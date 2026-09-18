@@ -18,6 +18,8 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.agents.model.TargetAgentEnvelope;
+import tools.jackson.core.JacksonException;
+
 import ai.gebo.architecture.agents.services.impl.ScheduleTargetAgentEnvelope;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -85,6 +87,9 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 				"Analyse the user request together with the current shared context and decide which of the reachable agents must act");
 		capabilities.addCapability(
 				"Send each selected agent a tailored command and, when given an invocation budget, keep iterating over successive cycles until the gathered contributions are sufficient to produce the answer");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing agent id:" + getId() + " advertises the routing/coordination capabilities");
+		}
 		return capabilities;
 	}
 
@@ -118,6 +123,12 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing agent id:" + getId() + " resolved model:"
+					+ (agentModel != null ? agentModel.getCode() : null) + " role:"
+					+ (agentRole != null ? agentRole.getCode() : null) + " prompt:"
+					+ (prompt != null ? prompt.getPromptUse() : null));
+		}
 		List<String> toCoordinate = contextAgentPersona.getCommunicationList();
 		if (toCoordinate == null || toCoordinate.isEmpty()) {
 			throw new AgentException("The routing agent: " + contextAgentPersona.getAgentContextualName()
@@ -128,9 +139,23 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		}
 		List<RuntimeAgentInfos> peers = new ArrayList<>();
 		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing agent id:" + getId() + " agentRole:" + (agentRole != null ? agentRole.getCode() : null)
+					+ " contextLength:" + agentModel.getContextLength() + " promptSize:" + prompt.getTokensSize()
+					+ " (tok) tokenBudget:" + tokenBudget + " (tok)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<ROUTING_AGENT_INPUT agent=" + getId() + ">");
+			LOGGER.trace(String.valueOf(msg.getPayload()));
+			LOGGER.trace("</ROUTING_AGENT_INPUT>");
+		}
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
 				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
 		final boolean formatDeclared = isPlaceholderDeclared(prompt, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing prompt declares the " + AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM
+					+ " placeholder:" + formatDeclared);
+		}
 		Map<String, Class<?>> checkTypesMap = new HashMap<>();
 		Map<String, Class<?>> typesMap = new HashMap<>();
 		for (String coordAgent : toCoordinate) {
@@ -139,6 +164,10 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 			// A routed message is the peer's input (the command it consumes), so the
 			// envelope command data must be typed on the peer's input type.
 			Class<?> peerInputType = agentData.getService().getInputType();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Coordinated peer:" + coordAgent + " agent service id:" + agentData.getService().getId()
+						+ " inputType:" + peerInputType.getName());
+			}
 			checkTypesMap.put(coordAgent, peerInputType);
 			if (formatDeclared) {
 				TypeDescription.Generic generic = TypeDescription.Generic.Builder
@@ -153,8 +182,16 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		if (formatDeclared) {
 			params.put(AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM, super.buildRootJsonSchema(typesMap));
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Requesting the routing plan from the agent model, routable peers:" + typesMap.size());
+		}
 		Map<String, Object> populated = (Map) agentModel.structuredResponse(prompt, params, chatRequestContext,
 				LinkedHashMap.class);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<ROUTING_PLAN agent=" + getId() + ">");
+			LOGGER.trace(String.valueOf(populated));
+			LOGGER.trace("</ROUTING_PLAN>");
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Routing LLM produced " + (populated != null ? populated.size() : 0)
 					+ " target agent entr(ies): " + (populated != null ? populated.keySet() : null));
@@ -171,18 +208,29 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 				// the assignability check below is meaningful.
 				Class<?> envelopeType = typesMap.get(targetAgent);
 				if (envelopeType == null || entry.getValue() == null) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Skipping routing entry for agent:" + targetAgent + " envelopeTypeKnown:"
+								+ (envelopeType != null) + " valuePresent:" + (entry.getValue() != null));
+					}
 					continue;
 				}
 				TargetAgentEnvelope<?> agentEnvelope = null;
 				try {
 					agentEnvelope = (TargetAgentEnvelope<?>) objectMapper.convertValue(entry.getValue(), envelopeType);
-				} catch (IllegalArgumentException e) {
+				} catch (IllegalArgumentException | JacksonException e) {
+					// Jackson 2 wrapped binding failures in IllegalArgumentException; Jackson 3
+					// (tools.jackson) throws MismatchedInputException -> DatabindException ->
+					// JacksonException -> RuntimeException, which is NOT an
+					// IllegalArgumentException. Catching only the latter let a single malformed
+					// envelope escape this loop and abort the whole routing turn, leaving the
+					// network with no dispatched message and the user with a blank answer.
+					// Both are caught so one bad entry is skipped and the rest of the plan runs.
 					LOGGER.error(
 							"For agent:" + targetAgent + " the command could not be bound to " + envelopeType.getName(),
 							e);
 					continue;
 				}
-				if (agentEnvelope != null && agentEnvelope.getCommandData() != null) {
+				if (agentEnvelope != null && isCommandDataPresent(agentEnvelope.getCommandData())) {
 					if (checkTypesMap.containsKey(targetAgent) && checkTypesMap.get(targetAgent)
 							.isAssignableFrom(agentEnvelope.getCommandData().getClass())) {
 						agentEnvelope.setAgentId(targetAgent);
@@ -191,9 +239,18 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 							LOGGER.debug("Scheduling command for agent:" + targetAgent + " deliveryOrder:"
 									+ agentEnvelope.getDeliveryOrder());
 						}
+						if (LOGGER.isTraceEnabled()) {
+							LOGGER.trace("<ROUTED_COMMAND to=" + targetAgent + " deliveryOrder="
+									+ agentEnvelope.getDeliveryOrder() + ">");
+							LOGGER.trace(String.valueOf(agentEnvelope.getCommandData()));
+							LOGGER.trace("</ROUTED_COMMAND>");
+						}
 					} else {
 						LOGGER.error("For agent:" + targetAgent + " the wrong type has been generated");
 					}
+				} else if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agent:" + targetAgent
+							+ " carries no command and is skipped for this cycle (gather/finalize selection)");
 				}
 
 			}
@@ -215,6 +272,20 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 						agentRole, d.getAgentId(), d.getCommandData(), d.getDeliveryOrder());
 				out.add(_msg);
 			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing agent id:" + getId() + " dispatches to " + targetAgents.size() + " agent(s): "
+					+ targetAgents);
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<ROUTING_DELIVERY_PLAN agent=" + getId() + ">");
+			for (Integer level : scheduled.keySet()) {
+				for (TargetAgentEnvelope<?> planned : scheduled.get(level)) {
+					LOGGER.trace("  order=" + level + " agent=" + planned.getAgentId() + " command="
+							+ String.valueOf(planned.getCommandData()));
+				}
+			}
+			LOGGER.trace("</ROUTING_DELIVERY_PLAN>");
 		}
 		notificationSink.next(
 				"Agent: " + contextAgentPersona.getNetworkAgentName() + " has messaged " + targetAgents,
@@ -240,11 +311,31 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		List<Map<String, Object>> output = super.createAgentTemplateParams(prompt, network, agentRole,
 				contextAgentPersona, session, mySessionContext, input, agentsDao, actualContributionNr, tokenBudget,
 				splitByBudget);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin createAgentTemplateParams(...) routing agent id:" + getId() + " window(s):"
+					+ output.size() + " contributionNr:" + actualContributionNr + " tokenBudget:" + tokenBudget
+					+ " splitByBudget:" + splitByBudget);
+		}
 		final int maxCycles = resolveMaxRoutingCycles(contextAgentPersona);
 		final int currentCycle = currentRoutingCycle(mySessionContext);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Exposing routing cycle signals to " + output.size() + " parameter window(s): cycle "
+					+ currentCycle + " of " + maxCycles);
+		}
 		for (Map<String, Object> window : output) {
 			window.put(CURRENT_CONTROLLER_CYCLE_TEMPLATE_PARAM, currentCycle);
 			window.put(MAX_CONTROLLER_CYCLES_TEMPLATE_PARAM, maxCycles);
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<ROUTING_TEMPLATE_PARAMS agent=" + getId() + " cycle=" + currentCycle + " of " + maxCycles
+					+ ">");
+			for (Map<String, Object> window : output) {
+				LOGGER.trace("  window parameter(s): " + window.keySet());
+			}
+			LOGGER.trace("</ROUTING_TEMPLATE_PARAMS>");
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End createAgentTemplateParams(...) routing agent id:" + getId());
 		}
 		return output;
 	}
@@ -282,18 +373,40 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		final int currentCycle = currentRoutingCycle(mySessionContext);
 		final boolean budgetRemains = currentCycle < maxCycles;
 		final int nextOrder = maxOrder + 1;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("applyRoutingIteration(...) self:" + selfName + " outputNode:" + outputNodeName
+					+ " dispatchedOutputNode:" + dispatchedOutputNode + " dispatchedWorker:" + dispatchedWorker
+					+ " cycle:" + currentCycle + "/" + maxCycles + " budgetRemains:" + budgetRemains + " nextOrder:"
+					+ nextOrder);
+		}
 		if (dispatchedOutputNode) {
 			// FINALIZE: the output node will produce the deliverable; stop iterating.
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Routing iteration decision: FINALIZE - the output node " + outputNodeName
+						+ " was dispatched on cycle " + currentCycle + " of " + maxCycles
+						+ ", so the network stops iterating");
+			}
 			return;
 		}
 		if (dispatchedWorker && budgetRemains) {
 			// GATHER: re-enter this routing agent after the dispatched work has landed in
 			// the shared context, so it can re-judge completeness and plan the next cycle.
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Routing iteration decision: GATHER - only worker agents were dispatched, re-scheduling"
+						+ " self:" + selfName + " at deliveryOrder:" + nextOrder + " to plan cycle " + (currentCycle + 1)
+						+ " of " + maxCycles);
+			}
 			out.add(new AgentsExchangeMessage(session.getId(), MessageSemantic.EXECUTE_AND_SHARE_RESULT, selfName,
 					agentRole, selfName, msg.getPayload(), nextOrder));
+			// INFO, not DEBUG: a gather cycle is the longest silence in the whole exchange -
+			// the searchers run, the controller re-plans, and only then does the writer begin
+			// emitting text. Measured on a multi source analytic question, that is around
+			// forty seconds in which the user has seen nothing but their own question echoed
+			// back. The network knows perfectly well what it is doing; at DEBUG it simply
+			// never said so.
 			notificationSink.next("Agent: " + selfName + " is gathering more evidence (cycle " + currentCycle + " of "
 					+ maxCycles + ")",
-					ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.DEBUG);
+					ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
 			return;
 		}
 		// No output node dispatched and either nothing planned or the cycle budget is
@@ -301,6 +414,12 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		// without an answer. Base default: nothing (legacy single-pass termination).
 		AgentsExchangeMessage<?> fallback = buildFinalizationFallback(session, contextAgentPersona, agentRole,
 				outputNodeName, msg, nextOrder);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing iteration decision: FALLBACK - no output node was dispatched and "
+					+ (budgetRemains ? "nothing was planned this cycle"
+							: "the cycle budget is exhausted at " + currentCycle + " of " + maxCycles)
+					+ ", forced finalization built:" + (fallback != null));
+		}
 		if (fallback != null) {
 			out.add(fallback);
 		}
@@ -315,6 +434,10 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	protected AgentsExchangeMessage<?> buildFinalizationFallback(AgentsCollaborationSessionContext session,
 			AgentNetworkParticipant contextAgentPersona, GAgentRole agentRole, String outputNodeName,
 			AgentsExchangeMessage<InputType> originalMessage, int deliveryOrder) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("buildFinalizationFallback(...) is not overridden by " + getClass().getSimpleName()
+					+ ": no deliverable is forced and the network can end without the output node ever running");
+		}
 		return null;
 	}
 
@@ -324,12 +447,28 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	 * is declared it is a single cycle (legacy single-pass behavior).
 	 */
 	protected int resolveMaxRoutingCycles(AgentNetworkParticipant persona) {
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Resolving the routing cycle budget for persona:"
+					+ (persona != null ? persona.getNetworkAgentName() : null) + " maxInvocations:"
+					+ (persona != null ? persona.getMaxInvocations() : null) + " maxConsecutiveInvocations:"
+					+ (persona != null ? persona.getMaxConsecutiveInvocations() : null));
+		}
 		if (persona != null && persona.getMaxInvocations() != null && persona.getMaxInvocations() > 0) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Routing cycle budget taken from maxInvocations:" + persona.getMaxInvocations());
+			}
 			return persona.getMaxInvocations();
 		}
 		if (persona != null && persona.getMaxConsecutiveInvocations() != null
 				&& persona.getMaxConsecutiveInvocations() > 0) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Routing cycle budget taken from maxConsecutiveInvocations:"
+						+ persona.getMaxConsecutiveInvocations());
+			}
 			return persona.getMaxConsecutiveInvocations();
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing cycle budget falls back to the single pass default:" + DEFAULT_MAX_ROUTING_CYCLES);
 		}
 		return DEFAULT_MAX_ROUTING_CYCLES;
 	}
@@ -339,8 +478,38 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	 * distinct session contribution turn, so the number of turns already recorded in
 	 * the agent's private memory is the count of completed cycles.
 	 */
+	/**
+	 * Tells whether a routing entry actually carries a command. The coordinator
+	 * prompt asks the model to leave {@code commandData} empty or null for the
+	 * agents it does not want to run in this cycle - that is how a GATHER cycle
+	 * withholds the writer/reporter. Testing only for {@code null} scheduled those
+	 * agents anyway with an empty instruction, so a blank text command counts as
+	 * absent here.
+	 */
+	protected boolean isCommandDataPresent(Object commandData) {
+		if (commandData == null) {
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("Routing entry carries a null command: that agent is withheld from this cycle");
+			}
+			return false;
+		}
+		if (commandData instanceof CharSequence text) {
+			final boolean present = !text.toString().isBlank();
+			if (!present && LOGGER.isTraceEnabled()) {
+				LOGGER.trace("Routing entry carries a blank command: that agent is withheld from this cycle");
+			}
+			return present;
+		}
+		return true;
+	}
+
 	protected int currentRoutingCycle(AgentPrivateSessionContext<?, ?> mySessionContext) {
-		return mySessionContext.getContributionTurnNumbers().size() + 1;
+		final int cycle = mySessionContext.getContributionTurnNumbers().size() + 1;
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Routing agent id:" + getId() + " is planning cycle " + cycle + ", recorded turns: "
+					+ mySessionContext.getContributionTurnNumbers());
+		}
+		return cycle;
 	}
 
 }

@@ -22,25 +22,57 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SecurityHeaderData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class SecurityHeaderData {
   @JsonProperty("token")
-  private Object token = null;
+  private String token = null;
 
-  @JsonProperty("authType")
-  private Object authType = null;
+  /**
+   * Gets or Sets authType
+   */
+  public enum AuthTypeEnum {
+    OAUTH2("OAUTH2"),
+    LOCAL_JWT("LOCAL_JWT"),
+    AUTO("AUTO");
+
+    private String value;
+
+    AuthTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static AuthTypeEnum fromValue(String input) {
+      for (AuthTypeEnum b : AuthTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("authType")
+  private AuthTypeEnum authType = null;
 
   @JsonProperty("authProviderId")
-  private Object authProviderId = null;
+  private String authProviderId = null;
 
   @JsonProperty("authTenantId")
-  private Object authTenantId = null;
+  private String authTenantId = null;
 
   @JsonProperty("empty")
-  private Object empty = null;
+  private Boolean empty = null;
 
-  public SecurityHeaderData token(Object token) {
+  public SecurityHeaderData token(String token) {
     this.token = token;
     return this;
   }
@@ -50,15 +82,15 @@ public class SecurityHeaderData {
    * @return token
   **/
   @Schema(description = "")
-  public Object getToken() {
+  public String getToken() {
     return token;
   }
 
-  public void setToken(Object token) {
+  public void setToken(String token) {
     this.token = token;
   }
 
-  public SecurityHeaderData authType(Object authType) {
+  public SecurityHeaderData authType(AuthTypeEnum authType) {
     this.authType = authType;
     return this;
   }
@@ -68,15 +100,15 @@ public class SecurityHeaderData {
    * @return authType
   **/
   @Schema(description = "")
-  public Object getAuthType() {
+  public AuthTypeEnum getAuthType() {
     return authType;
   }
 
-  public void setAuthType(Object authType) {
+  public void setAuthType(AuthTypeEnum authType) {
     this.authType = authType;
   }
 
-  public SecurityHeaderData authProviderId(Object authProviderId) {
+  public SecurityHeaderData authProviderId(String authProviderId) {
     this.authProviderId = authProviderId;
     return this;
   }
@@ -86,15 +118,15 @@ public class SecurityHeaderData {
    * @return authProviderId
   **/
   @Schema(description = "")
-  public Object getAuthProviderId() {
+  public String getAuthProviderId() {
     return authProviderId;
   }
 
-  public void setAuthProviderId(Object authProviderId) {
+  public void setAuthProviderId(String authProviderId) {
     this.authProviderId = authProviderId;
   }
 
-  public SecurityHeaderData authTenantId(Object authTenantId) {
+  public SecurityHeaderData authTenantId(String authTenantId) {
     this.authTenantId = authTenantId;
     return this;
   }
@@ -104,15 +136,15 @@ public class SecurityHeaderData {
    * @return authTenantId
   **/
   @Schema(description = "")
-  public Object getAuthTenantId() {
+  public String getAuthTenantId() {
     return authTenantId;
   }
 
-  public void setAuthTenantId(Object authTenantId) {
+  public void setAuthTenantId(String authTenantId) {
     this.authTenantId = authTenantId;
   }
 
-  public SecurityHeaderData empty(Object empty) {
+  public SecurityHeaderData empty(Boolean empty) {
     this.empty = empty;
     return this;
   }
@@ -122,11 +154,11 @@ public class SecurityHeaderData {
    * @return empty
   **/
   @Schema(description = "")
-  public Object getEmpty() {
+  public Boolean isEmpty() {
     return empty;
   }
 
-  public void setEmpty(Object empty) {
+  public void setEmpty(Boolean empty) {
     this.empty = empty;
   }
 

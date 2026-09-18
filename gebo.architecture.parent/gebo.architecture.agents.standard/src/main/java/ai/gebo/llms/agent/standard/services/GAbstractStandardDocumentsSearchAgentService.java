@@ -13,6 +13,8 @@ import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import java.util.ArrayList;
+import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
@@ -20,6 +22,7 @@ import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.services.IGSecurityService;
 
 /**
@@ -54,7 +57,96 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 	 * ranker is configured; otherwise returns them unchanged.
 	 */
 	protected List<Document> maybeRank(List<Document> documents, SearchAgentCommand command) throws AgentException {
+		return maybeRank(documents, command, null);
+	}
+
+	/**
+	 * Ranks the retrieved documents when asked to, and tells the user which documents
+	 * the search ended up on.
+	 * <p>
+	 * The names are announced after ranking rather than after retrieval on purpose:
+	 * retrieval deliberately over fetches (see {@link #retrievalTopK}) and the ranker
+	 * then discards most of it, so the retrieved set would name documents that never
+	 * reach the answer. What is announced here is what the writer will actually work
+	 * from.
+	 */
+	protected List<Document> maybeRank(List<Document> documents, SearchAgentCommand command,
+			INotificationSink notificationSink) throws AgentException {
+		if (notificationSink != null && documents != null && !documents.isEmpty() && rankingRequested(command)
+				&& rankerService.isRankerConfigured()) {
+			// Ranking is an LLM call over the whole candidate set, so it is a distinct wait
+			// worth naming rather than folding into the single "is searching" beat.
+			notificationSink.next("Agent: " + getId() + " is ranking " + documents.size() + " candidate(s)",
+					INotificationSink.NotificationObject.NotificationType.INFO);
+		}
+		final List<Document> outcome = rankDocuments(documents, command);
+		notifyFoundDocuments(outcome, notificationSink);
+		return outcome;
+	}
+
+	/**
+	 * The distinct source documents behind a set of retrieved fragments, in the order
+	 * the fragments came back, so the best ranked document is named first.
+	 */
+	protected List<String> foundDocumentNames(List<Document> documents) {
+		final List<String> names = new ArrayList<String>();
+		if (documents == null) {
+			return names;
+		}
+		for (Document document : documents) {
+			final Object fileName = document.getMetadata().get(DocumentMetaInfos.GEBO_FILE_NAME);
+			final Object contentCode = document.getMetadata().get(DocumentMetaInfos.CONTENT_CODE);
+			final Object chosen = fileName != null ? fileName : contentCode;
+			if (chosen == null) {
+				continue;
+			}
+			final String name = String.valueOf(chosen);
+			if (!name.isBlank() && !names.contains(name)) {
+				names.add(name);
+			}
+		}
+		return names;
+	}
+
+	/**
+	 * Names the documents the search settled on, in the conversation.
+	 * <p>
+	 * A search agent runs for tens of seconds and, until now, said nothing at all: the
+	 * notification sink was handed to it and never used. Naming the documents is the
+	 * one piece of progress that is both cheap to produce and meaningful to read - it
+	 * is the evidence the answer will be built on, and it lets the reader see a wrong
+	 * source being picked up long before the report is written.
+	 */
+	protected void notifyFoundDocuments(List<Document> documents, INotificationSink notificationSink) {
+		if (notificationSink == null) {
+			return;
+		}
+		final List<String> names = foundDocumentNames(documents);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("notifyFoundDocuments(...) agent id:" + getId() + " fragments:"
+					+ (documents != null ? documents.size() : 0) + " distinct document(s):" + names.size());
+		}
+		if (names.isEmpty()) {
+			// Worth saying out loud: an empty result is exactly the case where the user is
+			// otherwise left guessing why the answer is thin.
+			notificationSink.next("Agent: " + getId() + " found no matching document",
+					INotificationSink.NotificationObject.NotificationType.INFO);
+			return;
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<FOUND_DOCUMENTS agent=" + getId() + ">");
+			LOGGER.trace(String.valueOf(names));
+			LOGGER.trace("</FOUND_DOCUMENTS>");
+		}
+		notificationSink.next("Agent: " + getId() + " found " + names.size() + " document(s): "
+				+ String.join(", ", names), INotificationSink.NotificationObject.NotificationType.INFO);
+	}
+
+	private List<Document> rankDocuments(List<Document> documents, SearchAgentCommand command) throws AgentException {
 		if (documents == null || documents.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Ranking skipped for agent id:" + getId() + " : nothing was retrieved");
+			}
 			return documents;
 		}
 		if (rankingRequested(command) && rankerService.isRankerConfigured()) {
@@ -63,10 +155,24 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 						+ command.getTopK());
 			}
 			try {
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace("<RANKING_QUERY agent=" + getId() + ">");
+					LOGGER.trace(command.getCommand());
+					LOGGER.trace("</RANKING_QUERY>");
+				}
 				List<Document> ranked = rankerService.call(documents, command.getCommand(), command.getTopK());
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Ranking produced " + (ranked != null ? ranked.size() : 0)
 							+ " document(s) for agent id:" + getId());
+				}
+				if (LOGGER.isTraceEnabled() && ranked != null) {
+					int position = 1;
+					for (Document document : ranked) {
+						LOGGER.trace("<RANKED_DOCUMENT position=" + position + " id=" + document.getId() + ">");
+						LOGGER.trace(document.getText());
+						LOGGER.trace("</RANKED_DOCUMENT>");
+						position++;
+					}
 				}
 				return ranked;
 			} catch (LLMConfigException e) {
@@ -86,7 +192,12 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 	 */
 	protected int retrievalTopK(SearchAgentCommand command) {
 		int topK = command != null ? command.getTopK() : 20;
-		return (rankingRequested(command) && rankerService.isRankerConfigured()) ? topK * 2 : topK;
+		final boolean widened = rankingRequested(command) && rankerService.isRankerConfigured();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("retrievalTopK(...) agent id:" + getId() + " requestedTopK:" + topK + " widenedForRanking:"
+					+ widened + " retrieving:" + (widened ? topK * 2 : topK));
+		}
+		return widened ? topK * 2 : topK;
 	}
 
 	protected boolean rankingRequested(SearchAgentCommand command) {
@@ -104,14 +215,25 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 	 */
 	protected void appendSearchableSystems(AgentCapabilities capabilities, ISearchService<?> searchService) {
 		if (capabilities == null || searchService == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("appendSearchableSystems(...) skipped for agent id:" + getId() + " capabilities:"
+						+ (capabilities != null) + " searchService:" + (searchService != null));
+			}
 			return;
 		}
 		try {
 			List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("appendSearchableSystems(...) agent id:" + getId() + " advertises "
+						+ (systems != null ? systems.size() : 0) + " searchable system(s)");
+			}
 			if (systems != null) {
 				for (SearchableSystemMetaData system : systems) {
 					if (system == null) {
 						continue;
+					}
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("Searchable system: " + system.getCode() + " - " + system.getDescription());
 					}
 					capabilities.addResource(
 							AgentCapabilityResource.of(system.getCode(), system.getDescription(), null));
@@ -127,9 +249,16 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 			SearchableSystemMetaData system) {
 		try {
 			List<CatalogueSample> catalogues = searchService.getCachedCatalogues(system.getCode());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("System " + system.getCode() + " exposes " + (catalogues != null ? catalogues.size() : 0)
+						+ " cached catalogue(s) for agent id:" + getId());
+			}
 			if (catalogues != null) {
 				for (CatalogueSample catalogue : catalogues) {
 					if (catalogue != null) {
+						if (LOGGER.isTraceEnabled()) {
+							LOGGER.trace("Catalogue: " + catalogue.getCode() + " - " + catalogue.getDescription());
+						}
 						capabilities.addCatalog(AgentCapabilityResource.of(catalogue.getCode(), catalogue.getCode(),
 								catalogue.getDescription()));
 					}

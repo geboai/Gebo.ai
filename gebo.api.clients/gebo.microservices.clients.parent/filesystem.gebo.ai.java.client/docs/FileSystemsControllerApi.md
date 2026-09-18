@@ -57,7 +57,7 @@ No authorization required
 
 <a name="findFileSystemEndpointsByProject"></a>
 # **findFileSystemEndpointsByProject**
-> Object findFileSystemEndpointsByProject(parentProjectCode)
+> List&lt;GFilesystemProjectEndpoint&gt; findFileSystemEndpointsByProject(parentProjectCode)
 
 
 
@@ -69,9 +69,9 @@ No authorization required
 
 
 FileSystemsControllerApi apiInstance = new FileSystemsControllerApi();
-Object parentProjectCode = null; // Object | 
+String parentProjectCode = "parentProjectCode_example"; // String | 
 try {
-    Object result = apiInstance.findFileSystemEndpointsByProject(parentProjectCode);
+    List<GFilesystemProjectEndpoint> result = apiInstance.findFileSystemEndpointsByProject(parentProjectCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FileSystemsControllerApi#findFileSystemEndpointsByProject");
@@ -83,11 +83,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **parentProjectCode** | [**Object**](.md)|  |
+ **parentProjectCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GFilesystemProjectEndpoint&gt;**](GFilesystemProjectEndpoint.md)
 
 ### Authorization
 
@@ -100,7 +100,7 @@ No authorization required
 
 <a name="findFileSystemEndpointsByQbe"></a>
 # **findFileSystemEndpointsByQbe**
-> Object findFileSystemEndpointsByQbe(body)
+> List&lt;GFilesystemProjectEndpoint&gt; findFileSystemEndpointsByQbe(body)
 
 
 
@@ -114,7 +114,7 @@ No authorization required
 FileSystemsControllerApi apiInstance = new FileSystemsControllerApi();
 GFilesystemProjectEndpoint body = new GFilesystemProjectEndpoint(); // GFilesystemProjectEndpoint | 
 try {
-    Object result = apiInstance.findFileSystemEndpointsByQbe(body);
+    List<GFilesystemProjectEndpoint> result = apiInstance.findFileSystemEndpointsByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FileSystemsControllerApi#findFileSystemEndpointsByQbe");
@@ -130,7 +130,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GFilesystemProjectEndpoint&gt;**](GFilesystemProjectEndpoint.md)
 
 ### Authorization
 
@@ -143,7 +143,7 @@ No authorization required
 
 <a name="getFileSystemSystemTypes"></a>
 # **getFileSystemSystemTypes**
-> Object getFileSystemSystemTypes()
+> List&lt;GContentManagementSystemType&gt; getFileSystemSystemTypes()
 
 
 
@@ -156,7 +156,7 @@ No authorization required
 
 FileSystemsControllerApi apiInstance = new FileSystemsControllerApi();
 try {
-    Object result = apiInstance.getFileSystemSystemTypes();
+    List<GContentManagementSystemType> result = apiInstance.getFileSystemSystemTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FileSystemsControllerApi#getFileSystemSystemTypes");
@@ -169,7 +169,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GContentManagementSystemType&gt;**](GContentManagementSystemType.md)
 
 ### Authorization
 
@@ -182,7 +182,7 @@ No authorization required
 
 <a name="getFileSystemSystems"></a>
 # **getFileSystemSystems**
-> Object getFileSystemSystems(handlerCode)
+> List&lt;GFilesystemContentManagementSystem&gt; getFileSystemSystems(handlerCode)
 
 
 
@@ -194,9 +194,9 @@ No authorization required
 
 
 FileSystemsControllerApi apiInstance = new FileSystemsControllerApi();
-Object handlerCode = null; // Object | 
+String handlerCode = "handlerCode_example"; // String | 
 try {
-    Object result = apiInstance.getFileSystemSystems(handlerCode);
+    List<GFilesystemContentManagementSystem> result = apiInstance.getFileSystemSystems(handlerCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FileSystemsControllerApi#getFileSystemSystems");
@@ -208,11 +208,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **handlerCode** | [**Object**](.md)|  | [optional]
+ **handlerCode** | **String**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;GFilesystemContentManagementSystem&gt;**](GFilesystemContentManagementSystem.md)
 
 ### Authorization
 

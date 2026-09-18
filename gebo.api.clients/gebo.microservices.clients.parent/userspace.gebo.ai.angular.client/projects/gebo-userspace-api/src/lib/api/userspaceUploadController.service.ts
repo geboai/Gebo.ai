@@ -62,10 +62,10 @@ export class UserspaceUploadControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public uploadForm(userspaceFolderCode: any, files?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public uploadForm(userspaceFolderCode: any, files?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public uploadForm(userspaceFolderCode: any, files?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public uploadForm(userspaceFolderCode: any, files?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public uploadForm(userspaceFolderCode: string, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public uploadForm(userspaceFolderCode: string, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public uploadForm(userspaceFolderCode: string, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public uploadForm(userspaceFolderCode: string, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userspaceFolderCode === null || userspaceFolderCode === undefined) {
             throw new Error('Required parameter userspaceFolderCode was null or undefined when calling upload.');
@@ -92,14 +92,19 @@ export class UserspaceUploadControllerService {
         let formParams: { append(param: string, value: any): void; };
         let useForm = false;
         let convertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        useForm = canConsumeForm;
         if (useForm) {
             formParams = new FormData();
         } else {
             formParams = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         }
 
-        if (files !== undefined) {
-            formParams = formParams.append('files[]', <any>files) as any || formParams;
+        if (files) {
+            files.forEach((element) => {
+                formParams = formParams.append('files[]', <any>element) as any || formParams;
+            })
         }
 
         return this.httpClient.request<any>('post',`${this.basePath}/api/user/UserspaceUploadController/upload/${encodeURIComponent(String(userspaceFolderCode))}`,

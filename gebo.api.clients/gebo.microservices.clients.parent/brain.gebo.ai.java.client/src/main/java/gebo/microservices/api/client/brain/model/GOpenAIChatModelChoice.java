@@ -19,59 +19,60 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.ModelMetaInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GOpenAIChatModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GOpenAIChatModelChoice {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("creationDate")
-  private Object creationDate = null;
+  private Date creationDate = null;
 
   @JsonProperty("modificationDate")
-  private Object modificationDate = null;
+  private Date modificationDate = null;
 
   @JsonProperty("version")
-  private Object version = null;
+  private String version = null;
 
   @JsonProperty("metaInfos")
   private ModelMetaInfo metaInfos = null;
 
   @JsonProperty("informativeUrl")
-  private Object informativeUrl = null;
+  private String informativeUrl = null;
 
   @JsonProperty("contextLength")
-  private Object contextLength = null;
+  private Integer contextLength = null;
 
   @JsonProperty("nativeModelMetaInfos")
   private Object nativeModelMetaInfos = null;
 
   @JsonProperty("supportsStructuredOutput")
-  private Object supportsStructuredOutput = null;
+  private Boolean supportsStructuredOutput = null;
 
   @JsonProperty("supportsFunctionCalls")
-  private Object supportsFunctionCalls = null;
+  private Boolean supportsFunctionCalls = null;
 
-  public GOpenAIChatModelChoice code(Object code) {
+  public GOpenAIChatModelChoice code(String code) {
     this.code = code;
     return this;
   }
@@ -81,15 +82,15 @@ public class GOpenAIChatModelChoice {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GOpenAIChatModelChoice description(Object description) {
+  public GOpenAIChatModelChoice description(String description) {
     this.description = description;
     return this;
   }
@@ -99,15 +100,15 @@ public class GOpenAIChatModelChoice {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GOpenAIChatModelChoice userModified(Object userModified) {
+  public GOpenAIChatModelChoice userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -117,15 +118,15 @@ public class GOpenAIChatModelChoice {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GOpenAIChatModelChoice userCreated(Object userCreated) {
+  public GOpenAIChatModelChoice userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -135,15 +136,15 @@ public class GOpenAIChatModelChoice {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GOpenAIChatModelChoice dateModified(Object dateModified) {
+  public GOpenAIChatModelChoice dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -153,15 +154,15 @@ public class GOpenAIChatModelChoice {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GOpenAIChatModelChoice dateCreated(Object dateCreated) {
+  public GOpenAIChatModelChoice dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -171,15 +172,15 @@ public class GOpenAIChatModelChoice {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GOpenAIChatModelChoice creationDate(Object creationDate) {
+  public GOpenAIChatModelChoice creationDate(Date creationDate) {
     this.creationDate = creationDate;
     return this;
   }
@@ -189,15 +190,15 @@ public class GOpenAIChatModelChoice {
    * @return creationDate
   **/
   @Schema(description = "")
-  public Object getCreationDate() {
+  public Date getCreationDate() {
     return creationDate;
   }
 
-  public void setCreationDate(Object creationDate) {
+  public void setCreationDate(Date creationDate) {
     this.creationDate = creationDate;
   }
 
-  public GOpenAIChatModelChoice modificationDate(Object modificationDate) {
+  public GOpenAIChatModelChoice modificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
     return this;
   }
@@ -207,15 +208,15 @@ public class GOpenAIChatModelChoice {
    * @return modificationDate
   **/
   @Schema(description = "")
-  public Object getModificationDate() {
+  public Date getModificationDate() {
     return modificationDate;
   }
 
-  public void setModificationDate(Object modificationDate) {
+  public void setModificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
   }
 
-  public GOpenAIChatModelChoice version(Object version) {
+  public GOpenAIChatModelChoice version(String version) {
     this.version = version;
     return this;
   }
@@ -225,11 +226,11 @@ public class GOpenAIChatModelChoice {
    * @return version
   **/
   @Schema(description = "")
-  public Object getVersion() {
+  public String getVersion() {
     return version;
   }
 
-  public void setVersion(Object version) {
+  public void setVersion(String version) {
     this.version = version;
   }
 
@@ -251,7 +252,7 @@ public class GOpenAIChatModelChoice {
     this.metaInfos = metaInfos;
   }
 
-  public GOpenAIChatModelChoice informativeUrl(Object informativeUrl) {
+  public GOpenAIChatModelChoice informativeUrl(String informativeUrl) {
     this.informativeUrl = informativeUrl;
     return this;
   }
@@ -261,15 +262,15 @@ public class GOpenAIChatModelChoice {
    * @return informativeUrl
   **/
   @Schema(description = "")
-  public Object getInformativeUrl() {
+  public String getInformativeUrl() {
     return informativeUrl;
   }
 
-  public void setInformativeUrl(Object informativeUrl) {
+  public void setInformativeUrl(String informativeUrl) {
     this.informativeUrl = informativeUrl;
   }
 
-  public GOpenAIChatModelChoice contextLength(Object contextLength) {
+  public GOpenAIChatModelChoice contextLength(Integer contextLength) {
     this.contextLength = contextLength;
     return this;
   }
@@ -279,11 +280,11 @@ public class GOpenAIChatModelChoice {
    * @return contextLength
   **/
   @Schema(description = "")
-  public Object getContextLength() {
+  public Integer getContextLength() {
     return contextLength;
   }
 
-  public void setContextLength(Object contextLength) {
+  public void setContextLength(Integer contextLength) {
     this.contextLength = contextLength;
   }
 
@@ -305,7 +306,7 @@ public class GOpenAIChatModelChoice {
     this.nativeModelMetaInfos = nativeModelMetaInfos;
   }
 
-  public GOpenAIChatModelChoice supportsStructuredOutput(Object supportsStructuredOutput) {
+  public GOpenAIChatModelChoice supportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
     return this;
   }
@@ -315,15 +316,15 @@ public class GOpenAIChatModelChoice {
    * @return supportsStructuredOutput
   **/
   @Schema(description = "")
-  public Object getSupportsStructuredOutput() {
+  public Boolean isSupportsStructuredOutput() {
     return supportsStructuredOutput;
   }
 
-  public void setSupportsStructuredOutput(Object supportsStructuredOutput) {
+  public void setSupportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
   }
 
-  public GOpenAIChatModelChoice supportsFunctionCalls(Object supportsFunctionCalls) {
+  public GOpenAIChatModelChoice supportsFunctionCalls(Boolean supportsFunctionCalls) {
     this.supportsFunctionCalls = supportsFunctionCalls;
     return this;
   }
@@ -333,11 +334,11 @@ public class GOpenAIChatModelChoice {
    * @return supportsFunctionCalls
   **/
   @Schema(description = "")
-  public Object getSupportsFunctionCalls() {
+  public Boolean isSupportsFunctionCalls() {
     return supportsFunctionCalls;
   }
 
-  public void setSupportsFunctionCalls(Object supportsFunctionCalls) {
+  public void setSupportsFunctionCalls(Boolean supportsFunctionCalls) {
     this.supportsFunctionCalls = supportsFunctionCalls;
   }
 

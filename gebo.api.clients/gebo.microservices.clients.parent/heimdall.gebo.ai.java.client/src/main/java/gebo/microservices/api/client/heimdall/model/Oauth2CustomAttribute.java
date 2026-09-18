@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Oauth2CustomAttribute
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class Oauth2CustomAttribute {
   @JsonProperty("attributeName")
-  private Object attributeName = null;
+  private String attributeName = null;
 
   @JsonProperty("attributeDescription")
-  private Object attributeDescription = null;
+  private String attributeDescription = null;
 
-  public Oauth2CustomAttribute attributeName(Object attributeName) {
+  public Oauth2CustomAttribute attributeName(String attributeName) {
     this.attributeName = attributeName;
     return this;
   }
@@ -41,15 +41,15 @@ public class Oauth2CustomAttribute {
    * @return attributeName
   **/
   @Schema(description = "")
-  public Object getAttributeName() {
+  public String getAttributeName() {
     return attributeName;
   }
 
-  public void setAttributeName(Object attributeName) {
+  public void setAttributeName(String attributeName) {
     this.attributeName = attributeName;
   }
 
-  public Oauth2CustomAttribute attributeDescription(Object attributeDescription) {
+  public Oauth2CustomAttribute attributeDescription(String attributeDescription) {
     this.attributeDescription = attributeDescription;
     return this;
   }
@@ -59,11 +59,11 @@ public class Oauth2CustomAttribute {
    * @return attributeDescription
   **/
   @Schema(description = "")
-  public Object getAttributeDescription() {
+  public String getAttributeDescription() {
     return attributeDescription;
   }
 
-  public void setAttributeDescription(Object attributeDescription) {
+  public void setAttributeDescription(String attributeDescription) {
     this.attributeDescription = attributeDescription;
   }
 

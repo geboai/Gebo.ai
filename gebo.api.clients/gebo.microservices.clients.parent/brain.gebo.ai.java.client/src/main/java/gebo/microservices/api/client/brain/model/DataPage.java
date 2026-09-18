@@ -17,27 +17,30 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.Order;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * DataPage
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class DataPage {
   @JsonProperty("page")
-  private Object page = null;
+  private Integer page = null;
 
   @JsonProperty("pageSize")
-  private Object pageSize = null;
+  private Integer pageSize = null;
 
   @JsonProperty("numrecords")
-  private Object numrecords = null;
+  private Integer numrecords = null;
 
   @JsonProperty("sort")
-  private Object sort = null;
+  private List<Order> sort = null;
 
-  public DataPage page(Object page) {
+  public DataPage page(Integer page) {
     this.page = page;
     return this;
   }
@@ -47,15 +50,15 @@ public class DataPage {
    * @return page
   **/
   @Schema(description = "")
-  public Object getPage() {
+  public Integer getPage() {
     return page;
   }
 
-  public void setPage(Object page) {
+  public void setPage(Integer page) {
     this.page = page;
   }
 
-  public DataPage pageSize(Object pageSize) {
+  public DataPage pageSize(Integer pageSize) {
     this.pageSize = pageSize;
     return this;
   }
@@ -65,15 +68,15 @@ public class DataPage {
    * @return pageSize
   **/
   @Schema(description = "")
-  public Object getPageSize() {
+  public Integer getPageSize() {
     return pageSize;
   }
 
-  public void setPageSize(Object pageSize) {
+  public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
   }
 
-  public DataPage numrecords(Object numrecords) {
+  public DataPage numrecords(Integer numrecords) {
     this.numrecords = numrecords;
     return this;
   }
@@ -83,16 +86,24 @@ public class DataPage {
    * @return numrecords
   **/
   @Schema(description = "")
-  public Object getNumrecords() {
+  public Integer getNumrecords() {
     return numrecords;
   }
 
-  public void setNumrecords(Object numrecords) {
+  public void setNumrecords(Integer numrecords) {
     this.numrecords = numrecords;
   }
 
-  public DataPage sort(Object sort) {
+  public DataPage sort(List<Order> sort) {
     this.sort = sort;
+    return this;
+  }
+
+  public DataPage addSortItem(Order sortItem) {
+    if (this.sort == null) {
+      this.sort = new ArrayList<>();
+    }
+    this.sort.add(sortItem);
     return this;
   }
 
@@ -101,11 +112,11 @@ public class DataPage {
    * @return sort
   **/
   @Schema(description = "")
-  public Object getSort() {
+  public List<Order> getSort() {
     return sort;
   }
 
-  public void setSort(Object sort) {
+  public void setSort(List<Order> sort) {
     this.sort = sort;
   }
 

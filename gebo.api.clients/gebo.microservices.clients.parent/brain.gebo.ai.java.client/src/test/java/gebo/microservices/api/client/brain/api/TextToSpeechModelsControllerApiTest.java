@@ -12,6 +12,8 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseTextToSpeachModelConfig;
+import gebo.microservices.api.client.brain.model.GTextToSpeechModelType;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -38,8 +40,8 @@ public class TextToSpeechModelsControllerApiTest {
      */
     @Test
     public void getRuntimeConfiguredTextToSpeechModelsTest() {
-        Object modelTypeCode = null;
-        Object response = api.getRuntimeConfiguredTextToSpeechModels(modelTypeCode);
+        String modelTypeCode = null;
+        List<ConfigurationEntryGBaseTextToSpeachModelConfig> response = api.getRuntimeConfiguredTextToSpeechModels(modelTypeCode);
 
         // TODO: test validations
     }
@@ -53,7 +55,7 @@ public class TextToSpeechModelsControllerApiTest {
      */
     @Test
     public void getTextToSpeechModelTypesTest() {
-        Object response = api.getTextToSpeechModelTypes();
+        List<GTextToSpeechModelType> response = api.getTextToSpeechModelTypes();
 
         // TODO: test validations
     }

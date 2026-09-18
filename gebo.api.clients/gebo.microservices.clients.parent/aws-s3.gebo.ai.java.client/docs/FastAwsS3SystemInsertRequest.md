@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**description** | **Object** |  | 
-**awsEndpoint** | **Object** |  |  [optional]
+**description** | **String** |  | 
+**awsEndpoint** | **String** |  |  [optional]
 **awsConnectionCredentials** | [**GeboAwsConnectionCredentials**](GeboAwsConnectionCredentials.md) |  | 

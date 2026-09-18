@@ -17,30 +17,34 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.heimdall.model.GDataFlowMetaInfos;
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * ComponentMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class ComponentMetaInfo {
   @JsonProperty("messagingSystemId")
-  private Object messagingSystemId = null;
+  private String messagingSystemId = null;
 
   @JsonProperty("messagingModuleId")
-  private Object messagingModuleId = null;
+  private String messagingModuleId = null;
 
   @JsonProperty("receiver")
-  private Object receiver = null;
+  private Boolean receiver = null;
 
   @JsonProperty("emitter")
-  private Object emitter = null;
+  private Boolean emitter = null;
 
   @JsonProperty("localSystem")
-  private Object localSystem = null;
+  private Boolean localSystem = null;
 
-  public ComponentMetaInfo messagingSystemId(Object messagingSystemId) {
+  @JsonProperty("dataFlowMetaInfos")
+  private GDataFlowMetaInfos dataFlowMetaInfos = null;
+
+  public ComponentMetaInfo messagingSystemId(String messagingSystemId) {
     this.messagingSystemId = messagingSystemId;
     return this;
   }
@@ -50,15 +54,15 @@ public class ComponentMetaInfo {
    * @return messagingSystemId
   **/
   @Schema(description = "")
-  public Object getMessagingSystemId() {
+  public String getMessagingSystemId() {
     return messagingSystemId;
   }
 
-  public void setMessagingSystemId(Object messagingSystemId) {
+  public void setMessagingSystemId(String messagingSystemId) {
     this.messagingSystemId = messagingSystemId;
   }
 
-  public ComponentMetaInfo messagingModuleId(Object messagingModuleId) {
+  public ComponentMetaInfo messagingModuleId(String messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
     return this;
   }
@@ -68,15 +72,15 @@ public class ComponentMetaInfo {
    * @return messagingModuleId
   **/
   @Schema(description = "")
-  public Object getMessagingModuleId() {
+  public String getMessagingModuleId() {
     return messagingModuleId;
   }
 
-  public void setMessagingModuleId(Object messagingModuleId) {
+  public void setMessagingModuleId(String messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
   }
 
-  public ComponentMetaInfo receiver(Object receiver) {
+  public ComponentMetaInfo receiver(Boolean receiver) {
     this.receiver = receiver;
     return this;
   }
@@ -86,15 +90,15 @@ public class ComponentMetaInfo {
    * @return receiver
   **/
   @Schema(description = "")
-  public Object getReceiver() {
+  public Boolean isReceiver() {
     return receiver;
   }
 
-  public void setReceiver(Object receiver) {
+  public void setReceiver(Boolean receiver) {
     this.receiver = receiver;
   }
 
-  public ComponentMetaInfo emitter(Object emitter) {
+  public ComponentMetaInfo emitter(Boolean emitter) {
     this.emitter = emitter;
     return this;
   }
@@ -104,15 +108,15 @@ public class ComponentMetaInfo {
    * @return emitter
   **/
   @Schema(description = "")
-  public Object getEmitter() {
+  public Boolean isEmitter() {
     return emitter;
   }
 
-  public void setEmitter(Object emitter) {
+  public void setEmitter(Boolean emitter) {
     this.emitter = emitter;
   }
 
-  public ComponentMetaInfo localSystem(Object localSystem) {
+  public ComponentMetaInfo localSystem(Boolean localSystem) {
     this.localSystem = localSystem;
     return this;
   }
@@ -122,12 +126,30 @@ public class ComponentMetaInfo {
    * @return localSystem
   **/
   @Schema(description = "")
-  public Object getLocalSystem() {
+  public Boolean isLocalSystem() {
     return localSystem;
   }
 
-  public void setLocalSystem(Object localSystem) {
+  public void setLocalSystem(Boolean localSystem) {
     this.localSystem = localSystem;
+  }
+
+  public ComponentMetaInfo dataFlowMetaInfos(GDataFlowMetaInfos dataFlowMetaInfos) {
+    this.dataFlowMetaInfos = dataFlowMetaInfos;
+    return this;
+  }
+
+   /**
+   * Get dataFlowMetaInfos
+   * @return dataFlowMetaInfos
+  **/
+  @Schema(description = "")
+  public GDataFlowMetaInfos getDataFlowMetaInfos() {
+    return dataFlowMetaInfos;
+  }
+
+  public void setDataFlowMetaInfos(GDataFlowMetaInfos dataFlowMetaInfos) {
+    this.dataFlowMetaInfos = dataFlowMetaInfos;
   }
 
 
@@ -144,12 +166,13 @@ public class ComponentMetaInfo {
         Objects.equals(this.messagingModuleId, componentMetaInfo.messagingModuleId) &&
         Objects.equals(this.receiver, componentMetaInfo.receiver) &&
         Objects.equals(this.emitter, componentMetaInfo.emitter) &&
-        Objects.equals(this.localSystem, componentMetaInfo.localSystem);
+        Objects.equals(this.localSystem, componentMetaInfo.localSystem) &&
+        Objects.equals(this.dataFlowMetaInfos, componentMetaInfo.dataFlowMetaInfos);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(messagingSystemId, messagingModuleId, receiver, emitter, localSystem);
+    return Objects.hash(messagingSystemId, messagingModuleId, receiver, emitter, localSystem, dataFlowMetaInfos);
   }
 
 
@@ -163,6 +186,7 @@ public class ComponentMetaInfo {
     sb.append("    receiver: ").append(toIndentedString(receiver)).append("\n");
     sb.append("    emitter: ").append(toIndentedString(emitter)).append("\n");
     sb.append("    localSystem: ").append(toIndentedString(localSystem)).append("\n");
+    sb.append("    dataFlowMetaInfos: ").append(toIndentedString(dataFlowMetaInfos)).append("\n");
     sb.append("}");
     return sb.toString();
   }

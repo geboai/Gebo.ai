@@ -22,76 +22,76 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ComponentLLMSStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ComponentLLMSStatus {
   @JsonProperty("isSetup")
-  private Object isSetup = null;
+  private Boolean isSetup = null;
 
   @JsonProperty("chatModelSetup")
-  private Object chatModelSetup = null;
+  private Boolean chatModelSetup = null;
 
   @JsonProperty("internalServicesChatModelSetup")
-  private Object internalServicesChatModelSetup = null;
+  private Boolean internalServicesChatModelSetup = null;
 
   @JsonProperty("embeddedModelSetup")
-  private Object embeddedModelSetup = null;
+  private Boolean embeddedModelSetup = null;
 
   @JsonProperty("rankingModelSetup")
-  private Object rankingModelSetup = null;
+  private Boolean rankingModelSetup = null;
 
   @JsonProperty("imagesModelSetup")
-  private Object imagesModelSetup = null;
+  private Boolean imagesModelSetup = null;
 
   @JsonProperty("ttsModelSetup")
-  private Object ttsModelSetup = null;
+  private Boolean ttsModelSetup = null;
 
   @JsonProperty("transcriptModelSetup")
-  private Object transcriptModelSetup = null;
+  private Boolean transcriptModelSetup = null;
 
   @JsonProperty("chatModelCode")
-  private Object chatModelCode = null;
+  private String chatModelCode = null;
 
   @JsonProperty("internalServicesChatModelCode")
-  private Object internalServicesChatModelCode = null;
+  private String internalServicesChatModelCode = null;
 
   @JsonProperty("embeddedModelCode")
-  private Object embeddedModelCode = null;
+  private String embeddedModelCode = null;
 
   @JsonProperty("rankingModelCode")
-  private Object rankingModelCode = null;
+  private String rankingModelCode = null;
 
   @JsonProperty("imagesModelCode")
-  private Object imagesModelCode = null;
+  private String imagesModelCode = null;
 
   @JsonProperty("ttsModelCode")
-  private Object ttsModelCode = null;
+  private String ttsModelCode = null;
 
   @JsonProperty("transcriptModelCode")
-  private Object transcriptModelCode = null;
+  private String transcriptModelCode = null;
 
   @JsonProperty("chatModelProviderId")
-  private Object chatModelProviderId = null;
+  private String chatModelProviderId = null;
 
   @JsonProperty("internalServicesChatModelProviderId")
-  private Object internalServicesChatModelProviderId = null;
+  private String internalServicesChatModelProviderId = null;
 
   @JsonProperty("embeddedModelProviderId")
-  private Object embeddedModelProviderId = null;
+  private String embeddedModelProviderId = null;
 
   @JsonProperty("rankingModelProviderId")
-  private Object rankingModelProviderId = null;
+  private String rankingModelProviderId = null;
 
   @JsonProperty("imagesModelProviderId")
-  private Object imagesModelProviderId = null;
+  private String imagesModelProviderId = null;
 
   @JsonProperty("ttsModelProviderId")
-  private Object ttsModelProviderId = null;
+  private String ttsModelProviderId = null;
 
   @JsonProperty("transcriptModelProviderId")
-  private Object transcriptModelProviderId = null;
+  private String transcriptModelProviderId = null;
 
-  public ComponentLLMSStatus isSetup(Object isSetup) {
+  public ComponentLLMSStatus isSetup(Boolean isSetup) {
     this.isSetup = isSetup;
     return this;
   }
@@ -101,15 +101,15 @@ public class ComponentLLMSStatus {
    * @return isSetup
   **/
   @Schema(description = "")
-  public Object getIsSetup() {
+  public Boolean isIsSetup() {
     return isSetup;
   }
 
-  public void setIsSetup(Object isSetup) {
+  public void setIsSetup(Boolean isSetup) {
     this.isSetup = isSetup;
   }
 
-  public ComponentLLMSStatus chatModelSetup(Object chatModelSetup) {
+  public ComponentLLMSStatus chatModelSetup(Boolean chatModelSetup) {
     this.chatModelSetup = chatModelSetup;
     return this;
   }
@@ -119,15 +119,15 @@ public class ComponentLLMSStatus {
    * @return chatModelSetup
   **/
   @Schema(description = "")
-  public Object getChatModelSetup() {
+  public Boolean isChatModelSetup() {
     return chatModelSetup;
   }
 
-  public void setChatModelSetup(Object chatModelSetup) {
+  public void setChatModelSetup(Boolean chatModelSetup) {
     this.chatModelSetup = chatModelSetup;
   }
 
-  public ComponentLLMSStatus internalServicesChatModelSetup(Object internalServicesChatModelSetup) {
+  public ComponentLLMSStatus internalServicesChatModelSetup(Boolean internalServicesChatModelSetup) {
     this.internalServicesChatModelSetup = internalServicesChatModelSetup;
     return this;
   }
@@ -137,15 +137,15 @@ public class ComponentLLMSStatus {
    * @return internalServicesChatModelSetup
   **/
   @Schema(description = "")
-  public Object getInternalServicesChatModelSetup() {
+  public Boolean isInternalServicesChatModelSetup() {
     return internalServicesChatModelSetup;
   }
 
-  public void setInternalServicesChatModelSetup(Object internalServicesChatModelSetup) {
+  public void setInternalServicesChatModelSetup(Boolean internalServicesChatModelSetup) {
     this.internalServicesChatModelSetup = internalServicesChatModelSetup;
   }
 
-  public ComponentLLMSStatus embeddedModelSetup(Object embeddedModelSetup) {
+  public ComponentLLMSStatus embeddedModelSetup(Boolean embeddedModelSetup) {
     this.embeddedModelSetup = embeddedModelSetup;
     return this;
   }
@@ -155,15 +155,15 @@ public class ComponentLLMSStatus {
    * @return embeddedModelSetup
   **/
   @Schema(description = "")
-  public Object getEmbeddedModelSetup() {
+  public Boolean isEmbeddedModelSetup() {
     return embeddedModelSetup;
   }
 
-  public void setEmbeddedModelSetup(Object embeddedModelSetup) {
+  public void setEmbeddedModelSetup(Boolean embeddedModelSetup) {
     this.embeddedModelSetup = embeddedModelSetup;
   }
 
-  public ComponentLLMSStatus rankingModelSetup(Object rankingModelSetup) {
+  public ComponentLLMSStatus rankingModelSetup(Boolean rankingModelSetup) {
     this.rankingModelSetup = rankingModelSetup;
     return this;
   }
@@ -173,15 +173,15 @@ public class ComponentLLMSStatus {
    * @return rankingModelSetup
   **/
   @Schema(description = "")
-  public Object getRankingModelSetup() {
+  public Boolean isRankingModelSetup() {
     return rankingModelSetup;
   }
 
-  public void setRankingModelSetup(Object rankingModelSetup) {
+  public void setRankingModelSetup(Boolean rankingModelSetup) {
     this.rankingModelSetup = rankingModelSetup;
   }
 
-  public ComponentLLMSStatus imagesModelSetup(Object imagesModelSetup) {
+  public ComponentLLMSStatus imagesModelSetup(Boolean imagesModelSetup) {
     this.imagesModelSetup = imagesModelSetup;
     return this;
   }
@@ -191,15 +191,15 @@ public class ComponentLLMSStatus {
    * @return imagesModelSetup
   **/
   @Schema(description = "")
-  public Object getImagesModelSetup() {
+  public Boolean isImagesModelSetup() {
     return imagesModelSetup;
   }
 
-  public void setImagesModelSetup(Object imagesModelSetup) {
+  public void setImagesModelSetup(Boolean imagesModelSetup) {
     this.imagesModelSetup = imagesModelSetup;
   }
 
-  public ComponentLLMSStatus ttsModelSetup(Object ttsModelSetup) {
+  public ComponentLLMSStatus ttsModelSetup(Boolean ttsModelSetup) {
     this.ttsModelSetup = ttsModelSetup;
     return this;
   }
@@ -209,15 +209,15 @@ public class ComponentLLMSStatus {
    * @return ttsModelSetup
   **/
   @Schema(description = "")
-  public Object getTtsModelSetup() {
+  public Boolean isTtsModelSetup() {
     return ttsModelSetup;
   }
 
-  public void setTtsModelSetup(Object ttsModelSetup) {
+  public void setTtsModelSetup(Boolean ttsModelSetup) {
     this.ttsModelSetup = ttsModelSetup;
   }
 
-  public ComponentLLMSStatus transcriptModelSetup(Object transcriptModelSetup) {
+  public ComponentLLMSStatus transcriptModelSetup(Boolean transcriptModelSetup) {
     this.transcriptModelSetup = transcriptModelSetup;
     return this;
   }
@@ -227,15 +227,15 @@ public class ComponentLLMSStatus {
    * @return transcriptModelSetup
   **/
   @Schema(description = "")
-  public Object getTranscriptModelSetup() {
+  public Boolean isTranscriptModelSetup() {
     return transcriptModelSetup;
   }
 
-  public void setTranscriptModelSetup(Object transcriptModelSetup) {
+  public void setTranscriptModelSetup(Boolean transcriptModelSetup) {
     this.transcriptModelSetup = transcriptModelSetup;
   }
 
-  public ComponentLLMSStatus chatModelCode(Object chatModelCode) {
+  public ComponentLLMSStatus chatModelCode(String chatModelCode) {
     this.chatModelCode = chatModelCode;
     return this;
   }
@@ -245,15 +245,15 @@ public class ComponentLLMSStatus {
    * @return chatModelCode
   **/
   @Schema(description = "")
-  public Object getChatModelCode() {
+  public String getChatModelCode() {
     return chatModelCode;
   }
 
-  public void setChatModelCode(Object chatModelCode) {
+  public void setChatModelCode(String chatModelCode) {
     this.chatModelCode = chatModelCode;
   }
 
-  public ComponentLLMSStatus internalServicesChatModelCode(Object internalServicesChatModelCode) {
+  public ComponentLLMSStatus internalServicesChatModelCode(String internalServicesChatModelCode) {
     this.internalServicesChatModelCode = internalServicesChatModelCode;
     return this;
   }
@@ -263,15 +263,15 @@ public class ComponentLLMSStatus {
    * @return internalServicesChatModelCode
   **/
   @Schema(description = "")
-  public Object getInternalServicesChatModelCode() {
+  public String getInternalServicesChatModelCode() {
     return internalServicesChatModelCode;
   }
 
-  public void setInternalServicesChatModelCode(Object internalServicesChatModelCode) {
+  public void setInternalServicesChatModelCode(String internalServicesChatModelCode) {
     this.internalServicesChatModelCode = internalServicesChatModelCode;
   }
 
-  public ComponentLLMSStatus embeddedModelCode(Object embeddedModelCode) {
+  public ComponentLLMSStatus embeddedModelCode(String embeddedModelCode) {
     this.embeddedModelCode = embeddedModelCode;
     return this;
   }
@@ -281,15 +281,15 @@ public class ComponentLLMSStatus {
    * @return embeddedModelCode
   **/
   @Schema(description = "")
-  public Object getEmbeddedModelCode() {
+  public String getEmbeddedModelCode() {
     return embeddedModelCode;
   }
 
-  public void setEmbeddedModelCode(Object embeddedModelCode) {
+  public void setEmbeddedModelCode(String embeddedModelCode) {
     this.embeddedModelCode = embeddedModelCode;
   }
 
-  public ComponentLLMSStatus rankingModelCode(Object rankingModelCode) {
+  public ComponentLLMSStatus rankingModelCode(String rankingModelCode) {
     this.rankingModelCode = rankingModelCode;
     return this;
   }
@@ -299,15 +299,15 @@ public class ComponentLLMSStatus {
    * @return rankingModelCode
   **/
   @Schema(description = "")
-  public Object getRankingModelCode() {
+  public String getRankingModelCode() {
     return rankingModelCode;
   }
 
-  public void setRankingModelCode(Object rankingModelCode) {
+  public void setRankingModelCode(String rankingModelCode) {
     this.rankingModelCode = rankingModelCode;
   }
 
-  public ComponentLLMSStatus imagesModelCode(Object imagesModelCode) {
+  public ComponentLLMSStatus imagesModelCode(String imagesModelCode) {
     this.imagesModelCode = imagesModelCode;
     return this;
   }
@@ -317,15 +317,15 @@ public class ComponentLLMSStatus {
    * @return imagesModelCode
   **/
   @Schema(description = "")
-  public Object getImagesModelCode() {
+  public String getImagesModelCode() {
     return imagesModelCode;
   }
 
-  public void setImagesModelCode(Object imagesModelCode) {
+  public void setImagesModelCode(String imagesModelCode) {
     this.imagesModelCode = imagesModelCode;
   }
 
-  public ComponentLLMSStatus ttsModelCode(Object ttsModelCode) {
+  public ComponentLLMSStatus ttsModelCode(String ttsModelCode) {
     this.ttsModelCode = ttsModelCode;
     return this;
   }
@@ -335,15 +335,15 @@ public class ComponentLLMSStatus {
    * @return ttsModelCode
   **/
   @Schema(description = "")
-  public Object getTtsModelCode() {
+  public String getTtsModelCode() {
     return ttsModelCode;
   }
 
-  public void setTtsModelCode(Object ttsModelCode) {
+  public void setTtsModelCode(String ttsModelCode) {
     this.ttsModelCode = ttsModelCode;
   }
 
-  public ComponentLLMSStatus transcriptModelCode(Object transcriptModelCode) {
+  public ComponentLLMSStatus transcriptModelCode(String transcriptModelCode) {
     this.transcriptModelCode = transcriptModelCode;
     return this;
   }
@@ -353,15 +353,15 @@ public class ComponentLLMSStatus {
    * @return transcriptModelCode
   **/
   @Schema(description = "")
-  public Object getTranscriptModelCode() {
+  public String getTranscriptModelCode() {
     return transcriptModelCode;
   }
 
-  public void setTranscriptModelCode(Object transcriptModelCode) {
+  public void setTranscriptModelCode(String transcriptModelCode) {
     this.transcriptModelCode = transcriptModelCode;
   }
 
-  public ComponentLLMSStatus chatModelProviderId(Object chatModelProviderId) {
+  public ComponentLLMSStatus chatModelProviderId(String chatModelProviderId) {
     this.chatModelProviderId = chatModelProviderId;
     return this;
   }
@@ -371,15 +371,15 @@ public class ComponentLLMSStatus {
    * @return chatModelProviderId
   **/
   @Schema(description = "")
-  public Object getChatModelProviderId() {
+  public String getChatModelProviderId() {
     return chatModelProviderId;
   }
 
-  public void setChatModelProviderId(Object chatModelProviderId) {
+  public void setChatModelProviderId(String chatModelProviderId) {
     this.chatModelProviderId = chatModelProviderId;
   }
 
-  public ComponentLLMSStatus internalServicesChatModelProviderId(Object internalServicesChatModelProviderId) {
+  public ComponentLLMSStatus internalServicesChatModelProviderId(String internalServicesChatModelProviderId) {
     this.internalServicesChatModelProviderId = internalServicesChatModelProviderId;
     return this;
   }
@@ -389,15 +389,15 @@ public class ComponentLLMSStatus {
    * @return internalServicesChatModelProviderId
   **/
   @Schema(description = "")
-  public Object getInternalServicesChatModelProviderId() {
+  public String getInternalServicesChatModelProviderId() {
     return internalServicesChatModelProviderId;
   }
 
-  public void setInternalServicesChatModelProviderId(Object internalServicesChatModelProviderId) {
+  public void setInternalServicesChatModelProviderId(String internalServicesChatModelProviderId) {
     this.internalServicesChatModelProviderId = internalServicesChatModelProviderId;
   }
 
-  public ComponentLLMSStatus embeddedModelProviderId(Object embeddedModelProviderId) {
+  public ComponentLLMSStatus embeddedModelProviderId(String embeddedModelProviderId) {
     this.embeddedModelProviderId = embeddedModelProviderId;
     return this;
   }
@@ -407,15 +407,15 @@ public class ComponentLLMSStatus {
    * @return embeddedModelProviderId
   **/
   @Schema(description = "")
-  public Object getEmbeddedModelProviderId() {
+  public String getEmbeddedModelProviderId() {
     return embeddedModelProviderId;
   }
 
-  public void setEmbeddedModelProviderId(Object embeddedModelProviderId) {
+  public void setEmbeddedModelProviderId(String embeddedModelProviderId) {
     this.embeddedModelProviderId = embeddedModelProviderId;
   }
 
-  public ComponentLLMSStatus rankingModelProviderId(Object rankingModelProviderId) {
+  public ComponentLLMSStatus rankingModelProviderId(String rankingModelProviderId) {
     this.rankingModelProviderId = rankingModelProviderId;
     return this;
   }
@@ -425,15 +425,15 @@ public class ComponentLLMSStatus {
    * @return rankingModelProviderId
   **/
   @Schema(description = "")
-  public Object getRankingModelProviderId() {
+  public String getRankingModelProviderId() {
     return rankingModelProviderId;
   }
 
-  public void setRankingModelProviderId(Object rankingModelProviderId) {
+  public void setRankingModelProviderId(String rankingModelProviderId) {
     this.rankingModelProviderId = rankingModelProviderId;
   }
 
-  public ComponentLLMSStatus imagesModelProviderId(Object imagesModelProviderId) {
+  public ComponentLLMSStatus imagesModelProviderId(String imagesModelProviderId) {
     this.imagesModelProviderId = imagesModelProviderId;
     return this;
   }
@@ -443,15 +443,15 @@ public class ComponentLLMSStatus {
    * @return imagesModelProviderId
   **/
   @Schema(description = "")
-  public Object getImagesModelProviderId() {
+  public String getImagesModelProviderId() {
     return imagesModelProviderId;
   }
 
-  public void setImagesModelProviderId(Object imagesModelProviderId) {
+  public void setImagesModelProviderId(String imagesModelProviderId) {
     this.imagesModelProviderId = imagesModelProviderId;
   }
 
-  public ComponentLLMSStatus ttsModelProviderId(Object ttsModelProviderId) {
+  public ComponentLLMSStatus ttsModelProviderId(String ttsModelProviderId) {
     this.ttsModelProviderId = ttsModelProviderId;
     return this;
   }
@@ -461,15 +461,15 @@ public class ComponentLLMSStatus {
    * @return ttsModelProviderId
   **/
   @Schema(description = "")
-  public Object getTtsModelProviderId() {
+  public String getTtsModelProviderId() {
     return ttsModelProviderId;
   }
 
-  public void setTtsModelProviderId(Object ttsModelProviderId) {
+  public void setTtsModelProviderId(String ttsModelProviderId) {
     this.ttsModelProviderId = ttsModelProviderId;
   }
 
-  public ComponentLLMSStatus transcriptModelProviderId(Object transcriptModelProviderId) {
+  public ComponentLLMSStatus transcriptModelProviderId(String transcriptModelProviderId) {
     this.transcriptModelProviderId = transcriptModelProviderId;
     return this;
   }
@@ -479,11 +479,11 @@ public class ComponentLLMSStatus {
    * @return transcriptModelProviderId
   **/
   @Schema(description = "")
-  public Object getTranscriptModelProviderId() {
+  public String getTranscriptModelProviderId() {
     return transcriptModelProviderId;
   }
 
-  public void setTranscriptModelProviderId(Object transcriptModelProviderId) {
+  public void setTranscriptModelProviderId(String transcriptModelProviderId) {
     this.transcriptModelProviderId = transcriptModelProviderId;
   }
 

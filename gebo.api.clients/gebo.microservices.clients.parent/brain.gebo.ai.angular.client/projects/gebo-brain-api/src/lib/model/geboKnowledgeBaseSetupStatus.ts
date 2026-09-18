@@ -11,10 +11,10 @@
  */
 
 export interface GeboKnowledgeBaseSetupStatus { 
-    isSetup?: any;
-    knowledgeBases?: any;
-    projects?: any;
-    endpoints?: any;
-    endpointsPublished?: any;
-    documentReferences?: any;
+    isSetup?: boolean;
+    knowledgeBases?: number;
+    projects?: number;
+    endpoints?: number;
+    endpointsPublished?: number;
+    documentReferences?: number;
 }

@@ -23,7 +23,7 @@ Method | HTTP request | Description
 
 
 GeneratedUserApiKeyControllerApi apiInstance = new GeneratedUserApiKeyControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     apiInstance.deleteUserGeneratedApiKey(code);
 } catch (ApiException e) {
@@ -36,7 +36,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -139,7 +139,7 @@ No authorization required
 
 <a name="isUserGeneratedApiKeyGenerationAllowed"></a>
 # **isUserGeneratedApiKeyGenerationAllowed**
-> Object isUserGeneratedApiKeyGenerationAllowed()
+> Boolean isUserGeneratedApiKeyGenerationAllowed()
 
 
 
@@ -152,7 +152,7 @@ No authorization required
 
 GeneratedUserApiKeyControllerApi apiInstance = new GeneratedUserApiKeyControllerApi();
 try {
-    Object result = apiInstance.isUserGeneratedApiKeyGenerationAllowed();
+    Boolean result = apiInstance.isUserGeneratedApiKeyGenerationAllowed();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeneratedUserApiKeyControllerApi#isUserGeneratedApiKeyGenerationAllowed");
@@ -165,7 +165,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**Boolean**
 
 ### Authorization
 

@@ -13,6 +13,6 @@ import { VFilesystemReference } from './vFilesystemReference';
 
 export interface VirtualFilesystemNavigationNode { 
     value: VFilesystemReference;
-    selected?: any;
-    opened?: any;
+    selected?: boolean;
+    opened?: boolean;
 }

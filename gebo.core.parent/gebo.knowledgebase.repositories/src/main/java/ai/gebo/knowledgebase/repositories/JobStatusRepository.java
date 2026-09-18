@@ -32,7 +32,7 @@ import ai.gebo.model.base.GObjectRef;
  * Repository interface for managing job statuses in a MongoDB data source.
  * Provides methods to handle CRUD operations and custom queries related to job statuses.
  */
-public interface JobStatusRepository extends IGBaseMongoDBRepository<GJobStatus> {
+public interface JobStatusRepository extends IGBaseMongoDBRepository<GJobStatus>, JobStatusRepositoryCustom {
 	
 	/**
 	 * Returns the managed entity type by the repository.

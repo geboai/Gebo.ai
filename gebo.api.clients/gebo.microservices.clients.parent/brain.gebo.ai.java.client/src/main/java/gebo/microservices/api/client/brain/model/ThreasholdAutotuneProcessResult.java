@@ -19,59 +19,63 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.OptimizedThreashold;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 /**
  * ThreasholdAutotuneProcessResult
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ThreasholdAutotuneProcessResult {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("threasholds")
   private OptimizedThreashold threasholds = null;
 
   @JsonProperty("rootKnowledgeBase")
-  private Object rootKnowledgeBase = null;
+  private String rootKnowledgeBase = null;
 
   @JsonProperty("vectorStoreId")
-  private Object vectorStoreId = null;
+  private String vectorStoreId = null;
 
   @JsonProperty("embeddingModelCode")
-  private Object embeddingModelCode = null;
+  private String embeddingModelCode = null;
 
   @JsonProperty("vectorStoreVectorizedCount")
-  private Object vectorStoreVectorizedCount = null;
+  private Long vectorStoreVectorizedCount = null;
 
   @JsonProperty("evaluationPoints")
-  private Object evaluationPoints = null;
+  private Double evaluationPoints = null;
 
   @JsonProperty("score")
-  private Object score = null;
+  private Double score = null;
 
   @JsonProperty("processedDateTime")
-  private Object processedDateTime = null;
+  private Date processedDateTime = null;
 
   @JsonProperty("computedElements")
-  private Object computedElements = null;
+  private List<Map<String, Object>> computedElements = null;
 
-  public ThreasholdAutotuneProcessResult code(Object code) {
+  public ThreasholdAutotuneProcessResult code(String code) {
     this.code = code;
     return this;
   }
@@ -81,15 +85,15 @@ public class ThreasholdAutotuneProcessResult {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public ThreasholdAutotuneProcessResult description(Object description) {
+  public ThreasholdAutotuneProcessResult description(String description) {
     this.description = description;
     return this;
   }
@@ -99,15 +103,15 @@ public class ThreasholdAutotuneProcessResult {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public ThreasholdAutotuneProcessResult userModified(Object userModified) {
+  public ThreasholdAutotuneProcessResult userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -117,15 +121,15 @@ public class ThreasholdAutotuneProcessResult {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public ThreasholdAutotuneProcessResult userCreated(Object userCreated) {
+  public ThreasholdAutotuneProcessResult userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -135,15 +139,15 @@ public class ThreasholdAutotuneProcessResult {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public ThreasholdAutotuneProcessResult dateModified(Object dateModified) {
+  public ThreasholdAutotuneProcessResult dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -153,15 +157,15 @@ public class ThreasholdAutotuneProcessResult {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public ThreasholdAutotuneProcessResult dateCreated(Object dateCreated) {
+  public ThreasholdAutotuneProcessResult dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -171,11 +175,11 @@ public class ThreasholdAutotuneProcessResult {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
@@ -197,7 +201,7 @@ public class ThreasholdAutotuneProcessResult {
     this.threasholds = threasholds;
   }
 
-  public ThreasholdAutotuneProcessResult rootKnowledgeBase(Object rootKnowledgeBase) {
+  public ThreasholdAutotuneProcessResult rootKnowledgeBase(String rootKnowledgeBase) {
     this.rootKnowledgeBase = rootKnowledgeBase;
     return this;
   }
@@ -207,15 +211,15 @@ public class ThreasholdAutotuneProcessResult {
    * @return rootKnowledgeBase
   **/
   @Schema(description = "")
-  public Object getRootKnowledgeBase() {
+  public String getRootKnowledgeBase() {
     return rootKnowledgeBase;
   }
 
-  public void setRootKnowledgeBase(Object rootKnowledgeBase) {
+  public void setRootKnowledgeBase(String rootKnowledgeBase) {
     this.rootKnowledgeBase = rootKnowledgeBase;
   }
 
-  public ThreasholdAutotuneProcessResult vectorStoreId(Object vectorStoreId) {
+  public ThreasholdAutotuneProcessResult vectorStoreId(String vectorStoreId) {
     this.vectorStoreId = vectorStoreId;
     return this;
   }
@@ -225,15 +229,15 @@ public class ThreasholdAutotuneProcessResult {
    * @return vectorStoreId
   **/
   @Schema(description = "")
-  public Object getVectorStoreId() {
+  public String getVectorStoreId() {
     return vectorStoreId;
   }
 
-  public void setVectorStoreId(Object vectorStoreId) {
+  public void setVectorStoreId(String vectorStoreId) {
     this.vectorStoreId = vectorStoreId;
   }
 
-  public ThreasholdAutotuneProcessResult embeddingModelCode(Object embeddingModelCode) {
+  public ThreasholdAutotuneProcessResult embeddingModelCode(String embeddingModelCode) {
     this.embeddingModelCode = embeddingModelCode;
     return this;
   }
@@ -243,15 +247,15 @@ public class ThreasholdAutotuneProcessResult {
    * @return embeddingModelCode
   **/
   @Schema(description = "")
-  public Object getEmbeddingModelCode() {
+  public String getEmbeddingModelCode() {
     return embeddingModelCode;
   }
 
-  public void setEmbeddingModelCode(Object embeddingModelCode) {
+  public void setEmbeddingModelCode(String embeddingModelCode) {
     this.embeddingModelCode = embeddingModelCode;
   }
 
-  public ThreasholdAutotuneProcessResult vectorStoreVectorizedCount(Object vectorStoreVectorizedCount) {
+  public ThreasholdAutotuneProcessResult vectorStoreVectorizedCount(Long vectorStoreVectorizedCount) {
     this.vectorStoreVectorizedCount = vectorStoreVectorizedCount;
     return this;
   }
@@ -261,15 +265,15 @@ public class ThreasholdAutotuneProcessResult {
    * @return vectorStoreVectorizedCount
   **/
   @Schema(description = "")
-  public Object getVectorStoreVectorizedCount() {
+  public Long getVectorStoreVectorizedCount() {
     return vectorStoreVectorizedCount;
   }
 
-  public void setVectorStoreVectorizedCount(Object vectorStoreVectorizedCount) {
+  public void setVectorStoreVectorizedCount(Long vectorStoreVectorizedCount) {
     this.vectorStoreVectorizedCount = vectorStoreVectorizedCount;
   }
 
-  public ThreasholdAutotuneProcessResult evaluationPoints(Object evaluationPoints) {
+  public ThreasholdAutotuneProcessResult evaluationPoints(Double evaluationPoints) {
     this.evaluationPoints = evaluationPoints;
     return this;
   }
@@ -279,15 +283,15 @@ public class ThreasholdAutotuneProcessResult {
    * @return evaluationPoints
   **/
   @Schema(description = "")
-  public Object getEvaluationPoints() {
+  public Double getEvaluationPoints() {
     return evaluationPoints;
   }
 
-  public void setEvaluationPoints(Object evaluationPoints) {
+  public void setEvaluationPoints(Double evaluationPoints) {
     this.evaluationPoints = evaluationPoints;
   }
 
-  public ThreasholdAutotuneProcessResult score(Object score) {
+  public ThreasholdAutotuneProcessResult score(Double score) {
     this.score = score;
     return this;
   }
@@ -297,15 +301,15 @@ public class ThreasholdAutotuneProcessResult {
    * @return score
   **/
   @Schema(description = "")
-  public Object getScore() {
+  public Double getScore() {
     return score;
   }
 
-  public void setScore(Object score) {
+  public void setScore(Double score) {
     this.score = score;
   }
 
-  public ThreasholdAutotuneProcessResult processedDateTime(Object processedDateTime) {
+  public ThreasholdAutotuneProcessResult processedDateTime(Date processedDateTime) {
     this.processedDateTime = processedDateTime;
     return this;
   }
@@ -315,16 +319,24 @@ public class ThreasholdAutotuneProcessResult {
    * @return processedDateTime
   **/
   @Schema(description = "")
-  public Object getProcessedDateTime() {
+  public Date getProcessedDateTime() {
     return processedDateTime;
   }
 
-  public void setProcessedDateTime(Object processedDateTime) {
+  public void setProcessedDateTime(Date processedDateTime) {
     this.processedDateTime = processedDateTime;
   }
 
-  public ThreasholdAutotuneProcessResult computedElements(Object computedElements) {
+  public ThreasholdAutotuneProcessResult computedElements(List<Map<String, Object>> computedElements) {
     this.computedElements = computedElements;
+    return this;
+  }
+
+  public ThreasholdAutotuneProcessResult addComputedElementsItem(Map<String, Object> computedElementsItem) {
+    if (this.computedElements == null) {
+      this.computedElements = new ArrayList<>();
+    }
+    this.computedElements.add(computedElementsItem);
     return this;
   }
 
@@ -333,11 +345,11 @@ public class ThreasholdAutotuneProcessResult {
    * @return computedElements
   **/
   @Schema(description = "")
-  public Object getComputedElements() {
+  public List<Map<String, Object>> getComputedElements() {
     return computedElements;
   }
 
-  public void setComputedElements(Object computedElements) {
+  public void setComputedElements(List<Map<String, Object>> computedElements) {
     this.computedElements = computedElements;
   }
 

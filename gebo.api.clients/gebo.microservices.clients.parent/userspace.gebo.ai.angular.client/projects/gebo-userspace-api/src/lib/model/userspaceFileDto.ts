@@ -11,12 +11,12 @@
  */
 
 export interface UserspaceFileDto { 
-    code?: any;
-    name?: any;
-    extension?: any;
-    parentUserspaceUploadCode?: any;
-    processed?: any;
-    modificationTime?: any;
-    size?: any;
-    owner?: any;
+    code?: string;
+    name?: string;
+    extension?: string;
+    parentUserspaceUploadCode?: string;
+    processed?: boolean;
+    modificationTime?: Date;
+    size?: number;
+    owner?: boolean;
 }

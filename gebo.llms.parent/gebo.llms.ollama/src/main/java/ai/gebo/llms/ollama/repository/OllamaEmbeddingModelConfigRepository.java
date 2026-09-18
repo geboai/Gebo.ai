@@ -12,7 +12,6 @@
 
 package ai.gebo.llms.ollama.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.ollama.model.GOllamaEmbeddingModelConfig;
@@ -21,10 +20,8 @@ import ai.gebo.llms.ollama.model.GOllamaEmbeddingModelConfig;
  * AI generated comments
  * Repository interface for Ollama embedding model configuration data.
  * This repository manages persistence operations for Ollama embedding model configurations.
- * It extends the base MongoDB repository interface and is conditionally enabled
- * when the 'ai.gebo.llms.config.ollamaEnabled' property is set to 'true'.
+ * It extends the base MongoDB repository interface.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "ollamaEnabled", havingValue = "true")
 public interface OllamaEmbeddingModelConfigRepository extends IGBaseMongoDBRepository<GOllamaEmbeddingModelConfig> {
 	/**
 	 * Provides the managed entity type for this repository.

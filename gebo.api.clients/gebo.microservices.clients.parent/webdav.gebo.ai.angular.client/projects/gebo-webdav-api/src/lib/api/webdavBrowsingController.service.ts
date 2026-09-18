@@ -21,6 +21,7 @@ import { BrowseParam } from '../model/browseParam';
 import { OperationStatusListGVirtualFilesystemRoot } from '../model/operationStatusListGVirtualFilesystemRoot';
 import { OperationStatusListPathInfo } from '../model/operationStatusListPathInfo';
 import { OperationStatusListVirtualFilesystemNavigationTreeStatus } from '../model/operationStatusListVirtualFilesystemNavigationTreeStatus';
+import { VFilesystemReference } from '../model/vFilesystemReference';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -66,10 +67,10 @@ export class WebdavBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public browseWebdavPath(body: BrowseParam, systemCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
-    public browseWebdavPath(body: BrowseParam, systemCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
-    public browseWebdavPath(body: BrowseParam, systemCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
-    public browseWebdavPath(body: BrowseParam, systemCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public browseWebdavPath(body: BrowseParam, systemCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
+    public browseWebdavPath(body: BrowseParam, systemCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
+    public browseWebdavPath(body: BrowseParam, systemCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
+    public browseWebdavPath(body: BrowseParam, systemCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling browseWebdavPath.');
@@ -124,10 +125,10 @@ export class WebdavBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getWebdavNavigationStatus(body: any, systemCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
-    public getWebdavNavigationStatus(body: any, systemCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getWebdavNavigationStatus(body: any, systemCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getWebdavNavigationStatus(body: any, systemCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getWebdavNavigationStatus(body: Array<VFilesystemReference>, systemCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
+    public getWebdavNavigationStatus(body: Array<VFilesystemReference>, systemCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getWebdavNavigationStatus(body: Array<VFilesystemReference>, systemCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getWebdavNavigationStatus(body: Array<VFilesystemReference>, systemCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling getWebdavNavigationStatus.');
@@ -181,10 +182,10 @@ export class WebdavBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getWebdavRoots(systemCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
-    public getWebdavRoots(systemCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
-    public getWebdavRoots(systemCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
-    public getWebdavRoots(systemCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getWebdavRoots(systemCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
+    public getWebdavRoots(systemCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
+    public getWebdavRoots(systemCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
+    public getWebdavRoots(systemCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (systemCode === null || systemCode === undefined) {
             throw new Error('Required parameter systemCode was null or undefined when calling getWebdavRoots.');

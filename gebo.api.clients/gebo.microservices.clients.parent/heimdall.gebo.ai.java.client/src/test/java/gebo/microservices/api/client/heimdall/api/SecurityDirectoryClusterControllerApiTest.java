@@ -13,7 +13,9 @@
 package gebo.microservices.api.client.heimdall.api;
 
 import gebo.microservices.api.client.heimdall.model.CheckPasswordRequest;
+import gebo.microservices.api.client.heimdall.model.CreateUserIfNotExistsRequest;
 import gebo.microservices.api.client.heimdall.model.UserInfosImpl;
+import gebo.microservices.api.client.heimdall.model.UsersGroup;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -41,7 +43,22 @@ public class SecurityDirectoryClusterControllerApiTest {
     @Test
     public void checkPasswordTest() {
         CheckPasswordRequest body = null;
-        Object response = api.checkPassword(body);
+        Boolean response = api.checkPassword(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void createUserIfNotExistsTest() {
+        CreateUserIfNotExistsRequest body = null;
+        UserInfosImpl response = api.createUserIfNotExists(body);
 
         // TODO: test validations
     }
@@ -55,7 +72,7 @@ public class SecurityDirectoryClusterControllerApiTest {
      */
     @Test
     public void findAllGroupsTest() {
-        Object response = api.findAllGroups();
+        List<UsersGroup> response = api.findAllGroups();
 
         // TODO: test validations
     }
@@ -69,8 +86,8 @@ public class SecurityDirectoryClusterControllerApiTest {
      */
     @Test
     public void findGroupsOfUserTest() {
-        Object username = null;
-        Object response = api.findGroupsOfUser(username);
+        String username = null;
+        List<UsersGroup> response = api.findGroupsOfUser(username);
 
         // TODO: test validations
     }
@@ -84,7 +101,7 @@ public class SecurityDirectoryClusterControllerApiTest {
      */
     @Test
     public void findUserByUsernameTest() {
-        Object username = null;
+        String username = null;
         UserInfosImpl response = api.findUserByUsername(username);
 
         // TODO: test validations

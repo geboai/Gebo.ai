@@ -12,15 +12,23 @@
 import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
 
 export interface GJobStatusItem { 
-    description?: any;
-    code?: any;
-    workflowId?: any;
-    workflowType?: any;
+    description?: string;
+    code?: string;
+    workflowId?: string;
+    workflowType?: string;
     projectEndpointReference?: GObjectRefGProjectEndpoint;
-    startDateTime?: any;
-    error?: any;
-    processing?: any;
-    finished?: any;
-    jobType?: any;
-    endDateTime?: any;
+    startDateTime?: Date;
+    error?: boolean;
+    processing?: boolean;
+    finished?: boolean;
+    jobType?: GJobStatusItem.JobTypeEnum;
+    endDateTime?: Date;
+}
+export namespace GJobStatusItem {
+    export type JobTypeEnum = 'CONTENTS_READING' | 'VECTORIZING_CONTENTS' | 'CONTENTS_READING_VECTORIZING';
+    export const JobTypeEnum = {
+        CONTENTSREADING: 'CONTENTS_READING' as JobTypeEnum,
+        VECTORIZINGCONTENTS: 'VECTORIZING_CONTENTS' as JobTypeEnum,
+        CONTENTSREADINGVECTORIZING: 'CONTENTS_READING_VECTORIZING' as JobTypeEnum
+    };
 }

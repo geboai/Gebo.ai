@@ -26,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class CompanySystemsControllerApi {
     private ApiClient apiClient;
@@ -55,7 +55,7 @@ public class CompanySystemsControllerApi {
      * @return GContentManagementSystem
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GContentManagementSystem getContentSystem(Object systemTypeCode, Object systemCode) throws RestClientException {
+    public GContentManagementSystem getContentSystem(String systemTypeCode, String systemCode) throws RestClientException {
         return getContentSystemWithHttpInfo(systemTypeCode, systemCode).getBody();
     }
 
@@ -68,7 +68,7 @@ public class CompanySystemsControllerApi {
      * @return ResponseEntity&lt;GContentManagementSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GContentManagementSystem> getContentSystemWithHttpInfo(Object systemTypeCode, Object systemCode) throws RestClientException {
+    public ResponseEntity<GContentManagementSystem> getContentSystemWithHttpInfo(String systemTypeCode, String systemCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'systemTypeCode' is set
         if (systemTypeCode == null) {
@@ -78,7 +78,7 @@ public class CompanySystemsControllerApi {
         if (systemCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemCode' when calling getContentSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getContentSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getContentSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -96,7 +96,7 @@ public class CompanySystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GContentManagementSystem> returnType = new ParameterizedTypeReference<GContentManagementSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -106,7 +106,7 @@ public class CompanySystemsControllerApi {
      * @return GContentManagementSystemType
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GContentManagementSystemType getContentSystemType(Object systemTypeCode) throws RestClientException {
+    public GContentManagementSystemType getContentSystemType(String systemTypeCode) throws RestClientException {
         return getContentSystemTypeWithHttpInfo(systemTypeCode).getBody();
     }
 
@@ -118,13 +118,13 @@ public class CompanySystemsControllerApi {
      * @return ResponseEntity&lt;GContentManagementSystemType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GContentManagementSystemType> getContentSystemTypeWithHttpInfo(Object systemTypeCode) throws RestClientException {
+    public ResponseEntity<GContentManagementSystemType> getContentSystemTypeWithHttpInfo(String systemTypeCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'systemTypeCode' is set
         if (systemTypeCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemTypeCode' when calling getContentSystemType");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getContentSystemType").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getContentSystemType").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -141,16 +141,16 @@ public class CompanySystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GContentManagementSystemType> returnType = new ParameterizedTypeReference<GContentManagementSystemType>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GContentManagementSystemType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getContentSystemTypes() throws RestClientException {
+    public List<GContentManagementSystemType> getContentSystemTypes() throws RestClientException {
         return getContentSystemTypesWithHttpInfo().getBody();
     }
 
@@ -158,12 +158,12 @@ public class CompanySystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GContentManagementSystemType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getContentSystemTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GContentManagementSystemType>> getContentSystemTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getContentSystemTypes()").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getContentSystemTypes()").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -178,17 +178,17 @@ public class CompanySystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GContentManagementSystemType>> returnType = new ParameterizedTypeReference<List<GContentManagementSystemType>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GContentManagementSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getContentSystems() throws RestClientException {
+    public List<GContentManagementSystem> getContentSystems() throws RestClientException {
         return getContentSystemsWithHttpInfo().getBody();
     }
 
@@ -196,12 +196,12 @@ public class CompanySystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GContentManagementSystem&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getContentSystemsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GContentManagementSystem>> getContentSystemsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getContentSystems").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getContentSystems").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -216,8 +216,8 @@ public class CompanySystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GContentManagementSystem>> returnType = new ParameterizedTypeReference<List<GContentManagementSystem>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -229,7 +229,7 @@ public class CompanySystemsControllerApi {
      * @return GProjectEndpoint
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GProjectEndpoint getProjectEndpoint(Object systemTypeCode, Object systemCode, Object projectEndpointCode) throws RestClientException {
+    public GProjectEndpoint getProjectEndpoint(String systemTypeCode, String systemCode, String projectEndpointCode) throws RestClientException {
         return getProjectEndpointWithHttpInfo(systemTypeCode, systemCode, projectEndpointCode).getBody();
     }
 
@@ -243,7 +243,7 @@ public class CompanySystemsControllerApi {
      * @return ResponseEntity&lt;GProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GProjectEndpoint> getProjectEndpointWithHttpInfo(Object systemTypeCode, Object systemCode, Object projectEndpointCode) throws RestClientException {
+    public ResponseEntity<GProjectEndpoint> getProjectEndpointWithHttpInfo(String systemTypeCode, String systemCode, String projectEndpointCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'systemTypeCode' is set
         if (systemTypeCode == null) {
@@ -257,7 +257,7 @@ public class CompanySystemsControllerApi {
         if (projectEndpointCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'projectEndpointCode' when calling getProjectEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getProjectEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getProjectEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -276,7 +276,7 @@ public class CompanySystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GProjectEndpoint> returnType = new ParameterizedTypeReference<GProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -304,7 +304,7 @@ public class CompanySystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getProjectEndpointByObjectRef");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getProjectEndpointByObjectRef").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getProjectEndpointByObjectRef").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -322,7 +322,7 @@ public class CompanySystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GProjectEndpoint> returnType = new ParameterizedTypeReference<GProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -350,7 +350,7 @@ public class CompanySystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getProjectEndpointSystemInfos");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getProjectEndpointSystemInfos").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/CompanySystemsController/getProjectEndpointSystemInfos").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -368,6 +368,6 @@ public class CompanySystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SystemInfos> returnType = new ParameterizedTypeReference<SystemInfos>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

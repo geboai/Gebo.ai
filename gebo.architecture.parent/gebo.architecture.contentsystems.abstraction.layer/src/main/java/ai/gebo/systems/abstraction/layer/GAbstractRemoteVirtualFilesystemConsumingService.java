@@ -164,9 +164,10 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 						GVirtualFolder parentNode = createAndConsumeVirtualFolderNodes(previusFolderCoordinates,
 								position, system, endpoint, root, consumer, messagesConsumer, errorConsumer,
 								environment);
-						createAndConsumeDocumentReference(previusFolderCoordinates, resource, system, endpoint,
-								parentNode, consumer, messagesConsumer, errorConsumer, environment, messageModuleId,
-								messageSystemId);
+						GDocumentReference singleReference = createDocumentReference(previusFolderCoordinates, resource,
+								system, endpoint, parentNode, consumer, messagesConsumer, errorConsumer, environment,
+								messageModuleId, messageSystemId);
+						consumer.accept(singleReference);
 					} else
 						throw new GeboContentHandlerSystemException(
 								"The node=>" + resource.toString() + " is not a resource nor a folder");
@@ -204,9 +205,18 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * @param environment              The operating environment
 	 * @param messageModuleId          TODO
 	 * @param messageSystemId          TODO
-	 * @return A GDocumentReference representing the consumed document reference
+	 * @return A GDocumentReference representing the built document reference, not yet
+	 *         consumed
 	 */
-	protected GDocumentReference createAndConsumeDocumentReference(
+	// Builds the document reference and returns it WITHOUT consuming it - the caller
+	// now does consumer.accept(). Split out of the former
+	// createAndConsumeDocumentReference so a subclass can override this, enrich the
+	// returned reference (e.g. set ACL aliases transcoded from the remote object) and
+	// return it, before the parent hands it to the consumer. Folders already worked
+	// this way (createVirtualFolder returns, the caller accepts); this makes
+	// documents symmetric. Contract: must return a non-null reference (as it always
+	// has) - a null would make the caller skip the consume.
+	protected GDocumentReference createDocumentReference(
 			List<ImplementativePositionObjectType> previusFolderCoordinates, ImplementativePositionObjectType resource,
 			SystemType system, EndpointType endpoint, GVirtualFolder root, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
@@ -225,7 +235,6 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 		GDocumentReference dr = this.documentFactory.createWebDocumentReference(spaceFolder, projectEndpoint, code,
 				name, contentType, url, modificationTimestamp, meta, messageModuleId, messageSystemId);
 		dr.setFileSize(size);
-		consumer.accept(dr);
 		return dr;
 	}
 
@@ -293,10 +302,11 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 				completeCoordinates.add(nativeCoordinatePointer.child);
 				childrenMapsEnrich(completeCoordinates);
 				if (nativeCoordinatePointer.child.isResource()) {
-					GDocumentReference docreference = createAndConsumeDocumentReference(
+					GDocumentReference docreference = createDocumentReference(
 							nativeCoordinatePointer.parentCoordinates, nativeCoordinatePointer.child, system, endpoint,
 							parentNode, consumer, messagesConsumer, errorConsumer, environment, messageModuleId,
 							messageSystemId);
+					consumer.accept(docreference);
 					if (LOGGER.isDebugEnabled() && docreference != null) {
 						final String msg = "Document reference generated=>" + docreference.getCode();
 						LOGGER.debug(msg);

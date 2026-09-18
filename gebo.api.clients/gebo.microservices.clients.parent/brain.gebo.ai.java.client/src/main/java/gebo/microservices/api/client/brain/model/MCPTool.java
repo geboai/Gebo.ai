@@ -18,42 +18,52 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * MCPTool
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class MCPTool {
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("deletedOnMCPServer")
-  private Object deletedOnMCPServer = null;
+  private Boolean deletedOnMCPServer = null;
 
   @JsonProperty("addedOnMCPServer")
-  private Object addedOnMCPServer = null;
+  private Boolean addedOnMCPServer = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("inputSchema")
-  private Object inputSchema = null;
+  private String inputSchema = null;
 
-  public MCPTool accessibleGroups(Object accessibleGroups) {
+  public MCPTool accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public MCPTool addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -62,16 +72,24 @@ public class MCPTool {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public MCPTool accessibleUsers(Object accessibleUsers) {
+  public MCPTool accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public MCPTool addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -80,15 +98,15 @@ public class MCPTool {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public MCPTool accessibleToAll(Object accessibleToAll) {
+  public MCPTool accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -98,16 +116,24 @@ public class MCPTool {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public MCPTool aclAliases(Object aclAliases) {
+  public MCPTool aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public MCPTool addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -116,15 +142,15 @@ public class MCPTool {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
   }
 
-  public MCPTool name(Object name) {
+  public MCPTool name(String name) {
     this.name = name;
     return this;
   }
@@ -134,15 +160,15 @@ public class MCPTool {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public MCPTool deletedOnMCPServer(Object deletedOnMCPServer) {
+  public MCPTool deletedOnMCPServer(Boolean deletedOnMCPServer) {
     this.deletedOnMCPServer = deletedOnMCPServer;
     return this;
   }
@@ -152,15 +178,15 @@ public class MCPTool {
    * @return deletedOnMCPServer
   **/
   @Schema(description = "")
-  public Object getDeletedOnMCPServer() {
+  public Boolean isDeletedOnMCPServer() {
     return deletedOnMCPServer;
   }
 
-  public void setDeletedOnMCPServer(Object deletedOnMCPServer) {
+  public void setDeletedOnMCPServer(Boolean deletedOnMCPServer) {
     this.deletedOnMCPServer = deletedOnMCPServer;
   }
 
-  public MCPTool addedOnMCPServer(Object addedOnMCPServer) {
+  public MCPTool addedOnMCPServer(Boolean addedOnMCPServer) {
     this.addedOnMCPServer = addedOnMCPServer;
     return this;
   }
@@ -170,15 +196,15 @@ public class MCPTool {
    * @return addedOnMCPServer
   **/
   @Schema(description = "")
-  public Object getAddedOnMCPServer() {
+  public Boolean isAddedOnMCPServer() {
     return addedOnMCPServer;
   }
 
-  public void setAddedOnMCPServer(Object addedOnMCPServer) {
+  public void setAddedOnMCPServer(Boolean addedOnMCPServer) {
     this.addedOnMCPServer = addedOnMCPServer;
   }
 
-  public MCPTool description(Object description) {
+  public MCPTool description(String description) {
     this.description = description;
     return this;
   }
@@ -188,15 +214,15 @@ public class MCPTool {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public MCPTool inputSchema(Object inputSchema) {
+  public MCPTool inputSchema(String inputSchema) {
     this.inputSchema = inputSchema;
     return this;
   }
@@ -206,11 +232,11 @@ public class MCPTool {
    * @return inputSchema
   **/
   @Schema(description = "")
-  public Object getInputSchema() {
+  public String getInputSchema() {
     return inputSchema;
   }
 
-  public void setInputSchema(Object inputSchema) {
+  public void setInputSchema(String inputSchema) {
     this.inputSchema = inputSchema;
   }
 

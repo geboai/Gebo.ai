@@ -42,7 +42,7 @@ public class GeboMcpServerAdminControllerApiTest {
      */
     @Test
     public void deleteMcpServerTest() {
-        Object code = null;
+        String code = null;
         api.deleteMcpServer(code);
 
         // TODO: test validations
@@ -57,7 +57,7 @@ public class GeboMcpServerAdminControllerApiTest {
      */
     @Test
     public void findMcpServerByCodeTest() {
-        Object code = null;
+        String code = null;
         GeboMCPServerConfig response = api.findMcpServerByCode(code);
 
         // TODO: test validations
@@ -72,7 +72,7 @@ public class GeboMcpServerAdminControllerApiTest {
      */
     @Test
     public void getAllMcpServersTest() {
-        Object response = api.getAllMcpServers();
+        List<GeboMCPServerConfig> response = api.getAllMcpServers();
 
         // TODO: test validations
     }

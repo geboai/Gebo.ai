@@ -2,6 +2,7 @@ package gebo.microservices.api.client.git.api;
 
 import gebo.microservices.api.client.git.invoker.ApiClient;
 
+import gebo.microservices.api.client.git.model.GContentManagementSystemType;
 import gebo.microservices.api.client.git.model.GGitContentManagementSystem;
 import gebo.microservices.api.client.git.model.GGitProjectEndpoint;
 import gebo.microservices.api.client.git.model.OperationStatusGGitProjectEndpoint;
@@ -26,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:07.116206835+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.835643861+02:00[Europe/Rome]")
 
 public class GitSystemsControllerApi {
     private ApiClient apiClient;
@@ -71,7 +72,7 @@ public class GitSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteGitEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/deleteGitEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/deleteGitEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -87,7 +88,7 @@ public class GitSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -114,7 +115,7 @@ public class GitSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteGitSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/deleteGitSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/deleteGitSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -130,17 +131,17 @@ public class GitSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return Object
+     * @return List&lt;GGitProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findGitEndpointsByProject(Object parentProjectCode) throws RestClientException {
+    public List<GGitProjectEndpoint> findGitEndpointsByProject(String parentProjectCode) throws RestClientException {
         return findGitEndpointsByProjectWithHttpInfo(parentProjectCode).getBody();
     }
 
@@ -149,16 +150,16 @@ public class GitSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GGitProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findGitEndpointsByProjectWithHttpInfo(Object parentProjectCode) throws RestClientException {
+    public ResponseEntity<List<GGitProjectEndpoint>> findGitEndpointsByProjectWithHttpInfo(String parentProjectCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'parentProjectCode' is set
         if (parentProjectCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'parentProjectCode' when calling findGitEndpointsByProject");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/findGitEndpointsByProject").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/findGitEndpointsByProject").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -174,18 +175,18 @@ public class GitSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GGitProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GGitProjectEndpoint>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GGitProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findGitEndpointsByQbe(GGitProjectEndpoint body) throws RestClientException {
+    public List<GGitProjectEndpoint> findGitEndpointsByQbe(GGitProjectEndpoint body) throws RestClientException {
         return findGitEndpointsByQbeWithHttpInfo(body).getBody();
     }
 
@@ -194,16 +195,16 @@ public class GitSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GGitProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findGitEndpointsByQbeWithHttpInfo(GGitProjectEndpoint body) throws RestClientException {
+    public ResponseEntity<List<GGitProjectEndpoint>> findGitEndpointsByQbeWithHttpInfo(GGitProjectEndpoint body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findGitEndpointsByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/findGitEndpointsByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/findGitEndpointsByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -220,8 +221,8 @@ public class GitSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GGitProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GGitProjectEndpoint>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -249,7 +250,7 @@ public class GitSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getBranchesList");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/getBranchesList").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/getBranchesList").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -267,16 +268,16 @@ public class GitSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListString> returnType = new ParameterizedTypeReference<OperationStatusListString>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GContentManagementSystemType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGitSystemTypes() throws RestClientException {
+    public List<GContentManagementSystemType> getGitSystemTypes() throws RestClientException {
         return getGitSystemTypesWithHttpInfo().getBody();
     }
 
@@ -284,12 +285,12 @@ public class GitSystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GContentManagementSystemType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGitSystemTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GContentManagementSystemType>> getGitSystemTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/getGitSystemTypes").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/getGitSystemTypes").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -304,18 +305,18 @@ public class GitSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GContentManagementSystemType>> returnType = new ParameterizedTypeReference<List<GContentManagementSystemType>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param handlerCode  (optional)
-     * @return Object
+     * @return List&lt;GGitContentManagementSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGitSystems(Object handlerCode) throws RestClientException {
+    public List<GGitContentManagementSystem> getGitSystems(String handlerCode) throws RestClientException {
         return getGitSystemsWithHttpInfo(handlerCode).getBody();
     }
 
@@ -324,12 +325,12 @@ public class GitSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param handlerCode  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GGitContentManagementSystem&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGitSystemsWithHttpInfo(Object handlerCode) throws RestClientException {
+    public ResponseEntity<List<GGitContentManagementSystem>> getGitSystemsWithHttpInfo(String handlerCode) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/getGitSystems").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/getGitSystems").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -345,8 +346,8 @@ public class GitSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GGitContentManagementSystem>> returnType = new ParameterizedTypeReference<List<GGitContentManagementSystem>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -374,7 +375,7 @@ public class GitSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertGitEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/insertGitEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/insertGitEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -392,7 +393,7 @@ public class GitSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGGitProjectEndpoint> returnType = new ParameterizedTypeReference<OperationStatusGGitProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -420,7 +421,7 @@ public class GitSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertGitSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/insertGitSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/insertGitSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -438,7 +439,7 @@ public class GitSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GGitContentManagementSystem> returnType = new ParameterizedTypeReference<GGitContentManagementSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -466,7 +467,7 @@ public class GitSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishGitEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/publishGitEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/publishGitEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -484,7 +485,7 @@ public class GitSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJobStatus> returnType = new ParameterizedTypeReference<OperationStatusGJobStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -512,7 +513,7 @@ public class GitSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateGitEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/updateGitEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/updateGitEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -530,7 +531,7 @@ public class GitSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGGitProjectEndpoint> returnType = new ParameterizedTypeReference<OperationStatusGGitProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -558,7 +559,7 @@ public class GitSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateGitSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/updateGitSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/updateGitSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -576,6 +577,6 @@ public class GitSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GGitContentManagementSystem> returnType = new ParameterizedTypeReference<GGitContentManagementSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

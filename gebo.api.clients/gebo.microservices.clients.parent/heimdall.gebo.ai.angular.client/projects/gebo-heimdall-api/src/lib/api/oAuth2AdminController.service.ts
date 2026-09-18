@@ -17,6 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { AuthProviderDto } from '../model/authProviderDto';
 import { Oauth2ProviderModifiableData } from '../model/oauth2ProviderModifiableData';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -108,10 +109,10 @@ export class OAuth2AdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findOauth2ProviderRegistrationByRegistrationId(registrationId: any, observe?: 'body', reportProgress?: boolean): Observable<Oauth2ProviderModifiableData>;
-    public findOauth2ProviderRegistrationByRegistrationId(registrationId: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Oauth2ProviderModifiableData>>;
-    public findOauth2ProviderRegistrationByRegistrationId(registrationId: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Oauth2ProviderModifiableData>>;
-    public findOauth2ProviderRegistrationByRegistrationId(registrationId: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findOauth2ProviderRegistrationByRegistrationId(registrationId: string, observe?: 'body', reportProgress?: boolean): Observable<Oauth2ProviderModifiableData>;
+    public findOauth2ProviderRegistrationByRegistrationId(registrationId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Oauth2ProviderModifiableData>>;
+    public findOauth2ProviderRegistrationByRegistrationId(registrationId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Oauth2ProviderModifiableData>>;
+    public findOauth2ProviderRegistrationByRegistrationId(registrationId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (registrationId === null || registrationId === undefined) {
             throw new Error('Required parameter registrationId was null or undefined when calling findOauth2ProviderRegistrationByRegistrationId.');
@@ -154,9 +155,9 @@ export class OAuth2AdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProviders(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getProviders(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getProviders(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getProviders(observe?: 'body', reportProgress?: boolean): Observable<Array<AuthProviderDto>>;
+    public getProviders(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AuthProviderDto>>>;
+    public getProviders(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AuthProviderDto>>>;
     public getProviders(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -174,7 +175,7 @@ export class OAuth2AdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/OAuth2AdminController/getProviders`,
+        return this.httpClient.request<Array<AuthProviderDto>>('get',`${this.basePath}/api/admin/OAuth2AdminController/getProviders`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

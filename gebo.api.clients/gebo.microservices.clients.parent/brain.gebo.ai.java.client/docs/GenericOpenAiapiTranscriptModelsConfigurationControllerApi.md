@@ -69,7 +69,7 @@ No authorization required
 
 
 GenericOpenAiapiTranscriptModelsConfigurationControllerApi apiInstance = new GenericOpenAiapiTranscriptModelsConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GenericOpenAIAPITranscriptModelConfig result = apiInstance.findGenericOpenAIAPITranscriptModelConfigByCode(code);
     System.out.println(result);
@@ -83,7 +83,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -143,7 +143,7 @@ No authorization required
 
 <a name="getGenericOpenAITranscriptModelConfigs"></a>
 # **getGenericOpenAITranscriptModelConfigs**
-> Object getGenericOpenAITranscriptModelConfigs()
+> List&lt;GenericOpenAIAPITranscriptModelConfig&gt; getGenericOpenAITranscriptModelConfigs()
 
 
 
@@ -156,7 +156,7 @@ No authorization required
 
 GenericOpenAiapiTranscriptModelsConfigurationControllerApi apiInstance = new GenericOpenAiapiTranscriptModelsConfigurationControllerApi();
 try {
-    Object result = apiInstance.getGenericOpenAITranscriptModelConfigs();
+    List<GenericOpenAIAPITranscriptModelConfig> result = apiInstance.getGenericOpenAITranscriptModelConfigs();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GenericOpenAiapiTranscriptModelsConfigurationControllerApi#getGenericOpenAITranscriptModelConfigs");
@@ -169,7 +169,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GenericOpenAIAPITranscriptModelConfig&gt;**](GenericOpenAIAPITranscriptModelConfig.md)
 
 ### Authorization
 
@@ -182,7 +182,7 @@ No authorization required
 
 <a name="getGenericOpenAITranscriptModelTypes"></a>
 # **getGenericOpenAITranscriptModelTypes**
-> Object getGenericOpenAITranscriptModelTypes()
+> List&lt;GenericOpenAITranscriptModelType&gt; getGenericOpenAITranscriptModelTypes()
 
 
 
@@ -195,7 +195,7 @@ No authorization required
 
 GenericOpenAiapiTranscriptModelsConfigurationControllerApi apiInstance = new GenericOpenAiapiTranscriptModelsConfigurationControllerApi();
 try {
-    Object result = apiInstance.getGenericOpenAITranscriptModelTypes();
+    List<GenericOpenAITranscriptModelType> result = apiInstance.getGenericOpenAITranscriptModelTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GenericOpenAiapiTranscriptModelsConfigurationControllerApi#getGenericOpenAITranscriptModelTypes");
@@ -208,7 +208,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GenericOpenAITranscriptModelType&gt;**](GenericOpenAITranscriptModelType.md)
 
 ### Authorization
 

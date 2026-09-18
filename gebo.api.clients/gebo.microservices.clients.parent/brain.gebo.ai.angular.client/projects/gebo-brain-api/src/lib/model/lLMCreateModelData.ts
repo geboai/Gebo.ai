@@ -11,16 +11,40 @@
  */
 
 export interface LLMCreateModelData { 
-    type: any;
-    doModelsLookup?: any;
-    serviceHandler: any;
-    setAsDefaultModel?: any;
-    enableAllFunctions?: any;
-    secretId?: any;
-    modelCode: any;
-    baseUrl?: any;
-    contextWindow?: any;
-    uses?: any;
-    maxGeneratedTokens?: any;
-    thinking?: any;
+    type: LLMCreateModelData.TypeEnum;
+    doModelsLookup?: boolean;
+    serviceHandler: string;
+    setAsDefaultModel?: boolean;
+    enableAllFunctions?: boolean;
+    secretId?: string;
+    modelCode: string;
+    baseUrl?: string;
+    contextWindow?: number;
+    uses?: Array<LLMCreateModelData.UsesEnum>;
+    maxGeneratedTokens?: number;
+    thinking?: LLMCreateModelData.ThinkingEnum;
+}
+export namespace LLMCreateModelData {
+    export type TypeEnum = 'CHAT' | 'EMBEDDING' | 'RANKING' | 'IMAGESGEN' | 'TTS' | 'TRANSCRIPT';
+    export const TypeEnum = {
+        CHAT: 'CHAT' as TypeEnum,
+        EMBEDDING: 'EMBEDDING' as TypeEnum,
+        RANKING: 'RANKING' as TypeEnum,
+        IMAGESGEN: 'IMAGESGEN' as TypeEnum,
+        TTS: 'TTS' as TypeEnum,
+        TRANSCRIPT: 'TRANSCRIPT' as TypeEnum
+    };
+    export type UsesEnum = 'CHAT' | 'INTERNAL_SERVICES';
+    export const UsesEnum = {
+        CHAT: 'CHAT' as UsesEnum,
+        INTERNALSERVICES: 'INTERNAL_SERVICES' as UsesEnum
+    };
+    export type ThinkingEnum = 'NO_THINKING' | 'LOW_THINKING' | 'MEDIUM_THINKING' | 'HIGH_THINKING' | 'AUTO';
+    export const ThinkingEnum = {
+        NOTHINKING: 'NO_THINKING' as ThinkingEnum,
+        LOWTHINKING: 'LOW_THINKING' as ThinkingEnum,
+        MEDIUMTHINKING: 'MEDIUM_THINKING' as ThinkingEnum,
+        HIGHTHINKING: 'HIGH_THINKING' as ThinkingEnum,
+        AUTO: 'AUTO' as ThinkingEnum
+    };
 }

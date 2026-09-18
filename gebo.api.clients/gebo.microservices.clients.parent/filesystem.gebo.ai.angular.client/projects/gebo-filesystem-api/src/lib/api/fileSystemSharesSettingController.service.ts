@@ -18,12 +18,14 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { BrowseParam } from '../model/browseParam';
+import { FSReference } from '../model/fSReference';
 import { GFileSystemShareReference } from '../model/gFileSystemShareReference';
 import { OperationStatusGFileSystemShareReference } from '../model/operationStatusGFileSystemShareReference';
 import { OperationStatusListGVirtualFilesystemRoot } from '../model/operationStatusListGVirtualFilesystemRoot';
 import { OperationStatusListPathInfo } from '../model/operationStatusListPathInfo';
 import { OperationStatusListVirtualFilesystemNavigationTreeStatus } from '../model/operationStatusListVirtualFilesystemNavigationTreeStatus';
 import { SharedFilesystemUIConfig } from '../model/sharedFilesystemUIConfig';
+import { VFilesystemReference } from '../model/vFilesystemReference';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -161,10 +163,10 @@ export class FileSystemSharesSettingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFileSystemShareReferenceByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GFileSystemShareReference>;
-    public getFileSystemShareReferenceByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GFileSystemShareReference>>;
-    public getFileSystemShareReferenceByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GFileSystemShareReference>>;
-    public getFileSystemShareReferenceByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getFileSystemShareReferenceByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GFileSystemShareReference>;
+    public getFileSystemShareReferenceByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GFileSystemShareReference>>;
+    public getFileSystemShareReferenceByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GFileSystemShareReference>>;
+    public getFileSystemShareReferenceByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling getFileSystemShareReferenceByCode.');
@@ -255,10 +257,10 @@ export class FileSystemSharesSettingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGFileSystemNodeNavigationStatus(body: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
-    public getGFileSystemNodeNavigationStatus(body: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getGFileSystemNodeNavigationStatus(body: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getGFileSystemNodeNavigationStatus(body: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getGFileSystemNodeNavigationStatus(body: Array<VFilesystemReference>, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
+    public getGFileSystemNodeNavigationStatus(body: Array<VFilesystemReference>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getGFileSystemNodeNavigationStatus(body: Array<VFilesystemReference>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getGFileSystemNodeNavigationStatus(body: Array<VFilesystemReference>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling getGFileSystemNodeNavigationStatus.');
@@ -374,10 +376,10 @@ export class FileSystemSharesSettingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUsedFilesystemShares(body: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getUsedFilesystemShares(body: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getUsedFilesystemShares(body: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getUsedFilesystemShares(body: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getUsedFilesystemShares(body: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<FSReference>>;
+    public getUsedFilesystemShares(body: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<FSReference>>>;
+    public getUsedFilesystemShares(body: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<FSReference>>>;
+    public getUsedFilesystemShares(body: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling getUsedFilesystemShares.');
@@ -403,7 +405,7 @@ export class FileSystemSharesSettingControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/FileSystemSharesSettingController/getUsedFilesystemShares`,
+        return this.httpClient.request<Array<FSReference>>('post',`${this.basePath}/api/admin/FileSystemSharesSettingController/getUsedFilesystemShares`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

@@ -2,6 +2,8 @@ package ai.gebo.llms.agent.standardtools;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class StandardSearchesToolsImpl implements IGToolCallbackSource {
+	private static final Logger LOGGER = LoggerFactory.getLogger(StandardSearchesToolsImpl.class);
 	private static final String STANDARD_SEARCH_TOOLS = "Standard search tools";
 	public static final String STANDARD_SEARCHES_TOOLS_SOURCE = "standard-searches-tools-source";
 	private final ISearchServiceRepositoryPattern searchServicesRepoPattern;
@@ -43,11 +46,15 @@ public class StandardSearchesToolsImpl implements IGToolCallbackSource {
 
 	@Override
 	public List<ToolReference> getFullToolReferences() {
-
-		return searchServicesRepoPattern.getImplementations().stream().filter(x -> {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin getFullToolReferences() for tool source:" + getId());
+		}
+		List<ToolReference> references = searchServicesRepoPattern.getImplementations().stream().filter(x -> {
 			try {
 				return x.isEnabled();
 			} catch (SearchServiceException e) {
+				LOGGER.warn("Cannot tell whether search service {} is enabled, excluding it from the tool source",
+						x != null ? x.getId() : null, e);
 				return false;
 			}
 		}).map(searchService -> {
@@ -60,15 +67,24 @@ public class StandardSearchesToolsImpl implements IGToolCallbackSource {
 			return reference;
 
 		}).toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End getFullToolReferences() tool source:" + getId() + " exposes " + references.size()
+					+ " tool reference(s)");
+		}
+		return references;
 	}
 
 	@Override
 	public List<ToolCallback> getToolCallbacks() {
-
-		return searchServicesRepoPattern.getImplementations().stream().filter(x -> {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin getToolCallbacks() for tool source:" + getId());
+		}
+		List<ToolCallback> callbacks = searchServicesRepoPattern.getImplementations().stream().filter(x -> {
 			try {
 				return x.isEnabled();
 			} catch (SearchServiceException e) {
+				LOGGER.warn("Cannot tell whether search service {} is enabled, excluding it from the tool source",
+						x != null ? x.getId() : null, e);
 				return false;
 			}
 		}).map(searchService -> {
@@ -81,6 +97,17 @@ public class StandardSearchesToolsImpl implements IGToolCallbackSource {
 			return callBack;
 
 		}).toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End getToolCallbacks() tool source:" + getId() + " exposes " + callbacks.size()
+					+ " tool callback(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			for (ToolCallback callback : callbacks) {
+				LOGGER.trace("Exposed tool: " + callback.getToolDefinition().name() + " - "
+						+ callback.getToolDefinition().description());
+			}
+		}
+		return callbacks;
 	}
 
 	private ToolCallback createSearchTool(ISearchService searchService) {
@@ -89,8 +116,12 @@ public class StandardSearchesToolsImpl implements IGToolCallbackSource {
 	}
 
 	private IDocumentsChunkService getChunkingService() {
-
-		return runtimeBinder.getImplementationOf(IDocumentsChunkService.class);
+		IDocumentsChunkService chunkingService = runtimeBinder.getImplementationOf(IDocumentsChunkService.class);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Lazily resolved the documents chunk service to "
+					+ (chunkingService != null ? chunkingService.getClass().getName() : null));
+		}
+		return chunkingService;
 	}
 
 	private ToolCallback createNativeSearchTool(INativeSearchService nativeSearchService) {

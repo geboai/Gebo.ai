@@ -26,7 +26,7 @@ Method | HTTP request | Description
 
 
 GeboMcpServerAdminControllerApi apiInstance = new GeboMcpServerAdminControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     apiInstance.deleteMcpServer(code);
 } catch (ApiException e) {
@@ -39,7 +39,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -68,7 +68,7 @@ No authorization required
 
 
 GeboMcpServerAdminControllerApi apiInstance = new GeboMcpServerAdminControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GeboMCPServerConfig result = apiInstance.findMcpServerByCode(code);
     System.out.println(result);
@@ -82,7 +82,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -99,7 +99,7 @@ No authorization required
 
 <a name="getAllMcpServers"></a>
 # **getAllMcpServers**
-> Object getAllMcpServers()
+> List&lt;GeboMCPServerConfig&gt; getAllMcpServers()
 
 
 
@@ -112,7 +112,7 @@ No authorization required
 
 GeboMcpServerAdminControllerApi apiInstance = new GeboMcpServerAdminControllerApi();
 try {
-    Object result = apiInstance.getAllMcpServers();
+    List<GeboMCPServerConfig> result = apiInstance.getAllMcpServers();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboMcpServerAdminControllerApi#getAllMcpServers");
@@ -125,7 +125,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GeboMCPServerConfig&gt;**](GeboMCPServerConfig.md)
 
 ### Authorization
 

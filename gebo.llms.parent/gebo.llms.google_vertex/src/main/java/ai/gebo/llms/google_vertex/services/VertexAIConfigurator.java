@@ -27,6 +27,9 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.aiplatform.v1.PredictionServiceSettings;
 import com.google.genai.Client;
 import com.google.genai.types.HttpOptions;
+import com.google.genai.types.HttpRetryOptions;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.abstraction.layer.services.config.GeboLlmsClientConfig;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -50,6 +53,38 @@ class VertexAIConfigurator {
 	 */
 	@Autowired
 	private IGeboSecretsAccessService secretService;
+
+	/**
+	 * Supplies the configured timeouts and retry budget
+	 * ({@code ai.gebo.llms.default.clients.config}). The Google GenAI client otherwise
+	 * runs on SDK defaults: {@link HttpOptions} was only ever built here to carry a
+	 * custom base URL, so no timeout or retry option reached it.
+	 */
+	@Autowired
+	private IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+
+	/**
+	 * Provider id used for the lookup below. This configurator serves both the chat and
+	 * the embedding model, so it names the vendor rather than either model type;
+	 * {@code GLlmsServiceClientsProviderFactoryImpl.get(..)} currently returns the
+	 * default provider for every id anyway.
+	 */
+	private static final String CLIENTS_PROVIDER_ID = "google-vertex";
+
+	/**
+	 * Builds the {@link HttpOptions} every Vertex client shares: the configured request
+	 * timeout (milliseconds) and retry attempts, plus the optional custom base URL.
+	 */
+	private HttpOptions httpOptions(String baseUrl) {
+		GeboLlmsClientConfig cfg = serviceClientsProviderFactory.get(CLIENTS_PROVIDER_ID).getClientConfig();
+		HttpOptions.Builder options = HttpOptions.builder()
+				.timeout((int) cfg.getReadTimeoutMs())
+				.retryOptions(HttpRetryOptions.builder().attempts(cfg.getMaxRetryAttempts()));
+		if (baseUrl != null && baseUrl.trim().length() > 0) {
+			options.baseUrl(baseUrl);
+		}
+		return options.build();
+	}
 
 	/**
 	 * Creates and configures a Google GenAI {@link Client} (Vertex AI mode) using the provided
@@ -108,10 +143,8 @@ class VertexAIConfigurator {
 				}
 			}
 
-			// Configure custom endpoint if provided
-			if (baseUrl != null && baseUrl.trim().length() > 0) {
-				clientBuilder.httpOptions(HttpOptions.builder().baseUrl(baseUrl).build());
-			}
+			// Timeouts, retry budget and the optional custom endpoint all travel together
+			clientBuilder.httpOptions(httpOptions(baseUrl));
 
 			return clientBuilder.build();
 		} catch (IOException e) {

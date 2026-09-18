@@ -42,6 +42,7 @@ import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CommonPrefix;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Object;
@@ -136,8 +137,7 @@ public class AwsS3VirtualFilesystemConsumingService
 			throws GeboContentHandlerSystemException {
 		AwsS3NativePositionObject lastNode = nativeCoordinates.get(nativeCoordinates.size() - 1);
 		S3Client s3Client = (S3Client) environment.get(S3_CLIENT);
-		String bucketName = lastNode.isBucket() ? lastNode.getBucket().name()
-				: (String) lastNode.getResourceReferenceMetaInfos().get(AwsS3NativePositionObject.S3_BUCKET_NAME);
+		String bucketName = bucketNameOf(nativeCoordinates);
 		String prefix = lastNode.isBucket() ? "" : lastNode.getCode();
 		if (!prefix.isEmpty() && !prefix.endsWith("/")) {
 			prefix = prefix + "/";
@@ -213,16 +213,47 @@ public class AwsS3VirtualFilesystemConsumingService
 		}
 
 		if (position.getBrowsingStepsCustom() != null) {
+			String bucketName = bucketNameOf(path);
 			for (AwsS3PathComponent step : position.getBrowsingStepsCustom()) {
 				if (step.type == AwsS3PathNodeType.FOLDER) {
 					AwsS3NativePositionObject obj = new AwsS3NativePositionObject();
 					S3Object s3Obj = S3Object.builder().key(step.id).build();
 					obj.setS3Object(s3Obj);
 					path.add(obj);
+				} else if (step.type == AwsS3PathNodeType.RESOURCE) {
+					// A step naming a single object - what a data source declaring one file
+					// produces. Unlike a prefix, an object node has to carry its size and
+					// modification time, and only the store knows them, so it is described
+					// here rather than built from the key alone.
+					path.add(toResourceNode(bucketName, step.id, environment));
 				}
 			}
 		}
 		return path;
+	}
+
+	/**
+	 * Describes a single S3 object so it can stand as a navigation step.
+	 *
+	 * @param bucketName  the bucket the object lives in.
+	 * @param objectKey   the object key.
+	 * @param environment the environment holding the S3 client.
+	 * @return the native position object for it.
+	 * @throws GeboContentHandlerSystemException when the object cannot be described.
+	 */
+	private AwsS3NativePositionObject toResourceNode(String bucketName, String objectKey,
+			Map<String, Object> environment) throws GeboContentHandlerSystemException {
+		S3Client s3Client = (S3Client) environment.get(S3_CLIENT);
+		try {
+			HeadObjectResponse head = s3Client.headObject(r -> r.bucket(bucketName).key(objectKey));
+			AwsS3NativePositionObject obj = new AwsS3NativePositionObject();
+			obj.setS3Object(S3Object.builder().key(objectKey).size(head.contentLength())
+					.lastModified(head.lastModified()).eTag(head.eTag()).build());
+			return obj;
+		} catch (RuntimeException e) {
+			throw new GeboContentHandlerSystemException(
+					"Cannot access the AWS S3 object " + bucketName + "/" + objectKey, e);
+		}
 	}
 
 	@Override
@@ -307,9 +338,35 @@ public class AwsS3VirtualFilesystemConsumingService
 			return new AwsS3ResourceReference();
 		}
 		AwsS3ResourceReference ref = new AwsS3ResourceReference();
-		ref.bucketName = (String) last.getResourceReferenceMetaInfos().get(AwsS3NativePositionObject.S3_BUCKET_NAME);
+		ref.bucketName = bucketNameOf(nativeCoordinates);
 		ref.objectKey = (String) last.getResourceReferenceMetaInfos().get(AwsS3NativePositionObject.S3_OBJECT_KEY);
 		return ref;
+	}
+
+	/**
+	 * The bucket a set of native coordinates lives in.
+	 *
+	 * <p>
+	 * Only the bucket node carries {@code S3_BUCKET_NAME} - every node below it is
+	 * built from an {@code S3Object}, which knows its key and nothing about its
+	 * bucket - so reading the marker off the LAST node yields null for anything
+	 * deeper than the bucket root, which is every folder and every file. The bucket
+	 * is always the first coordinate, by construction in
+	 * {@code toNativeCoordinates}, so that is where it is taken from.
+	 * </p>
+	 *
+	 * @param nativeCoordinates the coordinates, rooted at the bucket.
+	 * @return the bucket name, or null when the coordinates carry no bucket.
+	 */
+	private static String bucketNameOf(List<AwsS3NativePositionObject> nativeCoordinates) {
+		if (nativeCoordinates == null || nativeCoordinates.isEmpty()) {
+			return null;
+		}
+		AwsS3NativePositionObject first = nativeCoordinates.get(0);
+		if (first.isBucket()) {
+			return first.getBucket().name();
+		}
+		return (String) first.getResourceReferenceMetaInfos().get(AwsS3NativePositionObject.S3_BUCKET_NAME);
 	}
 
 	@Override

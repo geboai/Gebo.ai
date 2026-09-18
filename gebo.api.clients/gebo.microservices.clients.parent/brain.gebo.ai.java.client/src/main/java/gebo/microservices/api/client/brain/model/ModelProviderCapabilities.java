@@ -17,33 +17,36 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.ToolCategoriesTree;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * ModelProviderCapabilities
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ModelProviderCapabilities {
   @JsonProperty("configurationCode")
-  private Object configurationCode = null;
+  private String configurationCode = null;
 
   @JsonProperty("supportsTranscript")
-  private Object supportsTranscript = null;
+  private Boolean supportsTranscript = null;
 
   @JsonProperty("supportsSpeech")
-  private Object supportsSpeech = null;
+  private Boolean supportsSpeech = null;
 
   @JsonProperty("supportsStructuredOutput")
-  private Object supportsStructuredOutput = null;
+  private Boolean supportsStructuredOutput = null;
 
   @JsonProperty("supportsFunctionCalls")
-  private Object supportsFunctionCalls = null;
+  private Boolean supportsFunctionCalls = null;
 
   @JsonProperty("functionsTreeList")
-  private Object functionsTreeList = null;
+  private List<ToolCategoriesTree> functionsTreeList = null;
 
-  public ModelProviderCapabilities configurationCode(Object configurationCode) {
+  public ModelProviderCapabilities configurationCode(String configurationCode) {
     this.configurationCode = configurationCode;
     return this;
   }
@@ -53,15 +56,15 @@ public class ModelProviderCapabilities {
    * @return configurationCode
   **/
   @Schema(description = "")
-  public Object getConfigurationCode() {
+  public String getConfigurationCode() {
     return configurationCode;
   }
 
-  public void setConfigurationCode(Object configurationCode) {
+  public void setConfigurationCode(String configurationCode) {
     this.configurationCode = configurationCode;
   }
 
-  public ModelProviderCapabilities supportsTranscript(Object supportsTranscript) {
+  public ModelProviderCapabilities supportsTranscript(Boolean supportsTranscript) {
     this.supportsTranscript = supportsTranscript;
     return this;
   }
@@ -71,15 +74,15 @@ public class ModelProviderCapabilities {
    * @return supportsTranscript
   **/
   @Schema(description = "")
-  public Object getSupportsTranscript() {
+  public Boolean isSupportsTranscript() {
     return supportsTranscript;
   }
 
-  public void setSupportsTranscript(Object supportsTranscript) {
+  public void setSupportsTranscript(Boolean supportsTranscript) {
     this.supportsTranscript = supportsTranscript;
   }
 
-  public ModelProviderCapabilities supportsSpeech(Object supportsSpeech) {
+  public ModelProviderCapabilities supportsSpeech(Boolean supportsSpeech) {
     this.supportsSpeech = supportsSpeech;
     return this;
   }
@@ -89,15 +92,15 @@ public class ModelProviderCapabilities {
    * @return supportsSpeech
   **/
   @Schema(description = "")
-  public Object getSupportsSpeech() {
+  public Boolean isSupportsSpeech() {
     return supportsSpeech;
   }
 
-  public void setSupportsSpeech(Object supportsSpeech) {
+  public void setSupportsSpeech(Boolean supportsSpeech) {
     this.supportsSpeech = supportsSpeech;
   }
 
-  public ModelProviderCapabilities supportsStructuredOutput(Object supportsStructuredOutput) {
+  public ModelProviderCapabilities supportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
     return this;
   }
@@ -107,15 +110,15 @@ public class ModelProviderCapabilities {
    * @return supportsStructuredOutput
   **/
   @Schema(description = "")
-  public Object getSupportsStructuredOutput() {
+  public Boolean isSupportsStructuredOutput() {
     return supportsStructuredOutput;
   }
 
-  public void setSupportsStructuredOutput(Object supportsStructuredOutput) {
+  public void setSupportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
   }
 
-  public ModelProviderCapabilities supportsFunctionCalls(Object supportsFunctionCalls) {
+  public ModelProviderCapabilities supportsFunctionCalls(Boolean supportsFunctionCalls) {
     this.supportsFunctionCalls = supportsFunctionCalls;
     return this;
   }
@@ -125,16 +128,24 @@ public class ModelProviderCapabilities {
    * @return supportsFunctionCalls
   **/
   @Schema(description = "")
-  public Object getSupportsFunctionCalls() {
+  public Boolean isSupportsFunctionCalls() {
     return supportsFunctionCalls;
   }
 
-  public void setSupportsFunctionCalls(Object supportsFunctionCalls) {
+  public void setSupportsFunctionCalls(Boolean supportsFunctionCalls) {
     this.supportsFunctionCalls = supportsFunctionCalls;
   }
 
-  public ModelProviderCapabilities functionsTreeList(Object functionsTreeList) {
+  public ModelProviderCapabilities functionsTreeList(List<ToolCategoriesTree> functionsTreeList) {
     this.functionsTreeList = functionsTreeList;
+    return this;
+  }
+
+  public ModelProviderCapabilities addFunctionsTreeListItem(ToolCategoriesTree functionsTreeListItem) {
+    if (this.functionsTreeList == null) {
+      this.functionsTreeList = new ArrayList<>();
+    }
+    this.functionsTreeList.add(functionsTreeListItem);
     return this;
   }
 
@@ -143,11 +154,11 @@ public class ModelProviderCapabilities {
    * @return functionsTreeList
   **/
   @Schema(description = "")
-  public Object getFunctionsTreeList() {
+  public List<ToolCategoriesTree> getFunctionsTreeList() {
     return functionsTreeList;
   }
 
-  public void setFunctionsTreeList(Object functionsTreeList) {
+  public void setFunctionsTreeList(List<ToolCategoriesTree> functionsTreeList) {
     this.functionsTreeList = functionsTreeList;
   }
 

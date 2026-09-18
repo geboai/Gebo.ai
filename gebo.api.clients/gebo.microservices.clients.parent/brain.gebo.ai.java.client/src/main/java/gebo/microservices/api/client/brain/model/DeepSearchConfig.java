@@ -17,73 +17,108 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.DeepSearchDataSourceAccess;
 import gebo.microservices.api.client.brain.model.RagQueryOptions;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * DeepSearchConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class DeepSearchConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
-  @JsonProperty("searchType")
-  private Object searchType = null;
+  /**
+   * Gets or Sets searchType
+   */
+  public enum SearchTypeEnum {
+    SINGLE_HOP("SINGLE_HOP"),
+    MULTI_HOP("MULTI_HOP");
+
+    private String value;
+
+    SearchTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static SearchTypeEnum fromValue(String input) {
+      for (SearchTypeEnum b : SearchTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("searchType")
+  private SearchTypeEnum searchType = null;
 
   @JsonProperty("ragQueryOptions")
   private RagQueryOptions ragQueryOptions = null;
 
   @JsonProperty("firstHopSimilarityThreashold")
-  private Object firstHopSimilarityThreashold = null;
+  private Double firstHopSimilarityThreashold = null;
 
   @JsonProperty("secondHopSimilarityThreashold")
-  private Object secondHopSimilarityThreashold = null;
+  private Double secondHopSimilarityThreashold = null;
 
   @JsonProperty("graphRagTopN")
-  private Object graphRagTopN = null;
+  private Integer graphRagTopN = null;
 
   @JsonProperty("tokensLimit")
-  private Object tokensLimit = null;
+  private Integer tokensLimit = null;
 
   @JsonProperty("manualThreasholdsConfiguration")
-  private Object manualThreasholdsConfiguration = null;
+  private Boolean manualThreasholdsConfiguration = null;
 
   @JsonProperty("defaultConfig")
-  private Object defaultConfig = null;
+  private Boolean defaultConfig = null;
 
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("dataSourcesAccesses")
-  private Object dataSourcesAccesses = null;
+  private List<DeepSearchDataSourceAccess> dataSourcesAccesses = null;
 
   @JsonProperty("perDataSourceConfigured")
-  private Object perDataSourceConfigured = null;
+  private Boolean perDataSourceConfigured = null;
 
-  public DeepSearchConfig code(Object code) {
+  public DeepSearchConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -93,15 +128,15 @@ public class DeepSearchConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public DeepSearchConfig description(Object description) {
+  public DeepSearchConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -111,15 +146,15 @@ public class DeepSearchConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public DeepSearchConfig userModified(Object userModified) {
+  public DeepSearchConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -129,15 +164,15 @@ public class DeepSearchConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public DeepSearchConfig userCreated(Object userCreated) {
+  public DeepSearchConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -147,15 +182,15 @@ public class DeepSearchConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public DeepSearchConfig dateModified(Object dateModified) {
+  public DeepSearchConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -165,15 +200,15 @@ public class DeepSearchConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public DeepSearchConfig dateCreated(Object dateCreated) {
+  public DeepSearchConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -183,15 +218,15 @@ public class DeepSearchConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public DeepSearchConfig searchType(Object searchType) {
+  public DeepSearchConfig searchType(SearchTypeEnum searchType) {
     this.searchType = searchType;
     return this;
   }
@@ -201,11 +236,11 @@ public class DeepSearchConfig {
    * @return searchType
   **/
   @Schema(required = true, description = "")
-  public Object getSearchType() {
+  public SearchTypeEnum getSearchType() {
     return searchType;
   }
 
-  public void setSearchType(Object searchType) {
+  public void setSearchType(SearchTypeEnum searchType) {
     this.searchType = searchType;
   }
 
@@ -227,7 +262,7 @@ public class DeepSearchConfig {
     this.ragQueryOptions = ragQueryOptions;
   }
 
-  public DeepSearchConfig firstHopSimilarityThreashold(Object firstHopSimilarityThreashold) {
+  public DeepSearchConfig firstHopSimilarityThreashold(Double firstHopSimilarityThreashold) {
     this.firstHopSimilarityThreashold = firstHopSimilarityThreashold;
     return this;
   }
@@ -237,15 +272,15 @@ public class DeepSearchConfig {
    * @return firstHopSimilarityThreashold
   **/
   @Schema(description = "")
-  public Object getFirstHopSimilarityThreashold() {
+  public Double getFirstHopSimilarityThreashold() {
     return firstHopSimilarityThreashold;
   }
 
-  public void setFirstHopSimilarityThreashold(Object firstHopSimilarityThreashold) {
+  public void setFirstHopSimilarityThreashold(Double firstHopSimilarityThreashold) {
     this.firstHopSimilarityThreashold = firstHopSimilarityThreashold;
   }
 
-  public DeepSearchConfig secondHopSimilarityThreashold(Object secondHopSimilarityThreashold) {
+  public DeepSearchConfig secondHopSimilarityThreashold(Double secondHopSimilarityThreashold) {
     this.secondHopSimilarityThreashold = secondHopSimilarityThreashold;
     return this;
   }
@@ -255,15 +290,15 @@ public class DeepSearchConfig {
    * @return secondHopSimilarityThreashold
   **/
   @Schema(description = "")
-  public Object getSecondHopSimilarityThreashold() {
+  public Double getSecondHopSimilarityThreashold() {
     return secondHopSimilarityThreashold;
   }
 
-  public void setSecondHopSimilarityThreashold(Object secondHopSimilarityThreashold) {
+  public void setSecondHopSimilarityThreashold(Double secondHopSimilarityThreashold) {
     this.secondHopSimilarityThreashold = secondHopSimilarityThreashold;
   }
 
-  public DeepSearchConfig graphRagTopN(Object graphRagTopN) {
+  public DeepSearchConfig graphRagTopN(Integer graphRagTopN) {
     this.graphRagTopN = graphRagTopN;
     return this;
   }
@@ -273,15 +308,15 @@ public class DeepSearchConfig {
    * @return graphRagTopN
   **/
   @Schema(description = "")
-  public Object getGraphRagTopN() {
+  public Integer getGraphRagTopN() {
     return graphRagTopN;
   }
 
-  public void setGraphRagTopN(Object graphRagTopN) {
+  public void setGraphRagTopN(Integer graphRagTopN) {
     this.graphRagTopN = graphRagTopN;
   }
 
-  public DeepSearchConfig tokensLimit(Object tokensLimit) {
+  public DeepSearchConfig tokensLimit(Integer tokensLimit) {
     this.tokensLimit = tokensLimit;
     return this;
   }
@@ -291,15 +326,15 @@ public class DeepSearchConfig {
    * @return tokensLimit
   **/
   @Schema(description = "")
-  public Object getTokensLimit() {
+  public Integer getTokensLimit() {
     return tokensLimit;
   }
 
-  public void setTokensLimit(Object tokensLimit) {
+  public void setTokensLimit(Integer tokensLimit) {
     this.tokensLimit = tokensLimit;
   }
 
-  public DeepSearchConfig manualThreasholdsConfiguration(Object manualThreasholdsConfiguration) {
+  public DeepSearchConfig manualThreasholdsConfiguration(Boolean manualThreasholdsConfiguration) {
     this.manualThreasholdsConfiguration = manualThreasholdsConfiguration;
     return this;
   }
@@ -309,15 +344,15 @@ public class DeepSearchConfig {
    * @return manualThreasholdsConfiguration
   **/
   @Schema(description = "")
-  public Object getManualThreasholdsConfiguration() {
+  public Boolean isManualThreasholdsConfiguration() {
     return manualThreasholdsConfiguration;
   }
 
-  public void setManualThreasholdsConfiguration(Object manualThreasholdsConfiguration) {
+  public void setManualThreasholdsConfiguration(Boolean manualThreasholdsConfiguration) {
     this.manualThreasholdsConfiguration = manualThreasholdsConfiguration;
   }
 
-  public DeepSearchConfig defaultConfig(Object defaultConfig) {
+  public DeepSearchConfig defaultConfig(Boolean defaultConfig) {
     this.defaultConfig = defaultConfig;
     return this;
   }
@@ -327,16 +362,24 @@ public class DeepSearchConfig {
    * @return defaultConfig
   **/
   @Schema(description = "")
-  public Object getDefaultConfig() {
+  public Boolean isDefaultConfig() {
     return defaultConfig;
   }
 
-  public void setDefaultConfig(Object defaultConfig) {
+  public void setDefaultConfig(Boolean defaultConfig) {
     this.defaultConfig = defaultConfig;
   }
 
-  public DeepSearchConfig accessibleGroups(Object accessibleGroups) {
+  public DeepSearchConfig accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public DeepSearchConfig addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -345,16 +388,24 @@ public class DeepSearchConfig {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public DeepSearchConfig accessibleUsers(Object accessibleUsers) {
+  public DeepSearchConfig accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public DeepSearchConfig addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -363,15 +414,15 @@ public class DeepSearchConfig {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public DeepSearchConfig accessibleToAll(Object accessibleToAll) {
+  public DeepSearchConfig accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -381,16 +432,24 @@ public class DeepSearchConfig {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public DeepSearchConfig dataSourcesAccesses(Object dataSourcesAccesses) {
+  public DeepSearchConfig dataSourcesAccesses(List<DeepSearchDataSourceAccess> dataSourcesAccesses) {
     this.dataSourcesAccesses = dataSourcesAccesses;
+    return this;
+  }
+
+  public DeepSearchConfig addDataSourcesAccessesItem(DeepSearchDataSourceAccess dataSourcesAccessesItem) {
+    if (this.dataSourcesAccesses == null) {
+      this.dataSourcesAccesses = new ArrayList<>();
+    }
+    this.dataSourcesAccesses.add(dataSourcesAccessesItem);
     return this;
   }
 
@@ -399,15 +458,15 @@ public class DeepSearchConfig {
    * @return dataSourcesAccesses
   **/
   @Schema(description = "")
-  public Object getDataSourcesAccesses() {
+  public List<DeepSearchDataSourceAccess> getDataSourcesAccesses() {
     return dataSourcesAccesses;
   }
 
-  public void setDataSourcesAccesses(Object dataSourcesAccesses) {
+  public void setDataSourcesAccesses(List<DeepSearchDataSourceAccess> dataSourcesAccesses) {
     this.dataSourcesAccesses = dataSourcesAccesses;
   }
 
-  public DeepSearchConfig perDataSourceConfigured(Object perDataSourceConfigured) {
+  public DeepSearchConfig perDataSourceConfigured(Boolean perDataSourceConfigured) {
     this.perDataSourceConfigured = perDataSourceConfigured;
     return this;
   }
@@ -417,11 +476,11 @@ public class DeepSearchConfig {
    * @return perDataSourceConfigured
   **/
   @Schema(description = "")
-  public Object getPerDataSourceConfigured() {
+  public Boolean isPerDataSourceConfigured() {
     return perDataSourceConfigured;
   }
 
-  public void setPerDataSourceConfigured(Object perDataSourceConfigured) {
+  public void setPerDataSourceConfigured(Boolean perDataSourceConfigured) {
     this.perDataSourceConfigured = perDataSourceConfigured;
   }
 

@@ -9,11 +9,11 @@
 
 package ai.gebo.secrets.services.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
@@ -26,6 +26,7 @@ import ai.gebo.secrets.model.GeboGoogleJsonSecretContent;
 import ai.gebo.secrets.model.GeboGoogleOauth2SecretContent;
 import ai.gebo.secrets.model.GeboOauth2SecretContent;
 import ai.gebo.secrets.model.GeboSecret;
+import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboSshKeySecretContent;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.GeboUsernamePasswordContent;
@@ -33,6 +34,7 @@ import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.repository.GeboSecretRepository;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.secrets.services.IGeboSecretsExternalStorageService;
+import ai.gebo.secrets.services.IGSecretsStaticConfigurationDao;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.SecurityAuditTaxonomy;
@@ -43,6 +45,37 @@ import tools.jackson.databind.ObjectMapper;
 /**
  * AI Generated Comments Service implementation of Gebo Secrets Access. Provides
  * functionality to manage secrets including storing, retrieving, and deleting.
+ *
+ * <h2>Where a secret is looked up, and in which order</h2>
+ * <p>
+ * A read resolves against, in order:
+ * </p>
+ * <ol>
+ * <li>the {@link IGSecretsStaticConfigurationDao} - the secrets declared under
+ * {@code ai.gebo.secrets.config.*} in the configuration;</li>
+ * <li>the {@link IGeboSecretsExternalStorageService}, when one is configured and
+ * active;</li>
+ * <li>the Mongo {@link GeboSecretRepository}.</li>
+ * </ol>
+ *
+ * <p>
+ * The configuration comes first on purpose: a secret an operator declared in
+ * {@code application.yml} is the deployment's answer for that code, and it must
+ * not be possible for anything written into the store later to quietly take its
+ * place. The practical consequence is that a configured code <b>shadows</b> a
+ * stored secret of the same code - which is also why the write paths refuse that
+ * code outright instead of letting a caller create the shadowed record.
+ * </p>
+ *
+ * <h2>Two write guards, for two different things</h2>
+ * <ul>
+ * <li><b>The content is read-only</b> - {@code readOnly == true} on the passed
+ * content, which only this implementation's configuration loader ever sets. A
+ * caller that read a configured secret and tried to write it back lands here.</li>
+ * <li><b>The code is taken by the configuration</b> - the only check a delete can
+ * make, since a delete is given nothing but a code, and the check that keeps the
+ * store free of records the read chain could never reach.</li>
+ * </ul>
  */
 @Service
 @AllArgsConstructor
@@ -53,6 +86,7 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	private final GeboCryptingServiceImpl cryptService;
 	private final Optional<IGeboSecretsExternalStorageService> externalStorage;
 	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+	private final IGSecretsStaticConfigurationDao staticConfigurationDao;
 
 	// NOTE: takes an already-created SecurityEvent (never calls newSecurityEvent()
 	// itself) so the caller-stack metadata newSecurityEvent() captures points at
@@ -73,6 +107,29 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	}
 
 	/**
+	 * Refuses a write whose content is marked read-only.
+	 *
+	 * @param secret the content about to be written
+	 * @throws GeboCryptSecretException if the content is a configuration-declared
+	 *                                  secret
+	 */
+	private void checkNotReadOnly(AbstractGeboSecretContent secret) throws GeboCryptSecretException {
+		if (AbstractGeboSecretContent.isReadOnlySecret(secret))
+			throw new GeboCryptSecretException(READ_ONLY_SECRET_MESSAGE);
+	}
+
+	/**
+	 * Refuses a write - or a delete - aimed at a code the configuration declares.
+	 *
+	 * @param code the code about to be written or deleted
+	 * @throws GeboCryptSecretException if the configuration declares that code
+	 */
+	private void checkCodeNotConfigured(String code) throws GeboCryptSecretException {
+		if (staticConfigurationDao.isConfiguredCode(code))
+			throw new GeboCryptSecretException(READ_ONLY_SECRET_MESSAGE);
+	}
+
+	/**
 	 * Retrieve secret content by its ID.
 	 * 
 	 * @param id The ID of the secret to retrieve.
@@ -82,6 +139,9 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	 */
 	@Override
 	public AbstractGeboSecretContent getSecretContentById(String id) throws GeboCryptSecretException {
+		AbstractGeboSecretContent configured = staticConfigurationDao.findByCode(id);
+		if (configured != null)
+			return configured;
 		if (isExternalStorageActive())
 			return externalStorage.get().getSecretContentById(id);
 		Optional<GeboSecret> content = repository.findById(id);
@@ -173,6 +233,7 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	@Override
 	public <SecretType extends AbstractGeboSecretContent> String storeSecret(SecretType secret, String description,
 			String contextCode) throws GeboCryptSecretException {
+		checkNotReadOnly(secret);
 		if (isExternalStorageActive()) {
 			SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 			try {
@@ -205,6 +266,8 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 			String contextCode, String code) throws GeboCryptSecretException {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		try {
+			checkNotReadOnly(secret);
+			checkCodeNotConfigured(code);
 			if (isExternalStorageActive()) {
 				externalStorage.get().updateSecret(secret, description, contextCode, code);
 			} else {
@@ -236,6 +299,7 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	public void deleteSecret(String code) throws GeboCryptSecretException {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		try {
+			checkCodeNotConfigured(code);
 			if (isExternalStorageActive()) {
 				externalStorage.get().deleteSecret(code);
 			} else {
@@ -257,13 +321,18 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	 */
 	@Override
 	public List<SecretInfo> getSecretInfoByContextCode(String contextCode) throws GeboCryptSecretException {
-		if (isExternalStorageActive())
-			return externalStorage.get().getSecretInfoByContextCode(contextCode);
-		List<GeboSecret> secrets = repository.findByContextCode(contextCode);
-		Stream<SecretInfo> infoStream = secrets.stream().map(x -> {
-			return new SecretInfo(x);
-		});
-		return infoStream.toList(); // Convert stream to list
+		// The configured secrets of the context come first, and a stored secret whose
+		// code one of them shadows is left out: the admin surface must not offer a
+		// record that no read of that code can ever reach.
+		List<SecretInfo> infos = new ArrayList<SecretInfo>(staticConfigurationDao.findInfoByContextCode(contextCode));
+		List<SecretInfo> stored = isExternalStorageActive()
+				? externalStorage.get().getSecretInfoByContextCode(contextCode)
+				: repository.findByContextCode(contextCode).stream().map(x -> new SecretInfo(x)).toList();
+		for (SecretInfo info : stored) {
+			if (!staticConfigurationDao.isConfiguredCode(info.getCode()))
+				infos.add(info);
+		}
+		return infos;
 	}
 
 	/**
@@ -275,6 +344,9 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	 */
 	@Override
 	public SecretInfo getSecretInfoById(String code) throws GeboCryptSecretException {
+		SecretInfo configured = staticConfigurationDao.findInfoByCode(code);
+		if (configured != null)
+			return configured;
 		if (isExternalStorageActive())
 			return externalStorage.get().getSecretInfoById(code);
 		Optional<GeboSecret> content = repository.findById(code);
@@ -295,6 +367,8 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 			String contextCode, String secretId) throws GeboCryptSecretException {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		try {
+			checkNotReadOnly(secret);
+			checkCodeNotConfigured(secretId);
 			if (isExternalStorageActive()) {
 				externalStorage.get().storeSecret(secret, description, contextCode, secretId);
 			} else {
@@ -317,6 +391,16 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	@Override
 	public <T extends GeboCustomSecretContent> T getCustomSecretContentById(String id, Class<T> type)
 			throws GeboCryptSecretException {
+		AbstractGeboSecretContent configured = staticConfigurationDao.findByCode(id);
+		if (configured != null) {
+			if (configured.type() != GeboSecretType.CUSTOM_SECRET)
+				throw new GeboCryptSecretException("SecretType must be CUSTOM_SECRET");
+			// The caller's subclass is a caller-side type the configuration bound as a
+			// plain GeboCustomSecretContent; re-reading the content through Jackson is
+			// what recovers whichever of `type`'s fields the configuration declared -
+			// the same round trip the stored path gets from decrypt + readValue.
+			return mapper.convertValue(configured, type);
+		}
 		if (isExternalStorageActive())
 			return externalStorage.get().getCustomSecretContentById(id, type);
 		Optional<GeboSecret> content = repository.findById(id);
@@ -336,9 +420,14 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 
 	@Override
 	public List<String> getAllSecretsId() {
-		if (isExternalStorageActive())
-			return externalStorage.get().getAllSecretsId();
-		return repository.findAll().stream().map(x -> x.getCode()).toList();
+		List<String> ids = new ArrayList<String>(staticConfigurationDao.getAllSecretsId());
+		List<String> stored = isExternalStorageActive() ? externalStorage.get().getAllSecretsId()
+				: repository.findAll().stream().map(x -> x.getCode()).toList();
+		for (String id : stored) {
+			if (!staticConfigurationDao.isConfiguredCode(id))
+				ids.add(id);
+		}
+		return ids;
 	}
 
 }

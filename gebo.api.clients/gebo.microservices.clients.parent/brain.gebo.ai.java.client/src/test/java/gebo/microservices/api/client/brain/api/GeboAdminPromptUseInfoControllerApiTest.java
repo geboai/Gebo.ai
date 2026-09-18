@@ -39,7 +39,7 @@ public class GeboAdminPromptUseInfoControllerApiTest {
      */
     @Test
     public void findAllTest() {
-        Object response = api.findAll();
+        List<GPromptUseInfo> response = api.findAll();
 
         // TODO: test validations
     }
@@ -53,7 +53,7 @@ public class GeboAdminPromptUseInfoControllerApiTest {
      */
     @Test
     public void findByCodeTest() {
-        Object code = null;
+        String code = null;
         GPromptUseInfo response = api.findByCode(code);
 
         // TODO: test validations
@@ -68,8 +68,8 @@ public class GeboAdminPromptUseInfoControllerApiTest {
      */
     @Test
     public void findByModuleTest() {
-        Object module = null;
-        Object response = api.findByModule(module);
+        String module = null;
+        List<GPromptUseInfo> response = api.findByModule(module);
 
         // TODO: test validations
     }

@@ -17,43 +17,54 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.LLMSSetupConfiguration;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * LLMSSetupConfigurationData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMSSetupConfigurationData {
   @JsonProperty("configurations")
-  private Object configurations = null;
+  private List<LLMSSetupConfiguration> configurations = null;
 
   @JsonProperty("canRunAutoconfigure")
-  private Object canRunAutoconfigure = null;
+  private Boolean canRunAutoconfigure = null;
 
   @JsonProperty("embeddingModelExists")
-  private Object embeddingModelExists = null;
+  private Boolean embeddingModelExists = null;
 
   @JsonProperty("defaultChatModelExists")
-  private Object defaultChatModelExists = null;
+  private Boolean defaultChatModelExists = null;
 
   @JsonProperty("internalServicesChatModelExists")
-  private Object internalServicesChatModelExists = null;
+  private Boolean internalServicesChatModelExists = null;
 
   @JsonProperty("rankerModelExists")
-  private Object rankerModelExists = null;
+  private Boolean rankerModelExists = null;
 
   @JsonProperty("imagesModelExists")
-  private Object imagesModelExists = null;
+  private Boolean imagesModelExists = null;
 
   @JsonProperty("ttsModelExists")
-  private Object ttsModelExists = null;
+  private Boolean ttsModelExists = null;
 
   @JsonProperty("transcriptModelExists")
-  private Object transcriptModelExists = null;
+  private Boolean transcriptModelExists = null;
 
-  public LLMSSetupConfigurationData configurations(Object configurations) {
+  public LLMSSetupConfigurationData configurations(List<LLMSSetupConfiguration> configurations) {
     this.configurations = configurations;
+    return this;
+  }
+
+  public LLMSSetupConfigurationData addConfigurationsItem(LLMSSetupConfiguration configurationsItem) {
+    if (this.configurations == null) {
+      this.configurations = new ArrayList<>();
+    }
+    this.configurations.add(configurationsItem);
     return this;
   }
 
@@ -62,15 +73,15 @@ public class LLMSSetupConfigurationData {
    * @return configurations
   **/
   @Schema(description = "")
-  public Object getConfigurations() {
+  public List<LLMSSetupConfiguration> getConfigurations() {
     return configurations;
   }
 
-  public void setConfigurations(Object configurations) {
+  public void setConfigurations(List<LLMSSetupConfiguration> configurations) {
     this.configurations = configurations;
   }
 
-  public LLMSSetupConfigurationData canRunAutoconfigure(Object canRunAutoconfigure) {
+  public LLMSSetupConfigurationData canRunAutoconfigure(Boolean canRunAutoconfigure) {
     this.canRunAutoconfigure = canRunAutoconfigure;
     return this;
   }
@@ -80,15 +91,15 @@ public class LLMSSetupConfigurationData {
    * @return canRunAutoconfigure
   **/
   @Schema(description = "")
-  public Object getCanRunAutoconfigure() {
+  public Boolean isCanRunAutoconfigure() {
     return canRunAutoconfigure;
   }
 
-  public void setCanRunAutoconfigure(Object canRunAutoconfigure) {
+  public void setCanRunAutoconfigure(Boolean canRunAutoconfigure) {
     this.canRunAutoconfigure = canRunAutoconfigure;
   }
 
-  public LLMSSetupConfigurationData embeddingModelExists(Object embeddingModelExists) {
+  public LLMSSetupConfigurationData embeddingModelExists(Boolean embeddingModelExists) {
     this.embeddingModelExists = embeddingModelExists;
     return this;
   }
@@ -98,15 +109,15 @@ public class LLMSSetupConfigurationData {
    * @return embeddingModelExists
   **/
   @Schema(description = "")
-  public Object getEmbeddingModelExists() {
+  public Boolean isEmbeddingModelExists() {
     return embeddingModelExists;
   }
 
-  public void setEmbeddingModelExists(Object embeddingModelExists) {
+  public void setEmbeddingModelExists(Boolean embeddingModelExists) {
     this.embeddingModelExists = embeddingModelExists;
   }
 
-  public LLMSSetupConfigurationData defaultChatModelExists(Object defaultChatModelExists) {
+  public LLMSSetupConfigurationData defaultChatModelExists(Boolean defaultChatModelExists) {
     this.defaultChatModelExists = defaultChatModelExists;
     return this;
   }
@@ -116,15 +127,15 @@ public class LLMSSetupConfigurationData {
    * @return defaultChatModelExists
   **/
   @Schema(description = "")
-  public Object getDefaultChatModelExists() {
+  public Boolean isDefaultChatModelExists() {
     return defaultChatModelExists;
   }
 
-  public void setDefaultChatModelExists(Object defaultChatModelExists) {
+  public void setDefaultChatModelExists(Boolean defaultChatModelExists) {
     this.defaultChatModelExists = defaultChatModelExists;
   }
 
-  public LLMSSetupConfigurationData internalServicesChatModelExists(Object internalServicesChatModelExists) {
+  public LLMSSetupConfigurationData internalServicesChatModelExists(Boolean internalServicesChatModelExists) {
     this.internalServicesChatModelExists = internalServicesChatModelExists;
     return this;
   }
@@ -134,15 +145,15 @@ public class LLMSSetupConfigurationData {
    * @return internalServicesChatModelExists
   **/
   @Schema(description = "")
-  public Object getInternalServicesChatModelExists() {
+  public Boolean isInternalServicesChatModelExists() {
     return internalServicesChatModelExists;
   }
 
-  public void setInternalServicesChatModelExists(Object internalServicesChatModelExists) {
+  public void setInternalServicesChatModelExists(Boolean internalServicesChatModelExists) {
     this.internalServicesChatModelExists = internalServicesChatModelExists;
   }
 
-  public LLMSSetupConfigurationData rankerModelExists(Object rankerModelExists) {
+  public LLMSSetupConfigurationData rankerModelExists(Boolean rankerModelExists) {
     this.rankerModelExists = rankerModelExists;
     return this;
   }
@@ -152,15 +163,15 @@ public class LLMSSetupConfigurationData {
    * @return rankerModelExists
   **/
   @Schema(description = "")
-  public Object getRankerModelExists() {
+  public Boolean isRankerModelExists() {
     return rankerModelExists;
   }
 
-  public void setRankerModelExists(Object rankerModelExists) {
+  public void setRankerModelExists(Boolean rankerModelExists) {
     this.rankerModelExists = rankerModelExists;
   }
 
-  public LLMSSetupConfigurationData imagesModelExists(Object imagesModelExists) {
+  public LLMSSetupConfigurationData imagesModelExists(Boolean imagesModelExists) {
     this.imagesModelExists = imagesModelExists;
     return this;
   }
@@ -170,15 +181,15 @@ public class LLMSSetupConfigurationData {
    * @return imagesModelExists
   **/
   @Schema(description = "")
-  public Object getImagesModelExists() {
+  public Boolean isImagesModelExists() {
     return imagesModelExists;
   }
 
-  public void setImagesModelExists(Object imagesModelExists) {
+  public void setImagesModelExists(Boolean imagesModelExists) {
     this.imagesModelExists = imagesModelExists;
   }
 
-  public LLMSSetupConfigurationData ttsModelExists(Object ttsModelExists) {
+  public LLMSSetupConfigurationData ttsModelExists(Boolean ttsModelExists) {
     this.ttsModelExists = ttsModelExists;
     return this;
   }
@@ -188,15 +199,15 @@ public class LLMSSetupConfigurationData {
    * @return ttsModelExists
   **/
   @Schema(description = "")
-  public Object getTtsModelExists() {
+  public Boolean isTtsModelExists() {
     return ttsModelExists;
   }
 
-  public void setTtsModelExists(Object ttsModelExists) {
+  public void setTtsModelExists(Boolean ttsModelExists) {
     this.ttsModelExists = ttsModelExists;
   }
 
-  public LLMSSetupConfigurationData transcriptModelExists(Object transcriptModelExists) {
+  public LLMSSetupConfigurationData transcriptModelExists(Boolean transcriptModelExists) {
     this.transcriptModelExists = transcriptModelExists;
     return this;
   }
@@ -206,11 +217,11 @@ public class LLMSSetupConfigurationData {
    * @return transcriptModelExists
   **/
   @Schema(description = "")
-  public Object getTranscriptModelExists() {
+  public Boolean isTranscriptModelExists() {
     return transcriptModelExists;
   }
 
-  public void setTranscriptModelExists(Object transcriptModelExists) {
+  public void setTranscriptModelExists(Boolean transcriptModelExists) {
     this.transcriptModelExists = transcriptModelExists;
   }
 

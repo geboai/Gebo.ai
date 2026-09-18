@@ -85,7 +85,7 @@
                       <gebo-ai-field id="tree" label="Choosed MCP resources" [required]="true"
                         help="Resources exposed by the MCP server. Pick the whole server to ingest every resource, or select individual resources.">
                         <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable"
-                          [readonly]="mode==='EDIT'" formControlName="paths" selectionMode="multiple"
+                          [readonly]="mode==='EDIT'" formControlName="paths" [required]="true" selectionMode="multiple"
                           [browsePathObservable]="browsePathObservable"
                           [reconstructNavigationCallback]="reconstructNavigationObservableCallback" [canChooseFolders]="true"
                         [canChooseFiles]="true" class="col-12" gebo-ai-field-element></gebo-ai-vfilesystem-selector-component>

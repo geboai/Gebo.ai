@@ -3,6 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { A2AClientConfigControllerService } from './api/a2AClientConfigController.service';
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
 import { AuthControllerService } from './api/authController.service';
 import { AuthProvidersControllerService } from './api/authProvidersController.service';
@@ -18,6 +19,7 @@ import { BraveSearchConfigurationControllerService } from './api/braveSearchConf
 import { BuildSystemsControllerService } from './api/buildSystemsController.service';
 import { ChatModelsControllerService } from './api/chatModelsController.service';
 import { ChatModelsLookupControllerService } from './api/chatModelsLookupController.service';
+import { ClientsTopologyProviderControllerService } from './api/clientsTopologyProviderController.service';
 import { CompanySystemsControllerService } from './api/companySystemsController.service';
 import { ConfluenceBrowsingControllerService } from './api/confluenceBrowsingController.service';
 import { ConfluenceSearchServiceControllerService } from './api/confluenceSearchServiceController.service';
@@ -34,6 +36,7 @@ import { FileSystemsControllerService } from './api/fileSystemsController.servic
 import { FileUploadControllerService } from './api/fileUploadController.service';
 import { FileUploadsControllerService } from './api/fileUploadsController.service';
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
+import { GeboA2AServerAdminControllerService } from './api/geboA2AServerAdminController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
 import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
 import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsController.service';
@@ -120,6 +123,7 @@ import { RankerModelsControllerService } from './api/rankerModelsController.serv
 import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
 import { SearxngSearchConfigurationControllerService } from './api/searxngSearchConfigurationController.service';
 import { SecretsControllerService } from './api/secretsController.service';
+import { SecurityHeaderDataCompletionControllerService } from './api/securityHeaderDataCompletionController.service';
 import { SerpapiSearchConfigurationControllerService } from './api/serpapiSearchConfigurationController.service';
 import { SharePointSearchServiceControllerService } from './api/sharePointSearchServiceController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
@@ -145,6 +149,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
   declarations: [],
   exports:      [],
   providers: [
+    A2AClientConfigControllerService,
     AnthropicChatModelsConfigurationControllerService,
     AuthControllerService,
     AuthProvidersControllerService,
@@ -160,6 +165,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     BuildSystemsControllerService,
     ChatModelsControllerService,
     ChatModelsLookupControllerService,
+    ClientsTopologyProviderControllerService,
     CompanySystemsControllerService,
     ConfluenceBrowsingControllerService,
     ConfluenceSearchServiceControllerService,
@@ -176,6 +182,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     FileUploadControllerService,
     FileUploadsControllerService,
     FunctionsLookupControllerService,
+    GeboA2AServerAdminControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
     GeboAdminPromptUseInfoControllerService,
     GeboAdminPromptsControllerService,
@@ -262,6 +269,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     ReindexingFrequencyOptionsControllerService,
     SearxngSearchConfigurationControllerService,
     SecretsControllerService,
+    SecurityHeaderDataCompletionControllerService,
     SerpapiSearchConfigurationControllerService,
     SharePointSearchServiceControllerService,
     SharepointBrowsingControllerService,

@@ -23,22 +23,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * VFolderInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class VFolderInfo {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("parentFolderCode")
-  private Object parentFolderCode = null;
+  private String parentFolderCode = null;
 
   @JsonProperty("endpointRef")
   private GObjectRefGProjectEndpoint endpointRef = null;
 
-  public VFolderInfo code(Object code) {
+  public VFolderInfo code(String code) {
     this.code = code;
     return this;
   }
@@ -48,15 +48,15 @@ public class VFolderInfo {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public VFolderInfo name(Object name) {
+  public VFolderInfo name(String name) {
     this.name = name;
     return this;
   }
@@ -66,15 +66,15 @@ public class VFolderInfo {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public VFolderInfo parentFolderCode(Object parentFolderCode) {
+  public VFolderInfo parentFolderCode(String parentFolderCode) {
     this.parentFolderCode = parentFolderCode;
     return this;
   }
@@ -84,11 +84,11 @@ public class VFolderInfo {
    * @return parentFolderCode
   **/
   @Schema(description = "")
-  public Object getParentFolderCode() {
+  public String getParentFolderCode() {
     return parentFolderCode;
   }
 
-  public void setParentFolderCode(Object parentFolderCode) {
+  public void setParentFolderCode(String parentFolderCode) {
     this.parentFolderCode = parentFolderCode;
   }
 

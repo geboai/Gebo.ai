@@ -78,7 +78,7 @@
                     <gebo-ai-field id="tree" label="Choosed files or folders" [required]="true"
                       help="Shared filesystems files or directories available on the server">
                       <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable"
-                        [readonly]="mode==='EDIT'" formControlName="path" selectionMode="multiple"
+                        [readonly]="mode==='EDIT'" formControlName="path" [required]="true" selectionMode="multiple"
                         [browsePathObservable]="browsePathObservable"
                         [reconstructNavigationCallback]="reconstructNavigationObservableCallback" [canChooseFolders]="true"
                       [canChooseFiles]="true" class="col-12" gebo-ai-field-element></gebo-ai-vfilesystem-selector-component>

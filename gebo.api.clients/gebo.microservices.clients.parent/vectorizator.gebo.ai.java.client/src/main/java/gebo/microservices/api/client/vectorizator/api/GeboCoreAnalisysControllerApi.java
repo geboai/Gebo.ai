@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:44:05.740376061+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:28.382074718+02:00[Europe/Rome]")
 
 public class GeboCoreAnalisysControllerApi {
     private ApiClient apiClient;
@@ -47,10 +47,10 @@ public class GeboCoreAnalisysControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GStatsHolder&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object coreDrillDown(GStatsHolder body) throws RestClientException {
+    public List<GStatsHolder> coreDrillDown(GStatsHolder body) throws RestClientException {
         return coreDrillDownWithHttpInfo(body).getBody();
     }
 
@@ -59,16 +59,16 @@ public class GeboCoreAnalisysControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GStatsHolder&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> coreDrillDownWithHttpInfo(GStatsHolder body) throws RestClientException {
+    public ResponseEntity<List<GStatsHolder>> coreDrillDownWithHttpInfo(GStatsHolder body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling coreDrillDown");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboCoreAnalisysController/drillDown").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboCoreAnalisysController/drillDown").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -85,8 +85,8 @@ public class GeboCoreAnalisysControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GStatsHolder>> returnType = new ParameterizedTypeReference<List<GStatsHolder>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -108,7 +108,7 @@ public class GeboCoreAnalisysControllerApi {
      */
     public ResponseEntity<GStatsHolder> getTopLevelKnowledgeBaseCategoryWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboCoreAnalisysController/getTopLevelKnowledgeBaseCategory").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboCoreAnalisysController/getTopLevelKnowledgeBaseCategory").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -124,6 +124,6 @@ public class GeboCoreAnalisysControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GStatsHolder> returnType = new ParameterizedTypeReference<GStatsHolder>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

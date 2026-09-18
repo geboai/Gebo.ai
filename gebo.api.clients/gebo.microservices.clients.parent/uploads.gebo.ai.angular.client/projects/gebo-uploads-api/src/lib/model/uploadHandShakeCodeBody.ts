@@ -11,5 +11,5 @@
  */
 
 export interface UploadHandShakeCodeBody { 
-    files: any;
+    files: Array<Blob>;
 }

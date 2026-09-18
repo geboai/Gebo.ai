@@ -41,7 +41,7 @@ public class PromptTemplatesControllerApiTest {
      */
     @Test
     public void getDefaultPromptTest() {
-        Object ragPrompt = null;
+        Boolean ragPrompt = null;
         GPromptTemplateConfig response = api.getDefaultPrompt(ragPrompt);
 
         // TODO: test validations

@@ -19,38 +19,39 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.filesystem.model.VFilesystemReference;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GFileSystemShareReference
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:56.984278175+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:30.490254341+02:00[Europe/Rome]")
 
 public class GFileSystemShareReference {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("mongoConfigured")
-  private Object mongoConfigured = null;
+  private Boolean mongoConfigured = null;
 
   @JsonProperty("reference")
   private VFilesystemReference reference = null;
 
-  public GFileSystemShareReference code(Object code) {
+  public GFileSystemShareReference code(String code) {
     this.code = code;
     return this;
   }
@@ -60,15 +61,15 @@ public class GFileSystemShareReference {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GFileSystemShareReference description(Object description) {
+  public GFileSystemShareReference description(String description) {
     this.description = description;
     return this;
   }
@@ -78,15 +79,15 @@ public class GFileSystemShareReference {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GFileSystemShareReference userModified(Object userModified) {
+  public GFileSystemShareReference userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -96,15 +97,15 @@ public class GFileSystemShareReference {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GFileSystemShareReference userCreated(Object userCreated) {
+  public GFileSystemShareReference userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -114,15 +115,15 @@ public class GFileSystemShareReference {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GFileSystemShareReference dateModified(Object dateModified) {
+  public GFileSystemShareReference dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -132,15 +133,15 @@ public class GFileSystemShareReference {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GFileSystemShareReference dateCreated(Object dateCreated) {
+  public GFileSystemShareReference dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -150,15 +151,15 @@ public class GFileSystemShareReference {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GFileSystemShareReference mongoConfigured(Object mongoConfigured) {
+  public GFileSystemShareReference mongoConfigured(Boolean mongoConfigured) {
     this.mongoConfigured = mongoConfigured;
     return this;
   }
@@ -168,11 +169,11 @@ public class GFileSystemShareReference {
    * @return mongoConfigured
   **/
   @Schema(description = "")
-  public Object getMongoConfigured() {
+  public Boolean isMongoConfigured() {
     return mongoConfigured;
   }
 
-  public void setMongoConfigured(Object mongoConfigured) {
+  public void setMongoConfigured(Boolean mongoConfigured) {
     this.mongoConfigured = mongoConfigured;
   }
 

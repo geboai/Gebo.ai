@@ -9,10 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Order } from './order';
 
 export interface DataPage { 
-    page?: any;
-    pageSize?: any;
-    numrecords?: any;
-    sort?: any;
+    page?: number;
+    pageSize?: number;
+    numrecords?: number;
+    sort?: Array<Order>;
 }

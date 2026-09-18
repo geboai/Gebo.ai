@@ -9,26 +9,34 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { DeepSearchDataSourceAccess } from './deepSearchDataSourceAccess';
 import { RagQueryOptions } from './ragQueryOptions';
 
 export interface DeepSearchConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    searchType: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    searchType: DeepSearchConfig.SearchTypeEnum;
     ragQueryOptions?: RagQueryOptions;
-    firstHopSimilarityThreashold?: any;
-    secondHopSimilarityThreashold?: any;
-    graphRagTopN?: any;
-    tokensLimit?: any;
-    manualThreasholdsConfiguration?: any;
-    defaultConfig?: any;
-    accessibleGroups?: any;
-    accessibleUsers?: any;
-    accessibleToAll?: any;
-    dataSourcesAccesses?: any;
-    perDataSourceConfigured?: any;
+    firstHopSimilarityThreashold?: number;
+    secondHopSimilarityThreashold?: number;
+    graphRagTopN?: number;
+    tokensLimit?: number;
+    manualThreasholdsConfiguration?: boolean;
+    defaultConfig?: boolean;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    dataSourcesAccesses?: Array<DeepSearchDataSourceAccess>;
+    perDataSourceConfigured?: boolean;
+}
+export namespace DeepSearchConfig {
+    export type SearchTypeEnum = 'SINGLE_HOP' | 'MULTI_HOP';
+    export const SearchTypeEnum = {
+        SINGLEHOP: 'SINGLE_HOP' as SearchTypeEnum,
+        MULTIHOP: 'MULTI_HOP' as SearchTypeEnum
+    };
 }

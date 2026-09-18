@@ -9,7 +9,6 @@
 
 package ai.gebo.llms.aws_bedrock.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.aws_bedrock.model.GBedrockRankerModelConfig;
@@ -17,7 +16,6 @@ import ai.gebo.llms.aws_bedrock.model.GBedrockRankerModelConfig;
 /**
  * MongoDB repository for AWS Bedrock reranking model configurations.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 public interface BedrockRankerModelConfigRepository extends IGBaseMongoDBRepository<GBedrockRankerModelConfig> {
 	@Override
 	default Class<GBedrockRankerModelConfig> getManagedType() {

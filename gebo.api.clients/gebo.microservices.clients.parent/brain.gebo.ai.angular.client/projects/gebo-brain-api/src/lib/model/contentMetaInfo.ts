@@ -11,14 +11,21 @@
  */
 
 export interface ContentMetaInfo { 
-    exists?: any;
-    code?: any;
-    extension?: any;
-    contentType?: any;
-    fileName?: any;
-    parentProjectCode?: any;
-    rootKnowledgeBase?: any;
-    moduleId?: any;
-    url?: any;
-    referenceType?: any;
+    exists?: boolean;
+    code?: string;
+    extension?: string;
+    contentType?: string;
+    fileName?: string;
+    parentProjectCode?: string;
+    rootKnowledgeBase?: string;
+    moduleId?: string;
+    url?: string;
+    referenceType?: ContentMetaInfo.ReferenceTypeEnum;
+}
+export namespace ContentMetaInfo {
+    export type ReferenceTypeEnum = 'FILE' | 'WEB';
+    export const ReferenceTypeEnum = {
+        FILE: 'FILE' as ReferenceTypeEnum,
+        WEB: 'WEB' as ReferenceTypeEnum
+    };
 }

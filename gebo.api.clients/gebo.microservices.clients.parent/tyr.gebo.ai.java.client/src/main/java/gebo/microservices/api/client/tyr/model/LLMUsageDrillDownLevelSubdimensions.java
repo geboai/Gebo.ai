@@ -18,36 +18,81 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * LLMUsageDrillDownLevelSubdimensions
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class LLMUsageDrillDownLevelSubdimensions {
   @JsonProperty("providerId")
-  private Object providerId = null;
+  private List<String> providerId = null;
 
   @JsonProperty("username")
-  private Object username = null;
+  private List<String> username = null;
 
   @JsonProperty("model")
-  private Object model = null;
+  private List<String> model = null;
 
   @JsonProperty("callerStack")
-  private Object callerStack = null;
+  private List<String> callerStack = null;
 
-  @JsonProperty("modelType")
-  private Object modelType = null;
+  /**
+   * Gets or Sets modelType
+   */
+  public enum ModelTypeEnum {
+    CHAT("CHAT"),
+    EMBEDDING("EMBEDDING"),
+    IMAGE("IMAGE"),
+    RANKER("RANKER"),
+    TTS("TTS"),
+    TRANSCRIPT("TRANSCRIPT");
+
+    private String value;
+
+    ModelTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ModelTypeEnum fromValue(String input) {
+      for (ModelTypeEnum b : ModelTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("modelType")
+  private List<ModelTypeEnum> modelType = null;
 
   @JsonProperty("year")
-  private Object year = null;
+  private List<Integer> year = null;
 
   @JsonProperty("month")
-  private Object month = null;
+  private List<Integer> month = null;
 
-  public LLMUsageDrillDownLevelSubdimensions providerId(Object providerId) {
+  public LLMUsageDrillDownLevelSubdimensions providerId(List<String> providerId) {
     this.providerId = providerId;
+    return this;
+  }
+
+  public LLMUsageDrillDownLevelSubdimensions addProviderIdItem(String providerIdItem) {
+    if (this.providerId == null) {
+      this.providerId = new ArrayList<>();
+    }
+    this.providerId.add(providerIdItem);
     return this;
   }
 
@@ -56,16 +101,24 @@ public class LLMUsageDrillDownLevelSubdimensions {
    * @return providerId
   **/
   @Schema(description = "")
-  public Object getProviderId() {
+  public List<String> getProviderId() {
     return providerId;
   }
 
-  public void setProviderId(Object providerId) {
+  public void setProviderId(List<String> providerId) {
     this.providerId = providerId;
   }
 
-  public LLMUsageDrillDownLevelSubdimensions username(Object username) {
+  public LLMUsageDrillDownLevelSubdimensions username(List<String> username) {
     this.username = username;
+    return this;
+  }
+
+  public LLMUsageDrillDownLevelSubdimensions addUsernameItem(String usernameItem) {
+    if (this.username == null) {
+      this.username = new ArrayList<>();
+    }
+    this.username.add(usernameItem);
     return this;
   }
 
@@ -74,16 +127,24 @@ public class LLMUsageDrillDownLevelSubdimensions {
    * @return username
   **/
   @Schema(description = "")
-  public Object getUsername() {
+  public List<String> getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(List<String> username) {
     this.username = username;
   }
 
-  public LLMUsageDrillDownLevelSubdimensions model(Object model) {
+  public LLMUsageDrillDownLevelSubdimensions model(List<String> model) {
     this.model = model;
+    return this;
+  }
+
+  public LLMUsageDrillDownLevelSubdimensions addModelItem(String modelItem) {
+    if (this.model == null) {
+      this.model = new ArrayList<>();
+    }
+    this.model.add(modelItem);
     return this;
   }
 
@@ -92,16 +153,24 @@ public class LLMUsageDrillDownLevelSubdimensions {
    * @return model
   **/
   @Schema(description = "")
-  public Object getModel() {
+  public List<String> getModel() {
     return model;
   }
 
-  public void setModel(Object model) {
+  public void setModel(List<String> model) {
     this.model = model;
   }
 
-  public LLMUsageDrillDownLevelSubdimensions callerStack(Object callerStack) {
+  public LLMUsageDrillDownLevelSubdimensions callerStack(List<String> callerStack) {
     this.callerStack = callerStack;
+    return this;
+  }
+
+  public LLMUsageDrillDownLevelSubdimensions addCallerStackItem(String callerStackItem) {
+    if (this.callerStack == null) {
+      this.callerStack = new ArrayList<>();
+    }
+    this.callerStack.add(callerStackItem);
     return this;
   }
 
@@ -110,16 +179,24 @@ public class LLMUsageDrillDownLevelSubdimensions {
    * @return callerStack
   **/
   @Schema(description = "")
-  public Object getCallerStack() {
+  public List<String> getCallerStack() {
     return callerStack;
   }
 
-  public void setCallerStack(Object callerStack) {
+  public void setCallerStack(List<String> callerStack) {
     this.callerStack = callerStack;
   }
 
-  public LLMUsageDrillDownLevelSubdimensions modelType(Object modelType) {
+  public LLMUsageDrillDownLevelSubdimensions modelType(List<ModelTypeEnum> modelType) {
     this.modelType = modelType;
+    return this;
+  }
+
+  public LLMUsageDrillDownLevelSubdimensions addModelTypeItem(ModelTypeEnum modelTypeItem) {
+    if (this.modelType == null) {
+      this.modelType = new ArrayList<>();
+    }
+    this.modelType.add(modelTypeItem);
     return this;
   }
 
@@ -128,16 +205,24 @@ public class LLMUsageDrillDownLevelSubdimensions {
    * @return modelType
   **/
   @Schema(description = "")
-  public Object getModelType() {
+  public List<ModelTypeEnum> getModelType() {
     return modelType;
   }
 
-  public void setModelType(Object modelType) {
+  public void setModelType(List<ModelTypeEnum> modelType) {
     this.modelType = modelType;
   }
 
-  public LLMUsageDrillDownLevelSubdimensions year(Object year) {
+  public LLMUsageDrillDownLevelSubdimensions year(List<Integer> year) {
     this.year = year;
+    return this;
+  }
+
+  public LLMUsageDrillDownLevelSubdimensions addYearItem(Integer yearItem) {
+    if (this.year == null) {
+      this.year = new ArrayList<>();
+    }
+    this.year.add(yearItem);
     return this;
   }
 
@@ -146,16 +231,24 @@ public class LLMUsageDrillDownLevelSubdimensions {
    * @return year
   **/
   @Schema(description = "")
-  public Object getYear() {
+  public List<Integer> getYear() {
     return year;
   }
 
-  public void setYear(Object year) {
+  public void setYear(List<Integer> year) {
     this.year = year;
   }
 
-  public LLMUsageDrillDownLevelSubdimensions month(Object month) {
+  public LLMUsageDrillDownLevelSubdimensions month(List<Integer> month) {
     this.month = month;
+    return this;
+  }
+
+  public LLMUsageDrillDownLevelSubdimensions addMonthItem(Integer monthItem) {
+    if (this.month == null) {
+      this.month = new ArrayList<>();
+    }
+    this.month.add(monthItem);
     return this;
   }
 
@@ -164,11 +257,11 @@ public class LLMUsageDrillDownLevelSubdimensions {
    * @return month
   **/
   @Schema(description = "")
-  public Object getMonth() {
+  public List<Integer> getMonth() {
     return month;
   }
 
-  public void setMonth(Object month) {
+  public void setMonth(List<Integer> month) {
     this.month = month;
   }
 

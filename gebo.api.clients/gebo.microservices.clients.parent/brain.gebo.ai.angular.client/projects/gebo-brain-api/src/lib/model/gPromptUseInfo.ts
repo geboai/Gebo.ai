@@ -9,10 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GPromptPlaceholderInfo } from './gPromptPlaceholderInfo';
 
 export interface GPromptUseInfo { 
-    placeholders?: any;
-    code: any;
-    description: any;
-    module: any;
+    placeholders?: Array<GPromptPlaceholderInfo>;
+    code: string;
+    description: string;
+    module: string;
 }

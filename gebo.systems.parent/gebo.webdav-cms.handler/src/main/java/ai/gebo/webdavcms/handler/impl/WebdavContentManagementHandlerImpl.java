@@ -12,16 +12,12 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemContentManagementSystemHandler;
-import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationDao;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
-import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
 import ai.gebo.webdavcms.handler.GWebdavContentManagementSystem;
 import ai.gebo.webdavcms.handler.GWebdavProjectEndpoint;
 import ai.gebo.webdavcms.handler.GWebdavResourceReference;
 import ai.gebo.webdavcms.handler.IGWebdavContentManagementSystemHandler;
 import ai.gebo.webdavcms.handler.IGWebdavVirtualFilesystemConsumingService;
-import ai.gebo.webdavcms.handler.repositories.WebdavContentManagementSystemRepository;
-import ai.gebo.webdavcms.handler.repositories.WebdavProjectEndpointRepository;
 
 public class WebdavContentManagementHandlerImpl extends
 		GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<GWebdavContentManagementSystem, GWebdavProjectEndpoint, GWebdavResourceReference, IGWebdavVirtualFilesystemConsumingService>
@@ -39,15 +35,15 @@ public class WebdavContentManagementHandlerImpl extends
 	protected IGeboSecretsAccessService secretsService = null;
 
 	public WebdavContentManagementHandlerImpl(IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
-			IGDocumentReferenceFactory contentHandler, WebdavContentManagementSystemRepository systemsRepo,
-			WebdavProjectEndpointRepository endpointRepo,
+			IGDocumentReferenceFactory contentHandler, WebdavSystemsConfigurationDao systemsDao,
+			WebdavProjectEndpointConfigurationDao endpointsDao,
 			IGLocalPersistentFolderDiscoveryService localFolderDiscoveryService,
 			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			IGeboSecretsAccessService secretsService, IGWebdavVirtualFilesystemConsumingService consumingService,
 			IGDocumentReferenceIngestionHandler ingestionHandler) {
 		super(buildSystemHandlerRepository, contentHandler,
-				IGContentManagementSystemConfigurationDao.of(systemsRepo),
-				IGProjectEndpointRuntimeConfigurationDao.of(endpointRepo), localFolderDiscoveryService,
+				systemsDao,
+				endpointsDao, localFolderDiscoveryService,
 				persistentObjectManager, messageBroker, consumingService, ingestionHandler);
 		this.secretsService = secretsService;
 	}

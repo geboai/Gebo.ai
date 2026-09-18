@@ -11,20 +11,28 @@
  */
 
 export interface GProject { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    creationDate?: any;
-    modificationDate?: any;
-    version?: any;
-    accessibleGroups?: any;
-    accessibleUsers?: any;
-    accessibleToAll?: any;
-    rootKnowledgeBaseCode?: any;
-    objectSpaceType?: any;
-    aclAliases?: any;
-    parentProjectCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    creationDate?: Date;
+    modificationDate?: Date;
+    version?: string;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    rootKnowledgeBaseCode?: string;
+    objectSpaceType?: GProject.ObjectSpaceTypeEnum;
+    aclAliases?: Array<number>;
+    parentProjectCode?: string;
+    readonly?: boolean;
+}
+export namespace GProject {
+    export type ObjectSpaceTypeEnum = 'COMPANY' | 'USERSPACE';
+    export const ObjectSpaceTypeEnum = {
+        COMPANY: 'COMPANY' as ObjectSpaceTypeEnum,
+        USERSPACE: 'USERSPACE' as ObjectSpaceTypeEnum
+    };
 }

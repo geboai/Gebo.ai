@@ -9,11 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GDataFlowMetaInfos } from './gDataFlowMetaInfos';
 
 export interface ComponentMetaInfo { 
-    messagingSystemId?: any;
-    messagingModuleId?: any;
-    receiver?: any;
-    emitter?: any;
-    localSystem?: any;
+    messagingSystemId?: string;
+    messagingModuleId?: string;
+    receiver?: boolean;
+    emitter?: boolean;
+    localSystem?: boolean;
+    dataFlowMetaInfos?: GDataFlowMetaInfos;
 }

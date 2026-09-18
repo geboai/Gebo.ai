@@ -1,0 +1,223 @@
+# ===========================================================================
+# Self-contained test scenario for the NEW Angular "Gebo AI Assistant" plugin
+# (../../../Gebo.ai-offices-plugin) against a REAL Gebo.ai platform, inside a
+# Keycloak-gated ONLYOFFICE Document Server.
+#
+# One stack, everything wired:
+#   mongo / qdrant / neo4j / opensearch  – platform infrastructure
+#   gebo.ai                              – the monolith backend (image geboai/gebo.ai),
+#                                          reusing ../gebo.ai/config/application.yml and
+#                                          overriding CORS + adding a Keycloak OAuth2
+#                                          resource-server config via SPRING_APPLICATION_JSON
+#   keycloak + oauth2-proxy              – the SSO gate (realm onlyoffice-dev)
+#   documentserver                       – ONLYOFFICE serving the built Angular plugin
+#
+# Everything shares one network, so gebo.ai resolves `keycloak.localtest.me`
+# (the alias on the keycloak service) to validate tokens against the SAME issuer
+# the browser/oauth2-proxy used — the one hostname rule that makes OAuth2 issuer
+# validation line up on both sides.
+#
+# Prerequisites:
+#   Build the plugin first:  cd ../../../Gebo.ai-offices-plugin && npm ci && npm run build
+#   (produces dist/office-plugin/browser, mounted below).
+#
+# Usage:
+#   docker compose up -d
+#   - Backend:   http://localhost:12999   (fresh DB on first run; see README for admin + LLM setup)
+#   - Editor/SSO: http://localhost:4180/welcome/   login developer / developer  (realm onlyoffice-dev)
+#   - Keycloak:  http://keycloak.localtest.me:8081/  (admin/admin)
+#   Then open the editor's Plugins tab -> "Gebo AI Assistant".
+#
+# Do NOT run this alongside dockers/gebo.ai or dockers/onlyoffice — they bind the
+# same ports (12999 / 27017 / 6334 / 7687 / 9200 / 8081 / 4180).
+# ===========================================================================
+services:
+  # --------------------------- platform infrastructure ---------------------------
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - '127.0.0.1:27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoroot
+      MONGO_INITDB_ROOT_PASSWORD: mongopwd
+    command: ['mongod', '--wiredTigerCacheSizeGB=1']
+    volumes:
+      - mongo-data:/data/db
+
+  qdrant:
+    image: qdrant/qdrant
+    restart: always
+    ports:
+      - '127.0.0.1:6333:6333'
+      - '127.0.0.1:6334:6334'
+    environment:
+      QDRANT__SERVICE__API_KEY: ce7c85bc-f037-4c64-91d8-70335638329d
+      QDRANT__STORAGE__OPTIMIZE_INDEXING: 'true'
+      QDRANT__STORAGE__RAM_DISK_SIZE: '256MB'
+      QDRANT__STORAGE__MAX_SEGMENT_SIZE: '1000000'
+    volumes:
+      - qdrant-data:/qdrant/storage
+
+  neo4j:
+    image: neo4j:5
+    restart: always
+    ports:
+      - '127.0.0.1:7474:7474'
+      - '127.0.0.1:7687:7687'
+    environment:
+      NEO4J_AUTH: 'neo4j/neo4jmaster'
+      NEO4J_server_memory_heap_initial__size: 1G
+      NEO4J_server_memory_heap_max__size: 2G
+      NEO4J_server_memory_pagecache_size: 512M
+      NEO4JLABS_PLUGINS: '["apoc"]'
+      NEO4J_apoc_export_file_enabled: 'true'
+      NEO4J_apoc_import_file_enabled: 'true'
+      NEO4J_apoc_import_file_use__neo4j__config: 'true'
+    volumes:
+      - neo4j-data:/data
+      - neo4j-logs:/logs
+
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=dothesearch1973-Advanced
+      - plugins.security.ssl.http.enabled=true
+      - plugins.security.ssl.transport.enabled=true
+      - bootstrap.memory_lock=true
+      - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+
+  # --------------------------- Gebo.ai backend ---------------------------
+  gebo.ai:
+    image: geboai/gebo.ai
+    restart: always
+    ports:
+      - '12999:12999'
+    depends_on:
+      - mongo
+      - qdrant
+      - neo4j
+      - opensearch
+      - keycloak
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+    volumes:
+      - gebo-work:/opt/gebo.ai/work
+      - gebo-home:/opt/gebo.ai/home
+      - gebo-logs:/opt/gebo.ai/logs
+      - gebo-shares:/opt/gebo.ai/shares
+      # Reuse the standard monolith config (Mongo/Qdrant/Neo4j/OpenSearch already
+      # point at the compose service names, DB "gebo-ai"). Read-only.
+      - ../gebo.ai/config:/opt/gebo.ai/config:ro
+    environment:
+      JAVA_TOOL_OPTIONS: >-
+        --enable-native-access=ALL-UNNAMED
+        -Dsun.jnu.encoding=UTF-8
+        -Dfile.encoding=UTF-8
+        -Dai.gebo.neo4j.enabled=true
+        -Xms2g
+        -Xmx4g
+        -XX:MaxMetaspaceSize=512m
+        --add-opens=java.base/java.nio.charset=ALL-UNNAMED
+      # Sandbox-only overrides on top of application.yml: allow the plugin's
+      # origin through CORS, auto-provision Keycloak identities, and trust the
+      # onlyoffice-dev realm as an OAuth2 resource server (issuerUri uses the
+      # keycloak.localtest.me alias, resolvable on this shared network).
+      SPRING_APPLICATION_JSON: >-
+        {"ai.gebo.agents.standard.enabled":"true",
+        "ai.gebo.officeplugin.enabled":"true",
+        "ai.gebo.security.cors.allowedOrigins":"http://localhost:12999,http://localhost:4200,http://localhost:4180",
+        "ai.gebo.security.loginPolicy":"TRUST_EVERY_OAUTH_IDENTITY",
+        "ai.gebo.security.oauth2configs[0].registrationId":"keycloakOnlyofficeBearer",
+        "ai.gebo.security.oauth2configs[0].description":"ONLYOFFICE sandbox Keycloak resource server",
+        "ai.gebo.security.oauth2configs[0].provider":"keycloak",
+        "ai.gebo.security.oauth2configs[0].configurationType":"AUTHENTICATION",
+        "ai.gebo.security.oauth2configs[0].client.clientId":"onlyoffice-plugin-dev",
+        "ai.gebo.security.oauth2configs[0].client.secret":"42f277af-7919-4edb-a686-a2f40ec4dc87",
+        "ai.gebo.security.oauth2configs[0].client.tenantId":"default",
+        "ai.gebo.security.oauth2configs[0].providerConfig.provider":"keycloak",
+        "ai.gebo.security.oauth2configs[0].providerConfig.authorizationUri":"http://keycloak.localtest.me:8081/realms/onlyoffice-dev/protocol/openid-connect/auth",
+        "ai.gebo.security.oauth2configs[0].providerConfig.tokenUri":"http://keycloak.localtest.me:8081/realms/onlyoffice-dev/protocol/openid-connect/token",
+        "ai.gebo.security.oauth2configs[0].providerConfig.userInfoUri":"http://keycloak.localtest.me:8081/realms/onlyoffice-dev/protocol/openid-connect/userinfo",
+        "ai.gebo.security.oauth2configs[0].providerConfig.issuerUri":"http://keycloak.localtest.me:8081/realms/onlyoffice-dev",
+        "ai.gebo.security.oauth2configs[0].providerConfig.userNameAttribute":"email",
+        "ai.gebo.sysinit.admin.config.adminUsername":"admin@gebo.ai",
+        "ai.gebo.sysinit.admin.config.adminPassword":"Adm1n-sandbox-2026",
+        "management.endpoints.web.exposure.include":"health,metrics,configprops",
+        "logging.level.ai.gebo.security":"DEBUG"}
+
+  # --------------------------- SSO gate ---------------------------
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    hostname: keycloak
+    command: ['start-dev', '--http-port=8081', '--import-realm']
+    environment:
+      KC_HTTP_PORT: 8081
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import:ro
+    ports:
+      - '127.0.0.1:8081:8081'
+    networks:
+      default:
+        aliases:
+          - keycloak.localtest.me
+
+  oauth2-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.3
+    command: --config /oauth2-proxy.cfg
+    hostname: oauth2-proxy
+    volumes:
+      - ./oauth2-proxy/oauth2-proxy.cfg:/oauth2-proxy.cfg:ro
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:4180:4180'
+    depends_on:
+      - keycloak
+      - documentserver
+
+  # --------------------------- ONLYOFFICE + plugin ---------------------------
+  documentserver:
+    image: onlyoffice/documentserver:latest
+    restart: unless-stopped
+    environment:
+      JWT_ENABLED: 'true'
+      JWT_SECRET: 996fc689d30df68745701ec12c0b28e34fb19512c31718d6
+      JWT_HEADER: Authorization
+    volumes:
+      - documentserver-data:/var/www/onlyoffice/Data
+      - documentserver-log:/var/log/onlyoffice
+      - ../../../Gebo.ai-offices-plugin/dist/office-plugin/browser:/var/www/onlyoffice/documentserver/sdkjs-plugins/gebo-ai-assistant:ro
+      - ./plugin-overrides/runtime-config.js:/var/www/onlyoffice/documentserver/sdkjs-plugins/gebo-ai-assistant/runtime-config.js:ro
+      - ./plugin-overrides/backends.json:/var/www/onlyoffice/documentserver/sdkjs-plugins/gebo-ai-assistant/assets/backends.json:ro
+
+volumes:
+  mongo-data:
+  qdrant-data:
+  neo4j-data:
+  neo4j-logs:
+  opensearch-data:
+  gebo-work:
+  gebo-home:
+  gebo-logs:
+  gebo-shares:
+  documentserver-data:
+  documentserver-log:
+
+networks:
+  default:
+    name: gebo-onlyoffice-assistant-dev

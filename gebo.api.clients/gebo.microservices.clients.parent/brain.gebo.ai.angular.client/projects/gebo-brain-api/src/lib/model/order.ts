@@ -11,10 +11,23 @@
  */
 
 export interface Order { 
-    direction?: any;
-    property?: any;
-    ignoreCase?: any;
-    nullHandling?: any;
-    descending?: any;
-    ascending?: any;
+    direction?: Order.DirectionEnum;
+    property?: string;
+    ignoreCase?: boolean;
+    nullHandling?: Order.NullHandlingEnum;
+    ascending?: boolean;
+    descending?: boolean;
+}
+export namespace Order {
+    export type DirectionEnum = 'ASC' | 'DESC';
+    export const DirectionEnum = {
+        ASC: 'ASC' as DirectionEnum,
+        DESC: 'DESC' as DirectionEnum
+    };
+    export type NullHandlingEnum = 'NATIVE' | 'NULLS_FIRST' | 'NULLS_LAST';
+    export const NullHandlingEnum = {
+        NATIVE: 'NATIVE' as NullHandlingEnum,
+        NULLSFIRST: 'NULLS_FIRST' as NullHandlingEnum,
+        NULLSLAST: 'NULLS_LAST' as NullHandlingEnum
+    };
 }

@@ -10,14 +10,21 @@
 
 
 
-import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject, OnChanges, OnInit, Optional, SimpleChanges } from "@angular/core";
 import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PagedModelGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginatorState } from "primeng/paginator";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, refreshTreeNodes } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, refreshTreeNodes, UI_COMPANY_FILES_NOT_SELECTABLE } from "@Gebo.ai/reusable-ui";
 import { ScrollerOptions, TreeNode } from "primeng/api";
 import { TreeNodeSelectEvent, TreeScrollIndexChangeEvent } from "primeng/tree";
 import { ActivatedRoute, Router } from "@angular/router";
+
+/**
+ * Re-exported from @Gebo.ai/reusable-ui, where the token now lives so that the office
+ * assistant (used by the office plugins, which never load this library) can read it
+ * too. Kept exported here for the hosts that already import it from @Gebo.ai/chat-ui.
+ */
+export { UI_COMPANY_FILES_NOT_SELECTABLE };
 
 interface ExtendedGUserChatInfo extends GUserChatInfo {
     routerLink: string
@@ -99,6 +106,8 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     protected id?: string;
     /** Whether the administrator has configured at least one chat model and one embedding model. Starts true to avoid flashing the warning while the check is in flight. */
     protected llmsSetupDone: boolean = true;
+    /** Value passed to the chat control as [disableFilesBrowsers], derived from UI_COMPANY_FILES_NOT_SELECTABLE. */
+    protected disableFilesBrowsers: boolean = false;
 
     /**
      * Component constructor that injects necessary services
@@ -114,7 +123,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         private router: Router,
         private geboRagChatControllerService: GeboRagChatControllerService,
         private geboUserChatsControllerService: GeboUserChatsControllerService,
-        private geboChatModelsControllerService: ChatModelsLookupControllerService) {
+        private geboChatModelsControllerService: ChatModelsLookupControllerService,
+        @Optional() @Inject(UI_COMPANY_FILES_NOT_SELECTABLE) companyFilesNotSelectable?: boolean) {
+        this.disableFilesBrowsers = companyFilesNotSelectable === true;
         this.scrollOptions = {
 
             onLazyLoad: () => {

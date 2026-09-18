@@ -18,27 +18,37 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * DeepSearchDataSourceAccess
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class DeepSearchDataSourceAccess {
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("dataSourceId")
-  private Object dataSourceId = null;
+  private String dataSourceId = null;
 
-  public DeepSearchDataSourceAccess accessibleGroups(Object accessibleGroups) {
+  public DeepSearchDataSourceAccess accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public DeepSearchDataSourceAccess addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -47,16 +57,24 @@ public class DeepSearchDataSourceAccess {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public DeepSearchDataSourceAccess accessibleUsers(Object accessibleUsers) {
+  public DeepSearchDataSourceAccess accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public DeepSearchDataSourceAccess addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -65,15 +83,15 @@ public class DeepSearchDataSourceAccess {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public DeepSearchDataSourceAccess accessibleToAll(Object accessibleToAll) {
+  public DeepSearchDataSourceAccess accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -83,15 +101,15 @@ public class DeepSearchDataSourceAccess {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public DeepSearchDataSourceAccess dataSourceId(Object dataSourceId) {
+  public DeepSearchDataSourceAccess dataSourceId(String dataSourceId) {
     this.dataSourceId = dataSourceId;
     return this;
   }
@@ -101,11 +119,11 @@ public class DeepSearchDataSourceAccess {
    * @return dataSourceId
   **/
   @Schema(description = "")
-  public Object getDataSourceId() {
+  public String getDataSourceId() {
     return dataSourceId;
   }
 
-  public void setDataSourceId(Object dataSourceId) {
+  public void setDataSourceId(String dataSourceId) {
     this.dataSourceId = dataSourceId;
   }
 

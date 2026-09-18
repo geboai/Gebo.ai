@@ -22,16 +22,37 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboUsernamePasswordContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class GeboUsernamePasswordContent {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("password")
-  private Object password = null;
+  private String password = null;
 
-  public GeboUsernamePasswordContent username(Object username) {
+  public GeboUsernamePasswordContent readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
+
+  public GeboUsernamePasswordContent username(String username) {
     this.username = username;
     return this;
   }
@@ -41,15 +62,15 @@ public class GeboUsernamePasswordContent {
    * @return username
   **/
   @Schema(required = true, description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public GeboUsernamePasswordContent password(Object password) {
+  public GeboUsernamePasswordContent password(String password) {
     this.password = password;
     return this;
   }
@@ -59,11 +80,11 @@ public class GeboUsernamePasswordContent {
    * @return password
   **/
   @Schema(required = true, description = "")
-  public Object getPassword() {
+  public String getPassword() {
     return password;
   }
 
-  public void setPassword(Object password) {
+  public void setPassword(String password) {
     this.password = password;
   }
 
@@ -77,13 +98,14 @@ public class GeboUsernamePasswordContent {
       return false;
     }
     GeboUsernamePasswordContent geboUsernamePasswordContent = (GeboUsernamePasswordContent) o;
-    return Objects.equals(this.username, geboUsernamePasswordContent.username) &&
+    return Objects.equals(this.readOnly, geboUsernamePasswordContent.readOnly) &&
+        Objects.equals(this.username, geboUsernamePasswordContent.username) &&
         Objects.equals(this.password, geboUsernamePasswordContent.password);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, password);
+    return Objects.hash(readOnly, username, password);
   }
 
 
@@ -92,6 +114,7 @@ public class GeboUsernamePasswordContent {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboUsernamePasswordContent {\n");
     
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("}");

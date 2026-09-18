@@ -3,6 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**customContentDescription** | **Object** |  |  [optional]
-**content** | **Object** |  |  [optional]
-**contentType** | **Object** |  |  [optional]
+**readOnly** | **Boolean** |  |  [optional]
+**customContentDescription** | **String** |  |  [optional]
+**content** | **String** |  |  [optional]
+**contentType** | **String** |  |  [optional]

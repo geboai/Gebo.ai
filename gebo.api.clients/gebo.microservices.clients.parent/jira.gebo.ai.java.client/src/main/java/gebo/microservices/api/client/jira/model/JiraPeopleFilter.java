@@ -18,24 +18,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * JiraPeopleFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:33.251328392+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:34.676208947+02:00[Europe/Rome]")
 
 public class JiraPeopleFilter {
   @JsonProperty("assigneesList")
-  private Object assigneesList = null;
+  private List<String> assigneesList = null;
 
   @JsonProperty("reportersList")
-  private Object reportersList = null;
+  private List<String> reportersList = null;
 
   @JsonProperty("creatorsList")
-  private Object creatorsList = null;
+  private List<String> creatorsList = null;
 
-  public JiraPeopleFilter assigneesList(Object assigneesList) {
+  public JiraPeopleFilter assigneesList(List<String> assigneesList) {
     this.assigneesList = assigneesList;
+    return this;
+  }
+
+  public JiraPeopleFilter addAssigneesListItem(String assigneesListItem) {
+    if (this.assigneesList == null) {
+      this.assigneesList = new ArrayList<>();
+    }
+    this.assigneesList.add(assigneesListItem);
     return this;
   }
 
@@ -44,16 +54,24 @@ public class JiraPeopleFilter {
    * @return assigneesList
   **/
   @Schema(description = "")
-  public Object getAssigneesList() {
+  public List<String> getAssigneesList() {
     return assigneesList;
   }
 
-  public void setAssigneesList(Object assigneesList) {
+  public void setAssigneesList(List<String> assigneesList) {
     this.assigneesList = assigneesList;
   }
 
-  public JiraPeopleFilter reportersList(Object reportersList) {
+  public JiraPeopleFilter reportersList(List<String> reportersList) {
     this.reportersList = reportersList;
+    return this;
+  }
+
+  public JiraPeopleFilter addReportersListItem(String reportersListItem) {
+    if (this.reportersList == null) {
+      this.reportersList = new ArrayList<>();
+    }
+    this.reportersList.add(reportersListItem);
     return this;
   }
 
@@ -62,16 +80,24 @@ public class JiraPeopleFilter {
    * @return reportersList
   **/
   @Schema(description = "")
-  public Object getReportersList() {
+  public List<String> getReportersList() {
     return reportersList;
   }
 
-  public void setReportersList(Object reportersList) {
+  public void setReportersList(List<String> reportersList) {
     this.reportersList = reportersList;
   }
 
-  public JiraPeopleFilter creatorsList(Object creatorsList) {
+  public JiraPeopleFilter creatorsList(List<String> creatorsList) {
     this.creatorsList = creatorsList;
+    return this;
+  }
+
+  public JiraPeopleFilter addCreatorsListItem(String creatorsListItem) {
+    if (this.creatorsList == null) {
+      this.creatorsList = new ArrayList<>();
+    }
+    this.creatorsList.add(creatorsListItem);
     return this;
   }
 
@@ -80,11 +106,11 @@ public class JiraPeopleFilter {
    * @return creatorsList
   **/
   @Schema(description = "")
-  public Object getCreatorsList() {
+  public List<String> getCreatorsList() {
     return creatorsList;
   }
 
-  public void setCreatorsList(Object creatorsList) {
+  public void setCreatorsList(List<String> creatorsList) {
     this.creatorsList = creatorsList;
   }
 

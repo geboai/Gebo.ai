@@ -9,26 +9,29 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
+import { GeboMCPAgentTool } from './geboMCPAgentTool';
+import { GeboMCPAgentsNetworkTool } from './geboMCPAgentsNetworkTool';
 
 export interface GeboMCPServerConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    exportedUniqueRelativeUrl: any;
-    enabled?: any;
-    accessibleGroups?: any;
-    accessibleUsers?: any;
-    accessibleToAll?: any;
-    aclAliases?: any;
-    shareAllPersonallyVisible?: any;
-    enabledTools?: any;
-    exportedKnowledgeBasesAsResources?: any;
-    exportedProjectsAsResources?: any;
-    exportedProjectEndpoints?: any;
-    exportedPrompts?: any;
-    agentAsTools?: any;
-    agentNetworkAsTools?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    exportedUniqueRelativeUrl: string;
+    enabled?: boolean;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    aclAliases?: Array<number>;
+    shareAllPersonallyVisible?: boolean;
+    enabledTools?: Array<string>;
+    exportedKnowledgeBasesAsResources?: Array<string>;
+    exportedProjectsAsResources?: Array<string>;
+    exportedProjectEndpoints?: Array<GObjectRefGProjectEndpoint>;
+    exportedPrompts?: Array<string>;
+    agentAsTools?: Array<GeboMCPAgentTool>;
+    agentNetworkAsTools?: Array<GeboMCPAgentsNetworkTool>;
 }

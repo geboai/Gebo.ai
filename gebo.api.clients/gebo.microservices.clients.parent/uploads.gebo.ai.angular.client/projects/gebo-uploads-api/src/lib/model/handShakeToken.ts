@@ -11,5 +11,5 @@
  */
 
 export interface HandShakeToken { 
-    token?: any;
+    token?: string;
 }

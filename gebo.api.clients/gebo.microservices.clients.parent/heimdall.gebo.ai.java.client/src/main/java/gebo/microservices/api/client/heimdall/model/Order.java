@@ -22,28 +22,91 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Order
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class Order {
-  @JsonProperty("direction")
-  private Object direction = null;
+  /**
+   * Gets or Sets direction
+   */
+  public enum DirectionEnum {
+    ASC("ASC"),
+    DESC("DESC");
+
+    private String value;
+
+    DirectionEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static DirectionEnum fromValue(String input) {
+      for (DirectionEnum b : DirectionEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("direction")
+  private DirectionEnum direction = null;
 
   @JsonProperty("property")
-  private Object property = null;
+  private String property = null;
 
   @JsonProperty("ignoreCase")
-  private Object ignoreCase = null;
+  private Boolean ignoreCase = null;
 
-  @JsonProperty("nullHandling")
-  private Object nullHandling = null;
+  /**
+   * Gets or Sets nullHandling
+   */
+  public enum NullHandlingEnum {
+    NATIVE("NATIVE"),
+    NULLS_FIRST("NULLS_FIRST"),
+    NULLS_LAST("NULLS_LAST");
+
+    private String value;
+
+    NullHandlingEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static NullHandlingEnum fromValue(String input) {
+      for (NullHandlingEnum b : NullHandlingEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("nullHandling")
+  private NullHandlingEnum nullHandling = null;
 
   @JsonProperty("ascending")
-  private Object ascending = null;
+  private Boolean ascending = null;
 
   @JsonProperty("descending")
-  private Object descending = null;
+  private Boolean descending = null;
 
-  public Order direction(Object direction) {
+  public Order direction(DirectionEnum direction) {
     this.direction = direction;
     return this;
   }
@@ -53,15 +116,15 @@ public class Order {
    * @return direction
   **/
   @Schema(description = "")
-  public Object getDirection() {
+  public DirectionEnum getDirection() {
     return direction;
   }
 
-  public void setDirection(Object direction) {
+  public void setDirection(DirectionEnum direction) {
     this.direction = direction;
   }
 
-  public Order property(Object property) {
+  public Order property(String property) {
     this.property = property;
     return this;
   }
@@ -71,15 +134,15 @@ public class Order {
    * @return property
   **/
   @Schema(description = "")
-  public Object getProperty() {
+  public String getProperty() {
     return property;
   }
 
-  public void setProperty(Object property) {
+  public void setProperty(String property) {
     this.property = property;
   }
 
-  public Order ignoreCase(Object ignoreCase) {
+  public Order ignoreCase(Boolean ignoreCase) {
     this.ignoreCase = ignoreCase;
     return this;
   }
@@ -89,15 +152,15 @@ public class Order {
    * @return ignoreCase
   **/
   @Schema(description = "")
-  public Object getIgnoreCase() {
+  public Boolean isIgnoreCase() {
     return ignoreCase;
   }
 
-  public void setIgnoreCase(Object ignoreCase) {
+  public void setIgnoreCase(Boolean ignoreCase) {
     this.ignoreCase = ignoreCase;
   }
 
-  public Order nullHandling(Object nullHandling) {
+  public Order nullHandling(NullHandlingEnum nullHandling) {
     this.nullHandling = nullHandling;
     return this;
   }
@@ -107,15 +170,15 @@ public class Order {
    * @return nullHandling
   **/
   @Schema(description = "")
-  public Object getNullHandling() {
+  public NullHandlingEnum getNullHandling() {
     return nullHandling;
   }
 
-  public void setNullHandling(Object nullHandling) {
+  public void setNullHandling(NullHandlingEnum nullHandling) {
     this.nullHandling = nullHandling;
   }
 
-  public Order ascending(Object ascending) {
+  public Order ascending(Boolean ascending) {
     this.ascending = ascending;
     return this;
   }
@@ -125,15 +188,15 @@ public class Order {
    * @return ascending
   **/
   @Schema(description = "")
-  public Object getAscending() {
+  public Boolean isAscending() {
     return ascending;
   }
 
-  public void setAscending(Object ascending) {
+  public void setAscending(Boolean ascending) {
     this.ascending = ascending;
   }
 
-  public Order descending(Object descending) {
+  public Order descending(Boolean descending) {
     this.descending = descending;
     return this;
   }
@@ -143,11 +206,11 @@ public class Order {
    * @return descending
   **/
   @Schema(description = "")
-  public Object getDescending() {
+  public Boolean isDescending() {
     return descending;
   }
 
-  public void setDescending(Object descending) {
+  public void setDescending(Boolean descending) {
     this.descending = descending;
   }
 

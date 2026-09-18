@@ -70,6 +70,20 @@ ai:
       cluster:
         enabled: true
         base-path: api/cluster/SecretsController
+      # Secrets declared by the configuration rather than stored (see §6.2 of
+      # docs/APPLICATION-YML-ADMIN-MANUAL.md) belong HERE, under
+      # ai.gebo.secrets.config, and nowhere else in the cluster: this is the
+      # service that owns the store and the crypting keys, so declaring them here
+      # keeps their plaintext on one service instead of in the shared config file
+      # that all 19 read. The other services get them transparently through the
+      # cluster endpoints above, encrypted on the wire like any stored secret.
+      #config:
+      #  token:
+      #    - code: my-llm-api-key
+      #      context-code: LLMS
+      #      secret:
+      #        token: ${SOME_API_KEY}
+      #        user: gebo
     security:
       # heimdall hosts AuthController (see WebMvcConfig in gebo.architecture.security),
       # so it needs this like any other browser-facing service. No cluster-internal

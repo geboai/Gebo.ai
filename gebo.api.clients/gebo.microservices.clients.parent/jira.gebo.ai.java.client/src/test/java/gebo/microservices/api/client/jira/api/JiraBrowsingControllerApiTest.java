@@ -16,6 +16,7 @@ import gebo.microservices.api.client.jira.model.BrowseParam;
 import gebo.microservices.api.client.jira.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.jira.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.jira.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.jira.model.VFilesystemReference;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -43,7 +44,7 @@ public class JiraBrowsingControllerApiTest {
     @Test
     public void browseJiraPathTest() {
         BrowseParam body = null;
-        Object systemCode = null;
+        String systemCode = null;
         OperationStatusListPathInfo response = api.browseJiraPath(body, systemCode);
 
         // TODO: test validations
@@ -58,8 +59,8 @@ public class JiraBrowsingControllerApiTest {
      */
     @Test
     public void getJiraNavigationStatusTest() {
-        Object body = null;
-        Object systemCode = null;
+        List<VFilesystemReference> body = null;
+        String systemCode = null;
         OperationStatusListVirtualFilesystemNavigationTreeStatus response = api.getJiraNavigationStatus(body, systemCode);
 
         // TODO: test validations
@@ -74,7 +75,7 @@ public class JiraBrowsingControllerApiTest {
      */
     @Test
     public void getJiraRootsTest() {
-        Object systemCode = null;
+        String systemCode = null;
         OperationStatusListGVirtualFilesystemRoot response = api.getJiraRoots(systemCode);
 
         // TODO: test validations

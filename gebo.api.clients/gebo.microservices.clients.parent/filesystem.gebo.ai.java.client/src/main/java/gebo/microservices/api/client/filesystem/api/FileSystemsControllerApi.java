@@ -2,6 +2,8 @@ package gebo.microservices.api.client.filesystem.api;
 
 import gebo.microservices.api.client.filesystem.invoker.ApiClient;
 
+import gebo.microservices.api.client.filesystem.model.GContentManagementSystemType;
+import gebo.microservices.api.client.filesystem.model.GFilesystemContentManagementSystem;
 import gebo.microservices.api.client.filesystem.model.GFilesystemProjectEndpoint;
 import gebo.microservices.api.client.filesystem.model.OperationStatusGJobStatus;
 
@@ -23,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:56.984278175+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:30.490254341+02:00[Europe/Rome]")
 
 public class FileSystemsControllerApi {
     private ApiClient apiClient;
@@ -68,7 +70,7 @@ public class FileSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteFilesystemEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/deleteFilesystemEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/deleteFilesystemEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -84,17 +86,17 @@ public class FileSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return Object
+     * @return List&lt;GFilesystemProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findFileSystemEndpointsByProject(Object parentProjectCode) throws RestClientException {
+    public List<GFilesystemProjectEndpoint> findFileSystemEndpointsByProject(String parentProjectCode) throws RestClientException {
         return findFileSystemEndpointsByProjectWithHttpInfo(parentProjectCode).getBody();
     }
 
@@ -103,16 +105,16 @@ public class FileSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GFilesystemProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findFileSystemEndpointsByProjectWithHttpInfo(Object parentProjectCode) throws RestClientException {
+    public ResponseEntity<List<GFilesystemProjectEndpoint>> findFileSystemEndpointsByProjectWithHttpInfo(String parentProjectCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'parentProjectCode' is set
         if (parentProjectCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'parentProjectCode' when calling findFileSystemEndpointsByProject");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/findFileSystemEndpointsByProject").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/findFileSystemEndpointsByProject").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -128,18 +130,18 @@ public class FileSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GFilesystemProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GFilesystemProjectEndpoint>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GFilesystemProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findFileSystemEndpointsByQbe(GFilesystemProjectEndpoint body) throws RestClientException {
+    public List<GFilesystemProjectEndpoint> findFileSystemEndpointsByQbe(GFilesystemProjectEndpoint body) throws RestClientException {
         return findFileSystemEndpointsByQbeWithHttpInfo(body).getBody();
     }
 
@@ -148,16 +150,16 @@ public class FileSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GFilesystemProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findFileSystemEndpointsByQbeWithHttpInfo(GFilesystemProjectEndpoint body) throws RestClientException {
+    public ResponseEntity<List<GFilesystemProjectEndpoint>> findFileSystemEndpointsByQbeWithHttpInfo(GFilesystemProjectEndpoint body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findFileSystemEndpointsByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/findFileSystemEndpointsByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/findFileSystemEndpointsByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -174,17 +176,17 @@ public class FileSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GFilesystemProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GFilesystemProjectEndpoint>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GContentManagementSystemType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getFileSystemSystemTypes() throws RestClientException {
+    public List<GContentManagementSystemType> getFileSystemSystemTypes() throws RestClientException {
         return getFileSystemSystemTypesWithHttpInfo().getBody();
     }
 
@@ -192,12 +194,12 @@ public class FileSystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GContentManagementSystemType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getFileSystemSystemTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GContentManagementSystemType>> getFileSystemSystemTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/getFileSystemSystemTypes").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/getFileSystemSystemTypes").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -212,18 +214,18 @@ public class FileSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GContentManagementSystemType>> returnType = new ParameterizedTypeReference<List<GContentManagementSystemType>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param handlerCode  (optional)
-     * @return Object
+     * @return List&lt;GFilesystemContentManagementSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getFileSystemSystems(Object handlerCode) throws RestClientException {
+    public List<GFilesystemContentManagementSystem> getFileSystemSystems(String handlerCode) throws RestClientException {
         return getFileSystemSystemsWithHttpInfo(handlerCode).getBody();
     }
 
@@ -232,12 +234,12 @@ public class FileSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param handlerCode  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GFilesystemContentManagementSystem&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getFileSystemSystemsWithHttpInfo(Object handlerCode) throws RestClientException {
+    public ResponseEntity<List<GFilesystemContentManagementSystem>> getFileSystemSystemsWithHttpInfo(String handlerCode) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/getFileSystemSystems").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/getFileSystemSystems").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -253,8 +255,8 @@ public class FileSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GFilesystemContentManagementSystem>> returnType = new ParameterizedTypeReference<List<GFilesystemContentManagementSystem>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -282,7 +284,7 @@ public class FileSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertFilesystemEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/insertFilesystemEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/insertFilesystemEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -300,7 +302,7 @@ public class FileSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GFilesystemProjectEndpoint> returnType = new ParameterizedTypeReference<GFilesystemProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -328,7 +330,7 @@ public class FileSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishFilesystemEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/publishFilesystemEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/publishFilesystemEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -346,7 +348,7 @@ public class FileSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJobStatus> returnType = new ParameterizedTypeReference<OperationStatusGJobStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -374,7 +376,7 @@ public class FileSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateFilesystemEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/updateFilesystemEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/updateFilesystemEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -392,6 +394,6 @@ public class FileSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GFilesystemProjectEndpoint> returnType = new ParameterizedTypeReference<GFilesystemProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

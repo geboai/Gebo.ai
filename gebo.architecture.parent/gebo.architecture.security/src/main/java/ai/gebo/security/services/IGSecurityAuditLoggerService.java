@@ -3,7 +3,7 @@ package ai.gebo.security.services;
 import java.util.HashMap;
 import java.util.Map;
 
-import ai.gebo.architecture.environment.GeboApplicationArchitecture.ArchitectureType;
+import ai.gebo.architecture.environment.ArchitectureType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

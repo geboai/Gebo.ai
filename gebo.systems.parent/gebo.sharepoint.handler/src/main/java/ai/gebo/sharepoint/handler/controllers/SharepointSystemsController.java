@@ -168,7 +168,7 @@ public class SharepointSystemsController
 	public List<GSharepointProjectEndpoint> findSharepointEndpointsByProject(
 			@RequestParam("parentProjectCode") String parentProjectCode) throws GeboPersistenceException {
 
-		return endpointRepository.findByParentProjectCode(parentProjectCode);
+		return handler.findDataSourcesByProject(parentProjectCode);
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class SharepointSystemsController
 	public GSharepointProjectEndpoint findSharepointEndpointsByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
 
-		return persistentObjectManager.findById(GSharepointProjectEndpoint.class, code);
+		return handler.findDataSource(code);
 	}
 
 	/**
@@ -196,7 +196,7 @@ public class SharepointSystemsController
 	public GSharepointContentManagementSystem findSharepointSystemByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
 
-		return persistentObjectManager.findById(GSharepointContentManagementSystem.class, code);
+		return handler.findConfiguration(code);
 	}
 
 	/**
@@ -363,4 +363,18 @@ public class SharepointSystemsController
 			return os;
 		}
 	}
+
+	/**
+	 * A system declared under {@code ai.gebo.sharepoint.systems} belongs to the
+	 * configuration, not to the admin UI: the write paths of the base controller
+	 * refuse it.
+	 *
+	 * @param system The system a write is being attempted on.
+	 * @return true when the system is declared in the configuration.
+	 */
+	@Override
+	protected boolean isDeclaredInConfiguration(GSharepointContentManagementSystem system) {
+		return system != null && handler.isDeclaredInConfiguration(system.getCode());
+	}
 }
+

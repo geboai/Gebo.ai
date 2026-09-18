@@ -18,28 +18,39 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.chunker.model.ChunkingParams;
+import gebo.microservices.api.client.chunker.model.DocumentBatch;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * StreamChunksReactiveRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:46.509035701+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class StreamChunksReactiveRequest {
   @JsonProperty("batches")
-  private Object batches = null;
+  private List<DocumentBatch> batches = null;
 
   @JsonProperty("chunkingSpecs")
   private ChunkingParams chunkingSpecs = null;
 
   @JsonProperty("chunkSessionId")
-  private Object chunkSessionId = null;
+  private String chunkSessionId = null;
 
   @JsonProperty("docConcurrency")
-  private Object docConcurrency = null;
+  private Integer docConcurrency = null;
 
-  public StreamChunksReactiveRequest batches(Object batches) {
+  public StreamChunksReactiveRequest batches(List<DocumentBatch> batches) {
     this.batches = batches;
+    return this;
+  }
+
+  public StreamChunksReactiveRequest addBatchesItem(DocumentBatch batchesItem) {
+    if (this.batches == null) {
+      this.batches = new ArrayList<>();
+    }
+    this.batches.add(batchesItem);
     return this;
   }
 
@@ -48,11 +59,11 @@ public class StreamChunksReactiveRequest {
    * @return batches
   **/
   @Schema(description = "")
-  public Object getBatches() {
+  public List<DocumentBatch> getBatches() {
     return batches;
   }
 
-  public void setBatches(Object batches) {
+  public void setBatches(List<DocumentBatch> batches) {
     this.batches = batches;
   }
 
@@ -74,7 +85,7 @@ public class StreamChunksReactiveRequest {
     this.chunkingSpecs = chunkingSpecs;
   }
 
-  public StreamChunksReactiveRequest chunkSessionId(Object chunkSessionId) {
+  public StreamChunksReactiveRequest chunkSessionId(String chunkSessionId) {
     this.chunkSessionId = chunkSessionId;
     return this;
   }
@@ -84,15 +95,15 @@ public class StreamChunksReactiveRequest {
    * @return chunkSessionId
   **/
   @Schema(description = "")
-  public Object getChunkSessionId() {
+  public String getChunkSessionId() {
     return chunkSessionId;
   }
 
-  public void setChunkSessionId(Object chunkSessionId) {
+  public void setChunkSessionId(String chunkSessionId) {
     this.chunkSessionId = chunkSessionId;
   }
 
-  public StreamChunksReactiveRequest docConcurrency(Object docConcurrency) {
+  public StreamChunksReactiveRequest docConcurrency(Integer docConcurrency) {
     this.docConcurrency = docConcurrency;
     return this;
   }
@@ -102,11 +113,11 @@ public class StreamChunksReactiveRequest {
    * @return docConcurrency
   **/
   @Schema(description = "")
-  public Object getDocConcurrency() {
+  public Integer getDocConcurrency() {
     return docConcurrency;
   }
 
-  public void setDocConcurrency(Object docConcurrency) {
+  public void setDocConcurrency(Integer docConcurrency) {
     this.docConcurrency = docConcurrency;
   }
 

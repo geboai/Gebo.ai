@@ -38,6 +38,11 @@ public class GeboSecurityConfig {
 	private Boolean oauth2UISetupEnabled = true;
 	private Boolean oauth2LoginEnabled = true;
 	private Boolean oauth2ResourceServerEnabled = true;
+	// TTL (seconds) of the resource-server sync cache: under
+	// TRUST_EVERY_OAUTH_IDENTITY an accepted bearer token triggers a user
+	// create/sync only when its token is not (or no longer) in this cache, so the
+	// sync runs at most once per token per TTL window instead of on every request.
+	private long oauth2ResourceServerSyncCacheTtlSeconds = 300;
 	private boolean useAcl = false;
 
 	/**
@@ -219,6 +224,14 @@ public class GeboSecurityConfig {
 
 	public void setOauth2LoginEnabled(Boolean oauth2Enabled) {
 		this.oauth2LoginEnabled = oauth2Enabled;
+	}
+
+	public long getOauth2ResourceServerSyncCacheTtlSeconds() {
+		return oauth2ResourceServerSyncCacheTtlSeconds;
+	}
+
+	public void setOauth2ResourceServerSyncCacheTtlSeconds(long oauth2ResourceServerSyncCacheTtlSeconds) {
+		this.oauth2ResourceServerSyncCacheTtlSeconds = oauth2ResourceServerSyncCacheTtlSeconds;
 	}
 
 	public Boolean getOauth2ResourceServerEnabled() {

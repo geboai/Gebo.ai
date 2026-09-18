@@ -104,7 +104,10 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "tts-1";
 			OpenAiAudioSpeechOptions speechOptions = OpenAiAudioSpeechOptions.builder().apiKey(apiKey.getApiKey()).model(modelName)
 					.voice(OpenAiAudioSpeechOptions.Voice.ALLOY)
-					.responseFormat(OpenAiAudioSpeechOptions.AudioResponseFormat.MP3).speed(1.0).build();
+					.responseFormat(OpenAiAudioSpeechOptions.AudioResponseFormat.MP3).speed(1.0)
+					.timeout(OpenAiClientCustomizer
+							.requestTimeout(serviceClientsProviderFactory.get(type.getCode())))
+					.build();
 			OpenAiAudioSpeechModel model = OpenAiAudioSpeechModel.builder()
 					.options(speechOptions)
 					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(type.getCode())))

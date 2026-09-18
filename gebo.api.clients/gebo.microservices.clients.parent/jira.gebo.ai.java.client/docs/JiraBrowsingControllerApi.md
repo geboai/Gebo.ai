@@ -23,7 +23,7 @@ Method | HTTP request | Description
 
 JiraBrowsingControllerApi apiInstance = new JiraBrowsingControllerApi();
 BrowseParam body = new BrowseParam(); // BrowseParam | 
-Object systemCode = null; // Object | 
+String systemCode = "systemCode_example"; // String | 
 try {
     OperationStatusListPathInfo result = apiInstance.browseJiraPath(body, systemCode);
     System.out.println(result);
@@ -38,7 +38,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**BrowseParam**](BrowseParam.md)|  |
- **systemCode** | [**Object**](.md)|  |
+ **systemCode** | **String**|  |
 
 ### Return type
 
@@ -67,8 +67,8 @@ No authorization required
 
 
 JiraBrowsingControllerApi apiInstance = new JiraBrowsingControllerApi();
-Object body = null; // Object | 
-Object systemCode = null; // Object | 
+List<VFilesystemReference> body = Arrays.asList(new VFilesystemReference()); // List<VFilesystemReference> | 
+String systemCode = "systemCode_example"; // String | 
 try {
     OperationStatusListVirtualFilesystemNavigationTreeStatus result = apiInstance.getJiraNavigationStatus(body, systemCode);
     System.out.println(result);
@@ -82,8 +82,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
- **systemCode** | [**Object**](.md)|  |
+ **body** | [**List&lt;VFilesystemReference&gt;**](VFilesystemReference.md)|  |
+ **systemCode** | **String**|  |
 
 ### Return type
 
@@ -112,7 +112,7 @@ No authorization required
 
 
 JiraBrowsingControllerApi apiInstance = new JiraBrowsingControllerApi();
-Object systemCode = null; // Object | 
+String systemCode = "systemCode_example"; // String | 
 try {
     OperationStatusListGVirtualFilesystemRoot result = apiInstance.getJiraRoots(systemCode);
     System.out.println(result);
@@ -126,7 +126,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **systemCode** | [**Object**](.md)|  |
+ **systemCode** | **String**|  |
 
 ### Return type
 

@@ -57,7 +57,7 @@ public class OpenAiTextToSpeechModelsConfigurationControllerApiTest {
      */
     @Test
     public void findOpenAITextToSpeechModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GOpenAITextToSpeechModelConfig response = api.findOpenAITextToSpeechModelConfigByCode(code);
 
         // TODO: test validations

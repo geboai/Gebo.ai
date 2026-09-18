@@ -18,35 +18,102 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * LLMModelPresetChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMModelPresetChoice {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("defaultChoice")
-  private Object defaultChoice = null;
+  private Boolean defaultChoice = null;
 
   @JsonProperty("contextWindow")
-  private Object contextWindow = null;
+  private Integer contextWindow = null;
 
-  @JsonProperty("uses")
-  private Object uses = null;
+  /**
+   * Gets or Sets uses
+   */
+  public enum UsesEnum {
+    CHAT("CHAT"),
+    INTERNAL_SERVICES("INTERNAL_SERVICES");
+
+    private String value;
+
+    UsesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static UsesEnum fromValue(String input) {
+      for (UsesEnum b : UsesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("uses")
+  private List<UsesEnum> uses = null;
 
   @JsonProperty("maxGeneratedTokens")
-  private Object maxGeneratedTokens = null;
+  private Integer maxGeneratedTokens = null;
 
-  @JsonProperty("thinking")
-  private Object thinking = null;
+  /**
+   * Gets or Sets thinking
+   */
+  public enum ThinkingEnum {
+    NO_THINKING("NO_THINKING"),
+    LOW_THINKING("LOW_THINKING"),
+    MEDIUM_THINKING("MEDIUM_THINKING"),
+    HIGH_THINKING("HIGH_THINKING"),
+    AUTO("AUTO");
 
-  public LLMModelPresetChoice code(Object code) {
+    private String value;
+
+    ThinkingEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ThinkingEnum fromValue(String input) {
+      for (ThinkingEnum b : ThinkingEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("thinking")
+  private ThinkingEnum thinking = null;
+
+  public LLMModelPresetChoice code(String code) {
     this.code = code;
     return this;
   }
@@ -56,15 +123,15 @@ public class LLMModelPresetChoice {
    * @return code
   **/
   @Schema(required = true, description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public LLMModelPresetChoice description(Object description) {
+  public LLMModelPresetChoice description(String description) {
     this.description = description;
     return this;
   }
@@ -74,15 +141,15 @@ public class LLMModelPresetChoice {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public LLMModelPresetChoice defaultChoice(Object defaultChoice) {
+  public LLMModelPresetChoice defaultChoice(Boolean defaultChoice) {
     this.defaultChoice = defaultChoice;
     return this;
   }
@@ -92,15 +159,15 @@ public class LLMModelPresetChoice {
    * @return defaultChoice
   **/
   @Schema(description = "")
-  public Object getDefaultChoice() {
+  public Boolean isDefaultChoice() {
     return defaultChoice;
   }
 
-  public void setDefaultChoice(Object defaultChoice) {
+  public void setDefaultChoice(Boolean defaultChoice) {
     this.defaultChoice = defaultChoice;
   }
 
-  public LLMModelPresetChoice contextWindow(Object contextWindow) {
+  public LLMModelPresetChoice contextWindow(Integer contextWindow) {
     this.contextWindow = contextWindow;
     return this;
   }
@@ -110,16 +177,24 @@ public class LLMModelPresetChoice {
    * @return contextWindow
   **/
   @Schema(description = "")
-  public Object getContextWindow() {
+  public Integer getContextWindow() {
     return contextWindow;
   }
 
-  public void setContextWindow(Object contextWindow) {
+  public void setContextWindow(Integer contextWindow) {
     this.contextWindow = contextWindow;
   }
 
-  public LLMModelPresetChoice uses(Object uses) {
+  public LLMModelPresetChoice uses(List<UsesEnum> uses) {
     this.uses = uses;
+    return this;
+  }
+
+  public LLMModelPresetChoice addUsesItem(UsesEnum usesItem) {
+    if (this.uses == null) {
+      this.uses = new ArrayList<>();
+    }
+    this.uses.add(usesItem);
     return this;
   }
 
@@ -128,15 +203,15 @@ public class LLMModelPresetChoice {
    * @return uses
   **/
   @Schema(description = "")
-  public Object getUses() {
+  public List<UsesEnum> getUses() {
     return uses;
   }
 
-  public void setUses(Object uses) {
+  public void setUses(List<UsesEnum> uses) {
     this.uses = uses;
   }
 
-  public LLMModelPresetChoice maxGeneratedTokens(Object maxGeneratedTokens) {
+  public LLMModelPresetChoice maxGeneratedTokens(Integer maxGeneratedTokens) {
     this.maxGeneratedTokens = maxGeneratedTokens;
     return this;
   }
@@ -146,15 +221,15 @@ public class LLMModelPresetChoice {
    * @return maxGeneratedTokens
   **/
   @Schema(description = "")
-  public Object getMaxGeneratedTokens() {
+  public Integer getMaxGeneratedTokens() {
     return maxGeneratedTokens;
   }
 
-  public void setMaxGeneratedTokens(Object maxGeneratedTokens) {
+  public void setMaxGeneratedTokens(Integer maxGeneratedTokens) {
     this.maxGeneratedTokens = maxGeneratedTokens;
   }
 
-  public LLMModelPresetChoice thinking(Object thinking) {
+  public LLMModelPresetChoice thinking(ThinkingEnum thinking) {
     this.thinking = thinking;
     return this;
   }
@@ -164,11 +239,11 @@ public class LLMModelPresetChoice {
    * @return thinking
   **/
   @Schema(description = "")
-  public Object getThinking() {
+  public ThinkingEnum getThinking() {
     return thinking;
   }
 
-  public void setThinking(Object thinking) {
+  public void setThinking(ThinkingEnum thinking) {
     this.thinking = thinking;
   }
 

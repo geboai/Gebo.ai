@@ -9,18 +9,19 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { SpecialFile } from './specialFile';
 
 export interface IngestionFileType { 
-    fileTypeId?: any;
-    description?: any;
-    treatAs?: any;
-    uiViewable?: any;
-    programmingLanguage?: any;
-    commentEscapeBegin?: any;
-    commentEscapeEnd?: any;
-    commentRowEscape?: any;
-    enrichWithCatalogInfos?: any;
-    specialfiles?: any;
-    extensions?: any;
-    contentTypes?: any;
+    fileTypeId?: string;
+    description?: string;
+    treatAs?: string;
+    uiViewable?: boolean;
+    programmingLanguage?: string;
+    commentEscapeBegin?: string;
+    commentEscapeEnd?: string;
+    commentRowEscape?: string;
+    enrichWithCatalogInfos?: boolean;
+    specialfiles?: Array<SpecialFile>;
+    extensions?: Array<string>;
+    contentTypes?: Array<string>;
 }

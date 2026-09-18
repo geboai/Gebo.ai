@@ -11,8 +11,8 @@
  */
 
 export interface GeboRagRequestCustomConfig { 
-    topK?: any;
-    similarityThreashold?: any;
-    historyFillWindowWeight?: any;
-    documentsFillWindowWeight?: any;
+    topK?: number;
+    similarityThreashold?: number;
+    historyFillWindowWeight?: number;
+    documentsFillWindowWeight?: number;
 }

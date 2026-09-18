@@ -58,4 +58,16 @@ public class GProject extends GBaseVersionableObject implements IGObjectWithSecu
 	// Code of the parent project, if any.
 	private String parentProjectCode = null;
 
+	/**
+	 * Whether this record is owned by the deployment's configuration rather than by
+	 * the admin UI. Set by the seeder that writes the entries declared under
+	 * {@code ai.gebo.knowledgebases} / {@code ai.gebo.projects}; the admin UI
+	 * disables save and delete on it and the controllers refuse the same writes.
+	 * Declared here rather than on the shared base for the same reason
+	 * {@code GContentManagementSystem} and {@code GProjectEndpoint} declare their
+	 * own: only the types a deployment can declare carry it.
+	 */
+	private Boolean readonly = null;
+
+
 }

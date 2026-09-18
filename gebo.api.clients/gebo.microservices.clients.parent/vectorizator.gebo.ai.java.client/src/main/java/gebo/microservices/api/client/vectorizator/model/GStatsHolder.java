@@ -18,30 +18,36 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.vectorizator.model.GLookupEntry;
+import gebo.microservices.api.client.vectorizator.model.GStatsLabelValue;
+import gebo.microservices.api.client.vectorizator.model.GStatsLine;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GStatsHolder
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:44:05.740376061+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:28.382074718+02:00[Europe/Rome]")
 
 public class GStatsHolder {
   @JsonProperty("levelKey")
-  private Object levelKey = null;
+  private String levelKey = null;
 
   @JsonProperty("dimensionValue")
   private GLookupEntry dimensionValue = null;
 
   @JsonProperty("canDrillDown")
-  private Object canDrillDown = null;
+  private Boolean canDrillDown = null;
 
   @JsonProperty("statsContainer")
-  private Object statsContainer = null;
+  private Map<String, List<GStatsLabelValue>> statsContainer = null;
 
   @JsonProperty("statsLines")
-  private Object statsLines = null;
+  private List<GStatsLine> statsLines = null;
 
-  public GStatsHolder levelKey(Object levelKey) {
+  public GStatsHolder levelKey(String levelKey) {
     this.levelKey = levelKey;
     return this;
   }
@@ -51,11 +57,11 @@ public class GStatsHolder {
    * @return levelKey
   **/
   @Schema(description = "")
-  public Object getLevelKey() {
+  public String getLevelKey() {
     return levelKey;
   }
 
-  public void setLevelKey(Object levelKey) {
+  public void setLevelKey(String levelKey) {
     this.levelKey = levelKey;
   }
 
@@ -77,7 +83,7 @@ public class GStatsHolder {
     this.dimensionValue = dimensionValue;
   }
 
-  public GStatsHolder canDrillDown(Object canDrillDown) {
+  public GStatsHolder canDrillDown(Boolean canDrillDown) {
     this.canDrillDown = canDrillDown;
     return this;
   }
@@ -87,16 +93,24 @@ public class GStatsHolder {
    * @return canDrillDown
   **/
   @Schema(description = "")
-  public Object getCanDrillDown() {
+  public Boolean isCanDrillDown() {
     return canDrillDown;
   }
 
-  public void setCanDrillDown(Object canDrillDown) {
+  public void setCanDrillDown(Boolean canDrillDown) {
     this.canDrillDown = canDrillDown;
   }
 
-  public GStatsHolder statsContainer(Object statsContainer) {
+  public GStatsHolder statsContainer(Map<String, List<GStatsLabelValue>> statsContainer) {
     this.statsContainer = statsContainer;
+    return this;
+  }
+
+  public GStatsHolder putStatsContainerItem(String key, List<GStatsLabelValue> statsContainerItem) {
+    if (this.statsContainer == null) {
+      this.statsContainer = new HashMap<>();
+    }
+    this.statsContainer.put(key, statsContainerItem);
     return this;
   }
 
@@ -105,16 +119,24 @@ public class GStatsHolder {
    * @return statsContainer
   **/
   @Schema(description = "")
-  public Object getStatsContainer() {
+  public Map<String, List<GStatsLabelValue>> getStatsContainer() {
     return statsContainer;
   }
 
-  public void setStatsContainer(Object statsContainer) {
+  public void setStatsContainer(Map<String, List<GStatsLabelValue>> statsContainer) {
     this.statsContainer = statsContainer;
   }
 
-  public GStatsHolder statsLines(Object statsLines) {
+  public GStatsHolder statsLines(List<GStatsLine> statsLines) {
     this.statsLines = statsLines;
+    return this;
+  }
+
+  public GStatsHolder addStatsLinesItem(GStatsLine statsLinesItem) {
+    if (this.statsLines == null) {
+      this.statsLines = new ArrayList<>();
+    }
+    this.statsLines.add(statsLinesItem);
     return this;
   }
 
@@ -123,11 +145,11 @@ public class GStatsHolder {
    * @return statsLines
   **/
   @Schema(description = "")
-  public Object getStatsLines() {
+  public List<GStatsLine> getStatsLines() {
     return statsLines;
   }
 
-  public void setStatsLines(Object statsLines) {
+  public void setStatsLines(List<GStatsLine> statsLines) {
     this.statsLines = statsLines;
   }
 

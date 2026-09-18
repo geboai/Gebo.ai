@@ -55,8 +55,8 @@ public class IntegrationSystemsControllerApiTest {
      */
     @Test
     public void findIntegrationEndpointsByProjectTest() {
-        Object parentProjectCode = null;
-        Object response = api.findIntegrationEndpointsByProject(parentProjectCode);
+        String parentProjectCode = null;
+        List<GIntegrationProjectEndpoint> response = api.findIntegrationEndpointsByProject(parentProjectCode);
 
         // TODO: test validations
     }

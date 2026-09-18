@@ -22,16 +22,48 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GAclEntry
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GAclEntry {
   @JsonProperty("aclGrantedUniqueId")
-  private Object aclGrantedUniqueId = null;
+  private String aclGrantedUniqueId = null;
 
-  @JsonProperty("grant")
-  private Object grant = null;
+  /**
+   * Gets or Sets grant
+   */
+  public enum GrantEnum {
+    READ("READ"),
+    WRITE("WRITE"),
+    EXECUTE("EXECUTE");
 
-  public GAclEntry aclGrantedUniqueId(Object aclGrantedUniqueId) {
+    private String value;
+
+    GrantEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static GrantEnum fromValue(String input) {
+      for (GrantEnum b : GrantEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("grant")
+  private GrantEnum grant = null;
+
+  public GAclEntry aclGrantedUniqueId(String aclGrantedUniqueId) {
     this.aclGrantedUniqueId = aclGrantedUniqueId;
     return this;
   }
@@ -41,15 +73,15 @@ public class GAclEntry {
    * @return aclGrantedUniqueId
   **/
   @Schema(description = "")
-  public Object getAclGrantedUniqueId() {
+  public String getAclGrantedUniqueId() {
     return aclGrantedUniqueId;
   }
 
-  public void setAclGrantedUniqueId(Object aclGrantedUniqueId) {
+  public void setAclGrantedUniqueId(String aclGrantedUniqueId) {
     this.aclGrantedUniqueId = aclGrantedUniqueId;
   }
 
-  public GAclEntry grant(Object grant) {
+  public GAclEntry grant(GrantEnum grant) {
     this.grant = grant;
     return this;
   }
@@ -59,11 +91,11 @@ public class GAclEntry {
    * @return grant
   **/
   @Schema(description = "")
-  public Object getGrant() {
+  public GrantEnum getGrant() {
     return grant;
   }
 
-  public void setGrant(Object grant) {
+  public void setGrant(GrantEnum grant) {
     this.grant = grant;
   }
 

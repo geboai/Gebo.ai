@@ -64,10 +64,10 @@ export class JobLauncherControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public abortJob(jobCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public abortJob(jobCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public abortJob(jobCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public abortJob(jobCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public abortJob(jobCode: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public abortJob(jobCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public abortJob(jobCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public abortJob(jobCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobCode === null || jobCode === undefined) {
             throw new Error('Required parameter jobCode was null or undefined when calling abortJob.');

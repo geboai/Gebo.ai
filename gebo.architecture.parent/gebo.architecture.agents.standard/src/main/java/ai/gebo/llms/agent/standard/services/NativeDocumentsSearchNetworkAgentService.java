@@ -77,6 +77,10 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 		capabilities.addCapability("Generate provider-native queries and search the '"
 				+ nativeSearchWrapper.getProductId() + "' system, returning the most relevant retrieved documents");
 		appendSearchableSystems(capabilities, nativeSearchWrapper);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Native search agent id:" + getId() + " advertises native querying of product:"
+					+ nativeSearchWrapper.getProductId());
+		}
 		return capabilities;
 	}
 
@@ -100,13 +104,25 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 			// at config time) is passed in as `prompt`, fed with the agent placeholder params
 			// merged with the per-system native template params.
 			final Class<NativeSearchDataStructure> queryType = nativeSearchWrapper.getNativeSearchDataStructureType();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Native search agent id:" + getId() + " will generate queries of type:" + queryType.getName());
+			}
 			for (SearchableSystemMetaData system : nativeSearchWrapper.getSearchableSystems()) {
 				List<CatalogueSample> catalogues = nativeSearchWrapper.getCataloguesListSample(system.getCode());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Querying system:" + system.getCode() + " with "
+							+ (catalogues != null ? catalogues.size() : 0) + " sampled catalogue(s)");
+				}
 				Map<String, Object> callParams = new HashMap<>(params);
 				callParams.putAll(nativeSearchWrapper.createCustomTemplateParamsMap(system,
 						catalogues != null ? catalogues : List.of()));
 				NativeSearchDataStructure queryObject = callLLMStructuredReturn(agentModel, prompt,
 						chatRequestContext, callParams, queryType);
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace("<NATIVE_QUERY system=" + system.getCode() + ">");
+					LOGGER.trace(String.valueOf(queryObject));
+					LOGGER.trace("</NATIVE_QUERY>");
+				}
 				List<SearchResult> systemResults = nativeSearchWrapper.nativeSearch(queryObject, system, topK);
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Native search on system:" + system.getCode() + " returned "
@@ -124,7 +140,8 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 			LOGGER.debug("End retrieveDocuments(...) native search agent id:" + getId() + " collected " + results.size()
 					+ " raw result(s)");
 		}
-		return maybeRank(chunkToDocuments(results, notificationSink, agentModel, command, keywords), command);
+		return maybeRank(chunkToDocuments(results, notificationSink, agentModel, command, keywords), command,
+				notificationSink);
 	}
 
 }

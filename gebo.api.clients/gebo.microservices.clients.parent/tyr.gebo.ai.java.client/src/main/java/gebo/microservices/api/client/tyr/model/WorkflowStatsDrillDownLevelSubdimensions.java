@@ -17,40 +17,53 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.tyr.model.GObjectRefGKnowledgeBase;
+import gebo.microservices.api.client.tyr.model.GObjectRefGProject;
+import gebo.microservices.api.client.tyr.model.GObjectRefGProjectEndpoint;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * WorkflowStatsDrillDownLevelSubdimensions
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class WorkflowStatsDrillDownLevelSubdimensions {
   @JsonProperty("knowledgeBaseReference")
-  private Object knowledgeBaseReference = null;
+  private List<GObjectRefGKnowledgeBase> knowledgeBaseReference = null;
 
   @JsonProperty("projectReference")
-  private Object projectReference = null;
+  private List<GObjectRefGProject> projectReference = null;
 
   @JsonProperty("projectEndpointReference")
-  private Object projectEndpointReference = null;
+  private List<GObjectRefGProjectEndpoint> projectEndpointReference = null;
 
   @JsonProperty("workflowType")
-  private Object workflowType = null;
+  private List<String> workflowType = null;
 
   @JsonProperty("workflowId")
-  private Object workflowId = null;
+  private List<String> workflowId = null;
 
   @JsonProperty("workflowStepId")
-  private Object workflowStepId = null;
+  private List<String> workflowStepId = null;
 
   @JsonProperty("year")
-  private Object year = null;
+  private List<Integer> year = null;
 
   @JsonProperty("month")
-  private Object month = null;
+  private List<Integer> month = null;
 
-  public WorkflowStatsDrillDownLevelSubdimensions knowledgeBaseReference(Object knowledgeBaseReference) {
+  public WorkflowStatsDrillDownLevelSubdimensions knowledgeBaseReference(List<GObjectRefGKnowledgeBase> knowledgeBaseReference) {
     this.knowledgeBaseReference = knowledgeBaseReference;
+    return this;
+  }
+
+  public WorkflowStatsDrillDownLevelSubdimensions addKnowledgeBaseReferenceItem(GObjectRefGKnowledgeBase knowledgeBaseReferenceItem) {
+    if (this.knowledgeBaseReference == null) {
+      this.knowledgeBaseReference = new ArrayList<>();
+    }
+    this.knowledgeBaseReference.add(knowledgeBaseReferenceItem);
     return this;
   }
 
@@ -59,16 +72,24 @@ public class WorkflowStatsDrillDownLevelSubdimensions {
    * @return knowledgeBaseReference
   **/
   @Schema(description = "")
-  public Object getKnowledgeBaseReference() {
+  public List<GObjectRefGKnowledgeBase> getKnowledgeBaseReference() {
     return knowledgeBaseReference;
   }
 
-  public void setKnowledgeBaseReference(Object knowledgeBaseReference) {
+  public void setKnowledgeBaseReference(List<GObjectRefGKnowledgeBase> knowledgeBaseReference) {
     this.knowledgeBaseReference = knowledgeBaseReference;
   }
 
-  public WorkflowStatsDrillDownLevelSubdimensions projectReference(Object projectReference) {
+  public WorkflowStatsDrillDownLevelSubdimensions projectReference(List<GObjectRefGProject> projectReference) {
     this.projectReference = projectReference;
+    return this;
+  }
+
+  public WorkflowStatsDrillDownLevelSubdimensions addProjectReferenceItem(GObjectRefGProject projectReferenceItem) {
+    if (this.projectReference == null) {
+      this.projectReference = new ArrayList<>();
+    }
+    this.projectReference.add(projectReferenceItem);
     return this;
   }
 
@@ -77,16 +98,24 @@ public class WorkflowStatsDrillDownLevelSubdimensions {
    * @return projectReference
   **/
   @Schema(description = "")
-  public Object getProjectReference() {
+  public List<GObjectRefGProject> getProjectReference() {
     return projectReference;
   }
 
-  public void setProjectReference(Object projectReference) {
+  public void setProjectReference(List<GObjectRefGProject> projectReference) {
     this.projectReference = projectReference;
   }
 
-  public WorkflowStatsDrillDownLevelSubdimensions projectEndpointReference(Object projectEndpointReference) {
+  public WorkflowStatsDrillDownLevelSubdimensions projectEndpointReference(List<GObjectRefGProjectEndpoint> projectEndpointReference) {
     this.projectEndpointReference = projectEndpointReference;
+    return this;
+  }
+
+  public WorkflowStatsDrillDownLevelSubdimensions addProjectEndpointReferenceItem(GObjectRefGProjectEndpoint projectEndpointReferenceItem) {
+    if (this.projectEndpointReference == null) {
+      this.projectEndpointReference = new ArrayList<>();
+    }
+    this.projectEndpointReference.add(projectEndpointReferenceItem);
     return this;
   }
 
@@ -95,16 +124,24 @@ public class WorkflowStatsDrillDownLevelSubdimensions {
    * @return projectEndpointReference
   **/
   @Schema(description = "")
-  public Object getProjectEndpointReference() {
+  public List<GObjectRefGProjectEndpoint> getProjectEndpointReference() {
     return projectEndpointReference;
   }
 
-  public void setProjectEndpointReference(Object projectEndpointReference) {
+  public void setProjectEndpointReference(List<GObjectRefGProjectEndpoint> projectEndpointReference) {
     this.projectEndpointReference = projectEndpointReference;
   }
 
-  public WorkflowStatsDrillDownLevelSubdimensions workflowType(Object workflowType) {
+  public WorkflowStatsDrillDownLevelSubdimensions workflowType(List<String> workflowType) {
     this.workflowType = workflowType;
+    return this;
+  }
+
+  public WorkflowStatsDrillDownLevelSubdimensions addWorkflowTypeItem(String workflowTypeItem) {
+    if (this.workflowType == null) {
+      this.workflowType = new ArrayList<>();
+    }
+    this.workflowType.add(workflowTypeItem);
     return this;
   }
 
@@ -113,16 +150,24 @@ public class WorkflowStatsDrillDownLevelSubdimensions {
    * @return workflowType
   **/
   @Schema(description = "")
-  public Object getWorkflowType() {
+  public List<String> getWorkflowType() {
     return workflowType;
   }
 
-  public void setWorkflowType(Object workflowType) {
+  public void setWorkflowType(List<String> workflowType) {
     this.workflowType = workflowType;
   }
 
-  public WorkflowStatsDrillDownLevelSubdimensions workflowId(Object workflowId) {
+  public WorkflowStatsDrillDownLevelSubdimensions workflowId(List<String> workflowId) {
     this.workflowId = workflowId;
+    return this;
+  }
+
+  public WorkflowStatsDrillDownLevelSubdimensions addWorkflowIdItem(String workflowIdItem) {
+    if (this.workflowId == null) {
+      this.workflowId = new ArrayList<>();
+    }
+    this.workflowId.add(workflowIdItem);
     return this;
   }
 
@@ -131,16 +176,24 @@ public class WorkflowStatsDrillDownLevelSubdimensions {
    * @return workflowId
   **/
   @Schema(description = "")
-  public Object getWorkflowId() {
+  public List<String> getWorkflowId() {
     return workflowId;
   }
 
-  public void setWorkflowId(Object workflowId) {
+  public void setWorkflowId(List<String> workflowId) {
     this.workflowId = workflowId;
   }
 
-  public WorkflowStatsDrillDownLevelSubdimensions workflowStepId(Object workflowStepId) {
+  public WorkflowStatsDrillDownLevelSubdimensions workflowStepId(List<String> workflowStepId) {
     this.workflowStepId = workflowStepId;
+    return this;
+  }
+
+  public WorkflowStatsDrillDownLevelSubdimensions addWorkflowStepIdItem(String workflowStepIdItem) {
+    if (this.workflowStepId == null) {
+      this.workflowStepId = new ArrayList<>();
+    }
+    this.workflowStepId.add(workflowStepIdItem);
     return this;
   }
 
@@ -149,16 +202,24 @@ public class WorkflowStatsDrillDownLevelSubdimensions {
    * @return workflowStepId
   **/
   @Schema(description = "")
-  public Object getWorkflowStepId() {
+  public List<String> getWorkflowStepId() {
     return workflowStepId;
   }
 
-  public void setWorkflowStepId(Object workflowStepId) {
+  public void setWorkflowStepId(List<String> workflowStepId) {
     this.workflowStepId = workflowStepId;
   }
 
-  public WorkflowStatsDrillDownLevelSubdimensions year(Object year) {
+  public WorkflowStatsDrillDownLevelSubdimensions year(List<Integer> year) {
     this.year = year;
+    return this;
+  }
+
+  public WorkflowStatsDrillDownLevelSubdimensions addYearItem(Integer yearItem) {
+    if (this.year == null) {
+      this.year = new ArrayList<>();
+    }
+    this.year.add(yearItem);
     return this;
   }
 
@@ -167,16 +228,24 @@ public class WorkflowStatsDrillDownLevelSubdimensions {
    * @return year
   **/
   @Schema(description = "")
-  public Object getYear() {
+  public List<Integer> getYear() {
     return year;
   }
 
-  public void setYear(Object year) {
+  public void setYear(List<Integer> year) {
     this.year = year;
   }
 
-  public WorkflowStatsDrillDownLevelSubdimensions month(Object month) {
+  public WorkflowStatsDrillDownLevelSubdimensions month(List<Integer> month) {
     this.month = month;
+    return this;
+  }
+
+  public WorkflowStatsDrillDownLevelSubdimensions addMonthItem(Integer monthItem) {
+    if (this.month == null) {
+      this.month = new ArrayList<>();
+    }
+    this.month.add(monthItem);
     return this;
   }
 
@@ -185,11 +254,11 @@ public class WorkflowStatsDrillDownLevelSubdimensions {
    * @return month
   **/
   @Schema(description = "")
-  public Object getMonth() {
+  public List<Integer> getMonth() {
     return month;
   }
 
-  public void setMonth(Object month) {
+  public void setMonth(List<Integer> month) {
     this.month = month;
   }
 

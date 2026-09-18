@@ -9,8 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { IngestionFileType } from './ingestionFileType';
 
 export interface IngestionHandlerConfig { 
-    id?: any;
-    fileTypes?: any;
+    id?: string;
+    fileTypes?: Array<IngestionFileType>;
 }

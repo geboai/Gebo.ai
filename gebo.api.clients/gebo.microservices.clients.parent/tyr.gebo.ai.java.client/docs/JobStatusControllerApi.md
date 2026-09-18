@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 
 JobStatusControllerApi apiInstance = new JobStatusControllerApi();
-Object jobCode = null; // Object | 
+String jobCode = "jobCode_example"; // String | 
 try {
     GJobStatus result = apiInstance.getJobStatus(jobCode);
     System.out.println(result);
@@ -36,7 +36,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **jobCode** | [**Object**](.md)|  |
+ **jobCode** | **String**|  |
 
 ### Return type
 
@@ -65,7 +65,7 @@ No authorization required
 
 
 JobStatusControllerApi apiInstance = new JobStatusControllerApi();
-Object jobCode = null; // Object | 
+String jobCode = "jobCode_example"; // String | 
 try {
     JobSummary result = apiInstance.getJobSummary(jobCode);
     System.out.println(result);
@@ -79,7 +79,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **jobCode** | [**Object**](.md)|  |
+ **jobCode** | **String**|  |
 
 ### Return type
 

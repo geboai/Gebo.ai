@@ -3,10 +3,11 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**username** | **Object** |  |  [optional]
-**description** | **Object** |  |  [optional]
-**code** | **Object** |  |  [optional]
-**chatProfileCode** | **Object** |  |  [optional]
-**chatModelCode** | **Object** |  |  [optional]
-**ragChat** | **Object** |  |  [optional]
-**chatCreationDateTime** | **Object** |  |  [optional]
+**username** | **String** |  |  [optional]
+**description** | **String** |  |  [optional]
+**code** | **String** |  |  [optional]
+**chatProfileCode** | **String** |  |  [optional]
+**chatModelCode** | **String** |  |  [optional]
+**ragChat** | **Boolean** |  |  [optional]
+**chatCreationDateTime** | [**Date**](Date.md) |  |  [optional]
+**contextCode** | **String** |  |  [optional]

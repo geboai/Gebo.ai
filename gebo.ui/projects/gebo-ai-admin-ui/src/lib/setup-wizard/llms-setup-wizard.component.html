@@ -19,15 +19,13 @@
               [value]="i">
               <p-accordion-header>
                 @if ((providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)) {
-                  <div style="font-weight: bolder;color:black"
-                    >
+                  <div class="gebo-status-title">
                     {{providerSituation.parentModel?.name}}
                     ({{providerSituation.runtimeConfigs?.length}})
                   </div>
                 }
                 @if (!(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)) {
-                  <div style="font-weight: bolder;color:gray"
-                    >
+                  <div class="gebo-status-meta">
                   {{providerSituation.parentModel?.name}}</div>
                 }
               </p-accordion-header>
@@ -55,14 +53,14 @@
   @if (actualProvidersConfiguration?.canRunAutoconfigure===true) {
     <p-tabs [value]="0" class="geboFullHeight">
     <p-tablist>
-      <p-tab [value]="0" gebo-ai-text>Easy initial setup/configuration fix</p-tab>
-      <p-tab [value]="1" gebo-ai-text>Extended infrastructure/suppliers choices</p-tab>
+      <p-tab [value]="0"><span id="EasySetupTab" gebo-ai-text>Easy initial setup/configuration fix</span></p-tab>
+      <p-tab [value]="1"><span id="ExtendedSetupTab" gebo-ai-text>Extended infrastructure/suppliers choices</span></p-tab>
     </p-tablist>
     <p-tabpanels>
       <p-tabpanel [value]="0">
         <gebo-ai-llms-easy-vendor-configuration-component
           [actualProvidersConfiguration]="actualProvidersConfiguration"
-          [autoSettingsConfigurations]="autoSettingsConfigurations" (llmsAutoSettingErrors)="userMessages=$event"
+          [autoSettingsConfigurations]="autoSettingsConfigurations" (llmsAutoSettingErrors)="onAutomaticSetupMessages($event)"
           (llmsAutoSettingSuccessfull)="onAutomaticSetupDone()">
         </gebo-ai-llms-easy-vendor-configuration-component>
       </p-tabpanel>

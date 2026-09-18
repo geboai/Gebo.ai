@@ -11,6 +11,7 @@
  */
 
 export interface GeboCustomSecretContent { 
+    readOnly?: boolean;
     customContentDescription?: string;
     content?: string;
     contentType?: string;

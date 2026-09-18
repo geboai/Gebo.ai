@@ -2,6 +2,8 @@ package ai.gebo.llms.agent.chat.service.impl;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
@@ -26,6 +28,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
 		GAbstractReactiveOutputAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService>
 		implements IGReactiveChatAgentsNetworkServiceFactory {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GReactiveChatAgentsNetworkServiceFactoryImpl.class);
 	private static final String _REACTIVE_CHAT_AGENTS_NETWORK_DESCRIPTION = "Default reactive chat network of agents";
 	public static final String REACTIVE_CHAT_AGENTS_NETWORK = "REACTIVE_CHAT_AGENTS_NETWORK";
 	private final IGeboThreadManager threadManager;
@@ -48,8 +51,22 @@ public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
 				.getImplementationOf(IGAgentServiceRuntimeDao.class);
 		IAgentConfigDao agentConfigDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
 		IAgentRoleDao agentRoleDao = runtimeBinder.getImplementationOf(IAgentRoleDao.class);
-		return new GReactiveChatAgentsNetworkService(agentServiceRuntimeDao, agentRoleDao, threadManager, network,
-				notificationSink, inputType, outputType, runAs, IGAgentsNetworkRuntimeDao.of(agentsCache), adapter);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin createAgentsNetworkService(...) factory:" + REACTIVE_CHAT_AGENTS_NETWORK + " network:"
+					+ (network != null ? network.getCode() : null) + " runtime agents:"
+					+ (agentsCache != null ? agentsCache.size() : 0));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Runtime agent names in the chat network: "
+					+ (agentsCache != null ? agentsCache.keySet() : null));
+		}
+		IGReactiveChatAgentsNetworkService service = new GReactiveChatAgentsNetworkService(agentServiceRuntimeDao,
+				agentRoleDao, threadManager, network, notificationSink, inputType, outputType, runAs,
+				IGAgentsNetworkRuntimeDao.of(agentsCache), adapter);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End createAgentsNetworkService(...) built service id:" + service.getId());
+		}
+		return service;
 
 	}
 

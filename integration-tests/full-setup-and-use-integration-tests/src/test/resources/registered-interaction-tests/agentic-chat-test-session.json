@@ -31,5 +31,15 @@
 		"responseTestCriteria": {
 			"checkNotEmptyDocumentsList": false
 		}
+	},
+	{
+		"description": "Agentic chat: a deliberately broad, corpus-wide report so the searchers pile a large shared context on the report writer, which then has to window it by token budget (createAgentTemplateParams splitByBudget -> TokensBudgetFluxCoordinator). This is a non-regression smoke: a report writer that cannot window a shared context bigger than one LLM window stops producing an answer - before the windowing fix an oversized single contribution looped instead of returning, so the run never completed. Which route the controller picks stays soft, as everywhere else in this suite.",
+		"request": {
+			"id": "AGENTIC-233243-UY2",
+			"query": "Confronta in modo esaustivo tutti i vangeli apocrifi presenti nella knowledge base: per ciascun testo riporta i temi principali, i personaggi ricorrenti e le differenze rispetto agli altri, citando i passaggi rilevanti di ogni documento"
+		},
+		"responseTestCriteria": {
+			"checkNotEmptyDocumentsList": false
+		}
 	}
 ]

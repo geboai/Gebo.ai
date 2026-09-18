@@ -22,16 +22,37 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboTokenContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class GeboTokenContent {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
   @JsonProperty("token")
-  private Object token = null;
+  private String token = null;
 
   @JsonProperty("user")
-  private Object user = null;
+  private String user = null;
 
-  public GeboTokenContent token(Object token) {
+  public GeboTokenContent readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
+
+  public GeboTokenContent token(String token) {
     this.token = token;
     return this;
   }
@@ -41,15 +62,15 @@ public class GeboTokenContent {
    * @return token
   **/
   @Schema(required = true, description = "")
-  public Object getToken() {
+  public String getToken() {
     return token;
   }
 
-  public void setToken(Object token) {
+  public void setToken(String token) {
     this.token = token;
   }
 
-  public GeboTokenContent user(Object user) {
+  public GeboTokenContent user(String user) {
     this.user = user;
     return this;
   }
@@ -59,11 +80,11 @@ public class GeboTokenContent {
    * @return user
   **/
   @Schema(required = true, description = "")
-  public Object getUser() {
+  public String getUser() {
     return user;
   }
 
-  public void setUser(Object user) {
+  public void setUser(String user) {
     this.user = user;
   }
 
@@ -77,13 +98,14 @@ public class GeboTokenContent {
       return false;
     }
     GeboTokenContent geboTokenContent = (GeboTokenContent) o;
-    return Objects.equals(this.token, geboTokenContent.token) &&
+    return Objects.equals(this.readOnly, geboTokenContent.readOnly) &&
+        Objects.equals(this.token, geboTokenContent.token) &&
         Objects.equals(this.user, geboTokenContent.user);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(token, user);
+    return Objects.hash(readOnly, token, user);
   }
 
 
@@ -92,6 +114,7 @@ public class GeboTokenContent {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboTokenContent {\n");
     
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    token: ").append(toIndentedString(token)).append("\n");
     sb.append("    user: ").append(toIndentedString(user)).append("\n");
     sb.append("}");

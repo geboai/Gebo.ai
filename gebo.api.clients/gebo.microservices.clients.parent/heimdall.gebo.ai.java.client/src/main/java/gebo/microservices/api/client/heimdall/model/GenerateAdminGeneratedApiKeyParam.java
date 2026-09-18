@@ -18,23 +18,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GenerateAdminGeneratedApiKeyParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class GenerateAdminGeneratedApiKeyParam {
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("impersonatedUser")
-  private Object impersonatedUser = null;
+  private String impersonatedUser = null;
 
   @JsonProperty("expiration")
-  private Object expiration = null;
+  private Date expiration = null;
 
-  public GenerateAdminGeneratedApiKeyParam description(Object description) {
+  public GenerateAdminGeneratedApiKeyParam description(String description) {
     this.description = description;
     return this;
   }
@@ -44,15 +45,15 @@ public class GenerateAdminGeneratedApiKeyParam {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GenerateAdminGeneratedApiKeyParam impersonatedUser(Object impersonatedUser) {
+  public GenerateAdminGeneratedApiKeyParam impersonatedUser(String impersonatedUser) {
     this.impersonatedUser = impersonatedUser;
     return this;
   }
@@ -62,15 +63,15 @@ public class GenerateAdminGeneratedApiKeyParam {
    * @return impersonatedUser
   **/
   @Schema(required = true, description = "")
-  public Object getImpersonatedUser() {
+  public String getImpersonatedUser() {
     return impersonatedUser;
   }
 
-  public void setImpersonatedUser(Object impersonatedUser) {
+  public void setImpersonatedUser(String impersonatedUser) {
     this.impersonatedUser = impersonatedUser;
   }
 
-  public GenerateAdminGeneratedApiKeyParam expiration(Object expiration) {
+  public GenerateAdminGeneratedApiKeyParam expiration(Date expiration) {
     this.expiration = expiration;
     return this;
   }
@@ -80,11 +81,11 @@ public class GenerateAdminGeneratedApiKeyParam {
    * @return expiration
   **/
   @Schema(required = true, description = "")
-  public Object getExpiration() {
+  public Date getExpiration() {
     return expiration;
   }
 
-  public void setExpiration(Object expiration) {
+  public void setExpiration(Date expiration) {
     this.expiration = expiration;
   }
 

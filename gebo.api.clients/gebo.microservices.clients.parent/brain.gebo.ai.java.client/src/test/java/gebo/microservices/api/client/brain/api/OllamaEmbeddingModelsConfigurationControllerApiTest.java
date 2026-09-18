@@ -57,7 +57,7 @@ public class OllamaEmbeddingModelsConfigurationControllerApiTest {
      */
     @Test
     public void findOllamaEmbeddingModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GOllamaEmbeddingModelConfig response = api.findOllamaEmbeddingModelConfigByCode(code);
 
         // TODO: test validations

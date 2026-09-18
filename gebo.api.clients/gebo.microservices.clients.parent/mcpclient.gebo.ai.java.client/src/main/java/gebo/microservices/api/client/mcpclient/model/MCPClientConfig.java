@@ -17,87 +17,163 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.mcpclient.model.MCPPrompt;
+import gebo.microservices.api.client.mcpclient.model.MCPResource;
+import gebo.microservices.api.client.mcpclient.model.MCPTool;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * MCPClientConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:38.949029837+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.887590537+02:00[Europe/Rome]")
 
 public class MCPClientConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("baseUrl")
-  private Object baseUrl = null;
+  private String baseUrl = null;
 
   @JsonProperty("mcpEndpoint")
-  private Object mcpEndpoint = null;
+  private String mcpEndpoint = null;
 
   @JsonProperty("sseEndpoint")
-  private Object sseEndpoint = null;
+  private String sseEndpoint = null;
 
   @JsonProperty("secretCode")
-  private Object secretCode = null;
+  private String secretCode = null;
 
   @JsonProperty("oauth2AuthenticatorCode")
-  private Object oauth2AuthenticatorCode = null;
+  private String oauth2AuthenticatorCode = null;
 
   @JsonProperty("stdioCommand")
-  private Object stdioCommand = null;
+  private String stdioCommand = null;
 
   @JsonProperty("stdioArgs")
-  private Object stdioArgs = null;
+  private List<String> stdioArgs = null;
 
   @JsonProperty("stdioEnvironment")
-  private Object stdioEnvironment = null;
+  private Map<String, String> stdioEnvironment = null;
 
-  @JsonProperty("transportType")
-  private Object transportType = null;
+  /**
+   * Gets or Sets transportType
+   */
+  public enum TransportTypeEnum {
+    STREAMABLE_HTTP("STREAMABLE_HTTP"),
+    SSE_LEGACY("SSE_LEGACY"),
+    STDIO("STDIO");
 
-  @JsonProperty("authMode")
-  private Object authMode = null;
+    private String value;
+
+    TransportTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TransportTypeEnum fromValue(String input) {
+      for (TransportTypeEnum b : TransportTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("transportType")
+  private TransportTypeEnum transportType = null;
+
+  /**
+   * Gets or Sets authMode
+   */
+  public enum AuthModeEnum {
+    NONE("NONE"),
+    API_KEY("API_KEY"),
+    STATIC_BEARER_TOKEN("STATIC_BEARER_TOKEN"),
+    OAUTH2_CLIENT_CREDENTIALS("OAUTH2_CLIENT_CREDENTIALS"),
+    OAUTH2_AUTHORIZATION_CODE_PER_USER("OAUTH2_AUTHORIZATION_CODE_PER_USER"),
+    USER_TOKEN_RELAY("USER_TOKEN_RELAY"),
+    TOKEN_EXCHANGE("TOKEN_EXCHANGE");
+
+    private String value;
+
+    AuthModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static AuthModeEnum fromValue(String input) {
+      for (AuthModeEnum b : AuthModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("authMode")
+  private AuthModeEnum authMode = null;
 
   @JsonProperty("exportingPrefix")
-  private Object exportingPrefix = null;
+  private String exportingPrefix = null;
 
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("tools")
-  private Object tools = null;
+  private List<MCPTool> tools = null;
 
   @JsonProperty("resources")
-  private Object resources = null;
+  private List<MCPResource> resources = null;
 
   @JsonProperty("prompts")
-  private Object prompts = null;
+  private List<MCPPrompt> prompts = null;
 
-  public MCPClientConfig code(Object code) {
+  public MCPClientConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -107,15 +183,15 @@ public class MCPClientConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public MCPClientConfig description(Object description) {
+  public MCPClientConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -125,15 +201,15 @@ public class MCPClientConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public MCPClientConfig userModified(Object userModified) {
+  public MCPClientConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -143,15 +219,15 @@ public class MCPClientConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public MCPClientConfig userCreated(Object userCreated) {
+  public MCPClientConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -161,15 +237,15 @@ public class MCPClientConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public MCPClientConfig dateModified(Object dateModified) {
+  public MCPClientConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -179,15 +255,15 @@ public class MCPClientConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public MCPClientConfig dateCreated(Object dateCreated) {
+  public MCPClientConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -197,15 +273,15 @@ public class MCPClientConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public MCPClientConfig baseUrl(Object baseUrl) {
+  public MCPClientConfig baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
   }
@@ -215,15 +291,15 @@ public class MCPClientConfig {
    * @return baseUrl
   **/
   @Schema(description = "")
-  public Object getBaseUrl() {
+  public String getBaseUrl() {
     return baseUrl;
   }
 
-  public void setBaseUrl(Object baseUrl) {
+  public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 
-  public MCPClientConfig mcpEndpoint(Object mcpEndpoint) {
+  public MCPClientConfig mcpEndpoint(String mcpEndpoint) {
     this.mcpEndpoint = mcpEndpoint;
     return this;
   }
@@ -233,15 +309,15 @@ public class MCPClientConfig {
    * @return mcpEndpoint
   **/
   @Schema(description = "")
-  public Object getMcpEndpoint() {
+  public String getMcpEndpoint() {
     return mcpEndpoint;
   }
 
-  public void setMcpEndpoint(Object mcpEndpoint) {
+  public void setMcpEndpoint(String mcpEndpoint) {
     this.mcpEndpoint = mcpEndpoint;
   }
 
-  public MCPClientConfig sseEndpoint(Object sseEndpoint) {
+  public MCPClientConfig sseEndpoint(String sseEndpoint) {
     this.sseEndpoint = sseEndpoint;
     return this;
   }
@@ -251,15 +327,15 @@ public class MCPClientConfig {
    * @return sseEndpoint
   **/
   @Schema(description = "")
-  public Object getSseEndpoint() {
+  public String getSseEndpoint() {
     return sseEndpoint;
   }
 
-  public void setSseEndpoint(Object sseEndpoint) {
+  public void setSseEndpoint(String sseEndpoint) {
     this.sseEndpoint = sseEndpoint;
   }
 
-  public MCPClientConfig secretCode(Object secretCode) {
+  public MCPClientConfig secretCode(String secretCode) {
     this.secretCode = secretCode;
     return this;
   }
@@ -269,15 +345,15 @@ public class MCPClientConfig {
    * @return secretCode
   **/
   @Schema(description = "")
-  public Object getSecretCode() {
+  public String getSecretCode() {
     return secretCode;
   }
 
-  public void setSecretCode(Object secretCode) {
+  public void setSecretCode(String secretCode) {
     this.secretCode = secretCode;
   }
 
-  public MCPClientConfig oauth2AuthenticatorCode(Object oauth2AuthenticatorCode) {
+  public MCPClientConfig oauth2AuthenticatorCode(String oauth2AuthenticatorCode) {
     this.oauth2AuthenticatorCode = oauth2AuthenticatorCode;
     return this;
   }
@@ -287,15 +363,15 @@ public class MCPClientConfig {
    * @return oauth2AuthenticatorCode
   **/
   @Schema(description = "")
-  public Object getOauth2AuthenticatorCode() {
+  public String getOauth2AuthenticatorCode() {
     return oauth2AuthenticatorCode;
   }
 
-  public void setOauth2AuthenticatorCode(Object oauth2AuthenticatorCode) {
+  public void setOauth2AuthenticatorCode(String oauth2AuthenticatorCode) {
     this.oauth2AuthenticatorCode = oauth2AuthenticatorCode;
   }
 
-  public MCPClientConfig stdioCommand(Object stdioCommand) {
+  public MCPClientConfig stdioCommand(String stdioCommand) {
     this.stdioCommand = stdioCommand;
     return this;
   }
@@ -305,16 +381,24 @@ public class MCPClientConfig {
    * @return stdioCommand
   **/
   @Schema(description = "")
-  public Object getStdioCommand() {
+  public String getStdioCommand() {
     return stdioCommand;
   }
 
-  public void setStdioCommand(Object stdioCommand) {
+  public void setStdioCommand(String stdioCommand) {
     this.stdioCommand = stdioCommand;
   }
 
-  public MCPClientConfig stdioArgs(Object stdioArgs) {
+  public MCPClientConfig stdioArgs(List<String> stdioArgs) {
     this.stdioArgs = stdioArgs;
+    return this;
+  }
+
+  public MCPClientConfig addStdioArgsItem(String stdioArgsItem) {
+    if (this.stdioArgs == null) {
+      this.stdioArgs = new ArrayList<>();
+    }
+    this.stdioArgs.add(stdioArgsItem);
     return this;
   }
 
@@ -323,16 +407,24 @@ public class MCPClientConfig {
    * @return stdioArgs
   **/
   @Schema(description = "")
-  public Object getStdioArgs() {
+  public List<String> getStdioArgs() {
     return stdioArgs;
   }
 
-  public void setStdioArgs(Object stdioArgs) {
+  public void setStdioArgs(List<String> stdioArgs) {
     this.stdioArgs = stdioArgs;
   }
 
-  public MCPClientConfig stdioEnvironment(Object stdioEnvironment) {
+  public MCPClientConfig stdioEnvironment(Map<String, String> stdioEnvironment) {
     this.stdioEnvironment = stdioEnvironment;
+    return this;
+  }
+
+  public MCPClientConfig putStdioEnvironmentItem(String key, String stdioEnvironmentItem) {
+    if (this.stdioEnvironment == null) {
+      this.stdioEnvironment = new HashMap<>();
+    }
+    this.stdioEnvironment.put(key, stdioEnvironmentItem);
     return this;
   }
 
@@ -341,15 +433,15 @@ public class MCPClientConfig {
    * @return stdioEnvironment
   **/
   @Schema(description = "")
-  public Object getStdioEnvironment() {
+  public Map<String, String> getStdioEnvironment() {
     return stdioEnvironment;
   }
 
-  public void setStdioEnvironment(Object stdioEnvironment) {
+  public void setStdioEnvironment(Map<String, String> stdioEnvironment) {
     this.stdioEnvironment = stdioEnvironment;
   }
 
-  public MCPClientConfig transportType(Object transportType) {
+  public MCPClientConfig transportType(TransportTypeEnum transportType) {
     this.transportType = transportType;
     return this;
   }
@@ -359,15 +451,15 @@ public class MCPClientConfig {
    * @return transportType
   **/
   @Schema(required = true, description = "")
-  public Object getTransportType() {
+  public TransportTypeEnum getTransportType() {
     return transportType;
   }
 
-  public void setTransportType(Object transportType) {
+  public void setTransportType(TransportTypeEnum transportType) {
     this.transportType = transportType;
   }
 
-  public MCPClientConfig authMode(Object authMode) {
+  public MCPClientConfig authMode(AuthModeEnum authMode) {
     this.authMode = authMode;
     return this;
   }
@@ -377,15 +469,15 @@ public class MCPClientConfig {
    * @return authMode
   **/
   @Schema(required = true, description = "")
-  public Object getAuthMode() {
+  public AuthModeEnum getAuthMode() {
     return authMode;
   }
 
-  public void setAuthMode(Object authMode) {
+  public void setAuthMode(AuthModeEnum authMode) {
     this.authMode = authMode;
   }
 
-  public MCPClientConfig exportingPrefix(Object exportingPrefix) {
+  public MCPClientConfig exportingPrefix(String exportingPrefix) {
     this.exportingPrefix = exportingPrefix;
     return this;
   }
@@ -395,16 +487,24 @@ public class MCPClientConfig {
    * @return exportingPrefix
   **/
   @Schema(required = true, description = "")
-  public Object getExportingPrefix() {
+  public String getExportingPrefix() {
     return exportingPrefix;
   }
 
-  public void setExportingPrefix(Object exportingPrefix) {
+  public void setExportingPrefix(String exportingPrefix) {
     this.exportingPrefix = exportingPrefix;
   }
 
-  public MCPClientConfig accessibleGroups(Object accessibleGroups) {
+  public MCPClientConfig accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public MCPClientConfig addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -413,16 +513,24 @@ public class MCPClientConfig {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public MCPClientConfig accessibleUsers(Object accessibleUsers) {
+  public MCPClientConfig accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public MCPClientConfig addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -431,15 +539,15 @@ public class MCPClientConfig {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public MCPClientConfig accessibleToAll(Object accessibleToAll) {
+  public MCPClientConfig accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -449,16 +557,24 @@ public class MCPClientConfig {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public MCPClientConfig aclAliases(Object aclAliases) {
+  public MCPClientConfig aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public MCPClientConfig addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -467,16 +583,24 @@ public class MCPClientConfig {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
   }
 
-  public MCPClientConfig tools(Object tools) {
+  public MCPClientConfig tools(List<MCPTool> tools) {
     this.tools = tools;
+    return this;
+  }
+
+  public MCPClientConfig addToolsItem(MCPTool toolsItem) {
+    if (this.tools == null) {
+      this.tools = new ArrayList<>();
+    }
+    this.tools.add(toolsItem);
     return this;
   }
 
@@ -485,16 +609,24 @@ public class MCPClientConfig {
    * @return tools
   **/
   @Schema(description = "")
-  public Object getTools() {
+  public List<MCPTool> getTools() {
     return tools;
   }
 
-  public void setTools(Object tools) {
+  public void setTools(List<MCPTool> tools) {
     this.tools = tools;
   }
 
-  public MCPClientConfig resources(Object resources) {
+  public MCPClientConfig resources(List<MCPResource> resources) {
     this.resources = resources;
+    return this;
+  }
+
+  public MCPClientConfig addResourcesItem(MCPResource resourcesItem) {
+    if (this.resources == null) {
+      this.resources = new ArrayList<>();
+    }
+    this.resources.add(resourcesItem);
     return this;
   }
 
@@ -503,16 +635,24 @@ public class MCPClientConfig {
    * @return resources
   **/
   @Schema(description = "")
-  public Object getResources() {
+  public List<MCPResource> getResources() {
     return resources;
   }
 
-  public void setResources(Object resources) {
+  public void setResources(List<MCPResource> resources) {
     this.resources = resources;
   }
 
-  public MCPClientConfig prompts(Object prompts) {
+  public MCPClientConfig prompts(List<MCPPrompt> prompts) {
     this.prompts = prompts;
+    return this;
+  }
+
+  public MCPClientConfig addPromptsItem(MCPPrompt promptsItem) {
+    if (this.prompts == null) {
+      this.prompts = new ArrayList<>();
+    }
+    this.prompts.add(promptsItem);
     return this;
   }
 
@@ -521,11 +661,11 @@ public class MCPClientConfig {
    * @return prompts
   **/
   @Schema(description = "")
-  public Object getPrompts() {
+  public List<MCPPrompt> getPrompts() {
     return prompts;
   }
 
-  public void setPrompts(Object prompts) {
+  public void setPrompts(List<MCPPrompt> prompts) {
     this.prompts = prompts;
   }
 

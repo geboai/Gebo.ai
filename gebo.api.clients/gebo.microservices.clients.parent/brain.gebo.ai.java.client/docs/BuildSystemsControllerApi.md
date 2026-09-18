@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getBuildSystemConfigs"></a>
 # **getBuildSystemConfigs**
-> Object getBuildSystemConfigs(buildSystemTypeCode)
+> List&lt;GBuildSystem&gt; getBuildSystemConfigs(buildSystemTypeCode)
 
 
 
@@ -21,9 +21,9 @@ Method | HTTP request | Description
 
 
 BuildSystemsControllerApi apiInstance = new BuildSystemsControllerApi();
-Object buildSystemTypeCode = null; // Object | 
+String buildSystemTypeCode = "buildSystemTypeCode_example"; // String | 
 try {
-    Object result = apiInstance.getBuildSystemConfigs(buildSystemTypeCode);
+    List<GBuildSystem> result = apiInstance.getBuildSystemConfigs(buildSystemTypeCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling BuildSystemsControllerApi#getBuildSystemConfigs");
@@ -35,11 +35,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **buildSystemTypeCode** | [**Object**](.md)|  |
+ **buildSystemTypeCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GBuildSystem&gt;**](GBuildSystem.md)
 
 ### Authorization
 
@@ -52,7 +52,7 @@ No authorization required
 
 <a name="getBuildSystemTypes"></a>
 # **getBuildSystemTypes**
-> Object getBuildSystemTypes()
+> List&lt;GBuildSystemType&gt; getBuildSystemTypes()
 
 
 
@@ -65,7 +65,7 @@ No authorization required
 
 BuildSystemsControllerApi apiInstance = new BuildSystemsControllerApi();
 try {
-    Object result = apiInstance.getBuildSystemTypes();
+    List<GBuildSystemType> result = apiInstance.getBuildSystemTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling BuildSystemsControllerApi#getBuildSystemTypes");
@@ -78,7 +78,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GBuildSystemType&gt;**](GBuildSystemType.md)
 
 ### Authorization
 

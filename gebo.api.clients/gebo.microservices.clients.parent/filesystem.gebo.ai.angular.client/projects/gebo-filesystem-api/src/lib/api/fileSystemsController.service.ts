@@ -17,6 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { GContentManagementSystemType } from '../model/gContentManagementSystemType';
+import { GFilesystemContentManagementSystem } from '../model/gFilesystemContentManagementSystem';
 import { GFilesystemProjectEndpoint } from '../model/gFilesystemProjectEndpoint';
 import { OperationStatusGJobStatus } from '../model/operationStatusGJobStatus';
 
@@ -109,10 +111,10 @@ export class FileSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findFileSystemEndpointsByProject(parentProjectCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findFileSystemEndpointsByProject(parentProjectCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findFileSystemEndpointsByProject(parentProjectCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findFileSystemEndpointsByProject(parentProjectCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findFileSystemEndpointsByProject(parentProjectCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GFilesystemProjectEndpoint>>;
+    public findFileSystemEndpointsByProject(parentProjectCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GFilesystemProjectEndpoint>>>;
+    public findFileSystemEndpointsByProject(parentProjectCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GFilesystemProjectEndpoint>>>;
+    public findFileSystemEndpointsByProject(parentProjectCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (parentProjectCode === null || parentProjectCode === undefined) {
             throw new Error('Required parameter parentProjectCode was null or undefined when calling findFileSystemEndpointsByProject.');
@@ -138,7 +140,7 @@ export class FileSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/FileSystemsController/findFileSystemEndpointsByProject`,
+        return this.httpClient.request<Array<GFilesystemProjectEndpoint>>('get',`${this.basePath}/api/admin/FileSystemsController/findFileSystemEndpointsByProject`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -156,9 +158,9 @@ export class FileSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findFileSystemEndpointsByQbe(body: GFilesystemProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findFileSystemEndpointsByQbe(body: GFilesystemProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findFileSystemEndpointsByQbe(body: GFilesystemProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findFileSystemEndpointsByQbe(body: GFilesystemProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<GFilesystemProjectEndpoint>>;
+    public findFileSystemEndpointsByQbe(body: GFilesystemProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GFilesystemProjectEndpoint>>>;
+    public findFileSystemEndpointsByQbe(body: GFilesystemProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GFilesystemProjectEndpoint>>>;
     public findFileSystemEndpointsByQbe(body: GFilesystemProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -185,7 +187,7 @@ export class FileSystemsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/FileSystemsController/findFileSystemEndpointsByQbe`,
+        return this.httpClient.request<Array<GFilesystemProjectEndpoint>>('post',`${this.basePath}/api/admin/FileSystemsController/findFileSystemEndpointsByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -202,9 +204,9 @@ export class FileSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFileSystemSystemTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getFileSystemSystemTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getFileSystemSystemTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getFileSystemSystemTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GContentManagementSystemType>>;
+    public getFileSystemSystemTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GContentManagementSystemType>>>;
+    public getFileSystemSystemTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GContentManagementSystemType>>>;
     public getFileSystemSystemTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -222,7 +224,7 @@ export class FileSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/FileSystemsController/getFileSystemSystemTypes`,
+        return this.httpClient.request<Array<GContentManagementSystemType>>('get',`${this.basePath}/api/admin/FileSystemsController/getFileSystemSystemTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -239,10 +241,10 @@ export class FileSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFileSystemSystems(handlerCode?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getFileSystemSystems(handlerCode?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getFileSystemSystems(handlerCode?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getFileSystemSystems(handlerCode?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getFileSystemSystems(handlerCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GFilesystemContentManagementSystem>>;
+    public getFileSystemSystems(handlerCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GFilesystemContentManagementSystem>>>;
+    public getFileSystemSystems(handlerCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GFilesystemContentManagementSystem>>>;
+    public getFileSystemSystems(handlerCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -265,7 +267,7 @@ export class FileSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/FileSystemsController/getFileSystemSystems`,
+        return this.httpClient.request<Array<GFilesystemContentManagementSystem>>('get',`${this.basePath}/api/admin/FileSystemsController/getFileSystemSystems`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

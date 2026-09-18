@@ -2,6 +2,8 @@ package ai.gebo.llms.agent.standard.config;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,7 @@ import lombok.Data;
 @Data
 @PropertySource(value = "classpath:/agents-prompt-library/agents-prompt-library.yml", factory = GeboYamlPropertySourceFactory.class)
 public class StandardAgentsPromptsLibraryConfig {
+	private static final Logger LOGGER = LoggerFactory.getLogger(StandardAgentsPromptsLibraryConfig.class);
 	public static final String COORDINATOR_AGENT_PROMPT = "controller-coordinator-agent-prompt";
 	public static final String REPORT_AND_ANSWER_WRITER_AGENT_PROMPT = "report-answer-writer-agent-prompt";
 	public static final String TOOL_CALLING_AGENT_PROMPT = "tool-calling-agent-prompt";
@@ -27,7 +30,12 @@ public class StandardAgentsPromptsLibraryConfig {
 
 	@Bean
 	public IGStaticPromptsProvider standardAgentsPromptsProvider(GeboOverriddenPromptsLibrary overridenLibrary) {
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Publishing the standard agents prompts provider with "
+					+ (library != null ? library.size() : 0) + " library reference(s) and "
+					+ (overridenLibrary.getLibrary() != null ? overridenLibrary.getLibrary().size() : 0)
+					+ " override(s)");
+		}
 		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary());
 	}
 

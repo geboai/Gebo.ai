@@ -147,6 +147,7 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 			String modelName = config.getChoosedModel() != null && config.getChoosedModel().getCode() != null
 					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "whisper-1";
 			builder.apiKey(apiKey.getApiKey()).responseFormat(AudioResponseFormat.TEXT).temperature(0f).model(modelName);
+			builder.timeout(OpenAiClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())));
 			OpenAiAudioTranscriptionOptions options = builder.build();
 			OpenAiAudioTranscriptionModel model = OpenAiAudioTranscriptionModel.builder()
 					.options(options)

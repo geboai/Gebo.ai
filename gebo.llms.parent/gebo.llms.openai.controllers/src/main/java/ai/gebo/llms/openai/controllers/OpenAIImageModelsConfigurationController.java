@@ -11,7 +11,6 @@ package ai.gebo.llms.openai.controllers;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +38,6 @@ import ai.gebo.security.services.IGSecurityAuditLoggerService;
  * configurations. This controller is only active when the 'openAIEnabled'
  * property is set to true. Access is restricted to users with ADMIN role.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "openAIEnabled", havingValue = "true")
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/OpenAIImageModelsConfigurationController")

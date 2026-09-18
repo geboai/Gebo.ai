@@ -18,29 +18,52 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * GeboGoogleOauth2SecretContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class GeboGoogleOauth2SecretContent {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
   @JsonProperty("uid")
-  private Object uid = null;
+  private String uid = null;
 
   @JsonProperty("token")
-  private Object token = null;
+  private String token = null;
 
   @JsonProperty("location")
-  private Object location = null;
+  private String location = null;
 
   @JsonProperty("projectId")
-  private Object projectId = null;
+  private String projectId = null;
 
   @JsonProperty("scopes")
-  private Object scopes = null;
+  private List<String> scopes = null;
 
-  public GeboGoogleOauth2SecretContent uid(Object uid) {
+  public GeboGoogleOauth2SecretContent readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
+
+  public GeboGoogleOauth2SecretContent uid(String uid) {
     this.uid = uid;
     return this;
   }
@@ -50,15 +73,15 @@ public class GeboGoogleOauth2SecretContent {
    * @return uid
   **/
   @Schema(description = "")
-  public Object getUid() {
+  public String getUid() {
     return uid;
   }
 
-  public void setUid(Object uid) {
+  public void setUid(String uid) {
     this.uid = uid;
   }
 
-  public GeboGoogleOauth2SecretContent token(Object token) {
+  public GeboGoogleOauth2SecretContent token(String token) {
     this.token = token;
     return this;
   }
@@ -68,15 +91,15 @@ public class GeboGoogleOauth2SecretContent {
    * @return token
   **/
   @Schema(description = "")
-  public Object getToken() {
+  public String getToken() {
     return token;
   }
 
-  public void setToken(Object token) {
+  public void setToken(String token) {
     this.token = token;
   }
 
-  public GeboGoogleOauth2SecretContent location(Object location) {
+  public GeboGoogleOauth2SecretContent location(String location) {
     this.location = location;
     return this;
   }
@@ -86,15 +109,15 @@ public class GeboGoogleOauth2SecretContent {
    * @return location
   **/
   @Schema(description = "")
-  public Object getLocation() {
+  public String getLocation() {
     return location;
   }
 
-  public void setLocation(Object location) {
+  public void setLocation(String location) {
     this.location = location;
   }
 
-  public GeboGoogleOauth2SecretContent projectId(Object projectId) {
+  public GeboGoogleOauth2SecretContent projectId(String projectId) {
     this.projectId = projectId;
     return this;
   }
@@ -104,16 +127,24 @@ public class GeboGoogleOauth2SecretContent {
    * @return projectId
   **/
   @Schema(description = "")
-  public Object getProjectId() {
+  public String getProjectId() {
     return projectId;
   }
 
-  public void setProjectId(Object projectId) {
+  public void setProjectId(String projectId) {
     this.projectId = projectId;
   }
 
-  public GeboGoogleOauth2SecretContent scopes(Object scopes) {
+  public GeboGoogleOauth2SecretContent scopes(List<String> scopes) {
     this.scopes = scopes;
+    return this;
+  }
+
+  public GeboGoogleOauth2SecretContent addScopesItem(String scopesItem) {
+    if (this.scopes == null) {
+      this.scopes = new ArrayList<>();
+    }
+    this.scopes.add(scopesItem);
     return this;
   }
 
@@ -122,11 +153,11 @@ public class GeboGoogleOauth2SecretContent {
    * @return scopes
   **/
   @Schema(description = "")
-  public Object getScopes() {
+  public List<String> getScopes() {
     return scopes;
   }
 
-  public void setScopes(Object scopes) {
+  public void setScopes(List<String> scopes) {
     this.scopes = scopes;
   }
 
@@ -140,7 +171,8 @@ public class GeboGoogleOauth2SecretContent {
       return false;
     }
     GeboGoogleOauth2SecretContent geboGoogleOauth2SecretContent = (GeboGoogleOauth2SecretContent) o;
-    return Objects.equals(this.uid, geboGoogleOauth2SecretContent.uid) &&
+    return Objects.equals(this.readOnly, geboGoogleOauth2SecretContent.readOnly) &&
+        Objects.equals(this.uid, geboGoogleOauth2SecretContent.uid) &&
         Objects.equals(this.token, geboGoogleOauth2SecretContent.token) &&
         Objects.equals(this.location, geboGoogleOauth2SecretContent.location) &&
         Objects.equals(this.projectId, geboGoogleOauth2SecretContent.projectId) &&
@@ -149,7 +181,7 @@ public class GeboGoogleOauth2SecretContent {
 
   @Override
   public int hashCode() {
-    return Objects.hash(uid, token, location, projectId, scopes);
+    return Objects.hash(readOnly, uid, token, location, projectId, scopes);
   }
 
 
@@ -158,6 +190,7 @@ public class GeboGoogleOauth2SecretContent {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboGoogleOauth2SecretContent {\n");
     
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    uid: ").append(toIndentedString(uid)).append("\n");
     sb.append("    token: ").append(toIndentedString(token)).append("\n");
     sb.append("    location: ").append(toIndentedString(location)).append("\n");

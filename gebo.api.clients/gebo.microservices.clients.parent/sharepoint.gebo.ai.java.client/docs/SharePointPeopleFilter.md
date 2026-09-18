@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**createdByList** | **Object** |  |  [optional]
-**lastModifiedByList** | **Object** |  |  [optional]
+**createdByList** | **List&lt;String&gt;** |  |  [optional]
+**lastModifiedByList** | **List&lt;String&gt;** |  |  [optional]

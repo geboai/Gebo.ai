@@ -14,4 +14,7 @@
  * Arbitrary environment entries
  */
 export interface PipelineEnvironment { 
+  [key: string]: any;
+
+
 }

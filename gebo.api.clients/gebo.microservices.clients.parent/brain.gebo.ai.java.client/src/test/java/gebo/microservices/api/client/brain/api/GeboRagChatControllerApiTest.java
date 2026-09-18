@@ -13,10 +13,13 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.GBaseChatModelChoice;
+import gebo.microservices.api.client.brain.model.GBaseObject;
+import gebo.microservices.api.client.brain.model.GChatProfileConfiguration;
 import gebo.microservices.api.client.brain.model.GeboChatRequest;
 import gebo.microservices.api.client.brain.model.GeboChatResponse;
 import gebo.microservices.api.client.brain.model.GeboChatUserInfo;
 import gebo.microservices.api.client.brain.model.ModelProviderCapabilities;
+import gebo.microservices.api.client.brain.model.ServerSentEventString;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -43,7 +46,7 @@ public class GeboRagChatControllerApiTest {
      */
     @Test
     public void getChatModelUserInfoByChatProfileCodeTest() {
-        Object chatProfileCode = null;
+        String chatProfileCode = null;
         GeboChatUserInfo response = api.getChatModelUserInfoByChatProfileCode(chatProfileCode);
 
         // TODO: test validations
@@ -58,7 +61,7 @@ public class GeboRagChatControllerApiTest {
      */
     @Test
     public void getChatProfileModelMetaInfosTest() {
-        Object chatProfileCode = null;
+        String chatProfileCode = null;
         GBaseChatModelChoice response = api.getChatProfileModelMetaInfos(chatProfileCode);
 
         // TODO: test validations
@@ -73,7 +76,7 @@ public class GeboRagChatControllerApiTest {
      */
     @Test
     public void getChatProfilesTest() {
-        Object response = api.getChatProfiles();
+        List<GChatProfileConfiguration> response = api.getChatProfiles();
 
         // TODO: test validations
     }
@@ -87,7 +90,7 @@ public class GeboRagChatControllerApiTest {
      */
     @Test
     public void getProfileProviderModelCapabilitiesTest() {
-        Object chatProfileCode = null;
+        String chatProfileCode = null;
         ModelProviderCapabilities response = api.getProfileProviderModelCapabilities(chatProfileCode);
 
         // TODO: test validations
@@ -102,8 +105,8 @@ public class GeboRagChatControllerApiTest {
      */
     @Test
     public void getVisibleKnowledgeBasesByProfileCodeTest() {
-        Object profileCode = null;
-        Object response = api.getVisibleKnowledgeBasesByProfileCode(profileCode);
+        String profileCode = null;
+        List<GBaseObject> response = api.getVisibleKnowledgeBasesByProfileCode(profileCode);
 
         // TODO: test validations
     }
@@ -133,7 +136,7 @@ public class GeboRagChatControllerApiTest {
     @Test
     public void streamRagResponseTest() {
         GeboChatRequest body = null;
-        Object response = api.streamRagResponse(body);
+        List<ServerSentEventString> response = api.streamRagResponse(body);
 
         // TODO: test validations
     }

@@ -37,6 +37,10 @@ export * from "./lib/controls/relation-list-component/relation-list.component";
 
 export * from './lib/controls/chat-control/gebo-ai-reusable-chat.module';
 export * from './lib/controls/chat-control/gebo-ai-reusable-chat.component';
+export * from './lib/controls/chat-control/company-files-selection.token';
+
+export * from './lib/controls/gebo-ai-office-assistant/gebo-ai-office-assistant.module';
+export * from './lib/controls/gebo-ai-office-assistant/gebo-ai-office-assistant.component';
 
 export * from './lib/controls/browse-content-component/browse-content.module';
 export * from './lib/controls/browse-content-component/browse-content.component';
@@ -133,6 +137,7 @@ export * from "./lib/controls/field-translation-container/label.directive";
 export * from "./lib/controls/field-translation-container/text.directive";
 export * from "./lib/controls/field-translation-container/language-resources-download.component";
 export * from "./lib/controls/field-translation-container/main-language-choice.component";
+export * from "./lib/controls/field-translation-container/main-micro-language.component";
 export * from "./lib/controls/field-translation-container/primeng-components-obsolete-multilanguage-adapters.directive";
 export * from "./lib/notifications/notification.component";
 export * from "./lib/notifications/display-messages.component";

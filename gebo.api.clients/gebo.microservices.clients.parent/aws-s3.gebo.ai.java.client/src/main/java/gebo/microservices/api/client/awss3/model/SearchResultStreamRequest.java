@@ -23,16 +23,47 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SearchResultStreamRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:31.417623672+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:35.503809141+02:00[Europe/Rome]")
 
 public class SearchResultStreamRequest {
-  @JsonProperty("streamingPurpose")
-  private Object streamingPurpose = null;
+  /**
+   * Gets or Sets streamingPurpose
+   */
+  public enum StreamingPurposeEnum {
+    SERVING("SERVING"),
+    INGESTING("INGESTING");
+
+    private String value;
+
+    StreamingPurposeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static StreamingPurposeEnum fromValue(String input) {
+      for (StreamingPurposeEnum b : StreamingPurposeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("streamingPurpose")
+  private StreamingPurposeEnum streamingPurpose = null;
 
   @JsonProperty("reference")
   private SearchResult reference = null;
 
-  public SearchResultStreamRequest streamingPurpose(Object streamingPurpose) {
+  public SearchResultStreamRequest streamingPurpose(StreamingPurposeEnum streamingPurpose) {
     this.streamingPurpose = streamingPurpose;
     return this;
   }
@@ -42,11 +73,11 @@ public class SearchResultStreamRequest {
    * @return streamingPurpose
   **/
   @Schema(required = true, description = "")
-  public Object getStreamingPurpose() {
+  public StreamingPurposeEnum getStreamingPurpose() {
     return streamingPurpose;
   }
 
-  public void setStreamingPurpose(Object streamingPurpose) {
+  public void setStreamingPurpose(StreamingPurposeEnum streamingPurpose) {
     this.streamingPurpose = streamingPurpose;
   }
 

@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 <a name="enabledSteps"></a>
 # **enabledSteps**
-> Object enabledSteps(workflowType, workflowId)
+> List&lt;String&gt; enabledSteps(workflowType, workflowId)
 
 
 
@@ -20,10 +20,10 @@ Method | HTTP request | Description
 
 
 WorkflowParticipantsEnablementControllerApi apiInstance = new WorkflowParticipantsEnablementControllerApi();
-Object workflowType = null; // Object | 
-Object workflowId = null; // Object | 
+String workflowType = "workflowType_example"; // String | 
+String workflowId = "workflowId_example"; // String | 
 try {
-    Object result = apiInstance.enabledSteps(workflowType, workflowId);
+    List<String> result = apiInstance.enabledSteps(workflowType, workflowId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling WorkflowParticipantsEnablementControllerApi#enabledSteps");
@@ -35,12 +35,12 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workflowType** | [**Object**](.md)|  |
- **workflowId** | [**Object**](.md)|  |
+ **workflowType** | **String**|  |
+ **workflowId** | **String**|  |
 
 ### Return type
 
-**Object**
+**List&lt;String&gt;**
 
 ### Authorization
 

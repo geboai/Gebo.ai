@@ -137,6 +137,7 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 			if (baseUrl != null) {
 				optionsBuilder.baseUrl(baseUrl);
 			}
+			optionsBuilder.timeout(OpenAiClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())));
 			OpenAiAudioSpeechOptions speechOptions = optionsBuilder.build();
 			OpenAiAudioSpeechModel model = OpenAiAudioSpeechModel.builder()
 					.options(speechOptions)

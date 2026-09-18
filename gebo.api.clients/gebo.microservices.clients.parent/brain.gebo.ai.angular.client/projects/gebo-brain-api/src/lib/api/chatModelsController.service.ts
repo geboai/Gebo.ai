@@ -17,6 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { ConfigurationEntryGBaseChatModelConfig } from '../model/configurationEntryGBaseChatModelConfig';
+import { GChatModelType } from '../model/gChatModelType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -60,9 +62,9 @@ export class ChatModelsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatModelTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getChatModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getChatModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getChatModelTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GChatModelType>>;
+    public getChatModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GChatModelType>>>;
+    public getChatModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GChatModelType>>>;
     public getChatModelTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -80,7 +82,7 @@ export class ChatModelsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/ChatModelsController/getChatModelTypes`,
+        return this.httpClient.request<Array<GChatModelType>>('get',`${this.basePath}/api/admin/ChatModelsController/getChatModelTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -97,10 +99,10 @@ export class ChatModelsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRuntimeConfiguredChatModels(modelTypeCode?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getRuntimeConfiguredChatModels(modelTypeCode?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getRuntimeConfiguredChatModels(modelTypeCode?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getRuntimeConfiguredChatModels(modelTypeCode?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getRuntimeConfiguredChatModels(modelTypeCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ConfigurationEntryGBaseChatModelConfig>>;
+    public getRuntimeConfiguredChatModels(modelTypeCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ConfigurationEntryGBaseChatModelConfig>>>;
+    public getRuntimeConfiguredChatModels(modelTypeCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ConfigurationEntryGBaseChatModelConfig>>>;
+    public getRuntimeConfiguredChatModels(modelTypeCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -123,7 +125,7 @@ export class ChatModelsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/ChatModelsController/getRuntimeConfiguredChatModels`,
+        return this.httpClient.request<Array<ConfigurationEntryGBaseChatModelConfig>>('get',`${this.basePath}/api/admin/ChatModelsController/getRuntimeConfiguredChatModels`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

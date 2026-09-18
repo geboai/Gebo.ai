@@ -1,0 +1,50 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+<div class="grid">
+  <div class="col-12">
+    <p-fieldset id="RequiredClassesSection" gebo-ai-label legend="Required models">
+      <div class="grid">
+        @for (row of requiredRows; track row.descriptor.id) {
+          <div class="col-12 md:col-6">
+            <gebo-ai-field [id]="row.descriptor.fieldId" [label]="row.label" [help]="row.description">
+              <div gebo-ai-field-element>
+                <gebo-ai-llms-easy-class-status [configured]="row.configured"
+                  [required]="row.descriptor.required" [currentCode]="row.currentCode"
+                  [currentProvider]="row.currentProvider" [providers]="row.providers">
+                </gebo-ai-llms-easy-class-status>
+              </div>
+            </gebo-ai-field>
+          </div>
+        }
+      </div>
+    </p-fieldset>
+  </div>
+
+  <div class="col-12">
+    <p-fieldset id="SuggestedClassesSection" gebo-ai-label legend="Suggested models">
+      <div class="grid">
+        @for (row of suggestedRows; track row.descriptor.id) {
+          <div class="col-12 md:col-6">
+            <gebo-ai-field [id]="row.descriptor.fieldId" [label]="row.label" [help]="row.description">
+              <div gebo-ai-field-element>
+                <gebo-ai-llms-easy-class-status [configured]="row.configured"
+                  [required]="row.descriptor.required" [currentCode]="row.currentCode"
+                  [currentProvider]="row.currentProvider" [providers]="row.providers">
+                </gebo-ai-llms-easy-class-status>
+              </div>
+            </gebo-ai-field>
+          </div>
+        }
+      </div>
+    </p-fieldset>
+  </div>
+</div>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

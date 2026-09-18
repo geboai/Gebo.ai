@@ -11,6 +11,7 @@ import { ButtonModule } from "primeng/button";
 import { GeboAILanguageChoiceComponent } from "./language-choice.component";
 import { SelectModule } from 'primeng/select';
 import { GeboAIMainLanguageChoiceComponent } from "./main-language-choice.component";
+import { GeboAIMainMicroLanguageComponent } from "./main-micro-language.component";
 import {
     PButtonLabelTarget, PFieldSetLabelTarget, PPanelLabelTarget, PDialogLabelTarget, PSidebarLabelTarget,
     PCardLabelTarget, PTabPanelLabelTarget, PAccordionTabLabelTarget, PToolbarLabelTarget,
@@ -25,7 +26,7 @@ import { PopoverModule } from 'primeng/popover';
 import { POldTabPanelLabelTarget } from "./primeng-components-obsolete-multilanguage-adapters.directive";
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule,FormsModule, ButtonModule, SelectModule,PopoverModule],
-    declarations: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent, PButtonLabelTarget, PFieldSetLabelTarget, PPanelLabelTarget, PDialogLabelTarget, PSidebarLabelTarget,
+    declarations: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent, GeboAIMainMicroLanguageComponent, PButtonLabelTarget, PFieldSetLabelTarget, PPanelLabelTarget, PDialogLabelTarget, PSidebarLabelTarget,
         PCardLabelTarget, PTabPanelLabelTarget, PAccordionTabLabelTarget, PToolbarLabelTarget,
         PBadgeLabelTarget, PTagLabelTarget, PChipLabelTarget,
         PCheckboxLabelTarget, PRadioLabelTarget, PToggleLabelTarget,
@@ -33,7 +34,7 @@ import { POldTabPanelLabelTarget } from "./primeng-components-obsolete-multilang
         PDropdownLabelTarget, PMultiSelectLabelTarget, PListboxLabelTarget,
         PCalendarLabelTarget, PSliderLabelTarget, PProgressBarLabelTarget,
         PStepsLabelTarget, PGalleriaLabelTarget, POldTabPanelLabelTarget],
-    exports: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent, PButtonLabelTarget, PFieldSetLabelTarget, PPanelLabelTarget, PDialogLabelTarget, PSidebarLabelTarget,
+    exports: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent, GeboAIMainMicroLanguageComponent, PButtonLabelTarget, PFieldSetLabelTarget, PPanelLabelTarget, PDialogLabelTarget, PSidebarLabelTarget,
         PCardLabelTarget, PTabPanelLabelTarget, PAccordionTabLabelTarget, PToolbarLabelTarget,
         PBadgeLabelTarget, PTagLabelTarget, PChipLabelTarget,
         PCheckboxLabelTarget, PRadioLabelTarget, PToggleLabelTarget,

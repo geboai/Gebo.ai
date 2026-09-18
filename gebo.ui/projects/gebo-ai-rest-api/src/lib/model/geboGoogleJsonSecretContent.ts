@@ -11,6 +11,7 @@
  */
 
 export interface GeboGoogleJsonSecretContent { 
+    readOnly?: boolean;
     jsonContent: string;
     delegatedUser: string;
 }

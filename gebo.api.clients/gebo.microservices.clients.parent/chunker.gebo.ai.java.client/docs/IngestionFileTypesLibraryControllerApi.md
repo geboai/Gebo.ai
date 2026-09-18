@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="getAllFileTypes"></a>
 # **getAllFileTypes**
-> Object getAllFileTypes()
+> List&lt;IngestionFileType&gt; getAllFileTypes()
 
 
 
@@ -23,7 +23,7 @@ Method | HTTP request | Description
 
 IngestionFileTypesLibraryControllerApi apiInstance = new IngestionFileTypesLibraryControllerApi();
 try {
-    Object result = apiInstance.getAllFileTypes();
+    List<IngestionFileType> result = apiInstance.getAllFileTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling IngestionFileTypesLibraryControllerApi#getAllFileTypes");
@@ -36,7 +36,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;IngestionFileType&gt;**](IngestionFileType.md)
 
 ### Authorization
 
@@ -61,7 +61,7 @@ No authorization required
 
 
 IngestionFileTypesLibraryControllerApi apiInstance = new IngestionFileTypesLibraryControllerApi();
-Object extension = null; // Object | 
+String extension = "extension_example"; // String | 
 try {
     IngestionFileType result = apiInstance.getIngestionFileTypeByExtension(extension);
     System.out.println(result);
@@ -75,7 +75,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **extension** | [**Object**](.md)|  |
+ **extension** | **String**|  |
 
 ### Return type
 
@@ -92,7 +92,7 @@ No authorization required
 
 <a name="getIngestionReadingModules"></a>
 # **getIngestionReadingModules**
-> Object getIngestionReadingModules()
+> List&lt;IngestionHandlerConfig&gt; getIngestionReadingModules()
 
 
 
@@ -105,7 +105,7 @@ No authorization required
 
 IngestionFileTypesLibraryControllerApi apiInstance = new IngestionFileTypesLibraryControllerApi();
 try {
-    Object result = apiInstance.getIngestionReadingModules();
+    List<IngestionHandlerConfig> result = apiInstance.getIngestionReadingModules();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling IngestionFileTypesLibraryControllerApi#getIngestionReadingModules");
@@ -118,7 +118,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;IngestionHandlerConfig&gt;**](IngestionHandlerConfig.md)
 
 ### Authorization
 

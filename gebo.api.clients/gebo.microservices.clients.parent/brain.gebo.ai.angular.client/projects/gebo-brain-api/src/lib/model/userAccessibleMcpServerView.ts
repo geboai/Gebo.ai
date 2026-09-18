@@ -11,18 +11,18 @@
  */
 
 export interface UserAccessibleMcpServerView { 
-    code?: any;
-    name?: any;
-    description?: any;
-    enabled?: any;
-    shareAllPersonallyVisible?: any;
-    exportedUniqueRelativeUrl?: any;
-    endpointPath?: any;
-    transportType?: any;
-    tools?: any;
-    resources?: any;
-    prompts?: any;
-    toolsCount?: any;
-    resourcesCount?: any;
-    promptsCount?: any;
+    code?: string;
+    name?: string;
+    description?: string;
+    enabled?: boolean;
+    shareAllPersonallyVisible?: boolean;
+    exportedUniqueRelativeUrl?: string;
+    endpointPath?: string;
+    transportType?: string;
+    tools?: Array<string>;
+    resources?: Array<string>;
+    prompts?: Array<string>;
+    toolsCount?: number;
+    resourcesCount?: number;
+    promptsCount?: number;
 }

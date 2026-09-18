@@ -19,50 +19,51 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.GAbstractBuildSystemConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GBuildSystem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GBuildSystem {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("creationDate")
-  private Object creationDate = null;
+  private Date creationDate = null;
 
   @JsonProperty("modificationDate")
-  private Object modificationDate = null;
+  private Date modificationDate = null;
 
   @JsonProperty("version")
-  private Object version = null;
+  private String version = null;
 
   @JsonProperty("buildSystemTypeCode")
-  private Object buildSystemTypeCode = null;
+  private String buildSystemTypeCode = null;
 
   @JsonProperty("config")
   private GAbstractBuildSystemConfig config = null;
 
   @JsonProperty("readonly")
-  private Object readonly = null;
+  private Boolean readonly = null;
 
-  public GBuildSystem code(Object code) {
+  public GBuildSystem code(String code) {
     this.code = code;
     return this;
   }
@@ -72,15 +73,15 @@ public class GBuildSystem {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GBuildSystem description(Object description) {
+  public GBuildSystem description(String description) {
     this.description = description;
     return this;
   }
@@ -90,15 +91,15 @@ public class GBuildSystem {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GBuildSystem userModified(Object userModified) {
+  public GBuildSystem userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -108,15 +109,15 @@ public class GBuildSystem {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GBuildSystem userCreated(Object userCreated) {
+  public GBuildSystem userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -126,15 +127,15 @@ public class GBuildSystem {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GBuildSystem dateModified(Object dateModified) {
+  public GBuildSystem dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -144,15 +145,15 @@ public class GBuildSystem {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GBuildSystem dateCreated(Object dateCreated) {
+  public GBuildSystem dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -162,15 +163,15 @@ public class GBuildSystem {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GBuildSystem creationDate(Object creationDate) {
+  public GBuildSystem creationDate(Date creationDate) {
     this.creationDate = creationDate;
     return this;
   }
@@ -180,15 +181,15 @@ public class GBuildSystem {
    * @return creationDate
   **/
   @Schema(description = "")
-  public Object getCreationDate() {
+  public Date getCreationDate() {
     return creationDate;
   }
 
-  public void setCreationDate(Object creationDate) {
+  public void setCreationDate(Date creationDate) {
     this.creationDate = creationDate;
   }
 
-  public GBuildSystem modificationDate(Object modificationDate) {
+  public GBuildSystem modificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
     return this;
   }
@@ -198,15 +199,15 @@ public class GBuildSystem {
    * @return modificationDate
   **/
   @Schema(description = "")
-  public Object getModificationDate() {
+  public Date getModificationDate() {
     return modificationDate;
   }
 
-  public void setModificationDate(Object modificationDate) {
+  public void setModificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
   }
 
-  public GBuildSystem version(Object version) {
+  public GBuildSystem version(String version) {
     this.version = version;
     return this;
   }
@@ -216,15 +217,15 @@ public class GBuildSystem {
    * @return version
   **/
   @Schema(description = "")
-  public Object getVersion() {
+  public String getVersion() {
     return version;
   }
 
-  public void setVersion(Object version) {
+  public void setVersion(String version) {
     this.version = version;
   }
 
-  public GBuildSystem buildSystemTypeCode(Object buildSystemTypeCode) {
+  public GBuildSystem buildSystemTypeCode(String buildSystemTypeCode) {
     this.buildSystemTypeCode = buildSystemTypeCode;
     return this;
   }
@@ -234,11 +235,11 @@ public class GBuildSystem {
    * @return buildSystemTypeCode
   **/
   @Schema(description = "")
-  public Object getBuildSystemTypeCode() {
+  public String getBuildSystemTypeCode() {
     return buildSystemTypeCode;
   }
 
-  public void setBuildSystemTypeCode(Object buildSystemTypeCode) {
+  public void setBuildSystemTypeCode(String buildSystemTypeCode) {
     this.buildSystemTypeCode = buildSystemTypeCode;
   }
 
@@ -260,7 +261,7 @@ public class GBuildSystem {
     this.config = config;
   }
 
-  public GBuildSystem readonly(Object readonly) {
+  public GBuildSystem readonly(Boolean readonly) {
     this.readonly = readonly;
     return this;
   }
@@ -270,11 +271,11 @@ public class GBuildSystem {
    * @return readonly
   **/
   @Schema(description = "")
-  public Object getReadonly() {
+  public Boolean isReadonly() {
     return readonly;
   }
 
-  public void setReadonly(Object readonly) {
+  public void setReadonly(Boolean readonly) {
     this.readonly = readonly;
   }
 

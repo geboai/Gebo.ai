@@ -86,6 +86,48 @@ public interface IGContentManagementSystemHandler<SystemIntegrationType extends 
 	public List<SystemIntegrationType> getConfigurations();
 
 	/**
+	 * Resolves one of those configurations by its code, through the same DAO -
+	 * so a system declared in {@code ai.gebo.<content handler>.systems} is found
+	 * exactly like one an admin created through the UI, and the admin screens can
+	 * open what {@link #getConfigurations()} listed.
+	 *
+	 * @param code The system code.
+	 * @return The matching system, or {@code null} when there is none.
+	 */
+	public SystemIntegrationType findConfiguration(String code);
+
+	/**
+	 * Tells whether the given system code is one the deployment declares in
+	 * {@code ai.gebo.<content handler>.systems}, rather than one an admin created.
+	 * A declared code is the configuration's answer and always wins over a stored
+	 * record, so the admin write paths refuse it instead of persisting something
+	 * the read chain would ignore.
+	 *
+	 * @param code The system code.
+	 * @return true when the code is declared in the configuration.
+	 */
+	public boolean isDeclaredInConfiguration(String code);
+
+	/**
+	 * Resolves a data source by its code through the endpoint DAO, so a declared
+	 * one is found exactly like a stored one.
+	 *
+	 * @param code The data source code.
+	 * @return The matching data source, or {@code null} when there is none.
+	 */
+	public ProjectEndpointType findDataSource(String code);
+
+	/**
+	 * The data sources feeding one knowledge base project, declared and stored
+	 * alike - what a project screen lists. Reading them through the DAO rather than
+	 * the repository is what makes a declared source appear under its project.
+	 *
+	 * @param parentProjectCode The project code.
+	 * @return The data sources of that project.
+	 */
+	public List<ProjectEndpointType> findDataSourcesByProject(String parentProjectCode);
+
+	/**
 	 * Checks if a given project endpoint is managed by this handler.
 	 *
 	 * @param endpoint The project endpoint to check.

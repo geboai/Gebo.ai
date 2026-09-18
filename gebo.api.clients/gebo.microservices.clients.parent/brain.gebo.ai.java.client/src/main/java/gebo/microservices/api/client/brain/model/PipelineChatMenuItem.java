@@ -17,39 +17,42 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.PipelineChatMenuItemParameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * PipelineChatMenuItem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class PipelineChatMenuItem {
   @JsonProperty("optionId")
-  private Object optionId = null;
+  private String optionId = null;
 
   @JsonProperty("icon")
-  private Object icon = null;
+  private String icon = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("defaultOption")
-  private Object defaultOption = null;
+  private Boolean defaultOption = null;
 
   @JsonProperty("routeOption")
-  private Object routeOption = null;
+  private String routeOption = null;
 
   @JsonProperty("pipelineId")
-  private Object pipelineId = null;
+  private String pipelineId = null;
 
   @JsonProperty("productId")
-  private Object productId = null;
+  private String productId = null;
 
   @JsonProperty("parameters")
-  private Object parameters = null;
+  private List<PipelineChatMenuItemParameter> parameters = null;
 
-  public PipelineChatMenuItem optionId(Object optionId) {
+  public PipelineChatMenuItem optionId(String optionId) {
     this.optionId = optionId;
     return this;
   }
@@ -59,15 +62,15 @@ public class PipelineChatMenuItem {
    * @return optionId
   **/
   @Schema(required = true, description = "")
-  public Object getOptionId() {
+  public String getOptionId() {
     return optionId;
   }
 
-  public void setOptionId(Object optionId) {
+  public void setOptionId(String optionId) {
     this.optionId = optionId;
   }
 
-  public PipelineChatMenuItem icon(Object icon) {
+  public PipelineChatMenuItem icon(String icon) {
     this.icon = icon;
     return this;
   }
@@ -77,15 +80,15 @@ public class PipelineChatMenuItem {
    * @return icon
   **/
   @Schema(description = "")
-  public Object getIcon() {
+  public String getIcon() {
     return icon;
   }
 
-  public void setIcon(Object icon) {
+  public void setIcon(String icon) {
     this.icon = icon;
   }
 
-  public PipelineChatMenuItem description(Object description) {
+  public PipelineChatMenuItem description(String description) {
     this.description = description;
     return this;
   }
@@ -95,15 +98,15 @@ public class PipelineChatMenuItem {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public PipelineChatMenuItem defaultOption(Object defaultOption) {
+  public PipelineChatMenuItem defaultOption(Boolean defaultOption) {
     this.defaultOption = defaultOption;
     return this;
   }
@@ -113,15 +116,15 @@ public class PipelineChatMenuItem {
    * @return defaultOption
   **/
   @Schema(description = "")
-  public Object getDefaultOption() {
+  public Boolean isDefaultOption() {
     return defaultOption;
   }
 
-  public void setDefaultOption(Object defaultOption) {
+  public void setDefaultOption(Boolean defaultOption) {
     this.defaultOption = defaultOption;
   }
 
-  public PipelineChatMenuItem routeOption(Object routeOption) {
+  public PipelineChatMenuItem routeOption(String routeOption) {
     this.routeOption = routeOption;
     return this;
   }
@@ -131,15 +134,15 @@ public class PipelineChatMenuItem {
    * @return routeOption
   **/
   @Schema(description = "")
-  public Object getRouteOption() {
+  public String getRouteOption() {
     return routeOption;
   }
 
-  public void setRouteOption(Object routeOption) {
+  public void setRouteOption(String routeOption) {
     this.routeOption = routeOption;
   }
 
-  public PipelineChatMenuItem pipelineId(Object pipelineId) {
+  public PipelineChatMenuItem pipelineId(String pipelineId) {
     this.pipelineId = pipelineId;
     return this;
   }
@@ -149,15 +152,15 @@ public class PipelineChatMenuItem {
    * @return pipelineId
   **/
   @Schema(description = "")
-  public Object getPipelineId() {
+  public String getPipelineId() {
     return pipelineId;
   }
 
-  public void setPipelineId(Object pipelineId) {
+  public void setPipelineId(String pipelineId) {
     this.pipelineId = pipelineId;
   }
 
-  public PipelineChatMenuItem productId(Object productId) {
+  public PipelineChatMenuItem productId(String productId) {
     this.productId = productId;
     return this;
   }
@@ -167,16 +170,24 @@ public class PipelineChatMenuItem {
    * @return productId
   **/
   @Schema(description = "")
-  public Object getProductId() {
+  public String getProductId() {
     return productId;
   }
 
-  public void setProductId(Object productId) {
+  public void setProductId(String productId) {
     this.productId = productId;
   }
 
-  public PipelineChatMenuItem parameters(Object parameters) {
+  public PipelineChatMenuItem parameters(List<PipelineChatMenuItemParameter> parameters) {
     this.parameters = parameters;
+    return this;
+  }
+
+  public PipelineChatMenuItem addParametersItem(PipelineChatMenuItemParameter parametersItem) {
+    if (this.parameters == null) {
+      this.parameters = new ArrayList<>();
+    }
+    this.parameters.add(parametersItem);
     return this;
   }
 
@@ -185,11 +196,11 @@ public class PipelineChatMenuItem {
    * @return parameters
   **/
   @Schema(description = "")
-  public Object getParameters() {
+  public List<PipelineChatMenuItemParameter> getParameters() {
     return parameters;
   }
 
-  public void setParameters(Object parameters) {
+  public void setParameters(List<PipelineChatMenuItemParameter> parameters) {
     this.parameters = parameters;
   }
 

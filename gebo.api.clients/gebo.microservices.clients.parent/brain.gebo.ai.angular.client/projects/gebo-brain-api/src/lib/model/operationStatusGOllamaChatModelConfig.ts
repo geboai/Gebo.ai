@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GOllamaChatModelConfig } from './gOllamaChatModelConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGOllamaChatModelConfig { 
     result?: GOllamaChatModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

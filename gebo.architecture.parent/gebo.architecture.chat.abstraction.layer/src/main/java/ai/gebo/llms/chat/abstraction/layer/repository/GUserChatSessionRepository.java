@@ -58,4 +58,36 @@ public interface GUserChatSessionRepository extends IGBaseMongoDBRepository<GUse
 
 	public List<GUserChatInfo> findByUsername(String username);
 
+	/**
+	 * Finds chat information by the given username and context code.
+	 *
+	 * @param username    a String representing the username to search for.
+	 * @param contextCode a String representing the external context code to search
+	 *                    for.
+	 * @return a List of GUserChatInfo data for the specified username and context
+	 *         code.
+	 */
+	public List<GUserChatInfo> findByUsernameAndContextCode(String username, String contextCode);
+
+	/**
+	 * Finds chat information for the given username among chats that do not
+	 * belong to any external context.
+	 *
+	 * @param username a String representing the username to search for.
+	 * @return a List of GUserChatInfo data for the specified username with no
+	 *         context code.
+	 */
+	public List<GUserChatInfo> findByUsernameAndContextCodeIsNull(String username);
+
+	/**
+	 * Finds chat information for the given username and pageable parameters
+	 * among chats that do not belong to any external context.
+	 *
+	 * @param username a String representing the username to search for.
+	 * @param page     a Pageable object to manage pagination.
+	 * @return a Page of GUserChatInfo data for the specified username with no
+	 *         context code.
+	 */
+	public Page<GUserChatInfo> findByUsernameAndContextCodeIsNull(String username, Pageable page);
+
 }

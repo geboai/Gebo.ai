@@ -22,55 +22,90 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMUsageAggregationBucket
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class LLMUsageAggregationBucket {
   @JsonProperty("providerId")
-  private Object providerId = null;
+  private String providerId = null;
 
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("model")
-  private Object model = null;
+  private String model = null;
 
   @JsonProperty("callerStack")
-  private Object callerStack = null;
+  private String callerStack = null;
 
-  @JsonProperty("modelType")
-  private Object modelType = null;
+  /**
+   * Gets or Sets modelType
+   */
+  public enum ModelTypeEnum {
+    CHAT("CHAT"),
+    EMBEDDING("EMBEDDING"),
+    IMAGE("IMAGE"),
+    RANKER("RANKER"),
+    TTS("TTS"),
+    TRANSCRIPT("TRANSCRIPT");
+
+    private String value;
+
+    ModelTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ModelTypeEnum fromValue(String input) {
+      for (ModelTypeEnum b : ModelTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("modelType")
+  private ModelTypeEnum modelType = null;
 
   @JsonProperty("year")
-  private Object year = null;
+  private Integer year = null;
 
   @JsonProperty("month")
-  private Object month = null;
+  private Integer month = null;
 
   @JsonProperty("day")
-  private Object day = null;
+  private Integer day = null;
 
   @JsonProperty("inputToken")
-  private Object inputToken = null;
+  private Long inputToken = null;
 
   @JsonProperty("outputToken")
-  private Object outputToken = null;
+  private Long outputToken = null;
 
   @JsonProperty("totalToken")
-  private Object totalToken = null;
+  private Long totalToken = null;
 
   @JsonProperty("nrRequests")
-  private Object nrRequests = null;
+  private Long nrRequests = null;
 
   @JsonProperty("latencyMin")
-  private Object latencyMin = null;
+  private Long latencyMin = null;
 
   @JsonProperty("latencyMax")
-  private Object latencyMax = null;
+  private Long latencyMax = null;
 
   @JsonProperty("latencyAvg")
-  private Object latencyAvg = null;
+  private Long latencyAvg = null;
 
-  public LLMUsageAggregationBucket providerId(Object providerId) {
+  public LLMUsageAggregationBucket providerId(String providerId) {
     this.providerId = providerId;
     return this;
   }
@@ -80,15 +115,15 @@ public class LLMUsageAggregationBucket {
    * @return providerId
   **/
   @Schema(description = "")
-  public Object getProviderId() {
+  public String getProviderId() {
     return providerId;
   }
 
-  public void setProviderId(Object providerId) {
+  public void setProviderId(String providerId) {
     this.providerId = providerId;
   }
 
-  public LLMUsageAggregationBucket username(Object username) {
+  public LLMUsageAggregationBucket username(String username) {
     this.username = username;
     return this;
   }
@@ -98,15 +133,15 @@ public class LLMUsageAggregationBucket {
    * @return username
   **/
   @Schema(description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public LLMUsageAggregationBucket model(Object model) {
+  public LLMUsageAggregationBucket model(String model) {
     this.model = model;
     return this;
   }
@@ -116,15 +151,15 @@ public class LLMUsageAggregationBucket {
    * @return model
   **/
   @Schema(description = "")
-  public Object getModel() {
+  public String getModel() {
     return model;
   }
 
-  public void setModel(Object model) {
+  public void setModel(String model) {
     this.model = model;
   }
 
-  public LLMUsageAggregationBucket callerStack(Object callerStack) {
+  public LLMUsageAggregationBucket callerStack(String callerStack) {
     this.callerStack = callerStack;
     return this;
   }
@@ -134,15 +169,15 @@ public class LLMUsageAggregationBucket {
    * @return callerStack
   **/
   @Schema(description = "")
-  public Object getCallerStack() {
+  public String getCallerStack() {
     return callerStack;
   }
 
-  public void setCallerStack(Object callerStack) {
+  public void setCallerStack(String callerStack) {
     this.callerStack = callerStack;
   }
 
-  public LLMUsageAggregationBucket modelType(Object modelType) {
+  public LLMUsageAggregationBucket modelType(ModelTypeEnum modelType) {
     this.modelType = modelType;
     return this;
   }
@@ -152,15 +187,15 @@ public class LLMUsageAggregationBucket {
    * @return modelType
   **/
   @Schema(description = "")
-  public Object getModelType() {
+  public ModelTypeEnum getModelType() {
     return modelType;
   }
 
-  public void setModelType(Object modelType) {
+  public void setModelType(ModelTypeEnum modelType) {
     this.modelType = modelType;
   }
 
-  public LLMUsageAggregationBucket year(Object year) {
+  public LLMUsageAggregationBucket year(Integer year) {
     this.year = year;
     return this;
   }
@@ -170,15 +205,15 @@ public class LLMUsageAggregationBucket {
    * @return year
   **/
   @Schema(description = "")
-  public Object getYear() {
+  public Integer getYear() {
     return year;
   }
 
-  public void setYear(Object year) {
+  public void setYear(Integer year) {
     this.year = year;
   }
 
-  public LLMUsageAggregationBucket month(Object month) {
+  public LLMUsageAggregationBucket month(Integer month) {
     this.month = month;
     return this;
   }
@@ -188,15 +223,15 @@ public class LLMUsageAggregationBucket {
    * @return month
   **/
   @Schema(description = "")
-  public Object getMonth() {
+  public Integer getMonth() {
     return month;
   }
 
-  public void setMonth(Object month) {
+  public void setMonth(Integer month) {
     this.month = month;
   }
 
-  public LLMUsageAggregationBucket day(Object day) {
+  public LLMUsageAggregationBucket day(Integer day) {
     this.day = day;
     return this;
   }
@@ -206,15 +241,15 @@ public class LLMUsageAggregationBucket {
    * @return day
   **/
   @Schema(description = "")
-  public Object getDay() {
+  public Integer getDay() {
     return day;
   }
 
-  public void setDay(Object day) {
+  public void setDay(Integer day) {
     this.day = day;
   }
 
-  public LLMUsageAggregationBucket inputToken(Object inputToken) {
+  public LLMUsageAggregationBucket inputToken(Long inputToken) {
     this.inputToken = inputToken;
     return this;
   }
@@ -224,15 +259,15 @@ public class LLMUsageAggregationBucket {
    * @return inputToken
   **/
   @Schema(description = "")
-  public Object getInputToken() {
+  public Long getInputToken() {
     return inputToken;
   }
 
-  public void setInputToken(Object inputToken) {
+  public void setInputToken(Long inputToken) {
     this.inputToken = inputToken;
   }
 
-  public LLMUsageAggregationBucket outputToken(Object outputToken) {
+  public LLMUsageAggregationBucket outputToken(Long outputToken) {
     this.outputToken = outputToken;
     return this;
   }
@@ -242,15 +277,15 @@ public class LLMUsageAggregationBucket {
    * @return outputToken
   **/
   @Schema(description = "")
-  public Object getOutputToken() {
+  public Long getOutputToken() {
     return outputToken;
   }
 
-  public void setOutputToken(Object outputToken) {
+  public void setOutputToken(Long outputToken) {
     this.outputToken = outputToken;
   }
 
-  public LLMUsageAggregationBucket totalToken(Object totalToken) {
+  public LLMUsageAggregationBucket totalToken(Long totalToken) {
     this.totalToken = totalToken;
     return this;
   }
@@ -260,15 +295,15 @@ public class LLMUsageAggregationBucket {
    * @return totalToken
   **/
   @Schema(description = "")
-  public Object getTotalToken() {
+  public Long getTotalToken() {
     return totalToken;
   }
 
-  public void setTotalToken(Object totalToken) {
+  public void setTotalToken(Long totalToken) {
     this.totalToken = totalToken;
   }
 
-  public LLMUsageAggregationBucket nrRequests(Object nrRequests) {
+  public LLMUsageAggregationBucket nrRequests(Long nrRequests) {
     this.nrRequests = nrRequests;
     return this;
   }
@@ -278,15 +313,15 @@ public class LLMUsageAggregationBucket {
    * @return nrRequests
   **/
   @Schema(description = "")
-  public Object getNrRequests() {
+  public Long getNrRequests() {
     return nrRequests;
   }
 
-  public void setNrRequests(Object nrRequests) {
+  public void setNrRequests(Long nrRequests) {
     this.nrRequests = nrRequests;
   }
 
-  public LLMUsageAggregationBucket latencyMin(Object latencyMin) {
+  public LLMUsageAggregationBucket latencyMin(Long latencyMin) {
     this.latencyMin = latencyMin;
     return this;
   }
@@ -296,15 +331,15 @@ public class LLMUsageAggregationBucket {
    * @return latencyMin
   **/
   @Schema(description = "")
-  public Object getLatencyMin() {
+  public Long getLatencyMin() {
     return latencyMin;
   }
 
-  public void setLatencyMin(Object latencyMin) {
+  public void setLatencyMin(Long latencyMin) {
     this.latencyMin = latencyMin;
   }
 
-  public LLMUsageAggregationBucket latencyMax(Object latencyMax) {
+  public LLMUsageAggregationBucket latencyMax(Long latencyMax) {
     this.latencyMax = latencyMax;
     return this;
   }
@@ -314,15 +349,15 @@ public class LLMUsageAggregationBucket {
    * @return latencyMax
   **/
   @Schema(description = "")
-  public Object getLatencyMax() {
+  public Long getLatencyMax() {
     return latencyMax;
   }
 
-  public void setLatencyMax(Object latencyMax) {
+  public void setLatencyMax(Long latencyMax) {
     this.latencyMax = latencyMax;
   }
 
-  public LLMUsageAggregationBucket latencyAvg(Object latencyAvg) {
+  public LLMUsageAggregationBucket latencyAvg(Long latencyAvg) {
     this.latencyAvg = latencyAvg;
     return this;
   }
@@ -332,11 +367,11 @@ public class LLMUsageAggregationBucket {
    * @return latencyAvg
   **/
   @Schema(description = "")
-  public Object getLatencyAvg() {
+  public Long getLatencyAvg() {
     return latencyAvg;
   }
 
-  public void setLatencyAvg(Object latencyAvg) {
+  public void setLatencyAvg(Long latencyAvg) {
     this.latencyAvg = latencyAvg;
   }
 

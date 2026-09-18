@@ -17,27 +17,65 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.LLMModelPresetChoice;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * LLMSModelsPresets
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMSModelsPresets {
   @JsonProperty("doModelsLookup")
-  private Object doModelsLookup = null;
+  private Boolean doModelsLookup = null;
 
-  @JsonProperty("type")
-  private Object type = null;
+  /**
+   * Gets or Sets type
+   */
+  public enum TypeEnum {
+    CHAT("CHAT"),
+    EMBEDDING("EMBEDDING"),
+    RANKING("RANKING"),
+    IMAGESGEN("IMAGESGEN"),
+    TTS("TTS"),
+    TRANSCRIPT("TRANSCRIPT");
+
+    private String value;
+
+    TypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TypeEnum fromValue(String input) {
+      for (TypeEnum b : TypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("type")
+  private TypeEnum type = null;
 
   @JsonProperty("serviceHandler")
-  private Object serviceHandler = null;
+  private String serviceHandler = null;
 
   @JsonProperty("choices")
-  private Object choices = null;
+  private List<LLMModelPresetChoice> choices = null;
 
-  public LLMSModelsPresets doModelsLookup(Object doModelsLookup) {
+  public LLMSModelsPresets doModelsLookup(Boolean doModelsLookup) {
     this.doModelsLookup = doModelsLookup;
     return this;
   }
@@ -47,15 +85,15 @@ public class LLMSModelsPresets {
    * @return doModelsLookup
   **/
   @Schema(description = "")
-  public Object getDoModelsLookup() {
+  public Boolean isDoModelsLookup() {
     return doModelsLookup;
   }
 
-  public void setDoModelsLookup(Object doModelsLookup) {
+  public void setDoModelsLookup(Boolean doModelsLookup) {
     this.doModelsLookup = doModelsLookup;
   }
 
-  public LLMSModelsPresets type(Object type) {
+  public LLMSModelsPresets type(TypeEnum type) {
     this.type = type;
     return this;
   }
@@ -65,15 +103,15 @@ public class LLMSModelsPresets {
    * @return type
   **/
   @Schema(required = true, description = "")
-  public Object getType() {
+  public TypeEnum getType() {
     return type;
   }
 
-  public void setType(Object type) {
+  public void setType(TypeEnum type) {
     this.type = type;
   }
 
-  public LLMSModelsPresets serviceHandler(Object serviceHandler) {
+  public LLMSModelsPresets serviceHandler(String serviceHandler) {
     this.serviceHandler = serviceHandler;
     return this;
   }
@@ -83,16 +121,24 @@ public class LLMSModelsPresets {
    * @return serviceHandler
   **/
   @Schema(required = true, description = "")
-  public Object getServiceHandler() {
+  public String getServiceHandler() {
     return serviceHandler;
   }
 
-  public void setServiceHandler(Object serviceHandler) {
+  public void setServiceHandler(String serviceHandler) {
     this.serviceHandler = serviceHandler;
   }
 
-  public LLMSModelsPresets choices(Object choices) {
+  public LLMSModelsPresets choices(List<LLMModelPresetChoice> choices) {
     this.choices = choices;
+    return this;
+  }
+
+  public LLMSModelsPresets addChoicesItem(LLMModelPresetChoice choicesItem) {
+    if (this.choices == null) {
+      this.choices = new ArrayList<>();
+    }
+    this.choices.add(choicesItem);
     return this;
   }
 
@@ -101,11 +147,11 @@ public class LLMSModelsPresets {
    * @return choices
   **/
   @Schema(description = "")
-  public Object getChoices() {
+  public List<LLMModelPresetChoice> getChoices() {
     return choices;
   }
 
-  public void setChoices(Object choices) {
+  public void setChoices(List<LLMModelPresetChoice> choices) {
     this.choices = choices;
   }
 

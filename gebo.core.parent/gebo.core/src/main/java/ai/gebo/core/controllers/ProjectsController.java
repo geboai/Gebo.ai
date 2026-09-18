@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.core.impl.GeboDeclaredProjectsSeeder;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.core.impl.GCoreMessagesEmitterImpl;
 import ai.gebo.core.messages.GDeletedProjectPayload;
@@ -236,6 +237,7 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "updateProject", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GProject updateProject(@RequestBody GProject entity) throws GeboPersistenceException {
+		refuseIfDeclaredInConfiguration(entity);
 		if (entity.getObjectSpaceType() == null) {
 			entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
 		}
@@ -251,6 +253,7 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "insertProject", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GProject insertProject(@RequestBody GProject entity) throws GeboPersistenceException {
+		refuseIfDeclaredInConfiguration(entity);
 		if (entity.getObjectSpaceType() == null) {
 			entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
 		}
@@ -265,6 +268,7 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "deleteProject", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteProject(@RequestBody GProject entity) throws GeboPersistenceException {
+		refuseIfDeclaredInConfiguration(entity);
 		persistenceManager.delete(entity);
 		GDeletedProjectPayload payload = new GDeletedProjectPayload();
 		// Set the project for the deletion payload
@@ -434,5 +438,29 @@ public class ProjectsController {
 				.map(x -> {
 					return new VDocumentInfo(x);
 				}).toList();
+	}
+
+	/**
+	 * The seeder that owns the project records declared in this deployment's
+	 * configuration - asked whether a write addresses one of them.
+	 */
+	@Autowired
+	private GeboDeclaredProjectsSeeder projectsSeeder;
+
+	/**
+	 * Refuses a write addressing a project the configuration owns: the next startup
+	 * would write the declaration back over it, so the change would not survive a
+	 * restart. The STORED record decides, not the marker on the object the client
+	 * sent back.
+	 *
+	 * @param entity the record a write is being attempted on.
+	 * @throws GeboPersistenceException when the record is declared in the
+	 *                                  configuration.
+	 */
+	private void refuseIfDeclaredInConfiguration(GProject entity) throws GeboPersistenceException {
+		if (entity != null && projectsSeeder.isDeclaredInConfiguration(entity.getCode())) {
+			throw new GeboPersistenceException("The project '" + entity.getCode()
+					+ "' is declared in this deployment's configuration and cannot be changed from the UI: edit it in application.yml instead");
+		}
 	}
 }

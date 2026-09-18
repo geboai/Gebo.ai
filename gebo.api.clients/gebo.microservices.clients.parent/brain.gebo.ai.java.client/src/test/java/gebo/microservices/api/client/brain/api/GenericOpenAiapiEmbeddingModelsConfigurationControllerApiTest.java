@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.GenericOpenAIAPIEmbeddingModelConfig;
+import gebo.microservices.api.client.brain.model.GenericOpenAIEmbeddingModelTypeConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusBoolean;
 import gebo.microservices.api.client.brain.model.OperationStatusGenericOpenAIAPIEmbeddingModelConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusListGenericOpenAIAPIEmbeddingModelChoice;
@@ -57,7 +58,7 @@ public class GenericOpenAiapiEmbeddingModelsConfigurationControllerApiTest {
      */
     @Test
     public void findGenericOpenAIAPIEmbeddingModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GenericOpenAIAPIEmbeddingModelConfig response = api.findGenericOpenAIAPIEmbeddingModelConfigByCode(code);
 
         // TODO: test validations
@@ -87,7 +88,7 @@ public class GenericOpenAiapiEmbeddingModelsConfigurationControllerApiTest {
      */
     @Test
     public void getGenericOpenAIEmbeddingModelTypesTest() {
-        Object response = api.getGenericOpenAIEmbeddingModelTypes();
+        List<GenericOpenAIEmbeddingModelTypeConfig> response = api.getGenericOpenAIEmbeddingModelTypes();
 
         // TODO: test validations
     }

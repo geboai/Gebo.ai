@@ -19,47 +19,80 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.tyr.model.GObjectRefGProjectEndpoint;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GJobStatusItem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class GJobStatusItem {
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("workflowId")
-  private Object workflowId = null;
+  private String workflowId = null;
 
   @JsonProperty("workflowType")
-  private Object workflowType = null;
+  private String workflowType = null;
 
   @JsonProperty("projectEndpointReference")
   private GObjectRefGProjectEndpoint projectEndpointReference = null;
 
   @JsonProperty("startDateTime")
-  private Object startDateTime = null;
+  private Date startDateTime = null;
 
   @JsonProperty("error")
-  private Object error = null;
+  private Boolean error = null;
 
   @JsonProperty("processing")
-  private Object processing = null;
+  private Boolean processing = null;
 
   @JsonProperty("finished")
-  private Object finished = null;
+  private Boolean finished = null;
 
-  @JsonProperty("jobType")
-  private Object jobType = null;
+  /**
+   * Gets or Sets jobType
+   */
+  public enum JobTypeEnum {
+    CONTENTS_READING("CONTENTS_READING"),
+    VECTORIZING_CONTENTS("VECTORIZING_CONTENTS"),
+    CONTENTS_READING_VECTORIZING("CONTENTS_READING_VECTORIZING");
+
+    private String value;
+
+    JobTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static JobTypeEnum fromValue(String input) {
+      for (JobTypeEnum b : JobTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("jobType")
+  private JobTypeEnum jobType = null;
 
   @JsonProperty("endDateTime")
-  private Object endDateTime = null;
+  private Date endDateTime = null;
 
-  public GJobStatusItem description(Object description) {
+  public GJobStatusItem description(String description) {
     this.description = description;
     return this;
   }
@@ -69,15 +102,15 @@ public class GJobStatusItem {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GJobStatusItem code(Object code) {
+  public GJobStatusItem code(String code) {
     this.code = code;
     return this;
   }
@@ -87,15 +120,15 @@ public class GJobStatusItem {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GJobStatusItem workflowId(Object workflowId) {
+  public GJobStatusItem workflowId(String workflowId) {
     this.workflowId = workflowId;
     return this;
   }
@@ -105,15 +138,15 @@ public class GJobStatusItem {
    * @return workflowId
   **/
   @Schema(description = "")
-  public Object getWorkflowId() {
+  public String getWorkflowId() {
     return workflowId;
   }
 
-  public void setWorkflowId(Object workflowId) {
+  public void setWorkflowId(String workflowId) {
     this.workflowId = workflowId;
   }
 
-  public GJobStatusItem workflowType(Object workflowType) {
+  public GJobStatusItem workflowType(String workflowType) {
     this.workflowType = workflowType;
     return this;
   }
@@ -123,11 +156,11 @@ public class GJobStatusItem {
    * @return workflowType
   **/
   @Schema(description = "")
-  public Object getWorkflowType() {
+  public String getWorkflowType() {
     return workflowType;
   }
 
-  public void setWorkflowType(Object workflowType) {
+  public void setWorkflowType(String workflowType) {
     this.workflowType = workflowType;
   }
 
@@ -149,7 +182,7 @@ public class GJobStatusItem {
     this.projectEndpointReference = projectEndpointReference;
   }
 
-  public GJobStatusItem startDateTime(Object startDateTime) {
+  public GJobStatusItem startDateTime(Date startDateTime) {
     this.startDateTime = startDateTime;
     return this;
   }
@@ -159,15 +192,15 @@ public class GJobStatusItem {
    * @return startDateTime
   **/
   @Schema(description = "")
-  public Object getStartDateTime() {
+  public Date getStartDateTime() {
     return startDateTime;
   }
 
-  public void setStartDateTime(Object startDateTime) {
+  public void setStartDateTime(Date startDateTime) {
     this.startDateTime = startDateTime;
   }
 
-  public GJobStatusItem error(Object error) {
+  public GJobStatusItem error(Boolean error) {
     this.error = error;
     return this;
   }
@@ -177,15 +210,15 @@ public class GJobStatusItem {
    * @return error
   **/
   @Schema(description = "")
-  public Object getError() {
+  public Boolean isError() {
     return error;
   }
 
-  public void setError(Object error) {
+  public void setError(Boolean error) {
     this.error = error;
   }
 
-  public GJobStatusItem processing(Object processing) {
+  public GJobStatusItem processing(Boolean processing) {
     this.processing = processing;
     return this;
   }
@@ -195,15 +228,15 @@ public class GJobStatusItem {
    * @return processing
   **/
   @Schema(description = "")
-  public Object getProcessing() {
+  public Boolean isProcessing() {
     return processing;
   }
 
-  public void setProcessing(Object processing) {
+  public void setProcessing(Boolean processing) {
     this.processing = processing;
   }
 
-  public GJobStatusItem finished(Object finished) {
+  public GJobStatusItem finished(Boolean finished) {
     this.finished = finished;
     return this;
   }
@@ -213,15 +246,15 @@ public class GJobStatusItem {
    * @return finished
   **/
   @Schema(description = "")
-  public Object getFinished() {
+  public Boolean isFinished() {
     return finished;
   }
 
-  public void setFinished(Object finished) {
+  public void setFinished(Boolean finished) {
     this.finished = finished;
   }
 
-  public GJobStatusItem jobType(Object jobType) {
+  public GJobStatusItem jobType(JobTypeEnum jobType) {
     this.jobType = jobType;
     return this;
   }
@@ -231,15 +264,15 @@ public class GJobStatusItem {
    * @return jobType
   **/
   @Schema(description = "")
-  public Object getJobType() {
+  public JobTypeEnum getJobType() {
     return jobType;
   }
 
-  public void setJobType(Object jobType) {
+  public void setJobType(JobTypeEnum jobType) {
     this.jobType = jobType;
   }
 
-  public GJobStatusItem endDateTime(Object endDateTime) {
+  public GJobStatusItem endDateTime(Date endDateTime) {
     this.endDateTime = endDateTime;
     return this;
   }
@@ -249,11 +282,11 @@ public class GJobStatusItem {
    * @return endDateTime
   **/
   @Schema(description = "")
-  public Object getEndDateTime() {
+  public Date getEndDateTime() {
     return endDateTime;
   }
 
-  public void setEndDateTime(Object endDateTime) {
+  public void setEndDateTime(Date endDateTime) {
     this.endDateTime = endDateTime;
   }
 

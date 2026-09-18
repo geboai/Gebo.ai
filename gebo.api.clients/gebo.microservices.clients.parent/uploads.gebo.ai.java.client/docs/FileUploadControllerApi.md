@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**getHandShakeCode**](FileUploadControllerApi.md#getHandShakeCode) | **GET** /api/admin/FileUploadController/getHandShakeCode | 
 [**upload**](FileUploadControllerApi.md#upload) | **POST** /api/admin/FileUploadController/upload/{handShakeCode} | 
+[**uploadToEndpoint**](FileUploadControllerApi.md#uploadToEndpoint) | **POST** /api/admin/FileUploadController/uploadToEndpoint/{endpointCode} | 
 
 <a name="getHandShakeCode"></a>
 # **getHandShakeCode**
@@ -60,8 +61,8 @@ No authorization required
 
 
 FileUploadControllerApi apiInstance = new FileUploadControllerApi();
-Object handShakeCode = null; // Object | 
-Object files = null; // Object | 
+String handShakeCode = "handShakeCode_example"; // String | 
+List<File> files = Arrays.asList(new File("/path/to/file")); // List<File> | 
 try {
     apiInstance.upload(handShakeCode, files);
 } catch (ApiException e) {
@@ -74,8 +75,52 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **handShakeCode** | [**Object**](.md)|  |
- **files** | [**Object**](.md)|  | [optional]
+ **handShakeCode** | **String**|  |
+ **files** | [**List&lt;File&gt;**](File.md)|  | [optional]
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
+ - **Accept**: Not defined
+
+<a name="uploadToEndpoint"></a>
+# **uploadToEndpoint**
+> uploadToEndpoint(endpointCode, files)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.uploads.invoker.ApiException;
+//import gebo.microservices.api.client.uploads.api.FileUploadControllerApi;
+
+
+FileUploadControllerApi apiInstance = new FileUploadControllerApi();
+String endpointCode = "endpointCode_example"; // String | 
+List<File> files = Arrays.asList(new File("/path/to/file")); // List<File> | 
+try {
+    apiInstance.uploadToEndpoint(endpointCode, files);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FileUploadControllerApi#uploadToEndpoint");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **endpointCode** | **String**|  |
+ **files** | [**List&lt;File&gt;**](File.md)|  | [optional]
 
 ### Return type
 

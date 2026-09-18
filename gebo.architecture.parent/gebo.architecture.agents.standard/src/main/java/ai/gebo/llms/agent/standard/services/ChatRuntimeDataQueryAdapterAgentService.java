@@ -70,6 +70,10 @@ public class ChatRuntimeDataQueryAdapterAgentService
 		AgentCapabilities capabilities = super.getAgentCapabilities(agentConfig);
 		capabilities.addCapability(
 				"Extract the user query from the chat runtime data and forward it to the controller (input node, no LLM call)");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Chat runtime data query adapter id:" + getId()
+					+ " advertises the input adaptation capability");
+		}
 		return capabilities;
 	}
 
@@ -104,6 +108,11 @@ public class ChatRuntimeDataQueryAdapterAgentService
 			LOGGER.debug("Extracted user query (length:" + query.length() + ") forwarding to " + targets.size()
 					+ " target(s): " + targets);
 		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<ADAPTED_USER_QUERY>");
+			LOGGER.trace(query);
+			LOGGER.trace("</ADAPTED_USER_QUERY>");
+		}
 		final GAgentRole agentRole = config.getAgentRoleCode() != null
 				? agentRoleDao.findByCode(config.getAgentRoleCode())
 				: null;
@@ -127,6 +136,10 @@ public class ChatRuntimeDataQueryAdapterAgentService
 			throw new AgentException("No chat request available to extract the user query");
 		}
 		String query = GeboChatRequest.actualQuery(request);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("extractQuery(...) resolved a user query of " + (query != null ? query.length() : 0)
+					+ " character(s)");
+		}
 		return query != null ? query : "";
 	}
 

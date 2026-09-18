@@ -2,7 +2,7 @@ FROM geboai/platform:2.5
 LABEL mantainer=paolo.zavalloni@gebo.ai
 LABEL org.opencontainers.image.authors="paolo.zavalloni@gebo.ai"
 LABEL org.opencontainers.image.title="Gebo.ai"
-LABEL org.opencontainers.image.version="1.0.1.0-BETA"
+LABEL org.opencontainers.image.version="1.0.3.0"
 LABEL org.opencontainers.image.description="Gebo.ai enterprise rag & agents/chatbot platform"
 LABEL org.opencontainers.image.vendor="Gebo.ai"
 LABEL org.opencontainers.image.source="https://github.com/geboai/Gebo.ai"
@@ -15,7 +15,7 @@ RUN mkdir -p /opt/gebo.ai/home \
              /opt/gebo.ai/config \
              /opt/gebo.ai/logs \
              /opt/gebo.ai/shares
-COPY gebo.ai.app-1.0.2.4-bootable.jar /opt/gebo.ai
+COPY gebo.ai.app-1.0.3.0-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
 
@@ -56,9 +56,14 @@ VOLUME /opt/gebo.ai/shares
 #RUN useradd --home-dir /opt/gebo.ai --shell /bin/bash gebo.ai
 #RUN chown gebo.ai:users -R /opt/gebo.ai
 #USER gebo.ai
-ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:+AggressiveHeap -XX:MaxMetaspaceSize=512m -XX:+PrintGCDetails -Xlog:gc:/opt/gebo.ai/logs/gc.log"
+# No -XX:+AggressiveHeap: it silently swaps G1 for the throughput collector. No
+# -XX:+PrintGCDetails: it is deprecated and re-routes the whole GC stream to
+# stdout (i.e. into `docker logs`) instead of gc.log. The compose deployment
+# overrides JAVA_TOOL_OPTIONS with these same corrected flags; this keeps a bare
+# `docker run` of the image consistent with it. See docker-compose-deploy/docker-compose.yml.
+ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:MaxMetaspaceSize=512m -Xlog:gc:file=/opt/gebo.ai/logs/gc.log:time,uptime:filecount=5,filesize=20M"
 ENV  GEBO_WORK_DIRECTORY="/opt/gebo.ai/work"
 ENV  GEBO_HOME="/opt/gebo.ai/home"
 EXPOSE 12999
 WORKDIR /opt/gebo.ai
-ENTRYPOINT  java $JAVA_TOOL_OPTIONS -DGEBO_WORK_DIRECTORY=$GEBO_WORK_DIRECTORY -DGEBO_HOME=$GEBO_HOME  -jar /opt/gebo.ai/gebo.ai.app-1.0.2.4-bootable.jar
+ENTRYPOINT  java $JAVA_TOOL_OPTIONS -DGEBO_WORK_DIRECTORY=$GEBO_WORK_DIRECTORY -DGEBO_HOME=$GEBO_HOME  -jar /opt/gebo.ai/gebo.ai.app-1.0.3.0-bootable.jar

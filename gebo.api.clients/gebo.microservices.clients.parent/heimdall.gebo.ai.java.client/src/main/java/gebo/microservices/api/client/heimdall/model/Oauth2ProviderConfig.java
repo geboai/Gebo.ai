@@ -22,34 +22,72 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Oauth2ProviderConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class Oauth2ProviderConfig {
-  @JsonProperty("provider")
-  private Object provider = null;
+  /**
+   * Gets or Sets provider
+   */
+  public enum ProviderEnum {
+    LOCAL("local"),
+    GOOGLE("google"),
+    MICROSOFT("microsoft"),
+    MICROSOFT_MULTITENANT("microsoft_multitenant"),
+    AWS_COGNITO("aws_cognito"),
+    AWS_IDENTITY_CENTER("aws_identity_center"),
+    KEYCLOAK("keycloak"),
+    OAUTH2_GENERIC("oauth2_generic"),
+    LDAP("ldap");
+
+    private String value;
+
+    ProviderEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ProviderEnum fromValue(String input) {
+      for (ProviderEnum b : ProviderEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("provider")
+  private ProviderEnum provider = null;
 
   @JsonProperty("authorizationUri")
-  private Object authorizationUri = null;
+  private String authorizationUri = null;
 
   @JsonProperty("tokenUri")
-  private Object tokenUri = null;
+  private String tokenUri = null;
 
   @JsonProperty("userInfoUri")
-  private Object userInfoUri = null;
+  private String userInfoUri = null;
 
   @JsonProperty("userNameAttribute")
-  private Object userNameAttribute = null;
+  private String userNameAttribute = null;
 
   @JsonProperty("introspectionUri")
-  private Object introspectionUri = null;
+  private String introspectionUri = null;
 
   @JsonProperty("issuerUri")
-  private Object issuerUri = null;
+  private String issuerUri = null;
 
   @JsonProperty("jwkSetUri")
-  private Object jwkSetUri = null;
+  private String jwkSetUri = null;
 
-  public Oauth2ProviderConfig provider(Object provider) {
+  public Oauth2ProviderConfig provider(ProviderEnum provider) {
     this.provider = provider;
     return this;
   }
@@ -59,15 +97,15 @@ public class Oauth2ProviderConfig {
    * @return provider
   **/
   @Schema(required = true, description = "")
-  public Object getProvider() {
+  public ProviderEnum getProvider() {
     return provider;
   }
 
-  public void setProvider(Object provider) {
+  public void setProvider(ProviderEnum provider) {
     this.provider = provider;
   }
 
-  public Oauth2ProviderConfig authorizationUri(Object authorizationUri) {
+  public Oauth2ProviderConfig authorizationUri(String authorizationUri) {
     this.authorizationUri = authorizationUri;
     return this;
   }
@@ -77,15 +115,15 @@ public class Oauth2ProviderConfig {
    * @return authorizationUri
   **/
   @Schema(required = true, description = "")
-  public Object getAuthorizationUri() {
+  public String getAuthorizationUri() {
     return authorizationUri;
   }
 
-  public void setAuthorizationUri(Object authorizationUri) {
+  public void setAuthorizationUri(String authorizationUri) {
     this.authorizationUri = authorizationUri;
   }
 
-  public Oauth2ProviderConfig tokenUri(Object tokenUri) {
+  public Oauth2ProviderConfig tokenUri(String tokenUri) {
     this.tokenUri = tokenUri;
     return this;
   }
@@ -95,15 +133,15 @@ public class Oauth2ProviderConfig {
    * @return tokenUri
   **/
   @Schema(required = true, description = "")
-  public Object getTokenUri() {
+  public String getTokenUri() {
     return tokenUri;
   }
 
-  public void setTokenUri(Object tokenUri) {
+  public void setTokenUri(String tokenUri) {
     this.tokenUri = tokenUri;
   }
 
-  public Oauth2ProviderConfig userInfoUri(Object userInfoUri) {
+  public Oauth2ProviderConfig userInfoUri(String userInfoUri) {
     this.userInfoUri = userInfoUri;
     return this;
   }
@@ -113,15 +151,15 @@ public class Oauth2ProviderConfig {
    * @return userInfoUri
   **/
   @Schema(required = true, description = "")
-  public Object getUserInfoUri() {
+  public String getUserInfoUri() {
     return userInfoUri;
   }
 
-  public void setUserInfoUri(Object userInfoUri) {
+  public void setUserInfoUri(String userInfoUri) {
     this.userInfoUri = userInfoUri;
   }
 
-  public Oauth2ProviderConfig userNameAttribute(Object userNameAttribute) {
+  public Oauth2ProviderConfig userNameAttribute(String userNameAttribute) {
     this.userNameAttribute = userNameAttribute;
     return this;
   }
@@ -131,15 +169,15 @@ public class Oauth2ProviderConfig {
    * @return userNameAttribute
   **/
   @Schema(required = true, description = "")
-  public Object getUserNameAttribute() {
+  public String getUserNameAttribute() {
     return userNameAttribute;
   }
 
-  public void setUserNameAttribute(Object userNameAttribute) {
+  public void setUserNameAttribute(String userNameAttribute) {
     this.userNameAttribute = userNameAttribute;
   }
 
-  public Oauth2ProviderConfig introspectionUri(Object introspectionUri) {
+  public Oauth2ProviderConfig introspectionUri(String introspectionUri) {
     this.introspectionUri = introspectionUri;
     return this;
   }
@@ -149,15 +187,15 @@ public class Oauth2ProviderConfig {
    * @return introspectionUri
   **/
   @Schema(description = "")
-  public Object getIntrospectionUri() {
+  public String getIntrospectionUri() {
     return introspectionUri;
   }
 
-  public void setIntrospectionUri(Object introspectionUri) {
+  public void setIntrospectionUri(String introspectionUri) {
     this.introspectionUri = introspectionUri;
   }
 
-  public Oauth2ProviderConfig issuerUri(Object issuerUri) {
+  public Oauth2ProviderConfig issuerUri(String issuerUri) {
     this.issuerUri = issuerUri;
     return this;
   }
@@ -167,15 +205,15 @@ public class Oauth2ProviderConfig {
    * @return issuerUri
   **/
   @Schema(description = "")
-  public Object getIssuerUri() {
+  public String getIssuerUri() {
     return issuerUri;
   }
 
-  public void setIssuerUri(Object issuerUri) {
+  public void setIssuerUri(String issuerUri) {
     this.issuerUri = issuerUri;
   }
 
-  public Oauth2ProviderConfig jwkSetUri(Object jwkSetUri) {
+  public Oauth2ProviderConfig jwkSetUri(String jwkSetUri) {
     this.jwkSetUri = jwkSetUri;
     return this;
   }
@@ -185,11 +223,11 @@ public class Oauth2ProviderConfig {
    * @return jwkSetUri
   **/
   @Schema(description = "")
-  public Object getJwkSetUri() {
+  public String getJwkSetUri() {
     return jwkSetUri;
   }
 
-  public void setJwkSetUri(Object jwkSetUri) {
+  public void setJwkSetUri(String jwkSetUri) {
     this.jwkSetUri = jwkSetUri;
   }
 

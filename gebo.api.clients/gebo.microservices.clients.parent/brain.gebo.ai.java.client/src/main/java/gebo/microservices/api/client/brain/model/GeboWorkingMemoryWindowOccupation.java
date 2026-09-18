@@ -22,28 +22,28 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboWorkingMemoryWindowOccupation
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboWorkingMemoryWindowOccupation {
   @JsonProperty("historyTokens")
-  private Object historyTokens = null;
+  private Long historyTokens = null;
 
   @JsonProperty("documentsTokens")
-  private Object documentsTokens = null;
+  private Long documentsTokens = null;
 
   @JsonProperty("queryTokens")
-  private Object queryTokens = null;
+  private Long queryTokens = null;
 
   @JsonProperty("historyPercentage")
-  private Object historyPercentage = null;
+  private Double historyPercentage = null;
 
   @JsonProperty("documentsPercentage")
-  private Object documentsPercentage = null;
+  private Double documentsPercentage = null;
 
   @JsonProperty("totalWindowUsePercentage")
-  private Object totalWindowUsePercentage = null;
+  private Double totalWindowUsePercentage = null;
 
-  public GeboWorkingMemoryWindowOccupation historyTokens(Object historyTokens) {
+  public GeboWorkingMemoryWindowOccupation historyTokens(Long historyTokens) {
     this.historyTokens = historyTokens;
     return this;
   }
@@ -53,15 +53,15 @@ public class GeboWorkingMemoryWindowOccupation {
    * @return historyTokens
   **/
   @Schema(description = "")
-  public Object getHistoryTokens() {
+  public Long getHistoryTokens() {
     return historyTokens;
   }
 
-  public void setHistoryTokens(Object historyTokens) {
+  public void setHistoryTokens(Long historyTokens) {
     this.historyTokens = historyTokens;
   }
 
-  public GeboWorkingMemoryWindowOccupation documentsTokens(Object documentsTokens) {
+  public GeboWorkingMemoryWindowOccupation documentsTokens(Long documentsTokens) {
     this.documentsTokens = documentsTokens;
     return this;
   }
@@ -71,15 +71,15 @@ public class GeboWorkingMemoryWindowOccupation {
    * @return documentsTokens
   **/
   @Schema(description = "")
-  public Object getDocumentsTokens() {
+  public Long getDocumentsTokens() {
     return documentsTokens;
   }
 
-  public void setDocumentsTokens(Object documentsTokens) {
+  public void setDocumentsTokens(Long documentsTokens) {
     this.documentsTokens = documentsTokens;
   }
 
-  public GeboWorkingMemoryWindowOccupation queryTokens(Object queryTokens) {
+  public GeboWorkingMemoryWindowOccupation queryTokens(Long queryTokens) {
     this.queryTokens = queryTokens;
     return this;
   }
@@ -89,15 +89,15 @@ public class GeboWorkingMemoryWindowOccupation {
    * @return queryTokens
   **/
   @Schema(description = "")
-  public Object getQueryTokens() {
+  public Long getQueryTokens() {
     return queryTokens;
   }
 
-  public void setQueryTokens(Object queryTokens) {
+  public void setQueryTokens(Long queryTokens) {
     this.queryTokens = queryTokens;
   }
 
-  public GeboWorkingMemoryWindowOccupation historyPercentage(Object historyPercentage) {
+  public GeboWorkingMemoryWindowOccupation historyPercentage(Double historyPercentage) {
     this.historyPercentage = historyPercentage;
     return this;
   }
@@ -107,15 +107,15 @@ public class GeboWorkingMemoryWindowOccupation {
    * @return historyPercentage
   **/
   @Schema(description = "")
-  public Object getHistoryPercentage() {
+  public Double getHistoryPercentage() {
     return historyPercentage;
   }
 
-  public void setHistoryPercentage(Object historyPercentage) {
+  public void setHistoryPercentage(Double historyPercentage) {
     this.historyPercentage = historyPercentage;
   }
 
-  public GeboWorkingMemoryWindowOccupation documentsPercentage(Object documentsPercentage) {
+  public GeboWorkingMemoryWindowOccupation documentsPercentage(Double documentsPercentage) {
     this.documentsPercentage = documentsPercentage;
     return this;
   }
@@ -125,15 +125,15 @@ public class GeboWorkingMemoryWindowOccupation {
    * @return documentsPercentage
   **/
   @Schema(description = "")
-  public Object getDocumentsPercentage() {
+  public Double getDocumentsPercentage() {
     return documentsPercentage;
   }
 
-  public void setDocumentsPercentage(Object documentsPercentage) {
+  public void setDocumentsPercentage(Double documentsPercentage) {
     this.documentsPercentage = documentsPercentage;
   }
 
-  public GeboWorkingMemoryWindowOccupation totalWindowUsePercentage(Object totalWindowUsePercentage) {
+  public GeboWorkingMemoryWindowOccupation totalWindowUsePercentage(Double totalWindowUsePercentage) {
     this.totalWindowUsePercentage = totalWindowUsePercentage;
     return this;
   }
@@ -143,11 +143,11 @@ public class GeboWorkingMemoryWindowOccupation {
    * @return totalWindowUsePercentage
   **/
   @Schema(description = "")
-  public Object getTotalWindowUsePercentage() {
+  public Double getTotalWindowUsePercentage() {
     return totalWindowUsePercentage;
   }
 
-  public void setTotalWindowUsePercentage(Object totalWindowUsePercentage) {
+  public void setTotalWindowUsePercentage(Double totalWindowUsePercentage) {
     this.totalWindowUsePercentage = totalWindowUsePercentage;
   }
 

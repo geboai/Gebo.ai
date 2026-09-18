@@ -14,12 +14,14 @@ import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UsersGroup;
+import ai.gebo.security.model.oauth2.Oauth2ClientRegistration;
 import ai.gebo.security.model.UserInfos;
 
 /**
@@ -131,4 +133,8 @@ public interface IGUsersAdminService {
 	public void createUserIfNotExists(String email, Map<String, Object> attributes, AuthProvider authProvider);
 
 	public void changePassword(String username, String password) throws GeboCryptSecretException;
+
+	
+
+	
 }

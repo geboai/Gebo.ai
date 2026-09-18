@@ -21,6 +21,7 @@ import { DocumentChunkingResponse } from '../model/documentChunkingResponse';
 import { GetCachedChunkSetRequest } from '../model/getCachedChunkSetRequest';
 import { GetChunkSetRequest } from '../model/getChunkSetRequest';
 import { GetNextChunkSetRequest } from '../model/getNextChunkSetRequest';
+import { IDocumentChunkWithRef } from '../model/iDocumentChunkWithRef';
 import { PrepareChunksRequest } from '../model/prepareChunksRequest';
 import { StreamChunksBatchRequest } from '../model/streamChunksBatchRequest';
 import { StreamChunksReactiveRequest } from '../model/streamChunksReactiveRequest';
@@ -69,10 +70,10 @@ export class DocumentsChunkServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createChunkingSession(reference: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public createChunkingSession(reference: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public createChunkingSession(reference: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public createChunkingSession(reference: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createChunkingSession(reference: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public createChunkingSession(reference: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public createChunkingSession(reference: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public createChunkingSession(reference: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (reference === null || reference === undefined) {
             throw new Error('Required parameter reference was null or undefined when calling createChunkingSession.');
@@ -80,7 +81,7 @@ export class DocumentsChunkServiceControllerService {
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (reference !== undefined && reference !== null) {
-            queryParameters = queryParameters.set('reference', JSON.stringify(reference));
+            queryParameters = queryParameters.set('reference', <any>reference);
         }
 
         let headers = this.defaultHeaders;
@@ -98,7 +99,7 @@ export class DocumentsChunkServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/DocumentsChunkServiceController/createChunkingSession`,
+        return this.httpClient.request<string>('post',`${this.basePath}/api/DocumentsChunkServiceController/createChunkingSession`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -116,10 +117,10 @@ export class DocumentsChunkServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public disposeChunkingSession(chunkSessionId: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public disposeChunkingSession(chunkSessionId: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public disposeChunkingSession(chunkSessionId: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public disposeChunkingSession(chunkSessionId: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public disposeChunkingSession(chunkSessionId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public disposeChunkingSession(chunkSessionId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public disposeChunkingSession(chunkSessionId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public disposeChunkingSession(chunkSessionId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (chunkSessionId === null || chunkSessionId === undefined) {
             throw new Error('Required parameter chunkSessionId was null or undefined when calling disposeChunkingSession.');
@@ -350,10 +351,10 @@ export class DocumentsChunkServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public retrieveChunkingSession(reference: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public retrieveChunkingSession(reference: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public retrieveChunkingSession(reference: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public retrieveChunkingSession(reference: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public retrieveChunkingSession(reference: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public retrieveChunkingSession(reference: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public retrieveChunkingSession(reference: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public retrieveChunkingSession(reference: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (reference === null || reference === undefined) {
             throw new Error('Required parameter reference was null or undefined when calling retrieveChunkingSession.');
@@ -379,7 +380,7 @@ export class DocumentsChunkServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/DocumentsChunkServiceController/retrieveChunkingSession`,
+        return this.httpClient.request<string>('get',`${this.basePath}/api/DocumentsChunkServiceController/retrieveChunkingSession`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -397,9 +398,9 @@ export class DocumentsChunkServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public streamChunks(body: StreamChunksRequest, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public streamChunks(body: StreamChunksRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public streamChunks(body: StreamChunksRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public streamChunks(body: StreamChunksRequest, observe?: 'body', reportProgress?: boolean): Observable<Array<IDocumentChunkWithRef>>;
+    public streamChunks(body: StreamChunksRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<IDocumentChunkWithRef>>>;
+    public streamChunks(body: StreamChunksRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<IDocumentChunkWithRef>>>;
     public streamChunks(body: StreamChunksRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -426,7 +427,7 @@ export class DocumentsChunkServiceControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/DocumentsChunkServiceController/streamChunks`,
+        return this.httpClient.request<Array<IDocumentChunkWithRef>>('post',`${this.basePath}/api/DocumentsChunkServiceController/streamChunks`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -444,9 +445,9 @@ export class DocumentsChunkServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public streamChunksBatch(body: StreamChunksBatchRequest, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public streamChunksBatch(body: StreamChunksBatchRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public streamChunksBatch(body: StreamChunksBatchRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public streamChunksBatch(body: StreamChunksBatchRequest, observe?: 'body', reportProgress?: boolean): Observable<Array<IDocumentChunkWithRef>>;
+    public streamChunksBatch(body: StreamChunksBatchRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<IDocumentChunkWithRef>>>;
+    public streamChunksBatch(body: StreamChunksBatchRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<IDocumentChunkWithRef>>>;
     public streamChunksBatch(body: StreamChunksBatchRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -473,7 +474,7 @@ export class DocumentsChunkServiceControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/DocumentsChunkServiceController/streamChunksBatch`,
+        return this.httpClient.request<Array<IDocumentChunkWithRef>>('post',`${this.basePath}/api/DocumentsChunkServiceController/streamChunksBatch`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -491,9 +492,9 @@ export class DocumentsChunkServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public streamChunksReactive(body: StreamChunksReactiveRequest, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public streamChunksReactive(body: StreamChunksReactiveRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public streamChunksReactive(body: StreamChunksReactiveRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public streamChunksReactive(body: StreamChunksReactiveRequest, observe?: 'body', reportProgress?: boolean): Observable<Array<IDocumentChunkWithRef>>;
+    public streamChunksReactive(body: StreamChunksReactiveRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<IDocumentChunkWithRef>>>;
+    public streamChunksReactive(body: StreamChunksReactiveRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<IDocumentChunkWithRef>>>;
     public streamChunksReactive(body: StreamChunksReactiveRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -520,7 +521,7 @@ export class DocumentsChunkServiceControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/DocumentsChunkServiceController/streamChunksReactive`,
+        return this.httpClient.request<Array<IDocumentChunkWithRef>>('post',`${this.basePath}/api/DocumentsChunkServiceController/streamChunksReactive`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

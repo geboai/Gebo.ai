@@ -22,19 +22,50 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * JobTicket
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:28.077543371+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:38.304055491+02:00[Europe/Rome]")
 
 public class JobTicket {
-  @JsonProperty("ticketType")
-  private Object ticketType = null;
+  /**
+   * Gets or Sets ticketType
+   */
+  public enum TicketTypeEnum {
+    CONTENT("CONTENT"),
+    JOB("JOB");
+
+    private String value;
+
+    TicketTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TicketTypeEnum fromValue(String input) {
+      for (TicketTypeEnum b : TicketTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("ticketType")
+  private TicketTypeEnum ticketType = null;
 
   @JsonProperty("ticketId")
-  private Object ticketId = null;
+  private String ticketId = null;
 
   @JsonProperty("contentCode")
-  private Object contentCode = null;
+  private String contentCode = null;
 
-  public JobTicket ticketType(Object ticketType) {
+  public JobTicket ticketType(TicketTypeEnum ticketType) {
     this.ticketType = ticketType;
     return this;
   }
@@ -44,15 +75,15 @@ public class JobTicket {
    * @return ticketType
   **/
   @Schema(required = true, description = "")
-  public Object getTicketType() {
+  public TicketTypeEnum getTicketType() {
     return ticketType;
   }
 
-  public void setTicketType(Object ticketType) {
+  public void setTicketType(TicketTypeEnum ticketType) {
     this.ticketType = ticketType;
   }
 
-  public JobTicket ticketId(Object ticketId) {
+  public JobTicket ticketId(String ticketId) {
     this.ticketId = ticketId;
     return this;
   }
@@ -62,15 +93,15 @@ public class JobTicket {
    * @return ticketId
   **/
   @Schema(required = true, description = "")
-  public Object getTicketId() {
+  public String getTicketId() {
     return ticketId;
   }
 
-  public void setTicketId(Object ticketId) {
+  public void setTicketId(String ticketId) {
     this.ticketId = ticketId;
   }
 
-  public JobTicket contentCode(Object contentCode) {
+  public JobTicket contentCode(String contentCode) {
     this.contentCode = contentCode;
     return this;
   }
@@ -80,11 +111,11 @@ public class JobTicket {
    * @return contentCode
   **/
   @Schema(required = true, description = "")
-  public Object getContentCode() {
+  public String getContentCode() {
     return contentCode;
   }
 
-  public void setContentCode(Object contentCode) {
+  public void setContentCode(String contentCode) {
     this.contentCode = contentCode;
   }
 

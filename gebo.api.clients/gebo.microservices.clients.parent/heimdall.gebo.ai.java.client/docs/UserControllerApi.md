@@ -92,7 +92,7 @@ No authorization required
 
 <a name="getMyGroups"></a>
 # **getMyGroups**
-> Object getMyGroups()
+> List&lt;GroupInfo&gt; getMyGroups()
 
 
 
@@ -105,7 +105,7 @@ No authorization required
 
 UserControllerApi apiInstance = new UserControllerApi();
 try {
-    Object result = apiInstance.getMyGroups();
+    List<GroupInfo> result = apiInstance.getMyGroups();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserControllerApi#getMyGroups");
@@ -118,7 +118,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GroupInfo&gt;**](GroupInfo.md)
 
 ### Authorization
 

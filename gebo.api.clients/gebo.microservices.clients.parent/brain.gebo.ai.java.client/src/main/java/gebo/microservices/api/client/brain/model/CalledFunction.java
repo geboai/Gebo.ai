@@ -18,23 +18,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * CalledFunction
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class CalledFunction {
   @JsonProperty("functionName")
-  private Object functionName = null;
+  private String functionName = null;
 
   @JsonProperty("functionDescription")
-  private Object functionDescription = null;
+  private String functionDescription = null;
 
   @JsonProperty("paramsDescription")
-  private Object paramsDescription = null;
+  private List<String> paramsDescription = null;
 
-  public CalledFunction functionName(Object functionName) {
+  public CalledFunction functionName(String functionName) {
     this.functionName = functionName;
     return this;
   }
@@ -44,15 +46,15 @@ public class CalledFunction {
    * @return functionName
   **/
   @Schema(description = "")
-  public Object getFunctionName() {
+  public String getFunctionName() {
     return functionName;
   }
 
-  public void setFunctionName(Object functionName) {
+  public void setFunctionName(String functionName) {
     this.functionName = functionName;
   }
 
-  public CalledFunction functionDescription(Object functionDescription) {
+  public CalledFunction functionDescription(String functionDescription) {
     this.functionDescription = functionDescription;
     return this;
   }
@@ -62,16 +64,24 @@ public class CalledFunction {
    * @return functionDescription
   **/
   @Schema(description = "")
-  public Object getFunctionDescription() {
+  public String getFunctionDescription() {
     return functionDescription;
   }
 
-  public void setFunctionDescription(Object functionDescription) {
+  public void setFunctionDescription(String functionDescription) {
     this.functionDescription = functionDescription;
   }
 
-  public CalledFunction paramsDescription(Object paramsDescription) {
+  public CalledFunction paramsDescription(List<String> paramsDescription) {
     this.paramsDescription = paramsDescription;
+    return this;
+  }
+
+  public CalledFunction addParamsDescriptionItem(String paramsDescriptionItem) {
+    if (this.paramsDescription == null) {
+      this.paramsDescription = new ArrayList<>();
+    }
+    this.paramsDescription.add(paramsDescriptionItem);
     return this;
   }
 
@@ -80,11 +90,11 @@ public class CalledFunction {
    * @return paramsDescription
   **/
   @Schema(description = "")
-  public Object getParamsDescription() {
+  public List<String> getParamsDescription() {
     return paramsDescription;
   }
 
-  public void setParamsDescription(Object paramsDescription) {
+  public void setParamsDescription(List<String> paramsDescription) {
     this.paramsDescription = paramsDescription;
   }
 

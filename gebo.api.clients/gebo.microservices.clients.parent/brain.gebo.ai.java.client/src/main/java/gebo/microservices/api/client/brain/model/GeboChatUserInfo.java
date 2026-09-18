@@ -18,30 +18,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.GBaseChatModelChoice;
+import gebo.microservices.api.client.brain.model.GBaseObject;
+import gebo.microservices.api.client.brain.model.ToolCategoriesTree;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * GeboChatUserInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboChatUserInfo {
   @JsonProperty("ragChat")
-  private Object ragChat = null;
+  private Boolean ragChat = null;
 
   @JsonProperty("knowledgeBases")
-  private Object knowledgeBases = null;
+  private List<GBaseObject> knowledgeBases = null;
 
   @JsonProperty("providerId")
-  private Object providerId = null;
+  private String providerId = null;
 
   @JsonProperty("availableFunctions")
-  private Object availableFunctions = null;
+  private List<ToolCategoriesTree> availableFunctions = null;
 
   @JsonProperty("chatModelChoice")
   private GBaseChatModelChoice chatModelChoice = null;
 
-  public GeboChatUserInfo ragChat(Object ragChat) {
+  public GeboChatUserInfo ragChat(Boolean ragChat) {
     this.ragChat = ragChat;
     return this;
   }
@@ -51,16 +55,24 @@ public class GeboChatUserInfo {
    * @return ragChat
   **/
   @Schema(description = "")
-  public Object getRagChat() {
+  public Boolean isRagChat() {
     return ragChat;
   }
 
-  public void setRagChat(Object ragChat) {
+  public void setRagChat(Boolean ragChat) {
     this.ragChat = ragChat;
   }
 
-  public GeboChatUserInfo knowledgeBases(Object knowledgeBases) {
+  public GeboChatUserInfo knowledgeBases(List<GBaseObject> knowledgeBases) {
     this.knowledgeBases = knowledgeBases;
+    return this;
+  }
+
+  public GeboChatUserInfo addKnowledgeBasesItem(GBaseObject knowledgeBasesItem) {
+    if (this.knowledgeBases == null) {
+      this.knowledgeBases = new ArrayList<>();
+    }
+    this.knowledgeBases.add(knowledgeBasesItem);
     return this;
   }
 
@@ -69,15 +81,15 @@ public class GeboChatUserInfo {
    * @return knowledgeBases
   **/
   @Schema(description = "")
-  public Object getKnowledgeBases() {
+  public List<GBaseObject> getKnowledgeBases() {
     return knowledgeBases;
   }
 
-  public void setKnowledgeBases(Object knowledgeBases) {
+  public void setKnowledgeBases(List<GBaseObject> knowledgeBases) {
     this.knowledgeBases = knowledgeBases;
   }
 
-  public GeboChatUserInfo providerId(Object providerId) {
+  public GeboChatUserInfo providerId(String providerId) {
     this.providerId = providerId;
     return this;
   }
@@ -87,16 +99,24 @@ public class GeboChatUserInfo {
    * @return providerId
   **/
   @Schema(description = "")
-  public Object getProviderId() {
+  public String getProviderId() {
     return providerId;
   }
 
-  public void setProviderId(Object providerId) {
+  public void setProviderId(String providerId) {
     this.providerId = providerId;
   }
 
-  public GeboChatUserInfo availableFunctions(Object availableFunctions) {
+  public GeboChatUserInfo availableFunctions(List<ToolCategoriesTree> availableFunctions) {
     this.availableFunctions = availableFunctions;
+    return this;
+  }
+
+  public GeboChatUserInfo addAvailableFunctionsItem(ToolCategoriesTree availableFunctionsItem) {
+    if (this.availableFunctions == null) {
+      this.availableFunctions = new ArrayList<>();
+    }
+    this.availableFunctions.add(availableFunctionsItem);
     return this;
   }
 
@@ -105,11 +125,11 @@ public class GeboChatUserInfo {
    * @return availableFunctions
   **/
   @Schema(description = "")
-  public Object getAvailableFunctions() {
+  public List<ToolCategoriesTree> getAvailableFunctions() {
     return availableFunctions;
   }
 
-  public void setAvailableFunctions(Object availableFunctions) {
+  public void setAvailableFunctions(List<ToolCategoriesTree> availableFunctions) {
     this.availableFunctions = availableFunctions;
   }
 

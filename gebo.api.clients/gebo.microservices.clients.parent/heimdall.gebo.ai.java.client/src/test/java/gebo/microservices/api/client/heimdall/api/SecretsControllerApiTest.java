@@ -182,8 +182,8 @@ public class SecretsControllerApiTest {
      */
     @Test
     public void getSecretsByContextCodeTest() {
-        Object context = null;
-        Object response = api.getSecretsByContextCode(context);
+        String context = null;
+        List<SecretInfo> response = api.getSecretsByContextCode(context);
 
         // TODO: test validations
     }

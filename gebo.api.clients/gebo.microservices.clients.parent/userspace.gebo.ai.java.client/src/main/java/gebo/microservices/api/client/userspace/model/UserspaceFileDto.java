@@ -18,38 +18,39 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * UserspaceFileDto
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:44:00.182052971+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.206631637+02:00[Europe/Rome]")
 
 public class UserspaceFileDto {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("extension")
-  private Object extension = null;
+  private String extension = null;
 
   @JsonProperty("parentUserspaceUploadCode")
-  private Object parentUserspaceUploadCode = null;
+  private String parentUserspaceUploadCode = null;
 
   @JsonProperty("processed")
-  private Object processed = null;
+  private Boolean processed = null;
 
   @JsonProperty("modificationTime")
-  private Object modificationTime = null;
+  private Date modificationTime = null;
 
   @JsonProperty("size")
-  private Object size = null;
+  private Long size = null;
 
   @JsonProperty("owner")
-  private Object owner = null;
+  private Boolean owner = null;
 
-  public UserspaceFileDto code(Object code) {
+  public UserspaceFileDto code(String code) {
     this.code = code;
     return this;
   }
@@ -59,15 +60,15 @@ public class UserspaceFileDto {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public UserspaceFileDto name(Object name) {
+  public UserspaceFileDto name(String name) {
     this.name = name;
     return this;
   }
@@ -77,15 +78,15 @@ public class UserspaceFileDto {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public UserspaceFileDto extension(Object extension) {
+  public UserspaceFileDto extension(String extension) {
     this.extension = extension;
     return this;
   }
@@ -95,15 +96,15 @@ public class UserspaceFileDto {
    * @return extension
   **/
   @Schema(description = "")
-  public Object getExtension() {
+  public String getExtension() {
     return extension;
   }
 
-  public void setExtension(Object extension) {
+  public void setExtension(String extension) {
     this.extension = extension;
   }
 
-  public UserspaceFileDto parentUserspaceUploadCode(Object parentUserspaceUploadCode) {
+  public UserspaceFileDto parentUserspaceUploadCode(String parentUserspaceUploadCode) {
     this.parentUserspaceUploadCode = parentUserspaceUploadCode;
     return this;
   }
@@ -113,15 +114,15 @@ public class UserspaceFileDto {
    * @return parentUserspaceUploadCode
   **/
   @Schema(description = "")
-  public Object getParentUserspaceUploadCode() {
+  public String getParentUserspaceUploadCode() {
     return parentUserspaceUploadCode;
   }
 
-  public void setParentUserspaceUploadCode(Object parentUserspaceUploadCode) {
+  public void setParentUserspaceUploadCode(String parentUserspaceUploadCode) {
     this.parentUserspaceUploadCode = parentUserspaceUploadCode;
   }
 
-  public UserspaceFileDto processed(Object processed) {
+  public UserspaceFileDto processed(Boolean processed) {
     this.processed = processed;
     return this;
   }
@@ -131,15 +132,15 @@ public class UserspaceFileDto {
    * @return processed
   **/
   @Schema(description = "")
-  public Object getProcessed() {
+  public Boolean isProcessed() {
     return processed;
   }
 
-  public void setProcessed(Object processed) {
+  public void setProcessed(Boolean processed) {
     this.processed = processed;
   }
 
-  public UserspaceFileDto modificationTime(Object modificationTime) {
+  public UserspaceFileDto modificationTime(Date modificationTime) {
     this.modificationTime = modificationTime;
     return this;
   }
@@ -149,15 +150,15 @@ public class UserspaceFileDto {
    * @return modificationTime
   **/
   @Schema(description = "")
-  public Object getModificationTime() {
+  public Date getModificationTime() {
     return modificationTime;
   }
 
-  public void setModificationTime(Object modificationTime) {
+  public void setModificationTime(Date modificationTime) {
     this.modificationTime = modificationTime;
   }
 
-  public UserspaceFileDto size(Object size) {
+  public UserspaceFileDto size(Long size) {
     this.size = size;
     return this;
   }
@@ -167,15 +168,15 @@ public class UserspaceFileDto {
    * @return size
   **/
   @Schema(description = "")
-  public Object getSize() {
+  public Long getSize() {
     return size;
   }
 
-  public void setSize(Object size) {
+  public void setSize(Long size) {
     this.size = size;
   }
 
-  public UserspaceFileDto owner(Object owner) {
+  public UserspaceFileDto owner(Boolean owner) {
     this.owner = owner;
     return this;
   }
@@ -185,11 +186,11 @@ public class UserspaceFileDto {
    * @return owner
   **/
   @Schema(description = "")
-  public Object getOwner() {
+  public Boolean isOwner() {
     return owner;
   }
 
-  public void setOwner(Object owner) {
+  public void setOwner(Boolean owner) {
     this.owner = owner;
   }
 

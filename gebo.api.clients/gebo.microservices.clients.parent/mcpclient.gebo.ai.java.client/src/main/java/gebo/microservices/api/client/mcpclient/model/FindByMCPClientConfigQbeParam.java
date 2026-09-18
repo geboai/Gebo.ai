@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * FindByMCPClientConfigQbeParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:38.949029837+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.887590537+02:00[Europe/Rome]")
 
 public class FindByMCPClientConfigQbeParam {
   @JsonProperty("qbe")

@@ -17,28 +17,40 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GUserMessage;
+import gebo.microservices.api.client.brain.model.GenericOpenAIAPIImageModelChoice;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * OperationStatusListGenericOpenAIAPIImageModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class OperationStatusListGenericOpenAIAPIImageModelChoice {
   @JsonProperty("result")
-  private Object result = null;
+  private List<GenericOpenAIAPIImageModelChoice> result = null;
 
   @JsonProperty("messages")
-  private Object messages = null;
+  private List<GUserMessage> messages = null;
 
   @JsonProperty("hasErrorMessages")
-  private Object hasErrorMessages = null;
+  private Boolean hasErrorMessages = null;
 
   @JsonProperty("hasWarnMessages")
-  private Object hasWarnMessages = null;
+  private Boolean hasWarnMessages = null;
 
-  public OperationStatusListGenericOpenAIAPIImageModelChoice result(Object result) {
+  public OperationStatusListGenericOpenAIAPIImageModelChoice result(List<GenericOpenAIAPIImageModelChoice> result) {
     this.result = result;
+    return this;
+  }
+
+  public OperationStatusListGenericOpenAIAPIImageModelChoice addResultItem(GenericOpenAIAPIImageModelChoice resultItem) {
+    if (this.result == null) {
+      this.result = new ArrayList<>();
+    }
+    this.result.add(resultItem);
     return this;
   }
 
@@ -47,16 +59,24 @@ public class OperationStatusListGenericOpenAIAPIImageModelChoice {
    * @return result
   **/
   @Schema(description = "")
-  public Object getResult() {
+  public List<GenericOpenAIAPIImageModelChoice> getResult() {
     return result;
   }
 
-  public void setResult(Object result) {
+  public void setResult(List<GenericOpenAIAPIImageModelChoice> result) {
     this.result = result;
   }
 
-  public OperationStatusListGenericOpenAIAPIImageModelChoice messages(Object messages) {
+  public OperationStatusListGenericOpenAIAPIImageModelChoice messages(List<GUserMessage> messages) {
     this.messages = messages;
+    return this;
+  }
+
+  public OperationStatusListGenericOpenAIAPIImageModelChoice addMessagesItem(GUserMessage messagesItem) {
+    if (this.messages == null) {
+      this.messages = new ArrayList<>();
+    }
+    this.messages.add(messagesItem);
     return this;
   }
 
@@ -65,15 +85,15 @@ public class OperationStatusListGenericOpenAIAPIImageModelChoice {
    * @return messages
   **/
   @Schema(description = "")
-  public Object getMessages() {
+  public List<GUserMessage> getMessages() {
     return messages;
   }
 
-  public void setMessages(Object messages) {
+  public void setMessages(List<GUserMessage> messages) {
     this.messages = messages;
   }
 
-  public OperationStatusListGenericOpenAIAPIImageModelChoice hasErrorMessages(Object hasErrorMessages) {
+  public OperationStatusListGenericOpenAIAPIImageModelChoice hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
   }
@@ -83,15 +103,15 @@ public class OperationStatusListGenericOpenAIAPIImageModelChoice {
    * @return hasErrorMessages
   **/
   @Schema(description = "")
-  public Object getHasErrorMessages() {
+  public Boolean isHasErrorMessages() {
     return hasErrorMessages;
   }
 
-  public void setHasErrorMessages(Object hasErrorMessages) {
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
   }
 
-  public OperationStatusListGenericOpenAIAPIImageModelChoice hasWarnMessages(Object hasWarnMessages) {
+  public OperationStatusListGenericOpenAIAPIImageModelChoice hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
   }
@@ -101,11 +121,11 @@ public class OperationStatusListGenericOpenAIAPIImageModelChoice {
    * @return hasWarnMessages
   **/
   @Schema(description = "")
-  public Object getHasWarnMessages() {
+  public Boolean isHasWarnMessages() {
     return hasWarnMessages;
   }
 
-  public void setHasWarnMessages(Object hasWarnMessages) {
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
   }
 

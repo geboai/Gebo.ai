@@ -15,6 +15,7 @@ export interface SecretInfo {
     description?: string;
     secretType?: SecretInfo.SecretTypeEnum;
     contextCode?: string;
+    readOnly?: boolean;
 }
 export namespace SecretInfo {
     export type SecretTypeEnum = 'USERNAME_PASSWORD' | 'TOKEN' | 'SSH_KEY' | 'CUSTOM_SECRET' | 'OAUTH2_STANDARD' | 'OAUTH2_GOOGLE' | 'GOOGLE_CLOUD_JSON_CREDENTIALS' | 'OAUTH2_AUTHORIZED_CLIENT' | 'AWS_CONNECTION';

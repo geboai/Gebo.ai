@@ -26,9 +26,12 @@ import java.util.Map;
  * GeboOauth2SecretContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
 
 public class GeboOauth2SecretContent {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
   @JsonProperty("providerName")
   private String providerName = null;
 
@@ -43,6 +46,24 @@ public class GeboOauth2SecretContent {
 
   @JsonProperty("customAttributes")
   private Map<String, String> customAttributes = null;
+
+  public GeboOauth2SecretContent readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
 
   public GeboOauth2SecretContent providerName(String providerName) {
     this.providerName = providerName;
@@ -160,7 +181,8 @@ public class GeboOauth2SecretContent {
       return false;
     }
     GeboOauth2SecretContent geboOauth2SecretContent = (GeboOauth2SecretContent) o;
-    return Objects.equals(this.providerName, geboOauth2SecretContent.providerName) &&
+    return Objects.equals(this.readOnly, geboOauth2SecretContent.readOnly) &&
+        Objects.equals(this.providerName, geboOauth2SecretContent.providerName) &&
         Objects.equals(this.clientId, geboOauth2SecretContent.clientId) &&
         Objects.equals(this.secret, geboOauth2SecretContent.secret) &&
         Objects.equals(this.scopes, geboOauth2SecretContent.scopes) &&
@@ -169,7 +191,7 @@ public class GeboOauth2SecretContent {
 
   @Override
   public int hashCode() {
-    return Objects.hash(providerName, clientId, secret, scopes, customAttributes);
+    return Objects.hash(readOnly, providerName, clientId, secret, scopes, customAttributes);
   }
 
 
@@ -178,6 +200,7 @@ public class GeboOauth2SecretContent {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboOauth2SecretContent {\n");
     
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    providerName: ").append(toIndentedString(providerName)).append("\n");
     sb.append("    clientId: ").append(toIndentedString(clientId)).append("\n");
     sb.append("    secret: ").append(toIndentedString(secret)).append("\n");

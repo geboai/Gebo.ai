@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | **Object** |  |  [optional]
-**pageSize** | **Object** |  |  [optional]
-**numrecords** | **Object** |  |  [optional]
-**sort** | **Object** |  |  [optional]
+**page** | **Integer** |  |  [optional]
+**pageSize** | **Integer** |  |  [optional]
+**numrecords** | **Integer** |  |  [optional]
+**sort** | [**List&lt;Order&gt;**](Order.md) |  |  [optional]

@@ -12,7 +12,10 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.AgentServiceDescriptor;
+import gebo.microservices.api.client.brain.model.GAgentConfig;
 import gebo.microservices.api.client.brain.model.GAgentsNetwork;
+import gebo.microservices.api.client.brain.model.GBaseObject;
 import gebo.microservices.api.client.brain.model.OperationStatusGAgentsNetwork;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -55,7 +58,7 @@ public class GeboAgentsNetworkAdminControllerApiTest {
      */
     @Test
     public void getAgentConfigsTest() {
-        Object response = api.getAgentConfigs();
+        List<GBaseObject> response = api.getAgentConfigs();
 
         // TODO: test validations
     }
@@ -69,8 +72,8 @@ public class GeboAgentsNetworkAdminControllerApiTest {
      */
     @Test
     public void getAgentConfigsByServiceIdTest() {
-        Object serviceId = null;
-        Object response = api.getAgentConfigsByServiceId(serviceId);
+        String serviceId = null;
+        List<GAgentConfig> response = api.getAgentConfigsByServiceId(serviceId);
 
         // TODO: test validations
     }
@@ -84,7 +87,7 @@ public class GeboAgentsNetworkAdminControllerApiTest {
      */
     @Test
     public void getAgentServicesTest() {
-        Object response = api.getAgentServices();
+        List<AgentServiceDescriptor> response = api.getAgentServices();
 
         // TODO: test validations
     }
@@ -98,7 +101,7 @@ public class GeboAgentsNetworkAdminControllerApiTest {
      */
     @Test
     public void getAgentsNetworkTest() {
-        Object response = api.getAgentsNetwork();
+        List<GBaseObject> response = api.getAgentsNetwork();
 
         // TODO: test validations
     }
@@ -112,7 +115,7 @@ public class GeboAgentsNetworkAdminControllerApiTest {
      */
     @Test
     public void getAgentsNetworkByCodeTest() {
-        Object code = null;
+        String code = null;
         GAgentsNetwork response = api.getAgentsNetworkByCode(code);
 
         // TODO: test validations
@@ -127,8 +130,8 @@ public class GeboAgentsNetworkAdminControllerApiTest {
      */
     @Test
     public void getCompatibleNextServicesTest() {
-        Object serviceId = null;
-        Object response = api.getCompatibleNextServices(serviceId);
+        String serviceId = null;
+        List<AgentServiceDescriptor> response = api.getCompatibleNextServices(serviceId);
 
         // TODO: test validations
     }
@@ -142,8 +145,8 @@ public class GeboAgentsNetworkAdminControllerApiTest {
      */
     @Test
     public void getCompatiblePreviousServicesTest() {
-        Object serviceId = null;
-        Object response = api.getCompatiblePreviousServices(serviceId);
+        String serviceId = null;
+        List<AgentServiceDescriptor> response = api.getCompatiblePreviousServices(serviceId);
 
         // TODO: test validations
     }
@@ -157,7 +160,7 @@ public class GeboAgentsNetworkAdminControllerApiTest {
      */
     @Test
     public void getNetworkAdapterServicesTest() {
-        Object response = api.getNetworkAdapterServices();
+        List<AgentServiceDescriptor> response = api.getNetworkAdapterServices();
 
         // TODO: test validations
     }

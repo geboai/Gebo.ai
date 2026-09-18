@@ -12,16 +12,16 @@
 import { GBaseTranscriptModelChoice } from './gBaseTranscriptModelChoice';
 
 export interface GBaseTranscriptModelConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    modelTypeCode?: any;
-    defaultModel?: any;
-    apiSecretCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    modelTypeCode?: string;
+    defaultModel?: boolean;
+    apiSecretCode?: string;
     choosedModel?: GBaseTranscriptModelChoice;
-    baseUrl?: any;
-    contextLength?: any;
+    baseUrl?: string;
+    contextLength?: number;
 }

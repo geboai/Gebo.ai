@@ -11,6 +11,7 @@
  */
 
 export interface GeboOauth2SecretContent { 
+    readOnly?: boolean;
     providerName: string;
     clientId: string;
     secret: string;

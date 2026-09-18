@@ -11,13 +11,14 @@ package ai.gebo.llms.mistralai.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.mistralai.MistralAiChatModel;
 import org.springframework.ai.mistralai.MistralAiChatOptions;
 import org.springframework.ai.mistralai.api.MistralAiApi;
 import org.springframework.ai.mistralai.api.MistralAiApi.Builder;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -46,14 +47,14 @@ import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments Service class responsible for configuring and creating
- * Mistral AI chat models. This service is conditional on the
- * 'ai.gebo.llms.config.mistralAIEnabled' property being set to 'true'.
+ * Mistral AI chat models.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "mistralAIEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class MistralChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GMistralChatModelChoice, GMistralChatModelConfig> {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MistralChatModelConfigurationSupportService.class);
 	/**
 	 * Static definition of the chat model type with code and description.
 	 */
@@ -152,7 +153,19 @@ public class MistralChatModelConfigurationSupportService
 			}
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
-				builder = builder.toolCallbacks(functions);
+				// The condition above tests the tool names that were REQUESTED. getTools filters
+				// the callbacks actually available by those names, so it can return fewer - or
+				// none at all, when the source that exports them failed. Configuring the model
+				// from the request rather than from what resolved leaves it declaring tools it
+				// will never send.
+				if (functions != null && !functions.isEmpty()) {
+					builder = builder.toolCallbacks(functions);
+				} else {
+					LOGGER.warn("Chat model " + config.getCode() + " enables "
+							+ config.getEnabledFunctions().size()
+							+ " tool(s) but none of them resolved to a callback, so it is configured"
+							+ " without tools: " + config.getEnabledFunctions());
+				}
 			}
 
 			MistralAiChatOptions options = builder.build();

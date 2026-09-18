@@ -181,7 +181,7 @@ public class JiraSystemsController extends GAbstractSystemsArchitectureControlle
      */
 	@GetMapping("findJiraSystemByCode")
 	public GJiraSystem findJiraSystemByCode(@RequestParam("code") String code) throws GeboPersistenceException {
-		return persistentObjectManager.findById(GJiraSystem.class, code);
+		return handler.findConfiguration(code);
 	}
 
     /**
@@ -348,5 +348,18 @@ public class JiraSystemsController extends GAbstractSystemsArchitectureControlle
 			os.getMessages().add(GUserMessage.errorMessage("Cannot access Jira", ""));
 			return os;
 		}
+	}
+
+	/**
+	 * A system declared under {@code ai.gebo.jira.systems} belongs to the
+	 * configuration, not to the admin UI: the write paths of the base controller
+	 * refuse it.
+	 *
+	 * @param system The system a write is being attempted on.
+	 * @return true when the system is declared in the configuration.
+	 */
+	@Override
+	protected boolean isDeclaredInConfiguration(GJiraSystem system) {
+		return system != null && handler.isDeclaredInConfiguration(system.getCode());
 	}
 }

@@ -50,6 +50,18 @@ function validateVendorSetup(fg: FormGroup): ValidationErrors | null {
 const formValidator: ValidatorFn = (control) => {
     return validateVendorSetup(control as FormGroup);
 };
+/**
+ * Shown when the backend created no model and produced no message of its own, so that a
+ * failed setup is never silent.
+ */
+const noModelCreatedMessage: GUserMessage = {
+    severity: "error",
+    summary: "No model was created",
+    detail: "The provider did not accept any of the chosen models. Review the model choices and try again.",
+    id: "NO_MODEL_CREATED",
+    jobId: "",
+    timestamp: 0
+};
 @Component({
     selector: "gebo-ai-llms-easy-vendor-configuration-component",
     templateUrl: "easy-vendor-configuration.component.html",
@@ -357,11 +369,23 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
         this.loading = true;
         this.geboFastLLMSSetupService.createLLMByAutoconfigure(creationData).subscribe({
             next: (operationStatus) => {
-                if (operationStatus.hasErrorMessages) {
-                    this.llmsAutoSettingErrors.emit(operationStatus.messages);
-                } else {
-                    this.llmsAutoSettingSuccessfull.emit(true);
+                const created = operationStatus?.result ?? [];
+                const messages = operationStatus?.messages ?? [];
+                // A model the provider does not offer anymore comes back as a *warning*, so
+                // hasErrorMessages alone would let a run that created nothing at all close the
+                // wizard announcing success. What was actually created decides the outcome, and
+                // every message the backend produced is shown - warnings included.
+                if (created.length === 0) {
+                    this.llmsAutoSettingErrors.emit(messages.length ? messages : [noModelCreatedMessage]);
+                    return;
                 }
+                if (messages.length) {
+                    // Partially applied: some models exist now, others could not be created. The
+                    // wizard stays open on the refreshed state so the missing kinds can be retried.
+                    this.llmsAutoSettingErrors.emit(messages);
+                    return;
+                }
+                this.llmsAutoSettingSuccessfull.emit(true);
             }, complete: () => {
                 this.loading = false;
             }

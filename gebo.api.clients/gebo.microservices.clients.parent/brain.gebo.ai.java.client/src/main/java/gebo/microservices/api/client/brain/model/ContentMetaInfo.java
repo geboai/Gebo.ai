@@ -22,40 +22,71 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ContentMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ContentMetaInfo {
   @JsonProperty("exists")
-  private Object exists = null;
+  private Boolean exists = null;
 
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("extension")
-  private Object extension = null;
+  private String extension = null;
 
   @JsonProperty("contentType")
-  private Object contentType = null;
+  private String contentType = null;
 
   @JsonProperty("fileName")
-  private Object fileName = null;
+  private String fileName = null;
 
   @JsonProperty("parentProjectCode")
-  private Object parentProjectCode = null;
+  private String parentProjectCode = null;
 
   @JsonProperty("rootKnowledgeBase")
-  private Object rootKnowledgeBase = null;
+  private String rootKnowledgeBase = null;
 
   @JsonProperty("moduleId")
-  private Object moduleId = null;
+  private String moduleId = null;
 
   @JsonProperty("url")
-  private Object url = null;
+  private String url = null;
 
-  @JsonProperty("referenceType")
-  private Object referenceType = null;
+  /**
+   * Gets or Sets referenceType
+   */
+  public enum ReferenceTypeEnum {
+    FILE("FILE"),
+    WEB("WEB");
 
-  public ContentMetaInfo exists(Object exists) {
+    private String value;
+
+    ReferenceTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ReferenceTypeEnum fromValue(String input) {
+      for (ReferenceTypeEnum b : ReferenceTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("referenceType")
+  private ReferenceTypeEnum referenceType = null;
+
+  public ContentMetaInfo exists(Boolean exists) {
     this.exists = exists;
     return this;
   }
@@ -65,15 +96,15 @@ public class ContentMetaInfo {
    * @return exists
   **/
   @Schema(description = "")
-  public Object getExists() {
+  public Boolean isExists() {
     return exists;
   }
 
-  public void setExists(Object exists) {
+  public void setExists(Boolean exists) {
     this.exists = exists;
   }
 
-  public ContentMetaInfo code(Object code) {
+  public ContentMetaInfo code(String code) {
     this.code = code;
     return this;
   }
@@ -83,15 +114,15 @@ public class ContentMetaInfo {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public ContentMetaInfo extension(Object extension) {
+  public ContentMetaInfo extension(String extension) {
     this.extension = extension;
     return this;
   }
@@ -101,15 +132,15 @@ public class ContentMetaInfo {
    * @return extension
   **/
   @Schema(description = "")
-  public Object getExtension() {
+  public String getExtension() {
     return extension;
   }
 
-  public void setExtension(Object extension) {
+  public void setExtension(String extension) {
     this.extension = extension;
   }
 
-  public ContentMetaInfo contentType(Object contentType) {
+  public ContentMetaInfo contentType(String contentType) {
     this.contentType = contentType;
     return this;
   }
@@ -119,15 +150,15 @@ public class ContentMetaInfo {
    * @return contentType
   **/
   @Schema(description = "")
-  public Object getContentType() {
+  public String getContentType() {
     return contentType;
   }
 
-  public void setContentType(Object contentType) {
+  public void setContentType(String contentType) {
     this.contentType = contentType;
   }
 
-  public ContentMetaInfo fileName(Object fileName) {
+  public ContentMetaInfo fileName(String fileName) {
     this.fileName = fileName;
     return this;
   }
@@ -137,15 +168,15 @@ public class ContentMetaInfo {
    * @return fileName
   **/
   @Schema(description = "")
-  public Object getFileName() {
+  public String getFileName() {
     return fileName;
   }
 
-  public void setFileName(Object fileName) {
+  public void setFileName(String fileName) {
     this.fileName = fileName;
   }
 
-  public ContentMetaInfo parentProjectCode(Object parentProjectCode) {
+  public ContentMetaInfo parentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
     return this;
   }
@@ -155,15 +186,15 @@ public class ContentMetaInfo {
    * @return parentProjectCode
   **/
   @Schema(description = "")
-  public Object getParentProjectCode() {
+  public String getParentProjectCode() {
     return parentProjectCode;
   }
 
-  public void setParentProjectCode(Object parentProjectCode) {
+  public void setParentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
   }
 
-  public ContentMetaInfo rootKnowledgeBase(Object rootKnowledgeBase) {
+  public ContentMetaInfo rootKnowledgeBase(String rootKnowledgeBase) {
     this.rootKnowledgeBase = rootKnowledgeBase;
     return this;
   }
@@ -173,15 +204,15 @@ public class ContentMetaInfo {
    * @return rootKnowledgeBase
   **/
   @Schema(description = "")
-  public Object getRootKnowledgeBase() {
+  public String getRootKnowledgeBase() {
     return rootKnowledgeBase;
   }
 
-  public void setRootKnowledgeBase(Object rootKnowledgeBase) {
+  public void setRootKnowledgeBase(String rootKnowledgeBase) {
     this.rootKnowledgeBase = rootKnowledgeBase;
   }
 
-  public ContentMetaInfo moduleId(Object moduleId) {
+  public ContentMetaInfo moduleId(String moduleId) {
     this.moduleId = moduleId;
     return this;
   }
@@ -191,15 +222,15 @@ public class ContentMetaInfo {
    * @return moduleId
   **/
   @Schema(description = "")
-  public Object getModuleId() {
+  public String getModuleId() {
     return moduleId;
   }
 
-  public void setModuleId(Object moduleId) {
+  public void setModuleId(String moduleId) {
     this.moduleId = moduleId;
   }
 
-  public ContentMetaInfo url(Object url) {
+  public ContentMetaInfo url(String url) {
     this.url = url;
     return this;
   }
@@ -209,15 +240,15 @@ public class ContentMetaInfo {
    * @return url
   **/
   @Schema(description = "")
-  public Object getUrl() {
+  public String getUrl() {
     return url;
   }
 
-  public void setUrl(Object url) {
+  public void setUrl(String url) {
     this.url = url;
   }
 
-  public ContentMetaInfo referenceType(Object referenceType) {
+  public ContentMetaInfo referenceType(ReferenceTypeEnum referenceType) {
     this.referenceType = referenceType;
     return this;
   }
@@ -227,11 +258,11 @@ public class ContentMetaInfo {
    * @return referenceType
   **/
   @Schema(description = "")
-  public Object getReferenceType() {
+  public ReferenceTypeEnum getReferenceType() {
     return referenceType;
   }
 
-  public void setReferenceType(Object referenceType) {
+  public void setReferenceType(ReferenceTypeEnum referenceType) {
     this.referenceType = referenceType;
   }
 

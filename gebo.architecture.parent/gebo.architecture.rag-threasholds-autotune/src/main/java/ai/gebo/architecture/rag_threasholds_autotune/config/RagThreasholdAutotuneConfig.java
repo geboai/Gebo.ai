@@ -16,7 +16,38 @@ public class RagThreasholdAutotuneConfig {
 	private double documentsCardinalityAddedPercentTrigger = 5.0;
 	private int dayElapsedWithoutTuning = 3;
 	private int sampleFragmentsMinTokenLength = 100;
+	/**
+	 * Fragments the tuning questions are generated from. Raising it widens the sample and
+	 * costs proportionally more question generation and rating calls.
+	 */
+	private int autotuneSampleFragments = 30;
 	private int autotuneMaxGeneratedQuestions = 12;
+	/**
+	 * Share of the answerable questions that a threshold must still answer to be
+	 * eligible. Coverage is a floor rather than the objective: requiring every
+	 * question to be answered lets a single hard question drag the threshold to the
+	 * loose end of the bracket, where the remaining questions retrieve mostly noise.
+	 */
+	private double minimumAnsweredQuestionsShare = 0.66;
+	/**
+	 * How many candidates to draw for every fragment finally kept. The extra ones are
+	 * the margin the representativeness selection needs: with a factor of one there is
+	 * nothing to choose between.
+	 */
+	private int sampleCandidatesPerFragment = 3;
+	/**
+	 * Sampled fragments sent to the model in one question generation call.
+	 * <p>
+	 * Sized by the answer the model has to write, not by how much prompt fits: a
+	 * reasoning model spends output tokens thinking before it emits anything, so a
+	 * prompt carrying every sampled fragment at once exhausts the output ceiling during
+	 * the reasoning and the completion comes back empty.
+	 */
+	private int autotuneQuestionChunksPerCall = 5;
+	/**
+	 * Fragments retrieved when probing how well one candidate represents the corpus.
+	 */
+	private int sampleRepresentativenessProbeTopK = 20;
 	private InitialAutotunePhrases autotuneSamples = null;
 	private boolean enabled = true;
 

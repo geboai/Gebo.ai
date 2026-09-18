@@ -206,10 +206,10 @@ export class GoogleDriveSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGoogleDriveEndpointsByProject(parentProjectCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findGoogleDriveEndpointsByProject(parentProjectCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findGoogleDriveEndpointsByProject(parentProjectCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findGoogleDriveEndpointsByProject(parentProjectCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGoogleDriveEndpointsByProject(parentProjectCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GGoogleDriveProjectEndpoint>>;
+    public findGoogleDriveEndpointsByProject(parentProjectCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GGoogleDriveProjectEndpoint>>>;
+    public findGoogleDriveEndpointsByProject(parentProjectCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GGoogleDriveProjectEndpoint>>>;
+    public findGoogleDriveEndpointsByProject(parentProjectCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (parentProjectCode === null || parentProjectCode === undefined) {
             throw new Error('Required parameter parentProjectCode was null or undefined when calling findGoogleDriveEndpointsByProject.');
@@ -235,7 +235,7 @@ export class GoogleDriveSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GoogleDriveSystemsController/findGoogleDriveEndpointsByProject`,
+        return this.httpClient.request<Array<GGoogleDriveProjectEndpoint>>('get',`${this.basePath}/api/admin/GoogleDriveSystemsController/findGoogleDriveEndpointsByProject`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -253,9 +253,9 @@ export class GoogleDriveSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGoogleDriveEndpointsByQbe(body: GGoogleDriveProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findGoogleDriveEndpointsByQbe(body: GGoogleDriveProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findGoogleDriveEndpointsByQbe(body: GGoogleDriveProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findGoogleDriveEndpointsByQbe(body: GGoogleDriveProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<GGoogleDriveProjectEndpoint>>;
+    public findGoogleDriveEndpointsByQbe(body: GGoogleDriveProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GGoogleDriveProjectEndpoint>>>;
+    public findGoogleDriveEndpointsByQbe(body: GGoogleDriveProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GGoogleDriveProjectEndpoint>>>;
     public findGoogleDriveEndpointsByQbe(body: GGoogleDriveProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -282,7 +282,7 @@ export class GoogleDriveSystemsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/GoogleDriveSystemsController/findGoogleDriveEndpointsByQbe`,
+        return this.httpClient.request<Array<GGoogleDriveProjectEndpoint>>('post',`${this.basePath}/api/admin/GoogleDriveSystemsController/findGoogleDriveEndpointsByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -300,10 +300,10 @@ export class GoogleDriveSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGoogleDriveProjectEndpointByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GGoogleDriveProjectEndpoint>;
-    public findGoogleDriveProjectEndpointByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GGoogleDriveProjectEndpoint>>;
-    public findGoogleDriveProjectEndpointByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GGoogleDriveProjectEndpoint>>;
-    public findGoogleDriveProjectEndpointByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGoogleDriveProjectEndpointByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GGoogleDriveProjectEndpoint>;
+    public findGoogleDriveProjectEndpointByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GGoogleDriveProjectEndpoint>>;
+    public findGoogleDriveProjectEndpointByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GGoogleDriveProjectEndpoint>>;
+    public findGoogleDriveProjectEndpointByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findGoogleDriveProjectEndpointByCode.');
@@ -347,10 +347,10 @@ export class GoogleDriveSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGoogleDriveSystemByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GGoogleDriveSystem>;
-    public findGoogleDriveSystemByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GGoogleDriveSystem>>;
-    public findGoogleDriveSystemByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GGoogleDriveSystem>>;
-    public findGoogleDriveSystemByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGoogleDriveSystemByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GGoogleDriveSystem>;
+    public findGoogleDriveSystemByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GGoogleDriveSystem>>;
+    public findGoogleDriveSystemByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GGoogleDriveSystem>>;
+    public findGoogleDriveSystemByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findGoogleDriveSystemByCode.');
@@ -429,9 +429,9 @@ export class GoogleDriveSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGoogleDriveSystems(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGoogleDriveSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGoogleDriveSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGoogleDriveSystems(observe?: 'body', reportProgress?: boolean): Observable<Array<GGoogleDriveSystem>>;
+    public getGoogleDriveSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GGoogleDriveSystem>>>;
+    public getGoogleDriveSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GGoogleDriveSystem>>>;
     public getGoogleDriveSystems(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -449,7 +449,7 @@ export class GoogleDriveSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GoogleDriveSystemsController/getGoogleDriveSystems`,
+        return this.httpClient.request<Array<GGoogleDriveSystem>>('get',`${this.basePath}/api/admin/GoogleDriveSystemsController/getGoogleDriveSystems`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

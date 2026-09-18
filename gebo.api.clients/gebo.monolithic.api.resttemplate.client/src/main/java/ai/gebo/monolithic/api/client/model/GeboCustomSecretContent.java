@@ -22,9 +22,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboCustomSecretContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
 
 public class GeboCustomSecretContent {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
   @JsonProperty("customContentDescription")
   private String customContentDescription = null;
 
@@ -33,6 +36,24 @@ public class GeboCustomSecretContent {
 
   @JsonProperty("contentType")
   private String contentType = null;
+
+  public GeboCustomSecretContent readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
 
   public GeboCustomSecretContent customContentDescription(String customContentDescription) {
     this.customContentDescription = customContentDescription;
@@ -98,14 +119,15 @@ public class GeboCustomSecretContent {
       return false;
     }
     GeboCustomSecretContent geboCustomSecretContent = (GeboCustomSecretContent) o;
-    return Objects.equals(this.customContentDescription, geboCustomSecretContent.customContentDescription) &&
+    return Objects.equals(this.readOnly, geboCustomSecretContent.readOnly) &&
+        Objects.equals(this.customContentDescription, geboCustomSecretContent.customContentDescription) &&
         Objects.equals(this.content, geboCustomSecretContent.content) &&
         Objects.equals(this.contentType, geboCustomSecretContent.contentType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(customContentDescription, content, contentType);
+    return Objects.hash(readOnly, customContentDescription, content, contentType);
   }
 
 
@@ -114,6 +136,7 @@ public class GeboCustomSecretContent {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboCustomSecretContent {\n");
     
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    customContentDescription: ").append(toIndentedString(customContentDescription)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");

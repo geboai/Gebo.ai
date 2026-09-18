@@ -1,5 +1,6 @@
 package ai.gebo.architecture.llms.usage.service.impl;
 
+import ai.gebo.core.messages.LLMCallOutcome;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -42,15 +43,19 @@ public class LLMUsageDailyAggregationServiceImpl {
 		long todayLastMillisecond = today.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli() - 1;
 		;
 		// Aggregate the raw values grouping by
-		// providerId, username, model, callerStack, modelType, year, month, day.
+		// providerId, username, model, callerStack, modelType, outcome, year, month, day.
 		Map<ConsolidationKey, DailyAccumulator> grouped = new HashMap<>();
 		try (Stream<LLMUsageDetail> stream = usageRepo.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(
 				todayFirstMillisecond, todayLastMillisecond)) {
 			stream.forEach(detail -> {
 				LocalDate date = Instant.ofEpochMilli(detail.getTimestamp()).atZone(zone).toLocalDate();
+				// Records written before the outcome existed carry null: fold them into
+				// SUCCESS rather than creating a third, meaningless bucket.
+				LLMCallOutcome outcome = detail.getOutcome() != null ? detail.getOutcome()
+						: LLMCallOutcome.SUCCESS;
 				ConsolidationKey key = new ConsolidationKey(detail.getProviderId(), detail.getUsername(),
-						detail.getModel(), detail.getCallerStack(), detail.getModelType(), date.getYear(),
-						date.getMonthValue(), date.getDayOfMonth());
+						detail.getModel(), detail.getCallerStack(), detail.getModelType(), outcome,
+						date.getYear(), date.getMonthValue(), date.getDayOfMonth());
 				grouped.computeIfAbsent(key, k -> new DailyAccumulator()).add(detail);
 			});
 		}
@@ -63,9 +68,9 @@ public class LLMUsageDailyAggregationServiceImpl {
 		for (Map.Entry<ConsolidationKey, DailyAccumulator> entry : grouped.entrySet()) {
 			ConsolidationKey key = entry.getKey();
 			LLMDailyUsageDetail target = consolidatedRepo
-					.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndYearAndMonthAndDay(
+					.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndYearAndMonthAndDay(
 							key.providerId(), key.username(), key.model(), key.callerStack(), key.modelType(),
-							key.year(), key.month(), key.day())
+							key.outcome(), key.year(), key.month(), key.day())
 					.orElseGet(() -> newDailyUsageDetail(key));
 			entry.getValue().mergeInto(target);
 			consolidatedRepo.save(target);
@@ -83,6 +88,7 @@ public class LLMUsageDailyAggregationServiceImpl {
 		daily.setModel(key.model());
 		daily.setCallerStack(key.callerStack());
 		daily.setModelType(key.modelType());
+		daily.setOutcome(key.outcome());
 		daily.setYear(key.year());
 		daily.setMonth(key.month());
 		daily.setDay(key.day());
@@ -90,7 +96,7 @@ public class LLMUsageDailyAggregationServiceImpl {
 	}
 
 	private record ConsolidationKey(String providerId, String username, String model, String callerStack,
-			ModelType modelType, int year, int month, int day) {
+			ModelType modelType, LLMCallOutcome outcome, int year, int month, int day) {
 	}
 
 	private static final class DailyAccumulator {

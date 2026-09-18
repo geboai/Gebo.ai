@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.core.impl.GeboDeclaredKnowledgeBasesSeeder;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.core.impl.GCoreMessagesEmitterImpl;
 import ai.gebo.core.messages.GDeletedKnowledgeBasePayload;
@@ -117,6 +118,7 @@ public class KnowledgeBaseController {
 	 */
 	@PostMapping(value = "updateKnowledgeBase", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GKnowledgeBase updateKnowledgeBase(@RequestBody GKnowledgeBase entity) throws GeboPersistenceException {
+		refuseIfDeclaredInConfiguration(entity);
 		// Set default ObjectSpaceType if not set
 		if (entity.getObjectSpaceType() == null) {
 			entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
@@ -133,6 +135,7 @@ public class KnowledgeBaseController {
 	 */
 	@PostMapping(value = "insertKnowledgeBase", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GKnowledgeBase insertKnowledgeBase(@RequestBody GKnowledgeBase entity) throws GeboPersistenceException {
+		refuseIfDeclaredInConfiguration(entity);
 		// Set default ObjectSpaceType if not set
 		if (entity.getObjectSpaceType() == null) {
 			entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
@@ -148,6 +151,7 @@ public class KnowledgeBaseController {
 	 */
 	@PostMapping(value = "deleteKnowledgeBase", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteKnowledgeBase(@RequestBody GKnowledgeBase entity) throws GeboPersistenceException {
+		refuseIfDeclaredInConfiguration(entity);
 		persistenceManager.delete(entity);
 		
 		// Create payload for deleted knowledge base
@@ -156,4 +160,28 @@ public class KnowledgeBaseController {
 		coreEmitter.sendDeletingPayload(payload);
 	}
 
+
+	/**
+	 * The seeder that owns the knowledge base records declared in this deployment's
+	 * configuration - asked whether a write addresses one of them.
+	 */
+	@Autowired
+	private GeboDeclaredKnowledgeBasesSeeder knowledgeBasesSeeder;
+
+	/**
+	 * Refuses a write addressing a knowledge base the configuration owns: the next startup
+	 * would write the declaration back over it, so the change would not survive a
+	 * restart. The STORED record decides, not the marker on the object the client
+	 * sent back.
+	 *
+	 * @param entity the record a write is being attempted on.
+	 * @throws GeboPersistenceException when the record is declared in the
+	 *                                  configuration.
+	 */
+	private void refuseIfDeclaredInConfiguration(GKnowledgeBase entity) throws GeboPersistenceException {
+		if (entity != null && knowledgeBasesSeeder.isDeclaredInConfiguration(entity.getCode())) {
+			throw new GeboPersistenceException("The knowledge base '" + entity.getCode()
+					+ "' is declared in this deployment's configuration and cannot be changed from the UI: edit it in application.yml instead");
+		}
+	}
 }

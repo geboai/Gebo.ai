@@ -22,22 +22,43 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboSshKeySecretContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class GeboSshKeySecretContent {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
   @JsonProperty("email")
-  private Object email = null;
+  private String email = null;
 
   @JsonProperty("key")
-  private Object key = null;
+  private String key = null;
 
   @JsonProperty("pub")
-  private Object pub = null;
+  private String pub = null;
 
   @JsonProperty("passphrase")
-  private Object passphrase = null;
+  private String passphrase = null;
 
-  public GeboSshKeySecretContent email(Object email) {
+  public GeboSshKeySecretContent readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
+
+  public GeboSshKeySecretContent email(String email) {
     this.email = email;
     return this;
   }
@@ -47,15 +68,15 @@ public class GeboSshKeySecretContent {
    * @return email
   **/
   @Schema(required = true, description = "")
-  public Object getEmail() {
+  public String getEmail() {
     return email;
   }
 
-  public void setEmail(Object email) {
+  public void setEmail(String email) {
     this.email = email;
   }
 
-  public GeboSshKeySecretContent key(Object key) {
+  public GeboSshKeySecretContent key(String key) {
     this.key = key;
     return this;
   }
@@ -65,15 +86,15 @@ public class GeboSshKeySecretContent {
    * @return key
   **/
   @Schema(required = true, description = "")
-  public Object getKey() {
+  public String getKey() {
     return key;
   }
 
-  public void setKey(Object key) {
+  public void setKey(String key) {
     this.key = key;
   }
 
-  public GeboSshKeySecretContent pub(Object pub) {
+  public GeboSshKeySecretContent pub(String pub) {
     this.pub = pub;
     return this;
   }
@@ -83,15 +104,15 @@ public class GeboSshKeySecretContent {
    * @return pub
   **/
   @Schema(required = true, description = "")
-  public Object getPub() {
+  public String getPub() {
     return pub;
   }
 
-  public void setPub(Object pub) {
+  public void setPub(String pub) {
     this.pub = pub;
   }
 
-  public GeboSshKeySecretContent passphrase(Object passphrase) {
+  public GeboSshKeySecretContent passphrase(String passphrase) {
     this.passphrase = passphrase;
     return this;
   }
@@ -101,11 +122,11 @@ public class GeboSshKeySecretContent {
    * @return passphrase
   **/
   @Schema(required = true, description = "")
-  public Object getPassphrase() {
+  public String getPassphrase() {
     return passphrase;
   }
 
-  public void setPassphrase(Object passphrase) {
+  public void setPassphrase(String passphrase) {
     this.passphrase = passphrase;
   }
 
@@ -119,7 +140,8 @@ public class GeboSshKeySecretContent {
       return false;
     }
     GeboSshKeySecretContent geboSshKeySecretContent = (GeboSshKeySecretContent) o;
-    return Objects.equals(this.email, geboSshKeySecretContent.email) &&
+    return Objects.equals(this.readOnly, geboSshKeySecretContent.readOnly) &&
+        Objects.equals(this.email, geboSshKeySecretContent.email) &&
         Objects.equals(this.key, geboSshKeySecretContent.key) &&
         Objects.equals(this.pub, geboSshKeySecretContent.pub) &&
         Objects.equals(this.passphrase, geboSshKeySecretContent.passphrase);
@@ -127,7 +149,7 @@ public class GeboSshKeySecretContent {
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, key, pub, passphrase);
+    return Objects.hash(readOnly, email, key, pub, passphrase);
   }
 
 
@@ -136,6 +158,7 @@ public class GeboSshKeySecretContent {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboSshKeySecretContent {\n");
     
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    key: ").append(toIndentedString(key)).append("\n");
     sb.append("    pub: ").append(toIndentedString(pub)).append("\n");

@@ -3,11 +3,21 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**customMetaData** | **Object** |  |  [optional]
-**fragmentType** | **Object** |  |  [optional]
-**contentType** | **Object** |  |  [optional]
-**characterEncoding** | **Object** |  |  [optional]
-**encoding** | **Object** |  |  [optional]
-**content** | **Object** |  |  [optional]
-**name** | **Object** |  |  [optional]
-**uniqueCode** | **Object** |  |  [optional]
+**customMetaData** | **Map&lt;String, Object&gt;** |  |  [optional]
+**fragmentType** | [**FragmentTypeEnum**](#FragmentTypeEnum) |  |  [optional]
+**contentType** | **String** |  |  [optional]
+**characterEncoding** | **String** |  |  [optional]
+**encoding** | **String** |  |  [optional]
+**content** | **String** |  |  [optional]
+**name** | **String** |  |  [optional]
+**uniqueCode** | **String** |  |  [optional]
+
+<a name="FragmentTypeEnum"></a>
+## Enum: FragmentTypeEnum
+Name | Value
+---- | -----
+TEXT | &quot;TEXT&quot;
+IMAGE | &quot;IMAGE&quot;
+AUDIO | &quot;AUDIO&quot;
+VIDEO | &quot;VIDEO&quot;
+MEDIA | &quot;MEDIA&quot;

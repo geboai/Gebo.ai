@@ -18,47 +18,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * UserInfosImpl
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class UserInfosImpl {
-  @JsonProperty("username")
-  private Object username = null;
-
   @JsonProperty("name")
-  private Object name = null;
-
-  @JsonProperty("roles")
-  private Object roles = null;
-
-  @JsonProperty("disabled")
-  private Object disabled = null;
+  private String name = null;
 
   @JsonProperty("sourname")
-  private Object sourname = null;
+  private String sourname = null;
 
-  public UserInfosImpl username(Object username) {
-    this.username = username;
-    return this;
-  }
+  @JsonProperty("roles")
+  private List<String> roles = null;
 
-   /**
-   * Get username
-   * @return username
-  **/
-  @Schema(description = "")
-  public Object getUsername() {
-    return username;
-  }
+  @JsonProperty("disabled")
+  private Boolean disabled = null;
 
-  public void setUsername(Object username) {
-    this.username = username;
-  }
+  @JsonProperty("username")
+  private String username = null;
 
-  public UserInfosImpl name(Object name) {
+  public UserInfosImpl name(String name) {
     this.name = name;
     return this;
   }
@@ -68,51 +52,15 @@ public class UserInfosImpl {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public UserInfosImpl roles(Object roles) {
-    this.roles = roles;
-    return this;
-  }
-
-   /**
-   * Get roles
-   * @return roles
-  **/
-  @Schema(description = "")
-  public Object getRoles() {
-    return roles;
-  }
-
-  public void setRoles(Object roles) {
-    this.roles = roles;
-  }
-
-  public UserInfosImpl disabled(Object disabled) {
-    this.disabled = disabled;
-    return this;
-  }
-
-   /**
-   * Get disabled
-   * @return disabled
-  **/
-  @Schema(description = "")
-  public Object getDisabled() {
-    return disabled;
-  }
-
-  public void setDisabled(Object disabled) {
-    this.disabled = disabled;
-  }
-
-  public UserInfosImpl sourname(Object sourname) {
+  public UserInfosImpl sourname(String sourname) {
     this.sourname = sourname;
     return this;
   }
@@ -122,12 +70,74 @@ public class UserInfosImpl {
    * @return sourname
   **/
   @Schema(description = "")
-  public Object getSourname() {
+  public String getSourname() {
     return sourname;
   }
 
-  public void setSourname(Object sourname) {
+  public void setSourname(String sourname) {
     this.sourname = sourname;
+  }
+
+  public UserInfosImpl roles(List<String> roles) {
+    this.roles = roles;
+    return this;
+  }
+
+  public UserInfosImpl addRolesItem(String rolesItem) {
+    if (this.roles == null) {
+      this.roles = new ArrayList<>();
+    }
+    this.roles.add(rolesItem);
+    return this;
+  }
+
+   /**
+   * Get roles
+   * @return roles
+  **/
+  @Schema(description = "")
+  public List<String> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(List<String> roles) {
+    this.roles = roles;
+  }
+
+  public UserInfosImpl disabled(Boolean disabled) {
+    this.disabled = disabled;
+    return this;
+  }
+
+   /**
+   * Get disabled
+   * @return disabled
+  **/
+  @Schema(description = "")
+  public Boolean isDisabled() {
+    return disabled;
+  }
+
+  public void setDisabled(Boolean disabled) {
+    this.disabled = disabled;
+  }
+
+  public UserInfosImpl username(String username) {
+    this.username = username;
+    return this;
+  }
+
+   /**
+   * Get username
+   * @return username
+  **/
+  @Schema(description = "")
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
   }
 
 
@@ -140,16 +150,16 @@ public class UserInfosImpl {
       return false;
     }
     UserInfosImpl userInfosImpl = (UserInfosImpl) o;
-    return Objects.equals(this.username, userInfosImpl.username) &&
-        Objects.equals(this.name, userInfosImpl.name) &&
+    return Objects.equals(this.name, userInfosImpl.name) &&
+        Objects.equals(this.sourname, userInfosImpl.sourname) &&
         Objects.equals(this.roles, userInfosImpl.roles) &&
         Objects.equals(this.disabled, userInfosImpl.disabled) &&
-        Objects.equals(this.sourname, userInfosImpl.sourname);
+        Objects.equals(this.username, userInfosImpl.username);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, name, roles, disabled, sourname);
+    return Objects.hash(name, sourname, roles, disabled, username);
   }
 
 
@@ -158,11 +168,11 @@ public class UserInfosImpl {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserInfosImpl {\n");
     
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
     sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("    disabled: ").append(toIndentedString(disabled)).append("\n");
-    sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
+    sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("}");
     return sb.toString();
   }

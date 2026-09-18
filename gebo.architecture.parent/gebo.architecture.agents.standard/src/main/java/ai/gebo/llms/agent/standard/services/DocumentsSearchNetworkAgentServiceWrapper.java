@@ -73,6 +73,10 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 		capabilities.addCapability("Generate optimised queries and search the '" + wrappedSearchService.getProductId()
 				+ "' external system, returning the most relevant retrieved documents");
 		appendSearchableSystems(capabilities, wrappedSearchService);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Search agent id:" + getId() + " advertises querying of external product:"
+					+ wrappedSearchService.getProductId());
+		}
 		return capabilities;
 	}
 
@@ -103,6 +107,11 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 					LOGGER.debug("Query extraction produced " + extracted.getSearchQuery().size() + " quer(ies)");
 				}
 				for (SearchQuery query : extracted.getSearchQuery()) {
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("<EXTRACTED_SEARCH_QUERY>");
+						LOGGER.trace(String.valueOf(query));
+						LOGGER.trace("</EXTRACTED_SEARCH_QUERY>");
+					}
 					if (query.getRelevantKeywords() != null) {
 						keywords.addAll(query.getRelevantKeywords());
 					}
@@ -115,6 +124,8 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 						results.addAll(systemResults);
 					}
 				}
+			} else if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Query extraction produced no search query for agent id:" + getId());
 			}
 		} catch (LLMConfigException | IOException | SearchServiceException e) {
 			throw new AgentException("Error executing search agent " + getId(), e);
@@ -122,10 +133,16 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 		// Prefer the LLM-generated relevant keywords; fall back to the command text.
 		final List<String> matchingKeywords = keywords.isEmpty() ? keywordsFromCommand(command) : keywords;
 		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Search agent id:" + getId() + " uses "
+					+ (keywords.isEmpty() ? "command derived" : "LLM generated") + " matching keyword(s): "
+					+ matchingKeywords.size());
+		}
+		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End retrieveDocuments(...) search agent id:" + getId() + " collected " + results.size()
 					+ " raw result(s)");
 		}
-		return maybeRank(chunkToDocuments(results, notificationSink, agentModel, command, matchingKeywords), command);
+		return maybeRank(chunkToDocuments(results, notificationSink, agentModel, command, matchingKeywords),
+				command, notificationSink);
 	}
 
 }

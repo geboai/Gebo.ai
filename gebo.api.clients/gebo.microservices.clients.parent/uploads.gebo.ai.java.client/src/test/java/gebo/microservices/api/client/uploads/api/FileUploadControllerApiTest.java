@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.uploads.api;
 
+import java.io.File;
 import gebo.microservices.api.client.uploads.model.HandShakeToken;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -53,9 +54,25 @@ public class FileUploadControllerApiTest {
      */
     @Test
     public void uploadTest() {
-        Object handShakeCode = null;
-        Object files = null;
+        String handShakeCode = null;
+        List<File> files = null;
         api.upload(handShakeCode, files);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void uploadToEndpointTest() {
+        String endpointCode = null;
+        List<File> files = null;
+        api.uploadToEndpoint(endpointCode, files);
 
         // TODO: test validations
     }

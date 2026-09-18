@@ -9,26 +9,42 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { BuildSystemRef } from './buildSystemRef';
+import { ReindexingProgrammedTable } from './reindexingProgrammedTable';
+import { VFilesystemReference } from './vFilesystemReference';
 
 export interface GAwsS3ProjectEndpoint { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    parentProjectCode?: any;
-    readonly?: any;
-    published?: any;
-    synchPeriodically?: any;
-    openZips?: any;
-    buildSystemsRefs?: any;
-    catalogingCriteria?: any;
-    programmedTables?: any;
-    vectorizeOnlyExtensions?: any;
-    synchroStrategy?: any;
-    objectSpaceType?: any;
-    aclAliases?: any;
-    paths?: any;
-    s3SystemCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    parentProjectCode?: string;
+    readonly?: boolean;
+    published?: boolean;
+    synchPeriodically?: boolean;
+    openZips?: boolean;
+    buildSystemsRefs?: Array<BuildSystemRef>;
+    catalogingCriteria?: string;
+    programmedTables?: Array<ReindexingProgrammedTable>;
+    vectorizeOnlyExtensions?: Array<string>;
+    synchroStrategy?: GAwsS3ProjectEndpoint.SynchroStrategyEnum;
+    objectSpaceType?: GAwsS3ProjectEndpoint.ObjectSpaceTypeEnum;
+    aclAliases?: Array<number>;
+    personalData?: boolean;
+    paths?: Array<VFilesystemReference>;
+    s3SystemCode?: string;
+}
+export namespace GAwsS3ProjectEndpoint {
+    export type SynchroStrategyEnum = 'SIZE_AND_TIMESTAMP_AND_HASH_CHECK' | 'HASH_CHECK';
+    export const SynchroStrategyEnum = {
+        SIZEANDTIMESTAMPANDHASHCHECK: 'SIZE_AND_TIMESTAMP_AND_HASH_CHECK' as SynchroStrategyEnum,
+        HASHCHECK: 'HASH_CHECK' as SynchroStrategyEnum
+    };
+    export type ObjectSpaceTypeEnum = 'COMPANY' | 'USERSPACE';
+    export const ObjectSpaceTypeEnum = {
+        COMPANY: 'COMPANY' as ObjectSpaceTypeEnum,
+        USERSPACE: 'USERSPACE' as ObjectSpaceTypeEnum
+    };
 }

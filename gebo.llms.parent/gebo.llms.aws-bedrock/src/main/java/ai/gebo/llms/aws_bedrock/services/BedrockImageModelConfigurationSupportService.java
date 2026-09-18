@@ -12,10 +12,11 @@ package ai.gebo.llms.aws_bedrock.services;
 import java.util.List;
 
 import org.springframework.ai.image.ImageModel;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.aws_bedrock.http.BedrockClientCustomizer;
 import ai.gebo.llms.abstraction.layer.model.GImageModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableImageModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableImageModel;
@@ -36,7 +37,6 @@ import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
  * Canvas / Titan Image / Stability), served through the AWS SDK
  * {@code InvokeModel} operation wrapped by {@link BedrockImageModel}.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class BedrockImageModelConfigurationSupportService
@@ -50,6 +50,12 @@ public class BedrockImageModelConfigurationSupportService
 	}
 
 	final BedrockCredentialsResolver credentialsResolver;
+	/**
+	 * Supplies the configured connect/read timeouts and retry budget
+	 * ({@code ai.gebo.llms.default.clients.config}); the AWS SDK defaults are
+	 * tighter and are not otherwise overridable from configuration.
+	 */
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final BedrockFoundationModelsLookupService modelsLookupService;
 	final ModelRuntimeConfigureHandler configureHandler;
 
@@ -65,7 +71,9 @@ public class BedrockImageModelConfigurationSupportService
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
 			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
 			BedrockRuntimeClient client = BedrockRuntimeClient.builder().region(region)
-					.credentialsProvider(credentials).build();
+					.credentialsProvider(credentials)
+					.overrideConfiguration(BedrockClientCustomizer.overrideConfiguration(serviceClientsProviderFactory.get(type.getCode())))
+					.build();
 			return new BedrockImageModel(client, config.getChoosedModel().getCode(), config.getHeight(),
 					config.getWidth(), config.getCfgScale(), config.getSeed());
 		}

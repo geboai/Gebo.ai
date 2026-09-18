@@ -12,16 +12,16 @@
 import { GAbstractBuildSystemConfig } from './gAbstractBuildSystemConfig';
 
 export interface GBuildSystem { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    creationDate?: any;
-    modificationDate?: any;
-    version?: any;
-    buildSystemTypeCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    creationDate?: Date;
+    modificationDate?: Date;
+    version?: string;
+    buildSystemTypeCode?: string;
     config?: GAbstractBuildSystemConfig;
-    readonly?: any;
+    readonly?: boolean;
 }

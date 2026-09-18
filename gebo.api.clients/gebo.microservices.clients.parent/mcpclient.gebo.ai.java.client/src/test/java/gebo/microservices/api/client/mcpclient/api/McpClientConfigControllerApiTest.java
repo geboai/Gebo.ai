@@ -59,7 +59,7 @@ public class McpClientConfigControllerApiTest {
      */
     @Test
     public void findMCPClientConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         OperationStatusMCPClientConfig response = api.findMCPClientConfigByCode(code);
 
         // TODO: test validations

@@ -18,20 +18,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.math.BigDecimal;
 /**
  * GStatsLabelValue
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:44:05.740376061+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:28.382074718+02:00[Europe/Rome]")
 
 public class GStatsLabelValue {
   @JsonProperty("label")
-  private Object label = null;
+  private String label = null;
 
   @JsonProperty("value")
-  private Object value = null;
+  private BigDecimal value = null;
 
-  public GStatsLabelValue label(Object label) {
+  public GStatsLabelValue label(String label) {
     this.label = label;
     return this;
   }
@@ -41,15 +42,15 @@ public class GStatsLabelValue {
    * @return label
   **/
   @Schema(description = "")
-  public Object getLabel() {
+  public String getLabel() {
     return label;
   }
 
-  public void setLabel(Object label) {
+  public void setLabel(String label) {
     this.label = label;
   }
 
-  public GStatsLabelValue value(Object value) {
+  public GStatsLabelValue value(BigDecimal value) {
     this.value = value;
     return this;
   }
@@ -59,11 +60,11 @@ public class GStatsLabelValue {
    * @return value
   **/
   @Schema(description = "")
-  public Object getValue() {
+  public BigDecimal getValue() {
     return value;
   }
 
-  public void setValue(Object value) {
+  public void setValue(BigDecimal value) {
     this.value = value;
   }
 

@@ -11,8 +11,19 @@
  */
 
 export interface LLMModelsLookupParameter { 
-    type: any;
-    serviceHandler: any;
-    secretId?: any;
-    baseUrl?: any;
+    type: LLMModelsLookupParameter.TypeEnum;
+    serviceHandler: string;
+    secretId?: string;
+    baseUrl?: string;
+}
+export namespace LLMModelsLookupParameter {
+    export type TypeEnum = 'CHAT' | 'EMBEDDING' | 'RANKING' | 'IMAGESGEN' | 'TTS' | 'TRANSCRIPT';
+    export const TypeEnum = {
+        CHAT: 'CHAT' as TypeEnum,
+        EMBEDDING: 'EMBEDDING' as TypeEnum,
+        RANKING: 'RANKING' as TypeEnum,
+        IMAGESGEN: 'IMAGESGEN' as TypeEnum,
+        TTS: 'TTS' as TypeEnum,
+        TRANSCRIPT: 'TRANSCRIPT' as TypeEnum
+    };
 }

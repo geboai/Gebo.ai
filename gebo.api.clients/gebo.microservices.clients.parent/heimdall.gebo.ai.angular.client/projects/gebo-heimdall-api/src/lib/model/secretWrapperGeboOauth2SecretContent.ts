@@ -12,7 +12,7 @@
 import { GeboOauth2SecretContent } from './geboOauth2SecretContent';
 
 export interface SecretWrapperGeboOauth2SecretContent { 
-    contextCode: any;
-    description: any;
+    contextCode: string;
+    description: string;
     secretContent: GeboOauth2SecretContent;
 }

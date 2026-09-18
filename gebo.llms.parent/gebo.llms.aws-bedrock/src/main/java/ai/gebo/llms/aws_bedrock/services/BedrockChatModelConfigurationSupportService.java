@@ -11,16 +11,19 @@ package ai.gebo.llms.aws_bedrock.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.bedrock.converse.BedrockChatOptions;
 import org.springframework.ai.bedrock.converse.BedrockProxyChatModel;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.aws_bedrock.http.BedrockClientCustomizer;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
@@ -44,11 +47,12 @@ import software.amazon.awssdk.services.bedrock.model.ModelModality;
  * Amazon Nova, Meta Llama, Mistral, Cohere Command, AI21 ...) with tool calling
  * and multimodal support.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class BedrockChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GBedrockChatModelChoice, GBedrockChatModelConfig> {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BedrockChatModelConfigurationSupportService.class);
 
 	static final GChatModelType type = new GChatModelType();
 	static {
@@ -58,6 +62,12 @@ public class BedrockChatModelConfigurationSupportService
 	}
 
 	final BedrockCredentialsResolver credentialsResolver;
+	/**
+	 * Supplies the configured connect/read timeouts and retry budget
+	 * ({@code ai.gebo.llms.default.clients.config}); the AWS SDK defaults are
+	 * tighter and are not otherwise overridable from configuration.
+	 */
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final BedrockFoundationModelsLookupService modelsLookupService;
 	final IGToolCallbackSourceRepositoryPattern functionsRepo;
 	final ModelRuntimeConfigureHandler configureHandler;
@@ -96,16 +106,36 @@ public class BedrockChatModelConfigurationSupportService
 			}
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools(config.getEnabledFunctions());
-				builder.toolCallbacks(functions);
+				// The condition above tests the tool names that were REQUESTED. getTools filters
+				// the callbacks actually available by those names, so it can return fewer - or
+				// none at all, when the source that exports them failed. Configuring the model
+				// from the request rather than from what resolved leaves it declaring tools it
+				// will never send.
+				if (functions != null && !functions.isEmpty()) {
+					builder.toolCallbacks(functions);
+				} else {
+					LOGGER.warn("Chat model " + config.getCode() + " enables "
+							+ config.getEnabledFunctions().size()
+							+ " tool(s) but none of them resolved to a callback, so it is configured"
+							+ " without tools: " + config.getEnabledFunctions());
+				}
 			}
 			BedrockChatOptions options = builder.build();
 
 			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
 					: functionsRepo.createToolCallingManager();
 
+			// The builder defaults asyncReadTimeout and socketTimeout to 30s and
+			// connectionTimeout to 5s, which cut long streamed generations well before
+			// the configured response timeout.
 			return BedrockProxyChatModel.builder()
 					.credentialsProvider(credentials)
 					.region(region)
+					.timeout(BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())))
+					.asyncReadTimeout(BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())))
+					.socketTimeout(BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())))
+					.connectionTimeout(BedrockClientCustomizer.connectTimeout(serviceClientsProviderFactory.get(type.getCode())))
+					.connectionAcquisitionTimeout(BedrockClientCustomizer.connectTimeout(serviceClientsProviderFactory.get(type.getCode())))
 					.options(options)
 					.toolCallingManager(toolCallingManager)
 					.observationRegistry(observationRegistry)

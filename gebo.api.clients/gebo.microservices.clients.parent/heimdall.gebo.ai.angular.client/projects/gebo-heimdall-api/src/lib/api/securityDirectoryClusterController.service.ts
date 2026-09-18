@@ -18,7 +18,9 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { CheckPasswordRequest } from '../model/checkPasswordRequest';
+import { CreateUserIfNotExistsRequest } from '../model/createUserIfNotExistsRequest';
 import { UserInfosImpl } from '../model/userInfosImpl';
+import { UsersGroup } from '../model/usersGroup';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -63,9 +65,9 @@ export class SecurityDirectoryClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public checkPassword(body: CheckPasswordRequest, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public checkPassword(body: CheckPasswordRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public checkPassword(body: CheckPasswordRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public checkPassword(body: CheckPasswordRequest, observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public checkPassword(body: CheckPasswordRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public checkPassword(body: CheckPasswordRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
     public checkPassword(body: CheckPasswordRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -92,7 +94,54 @@ export class SecurityDirectoryClusterControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/cluster/SecurityController/checkPassword`,
+        return this.httpClient.request<boolean>('post',`${this.basePath}/api/cluster/SecurityController/checkPassword`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createUserIfNotExists(body: CreateUserIfNotExistsRequest, observe?: 'body', reportProgress?: boolean): Observable<UserInfosImpl>;
+    public createUserIfNotExists(body: CreateUserIfNotExistsRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserInfosImpl>>;
+    public createUserIfNotExists(body: CreateUserIfNotExistsRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserInfosImpl>>;
+    public createUserIfNotExists(body: CreateUserIfNotExistsRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling createUserIfNotExists.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<UserInfosImpl>('post',`${this.basePath}/api/cluster/SecurityController/createUserIfNotExists`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -109,9 +158,9 @@ export class SecurityDirectoryClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAllGroups(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findAllGroups(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findAllGroups(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findAllGroups(observe?: 'body', reportProgress?: boolean): Observable<Array<UsersGroup>>;
+    public findAllGroups(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UsersGroup>>>;
+    public findAllGroups(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UsersGroup>>>;
     public findAllGroups(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -129,7 +178,7 @@ export class SecurityDirectoryClusterControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/cluster/SecurityController/findAllGroups`,
+        return this.httpClient.request<Array<UsersGroup>>('get',`${this.basePath}/api/cluster/SecurityController/findAllGroups`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -146,10 +195,10 @@ export class SecurityDirectoryClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGroupsOfUser(username: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findGroupsOfUser(username: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findGroupsOfUser(username: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findGroupsOfUser(username: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGroupsOfUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<UsersGroup>>;
+    public findGroupsOfUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UsersGroup>>>;
+    public findGroupsOfUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UsersGroup>>>;
+    public findGroupsOfUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling findGroupsOfUser.');
@@ -175,7 +224,7 @@ export class SecurityDirectoryClusterControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/cluster/SecurityController/findGroupsOfUser`,
+        return this.httpClient.request<Array<UsersGroup>>('get',`${this.basePath}/api/cluster/SecurityController/findGroupsOfUser`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -193,10 +242,10 @@ export class SecurityDirectoryClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUserByUsername(username: any, observe?: 'body', reportProgress?: boolean): Observable<UserInfosImpl>;
-    public findUserByUsername(username: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserInfosImpl>>;
-    public findUserByUsername(username: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserInfosImpl>>;
-    public findUserByUsername(username: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findUserByUsername(username: string, observe?: 'body', reportProgress?: boolean): Observable<UserInfosImpl>;
+    public findUserByUsername(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserInfosImpl>>;
+    public findUserByUsername(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserInfosImpl>>;
+    public findUserByUsername(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling findUserByUsername.');

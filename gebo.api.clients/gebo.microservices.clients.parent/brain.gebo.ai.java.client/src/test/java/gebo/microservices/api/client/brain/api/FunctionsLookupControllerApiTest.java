@@ -12,6 +12,8 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.GLookupEntry;
+import gebo.microservices.api.client.brain.model.ToolCategoriesTree;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -38,7 +40,7 @@ public class FunctionsLookupControllerApiTest {
      */
     @Test
     public void getAllFunctionsTest() {
-        Object response = api.getAllFunctions();
+        List<GLookupEntry> response = api.getAllFunctions();
 
         // TODO: test validations
     }
@@ -52,8 +54,8 @@ public class FunctionsLookupControllerApiTest {
      */
     @Test
     public void getAllFunctionsTreeTest() {
-        Object ragContextFunctions = null;
-        Object response = api.getAllFunctionsTree(ragContextFunctions);
+        Boolean ragContextFunctions = null;
+        List<ToolCategoriesTree> response = api.getAllFunctionsTree(ragContextFunctions);
 
         // TODO: test validations
     }
@@ -67,7 +69,7 @@ public class FunctionsLookupControllerApiTest {
      */
     @Test
     public void getAllLocalFunctionsTest() {
-        Object response = api.getAllLocalFunctions();
+        List<GLookupEntry> response = api.getAllLocalFunctions();
 
         // TODO: test validations
     }
@@ -81,8 +83,8 @@ public class FunctionsLookupControllerApiTest {
      */
     @Test
     public void getAllLocalFunctionsTreeTest() {
-        Object ragContextFunctions = null;
-        Object response = api.getAllLocalFunctionsTree(ragContextFunctions);
+        Boolean ragContextFunctions = null;
+        List<ToolCategoriesTree> response = api.getAllLocalFunctionsTree(ragContextFunctions);
 
         // TODO: test validations
     }

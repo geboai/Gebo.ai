@@ -15,11 +15,10 @@ package ai.gebo.git.content.handler.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
 import ai.gebo.git.content.handler.GGitContentManagementSystem;
 import ai.gebo.git.content.handler.config.GitSystemsConfig;
-import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationDao;
+import ai.gebo.systems.abstraction.layer.GAbstractContentManagementSystemConfigurationDao;
 
 /**
  * AI generated comments
@@ -30,9 +29,8 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationD
  * system configuration interface for Git systems.
  */
 @Service
-public class GitSystemsRuntimeConfiguratoinDao extends
-		GAbstractRuntimeConfigurationDao<GGitContentManagementSystem>
-		implements IGContentManagementSystemConfigurationDao<GGitContentManagementSystem> {
+public class GitSystemsRuntimeConfiguratoinDao
+		extends GAbstractContentManagementSystemConfigurationDao<GGitContentManagementSystem> {
 	
 	/**
 	 * Constructs a new GitSystemsRuntimeConfiguratoinDao with the specified configuration and optional
@@ -43,7 +41,10 @@ public class GitSystemsRuntimeConfiguratoinDao extends
 	 */
 	public GitSystemsRuntimeConfiguratoinDao(@Autowired GitSystemsConfig config,
 			@Autowired(required = false) IGDynamicConfigurationSource<GGitContentManagementSystem> source) {
-		super(config.getSystems(), source);
+		// No implied handled type: this module registers several Git content
+		// handlers (getGitSystemTypes lists them), so a declared system has to name
+		// its own contentManagementSystemType.
+		super(config.getSystems(), source, null);
 	}
 
 }

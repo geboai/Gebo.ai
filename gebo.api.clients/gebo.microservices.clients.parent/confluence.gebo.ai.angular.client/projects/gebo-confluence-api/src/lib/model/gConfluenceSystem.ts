@@ -11,20 +11,34 @@
  */
 
 export interface GConfluenceSystem { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    creationDate?: any;
-    modificationDate?: any;
-    version?: any;
-    contentManagementSystemType?: any;
-    readonly?: any;
-    baseUri?: any;
-    usedCapabilities?: any;
-    aclAliases?: any;
-    confluenceVersion?: any;
-    secretCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    creationDate?: Date;
+    modificationDate?: Date;
+    version?: string;
+    contentManagementSystemType?: string;
+    readonly?: boolean;
+    baseUri?: string;
+    usedCapabilities?: Array<GConfluenceSystem.UsedCapabilitiesEnum>;
+    aclAliases?: Array<number>;
+    confluenceVersion?: GConfluenceSystem.ConfluenceVersionEnum;
+    secretCode?: string;
+}
+export namespace GConfluenceSystem {
+    export type UsedCapabilitiesEnum = 'TICKETS_MANAGEMENT' | 'DOCUMENTS_MANAGEMENT' | 'SOURCE_MANAGEMENT' | 'ARTIFACTS_REPOSITORY_MANAGEMENT';
+    export const UsedCapabilitiesEnum = {
+        TICKETSMANAGEMENT: 'TICKETS_MANAGEMENT' as UsedCapabilitiesEnum,
+        DOCUMENTSMANAGEMENT: 'DOCUMENTS_MANAGEMENT' as UsedCapabilitiesEnum,
+        SOURCEMANAGEMENT: 'SOURCE_MANAGEMENT' as UsedCapabilitiesEnum,
+        ARTIFACTSREPOSITORYMANAGEMENT: 'ARTIFACTS_REPOSITORY_MANAGEMENT' as UsedCapabilitiesEnum
+    };
+    export type ConfluenceVersionEnum = 'ONPREMISE7X' | 'CLOUD';
+    export const ConfluenceVersionEnum = {
+        ONPREMISE7X: 'ONPREMISE7X' as ConfluenceVersionEnum,
+        CLOUD: 'CLOUD' as ConfluenceVersionEnum
+    };
 }

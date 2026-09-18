@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SpecialFile
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:55.259662693+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:31.380104145+02:00[Europe/Rome]")
 
 public class SpecialFile {
   @JsonProperty("fileName")
-  private Object fileName = null;
+  private String fileName = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
-  public SpecialFile fileName(Object fileName) {
+  public SpecialFile fileName(String fileName) {
     this.fileName = fileName;
     return this;
   }
@@ -41,15 +41,15 @@ public class SpecialFile {
    * @return fileName
   **/
   @Schema(description = "")
-  public Object getFileName() {
+  public String getFileName() {
     return fileName;
   }
 
-  public void setFileName(Object fileName) {
+  public void setFileName(String fileName) {
     this.fileName = fileName;
   }
 
-  public SpecialFile description(Object description) {
+  public SpecialFile description(String description) {
     this.description = description;
     return this;
   }
@@ -59,11 +59,11 @@ public class SpecialFile {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 

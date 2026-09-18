@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Oauth2ModuleStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class Oauth2ModuleStatus {
   @JsonProperty("oauth2UISetupEnabled")
-  private Object oauth2UISetupEnabled = null;
+  private Boolean oauth2UISetupEnabled = null;
 
   @JsonProperty("oauth2Enabled")
-  private Object oauth2Enabled = null;
+  private Boolean oauth2Enabled = null;
 
-  public Oauth2ModuleStatus oauth2UISetupEnabled(Object oauth2UISetupEnabled) {
+  public Oauth2ModuleStatus oauth2UISetupEnabled(Boolean oauth2UISetupEnabled) {
     this.oauth2UISetupEnabled = oauth2UISetupEnabled;
     return this;
   }
@@ -41,15 +41,15 @@ public class Oauth2ModuleStatus {
    * @return oauth2UISetupEnabled
   **/
   @Schema(description = "")
-  public Object getOauth2UISetupEnabled() {
+  public Boolean isOauth2UISetupEnabled() {
     return oauth2UISetupEnabled;
   }
 
-  public void setOauth2UISetupEnabled(Object oauth2UISetupEnabled) {
+  public void setOauth2UISetupEnabled(Boolean oauth2UISetupEnabled) {
     this.oauth2UISetupEnabled = oauth2UISetupEnabled;
   }
 
-  public Oauth2ModuleStatus oauth2Enabled(Object oauth2Enabled) {
+  public Oauth2ModuleStatus oauth2Enabled(Boolean oauth2Enabled) {
     this.oauth2Enabled = oauth2Enabled;
     return this;
   }
@@ -59,11 +59,11 @@ public class Oauth2ModuleStatus {
    * @return oauth2Enabled
   **/
   @Schema(description = "")
-  public Object getOauth2Enabled() {
+  public Boolean isOauth2Enabled() {
     return oauth2Enabled;
   }
 
-  public void setOauth2Enabled(Object oauth2Enabled) {
+  public void setOauth2Enabled(Boolean oauth2Enabled) {
     this.oauth2Enabled = oauth2Enabled;
   }
 

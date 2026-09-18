@@ -59,15 +59,35 @@ public class GeboRagSearchConfig {
 	// Upper bound on the fragments of a single batch, on top of the context window
 	// budget. It keeps the batches small enough for the model to judge them one by one
 	// and makes the walk advance in steps instead of deciding everything in one call.
-	private int rankerIrrelevanceFilterMaxFragmentsPerBatch = 5;
+	private int rankerIrrelevanceFilterMaxFragmentsPerBatch = 15;
 	// The filter does not run on result sets smaller than this: on a handful of
 	// fragments the extra LLM round trip is not worth its latency
 	private int rankerIrrelevanceFilterMinDocuments = 5;
+	/**
+	 * Fraction of ranked fragments discarded by the irrelevance filter above which the
+	 * event is logged at WARN instead of DEBUG. The filter dropping a lot is not a fault
+	 * of the filter - it removes only what the service model judged useless on every one
+	 * of its pieces - but a sustained high rate means the retrieval probes are off
+	 * target, which is worth surfacing without enabling TRACE.
+	 */
+	private double rankerIrrelevanceFilterWarnRate = 0.6;
 	// The best ranked fragments are never submitted to the filter: the filtering model
 	// is non deterministic and can occasionally judge as useless a fragment the ranker
 	// scored among the most relevant, so the top of the ranked list is protected from
 	// it. Set to 0 to let the filter judge the whole list.
 	private int rankerIrrelevanceFilterProtectedTopFragments = 2;
+	// Hybrid retrieval. When enabled the lexical (full text) leg ALWAYS runs beside
+	// the semantic one and the two share the requested topK, instead of the lexical
+	// leg running only as a fallback when the semantic one under delivers. With a
+	// populated vector store the semantic leg always filled the quota, so the
+	// lexical index was never queried and queries carrying rare literal terms - the
+	// ones lexical search is best at - could not be answered. Set to false to get
+	// the previous semantic-first/lexical-fallback behaviour back.
+	private boolean hybridSearchEnabled = true;
+	// Share of the requested topK reserved for the lexical leg when hybrid retrieval
+	// is enabled. The remainder goes to the semantic leg. 0.5 splits the budget
+	// evenly; lower it to favour semantic recall, raise it to favour literal matches.
+	private double hybridFullTextShare = 0.5;
 
 	public GeboRagSearchConfig(@Autowired IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService,
 			@Autowired IGSemanticSearchDocumentsCachedDao semanticSearchDao,

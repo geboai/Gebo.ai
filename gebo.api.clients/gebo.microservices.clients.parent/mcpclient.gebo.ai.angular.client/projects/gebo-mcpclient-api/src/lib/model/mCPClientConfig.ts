@@ -9,30 +9,51 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { MCPPrompt } from './mCPPrompt';
+import { MCPResource } from './mCPResource';
+import { MCPTool } from './mCPTool';
 
 export interface MCPClientConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    baseUrl?: any;
-    mcpEndpoint?: any;
-    sseEndpoint?: any;
-    secretCode?: any;
-    oauth2AuthenticatorCode?: any;
-    stdioCommand?: any;
-    stdioArgs?: any;
-    stdioEnvironment?: any;
-    transportType: any;
-    authMode: any;
-    exportingPrefix: any;
-    accessibleGroups?: any;
-    accessibleUsers?: any;
-    accessibleToAll?: any;
-    aclAliases?: any;
-    tools?: any;
-    resources?: any;
-    prompts?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    baseUrl?: string;
+    mcpEndpoint?: string;
+    sseEndpoint?: string;
+    secretCode?: string;
+    oauth2AuthenticatorCode?: string;
+    stdioCommand?: string;
+    stdioArgs?: Array<string>;
+    stdioEnvironment?: { [key: string]: string; };
+    transportType: MCPClientConfig.TransportTypeEnum;
+    authMode: MCPClientConfig.AuthModeEnum;
+    exportingPrefix: string;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    aclAliases?: Array<number>;
+    tools?: Array<MCPTool>;
+    resources?: Array<MCPResource>;
+    prompts?: Array<MCPPrompt>;
+}
+export namespace MCPClientConfig {
+    export type TransportTypeEnum = 'STREAMABLE_HTTP' | 'SSE_LEGACY' | 'STDIO';
+    export const TransportTypeEnum = {
+        STREAMABLEHTTP: 'STREAMABLE_HTTP' as TransportTypeEnum,
+        SSELEGACY: 'SSE_LEGACY' as TransportTypeEnum,
+        STDIO: 'STDIO' as TransportTypeEnum
+    };
+    export type AuthModeEnum = 'NONE' | 'API_KEY' | 'STATIC_BEARER_TOKEN' | 'OAUTH2_CLIENT_CREDENTIALS' | 'OAUTH2_AUTHORIZATION_CODE_PER_USER' | 'USER_TOKEN_RELAY' | 'TOKEN_EXCHANGE';
+    export const AuthModeEnum = {
+        NONE: 'NONE' as AuthModeEnum,
+        APIKEY: 'API_KEY' as AuthModeEnum,
+        STATICBEARERTOKEN: 'STATIC_BEARER_TOKEN' as AuthModeEnum,
+        OAUTH2CLIENTCREDENTIALS: 'OAUTH2_CLIENT_CREDENTIALS' as AuthModeEnum,
+        OAUTH2AUTHORIZATIONCODEPERUSER: 'OAUTH2_AUTHORIZATION_CODE_PER_USER' as AuthModeEnum,
+        USERTOKENRELAY: 'USER_TOKEN_RELAY' as AuthModeEnum,
+        TOKENEXCHANGE: 'TOKEN_EXCHANGE' as AuthModeEnum
+    };
 }

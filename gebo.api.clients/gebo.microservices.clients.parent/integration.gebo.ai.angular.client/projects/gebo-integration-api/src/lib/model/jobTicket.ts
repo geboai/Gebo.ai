@@ -11,7 +11,14 @@
  */
 
 export interface JobTicket { 
-    ticketType: any;
-    ticketId: any;
-    contentCode: any;
+    ticketType: JobTicket.TicketTypeEnum;
+    ticketId: string;
+    contentCode: string;
+}
+export namespace JobTicket {
+    export type TicketTypeEnum = 'CONTENT' | 'JOB';
+    export const TicketTypeEnum = {
+        CONTENT: 'CONTENT' as TicketTypeEnum,
+        JOB: 'JOB' as TicketTypeEnum
+    };
 }

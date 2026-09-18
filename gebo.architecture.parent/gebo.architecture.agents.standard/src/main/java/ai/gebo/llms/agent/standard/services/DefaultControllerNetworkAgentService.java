@@ -59,9 +59,23 @@ public class DefaultControllerNetworkAgentService extends GBaseRoutingNetworkAge
 				splitByBudget);
 		DeliverableIntent actualUserIntent = (DeliverableIntent) session.getEnvironment()
 				.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT);
-		if (actualUserIntent == null)
+		if (actualUserIntent == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No " + StandardAgentsNetworkEnvironmentEntries.USER_INTENT
+						+ " in the shared environment, the controller defaults to SUMMARY");
+			}
 			actualUserIntent = DeliverableIntent.SUMMARY;
+		}
 		final String completeness = actualUserIntent.name() + ": " + actualUserIntent.getAgentDeliverableCompleteness();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Controller agent id:" + getId() + " required deliverable completeness:"
+					+ actualUserIntent.name() + " applied to " + output.size() + " parameter window(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<" + REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM + ">");
+			LOGGER.trace(completeness);
+			LOGGER.trace("</" + REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM + ">");
+		}
 		for (Map<String, Object> window : output) {
 			window.put(REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM, completeness);
 		}
@@ -79,9 +93,21 @@ public class DefaultControllerNetworkAgentService extends GBaseRoutingNetworkAge
 			AgentNetworkParticipant contextAgentPersona, GAgentRole agentRole, String outputNodeName,
 			AgentsExchangeMessage<String> originalMessage, int deliveryOrder) {
 		if (outputNodeName == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No output node in the network: the controller cannot force a final writing pass");
+			}
 			return null;
 		}
 		String userRequest = originalMessage != null ? originalMessage.getPayload() : null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Forcing a final writing pass onto the output node:" + outputNodeName + " at deliveryOrder:"
+					+ deliveryOrder);
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<FORCED_WRITER_INSTRUCTION>");
+			LOGGER.trace(finalWriterFallbackInstruction(userRequest));
+			LOGGER.trace("</FORCED_WRITER_INSTRUCTION>");
+		}
 		return new AgentsExchangeMessage(session.getId(), MessageSemantic.EXECUTE_AND_SHARE_RESULT,
 				contextAgentPersona.getNetworkAgentName(), agentRole, outputNodeName,
 				finalWriterFallbackInstruction(userRequest), deliveryOrder);

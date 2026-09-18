@@ -1,0 +1,61 @@
+{
+  "realm": "onlyoffice-workspace-dev",
+  "enabled": true,
+  "sslRequired": "none",
+  "clients": [
+    {
+      "clientId": "onlyoffice-plugin-dev",
+      "enabled": true,
+      "publicClient": false,
+      "protocol": "openid-connect",
+      "secret": "42f277af-7919-4edb-a686-a2f40ec4dc87",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "http://office.localtest.me:4280/oauth2/callback",
+        "http://gebo.localtest.me:13999/login/oauth2/code/*",
+        "http://gebo.localtest.me:13999/*"
+      ],
+      "webOrigins": [
+        "http://office.localtest.me:4280",
+        "http://gebo.localtest.me:13999"
+      ]
+    },
+    {
+      "clientId": "nextcloud",
+      "enabled": true,
+      "publicClient": false,
+      "protocol": "openid-connect",
+      "secret": "nextcloud-sandbox-secret-2026",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [
+        "http://nextcloud.localtest.me:8090/apps/user_oidc/code",
+        "http://nextcloud.localtest.me:8090/*"
+      ],
+      "webOrigins": [
+        "http://nextcloud.localtest.me:8090"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "developer",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "developer@workspace.local",
+      "firstName": "Plugin",
+      "lastName": "Developer",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "developer",
+          "temporary": false
+        }
+      ]
+    }
+  ],
+  "accessTokenLifespan": 1800,
+  "ssoSessionIdleTimeout": 36000,
+  "ssoSessionMaxLifespan": 36000
+}

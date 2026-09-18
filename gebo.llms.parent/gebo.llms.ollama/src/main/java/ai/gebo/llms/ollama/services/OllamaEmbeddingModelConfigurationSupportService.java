@@ -10,7 +10,6 @@
 /**
  * AI generated comments
  * Service for configuring and creating Ollama embedding models.
- * This service is only active when the property 'ai.gebo.llms.config.ollamaEnabled' is set to true.
  */
 package ai.gebo.llms.ollama.services;
 
@@ -24,7 +23,6 @@ import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaEmbeddingOptions;
 import org.springframework.ai.ollama.management.ModelManagementOptions;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +46,6 @@ import io.micrometer.observation.ObservationRegistry;
 import jakarta.el.MethodNotFoundException;
 import lombok.AllArgsConstructor;
 
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "ollamaEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class OllamaEmbeddingModelConfigurationSupportService implements

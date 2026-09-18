@@ -12,6 +12,6 @@
 
 export interface GeboChatMessageEnvelope { 
     content?: any;
-    lastMessage?: any;
-    contentObjectType?: any;
+    lastMessage?: boolean;
+    contentObjectType?: string;
 }

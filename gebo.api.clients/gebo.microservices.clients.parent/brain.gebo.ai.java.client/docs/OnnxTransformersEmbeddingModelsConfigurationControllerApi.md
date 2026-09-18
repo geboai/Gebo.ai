@@ -67,7 +67,7 @@ No authorization required
 
 
 OnnxTransformersEmbeddingModelsConfigurationControllerApi apiInstance = new OnnxTransformersEmbeddingModelsConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GONNXTransformersEmbeddingModelConfig result = apiInstance.findONNXTransformersEmbeddingModelConfigByCode(code);
     System.out.println(result);
@@ -81,7 +81,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

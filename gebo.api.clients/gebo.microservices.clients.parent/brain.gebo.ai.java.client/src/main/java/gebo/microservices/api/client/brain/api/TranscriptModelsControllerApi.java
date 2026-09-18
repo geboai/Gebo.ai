@@ -2,6 +2,8 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseTranscriptModelConfig;
+import gebo.microservices.api.client.brain.model.GTranscriptModelType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class TranscriptModelsControllerApi {
     private ApiClient apiClient;
@@ -46,10 +48,10 @@ public class TranscriptModelsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return Object
+     * @return List&lt;ConfigurationEntryGBaseTranscriptModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getRuntimeConfiguredTranscriptModels(Object modelTypeCode) throws RestClientException {
+    public List<ConfigurationEntryGBaseTranscriptModelConfig> getRuntimeConfiguredTranscriptModels(String modelTypeCode) throws RestClientException {
         return getRuntimeConfiguredTranscriptModelsWithHttpInfo(modelTypeCode).getBody();
     }
 
@@ -58,12 +60,12 @@ public class TranscriptModelsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;ConfigurationEntryGBaseTranscriptModelConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getRuntimeConfiguredTranscriptModelsWithHttpInfo(Object modelTypeCode) throws RestClientException {
+    public ResponseEntity<List<ConfigurationEntryGBaseTranscriptModelConfig>> getRuntimeConfiguredTranscriptModelsWithHttpInfo(String modelTypeCode) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -79,17 +81,17 @@ public class TranscriptModelsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<ConfigurationEntryGBaseTranscriptModelConfig>> returnType = new ParameterizedTypeReference<List<ConfigurationEntryGBaseTranscriptModelConfig>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GTranscriptModelType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getTranscriptModelTypes() throws RestClientException {
+    public List<GTranscriptModelType> getTranscriptModelTypes() throws RestClientException {
         return getTranscriptModelTypesWithHttpInfo().getBody();
     }
 
@@ -97,12 +99,12 @@ public class TranscriptModelsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GTranscriptModelType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getTranscriptModelTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GTranscriptModelType>> getTranscriptModelTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/TranscriptModelsController/getTranscriptModelTypes").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/TranscriptModelsController/getTranscriptModelTypes").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -117,7 +119,7 @@ public class TranscriptModelsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GTranscriptModelType>> returnType = new ParameterizedTypeReference<List<GTranscriptModelType>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

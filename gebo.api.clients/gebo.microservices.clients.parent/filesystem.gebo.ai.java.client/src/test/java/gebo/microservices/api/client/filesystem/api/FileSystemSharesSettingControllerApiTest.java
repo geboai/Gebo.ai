@@ -13,12 +13,14 @@
 package gebo.microservices.api.client.filesystem.api;
 
 import gebo.microservices.api.client.filesystem.model.BrowseParam;
+import gebo.microservices.api.client.filesystem.model.FSReference;
 import gebo.microservices.api.client.filesystem.model.GFileSystemShareReference;
 import gebo.microservices.api.client.filesystem.model.OperationStatusGFileSystemShareReference;
 import gebo.microservices.api.client.filesystem.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.filesystem.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.filesystem.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
 import gebo.microservices.api.client.filesystem.model.SharedFilesystemUIConfig;
+import gebo.microservices.api.client.filesystem.model.VFilesystemReference;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -75,7 +77,7 @@ public class FileSystemSharesSettingControllerApiTest {
      */
     @Test
     public void getFileSystemShareReferenceByCodeTest() {
-        Object code = null;
+        String code = null;
         GFileSystemShareReference response = api.getFileSystemShareReferenceByCode(code);
 
         // TODO: test validations
@@ -105,7 +107,7 @@ public class FileSystemSharesSettingControllerApiTest {
      */
     @Test
     public void getGFileSystemNodeNavigationStatusTest() {
-        Object body = null;
+        List<VFilesystemReference> body = null;
         OperationStatusListVirtualFilesystemNavigationTreeStatus response = api.getGFileSystemNodeNavigationStatus(body);
 
         // TODO: test validations
@@ -148,8 +150,8 @@ public class FileSystemSharesSettingControllerApiTest {
      */
     @Test
     public void getUsedFilesystemSharesTest() {
-        Object body = null;
-        Object response = api.getUsedFilesystemShares(body);
+        List<String> body = null;
+        List<FSReference> response = api.getUsedFilesystemShares(body);
 
         // TODO: test validations
     }

@@ -30,7 +30,8 @@
             <p-tablist>
               <p-tab [value]="0" gebo-ai-text>General infos</p-tab>
               <p-tab [value]="1" gebo-ai-text>Agents Network Graph</p-tab>
-              <p-tab [value]="2" gebo-ai-text>Security access settings</p-tab>
+              <p-tab [value]="2" gebo-ai-text>Agents list</p-tab>
+              <p-tab [value]="3" gebo-ai-text>Security access settings</p-tab>
             </p-tablist>
             <p-tabpanels>
             <p-tabpanel [value]="0">
@@ -108,6 +109,71 @@
                 </p-tabpanel>
 
                 <p-tabpanel [value]="2">
+                  <div class="flex justify-content-between align-items-center mb-4 p-2">
+                    <div>
+                      <h3 class="m-0 font-semibold text-xl">Agents in the Network</h3>
+                      <p class="text-sm text-muted-color m-0">Click a row to open the agent editor{{ readonly ? ' (read only)' : '' }}.</p>
+                    </div>
+                    <div class="flex gap-2">
+                      <button pButton label="Add Agent" icon="pi pi-plus" class="p-button-outlined" [disabled]="readonly" (click)="openAddParticipant()"></button>
+                    </div>
+                  </div>
+
+                  <p-table [value]="agentsList" [rowHover]="true" styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="420px">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th>Network Agent Name</th>
+                        <th>Agent Configuration</th>
+                        <th>Contextual Name</th>
+                        <th>Role</th>
+                        <th>Communication Policy</th>
+                        <th>Communicates With</th>
+                        <th style="width: 7rem"></th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-agent>
+                      <tr class="cursor-pointer" (click)="openEditParticipant(agent)">
+                        <td class="font-semibold text-primary">{{ agent.networkAgentName }}</td>
+                        <td>{{ getAgentDescription(agent.agentConfigCode) }}</td>
+                        <td>{{ agent.agentContextualName || '-' }}</td>
+                        <td>
+                          <div class="flex gap-1">
+                            @if (agent.inputNode) {
+                              <span class="p-1 border-round bg-green-100 text-green-700 text-xs font-semibold" title="Input Node">IN</span>
+                            }
+                            @if (agent.outputNode) {
+                              <span class="p-1 border-round bg-blue-100 text-blue-700 text-xs font-semibold" title="Output Node">OUT</span>
+                            }
+                            @if (!agent.inputNode && !agent.outputNode) {
+                              <span class="text-muted-color">-</span>
+                            }
+                          </div>
+                        </td>
+                        <td>{{ agent.communicationPolicy }}</td>
+                        <td>{{ (agent.communicationList && agent.communicationList.length) ? agent.communicationList.join(', ') : '-' }}</td>
+                        <td class="text-right" (click)="$event.stopPropagation()">
+                          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-secondary p-button-sm p-0 w-2rem h-2rem"
+                            [title]="readonly ? 'View Participant' : 'Edit Participant'" (click)="openEditParticipant(agent)"></button>
+                          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger p-button-sm p-0 w-2rem h-2rem"
+                            [disabled]="readonly" title="Remove Participant" (click)="deleteParticipant(agent)"></button>
+                        </td>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                      <tr>
+                        <td colspan="7">
+                          <div class="flex flex-column align-items-center justify-content-center p-5 text-center">
+                            <i class="pi pi-users text-3xl text-primary mb-2"></i>
+                            <span class="font-semibold mb-1">No agents in the network yet</span>
+                            <span class="text-sm text-muted-color">Use "Add Agent" to add the first participant.</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </p-tabpanel>
+
+                <p-tabpanel [value]="3">
                   <div class="standardTabDialogueHeight">
                     <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
                   </div>
@@ -118,70 +184,84 @@
           </div>
         </p-panel>
 
-        <!-- Participant Modal Dialog -->
-        <p-dialog [(visible)]="showParticipantDialog" [header]="dialogHeader" [modal]="true" [style]="{width: '520px'}" styleClass="p-fluid" [dismissableMask]="true">
-          <div class="grid gap-3 p-3" [formGroup]="participantFormGroup">
-            <div class="col-12">
-              <label for="networkAgentName" class="font-semibold mb-1 block text-sm">Network Agent Name *</label>
-              <input pInputText id="networkAgentName" formControlName="networkAgentName" placeholder="Unique name in network (e.g. worker)" />
-            </div>
-
-            <div class="col-12">
-              <label for="agentConfigCode" class="font-semibold mb-1 block text-sm">Agent Configuration *</label>
-              <div class="flex gap-2">
-                <p-select id="agentConfigCode" formControlName="agentConfigCode" [options]="availableAgents" optionValue="code" optionLabel="description" placeholder="Select Agent Configuration" class="flex-grow-1"></p-select>
-                <button pButton icon="pi pi-pencil" class="p-button-outlined w-3rem h-3rem" [disabled]="!participantFormGroup.get('agentConfigCode')?.value || readonly" (click)="editAgentConfig(participantFormGroup.get('agentConfigCode')?.value)" title="Edit Agent Configuration"></button>
-                <button pButton icon="pi pi-plus" class="p-button-outlined w-3rem h-3rem" [disabled]="readonly" (click)="addAgentConfig()" title="Add Agent Configuration"></button>
+        <!-- Participant Modal Dialog - organized like the entity editors: 90% viewport, buttons on top -->
+        <p-dialog [(visible)]="showParticipantDialog" [modal]="true" styleClass="gebo-entity-dialog"
+          [style]="{width: '90vw', height: '90vh'}" [maximizable]="true" [dismissableMask]="true">
+          <p-panel [header]="dialogHeader" [formGroup]="participantFormGroup">
+            <div class="geboButtonsBar" style="vertical-align: bottom">
+              <div class="grid">
+                <div class="col-6">
+                  <p-button [outlined]="true" label="Save" (onClick)="saveParticipant()" icon="pi pi-save"
+                    severity="success" [disabled]="participantFormGroup.invalid || readonly===true" styleClass="w-full"></p-button>
+                </div>
+                <div class="col-6">
+                  <p-button [outlined]="true" label="Cancel" severity="contrast"
+                    (onClick)="showParticipantDialog = false" styleClass="w-full"></p-button>
+                </div>
               </div>
             </div>
 
-            <div class="col-12">
-              <label for="agentContextualName" class="font-semibold mb-1 block text-sm">Contextual Name</label>
-              <input pInputText id="agentContextualName" formControlName="agentContextualName" placeholder="Optional contextual description" />
-            </div>
-
-            <div class="col-12 grid">
-              <div class="col-6 flex align-items-center gap-2">
-                <p-checkbox formControlName="inputNode" [binary]="true" id="inputNode" label="Starting Input Node"></p-checkbox>
+            <div class="grid geboDialogContent p-3">
+              <div class="col-12 md:col-6">
+                <label for="networkAgentName" class="font-semibold mb-1 block text-sm">Network Agent Name *</label>
+                <input pInputText id="networkAgentName" formControlName="networkAgentName" class="w-full" placeholder="Unique name in network (e.g. worker)" />
               </div>
-              <div class="col-6 flex align-items-center gap-2">
-                <p-checkbox formControlName="outputNode" [binary]="true" id="outputNode" label="Final Output Node"></p-checkbox>
+
+              <div class="col-12 md:col-6">
+                <label for="agentConfigCode" class="font-semibold mb-1 block text-sm">Agent Configuration *</label>
+                <div class="flex gap-2">
+                  <p-select id="agentConfigCode" formControlName="agentConfigCode" [options]="availableAgents" optionValue="code" optionLabel="description" placeholder="Select Agent Configuration" class="flex-grow-1"></p-select>
+                  <button pButton icon="pi pi-pencil" class="p-button-outlined w-3rem h-3rem" [disabled]="!participantFormGroup.get('agentConfigCode')?.value || readonly" (click)="editAgentConfig(participantFormGroup.get('agentConfigCode')?.value)" title="Edit Agent Configuration"></button>
+                  <button pButton icon="pi pi-plus" class="p-button-outlined w-3rem h-3rem" [disabled]="readonly" (click)="addAgentConfig()" title="Add Agent Configuration"></button>
+                </div>
               </div>
-            </div>
 
-            <div class="col-12 border-top-1 surface-border pt-3">
-              <label for="communicationPolicy" class="font-semibold mb-1 block text-sm">Communication Policy *</label>
-              <p-select id="communicationPolicy" formControlName="communicationPolicy" [options]="policyOptions" optionValue="value" optionLabel="label"></p-select>
-            </div>
+              <div class="col-12 md:col-6">
+                <label for="agentContextualName" class="font-semibold mb-1 block text-sm">Contextual Name</label>
+                <input pInputText id="agentContextualName" formControlName="agentContextualName" class="w-full" placeholder="Optional contextual description" />
+              </div>
 
-            <div class="col-12">
-              <label for="communicationList" class="font-semibold mb-1 block text-sm">Communicates With</label>
-              <p-multiSelect id="communicationList" formControlName="communicationList" [options]="getPotentialTargets(participantFormGroup.get('networkAgentName')?.value || undefined)" placeholder="Select target agents"></p-multiSelect>
-            </div>
+              <div class="col-12 md:col-6">
+                <label for="communicationPolicy" class="font-semibold mb-1 block text-sm">Communication Policy *</label>
+                <p-select id="communicationPolicy" formControlName="communicationPolicy" [options]="policyOptions" optionValue="value" optionLabel="label" class="w-full"></p-select>
+              </div>
 
-            <div class="col-12 grid border-top-1 surface-border pt-3">
-              <div class="col-6">
+              <div class="col-12">
+                <label for="communicationList" class="font-semibold mb-1 block text-sm">Communicates With</label>
+                <p-multiSelect id="communicationList" formControlName="communicationList" [options]="getPotentialTargets(participantFormGroup.get('networkAgentName')?.value || undefined)" placeholder="Select target agents" class="w-full"></p-multiSelect>
+              </div>
+
+              <div class="col-12 md:col-6">
                 <label for="maxInvocations" class="font-semibold mb-1 block text-sm">Max Invocations</label>
-                <p-inputNumber id="maxInvocations" formControlName="maxInvocations" [min]="1" placeholder="Unlimited"></p-inputNumber>
+                <p-inputNumber id="maxInvocations" formControlName="maxInvocations" [min]="1" placeholder="Unlimited" styleClass="w-full"></p-inputNumber>
               </div>
-              <div class="col-6">
+
+              <div class="col-12 md:col-6">
                 <label for="maxConsecutiveInvocations" class="font-semibold mb-1 block text-sm">Max Consecutive Invocations</label>
-                <p-inputNumber id="maxConsecutiveInvocations" formControlName="maxConsecutiveInvocations" [min]="1" placeholder="Unlimited"></p-inputNumber>
+                <p-inputNumber id="maxConsecutiveInvocations" formControlName="maxConsecutiveInvocations" [min]="1" placeholder="Unlimited" styleClass="w-full"></p-inputNumber>
+              </div>
+
+              <div class="col-12 border-top-1 surface-border pt-3">
+                <span class="font-semibold text-sm block mb-2">Node role &amp; capabilities</span>
+                <div class="grid">
+                  <div class="col-6 md:col-3 flex align-items-center gap-2">
+                    <p-checkbox formControlName="inputNode" [binary]="true" inputId="inputNode"></p-checkbox>
+                    <label for="inputNode" class="text-sm">Starting Input Node</label>
+                  </div>
+                  <div class="col-6 md:col-3 flex align-items-center gap-2">
+                    <p-checkbox formControlName="outputNode" [binary]="true" inputId="outputNode"></p-checkbox>
+                    <label for="outputNode" class="text-sm">Final Output Node</label>
+                  </div>
+                  <div class="col-6 md:col-3 flex align-items-center gap-2">
+                    <p-checkbox formControlName="canCallTools" [binary]="true" inputId="canCallTools"></p-checkbox>
+                    <label for="canCallTools" class="text-sm">Can Call Tools</label>
+                  </div>
+                  <div class="col-6 md:col-3 flex align-items-center gap-2">
+                    <p-checkbox formControlName="canCallOtherAgents" [binary]="true" inputId="canCallOtherAgents"></p-checkbox>
+                    <label for="canCallOtherAgents" class="text-sm">Can Call Other Agents</label>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div class="col-12 grid">
-              <div class="col-6 flex align-items-center gap-2">
-                <p-checkbox formControlName="canCallTools" [binary]="true" id="canCallTools" label="Can Call Tools"></p-checkbox>
-              </div>
-              <div class="col-6 flex align-items-center gap-2">
-                <p-checkbox formControlName="canCallOtherAgents" [binary]="true" id="canCallOtherAgents" label="Can Call Other Agents"></p-checkbox>
-              </div>
-            </div>
-          </div>
-
-          <ng-template pTemplate="footer">
-            <button pButton label="Cancel" icon="pi pi-times" class="p-button-text p-button-secondary" (click)="showParticipantDialog = false"></button>
-            <button pButton label="Save" icon="pi pi-check" class="p-button-primary" [disabled]="participantFormGroup.invalid || readonly" (click)="saveParticipant()"></button>
-          </ng-template>
+          </p-panel>
         </p-dialog>

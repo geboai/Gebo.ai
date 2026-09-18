@@ -17,21 +17,24 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.filesystem.model.GFileSystemShareReference;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * SharedFilesystemUIConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:56.984278175+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:30.490254341+02:00[Europe/Rome]")
 
 public class SharedFilesystemUIConfig {
   @JsonProperty("uiSettingsEnabled")
-  private Object uiSettingsEnabled = null;
+  private Boolean uiSettingsEnabled = null;
 
   @JsonProperty("shares")
-  private Object shares = null;
+  private List<GFileSystemShareReference> shares = null;
 
-  public SharedFilesystemUIConfig uiSettingsEnabled(Object uiSettingsEnabled) {
+  public SharedFilesystemUIConfig uiSettingsEnabled(Boolean uiSettingsEnabled) {
     this.uiSettingsEnabled = uiSettingsEnabled;
     return this;
   }
@@ -41,16 +44,24 @@ public class SharedFilesystemUIConfig {
    * @return uiSettingsEnabled
   **/
   @Schema(description = "")
-  public Object getUiSettingsEnabled() {
+  public Boolean isUiSettingsEnabled() {
     return uiSettingsEnabled;
   }
 
-  public void setUiSettingsEnabled(Object uiSettingsEnabled) {
+  public void setUiSettingsEnabled(Boolean uiSettingsEnabled) {
     this.uiSettingsEnabled = uiSettingsEnabled;
   }
 
-  public SharedFilesystemUIConfig shares(Object shares) {
+  public SharedFilesystemUIConfig shares(List<GFileSystemShareReference> shares) {
     this.shares = shares;
+    return this;
+  }
+
+  public SharedFilesystemUIConfig addSharesItem(GFileSystemShareReference sharesItem) {
+    if (this.shares == null) {
+      this.shares = new ArrayList<>();
+    }
+    this.shares.add(sharesItem);
     return this;
   }
 
@@ -59,11 +70,11 @@ public class SharedFilesystemUIConfig {
    * @return shares
   **/
   @Schema(description = "")
-  public Object getShares() {
+  public List<GFileSystemShareReference> getShares() {
     return shares;
   }
 
-  public void setShares(Object shares) {
+  public void setShares(List<GFileSystemShareReference> shares) {
     this.shares = shares;
   }
 

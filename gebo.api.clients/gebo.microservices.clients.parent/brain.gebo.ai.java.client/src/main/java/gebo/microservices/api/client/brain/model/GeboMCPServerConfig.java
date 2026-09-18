@@ -17,75 +17,81 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GObjectRefGProjectEndpoint;
+import gebo.microservices.api.client.brain.model.GeboMCPAgentTool;
+import gebo.microservices.api.client.brain.model.GeboMCPAgentsNetworkTool;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GeboMCPServerConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboMCPServerConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("exportedUniqueRelativeUrl")
-  private Object exportedUniqueRelativeUrl = null;
+  private String exportedUniqueRelativeUrl = null;
 
   @JsonProperty("enabled")
-  private Object enabled = null;
+  private Boolean enabled = null;
 
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("shareAllPersonallyVisible")
-  private Object shareAllPersonallyVisible = null;
+  private Boolean shareAllPersonallyVisible = null;
 
   @JsonProperty("enabledTools")
-  private Object enabledTools = null;
+  private List<String> enabledTools = null;
 
   @JsonProperty("exportedKnowledgeBasesAsResources")
-  private Object exportedKnowledgeBasesAsResources = null;
+  private List<String> exportedKnowledgeBasesAsResources = null;
 
   @JsonProperty("exportedProjectsAsResources")
-  private Object exportedProjectsAsResources = null;
+  private List<String> exportedProjectsAsResources = null;
 
   @JsonProperty("exportedProjectEndpoints")
-  private Object exportedProjectEndpoints = null;
+  private List<GObjectRefGProjectEndpoint> exportedProjectEndpoints = null;
 
   @JsonProperty("exportedPrompts")
-  private Object exportedPrompts = null;
+  private List<String> exportedPrompts = null;
 
   @JsonProperty("agentAsTools")
-  private Object agentAsTools = null;
+  private List<GeboMCPAgentTool> agentAsTools = null;
 
   @JsonProperty("agentNetworkAsTools")
-  private Object agentNetworkAsTools = null;
+  private List<GeboMCPAgentsNetworkTool> agentNetworkAsTools = null;
 
-  public GeboMCPServerConfig code(Object code) {
+  public GeboMCPServerConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -95,15 +101,15 @@ public class GeboMCPServerConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GeboMCPServerConfig description(Object description) {
+  public GeboMCPServerConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -113,15 +119,15 @@ public class GeboMCPServerConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GeboMCPServerConfig userModified(Object userModified) {
+  public GeboMCPServerConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -131,15 +137,15 @@ public class GeboMCPServerConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GeboMCPServerConfig userCreated(Object userCreated) {
+  public GeboMCPServerConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -149,15 +155,15 @@ public class GeboMCPServerConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GeboMCPServerConfig dateModified(Object dateModified) {
+  public GeboMCPServerConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -167,15 +173,15 @@ public class GeboMCPServerConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GeboMCPServerConfig dateCreated(Object dateCreated) {
+  public GeboMCPServerConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -185,15 +191,15 @@ public class GeboMCPServerConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GeboMCPServerConfig exportedUniqueRelativeUrl(Object exportedUniqueRelativeUrl) {
+  public GeboMCPServerConfig exportedUniqueRelativeUrl(String exportedUniqueRelativeUrl) {
     this.exportedUniqueRelativeUrl = exportedUniqueRelativeUrl;
     return this;
   }
@@ -203,15 +209,15 @@ public class GeboMCPServerConfig {
    * @return exportedUniqueRelativeUrl
   **/
   @Schema(required = true, description = "")
-  public Object getExportedUniqueRelativeUrl() {
+  public String getExportedUniqueRelativeUrl() {
     return exportedUniqueRelativeUrl;
   }
 
-  public void setExportedUniqueRelativeUrl(Object exportedUniqueRelativeUrl) {
+  public void setExportedUniqueRelativeUrl(String exportedUniqueRelativeUrl) {
     this.exportedUniqueRelativeUrl = exportedUniqueRelativeUrl;
   }
 
-  public GeboMCPServerConfig enabled(Object enabled) {
+  public GeboMCPServerConfig enabled(Boolean enabled) {
     this.enabled = enabled;
     return this;
   }
@@ -221,16 +227,24 @@ public class GeboMCPServerConfig {
    * @return enabled
   **/
   @Schema(description = "")
-  public Object getEnabled() {
+  public Boolean isEnabled() {
     return enabled;
   }
 
-  public void setEnabled(Object enabled) {
+  public void setEnabled(Boolean enabled) {
     this.enabled = enabled;
   }
 
-  public GeboMCPServerConfig accessibleGroups(Object accessibleGroups) {
+  public GeboMCPServerConfig accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public GeboMCPServerConfig addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -239,16 +253,24 @@ public class GeboMCPServerConfig {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public GeboMCPServerConfig accessibleUsers(Object accessibleUsers) {
+  public GeboMCPServerConfig accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public GeboMCPServerConfig addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -257,15 +279,15 @@ public class GeboMCPServerConfig {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public GeboMCPServerConfig accessibleToAll(Object accessibleToAll) {
+  public GeboMCPServerConfig accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -275,16 +297,24 @@ public class GeboMCPServerConfig {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public GeboMCPServerConfig aclAliases(Object aclAliases) {
+  public GeboMCPServerConfig aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GeboMCPServerConfig addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -293,15 +323,15 @@ public class GeboMCPServerConfig {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
   }
 
-  public GeboMCPServerConfig shareAllPersonallyVisible(Object shareAllPersonallyVisible) {
+  public GeboMCPServerConfig shareAllPersonallyVisible(Boolean shareAllPersonallyVisible) {
     this.shareAllPersonallyVisible = shareAllPersonallyVisible;
     return this;
   }
@@ -311,16 +341,24 @@ public class GeboMCPServerConfig {
    * @return shareAllPersonallyVisible
   **/
   @Schema(description = "")
-  public Object getShareAllPersonallyVisible() {
+  public Boolean isShareAllPersonallyVisible() {
     return shareAllPersonallyVisible;
   }
 
-  public void setShareAllPersonallyVisible(Object shareAllPersonallyVisible) {
+  public void setShareAllPersonallyVisible(Boolean shareAllPersonallyVisible) {
     this.shareAllPersonallyVisible = shareAllPersonallyVisible;
   }
 
-  public GeboMCPServerConfig enabledTools(Object enabledTools) {
+  public GeboMCPServerConfig enabledTools(List<String> enabledTools) {
     this.enabledTools = enabledTools;
+    return this;
+  }
+
+  public GeboMCPServerConfig addEnabledToolsItem(String enabledToolsItem) {
+    if (this.enabledTools == null) {
+      this.enabledTools = new ArrayList<>();
+    }
+    this.enabledTools.add(enabledToolsItem);
     return this;
   }
 
@@ -329,16 +367,24 @@ public class GeboMCPServerConfig {
    * @return enabledTools
   **/
   @Schema(description = "")
-  public Object getEnabledTools() {
+  public List<String> getEnabledTools() {
     return enabledTools;
   }
 
-  public void setEnabledTools(Object enabledTools) {
+  public void setEnabledTools(List<String> enabledTools) {
     this.enabledTools = enabledTools;
   }
 
-  public GeboMCPServerConfig exportedKnowledgeBasesAsResources(Object exportedKnowledgeBasesAsResources) {
+  public GeboMCPServerConfig exportedKnowledgeBasesAsResources(List<String> exportedKnowledgeBasesAsResources) {
     this.exportedKnowledgeBasesAsResources = exportedKnowledgeBasesAsResources;
+    return this;
+  }
+
+  public GeboMCPServerConfig addExportedKnowledgeBasesAsResourcesItem(String exportedKnowledgeBasesAsResourcesItem) {
+    if (this.exportedKnowledgeBasesAsResources == null) {
+      this.exportedKnowledgeBasesAsResources = new ArrayList<>();
+    }
+    this.exportedKnowledgeBasesAsResources.add(exportedKnowledgeBasesAsResourcesItem);
     return this;
   }
 
@@ -347,16 +393,24 @@ public class GeboMCPServerConfig {
    * @return exportedKnowledgeBasesAsResources
   **/
   @Schema(description = "")
-  public Object getExportedKnowledgeBasesAsResources() {
+  public List<String> getExportedKnowledgeBasesAsResources() {
     return exportedKnowledgeBasesAsResources;
   }
 
-  public void setExportedKnowledgeBasesAsResources(Object exportedKnowledgeBasesAsResources) {
+  public void setExportedKnowledgeBasesAsResources(List<String> exportedKnowledgeBasesAsResources) {
     this.exportedKnowledgeBasesAsResources = exportedKnowledgeBasesAsResources;
   }
 
-  public GeboMCPServerConfig exportedProjectsAsResources(Object exportedProjectsAsResources) {
+  public GeboMCPServerConfig exportedProjectsAsResources(List<String> exportedProjectsAsResources) {
     this.exportedProjectsAsResources = exportedProjectsAsResources;
+    return this;
+  }
+
+  public GeboMCPServerConfig addExportedProjectsAsResourcesItem(String exportedProjectsAsResourcesItem) {
+    if (this.exportedProjectsAsResources == null) {
+      this.exportedProjectsAsResources = new ArrayList<>();
+    }
+    this.exportedProjectsAsResources.add(exportedProjectsAsResourcesItem);
     return this;
   }
 
@@ -365,16 +419,24 @@ public class GeboMCPServerConfig {
    * @return exportedProjectsAsResources
   **/
   @Schema(description = "")
-  public Object getExportedProjectsAsResources() {
+  public List<String> getExportedProjectsAsResources() {
     return exportedProjectsAsResources;
   }
 
-  public void setExportedProjectsAsResources(Object exportedProjectsAsResources) {
+  public void setExportedProjectsAsResources(List<String> exportedProjectsAsResources) {
     this.exportedProjectsAsResources = exportedProjectsAsResources;
   }
 
-  public GeboMCPServerConfig exportedProjectEndpoints(Object exportedProjectEndpoints) {
+  public GeboMCPServerConfig exportedProjectEndpoints(List<GObjectRefGProjectEndpoint> exportedProjectEndpoints) {
     this.exportedProjectEndpoints = exportedProjectEndpoints;
+    return this;
+  }
+
+  public GeboMCPServerConfig addExportedProjectEndpointsItem(GObjectRefGProjectEndpoint exportedProjectEndpointsItem) {
+    if (this.exportedProjectEndpoints == null) {
+      this.exportedProjectEndpoints = new ArrayList<>();
+    }
+    this.exportedProjectEndpoints.add(exportedProjectEndpointsItem);
     return this;
   }
 
@@ -383,16 +445,24 @@ public class GeboMCPServerConfig {
    * @return exportedProjectEndpoints
   **/
   @Schema(description = "")
-  public Object getExportedProjectEndpoints() {
+  public List<GObjectRefGProjectEndpoint> getExportedProjectEndpoints() {
     return exportedProjectEndpoints;
   }
 
-  public void setExportedProjectEndpoints(Object exportedProjectEndpoints) {
+  public void setExportedProjectEndpoints(List<GObjectRefGProjectEndpoint> exportedProjectEndpoints) {
     this.exportedProjectEndpoints = exportedProjectEndpoints;
   }
 
-  public GeboMCPServerConfig exportedPrompts(Object exportedPrompts) {
+  public GeboMCPServerConfig exportedPrompts(List<String> exportedPrompts) {
     this.exportedPrompts = exportedPrompts;
+    return this;
+  }
+
+  public GeboMCPServerConfig addExportedPromptsItem(String exportedPromptsItem) {
+    if (this.exportedPrompts == null) {
+      this.exportedPrompts = new ArrayList<>();
+    }
+    this.exportedPrompts.add(exportedPromptsItem);
     return this;
   }
 
@@ -401,16 +471,24 @@ public class GeboMCPServerConfig {
    * @return exportedPrompts
   **/
   @Schema(description = "")
-  public Object getExportedPrompts() {
+  public List<String> getExportedPrompts() {
     return exportedPrompts;
   }
 
-  public void setExportedPrompts(Object exportedPrompts) {
+  public void setExportedPrompts(List<String> exportedPrompts) {
     this.exportedPrompts = exportedPrompts;
   }
 
-  public GeboMCPServerConfig agentAsTools(Object agentAsTools) {
+  public GeboMCPServerConfig agentAsTools(List<GeboMCPAgentTool> agentAsTools) {
     this.agentAsTools = agentAsTools;
+    return this;
+  }
+
+  public GeboMCPServerConfig addAgentAsToolsItem(GeboMCPAgentTool agentAsToolsItem) {
+    if (this.agentAsTools == null) {
+      this.agentAsTools = new ArrayList<>();
+    }
+    this.agentAsTools.add(agentAsToolsItem);
     return this;
   }
 
@@ -419,16 +497,24 @@ public class GeboMCPServerConfig {
    * @return agentAsTools
   **/
   @Schema(description = "")
-  public Object getAgentAsTools() {
+  public List<GeboMCPAgentTool> getAgentAsTools() {
     return agentAsTools;
   }
 
-  public void setAgentAsTools(Object agentAsTools) {
+  public void setAgentAsTools(List<GeboMCPAgentTool> agentAsTools) {
     this.agentAsTools = agentAsTools;
   }
 
-  public GeboMCPServerConfig agentNetworkAsTools(Object agentNetworkAsTools) {
+  public GeboMCPServerConfig agentNetworkAsTools(List<GeboMCPAgentsNetworkTool> agentNetworkAsTools) {
     this.agentNetworkAsTools = agentNetworkAsTools;
+    return this;
+  }
+
+  public GeboMCPServerConfig addAgentNetworkAsToolsItem(GeboMCPAgentsNetworkTool agentNetworkAsToolsItem) {
+    if (this.agentNetworkAsTools == null) {
+      this.agentNetworkAsTools = new ArrayList<>();
+    }
+    this.agentNetworkAsTools.add(agentNetworkAsToolsItem);
     return this;
   }
 
@@ -437,11 +523,11 @@ public class GeboMCPServerConfig {
    * @return agentNetworkAsTools
   **/
   @Schema(description = "")
-  public Object getAgentNetworkAsTools() {
+  public List<GeboMCPAgentsNetworkTool> getAgentNetworkAsTools() {
     return agentNetworkAsTools;
   }
 
-  public void setAgentNetworkAsTools(Object agentNetworkAsTools) {
+  public void setAgentNetworkAsTools(List<GeboMCPAgentsNetworkTool> agentNetworkAsTools) {
     this.agentNetworkAsTools = agentNetworkAsTools;
   }
 

@@ -89,7 +89,7 @@ public class SharepointSystemsControllerApiTest {
      */
     @Test
     public void findSharepointEndpointsByCodeTest() {
-        Object code = null;
+        String code = null;
         GSharepointProjectEndpoint response = api.findSharepointEndpointsByCode(code);
 
         // TODO: test validations
@@ -104,8 +104,8 @@ public class SharepointSystemsControllerApiTest {
      */
     @Test
     public void findSharepointEndpointsByProjectTest() {
-        Object parentProjectCode = null;
-        Object response = api.findSharepointEndpointsByProject(parentProjectCode);
+        String parentProjectCode = null;
+        List<GSharepointProjectEndpoint> response = api.findSharepointEndpointsByProject(parentProjectCode);
 
         // TODO: test validations
     }
@@ -120,7 +120,7 @@ public class SharepointSystemsControllerApiTest {
     @Test
     public void findSharepointEndpointsByQbeTest() {
         GSharepointProjectEndpoint body = null;
-        Object response = api.findSharepointEndpointsByQbe(body);
+        List<GSharepointProjectEndpoint> response = api.findSharepointEndpointsByQbe(body);
 
         // TODO: test validations
     }
@@ -134,7 +134,7 @@ public class SharepointSystemsControllerApiTest {
      */
     @Test
     public void findSharepointSystemByCodeTest() {
-        Object code = null;
+        String code = null;
         GSharepointContentManagementSystem response = api.findSharepointSystemByCode(code);
 
         // TODO: test validations
@@ -163,7 +163,7 @@ public class SharepointSystemsControllerApiTest {
      */
     @Test
     public void getSharepointSystemsTest() {
-        Object response = api.getSharepointSystems();
+        List<GSharepointContentManagementSystem> response = api.getSharepointSystems();
 
         // TODO: test validations
     }

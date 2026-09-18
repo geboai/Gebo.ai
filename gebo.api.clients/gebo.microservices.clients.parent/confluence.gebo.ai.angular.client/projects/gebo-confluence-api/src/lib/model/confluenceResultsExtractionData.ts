@@ -12,8 +12,8 @@
 import { ConfluenceAdditionalSearchFilter } from './confluenceAdditionalSearchFilter';
 
 export interface ConfluenceResultsExtractionData { 
-    extractedRelevantContent?: any;
-    contentIsRelevant?: any;
-    satisfactoryAnswer?: any;
+    extractedRelevantContent?: string;
+    contentIsRelevant?: boolean;
+    satisfactoryAnswer?: boolean;
     additionalConfluenceSearchIdeas?: ConfluenceAdditionalSearchFilter;
 }

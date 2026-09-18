@@ -22,22 +22,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ToolReference
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ToolReference {
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userUIfunctionDescription")
-  private Object userUIfunctionDescription = null;
+  private String userUIfunctionDescription = null;
 
   @JsonProperty("inputSchema")
-  private Object inputSchema = null;
+  private String inputSchema = null;
 
-  public ToolReference name(Object name) {
+  public ToolReference name(String name) {
     this.name = name;
     return this;
   }
@@ -47,15 +47,15 @@ public class ToolReference {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public ToolReference description(Object description) {
+  public ToolReference description(String description) {
     this.description = description;
     return this;
   }
@@ -65,15 +65,15 @@ public class ToolReference {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public ToolReference userUIfunctionDescription(Object userUIfunctionDescription) {
+  public ToolReference userUIfunctionDescription(String userUIfunctionDescription) {
     this.userUIfunctionDescription = userUIfunctionDescription;
     return this;
   }
@@ -83,15 +83,15 @@ public class ToolReference {
    * @return userUIfunctionDescription
   **/
   @Schema(description = "")
-  public Object getUserUIfunctionDescription() {
+  public String getUserUIfunctionDescription() {
     return userUIfunctionDescription;
   }
 
-  public void setUserUIfunctionDescription(Object userUIfunctionDescription) {
+  public void setUserUIfunctionDescription(String userUIfunctionDescription) {
     this.userUIfunctionDescription = userUIfunctionDescription;
   }
 
-  public ToolReference inputSchema(Object inputSchema) {
+  public ToolReference inputSchema(String inputSchema) {
     this.inputSchema = inputSchema;
     return this;
   }
@@ -101,11 +101,11 @@ public class ToolReference {
    * @return inputSchema
   **/
   @Schema(description = "")
-  public Object getInputSchema() {
+  public String getInputSchema() {
     return inputSchema;
   }
 
-  public void setInputSchema(Object inputSchema) {
+  public void setInputSchema(String inputSchema) {
     this.inputSchema = inputSchema;
   }
 

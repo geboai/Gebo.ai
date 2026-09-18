@@ -161,7 +161,7 @@ No authorization required
 
 
 SharepointSystemsControllerApi apiInstance = new SharepointSystemsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GSharepointProjectEndpoint result = apiInstance.findSharepointEndpointsByCode(code);
     System.out.println(result);
@@ -175,7 +175,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -192,7 +192,7 @@ No authorization required
 
 <a name="findSharepointEndpointsByProject"></a>
 # **findSharepointEndpointsByProject**
-> Object findSharepointEndpointsByProject(parentProjectCode)
+> List&lt;GSharepointProjectEndpoint&gt; findSharepointEndpointsByProject(parentProjectCode)
 
 
 
@@ -204,9 +204,9 @@ No authorization required
 
 
 SharepointSystemsControllerApi apiInstance = new SharepointSystemsControllerApi();
-Object parentProjectCode = null; // Object | 
+String parentProjectCode = "parentProjectCode_example"; // String | 
 try {
-    Object result = apiInstance.findSharepointEndpointsByProject(parentProjectCode);
+    List<GSharepointProjectEndpoint> result = apiInstance.findSharepointEndpointsByProject(parentProjectCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SharepointSystemsControllerApi#findSharepointEndpointsByProject");
@@ -218,11 +218,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **parentProjectCode** | [**Object**](.md)|  |
+ **parentProjectCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GSharepointProjectEndpoint&gt;**](GSharepointProjectEndpoint.md)
 
 ### Authorization
 
@@ -235,7 +235,7 @@ No authorization required
 
 <a name="findSharepointEndpointsByQbe"></a>
 # **findSharepointEndpointsByQbe**
-> Object findSharepointEndpointsByQbe(body)
+> List&lt;GSharepointProjectEndpoint&gt; findSharepointEndpointsByQbe(body)
 
 
 
@@ -249,7 +249,7 @@ No authorization required
 SharepointSystemsControllerApi apiInstance = new SharepointSystemsControllerApi();
 GSharepointProjectEndpoint body = new GSharepointProjectEndpoint(); // GSharepointProjectEndpoint | 
 try {
-    Object result = apiInstance.findSharepointEndpointsByQbe(body);
+    List<GSharepointProjectEndpoint> result = apiInstance.findSharepointEndpointsByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SharepointSystemsControllerApi#findSharepointEndpointsByQbe");
@@ -265,7 +265,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GSharepointProjectEndpoint&gt;**](GSharepointProjectEndpoint.md)
 
 ### Authorization
 
@@ -290,7 +290,7 @@ No authorization required
 
 
 SharepointSystemsControllerApi apiInstance = new SharepointSystemsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GSharepointContentManagementSystem result = apiInstance.findSharepointSystemByCode(code);
     System.out.println(result);
@@ -304,7 +304,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -360,7 +360,7 @@ No authorization required
 
 <a name="getSharepointSystems"></a>
 # **getSharepointSystems**
-> Object getSharepointSystems()
+> List&lt;GSharepointContentManagementSystem&gt; getSharepointSystems()
 
 
 
@@ -373,7 +373,7 @@ No authorization required
 
 SharepointSystemsControllerApi apiInstance = new SharepointSystemsControllerApi();
 try {
-    Object result = apiInstance.getSharepointSystems();
+    List<GSharepointContentManagementSystem> result = apiInstance.getSharepointSystems();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SharepointSystemsControllerApi#getSharepointSystems");
@@ -386,7 +386,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GSharepointContentManagementSystem&gt;**](GSharepointContentManagementSystem.md)
 
 ### Authorization
 

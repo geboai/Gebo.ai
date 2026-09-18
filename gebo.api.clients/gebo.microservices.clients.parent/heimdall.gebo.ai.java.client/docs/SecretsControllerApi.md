@@ -403,7 +403,7 @@ No authorization required
 
 <a name="getSecretsByContextCode"></a>
 # **getSecretsByContextCode**
-> Object getSecretsByContextCode(context)
+> List&lt;SecretInfo&gt; getSecretsByContextCode(context)
 
 
 
@@ -415,9 +415,9 @@ No authorization required
 
 
 SecretsControllerApi apiInstance = new SecretsControllerApi();
-Object context = null; // Object | 
+String context = "context_example"; // String | 
 try {
-    Object result = apiInstance.getSecretsByContextCode(context);
+    List<SecretInfo> result = apiInstance.getSecretsByContextCode(context);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SecretsControllerApi#getSecretsByContextCode");
@@ -429,11 +429,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **context** | [**Object**](.md)|  |
+ **context** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;SecretInfo&gt;**](SecretInfo.md)
 
 ### Authorization
 

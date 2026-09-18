@@ -11,10 +11,20 @@
  */
 
 export interface FastWebdavSystemInsertRequest { 
-    baseUri: any;
-    description: any;
-    authType: any;
-    username?: any;
-    password?: any;
-    token?: any;
+    baseUri: string;
+    description: string;
+    authType: FastWebdavSystemInsertRequest.AuthTypeEnum;
+    username?: string;
+    password?: string;
+    token?: string;
+}
+export namespace FastWebdavSystemInsertRequest {
+    export type AuthTypeEnum = 'NONE' | 'BASIC' | 'DIGEST' | 'NTLM' | 'BEARER_TOKEN';
+    export const AuthTypeEnum = {
+        NONE: 'NONE' as AuthTypeEnum,
+        BASIC: 'BASIC' as AuthTypeEnum,
+        DIGEST: 'DIGEST' as AuthTypeEnum,
+        NTLM: 'NTLM' as AuthTypeEnum,
+        BEARERTOKEN: 'BEARER_TOKEN' as AuthTypeEnum
+    };
 }

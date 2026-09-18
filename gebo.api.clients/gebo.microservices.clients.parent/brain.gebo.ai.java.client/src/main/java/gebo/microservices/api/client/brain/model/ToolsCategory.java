@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ToolsCategory
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ToolsCategory {
   @JsonProperty("knowledgeBaseRelative")
-  private Object knowledgeBaseRelative = null;
+  private Boolean knowledgeBaseRelative = null;
 
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
-  public ToolsCategory knowledgeBaseRelative(Object knowledgeBaseRelative) {
+  public ToolsCategory knowledgeBaseRelative(Boolean knowledgeBaseRelative) {
     this.knowledgeBaseRelative = knowledgeBaseRelative;
     return this;
   }
@@ -44,15 +44,15 @@ public class ToolsCategory {
    * @return knowledgeBaseRelative
   **/
   @Schema(description = "")
-  public Object getKnowledgeBaseRelative() {
+  public Boolean isKnowledgeBaseRelative() {
     return knowledgeBaseRelative;
   }
 
-  public void setKnowledgeBaseRelative(Object knowledgeBaseRelative) {
+  public void setKnowledgeBaseRelative(Boolean knowledgeBaseRelative) {
     this.knowledgeBaseRelative = knowledgeBaseRelative;
   }
 
-  public ToolsCategory code(Object code) {
+  public ToolsCategory code(String code) {
     this.code = code;
     return this;
   }
@@ -62,15 +62,15 @@ public class ToolsCategory {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public ToolsCategory description(Object description) {
+  public ToolsCategory description(String description) {
     this.description = description;
     return this;
   }
@@ -80,11 +80,11 @@ public class ToolsCategory {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 

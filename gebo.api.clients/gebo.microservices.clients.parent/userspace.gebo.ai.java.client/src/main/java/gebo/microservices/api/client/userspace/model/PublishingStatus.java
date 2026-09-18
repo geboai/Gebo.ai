@@ -23,22 +23,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PublishingStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:44:00.182052971+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.206631637+02:00[Europe/Rome]")
 
 public class PublishingStatus {
   @JsonProperty("underPubishingAlgorithm")
-  private Object underPubishingAlgorithm = null;
+  private Boolean underPubishingAlgorithm = null;
 
   @JsonProperty("hasBeenPublished")
-  private Object hasBeenPublished = null;
+  private Boolean hasBeenPublished = null;
 
   @JsonProperty("jobId")
-  private Object jobId = null;
+  private String jobId = null;
 
   @JsonProperty("folder")
   private UserspaceFolderDto folder = null;
 
-  public PublishingStatus underPubishingAlgorithm(Object underPubishingAlgorithm) {
+  public PublishingStatus underPubishingAlgorithm(Boolean underPubishingAlgorithm) {
     this.underPubishingAlgorithm = underPubishingAlgorithm;
     return this;
   }
@@ -48,15 +48,15 @@ public class PublishingStatus {
    * @return underPubishingAlgorithm
   **/
   @Schema(description = "")
-  public Object getUnderPubishingAlgorithm() {
+  public Boolean isUnderPubishingAlgorithm() {
     return underPubishingAlgorithm;
   }
 
-  public void setUnderPubishingAlgorithm(Object underPubishingAlgorithm) {
+  public void setUnderPubishingAlgorithm(Boolean underPubishingAlgorithm) {
     this.underPubishingAlgorithm = underPubishingAlgorithm;
   }
 
-  public PublishingStatus hasBeenPublished(Object hasBeenPublished) {
+  public PublishingStatus hasBeenPublished(Boolean hasBeenPublished) {
     this.hasBeenPublished = hasBeenPublished;
     return this;
   }
@@ -66,15 +66,15 @@ public class PublishingStatus {
    * @return hasBeenPublished
   **/
   @Schema(description = "")
-  public Object getHasBeenPublished() {
+  public Boolean isHasBeenPublished() {
     return hasBeenPublished;
   }
 
-  public void setHasBeenPublished(Object hasBeenPublished) {
+  public void setHasBeenPublished(Boolean hasBeenPublished) {
     this.hasBeenPublished = hasBeenPublished;
   }
 
-  public PublishingStatus jobId(Object jobId) {
+  public PublishingStatus jobId(String jobId) {
     this.jobId = jobId;
     return this;
   }
@@ -84,11 +84,11 @@ public class PublishingStatus {
    * @return jobId
   **/
   @Schema(description = "")
-  public Object getJobId() {
+  public String getJobId() {
     return jobId;
   }
 
-  public void setJobId(Object jobId) {
+  public void setJobId(String jobId) {
     this.jobId = jobId;
   }
 

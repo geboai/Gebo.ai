@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GObjectRefGKnowledgeBase
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class GObjectRefGKnowledgeBase {
   @JsonProperty("className")
-  private Object className = null;
+  private String className = null;
 
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
-  public GObjectRefGKnowledgeBase className(Object className) {
+  public GObjectRefGKnowledgeBase className(String className) {
     this.className = className;
     return this;
   }
@@ -44,15 +44,15 @@ public class GObjectRefGKnowledgeBase {
    * @return className
   **/
   @Schema(description = "")
-  public Object getClassName() {
+  public String getClassName() {
     return className;
   }
 
-  public void setClassName(Object className) {
+  public void setClassName(String className) {
     this.className = className;
   }
 
-  public GObjectRefGKnowledgeBase code(Object code) {
+  public GObjectRefGKnowledgeBase code(String code) {
     this.code = code;
     return this;
   }
@@ -62,15 +62,15 @@ public class GObjectRefGKnowledgeBase {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GObjectRefGKnowledgeBase description(Object description) {
+  public GObjectRefGKnowledgeBase description(String description) {
     this.description = description;
     return this;
   }
@@ -80,11 +80,11 @@ public class GObjectRefGKnowledgeBase {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 

@@ -12,8 +12,12 @@
 
 package gebo.microservices.api.client.uploads.api;
 
+import gebo.microservices.api.client.uploads.model.GContentManagementSystemType;
+import gebo.microservices.api.client.uploads.model.GUploadsContentManagementSystem;
 import gebo.microservices.api.client.uploads.model.GUploadsProjectEndpoint;
 import gebo.microservices.api.client.uploads.model.OperationStatusGJobStatus;
+import gebo.microservices.api.client.uploads.model.OperationStatusGUploadsProjectEndpoint;
+import gebo.microservices.api.client.uploads.model.UploadedFileInfo;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -39,6 +43,22 @@ public class FileUploadsControllerApiTest {
      *          if the Api call fails
      */
     @Test
+    public void deleteUploadedFilesTest() {
+        List<String> body = null;
+        String endpointCode = null;
+        OperationStatusGUploadsProjectEndpoint response = api.deleteUploadedFiles(body, endpointCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
     public void deleteUploadsEndpointTest() {
         GUploadsProjectEndpoint body = null;
         api.deleteUploadsEndpoint(body);
@@ -55,8 +75,8 @@ public class FileUploadsControllerApiTest {
      */
     @Test
     public void findUploadsEndpointsByProjectTest() {
-        Object parentProjectCode = null;
-        Object response = api.findUploadsEndpointsByProject(parentProjectCode);
+        String parentProjectCode = null;
+        List<GUploadsProjectEndpoint> response = api.findUploadsEndpointsByProject(parentProjectCode);
 
         // TODO: test validations
     }
@@ -71,7 +91,7 @@ public class FileUploadsControllerApiTest {
     @Test
     public void findUploadsEndpointsByQbeTest() {
         GUploadsProjectEndpoint body = null;
-        Object response = api.findUploadsEndpointsByQbe(body);
+        List<GUploadsProjectEndpoint> response = api.findUploadsEndpointsByQbe(body);
 
         // TODO: test validations
     }
@@ -85,7 +105,7 @@ public class FileUploadsControllerApiTest {
      */
     @Test
     public void getFileSystemSystemTypesTest() {
-        Object response = api.getFileSystemSystemTypes();
+        List<GContentManagementSystemType> response = api.getFileSystemSystemTypes();
 
         // TODO: test validations
     }
@@ -99,7 +119,7 @@ public class FileUploadsControllerApiTest {
      */
     @Test
     public void getUploadableFilesExtensionsTest() {
-        Object response = api.getUploadableFilesExtensions();
+        List<String> response = api.getUploadableFilesExtensions();
 
         // TODO: test validations
     }
@@ -113,8 +133,8 @@ public class FileUploadsControllerApiTest {
      */
     @Test
     public void getUploadsSystemsTest() {
-        Object handlerCode = null;
-        Object response = api.getUploadsSystems(handlerCode);
+        String handlerCode = null;
+        List<GUploadsContentManagementSystem> response = api.getUploadsSystems(handlerCode);
 
         // TODO: test validations
     }
@@ -130,6 +150,21 @@ public class FileUploadsControllerApiTest {
     public void insertUploadsEndpointTest() {
         GUploadsProjectEndpoint body = null;
         GUploadsProjectEndpoint response = api.insertUploadsEndpoint(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listUploadedFilesTest() {
+        String endpointCode = null;
+        List<UploadedFileInfo> response = api.listUploadedFiles(endpointCode);
 
         // TODO: test validations
     }

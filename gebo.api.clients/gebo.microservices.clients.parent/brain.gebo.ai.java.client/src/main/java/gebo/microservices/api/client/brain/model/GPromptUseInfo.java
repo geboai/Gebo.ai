@@ -17,28 +17,39 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GPromptPlaceholderInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * GPromptUseInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GPromptUseInfo {
   @JsonProperty("placeholders")
-  private Object placeholders = null;
+  private List<GPromptPlaceholderInfo> placeholders = null;
 
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("module")
-  private Object module = null;
+  private String module = null;
 
-  public GPromptUseInfo placeholders(Object placeholders) {
+  public GPromptUseInfo placeholders(List<GPromptPlaceholderInfo> placeholders) {
     this.placeholders = placeholders;
+    return this;
+  }
+
+  public GPromptUseInfo addPlaceholdersItem(GPromptPlaceholderInfo placeholdersItem) {
+    if (this.placeholders == null) {
+      this.placeholders = new ArrayList<>();
+    }
+    this.placeholders.add(placeholdersItem);
     return this;
   }
 
@@ -47,15 +58,15 @@ public class GPromptUseInfo {
    * @return placeholders
   **/
   @Schema(description = "")
-  public Object getPlaceholders() {
+  public List<GPromptPlaceholderInfo> getPlaceholders() {
     return placeholders;
   }
 
-  public void setPlaceholders(Object placeholders) {
+  public void setPlaceholders(List<GPromptPlaceholderInfo> placeholders) {
     this.placeholders = placeholders;
   }
 
-  public GPromptUseInfo code(Object code) {
+  public GPromptUseInfo code(String code) {
     this.code = code;
     return this;
   }
@@ -65,15 +76,15 @@ public class GPromptUseInfo {
    * @return code
   **/
   @Schema(required = true, description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GPromptUseInfo description(Object description) {
+  public GPromptUseInfo description(String description) {
     this.description = description;
     return this;
   }
@@ -83,15 +94,15 @@ public class GPromptUseInfo {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GPromptUseInfo module(Object module) {
+  public GPromptUseInfo module(String module) {
     this.module = module;
     return this;
   }
@@ -101,11 +112,11 @@ public class GPromptUseInfo {
    * @return module
   **/
   @Schema(required = true, description = "")
-  public Object getModule() {
+  public String getModule() {
     return module;
   }
 
-  public void setModule(Object module) {
+  public void setModule(String module) {
     this.module = module;
   }
 

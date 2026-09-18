@@ -108,7 +108,12 @@ public class GeboUserChatsController {
 
 	@GetMapping(value = "getMyChats", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GUserChatInfo> getMyChats() {
-		return repository.findByUsername(securityService.getCurrentUser().getUsername());
+		return repository.findByUsernameAndContextCodeIsNull(securityService.getCurrentUser().getUsername());
+	}
+
+	@GetMapping(value = "getMyChatsByContextCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GUserChatInfo> getMyChatsByContextCode(@RequestParam("contextCode") String contextCode) {
+		return repository.findByUsernameAndContextCode(securityService.getCurrentUser().getUsername(), contextCode);
 	}
 
 	/**
@@ -126,7 +131,8 @@ public class GeboUserChatsController {
 		_page.setPage(page);
 		_page.setPageSize(pageSize);
 
-		return repository.findByUsername(securityService.getCurrentUser().getUsername(), _page.toPageable());
+		return repository.findByUsernameAndContextCodeIsNull(securityService.getCurrentUser().getUsername(),
+				_page.toPageable());
 	}
 
 	/**
@@ -213,9 +219,10 @@ public class GeboUserChatsController {
 
 	@GetMapping(value = "createCleanChatByChatProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GUserChatInfo createCleanChatByChatProfileCode(
-			@RequestParam(value = "chatProfileCode", required = true) String chatProfileCode)
+			@RequestParam(value = "chatProfileCode", required = true) String chatProfileCode,
+			@RequestParam(value = "contextCode", required = false) String contextCode)
 			throws GeboPersistenceException {
-		return this.sessionLifeCycleService.createCleanChatByChatProfileCode(chatProfileCode);
+		return this.sessionLifeCycleService.createCleanChatByChatProfileCode(chatProfileCode, contextCode);
 	}
 
 	@DeleteMapping("deleteChat")

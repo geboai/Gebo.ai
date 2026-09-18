@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * CatalogueSample
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:44.609405746+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class CatalogueSample {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
-  public CatalogueSample code(Object code) {
+  public CatalogueSample code(String code) {
     this.code = code;
     return this;
   }
@@ -41,15 +41,15 @@ public class CatalogueSample {
    * @return code
   **/
   @Schema(required = true, description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public CatalogueSample description(Object description) {
+  public CatalogueSample description(String description) {
     this.description = description;
     return this;
   }
@@ -59,11 +59,11 @@ public class CatalogueSample {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 

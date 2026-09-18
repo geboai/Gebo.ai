@@ -17,28 +17,40 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GOpenAIChatModelChoice;
+import gebo.microservices.api.client.brain.model.GUserMessage;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * OperationStatusListGOpenAIChatModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class OperationStatusListGOpenAIChatModelChoice {
   @JsonProperty("result")
-  private Object result = null;
+  private List<GOpenAIChatModelChoice> result = null;
 
   @JsonProperty("messages")
-  private Object messages = null;
+  private List<GUserMessage> messages = null;
 
   @JsonProperty("hasErrorMessages")
-  private Object hasErrorMessages = null;
+  private Boolean hasErrorMessages = null;
 
   @JsonProperty("hasWarnMessages")
-  private Object hasWarnMessages = null;
+  private Boolean hasWarnMessages = null;
 
-  public OperationStatusListGOpenAIChatModelChoice result(Object result) {
+  public OperationStatusListGOpenAIChatModelChoice result(List<GOpenAIChatModelChoice> result) {
     this.result = result;
+    return this;
+  }
+
+  public OperationStatusListGOpenAIChatModelChoice addResultItem(GOpenAIChatModelChoice resultItem) {
+    if (this.result == null) {
+      this.result = new ArrayList<>();
+    }
+    this.result.add(resultItem);
     return this;
   }
 
@@ -47,16 +59,24 @@ public class OperationStatusListGOpenAIChatModelChoice {
    * @return result
   **/
   @Schema(description = "")
-  public Object getResult() {
+  public List<GOpenAIChatModelChoice> getResult() {
     return result;
   }
 
-  public void setResult(Object result) {
+  public void setResult(List<GOpenAIChatModelChoice> result) {
     this.result = result;
   }
 
-  public OperationStatusListGOpenAIChatModelChoice messages(Object messages) {
+  public OperationStatusListGOpenAIChatModelChoice messages(List<GUserMessage> messages) {
     this.messages = messages;
+    return this;
+  }
+
+  public OperationStatusListGOpenAIChatModelChoice addMessagesItem(GUserMessage messagesItem) {
+    if (this.messages == null) {
+      this.messages = new ArrayList<>();
+    }
+    this.messages.add(messagesItem);
     return this;
   }
 
@@ -65,15 +85,15 @@ public class OperationStatusListGOpenAIChatModelChoice {
    * @return messages
   **/
   @Schema(description = "")
-  public Object getMessages() {
+  public List<GUserMessage> getMessages() {
     return messages;
   }
 
-  public void setMessages(Object messages) {
+  public void setMessages(List<GUserMessage> messages) {
     this.messages = messages;
   }
 
-  public OperationStatusListGOpenAIChatModelChoice hasErrorMessages(Object hasErrorMessages) {
+  public OperationStatusListGOpenAIChatModelChoice hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
   }
@@ -83,15 +103,15 @@ public class OperationStatusListGOpenAIChatModelChoice {
    * @return hasErrorMessages
   **/
   @Schema(description = "")
-  public Object getHasErrorMessages() {
+  public Boolean isHasErrorMessages() {
     return hasErrorMessages;
   }
 
-  public void setHasErrorMessages(Object hasErrorMessages) {
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
   }
 
-  public OperationStatusListGOpenAIChatModelChoice hasWarnMessages(Object hasWarnMessages) {
+  public OperationStatusListGOpenAIChatModelChoice hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
   }
@@ -101,11 +121,11 @@ public class OperationStatusListGOpenAIChatModelChoice {
    * @return hasWarnMessages
   **/
   @Schema(description = "")
-  public Object getHasWarnMessages() {
+  public Boolean isHasWarnMessages() {
     return hasWarnMessages;
   }
 
-  public void setHasWarnMessages(Object hasWarnMessages) {
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
   }
 

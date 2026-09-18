@@ -2,6 +2,7 @@ package gebo.microservices.api.client.tyr.api;
 
 import gebo.microservices.api.client.tyr.invoker.ApiClient;
 
+import gebo.microservices.api.client.tyr.model.MicroserviceMetaInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class GlobalInternalTopologyControllerApi {
     private ApiClient apiClient;
@@ -45,10 +46,10 @@ public class GlobalInternalTopologyControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;MicroserviceMetaInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGlobalTopology() throws RestClientException {
+    public List<MicroserviceMetaInfo> getGlobalTopology() throws RestClientException {
         return getGlobalTopologyWithHttpInfo().getBody();
     }
 
@@ -56,12 +57,12 @@ public class GlobalInternalTopologyControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;MicroserviceMetaInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGlobalTopologyWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<MicroserviceMetaInfo>> getGlobalTopologyWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GlobalInternalTopologyController/getGlobalTopology").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GlobalInternalTopologyController/getGlobalTopology").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -76,17 +77,17 @@ public class GlobalInternalTopologyControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<MicroserviceMetaInfo>> returnType = new ParameterizedTypeReference<List<MicroserviceMetaInfo>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object refresh() throws RestClientException {
+    public Boolean refresh() throws RestClientException {
         return refreshWithHttpInfo().getBody();
     }
 
@@ -94,12 +95,12 @@ public class GlobalInternalTopologyControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;Boolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> refreshWithHttpInfo() throws RestClientException {
+    public ResponseEntity<Boolean> refreshWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GlobalInternalTopologyController/refresh").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GlobalInternalTopologyController/refresh").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -114,7 +115,7 @@ public class GlobalInternalTopologyControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<Boolean> returnType = new ParameterizedTypeReference<Boolean>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

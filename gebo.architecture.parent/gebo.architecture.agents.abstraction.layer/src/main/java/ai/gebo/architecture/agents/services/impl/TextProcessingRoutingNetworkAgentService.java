@@ -25,7 +25,10 @@ public class TextProcessingRoutingNetworkAgentService extends GBaseRoutingNetwor
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
 				TEXT_PROCESSING_ROUTING_NETWORK_AGENT_SERVICE, ROUTING_AGENT_THAT_PROCESSES_TEXT_AS_AN_INPUT,
 				String.class, Void.class, rendererFactory);
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Registered routing agent service id:" + TEXT_PROCESSING_ROUTING_NETWORK_AGENT_SERVICE
+					+ " accepting String input");
+		}
 	}
 
 }

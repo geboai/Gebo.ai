@@ -18,28 +18,39 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.chunker.model.ChunkingParams;
+import gebo.microservices.api.client.chunker.model.IGComponentOriginatedDocument;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * StreamChunksBatchRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:46.509035701+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class StreamChunksBatchRequest {
   @JsonProperty("documents")
-  private Object documents = null;
+  private List<IGComponentOriginatedDocument> documents = null;
 
   @JsonProperty("chunkingSpecs")
   private ChunkingParams chunkingSpecs = null;
 
   @JsonProperty("chunkSessionId")
-  private Object chunkSessionId = null;
+  private String chunkSessionId = null;
 
   @JsonProperty("docConcurrency")
-  private Object docConcurrency = null;
+  private Integer docConcurrency = null;
 
-  public StreamChunksBatchRequest documents(Object documents) {
+  public StreamChunksBatchRequest documents(List<IGComponentOriginatedDocument> documents) {
     this.documents = documents;
+    return this;
+  }
+
+  public StreamChunksBatchRequest addDocumentsItem(IGComponentOriginatedDocument documentsItem) {
+    if (this.documents == null) {
+      this.documents = new ArrayList<>();
+    }
+    this.documents.add(documentsItem);
     return this;
   }
 
@@ -48,11 +59,11 @@ public class StreamChunksBatchRequest {
    * @return documents
   **/
   @Schema(description = "")
-  public Object getDocuments() {
+  public List<IGComponentOriginatedDocument> getDocuments() {
     return documents;
   }
 
-  public void setDocuments(Object documents) {
+  public void setDocuments(List<IGComponentOriginatedDocument> documents) {
     this.documents = documents;
   }
 
@@ -74,7 +85,7 @@ public class StreamChunksBatchRequest {
     this.chunkingSpecs = chunkingSpecs;
   }
 
-  public StreamChunksBatchRequest chunkSessionId(Object chunkSessionId) {
+  public StreamChunksBatchRequest chunkSessionId(String chunkSessionId) {
     this.chunkSessionId = chunkSessionId;
     return this;
   }
@@ -84,15 +95,15 @@ public class StreamChunksBatchRequest {
    * @return chunkSessionId
   **/
   @Schema(description = "")
-  public Object getChunkSessionId() {
+  public String getChunkSessionId() {
     return chunkSessionId;
   }
 
-  public void setChunkSessionId(Object chunkSessionId) {
+  public void setChunkSessionId(String chunkSessionId) {
     this.chunkSessionId = chunkSessionId;
   }
 
-  public StreamChunksBatchRequest docConcurrency(Object docConcurrency) {
+  public StreamChunksBatchRequest docConcurrency(Integer docConcurrency) {
     this.docConcurrency = docConcurrency;
     return this;
   }
@@ -102,11 +113,11 @@ public class StreamChunksBatchRequest {
    * @return docConcurrency
   **/
   @Schema(description = "")
-  public Object getDocConcurrency() {
+  public Integer getDocConcurrency() {
     return docConcurrency;
   }
 
-  public void setDocConcurrency(Object docConcurrency) {
+  public void setDocConcurrency(Integer docConcurrency) {
     this.docConcurrency = docConcurrency;
   }
 

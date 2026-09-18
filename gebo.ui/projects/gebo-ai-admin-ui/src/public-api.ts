@@ -138,6 +138,10 @@ export * from "./lib/admin-ui/main-panels/compliance/data-transformation-node.co
 export * from "./lib/setup-wizard/mcp-server-wizard.component";
 export * from "./lib/setup-wizard/gebo-ai-mcp-server-wizard.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-mcp-client-admin/gebo-ai-mcp-client-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-a2a-client-admin/gebo-ai-a2a-client-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-a2a-server-admin/gebo-ai-a2a-server-admin.component";
+export * from "./lib/setup-wizard/a2a-import-wizard.component";
+export * from "./lib/setup-wizard/a2a-export-wizard.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-users-admin/gebo-ai-change-user-password.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-mcp-server-admin/gebo-ai-mcp-server-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-mcpclient-admin/gebo-ai-mcpclient-endpoint.component";

@@ -103,7 +103,7 @@ No authorization required
 
 <a name="findGitEndpointsByProject"></a>
 # **findGitEndpointsByProject**
-> Object findGitEndpointsByProject(parentProjectCode)
+> List&lt;GGitProjectEndpoint&gt; findGitEndpointsByProject(parentProjectCode)
 
 
 
@@ -115,9 +115,9 @@ No authorization required
 
 
 GitSystemsControllerApi apiInstance = new GitSystemsControllerApi();
-Object parentProjectCode = null; // Object | 
+String parentProjectCode = "parentProjectCode_example"; // String | 
 try {
-    Object result = apiInstance.findGitEndpointsByProject(parentProjectCode);
+    List<GGitProjectEndpoint> result = apiInstance.findGitEndpointsByProject(parentProjectCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GitSystemsControllerApi#findGitEndpointsByProject");
@@ -129,11 +129,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **parentProjectCode** | [**Object**](.md)|  |
+ **parentProjectCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GGitProjectEndpoint&gt;**](GGitProjectEndpoint.md)
 
 ### Authorization
 
@@ -146,7 +146,7 @@ No authorization required
 
 <a name="findGitEndpointsByQbe"></a>
 # **findGitEndpointsByQbe**
-> Object findGitEndpointsByQbe(body)
+> List&lt;GGitProjectEndpoint&gt; findGitEndpointsByQbe(body)
 
 
 
@@ -160,7 +160,7 @@ No authorization required
 GitSystemsControllerApi apiInstance = new GitSystemsControllerApi();
 GGitProjectEndpoint body = new GGitProjectEndpoint(); // GGitProjectEndpoint | 
 try {
-    Object result = apiInstance.findGitEndpointsByQbe(body);
+    List<GGitProjectEndpoint> result = apiInstance.findGitEndpointsByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GitSystemsControllerApi#findGitEndpointsByQbe");
@@ -176,7 +176,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GGitProjectEndpoint&gt;**](GGitProjectEndpoint.md)
 
 ### Authorization
 
@@ -232,7 +232,7 @@ No authorization required
 
 <a name="getGitSystemTypes"></a>
 # **getGitSystemTypes**
-> Object getGitSystemTypes()
+> List&lt;GContentManagementSystemType&gt; getGitSystemTypes()
 
 
 
@@ -245,7 +245,7 @@ No authorization required
 
 GitSystemsControllerApi apiInstance = new GitSystemsControllerApi();
 try {
-    Object result = apiInstance.getGitSystemTypes();
+    List<GContentManagementSystemType> result = apiInstance.getGitSystemTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GitSystemsControllerApi#getGitSystemTypes");
@@ -258,7 +258,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GContentManagementSystemType&gt;**](GContentManagementSystemType.md)
 
 ### Authorization
 
@@ -271,7 +271,7 @@ No authorization required
 
 <a name="getGitSystems"></a>
 # **getGitSystems**
-> Object getGitSystems(handlerCode)
+> List&lt;GGitContentManagementSystem&gt; getGitSystems(handlerCode)
 
 
 
@@ -283,9 +283,9 @@ No authorization required
 
 
 GitSystemsControllerApi apiInstance = new GitSystemsControllerApi();
-Object handlerCode = null; // Object | 
+String handlerCode = "handlerCode_example"; // String | 
 try {
-    Object result = apiInstance.getGitSystems(handlerCode);
+    List<GGitContentManagementSystem> result = apiInstance.getGitSystems(handlerCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GitSystemsControllerApi#getGitSystems");
@@ -297,11 +297,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **handlerCode** | [**Object**](.md)|  | [optional]
+ **handlerCode** | **String**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;GGitContentManagementSystem&gt;**](GGitContentManagementSystem.md)
 
 ### Authorization
 

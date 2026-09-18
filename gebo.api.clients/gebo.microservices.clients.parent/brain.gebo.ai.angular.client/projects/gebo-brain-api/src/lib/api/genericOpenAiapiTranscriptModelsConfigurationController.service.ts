@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GenericOpenAIAPITranscriptModelConfig } from '../model/genericOpenAIAPITranscriptModelConfig';
+import { GenericOpenAITranscriptModelType } from '../model/genericOpenAITranscriptModelType';
 import { OperationStatusBoolean } from '../model/operationStatusBoolean';
 import { OperationStatusGenericOpenAIAPITranscriptModelConfig } from '../model/operationStatusGenericOpenAIAPITranscriptModelConfig';
 import { OperationStatusListGenericOpenAIAPITranscriptModelChoice } from '../model/operationStatusListGenericOpenAIAPITranscriptModelChoice';
@@ -112,10 +113,10 @@ export class GenericOpenAiapiTranscriptModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGenericOpenAIAPITranscriptModelConfigByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIAPITranscriptModelConfig>;
-    public findGenericOpenAIAPITranscriptModelConfigByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIAPITranscriptModelConfig>>;
-    public findGenericOpenAIAPITranscriptModelConfigByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIAPITranscriptModelConfig>>;
-    public findGenericOpenAIAPITranscriptModelConfigByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGenericOpenAIAPITranscriptModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIAPITranscriptModelConfig>;
+    public findGenericOpenAIAPITranscriptModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIAPITranscriptModelConfig>>;
+    public findGenericOpenAIAPITranscriptModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIAPITranscriptModelConfig>>;
+    public findGenericOpenAIAPITranscriptModelConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findGenericOpenAIAPITranscriptModelConfigByCode.');
@@ -205,9 +206,9 @@ export class GenericOpenAiapiTranscriptModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGenericOpenAITranscriptModelConfigs(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGenericOpenAITranscriptModelConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGenericOpenAITranscriptModelConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGenericOpenAITranscriptModelConfigs(observe?: 'body', reportProgress?: boolean): Observable<Array<GenericOpenAIAPITranscriptModelConfig>>;
+    public getGenericOpenAITranscriptModelConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GenericOpenAIAPITranscriptModelConfig>>>;
+    public getGenericOpenAITranscriptModelConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GenericOpenAIAPITranscriptModelConfig>>>;
     public getGenericOpenAITranscriptModelConfigs(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -225,7 +226,7 @@ export class GenericOpenAiapiTranscriptModelsConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/getGenericOpenAITranscriptModelConfigs`,
+        return this.httpClient.request<Array<GenericOpenAIAPITranscriptModelConfig>>('get',`${this.basePath}/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/getGenericOpenAITranscriptModelConfigs`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -241,9 +242,9 @@ export class GenericOpenAiapiTranscriptModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGenericOpenAITranscriptModelTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGenericOpenAITranscriptModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGenericOpenAITranscriptModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGenericOpenAITranscriptModelTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GenericOpenAITranscriptModelType>>;
+    public getGenericOpenAITranscriptModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GenericOpenAITranscriptModelType>>>;
+    public getGenericOpenAITranscriptModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GenericOpenAITranscriptModelType>>>;
     public getGenericOpenAITranscriptModelTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -261,7 +262,7 @@ export class GenericOpenAiapiTranscriptModelsConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/getGenericOpenAITranscriptModelTypes`,
+        return this.httpClient.request<Array<GenericOpenAITranscriptModelType>>('get',`${this.basePath}/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/getGenericOpenAITranscriptModelTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

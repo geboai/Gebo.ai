@@ -28,13 +28,14 @@ ul {
 }
 
 .licenceBody {
-    border: 2px solid black;
-    background-color: white;
-    font-family: Arial, sans-serif;
+    border: 1px solid var(--gebo-border-strong, #d1d5db);
+    background-color: var(--gebo-white, #fff);
+    color: var(--gebo-text, #1f2937);
+    font-family: var(--gebo-font-family, "Inter", "Segoe UI", sans-serif);
     margin: 0px;
     line-height: 1.5;
 
 }
 .blueArea {
-    background-color: #C0C0C0;
+    background-color: var(--gebo-surface-muted, #f8f9fa);
 }

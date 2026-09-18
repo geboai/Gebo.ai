@@ -12,7 +12,6 @@
 
 package ai.gebo.llms.mistralai.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.mistralai.model.GMistralEmbeddingModelConfig;
@@ -24,7 +23,6 @@ import ai.gebo.llms.mistralai.model.GMistralEmbeddingModelConfig;
  * It extends the base MongoDB repository interface to provide CRUD operations for
  * MistralAI embedding model configurations.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "mistralAIEnabled", havingValue = "true")
 public interface MistralEmbeddingModelConfigRepository extends IGBaseMongoDBRepository<GMistralEmbeddingModelConfig> {
 	
 	/**

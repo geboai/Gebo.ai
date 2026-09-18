@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**deleteJobStatus**](LogViewControllerApi.md#deleteJobStatus) | **POST** /api/admin/LogViewController/deleteJobStatus | 
 [**getJobMessagesPaged**](LogViewControllerApi.md#getJobMessagesPaged) | **POST** /api/admin/LogViewController/getJobMessagesPaged | 
+[**getJobsEntries**](LogViewControllerApi.md#getJobsEntries) | **POST** /api/admin/LogViewController/getJobsEntries | 
 [**getJobsEntriesForClassName**](LogViewControllerApi.md#getJobsEntriesForClassName) | **POST** /api/admin/LogViewController/getJobsEntriesForClassName | 
 [**getJobsEntriesForJobType**](LogViewControllerApi.md#getJobsEntriesForJobType) | **POST** /api/admin/LogViewController/getJobsEntriesForJobType | 
 [**getJobsEntriesForProjectEndpoint**](LogViewControllerApi.md#getJobsEntriesForProjectEndpoint) | **POST** /api/admin/LogViewController/getJobsEntriesForProjectEndpoint | 
@@ -24,7 +25,7 @@ Method | HTTP request | Description
 
 
 LogViewControllerApi apiInstance = new LogViewControllerApi();
-Object body = null; // Object | 
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
     apiInstance.deleteJobStatus(body);
 } catch (ApiException e) {
@@ -37,7 +38,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**List&lt;String&gt;**](String.md)|  |
 
 ### Return type
 
@@ -85,6 +86,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**PageGUserMessage**](PageGUserMessage.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getJobsEntries"></a>
+# **getJobsEntries**
+> PageGJobStatusItem getJobsEntries(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.LogViewControllerApi;
+
+
+LogViewControllerApi apiInstance = new LogViewControllerApi();
+JobsEntriesFilter body = new JobsEntriesFilter(); // JobsEntriesFilter | 
+try {
+    PageGJobStatusItem result = apiInstance.getJobsEntries(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling LogViewControllerApi#getJobsEntries");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**JobsEntriesFilter**](JobsEntriesFilter.md)|  |
+
+### Return type
+
+[**PageGJobStatusItem**](PageGJobStatusItem.md)
 
 ### Authorization
 

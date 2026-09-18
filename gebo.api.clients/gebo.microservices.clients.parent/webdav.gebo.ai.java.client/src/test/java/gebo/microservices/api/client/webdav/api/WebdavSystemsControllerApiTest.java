@@ -89,7 +89,7 @@ public class WebdavSystemsControllerApiTest {
      */
     @Test
     public void findWebdavEndpointsByCodeTest() {
-        Object code = null;
+        String code = null;
         GWebdavProjectEndpoint response = api.findWebdavEndpointsByCode(code);
 
         // TODO: test validations
@@ -104,8 +104,8 @@ public class WebdavSystemsControllerApiTest {
      */
     @Test
     public void findWebdavEndpointsByProjectTest() {
-        Object parentProjectCode = null;
-        Object response = api.findWebdavEndpointsByProject(parentProjectCode);
+        String parentProjectCode = null;
+        List<GWebdavProjectEndpoint> response = api.findWebdavEndpointsByProject(parentProjectCode);
 
         // TODO: test validations
     }
@@ -120,7 +120,7 @@ public class WebdavSystemsControllerApiTest {
     @Test
     public void findWebdavEndpointsByQbeTest() {
         GWebdavProjectEndpoint body = null;
-        Object response = api.findWebdavEndpointsByQbe(body);
+        List<GWebdavProjectEndpoint> response = api.findWebdavEndpointsByQbe(body);
 
         // TODO: test validations
     }
@@ -134,7 +134,7 @@ public class WebdavSystemsControllerApiTest {
      */
     @Test
     public void findWebdavSystemByCodeTest() {
-        Object code = null;
+        String code = null;
         GWebdavContentManagementSystem response = api.findWebdavSystemByCode(code);
 
         // TODO: test validations
@@ -163,7 +163,7 @@ public class WebdavSystemsControllerApiTest {
      */
     @Test
     public void getWebdavSystemsTest() {
-        Object response = api.getWebdavSystems();
+        List<GWebdavContentManagementSystem> response = api.getWebdavSystems();
 
         // TODO: test validations
     }

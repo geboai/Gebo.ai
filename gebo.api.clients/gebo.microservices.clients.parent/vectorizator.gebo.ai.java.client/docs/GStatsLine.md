@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**statsKey** | **Object** |  |  [optional]
-**data** | **Object** |  |  [optional]
+**statsKey** | **String** |  |  [optional]
+**data** | [**List&lt;GStatsLabelValue&gt;**](GStatsLabelValue.md) |  |  [optional]

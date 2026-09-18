@@ -11,5 +11,5 @@
  */
 
 export interface ContentObject { 
-    content?: any;
+    content?: string;
 }

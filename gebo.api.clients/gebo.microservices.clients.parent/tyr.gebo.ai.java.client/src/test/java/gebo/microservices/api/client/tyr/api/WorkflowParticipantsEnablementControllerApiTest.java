@@ -38,9 +38,9 @@ public class WorkflowParticipantsEnablementControllerApiTest {
      */
     @Test
     public void enabledStepsTest() {
-        Object workflowType = null;
-        Object workflowId = null;
-        Object response = api.enabledSteps(workflowType, workflowId);
+        String workflowType = null;
+        String workflowId = null;
+        List<String> response = api.enabledSteps(workflowType, workflowId);
 
         // TODO: test validations
     }

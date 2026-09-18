@@ -28,11 +28,21 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     selector: "llms-systems-component",
     templateUrl: "llms-systems.component.html",
     standalone: false,
+    styles: [`
+        .gebo-code-cell { display: inline-block; max-width: 11rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
+        .gebo-code-cell--clickable { cursor: pointer; text-decoration: underline dotted; text-underline-offset: 2px; }
+        .gebo-code-cell__full { font-family: monospace; word-break: break-all; max-width: 40rem; }
+    `],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "LlmsPanelModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LlmsSystemsComponent")
     }]
 })
 export class LlmsSystemsComponent extends AncestorPanelComponent implements OnInit {
+    // Full code of the cell the user clicked, shown in the shared #codePopover. The
+    // model codes run well past what fits a table column at high resolutions - showing
+    // them in full forced a horizontal scrollbar under every table - so the cell shows
+    // the first 20 characters and reveals the rest on click.
+    protected selectedCode?: string;
     chatModels: ConfigurationEntryGBaseChatModelConfig[] = [];
     embeddingModels: ConfigurationEntryGBaseEmbeddingModelConfig[] = [];
     rerankerModels: ConfigurationEntryGBaseRankerModelConfig[] = [];
@@ -369,4 +379,8 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
         this.loadData();
     }
 
+    protected showFullCode(event: Event, code: string | undefined, popover: { toggle: (e: Event) => void }): void {
+        this.selectedCode = code;
+        popover.toggle(event);
+    }
 }

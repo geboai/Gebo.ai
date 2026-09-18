@@ -15,13 +15,15 @@ package gebo.microservices.api.client.brain.model;
 import java.util.Objects;
 import java.util.Arrays;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.HashMap;
+import java.util.Map;
 /**
  * Arbitrary environment entries
  */
 @Schema(description = "Arbitrary environment entries")
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
-public class PipelineEnvironment {
+public class PipelineEnvironment extends HashMap<String, Object> {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -31,12 +33,12 @@ public class PipelineEnvironment {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return true;
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash();
+    return Objects.hash(super.hashCode());
   }
 
 
@@ -44,7 +46,7 @@ public class PipelineEnvironment {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PipelineEnvironment {\n");
-    
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("}");
     return sb.toString();
   }

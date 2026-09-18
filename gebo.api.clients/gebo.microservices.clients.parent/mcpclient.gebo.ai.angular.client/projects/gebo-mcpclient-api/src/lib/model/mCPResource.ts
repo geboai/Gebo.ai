@@ -11,12 +11,12 @@
  */
 
 export interface MCPResource { 
-    accessibleGroups?: any;
-    accessibleUsers?: any;
-    accessibleToAll?: any;
-    aclAliases?: any;
-    name?: any;
-    deletedOnMCPServer?: any;
-    addedOnMCPServer?: any;
-    uri?: any;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    aclAliases?: Array<number>;
+    name?: string;
+    deletedOnMCPServer?: boolean;
+    addedOnMCPServer?: boolean;
+    uri?: string;
 }

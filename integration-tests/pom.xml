@@ -34,7 +34,7 @@
 	<parent>
 		<groupId>ai.gebo</groupId>
 		<artifactId>ai.gebo.parent</artifactId>
-		<version>1.0.2.4</version>
+		<version>1.0.3.0</version>
 	</parent>
 	<groupId>ai.gebo.integration-tests</groupId>
 	<artifactId>gebo.integration-tests.parent</artifactId>
@@ -49,5 +49,6 @@
 
 		<module>atlassian-jira-integration-tests</module>
 		<module>full-setup-and-use-integration-tests</module>
+		<module>a2a-integration-tests</module>
 	</modules>
 </project>

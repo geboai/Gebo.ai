@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import ai.gebo.architecture.environment.ArchitectureType;
 import ai.gebo.architecture.environment.GeboApplicationArchitecture;
-import ai.gebo.architecture.environment.GeboApplicationArchitecture.ArchitectureType;
 
 @Configuration
 public class MonolithicArchitectureDeclaration {

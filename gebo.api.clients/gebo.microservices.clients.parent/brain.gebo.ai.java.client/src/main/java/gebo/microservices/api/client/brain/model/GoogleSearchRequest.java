@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GoogleSearchRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GoogleSearchRequest {
   @JsonProperty("language")
-  private Object language = null;
+  private String language = null;
 
   @JsonProperty("query")
-  private Object query = null;
+  private String query = null;
 
   @JsonProperty("topN")
-  private Object topN = null;
+  private Integer topN = null;
 
-  public GoogleSearchRequest language(Object language) {
+  public GoogleSearchRequest language(String language) {
     this.language = language;
     return this;
   }
@@ -44,15 +44,15 @@ public class GoogleSearchRequest {
    * @return language
   **/
   @Schema(description = "")
-  public Object getLanguage() {
+  public String getLanguage() {
     return language;
   }
 
-  public void setLanguage(Object language) {
+  public void setLanguage(String language) {
     this.language = language;
   }
 
-  public GoogleSearchRequest query(Object query) {
+  public GoogleSearchRequest query(String query) {
     this.query = query;
     return this;
   }
@@ -62,15 +62,15 @@ public class GoogleSearchRequest {
    * @return query
   **/
   @Schema(description = "")
-  public Object getQuery() {
+  public String getQuery() {
     return query;
   }
 
-  public void setQuery(Object query) {
+  public void setQuery(String query) {
     this.query = query;
   }
 
-  public GoogleSearchRequest topN(Object topN) {
+  public GoogleSearchRequest topN(Integer topN) {
     this.topN = topN;
     return this;
   }
@@ -80,11 +80,11 @@ public class GoogleSearchRequest {
    * @return topN
   **/
   @Schema(description = "")
-  public Object getTopN() {
+  public Integer getTopN() {
     return topN;
   }
 
-  public void setTopN(Object topN) {
+  public void setTopN(Integer topN) {
     this.topN = topN;
   }
 

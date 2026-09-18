@@ -42,7 +42,7 @@ public class GeboChatProfileLookupControllerApiTest {
      */
     @Test
     public void findChatProfileConfigurationLookupByCodeTest() {
-        Object code = null;
+        String code = null;
         GChatProfileConfiguration response = api.findChatProfileConfigurationLookupByCode(code);
 
         // TODO: test validations

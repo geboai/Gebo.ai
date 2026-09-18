@@ -161,7 +161,7 @@ No authorization required
 
 
 JiraSystemsControllerApi apiInstance = new JiraSystemsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GJiraProjectEndpoint result = apiInstance.findJiraEndpointsByCode(code);
     System.out.println(result);
@@ -175,7 +175,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -192,7 +192,7 @@ No authorization required
 
 <a name="findJiraEndpointsByProject"></a>
 # **findJiraEndpointsByProject**
-> Object findJiraEndpointsByProject(parentProjectCode)
+> List&lt;GJiraProjectEndpoint&gt; findJiraEndpointsByProject(parentProjectCode)
 
 
 
@@ -204,9 +204,9 @@ No authorization required
 
 
 JiraSystemsControllerApi apiInstance = new JiraSystemsControllerApi();
-Object parentProjectCode = null; // Object | 
+String parentProjectCode = "parentProjectCode_example"; // String | 
 try {
-    Object result = apiInstance.findJiraEndpointsByProject(parentProjectCode);
+    List<GJiraProjectEndpoint> result = apiInstance.findJiraEndpointsByProject(parentProjectCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSystemsControllerApi#findJiraEndpointsByProject");
@@ -218,11 +218,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **parentProjectCode** | [**Object**](.md)|  |
+ **parentProjectCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GJiraProjectEndpoint&gt;**](GJiraProjectEndpoint.md)
 
 ### Authorization
 
@@ -235,7 +235,7 @@ No authorization required
 
 <a name="findJiraEndpointsByQbe"></a>
 # **findJiraEndpointsByQbe**
-> Object findJiraEndpointsByQbe(body)
+> List&lt;GJiraProjectEndpoint&gt; findJiraEndpointsByQbe(body)
 
 
 
@@ -249,7 +249,7 @@ No authorization required
 JiraSystemsControllerApi apiInstance = new JiraSystemsControllerApi();
 GJiraProjectEndpoint body = new GJiraProjectEndpoint(); // GJiraProjectEndpoint | 
 try {
-    Object result = apiInstance.findJiraEndpointsByQbe(body);
+    List<GJiraProjectEndpoint> result = apiInstance.findJiraEndpointsByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSystemsControllerApi#findJiraEndpointsByQbe");
@@ -265,7 +265,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GJiraProjectEndpoint&gt;**](GJiraProjectEndpoint.md)
 
 ### Authorization
 
@@ -290,7 +290,7 @@ No authorization required
 
 
 JiraSystemsControllerApi apiInstance = new JiraSystemsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GJiraSystem result = apiInstance.findJiraSystemByCode(code);
     System.out.println(result);
@@ -304,7 +304,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -360,7 +360,7 @@ No authorization required
 
 <a name="getJiraSystems"></a>
 # **getJiraSystems**
-> Object getJiraSystems()
+> List&lt;GJiraSystem&gt; getJiraSystems()
 
 
 
@@ -373,7 +373,7 @@ No authorization required
 
 JiraSystemsControllerApi apiInstance = new JiraSystemsControllerApi();
 try {
-    Object result = apiInstance.getJiraSystems();
+    List<GJiraSystem> result = apiInstance.getJiraSystems();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSystemsControllerApi#getJiraSystems");
@@ -386,7 +386,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GJiraSystem&gt;**](GJiraSystem.md)
 
 ### Authorization
 

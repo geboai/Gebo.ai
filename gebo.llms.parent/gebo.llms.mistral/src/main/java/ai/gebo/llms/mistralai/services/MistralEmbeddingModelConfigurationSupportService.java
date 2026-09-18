@@ -23,7 +23,6 @@ import org.springframework.ai.mistralai.MistralAiEmbeddingModel;
 import org.springframework.ai.mistralai.MistralAiEmbeddingOptions;
 import org.springframework.ai.mistralai.api.MistralAiApi;
 import org.springframework.ai.mistralai.api.MistralAiApi.Builder;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -47,7 +46,6 @@ import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "mistralAIEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class MistralEmbeddingModelConfigurationSupportService implements

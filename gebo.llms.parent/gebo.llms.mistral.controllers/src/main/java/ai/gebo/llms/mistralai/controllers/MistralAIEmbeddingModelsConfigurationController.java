@@ -11,7 +11,6 @@ package ai.gebo.llms.mistralai.controllers;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +37,6 @@ import ai.gebo.security.services.IGSecurityAuditLoggerService;
  * MistralAI integration is enabled in the application properties. Access to
  * these endpoints is restricted to users with the ADMIN role.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "mistralAIEnabled", havingValue = "true")
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/MistralAIEmbeddingModelsConfigurationController")

@@ -19,80 +19,182 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.GOpenAIChatModelChoice;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GOpenAIChatModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GOpenAIChatModelConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("modelTypeCode")
-  private Object modelTypeCode = null;
+  private String modelTypeCode = null;
 
   @JsonProperty("defaultModel")
-  private Object defaultModel = null;
+  private Boolean defaultModel = null;
 
   @JsonProperty("apiSecretCode")
-  private Object apiSecretCode = null;
+  private String apiSecretCode = null;
 
   @JsonProperty("choosedModel")
   private GOpenAIChatModelChoice choosedModel = null;
 
   @JsonProperty("baseUrl")
-  private Object baseUrl = null;
+  private String baseUrl = null;
 
   @JsonProperty("contextLength")
-  private Object contextLength = null;
+  private Integer contextLength = null;
 
   @JsonProperty("topP")
-  private Object topP = null;
+  private Double topP = null;
 
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("enabledFunctions")
-  private Object enabledFunctions = null;
+  private List<String> enabledFunctions = null;
 
   @JsonProperty("temperature")
-  private Object temperature = null;
+  private Double temperature = null;
 
-  @JsonProperty("forUses")
-  private Object forUses = null;
+  /**
+   * Gets or Sets forUses
+   */
+  public enum ForUsesEnum {
+    CHAT("CHAT"),
+    INTERNAL_SERVICES("INTERNAL_SERVICES");
 
-  @JsonProperty("features")
-  private Object features = null;
+    private String value;
 
-  @JsonProperty("thinking")
-  private Object thinking = null;
+    ForUsesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ForUsesEnum fromValue(String input) {
+      for (ForUsesEnum b : ForUsesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("forUses")
+  private List<ForUsesEnum> forUses = null;
+
+  /**
+   * Gets or Sets features
+   */
+  public enum FeaturesEnum {
+    CHAT("CHAT"),
+    REASONING("REASONING"),
+    STRUCTURED_OUTPUT("STRUCTURED_OUTPUT"),
+    MULTIMEDIA("MULTIMEDIA"),
+    FUNCTION_CALLING("FUNCTION_CALLING");
+
+    private String value;
+
+    FeaturesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static FeaturesEnum fromValue(String input) {
+      for (FeaturesEnum b : FeaturesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("features")
+  private List<FeaturesEnum> features = null;
+
+  /**
+   * Gets or Sets thinking
+   */
+  public enum ThinkingEnum {
+    NO_THINKING("NO_THINKING"),
+    LOW_THINKING("LOW_THINKING"),
+    MEDIUM_THINKING("MEDIUM_THINKING"),
+    HIGH_THINKING("HIGH_THINKING"),
+    AUTO("AUTO");
+
+    private String value;
+
+    ThinkingEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ThinkingEnum fromValue(String input) {
+      for (ThinkingEnum b : ThinkingEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("thinking")
+  private ThinkingEnum thinking = null;
 
   @JsonProperty("maxGeneratedTokens")
-  private Object maxGeneratedTokens = null;
+  private Integer maxGeneratedTokens = null;
 
-  public GOpenAIChatModelConfig code(Object code) {
+  public GOpenAIChatModelConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -102,15 +204,15 @@ public class GOpenAIChatModelConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GOpenAIChatModelConfig description(Object description) {
+  public GOpenAIChatModelConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -120,15 +222,15 @@ public class GOpenAIChatModelConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GOpenAIChatModelConfig userModified(Object userModified) {
+  public GOpenAIChatModelConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -138,15 +240,15 @@ public class GOpenAIChatModelConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GOpenAIChatModelConfig userCreated(Object userCreated) {
+  public GOpenAIChatModelConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -156,15 +258,15 @@ public class GOpenAIChatModelConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GOpenAIChatModelConfig dateModified(Object dateModified) {
+  public GOpenAIChatModelConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -174,15 +276,15 @@ public class GOpenAIChatModelConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GOpenAIChatModelConfig dateCreated(Object dateCreated) {
+  public GOpenAIChatModelConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -192,15 +294,15 @@ public class GOpenAIChatModelConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GOpenAIChatModelConfig modelTypeCode(Object modelTypeCode) {
+  public GOpenAIChatModelConfig modelTypeCode(String modelTypeCode) {
     this.modelTypeCode = modelTypeCode;
     return this;
   }
@@ -210,15 +312,15 @@ public class GOpenAIChatModelConfig {
    * @return modelTypeCode
   **/
   @Schema(description = "")
-  public Object getModelTypeCode() {
+  public String getModelTypeCode() {
     return modelTypeCode;
   }
 
-  public void setModelTypeCode(Object modelTypeCode) {
+  public void setModelTypeCode(String modelTypeCode) {
     this.modelTypeCode = modelTypeCode;
   }
 
-  public GOpenAIChatModelConfig defaultModel(Object defaultModel) {
+  public GOpenAIChatModelConfig defaultModel(Boolean defaultModel) {
     this.defaultModel = defaultModel;
     return this;
   }
@@ -228,15 +330,15 @@ public class GOpenAIChatModelConfig {
    * @return defaultModel
   **/
   @Schema(description = "")
-  public Object getDefaultModel() {
+  public Boolean isDefaultModel() {
     return defaultModel;
   }
 
-  public void setDefaultModel(Object defaultModel) {
+  public void setDefaultModel(Boolean defaultModel) {
     this.defaultModel = defaultModel;
   }
 
-  public GOpenAIChatModelConfig apiSecretCode(Object apiSecretCode) {
+  public GOpenAIChatModelConfig apiSecretCode(String apiSecretCode) {
     this.apiSecretCode = apiSecretCode;
     return this;
   }
@@ -246,11 +348,11 @@ public class GOpenAIChatModelConfig {
    * @return apiSecretCode
   **/
   @Schema(description = "")
-  public Object getApiSecretCode() {
+  public String getApiSecretCode() {
     return apiSecretCode;
   }
 
-  public void setApiSecretCode(Object apiSecretCode) {
+  public void setApiSecretCode(String apiSecretCode) {
     this.apiSecretCode = apiSecretCode;
   }
 
@@ -272,7 +374,7 @@ public class GOpenAIChatModelConfig {
     this.choosedModel = choosedModel;
   }
 
-  public GOpenAIChatModelConfig baseUrl(Object baseUrl) {
+  public GOpenAIChatModelConfig baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
   }
@@ -282,15 +384,15 @@ public class GOpenAIChatModelConfig {
    * @return baseUrl
   **/
   @Schema(description = "")
-  public Object getBaseUrl() {
+  public String getBaseUrl() {
     return baseUrl;
   }
 
-  public void setBaseUrl(Object baseUrl) {
+  public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 
-  public GOpenAIChatModelConfig contextLength(Object contextLength) {
+  public GOpenAIChatModelConfig contextLength(Integer contextLength) {
     this.contextLength = contextLength;
     return this;
   }
@@ -300,15 +402,15 @@ public class GOpenAIChatModelConfig {
    * @return contextLength
   **/
   @Schema(description = "")
-  public Object getContextLength() {
+  public Integer getContextLength() {
     return contextLength;
   }
 
-  public void setContextLength(Object contextLength) {
+  public void setContextLength(Integer contextLength) {
     this.contextLength = contextLength;
   }
 
-  public GOpenAIChatModelConfig topP(Object topP) {
+  public GOpenAIChatModelConfig topP(Double topP) {
     this.topP = topP;
     return this;
   }
@@ -318,16 +420,24 @@ public class GOpenAIChatModelConfig {
    * @return topP
   **/
   @Schema(description = "")
-  public Object getTopP() {
+  public Double getTopP() {
     return topP;
   }
 
-  public void setTopP(Object topP) {
+  public void setTopP(Double topP) {
     this.topP = topP;
   }
 
-  public GOpenAIChatModelConfig accessibleGroups(Object accessibleGroups) {
+  public GOpenAIChatModelConfig accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public GOpenAIChatModelConfig addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -336,16 +446,24 @@ public class GOpenAIChatModelConfig {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public GOpenAIChatModelConfig accessibleUsers(Object accessibleUsers) {
+  public GOpenAIChatModelConfig accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public GOpenAIChatModelConfig addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -354,15 +472,15 @@ public class GOpenAIChatModelConfig {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public GOpenAIChatModelConfig accessibleToAll(Object accessibleToAll) {
+  public GOpenAIChatModelConfig accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -372,16 +490,24 @@ public class GOpenAIChatModelConfig {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public GOpenAIChatModelConfig enabledFunctions(Object enabledFunctions) {
+  public GOpenAIChatModelConfig enabledFunctions(List<String> enabledFunctions) {
     this.enabledFunctions = enabledFunctions;
+    return this;
+  }
+
+  public GOpenAIChatModelConfig addEnabledFunctionsItem(String enabledFunctionsItem) {
+    if (this.enabledFunctions == null) {
+      this.enabledFunctions = new ArrayList<>();
+    }
+    this.enabledFunctions.add(enabledFunctionsItem);
     return this;
   }
 
@@ -390,15 +516,15 @@ public class GOpenAIChatModelConfig {
    * @return enabledFunctions
   **/
   @Schema(description = "")
-  public Object getEnabledFunctions() {
+  public List<String> getEnabledFunctions() {
     return enabledFunctions;
   }
 
-  public void setEnabledFunctions(Object enabledFunctions) {
+  public void setEnabledFunctions(List<String> enabledFunctions) {
     this.enabledFunctions = enabledFunctions;
   }
 
-  public GOpenAIChatModelConfig temperature(Object temperature) {
+  public GOpenAIChatModelConfig temperature(Double temperature) {
     this.temperature = temperature;
     return this;
   }
@@ -408,16 +534,24 @@ public class GOpenAIChatModelConfig {
    * @return temperature
   **/
   @Schema(description = "")
-  public Object getTemperature() {
+  public Double getTemperature() {
     return temperature;
   }
 
-  public void setTemperature(Object temperature) {
+  public void setTemperature(Double temperature) {
     this.temperature = temperature;
   }
 
-  public GOpenAIChatModelConfig forUses(Object forUses) {
+  public GOpenAIChatModelConfig forUses(List<ForUsesEnum> forUses) {
     this.forUses = forUses;
+    return this;
+  }
+
+  public GOpenAIChatModelConfig addForUsesItem(ForUsesEnum forUsesItem) {
+    if (this.forUses == null) {
+      this.forUses = new ArrayList<>();
+    }
+    this.forUses.add(forUsesItem);
     return this;
   }
 
@@ -426,16 +560,24 @@ public class GOpenAIChatModelConfig {
    * @return forUses
   **/
   @Schema(description = "")
-  public Object getForUses() {
+  public List<ForUsesEnum> getForUses() {
     return forUses;
   }
 
-  public void setForUses(Object forUses) {
+  public void setForUses(List<ForUsesEnum> forUses) {
     this.forUses = forUses;
   }
 
-  public GOpenAIChatModelConfig features(Object features) {
+  public GOpenAIChatModelConfig features(List<FeaturesEnum> features) {
     this.features = features;
+    return this;
+  }
+
+  public GOpenAIChatModelConfig addFeaturesItem(FeaturesEnum featuresItem) {
+    if (this.features == null) {
+      this.features = new ArrayList<>();
+    }
+    this.features.add(featuresItem);
     return this;
   }
 
@@ -444,15 +586,15 @@ public class GOpenAIChatModelConfig {
    * @return features
   **/
   @Schema(description = "")
-  public Object getFeatures() {
+  public List<FeaturesEnum> getFeatures() {
     return features;
   }
 
-  public void setFeatures(Object features) {
+  public void setFeatures(List<FeaturesEnum> features) {
     this.features = features;
   }
 
-  public GOpenAIChatModelConfig thinking(Object thinking) {
+  public GOpenAIChatModelConfig thinking(ThinkingEnum thinking) {
     this.thinking = thinking;
     return this;
   }
@@ -462,15 +604,15 @@ public class GOpenAIChatModelConfig {
    * @return thinking
   **/
   @Schema(description = "")
-  public Object getThinking() {
+  public ThinkingEnum getThinking() {
     return thinking;
   }
 
-  public void setThinking(Object thinking) {
+  public void setThinking(ThinkingEnum thinking) {
     this.thinking = thinking;
   }
 
-  public GOpenAIChatModelConfig maxGeneratedTokens(Object maxGeneratedTokens) {
+  public GOpenAIChatModelConfig maxGeneratedTokens(Integer maxGeneratedTokens) {
     this.maxGeneratedTokens = maxGeneratedTokens;
     return this;
   }
@@ -480,11 +622,11 @@ public class GOpenAIChatModelConfig {
    * @return maxGeneratedTokens
   **/
   @Schema(description = "")
-  public Object getMaxGeneratedTokens() {
+  public Integer getMaxGeneratedTokens() {
     return maxGeneratedTokens;
   }
 
-  public void setMaxGeneratedTokens(Object maxGeneratedTokens) {
+  public void setMaxGeneratedTokens(Integer maxGeneratedTokens) {
     this.maxGeneratedTokens = maxGeneratedTokens;
   }
 

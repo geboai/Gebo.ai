@@ -17,75 +17,79 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.tyr.model.ComputedWorkflowStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * ComputedWorkflowStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class ComputedWorkflowStatus {
   @JsonProperty("jobId")
-  private Object jobId = null;
+  private String jobId = null;
 
   @JsonProperty("workflowType")
-  private Object workflowType = null;
+  private String workflowType = null;
 
   @JsonProperty("workflowId")
-  private Object workflowId = null;
+  private String workflowId = null;
 
   @JsonProperty("workflowStepId")
-  private Object workflowStepId = null;
+  private String workflowStepId = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("batchDocumentsInput")
-  private Object batchDocumentsInput = null;
+  private Long batchDocumentsInput = null;
 
   @JsonProperty("batchDocumentsProcessingErrors")
-  private Object batchDocumentsProcessingErrors = null;
+  private Long batchDocumentsProcessingErrors = null;
 
   @JsonProperty("batchDocumentsProcessed")
-  private Object batchDocumentsProcessed = null;
+  private Long batchDocumentsProcessed = null;
 
   @JsonProperty("batchSentToNextStep")
-  private Object batchSentToNextStep = null;
+  private Long batchSentToNextStep = null;
 
   @JsonProperty("batchDiscardedInput")
-  private Object batchDiscardedInput = null;
+  private Long batchDiscardedInput = null;
 
   @JsonProperty("chunksProcessed")
-  private Object chunksProcessed = null;
+  private Long chunksProcessed = null;
 
   @JsonProperty("tokensProcessed")
-  private Object tokensProcessed = null;
+  private Long tokensProcessed = null;
 
   @JsonProperty("completed")
-  private Object completed = null;
+  private Boolean completed = null;
 
   @JsonProperty("hasErrors")
-  private Object hasErrors = null;
+  private Boolean hasErrors = null;
 
   @JsonProperty("startedRunning")
-  private Object startedRunning = null;
+  private Boolean startedRunning = null;
 
   @JsonProperty("levelId")
-  private Object levelId = null;
+  private Integer levelId = null;
 
   @JsonProperty("enabledStep")
-  private Object enabledStep = null;
+  private Boolean enabledStep = null;
 
   @JsonProperty("startProcessingTimestamp")
-  private Object startProcessingTimestamp = null;
+  private Date startProcessingTimestamp = null;
 
   @JsonProperty("lastProcessingTimestamp")
-  private Object lastProcessingTimestamp = null;
+  private Date lastProcessingTimestamp = null;
 
   @JsonProperty("childs")
-  private Object childs = null;
+  private List<ComputedWorkflowStatus> childs = null;
 
-  public ComputedWorkflowStatus jobId(Object jobId) {
+  public ComputedWorkflowStatus jobId(String jobId) {
     this.jobId = jobId;
     return this;
   }
@@ -95,15 +99,15 @@ public class ComputedWorkflowStatus {
    * @return jobId
   **/
   @Schema(description = "")
-  public Object getJobId() {
+  public String getJobId() {
     return jobId;
   }
 
-  public void setJobId(Object jobId) {
+  public void setJobId(String jobId) {
     this.jobId = jobId;
   }
 
-  public ComputedWorkflowStatus workflowType(Object workflowType) {
+  public ComputedWorkflowStatus workflowType(String workflowType) {
     this.workflowType = workflowType;
     return this;
   }
@@ -113,15 +117,15 @@ public class ComputedWorkflowStatus {
    * @return workflowType
   **/
   @Schema(description = "")
-  public Object getWorkflowType() {
+  public String getWorkflowType() {
     return workflowType;
   }
 
-  public void setWorkflowType(Object workflowType) {
+  public void setWorkflowType(String workflowType) {
     this.workflowType = workflowType;
   }
 
-  public ComputedWorkflowStatus workflowId(Object workflowId) {
+  public ComputedWorkflowStatus workflowId(String workflowId) {
     this.workflowId = workflowId;
     return this;
   }
@@ -131,15 +135,15 @@ public class ComputedWorkflowStatus {
    * @return workflowId
   **/
   @Schema(description = "")
-  public Object getWorkflowId() {
+  public String getWorkflowId() {
     return workflowId;
   }
 
-  public void setWorkflowId(Object workflowId) {
+  public void setWorkflowId(String workflowId) {
     this.workflowId = workflowId;
   }
 
-  public ComputedWorkflowStatus workflowStepId(Object workflowStepId) {
+  public ComputedWorkflowStatus workflowStepId(String workflowStepId) {
     this.workflowStepId = workflowStepId;
     return this;
   }
@@ -149,15 +153,15 @@ public class ComputedWorkflowStatus {
    * @return workflowStepId
   **/
   @Schema(description = "")
-  public Object getWorkflowStepId() {
+  public String getWorkflowStepId() {
     return workflowStepId;
   }
 
-  public void setWorkflowStepId(Object workflowStepId) {
+  public void setWorkflowStepId(String workflowStepId) {
     this.workflowStepId = workflowStepId;
   }
 
-  public ComputedWorkflowStatus description(Object description) {
+  public ComputedWorkflowStatus description(String description) {
     this.description = description;
     return this;
   }
@@ -167,15 +171,15 @@ public class ComputedWorkflowStatus {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public ComputedWorkflowStatus batchDocumentsInput(Object batchDocumentsInput) {
+  public ComputedWorkflowStatus batchDocumentsInput(Long batchDocumentsInput) {
     this.batchDocumentsInput = batchDocumentsInput;
     return this;
   }
@@ -185,15 +189,15 @@ public class ComputedWorkflowStatus {
    * @return batchDocumentsInput
   **/
   @Schema(description = "")
-  public Object getBatchDocumentsInput() {
+  public Long getBatchDocumentsInput() {
     return batchDocumentsInput;
   }
 
-  public void setBatchDocumentsInput(Object batchDocumentsInput) {
+  public void setBatchDocumentsInput(Long batchDocumentsInput) {
     this.batchDocumentsInput = batchDocumentsInput;
   }
 
-  public ComputedWorkflowStatus batchDocumentsProcessingErrors(Object batchDocumentsProcessingErrors) {
+  public ComputedWorkflowStatus batchDocumentsProcessingErrors(Long batchDocumentsProcessingErrors) {
     this.batchDocumentsProcessingErrors = batchDocumentsProcessingErrors;
     return this;
   }
@@ -203,15 +207,15 @@ public class ComputedWorkflowStatus {
    * @return batchDocumentsProcessingErrors
   **/
   @Schema(description = "")
-  public Object getBatchDocumentsProcessingErrors() {
+  public Long getBatchDocumentsProcessingErrors() {
     return batchDocumentsProcessingErrors;
   }
 
-  public void setBatchDocumentsProcessingErrors(Object batchDocumentsProcessingErrors) {
+  public void setBatchDocumentsProcessingErrors(Long batchDocumentsProcessingErrors) {
     this.batchDocumentsProcessingErrors = batchDocumentsProcessingErrors;
   }
 
-  public ComputedWorkflowStatus batchDocumentsProcessed(Object batchDocumentsProcessed) {
+  public ComputedWorkflowStatus batchDocumentsProcessed(Long batchDocumentsProcessed) {
     this.batchDocumentsProcessed = batchDocumentsProcessed;
     return this;
   }
@@ -221,15 +225,15 @@ public class ComputedWorkflowStatus {
    * @return batchDocumentsProcessed
   **/
   @Schema(description = "")
-  public Object getBatchDocumentsProcessed() {
+  public Long getBatchDocumentsProcessed() {
     return batchDocumentsProcessed;
   }
 
-  public void setBatchDocumentsProcessed(Object batchDocumentsProcessed) {
+  public void setBatchDocumentsProcessed(Long batchDocumentsProcessed) {
     this.batchDocumentsProcessed = batchDocumentsProcessed;
   }
 
-  public ComputedWorkflowStatus batchSentToNextStep(Object batchSentToNextStep) {
+  public ComputedWorkflowStatus batchSentToNextStep(Long batchSentToNextStep) {
     this.batchSentToNextStep = batchSentToNextStep;
     return this;
   }
@@ -239,15 +243,15 @@ public class ComputedWorkflowStatus {
    * @return batchSentToNextStep
   **/
   @Schema(description = "")
-  public Object getBatchSentToNextStep() {
+  public Long getBatchSentToNextStep() {
     return batchSentToNextStep;
   }
 
-  public void setBatchSentToNextStep(Object batchSentToNextStep) {
+  public void setBatchSentToNextStep(Long batchSentToNextStep) {
     this.batchSentToNextStep = batchSentToNextStep;
   }
 
-  public ComputedWorkflowStatus batchDiscardedInput(Object batchDiscardedInput) {
+  public ComputedWorkflowStatus batchDiscardedInput(Long batchDiscardedInput) {
     this.batchDiscardedInput = batchDiscardedInput;
     return this;
   }
@@ -257,15 +261,15 @@ public class ComputedWorkflowStatus {
    * @return batchDiscardedInput
   **/
   @Schema(description = "")
-  public Object getBatchDiscardedInput() {
+  public Long getBatchDiscardedInput() {
     return batchDiscardedInput;
   }
 
-  public void setBatchDiscardedInput(Object batchDiscardedInput) {
+  public void setBatchDiscardedInput(Long batchDiscardedInput) {
     this.batchDiscardedInput = batchDiscardedInput;
   }
 
-  public ComputedWorkflowStatus chunksProcessed(Object chunksProcessed) {
+  public ComputedWorkflowStatus chunksProcessed(Long chunksProcessed) {
     this.chunksProcessed = chunksProcessed;
     return this;
   }
@@ -275,15 +279,15 @@ public class ComputedWorkflowStatus {
    * @return chunksProcessed
   **/
   @Schema(description = "")
-  public Object getChunksProcessed() {
+  public Long getChunksProcessed() {
     return chunksProcessed;
   }
 
-  public void setChunksProcessed(Object chunksProcessed) {
+  public void setChunksProcessed(Long chunksProcessed) {
     this.chunksProcessed = chunksProcessed;
   }
 
-  public ComputedWorkflowStatus tokensProcessed(Object tokensProcessed) {
+  public ComputedWorkflowStatus tokensProcessed(Long tokensProcessed) {
     this.tokensProcessed = tokensProcessed;
     return this;
   }
@@ -293,15 +297,15 @@ public class ComputedWorkflowStatus {
    * @return tokensProcessed
   **/
   @Schema(description = "")
-  public Object getTokensProcessed() {
+  public Long getTokensProcessed() {
     return tokensProcessed;
   }
 
-  public void setTokensProcessed(Object tokensProcessed) {
+  public void setTokensProcessed(Long tokensProcessed) {
     this.tokensProcessed = tokensProcessed;
   }
 
-  public ComputedWorkflowStatus completed(Object completed) {
+  public ComputedWorkflowStatus completed(Boolean completed) {
     this.completed = completed;
     return this;
   }
@@ -311,15 +315,15 @@ public class ComputedWorkflowStatus {
    * @return completed
   **/
   @Schema(description = "")
-  public Object getCompleted() {
+  public Boolean isCompleted() {
     return completed;
   }
 
-  public void setCompleted(Object completed) {
+  public void setCompleted(Boolean completed) {
     this.completed = completed;
   }
 
-  public ComputedWorkflowStatus hasErrors(Object hasErrors) {
+  public ComputedWorkflowStatus hasErrors(Boolean hasErrors) {
     this.hasErrors = hasErrors;
     return this;
   }
@@ -329,15 +333,15 @@ public class ComputedWorkflowStatus {
    * @return hasErrors
   **/
   @Schema(description = "")
-  public Object getHasErrors() {
+  public Boolean isHasErrors() {
     return hasErrors;
   }
 
-  public void setHasErrors(Object hasErrors) {
+  public void setHasErrors(Boolean hasErrors) {
     this.hasErrors = hasErrors;
   }
 
-  public ComputedWorkflowStatus startedRunning(Object startedRunning) {
+  public ComputedWorkflowStatus startedRunning(Boolean startedRunning) {
     this.startedRunning = startedRunning;
     return this;
   }
@@ -347,15 +351,15 @@ public class ComputedWorkflowStatus {
    * @return startedRunning
   **/
   @Schema(description = "")
-  public Object getStartedRunning() {
+  public Boolean isStartedRunning() {
     return startedRunning;
   }
 
-  public void setStartedRunning(Object startedRunning) {
+  public void setStartedRunning(Boolean startedRunning) {
     this.startedRunning = startedRunning;
   }
 
-  public ComputedWorkflowStatus levelId(Object levelId) {
+  public ComputedWorkflowStatus levelId(Integer levelId) {
     this.levelId = levelId;
     return this;
   }
@@ -365,15 +369,15 @@ public class ComputedWorkflowStatus {
    * @return levelId
   **/
   @Schema(description = "")
-  public Object getLevelId() {
+  public Integer getLevelId() {
     return levelId;
   }
 
-  public void setLevelId(Object levelId) {
+  public void setLevelId(Integer levelId) {
     this.levelId = levelId;
   }
 
-  public ComputedWorkflowStatus enabledStep(Object enabledStep) {
+  public ComputedWorkflowStatus enabledStep(Boolean enabledStep) {
     this.enabledStep = enabledStep;
     return this;
   }
@@ -383,15 +387,15 @@ public class ComputedWorkflowStatus {
    * @return enabledStep
   **/
   @Schema(description = "")
-  public Object getEnabledStep() {
+  public Boolean isEnabledStep() {
     return enabledStep;
   }
 
-  public void setEnabledStep(Object enabledStep) {
+  public void setEnabledStep(Boolean enabledStep) {
     this.enabledStep = enabledStep;
   }
 
-  public ComputedWorkflowStatus startProcessingTimestamp(Object startProcessingTimestamp) {
+  public ComputedWorkflowStatus startProcessingTimestamp(Date startProcessingTimestamp) {
     this.startProcessingTimestamp = startProcessingTimestamp;
     return this;
   }
@@ -401,15 +405,15 @@ public class ComputedWorkflowStatus {
    * @return startProcessingTimestamp
   **/
   @Schema(description = "")
-  public Object getStartProcessingTimestamp() {
+  public Date getStartProcessingTimestamp() {
     return startProcessingTimestamp;
   }
 
-  public void setStartProcessingTimestamp(Object startProcessingTimestamp) {
+  public void setStartProcessingTimestamp(Date startProcessingTimestamp) {
     this.startProcessingTimestamp = startProcessingTimestamp;
   }
 
-  public ComputedWorkflowStatus lastProcessingTimestamp(Object lastProcessingTimestamp) {
+  public ComputedWorkflowStatus lastProcessingTimestamp(Date lastProcessingTimestamp) {
     this.lastProcessingTimestamp = lastProcessingTimestamp;
     return this;
   }
@@ -419,16 +423,24 @@ public class ComputedWorkflowStatus {
    * @return lastProcessingTimestamp
   **/
   @Schema(description = "")
-  public Object getLastProcessingTimestamp() {
+  public Date getLastProcessingTimestamp() {
     return lastProcessingTimestamp;
   }
 
-  public void setLastProcessingTimestamp(Object lastProcessingTimestamp) {
+  public void setLastProcessingTimestamp(Date lastProcessingTimestamp) {
     this.lastProcessingTimestamp = lastProcessingTimestamp;
   }
 
-  public ComputedWorkflowStatus childs(Object childs) {
+  public ComputedWorkflowStatus childs(List<ComputedWorkflowStatus> childs) {
     this.childs = childs;
+    return this;
+  }
+
+  public ComputedWorkflowStatus addChildsItem(ComputedWorkflowStatus childsItem) {
+    if (this.childs == null) {
+      this.childs = new ArrayList<>();
+    }
+    this.childs.add(childsItem);
     return this;
   }
 
@@ -437,11 +449,11 @@ public class ComputedWorkflowStatus {
    * @return childs
   **/
   @Schema(description = "")
-  public Object getChilds() {
+  public List<ComputedWorkflowStatus> getChilds() {
     return childs;
   }
 
-  public void setChilds(Object childs) {
+  public void setChilds(List<ComputedWorkflowStatus> childs) {
     this.childs = childs;
   }
 

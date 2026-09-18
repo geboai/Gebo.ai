@@ -2,6 +2,7 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.GLookupEntry;
 import gebo.microservices.api.client.brain.model.GLookupEntryRefGBaseChatModelConfig;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ChatModelsLookupControllerApi {
     private ApiClient apiClient;
@@ -46,10 +47,10 @@ public class ChatModelsLookupControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GLookupEntry&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getChatModelTypesLookup() throws RestClientException {
+    public List<GLookupEntry> getChatModelTypesLookup() throws RestClientException {
         return getChatModelTypesLookupWithHttpInfo().getBody();
     }
 
@@ -57,12 +58,12 @@ public class ChatModelsLookupControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GLookupEntry&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getChatModelTypesLookupWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GLookupEntry>> getChatModelTypesLookupWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/ChatModelsLookupController/getChatModelTypesLookup").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ChatModelsLookupController/getChatModelTypesLookup").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -77,8 +78,8 @@ public class ChatModelsLookupControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GLookupEntry>> returnType = new ParameterizedTypeReference<List<GLookupEntry>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -100,7 +101,7 @@ public class ChatModelsLookupControllerApi {
      */
     public ResponseEntity<GLookupEntryRefGBaseChatModelConfig> getDefaultChatModelWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/ChatModelsLookupController/getDefaultChatModel").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ChatModelsLookupController/getDefaultChatModel").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -116,17 +117,17 @@ public class ChatModelsLookupControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GLookupEntryRefGBaseChatModelConfig> returnType = new ParameterizedTypeReference<GLookupEntryRefGBaseChatModelConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return Object
+     * @return List&lt;GLookupEntryRefGBaseChatModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getRuntimeConfiguredChatModelsLookup(Object modelTypeCode) throws RestClientException {
+    public List<GLookupEntryRefGBaseChatModelConfig> getRuntimeConfiguredChatModelsLookup(String modelTypeCode) throws RestClientException {
         return getRuntimeConfiguredChatModelsLookupWithHttpInfo(modelTypeCode).getBody();
     }
 
@@ -135,12 +136,12 @@ public class ChatModelsLookupControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GLookupEntryRefGBaseChatModelConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getRuntimeConfiguredChatModelsLookupWithHttpInfo(Object modelTypeCode) throws RestClientException {
+    public ResponseEntity<List<GLookupEntryRefGBaseChatModelConfig>> getRuntimeConfiguredChatModelsLookupWithHttpInfo(String modelTypeCode) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -156,7 +157,7 @@ public class ChatModelsLookupControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GLookupEntryRefGBaseChatModelConfig>> returnType = new ParameterizedTypeReference<List<GLookupEntryRefGBaseChatModelConfig>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

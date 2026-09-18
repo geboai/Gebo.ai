@@ -11,8 +11,8 @@
  */
 
 export interface ChangePasswordParam { 
-    username: any;
-    oldPassword: any;
-    newPassword: any;
-    newPassword1: any;
+    username: string;
+    oldPassword: string;
+    newPassword: string;
+    newPassword1: string;
 }

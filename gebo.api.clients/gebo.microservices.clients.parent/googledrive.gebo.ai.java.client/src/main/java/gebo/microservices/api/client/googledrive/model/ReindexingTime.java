@@ -18,20 +18,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * ReindexingTime
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:12.006082925+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.115295867+02:00[Europe/Rome]")
 
 public class ReindexingTime {
   @JsonProperty("createdTime")
-  private Object createdTime = null;
+  private Long createdTime = null;
 
   @JsonProperty("timeComponent")
-  private Object timeComponent = null;
+  private List<Long> timeComponent = null;
 
-  public ReindexingTime createdTime(Object createdTime) {
+  public ReindexingTime createdTime(Long createdTime) {
     this.createdTime = createdTime;
     return this;
   }
@@ -41,16 +43,24 @@ public class ReindexingTime {
    * @return createdTime
   **/
   @Schema(description = "")
-  public Object getCreatedTime() {
+  public Long getCreatedTime() {
     return createdTime;
   }
 
-  public void setCreatedTime(Object createdTime) {
+  public void setCreatedTime(Long createdTime) {
     this.createdTime = createdTime;
   }
 
-  public ReindexingTime timeComponent(Object timeComponent) {
+  public ReindexingTime timeComponent(List<Long> timeComponent) {
     this.timeComponent = timeComponent;
+    return this;
+  }
+
+  public ReindexingTime addTimeComponentItem(Long timeComponentItem) {
+    if (this.timeComponent == null) {
+      this.timeComponent = new ArrayList<>();
+    }
+    this.timeComponent.add(timeComponentItem);
     return this;
   }
 
@@ -59,11 +69,11 @@ public class ReindexingTime {
    * @return timeComponent
   **/
   @Schema(description = "")
-  public Object getTimeComponent() {
+  public List<Long> getTimeComponent() {
     return timeComponent;
   }
 
-  public void setTimeComponent(Object timeComponent) {
+  public void setTimeComponent(List<Long> timeComponent) {
     this.timeComponent = timeComponent;
   }
 

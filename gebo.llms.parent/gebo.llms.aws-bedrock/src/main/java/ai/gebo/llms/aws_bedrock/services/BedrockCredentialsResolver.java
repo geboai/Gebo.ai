@@ -10,7 +10,6 @@
 package ai.gebo.llms.aws_bedrock.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
@@ -40,7 +39,6 @@ import software.amazon.awssdk.regions.Region;
  * platform to rely on an attached IAM role when it runs inside AWS.
  * </p>
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 @Service
 public class BedrockCredentialsResolver {
 

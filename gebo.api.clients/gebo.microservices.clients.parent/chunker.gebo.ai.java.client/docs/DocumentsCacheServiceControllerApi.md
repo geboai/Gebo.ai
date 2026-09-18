@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 <a name="streamDocument"></a>
 # **streamDocument**
-> Object streamDocument(body)
+> File streamDocument(body)
 
 
 
@@ -22,7 +22,7 @@ Method | HTTP request | Description
 DocumentsCacheServiceControllerApi apiInstance = new DocumentsCacheServiceControllerApi();
 StreamDocumentRequest body = new StreamDocumentRequest(); // StreamDocumentRequest | 
 try {
-    Object result = apiInstance.streamDocument(body);
+    File result = apiInstance.streamDocument(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DocumentsCacheServiceControllerApi#streamDocument");
@@ -38,7 +38,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**File**](File.md)
 
 ### Authorization
 

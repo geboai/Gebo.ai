@@ -17,61 +17,105 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.AdditionalContent;
 import gebo.microservices.api.client.brain.model.GeboRagRequestCustomConfig;
+import gebo.microservices.api.client.brain.model.UserUploadedContent;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("userChatContextCode")
-  private Object userChatContextCode = null;
+  private String userChatContextCode = null;
 
   @JsonProperty("chatProfileCode")
-  private Object chatProfileCode = null;
+  private String chatProfileCode = null;
 
   @JsonProperty("chatModelCode")
-  private Object chatModelCode = null;
+  private String chatModelCode = null;
 
   @JsonProperty("streamResponse")
-  private Object streamResponse = null;
+  private Boolean streamResponse = null;
 
   @JsonProperty("query")
-  private Object query = null;
+  private String query = null;
 
   @JsonProperty("rewrittenQuery")
-  private Object rewrittenQuery = null;
+  private String rewrittenQuery = null;
 
   @JsonProperty("customRagConfig")
   private GeboRagRequestCustomConfig customRagConfig = null;
 
   @JsonProperty("choosedKnowledgeBases")
-  private Object choosedKnowledgeBases = null;
+  private List<String> choosedKnowledgeBases = null;
 
   @JsonProperty("chatPipelineProcessId")
-  private Object chatPipelineProcessId = null;
+  private String chatPipelineProcessId = null;
 
   @JsonProperty("forcedRequestDocuments")
-  private Object forcedRequestDocuments = null;
+  private List<String> forcedRequestDocuments = null;
 
   @JsonProperty("userUploadedContents")
-  private Object userUploadedContents = null;
+  private List<UserUploadedContent> userUploadedContents = null;
 
   @JsonProperty("deepSearchDataSources")
-  private Object deepSearchDataSources = null;
+  private List<String> deepSearchDataSources = null;
 
-  @JsonProperty("userIntent")
-  private Object userIntent = null;
+  /**
+   * Gets or Sets userIntent
+   */
+  public enum UserIntentEnum {
+    QA("QA"),
+    HOWTO("HOWTO"),
+    DECISION("DECISION"),
+    SUMMARY("SUMMARY"),
+    PURE_SEARCH("PURE_SEARCH"),
+    ANALISYS("ANALISYS"),
+    IMAGE_GENERATION("IMAGE_GENERATION"),
+    UNKNOWN("UNKNOWN");
+
+    private String value;
+
+    UserIntentEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static UserIntentEnum fromValue(String input) {
+      for (UserIntentEnum b : UserIntentEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("userIntent")
+  private UserIntentEnum userIntent = null;
+
+  @JsonProperty("additionalContents")
+  private List<AdditionalContent> additionalContents = null;
 
   @JsonProperty("tokensSize")
-  private Object tokensSize = null;
+  private Integer tokensSize = null;
 
-  public GeboChatRequest id(Object id) {
+  public GeboChatRequest id(String id) {
     this.id = id;
     return this;
   }
@@ -81,15 +125,15 @@ public class GeboChatRequest {
    * @return id
   **/
   @Schema(description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public GeboChatRequest userChatContextCode(Object userChatContextCode) {
+  public GeboChatRequest userChatContextCode(String userChatContextCode) {
     this.userChatContextCode = userChatContextCode;
     return this;
   }
@@ -99,15 +143,15 @@ public class GeboChatRequest {
    * @return userChatContextCode
   **/
   @Schema(description = "")
-  public Object getUserChatContextCode() {
+  public String getUserChatContextCode() {
     return userChatContextCode;
   }
 
-  public void setUserChatContextCode(Object userChatContextCode) {
+  public void setUserChatContextCode(String userChatContextCode) {
     this.userChatContextCode = userChatContextCode;
   }
 
-  public GeboChatRequest chatProfileCode(Object chatProfileCode) {
+  public GeboChatRequest chatProfileCode(String chatProfileCode) {
     this.chatProfileCode = chatProfileCode;
     return this;
   }
@@ -117,15 +161,15 @@ public class GeboChatRequest {
    * @return chatProfileCode
   **/
   @Schema(description = "")
-  public Object getChatProfileCode() {
+  public String getChatProfileCode() {
     return chatProfileCode;
   }
 
-  public void setChatProfileCode(Object chatProfileCode) {
+  public void setChatProfileCode(String chatProfileCode) {
     this.chatProfileCode = chatProfileCode;
   }
 
-  public GeboChatRequest chatModelCode(Object chatModelCode) {
+  public GeboChatRequest chatModelCode(String chatModelCode) {
     this.chatModelCode = chatModelCode;
     return this;
   }
@@ -135,15 +179,15 @@ public class GeboChatRequest {
    * @return chatModelCode
   **/
   @Schema(description = "")
-  public Object getChatModelCode() {
+  public String getChatModelCode() {
     return chatModelCode;
   }
 
-  public void setChatModelCode(Object chatModelCode) {
+  public void setChatModelCode(String chatModelCode) {
     this.chatModelCode = chatModelCode;
   }
 
-  public GeboChatRequest streamResponse(Object streamResponse) {
+  public GeboChatRequest streamResponse(Boolean streamResponse) {
     this.streamResponse = streamResponse;
     return this;
   }
@@ -153,15 +197,15 @@ public class GeboChatRequest {
    * @return streamResponse
   **/
   @Schema(description = "")
-  public Object getStreamResponse() {
+  public Boolean isStreamResponse() {
     return streamResponse;
   }
 
-  public void setStreamResponse(Object streamResponse) {
+  public void setStreamResponse(Boolean streamResponse) {
     this.streamResponse = streamResponse;
   }
 
-  public GeboChatRequest query(Object query) {
+  public GeboChatRequest query(String query) {
     this.query = query;
     return this;
   }
@@ -171,15 +215,15 @@ public class GeboChatRequest {
    * @return query
   **/
   @Schema(description = "")
-  public Object getQuery() {
+  public String getQuery() {
     return query;
   }
 
-  public void setQuery(Object query) {
+  public void setQuery(String query) {
     this.query = query;
   }
 
-  public GeboChatRequest rewrittenQuery(Object rewrittenQuery) {
+  public GeboChatRequest rewrittenQuery(String rewrittenQuery) {
     this.rewrittenQuery = rewrittenQuery;
     return this;
   }
@@ -189,11 +233,11 @@ public class GeboChatRequest {
    * @return rewrittenQuery
   **/
   @Schema(description = "")
-  public Object getRewrittenQuery() {
+  public String getRewrittenQuery() {
     return rewrittenQuery;
   }
 
-  public void setRewrittenQuery(Object rewrittenQuery) {
+  public void setRewrittenQuery(String rewrittenQuery) {
     this.rewrittenQuery = rewrittenQuery;
   }
 
@@ -215,8 +259,16 @@ public class GeboChatRequest {
     this.customRagConfig = customRagConfig;
   }
 
-  public GeboChatRequest choosedKnowledgeBases(Object choosedKnowledgeBases) {
+  public GeboChatRequest choosedKnowledgeBases(List<String> choosedKnowledgeBases) {
     this.choosedKnowledgeBases = choosedKnowledgeBases;
+    return this;
+  }
+
+  public GeboChatRequest addChoosedKnowledgeBasesItem(String choosedKnowledgeBasesItem) {
+    if (this.choosedKnowledgeBases == null) {
+      this.choosedKnowledgeBases = new ArrayList<>();
+    }
+    this.choosedKnowledgeBases.add(choosedKnowledgeBasesItem);
     return this;
   }
 
@@ -225,15 +277,15 @@ public class GeboChatRequest {
    * @return choosedKnowledgeBases
   **/
   @Schema(description = "")
-  public Object getChoosedKnowledgeBases() {
+  public List<String> getChoosedKnowledgeBases() {
     return choosedKnowledgeBases;
   }
 
-  public void setChoosedKnowledgeBases(Object choosedKnowledgeBases) {
+  public void setChoosedKnowledgeBases(List<String> choosedKnowledgeBases) {
     this.choosedKnowledgeBases = choosedKnowledgeBases;
   }
 
-  public GeboChatRequest chatPipelineProcessId(Object chatPipelineProcessId) {
+  public GeboChatRequest chatPipelineProcessId(String chatPipelineProcessId) {
     this.chatPipelineProcessId = chatPipelineProcessId;
     return this;
   }
@@ -243,16 +295,24 @@ public class GeboChatRequest {
    * @return chatPipelineProcessId
   **/
   @Schema(description = "")
-  public Object getChatPipelineProcessId() {
+  public String getChatPipelineProcessId() {
     return chatPipelineProcessId;
   }
 
-  public void setChatPipelineProcessId(Object chatPipelineProcessId) {
+  public void setChatPipelineProcessId(String chatPipelineProcessId) {
     this.chatPipelineProcessId = chatPipelineProcessId;
   }
 
-  public GeboChatRequest forcedRequestDocuments(Object forcedRequestDocuments) {
+  public GeboChatRequest forcedRequestDocuments(List<String> forcedRequestDocuments) {
     this.forcedRequestDocuments = forcedRequestDocuments;
+    return this;
+  }
+
+  public GeboChatRequest addForcedRequestDocumentsItem(String forcedRequestDocumentsItem) {
+    if (this.forcedRequestDocuments == null) {
+      this.forcedRequestDocuments = new ArrayList<>();
+    }
+    this.forcedRequestDocuments.add(forcedRequestDocumentsItem);
     return this;
   }
 
@@ -261,16 +321,24 @@ public class GeboChatRequest {
    * @return forcedRequestDocuments
   **/
   @Schema(description = "")
-  public Object getForcedRequestDocuments() {
+  public List<String> getForcedRequestDocuments() {
     return forcedRequestDocuments;
   }
 
-  public void setForcedRequestDocuments(Object forcedRequestDocuments) {
+  public void setForcedRequestDocuments(List<String> forcedRequestDocuments) {
     this.forcedRequestDocuments = forcedRequestDocuments;
   }
 
-  public GeboChatRequest userUploadedContents(Object userUploadedContents) {
+  public GeboChatRequest userUploadedContents(List<UserUploadedContent> userUploadedContents) {
     this.userUploadedContents = userUploadedContents;
+    return this;
+  }
+
+  public GeboChatRequest addUserUploadedContentsItem(UserUploadedContent userUploadedContentsItem) {
+    if (this.userUploadedContents == null) {
+      this.userUploadedContents = new ArrayList<>();
+    }
+    this.userUploadedContents.add(userUploadedContentsItem);
     return this;
   }
 
@@ -279,16 +347,24 @@ public class GeboChatRequest {
    * @return userUploadedContents
   **/
   @Schema(description = "")
-  public Object getUserUploadedContents() {
+  public List<UserUploadedContent> getUserUploadedContents() {
     return userUploadedContents;
   }
 
-  public void setUserUploadedContents(Object userUploadedContents) {
+  public void setUserUploadedContents(List<UserUploadedContent> userUploadedContents) {
     this.userUploadedContents = userUploadedContents;
   }
 
-  public GeboChatRequest deepSearchDataSources(Object deepSearchDataSources) {
+  public GeboChatRequest deepSearchDataSources(List<String> deepSearchDataSources) {
     this.deepSearchDataSources = deepSearchDataSources;
+    return this;
+  }
+
+  public GeboChatRequest addDeepSearchDataSourcesItem(String deepSearchDataSourcesItem) {
+    if (this.deepSearchDataSources == null) {
+      this.deepSearchDataSources = new ArrayList<>();
+    }
+    this.deepSearchDataSources.add(deepSearchDataSourcesItem);
     return this;
   }
 
@@ -297,15 +373,15 @@ public class GeboChatRequest {
    * @return deepSearchDataSources
   **/
   @Schema(description = "")
-  public Object getDeepSearchDataSources() {
+  public List<String> getDeepSearchDataSources() {
     return deepSearchDataSources;
   }
 
-  public void setDeepSearchDataSources(Object deepSearchDataSources) {
+  public void setDeepSearchDataSources(List<String> deepSearchDataSources) {
     this.deepSearchDataSources = deepSearchDataSources;
   }
 
-  public GeboChatRequest userIntent(Object userIntent) {
+  public GeboChatRequest userIntent(UserIntentEnum userIntent) {
     this.userIntent = userIntent;
     return this;
   }
@@ -315,15 +391,41 @@ public class GeboChatRequest {
    * @return userIntent
   **/
   @Schema(description = "")
-  public Object getUserIntent() {
+  public UserIntentEnum getUserIntent() {
     return userIntent;
   }
 
-  public void setUserIntent(Object userIntent) {
+  public void setUserIntent(UserIntentEnum userIntent) {
     this.userIntent = userIntent;
   }
 
-  public GeboChatRequest tokensSize(Object tokensSize) {
+  public GeboChatRequest additionalContents(List<AdditionalContent> additionalContents) {
+    this.additionalContents = additionalContents;
+    return this;
+  }
+
+  public GeboChatRequest addAdditionalContentsItem(AdditionalContent additionalContentsItem) {
+    if (this.additionalContents == null) {
+      this.additionalContents = new ArrayList<>();
+    }
+    this.additionalContents.add(additionalContentsItem);
+    return this;
+  }
+
+   /**
+   * Get additionalContents
+   * @return additionalContents
+  **/
+  @Schema(description = "")
+  public List<AdditionalContent> getAdditionalContents() {
+    return additionalContents;
+  }
+
+  public void setAdditionalContents(List<AdditionalContent> additionalContents) {
+    this.additionalContents = additionalContents;
+  }
+
+  public GeboChatRequest tokensSize(Integer tokensSize) {
     this.tokensSize = tokensSize;
     return this;
   }
@@ -333,11 +435,11 @@ public class GeboChatRequest {
    * @return tokensSize
   **/
   @Schema(description = "")
-  public Object getTokensSize() {
+  public Integer getTokensSize() {
     return tokensSize;
   }
 
-  public void setTokensSize(Object tokensSize) {
+  public void setTokensSize(Integer tokensSize) {
     this.tokensSize = tokensSize;
   }
 
@@ -365,12 +467,13 @@ public class GeboChatRequest {
         Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents) &&
         Objects.equals(this.deepSearchDataSources, geboChatRequest.deepSearchDataSources) &&
         Objects.equals(this.userIntent, geboChatRequest.userIntent) &&
+        Objects.equals(this.additionalContents, geboChatRequest.additionalContents) &&
         Objects.equals(this.tokensSize, geboChatRequest.tokensSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, userIntent, tokensSize);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, userIntent, additionalContents, tokensSize);
   }
 
 
@@ -393,6 +496,7 @@ public class GeboChatRequest {
     sb.append("    userUploadedContents: ").append(toIndentedString(userUploadedContents)).append("\n");
     sb.append("    deepSearchDataSources: ").append(toIndentedString(deepSearchDataSources)).append("\n");
     sb.append("    userIntent: ").append(toIndentedString(userIntent)).append("\n");
+    sb.append("    additionalContents: ").append(toIndentedString(additionalContents)).append("\n");
     sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -11,11 +11,22 @@
  */
 
 export interface LLMCredentialsCreationData { 
-    type: any;
-    doModelsLookup?: any;
-    serviceHandler: any;
-    apiKeySecretContext: any;
-    newApiSecret: any;
-    newUserName: any;
-    baseUrl?: any;
+    type: LLMCredentialsCreationData.TypeEnum;
+    doModelsLookup?: boolean;
+    serviceHandler: string;
+    apiKeySecretContext: string;
+    newApiSecret: string;
+    newUserName: string;
+    baseUrl?: string;
+}
+export namespace LLMCredentialsCreationData {
+    export type TypeEnum = 'CHAT' | 'EMBEDDING' | 'RANKING' | 'IMAGESGEN' | 'TTS' | 'TRANSCRIPT';
+    export const TypeEnum = {
+        CHAT: 'CHAT' as TypeEnum,
+        EMBEDDING: 'EMBEDDING' as TypeEnum,
+        RANKING: 'RANKING' as TypeEnum,
+        IMAGESGEN: 'IMAGESGEN' as TypeEnum,
+        TTS: 'TTS' as TypeEnum,
+        TRANSCRIPT: 'TRANSCRIPT' as TypeEnum
+    };
 }

@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getGlobalTopology"></a>
 # **getGlobalTopology**
-> Object getGlobalTopology()
+> List&lt;MicroserviceMetaInfo&gt; getGlobalTopology()
 
 
 
@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 GlobalInternalTopologyControllerApi apiInstance = new GlobalInternalTopologyControllerApi();
 try {
-    Object result = apiInstance.getGlobalTopology();
+    List<MicroserviceMetaInfo> result = apiInstance.getGlobalTopology();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GlobalInternalTopologyControllerApi#getGlobalTopology");
@@ -35,7 +35,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;MicroserviceMetaInfo&gt;**](MicroserviceMetaInfo.md)
 
 ### Authorization
 
@@ -48,7 +48,7 @@ No authorization required
 
 <a name="refresh"></a>
 # **refresh**
-> Object refresh()
+> Boolean refresh()
 
 
 
@@ -61,7 +61,7 @@ No authorization required
 
 GlobalInternalTopologyControllerApi apiInstance = new GlobalInternalTopologyControllerApi();
 try {
-    Object result = apiInstance.refresh();
+    Boolean result = apiInstance.refresh();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GlobalInternalTopologyControllerApi#refresh");
@@ -74,7 +74,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**Boolean**
 
 ### Authorization
 

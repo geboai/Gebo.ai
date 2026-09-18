@@ -23,8 +23,8 @@ Method | HTTP request | Description
 
 
 IntegrationInputControllerApi apiInstance = new IntegrationInputControllerApi();
-Object body = null; // Object | 
-Object endpointCode = null; // Object | 
+List<JobTicket> body = Arrays.asList(new JobTicket()); // List<JobTicket> | 
+String endpointCode = "endpointCode_example"; // String | 
 try {
     JobTicket result = apiInstance.publishContents(body, endpointCode);
     System.out.println(result);
@@ -38,8 +38,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
- **endpointCode** | [**Object**](.md)|  |
+ **body** | [**List&lt;JobTicket&gt;**](JobTicket.md)|  |
+ **endpointCode** | **String**|  |
 
 ### Return type
 
@@ -68,7 +68,7 @@ No authorization required
 
 
 IntegrationInputControllerApi apiInstance = new IntegrationInputControllerApi();
-Object endpointCode = null; // Object | 
+String endpointCode = "endpointCode_example"; // String | 
 try {
     JobTicket result = apiInstance.publishSync(endpointCode);
     System.out.println(result);
@@ -82,7 +82,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **endpointCode** | [**Object**](.md)|  |
+ **endpointCode** | **String**|  |
 
 ### Return type
 
@@ -112,8 +112,8 @@ No authorization required
 
 IntegrationInputControllerApi apiInstance = new IntegrationInputControllerApi();
 IntegrationDocumentEnvelop body = new IntegrationDocumentEnvelop(); // IntegrationDocumentEnvelop | 
-Object endpointCode = null; // Object | 
-Object relativePath = null; // Object | 
+String endpointCode = "endpointCode_example"; // String | 
+String relativePath = "relativePath_example"; // String | 
 try {
     JobTicket result = apiInstance.spoolDocument(body, endpointCode, relativePath);
     System.out.println(result);
@@ -128,8 +128,8 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**IntegrationDocumentEnvelop**](IntegrationDocumentEnvelop.md)|  |
- **endpointCode** | [**Object**](.md)|  |
- **relativePath** | [**Object**](.md)|  |
+ **endpointCode** | **String**|  |
+ **relativePath** | **String**|  |
 
 ### Return type
 
@@ -158,9 +158,9 @@ No authorization required
 
 
 IntegrationInputControllerApi apiInstance = new IntegrationInputControllerApi();
-Object file = null; // Object | 
-Object endpointCode = null; // Object | 
-Object relativePath = null; // Object | 
+File file = new File("file_example"); // File | 
+String endpointCode = "endpointCode_example"; // String | 
+String relativePath = "relativePath_example"; // String | 
 try {
     JobTicket result = apiInstance.spoolDocument1(file, endpointCode, relativePath);
     System.out.println(result);
@@ -174,9 +174,9 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **file** | [**Object**](.md)|  |
- **endpointCode** | [**Object**](.md)|  |
- **relativePath** | [**Object**](.md)|  |
+ **file** | **File**|  |
+ **endpointCode** | **String**|  |
+ **relativePath** | **String**|  |
 
 ### Return type
 

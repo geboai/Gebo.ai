@@ -11,9 +11,9 @@
  */
 
 export interface FastInstallationSetupData { 
-    username: any;
-    password: any;
-    passwordC?: any;
-    licenceAgreement: any;
-    lang: any;
+    username: string;
+    password: string;
+    passwordC?: string;
+    licenceAgreement: string;
+    lang: string;
 }

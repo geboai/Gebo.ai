@@ -191,7 +191,7 @@ public class ConfluenceSystemsController
 	@GetMapping("findConfluenceSystemByCode")
 	public GConfluenceSystem findConfluenceSystemByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
-		return persistentObjectManager.findById(GConfluenceSystem.class, code);
+		return handler.findConfiguration(code);
 	}
 
 	/**
@@ -392,5 +392,18 @@ public class ConfluenceSystemsController
 			os.getMessages().add(GUserMessage.errorMessage("Cannot access confluence", ""));
 			return os;
 		}
+	}
+
+	/**
+	 * A system declared under {@code ai.gebo.confluence.systems} belongs to the
+	 * configuration, not to the admin UI: the write paths of the base controller
+	 * refuse it.
+	 *
+	 * @param system The system a write is being attempted on.
+	 * @return true when the system is declared in the configuration.
+	 */
+	@Override
+	protected boolean isDeclaredInConfiguration(GConfluenceSystem system) {
+		return system != null && handler.isDeclaredInConfiguration(system.getCode());
 	}
 }

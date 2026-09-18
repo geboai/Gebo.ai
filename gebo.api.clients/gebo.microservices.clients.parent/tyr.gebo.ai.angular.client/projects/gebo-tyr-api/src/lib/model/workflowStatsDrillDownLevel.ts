@@ -17,9 +17,9 @@ export interface WorkflowStatsDrillDownLevel {
     knowledgeBaseReference?: GObjectRefGKnowledgeBase;
     projectReference?: GObjectRefGProject;
     projectEndpointReference?: GObjectRefGProjectEndpoint;
-    workflowType?: any;
-    workflowId?: any;
-    workflowStepId?: any;
-    year?: any;
-    month?: any;
+    workflowType?: string;
+    workflowId?: string;
+    workflowStepId?: string;
+    year?: number;
+    month?: number;
 }

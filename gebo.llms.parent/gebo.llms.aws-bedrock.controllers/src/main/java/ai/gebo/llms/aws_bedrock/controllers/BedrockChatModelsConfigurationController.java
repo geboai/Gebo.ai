@@ -11,7 +11,6 @@ package ai.gebo.llms.aws_bedrock.controllers;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,11 +31,9 @@ import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
- * Admin controller for AWS Bedrock chat model configurations. Only active when
- * {@code ai.gebo.llms.config.awsBedrockEnabled} is {@code true}; restricted to
+ * Admin controller for AWS Bedrock chat model configurations. Restricted to
  * ADMIN users.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/BedrockChatModelsConfigurationController")

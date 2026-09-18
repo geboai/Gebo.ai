@@ -11,6 +11,6 @@
  */
 
 export interface SearchDocumentByNameParam { 
-    name: any;
-    knowledgeBaseCodes: any;
+    name: string;
+    knowledgeBaseCodes: Array<string>;
 }

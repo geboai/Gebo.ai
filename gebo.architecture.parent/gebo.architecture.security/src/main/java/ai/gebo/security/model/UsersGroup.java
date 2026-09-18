@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.security.model;
 
@@ -21,98 +18,68 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+
 /**
- * Gebo.ai comment agent
- * Represents a group of users. 
- * This class is stored as a document in MongoDB.
+ * Gebo.ai comment agent Represents a group of users. This class is stored as a
+ * document in MongoDB.
  */
 @Document
+@Data
 public class UsersGroup {
 
-    /** 
-     * The unique identifier for the user group.
-     */
-    @Id
-    String code = null;
+	/**
+	 * The unique identifier for the user group.
+	 *
+	 * <p>
+	 * Also the ACL principal: {@code AclGrantedAccessorServiceImpl} keys every grant
+	 * made to this group as {@code group:<code>}. Changing it on a group that
+	 * already exists therefore does not rename the group - it orphans every grant
+	 * ever made to it. Treat it as immutable once set, and see {@link #extCode} for
+	 * the identifier a group carries in the system it came from.
+	 * </p>
+	 */
+	@Id
+	String code = null;
 
-    /** 
-     * A textual description of the user group.
-     */
-    String description = null;
+	/**
+	 * A textual description of the user group.
+	 */
+	String description = null;
 
-    /**
-     * A list containing the user IDs that belong to this group.
-     */
-    List<String> userIds = null;
-    @JsonIgnore
-    private Map<String, Object> customInfos=new HashMap<>();
-    /**
-     * Default constructor for UsersGroup.
-     */
-    public UsersGroup() {
-        // Default constructor logic if any
-    }
+	/**
+	 * A list containing the user IDs that belong to this group.
+	 */
+	List<String> userIds = null;
 
-    /**
-     * Returns the list of user IDs associated with this group.
-     * 
-     * @return a List of user IDs
-     */
-    public List<String> getUserIds() {
-        return userIds;
-    }
+	/**
+	 * Free-form metadata about the group, deliberately not part of its JSON
+	 * representation.
+	 *
+	 * <p>
+	 * {@code @JsonIgnore} is load-bearing for a group provisioned from an identity
+	 * provider: the OAuth2 onboarding records here which provider, directory and
+	 * object the group stands for, and consults that record before joining an
+	 * identity to an existing group. Keeping the map off the wire means nothing
+	 * posting to {@code UsersAdminController} can forge the provenance, and so
+	 * cannot make a hand-made group impersonate a directory group.
+	 * </p>
+	 */
+	@JsonIgnore
+	private Map<String, Object> customInfos = new HashMap<>();
 
-    /**
-     * Sets the list of user IDs for this group.
-     * 
-     * @param userIds a List of user IDs to associate with the group
-     */
-    public void setUserIds(List<String> userIds) {
-        this.userIds = userIds;
-    }
-
-    /**
-     * Returns the unique code identifier for this group.
-     * 
-     * @return the code as a String
-     */
-    public String getCode() {
-        return code;
-    }
-
-    /**
-     * Sets the unique code identifier for this group.
-     * 
-     * @param code the code as a String
-     */
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    /**
-     * Returns the description of this user group.
-     * 
-     * @return the description as a String
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Sets the description for this user group.
-     * 
-     * @param description the description as a String
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-	public Map<String, Object> getCustomInfos() {
-		return customInfos;
-	}
-
-	public void setCustomInfos(Map<String, Object> customInfos) {
-		this.customInfos = customInfos;
-	}
+	/**
+	 * The identifier this group has in the system it came from, when it did not
+	 * originate here - a directory group id, a role name, an LDAP DN.
+	 *
+	 * <p>
+	 * {@link #code} cannot serve that purpose. It has to be unique across every
+	 * source and stable for the life of the group (see above), while an external
+	 * identifier is neither: two directories can use the same one. This field is
+	 * what lets a UI show the value the source system shows while the code stays the
+	 * platform's own key.
+	 * </p>
+	 */
+	private String extCode = null;
 
 }

@@ -11,6 +11,7 @@
  */
 
 export interface GeboUsernamePasswordContent { 
+    readOnly?: boolean;
     username: string;
     password: string;
 }

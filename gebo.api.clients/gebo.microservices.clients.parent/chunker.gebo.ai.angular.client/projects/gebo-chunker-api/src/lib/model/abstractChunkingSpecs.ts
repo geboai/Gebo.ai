@@ -11,5 +11,12 @@
  */
 
 export interface AbstractChunkingSpecs { 
-    chunkType?: any;
+    chunkType?: AbstractChunkingSpecs.ChunkTypeEnum;
+}
+export namespace AbstractChunkingSpecs {
+    export type ChunkTypeEnum = 'TEXT' | 'IMAGE';
+    export const ChunkTypeEnum = {
+        TEXT: 'TEXT' as ChunkTypeEnum,
+        IMAGE: 'IMAGE' as ChunkTypeEnum
+    };
 }

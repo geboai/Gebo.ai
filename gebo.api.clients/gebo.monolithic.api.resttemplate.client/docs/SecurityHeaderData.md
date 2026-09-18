@@ -15,3 +15,4 @@ Name | Value
 ---- | -----
 OAUTH2 | &quot;OAUTH2&quot;
 LOCAL_JWT | &quot;LOCAL_JWT&quot;
+AUTO | &quot;AUTO&quot;

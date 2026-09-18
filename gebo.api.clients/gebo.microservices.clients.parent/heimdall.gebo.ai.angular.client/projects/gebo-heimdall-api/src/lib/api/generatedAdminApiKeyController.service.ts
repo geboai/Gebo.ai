@@ -65,10 +65,10 @@ export class GeneratedAdminApiKeyControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteAdminGeneratedApiKey(code: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteAdminGeneratedApiKey(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteAdminGeneratedApiKey(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteAdminGeneratedApiKey(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteAdminGeneratedApiKey(code: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteAdminGeneratedApiKey(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteAdminGeneratedApiKey(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteAdminGeneratedApiKey(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling deleteAdminGeneratedApiKey.');
@@ -204,9 +204,9 @@ export class GeneratedAdminApiKeyControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public isAdminGeneratedApiKeyGenerationAllowed(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public isAdminGeneratedApiKeyGenerationAllowed(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public isAdminGeneratedApiKeyGenerationAllowed(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public isAdminGeneratedApiKeyGenerationAllowed(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public isAdminGeneratedApiKeyGenerationAllowed(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public isAdminGeneratedApiKeyGenerationAllowed(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
     public isAdminGeneratedApiKeyGenerationAllowed(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -224,7 +224,7 @@ export class GeneratedAdminApiKeyControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeneratedAdminApiKeyController/isAdminGeneratedApiKeyGenerationAllowed`,
+        return this.httpClient.request<boolean>('get',`${this.basePath}/api/admin/GeneratedAdminApiKeyController/isAdminGeneratedApiKeyGenerationAllowed`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

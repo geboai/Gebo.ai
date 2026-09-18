@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SecretInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
 
 public class SecretInfo {
   @JsonProperty("code")
@@ -74,6 +74,9 @@ public class SecretInfo {
 
   @JsonProperty("contextCode")
   private String contextCode = null;
+
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
 
   public SecretInfo code(String code) {
     this.code = code;
@@ -147,6 +150,24 @@ public class SecretInfo {
     this.contextCode = contextCode;
   }
 
+  public SecretInfo readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -160,12 +181,13 @@ public class SecretInfo {
     return Objects.equals(this.code, secretInfo.code) &&
         Objects.equals(this.description, secretInfo.description) &&
         Objects.equals(this.secretType, secretInfo.secretType) &&
-        Objects.equals(this.contextCode, secretInfo.contextCode);
+        Objects.equals(this.contextCode, secretInfo.contextCode) &&
+        Objects.equals(this.readOnly, secretInfo.readOnly);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, secretType, contextCode);
+    return Objects.hash(code, description, secretType, contextCode, readOnly);
   }
 
 
@@ -178,6 +200,7 @@ public class SecretInfo {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    secretType: ").append(toIndentedString(secretType)).append("\n");
     sb.append("    contextCode: ").append(toIndentedString(contextCode)).append("\n");
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("}");
     return sb.toString();
   }

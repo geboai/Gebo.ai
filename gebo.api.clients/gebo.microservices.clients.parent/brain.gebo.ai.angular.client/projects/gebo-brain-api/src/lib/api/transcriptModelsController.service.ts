@@ -17,6 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { ConfigurationEntryGBaseTranscriptModelConfig } from '../model/configurationEntryGBaseTranscriptModelConfig';
+import { GTranscriptModelType } from '../model/gTranscriptModelType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -61,10 +63,10 @@ export class TranscriptModelsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRuntimeConfiguredTranscriptModels(modelTypeCode?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getRuntimeConfiguredTranscriptModels(modelTypeCode?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getRuntimeConfiguredTranscriptModels(modelTypeCode?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getRuntimeConfiguredTranscriptModels(modelTypeCode?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getRuntimeConfiguredTranscriptModels(modelTypeCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ConfigurationEntryGBaseTranscriptModelConfig>>;
+    public getRuntimeConfiguredTranscriptModels(modelTypeCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ConfigurationEntryGBaseTranscriptModelConfig>>>;
+    public getRuntimeConfiguredTranscriptModels(modelTypeCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ConfigurationEntryGBaseTranscriptModelConfig>>>;
+    public getRuntimeConfiguredTranscriptModels(modelTypeCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -87,7 +89,7 @@ export class TranscriptModelsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels`,
+        return this.httpClient.request<Array<ConfigurationEntryGBaseTranscriptModelConfig>>('get',`${this.basePath}/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -104,9 +106,9 @@ export class TranscriptModelsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTranscriptModelTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getTranscriptModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getTranscriptModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getTranscriptModelTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GTranscriptModelType>>;
+    public getTranscriptModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GTranscriptModelType>>>;
+    public getTranscriptModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GTranscriptModelType>>>;
     public getTranscriptModelTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -124,7 +126,7 @@ export class TranscriptModelsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/TranscriptModelsController/getTranscriptModelTypes`,
+        return this.httpClient.request<Array<GTranscriptModelType>>('get',`${this.basePath}/api/admin/TranscriptModelsController/getTranscriptModelTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -13,6 +13,8 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.GAgentConfig;
+import gebo.microservices.api.client.brain.model.GBaseObject;
+import gebo.microservices.api.client.brain.model.GPromptTemplateConfig;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -54,7 +56,7 @@ public class GeboAgentAdminControllerApiTest {
      */
     @Test
     public void getAgentByCodeTest() {
-        Object code = null;
+        String code = null;
         GAgentConfig response = api.getAgentByCode(code);
 
         // TODO: test validations
@@ -69,7 +71,7 @@ public class GeboAgentAdminControllerApiTest {
      */
     @Test
     public void getAgentsTest() {
-        Object response = api.getAgents();
+        List<GBaseObject> response = api.getAgents();
 
         // TODO: test validations
     }
@@ -83,7 +85,7 @@ public class GeboAgentAdminControllerApiTest {
      */
     @Test
     public void getAgentsChoicesTest() {
-        Object response = api.getAgentsChoices();
+        List<GBaseObject> response = api.getAgentsChoices();
 
         // TODO: test validations
     }
@@ -97,8 +99,8 @@ public class GeboAgentAdminControllerApiTest {
      */
     @Test
     public void getPromptTemplatesByAgentIdTest() {
-        Object agentId = null;
-        Object response = api.getPromptTemplatesByAgentId(agentId);
+        String agentId = null;
+        List<GPromptTemplateConfig> response = api.getPromptTemplatesByAgentId(agentId);
 
         // TODO: test validations
     }

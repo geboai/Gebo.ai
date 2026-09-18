@@ -12,12 +12,12 @@
 import { VFilesystemReference } from './vFilesystemReference';
 
 export interface GFileSystemShareReference { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    mongoConfigured?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    mongoConfigured?: boolean;
     reference: VFilesystemReference;
 }

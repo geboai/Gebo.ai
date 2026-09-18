@@ -23,28 +23,28 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ComputedWorkflowResult
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class ComputedWorkflowResult {
   @JsonProperty("workflowType")
-  private Object workflowType = null;
+  private String workflowType = null;
 
   @JsonProperty("workflowId")
-  private Object workflowId = null;
+  private String workflowId = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("finished")
-  private Object finished = null;
+  private Boolean finished = null;
 
   @JsonProperty("hasErrors")
-  private Object hasErrors = null;
+  private Boolean hasErrors = null;
 
   @JsonProperty("rootStatus")
   private ComputedWorkflowStatus rootStatus = null;
 
-  public ComputedWorkflowResult workflowType(Object workflowType) {
+  public ComputedWorkflowResult workflowType(String workflowType) {
     this.workflowType = workflowType;
     return this;
   }
@@ -54,15 +54,15 @@ public class ComputedWorkflowResult {
    * @return workflowType
   **/
   @Schema(description = "")
-  public Object getWorkflowType() {
+  public String getWorkflowType() {
     return workflowType;
   }
 
-  public void setWorkflowType(Object workflowType) {
+  public void setWorkflowType(String workflowType) {
     this.workflowType = workflowType;
   }
 
-  public ComputedWorkflowResult workflowId(Object workflowId) {
+  public ComputedWorkflowResult workflowId(String workflowId) {
     this.workflowId = workflowId;
     return this;
   }
@@ -72,15 +72,15 @@ public class ComputedWorkflowResult {
    * @return workflowId
   **/
   @Schema(description = "")
-  public Object getWorkflowId() {
+  public String getWorkflowId() {
     return workflowId;
   }
 
-  public void setWorkflowId(Object workflowId) {
+  public void setWorkflowId(String workflowId) {
     this.workflowId = workflowId;
   }
 
-  public ComputedWorkflowResult description(Object description) {
+  public ComputedWorkflowResult description(String description) {
     this.description = description;
     return this;
   }
@@ -90,15 +90,15 @@ public class ComputedWorkflowResult {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public ComputedWorkflowResult finished(Object finished) {
+  public ComputedWorkflowResult finished(Boolean finished) {
     this.finished = finished;
     return this;
   }
@@ -108,15 +108,15 @@ public class ComputedWorkflowResult {
    * @return finished
   **/
   @Schema(description = "")
-  public Object getFinished() {
+  public Boolean isFinished() {
     return finished;
   }
 
-  public void setFinished(Object finished) {
+  public void setFinished(Boolean finished) {
     this.finished = finished;
   }
 
-  public ComputedWorkflowResult hasErrors(Object hasErrors) {
+  public ComputedWorkflowResult hasErrors(Boolean hasErrors) {
     this.hasErrors = hasErrors;
     return this;
   }
@@ -126,11 +126,11 @@ public class ComputedWorkflowResult {
    * @return hasErrors
   **/
   @Schema(description = "")
-  public Object getHasErrors() {
+  public Boolean isHasErrors() {
     return hasErrors;
   }
 
-  public void setHasErrors(Object hasErrors) {
+  public void setHasErrors(Boolean hasErrors) {
     this.hasErrors = hasErrors;
   }
 

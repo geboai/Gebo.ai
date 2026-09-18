@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GenericOpenAIAPIRankerModelConfig } from '../model/genericOpenAIAPIRankerModelConfig';
+import { GenericOpenAIRankerModelTypeConfig } from '../model/genericOpenAIRankerModelTypeConfig';
 import { OperationStatusBoolean } from '../model/operationStatusBoolean';
 import { OperationStatusGenericOpenAIAPIRankerModelConfig } from '../model/operationStatusGenericOpenAIAPIRankerModelConfig';
 import { OperationStatusListGenericOpenAIAPIRankerModelChoice } from '../model/operationStatusListGenericOpenAIAPIRankerModelChoice';
@@ -112,10 +113,10 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGenericOpenAIAPIRankerModelConfigByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIAPIRankerModelConfig>;
-    public findGenericOpenAIAPIRankerModelConfigByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIAPIRankerModelConfig>>;
-    public findGenericOpenAIAPIRankerModelConfigByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIAPIRankerModelConfig>>;
-    public findGenericOpenAIAPIRankerModelConfigByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGenericOpenAIAPIRankerModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIAPIRankerModelConfig>;
+    public findGenericOpenAIAPIRankerModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIAPIRankerModelConfig>>;
+    public findGenericOpenAIAPIRankerModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIAPIRankerModelConfig>>;
+    public findGenericOpenAIAPIRankerModelConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findGenericOpenAIAPIRankerModelConfigByCode.');
@@ -205,9 +206,9 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGenericOpenAIRankerModelConfigs(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGenericOpenAIRankerModelConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGenericOpenAIRankerModelConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGenericOpenAIRankerModelConfigs(observe?: 'body', reportProgress?: boolean): Observable<Array<GenericOpenAIAPIRankerModelConfig>>;
+    public getGenericOpenAIRankerModelConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GenericOpenAIAPIRankerModelConfig>>>;
+    public getGenericOpenAIRankerModelConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GenericOpenAIAPIRankerModelConfig>>>;
     public getGenericOpenAIRankerModelConfigs(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -225,7 +226,7 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIRankerModelConfigs`,
+        return this.httpClient.request<Array<GenericOpenAIAPIRankerModelConfig>>('get',`${this.basePath}/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIRankerModelConfigs`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -241,9 +242,9 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGenericOpenAIRankerModelTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGenericOpenAIRankerModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGenericOpenAIRankerModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGenericOpenAIRankerModelTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GenericOpenAIRankerModelTypeConfig>>;
+    public getGenericOpenAIRankerModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GenericOpenAIRankerModelTypeConfig>>>;
+    public getGenericOpenAIRankerModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GenericOpenAIRankerModelTypeConfig>>>;
     public getGenericOpenAIRankerModelTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -261,7 +262,7 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIRankerModelTypes`,
+        return this.httpClient.request<Array<GenericOpenAIRankerModelTypeConfig>>('get',`${this.basePath}/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIRankerModelTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

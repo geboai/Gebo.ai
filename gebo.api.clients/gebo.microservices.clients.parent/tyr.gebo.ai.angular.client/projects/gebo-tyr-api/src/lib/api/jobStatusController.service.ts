@@ -65,10 +65,10 @@ export class JobStatusControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobStatus(jobCode: any, observe?: 'body', reportProgress?: boolean): Observable<GJobStatus>;
-    public getJobStatus(jobCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GJobStatus>>;
-    public getJobStatus(jobCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GJobStatus>>;
-    public getJobStatus(jobCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getJobStatus(jobCode: string, observe?: 'body', reportProgress?: boolean): Observable<GJobStatus>;
+    public getJobStatus(jobCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GJobStatus>>;
+    public getJobStatus(jobCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GJobStatus>>;
+    public getJobStatus(jobCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobCode === null || jobCode === undefined) {
             throw new Error('Required parameter jobCode was null or undefined when calling getJobStatus.');
@@ -112,10 +112,10 @@ export class JobStatusControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobSummary(jobCode: any, observe?: 'body', reportProgress?: boolean): Observable<JobSummary>;
-    public getJobSummary(jobCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobSummary>>;
-    public getJobSummary(jobCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobSummary>>;
-    public getJobSummary(jobCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getJobSummary(jobCode: string, observe?: 'body', reportProgress?: boolean): Observable<JobSummary>;
+    public getJobSummary(jobCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobSummary>>;
+    public getJobSummary(jobCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobSummary>>;
+    public getJobSummary(jobCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobCode === null || jobCode === undefined) {
             throw new Error('Required parameter jobCode was null or undefined when calling getJobSummary.');

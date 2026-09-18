@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**placeholders** | **Object** |  |  [optional]
-**code** | **Object** |  | 
-**description** | **Object** |  | 
-**module** | **Object** |  | 
+**placeholders** | [**List&lt;GPromptPlaceholderInfo&gt;**](GPromptPlaceholderInfo.md) |  |  [optional]
+**code** | **String** |  | 
+**description** | **String** |  | 
+**module** | **String** |  | 

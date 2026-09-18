@@ -18,10 +18,11 @@ import org.springframework.ai.bedrock.titan.BedrockTitanEmbeddingModel;
 import org.springframework.ai.bedrock.titan.api.TitanEmbeddingBedrockApi;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.util.JacksonUtils;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.aws_bedrock.http.BedrockClientCustomizer;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -45,7 +46,6 @@ import tools.jackson.databind.json.JsonMapper;
  * {@link BedrockCohereEmbeddingModel} (Cohere) integrations. The proper backend
  * is selected from the chosen model id.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class BedrockEmbeddingModelConfigurationSupportService implements
@@ -61,6 +61,12 @@ public class BedrockEmbeddingModelConfigurationSupportService implements
 	static final Duration API_TIMEOUT = Duration.ofMinutes(2);
 
 	final BedrockCredentialsResolver credentialsResolver;
+	/**
+	 * Supplies the configured connect/read timeouts and retry budget
+	 * ({@code ai.gebo.llms.default.clients.config}); the AWS SDK defaults are
+	 * tighter and are not otherwise overridable from configuration.
+	 */
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final BedrockFoundationModelsLookupService modelsLookupService;
 	final IGVectorStoreFactoryProvider storeFactoryProvider;
 	final ModelRuntimeConfigureHandler configureHandler;
@@ -86,14 +92,14 @@ public class BedrockEmbeddingModelConfigurationSupportService implements
 
 			if (modelId.startsWith("cohere.")) {
 				CohereEmbeddingBedrockApi api = new CohereEmbeddingBedrockApi(modelId, credentials, region, jsonMapper,
-						API_TIMEOUT);
+						BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())));
 				// BedrockCohereEmbeddingModel has no ObservationRegistry-accepting constructor
 				// in this Spring AI version - only the Titan path below can be wired.
 				return new BedrockCohereEmbeddingModel(api);
 			}
 			// Amazon Titan embeddings (amazon.titan-embed-*) and default fallback
 			TitanEmbeddingBedrockApi api = new TitanEmbeddingBedrockApi(modelId, credentials, region, jsonMapper,
-					API_TIMEOUT);
+					BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())));
 			return new BedrockTitanEmbeddingModel(api, observationRegistry);
 		}
 	}

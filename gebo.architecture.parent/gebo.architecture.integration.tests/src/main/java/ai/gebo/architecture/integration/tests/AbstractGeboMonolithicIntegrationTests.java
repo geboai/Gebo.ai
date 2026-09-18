@@ -311,8 +311,9 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 	protected User createUser(String email, List<String> roles) {
 		User user = new User();
 		user.setUsername(email);
-		// Encrypting the user's password
-		user.setPassword("NOPASSWORD");
+		// No password: the user document does not hold one any more (it is a secret under
+		// "user:<username>" - see IGUserPasswordService), and these fixtures authenticate
+		// by minting a LOCAL_JWT, never through a password login.
 		user.setEmailVerified(true);
 		user.setProvider(AuthProvider.local);
 		user.setRoles(roles != null && !roles.isEmpty() ? roles : ALL_ROLES);

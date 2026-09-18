@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.2.4</version>
+		<version>1.0.3.0</version>
 	</parent>
 	<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
 	<dependencies>
@@ -139,6 +139,16 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 
+		</dependency>
+		<!--
+			IAclAliasesDao, to resolve the everyone-read alias a declared data source
+			is opened up with. Optional at runtime (field-injected required=false), so a
+			deployment without the ACL layer still starts.
+		-->
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.acl.services</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

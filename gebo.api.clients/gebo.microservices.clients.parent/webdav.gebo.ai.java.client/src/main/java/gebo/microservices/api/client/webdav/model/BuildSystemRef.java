@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * BuildSystemRef
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-09T11:46:07.427269500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:37.654842713+02:00[Europe/Rome]")
 
 public class BuildSystemRef {
   @JsonProperty("buildSystemTypeCode")
-  private Object buildSystemTypeCode = null;
+  private String buildSystemTypeCode = null;
 
   @JsonProperty("buildSystemConfigCode")
-  private Object buildSystemConfigCode = null;
+  private String buildSystemConfigCode = null;
 
-  public BuildSystemRef buildSystemTypeCode(Object buildSystemTypeCode) {
+  public BuildSystemRef buildSystemTypeCode(String buildSystemTypeCode) {
     this.buildSystemTypeCode = buildSystemTypeCode;
     return this;
   }
@@ -41,15 +41,15 @@ public class BuildSystemRef {
    * @return buildSystemTypeCode
   **/
   @Schema(description = "")
-  public Object getBuildSystemTypeCode() {
+  public String getBuildSystemTypeCode() {
     return buildSystemTypeCode;
   }
 
-  public void setBuildSystemTypeCode(Object buildSystemTypeCode) {
+  public void setBuildSystemTypeCode(String buildSystemTypeCode) {
     this.buildSystemTypeCode = buildSystemTypeCode;
   }
 
-  public BuildSystemRef buildSystemConfigCode(Object buildSystemConfigCode) {
+  public BuildSystemRef buildSystemConfigCode(String buildSystemConfigCode) {
     this.buildSystemConfigCode = buildSystemConfigCode;
     return this;
   }
@@ -59,11 +59,11 @@ public class BuildSystemRef {
    * @return buildSystemConfigCode
   **/
   @Schema(description = "")
-  public Object getBuildSystemConfigCode() {
+  public String getBuildSystemConfigCode() {
     return buildSystemConfigCode;
   }
 
-  public void setBuildSystemConfigCode(Object buildSystemConfigCode) {
+  public void setBuildSystemConfigCode(String buildSystemConfigCode) {
     this.buildSystemConfigCode = buildSystemConfigCode;
   }
 

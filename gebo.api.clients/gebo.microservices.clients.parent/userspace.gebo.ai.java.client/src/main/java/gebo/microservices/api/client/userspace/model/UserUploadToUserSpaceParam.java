@@ -18,25 +18,33 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.userspace.model.GObjectRefGUserspaceProjectEndpoint;
+import gebo.microservices.api.client.userspace.model.UserUploadedContent;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * UserUploadToUserSpaceParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:44:00.182052971+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.206631637+02:00[Europe/Rome]")
 
 public class UserUploadToUserSpaceParam {
   @JsonProperty("userUploadContent")
-  private Object userUploadContent = null;
+  private List<UserUploadedContent> userUploadContent = new ArrayList<>();
 
   @JsonProperty("userSpaceTransferTo")
   private GObjectRefGUserspaceProjectEndpoint userSpaceTransferTo = null;
 
   @JsonProperty("transferToUserDefaultSpace")
-  private Object transferToUserDefaultSpace = null;
+  private Boolean transferToUserDefaultSpace = null;
 
-  public UserUploadToUserSpaceParam userUploadContent(Object userUploadContent) {
+  public UserUploadToUserSpaceParam userUploadContent(List<UserUploadedContent> userUploadContent) {
     this.userUploadContent = userUploadContent;
+    return this;
+  }
+
+  public UserUploadToUserSpaceParam addUserUploadContentItem(UserUploadedContent userUploadContentItem) {
+    this.userUploadContent.add(userUploadContentItem);
     return this;
   }
 
@@ -45,11 +53,11 @@ public class UserUploadToUserSpaceParam {
    * @return userUploadContent
   **/
   @Schema(required = true, description = "")
-  public Object getUserUploadContent() {
+  public List<UserUploadedContent> getUserUploadContent() {
     return userUploadContent;
   }
 
-  public void setUserUploadContent(Object userUploadContent) {
+  public void setUserUploadContent(List<UserUploadedContent> userUploadContent) {
     this.userUploadContent = userUploadContent;
   }
 
@@ -71,7 +79,7 @@ public class UserUploadToUserSpaceParam {
     this.userSpaceTransferTo = userSpaceTransferTo;
   }
 
-  public UserUploadToUserSpaceParam transferToUserDefaultSpace(Object transferToUserDefaultSpace) {
+  public UserUploadToUserSpaceParam transferToUserDefaultSpace(Boolean transferToUserDefaultSpace) {
     this.transferToUserDefaultSpace = transferToUserDefaultSpace;
     return this;
   }
@@ -81,11 +89,11 @@ public class UserUploadToUserSpaceParam {
    * @return transferToUserDefaultSpace
   **/
   @Schema(description = "")
-  public Object getTransferToUserDefaultSpace() {
+  public Boolean isTransferToUserDefaultSpace() {
     return transferToUserDefaultSpace;
   }
 
-  public void setTransferToUserDefaultSpace(Object transferToUserDefaultSpace) {
+  public void setTransferToUserDefaultSpace(Boolean transferToUserDefaultSpace) {
     this.transferToUserDefaultSpace = transferToUserDefaultSpace;
   }
 

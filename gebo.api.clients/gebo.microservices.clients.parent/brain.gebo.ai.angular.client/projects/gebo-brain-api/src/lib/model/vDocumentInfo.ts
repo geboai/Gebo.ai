@@ -12,12 +12,12 @@
 import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
 
 export interface VDocumentInfo { 
-    code?: any;
-    name?: any;
-    parentFolderCode?: any;
+    code?: string;
+    name?: string;
+    parentFolderCode?: string;
     endpointRef?: GObjectRefGProjectEndpoint;
-    creationDate?: any;
-    modificationDate?: any;
-    extension?: any;
-    contentType?: any;
+    creationDate?: Date;
+    modificationDate?: Date;
+    extension?: string;
+    contentType?: string;
 }

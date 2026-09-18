@@ -63,7 +63,7 @@ No authorization required
 
 <a name="findChildProjects"></a>
 # **findChildProjects**
-> Object findChildProjects(knowledgeBaseCode, parentProjectCode)
+> List&lt;GProject&gt; findChildProjects(knowledgeBaseCode, parentProjectCode)
 
 
 
@@ -75,10 +75,10 @@ No authorization required
 
 
 ProjectsControllerApi apiInstance = new ProjectsControllerApi();
-Object knowledgeBaseCode = null; // Object | 
-Object parentProjectCode = null; // Object | 
+String knowledgeBaseCode = "knowledgeBaseCode_example"; // String | 
+String parentProjectCode = "parentProjectCode_example"; // String | 
 try {
-    Object result = apiInstance.findChildProjects(knowledgeBaseCode, parentProjectCode);
+    List<GProject> result = apiInstance.findChildProjects(knowledgeBaseCode, parentProjectCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ProjectsControllerApi#findChildProjects");
@@ -90,12 +90,12 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **knowledgeBaseCode** | [**Object**](.md)|  |
- **parentProjectCode** | [**Object**](.md)|  |
+ **knowledgeBaseCode** | **String**|  |
+ **parentProjectCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GProject&gt;**](GProject.md)
 
 ### Authorization
 
@@ -108,7 +108,7 @@ No authorization required
 
 <a name="findOtherKnowledgeBaseIncludableProjects"></a>
 # **findOtherKnowledgeBaseIncludableProjects**
-> Object findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode, actualSelectedProjects)
+> List&lt;GProject&gt; findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode, actualSelectedProjects)
 
 
 
@@ -120,10 +120,10 @@ No authorization required
 
 
 ProjectsControllerApi apiInstance = new ProjectsControllerApi();
-Object knowledgeBaseCode = null; // Object | 
-Object actualSelectedProjects = null; // Object | 
+String knowledgeBaseCode = "knowledgeBaseCode_example"; // String | 
+List<String> actualSelectedProjects = Arrays.asList("actualSelectedProjects_example"); // List<String> | 
 try {
-    Object result = apiInstance.findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode, actualSelectedProjects);
+    List<GProject> result = apiInstance.findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode, actualSelectedProjects);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ProjectsControllerApi#findOtherKnowledgeBaseIncludableProjects");
@@ -135,12 +135,12 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **knowledgeBaseCode** | [**Object**](.md)|  |
- **actualSelectedProjects** | [**Object**](.md)|  |
+ **knowledgeBaseCode** | **String**|  |
+ **actualSelectedProjects** | [**List&lt;String&gt;**](String.md)|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GProject&gt;**](GProject.md)
 
 ### Authorization
 
@@ -165,7 +165,7 @@ No authorization required
 
 
 ProjectsControllerApi apiInstance = new ProjectsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GProject result = apiInstance.findProjectByCode(code);
     System.out.println(result);
@@ -179,7 +179,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -196,7 +196,7 @@ No authorization required
 
 <a name="findRootProjects"></a>
 # **findRootProjects**
-> Object findRootProjects(knowledgeBaseCode)
+> List&lt;GProject&gt; findRootProjects(knowledgeBaseCode)
 
 
 
@@ -208,9 +208,9 @@ No authorization required
 
 
 ProjectsControllerApi apiInstance = new ProjectsControllerApi();
-Object knowledgeBaseCode = null; // Object | 
+String knowledgeBaseCode = "knowledgeBaseCode_example"; // String | 
 try {
-    Object result = apiInstance.findRootProjects(knowledgeBaseCode);
+    List<GProject> result = apiInstance.findRootProjects(knowledgeBaseCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ProjectsControllerApi#findRootProjects");
@@ -222,11 +222,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **knowledgeBaseCode** | [**Object**](.md)|  |
+ **knowledgeBaseCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GProject&gt;**](GProject.md)
 
 ### Authorization
 
@@ -239,7 +239,7 @@ No authorization required
 
 <a name="getChildDocuments"></a>
 # **getChildDocuments**
-> Object getChildDocuments(body)
+> List&lt;VDocumentInfo&gt; getChildDocuments(body)
 
 
 
@@ -253,7 +253,7 @@ No authorization required
 ProjectsControllerApi apiInstance = new ProjectsControllerApi();
 ChildVirtualFSParam body = new ChildVirtualFSParam(); // ChildVirtualFSParam | 
 try {
-    Object result = apiInstance.getChildDocuments(body);
+    List<VDocumentInfo> result = apiInstance.getChildDocuments(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ProjectsControllerApi#getChildDocuments");
@@ -269,7 +269,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;VDocumentInfo&gt;**](VDocumentInfo.md)
 
 ### Authorization
 
@@ -282,7 +282,7 @@ No authorization required
 
 <a name="getChildFolders"></a>
 # **getChildFolders**
-> Object getChildFolders(body)
+> List&lt;VFolderInfo&gt; getChildFolders(body)
 
 
 
@@ -296,7 +296,7 @@ No authorization required
 ProjectsControllerApi apiInstance = new ProjectsControllerApi();
 ChildVirtualFSParam body = new ChildVirtualFSParam(); // ChildVirtualFSParam | 
 try {
-    Object result = apiInstance.getChildFolders(body);
+    List<VFolderInfo> result = apiInstance.getChildFolders(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ProjectsControllerApi#getChildFolders");
@@ -312,7 +312,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;VFolderInfo&gt;**](VFolderInfo.md)
 
 ### Authorization
 
@@ -325,7 +325,7 @@ No authorization required
 
 <a name="getProjects"></a>
 # **getProjects**
-> Object getProjects()
+> List&lt;GProject&gt; getProjects()
 
 
 
@@ -338,7 +338,7 @@ No authorization required
 
 ProjectsControllerApi apiInstance = new ProjectsControllerApi();
 try {
-    Object result = apiInstance.getProjects();
+    List<GProject> result = apiInstance.getProjects();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ProjectsControllerApi#getProjects");
@@ -351,7 +351,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GProject&gt;**](GProject.md)
 
 ### Authorization
 
@@ -364,7 +364,7 @@ No authorization required
 
 <a name="getRootDocuments"></a>
 # **getRootDocuments**
-> Object getRootDocuments(body)
+> List&lt;VDocumentInfo&gt; getRootDocuments(body)
 
 
 
@@ -378,7 +378,7 @@ No authorization required
 ProjectsControllerApi apiInstance = new ProjectsControllerApi();
 GObjectRefGProjectEndpoint body = new GObjectRefGProjectEndpoint(); // GObjectRefGProjectEndpoint | 
 try {
-    Object result = apiInstance.getRootDocuments(body);
+    List<VDocumentInfo> result = apiInstance.getRootDocuments(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ProjectsControllerApi#getRootDocuments");
@@ -394,7 +394,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;VDocumentInfo&gt;**](VDocumentInfo.md)
 
 ### Authorization
 
@@ -407,7 +407,7 @@ No authorization required
 
 <a name="getRootFolders"></a>
 # **getRootFolders**
-> Object getRootFolders(body)
+> List&lt;VFolderInfo&gt; getRootFolders(body)
 
 
 
@@ -421,7 +421,7 @@ No authorization required
 ProjectsControllerApi apiInstance = new ProjectsControllerApi();
 GObjectRefGProjectEndpoint body = new GObjectRefGProjectEndpoint(); // GObjectRefGProjectEndpoint | 
 try {
-    Object result = apiInstance.getRootFolders(body);
+    List<VFolderInfo> result = apiInstance.getRootFolders(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ProjectsControllerApi#getRootFolders");
@@ -437,7 +437,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;VFolderInfo&gt;**](VFolderInfo.md)
 
 ### Authorization
 
@@ -493,7 +493,7 @@ No authorization required
 
 <a name="searchProjects"></a>
 # **searchProjects**
-> Object searchProjects(body)
+> List&lt;GProject&gt; searchProjects(body)
 
 
 
@@ -507,7 +507,7 @@ No authorization required
 ProjectsControllerApi apiInstance = new ProjectsControllerApi();
 ProjectsResearchFilter body = new ProjectsResearchFilter(); // ProjectsResearchFilter | 
 try {
-    Object result = apiInstance.searchProjects(body);
+    List<GProject> result = apiInstance.searchProjects(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ProjectsControllerApi#searchProjects");
@@ -523,7 +523,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GProject&gt;**](GProject.md)
 
 ### Authorization
 
@@ -536,7 +536,7 @@ No authorization required
 
 <a name="searchProjectsByQbe"></a>
 # **searchProjectsByQbe**
-> Object searchProjectsByQbe(body)
+> List&lt;GProject&gt; searchProjectsByQbe(body)
 
 
 
@@ -550,7 +550,7 @@ No authorization required
 ProjectsControllerApi apiInstance = new ProjectsControllerApi();
 GProject body = new GProject(); // GProject | 
 try {
-    Object result = apiInstance.searchProjectsByQbe(body);
+    List<GProject> result = apiInstance.searchProjectsByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ProjectsControllerApi#searchProjectsByQbe");
@@ -566,7 +566,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GProject&gt;**](GProject.md)
 
 ### Authorization
 

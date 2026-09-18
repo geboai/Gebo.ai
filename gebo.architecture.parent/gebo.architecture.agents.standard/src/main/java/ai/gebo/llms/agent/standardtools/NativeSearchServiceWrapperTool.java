@@ -55,6 +55,10 @@ public class NativeSearchServiceWrapperTool extends AbstractSearchServiceWrapper
 			wrapped.setToolName(functionName);
 			wrapped.setToolDescription(description);
 			wrapped.setParamType(dynamicParamType);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Declaring native search tool:" + functionName + " with the reified query type:"
+						+ this.wrapped.getNativeSearchDataStructureType().getName());
+			}
 			return wrapped.createCallback();
 		} catch (InstantiationException | IllegalAccessException e) {
 			throw new RuntimeException("Exception in to tool", e);
@@ -66,6 +70,10 @@ public class NativeSearchServiceWrapperTool extends AbstractSearchServiceWrapper
 	public ToolReference toToolReference() {
 		final String functionName = this.wrapped.getProductId() + NATIVE_SEARCH;
 		final String description = this.wrapped.getProductId() + NATIVE_SEARCHING_FUNCTION_DESCRIPTION;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Building the tool reference of the native search tool:" + functionName + " (" + description
+					+ ")");
+		}
 		ToolReference toolReference = new ToolReference(toTool());
 		return toolReference;
 	}
@@ -95,6 +103,11 @@ public class NativeSearchServiceWrapperTool extends AbstractSearchServiceWrapper
 				}
 				for (SearchableSystemMetaData searchableSystemMetaData : systems) {
 					List<SearchResult> found;
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("<NATIVE_TOOL_QUERY system=" + searchableSystemMetaData.getCode() + ">");
+						LOGGER.trace(String.valueOf(param.getQuery()));
+						LOGGER.trace("</NATIVE_TOOL_QUERY>");
+					}
 					found = wrapped.nativeSearch(param.getQuery(), searchableSystemMetaData, param.getTopK());
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Native search on system:" + searchableSystemMetaData.getCode() + " returned "

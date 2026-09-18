@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GGitProjectEndpoint } from './gGitProjectEndpoint';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGGitProjectEndpoint { 
     result?: GGitProjectEndpoint;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

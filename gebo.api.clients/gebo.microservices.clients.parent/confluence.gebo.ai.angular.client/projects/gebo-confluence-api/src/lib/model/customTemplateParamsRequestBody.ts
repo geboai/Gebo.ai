@@ -9,9 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { CatalogueSample } from './catalogueSample';
 import { SearchableSystemMetaData } from './searchableSystemMetaData';
 
 export interface CustomTemplateParamsRequestBody { 
     searchableSystemMetaData?: SearchableSystemMetaData;
-    cataloguesSample?: any;
+    cataloguesSample?: Array<CatalogueSample>;
 }

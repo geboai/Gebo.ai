@@ -1,0 +1,46 @@
+<p-blockUI id="BlockUILock" [target]="a2aExportUI" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #a2aExportUI header="Expose Gebo agents over A2A">
+  <div class="grid geboLargeButtonsBar">
+    <div class="col-6">
+      <p-button id="A2AExportAddBtn" gebo-ai-label icon="pi pi-plus" label="Add A2A Server" styleClass="w-full"
+        [outlined]="true" (onClick)="addConfig()"></p-button>
+    </div>
+  </div>
+  <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+  <div class="grid">
+    <div class="col-12">
+      <p-table id="Table" gebo-ai-label [value]="configs" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template #header pTemplate="header">
+          <tr>
+            <th gebo-ai-text>Relative URL</th>
+            <th gebo-ai-text>Description</th>
+            <th gebo-ai-text>Exports</th>
+            <th gebo-ai-text>Enabled</th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-item pTemplate="body">
+          <tr>
+            <td>{{ item.exportedRelativeUrl }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ (item.exportedAgents || []).length }}</td>
+            <td>
+              <i class="pi" [class.pi-check]="item.enabled === true" [class.pi-times]="item.enabled !== true"></i>
+            </td>
+            <td>
+              <p-button gebo-ai-label label="Edit" icon="pi pi-pencil" [outlined]="true"
+                (onClick)="editConfig(item)"></p-button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template #emptymessage pTemplate="emptymessage">
+          <tr>
+            <td colspan="5" gebo-ai-text>No A2A servers published yet.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</p-panel>

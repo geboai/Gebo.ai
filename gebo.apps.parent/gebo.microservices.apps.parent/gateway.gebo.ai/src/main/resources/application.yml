@@ -87,6 +87,14 @@ server:
 # tyr. Adding a service to the console is one entry here.
 # ---------------------------------------------------------------------------
 springdoc:
+  # Emit the served specification as OpenAPI 3.0.1 rather than springdoc's own 3.1.0
+  # default, so swagger-codegen keeps generating typed client stubs - see
+  # gebo.api.clients/gebo.microservices.clients.parent/MICROSERVICES-STUBS-ARCHITECTURE.md.
+  # The servlet services inherit this from gebo.architecture.swagger
+  # (GeboOpenApiDefaultsAutoConfiguration); the gateway cannot, because it deliberately
+  # ships springdoc's WEBFLUX starter instead of that module, so it sets the key itself.
+  api-docs:
+    version: OPENAPI_3_0
   swagger-ui:
     urls:
       - name: brain_gebo_ai

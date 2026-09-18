@@ -9,11 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GUserMessage } from './gUserMessage';
 import { GenericOpenAIAPIChatModelConfig } from './genericOpenAIAPIChatModelConfig';
 
 export interface OperationStatusGenericOpenAIAPIChatModelConfig { 
     result?: GenericOpenAIAPIChatModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

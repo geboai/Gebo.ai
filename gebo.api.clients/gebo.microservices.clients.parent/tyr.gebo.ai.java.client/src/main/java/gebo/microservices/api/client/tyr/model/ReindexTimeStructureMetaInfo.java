@@ -17,21 +17,60 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.tyr.model.ReindexTimeComponentMetaInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * ReindexTimeStructureMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class ReindexTimeStructureMetaInfo {
-  @JsonProperty("frequency")
-  private Object frequency = null;
+  /**
+   * Gets or Sets frequency
+   */
+  public enum FrequencyEnum {
+    DAILY("DAILY"),
+    MONTHLY("MONTHLY"),
+    WEEKLY("WEEKLY"),
+    HOURLY("HOURLY"),
+    YEARLY("YEARLY"),
+    ON_CHANGES("ON_CHANGES"),
+    DATES("DATES");
+
+    private String value;
+
+    FrequencyEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static FrequencyEnum fromValue(String input) {
+      for (FrequencyEnum b : FrequencyEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("frequency")
+  private FrequencyEnum frequency = null;
 
   @JsonProperty("periodComponents")
-  private Object periodComponents = null;
+  private List<ReindexTimeComponentMetaInfo> periodComponents = null;
 
-  public ReindexTimeStructureMetaInfo frequency(Object frequency) {
+  public ReindexTimeStructureMetaInfo frequency(FrequencyEnum frequency) {
     this.frequency = frequency;
     return this;
   }
@@ -41,16 +80,24 @@ public class ReindexTimeStructureMetaInfo {
    * @return frequency
   **/
   @Schema(description = "")
-  public Object getFrequency() {
+  public FrequencyEnum getFrequency() {
     return frequency;
   }
 
-  public void setFrequency(Object frequency) {
+  public void setFrequency(FrequencyEnum frequency) {
     this.frequency = frequency;
   }
 
-  public ReindexTimeStructureMetaInfo periodComponents(Object periodComponents) {
+  public ReindexTimeStructureMetaInfo periodComponents(List<ReindexTimeComponentMetaInfo> periodComponents) {
     this.periodComponents = periodComponents;
+    return this;
+  }
+
+  public ReindexTimeStructureMetaInfo addPeriodComponentsItem(ReindexTimeComponentMetaInfo periodComponentsItem) {
+    if (this.periodComponents == null) {
+      this.periodComponents = new ArrayList<>();
+    }
+    this.periodComponents.add(periodComponentsItem);
     return this;
   }
 
@@ -59,11 +106,11 @@ public class ReindexTimeStructureMetaInfo {
    * @return periodComponents
   **/
   @Schema(description = "")
-  public Object getPeriodComponents() {
+  public List<ReindexTimeComponentMetaInfo> getPeriodComponents() {
     return periodComponents;
   }
 
-  public void setPeriodComponents(Object periodComponents) {
+  public void setPeriodComponents(List<ReindexTimeComponentMetaInfo> periodComponents) {
     this.periodComponents = periodComponents;
   }
 

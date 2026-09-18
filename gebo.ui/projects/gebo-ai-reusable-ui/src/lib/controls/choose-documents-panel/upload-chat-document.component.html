@@ -11,7 +11,7 @@
     </div>
   </ng-template>
 
-  <p-dialog [modal]="true" [maximizable]="true" [visible]="showUpload" [modal]="true" [style]="{width:'50%',height:'50%'}"
+  <p-dialog [modal]="true" [maximizable]="true" [visible]="showUpload" [modal]="true" styleClass="gebo-entity-dialog"
     [closable]="true" (visibleChange)="showUploadChange.emit(false)">
     <p-blockUI [blocked]="loading" [target]="uploadFilesArea">
       <i class="pi pi-lock" style="font-size: 3rem"></i>

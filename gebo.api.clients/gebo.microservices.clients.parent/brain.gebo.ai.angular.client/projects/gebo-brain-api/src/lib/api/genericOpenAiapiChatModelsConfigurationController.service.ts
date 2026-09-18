@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GenericOpenAIAPIChatModelConfig } from '../model/genericOpenAIAPIChatModelConfig';
+import { GenericOpenAIChatModelTypeConfig } from '../model/genericOpenAIChatModelTypeConfig';
 import { OperationStatusBoolean } from '../model/operationStatusBoolean';
 import { OperationStatusGenericOpenAIAPIChatModelConfig } from '../model/operationStatusGenericOpenAIAPIChatModelConfig';
 import { OperationStatusListGenericOpenAIAPIChatModelChoice } from '../model/operationStatusListGenericOpenAIAPIChatModelChoice';
@@ -112,10 +113,10 @@ export class GenericOpenAiapiChatModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGenericOpenAIAPIChatModelConfigByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIAPIChatModelConfig>;
-    public findGenericOpenAIAPIChatModelConfigByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIAPIChatModelConfig>>;
-    public findGenericOpenAIAPIChatModelConfigByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIAPIChatModelConfig>>;
-    public findGenericOpenAIAPIChatModelConfigByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGenericOpenAIAPIChatModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIAPIChatModelConfig>;
+    public findGenericOpenAIAPIChatModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIAPIChatModelConfig>>;
+    public findGenericOpenAIAPIChatModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIAPIChatModelConfig>>;
+    public findGenericOpenAIAPIChatModelConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findGenericOpenAIAPIChatModelConfigByCode.');
@@ -205,9 +206,9 @@ export class GenericOpenAiapiChatModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGenericOpenAIChatModelTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGenericOpenAIChatModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGenericOpenAIChatModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGenericOpenAIChatModelTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GenericOpenAIChatModelTypeConfig>>;
+    public getGenericOpenAIChatModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GenericOpenAIChatModelTypeConfig>>>;
+    public getGenericOpenAIChatModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GenericOpenAIChatModelTypeConfig>>>;
     public getGenericOpenAIChatModelTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -225,7 +226,7 @@ export class GenericOpenAiapiChatModelsConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GenericOpenAIAPIChatModelsConfigurationController/getGenericOpenAIChatModelTypes`,
+        return this.httpClient.request<Array<GenericOpenAIChatModelTypeConfig>>('get',`${this.basePath}/api/admin/GenericOpenAIAPIChatModelsConfigurationController/getGenericOpenAIChatModelTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

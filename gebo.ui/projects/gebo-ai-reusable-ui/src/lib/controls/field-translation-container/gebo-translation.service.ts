@@ -31,11 +31,14 @@ export class GeboAITranslationService {
         private httpClient: HttpClient) {
         this.translateService.addLangs(["ar", "cs", "de", "en", "es", "fi", "fr", "he", "hi", "it", "js", "ko", "nl", "no", "pt", "ro", "ru", "sv", "th", "tr", "vi", "zh"]);
     }
+    /**
+     * Base URL of the bundled assets, resolved against the document base URI rather than
+     * the origin root. A host is not necessarily served from "/": an office plugin lives
+     * under /sdkjs-plugins/<plugin>/ inside the document server, where a root-absolute
+     * "/assets/" 404s and the language list silently stays empty.
+     */
     protected get assetsUrl(): string {
-        let host = document.location.hostname;
-        let port = document.location.port;
-        let protocol = document.location.protocol;
-        return protocol + "//" + host + (port ? ":" + port : "") + "/assets/";
+        return new URL("assets/", document.baseURI).href;
     }
     private loadLanguagesResource(fileName: string): Observable<GeboLanguage[]> {
         const url = this.assetsUrl + fileName;
@@ -49,17 +52,20 @@ export class GeboAITranslationService {
             try {
                 const moduleConfiguration = await this.uiTextResourcesService.getUiTextResourcesModule().toPromise();
                 GeboAITranslationService.recordingOn = moduleConfiguration?.enabled === true;
-
-                try {
-                    const langs = await this.loadLanguagesResource("languages-choice.json").toPromise();
-                    if (langs && langs.length) {
-                        GeboAITranslationService.languageChoices = langs;
-                        this.translateService.addLangs(langs.map(x => x.langCode));
-                    }
-                } catch (w) {
-
-                }
             } catch (e) {
+
+            }
+            // The choosable languages come from a static asset, so they must be loaded even
+            // when the backend call above failed (it does, for instance, while an office
+            // plugin is still unauthenticated): keeping it inside that try left the language
+            // list permanently empty, since `initialized` is latched right after.
+            try {
+                const langs = await this.loadLanguagesResource("languages-choice.json").toPromise();
+                if (langs && langs.length) {
+                    GeboAITranslationService.languageChoices = langs;
+                    this.translateService.addLangs(langs.map(x => x.langCode));
+                }
+            } catch (w) {
 
             } finally {
                 GeboAITranslationService.initialized = true;

@@ -18,26 +18,62 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * ReindexTimeComponentMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class ReindexTimeComponentMetaInfo {
-  @JsonProperty("timeUnity")
-  private Object timeUnity = null;
+  /**
+   * Gets or Sets timeUnity
+   */
+  public enum TimeUnityEnum {
+    HOUR("HOUR"),
+    MINUTES("MINUTES"),
+    DAY_OF_WEEK("DAY_OF_WEEK"),
+    WEEK_OF_MONTH("WEEK_OF_MONTH"),
+    DATE("DATE");
+
+    private String value;
+
+    TimeUnityEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TimeUnityEnum fromValue(String input) {
+      for (TimeUnityEnum b : TimeUnityEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("timeUnity")
+  private TimeUnityEnum timeUnity = null;
 
   @JsonProperty("choosableOptions")
-  private Object choosableOptions = null;
+  private List<String> choosableOptions = null;
 
   @JsonProperty("maxValue")
-  private Object maxValue = null;
+  private Integer maxValue = null;
 
   @JsonProperty("label")
-  private Object label = null;
+  private String label = null;
 
-  public ReindexTimeComponentMetaInfo timeUnity(Object timeUnity) {
+  public ReindexTimeComponentMetaInfo timeUnity(TimeUnityEnum timeUnity) {
     this.timeUnity = timeUnity;
     return this;
   }
@@ -47,16 +83,24 @@ public class ReindexTimeComponentMetaInfo {
    * @return timeUnity
   **/
   @Schema(description = "")
-  public Object getTimeUnity() {
+  public TimeUnityEnum getTimeUnity() {
     return timeUnity;
   }
 
-  public void setTimeUnity(Object timeUnity) {
+  public void setTimeUnity(TimeUnityEnum timeUnity) {
     this.timeUnity = timeUnity;
   }
 
-  public ReindexTimeComponentMetaInfo choosableOptions(Object choosableOptions) {
+  public ReindexTimeComponentMetaInfo choosableOptions(List<String> choosableOptions) {
     this.choosableOptions = choosableOptions;
+    return this;
+  }
+
+  public ReindexTimeComponentMetaInfo addChoosableOptionsItem(String choosableOptionsItem) {
+    if (this.choosableOptions == null) {
+      this.choosableOptions = new ArrayList<>();
+    }
+    this.choosableOptions.add(choosableOptionsItem);
     return this;
   }
 
@@ -65,15 +109,15 @@ public class ReindexTimeComponentMetaInfo {
    * @return choosableOptions
   **/
   @Schema(description = "")
-  public Object getChoosableOptions() {
+  public List<String> getChoosableOptions() {
     return choosableOptions;
   }
 
-  public void setChoosableOptions(Object choosableOptions) {
+  public void setChoosableOptions(List<String> choosableOptions) {
     this.choosableOptions = choosableOptions;
   }
 
-  public ReindexTimeComponentMetaInfo maxValue(Object maxValue) {
+  public ReindexTimeComponentMetaInfo maxValue(Integer maxValue) {
     this.maxValue = maxValue;
     return this;
   }
@@ -83,15 +127,15 @@ public class ReindexTimeComponentMetaInfo {
    * @return maxValue
   **/
   @Schema(description = "")
-  public Object getMaxValue() {
+  public Integer getMaxValue() {
     return maxValue;
   }
 
-  public void setMaxValue(Object maxValue) {
+  public void setMaxValue(Integer maxValue) {
     this.maxValue = maxValue;
   }
 
-  public ReindexTimeComponentMetaInfo label(Object label) {
+  public ReindexTimeComponentMetaInfo label(String label) {
     this.label = label;
     return this;
   }
@@ -101,11 +145,11 @@ public class ReindexTimeComponentMetaInfo {
    * @return label
   **/
   @Schema(description = "")
-  public Object getLabel() {
+  public String getLabel() {
     return label;
   }
 
-  public void setLabel(Object label) {
+  public void setLabel(String label) {
     this.label = label;
   }
 

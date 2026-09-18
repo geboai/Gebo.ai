@@ -57,7 +57,7 @@ public class AnthropicChatModelsConfigurationControllerApiTest {
      */
     @Test
     public void findAnthropicChatModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GAnthropicChatModelConfig response = api.findAnthropicChatModelConfigByCode(code);
 
         // TODO: test validations

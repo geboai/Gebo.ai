@@ -17,61 +17,68 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.ChatInteractions;
 import gebo.microservices.api.client.brain.model.GObjectRefGBaseChatModelConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GUserChatSession
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GUserChatSession {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("chatCreationDateTime")
-  private Object chatCreationDateTime = null;
+  private Date chatCreationDateTime = null;
 
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
+
+  @JsonProperty("contextCode")
+  private String contextCode = null;
 
   @JsonProperty("chatProfileCode")
-  private Object chatProfileCode = null;
+  private String chatProfileCode = null;
 
   @JsonProperty("modelReference")
   private GObjectRefGBaseChatModelConfig modelReference = null;
 
   @JsonProperty("ragChat")
-  private Object ragChat = null;
+  private Boolean ragChat = null;
 
   @JsonProperty("chatMemoryId")
-  private Object chatMemoryId = null;
+  private String chatMemoryId = null;
 
   @JsonProperty("interactions")
-  private Object interactions = null;
+  private List<ChatInteractions> interactions = null;
 
   @JsonProperty("chatModelCode")
-  private Object chatModelCode = null;
+  private String chatModelCode = null;
 
   @JsonProperty("choosedKnowledgeBases")
-  private Object choosedKnowledgeBases = null;
+  private List<String> choosedKnowledgeBases = null;
 
-  public GUserChatSession code(Object code) {
+  public GUserChatSession code(String code) {
     this.code = code;
     return this;
   }
@@ -81,15 +88,15 @@ public class GUserChatSession {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GUserChatSession description(Object description) {
+  public GUserChatSession description(String description) {
     this.description = description;
     return this;
   }
@@ -99,15 +106,15 @@ public class GUserChatSession {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GUserChatSession userModified(Object userModified) {
+  public GUserChatSession userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -117,15 +124,15 @@ public class GUserChatSession {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GUserChatSession userCreated(Object userCreated) {
+  public GUserChatSession userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -135,15 +142,15 @@ public class GUserChatSession {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GUserChatSession dateModified(Object dateModified) {
+  public GUserChatSession dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -153,15 +160,15 @@ public class GUserChatSession {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GUserChatSession dateCreated(Object dateCreated) {
+  public GUserChatSession dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -171,15 +178,15 @@ public class GUserChatSession {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GUserChatSession chatCreationDateTime(Object chatCreationDateTime) {
+  public GUserChatSession chatCreationDateTime(Date chatCreationDateTime) {
     this.chatCreationDateTime = chatCreationDateTime;
     return this;
   }
@@ -189,15 +196,15 @@ public class GUserChatSession {
    * @return chatCreationDateTime
   **/
   @Schema(description = "")
-  public Object getChatCreationDateTime() {
+  public Date getChatCreationDateTime() {
     return chatCreationDateTime;
   }
 
-  public void setChatCreationDateTime(Object chatCreationDateTime) {
+  public void setChatCreationDateTime(Date chatCreationDateTime) {
     this.chatCreationDateTime = chatCreationDateTime;
   }
 
-  public GUserChatSession username(Object username) {
+  public GUserChatSession username(String username) {
     this.username = username;
     return this;
   }
@@ -207,15 +214,33 @@ public class GUserChatSession {
    * @return username
   **/
   @Schema(description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public GUserChatSession chatProfileCode(Object chatProfileCode) {
+  public GUserChatSession contextCode(String contextCode) {
+    this.contextCode = contextCode;
+    return this;
+  }
+
+   /**
+   * Get contextCode
+   * @return contextCode
+  **/
+  @Schema(description = "")
+  public String getContextCode() {
+    return contextCode;
+  }
+
+  public void setContextCode(String contextCode) {
+    this.contextCode = contextCode;
+  }
+
+  public GUserChatSession chatProfileCode(String chatProfileCode) {
     this.chatProfileCode = chatProfileCode;
     return this;
   }
@@ -225,11 +250,11 @@ public class GUserChatSession {
    * @return chatProfileCode
   **/
   @Schema(description = "")
-  public Object getChatProfileCode() {
+  public String getChatProfileCode() {
     return chatProfileCode;
   }
 
-  public void setChatProfileCode(Object chatProfileCode) {
+  public void setChatProfileCode(String chatProfileCode) {
     this.chatProfileCode = chatProfileCode;
   }
 
@@ -251,7 +276,7 @@ public class GUserChatSession {
     this.modelReference = modelReference;
   }
 
-  public GUserChatSession ragChat(Object ragChat) {
+  public GUserChatSession ragChat(Boolean ragChat) {
     this.ragChat = ragChat;
     return this;
   }
@@ -261,15 +286,15 @@ public class GUserChatSession {
    * @return ragChat
   **/
   @Schema(description = "")
-  public Object getRagChat() {
+  public Boolean isRagChat() {
     return ragChat;
   }
 
-  public void setRagChat(Object ragChat) {
+  public void setRagChat(Boolean ragChat) {
     this.ragChat = ragChat;
   }
 
-  public GUserChatSession chatMemoryId(Object chatMemoryId) {
+  public GUserChatSession chatMemoryId(String chatMemoryId) {
     this.chatMemoryId = chatMemoryId;
     return this;
   }
@@ -279,16 +304,24 @@ public class GUserChatSession {
    * @return chatMemoryId
   **/
   @Schema(description = "")
-  public Object getChatMemoryId() {
+  public String getChatMemoryId() {
     return chatMemoryId;
   }
 
-  public void setChatMemoryId(Object chatMemoryId) {
+  public void setChatMemoryId(String chatMemoryId) {
     this.chatMemoryId = chatMemoryId;
   }
 
-  public GUserChatSession interactions(Object interactions) {
+  public GUserChatSession interactions(List<ChatInteractions> interactions) {
     this.interactions = interactions;
+    return this;
+  }
+
+  public GUserChatSession addInteractionsItem(ChatInteractions interactionsItem) {
+    if (this.interactions == null) {
+      this.interactions = new ArrayList<>();
+    }
+    this.interactions.add(interactionsItem);
     return this;
   }
 
@@ -297,15 +330,15 @@ public class GUserChatSession {
    * @return interactions
   **/
   @Schema(description = "")
-  public Object getInteractions() {
+  public List<ChatInteractions> getInteractions() {
     return interactions;
   }
 
-  public void setInteractions(Object interactions) {
+  public void setInteractions(List<ChatInteractions> interactions) {
     this.interactions = interactions;
   }
 
-  public GUserChatSession chatModelCode(Object chatModelCode) {
+  public GUserChatSession chatModelCode(String chatModelCode) {
     this.chatModelCode = chatModelCode;
     return this;
   }
@@ -315,16 +348,24 @@ public class GUserChatSession {
    * @return chatModelCode
   **/
   @Schema(description = "")
-  public Object getChatModelCode() {
+  public String getChatModelCode() {
     return chatModelCode;
   }
 
-  public void setChatModelCode(Object chatModelCode) {
+  public void setChatModelCode(String chatModelCode) {
     this.chatModelCode = chatModelCode;
   }
 
-  public GUserChatSession choosedKnowledgeBases(Object choosedKnowledgeBases) {
+  public GUserChatSession choosedKnowledgeBases(List<String> choosedKnowledgeBases) {
     this.choosedKnowledgeBases = choosedKnowledgeBases;
+    return this;
+  }
+
+  public GUserChatSession addChoosedKnowledgeBasesItem(String choosedKnowledgeBasesItem) {
+    if (this.choosedKnowledgeBases == null) {
+      this.choosedKnowledgeBases = new ArrayList<>();
+    }
+    this.choosedKnowledgeBases.add(choosedKnowledgeBasesItem);
     return this;
   }
 
@@ -333,11 +374,11 @@ public class GUserChatSession {
    * @return choosedKnowledgeBases
   **/
   @Schema(description = "")
-  public Object getChoosedKnowledgeBases() {
+  public List<String> getChoosedKnowledgeBases() {
     return choosedKnowledgeBases;
   }
 
-  public void setChoosedKnowledgeBases(Object choosedKnowledgeBases) {
+  public void setChoosedKnowledgeBases(List<String> choosedKnowledgeBases) {
     this.choosedKnowledgeBases = choosedKnowledgeBases;
   }
 
@@ -359,6 +400,7 @@ public class GUserChatSession {
         Objects.equals(this.dateCreated, guserChatSession.dateCreated) &&
         Objects.equals(this.chatCreationDateTime, guserChatSession.chatCreationDateTime) &&
         Objects.equals(this.username, guserChatSession.username) &&
+        Objects.equals(this.contextCode, guserChatSession.contextCode) &&
         Objects.equals(this.chatProfileCode, guserChatSession.chatProfileCode) &&
         Objects.equals(this.modelReference, guserChatSession.modelReference) &&
         Objects.equals(this.ragChat, guserChatSession.ragChat) &&
@@ -370,7 +412,7 @@ public class GUserChatSession {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, chatProfileCode, modelReference, ragChat, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, contextCode, chatProfileCode, modelReference, ragChat, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases);
   }
 
 
@@ -387,6 +429,7 @@ public class GUserChatSession {
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    chatCreationDateTime: ").append(toIndentedString(chatCreationDateTime)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    contextCode: ").append(toIndentedString(contextCode)).append("\n");
     sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("    modelReference: ").append(toIndentedString(modelReference)).append("\n");
     sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");

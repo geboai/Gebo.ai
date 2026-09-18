@@ -9,10 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GONNXTransformersEmbeddingModelChoice } from './gONNXTransformersEmbeddingModelChoice';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusListGONNXTransformersEmbeddingModelChoice { 
-    result?: any;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    result?: Array<GONNXTransformersEmbeddingModelChoice>;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

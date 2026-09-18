@@ -11,14 +11,14 @@
  */
 
 export interface QdrantConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    host?: any;
-    port?: any;
-    apiKey?: any;
-    tls?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    host?: string;
+    port?: number;
+    apiKey?: string;
+    tls?: boolean;
 }

@@ -1,0 +1,148 @@
+<p-blockUI id="BlockUI" [target]="a2aServerCtrl" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+
+<p-panel id="MainPanel" gebo-ai-label #a2aServerCtrl header="Editing A2A Server (export)" [formGroup]="formGroup">
+    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
+                    icon="pi pi-save" severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false || readonly===true"
+                    styleClass="w-full"></p-button>
+            </div>
+            <div class="col-4">
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+                    (onClick)="cancelAction.emit(true)" styleClass="w-full" />
+            </div>
+            <div class="col-4">
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
+                    icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full"
+                    [disabled]="canDelete===false || readonly===true" />
+            </div>
+        </div>
+    </div>
+
+    <div class="geboDialogContent">
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+
+        <p-tabs [value]="0" id="TabView">
+            <p-tablist>
+                <p-tab [value]="0" gebo-ai-text>General settings</p-tab>
+                <p-tab [value]="1" gebo-ai-text>Exported agents &amp; networks</p-tab>
+                <p-tab [value]="2" gebo-ai-text>Security access settings</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <!-- General -->
+                <p-tabpanel [value]="0">
+                    <div class="grid">
+                        <div class="col-6">
+                            <gebo-ai-field id="description" label="Description"
+                                help="A short description of this published A2A server.">
+                                <input pInputText id="description" formControlName="description" maxlength="120"
+                                    gebo-ai-field-element [readonly]="readonly" />
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-6">
+                            <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code.">
+                                <input pInputText id="code" formControlName="code" readonly="true"
+                                    gebo-ai-field-element />
+                            </gebo-ai-field>
+                        </div>
+
+                        <div class="col-8">
+                            <gebo-ai-field id="exportedRelativeUrl" label="Exported Relative URL"
+                                help="URL segment the endpoint is served under: /a2a/<url> (card at /a2a/<url>/.well-known/agent-card.json)."
+                                [required]="true">
+                                <input pInputText id="exportedRelativeUrl" formControlName="exportedRelativeUrl"
+                                    [required]="true" class="col-12" gebo-ai-field-element [readonly]="readonly" />
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-4">
+                            <gebo-ai-field id="enabled" label="Enabled"
+                                help="When enabled, the endpoint is published and callable.">
+                                <p-toggleswitch id="enabled" formControlName="enabled" gebo-ai-field-element
+                                    [disabled]="readonly"></p-toggleswitch>
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-12">
+                            <p-message severity="info" styleClass="w-full" gebo-ai-text>
+                                Callers authenticate through this platform's active security (self-issued JWT / API key,
+                                or OAuth2 resource server) — there is no per-server credential here. The exported network
+                                runs impersonating the resolved caller and honours that user's access rights; the served
+                                Agent Card advertises the active scheme.
+                            </p-message>
+                        </div>
+                    </div>
+                </p-tabpanel>
+
+                <!-- Exported agents & networks -->
+                <p-tabpanel [value]="1">
+                    <p-table [value]="exportedAgents" [tableStyle]="{ 'min-width': '50rem' }">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th gebo-ai-text>Kind</th>
+                                <th gebo-ai-text>Network / Agent code</th>
+                                <th gebo-ai-text>Skill name</th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-item let-i="rowIndex">
+                            <tr>
+                                <td>{{ isNetwork(item) ? 'Network' : 'Agent' }}</td>
+                                <td>{{ isNetwork(item) ? item.networkCode : item.agentConfigCode }}</td>
+                                <td>{{ item.skillName }}</td>
+                                <td>
+                                    <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                                        (onClick)="removeEntry(i)" [disabled]="readonly"></p-button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="4" gebo-ai-text>No agents or networks exported yet.</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+                    <div class="grid" style="margin-top: 1rem;" *ngIf="!readonly">
+                        <div class="col-3">
+                            <gebo-ai-field id="newKind" label="Kind" help="Export a whole network or a single agent.">
+                                <p-select id="newKind" [(ngModel)]="newEntry.kind" [ngModelOptions]="{standalone: true}"
+                                    [options]="kinds" optionLabel="label" optionValue="value"
+                                    gebo-ai-field-element></p-select>
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-5">
+                            <gebo-ai-field id="newCode" label="Network / Agent code"
+                                help="The GAgentsNetwork code (network) or GAgentConfig code (agent) to export.">
+                                <input *ngIf="isNetwork(newEntry)" pInputText id="newNetworkCode"
+                                    [(ngModel)]="newEntry.networkCode" [ngModelOptions]="{standalone: true}"
+                                    class="col-12" gebo-ai-field-element />
+                                <input *ngIf="!isNetwork(newEntry)" pInputText id="newAgentCode"
+                                    [(ngModel)]="newEntry.agentConfigCode" [ngModelOptions]="{standalone: true}"
+                                    class="col-12" gebo-ai-field-element />
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-3">
+                            <gebo-ai-field id="newSkillName" label="Skill name"
+                                help="Skill id/name advertised on the Agent Card (defaults to the code).">
+                                <input pInputText id="newSkillName" [(ngModel)]="newEntry.skillName"
+                                    [ngModelOptions]="{standalone: true}" class="col-12" gebo-ai-field-element />
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-1" style="display: flex; align-items: flex-end;">
+                            <p-button id="AddExportBtn" icon="pi pi-plus" [outlined]="true" label="Add"
+                                (onClick)="addEntry()"></p-button>
+                        </div>
+                    </div>
+                </p-tabpanel>
+
+                <!-- Security access -->
+                <p-tabpanel [value]="2">
+                    <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</p-panel>

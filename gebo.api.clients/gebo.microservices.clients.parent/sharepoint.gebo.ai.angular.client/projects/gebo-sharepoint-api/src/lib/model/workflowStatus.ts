@@ -11,9 +11,9 @@
  */
 
 export interface WorkflowStatus { 
-    completed?: any;
-    hasErrors?: any;
-    totalDocuments?: any;
-    totalDocumentsWithErrors?: any;
-    totalDocumentsSuccessfull?: any;
+    completed?: boolean;
+    hasErrors?: boolean;
+    totalDocuments?: number;
+    totalDocumentsWithErrors?: number;
+    totalDocumentsSuccessfull?: number;
 }

@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { AggregateRequestBodyJiraResultsExtractionData } from '../model/aggregateRequestBodyJiraResultsExtractionData';
+import { CatalogueSample } from '../model/catalogueSample';
 import { CustomTemplateParamsRequestBody } from '../model/customTemplateParamsRequestBody';
 import { JiraIssuesSearchFilter } from '../model/jiraIssuesSearchFilter';
 import { JiraResultsExtractionData } from '../model/jiraResultsExtractionData';
@@ -116,9 +117,9 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restCreateCustomTemplateParamsMap(body: CustomTemplateParamsRequestBody, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public restCreateCustomTemplateParamsMap(body: CustomTemplateParamsRequestBody, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public restCreateCustomTemplateParamsMap(body: CustomTemplateParamsRequestBody, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public restCreateCustomTemplateParamsMap(body: CustomTemplateParamsRequestBody, observe?: 'body', reportProgress?: boolean): Observable<{ [key: string]: any; }>;
+    public restCreateCustomTemplateParamsMap(body: CustomTemplateParamsRequestBody, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{ [key: string]: any; }>>;
+    public restCreateCustomTemplateParamsMap(body: CustomTemplateParamsRequestBody, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{ [key: string]: any; }>>;
     public restCreateCustomTemplateParamsMap(body: CustomTemplateParamsRequestBody, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -145,7 +146,7 @@ export class JiraSearchServiceControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/users/JiraSearchServiceController/createCustomTemplateParamsMap`,
+        return this.httpClient.request<{ [key: string]: any; }>('post',`${this.basePath}/api/users/JiraSearchServiceController/createCustomTemplateParamsMap`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -164,10 +165,10 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restExtractRelatedAnalisysReferences(body: JiraResultsExtractionData, systemId: any, observe?: 'body', reportProgress?: boolean): Observable<SearchResultAnalisysOutcome>;
-    public restExtractRelatedAnalisysReferences(body: JiraResultsExtractionData, systemId: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchResultAnalisysOutcome>>;
-    public restExtractRelatedAnalisysReferences(body: JiraResultsExtractionData, systemId: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchResultAnalisysOutcome>>;
-    public restExtractRelatedAnalisysReferences(body: JiraResultsExtractionData, systemId: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restExtractRelatedAnalisysReferences(body: JiraResultsExtractionData, systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchResultAnalisysOutcome>;
+    public restExtractRelatedAnalisysReferences(body: JiraResultsExtractionData, systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchResultAnalisysOutcome>>;
+    public restExtractRelatedAnalisysReferences(body: JiraResultsExtractionData, systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchResultAnalisysOutcome>>;
+    public restExtractRelatedAnalisysReferences(body: JiraResultsExtractionData, systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling restExtractRelatedAnalisysReferences.');
@@ -221,10 +222,10 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restFindSystemById(systemId: any, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
-    public restFindSystemById(systemId: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
-    public restFindSystemById(systemId: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
-    public restFindSystemById(systemId: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restFindSystemById(systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
+    public restFindSystemById(systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
+    public restFindSystemById(systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
+    public restFindSystemById(systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (systemId === null || systemId === undefined) {
             throw new Error('Required parameter systemId was null or undefined when calling restFindSystemById.');
@@ -315,10 +316,10 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetCachedCatalogues(systemConfigurationCode?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public restGetCachedCatalogues(systemConfigurationCode?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public restGetCachedCatalogues(systemConfigurationCode?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public restGetCachedCatalogues(systemConfigurationCode?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetCachedCatalogues(systemConfigurationCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
+    public restGetCachedCatalogues(systemConfigurationCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
+    public restGetCachedCatalogues(systemConfigurationCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
+    public restGetCachedCatalogues(systemConfigurationCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -341,7 +342,7 @@ export class JiraSearchServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/JiraSearchServiceController/getCachedCatalogues`,
+        return this.httpClient.request<Array<CatalogueSample>>('get',`${this.basePath}/api/users/JiraSearchServiceController/getCachedCatalogues`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -359,10 +360,10 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetCataloguesListSample(configurationCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public restGetCataloguesListSample(configurationCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public restGetCataloguesListSample(configurationCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public restGetCataloguesListSample(configurationCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetCataloguesListSample(configurationCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
+    public restGetCataloguesListSample(configurationCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
+    public restGetCataloguesListSample(configurationCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
+    public restGetCataloguesListSample(configurationCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (configurationCode === null || configurationCode === undefined) {
             throw new Error('Required parameter configurationCode was null or undefined when calling restGetCataloguesListSample.');
@@ -388,7 +389,7 @@ export class JiraSearchServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/JiraSearchServiceController/getCataloguesListSample`,
+        return this.httpClient.request<Array<CatalogueSample>>('get',`${this.basePath}/api/users/JiraSearchServiceController/getCataloguesListSample`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -405,9 +406,9 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetDescription(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public restGetDescription(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public restGetDescription(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public restGetDescription(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetDescription(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetDescription(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
     public restGetDescription(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -425,7 +426,7 @@ export class JiraSearchServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/JiraSearchServiceController/getDescription`,
+        return this.httpClient.request<string>('get',`${this.basePath}/api/users/JiraSearchServiceController/getDescription`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -441,9 +442,9 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetId(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public restGetId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public restGetId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public restGetId(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
     public restGetId(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -461,7 +462,7 @@ export class JiraSearchServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/JiraSearchServiceController/getId`,
+        return this.httpClient.request<string>('get',`${this.basePath}/api/users/JiraSearchServiceController/getId`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -477,9 +478,9 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetMessagingModuleId(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public restGetMessagingModuleId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public restGetMessagingModuleId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public restGetMessagingModuleId(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetMessagingModuleId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetMessagingModuleId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
     public restGetMessagingModuleId(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -497,7 +498,7 @@ export class JiraSearchServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/JiraSearchServiceController/getMessagingModuleId`,
+        return this.httpClient.request<string>('get',`${this.basePath}/api/users/JiraSearchServiceController/getMessagingModuleId`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -513,9 +514,9 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetNativePromptTemplateUseCode(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public restGetNativePromptTemplateUseCode(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public restGetNativePromptTemplateUseCode(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public restGetNativePromptTemplateUseCode(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetNativePromptTemplateUseCode(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetNativePromptTemplateUseCode(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
     public restGetNativePromptTemplateUseCode(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -533,7 +534,7 @@ export class JiraSearchServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/JiraSearchServiceController/getNativePromptTemplateUseCode`,
+        return this.httpClient.request<string>('get',`${this.basePath}/api/users/JiraSearchServiceController/getNativePromptTemplateUseCode`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -549,9 +550,9 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetProductId(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public restGetProductId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public restGetProductId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public restGetProductId(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetProductId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetProductId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
     public restGetProductId(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -569,7 +570,7 @@ export class JiraSearchServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/JiraSearchServiceController/getProductId`,
+        return this.httpClient.request<string>('get',`${this.basePath}/api/users/JiraSearchServiceController/getProductId`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -585,9 +586,9 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetQueriesGenerationPromptUseCode(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public restGetQueriesGenerationPromptUseCode(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public restGetQueriesGenerationPromptUseCode(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public restGetQueriesGenerationPromptUseCode(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetQueriesGenerationPromptUseCode(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetQueriesGenerationPromptUseCode(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
     public restGetQueriesGenerationPromptUseCode(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -605,7 +606,7 @@ export class JiraSearchServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/JiraSearchServiceController/getQueriesGenerationPromptUseCode`,
+        return this.httpClient.request<string>('get',`${this.basePath}/api/users/JiraSearchServiceController/getQueriesGenerationPromptUseCode`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -621,9 +622,9 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetSearchableSystems(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public restGetSearchableSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public restGetSearchableSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public restGetSearchableSystems(observe?: 'body', reportProgress?: boolean): Observable<Array<SearchableSystemMetaData>>;
+    public restGetSearchableSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchableSystemMetaData>>>;
+    public restGetSearchableSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchableSystemMetaData>>>;
     public restGetSearchableSystems(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -641,7 +642,7 @@ export class JiraSearchServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/JiraSearchServiceController/getSearchableSystems`,
+        return this.httpClient.request<Array<SearchableSystemMetaData>>('get',`${this.basePath}/api/users/JiraSearchServiceController/getSearchableSystems`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -657,9 +658,9 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restIsEnabled(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public restIsEnabled(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public restIsEnabled(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public restIsEnabled(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public restIsEnabled(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public restIsEnabled(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
     public restIsEnabled(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -677,7 +678,7 @@ export class JiraSearchServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/JiraSearchServiceController/isEnabled`,
+        return this.httpClient.request<boolean>('get',`${this.basePath}/api/users/JiraSearchServiceController/isEnabled`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -696,10 +697,10 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restNativeSearch(body: JiraIssuesSearchFilter, systemId: any, nEntryLimit: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public restNativeSearch(body: JiraIssuesSearchFilter, systemId: any, nEntryLimit: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public restNativeSearch(body: JiraIssuesSearchFilter, systemId: any, nEntryLimit: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public restNativeSearch(body: JiraIssuesSearchFilter, systemId: any, nEntryLimit: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restNativeSearch(body: JiraIssuesSearchFilter, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
+    public restNativeSearch(body: JiraIssuesSearchFilter, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
+    public restNativeSearch(body: JiraIssuesSearchFilter, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
+    public restNativeSearch(body: JiraIssuesSearchFilter, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling restNativeSearch.');
@@ -741,7 +742,7 @@ export class JiraSearchServiceControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/users/JiraSearchServiceController/nativeSearch`,
+        return this.httpClient.request<Array<SearchResult>>('post',`${this.basePath}/api/users/JiraSearchServiceController/nativeSearch`,
             {
                 body: body,
                 params: queryParameters,
@@ -762,10 +763,10 @@ export class JiraSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restSearch(body: SearchQuery, systemId: any, nEntryLimit: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public restSearch(body: SearchQuery, systemId: any, nEntryLimit: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public restSearch(body: SearchQuery, systemId: any, nEntryLimit: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public restSearch(body: SearchQuery, systemId: any, nEntryLimit: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restSearch(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
+    public restSearch(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
+    public restSearch(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
+    public restSearch(body: SearchQuery, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling restSearch.');
@@ -807,7 +808,7 @@ export class JiraSearchServiceControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/users/JiraSearchServiceController/search`,
+        return this.httpClient.request<Array<SearchResult>>('post',`${this.basePath}/api/users/JiraSearchServiceController/search`,
             {
                 body: body,
                 params: queryParameters,

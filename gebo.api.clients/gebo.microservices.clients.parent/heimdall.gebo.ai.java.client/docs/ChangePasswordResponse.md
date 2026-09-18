@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ok** | **Object** |  |  [optional]
-**wrongPassword** | **Object** |  |  [optional]
-**newPasswordNeverMatch** | **Object** |  |  [optional]
+**ok** | **Boolean** |  |  [optional]
+**wrongPassword** | **Boolean** |  |  [optional]
+**newPasswordNeverMatch** | **Boolean** |  |  [optional]

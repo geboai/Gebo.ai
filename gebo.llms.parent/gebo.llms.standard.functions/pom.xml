@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>ai.gebo.llms</groupId>
 		<artifactId>gebo.llms.parent</artifactId>
-		<version>1.0.2.4</version>
+		<version>1.0.3.0</version>
 	</parent>
 	<artifactId>gebo.llms.standard.functions</artifactId>
 	<dependencies>
+		<!-- Version managed centrally in the root pom. -->
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<version>1.18.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>

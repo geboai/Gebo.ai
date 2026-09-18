@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GAwsS3System } from './gAwsS3System';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGAwsS3System { 
     result?: GAwsS3System;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

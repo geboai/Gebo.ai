@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**browseUploadsEndpointPath**](UploadsBrowsingControllerApi.md#browseUploadsEndpointPath) | **POST** /api/admin/UploadsBrowsingController/browseUploadsEndpointPath | 
 [**getUploadsEndpointNavigationStatus**](UploadsBrowsingControllerApi.md#getUploadsEndpointNavigationStatus) | **POST** /api/admin/UploadsBrowsingController/getUploadsEndpointNavigationStatus | 
 [**getUploadsEndpointRoots**](UploadsBrowsingControllerApi.md#getUploadsEndpointRoots) | **GET** /api/admin/UploadsBrowsingController/getUploadsEndpointRoots | 
+[**serveUploadsEndpointFile**](UploadsBrowsingControllerApi.md#serveUploadsEndpointFile) | **GET** /api/admin/UploadsBrowsingController/serveUploadsEndpointFile | 
 
 <a name="browseUploadsEndpointPath"></a>
 # **browseUploadsEndpointPath**
@@ -140,4 +141,49 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
+<a name="serveUploadsEndpointFile"></a>
+# **serveUploadsEndpointFile**
+> File serveUploadsEndpointFile(endpointCode, path)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.UploadsBrowsingControllerApi;
+
+
+UploadsBrowsingControllerApi apiInstance = new UploadsBrowsingControllerApi();
+String endpointCode = "endpointCode_example"; // String | 
+String path = "path_example"; // String | 
+try {
+    File result = apiInstance.serveUploadsEndpointFile(endpointCode, path);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling UploadsBrowsingControllerApi#serveUploadsEndpointFile");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **endpointCode** | **String**|  |
+ **path** | **String**|  |
+
+### Return type
+
+[**File**](File.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: */*
 

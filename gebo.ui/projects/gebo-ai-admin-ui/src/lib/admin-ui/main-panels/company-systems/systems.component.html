@@ -64,7 +64,7 @@
 </div>
 <!--
 <span>
-  <p-dialog  [maximizable]="true" [visible]="editedGitServer?true:false" [modal]="true" [style]="{ width: '90%',height:'90%' }"  [closable]="false" [showHeader]="false"
+  <p-dialog [maximizable]="true" [visible]="editedGitServer?true:false" [modal]="true" styleClass="gebo-entity-dialog" [closable]="false" [showHeader]="false"
     (onHide)="resetSystems()">
     <gebo-ai-git-system-admin-component [entity]="editedGitServer" (createdNew)="resetSystems()"
       (updated)="resetSystems()" (deleted)="resetSystems()" (cancelAction)="resetSystems()"

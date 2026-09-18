@@ -18,9 +18,12 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { BrowseParam } from '../model/browseParam';
+import { GBaseObject } from '../model/gBaseObject';
+import { GKnowledgeBase } from '../model/gKnowledgeBase';
 import { OperationStatusListGVirtualFilesystemRoot } from '../model/operationStatusListGVirtualFilesystemRoot';
 import { OperationStatusListPathInfo } from '../model/operationStatusListPathInfo';
 import { OperationStatusListVirtualFilesystemNavigationTreeStatus } from '../model/operationStatusListVirtualFilesystemNavigationTreeStatus';
+import { VFilesystemReference } from '../model/vFilesystemReference';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -66,10 +69,10 @@ export class UserKnowledgeBaseBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public browseKnowledgeBasePath(body: BrowseParam, codes: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
-    public browseKnowledgeBasePath(body: BrowseParam, codes: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
-    public browseKnowledgeBasePath(body: BrowseParam, codes: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
-    public browseKnowledgeBasePath(body: BrowseParam, codes: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public browseKnowledgeBasePath(body: BrowseParam, codes: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
+    public browseKnowledgeBasePath(body: BrowseParam, codes: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
+    public browseKnowledgeBasePath(body: BrowseParam, codes: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
+    public browseKnowledgeBasePath(body: BrowseParam, codes: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling browseKnowledgeBasePath.');
@@ -80,8 +83,10 @@ export class UserKnowledgeBaseBrowsingControllerService {
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (codes !== undefined && codes !== null) {
-            queryParameters = queryParameters.set('codes', <any>codes);
+        if (codes) {
+            codes.forEach((element) => {
+                queryParameters = queryParameters.append('codes', <any>element);
+            })
         }
 
         let headers = this.defaultHeaders;
@@ -122,9 +127,9 @@ export class UserKnowledgeBaseBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAccessibleRootKnowledgeBases(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAccessibleRootKnowledgeBases(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAccessibleRootKnowledgeBases(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAccessibleRootKnowledgeBases(observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
+    public getAccessibleRootKnowledgeBases(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
+    public getAccessibleRootKnowledgeBases(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
     public getAccessibleRootKnowledgeBases(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -142,7 +147,7 @@ export class UserKnowledgeBaseBrowsingControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/user/UserKnowledgeBaseBrowsingController/getAccessibleRootKnowledgeBases`,
+        return this.httpClient.request<Array<GBaseObject>>('get',`${this.basePath}/api/user/UserKnowledgeBaseBrowsingController/getAccessibleRootKnowledgeBases`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -160,10 +165,10 @@ export class UserKnowledgeBaseBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getKnowledgeBaseNavigationStatus(body: any, codes: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
-    public getKnowledgeBaseNavigationStatus(body: any, codes: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getKnowledgeBaseNavigationStatus(body: any, codes: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getKnowledgeBaseNavigationStatus(body: any, codes: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getKnowledgeBaseNavigationStatus(body: Array<VFilesystemReference>, codes: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
+    public getKnowledgeBaseNavigationStatus(body: Array<VFilesystemReference>, codes: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getKnowledgeBaseNavigationStatus(body: Array<VFilesystemReference>, codes: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getKnowledgeBaseNavigationStatus(body: Array<VFilesystemReference>, codes: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling getKnowledgeBaseNavigationStatus.');
@@ -174,8 +179,10 @@ export class UserKnowledgeBaseBrowsingControllerService {
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (codes !== undefined && codes !== null) {
-            queryParameters = queryParameters.set('codes', JSON.stringify(codes));
+        if (codes) {
+            codes.forEach((element) => {
+                queryParameters = queryParameters.append('codes', <any>element);
+            })
         }
 
         let headers = this.defaultHeaders;
@@ -217,18 +224,20 @@ export class UserKnowledgeBaseBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getKnowledgeBaseRoots(codes: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
-    public getKnowledgeBaseRoots(codes: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
-    public getKnowledgeBaseRoots(codes: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
-    public getKnowledgeBaseRoots(codes: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getKnowledgeBaseRoots(codes: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
+    public getKnowledgeBaseRoots(codes: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
+    public getKnowledgeBaseRoots(codes: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
+    public getKnowledgeBaseRoots(codes: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (codes === null || codes === undefined) {
             throw new Error('Required parameter codes was null or undefined when calling getKnowledgeBaseRoots.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (codes !== undefined && codes !== null) {
-            queryParameters = queryParameters.set('codes', <any>codes);
+        if (codes) {
+            codes.forEach((element) => {
+                queryParameters = queryParameters.append('codes', <any>element);
+            })
         }
 
         let headers = this.defaultHeaders;
@@ -264,10 +273,10 @@ export class UserKnowledgeBaseBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getVisibleKnowledgeBaseByCodes(body: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getVisibleKnowledgeBaseByCodes(body: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getVisibleKnowledgeBaseByCodes(body: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getVisibleKnowledgeBaseByCodes(body: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getVisibleKnowledgeBaseByCodes(body: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<GKnowledgeBase>>;
+    public getVisibleKnowledgeBaseByCodes(body: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GKnowledgeBase>>>;
+    public getVisibleKnowledgeBaseByCodes(body: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GKnowledgeBase>>>;
+    public getVisibleKnowledgeBaseByCodes(body: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling getVisibleKnowledgeBaseByCodes.');
@@ -293,7 +302,7 @@ export class UserKnowledgeBaseBrowsingControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/user/UserKnowledgeBaseBrowsingController/getVisibleKnowledgeBaseByCodes`,
+        return this.httpClient.request<Array<GKnowledgeBase>>('post',`${this.basePath}/api/user/UserKnowledgeBaseBrowsingController/getVisibleKnowledgeBaseByCodes`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

@@ -6,6 +6,7 @@ import gebo.microservices.api.client.mcpclient.model.BrowseParam;
 import gebo.microservices.api.client.mcpclient.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.mcpclient.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.mcpclient.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.mcpclient.model.VFilesystemReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:38.949029837+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.887590537+02:00[Europe/Rome]")
 
 public class McpClientBrowsingControllerApi {
     private ApiClient apiClient;
@@ -54,7 +55,7 @@ public class McpClientBrowsingControllerApi {
      * @return OperationStatusListPathInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListPathInfo browseMCPClientPath(BrowseParam body, Object mcpClientConfigCode) throws RestClientException {
+    public OperationStatusListPathInfo browseMCPClientPath(BrowseParam body, String mcpClientConfigCode) throws RestClientException {
         return browseMCPClientPathWithHttpInfo(body, mcpClientConfigCode).getBody();
     }
 
@@ -67,7 +68,7 @@ public class McpClientBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListPathInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListPathInfo> browseMCPClientPathWithHttpInfo(BrowseParam body, Object mcpClientConfigCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListPathInfo> browseMCPClientPathWithHttpInfo(BrowseParam body, String mcpClientConfigCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -77,7 +78,7 @@ public class McpClientBrowsingControllerApi {
         if (mcpClientConfigCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'mcpClientConfigCode' when calling browseMCPClientPath");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientBrowsingController/browseMCPClientPath").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientBrowsingController/browseMCPClientPath").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -96,7 +97,7 @@ public class McpClientBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListPathInfo> returnType = new ParameterizedTypeReference<OperationStatusListPathInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -107,7 +108,7 @@ public class McpClientBrowsingControllerApi {
      * @return OperationStatusListVirtualFilesystemNavigationTreeStatus
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListVirtualFilesystemNavigationTreeStatus getMCPClientNavigationStatus(Object body, Object mcpClientConfigCode) throws RestClientException {
+    public OperationStatusListVirtualFilesystemNavigationTreeStatus getMCPClientNavigationStatus(List<VFilesystemReference> body, String mcpClientConfigCode) throws RestClientException {
         return getMCPClientNavigationStatusWithHttpInfo(body, mcpClientConfigCode).getBody();
     }
 
@@ -120,7 +121,7 @@ public class McpClientBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListVirtualFilesystemNavigationTreeStatus&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getMCPClientNavigationStatusWithHttpInfo(Object body, Object mcpClientConfigCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getMCPClientNavigationStatusWithHttpInfo(List<VFilesystemReference> body, String mcpClientConfigCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -130,7 +131,7 @@ public class McpClientBrowsingControllerApi {
         if (mcpClientConfigCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'mcpClientConfigCode' when calling getMCPClientNavigationStatus");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientBrowsingController/getMCPClientNavigationStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientBrowsingController/getMCPClientNavigationStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -149,7 +150,7 @@ public class McpClientBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus> returnType = new ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -159,7 +160,7 @@ public class McpClientBrowsingControllerApi {
      * @return OperationStatusListGVirtualFilesystemRoot
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListGVirtualFilesystemRoot getMCPClientRoots(Object mcpClientConfigCode) throws RestClientException {
+    public OperationStatusListGVirtualFilesystemRoot getMCPClientRoots(String mcpClientConfigCode) throws RestClientException {
         return getMCPClientRootsWithHttpInfo(mcpClientConfigCode).getBody();
     }
 
@@ -171,13 +172,13 @@ public class McpClientBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListGVirtualFilesystemRoot&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getMCPClientRootsWithHttpInfo(Object mcpClientConfigCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getMCPClientRootsWithHttpInfo(String mcpClientConfigCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'mcpClientConfigCode' is set
         if (mcpClientConfigCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'mcpClientConfigCode' when calling getMCPClientRoots");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientBrowsingController/getMCPClientRoots").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientBrowsingController/getMCPClientRoots").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -194,6 +195,6 @@ public class McpClientBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot> returnType = new ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

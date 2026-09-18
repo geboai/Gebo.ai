@@ -18,56 +18,58 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * UserAccessibleMcpServerView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class UserAccessibleMcpServerView {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("enabled")
-  private Object enabled = null;
+  private Boolean enabled = null;
 
   @JsonProperty("shareAllPersonallyVisible")
-  private Object shareAllPersonallyVisible = null;
+  private Boolean shareAllPersonallyVisible = null;
 
   @JsonProperty("exportedUniqueRelativeUrl")
-  private Object exportedUniqueRelativeUrl = null;
+  private String exportedUniqueRelativeUrl = null;
 
   @JsonProperty("endpointPath")
-  private Object endpointPath = null;
+  private String endpointPath = null;
 
   @JsonProperty("transportType")
-  private Object transportType = null;
+  private String transportType = null;
 
   @JsonProperty("tools")
-  private Object tools = null;
+  private List<String> tools = null;
 
   @JsonProperty("resources")
-  private Object resources = null;
+  private List<String> resources = null;
 
   @JsonProperty("prompts")
-  private Object prompts = null;
+  private List<String> prompts = null;
 
   @JsonProperty("toolsCount")
-  private Object toolsCount = null;
+  private Integer toolsCount = null;
 
   @JsonProperty("resourcesCount")
-  private Object resourcesCount = null;
+  private Integer resourcesCount = null;
 
   @JsonProperty("promptsCount")
-  private Object promptsCount = null;
+  private Integer promptsCount = null;
 
-  public UserAccessibleMcpServerView code(Object code) {
+  public UserAccessibleMcpServerView code(String code) {
     this.code = code;
     return this;
   }
@@ -77,15 +79,15 @@ public class UserAccessibleMcpServerView {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public UserAccessibleMcpServerView name(Object name) {
+  public UserAccessibleMcpServerView name(String name) {
     this.name = name;
     return this;
   }
@@ -95,15 +97,15 @@ public class UserAccessibleMcpServerView {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public UserAccessibleMcpServerView description(Object description) {
+  public UserAccessibleMcpServerView description(String description) {
     this.description = description;
     return this;
   }
@@ -113,15 +115,15 @@ public class UserAccessibleMcpServerView {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public UserAccessibleMcpServerView enabled(Object enabled) {
+  public UserAccessibleMcpServerView enabled(Boolean enabled) {
     this.enabled = enabled;
     return this;
   }
@@ -131,15 +133,15 @@ public class UserAccessibleMcpServerView {
    * @return enabled
   **/
   @Schema(description = "")
-  public Object getEnabled() {
+  public Boolean isEnabled() {
     return enabled;
   }
 
-  public void setEnabled(Object enabled) {
+  public void setEnabled(Boolean enabled) {
     this.enabled = enabled;
   }
 
-  public UserAccessibleMcpServerView shareAllPersonallyVisible(Object shareAllPersonallyVisible) {
+  public UserAccessibleMcpServerView shareAllPersonallyVisible(Boolean shareAllPersonallyVisible) {
     this.shareAllPersonallyVisible = shareAllPersonallyVisible;
     return this;
   }
@@ -149,15 +151,15 @@ public class UserAccessibleMcpServerView {
    * @return shareAllPersonallyVisible
   **/
   @Schema(description = "")
-  public Object getShareAllPersonallyVisible() {
+  public Boolean isShareAllPersonallyVisible() {
     return shareAllPersonallyVisible;
   }
 
-  public void setShareAllPersonallyVisible(Object shareAllPersonallyVisible) {
+  public void setShareAllPersonallyVisible(Boolean shareAllPersonallyVisible) {
     this.shareAllPersonallyVisible = shareAllPersonallyVisible;
   }
 
-  public UserAccessibleMcpServerView exportedUniqueRelativeUrl(Object exportedUniqueRelativeUrl) {
+  public UserAccessibleMcpServerView exportedUniqueRelativeUrl(String exportedUniqueRelativeUrl) {
     this.exportedUniqueRelativeUrl = exportedUniqueRelativeUrl;
     return this;
   }
@@ -167,15 +169,15 @@ public class UserAccessibleMcpServerView {
    * @return exportedUniqueRelativeUrl
   **/
   @Schema(description = "")
-  public Object getExportedUniqueRelativeUrl() {
+  public String getExportedUniqueRelativeUrl() {
     return exportedUniqueRelativeUrl;
   }
 
-  public void setExportedUniqueRelativeUrl(Object exportedUniqueRelativeUrl) {
+  public void setExportedUniqueRelativeUrl(String exportedUniqueRelativeUrl) {
     this.exportedUniqueRelativeUrl = exportedUniqueRelativeUrl;
   }
 
-  public UserAccessibleMcpServerView endpointPath(Object endpointPath) {
+  public UserAccessibleMcpServerView endpointPath(String endpointPath) {
     this.endpointPath = endpointPath;
     return this;
   }
@@ -185,15 +187,15 @@ public class UserAccessibleMcpServerView {
    * @return endpointPath
   **/
   @Schema(description = "")
-  public Object getEndpointPath() {
+  public String getEndpointPath() {
     return endpointPath;
   }
 
-  public void setEndpointPath(Object endpointPath) {
+  public void setEndpointPath(String endpointPath) {
     this.endpointPath = endpointPath;
   }
 
-  public UserAccessibleMcpServerView transportType(Object transportType) {
+  public UserAccessibleMcpServerView transportType(String transportType) {
     this.transportType = transportType;
     return this;
   }
@@ -203,16 +205,24 @@ public class UserAccessibleMcpServerView {
    * @return transportType
   **/
   @Schema(description = "")
-  public Object getTransportType() {
+  public String getTransportType() {
     return transportType;
   }
 
-  public void setTransportType(Object transportType) {
+  public void setTransportType(String transportType) {
     this.transportType = transportType;
   }
 
-  public UserAccessibleMcpServerView tools(Object tools) {
+  public UserAccessibleMcpServerView tools(List<String> tools) {
     this.tools = tools;
+    return this;
+  }
+
+  public UserAccessibleMcpServerView addToolsItem(String toolsItem) {
+    if (this.tools == null) {
+      this.tools = new ArrayList<>();
+    }
+    this.tools.add(toolsItem);
     return this;
   }
 
@@ -221,16 +231,24 @@ public class UserAccessibleMcpServerView {
    * @return tools
   **/
   @Schema(description = "")
-  public Object getTools() {
+  public List<String> getTools() {
     return tools;
   }
 
-  public void setTools(Object tools) {
+  public void setTools(List<String> tools) {
     this.tools = tools;
   }
 
-  public UserAccessibleMcpServerView resources(Object resources) {
+  public UserAccessibleMcpServerView resources(List<String> resources) {
     this.resources = resources;
+    return this;
+  }
+
+  public UserAccessibleMcpServerView addResourcesItem(String resourcesItem) {
+    if (this.resources == null) {
+      this.resources = new ArrayList<>();
+    }
+    this.resources.add(resourcesItem);
     return this;
   }
 
@@ -239,16 +257,24 @@ public class UserAccessibleMcpServerView {
    * @return resources
   **/
   @Schema(description = "")
-  public Object getResources() {
+  public List<String> getResources() {
     return resources;
   }
 
-  public void setResources(Object resources) {
+  public void setResources(List<String> resources) {
     this.resources = resources;
   }
 
-  public UserAccessibleMcpServerView prompts(Object prompts) {
+  public UserAccessibleMcpServerView prompts(List<String> prompts) {
     this.prompts = prompts;
+    return this;
+  }
+
+  public UserAccessibleMcpServerView addPromptsItem(String promptsItem) {
+    if (this.prompts == null) {
+      this.prompts = new ArrayList<>();
+    }
+    this.prompts.add(promptsItem);
     return this;
   }
 
@@ -257,15 +283,15 @@ public class UserAccessibleMcpServerView {
    * @return prompts
   **/
   @Schema(description = "")
-  public Object getPrompts() {
+  public List<String> getPrompts() {
     return prompts;
   }
 
-  public void setPrompts(Object prompts) {
+  public void setPrompts(List<String> prompts) {
     this.prompts = prompts;
   }
 
-  public UserAccessibleMcpServerView toolsCount(Object toolsCount) {
+  public UserAccessibleMcpServerView toolsCount(Integer toolsCount) {
     this.toolsCount = toolsCount;
     return this;
   }
@@ -275,15 +301,15 @@ public class UserAccessibleMcpServerView {
    * @return toolsCount
   **/
   @Schema(description = "")
-  public Object getToolsCount() {
+  public Integer getToolsCount() {
     return toolsCount;
   }
 
-  public void setToolsCount(Object toolsCount) {
+  public void setToolsCount(Integer toolsCount) {
     this.toolsCount = toolsCount;
   }
 
-  public UserAccessibleMcpServerView resourcesCount(Object resourcesCount) {
+  public UserAccessibleMcpServerView resourcesCount(Integer resourcesCount) {
     this.resourcesCount = resourcesCount;
     return this;
   }
@@ -293,15 +319,15 @@ public class UserAccessibleMcpServerView {
    * @return resourcesCount
   **/
   @Schema(description = "")
-  public Object getResourcesCount() {
+  public Integer getResourcesCount() {
     return resourcesCount;
   }
 
-  public void setResourcesCount(Object resourcesCount) {
+  public void setResourcesCount(Integer resourcesCount) {
     this.resourcesCount = resourcesCount;
   }
 
-  public UserAccessibleMcpServerView promptsCount(Object promptsCount) {
+  public UserAccessibleMcpServerView promptsCount(Integer promptsCount) {
     this.promptsCount = promptsCount;
     return this;
   }
@@ -311,11 +337,11 @@ public class UserAccessibleMcpServerView {
    * @return promptsCount
   **/
   @Schema(description = "")
-  public Object getPromptsCount() {
+  public Integer getPromptsCount() {
     return promptsCount;
   }
 
-  public void setPromptsCount(Object promptsCount) {
+  public void setPromptsCount(Integer promptsCount) {
     this.promptsCount = promptsCount;
   }
 

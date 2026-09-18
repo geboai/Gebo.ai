@@ -18,35 +18,39 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GUserChatInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GUserChatInfo {
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("chatProfileCode")
-  private Object chatProfileCode = null;
+  private String chatProfileCode = null;
 
   @JsonProperty("chatModelCode")
-  private Object chatModelCode = null;
+  private String chatModelCode = null;
 
   @JsonProperty("ragChat")
-  private Object ragChat = null;
+  private Boolean ragChat = null;
 
   @JsonProperty("chatCreationDateTime")
-  private Object chatCreationDateTime = null;
+  private Date chatCreationDateTime = null;
 
-  public GUserChatInfo username(Object username) {
+  @JsonProperty("contextCode")
+  private String contextCode = null;
+
+  public GUserChatInfo username(String username) {
     this.username = username;
     return this;
   }
@@ -56,15 +60,15 @@ public class GUserChatInfo {
    * @return username
   **/
   @Schema(description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public GUserChatInfo description(Object description) {
+  public GUserChatInfo description(String description) {
     this.description = description;
     return this;
   }
@@ -74,15 +78,15 @@ public class GUserChatInfo {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GUserChatInfo code(Object code) {
+  public GUserChatInfo code(String code) {
     this.code = code;
     return this;
   }
@@ -92,15 +96,15 @@ public class GUserChatInfo {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GUserChatInfo chatProfileCode(Object chatProfileCode) {
+  public GUserChatInfo chatProfileCode(String chatProfileCode) {
     this.chatProfileCode = chatProfileCode;
     return this;
   }
@@ -110,15 +114,15 @@ public class GUserChatInfo {
    * @return chatProfileCode
   **/
   @Schema(description = "")
-  public Object getChatProfileCode() {
+  public String getChatProfileCode() {
     return chatProfileCode;
   }
 
-  public void setChatProfileCode(Object chatProfileCode) {
+  public void setChatProfileCode(String chatProfileCode) {
     this.chatProfileCode = chatProfileCode;
   }
 
-  public GUserChatInfo chatModelCode(Object chatModelCode) {
+  public GUserChatInfo chatModelCode(String chatModelCode) {
     this.chatModelCode = chatModelCode;
     return this;
   }
@@ -128,15 +132,15 @@ public class GUserChatInfo {
    * @return chatModelCode
   **/
   @Schema(description = "")
-  public Object getChatModelCode() {
+  public String getChatModelCode() {
     return chatModelCode;
   }
 
-  public void setChatModelCode(Object chatModelCode) {
+  public void setChatModelCode(String chatModelCode) {
     this.chatModelCode = chatModelCode;
   }
 
-  public GUserChatInfo ragChat(Object ragChat) {
+  public GUserChatInfo ragChat(Boolean ragChat) {
     this.ragChat = ragChat;
     return this;
   }
@@ -146,15 +150,15 @@ public class GUserChatInfo {
    * @return ragChat
   **/
   @Schema(description = "")
-  public Object getRagChat() {
+  public Boolean isRagChat() {
     return ragChat;
   }
 
-  public void setRagChat(Object ragChat) {
+  public void setRagChat(Boolean ragChat) {
     this.ragChat = ragChat;
   }
 
-  public GUserChatInfo chatCreationDateTime(Object chatCreationDateTime) {
+  public GUserChatInfo chatCreationDateTime(Date chatCreationDateTime) {
     this.chatCreationDateTime = chatCreationDateTime;
     return this;
   }
@@ -164,12 +168,30 @@ public class GUserChatInfo {
    * @return chatCreationDateTime
   **/
   @Schema(description = "")
-  public Object getChatCreationDateTime() {
+  public Date getChatCreationDateTime() {
     return chatCreationDateTime;
   }
 
-  public void setChatCreationDateTime(Object chatCreationDateTime) {
+  public void setChatCreationDateTime(Date chatCreationDateTime) {
     this.chatCreationDateTime = chatCreationDateTime;
+  }
+
+  public GUserChatInfo contextCode(String contextCode) {
+    this.contextCode = contextCode;
+    return this;
+  }
+
+   /**
+   * Get contextCode
+   * @return contextCode
+  **/
+  @Schema(description = "")
+  public String getContextCode() {
+    return contextCode;
+  }
+
+  public void setContextCode(String contextCode) {
+    this.contextCode = contextCode;
   }
 
 
@@ -188,12 +210,13 @@ public class GUserChatInfo {
         Objects.equals(this.chatProfileCode, guserChatInfo.chatProfileCode) &&
         Objects.equals(this.chatModelCode, guserChatInfo.chatModelCode) &&
         Objects.equals(this.ragChat, guserChatInfo.ragChat) &&
-        Objects.equals(this.chatCreationDateTime, guserChatInfo.chatCreationDateTime);
+        Objects.equals(this.chatCreationDateTime, guserChatInfo.chatCreationDateTime) &&
+        Objects.equals(this.contextCode, guserChatInfo.contextCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, description, code, chatProfileCode, chatModelCode, ragChat, chatCreationDateTime);
+    return Objects.hash(username, description, code, chatProfileCode, chatModelCode, ragChat, chatCreationDateTime, contextCode);
   }
 
 
@@ -209,6 +232,7 @@ public class GUserChatInfo {
     sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
     sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");
     sb.append("    chatCreationDateTime: ").append(toIndentedString(chatCreationDateTime)).append("\n");
+    sb.append("    contextCode: ").append(toIndentedString(contextCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

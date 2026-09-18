@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class KnowledgeBaseControllerApi {
     private ApiClient apiClient;
@@ -67,7 +67,7 @@ public class KnowledgeBaseControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteKnowledgeBase");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/deleteKnowledgeBase").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/deleteKnowledgeBase").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -83,7 +83,7 @@ public class KnowledgeBaseControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -93,7 +93,7 @@ public class KnowledgeBaseControllerApi {
      * @return GKnowledgeBase
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GKnowledgeBase findKnowledgeBaseByCode(Object code) throws RestClientException {
+    public GKnowledgeBase findKnowledgeBaseByCode(String code) throws RestClientException {
         return findKnowledgeBaseByCodeWithHttpInfo(code).getBody();
     }
 
@@ -105,13 +105,13 @@ public class KnowledgeBaseControllerApi {
      * @return ResponseEntity&lt;GKnowledgeBase&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GKnowledgeBase> findKnowledgeBaseByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GKnowledgeBase> findKnowledgeBaseByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findKnowledgeBaseByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/findKnowledgeBaseByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/findKnowledgeBaseByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -128,17 +128,17 @@ public class KnowledgeBaseControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GKnowledgeBase> returnType = new ParameterizedTypeReference<GKnowledgeBase>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GKnowledgeBase&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findKnowledgeBasesByQbe(GKnowledgeBase body) throws RestClientException {
+    public List<GKnowledgeBase> findKnowledgeBasesByQbe(GKnowledgeBase body) throws RestClientException {
         return findKnowledgeBasesByQbeWithHttpInfo(body).getBody();
     }
 
@@ -147,16 +147,16 @@ public class KnowledgeBaseControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GKnowledgeBase&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findKnowledgeBasesByQbeWithHttpInfo(GKnowledgeBase body) throws RestClientException {
+    public ResponseEntity<List<GKnowledgeBase>> findKnowledgeBasesByQbeWithHttpInfo(GKnowledgeBase body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findKnowledgeBasesByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/findKnowledgeBasesByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/findKnowledgeBasesByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -173,18 +173,18 @@ public class KnowledgeBaseControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GKnowledgeBase>> returnType = new ParameterizedTypeReference<List<GKnowledgeBase>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param code  (required)
-     * @return Object
+     * @return List&lt;GKnowledgeBase&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getChildKnowledgeBases(Object code) throws RestClientException {
+    public List<GKnowledgeBase> getChildKnowledgeBases(String code) throws RestClientException {
         return getChildKnowledgeBasesWithHttpInfo(code).getBody();
     }
 
@@ -193,16 +193,16 @@ public class KnowledgeBaseControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param code  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GKnowledgeBase&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getChildKnowledgeBasesWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<List<GKnowledgeBase>> getChildKnowledgeBasesWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling getChildKnowledgeBases");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/getChildKnowledgeBases").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/getChildKnowledgeBases").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -218,17 +218,17 @@ public class KnowledgeBaseControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GKnowledgeBase>> returnType = new ParameterizedTypeReference<List<GKnowledgeBase>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GKnowledgeBase&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getKnowledgeBases() throws RestClientException {
+    public List<GKnowledgeBase> getKnowledgeBases() throws RestClientException {
         return getKnowledgeBasesWithHttpInfo().getBody();
     }
 
@@ -236,12 +236,12 @@ public class KnowledgeBaseControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GKnowledgeBase&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getKnowledgeBasesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GKnowledgeBase>> getKnowledgeBasesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/getKnowledgeBases").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/getKnowledgeBases").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -256,8 +256,8 @@ public class KnowledgeBaseControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GKnowledgeBase>> returnType = new ParameterizedTypeReference<List<GKnowledgeBase>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -285,7 +285,7 @@ public class KnowledgeBaseControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertKnowledgeBase");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/insertKnowledgeBase").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/insertKnowledgeBase").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -303,7 +303,7 @@ public class KnowledgeBaseControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GKnowledgeBase> returnType = new ParameterizedTypeReference<GKnowledgeBase>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -331,7 +331,7 @@ public class KnowledgeBaseControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateKnowledgeBase");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/updateKnowledgeBase").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/updateKnowledgeBase").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -349,6 +349,6 @@ public class KnowledgeBaseControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GKnowledgeBase> returnType = new ParameterizedTypeReference<GKnowledgeBase>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

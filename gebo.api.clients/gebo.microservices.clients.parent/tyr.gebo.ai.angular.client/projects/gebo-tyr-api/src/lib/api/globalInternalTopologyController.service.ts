@@ -17,6 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { MicroserviceMetaInfo } from '../model/microserviceMetaInfo';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -60,9 +61,9 @@ export class GlobalInternalTopologyControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGlobalTopology(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGlobalTopology(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGlobalTopology(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGlobalTopology(observe?: 'body', reportProgress?: boolean): Observable<Array<MicroserviceMetaInfo>>;
+    public getGlobalTopology(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MicroserviceMetaInfo>>>;
+    public getGlobalTopology(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MicroserviceMetaInfo>>>;
     public getGlobalTopology(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -80,7 +81,7 @@ export class GlobalInternalTopologyControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GlobalInternalTopologyController/getGlobalTopology`,
+        return this.httpClient.request<Array<MicroserviceMetaInfo>>('get',`${this.basePath}/api/admin/GlobalInternalTopologyController/getGlobalTopology`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -96,9 +97,9 @@ export class GlobalInternalTopologyControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public refresh(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public refresh(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public refresh(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public refresh(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public refresh(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public refresh(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
     public refresh(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -116,7 +117,7 @@ export class GlobalInternalTopologyControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/GlobalInternalTopologyController/refresh`,
+        return this.httpClient.request<boolean>('post',`${this.basePath}/api/admin/GlobalInternalTopologyController/refresh`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

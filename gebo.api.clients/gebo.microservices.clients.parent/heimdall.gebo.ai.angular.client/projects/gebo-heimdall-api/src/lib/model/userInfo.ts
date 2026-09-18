@@ -11,6 +11,6 @@
  */
 
 export interface UserInfo { 
-    username?: any;
-    roles?: any;
+    username?: string;
+    roles?: Array<string>;
 }

@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**user** | **Object** |  | 
-**uiSuccessForward** | **Object** |  | 
-**uiErrorForward** | **Object** |  | 
+**user** | **String** |  | 
+**uiSuccessForward** | **String** |  | 
+**uiErrorForward** | **String** |  | 

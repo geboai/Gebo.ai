@@ -14,6 +14,7 @@ package gebo.microservices.api.client.heimdall.api;
 
 import gebo.microservices.api.client.heimdall.model.ChangePasswordParam;
 import gebo.microservices.api.client.heimdall.model.ChangePasswordResponse;
+import gebo.microservices.api.client.heimdall.model.GroupInfo;
 import gebo.microservices.api.client.heimdall.model.UserInfo;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -70,7 +71,7 @@ public class UserControllerApiTest {
      */
     @Test
     public void getMyGroupsTest() {
-        Object response = api.getMyGroups();
+        List<GroupInfo> response = api.getMyGroups();
 
         // TODO: test validations
     }

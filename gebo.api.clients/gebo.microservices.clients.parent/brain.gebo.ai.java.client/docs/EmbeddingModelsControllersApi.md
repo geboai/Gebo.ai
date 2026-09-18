@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getEmbeddingModelTypes"></a>
 # **getEmbeddingModelTypes**
-> Object getEmbeddingModelTypes()
+> List&lt;GEmbeddingModelType&gt; getEmbeddingModelTypes()
 
 
 
@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 EmbeddingModelsControllersApi apiInstance = new EmbeddingModelsControllersApi();
 try {
-    Object result = apiInstance.getEmbeddingModelTypes();
+    List<GEmbeddingModelType> result = apiInstance.getEmbeddingModelTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling EmbeddingModelsControllersApi#getEmbeddingModelTypes");
@@ -35,7 +35,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GEmbeddingModelType&gt;**](GEmbeddingModelType.md)
 
 ### Authorization
 
@@ -48,7 +48,7 @@ No authorization required
 
 <a name="getRuntimeConfiguredEmbeddingModels"></a>
 # **getRuntimeConfiguredEmbeddingModels**
-> Object getRuntimeConfiguredEmbeddingModels(modelTypeCode)
+> List&lt;ConfigurationEntryGBaseEmbeddingModelConfig&gt; getRuntimeConfiguredEmbeddingModels(modelTypeCode)
 
 
 
@@ -60,9 +60,9 @@ No authorization required
 
 
 EmbeddingModelsControllersApi apiInstance = new EmbeddingModelsControllersApi();
-Object modelTypeCode = null; // Object | 
+String modelTypeCode = "modelTypeCode_example"; // String | 
 try {
-    Object result = apiInstance.getRuntimeConfiguredEmbeddingModels(modelTypeCode);
+    List<ConfigurationEntryGBaseEmbeddingModelConfig> result = apiInstance.getRuntimeConfiguredEmbeddingModels(modelTypeCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling EmbeddingModelsControllersApi#getRuntimeConfiguredEmbeddingModels");
@@ -74,11 +74,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional]
+ **modelTypeCode** | **String**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;ConfigurationEntryGBaseEmbeddingModelConfig&gt;**](ConfigurationEntryGBaseEmbeddingModelConfig.md)
 
 ### Authorization
 

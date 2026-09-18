@@ -1,0 +1,3 @@
+# All files here are inputs to Linux containers - keep LF so no  sneaks into
+# shell hooks, oauth2-proxy config, JSON, etc.
+* text=auto eol=lf

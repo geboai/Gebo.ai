@@ -14,13 +14,14 @@
     <div class="grid w-full">
       <div class="col-11">
 
-        <img src="assets/Gebo.png" width="240" height="60">
+        <img class="gebo-ai-rag-chat-section__brand" src="assets/Gebo.png" alt="Gebo.ai">
 
       </div>
 
       <div class="col-1  flex justify-content-end">
 
         <p-button id="TimesBtn" gebo-ai-label icon="pi pi-times" text="true" outlined="true"
+          ariaLabel="Close chat navigation"
           (onClick)="chatsListAndOptionsVisible=false;"></p-button>
 
       </div>
@@ -93,8 +94,8 @@
         (onNodeDoubleClick)="openChatItem($event)" [loading]="chatsPageLoading">
         <ng-template let-node pTemplate="default">
 
-          <a (click)="node.data?routeToChat(node.data):false" href="javascript:void(0)"
-            style="text-decoration: none;color:black">{{node.label}}</a>
+          <a class="gebo-ai-rag-chat-section__tree-link" (click)="node.data?routeToChat(node.data):false"
+            href="javascript:void(0)">{{node.label}}</a>
 
         </ng-template>
       </p-tree>
@@ -105,17 +106,20 @@
 <div class="gebo-ai-rag-chat-section">
   <div class="gebo-ai-rag-chat-section__menu">
     <p-button id="ChevronLeftBtn" gebo-ai-label (onClick)="chatsListAndOptionsVisible=true;" [text]="true"
+      ariaLabel="Open chat navigation"
       [outlined]="true" icon="pi pi-chevron-left" title="Open chat options section"></p-button>
   </div>
 
   <div class="gebo-ai-rag-chat-section__content">
     @if (openRagChat===true) {
     <gebo-ai-reusable-chat-component [ragsystem]="true" [chatInfo]="currentChat"
+      [disableFilesBrowsers]="disableFilesBrowsers"
       (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
       (updatedChatAction)="onUpdatedChat($event)" [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
     }
     @if (openChat===true) {
     <gebo-ai-reusable-chat-component [ragsystem]="false" [chatInfo]="currentChat"
+      [disableFilesBrowsers]="disableFilesBrowsers"
       (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
       (updatedChatAction)="onUpdatedChat($event)" [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
     }

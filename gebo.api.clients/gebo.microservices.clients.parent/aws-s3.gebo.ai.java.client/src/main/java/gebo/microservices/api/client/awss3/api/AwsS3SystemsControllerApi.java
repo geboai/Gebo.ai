@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:31.417623672+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:35.503809141+02:00[Europe/Rome]")
 
 public class AwsS3SystemsControllerApi {
     private ApiClient apiClient;
@@ -72,7 +72,7 @@ public class AwsS3SystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteAwsS3ProjectEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/deleteAwsS3ProjectEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/deleteAwsS3ProjectEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -88,7 +88,7 @@ public class AwsS3SystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -115,7 +115,7 @@ public class AwsS3SystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteAwsS3System");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/deleteAwsS3System").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/deleteAwsS3System").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -131,7 +131,7 @@ public class AwsS3SystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -159,7 +159,7 @@ public class AwsS3SystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling fastAwsS3Config");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/fastAwsS3Config").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/fastAwsS3Config").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -177,17 +177,17 @@ public class AwsS3SystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGAwsS3System> returnType = new ParameterizedTypeReference<OperationStatusGAwsS3System>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return Object
+     * @return List&lt;GAwsS3ProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findAwsS3EndpointsByProject(Object parentProjectCode) throws RestClientException {
+    public List<GAwsS3ProjectEndpoint> findAwsS3EndpointsByProject(String parentProjectCode) throws RestClientException {
         return findAwsS3EndpointsByProjectWithHttpInfo(parentProjectCode).getBody();
     }
 
@@ -196,16 +196,16 @@ public class AwsS3SystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GAwsS3ProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findAwsS3EndpointsByProjectWithHttpInfo(Object parentProjectCode) throws RestClientException {
+    public ResponseEntity<List<GAwsS3ProjectEndpoint>> findAwsS3EndpointsByProjectWithHttpInfo(String parentProjectCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'parentProjectCode' is set
         if (parentProjectCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'parentProjectCode' when calling findAwsS3EndpointsByProject");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/findAwsS3EndpointsByProject").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/findAwsS3EndpointsByProject").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -221,18 +221,18 @@ public class AwsS3SystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GAwsS3ProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GAwsS3ProjectEndpoint>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GAwsS3ProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findAwsS3EndpointsByQbe(GAwsS3ProjectEndpoint body) throws RestClientException {
+    public List<GAwsS3ProjectEndpoint> findAwsS3EndpointsByQbe(GAwsS3ProjectEndpoint body) throws RestClientException {
         return findAwsS3EndpointsByQbeWithHttpInfo(body).getBody();
     }
 
@@ -241,16 +241,16 @@ public class AwsS3SystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GAwsS3ProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findAwsS3EndpointsByQbeWithHttpInfo(GAwsS3ProjectEndpoint body) throws RestClientException {
+    public ResponseEntity<List<GAwsS3ProjectEndpoint>> findAwsS3EndpointsByQbeWithHttpInfo(GAwsS3ProjectEndpoint body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findAwsS3EndpointsByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/findAwsS3EndpointsByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/findAwsS3EndpointsByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -267,8 +267,8 @@ public class AwsS3SystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GAwsS3ProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GAwsS3ProjectEndpoint>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -278,7 +278,7 @@ public class AwsS3SystemsControllerApi {
      * @return GAwsS3ProjectEndpoint
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GAwsS3ProjectEndpoint findAwsS3ProjectEndpointByCode(Object code) throws RestClientException {
+    public GAwsS3ProjectEndpoint findAwsS3ProjectEndpointByCode(String code) throws RestClientException {
         return findAwsS3ProjectEndpointByCodeWithHttpInfo(code).getBody();
     }
 
@@ -290,13 +290,13 @@ public class AwsS3SystemsControllerApi {
      * @return ResponseEntity&lt;GAwsS3ProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GAwsS3ProjectEndpoint> findAwsS3ProjectEndpointByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GAwsS3ProjectEndpoint> findAwsS3ProjectEndpointByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findAwsS3ProjectEndpointByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/findAwsS3ProjectEndpointByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/findAwsS3ProjectEndpointByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -313,7 +313,7 @@ public class AwsS3SystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GAwsS3ProjectEndpoint> returnType = new ParameterizedTypeReference<GAwsS3ProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -323,7 +323,7 @@ public class AwsS3SystemsControllerApi {
      * @return GAwsS3System
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GAwsS3System findAwsS3SystemByCode(Object code) throws RestClientException {
+    public GAwsS3System findAwsS3SystemByCode(String code) throws RestClientException {
         return findAwsS3SystemByCodeWithHttpInfo(code).getBody();
     }
 
@@ -335,13 +335,13 @@ public class AwsS3SystemsControllerApi {
      * @return ResponseEntity&lt;GAwsS3System&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GAwsS3System> findAwsS3SystemByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GAwsS3System> findAwsS3SystemByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findAwsS3SystemByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/findAwsS3SystemByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/findAwsS3SystemByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -358,7 +358,7 @@ public class AwsS3SystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GAwsS3System> returnType = new ParameterizedTypeReference<GAwsS3System>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -380,7 +380,7 @@ public class AwsS3SystemsControllerApi {
      */
     public ResponseEntity<GContentManagementSystemType> getAwsS3SystemTypeWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/getAwsS3SystemType").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/getAwsS3SystemType").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -396,16 +396,16 @@ public class AwsS3SystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GContentManagementSystemType> returnType = new ParameterizedTypeReference<GContentManagementSystemType>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GAwsS3System&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAwsS3Systems() throws RestClientException {
+    public List<GAwsS3System> getAwsS3Systems() throws RestClientException {
         return getAwsS3SystemsWithHttpInfo().getBody();
     }
 
@@ -413,12 +413,12 @@ public class AwsS3SystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GAwsS3System&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAwsS3SystemsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GAwsS3System>> getAwsS3SystemsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/getAwsS3Systems").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/getAwsS3Systems").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -433,8 +433,8 @@ public class AwsS3SystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GAwsS3System>> returnType = new ParameterizedTypeReference<List<GAwsS3System>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -462,7 +462,7 @@ public class AwsS3SystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertAwsS3ProjectEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/insertAwsS3ProjectEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/insertAwsS3ProjectEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -480,7 +480,7 @@ public class AwsS3SystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GAwsS3ProjectEndpoint> returnType = new ParameterizedTypeReference<GAwsS3ProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -508,7 +508,7 @@ public class AwsS3SystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertAwsS3System");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/insertAwsS3System").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/insertAwsS3System").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -526,7 +526,7 @@ public class AwsS3SystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGAwsS3System> returnType = new ParameterizedTypeReference<OperationStatusGAwsS3System>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -554,7 +554,7 @@ public class AwsS3SystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishAwsS3ProjectEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/publishAwsS3ProjectEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/publishAwsS3ProjectEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -572,7 +572,7 @@ public class AwsS3SystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJobStatus> returnType = new ParameterizedTypeReference<OperationStatusGJobStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -600,7 +600,7 @@ public class AwsS3SystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateAwsS3ProjectEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/updateAwsS3ProjectEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/updateAwsS3ProjectEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -618,7 +618,7 @@ public class AwsS3SystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GAwsS3ProjectEndpoint> returnType = new ParameterizedTypeReference<GAwsS3ProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -646,7 +646,7 @@ public class AwsS3SystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateAwsS3System");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/updateAwsS3System").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/updateAwsS3System").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -664,6 +664,6 @@ public class AwsS3SystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGAwsS3System> returnType = new ParameterizedTypeReference<OperationStatusGAwsS3System>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

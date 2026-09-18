@@ -16,6 +16,8 @@ import gebo.microservices.api.client.brain.model.ChildVirtualFSParam;
 import gebo.microservices.api.client.brain.model.GObjectRefGProjectEndpoint;
 import gebo.microservices.api.client.brain.model.GProject;
 import gebo.microservices.api.client.brain.model.ProjectsResearchFilter;
+import gebo.microservices.api.client.brain.model.VDocumentInfo;
+import gebo.microservices.api.client.brain.model.VFolderInfo;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -57,9 +59,9 @@ public class ProjectsControllerApiTest {
      */
     @Test
     public void findChildProjectsTest() {
-        Object knowledgeBaseCode = null;
-        Object parentProjectCode = null;
-        Object response = api.findChildProjects(knowledgeBaseCode, parentProjectCode);
+        String knowledgeBaseCode = null;
+        String parentProjectCode = null;
+        List<GProject> response = api.findChildProjects(knowledgeBaseCode, parentProjectCode);
 
         // TODO: test validations
     }
@@ -73,9 +75,9 @@ public class ProjectsControllerApiTest {
      */
     @Test
     public void findOtherKnowledgeBaseIncludableProjectsTest() {
-        Object knowledgeBaseCode = null;
-        Object actualSelectedProjects = null;
-        Object response = api.findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode, actualSelectedProjects);
+        String knowledgeBaseCode = null;
+        List<String> actualSelectedProjects = null;
+        List<GProject> response = api.findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode, actualSelectedProjects);
 
         // TODO: test validations
     }
@@ -89,7 +91,7 @@ public class ProjectsControllerApiTest {
      */
     @Test
     public void findProjectByCodeTest() {
-        Object code = null;
+        String code = null;
         GProject response = api.findProjectByCode(code);
 
         // TODO: test validations
@@ -104,8 +106,8 @@ public class ProjectsControllerApiTest {
      */
     @Test
     public void findRootProjectsTest() {
-        Object knowledgeBaseCode = null;
-        Object response = api.findRootProjects(knowledgeBaseCode);
+        String knowledgeBaseCode = null;
+        List<GProject> response = api.findRootProjects(knowledgeBaseCode);
 
         // TODO: test validations
     }
@@ -120,7 +122,7 @@ public class ProjectsControllerApiTest {
     @Test
     public void getChildDocumentsTest() {
         ChildVirtualFSParam body = null;
-        Object response = api.getChildDocuments(body);
+        List<VDocumentInfo> response = api.getChildDocuments(body);
 
         // TODO: test validations
     }
@@ -135,7 +137,7 @@ public class ProjectsControllerApiTest {
     @Test
     public void getChildFoldersTest() {
         ChildVirtualFSParam body = null;
-        Object response = api.getChildFolders(body);
+        List<VFolderInfo> response = api.getChildFolders(body);
 
         // TODO: test validations
     }
@@ -149,7 +151,7 @@ public class ProjectsControllerApiTest {
      */
     @Test
     public void getProjectsTest() {
-        Object response = api.getProjects();
+        List<GProject> response = api.getProjects();
 
         // TODO: test validations
     }
@@ -164,7 +166,7 @@ public class ProjectsControllerApiTest {
     @Test
     public void getRootDocumentsTest() {
         GObjectRefGProjectEndpoint body = null;
-        Object response = api.getRootDocuments(body);
+        List<VDocumentInfo> response = api.getRootDocuments(body);
 
         // TODO: test validations
     }
@@ -179,7 +181,7 @@ public class ProjectsControllerApiTest {
     @Test
     public void getRootFoldersTest() {
         GObjectRefGProjectEndpoint body = null;
-        Object response = api.getRootFolders(body);
+        List<VFolderInfo> response = api.getRootFolders(body);
 
         // TODO: test validations
     }
@@ -209,7 +211,7 @@ public class ProjectsControllerApiTest {
     @Test
     public void searchProjectsTest() {
         ProjectsResearchFilter body = null;
-        Object response = api.searchProjects(body);
+        List<GProject> response = api.searchProjects(body);
 
         // TODO: test validations
     }
@@ -224,7 +226,7 @@ public class ProjectsControllerApiTest {
     @Test
     public void searchProjectsByQbeTest() {
         GProject body = null;
-        Object response = api.searchProjectsByQbe(body);
+        List<GProject> response = api.searchProjectsByQbe(body);
 
         // TODO: test validations
     }

@@ -13,10 +13,12 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.GBaseChatModelChoice;
+import gebo.microservices.api.client.brain.model.GBaseObject;
 import gebo.microservices.api.client.brain.model.GeboChatRequest;
 import gebo.microservices.api.client.brain.model.GeboChatResponse;
 import gebo.microservices.api.client.brain.model.GeboChatUserInfo;
 import gebo.microservices.api.client.brain.model.ModelProviderCapabilities;
+import gebo.microservices.api.client.brain.model.ServerSentEventString;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -58,7 +60,7 @@ public class GeboChatControllerApiTest {
      */
     @Test
     public void getChatModelMetaInfosTest() {
-        Object modelCode = null;
+        String modelCode = null;
         GBaseChatModelChoice response = api.getChatModelMetaInfos(modelCode);
 
         // TODO: test validations
@@ -73,7 +75,7 @@ public class GeboChatControllerApiTest {
      */
     @Test
     public void getChatModelUserInfoTest() {
-        Object modelCode = null;
+        String modelCode = null;
         GeboChatUserInfo response = api.getChatModelUserInfo(modelCode);
 
         // TODO: test validations
@@ -88,7 +90,7 @@ public class GeboChatControllerApiTest {
      */
     @Test
     public void getProviderCapabilitiesTest() {
-        Object modelCode = null;
+        String modelCode = null;
         ModelProviderCapabilities response = api.getProviderCapabilities(modelCode);
 
         // TODO: test validations
@@ -103,7 +105,7 @@ public class GeboChatControllerApiTest {
      */
     @Test
     public void getVisibleKnowledgeBasesTest() {
-        Object response = api.getVisibleKnowledgeBases();
+        List<GBaseObject> response = api.getVisibleKnowledgeBases();
 
         // TODO: test validations
     }
@@ -118,7 +120,7 @@ public class GeboChatControllerApiTest {
     @Test
     public void streamResponseTest() {
         GeboChatRequest body = null;
-        Object response = api.streamResponse(body);
+        List<ServerSentEventString> response = api.streamResponse(body);
 
         // TODO: test validations
     }

@@ -60,7 +60,8 @@ public class GeboUserChatsControllerApiTest {
     @Test
     public void createCleanChatByChatProfileCodeTest() {
         String chatProfileCode = null;
-        GUserChatInfo response = api.createCleanChatByChatProfileCode(chatProfileCode);
+        String contextCode = null;
+        GUserChatInfo response = api.createCleanChatByChatProfileCode(chatProfileCode, contextCode);
 
         // TODO: test validations
     }

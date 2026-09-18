@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.graphicator.api;
 
 import gebo.microservices.api.client.graphicator.model.IngestionFileType;
+import gebo.microservices.api.client.graphicator.model.IngestionHandlerConfig;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -39,7 +40,7 @@ public class IngestionFileTypesLibraryControllerApiTest {
      */
     @Test
     public void getAllFileTypesTest() {
-        Object response = api.getAllFileTypes();
+        List<IngestionFileType> response = api.getAllFileTypes();
 
         // TODO: test validations
     }
@@ -53,7 +54,7 @@ public class IngestionFileTypesLibraryControllerApiTest {
      */
     @Test
     public void getIngestionFileTypeByExtensionTest() {
-        Object extension = null;
+        String extension = null;
         IngestionFileType response = api.getIngestionFileTypeByExtension(extension);
 
         // TODO: test validations
@@ -68,7 +69,7 @@ public class IngestionFileTypesLibraryControllerApiTest {
      */
     @Test
     public void getIngestionReadingModulesTest() {
-        Object response = api.getIngestionReadingModules();
+        List<IngestionHandlerConfig> response = api.getIngestionReadingModules();
 
         // TODO: test validations
     }

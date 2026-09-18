@@ -22,6 +22,7 @@ public final class MultiOauth2ConfigOpaqueTokenAuthenticationManager implements 
 	final SecurityHeaderData header;
 	final List<Oauth2RuntimeConfiguration> oauth2AuthenticationConfigs;
 	final OpaqueTokenAuthenticationConverter converter;
+	final GOauth2ResourceServerUserProvisioner provisioner;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -30,7 +31,7 @@ public final class MultiOauth2ConfigOpaqueTokenAuthenticationManager implements 
 			String introspectionUri = oauth2RuntimeConfiguration.getProviderConfig().getIntrospectionUri();
 			try {
 				SingleOauth2ConfigOpaqueTokenAuthenticationManager manager = new SingleOauth2ConfigOpaqueTokenAuthenticationManager(
-						header, oauth2RuntimeConfiguration, converter);
+						header, oauth2RuntimeConfiguration, converter, provisioner);
 				return manager.authenticate(authentication);
 			} catch (AuthenticationException ex) {
 				// Token not valid for this provider; try next.

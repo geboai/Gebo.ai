@@ -3,4 +3,4 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**documents** | **Object** |  |  [optional]
+**documents** | [**List&lt;IGComponentOriginatedDocument&gt;**](IGComponentOriginatedDocument.md) |  |  [optional]

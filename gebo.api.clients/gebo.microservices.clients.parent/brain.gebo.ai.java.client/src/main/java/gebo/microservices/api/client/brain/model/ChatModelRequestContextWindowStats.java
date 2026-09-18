@@ -22,46 +22,46 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ChatModelRequestContextWindowStats
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ChatModelRequestContextWindowStats {
   @JsonProperty("contextWindowLengthNTokens")
-  private Object contextWindowLengthNTokens = null;
+  private Double contextWindowLengthNTokens = null;
 
   @JsonProperty("availableNTokens")
-  private Object availableNTokens = null;
+  private Double availableNTokens = null;
 
   @JsonProperty("historyNTokens")
-  private Object historyNTokens = null;
+  private Double historyNTokens = null;
 
   @JsonProperty("queryNTokens")
-  private Object queryNTokens = null;
+  private Double queryNTokens = null;
 
   @JsonProperty("documentsNTokens")
-  private Object documentsNTokens = null;
+  private Double documentsNTokens = null;
 
   @JsonProperty("contextDocumentsNTokens")
-  private Object contextDocumentsNTokens = null;
+  private Double contextDocumentsNTokens = null;
 
   @JsonProperty("uploadedDocumentsNTokens")
-  private Object uploadedDocumentsNTokens = null;
+  private Double uploadedDocumentsNTokens = null;
 
   @JsonProperty("availableSharePerc")
-  private Object availableSharePerc = null;
+  private Double availableSharePerc = null;
 
   @JsonProperty("historySharePerc")
-  private Object historySharePerc = null;
+  private Double historySharePerc = null;
 
   @JsonProperty("documentsSharePerc")
-  private Object documentsSharePerc = null;
+  private Double documentsSharePerc = null;
 
   @JsonProperty("contextDocumentsSharePerc")
-  private Object contextDocumentsSharePerc = null;
+  private Double contextDocumentsSharePerc = null;
 
   @JsonProperty("uploadedDocumentsSharePerc")
-  private Object uploadedDocumentsSharePerc = null;
+  private Double uploadedDocumentsSharePerc = null;
 
-  public ChatModelRequestContextWindowStats contextWindowLengthNTokens(Object contextWindowLengthNTokens) {
+  public ChatModelRequestContextWindowStats contextWindowLengthNTokens(Double contextWindowLengthNTokens) {
     this.contextWindowLengthNTokens = contextWindowLengthNTokens;
     return this;
   }
@@ -71,15 +71,15 @@ public class ChatModelRequestContextWindowStats {
    * @return contextWindowLengthNTokens
   **/
   @Schema(description = "")
-  public Object getContextWindowLengthNTokens() {
+  public Double getContextWindowLengthNTokens() {
     return contextWindowLengthNTokens;
   }
 
-  public void setContextWindowLengthNTokens(Object contextWindowLengthNTokens) {
+  public void setContextWindowLengthNTokens(Double contextWindowLengthNTokens) {
     this.contextWindowLengthNTokens = contextWindowLengthNTokens;
   }
 
-  public ChatModelRequestContextWindowStats availableNTokens(Object availableNTokens) {
+  public ChatModelRequestContextWindowStats availableNTokens(Double availableNTokens) {
     this.availableNTokens = availableNTokens;
     return this;
   }
@@ -89,15 +89,15 @@ public class ChatModelRequestContextWindowStats {
    * @return availableNTokens
   **/
   @Schema(description = "")
-  public Object getAvailableNTokens() {
+  public Double getAvailableNTokens() {
     return availableNTokens;
   }
 
-  public void setAvailableNTokens(Object availableNTokens) {
+  public void setAvailableNTokens(Double availableNTokens) {
     this.availableNTokens = availableNTokens;
   }
 
-  public ChatModelRequestContextWindowStats historyNTokens(Object historyNTokens) {
+  public ChatModelRequestContextWindowStats historyNTokens(Double historyNTokens) {
     this.historyNTokens = historyNTokens;
     return this;
   }
@@ -107,15 +107,15 @@ public class ChatModelRequestContextWindowStats {
    * @return historyNTokens
   **/
   @Schema(description = "")
-  public Object getHistoryNTokens() {
+  public Double getHistoryNTokens() {
     return historyNTokens;
   }
 
-  public void setHistoryNTokens(Object historyNTokens) {
+  public void setHistoryNTokens(Double historyNTokens) {
     this.historyNTokens = historyNTokens;
   }
 
-  public ChatModelRequestContextWindowStats queryNTokens(Object queryNTokens) {
+  public ChatModelRequestContextWindowStats queryNTokens(Double queryNTokens) {
     this.queryNTokens = queryNTokens;
     return this;
   }
@@ -125,15 +125,15 @@ public class ChatModelRequestContextWindowStats {
    * @return queryNTokens
   **/
   @Schema(description = "")
-  public Object getQueryNTokens() {
+  public Double getQueryNTokens() {
     return queryNTokens;
   }
 
-  public void setQueryNTokens(Object queryNTokens) {
+  public void setQueryNTokens(Double queryNTokens) {
     this.queryNTokens = queryNTokens;
   }
 
-  public ChatModelRequestContextWindowStats documentsNTokens(Object documentsNTokens) {
+  public ChatModelRequestContextWindowStats documentsNTokens(Double documentsNTokens) {
     this.documentsNTokens = documentsNTokens;
     return this;
   }
@@ -143,15 +143,15 @@ public class ChatModelRequestContextWindowStats {
    * @return documentsNTokens
   **/
   @Schema(description = "")
-  public Object getDocumentsNTokens() {
+  public Double getDocumentsNTokens() {
     return documentsNTokens;
   }
 
-  public void setDocumentsNTokens(Object documentsNTokens) {
+  public void setDocumentsNTokens(Double documentsNTokens) {
     this.documentsNTokens = documentsNTokens;
   }
 
-  public ChatModelRequestContextWindowStats contextDocumentsNTokens(Object contextDocumentsNTokens) {
+  public ChatModelRequestContextWindowStats contextDocumentsNTokens(Double contextDocumentsNTokens) {
     this.contextDocumentsNTokens = contextDocumentsNTokens;
     return this;
   }
@@ -161,15 +161,15 @@ public class ChatModelRequestContextWindowStats {
    * @return contextDocumentsNTokens
   **/
   @Schema(description = "")
-  public Object getContextDocumentsNTokens() {
+  public Double getContextDocumentsNTokens() {
     return contextDocumentsNTokens;
   }
 
-  public void setContextDocumentsNTokens(Object contextDocumentsNTokens) {
+  public void setContextDocumentsNTokens(Double contextDocumentsNTokens) {
     this.contextDocumentsNTokens = contextDocumentsNTokens;
   }
 
-  public ChatModelRequestContextWindowStats uploadedDocumentsNTokens(Object uploadedDocumentsNTokens) {
+  public ChatModelRequestContextWindowStats uploadedDocumentsNTokens(Double uploadedDocumentsNTokens) {
     this.uploadedDocumentsNTokens = uploadedDocumentsNTokens;
     return this;
   }
@@ -179,15 +179,15 @@ public class ChatModelRequestContextWindowStats {
    * @return uploadedDocumentsNTokens
   **/
   @Schema(description = "")
-  public Object getUploadedDocumentsNTokens() {
+  public Double getUploadedDocumentsNTokens() {
     return uploadedDocumentsNTokens;
   }
 
-  public void setUploadedDocumentsNTokens(Object uploadedDocumentsNTokens) {
+  public void setUploadedDocumentsNTokens(Double uploadedDocumentsNTokens) {
     this.uploadedDocumentsNTokens = uploadedDocumentsNTokens;
   }
 
-  public ChatModelRequestContextWindowStats availableSharePerc(Object availableSharePerc) {
+  public ChatModelRequestContextWindowStats availableSharePerc(Double availableSharePerc) {
     this.availableSharePerc = availableSharePerc;
     return this;
   }
@@ -197,15 +197,15 @@ public class ChatModelRequestContextWindowStats {
    * @return availableSharePerc
   **/
   @Schema(description = "")
-  public Object getAvailableSharePerc() {
+  public Double getAvailableSharePerc() {
     return availableSharePerc;
   }
 
-  public void setAvailableSharePerc(Object availableSharePerc) {
+  public void setAvailableSharePerc(Double availableSharePerc) {
     this.availableSharePerc = availableSharePerc;
   }
 
-  public ChatModelRequestContextWindowStats historySharePerc(Object historySharePerc) {
+  public ChatModelRequestContextWindowStats historySharePerc(Double historySharePerc) {
     this.historySharePerc = historySharePerc;
     return this;
   }
@@ -215,15 +215,15 @@ public class ChatModelRequestContextWindowStats {
    * @return historySharePerc
   **/
   @Schema(description = "")
-  public Object getHistorySharePerc() {
+  public Double getHistorySharePerc() {
     return historySharePerc;
   }
 
-  public void setHistorySharePerc(Object historySharePerc) {
+  public void setHistorySharePerc(Double historySharePerc) {
     this.historySharePerc = historySharePerc;
   }
 
-  public ChatModelRequestContextWindowStats documentsSharePerc(Object documentsSharePerc) {
+  public ChatModelRequestContextWindowStats documentsSharePerc(Double documentsSharePerc) {
     this.documentsSharePerc = documentsSharePerc;
     return this;
   }
@@ -233,15 +233,15 @@ public class ChatModelRequestContextWindowStats {
    * @return documentsSharePerc
   **/
   @Schema(description = "")
-  public Object getDocumentsSharePerc() {
+  public Double getDocumentsSharePerc() {
     return documentsSharePerc;
   }
 
-  public void setDocumentsSharePerc(Object documentsSharePerc) {
+  public void setDocumentsSharePerc(Double documentsSharePerc) {
     this.documentsSharePerc = documentsSharePerc;
   }
 
-  public ChatModelRequestContextWindowStats contextDocumentsSharePerc(Object contextDocumentsSharePerc) {
+  public ChatModelRequestContextWindowStats contextDocumentsSharePerc(Double contextDocumentsSharePerc) {
     this.contextDocumentsSharePerc = contextDocumentsSharePerc;
     return this;
   }
@@ -251,15 +251,15 @@ public class ChatModelRequestContextWindowStats {
    * @return contextDocumentsSharePerc
   **/
   @Schema(description = "")
-  public Object getContextDocumentsSharePerc() {
+  public Double getContextDocumentsSharePerc() {
     return contextDocumentsSharePerc;
   }
 
-  public void setContextDocumentsSharePerc(Object contextDocumentsSharePerc) {
+  public void setContextDocumentsSharePerc(Double contextDocumentsSharePerc) {
     this.contextDocumentsSharePerc = contextDocumentsSharePerc;
   }
 
-  public ChatModelRequestContextWindowStats uploadedDocumentsSharePerc(Object uploadedDocumentsSharePerc) {
+  public ChatModelRequestContextWindowStats uploadedDocumentsSharePerc(Double uploadedDocumentsSharePerc) {
     this.uploadedDocumentsSharePerc = uploadedDocumentsSharePerc;
     return this;
   }
@@ -269,11 +269,11 @@ public class ChatModelRequestContextWindowStats {
    * @return uploadedDocumentsSharePerc
   **/
   @Schema(description = "")
-  public Object getUploadedDocumentsSharePerc() {
+  public Double getUploadedDocumentsSharePerc() {
     return uploadedDocumentsSharePerc;
   }
 
-  public void setUploadedDocumentsSharePerc(Object uploadedDocumentsSharePerc) {
+  public void setUploadedDocumentsSharePerc(Double uploadedDocumentsSharePerc) {
     this.uploadedDocumentsSharePerc = uploadedDocumentsSharePerc;
   }
 

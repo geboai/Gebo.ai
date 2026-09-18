@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SecurityHeaderData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
 
 public class SecurityHeaderData {
   @JsonProperty("token")
@@ -33,7 +33,8 @@ public class SecurityHeaderData {
    */
   public enum AuthTypeEnum {
     OAUTH2("OAUTH2"),
-    LOCAL_JWT("LOCAL_JWT");
+    LOCAL_JWT("LOCAL_JWT"),
+    AUTO("AUTO");
 
     private String value;
 

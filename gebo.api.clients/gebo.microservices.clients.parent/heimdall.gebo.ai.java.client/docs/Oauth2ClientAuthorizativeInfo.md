@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**registrationId** | **Object** |  |  [optional]
-**providerName** | **Object** |  |  [optional]
-**description** | **Object** |  |  [optional]
+**registrationId** | **String** |  |  [optional]
+**providerName** | **String** |  |  [optional]
+**description** | **String** |  |  [optional]

@@ -14,14 +14,14 @@ import { SearchResultReference } from './searchResultReference';
 import { VFilesystemReference } from './vFilesystemReference';
 
 export interface SearchResult { 
-    id: any;
+    id: string;
     resultReference: SearchResultReference;
     navigationReference: VFilesystemReference;
-    descriptiveText: any;
-    nestingLevel?: any;
-    modificationDate?: any;
-    childs?: any;
+    descriptiveText: string;
+    nestingLevel?: number;
+    modificationDate?: Date;
+    childs?: Array<SearchResult>;
     originComponent: GeboComponentInfo;
-    systemConfigurationCode: any;
-    code: any;
+    systemConfigurationCode: string;
+    code: string;
 }

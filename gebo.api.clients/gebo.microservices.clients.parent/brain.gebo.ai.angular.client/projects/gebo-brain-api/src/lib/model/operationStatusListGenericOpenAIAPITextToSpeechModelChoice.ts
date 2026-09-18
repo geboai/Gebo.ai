@@ -9,10 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GUserMessage } from './gUserMessage';
+import { GenericOpenAIAPITextToSpeechModelChoice } from './genericOpenAIAPITextToSpeechModelChoice';
 
 export interface OperationStatusListGenericOpenAIAPITextToSpeechModelChoice { 
-    result?: any;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    result?: Array<GenericOpenAIAPITextToSpeechModelChoice>;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

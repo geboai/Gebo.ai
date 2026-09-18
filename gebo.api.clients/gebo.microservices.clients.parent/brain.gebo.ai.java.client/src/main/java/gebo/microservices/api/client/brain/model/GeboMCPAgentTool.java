@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboMCPAgentTool
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboMCPAgentTool {
   @JsonProperty("agentConfigCode")
-  private Object agentConfigCode = null;
+  private String agentConfigCode = null;
 
   @JsonProperty("networkConfigCode")
-  private Object networkConfigCode = null;
+  private String networkConfigCode = null;
 
   @JsonProperty("toolName")
-  private Object toolName = null;
+  private String toolName = null;
 
-  public GeboMCPAgentTool agentConfigCode(Object agentConfigCode) {
+  public GeboMCPAgentTool agentConfigCode(String agentConfigCode) {
     this.agentConfigCode = agentConfigCode;
     return this;
   }
@@ -44,15 +44,15 @@ public class GeboMCPAgentTool {
    * @return agentConfigCode
   **/
   @Schema(required = true, description = "")
-  public Object getAgentConfigCode() {
+  public String getAgentConfigCode() {
     return agentConfigCode;
   }
 
-  public void setAgentConfigCode(Object agentConfigCode) {
+  public void setAgentConfigCode(String agentConfigCode) {
     this.agentConfigCode = agentConfigCode;
   }
 
-  public GeboMCPAgentTool networkConfigCode(Object networkConfigCode) {
+  public GeboMCPAgentTool networkConfigCode(String networkConfigCode) {
     this.networkConfigCode = networkConfigCode;
     return this;
   }
@@ -62,15 +62,15 @@ public class GeboMCPAgentTool {
    * @return networkConfigCode
   **/
   @Schema(required = true, description = "")
-  public Object getNetworkConfigCode() {
+  public String getNetworkConfigCode() {
     return networkConfigCode;
   }
 
-  public void setNetworkConfigCode(Object networkConfigCode) {
+  public void setNetworkConfigCode(String networkConfigCode) {
     this.networkConfigCode = networkConfigCode;
   }
 
-  public GeboMCPAgentTool toolName(Object toolName) {
+  public GeboMCPAgentTool toolName(String toolName) {
     this.toolName = toolName;
     return this;
   }
@@ -80,11 +80,11 @@ public class GeboMCPAgentTool {
    * @return toolName
   **/
   @Schema(required = true, description = "")
-  public Object getToolName() {
+  public String getToolName() {
     return toolName;
   }
 
-  public void setToolName(Object toolName) {
+  public void setToolName(String toolName) {
     this.toolName = toolName;
   }
 

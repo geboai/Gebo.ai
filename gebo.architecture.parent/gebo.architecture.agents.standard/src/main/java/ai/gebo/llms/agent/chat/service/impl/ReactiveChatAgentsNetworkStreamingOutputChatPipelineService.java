@@ -1,5 +1,6 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
+import java.util.concurrent.atomic.AtomicReference;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -32,21 +33,48 @@ import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
-import lombok.AllArgsConstructor;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
-@AllArgsConstructor
 public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		implements IStreamingOutputChatPipelineService {
 	private static final String SERVICE_ID = "ReactiveChatAgentsNetworkStreamingOutputChatPipelineService";
 	private static final String EXCEPTION_CREATING_NETWORK_OF_AGENTS = "Exception creating network of agents";
 	private static final String EXCEPTION_RUNNING_NETWORK_OF_AGENTS = "Exception running network of agents";
-	private final IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory;
-	private final IDynamicAgentsNetworkDataSource agentsNetworkDataSource;
-	private final IGChatSessionLifeCycleService lifeCycleService;
+	protected final IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory;
+	protected final IDynamicAgentsNetworkDataSource agentsNetworkDataSource;
+	protected final IGChatSessionLifeCycleService lifeCycleService;
+	/**
+	 * Pipeline step id. The chat pipeline step repository indexes steps globally by
+	 * {@link #getStepId()}, so a second network-streaming step (e.g. the office
+	 * assistant network) must carry a distinct id; this is constructor-injectable
+	 * for exactly that reuse, defaulting to {@link #SERVICE_ID} for the standard
+	 * default-network step.
+	 */
+	private final String stepId;
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.class);
+
+	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
+			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService) {
+		this(factory, agentsNetworkDataSource, lifeCycleService, SERVICE_ID);
+	}
+
+	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
+			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
+			String stepId) {
+		this.factory = factory;
+		this.agentsNetworkDataSource = agentsNetworkDataSource;
+		this.lifeCycleService = lifeCycleService;
+		this.stepId = stepId;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Registered reactive chat agents network pipeline step id:" + stepId + " over network factory:"
+					+ (factory != null ? factory.getId() : null));
+		}
+	}
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -57,7 +85,40 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	@Override
 	public String getStepId() {
 
-		return SERVICE_ID;
+		return stepId;
+	}
+
+	/**
+	 * Builds the environment map seeded into the agents network session
+	 * ({@code session.getEnvironment()}). The default network contributes the
+	 * available knowledge-base codes and the user intent. Subclasses (e.g. the
+	 * office assistant network) override this to enrich the shared environment with
+	 * additional entries - such as the document fragments the user is editing -
+	 * while keeping the standard entries by calling {@code super}.
+	 */
+	protected Map<String, Object> buildNetworkEnvironment(ChatPipelineExecutionRuntimeData runtimeData)
+			throws LLMConfigException, GeboChatSessionLifecycleException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin buildNetworkEnvironment(...) pipeline step:" + getStepId());
+		}
+		final Map<String, Object> environment = new HashMap<String, Object>();
+		final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
+		List<GKnowledgeBase> knowledgeBases = lifeCycleService.getSessionAvailableKnowledgeBases(request);
+		List<String> knowledgeBaseCodes = knowledgeBases.stream().map(x -> x.getCode()).toList();
+		environment.put(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE, knowledgeBaseCodes);
+		environment.put(StandardAgentsNetworkEnvironmentEntries.USER_INTENT,
+				request.getUserIntent() != null ? request.getUserIntent() : DeliverableIntent.SUMMARY);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End buildNetworkEnvironment(...) knowledgeBases:" + knowledgeBaseCodes.size() + " userIntent:"
+					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Knowledge base codes seeded into the network environment: " + knowledgeBaseCodes);
+			LOGGER.trace("<USER_QUERY>");
+			LOGGER.trace(String.valueOf(request.getQuery()));
+			LOGGER.trace("</USER_QUERY>");
+		}
+		return environment;
 	}
 
 	@Override
@@ -78,17 +139,14 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 			INotificationSink notificationSink = sinkUIEmitter;
 			final GeboChatResponse responseReference = runtimeData.getChatResponse();
-			final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
 			List<GAgentsNetwork> ds = this.agentsNetworkDataSource.getConfigurations();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("The agents network data source offers " + ds.size()
+						+ " network(s); the first one is used as the agentic chat network");
+			}
 			if (ds.isEmpty())
 				throw new ChatPipelineException("No agentic chat network set");
-			final Map<String, Object> environment = new HashMap<String, Object>();
-			List<GKnowledgeBase> knowledgeBases = lifeCycleService
-					.getSessionAvailableKnowledgeBases(runtimeData.getRequestResources().getCurrentRequest());
-			List<String> knowledgeBaseCodes = knowledgeBases.stream().map(x -> x.getCode()).toList();
-			environment.put(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE, knowledgeBaseCodes);
-			environment.put(StandardAgentsNetworkEnvironmentEntries.USER_INTENT,
-					request.getUserIntent() != null ? request.getUserIntent() : DeliverableIntent.SUMMARY);
+			final Map<String, Object> environment = buildNetworkEnvironment(runtimeData);
 			GAgentsNetwork network = ds.get(0);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Creating runtime network of agents from config code:" + network.getCode());
@@ -97,17 +155,32 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 					ChatPipelineExecutionRuntimeData.class, GeboChatMessageEnvelope.class, runAs);
 			Flux<GeboChatMessageEnvelope> flux = runtimeNetwork.getFlux();
 			Flux<GeboChatMessageEnvelope> trailingFlux = Flux.defer(() -> {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Emitting the trailing last-message envelope for pipeline step:" + getStepId());
+				}
 				GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(responseReference);
 				envelope.setLastMessage(true);
 				return Flux.just(envelope);
 
 			});
+			// The network runs on its own worker rather than inside the doOnSubscribe
+			// callback. Reactor invokes that callback BEFORE handing the subscription to the
+			// downstream subscriber, so running the network there finished the whole thing -
+			// every agent, every LLM call - before anyone could request a single element. The
+			// sink behind this flux is unicast().onBackpressureBuffer(), so everything the
+			// agents produced accumulated there and was delivered in one burst at the end.
+			//
+			// Measured on a report of 2,264 chunks: the browser saw nothing for 55 seconds and
+			// then the entire answer at once. That defeats both halves of the streaming design
+			// - the writer emitting its text chunk by chunk, and the network replacing one
+			// self contained cycle output with the next as the report is refined.
+			final AtomicReference<Disposable> networkExecution = new AtomicReference<Disposable>();
 			flux = flux.doOnSubscribe((subscription) -> {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Subscription received, launching executeNetwork(...) for network code:"
 							+ network.getCode());
 				}
-				runAs.doAs(() -> {
+				networkExecution.set(Schedulers.boundedElastic().schedule(() -> runAs.doAs(() -> {
 					try {
 
 						runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(),
@@ -115,12 +188,29 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 					} catch (AgentException | LLMConfigException e) {
 						LOGGER.error(EXCEPTION_RUNNING_NETWORK_OF_AGENTS, e);
 					}
-				});
+				})));
 			}).map(x -> {
 				if (x != null && x.getContent() instanceof GeboChatResponse response) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Merging a network chat response onto the pipeline response, responseLength:"
+								+ (response.getQueryResponse() != null ? response.getQueryResponse().length() : 0)
+								+ " calledFunctions:"
+								+ (response.getCalledFunctions() != null ? response.getCalledFunctions().size() : 0)
+								+ " documentRefs:"
+								+ (response.getDocumentsRef() != null ? response.getDocumentsRef().size() : 0));
+					}
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("<NETWORK_CHAT_RESPONSE>");
+						LOGGER.trace(response.getQueryResponse());
+						LOGGER.trace("</NETWORK_CHAT_RESPONSE>");
+					}
 					responseReference.setQueryResponse(response.getQueryResponse());
 					responseReference.setCalledFunctions(response.getCalledFunctions());
 					responseReference.setDocumentsRef(response.getDocumentsRef());
+					// Carry any additional content the writer produced (e.g. the office
+					// assistant's document part) onto the emitted response. Null for the
+					// default network, which never sets it.
+					responseReference.setAdditionalContents(response.getAdditionalContents());
 					return new GeboChatMessageEnvelope(responseReference);
 				}
 				return x;
@@ -128,15 +218,24 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Reactive chat agents network flux cancelled, disposing runtime network");
 				}
+				// The network now outlives the subscribe call, so a cancelled flux has to stop
+				// it explicitly: without this the agents would keep calling models and paying
+				// for answers nobody is listening to any more.
+				disposeNetworkExecution(networkExecution);
 				runtimeNetwork.dispose();
 			}).doFinally(signalType -> {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Reactive chat agents network flux terminated with signal:" + signalType
 							+ ", disposing runtime network");
 				}
+				disposeNetworkExecution(networkExecution);
 				runtimeNetwork.dispose();
 			});
 			;
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End execute(...) reactive chat agents network streaming pipeline step:" + getStepId()
+						+ ", the output flux is ready to be subscribed");
+			}
 			return flux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 		} catch (NetworkOfAgentsException e) {
 			LOGGER.error(EXCEPTION_CREATING_NETWORK_OF_AGENTS, e);
@@ -145,4 +244,16 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 
 	}
 
+	/**
+	 * Stops the worker running the network, if it is still running.
+	 * <p>
+	 * Disposing a task that has already finished is a no-op, and the reference is null
+	 * when the flux terminated before anything subscribed.
+	 */
+	private void disposeNetworkExecution(AtomicReference<Disposable> networkExecution) {
+		Disposable execution = networkExecution.getAndSet(null);
+		if (execution != null && !execution.isDisposed()) {
+			execution.dispose();
+		}
+	}
 }

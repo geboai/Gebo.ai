@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.AutotuneVectorStoreInfo;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -38,7 +39,7 @@ public class GeboAdminRagAutotuneControllerApiTest {
      */
     @Test
     public void getLatestComputedVectorStoresTest() {
-        Object response = api.getLatestComputedVectorStores();
+        List<AutotuneVectorStoreInfo> response = api.getLatestComputedVectorStores();
 
         // TODO: test validations
     }

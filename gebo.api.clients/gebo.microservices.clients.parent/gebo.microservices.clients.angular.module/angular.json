@@ -1,0 +1,33 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "gebo-microservices-clients": {
+      "projectType": "library",
+      "root": "projects/gebo-microservices-clients",
+      "sourceRoot": "projects/gebo-microservices-clients/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/gebo-microservices-clients/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/gebo-microservices-clients/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/gebo-microservices-clients/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
+}

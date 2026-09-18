@@ -18,29 +18,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * UserspaceKnowledgebaseDto
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:44:00.182052971+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.206631637+02:00[Europe/Rome]")
 
 public class UserspaceKnowledgebaseDto {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("owned")
-  private Object owned = null;
+  private Boolean owned = null;
 
   @JsonProperty("parentKnowledgebaseCode")
-  private Object parentKnowledgebaseCode = null;
+  private String parentKnowledgebaseCode = null;
 
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
-  public UserspaceKnowledgebaseDto code(Object code) {
+  public UserspaceKnowledgebaseDto code(String code) {
     this.code = code;
     return this;
   }
@@ -50,15 +52,15 @@ public class UserspaceKnowledgebaseDto {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public UserspaceKnowledgebaseDto description(Object description) {
+  public UserspaceKnowledgebaseDto description(String description) {
     this.description = description;
     return this;
   }
@@ -68,15 +70,15 @@ public class UserspaceKnowledgebaseDto {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public UserspaceKnowledgebaseDto owned(Object owned) {
+  public UserspaceKnowledgebaseDto owned(Boolean owned) {
     this.owned = owned;
     return this;
   }
@@ -86,15 +88,15 @@ public class UserspaceKnowledgebaseDto {
    * @return owned
   **/
   @Schema(description = "")
-  public Object getOwned() {
+  public Boolean isOwned() {
     return owned;
   }
 
-  public void setOwned(Object owned) {
+  public void setOwned(Boolean owned) {
     this.owned = owned;
   }
 
-  public UserspaceKnowledgebaseDto parentKnowledgebaseCode(Object parentKnowledgebaseCode) {
+  public UserspaceKnowledgebaseDto parentKnowledgebaseCode(String parentKnowledgebaseCode) {
     this.parentKnowledgebaseCode = parentKnowledgebaseCode;
     return this;
   }
@@ -104,16 +106,24 @@ public class UserspaceKnowledgebaseDto {
    * @return parentKnowledgebaseCode
   **/
   @Schema(description = "")
-  public Object getParentKnowledgebaseCode() {
+  public String getParentKnowledgebaseCode() {
     return parentKnowledgebaseCode;
   }
 
-  public void setParentKnowledgebaseCode(Object parentKnowledgebaseCode) {
+  public void setParentKnowledgebaseCode(String parentKnowledgebaseCode) {
     this.parentKnowledgebaseCode = parentKnowledgebaseCode;
   }
 
-  public UserspaceKnowledgebaseDto accessibleGroups(Object accessibleGroups) {
+  public UserspaceKnowledgebaseDto accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public UserspaceKnowledgebaseDto addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -122,11 +132,11 @@ public class UserspaceKnowledgebaseDto {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 

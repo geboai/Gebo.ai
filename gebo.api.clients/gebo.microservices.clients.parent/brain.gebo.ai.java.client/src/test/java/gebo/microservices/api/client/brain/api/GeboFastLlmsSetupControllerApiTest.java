@@ -14,6 +14,7 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.ComponentLLMSStatus;
 import gebo.microservices.api.client.brain.model.LLMAutoconfigureCreationData;
+import gebo.microservices.api.client.brain.model.LLMCreateModelData;
 import gebo.microservices.api.client.brain.model.LLMCredentialsCreationData;
 import gebo.microservices.api.client.brain.model.LLMCredentialsVerificationData;
 import gebo.microservices.api.client.brain.model.LLMModelsLookupParameter;
@@ -78,7 +79,7 @@ public class GeboFastLlmsSetupControllerApiTest {
      */
     @Test
     public void createLLMSTest() {
-        Object body = null;
+        List<LLMCreateModelData> body = null;
         OperationStatusLLMSModelsCreationResult response = api.createLLMS(body);
 
         // TODO: test validations

@@ -11,8 +11,8 @@
  */
 
 export interface ConfluencePeopleFilter { 
-    creatorsList?: any;
-    contributorsList?: any;
-    mentionsList?: any;
-    ownersList?: any;
+    creatorsList?: Array<string>;
+    contributorsList?: Array<string>;
+    mentionsList?: Array<string>;
+    ownersList?: Array<string>;
 }

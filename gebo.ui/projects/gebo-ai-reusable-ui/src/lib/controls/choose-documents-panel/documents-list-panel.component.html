@@ -12,9 +12,12 @@
 
 
 
-<p-panel [header]="title" [formGroup]="formGroup">
-  <p-blockUI [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+<p-panel [header]="title" [formGroup]="formGroup" #docsListPanel>
+  <!-- [target] scopes the mask to this panel; without it PrimeNG masks the whole document. -->
+  <p-blockUI [blocked]="loading" [target]="docsListPanel">
+    @if (loading) {
+      <i class="pi pi-lock" style="font-size: 3rem"></i>
+    }
   </p-blockUI>
   <div class="grid">
     <div class="col-12">

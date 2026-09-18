@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.tyr.api;
 
+import gebo.microservices.api.client.tyr.model.MicroserviceMetaInfo;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -38,7 +39,7 @@ public class GlobalInternalTopologyControllerApiTest {
      */
     @Test
     public void getGlobalTopologyTest() {
-        Object response = api.getGlobalTopology();
+        List<MicroserviceMetaInfo> response = api.getGlobalTopology();
 
         // TODO: test validations
     }
@@ -52,7 +53,7 @@ public class GlobalInternalTopologyControllerApiTest {
      */
     @Test
     public void refreshTest() {
-        Object response = api.refresh();
+        Boolean response = api.refresh();
 
         // TODO: test validations
     }

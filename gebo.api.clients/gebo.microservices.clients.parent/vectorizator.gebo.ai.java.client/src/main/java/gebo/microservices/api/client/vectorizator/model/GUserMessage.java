@@ -22,31 +22,64 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GUserMessage
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:44:05.740376061+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:28.382074718+02:00[Europe/Rome]")
 
 public class GUserMessage {
-  @JsonProperty("severity")
-  private Object severity = null;
+  /**
+   * Gets or Sets severity
+   */
+  public enum SeverityEnum {
+    INFO("info"),
+    WARN("warn"),
+    ERROR("error"),
+    SUCCESS("success");
+
+    private String value;
+
+    SeverityEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static SeverityEnum fromValue(String input) {
+      for (SeverityEnum b : SeverityEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("severity")
+  private SeverityEnum severity = null;
 
   @JsonProperty("summary")
-  private Object summary = null;
+  private String summary = null;
 
   @JsonProperty("detail")
-  private Object detail = null;
+  private String detail = null;
 
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("key")
-  private Object key = null;
+  private String key = null;
 
   @JsonProperty("jobId")
-  private Object jobId = null;
+  private String jobId = null;
 
   @JsonProperty("timestamp")
-  private Object timestamp = null;
+  private Long timestamp = null;
 
-  public GUserMessage severity(Object severity) {
+  public GUserMessage severity(SeverityEnum severity) {
     this.severity = severity;
     return this;
   }
@@ -56,15 +89,15 @@ public class GUserMessage {
    * @return severity
   **/
   @Schema(required = true, description = "")
-  public Object getSeverity() {
+  public SeverityEnum getSeverity() {
     return severity;
   }
 
-  public void setSeverity(Object severity) {
+  public void setSeverity(SeverityEnum severity) {
     this.severity = severity;
   }
 
-  public GUserMessage summary(Object summary) {
+  public GUserMessage summary(String summary) {
     this.summary = summary;
     return this;
   }
@@ -74,15 +107,15 @@ public class GUserMessage {
    * @return summary
   **/
   @Schema(required = true, description = "")
-  public Object getSummary() {
+  public String getSummary() {
     return summary;
   }
 
-  public void setSummary(Object summary) {
+  public void setSummary(String summary) {
     this.summary = summary;
   }
 
-  public GUserMessage detail(Object detail) {
+  public GUserMessage detail(String detail) {
     this.detail = detail;
     return this;
   }
@@ -92,15 +125,15 @@ public class GUserMessage {
    * @return detail
   **/
   @Schema(required = true, description = "")
-  public Object getDetail() {
+  public String getDetail() {
     return detail;
   }
 
-  public void setDetail(Object detail) {
+  public void setDetail(String detail) {
     this.detail = detail;
   }
 
-  public GUserMessage id(Object id) {
+  public GUserMessage id(String id) {
     this.id = id;
     return this;
   }
@@ -110,15 +143,15 @@ public class GUserMessage {
    * @return id
   **/
   @Schema(required = true, description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public GUserMessage key(Object key) {
+  public GUserMessage key(String key) {
     this.key = key;
     return this;
   }
@@ -128,15 +161,15 @@ public class GUserMessage {
    * @return key
   **/
   @Schema(description = "")
-  public Object getKey() {
+  public String getKey() {
     return key;
   }
 
-  public void setKey(Object key) {
+  public void setKey(String key) {
     this.key = key;
   }
 
-  public GUserMessage jobId(Object jobId) {
+  public GUserMessage jobId(String jobId) {
     this.jobId = jobId;
     return this;
   }
@@ -146,15 +179,15 @@ public class GUserMessage {
    * @return jobId
   **/
   @Schema(required = true, description = "")
-  public Object getJobId() {
+  public String getJobId() {
     return jobId;
   }
 
-  public void setJobId(Object jobId) {
+  public void setJobId(String jobId) {
     this.jobId = jobId;
   }
 
-  public GUserMessage timestamp(Object timestamp) {
+  public GUserMessage timestamp(Long timestamp) {
     this.timestamp = timestamp;
     return this;
   }
@@ -164,11 +197,11 @@ public class GUserMessage {
    * @return timestamp
   **/
   @Schema(required = true, description = "")
-  public Object getTimestamp() {
+  public Long getTimestamp() {
     return timestamp;
   }
 
-  public void setTimestamp(Object timestamp) {
+  public void setTimestamp(Long timestamp) {
     this.timestamp = timestamp;
   }
 

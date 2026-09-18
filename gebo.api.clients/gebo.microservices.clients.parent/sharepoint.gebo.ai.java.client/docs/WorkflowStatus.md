@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**completed** | **Object** |  |  [optional]
-**hasErrors** | **Object** |  |  [optional]
-**totalDocuments** | **Object** |  |  [optional]
-**totalDocumentsWithErrors** | **Object** |  |  [optional]
-**totalDocumentsSuccessfull** | **Object** |  |  [optional]
+**completed** | **Boolean** |  |  [optional]
+**hasErrors** | **Boolean** |  |  [optional]
+**totalDocuments** | **Long** |  |  [optional]
+**totalDocumentsWithErrors** | **Long** |  |  [optional]
+**totalDocumentsSuccessfull** | **Long** |  |  [optional]

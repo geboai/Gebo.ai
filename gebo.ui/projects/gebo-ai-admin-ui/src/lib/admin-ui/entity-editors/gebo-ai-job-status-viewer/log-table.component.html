@@ -8,7 +8,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 -->
- 
+
 <p-panel id="MainPanel" gebo-ai-label  #logList [showHeader]="false">
     <p-blockUI [target]="logList" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
@@ -16,25 +16,32 @@
 <div class="grid">
     <div class="col-12" >
         <table class="grid geboLargeButtonsBar">
-            <div class="col-4"><p-button id="ReloadDataBtn" gebo-ai-label icon="pi pi-history" [outlined]="true" [disabled]="(!jobType && !className)" (onClick)="reloadData()" label="reload data"></p-button></div>
+            <div class="col-4"><p-button id="ReloadDataBtn" gebo-ai-label icon="pi pi-history" [outlined]="true" (onClick)="reloadData()" label="reload data"></p-button></div>
             <div class="col-4"><p-button id="DeleteBtn" gebo-ai-label icon="pi pi-trash" severity="danger" label="Delete" [outlined]="true" (onClick)="deleteSelected()"></p-button></div>
-            <div class="col-4"></div>
+            <div class="col-4">
+                <input id="SearchInput" gebo-ai-label pInputText type="text" class="w-full" [ngModel]="searchText"
+                    (ngModelChange)="onSearchTextChanged($event)" placeholder="search logs">
+            </div>
         </table>
 
 
     </div>
     <div class="col-12">
-        <p-table  [value]="actualData" [tableStyle]="{ 'min-width': '50rem' }">
+        <p-table [value]="actualData" [tableStyle]="{ 'min-width': '50rem' }" [lazy]="true" [lazyLoadOnInit]="false"
+            (onLazyLoad)="onLazyLoad($event)" [paginator]="true" [first]="first" [rows]="pageSize"
+            [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 20, 30, 50]" [sortField]="sortField"
+            [sortOrder]="sortOrder" [showCurrentPageReport]="true"
+            currentPageReportTemplate="{first} - {last} / {totalRecords}">
             <ng-template pTemplate="header">
                 <tr>
                     <th id="SelectHeader" gebo-ai-text>Select</th>
-                    <th id="CodeHeader" gebo-ai-text>Code</th>
-                    <th id="DescriptionHeader" gebo-ai-text>Description</th>
-                    <th id="StartDateTimeHeader" gebo-ai-text>start date/time</th>
-                    <th id="EndDateTimeHeader" gebo-ai-text>end date/time</th>
-                    <th id="ProcessingHeader" gebo-ai-text>processing</th>
-                    <th id="FinishedHeader" gebo-ai-text>finished</th>
-                    <th id="WithErrorHeader" gebo-ai-text>with error</th>
+                    <th id="CodeHeader" gebo-ai-text pSortableColumn="code">Code<p-sortIcon field="code"></p-sortIcon></th>
+                    <th id="DescriptionHeader" gebo-ai-text pSortableColumn="description">Description<p-sortIcon field="description"></p-sortIcon></th>
+                    <th id="StartDateTimeHeader" gebo-ai-text pSortableColumn="startDateTime">start date/time<p-sortIcon field="startDateTime"></p-sortIcon></th>
+                    <th id="EndDateTimeHeader" gebo-ai-text pSortableColumn="endDateTime">end date/time<p-sortIcon field="endDateTime"></p-sortIcon></th>
+                    <th id="ProcessingHeader" gebo-ai-text pSortableColumn="processing">processing<p-sortIcon field="processing"></p-sortIcon></th>
+                    <th id="FinishedHeader" gebo-ai-text pSortableColumn="finished">finished<p-sortIcon field="finished"></p-sortIcon></th>
+                    <th id="WithErrorHeader" gebo-ai-text pSortableColumn="error">with error<p-sortIcon field="error"></p-sortIcon></th>
                     <th></th>
                 </tr>
             </ng-template>
@@ -63,20 +70,13 @@
                     </td>
                 </tr>
             </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="9"><span id="NoLogEntries" gebo-ai-text>No log entry matches the current filters</span></td>
+                </tr>
+            </ng-template>
 
         </p-table>
-        <table class="grid">
-            <div class="col-4">
-
-            </div>
-            <div class="col-4">
-                <p-paginator id="Paginator" gebo-ai-label (onPageChange)="onPageChange($event)" [first]="0" [rows]="page.pageSize"
-            [totalRecords]="data?.page?.totalElements"  [rowsPerPageOptions]="[10, 20, 30]" />
-            </div>
-            <div class="col-4">
-
-            </div>
-        </table>
 
     </div>
 </div>

@@ -17,33 +17,36 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.PipelineChatMenuItem;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * PipelineChatMenu
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class PipelineChatMenu {
   @JsonProperty("menuId")
-  private Object menuId = null;
+  private String menuId = null;
 
   @JsonProperty("pipelineId")
-  private Object pipelineId = null;
+  private String pipelineId = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("icon")
-  private Object icon = null;
+  private String icon = null;
 
   @JsonProperty("items")
-  private Object items = null;
+  private List<PipelineChatMenuItem> items = new ArrayList<>();
 
   @JsonProperty("order")
-  private Object order = null;
+  private Integer order = null;
 
-  public PipelineChatMenu menuId(Object menuId) {
+  public PipelineChatMenu menuId(String menuId) {
     this.menuId = menuId;
     return this;
   }
@@ -53,15 +56,15 @@ public class PipelineChatMenu {
    * @return menuId
   **/
   @Schema(required = true, description = "")
-  public Object getMenuId() {
+  public String getMenuId() {
     return menuId;
   }
 
-  public void setMenuId(Object menuId) {
+  public void setMenuId(String menuId) {
     this.menuId = menuId;
   }
 
-  public PipelineChatMenu pipelineId(Object pipelineId) {
+  public PipelineChatMenu pipelineId(String pipelineId) {
     this.pipelineId = pipelineId;
     return this;
   }
@@ -71,15 +74,15 @@ public class PipelineChatMenu {
    * @return pipelineId
   **/
   @Schema(description = "")
-  public Object getPipelineId() {
+  public String getPipelineId() {
     return pipelineId;
   }
 
-  public void setPipelineId(Object pipelineId) {
+  public void setPipelineId(String pipelineId) {
     this.pipelineId = pipelineId;
   }
 
-  public PipelineChatMenu description(Object description) {
+  public PipelineChatMenu description(String description) {
     this.description = description;
     return this;
   }
@@ -89,15 +92,15 @@ public class PipelineChatMenu {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public PipelineChatMenu icon(Object icon) {
+  public PipelineChatMenu icon(String icon) {
     this.icon = icon;
     return this;
   }
@@ -107,16 +110,21 @@ public class PipelineChatMenu {
    * @return icon
   **/
   @Schema(description = "")
-  public Object getIcon() {
+  public String getIcon() {
     return icon;
   }
 
-  public void setIcon(Object icon) {
+  public void setIcon(String icon) {
     this.icon = icon;
   }
 
-  public PipelineChatMenu items(Object items) {
+  public PipelineChatMenu items(List<PipelineChatMenuItem> items) {
     this.items = items;
+    return this;
+  }
+
+  public PipelineChatMenu addItemsItem(PipelineChatMenuItem itemsItem) {
+    this.items.add(itemsItem);
     return this;
   }
 
@@ -125,15 +133,15 @@ public class PipelineChatMenu {
    * @return items
   **/
   @Schema(required = true, description = "")
-  public Object getItems() {
+  public List<PipelineChatMenuItem> getItems() {
     return items;
   }
 
-  public void setItems(Object items) {
+  public void setItems(List<PipelineChatMenuItem> items) {
     this.items = items;
   }
 
-  public PipelineChatMenu order(Object order) {
+  public PipelineChatMenu order(Integer order) {
     this.order = order;
     return this;
   }
@@ -143,11 +151,11 @@ public class PipelineChatMenu {
    * @return order
   **/
   @Schema(required = true, description = "")
-  public Object getOrder() {
+  public Integer getOrder() {
     return order;
   }
 
-  public void setOrder(Object order) {
+  public void setOrder(Integer order) {
     this.order = order;
   }
 

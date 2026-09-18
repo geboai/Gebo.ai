@@ -18,27 +18,37 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * ConfluencePeopleFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:50.343715666+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:33.855652885+02:00[Europe/Rome]")
 
 public class ConfluencePeopleFilter {
   @JsonProperty("creatorsList")
-  private Object creatorsList = null;
+  private List<String> creatorsList = null;
 
   @JsonProperty("contributorsList")
-  private Object contributorsList = null;
+  private List<String> contributorsList = null;
 
   @JsonProperty("mentionsList")
-  private Object mentionsList = null;
+  private List<String> mentionsList = null;
 
   @JsonProperty("ownersList")
-  private Object ownersList = null;
+  private List<String> ownersList = null;
 
-  public ConfluencePeopleFilter creatorsList(Object creatorsList) {
+  public ConfluencePeopleFilter creatorsList(List<String> creatorsList) {
     this.creatorsList = creatorsList;
+    return this;
+  }
+
+  public ConfluencePeopleFilter addCreatorsListItem(String creatorsListItem) {
+    if (this.creatorsList == null) {
+      this.creatorsList = new ArrayList<>();
+    }
+    this.creatorsList.add(creatorsListItem);
     return this;
   }
 
@@ -47,16 +57,24 @@ public class ConfluencePeopleFilter {
    * @return creatorsList
   **/
   @Schema(description = "")
-  public Object getCreatorsList() {
+  public List<String> getCreatorsList() {
     return creatorsList;
   }
 
-  public void setCreatorsList(Object creatorsList) {
+  public void setCreatorsList(List<String> creatorsList) {
     this.creatorsList = creatorsList;
   }
 
-  public ConfluencePeopleFilter contributorsList(Object contributorsList) {
+  public ConfluencePeopleFilter contributorsList(List<String> contributorsList) {
     this.contributorsList = contributorsList;
+    return this;
+  }
+
+  public ConfluencePeopleFilter addContributorsListItem(String contributorsListItem) {
+    if (this.contributorsList == null) {
+      this.contributorsList = new ArrayList<>();
+    }
+    this.contributorsList.add(contributorsListItem);
     return this;
   }
 
@@ -65,16 +83,24 @@ public class ConfluencePeopleFilter {
    * @return contributorsList
   **/
   @Schema(description = "")
-  public Object getContributorsList() {
+  public List<String> getContributorsList() {
     return contributorsList;
   }
 
-  public void setContributorsList(Object contributorsList) {
+  public void setContributorsList(List<String> contributorsList) {
     this.contributorsList = contributorsList;
   }
 
-  public ConfluencePeopleFilter mentionsList(Object mentionsList) {
+  public ConfluencePeopleFilter mentionsList(List<String> mentionsList) {
     this.mentionsList = mentionsList;
+    return this;
+  }
+
+  public ConfluencePeopleFilter addMentionsListItem(String mentionsListItem) {
+    if (this.mentionsList == null) {
+      this.mentionsList = new ArrayList<>();
+    }
+    this.mentionsList.add(mentionsListItem);
     return this;
   }
 
@@ -83,16 +109,24 @@ public class ConfluencePeopleFilter {
    * @return mentionsList
   **/
   @Schema(description = "")
-  public Object getMentionsList() {
+  public List<String> getMentionsList() {
     return mentionsList;
   }
 
-  public void setMentionsList(Object mentionsList) {
+  public void setMentionsList(List<String> mentionsList) {
     this.mentionsList = mentionsList;
   }
 
-  public ConfluencePeopleFilter ownersList(Object ownersList) {
+  public ConfluencePeopleFilter ownersList(List<String> ownersList) {
     this.ownersList = ownersList;
+    return this;
+  }
+
+  public ConfluencePeopleFilter addOwnersListItem(String ownersListItem) {
+    if (this.ownersList == null) {
+      this.ownersList = new ArrayList<>();
+    }
+    this.ownersList.add(ownersListItem);
     return this;
   }
 
@@ -101,11 +135,11 @@ public class ConfluencePeopleFilter {
    * @return ownersList
   **/
   @Schema(description = "")
-  public Object getOwnersList() {
+  public List<String> getOwnersList() {
     return ownersList;
   }
 
-  public void setOwnersList(Object ownersList) {
+  public void setOwnersList(List<String> ownersList) {
     this.ownersList = ownersList;
   }
 

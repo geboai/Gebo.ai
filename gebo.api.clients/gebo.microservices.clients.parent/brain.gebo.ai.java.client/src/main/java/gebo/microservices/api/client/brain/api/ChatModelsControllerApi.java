@@ -2,6 +2,8 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseChatModelConfig;
+import gebo.microservices.api.client.brain.model.GChatModelType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ChatModelsControllerApi {
     private ApiClient apiClient;
@@ -45,10 +47,10 @@ public class ChatModelsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GChatModelType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getChatModelTypes() throws RestClientException {
+    public List<GChatModelType> getChatModelTypes() throws RestClientException {
         return getChatModelTypesWithHttpInfo().getBody();
     }
 
@@ -56,12 +58,12 @@ public class ChatModelsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GChatModelType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getChatModelTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GChatModelType>> getChatModelTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/ChatModelsController/getChatModelTypes").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ChatModelsController/getChatModelTypes").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -76,18 +78,18 @@ public class ChatModelsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GChatModelType>> returnType = new ParameterizedTypeReference<List<GChatModelType>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return Object
+     * @return List&lt;ConfigurationEntryGBaseChatModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getRuntimeConfiguredChatModels(Object modelTypeCode) throws RestClientException {
+    public List<ConfigurationEntryGBaseChatModelConfig> getRuntimeConfiguredChatModels(String modelTypeCode) throws RestClientException {
         return getRuntimeConfiguredChatModelsWithHttpInfo(modelTypeCode).getBody();
     }
 
@@ -96,12 +98,12 @@ public class ChatModelsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;ConfigurationEntryGBaseChatModelConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getRuntimeConfiguredChatModelsWithHttpInfo(Object modelTypeCode) throws RestClientException {
+    public ResponseEntity<List<ConfigurationEntryGBaseChatModelConfig>> getRuntimeConfiguredChatModelsWithHttpInfo(String modelTypeCode) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/ChatModelsController/getRuntimeConfiguredChatModels").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ChatModelsController/getRuntimeConfiguredChatModels").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -117,7 +119,7 @@ public class ChatModelsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<ConfigurationEntryGBaseChatModelConfig>> returnType = new ParameterizedTypeReference<List<ConfigurationEntryGBaseChatModelConfig>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

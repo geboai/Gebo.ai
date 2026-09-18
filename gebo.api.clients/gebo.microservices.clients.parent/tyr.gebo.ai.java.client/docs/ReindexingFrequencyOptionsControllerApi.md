@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="displayTimeValues"></a>
 # **displayTimeValues**
-> Object displayTimeValues(body)
+> List&lt;String&gt; displayTimeValues(body)
 
 
 
@@ -22,9 +22,9 @@ Method | HTTP request | Description
 
 
 ReindexingFrequencyOptionsControllerApi apiInstance = new ReindexingFrequencyOptionsControllerApi();
-Object body = null; // Object | 
+List<ReindexingProgrammedTable> body = Arrays.asList(new ReindexingProgrammedTable()); // List<ReindexingProgrammedTable> | 
 try {
-    Object result = apiInstance.displayTimeValues(body);
+    List<String> result = apiInstance.displayTimeValues(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ReindexingFrequencyOptionsControllerApi#displayTimeValues");
@@ -36,11 +36,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**List&lt;ReindexingProgrammedTable&gt;**](ReindexingProgrammedTable.md)|  |
 
 ### Return type
 
-**Object**
+**List&lt;String&gt;**
 
 ### Authorization
 
@@ -53,7 +53,7 @@ No authorization required
 
 <a name="getAllTimeStructureMetaInfos"></a>
 # **getAllTimeStructureMetaInfos**
-> Object getAllTimeStructureMetaInfos()
+> List&lt;ReindexTimeStructureMetaInfo&gt; getAllTimeStructureMetaInfos()
 
 
 
@@ -66,7 +66,7 @@ No authorization required
 
 ReindexingFrequencyOptionsControllerApi apiInstance = new ReindexingFrequencyOptionsControllerApi();
 try {
-    Object result = apiInstance.getAllTimeStructureMetaInfos();
+    List<ReindexTimeStructureMetaInfo> result = apiInstance.getAllTimeStructureMetaInfos();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ReindexingFrequencyOptionsControllerApi#getAllTimeStructureMetaInfos");
@@ -79,7 +79,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;ReindexTimeStructureMetaInfo&gt;**](ReindexTimeStructureMetaInfo.md)
 
 ### Authorization
 
@@ -104,7 +104,7 @@ No authorization required
 
 
 ReindexingFrequencyOptionsControllerApi apiInstance = new ReindexingFrequencyOptionsControllerApi();
-Object frequency = null; // Object | 
+String frequency = "frequency_example"; // String | 
 try {
     ReindexTimeStructureMetaInfo result = apiInstance.getTimeStructureMetaInfo(frequency);
     System.out.println(result);
@@ -118,7 +118,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **frequency** | [**Object**](.md)|  |
+ **frequency** | **String**|  | [enum: DAILY, MONTHLY, WEEKLY, HOURLY, YEARLY, ON_CHANGES, DATES]
 
 ### Return type
 

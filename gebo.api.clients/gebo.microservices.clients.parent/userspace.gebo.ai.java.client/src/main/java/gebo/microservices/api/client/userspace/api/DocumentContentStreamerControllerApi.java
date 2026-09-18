@@ -2,6 +2,7 @@ package gebo.microservices.api.client.userspace.api;
 
 import gebo.microservices.api.client.userspace.invoker.ApiClient;
 
+import java.io.File;
 import gebo.microservices.api.client.userspace.model.GDocumentReferenceStreamRequest;
 import gebo.microservices.api.client.userspace.model.SearchResultStreamRequest;
 
@@ -23,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:44:00.182052971+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.206631637+02:00[Europe/Rome]")
 
 public class DocumentContentStreamerControllerApi {
     private ApiClient apiClient;
@@ -48,10 +49,10 @@ public class DocumentContentStreamerControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return File
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object streamDocumentReference(GDocumentReferenceStreamRequest body) throws RestClientException {
+    public File streamDocumentReference(GDocumentReferenceStreamRequest body) throws RestClientException {
         return streamDocumentReferenceWithHttpInfo(body).getBody();
     }
 
@@ -60,16 +61,16 @@ public class DocumentContentStreamerControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;File&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> streamDocumentReferenceWithHttpInfo(GDocumentReferenceStreamRequest body) throws RestClientException {
+    public ResponseEntity<File> streamDocumentReferenceWithHttpInfo(GDocumentReferenceStreamRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling streamDocumentReference");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/DocumentContentStreamerController/streamDocumentReference").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/DocumentContentStreamerController/streamDocumentReference").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -86,18 +87,18 @@ public class DocumentContentStreamerControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<File> returnType = new ParameterizedTypeReference<File>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return File
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object streamSearchResult(SearchResultStreamRequest body) throws RestClientException {
+    public File streamSearchResult(SearchResultStreamRequest body) throws RestClientException {
         return streamSearchResultWithHttpInfo(body).getBody();
     }
 
@@ -106,16 +107,16 @@ public class DocumentContentStreamerControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;File&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> streamSearchResultWithHttpInfo(SearchResultStreamRequest body) throws RestClientException {
+    public ResponseEntity<File> streamSearchResultWithHttpInfo(SearchResultStreamRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling streamSearchResult");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/DocumentContentStreamerController/streamSearchResult").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/DocumentContentStreamerController/streamSearchResult").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -132,7 +133,7 @@ public class DocumentContentStreamerControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<File> returnType = new ParameterizedTypeReference<File>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

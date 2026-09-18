@@ -13,5 +13,5 @@ import { GBaseChatModelConfig } from './gBaseChatModelConfig';
 
 export interface DefaultPromptForChatModelParam { 
     chatModelConfig: GBaseChatModelConfig;
-    ragPrompt: any;
+    ragPrompt: boolean;
 }

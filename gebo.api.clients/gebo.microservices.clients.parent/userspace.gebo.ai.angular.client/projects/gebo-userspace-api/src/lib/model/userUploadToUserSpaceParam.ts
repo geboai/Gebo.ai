@@ -10,9 +10,10 @@
  * Do not edit the class manually.
  */
 import { GObjectRefGUserspaceProjectEndpoint } from './gObjectRefGUserspaceProjectEndpoint';
+import { UserUploadedContent } from './userUploadedContent';
 
 export interface UserUploadToUserSpaceParam { 
-    userUploadContent: any;
+    userUploadContent: Array<UserUploadedContent>;
     userSpaceTransferTo?: GObjectRefGUserspaceProjectEndpoint;
-    transferToUserDefaultSpace?: any;
+    transferToUserDefaultSpace?: boolean;
 }

@@ -68,7 +68,7 @@ No authorization required
 
 
 GenericOpenAiapiEmbeddingModelsConfigurationControllerApi apiInstance = new GenericOpenAiapiEmbeddingModelsConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GenericOpenAIAPIEmbeddingModelConfig result = apiInstance.findGenericOpenAIAPIEmbeddingModelConfigByCode(code);
     System.out.println(result);
@@ -82,7 +82,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -142,7 +142,7 @@ No authorization required
 
 <a name="getGenericOpenAIEmbeddingModelTypes"></a>
 # **getGenericOpenAIEmbeddingModelTypes**
-> Object getGenericOpenAIEmbeddingModelTypes()
+> List&lt;GenericOpenAIEmbeddingModelTypeConfig&gt; getGenericOpenAIEmbeddingModelTypes()
 
 
 
@@ -155,7 +155,7 @@ No authorization required
 
 GenericOpenAiapiEmbeddingModelsConfigurationControllerApi apiInstance = new GenericOpenAiapiEmbeddingModelsConfigurationControllerApi();
 try {
-    Object result = apiInstance.getGenericOpenAIEmbeddingModelTypes();
+    List<GenericOpenAIEmbeddingModelTypeConfig> result = apiInstance.getGenericOpenAIEmbeddingModelTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GenericOpenAiapiEmbeddingModelsConfigurationControllerApi#getGenericOpenAIEmbeddingModelTypes");
@@ -168,7 +168,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GenericOpenAIEmbeddingModelTypeConfig&gt;**](GenericOpenAIEmbeddingModelTypeConfig.md)
 
 ### Authorization
 

@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**queryText** | **Object** |  |  [optional]
-**relevantKeywords** | **Object** |  |  [optional]
+**queryText** | **String** |  |  [optional]
+**relevantKeywords** | **List&lt;String&gt;** |  |  [optional]

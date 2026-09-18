@@ -11,6 +11,7 @@
  */
 
 export interface GeboGoogleOauth2SecretContent { 
+    readOnly?: boolean;
     uid?: string;
     token?: string;
     location?: string;

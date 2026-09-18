@@ -42,7 +42,7 @@ public class GeneratedUserApiKeyControllerApiTest {
      */
     @Test
     public void deleteUserGeneratedApiKeyTest() {
-        Object code = null;
+        String code = null;
         api.deleteUserGeneratedApiKey(code);
 
         // TODO: test validations
@@ -87,7 +87,7 @@ public class GeneratedUserApiKeyControllerApiTest {
      */
     @Test
     public void isUserGeneratedApiKeyGenerationAllowedTest() {
-        Object response = api.isUserGeneratedApiKeyGenerationAllowed();
+        Boolean response = api.isUserGeneratedApiKeyGenerationAllowed();
 
         // TODO: test validations
     }

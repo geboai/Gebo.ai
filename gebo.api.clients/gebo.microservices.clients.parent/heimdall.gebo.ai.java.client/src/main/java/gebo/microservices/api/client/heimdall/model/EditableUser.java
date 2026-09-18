@@ -18,35 +18,80 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * EditableUser
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class EditableUser {
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("sourname")
-  private Object sourname = null;
+  private String sourname = null;
 
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("disabled")
-  private Object disabled = null;
+  private Boolean disabled = null;
 
   @JsonProperty("roles")
-  private Object roles = null;
+  private List<String> roles = new ArrayList<>();
 
-  @JsonProperty("authProvider")
-  private Object authProvider = null;
+  /**
+   * Gets or Sets authProvider
+   */
+  public enum AuthProviderEnum {
+    LOCAL("local"),
+    GOOGLE("google"),
+    MICROSOFT("microsoft"),
+    MICROSOFT_MULTITENANT("microsoft_multitenant"),
+    AWS_COGNITO("aws_cognito"),
+    AWS_IDENTITY_CENTER("aws_identity_center"),
+    KEYCLOAK("keycloak"),
+    OAUTH2_GENERIC("oauth2_generic"),
+    LDAP("ldap");
+
+    private String value;
+
+    AuthProviderEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static AuthProviderEnum fromValue(String input) {
+      for (AuthProviderEnum b : AuthProviderEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("authProvider")
+  private AuthProviderEnum authProvider = null;
 
   @JsonProperty("langCode")
-  private Object langCode = null;
+  private String langCode = null;
 
-  public EditableUser name(Object name) {
+  @JsonProperty("customInfos")
+  private Map<String, Object> customInfos = null;
+
+  public EditableUser name(String name) {
     this.name = name;
     return this;
   }
@@ -56,15 +101,15 @@ public class EditableUser {
    * @return name
   **/
   @Schema(required = true, description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public EditableUser sourname(Object sourname) {
+  public EditableUser sourname(String sourname) {
     this.sourname = sourname;
     return this;
   }
@@ -74,15 +119,15 @@ public class EditableUser {
    * @return sourname
   **/
   @Schema(required = true, description = "")
-  public Object getSourname() {
+  public String getSourname() {
     return sourname;
   }
 
-  public void setSourname(Object sourname) {
+  public void setSourname(String sourname) {
     this.sourname = sourname;
   }
 
-  public EditableUser username(Object username) {
+  public EditableUser username(String username) {
     this.username = username;
     return this;
   }
@@ -92,15 +137,15 @@ public class EditableUser {
    * @return username
   **/
   @Schema(required = true, description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public EditableUser disabled(Object disabled) {
+  public EditableUser disabled(Boolean disabled) {
     this.disabled = disabled;
     return this;
   }
@@ -110,16 +155,21 @@ public class EditableUser {
    * @return disabled
   **/
   @Schema(description = "")
-  public Object getDisabled() {
+  public Boolean isDisabled() {
     return disabled;
   }
 
-  public void setDisabled(Object disabled) {
+  public void setDisabled(Boolean disabled) {
     this.disabled = disabled;
   }
 
-  public EditableUser roles(Object roles) {
+  public EditableUser roles(List<String> roles) {
     this.roles = roles;
+    return this;
+  }
+
+  public EditableUser addRolesItem(String rolesItem) {
+    this.roles.add(rolesItem);
     return this;
   }
 
@@ -128,15 +178,15 @@ public class EditableUser {
    * @return roles
   **/
   @Schema(required = true, description = "")
-  public Object getRoles() {
+  public List<String> getRoles() {
     return roles;
   }
 
-  public void setRoles(Object roles) {
+  public void setRoles(List<String> roles) {
     this.roles = roles;
   }
 
-  public EditableUser authProvider(Object authProvider) {
+  public EditableUser authProvider(AuthProviderEnum authProvider) {
     this.authProvider = authProvider;
     return this;
   }
@@ -146,15 +196,15 @@ public class EditableUser {
    * @return authProvider
   **/
   @Schema(required = true, description = "")
-  public Object getAuthProvider() {
+  public AuthProviderEnum getAuthProvider() {
     return authProvider;
   }
 
-  public void setAuthProvider(Object authProvider) {
+  public void setAuthProvider(AuthProviderEnum authProvider) {
     this.authProvider = authProvider;
   }
 
-  public EditableUser langCode(Object langCode) {
+  public EditableUser langCode(String langCode) {
     this.langCode = langCode;
     return this;
   }
@@ -164,12 +214,38 @@ public class EditableUser {
    * @return langCode
   **/
   @Schema(description = "")
-  public Object getLangCode() {
+  public String getLangCode() {
     return langCode;
   }
 
-  public void setLangCode(Object langCode) {
+  public void setLangCode(String langCode) {
     this.langCode = langCode;
+  }
+
+  public EditableUser customInfos(Map<String, Object> customInfos) {
+    this.customInfos = customInfos;
+    return this;
+  }
+
+  public EditableUser putCustomInfosItem(String key, Object customInfosItem) {
+    if (this.customInfos == null) {
+      this.customInfos = new HashMap<>();
+    }
+    this.customInfos.put(key, customInfosItem);
+    return this;
+  }
+
+   /**
+   * Get customInfos
+   * @return customInfos
+  **/
+  @Schema(description = "")
+  public Map<String, Object> getCustomInfos() {
+    return customInfos;
+  }
+
+  public void setCustomInfos(Map<String, Object> customInfos) {
+    this.customInfos = customInfos;
   }
 
 
@@ -188,12 +264,13 @@ public class EditableUser {
         Objects.equals(this.disabled, editableUser.disabled) &&
         Objects.equals(this.roles, editableUser.roles) &&
         Objects.equals(this.authProvider, editableUser.authProvider) &&
-        Objects.equals(this.langCode, editableUser.langCode);
+        Objects.equals(this.langCode, editableUser.langCode) &&
+        Objects.equals(this.customInfos, editableUser.customInfos);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, sourname, username, disabled, roles, authProvider, langCode);
+    return Objects.hash(name, sourname, username, disabled, roles, authProvider, langCode, customInfos);
   }
 
 
@@ -209,6 +286,7 @@ public class EditableUser {
     sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("    authProvider: ").append(toIndentedString(authProvider)).append("\n");
     sb.append("    langCode: ").append(toIndentedString(langCode)).append("\n");
+    sb.append("    customInfos: ").append(toIndentedString(customInfos)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -18,29 +18,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * UserInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class UserInfos {
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("roles")
-  private Object roles = null;
+  private List<String> roles = null;
 
   @JsonProperty("disabled")
-  private Object disabled = null;
+  private Boolean disabled = null;
 
   @JsonProperty("sourname")
-  private Object sourname = null;
+  private String sourname = null;
 
-  public UserInfos username(Object username) {
+  public UserInfos username(String username) {
     this.username = username;
     return this;
   }
@@ -50,15 +52,15 @@ public class UserInfos {
    * @return username
   **/
   @Schema(description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public UserInfos name(Object name) {
+  public UserInfos name(String name) {
     this.name = name;
     return this;
   }
@@ -68,16 +70,24 @@ public class UserInfos {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public UserInfos roles(Object roles) {
+  public UserInfos roles(List<String> roles) {
     this.roles = roles;
+    return this;
+  }
+
+  public UserInfos addRolesItem(String rolesItem) {
+    if (this.roles == null) {
+      this.roles = new ArrayList<>();
+    }
+    this.roles.add(rolesItem);
     return this;
   }
 
@@ -86,15 +96,15 @@ public class UserInfos {
    * @return roles
   **/
   @Schema(description = "")
-  public Object getRoles() {
+  public List<String> getRoles() {
     return roles;
   }
 
-  public void setRoles(Object roles) {
+  public void setRoles(List<String> roles) {
     this.roles = roles;
   }
 
-  public UserInfos disabled(Object disabled) {
+  public UserInfos disabled(Boolean disabled) {
     this.disabled = disabled;
     return this;
   }
@@ -104,15 +114,15 @@ public class UserInfos {
    * @return disabled
   **/
   @Schema(description = "")
-  public Object getDisabled() {
+  public Boolean isDisabled() {
     return disabled;
   }
 
-  public void setDisabled(Object disabled) {
+  public void setDisabled(Boolean disabled) {
     this.disabled = disabled;
   }
 
-  public UserInfos sourname(Object sourname) {
+  public UserInfos sourname(String sourname) {
     this.sourname = sourname;
     return this;
   }
@@ -122,11 +132,11 @@ public class UserInfos {
    * @return sourname
   **/
   @Schema(description = "")
-  public Object getSourname() {
+  public String getSourname() {
     return sourname;
   }
 
-  public void setSourname(Object sourname) {
+  public void setSourname(String sourname) {
     this.sourname = sourname;
   }
 

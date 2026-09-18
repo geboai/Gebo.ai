@@ -12,7 +12,7 @@
 import { GeboAwsConnectionCredentials } from './geboAwsConnectionCredentials';
 
 export interface SecretWrapperGeboAwsConnectionCredentials { 
-    contextCode: any;
-    description: any;
+    contextCode: string;
+    description: string;
     secretContent: GeboAwsConnectionCredentials;
 }

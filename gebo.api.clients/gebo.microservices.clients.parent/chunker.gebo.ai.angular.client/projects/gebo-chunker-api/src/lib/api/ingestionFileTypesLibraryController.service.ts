@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { IngestionFileType } from '../model/ingestionFileType';
+import { IngestionHandlerConfig } from '../model/ingestionHandlerConfig';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -61,9 +62,9 @@ export class IngestionFileTypesLibraryControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllFileTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAllFileTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAllFileTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAllFileTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<IngestionFileType>>;
+    public getAllFileTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<IngestionFileType>>>;
+    public getAllFileTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<IngestionFileType>>>;
     public getAllFileTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -81,7 +82,7 @@ export class IngestionFileTypesLibraryControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/IngestionFileTypesLibraryController/getAllFileTypes`,
+        return this.httpClient.request<Array<IngestionFileType>>('get',`${this.basePath}/api/users/IngestionFileTypesLibraryController/getAllFileTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -98,10 +99,10 @@ export class IngestionFileTypesLibraryControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIngestionFileTypeByExtension(extension: any, observe?: 'body', reportProgress?: boolean): Observable<IngestionFileType>;
-    public getIngestionFileTypeByExtension(extension: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<IngestionFileType>>;
-    public getIngestionFileTypeByExtension(extension: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<IngestionFileType>>;
-    public getIngestionFileTypeByExtension(extension: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getIngestionFileTypeByExtension(extension: string, observe?: 'body', reportProgress?: boolean): Observable<IngestionFileType>;
+    public getIngestionFileTypeByExtension(extension: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<IngestionFileType>>;
+    public getIngestionFileTypeByExtension(extension: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<IngestionFileType>>;
+    public getIngestionFileTypeByExtension(extension: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (extension === null || extension === undefined) {
             throw new Error('Required parameter extension was null or undefined when calling getIngestionFileTypeByExtension.');
@@ -109,7 +110,7 @@ export class IngestionFileTypesLibraryControllerService {
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (extension !== undefined && extension !== null) {
-            queryParameters = queryParameters.set('extension', JSON.stringify(extension));
+            queryParameters = queryParameters.set('extension', <any>extension);
         }
 
         let headers = this.defaultHeaders;
@@ -144,9 +145,9 @@ export class IngestionFileTypesLibraryControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIngestionReadingModules(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getIngestionReadingModules(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getIngestionReadingModules(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getIngestionReadingModules(observe?: 'body', reportProgress?: boolean): Observable<Array<IngestionHandlerConfig>>;
+    public getIngestionReadingModules(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<IngestionHandlerConfig>>>;
+    public getIngestionReadingModules(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<IngestionHandlerConfig>>>;
     public getIngestionReadingModules(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -164,7 +165,7 @@ export class IngestionFileTypesLibraryControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules`,
+        return this.httpClient.request<Array<IngestionHandlerConfig>>('get',`${this.basePath}/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

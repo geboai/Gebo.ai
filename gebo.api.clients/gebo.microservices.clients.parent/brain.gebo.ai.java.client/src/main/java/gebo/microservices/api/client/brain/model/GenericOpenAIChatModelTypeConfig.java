@@ -18,50 +18,51 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GenericOpenAIChatModelTypeConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GenericOpenAIChatModelTypeConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("modelConfigurationClass")
-  private Object modelConfigurationClass = null;
+  private String modelConfigurationClass = null;
 
   @JsonProperty("baseUrl")
-  private Object baseUrl = null;
+  private String baseUrl = null;
 
   @JsonProperty("modelsListProvider")
-  private Object modelsListProvider = null;
+  private String modelsListProvider = null;
 
   @JsonProperty("providerId")
-  private Object providerId = null;
+  private String providerId = null;
 
   @JsonProperty("optionalAuthentication")
-  private Object optionalAuthentication = null;
+  private Boolean optionalAuthentication = null;
 
   @JsonProperty("applyThinkingMarkupHandling")
-  private Object applyThinkingMarkupHandling = null;
+  private Boolean applyThinkingMarkupHandling = null;
 
-  public GenericOpenAIChatModelTypeConfig code(Object code) {
+  public GenericOpenAIChatModelTypeConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -71,15 +72,15 @@ public class GenericOpenAIChatModelTypeConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GenericOpenAIChatModelTypeConfig description(Object description) {
+  public GenericOpenAIChatModelTypeConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -89,15 +90,15 @@ public class GenericOpenAIChatModelTypeConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GenericOpenAIChatModelTypeConfig userModified(Object userModified) {
+  public GenericOpenAIChatModelTypeConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -107,15 +108,15 @@ public class GenericOpenAIChatModelTypeConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GenericOpenAIChatModelTypeConfig userCreated(Object userCreated) {
+  public GenericOpenAIChatModelTypeConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -125,15 +126,15 @@ public class GenericOpenAIChatModelTypeConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GenericOpenAIChatModelTypeConfig dateModified(Object dateModified) {
+  public GenericOpenAIChatModelTypeConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -143,15 +144,15 @@ public class GenericOpenAIChatModelTypeConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GenericOpenAIChatModelTypeConfig dateCreated(Object dateCreated) {
+  public GenericOpenAIChatModelTypeConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -161,15 +162,15 @@ public class GenericOpenAIChatModelTypeConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GenericOpenAIChatModelTypeConfig modelConfigurationClass(Object modelConfigurationClass) {
+  public GenericOpenAIChatModelTypeConfig modelConfigurationClass(String modelConfigurationClass) {
     this.modelConfigurationClass = modelConfigurationClass;
     return this;
   }
@@ -179,15 +180,15 @@ public class GenericOpenAIChatModelTypeConfig {
    * @return modelConfigurationClass
   **/
   @Schema(description = "")
-  public Object getModelConfigurationClass() {
+  public String getModelConfigurationClass() {
     return modelConfigurationClass;
   }
 
-  public void setModelConfigurationClass(Object modelConfigurationClass) {
+  public void setModelConfigurationClass(String modelConfigurationClass) {
     this.modelConfigurationClass = modelConfigurationClass;
   }
 
-  public GenericOpenAIChatModelTypeConfig baseUrl(Object baseUrl) {
+  public GenericOpenAIChatModelTypeConfig baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
   }
@@ -197,15 +198,15 @@ public class GenericOpenAIChatModelTypeConfig {
    * @return baseUrl
   **/
   @Schema(description = "")
-  public Object getBaseUrl() {
+  public String getBaseUrl() {
     return baseUrl;
   }
 
-  public void setBaseUrl(Object baseUrl) {
+  public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 
-  public GenericOpenAIChatModelTypeConfig modelsListProvider(Object modelsListProvider) {
+  public GenericOpenAIChatModelTypeConfig modelsListProvider(String modelsListProvider) {
     this.modelsListProvider = modelsListProvider;
     return this;
   }
@@ -215,15 +216,15 @@ public class GenericOpenAIChatModelTypeConfig {
    * @return modelsListProvider
   **/
   @Schema(description = "")
-  public Object getModelsListProvider() {
+  public String getModelsListProvider() {
     return modelsListProvider;
   }
 
-  public void setModelsListProvider(Object modelsListProvider) {
+  public void setModelsListProvider(String modelsListProvider) {
     this.modelsListProvider = modelsListProvider;
   }
 
-  public GenericOpenAIChatModelTypeConfig providerId(Object providerId) {
+  public GenericOpenAIChatModelTypeConfig providerId(String providerId) {
     this.providerId = providerId;
     return this;
   }
@@ -233,15 +234,15 @@ public class GenericOpenAIChatModelTypeConfig {
    * @return providerId
   **/
   @Schema(description = "")
-  public Object getProviderId() {
+  public String getProviderId() {
     return providerId;
   }
 
-  public void setProviderId(Object providerId) {
+  public void setProviderId(String providerId) {
     this.providerId = providerId;
   }
 
-  public GenericOpenAIChatModelTypeConfig optionalAuthentication(Object optionalAuthentication) {
+  public GenericOpenAIChatModelTypeConfig optionalAuthentication(Boolean optionalAuthentication) {
     this.optionalAuthentication = optionalAuthentication;
     return this;
   }
@@ -251,15 +252,15 @@ public class GenericOpenAIChatModelTypeConfig {
    * @return optionalAuthentication
   **/
   @Schema(description = "")
-  public Object getOptionalAuthentication() {
+  public Boolean isOptionalAuthentication() {
     return optionalAuthentication;
   }
 
-  public void setOptionalAuthentication(Object optionalAuthentication) {
+  public void setOptionalAuthentication(Boolean optionalAuthentication) {
     this.optionalAuthentication = optionalAuthentication;
   }
 
-  public GenericOpenAIChatModelTypeConfig applyThinkingMarkupHandling(Object applyThinkingMarkupHandling) {
+  public GenericOpenAIChatModelTypeConfig applyThinkingMarkupHandling(Boolean applyThinkingMarkupHandling) {
     this.applyThinkingMarkupHandling = applyThinkingMarkupHandling;
     return this;
   }
@@ -269,11 +270,11 @@ public class GenericOpenAIChatModelTypeConfig {
    * @return applyThinkingMarkupHandling
   **/
   @Schema(description = "")
-  public Object getApplyThinkingMarkupHandling() {
+  public Boolean isApplyThinkingMarkupHandling() {
     return applyThinkingMarkupHandling;
   }
 
-  public void setApplyThinkingMarkupHandling(Object applyThinkingMarkupHandling) {
+  public void setApplyThinkingMarkupHandling(Boolean applyThinkingMarkupHandling) {
     this.applyThinkingMarkupHandling = applyThinkingMarkupHandling;
   }
 

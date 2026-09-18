@@ -78,7 +78,11 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			LOGGER.debug("Begin onMessage(...) reactive agent network adapter id:" + getId() + " fromAgent:"
 					+ msg.getFromAgent());
 		}
-		
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<ADAPTED_REACTIVE_AGENT_INPUT agent=" + getId() + ">");
+			LOGGER.trace(String.valueOf(msg.getPayload()));
+			LOGGER.trace("</ADAPTED_REACTIVE_AGENT_INPUT>");
+		}
 		Flux<IGPartialOperation<ResponseType>> flux = service.execute(chatRequestContext, config, msg.getPayload(),
 				network, contextAgentPersona, notificationSink, session, mySessionContext, runAs);
 		Flux<IGPartialOperation<ResponseType>> duplicatedFlux = flux.map(x -> {
@@ -91,6 +95,15 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 					+ (buffered != null ? buffered.size() : 0) + " partial operation(s)");
 		}
 		ResponseType response = extractResponse(buffered);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Reactive agent adapter id:" + getId() + " collapsed the buffered partials into a response:"
+					+ (response != null));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<ADAPTED_REACTIVE_AGENT_OUTPUT agent=" + getId() + ">");
+			LOGGER.trace(String.valueOf(response));
+			LOGGER.trace("</ADAPTED_REACTIVE_AGENT_OUTPUT>");
+		}
 		AgentsExchangeMessage<ResponseType> outMessage = AgentsExchangeMessage.of(session, msg.getFromAgent(), response,
 				MessageSemantic.RESPONSE);
 		if (LOGGER.isDebugEnabled()) {

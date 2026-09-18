@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LoginRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class LoginRequest {
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("password")
-  private Object password = null;
+  private String password = null;
 
-  public LoginRequest username(Object username) {
+  public LoginRequest username(String username) {
     this.username = username;
     return this;
   }
@@ -41,15 +41,15 @@ public class LoginRequest {
    * @return username
   **/
   @Schema(required = true, description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public LoginRequest password(Object password) {
+  public LoginRequest password(String password) {
     this.password = password;
     return this;
   }
@@ -59,11 +59,11 @@ public class LoginRequest {
    * @return password
   **/
   @Schema(required = true, description = "")
-  public Object getPassword() {
+  public String getPassword() {
     return password;
   }
 
-  public void setPassword(Object password) {
+  public void setPassword(String password) {
     this.password = password;
   }
 

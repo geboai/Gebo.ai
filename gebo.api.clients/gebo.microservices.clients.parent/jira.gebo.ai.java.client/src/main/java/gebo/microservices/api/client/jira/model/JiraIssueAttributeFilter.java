@@ -18,54 +18,157 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * JiraIssueAttributeFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:33.251328392+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:34.676208947+02:00[Europe/Rome]")
 
 public class JiraIssueAttributeFilter {
   @JsonProperty("projectCodes")
-  private Object projectCodes = null;
+  private List<String> projectCodes = null;
 
   @JsonProperty("issuetypeCodes")
-  private Object issuetypeCodes = null;
+  private List<String> issuetypeCodes = null;
 
   @JsonProperty("issueKeys")
-  private Object issueKeys = null;
+  private List<String> issueKeys = null;
 
   @JsonProperty("summaryTerms")
-  private Object summaryTerms = null;
+  private List<String> summaryTerms = null;
 
-  @JsonProperty("summaryTermsMatchMode")
-  private Object summaryTermsMatchMode = null;
+  /**
+   * Gets or Sets summaryTermsMatchMode
+   */
+  public enum SummaryTermsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    SummaryTermsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static SummaryTermsMatchModeEnum fromValue(String input) {
+      for (SummaryTermsMatchModeEnum b : SummaryTermsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("summaryTermsMatchMode")
+  private SummaryTermsMatchModeEnum summaryTermsMatchMode = null;
 
   @JsonProperty("descriptionTerms")
-  private Object descriptionTerms = null;
+  private List<String> descriptionTerms = null;
 
-  @JsonProperty("descriptionTermsMatchMode")
-  private Object descriptionTermsMatchMode = null;
+  /**
+   * Gets or Sets descriptionTermsMatchMode
+   */
+  public enum DescriptionTermsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    DescriptionTermsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static DescriptionTermsMatchModeEnum fromValue(String input) {
+      for (DescriptionTermsMatchModeEnum b : DescriptionTermsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("descriptionTermsMatchMode")
+  private DescriptionTermsMatchModeEnum descriptionTermsMatchMode = null;
 
   @JsonProperty("labels")
-  private Object labels = null;
+  private List<String> labels = null;
 
-  @JsonProperty("labelsMatchMode")
-  private Object labelsMatchMode = null;
+  /**
+   * Gets or Sets labelsMatchMode
+   */
+  public enum LabelsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    LabelsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static LabelsMatchModeEnum fromValue(String input) {
+      for (LabelsMatchModeEnum b : LabelsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("labelsMatchMode")
+  private LabelsMatchModeEnum labelsMatchMode = null;
 
   @JsonProperty("priorityCodes")
-  private Object priorityCodes = null;
+  private List<String> priorityCodes = null;
 
   @JsonProperty("statusCodes")
-  private Object statusCodes = null;
+  private List<String> statusCodes = null;
 
   @JsonProperty("affectedVersions")
-  private Object affectedVersions = null;
+  private List<String> affectedVersions = null;
 
   @JsonProperty("fixVersions")
-  private Object fixVersions = null;
+  private List<String> fixVersions = null;
 
-  public JiraIssueAttributeFilter projectCodes(Object projectCodes) {
+  public JiraIssueAttributeFilter projectCodes(List<String> projectCodes) {
     this.projectCodes = projectCodes;
+    return this;
+  }
+
+  public JiraIssueAttributeFilter addProjectCodesItem(String projectCodesItem) {
+    if (this.projectCodes == null) {
+      this.projectCodes = new ArrayList<>();
+    }
+    this.projectCodes.add(projectCodesItem);
     return this;
   }
 
@@ -74,16 +177,24 @@ public class JiraIssueAttributeFilter {
    * @return projectCodes
   **/
   @Schema(description = "")
-  public Object getProjectCodes() {
+  public List<String> getProjectCodes() {
     return projectCodes;
   }
 
-  public void setProjectCodes(Object projectCodes) {
+  public void setProjectCodes(List<String> projectCodes) {
     this.projectCodes = projectCodes;
   }
 
-  public JiraIssueAttributeFilter issuetypeCodes(Object issuetypeCodes) {
+  public JiraIssueAttributeFilter issuetypeCodes(List<String> issuetypeCodes) {
     this.issuetypeCodes = issuetypeCodes;
+    return this;
+  }
+
+  public JiraIssueAttributeFilter addIssuetypeCodesItem(String issuetypeCodesItem) {
+    if (this.issuetypeCodes == null) {
+      this.issuetypeCodes = new ArrayList<>();
+    }
+    this.issuetypeCodes.add(issuetypeCodesItem);
     return this;
   }
 
@@ -92,16 +203,24 @@ public class JiraIssueAttributeFilter {
    * @return issuetypeCodes
   **/
   @Schema(description = "")
-  public Object getIssuetypeCodes() {
+  public List<String> getIssuetypeCodes() {
     return issuetypeCodes;
   }
 
-  public void setIssuetypeCodes(Object issuetypeCodes) {
+  public void setIssuetypeCodes(List<String> issuetypeCodes) {
     this.issuetypeCodes = issuetypeCodes;
   }
 
-  public JiraIssueAttributeFilter issueKeys(Object issueKeys) {
+  public JiraIssueAttributeFilter issueKeys(List<String> issueKeys) {
     this.issueKeys = issueKeys;
+    return this;
+  }
+
+  public JiraIssueAttributeFilter addIssueKeysItem(String issueKeysItem) {
+    if (this.issueKeys == null) {
+      this.issueKeys = new ArrayList<>();
+    }
+    this.issueKeys.add(issueKeysItem);
     return this;
   }
 
@@ -110,16 +229,24 @@ public class JiraIssueAttributeFilter {
    * @return issueKeys
   **/
   @Schema(description = "")
-  public Object getIssueKeys() {
+  public List<String> getIssueKeys() {
     return issueKeys;
   }
 
-  public void setIssueKeys(Object issueKeys) {
+  public void setIssueKeys(List<String> issueKeys) {
     this.issueKeys = issueKeys;
   }
 
-  public JiraIssueAttributeFilter summaryTerms(Object summaryTerms) {
+  public JiraIssueAttributeFilter summaryTerms(List<String> summaryTerms) {
     this.summaryTerms = summaryTerms;
+    return this;
+  }
+
+  public JiraIssueAttributeFilter addSummaryTermsItem(String summaryTermsItem) {
+    if (this.summaryTerms == null) {
+      this.summaryTerms = new ArrayList<>();
+    }
+    this.summaryTerms.add(summaryTermsItem);
     return this;
   }
 
@@ -128,15 +255,15 @@ public class JiraIssueAttributeFilter {
    * @return summaryTerms
   **/
   @Schema(description = "")
-  public Object getSummaryTerms() {
+  public List<String> getSummaryTerms() {
     return summaryTerms;
   }
 
-  public void setSummaryTerms(Object summaryTerms) {
+  public void setSummaryTerms(List<String> summaryTerms) {
     this.summaryTerms = summaryTerms;
   }
 
-  public JiraIssueAttributeFilter summaryTermsMatchMode(Object summaryTermsMatchMode) {
+  public JiraIssueAttributeFilter summaryTermsMatchMode(SummaryTermsMatchModeEnum summaryTermsMatchMode) {
     this.summaryTermsMatchMode = summaryTermsMatchMode;
     return this;
   }
@@ -146,16 +273,24 @@ public class JiraIssueAttributeFilter {
    * @return summaryTermsMatchMode
   **/
   @Schema(description = "")
-  public Object getSummaryTermsMatchMode() {
+  public SummaryTermsMatchModeEnum getSummaryTermsMatchMode() {
     return summaryTermsMatchMode;
   }
 
-  public void setSummaryTermsMatchMode(Object summaryTermsMatchMode) {
+  public void setSummaryTermsMatchMode(SummaryTermsMatchModeEnum summaryTermsMatchMode) {
     this.summaryTermsMatchMode = summaryTermsMatchMode;
   }
 
-  public JiraIssueAttributeFilter descriptionTerms(Object descriptionTerms) {
+  public JiraIssueAttributeFilter descriptionTerms(List<String> descriptionTerms) {
     this.descriptionTerms = descriptionTerms;
+    return this;
+  }
+
+  public JiraIssueAttributeFilter addDescriptionTermsItem(String descriptionTermsItem) {
+    if (this.descriptionTerms == null) {
+      this.descriptionTerms = new ArrayList<>();
+    }
+    this.descriptionTerms.add(descriptionTermsItem);
     return this;
   }
 
@@ -164,15 +299,15 @@ public class JiraIssueAttributeFilter {
    * @return descriptionTerms
   **/
   @Schema(description = "")
-  public Object getDescriptionTerms() {
+  public List<String> getDescriptionTerms() {
     return descriptionTerms;
   }
 
-  public void setDescriptionTerms(Object descriptionTerms) {
+  public void setDescriptionTerms(List<String> descriptionTerms) {
     this.descriptionTerms = descriptionTerms;
   }
 
-  public JiraIssueAttributeFilter descriptionTermsMatchMode(Object descriptionTermsMatchMode) {
+  public JiraIssueAttributeFilter descriptionTermsMatchMode(DescriptionTermsMatchModeEnum descriptionTermsMatchMode) {
     this.descriptionTermsMatchMode = descriptionTermsMatchMode;
     return this;
   }
@@ -182,16 +317,24 @@ public class JiraIssueAttributeFilter {
    * @return descriptionTermsMatchMode
   **/
   @Schema(description = "")
-  public Object getDescriptionTermsMatchMode() {
+  public DescriptionTermsMatchModeEnum getDescriptionTermsMatchMode() {
     return descriptionTermsMatchMode;
   }
 
-  public void setDescriptionTermsMatchMode(Object descriptionTermsMatchMode) {
+  public void setDescriptionTermsMatchMode(DescriptionTermsMatchModeEnum descriptionTermsMatchMode) {
     this.descriptionTermsMatchMode = descriptionTermsMatchMode;
   }
 
-  public JiraIssueAttributeFilter labels(Object labels) {
+  public JiraIssueAttributeFilter labels(List<String> labels) {
     this.labels = labels;
+    return this;
+  }
+
+  public JiraIssueAttributeFilter addLabelsItem(String labelsItem) {
+    if (this.labels == null) {
+      this.labels = new ArrayList<>();
+    }
+    this.labels.add(labelsItem);
     return this;
   }
 
@@ -200,15 +343,15 @@ public class JiraIssueAttributeFilter {
    * @return labels
   **/
   @Schema(description = "")
-  public Object getLabels() {
+  public List<String> getLabels() {
     return labels;
   }
 
-  public void setLabels(Object labels) {
+  public void setLabels(List<String> labels) {
     this.labels = labels;
   }
 
-  public JiraIssueAttributeFilter labelsMatchMode(Object labelsMatchMode) {
+  public JiraIssueAttributeFilter labelsMatchMode(LabelsMatchModeEnum labelsMatchMode) {
     this.labelsMatchMode = labelsMatchMode;
     return this;
   }
@@ -218,16 +361,24 @@ public class JiraIssueAttributeFilter {
    * @return labelsMatchMode
   **/
   @Schema(description = "")
-  public Object getLabelsMatchMode() {
+  public LabelsMatchModeEnum getLabelsMatchMode() {
     return labelsMatchMode;
   }
 
-  public void setLabelsMatchMode(Object labelsMatchMode) {
+  public void setLabelsMatchMode(LabelsMatchModeEnum labelsMatchMode) {
     this.labelsMatchMode = labelsMatchMode;
   }
 
-  public JiraIssueAttributeFilter priorityCodes(Object priorityCodes) {
+  public JiraIssueAttributeFilter priorityCodes(List<String> priorityCodes) {
     this.priorityCodes = priorityCodes;
+    return this;
+  }
+
+  public JiraIssueAttributeFilter addPriorityCodesItem(String priorityCodesItem) {
+    if (this.priorityCodes == null) {
+      this.priorityCodes = new ArrayList<>();
+    }
+    this.priorityCodes.add(priorityCodesItem);
     return this;
   }
 
@@ -236,16 +387,24 @@ public class JiraIssueAttributeFilter {
    * @return priorityCodes
   **/
   @Schema(description = "")
-  public Object getPriorityCodes() {
+  public List<String> getPriorityCodes() {
     return priorityCodes;
   }
 
-  public void setPriorityCodes(Object priorityCodes) {
+  public void setPriorityCodes(List<String> priorityCodes) {
     this.priorityCodes = priorityCodes;
   }
 
-  public JiraIssueAttributeFilter statusCodes(Object statusCodes) {
+  public JiraIssueAttributeFilter statusCodes(List<String> statusCodes) {
     this.statusCodes = statusCodes;
+    return this;
+  }
+
+  public JiraIssueAttributeFilter addStatusCodesItem(String statusCodesItem) {
+    if (this.statusCodes == null) {
+      this.statusCodes = new ArrayList<>();
+    }
+    this.statusCodes.add(statusCodesItem);
     return this;
   }
 
@@ -254,16 +413,24 @@ public class JiraIssueAttributeFilter {
    * @return statusCodes
   **/
   @Schema(description = "")
-  public Object getStatusCodes() {
+  public List<String> getStatusCodes() {
     return statusCodes;
   }
 
-  public void setStatusCodes(Object statusCodes) {
+  public void setStatusCodes(List<String> statusCodes) {
     this.statusCodes = statusCodes;
   }
 
-  public JiraIssueAttributeFilter affectedVersions(Object affectedVersions) {
+  public JiraIssueAttributeFilter affectedVersions(List<String> affectedVersions) {
     this.affectedVersions = affectedVersions;
+    return this;
+  }
+
+  public JiraIssueAttributeFilter addAffectedVersionsItem(String affectedVersionsItem) {
+    if (this.affectedVersions == null) {
+      this.affectedVersions = new ArrayList<>();
+    }
+    this.affectedVersions.add(affectedVersionsItem);
     return this;
   }
 
@@ -272,16 +439,24 @@ public class JiraIssueAttributeFilter {
    * @return affectedVersions
   **/
   @Schema(description = "")
-  public Object getAffectedVersions() {
+  public List<String> getAffectedVersions() {
     return affectedVersions;
   }
 
-  public void setAffectedVersions(Object affectedVersions) {
+  public void setAffectedVersions(List<String> affectedVersions) {
     this.affectedVersions = affectedVersions;
   }
 
-  public JiraIssueAttributeFilter fixVersions(Object fixVersions) {
+  public JiraIssueAttributeFilter fixVersions(List<String> fixVersions) {
     this.fixVersions = fixVersions;
+    return this;
+  }
+
+  public JiraIssueAttributeFilter addFixVersionsItem(String fixVersionsItem) {
+    if (this.fixVersions == null) {
+      this.fixVersions = new ArrayList<>();
+    }
+    this.fixVersions.add(fixVersionsItem);
     return this;
   }
 
@@ -290,11 +465,11 @@ public class JiraIssueAttributeFilter {
    * @return fixVersions
   **/
   @Schema(description = "")
-  public Object getFixVersions() {
+  public List<String> getFixVersions() {
     return fixVersions;
   }
 
-  public void setFixVersions(Object fixVersions) {
+  public void setFixVersions(List<String> fixVersions) {
     this.fixVersions = fixVersions;
   }
 

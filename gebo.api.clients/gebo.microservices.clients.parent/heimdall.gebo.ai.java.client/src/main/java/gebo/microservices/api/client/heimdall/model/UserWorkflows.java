@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * UserWorkflows
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class UserWorkflows {
   @JsonProperty("activationWorkflowEnabled")
-  private Object activationWorkflowEnabled = null;
+  private Boolean activationWorkflowEnabled = null;
 
   @JsonProperty("forgotPasswordWorkflowEnabled")
-  private Object forgotPasswordWorkflowEnabled = null;
+  private Boolean forgotPasswordWorkflowEnabled = null;
 
-  public UserWorkflows activationWorkflowEnabled(Object activationWorkflowEnabled) {
+  public UserWorkflows activationWorkflowEnabled(Boolean activationWorkflowEnabled) {
     this.activationWorkflowEnabled = activationWorkflowEnabled;
     return this;
   }
@@ -41,15 +41,15 @@ public class UserWorkflows {
    * @return activationWorkflowEnabled
   **/
   @Schema(description = "")
-  public Object getActivationWorkflowEnabled() {
+  public Boolean isActivationWorkflowEnabled() {
     return activationWorkflowEnabled;
   }
 
-  public void setActivationWorkflowEnabled(Object activationWorkflowEnabled) {
+  public void setActivationWorkflowEnabled(Boolean activationWorkflowEnabled) {
     this.activationWorkflowEnabled = activationWorkflowEnabled;
   }
 
-  public UserWorkflows forgotPasswordWorkflowEnabled(Object forgotPasswordWorkflowEnabled) {
+  public UserWorkflows forgotPasswordWorkflowEnabled(Boolean forgotPasswordWorkflowEnabled) {
     this.forgotPasswordWorkflowEnabled = forgotPasswordWorkflowEnabled;
     return this;
   }
@@ -59,11 +59,11 @@ public class UserWorkflows {
    * @return forgotPasswordWorkflowEnabled
   **/
   @Schema(description = "")
-  public Object getForgotPasswordWorkflowEnabled() {
+  public Boolean isForgotPasswordWorkflowEnabled() {
     return forgotPasswordWorkflowEnabled;
   }
 
-  public void setForgotPasswordWorkflowEnabled(Object forgotPasswordWorkflowEnabled) {
+  public void setForgotPasswordWorkflowEnabled(Boolean forgotPasswordWorkflowEnabled) {
     this.forgotPasswordWorkflowEnabled = forgotPasswordWorkflowEnabled;
   }
 

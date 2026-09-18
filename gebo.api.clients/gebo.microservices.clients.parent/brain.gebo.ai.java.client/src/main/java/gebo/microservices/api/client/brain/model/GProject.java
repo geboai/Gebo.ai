@@ -18,62 +18,99 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GProject
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GProject {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("creationDate")
-  private Object creationDate = null;
+  private Date creationDate = null;
 
   @JsonProperty("modificationDate")
-  private Object modificationDate = null;
+  private Date modificationDate = null;
 
   @JsonProperty("version")
-  private Object version = null;
+  private String version = null;
 
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("rootKnowledgeBaseCode")
-  private Object rootKnowledgeBaseCode = null;
+  private String rootKnowledgeBaseCode = null;
 
-  @JsonProperty("objectSpaceType")
-  private Object objectSpaceType = null;
+  /**
+   * Gets or Sets objectSpaceType
+   */
+  public enum ObjectSpaceTypeEnum {
+    COMPANY("COMPANY"),
+    USERSPACE("USERSPACE");
+
+    private String value;
+
+    ObjectSpaceTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ObjectSpaceTypeEnum fromValue(String input) {
+      for (ObjectSpaceTypeEnum b : ObjectSpaceTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("objectSpaceType")
+  private ObjectSpaceTypeEnum objectSpaceType = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("parentProjectCode")
-  private Object parentProjectCode = null;
+  private String parentProjectCode = null;
 
-  public GProject code(Object code) {
+  @JsonProperty("readonly")
+  private Boolean readonly = null;
+
+  public GProject code(String code) {
     this.code = code;
     return this;
   }
@@ -83,15 +120,15 @@ public class GProject {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GProject description(Object description) {
+  public GProject description(String description) {
     this.description = description;
     return this;
   }
@@ -101,15 +138,15 @@ public class GProject {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GProject userModified(Object userModified) {
+  public GProject userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -119,15 +156,15 @@ public class GProject {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GProject userCreated(Object userCreated) {
+  public GProject userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -137,15 +174,15 @@ public class GProject {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GProject dateModified(Object dateModified) {
+  public GProject dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -155,15 +192,15 @@ public class GProject {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GProject dateCreated(Object dateCreated) {
+  public GProject dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -173,15 +210,15 @@ public class GProject {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GProject creationDate(Object creationDate) {
+  public GProject creationDate(Date creationDate) {
     this.creationDate = creationDate;
     return this;
   }
@@ -191,15 +228,15 @@ public class GProject {
    * @return creationDate
   **/
   @Schema(description = "")
-  public Object getCreationDate() {
+  public Date getCreationDate() {
     return creationDate;
   }
 
-  public void setCreationDate(Object creationDate) {
+  public void setCreationDate(Date creationDate) {
     this.creationDate = creationDate;
   }
 
-  public GProject modificationDate(Object modificationDate) {
+  public GProject modificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
     return this;
   }
@@ -209,15 +246,15 @@ public class GProject {
    * @return modificationDate
   **/
   @Schema(description = "")
-  public Object getModificationDate() {
+  public Date getModificationDate() {
     return modificationDate;
   }
 
-  public void setModificationDate(Object modificationDate) {
+  public void setModificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
   }
 
-  public GProject version(Object version) {
+  public GProject version(String version) {
     this.version = version;
     return this;
   }
@@ -227,16 +264,24 @@ public class GProject {
    * @return version
   **/
   @Schema(description = "")
-  public Object getVersion() {
+  public String getVersion() {
     return version;
   }
 
-  public void setVersion(Object version) {
+  public void setVersion(String version) {
     this.version = version;
   }
 
-  public GProject accessibleGroups(Object accessibleGroups) {
+  public GProject accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public GProject addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -245,16 +290,24 @@ public class GProject {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public GProject accessibleUsers(Object accessibleUsers) {
+  public GProject accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public GProject addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -263,15 +316,15 @@ public class GProject {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public GProject accessibleToAll(Object accessibleToAll) {
+  public GProject accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -281,15 +334,15 @@ public class GProject {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public GProject rootKnowledgeBaseCode(Object rootKnowledgeBaseCode) {
+  public GProject rootKnowledgeBaseCode(String rootKnowledgeBaseCode) {
     this.rootKnowledgeBaseCode = rootKnowledgeBaseCode;
     return this;
   }
@@ -299,15 +352,15 @@ public class GProject {
    * @return rootKnowledgeBaseCode
   **/
   @Schema(description = "")
-  public Object getRootKnowledgeBaseCode() {
+  public String getRootKnowledgeBaseCode() {
     return rootKnowledgeBaseCode;
   }
 
-  public void setRootKnowledgeBaseCode(Object rootKnowledgeBaseCode) {
+  public void setRootKnowledgeBaseCode(String rootKnowledgeBaseCode) {
     this.rootKnowledgeBaseCode = rootKnowledgeBaseCode;
   }
 
-  public GProject objectSpaceType(Object objectSpaceType) {
+  public GProject objectSpaceType(ObjectSpaceTypeEnum objectSpaceType) {
     this.objectSpaceType = objectSpaceType;
     return this;
   }
@@ -317,16 +370,24 @@ public class GProject {
    * @return objectSpaceType
   **/
   @Schema(description = "")
-  public Object getObjectSpaceType() {
+  public ObjectSpaceTypeEnum getObjectSpaceType() {
     return objectSpaceType;
   }
 
-  public void setObjectSpaceType(Object objectSpaceType) {
+  public void setObjectSpaceType(ObjectSpaceTypeEnum objectSpaceType) {
     this.objectSpaceType = objectSpaceType;
   }
 
-  public GProject aclAliases(Object aclAliases) {
+  public GProject aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GProject addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -335,15 +396,15 @@ public class GProject {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
   }
 
-  public GProject parentProjectCode(Object parentProjectCode) {
+  public GProject parentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
     return this;
   }
@@ -353,12 +414,30 @@ public class GProject {
    * @return parentProjectCode
   **/
   @Schema(description = "")
-  public Object getParentProjectCode() {
+  public String getParentProjectCode() {
     return parentProjectCode;
   }
 
-  public void setParentProjectCode(Object parentProjectCode) {
+  public void setParentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
+  }
+
+  public GProject readonly(Boolean readonly) {
+    this.readonly = readonly;
+    return this;
+  }
+
+   /**
+   * Get readonly
+   * @return readonly
+  **/
+  @Schema(description = "")
+  public Boolean isReadonly() {
+    return readonly;
+  }
+
+  public void setReadonly(Boolean readonly) {
+    this.readonly = readonly;
   }
 
 
@@ -386,12 +465,13 @@ public class GProject {
         Objects.equals(this.rootKnowledgeBaseCode, gproject.rootKnowledgeBaseCode) &&
         Objects.equals(this.objectSpaceType, gproject.objectSpaceType) &&
         Objects.equals(this.aclAliases, gproject.aclAliases) &&
-        Objects.equals(this.parentProjectCode, gproject.parentProjectCode);
+        Objects.equals(this.parentProjectCode, gproject.parentProjectCode) &&
+        Objects.equals(this.readonly, gproject.readonly);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, accessibleGroups, accessibleUsers, accessibleToAll, rootKnowledgeBaseCode, objectSpaceType, aclAliases, parentProjectCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, accessibleGroups, accessibleUsers, accessibleToAll, rootKnowledgeBaseCode, objectSpaceType, aclAliases, parentProjectCode, readonly);
   }
 
 
@@ -416,6 +496,7 @@ public class GProject {
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    parentProjectCode: ").append(toIndentedString(parentProjectCode)).append("\n");
+    sb.append("    readonly: ").append(toIndentedString(readonly)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -12,7 +12,7 @@ RUN update-locale LANG=en_US.UTF-8
 LABEL mantainer=paolo.zavalloni@gebo.ai
 LABEL org.opencontainers.image.authors="paolo.zavalloni@gebo.ai"
 LABEL org.opencontainers.image.title="Gebo.ai"
-LABEL org.opencontainers.image.version="1.0.2.4"
+LABEL org.opencontainers.image.version="1.0.3.0"
 LABEL org.opencontainers.image.description="Gebo.ai enterprise rag & agents/chatbot platform"
 LABEL org.opencontainers.image.vendor="Gebo.ai"
 LABEL org.opencontainers.image.source="https://github.com/geboai/Gebo.ai"
@@ -42,7 +42,18 @@ ENV DEBIAN_FRONTEND=noninteractive \
     OPENSEARCH_HOME=/opt/opensearch \
     OPENSEARCH_DATA=/opt/opensearch/data
 
-ARG MONGO_MAJOR=8.0
+# Pinned to the 8.2 line on purpose, NOT 8.0 or 8.3.
+# MongoDB 8.0+ is incompatible with Linux kernel 6.19 and newer (TCMalloc
+# violates the upstream rseq ABI - SERVER-121912). 8.0.30 and 8.3.9 refuse to
+# start on those kernels rather than segfault later, and Ubuntu 24.04 LTS ships
+# kernel 7.0 in its HWE line, so that is a mainstream host. 8.2.x is the newest
+# line that still starts there; supervisord also sets GLIBC_TUNABLES for mongod.
+# REVERT TO 8.0/8.3 once MongoDB ships the TCMalloc fix.
+ARG MONGO_MAJOR=8.2
+# MongoDB publishes signing keys only for its LTS series (7.0, 8.0); there is no
+# server-8.2.asc. The 8.0 key signs the 8.2 repo too - verified against its
+# InRelease - so the key series and the repo series differ on purpose.
+ARG MONGO_PGP_SERIES=8.0
 ARG QDRANT_VERSION=1.15.3
 ARG OPENSEARCH_VERSION=2.18.0
 ARG TARGETARCH
@@ -51,10 +62,10 @@ RUN apt-get update && apt-get install -y  \
       ca-certificates curl gnupg lsb-release supervisor tini \
     && rm -rf /var/lib/apt/lists/*
 
-RUN    curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
-	   gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg \
+RUN    curl -fsSL https://www.mongodb.org/static/pgp/server-${MONGO_PGP_SERIES}.asc | \
+	   gpg -o /usr/share/keyrings/mongodb-server-${MONGO_MAJOR}.gpg \
 	   --dearmor 
-RUN echo  "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse" |  tee /etc/apt/sources.list.d/mongodb-org-8.0.list 
+RUN echo  "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-${MONGO_MAJOR}.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/${MONGO_MAJOR} multiverse" |  tee /etc/apt/sources.list.d/mongodb-org-${MONGO_MAJOR}.list 
 	
 RUN apt-get update 
 RUN apt-get install -y  mongodb-org 
@@ -140,7 +151,7 @@ ENV JAVA_EXTRA_SECURITY_DIR=/opt/
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 RUN mkdir -p /opt/gebo.ai/home /opt/gebo.ai/config /opt/gebo.ai/work /opt/gebo.ai/logs /opt/gebo.ai/shares /var/log/gebo.ai
-COPY gebo.ai.app-1.0.2.4-bootable.jar /opt/gebo.ai
+COPY gebo.ai.app-1.0.3.0-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
 ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:+AggressiveHeap -XX:MaxMetaspaceSize=512m -XX:+PrintGCDetails -Xlog:gc:/opt/gebo.ai/logs/gc.log"

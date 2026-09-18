@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:50.343715666+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:33.855652885+02:00[Europe/Rome]")
 
 public class ConfluenceSystemsControllerApi {
     private ApiClient apiClient;
@@ -72,7 +72,7 @@ public class ConfluenceSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteConfluenceEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/deleteConfluenceEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/deleteConfluenceEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -88,7 +88,7 @@ public class ConfluenceSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -115,7 +115,7 @@ public class ConfluenceSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteConfluenceSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/deleteConfluenceSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/deleteConfluenceSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -131,7 +131,7 @@ public class ConfluenceSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -159,7 +159,7 @@ public class ConfluenceSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling fastConfluenceConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/fastConfluenceConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/fastConfluenceConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -177,7 +177,7 @@ public class ConfluenceSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGConfluenceSystem> returnType = new ParameterizedTypeReference<OperationStatusGConfluenceSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -187,7 +187,7 @@ public class ConfluenceSystemsControllerApi {
      * @return GConfluenceProjectEndpoint
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GConfluenceProjectEndpoint findConfluenceEndpointsByCode(Object code) throws RestClientException {
+    public GConfluenceProjectEndpoint findConfluenceEndpointsByCode(String code) throws RestClientException {
         return findConfluenceEndpointsByCodeWithHttpInfo(code).getBody();
     }
 
@@ -199,13 +199,13 @@ public class ConfluenceSystemsControllerApi {
      * @return ResponseEntity&lt;GConfluenceProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GConfluenceProjectEndpoint> findConfluenceEndpointsByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GConfluenceProjectEndpoint> findConfluenceEndpointsByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findConfluenceEndpointsByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -222,17 +222,17 @@ public class ConfluenceSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GConfluenceProjectEndpoint> returnType = new ParameterizedTypeReference<GConfluenceProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return Object
+     * @return List&lt;GConfluenceProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findConfluenceEndpointsByProject(Object parentProjectCode) throws RestClientException {
+    public List<GConfluenceProjectEndpoint> findConfluenceEndpointsByProject(String parentProjectCode) throws RestClientException {
         return findConfluenceEndpointsByProjectWithHttpInfo(parentProjectCode).getBody();
     }
 
@@ -241,16 +241,16 @@ public class ConfluenceSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GConfluenceProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findConfluenceEndpointsByProjectWithHttpInfo(Object parentProjectCode) throws RestClientException {
+    public ResponseEntity<List<GConfluenceProjectEndpoint>> findConfluenceEndpointsByProjectWithHttpInfo(String parentProjectCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'parentProjectCode' is set
         if (parentProjectCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'parentProjectCode' when calling findConfluenceEndpointsByProject");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByProject").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByProject").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -266,18 +266,18 @@ public class ConfluenceSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GConfluenceProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GConfluenceProjectEndpoint>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GConfluenceProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findConfluenceEndpointsByQbe(GConfluenceProjectEndpoint body) throws RestClientException {
+    public List<GConfluenceProjectEndpoint> findConfluenceEndpointsByQbe(GConfluenceProjectEndpoint body) throws RestClientException {
         return findConfluenceEndpointsByQbeWithHttpInfo(body).getBody();
     }
 
@@ -286,16 +286,16 @@ public class ConfluenceSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GConfluenceProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findConfluenceEndpointsByQbeWithHttpInfo(GConfluenceProjectEndpoint body) throws RestClientException {
+    public ResponseEntity<List<GConfluenceProjectEndpoint>> findConfluenceEndpointsByQbeWithHttpInfo(GConfluenceProjectEndpoint body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findConfluenceEndpointsByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -312,8 +312,8 @@ public class ConfluenceSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GConfluenceProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GConfluenceProjectEndpoint>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -323,7 +323,7 @@ public class ConfluenceSystemsControllerApi {
      * @return GConfluenceSystem
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GConfluenceSystem findConfluenceSystemByCode(Object code) throws RestClientException {
+    public GConfluenceSystem findConfluenceSystemByCode(String code) throws RestClientException {
         return findConfluenceSystemByCodeWithHttpInfo(code).getBody();
     }
 
@@ -335,13 +335,13 @@ public class ConfluenceSystemsControllerApi {
      * @return ResponseEntity&lt;GConfluenceSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GConfluenceSystem> findConfluenceSystemByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GConfluenceSystem> findConfluenceSystemByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findConfluenceSystemByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/findConfluenceSystemByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/findConfluenceSystemByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -358,7 +358,7 @@ public class ConfluenceSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GConfluenceSystem> returnType = new ParameterizedTypeReference<GConfluenceSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -380,7 +380,7 @@ public class ConfluenceSystemsControllerApi {
      */
     public ResponseEntity<GContentManagementSystemType> getConfluenceSystemTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/getConfluenceSystemType").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/getConfluenceSystemType").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -396,16 +396,16 @@ public class ConfluenceSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GContentManagementSystemType> returnType = new ParameterizedTypeReference<GContentManagementSystemType>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GConfluenceSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getConfluenceSystems() throws RestClientException {
+    public List<GConfluenceSystem> getConfluenceSystems() throws RestClientException {
         return getConfluenceSystemsWithHttpInfo().getBody();
     }
 
@@ -413,12 +413,12 @@ public class ConfluenceSystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GConfluenceSystem&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getConfluenceSystemsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GConfluenceSystem>> getConfluenceSystemsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/getConfluenceSystems").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/getConfluenceSystems").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -433,8 +433,8 @@ public class ConfluenceSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GConfluenceSystem>> returnType = new ParameterizedTypeReference<List<GConfluenceSystem>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -462,7 +462,7 @@ public class ConfluenceSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertConfluenceEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/insertConfluenceEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/insertConfluenceEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -480,7 +480,7 @@ public class ConfluenceSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GConfluenceProjectEndpoint> returnType = new ParameterizedTypeReference<GConfluenceProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -508,7 +508,7 @@ public class ConfluenceSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertConfluenceSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/insertConfluenceSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/insertConfluenceSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -526,7 +526,7 @@ public class ConfluenceSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGConfluenceSystem> returnType = new ParameterizedTypeReference<OperationStatusGConfluenceSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -554,7 +554,7 @@ public class ConfluenceSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishConfluenceEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/publishConfluenceEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/publishConfluenceEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -572,7 +572,7 @@ public class ConfluenceSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJobStatus> returnType = new ParameterizedTypeReference<OperationStatusGJobStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -600,7 +600,7 @@ public class ConfluenceSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling testConfluenceSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/testConfluenceSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/testConfluenceSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -618,7 +618,7 @@ public class ConfluenceSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGConfluenceSystem> returnType = new ParameterizedTypeReference<OperationStatusGConfluenceSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -646,7 +646,7 @@ public class ConfluenceSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateConfluenceEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/updateConfluenceEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/updateConfluenceEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -664,7 +664,7 @@ public class ConfluenceSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GConfluenceProjectEndpoint> returnType = new ParameterizedTypeReference<GConfluenceProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -692,7 +692,7 @@ public class ConfluenceSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateConfluenceSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/updateConfluenceSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/updateConfluenceSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -710,6 +710,6 @@ public class ConfluenceSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGConfluenceSystem> returnType = new ParameterizedTypeReference<OperationStatusGConfluenceSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

@@ -3,19 +3,27 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  |  [optional]
-**description** | **Object** |  |  [optional]
-**userModified** | **Object** |  |  [optional]
-**userCreated** | **Object** |  |  [optional]
-**dateModified** | **Object** |  |  [optional]
-**dateCreated** | **Object** |  |  [optional]
-**creationDate** | **Object** |  |  [optional]
-**modificationDate** | **Object** |  |  [optional]
-**version** | **Object** |  |  [optional]
-**accessibleGroups** | **Object** |  |  [optional]
-**accessibleUsers** | **Object** |  |  [optional]
-**accessibleToAll** | **Object** |  |  [optional]
-**rootKnowledgeBaseCode** | **Object** |  |  [optional]
-**objectSpaceType** | **Object** |  |  [optional]
-**aclAliases** | **Object** |  |  [optional]
-**parentProjectCode** | **Object** |  |  [optional]
+**code** | **String** |  |  [optional]
+**description** | **String** |  |  [optional]
+**userModified** | **String** |  |  [optional]
+**userCreated** | **String** |  |  [optional]
+**dateModified** | [**Date**](Date.md) |  |  [optional]
+**dateCreated** | [**Date**](Date.md) |  |  [optional]
+**creationDate** | [**Date**](Date.md) |  |  [optional]
+**modificationDate** | [**Date**](Date.md) |  |  [optional]
+**version** | **String** |  |  [optional]
+**accessibleGroups** | **List&lt;String&gt;** |  |  [optional]
+**accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
+**accessibleToAll** | **Boolean** |  |  [optional]
+**rootKnowledgeBaseCode** | **String** |  |  [optional]
+**objectSpaceType** | [**ObjectSpaceTypeEnum**](#ObjectSpaceTypeEnum) |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
+**parentProjectCode** | **String** |  |  [optional]
+**readonly** | **Boolean** |  |  [optional]
+
+<a name="ObjectSpaceTypeEnum"></a>
+## Enum: ObjectSpaceTypeEnum
+Name | Value
+---- | -----
+COMPANY | &quot;COMPANY&quot;
+USERSPACE | &quot;USERSPACE&quot;

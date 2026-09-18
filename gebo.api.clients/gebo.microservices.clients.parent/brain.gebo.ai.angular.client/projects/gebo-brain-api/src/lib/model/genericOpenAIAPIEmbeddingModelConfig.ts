@@ -12,17 +12,17 @@
 import { GenericOpenAIAPIEmbeddingModelChoice } from './genericOpenAIAPIEmbeddingModelChoice';
 
 export interface GenericOpenAIAPIEmbeddingModelConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    modelTypeCode?: any;
-    defaultModel?: any;
-    apiSecretCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    modelTypeCode?: string;
+    defaultModel?: boolean;
+    apiSecretCode?: string;
     choosedModel?: GenericOpenAIAPIEmbeddingModelChoice;
-    baseUrl?: any;
-    contextLength?: any;
-    tokenizationThreshold?: any;
+    baseUrl?: string;
+    contextLength?: number;
+    tokenizationThreshold?: number;
 }

@@ -9,16 +9,13 @@
 
 package ai.gebo.llms.aws_bedrock.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.aws_bedrock.model.GBedrockChatModelConfig;
 
 /**
- * MongoDB repository for AWS Bedrock chat model configurations. Only enabled
- * when {@code ai.gebo.llms.config.awsBedrockEnabled} is {@code true}.
+ * MongoDB repository for AWS Bedrock chat model configurations.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 public interface BedrockChatModelConfigRepository extends IGBaseMongoDBRepository<GBedrockChatModelConfig> {
 	@Override
 	default Class<GBedrockChatModelConfig> getManagedType() {

@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboChatProfileLookupControllerApi {
     private ApiClient apiClient;
@@ -53,7 +53,7 @@ public class GeboChatProfileLookupControllerApi {
      * @return GChatProfileConfiguration
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GChatProfileConfiguration findChatProfileConfigurationLookupByCode(Object code) throws RestClientException {
+    public GChatProfileConfiguration findChatProfileConfigurationLookupByCode(String code) throws RestClientException {
         return findChatProfileConfigurationLookupByCodeWithHttpInfo(code).getBody();
     }
 
@@ -65,13 +65,13 @@ public class GeboChatProfileLookupControllerApi {
      * @return ResponseEntity&lt;GChatProfileConfiguration&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GChatProfileConfiguration> findChatProfileConfigurationLookupByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GChatProfileConfiguration> findChatProfileConfigurationLookupByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findChatProfileConfigurationLookupByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboChatProfileLookupController/findChatProfileConfigurationLookupByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboChatProfileLookupController/findChatProfileConfigurationLookupByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -88,7 +88,7 @@ public class GeboChatProfileLookupControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GChatProfileConfiguration> returnType = new ParameterizedTypeReference<GChatProfileConfiguration>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -116,7 +116,7 @@ public class GeboChatProfileLookupControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getAllChatProfileConfigurationLoookup");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboChatProfileLookupController/getAllChatProfileConfigurationLoookup").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboChatProfileLookupController/getAllChatProfileConfigurationLoookup").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -134,7 +134,7 @@ public class GeboChatProfileLookupControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PageGLookupEntry> returnType = new ParameterizedTypeReference<PageGLookupEntry>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -162,7 +162,7 @@ public class GeboChatProfileLookupControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getChatProfileConfigurationLookupByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboChatProfileLookupController/getChatProfileConfigurationLookupByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboChatProfileLookupController/getChatProfileConfigurationLookupByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -180,6 +180,6 @@ public class GeboChatProfileLookupControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PageGLookupEntry> returnType = new ParameterizedTypeReference<PageGLookupEntry>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

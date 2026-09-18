@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**description** | **Object** |  | 
-**impersonatedUser** | **Object** |  | 
-**expiration** | **Object** |  | 
+**description** | **String** |  | 
+**impersonatedUser** | **String** |  | 
+**expiration** | [**Date**](Date.md) |  | 

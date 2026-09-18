@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboContentProcessRow
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboContentProcessRow {
   @JsonProperty("knowledgeBase")
@@ -42,7 +42,7 @@ public class GeboContentProcessRow {
   private GObjectRefGProjectEndpoint endpointObjectRef = null;
 
   @JsonProperty("contentsCount")
-  private Object contentsCount = null;
+  private Long contentsCount = null;
 
   public GeboContentProcessRow knowledgeBase(GKnowledgeBase knowledgeBase) {
     this.knowledgeBase = knowledgeBase;
@@ -116,7 +116,7 @@ public class GeboContentProcessRow {
     this.endpointObjectRef = endpointObjectRef;
   }
 
-  public GeboContentProcessRow contentsCount(Object contentsCount) {
+  public GeboContentProcessRow contentsCount(Long contentsCount) {
     this.contentsCount = contentsCount;
     return this;
   }
@@ -126,11 +126,11 @@ public class GeboContentProcessRow {
    * @return contentsCount
   **/
   @Schema(description = "")
-  public Object getContentsCount() {
+  public Long getContentsCount() {
     return contentsCount;
   }
 
-  public void setContentsCount(Object contentsCount) {
+  public void setContentsCount(Long contentsCount) {
     this.contentsCount = contentsCount;
   }
 

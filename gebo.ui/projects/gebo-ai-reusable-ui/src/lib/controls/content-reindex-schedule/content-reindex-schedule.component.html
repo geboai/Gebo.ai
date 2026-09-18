@@ -13,7 +13,7 @@
 
 
 <p-dialog [maximizable]="true" [visible]="mode==='EDITING'" [modal]="true" header="Content updates scheduling"
-  [style]="{width:'60%'}" (visibleChange)="abandonEdit()">
+  styleClass="gebo-entity-dialog" (visibleChange)="abandonEdit()">
   @if (mode==='EDITING') {
     <p-panel [formGroup]="formGroup" [showHeader]="false">
       <div class="geboLargeButtonsBar" style="vertical-align: baseline;">
@@ -82,8 +82,8 @@
     </p-panel>
   }
 </p-dialog>
-<div style="width: 100%; border: solid #C0C0C0 1px;">
-  <p-blockUI [blocked]="loading">
+<div #reindexScheduleBox="geboBlockableContainer" geboBlockableContainer style="width: 100%; border: solid #C0C0C0 1px;">
+  <p-blockUI [target]="reindexScheduleBox" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
   </p-blockUI>
   <p-button id="EditBtn" gebo-ai-label title="Edit scheduling" (onClick)="enterEdit()" [outlined]="true"

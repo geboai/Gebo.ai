@@ -18,36 +18,46 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * MCPPrompt
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class MCPPrompt {
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("deletedOnMCPServer")
-  private Object deletedOnMCPServer = null;
+  private Boolean deletedOnMCPServer = null;
 
   @JsonProperty("addedOnMCPServer")
-  private Object addedOnMCPServer = null;
+  private Boolean addedOnMCPServer = null;
 
-  public MCPPrompt accessibleGroups(Object accessibleGroups) {
+  public MCPPrompt accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public MCPPrompt addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -56,16 +66,24 @@ public class MCPPrompt {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public MCPPrompt accessibleUsers(Object accessibleUsers) {
+  public MCPPrompt accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public MCPPrompt addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -74,15 +92,15 @@ public class MCPPrompt {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public MCPPrompt accessibleToAll(Object accessibleToAll) {
+  public MCPPrompt accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -92,16 +110,24 @@ public class MCPPrompt {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public MCPPrompt aclAliases(Object aclAliases) {
+  public MCPPrompt aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public MCPPrompt addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -110,15 +136,15 @@ public class MCPPrompt {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
   }
 
-  public MCPPrompt name(Object name) {
+  public MCPPrompt name(String name) {
     this.name = name;
     return this;
   }
@@ -128,15 +154,15 @@ public class MCPPrompt {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public MCPPrompt deletedOnMCPServer(Object deletedOnMCPServer) {
+  public MCPPrompt deletedOnMCPServer(Boolean deletedOnMCPServer) {
     this.deletedOnMCPServer = deletedOnMCPServer;
     return this;
   }
@@ -146,15 +172,15 @@ public class MCPPrompt {
    * @return deletedOnMCPServer
   **/
   @Schema(description = "")
-  public Object getDeletedOnMCPServer() {
+  public Boolean isDeletedOnMCPServer() {
     return deletedOnMCPServer;
   }
 
-  public void setDeletedOnMCPServer(Object deletedOnMCPServer) {
+  public void setDeletedOnMCPServer(Boolean deletedOnMCPServer) {
     this.deletedOnMCPServer = deletedOnMCPServer;
   }
 
-  public MCPPrompt addedOnMCPServer(Object addedOnMCPServer) {
+  public MCPPrompt addedOnMCPServer(Boolean addedOnMCPServer) {
     this.addedOnMCPServer = addedOnMCPServer;
     return this;
   }
@@ -164,11 +190,11 @@ public class MCPPrompt {
    * @return addedOnMCPServer
   **/
   @Schema(description = "")
-  public Object getAddedOnMCPServer() {
+  public Boolean isAddedOnMCPServer() {
     return addedOnMCPServer;
   }
 
-  public void setAddedOnMCPServer(Object addedOnMCPServer) {
+  public void setAddedOnMCPServer(Boolean addedOnMCPServer) {
     this.addedOnMCPServer = addedOnMCPServer;
   }
 

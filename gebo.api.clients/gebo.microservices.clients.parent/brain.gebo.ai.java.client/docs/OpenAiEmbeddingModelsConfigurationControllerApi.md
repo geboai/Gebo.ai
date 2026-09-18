@@ -67,7 +67,7 @@ No authorization required
 
 
 OpenAiEmbeddingModelsConfigurationControllerApi apiInstance = new OpenAiEmbeddingModelsConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GOpenAIEmbeddingModelConfig result = apiInstance.findOpenAIEmbeddingModelConfigByCode(code);
     System.out.println(result);
@@ -81,7 +81,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

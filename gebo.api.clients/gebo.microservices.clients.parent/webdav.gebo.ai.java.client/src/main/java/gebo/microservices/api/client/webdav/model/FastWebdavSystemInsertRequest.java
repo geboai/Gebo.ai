@@ -22,28 +22,62 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * FastWebdavSystemInsertRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-09T11:46:07.427269500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:37.654842713+02:00[Europe/Rome]")
 
 public class FastWebdavSystemInsertRequest {
   @JsonProperty("baseUri")
-  private Object baseUri = null;
+  private String baseUri = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
-  @JsonProperty("authType")
-  private Object authType = null;
+  /**
+   * Gets or Sets authType
+   */
+  public enum AuthTypeEnum {
+    NONE("NONE"),
+    BASIC("BASIC"),
+    DIGEST("DIGEST"),
+    NTLM("NTLM"),
+    BEARER_TOKEN("BEARER_TOKEN");
+
+    private String value;
+
+    AuthTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static AuthTypeEnum fromValue(String input) {
+      for (AuthTypeEnum b : AuthTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("authType")
+  private AuthTypeEnum authType = null;
 
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("password")
-  private Object password = null;
+  private String password = null;
 
   @JsonProperty("token")
-  private Object token = null;
+  private String token = null;
 
-  public FastWebdavSystemInsertRequest baseUri(Object baseUri) {
+  public FastWebdavSystemInsertRequest baseUri(String baseUri) {
     this.baseUri = baseUri;
     return this;
   }
@@ -53,15 +87,15 @@ public class FastWebdavSystemInsertRequest {
    * @return baseUri
   **/
   @Schema(required = true, description = "")
-  public Object getBaseUri() {
+  public String getBaseUri() {
     return baseUri;
   }
 
-  public void setBaseUri(Object baseUri) {
+  public void setBaseUri(String baseUri) {
     this.baseUri = baseUri;
   }
 
-  public FastWebdavSystemInsertRequest description(Object description) {
+  public FastWebdavSystemInsertRequest description(String description) {
     this.description = description;
     return this;
   }
@@ -71,15 +105,15 @@ public class FastWebdavSystemInsertRequest {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public FastWebdavSystemInsertRequest authType(Object authType) {
+  public FastWebdavSystemInsertRequest authType(AuthTypeEnum authType) {
     this.authType = authType;
     return this;
   }
@@ -89,15 +123,15 @@ public class FastWebdavSystemInsertRequest {
    * @return authType
   **/
   @Schema(required = true, description = "")
-  public Object getAuthType() {
+  public AuthTypeEnum getAuthType() {
     return authType;
   }
 
-  public void setAuthType(Object authType) {
+  public void setAuthType(AuthTypeEnum authType) {
     this.authType = authType;
   }
 
-  public FastWebdavSystemInsertRequest username(Object username) {
+  public FastWebdavSystemInsertRequest username(String username) {
     this.username = username;
     return this;
   }
@@ -107,15 +141,15 @@ public class FastWebdavSystemInsertRequest {
    * @return username
   **/
   @Schema(description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public FastWebdavSystemInsertRequest password(Object password) {
+  public FastWebdavSystemInsertRequest password(String password) {
     this.password = password;
     return this;
   }
@@ -125,15 +159,15 @@ public class FastWebdavSystemInsertRequest {
    * @return password
   **/
   @Schema(description = "")
-  public Object getPassword() {
+  public String getPassword() {
     return password;
   }
 
-  public void setPassword(Object password) {
+  public void setPassword(String password) {
     this.password = password;
   }
 
-  public FastWebdavSystemInsertRequest token(Object token) {
+  public FastWebdavSystemInsertRequest token(String token) {
     this.token = token;
     return this;
   }
@@ -143,11 +177,11 @@ public class FastWebdavSystemInsertRequest {
    * @return token
   **/
   @Schema(description = "")
-  public Object getToken() {
+  public String getToken() {
     return token;
   }
 
-  public void setToken(Object token) {
+  public void setToken(String token) {
     this.token = token;
   }
 

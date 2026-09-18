@@ -252,7 +252,7 @@ export class GeboAiGoogleDriveProjectEndpointAdminComponent extends BaseEntityEd
         }
       });
     }
-    this.doSave(callback);
+    this.saveUnlessReadonly(callback);
   }
 
 }

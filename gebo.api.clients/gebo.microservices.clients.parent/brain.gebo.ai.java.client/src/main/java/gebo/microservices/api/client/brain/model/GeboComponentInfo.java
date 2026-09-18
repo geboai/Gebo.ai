@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboComponentInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboComponentInfo {
   @JsonProperty("messagingModuleId")
-  private Object messagingModuleId = null;
+  private String messagingModuleId = null;
 
   @JsonProperty("messagingComponentId")
-  private Object messagingComponentId = null;
+  private String messagingComponentId = null;
 
   @JsonProperty("completeComponentId")
-  private Object completeComponentId = null;
+  private String completeComponentId = null;
 
-  public GeboComponentInfo messagingModuleId(Object messagingModuleId) {
+  public GeboComponentInfo messagingModuleId(String messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
     return this;
   }
@@ -44,15 +44,15 @@ public class GeboComponentInfo {
    * @return messagingModuleId
   **/
   @Schema(required = true, description = "")
-  public Object getMessagingModuleId() {
+  public String getMessagingModuleId() {
     return messagingModuleId;
   }
 
-  public void setMessagingModuleId(Object messagingModuleId) {
+  public void setMessagingModuleId(String messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
   }
 
-  public GeboComponentInfo messagingComponentId(Object messagingComponentId) {
+  public GeboComponentInfo messagingComponentId(String messagingComponentId) {
     this.messagingComponentId = messagingComponentId;
     return this;
   }
@@ -62,15 +62,15 @@ public class GeboComponentInfo {
    * @return messagingComponentId
   **/
   @Schema(required = true, description = "")
-  public Object getMessagingComponentId() {
+  public String getMessagingComponentId() {
     return messagingComponentId;
   }
 
-  public void setMessagingComponentId(Object messagingComponentId) {
+  public void setMessagingComponentId(String messagingComponentId) {
     this.messagingComponentId = messagingComponentId;
   }
 
-  public GeboComponentInfo completeComponentId(Object completeComponentId) {
+  public GeboComponentInfo completeComponentId(String completeComponentId) {
     this.completeComponentId = completeComponentId;
     return this;
   }
@@ -80,11 +80,11 @@ public class GeboComponentInfo {
    * @return completeComponentId
   **/
   @Schema(description = "")
-  public Object getCompleteComponentId() {
+  public String getCompleteComponentId() {
     return completeComponentId;
   }
 
-  public void setCompleteComponentId(Object completeComponentId) {
+  public void setCompleteComponentId(String completeComponentId) {
     this.completeComponentId = completeComponentId;
   }
 

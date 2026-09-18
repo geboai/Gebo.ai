@@ -17,75 +17,146 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.jira.model.BuildSystemRef;
+import gebo.microservices.api.client.jira.model.ReindexingProgrammedTable;
+import gebo.microservices.api.client.jira.model.VFilesystemReference;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GJiraProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:33.251328392+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:34.676208947+02:00[Europe/Rome]")
 
 public class GJiraProjectEndpoint {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("parentProjectCode")
-  private Object parentProjectCode = null;
+  private String parentProjectCode = null;
 
   @JsonProperty("readonly")
-  private Object readonly = null;
+  private Boolean readonly = null;
 
   @JsonProperty("published")
-  private Object published = null;
+  private Boolean published = null;
 
   @JsonProperty("synchPeriodically")
-  private Object synchPeriodically = null;
+  private Boolean synchPeriodically = null;
 
   @JsonProperty("openZips")
-  private Object openZips = null;
+  private Boolean openZips = null;
 
   @JsonProperty("buildSystemsRefs")
-  private Object buildSystemsRefs = null;
+  private List<BuildSystemRef> buildSystemsRefs = null;
 
   @JsonProperty("catalogingCriteria")
-  private Object catalogingCriteria = null;
+  private String catalogingCriteria = null;
 
   @JsonProperty("programmedTables")
-  private Object programmedTables = null;
+  private List<ReindexingProgrammedTable> programmedTables = null;
 
   @JsonProperty("vectorizeOnlyExtensions")
-  private Object vectorizeOnlyExtensions = null;
+  private List<String> vectorizeOnlyExtensions = null;
 
-  @JsonProperty("synchroStrategy")
-  private Object synchroStrategy = null;
+  /**
+   * Gets or Sets synchroStrategy
+   */
+  public enum SynchroStrategyEnum {
+    SIZE_AND_TIMESTAMP_AND_HASH_CHECK("SIZE_AND_TIMESTAMP_AND_HASH_CHECK"),
+    HASH_CHECK("HASH_CHECK");
 
-  @JsonProperty("objectSpaceType")
-  private Object objectSpaceType = null;
+    private String value;
+
+    SynchroStrategyEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static SynchroStrategyEnum fromValue(String input) {
+      for (SynchroStrategyEnum b : SynchroStrategyEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("synchroStrategy")
+  private SynchroStrategyEnum synchroStrategy = null;
+
+  /**
+   * Gets or Sets objectSpaceType
+   */
+  public enum ObjectSpaceTypeEnum {
+    COMPANY("COMPANY"),
+    USERSPACE("USERSPACE");
+
+    private String value;
+
+    ObjectSpaceTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ObjectSpaceTypeEnum fromValue(String input) {
+      for (ObjectSpaceTypeEnum b : ObjectSpaceTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("objectSpaceType")
+  private ObjectSpaceTypeEnum objectSpaceType = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
+
+  @JsonProperty("personalData")
+  private Boolean personalData = null;
 
   @JsonProperty("paths")
-  private Object paths = null;
+  private List<VFilesystemReference> paths = null;
 
   @JsonProperty("jiraSystemCode")
-  private Object jiraSystemCode = null;
+  private String jiraSystemCode = null;
 
-  public GJiraProjectEndpoint code(Object code) {
+  public GJiraProjectEndpoint code(String code) {
     this.code = code;
     return this;
   }
@@ -95,15 +166,15 @@ public class GJiraProjectEndpoint {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GJiraProjectEndpoint description(Object description) {
+  public GJiraProjectEndpoint description(String description) {
     this.description = description;
     return this;
   }
@@ -113,15 +184,15 @@ public class GJiraProjectEndpoint {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GJiraProjectEndpoint userModified(Object userModified) {
+  public GJiraProjectEndpoint userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -131,15 +202,15 @@ public class GJiraProjectEndpoint {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GJiraProjectEndpoint userCreated(Object userCreated) {
+  public GJiraProjectEndpoint userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -149,15 +220,15 @@ public class GJiraProjectEndpoint {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GJiraProjectEndpoint dateModified(Object dateModified) {
+  public GJiraProjectEndpoint dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -167,15 +238,15 @@ public class GJiraProjectEndpoint {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GJiraProjectEndpoint dateCreated(Object dateCreated) {
+  public GJiraProjectEndpoint dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -185,15 +256,15 @@ public class GJiraProjectEndpoint {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GJiraProjectEndpoint parentProjectCode(Object parentProjectCode) {
+  public GJiraProjectEndpoint parentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
     return this;
   }
@@ -203,15 +274,15 @@ public class GJiraProjectEndpoint {
    * @return parentProjectCode
   **/
   @Schema(description = "")
-  public Object getParentProjectCode() {
+  public String getParentProjectCode() {
     return parentProjectCode;
   }
 
-  public void setParentProjectCode(Object parentProjectCode) {
+  public void setParentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
   }
 
-  public GJiraProjectEndpoint readonly(Object readonly) {
+  public GJiraProjectEndpoint readonly(Boolean readonly) {
     this.readonly = readonly;
     return this;
   }
@@ -221,15 +292,15 @@ public class GJiraProjectEndpoint {
    * @return readonly
   **/
   @Schema(description = "")
-  public Object getReadonly() {
+  public Boolean isReadonly() {
     return readonly;
   }
 
-  public void setReadonly(Object readonly) {
+  public void setReadonly(Boolean readonly) {
     this.readonly = readonly;
   }
 
-  public GJiraProjectEndpoint published(Object published) {
+  public GJiraProjectEndpoint published(Boolean published) {
     this.published = published;
     return this;
   }
@@ -239,15 +310,15 @@ public class GJiraProjectEndpoint {
    * @return published
   **/
   @Schema(description = "")
-  public Object getPublished() {
+  public Boolean isPublished() {
     return published;
   }
 
-  public void setPublished(Object published) {
+  public void setPublished(Boolean published) {
     this.published = published;
   }
 
-  public GJiraProjectEndpoint synchPeriodically(Object synchPeriodically) {
+  public GJiraProjectEndpoint synchPeriodically(Boolean synchPeriodically) {
     this.synchPeriodically = synchPeriodically;
     return this;
   }
@@ -257,15 +328,15 @@ public class GJiraProjectEndpoint {
    * @return synchPeriodically
   **/
   @Schema(description = "")
-  public Object getSynchPeriodically() {
+  public Boolean isSynchPeriodically() {
     return synchPeriodically;
   }
 
-  public void setSynchPeriodically(Object synchPeriodically) {
+  public void setSynchPeriodically(Boolean synchPeriodically) {
     this.synchPeriodically = synchPeriodically;
   }
 
-  public GJiraProjectEndpoint openZips(Object openZips) {
+  public GJiraProjectEndpoint openZips(Boolean openZips) {
     this.openZips = openZips;
     return this;
   }
@@ -275,16 +346,24 @@ public class GJiraProjectEndpoint {
    * @return openZips
   **/
   @Schema(description = "")
-  public Object getOpenZips() {
+  public Boolean isOpenZips() {
     return openZips;
   }
 
-  public void setOpenZips(Object openZips) {
+  public void setOpenZips(Boolean openZips) {
     this.openZips = openZips;
   }
 
-  public GJiraProjectEndpoint buildSystemsRefs(Object buildSystemsRefs) {
+  public GJiraProjectEndpoint buildSystemsRefs(List<BuildSystemRef> buildSystemsRefs) {
     this.buildSystemsRefs = buildSystemsRefs;
+    return this;
+  }
+
+  public GJiraProjectEndpoint addBuildSystemsRefsItem(BuildSystemRef buildSystemsRefsItem) {
+    if (this.buildSystemsRefs == null) {
+      this.buildSystemsRefs = new ArrayList<>();
+    }
+    this.buildSystemsRefs.add(buildSystemsRefsItem);
     return this;
   }
 
@@ -293,15 +372,15 @@ public class GJiraProjectEndpoint {
    * @return buildSystemsRefs
   **/
   @Schema(description = "")
-  public Object getBuildSystemsRefs() {
+  public List<BuildSystemRef> getBuildSystemsRefs() {
     return buildSystemsRefs;
   }
 
-  public void setBuildSystemsRefs(Object buildSystemsRefs) {
+  public void setBuildSystemsRefs(List<BuildSystemRef> buildSystemsRefs) {
     this.buildSystemsRefs = buildSystemsRefs;
   }
 
-  public GJiraProjectEndpoint catalogingCriteria(Object catalogingCriteria) {
+  public GJiraProjectEndpoint catalogingCriteria(String catalogingCriteria) {
     this.catalogingCriteria = catalogingCriteria;
     return this;
   }
@@ -311,16 +390,24 @@ public class GJiraProjectEndpoint {
    * @return catalogingCriteria
   **/
   @Schema(description = "")
-  public Object getCatalogingCriteria() {
+  public String getCatalogingCriteria() {
     return catalogingCriteria;
   }
 
-  public void setCatalogingCriteria(Object catalogingCriteria) {
+  public void setCatalogingCriteria(String catalogingCriteria) {
     this.catalogingCriteria = catalogingCriteria;
   }
 
-  public GJiraProjectEndpoint programmedTables(Object programmedTables) {
+  public GJiraProjectEndpoint programmedTables(List<ReindexingProgrammedTable> programmedTables) {
     this.programmedTables = programmedTables;
+    return this;
+  }
+
+  public GJiraProjectEndpoint addProgrammedTablesItem(ReindexingProgrammedTable programmedTablesItem) {
+    if (this.programmedTables == null) {
+      this.programmedTables = new ArrayList<>();
+    }
+    this.programmedTables.add(programmedTablesItem);
     return this;
   }
 
@@ -329,16 +416,24 @@ public class GJiraProjectEndpoint {
    * @return programmedTables
   **/
   @Schema(description = "")
-  public Object getProgrammedTables() {
+  public List<ReindexingProgrammedTable> getProgrammedTables() {
     return programmedTables;
   }
 
-  public void setProgrammedTables(Object programmedTables) {
+  public void setProgrammedTables(List<ReindexingProgrammedTable> programmedTables) {
     this.programmedTables = programmedTables;
   }
 
-  public GJiraProjectEndpoint vectorizeOnlyExtensions(Object vectorizeOnlyExtensions) {
+  public GJiraProjectEndpoint vectorizeOnlyExtensions(List<String> vectorizeOnlyExtensions) {
     this.vectorizeOnlyExtensions = vectorizeOnlyExtensions;
+    return this;
+  }
+
+  public GJiraProjectEndpoint addVectorizeOnlyExtensionsItem(String vectorizeOnlyExtensionsItem) {
+    if (this.vectorizeOnlyExtensions == null) {
+      this.vectorizeOnlyExtensions = new ArrayList<>();
+    }
+    this.vectorizeOnlyExtensions.add(vectorizeOnlyExtensionsItem);
     return this;
   }
 
@@ -347,15 +442,15 @@ public class GJiraProjectEndpoint {
    * @return vectorizeOnlyExtensions
   **/
   @Schema(description = "")
-  public Object getVectorizeOnlyExtensions() {
+  public List<String> getVectorizeOnlyExtensions() {
     return vectorizeOnlyExtensions;
   }
 
-  public void setVectorizeOnlyExtensions(Object vectorizeOnlyExtensions) {
+  public void setVectorizeOnlyExtensions(List<String> vectorizeOnlyExtensions) {
     this.vectorizeOnlyExtensions = vectorizeOnlyExtensions;
   }
 
-  public GJiraProjectEndpoint synchroStrategy(Object synchroStrategy) {
+  public GJiraProjectEndpoint synchroStrategy(SynchroStrategyEnum synchroStrategy) {
     this.synchroStrategy = synchroStrategy;
     return this;
   }
@@ -365,15 +460,15 @@ public class GJiraProjectEndpoint {
    * @return synchroStrategy
   **/
   @Schema(description = "")
-  public Object getSynchroStrategy() {
+  public SynchroStrategyEnum getSynchroStrategy() {
     return synchroStrategy;
   }
 
-  public void setSynchroStrategy(Object synchroStrategy) {
+  public void setSynchroStrategy(SynchroStrategyEnum synchroStrategy) {
     this.synchroStrategy = synchroStrategy;
   }
 
-  public GJiraProjectEndpoint objectSpaceType(Object objectSpaceType) {
+  public GJiraProjectEndpoint objectSpaceType(ObjectSpaceTypeEnum objectSpaceType) {
     this.objectSpaceType = objectSpaceType;
     return this;
   }
@@ -383,16 +478,24 @@ public class GJiraProjectEndpoint {
    * @return objectSpaceType
   **/
   @Schema(description = "")
-  public Object getObjectSpaceType() {
+  public ObjectSpaceTypeEnum getObjectSpaceType() {
     return objectSpaceType;
   }
 
-  public void setObjectSpaceType(Object objectSpaceType) {
+  public void setObjectSpaceType(ObjectSpaceTypeEnum objectSpaceType) {
     this.objectSpaceType = objectSpaceType;
   }
 
-  public GJiraProjectEndpoint aclAliases(Object aclAliases) {
+  public GJiraProjectEndpoint aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GJiraProjectEndpoint addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -401,16 +504,42 @@ public class GJiraProjectEndpoint {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
   }
 
-  public GJiraProjectEndpoint paths(Object paths) {
+  public GJiraProjectEndpoint personalData(Boolean personalData) {
+    this.personalData = personalData;
+    return this;
+  }
+
+   /**
+   * Get personalData
+   * @return personalData
+  **/
+  @Schema(description = "")
+  public Boolean isPersonalData() {
+    return personalData;
+  }
+
+  public void setPersonalData(Boolean personalData) {
+    this.personalData = personalData;
+  }
+
+  public GJiraProjectEndpoint paths(List<VFilesystemReference> paths) {
     this.paths = paths;
+    return this;
+  }
+
+  public GJiraProjectEndpoint addPathsItem(VFilesystemReference pathsItem) {
+    if (this.paths == null) {
+      this.paths = new ArrayList<>();
+    }
+    this.paths.add(pathsItem);
     return this;
   }
 
@@ -419,15 +548,15 @@ public class GJiraProjectEndpoint {
    * @return paths
   **/
   @Schema(description = "")
-  public Object getPaths() {
+  public List<VFilesystemReference> getPaths() {
     return paths;
   }
 
-  public void setPaths(Object paths) {
+  public void setPaths(List<VFilesystemReference> paths) {
     this.paths = paths;
   }
 
-  public GJiraProjectEndpoint jiraSystemCode(Object jiraSystemCode) {
+  public GJiraProjectEndpoint jiraSystemCode(String jiraSystemCode) {
     this.jiraSystemCode = jiraSystemCode;
     return this;
   }
@@ -437,11 +566,11 @@ public class GJiraProjectEndpoint {
    * @return jiraSystemCode
   **/
   @Schema(description = "")
-  public Object getJiraSystemCode() {
+  public String getJiraSystemCode() {
     return jiraSystemCode;
   }
 
-  public void setJiraSystemCode(Object jiraSystemCode) {
+  public void setJiraSystemCode(String jiraSystemCode) {
     this.jiraSystemCode = jiraSystemCode;
   }
 
@@ -473,13 +602,14 @@ public class GJiraProjectEndpoint {
         Objects.equals(this.synchroStrategy, gjiraProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, gjiraProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, gjiraProjectEndpoint.aclAliases) &&
+        Objects.equals(this.personalData, gjiraProjectEndpoint.personalData) &&
         Objects.equals(this.paths, gjiraProjectEndpoint.paths) &&
         Objects.equals(this.jiraSystemCode, gjiraProjectEndpoint.jiraSystemCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, paths, jiraSystemCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, paths, jiraSystemCode);
   }
 
 
@@ -506,6 +636,7 @@ public class GJiraProjectEndpoint {
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    paths: ").append(toIndentedString(paths)).append("\n");
     sb.append("    jiraSystemCode: ").append(toIndentedString(jiraSystemCode)).append("\n");
     sb.append("}");

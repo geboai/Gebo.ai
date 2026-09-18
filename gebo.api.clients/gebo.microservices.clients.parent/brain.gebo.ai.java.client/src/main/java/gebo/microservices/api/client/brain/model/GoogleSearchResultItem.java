@@ -22,31 +22,31 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GoogleSearchResultItem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GoogleSearchResultItem {
   @JsonProperty("kind")
-  private Object kind = null;
+  private String kind = null;
 
   @JsonProperty("title")
-  private Object title = null;
+  private String title = null;
 
   @JsonProperty("htmlTitle")
-  private Object htmlTitle = null;
+  private String htmlTitle = null;
 
   @JsonProperty("link")
-  private Object link = null;
+  private String link = null;
 
   @JsonProperty("displayLink")
-  private Object displayLink = null;
+  private String displayLink = null;
 
   @JsonProperty("snippet")
-  private Object snippet = null;
+  private String snippet = null;
 
   @JsonProperty("htmlSnippet")
-  private Object htmlSnippet = null;
+  private String htmlSnippet = null;
 
-  public GoogleSearchResultItem kind(Object kind) {
+  public GoogleSearchResultItem kind(String kind) {
     this.kind = kind;
     return this;
   }
@@ -56,15 +56,15 @@ public class GoogleSearchResultItem {
    * @return kind
   **/
   @Schema(description = "")
-  public Object getKind() {
+  public String getKind() {
     return kind;
   }
 
-  public void setKind(Object kind) {
+  public void setKind(String kind) {
     this.kind = kind;
   }
 
-  public GoogleSearchResultItem title(Object title) {
+  public GoogleSearchResultItem title(String title) {
     this.title = title;
     return this;
   }
@@ -74,15 +74,15 @@ public class GoogleSearchResultItem {
    * @return title
   **/
   @Schema(description = "")
-  public Object getTitle() {
+  public String getTitle() {
     return title;
   }
 
-  public void setTitle(Object title) {
+  public void setTitle(String title) {
     this.title = title;
   }
 
-  public GoogleSearchResultItem htmlTitle(Object htmlTitle) {
+  public GoogleSearchResultItem htmlTitle(String htmlTitle) {
     this.htmlTitle = htmlTitle;
     return this;
   }
@@ -92,15 +92,15 @@ public class GoogleSearchResultItem {
    * @return htmlTitle
   **/
   @Schema(description = "")
-  public Object getHtmlTitle() {
+  public String getHtmlTitle() {
     return htmlTitle;
   }
 
-  public void setHtmlTitle(Object htmlTitle) {
+  public void setHtmlTitle(String htmlTitle) {
     this.htmlTitle = htmlTitle;
   }
 
-  public GoogleSearchResultItem link(Object link) {
+  public GoogleSearchResultItem link(String link) {
     this.link = link;
     return this;
   }
@@ -110,15 +110,15 @@ public class GoogleSearchResultItem {
    * @return link
   **/
   @Schema(description = "")
-  public Object getLink() {
+  public String getLink() {
     return link;
   }
 
-  public void setLink(Object link) {
+  public void setLink(String link) {
     this.link = link;
   }
 
-  public GoogleSearchResultItem displayLink(Object displayLink) {
+  public GoogleSearchResultItem displayLink(String displayLink) {
     this.displayLink = displayLink;
     return this;
   }
@@ -128,15 +128,15 @@ public class GoogleSearchResultItem {
    * @return displayLink
   **/
   @Schema(description = "")
-  public Object getDisplayLink() {
+  public String getDisplayLink() {
     return displayLink;
   }
 
-  public void setDisplayLink(Object displayLink) {
+  public void setDisplayLink(String displayLink) {
     this.displayLink = displayLink;
   }
 
-  public GoogleSearchResultItem snippet(Object snippet) {
+  public GoogleSearchResultItem snippet(String snippet) {
     this.snippet = snippet;
     return this;
   }
@@ -146,15 +146,15 @@ public class GoogleSearchResultItem {
    * @return snippet
   **/
   @Schema(description = "")
-  public Object getSnippet() {
+  public String getSnippet() {
     return snippet;
   }
 
-  public void setSnippet(Object snippet) {
+  public void setSnippet(String snippet) {
     this.snippet = snippet;
   }
 
-  public GoogleSearchResultItem htmlSnippet(Object htmlSnippet) {
+  public GoogleSearchResultItem htmlSnippet(String htmlSnippet) {
     this.htmlSnippet = htmlSnippet;
     return this;
   }
@@ -164,11 +164,11 @@ public class GoogleSearchResultItem {
    * @return htmlSnippet
   **/
   @Schema(description = "")
-  public Object getHtmlSnippet() {
+  public String getHtmlSnippet() {
     return htmlSnippet;
   }
 
-  public void setHtmlSnippet(Object htmlSnippet) {
+  public void setHtmlSnippet(String htmlSnippet) {
     this.htmlSnippet = htmlSnippet;
   }
 

@@ -22,22 +22,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboRagRequestCustomConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboRagRequestCustomConfig {
   @JsonProperty("topK")
-  private Object topK = null;
+  private Integer topK = null;
 
   @JsonProperty("similarityThreashold")
-  private Object similarityThreashold = null;
+  private Double similarityThreashold = null;
 
   @JsonProperty("historyFillWindowWeight")
-  private Object historyFillWindowWeight = null;
+  private Double historyFillWindowWeight = null;
 
   @JsonProperty("documentsFillWindowWeight")
-  private Object documentsFillWindowWeight = null;
+  private Double documentsFillWindowWeight = null;
 
-  public GeboRagRequestCustomConfig topK(Object topK) {
+  public GeboRagRequestCustomConfig topK(Integer topK) {
     this.topK = topK;
     return this;
   }
@@ -47,15 +47,15 @@ public class GeboRagRequestCustomConfig {
    * @return topK
   **/
   @Schema(description = "")
-  public Object getTopK() {
+  public Integer getTopK() {
     return topK;
   }
 
-  public void setTopK(Object topK) {
+  public void setTopK(Integer topK) {
     this.topK = topK;
   }
 
-  public GeboRagRequestCustomConfig similarityThreashold(Object similarityThreashold) {
+  public GeboRagRequestCustomConfig similarityThreashold(Double similarityThreashold) {
     this.similarityThreashold = similarityThreashold;
     return this;
   }
@@ -65,15 +65,15 @@ public class GeboRagRequestCustomConfig {
    * @return similarityThreashold
   **/
   @Schema(description = "")
-  public Object getSimilarityThreashold() {
+  public Double getSimilarityThreashold() {
     return similarityThreashold;
   }
 
-  public void setSimilarityThreashold(Object similarityThreashold) {
+  public void setSimilarityThreashold(Double similarityThreashold) {
     this.similarityThreashold = similarityThreashold;
   }
 
-  public GeboRagRequestCustomConfig historyFillWindowWeight(Object historyFillWindowWeight) {
+  public GeboRagRequestCustomConfig historyFillWindowWeight(Double historyFillWindowWeight) {
     this.historyFillWindowWeight = historyFillWindowWeight;
     return this;
   }
@@ -83,15 +83,15 @@ public class GeboRagRequestCustomConfig {
    * @return historyFillWindowWeight
   **/
   @Schema(description = "")
-  public Object getHistoryFillWindowWeight() {
+  public Double getHistoryFillWindowWeight() {
     return historyFillWindowWeight;
   }
 
-  public void setHistoryFillWindowWeight(Object historyFillWindowWeight) {
+  public void setHistoryFillWindowWeight(Double historyFillWindowWeight) {
     this.historyFillWindowWeight = historyFillWindowWeight;
   }
 
-  public GeboRagRequestCustomConfig documentsFillWindowWeight(Object documentsFillWindowWeight) {
+  public GeboRagRequestCustomConfig documentsFillWindowWeight(Double documentsFillWindowWeight) {
     this.documentsFillWindowWeight = documentsFillWindowWeight;
     return this;
   }
@@ -101,11 +101,11 @@ public class GeboRagRequestCustomConfig {
    * @return documentsFillWindowWeight
   **/
   @Schema(description = "")
-  public Object getDocumentsFillWindowWeight() {
+  public Double getDocumentsFillWindowWeight() {
     return documentsFillWindowWeight;
   }
 
-  public void setDocumentsFillWindowWeight(Object documentsFillWindowWeight) {
+  public void setDocumentsFillWindowWeight(Double documentsFillWindowWeight) {
     this.documentsFillWindowWeight = documentsFillWindowWeight;
   }
 

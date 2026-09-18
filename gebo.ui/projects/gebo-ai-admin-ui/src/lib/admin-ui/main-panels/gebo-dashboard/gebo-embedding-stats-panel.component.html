@@ -15,7 +15,7 @@
     @for (item of entry.embeddingData; track item) {
       <div class="col-6">
         <gebo-ai-embedded-documents-piechart #thisEntry [item]="item" (drillDown)="drillDown(entry)"></gebo-ai-embedded-documents-piechart>
-        <p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="(drilldownShowed && entry.drillDowns!==undefined)?true:false" [style]="{width:'95%'}" (visibleChange)="drilldownShowed=false">
+        <p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="(drilldownShowed && entry.drillDowns!==undefined)?true:false" styleClass="gebo-entity-dialog" (visibleChange)="drilldownShowed=false">
           @if (drilldownShowed===true && entry.drillDowns) {
             <gebo-ai-embedding-stats-panel [rootValue]="entry.drillDowns" [isRoot]="false" ></gebo-ai-embedding-stats-panel>
           }

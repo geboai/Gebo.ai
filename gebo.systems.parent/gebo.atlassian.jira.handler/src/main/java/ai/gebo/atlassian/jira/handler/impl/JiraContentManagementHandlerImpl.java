@@ -36,7 +36,6 @@ import ai.gebo.atlassian.jira.handler.IGJiraVirtualFilesystemConsumingService;
 import ai.gebo.atlassian.jira.handler.impl.model.JiraPathNodeType;
 import ai.gebo.atlassian.jira.handler.impl.model.JiraResourceReference;
 import ai.gebo.atlassian.jira.handler.repository.JiraProjectEndpointRepository;
-import ai.gebo.atlassian.jira.handler.repository.JiraSystemRepository;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.jira.cloud.client.api.IssueAttachmentsApi;
 import ai.gebo.jira.cloud.client.api.IssuesApi;
@@ -47,7 +46,6 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemContentManagementSystemHandler;
-import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationDao;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
 
@@ -74,7 +72,7 @@ public class JiraContentManagementHandlerImpl extends
 	 * 
 	 * @param buildSystemHandlerRepository Repository for build system handler
 	 * @param contentHandler Factory for document references
-	 * @param systemsRepo Repository for Jira systems
+	 * @param systemsDao Declared and stored Jira systems
 	 * @param endpointRepo Repository for Jira project endpoints
 	 * @param localFolderDiscoveryService Service for discovering local folders
 	 * @param persistentObjectManager Manager for persistent objects
@@ -84,13 +82,13 @@ public class JiraContentManagementHandlerImpl extends
 	 * @param ingestionHandler Handler for document reference ingestion
 	 */
 	public JiraContentManagementHandlerImpl(IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
-			IGDocumentReferenceFactory contentHandler, JiraSystemRepository systemsRepo,
+			IGDocumentReferenceFactory contentHandler, JiraSystemsConfigurationDao systemsDao,
 			JiraProjectEndpointRepository endpointRepo,
 			IGLocalPersistentFolderDiscoveryService localFolderDiscoveryService,
 			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			IGeboSecretsAccessService secretsService, IGJiraVirtualFilesystemConsumingService consumingService,
 			IGDocumentReferenceIngestionHandler ingestionHandler) {
-		super(buildSystemHandlerRepository, contentHandler, IGContentManagementSystemConfigurationDao.of(systemsRepo),
+		super(buildSystemHandlerRepository, contentHandler, systemsDao,
 				IGProjectEndpointRuntimeConfigurationDao.of(endpointRepo), localFolderDiscoveryService,
 				persistentObjectManager, messageBroker, consumingService, ingestionHandler);
 		this.secretsService = secretsService;

@@ -11,7 +11,7 @@
  */
 
 export interface SemanticQueryParam { 
-    query: any;
-    knowledgeBaseCodes: any;
-    topK?: any;
+    query: string;
+    knowledgeBaseCodes: Array<string>;
+    topK?: number;
 }

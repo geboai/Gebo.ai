@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Oauth2ClientAuthorizativeInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class Oauth2ClientAuthorizativeInfo {
   @JsonProperty("registrationId")
-  private Object registrationId = null;
+  private String registrationId = null;
 
   @JsonProperty("providerName")
-  private Object providerName = null;
+  private String providerName = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
-  public Oauth2ClientAuthorizativeInfo registrationId(Object registrationId) {
+  public Oauth2ClientAuthorizativeInfo registrationId(String registrationId) {
     this.registrationId = registrationId;
     return this;
   }
@@ -44,15 +44,15 @@ public class Oauth2ClientAuthorizativeInfo {
    * @return registrationId
   **/
   @Schema(description = "")
-  public Object getRegistrationId() {
+  public String getRegistrationId() {
     return registrationId;
   }
 
-  public void setRegistrationId(Object registrationId) {
+  public void setRegistrationId(String registrationId) {
     this.registrationId = registrationId;
   }
 
-  public Oauth2ClientAuthorizativeInfo providerName(Object providerName) {
+  public Oauth2ClientAuthorizativeInfo providerName(String providerName) {
     this.providerName = providerName;
     return this;
   }
@@ -62,15 +62,15 @@ public class Oauth2ClientAuthorizativeInfo {
    * @return providerName
   **/
   @Schema(description = "")
-  public Object getProviderName() {
+  public String getProviderName() {
     return providerName;
   }
 
-  public void setProviderName(Object providerName) {
+  public void setProviderName(String providerName) {
     this.providerName = providerName;
   }
 
-  public Oauth2ClientAuthorizativeInfo description(Object description) {
+  public Oauth2ClientAuthorizativeInfo description(String description) {
     this.description = description;
     return this;
   }
@@ -80,11 +80,11 @@ public class Oauth2ClientAuthorizativeInfo {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 

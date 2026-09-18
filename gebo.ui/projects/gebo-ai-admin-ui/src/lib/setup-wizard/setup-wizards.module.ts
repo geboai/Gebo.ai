@@ -69,8 +69,17 @@ import { GeboAIEasyVendorConfigurationComponent } from "./llms-setup-components/
 import { AgentStatusService, GeboAIAgentSetupWizardComponent } from "./agent-setup-wizard.component";
 import { McpServerWizardComponent, McpServerWizardStatusService } from "./mcp-server-wizard.component";
 import { GeboAIMCPServerWizardComponent, GeboAIMcpServerWizardStatusService } from "./gebo-ai-mcp-server-wizard.component";
+import { A2AImportWizardComponent, A2AImportWizardStatusService } from "./a2a-import-wizard.component";
+import { A2AExportWizardComponent, A2AExportWizardStatusService } from "./a2a-export-wizard.component";
 import { GeneratedAdminApiKeyWizardComponent, GeneratedAdminApiKeyEnabledService } from "./generated-admin-api-key-wizard.component";
 import { SelectModule } from 'primeng/select';
+import { StepsModule } from 'primeng/steps';
+import { LLMSEasySetupWizardComponent } from "./llms-easy-wizard/llms-easy-setup-wizard.component";
+import { LLMSEasyIntroStepComponent } from "./llms-easy-wizard/step-intro.component";
+import { LLMSEasyProviderStepComponent } from "./llms-easy-wizard/step-provider.component";
+import { LLMSEasyModelsStepComponent } from "./llms-easy-wizard/step-models.component";
+import { LLMSEasySummaryStepComponent } from "./llms-easy-wizard/step-summary.component";
+import { LLMSEasyClassStatusComponent } from "./llms-easy-wizard/class-status.component";
 import { DatePickerModule } from 'primeng/datepicker';
 /**
  * Setup section for administrator user account configuration.
@@ -147,7 +156,9 @@ const adminLLMSSetupSection: SetupWizardsSection = {
     description: "Configure various llms with cloud or local/lan infrastructure backend services, at least one chat model and one embedding models are to be configured to let the software work properly.",
     enabledService: AlwaysTrueStatusService,
     setupCompletedService: LLMSetupWizardService,
-    wizardComponent: LLMSetupWizardComponent,
+    // Guided ("easy") stepper flow. The previous flat easy/expert component
+    // (LLMSetupWizardComponent) is left in place, declared but no longer wired to a section.
+    wizardComponent: LLMSEasySetupWizardComponent,
     wizardSectionId: "adminLLMSSetupSection",
     mandatory: true
 };
@@ -382,6 +393,30 @@ const geboMcpServerSetupSection: SetupWizardsSection = {
     mandatory: false
 };
 
+const a2aImportSetupSection: SetupWizardsSection = {
+    orderEntry: 19.6,
+    requredStepsIds: [],
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: A2AImportWizardStatusService,
+    label: "Import external A2A agents",
+    description: "Register external Agent2Agent (A2A) agents so they can be used as participants in your networks of agents.",
+    wizardComponent: A2AImportWizardComponent,
+    wizardSectionId: "a2aImportSetupSection",
+    mandatory: false
+};
+
+const a2aExportSetupSection: SetupWizardsSection = {
+    orderEntry: 19.7,
+    requredStepsIds: [],
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: A2AExportWizardStatusService,
+    label: "Expose Gebo agents over A2A",
+    description: "Publish your Gebo agents and networks of agents as opaque Agent2Agent (A2A) agents callable by external clients.",
+    wizardComponent: A2AExportWizardComponent,
+    wizardSectionId: "a2aExportSetupSection",
+    mandatory: false
+};
+
 const generatedAdminApiKeySetupSection: SetupWizardsSection = {
     orderEntry: 20,
     requredStepsIds: [],
@@ -402,8 +437,8 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
  * Each wizard section is registered with the WIZARD_SECTION injection token.
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabsModule, GeboAIApiKeyModule, GeboAINotificationsModule, SelectModule, DatePickerModule],
-    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, GeneratedAdminApiKeyWizardComponent],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabsModule, GeboAIApiKeyModule, GeboAINotificationsModule, SelectModule, DatePickerModule, StepsModule],
+    declarations: [LLMSetupWizardComponent, LLMSEasySetupWizardComponent, LLMSEasyIntroStepComponent, LLMSEasyProviderStepComponent, LLMSEasyModelsStepComponent, LLMSEasySummaryStepComponent, LLMSEasyClassStatusComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, A2AImportWizardComponent, A2AExportWizardComponent, GeneratedAdminApiKeyWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
@@ -437,6 +472,8 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         AgentStatusService,
         McpServerWizardStatusService,
         GeboAIMcpServerWizardStatusService,
+        A2AImportWizardStatusService,
+        A2AExportWizardStatusService,
         GeneratedAdminApiKeyEnabledService,
         { provide: WIZARD_SECTION, useValue: adminUserSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: geboWorkDirectorySetupSection, multi: true },
@@ -459,6 +496,8 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: agentSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: mcpServerSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: geboMcpServerSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: a2aImportSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: a2aExportSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: generatedAdminApiKeySetupSection, multi: true },
         { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false }]
 

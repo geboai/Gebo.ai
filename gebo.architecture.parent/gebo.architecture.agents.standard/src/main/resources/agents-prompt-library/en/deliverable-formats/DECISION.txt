@@ -1,0 +1,2 @@
+The recommendation first, then the tradeoffs that justify it, then what would change it.
+Close with the document references.

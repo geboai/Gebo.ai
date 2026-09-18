@@ -25,7 +25,7 @@ import java.util.List;
  * GProject
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
 
 public class GProject {
   @JsonProperty("code")
@@ -106,6 +106,9 @@ public class GProject {
 
   @JsonProperty("parentProjectCode")
   private String parentProjectCode = null;
+
+  @JsonProperty("readonly")
+  private Boolean readonly = null;
 
   public GProject code(String code) {
     this.code = code;
@@ -419,6 +422,24 @@ public class GProject {
     this.parentProjectCode = parentProjectCode;
   }
 
+  public GProject readonly(Boolean readonly) {
+    this.readonly = readonly;
+    return this;
+  }
+
+   /**
+   * Get readonly
+   * @return readonly
+  **/
+  @Schema(description = "")
+  public Boolean isReadonly() {
+    return readonly;
+  }
+
+  public void setReadonly(Boolean readonly) {
+    this.readonly = readonly;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -444,12 +465,13 @@ public class GProject {
         Objects.equals(this.rootKnowledgeBaseCode, gproject.rootKnowledgeBaseCode) &&
         Objects.equals(this.objectSpaceType, gproject.objectSpaceType) &&
         Objects.equals(this.aclAliases, gproject.aclAliases) &&
-        Objects.equals(this.parentProjectCode, gproject.parentProjectCode);
+        Objects.equals(this.parentProjectCode, gproject.parentProjectCode) &&
+        Objects.equals(this.readonly, gproject.readonly);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, accessibleGroups, accessibleUsers, accessibleToAll, rootKnowledgeBaseCode, objectSpaceType, aclAliases, parentProjectCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, accessibleGroups, accessibleUsers, accessibleToAll, rootKnowledgeBaseCode, objectSpaceType, aclAliases, parentProjectCode, readonly);
   }
 
 
@@ -474,6 +496,7 @@ public class GProject {
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    parentProjectCode: ").append(toIndentedString(parentProjectCode)).append("\n");
+    sb.append("    readonly: ").append(toIndentedString(readonly)).append("\n");
     sb.append("}");
     return sb.toString();
   }

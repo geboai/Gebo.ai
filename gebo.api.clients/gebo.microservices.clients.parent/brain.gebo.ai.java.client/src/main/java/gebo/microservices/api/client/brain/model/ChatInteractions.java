@@ -24,23 +24,23 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ChatInteractions
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ChatInteractions {
   @JsonProperty("request")
   private GeboChatRequest request = null;
 
   @JsonProperty("requestNTokens")
-  private Object requestNTokens = null;
+  private Integer requestNTokens = null;
 
   @JsonProperty("response")
   private GeboTemplatedChatResponse response = null;
 
   @JsonProperty("responseNTokens")
-  private Object responseNTokens = null;
+  private Integer responseNTokens = null;
 
   @JsonProperty("tokensSize")
-  private Object tokensSize = null;
+  private Integer tokensSize = null;
 
   public ChatInteractions request(GeboChatRequest request) {
     this.request = request;
@@ -60,7 +60,7 @@ public class ChatInteractions {
     this.request = request;
   }
 
-  public ChatInteractions requestNTokens(Object requestNTokens) {
+  public ChatInteractions requestNTokens(Integer requestNTokens) {
     this.requestNTokens = requestNTokens;
     return this;
   }
@@ -70,11 +70,11 @@ public class ChatInteractions {
    * @return requestNTokens
   **/
   @Schema(description = "")
-  public Object getRequestNTokens() {
+  public Integer getRequestNTokens() {
     return requestNTokens;
   }
 
-  public void setRequestNTokens(Object requestNTokens) {
+  public void setRequestNTokens(Integer requestNTokens) {
     this.requestNTokens = requestNTokens;
   }
 
@@ -96,7 +96,7 @@ public class ChatInteractions {
     this.response = response;
   }
 
-  public ChatInteractions responseNTokens(Object responseNTokens) {
+  public ChatInteractions responseNTokens(Integer responseNTokens) {
     this.responseNTokens = responseNTokens;
     return this;
   }
@@ -106,15 +106,15 @@ public class ChatInteractions {
    * @return responseNTokens
   **/
   @Schema(description = "")
-  public Object getResponseNTokens() {
+  public Integer getResponseNTokens() {
     return responseNTokens;
   }
 
-  public void setResponseNTokens(Object responseNTokens) {
+  public void setResponseNTokens(Integer responseNTokens) {
     this.responseNTokens = responseNTokens;
   }
 
-  public ChatInteractions tokensSize(Object tokensSize) {
+  public ChatInteractions tokensSize(Integer tokensSize) {
     this.tokensSize = tokensSize;
     return this;
   }
@@ -124,11 +124,11 @@ public class ChatInteractions {
    * @return tokensSize
   **/
   @Schema(description = "")
-  public Object getTokensSize() {
+  public Integer getTokensSize() {
     return tokensSize;
   }
 
-  public void setTokensSize(Object tokensSize) {
+  public void setTokensSize(Integer tokensSize) {
     this.tokensSize = tokensSize;
   }
 

@@ -90,9 +90,16 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 				"Plan semantic and full-text queries and search the internal knowledge base, returning the most relevant document chunks (optionally re-ranked)");
 		try {
 			List<GKnowledgeBase> visibles = knowledgeBaseVisibilityService.allVisibleKnowledgebases();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Internal-KB agent id:" + getId() + " advertises "
+						+ (visibles != null ? visibles.size() : 0) + " visible knowledge base(s) as catalogs");
+			}
 			if (visibles != null) {
 				for (GKnowledgeBase kb : visibles) {
 					if (kb != null) {
+						if (LOGGER.isTraceEnabled()) {
+							LOGGER.trace("Visible knowledge base: " + kb.getCode() + " - " + kb.getDescription());
+						}
 						capabilities.addCatalog(AgentCapabilityResource.of(kb.getCode(), kb.getDescription(), null));
 					}
 				}
@@ -119,6 +126,10 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 					+ (command != null ? command.getExecuteRanking() : null));
 		}
 		try {
+			if (notificationSink != null) {
+				notificationSink.next("Agent: " + getId() + " is planning the search queries",
+						INotificationSink.NotificationObject.NotificationType.INFO);
+			}
 			// LLM planner: rewrite the command into semantic and full-text search queries.
 			// `prompt` is the runtime-patched planner prompt (agent network placeholders
 			// injected at config time), so it is used directly instead of re-fetching the
@@ -127,9 +138,24 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 					chatRequestContext, params, List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD));
 			List<String> semanticQueries = fields.getOrDefault(SEMANTIC_QUERIES_FIELD, List.of());
 			List<String> fullTextQueries = fields.getOrDefault(FULL_TEXT_QUERIES_FIELD, List.of());
-			if (LOGGER.isDebugEnabled()) {
+			if (semanticQueries.isEmpty() && fullTextQueries.isEmpty()) {
+				// Both legs then fall back to the raw command text. That is survivable but
+				// it is a degraded search on an instruction-shaped probe, and at DEBUG the
+				// planner call looked like any other successful one.
+				LOGGER.warn("Search planner returned no queries for command:"
+						+ (command != null ? command.getCommand() : null)
+						+ " - falling back to the raw command text for both legs");
+			} else if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Search planner produced " + semanticQueries.size() + " semantic and "
 						+ fullTextQueries.size() + " full-text quer(ies)");
+			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<PLANNED_SEMANTIC_QUERIES>");
+				LOGGER.trace(String.valueOf(semanticQueries));
+				LOGGER.trace("</PLANNED_SEMANTIC_QUERIES>");
+				LOGGER.trace("<PLANNED_FULL_TEXT_QUERIES>");
+				LOGGER.trace(String.valueOf(fullTextQueries));
+				LOGGER.trace("</PLANNED_FULL_TEXT_QUERIES>");
 			}
 
 			final List<String> kbCodes = sessionKnowledgeBaseCodes(session);
@@ -141,6 +167,10 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 					&& !securityService.isCurrentUserAdmin()) {
 				List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
 						.getAllOwnedAclAliases();
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("ACL based content access policy in force: filtering the internal-KB search on "
+							+ (aclAliases != null ? aclAliases.size() : 0) + " owned ACL alias(es)");
+				}
 				semanticFilter.setAclAliases(aclAliases);
 				fullTextFilter.setAclAliases(aclAliases);
 			}
@@ -158,7 +188,16 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 				LOGGER.debug("End retrieveDocuments(...) internal-KB agent retrieved " + documents.size()
 						+ " document(s) before ranking");
 			}
-			return maybeRank(documents, command);
+			if (LOGGER.isTraceEnabled()) {
+				int index = 1;
+				for (Document document : documents) {
+					LOGGER.trace("<KB_DOCUMENT nr=" + index + " id=" + document.getId() + ">");
+					LOGGER.trace(document.getText());
+					LOGGER.trace("</KB_DOCUMENT>");
+					index++;
+				}
+			}
+			return maybeRank(documents, command, notificationSink);
 		} catch (LLMConfigException | FullTextException e) {
 			throw new AgentException("Error executing internal knowledge base search agent", e);
 		}
@@ -181,6 +220,9 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 				LOGGER.debug("Scoping internal-KB search to " + codes.size()
 						+ " knowledge base code(s) from the session environment");
 			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("Session scoped knowledge base codes: " + codes);
+			}
 			return (List<String>) codes;
 		}
 		if (LOGGER.isDebugEnabled()) {
@@ -191,7 +233,14 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 
 	private List<String> visibleKnowledgeBaseCodes() {
 		List<GKnowledgeBase> visibles = knowledgeBaseVisibilityService.allVisibleKnowledgebases();
-		return visibles != null ? visibles.stream().map(GKnowledgeBase::getCode).toList() : List.of();
+		List<String> codes = visibles != null ? visibles.stream().map(GKnowledgeBase::getCode).toList() : List.of();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("visibleKnowledgeBaseCodes() resolved " + codes.size() + " visible knowledge base code(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Visible knowledge base codes: " + codes);
+		}
+		return codes;
 	}
 
 }

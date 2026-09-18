@@ -3,8 +3,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**messagingSystemId** | **Object** |  |  [optional]
-**messagingModuleId** | **Object** |  |  [optional]
-**receiver** | **Object** |  |  [optional]
-**emitter** | **Object** |  |  [optional]
-**localSystem** | **Object** |  |  [optional]
+**messagingSystemId** | **String** |  |  [optional]
+**messagingModuleId** | **String** |  |  [optional]
+**receiver** | **Boolean** |  |  [optional]
+**emitter** | **Boolean** |  |  [optional]
+**localSystem** | **Boolean** |  |  [optional]
+**dataFlowMetaInfos** | [**GDataFlowMetaInfos**](GDataFlowMetaInfos.md) |  |  [optional]

@@ -3,9 +3,12 @@ package gebo.microservices.api.client.brain.api;
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
 import gebo.microservices.api.client.brain.model.BrowseParam;
+import gebo.microservices.api.client.brain.model.GBaseObject;
+import gebo.microservices.api.client.brain.model.GKnowledgeBase;
 import gebo.microservices.api.client.brain.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.brain.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.brain.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.brain.model.VFilesystemReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class UserKnowledgeBaseBrowsingControllerApi {
     private ApiClient apiClient;
@@ -54,7 +57,7 @@ public class UserKnowledgeBaseBrowsingControllerApi {
      * @return OperationStatusListPathInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListPathInfo browseKnowledgeBasePath(BrowseParam body, Object codes) throws RestClientException {
+    public OperationStatusListPathInfo browseKnowledgeBasePath(BrowseParam body, List<String> codes) throws RestClientException {
         return browseKnowledgeBasePathWithHttpInfo(body, codes).getBody();
     }
 
@@ -67,7 +70,7 @@ public class UserKnowledgeBaseBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListPathInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListPathInfo> browseKnowledgeBasePathWithHttpInfo(BrowseParam body, Object codes) throws RestClientException {
+    public ResponseEntity<OperationStatusListPathInfo> browseKnowledgeBasePathWithHttpInfo(BrowseParam body, List<String> codes) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -77,12 +80,12 @@ public class UserKnowledgeBaseBrowsingControllerApi {
         if (codes == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'codes' when calling browseKnowledgeBasePath");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserKnowledgeBaseBrowsingController/browseKnowledgeBasePath").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserKnowledgeBaseBrowsingController/browseKnowledgeBasePath").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
-        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "codes", codes));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(ApiClient.CollectionFormat.valueOf("multi".toUpperCase()), "codes", codes));
 
         final String[] accepts = { 
             "application/json"
@@ -96,16 +99,16 @@ public class UserKnowledgeBaseBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListPathInfo> returnType = new ParameterizedTypeReference<OperationStatusListPathInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GBaseObject&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAccessibleRootKnowledgeBases() throws RestClientException {
+    public List<GBaseObject> getAccessibleRootKnowledgeBases() throws RestClientException {
         return getAccessibleRootKnowledgeBasesWithHttpInfo().getBody();
     }
 
@@ -113,12 +116,12 @@ public class UserKnowledgeBaseBrowsingControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GBaseObject&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAccessibleRootKnowledgeBasesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GBaseObject>> getAccessibleRootKnowledgeBasesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/user/UserKnowledgeBaseBrowsingController/getAccessibleRootKnowledgeBases").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserKnowledgeBaseBrowsingController/getAccessibleRootKnowledgeBases").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -133,8 +136,8 @@ public class UserKnowledgeBaseBrowsingControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GBaseObject>> returnType = new ParameterizedTypeReference<List<GBaseObject>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -145,7 +148,7 @@ public class UserKnowledgeBaseBrowsingControllerApi {
      * @return OperationStatusListVirtualFilesystemNavigationTreeStatus
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListVirtualFilesystemNavigationTreeStatus getKnowledgeBaseNavigationStatus(Object body, Object codes) throws RestClientException {
+    public OperationStatusListVirtualFilesystemNavigationTreeStatus getKnowledgeBaseNavigationStatus(List<VFilesystemReference> body, List<String> codes) throws RestClientException {
         return getKnowledgeBaseNavigationStatusWithHttpInfo(body, codes).getBody();
     }
 
@@ -158,7 +161,7 @@ public class UserKnowledgeBaseBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListVirtualFilesystemNavigationTreeStatus&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getKnowledgeBaseNavigationStatusWithHttpInfo(Object body, Object codes) throws RestClientException {
+    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getKnowledgeBaseNavigationStatusWithHttpInfo(List<VFilesystemReference> body, List<String> codes) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -168,12 +171,12 @@ public class UserKnowledgeBaseBrowsingControllerApi {
         if (codes == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'codes' when calling getKnowledgeBaseNavigationStatus");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserKnowledgeBaseBrowsingController/getKnowledgeBaseNavigationStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserKnowledgeBaseBrowsingController/getKnowledgeBaseNavigationStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
-        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "codes", codes));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(ApiClient.CollectionFormat.valueOf("multi".toUpperCase()), "codes", codes));
 
         final String[] accepts = { 
             "application/json"
@@ -187,7 +190,7 @@ public class UserKnowledgeBaseBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus> returnType = new ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -197,7 +200,7 @@ public class UserKnowledgeBaseBrowsingControllerApi {
      * @return OperationStatusListGVirtualFilesystemRoot
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListGVirtualFilesystemRoot getKnowledgeBaseRoots(Object codes) throws RestClientException {
+    public OperationStatusListGVirtualFilesystemRoot getKnowledgeBaseRoots(List<String> codes) throws RestClientException {
         return getKnowledgeBaseRootsWithHttpInfo(codes).getBody();
     }
 
@@ -209,18 +212,18 @@ public class UserKnowledgeBaseBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListGVirtualFilesystemRoot&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getKnowledgeBaseRootsWithHttpInfo(Object codes) throws RestClientException {
+    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getKnowledgeBaseRootsWithHttpInfo(List<String> codes) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'codes' is set
         if (codes == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'codes' when calling getKnowledgeBaseRoots");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserKnowledgeBaseBrowsingController/getKnowledgeBaseRoots").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserKnowledgeBaseBrowsingController/getKnowledgeBaseRoots").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
-        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "codes", codes));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(ApiClient.CollectionFormat.valueOf("multi".toUpperCase()), "codes", codes));
 
         final String[] accepts = { 
             "application/json"
@@ -232,17 +235,17 @@ public class UserKnowledgeBaseBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot> returnType = new ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GKnowledgeBase&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getVisibleKnowledgeBaseByCodes(Object body) throws RestClientException {
+    public List<GKnowledgeBase> getVisibleKnowledgeBaseByCodes(List<String> body) throws RestClientException {
         return getVisibleKnowledgeBaseByCodesWithHttpInfo(body).getBody();
     }
 
@@ -251,16 +254,16 @@ public class UserKnowledgeBaseBrowsingControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GKnowledgeBase&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getVisibleKnowledgeBaseByCodesWithHttpInfo(Object body) throws RestClientException {
+    public ResponseEntity<List<GKnowledgeBase>> getVisibleKnowledgeBaseByCodesWithHttpInfo(List<String> body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getVisibleKnowledgeBaseByCodes");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserKnowledgeBaseBrowsingController/getVisibleKnowledgeBaseByCodes").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserKnowledgeBaseBrowsingController/getVisibleKnowledgeBaseByCodes").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -277,7 +280,7 @@ public class UserKnowledgeBaseBrowsingControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GKnowledgeBase>> returnType = new ParameterizedTypeReference<List<GKnowledgeBase>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

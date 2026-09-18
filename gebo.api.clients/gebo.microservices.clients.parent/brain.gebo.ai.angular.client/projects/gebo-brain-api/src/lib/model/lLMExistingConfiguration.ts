@@ -14,7 +14,18 @@ import { SecretInfo } from './secretInfo';
 
 export interface LLMExistingConfiguration { 
     existingModelConfig: GObjectRefGBaseModelConfig;
-    modelType: any;
+    modelType: LLMExistingConfiguration.ModelTypeEnum;
     secretInfo?: SecretInfo;
-    baseUrl?: any;
+    baseUrl?: string;
+}
+export namespace LLMExistingConfiguration {
+    export type ModelTypeEnum = 'CHAT' | 'EMBEDDING' | 'RANKING' | 'IMAGESGEN' | 'TTS' | 'TRANSCRIPT';
+    export const ModelTypeEnum = {
+        CHAT: 'CHAT' as ModelTypeEnum,
+        EMBEDDING: 'EMBEDDING' as ModelTypeEnum,
+        RANKING: 'RANKING' as ModelTypeEnum,
+        IMAGESGEN: 'IMAGESGEN' as ModelTypeEnum,
+        TTS: 'TTS' as ModelTypeEnum,
+        TRANSCRIPT: 'TRANSCRIPT' as ModelTypeEnum
+    };
 }

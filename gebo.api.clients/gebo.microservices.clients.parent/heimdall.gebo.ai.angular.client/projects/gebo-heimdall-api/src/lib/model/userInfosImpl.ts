@@ -11,9 +11,9 @@
  */
 
 export interface UserInfosImpl { 
-    username?: any;
-    name?: any;
-    roles?: any;
-    disabled?: any;
-    sourname?: any;
+    name?: string;
+    sourname?: string;
+    roles?: Array<string>;
+    disabled?: boolean;
+    username?: string;
 }

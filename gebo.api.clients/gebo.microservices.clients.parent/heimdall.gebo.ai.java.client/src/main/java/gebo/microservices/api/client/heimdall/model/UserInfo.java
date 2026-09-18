@@ -18,20 +18,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * UserInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class UserInfo {
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("roles")
-  private Object roles = null;
+  private List<String> roles = null;
 
-  public UserInfo username(Object username) {
+  public UserInfo username(String username) {
     this.username = username;
     return this;
   }
@@ -41,16 +43,24 @@ public class UserInfo {
    * @return username
   **/
   @Schema(description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public UserInfo roles(Object roles) {
+  public UserInfo roles(List<String> roles) {
     this.roles = roles;
+    return this;
+  }
+
+  public UserInfo addRolesItem(String rolesItem) {
+    if (this.roles == null) {
+      this.roles = new ArrayList<>();
+    }
+    this.roles.add(rolesItem);
     return this;
   }
 
@@ -59,11 +69,11 @@ public class UserInfo {
    * @return roles
   **/
   @Schema(description = "")
-  public Object getRoles() {
+  public List<String> getRoles() {
     return roles;
   }
 
-  public void setRoles(Object roles) {
+  public void setRoles(List<String> roles) {
     this.roles = roles;
   }
 

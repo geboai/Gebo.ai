@@ -26,7 +26,7 @@ Method | HTTP request | Description
 
 
 SecretsClusterControllerApi apiInstance = new SecretsClusterControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     apiInstance.deleteSecret(code);
 } catch (ApiException e) {
@@ -39,7 +39,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -56,7 +56,7 @@ No authorization required
 
 <a name="getAllSecretsId"></a>
 # **getAllSecretsId**
-> Object getAllSecretsId()
+> List&lt;String&gt; getAllSecretsId()
 
 
 
@@ -69,7 +69,7 @@ No authorization required
 
 SecretsClusterControllerApi apiInstance = new SecretsClusterControllerApi();
 try {
-    Object result = apiInstance.getAllSecretsId();
+    List<String> result = apiInstance.getAllSecretsId();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SecretsClusterControllerApi#getAllSecretsId");
@@ -82,7 +82,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**List&lt;String&gt;**
 
 ### Authorization
 
@@ -107,7 +107,7 @@ No authorization required
 
 
 SecretsClusterControllerApi apiInstance = new SecretsClusterControllerApi();
-Object id = null; // Object | 
+String id = "id_example"; // String | 
 try {
     GeboSecretContentEnvelope result = apiInstance.getSecretContentById(id);
     System.out.println(result);
@@ -121,7 +121,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | [**Object**](.md)|  |
+ **id** | **String**|  |
 
 ### Return type
 
@@ -138,7 +138,7 @@ No authorization required
 
 <a name="getSecretInfoByContextCode"></a>
 # **getSecretInfoByContextCode**
-> Object getSecretInfoByContextCode(contextCode)
+> List&lt;SecretInfo&gt; getSecretInfoByContextCode(contextCode)
 
 
 
@@ -150,9 +150,9 @@ No authorization required
 
 
 SecretsClusterControllerApi apiInstance = new SecretsClusterControllerApi();
-Object contextCode = null; // Object | 
+String contextCode = "contextCode_example"; // String | 
 try {
-    Object result = apiInstance.getSecretInfoByContextCode(contextCode);
+    List<SecretInfo> result = apiInstance.getSecretInfoByContextCode(contextCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SecretsClusterControllerApi#getSecretInfoByContextCode");
@@ -164,11 +164,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **contextCode** | [**Object**](.md)|  |
+ **contextCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;SecretInfo&gt;**](SecretInfo.md)
 
 ### Authorization
 
@@ -193,7 +193,7 @@ No authorization required
 
 
 SecretsClusterControllerApi apiInstance = new SecretsClusterControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     SecretInfo result = apiInstance.getSecretInfoById(code);
     System.out.println(result);
@@ -207,7 +207,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -224,7 +224,7 @@ No authorization required
 
 <a name="storeSecret"></a>
 # **storeSecret**
-> Object storeSecret(body)
+> String storeSecret(body)
 
 
 
@@ -238,7 +238,7 @@ No authorization required
 SecretsClusterControllerApi apiInstance = new SecretsClusterControllerApi();
 GeboSecretStoreRequest body = new GeboSecretStoreRequest(); // GeboSecretStoreRequest | 
 try {
-    Object result = apiInstance.storeSecret(body);
+    String result = apiInstance.storeSecret(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SecretsClusterControllerApi#storeSecret");
@@ -254,7 +254,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+**String**
 
 ### Authorization
 

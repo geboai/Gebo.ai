@@ -55,7 +55,7 @@ public class GeboAdminPromptsControllerApiTest {
      */
     @Test
     public void findPromptConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GPromptTemplateConfig response = api.findPromptConfigByCode(code);
 
         // TODO: test validations
@@ -70,7 +70,7 @@ public class GeboAdminPromptsControllerApiTest {
      */
     @Test
     public void getPromptCategoriesTest() {
-        Object response = api.getPromptCategories();
+        List<String> response = api.getPromptCategories();
 
         // TODO: test validations
     }

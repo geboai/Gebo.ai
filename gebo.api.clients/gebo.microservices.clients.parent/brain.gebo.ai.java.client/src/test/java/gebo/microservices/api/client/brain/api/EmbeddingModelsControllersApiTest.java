@@ -12,6 +12,8 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseEmbeddingModelConfig;
+import gebo.microservices.api.client.brain.model.GEmbeddingModelType;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -38,7 +40,7 @@ public class EmbeddingModelsControllersApiTest {
      */
     @Test
     public void getEmbeddingModelTypesTest() {
-        Object response = api.getEmbeddingModelTypes();
+        List<GEmbeddingModelType> response = api.getEmbeddingModelTypes();
 
         // TODO: test validations
     }
@@ -52,8 +54,8 @@ public class EmbeddingModelsControllersApiTest {
      */
     @Test
     public void getRuntimeConfiguredEmbeddingModelsTest() {
-        Object modelTypeCode = null;
-        Object response = api.getRuntimeConfiguredEmbeddingModels(modelTypeCode);
+        String modelTypeCode = null;
+        List<ConfigurationEntryGBaseEmbeddingModelConfig> response = api.getRuntimeConfiguredEmbeddingModels(modelTypeCode);
 
         // TODO: test validations
     }

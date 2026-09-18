@@ -17,23 +17,27 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.LLMExistingConfiguration;
+import gebo.microservices.api.client.brain.model.LLMSModelsPresets;
 import gebo.microservices.api.client.brain.model.LLMSVendorInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * LLMSSetupConfiguration
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMSSetupConfiguration {
   @JsonProperty("parentModel")
   private LLMSVendorInfo parentModel = null;
 
   @JsonProperty("libraryModel")
-  private Object libraryModel = null;
+  private List<LLMSModelsPresets> libraryModel = new ArrayList<>();
 
   @JsonProperty("runtimeConfigs")
-  private Object runtimeConfigs = null;
+  private List<LLMExistingConfiguration> runtimeConfigs = null;
 
   public LLMSSetupConfiguration parentModel(LLMSVendorInfo parentModel) {
     this.parentModel = parentModel;
@@ -53,8 +57,13 @@ public class LLMSSetupConfiguration {
     this.parentModel = parentModel;
   }
 
-  public LLMSSetupConfiguration libraryModel(Object libraryModel) {
+  public LLMSSetupConfiguration libraryModel(List<LLMSModelsPresets> libraryModel) {
     this.libraryModel = libraryModel;
+    return this;
+  }
+
+  public LLMSSetupConfiguration addLibraryModelItem(LLMSModelsPresets libraryModelItem) {
+    this.libraryModel.add(libraryModelItem);
     return this;
   }
 
@@ -63,16 +72,24 @@ public class LLMSSetupConfiguration {
    * @return libraryModel
   **/
   @Schema(required = true, description = "")
-  public Object getLibraryModel() {
+  public List<LLMSModelsPresets> getLibraryModel() {
     return libraryModel;
   }
 
-  public void setLibraryModel(Object libraryModel) {
+  public void setLibraryModel(List<LLMSModelsPresets> libraryModel) {
     this.libraryModel = libraryModel;
   }
 
-  public LLMSSetupConfiguration runtimeConfigs(Object runtimeConfigs) {
+  public LLMSSetupConfiguration runtimeConfigs(List<LLMExistingConfiguration> runtimeConfigs) {
     this.runtimeConfigs = runtimeConfigs;
+    return this;
+  }
+
+  public LLMSSetupConfiguration addRuntimeConfigsItem(LLMExistingConfiguration runtimeConfigsItem) {
+    if (this.runtimeConfigs == null) {
+      this.runtimeConfigs = new ArrayList<>();
+    }
+    this.runtimeConfigs.add(runtimeConfigsItem);
     return this;
   }
 
@@ -81,11 +98,11 @@ public class LLMSSetupConfiguration {
    * @return runtimeConfigs
   **/
   @Schema(description = "")
-  public Object getRuntimeConfigs() {
+  public List<LLMExistingConfiguration> getRuntimeConfigs() {
     return runtimeConfigs;
   }
 
-  public void setRuntimeConfigs(Object runtimeConfigs) {
+  public void setRuntimeConfigs(List<LLMExistingConfiguration> runtimeConfigs) {
     this.runtimeConfigs = runtimeConfigs;
   }
 

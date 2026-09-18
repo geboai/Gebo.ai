@@ -27,7 +27,7 @@ import java.util.List;
  * GKnowledgeBase
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
 
 public class GKnowledgeBase {
   @JsonProperty("code")
@@ -111,6 +111,9 @@ public class GKnowledgeBase {
 
   @JsonProperty("aclAliases")
   private List<Integer> aclAliases = null;
+
+  @JsonProperty("readonly")
+  private Boolean readonly = null;
 
   public GKnowledgeBase code(String code) {
     this.code = code;
@@ -474,6 +477,24 @@ public class GKnowledgeBase {
     this.aclAliases = aclAliases;
   }
 
+  public GKnowledgeBase readonly(Boolean readonly) {
+    this.readonly = readonly;
+    return this;
+  }
+
+   /**
+   * Get readonly
+   * @return readonly
+  **/
+  @Schema(description = "")
+  public Boolean isReadonly() {
+    return readonly;
+  }
+
+  public void setReadonly(Boolean readonly) {
+    this.readonly = readonly;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -500,12 +521,13 @@ public class GKnowledgeBase {
         Objects.equals(this.parentKnowledgebaseCode, gknowledgeBase.parentKnowledgebaseCode) &&
         Objects.equals(this.objectSpaceType, gknowledgeBase.objectSpaceType) &&
         Objects.equals(this.acl, gknowledgeBase.acl) &&
-        Objects.equals(this.aclAliases, gknowledgeBase.aclAliases);
+        Objects.equals(this.aclAliases, gknowledgeBase.aclAliases) &&
+        Objects.equals(this.readonly, gknowledgeBase.readonly);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, accessibleGroups, accessibleUsers, accessibleToAll, knowledgeBaseReferences, projectsReferences, embeddingModelReferences, username, parentKnowledgebaseCode, objectSpaceType, acl, aclAliases);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, accessibleGroups, accessibleUsers, accessibleToAll, knowledgeBaseReferences, projectsReferences, embeddingModelReferences, username, parentKnowledgebaseCode, objectSpaceType, acl, aclAliases, readonly);
   }
 
 
@@ -531,6 +553,7 @@ public class GKnowledgeBase {
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    acl: ").append(toIndentedString(acl)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    readonly: ").append(toIndentedString(readonly)).append("\n");
     sb.append("}");
     return sb.toString();
   }

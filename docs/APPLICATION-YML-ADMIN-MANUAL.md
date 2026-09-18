@@ -26,7 +26,7 @@ config contains a key that no Java code binds to, it's called out explicitly in
 next to the jar or in the mounted `/opt/gebo.ai/config` → built-in defaults compiled into the jar.
 Any property can also be set as an environment variable using Spring Boot's relaxed-binding rules
 (uppercase, `.`/`-` → `_`) — e.g. `management.otlp.tracing.endpoint` becomes
-`MANAGEMENT_OTLP_TRACING_ENDPOINT`, exactly as `dockers/gebo.ai/docker-compose.yml` already does.
+`MANAGEMENT_OTLP_TRACING_ENDPOINT`, exactly as `dockers/docker-compose-deploy/docker-compose.observability.yml` already does.
 
 **A configuration change requires a restart** of the `gebo.ai` process/container — nothing in this
 document is hot-reloaded. Two standalone settings are supplied separately, not through
@@ -124,6 +124,89 @@ it can be pre-seeded here.
 | `clientAuthMethod` | enum | Token-endpoint auth method. |
 | `authGrantType` | enum | Defaults to `AUTHORIZATION_CODE`. |
 | `providerConfig.*` | object | Only used when `provider: oauth2_generic` — `authorizationUri`, `tokenUri`, `userInfoUri`, `introspectionUri`, `issuerUri`, `jwkSetUri`, `userNameAttribute`. |
+
+### 6.2 `ai.gebo.secrets.config` — declaratively configured read-only secrets (lists)
+
+> For how these are referenced by a declared content system, and which type each connector
+> expects, see
+> [`APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md`](APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md).
+
+Secrets normally live encrypted in the store (Mongo, or an external vault) and are created through
+the admin UI. This section is the alternative for a deployment that wants a credential to come from
+its own configuration — a Kubernetes secret projected into `application.yml`, an env var, a mounted
+config file — instead of being typed into the UI and stored.
+
+One **list per secret type**, keyed by the `GeboSecretType` in dashed form. Each entry carries the
+metadata a stored secret would have on its record (`code`, `description`, `context-code`) plus the
+content itself, nested under `secret`:
+
+```yaml
+ai.gebo.secrets.config:
+  username-password:
+    - code: nightly-ingestion-account      # what the rest of the configuration references
+      description: Service account of the nightly ingestion
+      context-code: SYSTEMS
+      secret:
+        username: ingestion
+        password: ${INGESTION_PASSWORD}    # env var / projected k8s secret
+  token:
+    - code: my-llm-api-key
+      context-code: LLMS
+      secret:
+        token: ${SOME_API_KEY}
+        user: gebo
+  aws-connection:
+    - code: aws-main
+      context-code: SYSTEMS
+      secret:
+        access-key-id: ${AWS_ACCESS_KEY_ID}
+        secret-access-key: ${AWS_SECRET_ACCESS_KEY}
+        region: eu-central-1
+```
+
+| Key | Content type | Content fields |
+|---|---|---|
+| `username-password` | `GeboUsernamePasswordContent` | `username`, `password` (both required) |
+| `token` | `GeboTokenContent` | `token`, `user` (both required) |
+| `ssh-key` | `GeboSshKeySecretContent` | `email`, `key` (private key), `pub`, `passphrase` |
+| `custom-secret` | `GeboCustomSecretContent` | `content`, `content-type`, `custom-content-description` |
+| `oauth2-standard` | `GeboOauth2SecretContent` | `provider-name`, `client-id`, `secret` (required), `scopes`, `custom-attributes` |
+| `oauth2-google` | `GeboGoogleOauth2SecretContent` | `uid`, `token`, `location`, `project-id`, `scopes` |
+| `google-cloud-json-credentials` | `GeboGoogleJsonSecretContent` | `json-content`, `delegated-user` |
+| `aws-connection` | `GeboAwsConnectionCredentials` | `access-key-id`, `secret-access-key`, `region` (all required; region as the AWS code, e.g. `eu-central-1`) |
+
+Every entry field: `code` is **required and unique across all the lists**; `description` and
+`context-code` are optional but `context-code` is what the admin UI and the connectors filter on, so
+a secret declared without one will not appear in any per-context picker.
+
+**What "read-only" means.** A declared secret is resolved **before** the external vault and before
+Mongo, so a declared `code` shadows any stored secret of the same code, and the configuration always
+wins. In exchange every write path refuses it — create, update and delete alike — with
+`A readOnly secret can only being read and not updated/deleted in the implementation of
+IGeboSecretsAccessService`. Practical consequences:
+
+- the admin UI can list a declared secret but cannot edit or delete it; rotation means changing the
+  configuration and restarting, not a UI action;
+- an OAuth2 client secret declared here cannot be rotated by the OAuth2 admin screens either;
+- store/vault **migration skips** declared secrets in both directions — they are never copied into
+  the vault;
+- `OAUTH2_AUTHORIZED_CLIENT` is intentionally not configurable: it holds runtime OAuth2 tokens the
+  server refreshes for itself, which a read-only secret could not support.
+
+**Where to put it.** Only the service that owns the secrets store reads this section: the monolith,
+or `heimdall.gebo.ai` in a microservices deployment — and in the latter case it belongs in
+*heimdall's own* configuration, not the shared one, so the plaintext stays on the one service that
+already holds the crypting keys. The other services see declared secrets transparently through the
+cluster secrets endpoints, encrypted on the wire exactly like stored ones.
+
+**Misconfiguration fails the startup.** A missing or duplicated `code`, a missing `secret` block, or
+a content that violates its own required fields (a `username-password` with no `password`, say) stops
+the application from starting. One gap to be aware of: a *mistyped* content property with no required
+constraint behind it (`tokenn:` instead of `token:`) binds to nothing and is only reported when the
+secret is read — Spring Boot's unknown-property check does not reach inside list elements.
+
+🔒 Everything under this section is a credential in plaintext at rest in your configuration. Prefer
+`${ENV_VAR}` placeholders over literals, and treat the file itself as secret material.
 
 ## 7. Async execution
 
@@ -258,6 +341,194 @@ Bound by `GeboAiFilesystemsConfig` (`ai.gebo.filesystem`).
 These are advanced/integration features (source-code repository ingestion & CI build awareness),
 not required for a standard RAG deployment.
 
+> **Full guide with a worked example per handler** — knowledge bases, projects, secrets, systems
+> and data sources, how they reference each other, and which secret type each connector expects:
+> [`APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md`](APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md).
+> The three sections below are the reference tables.
+
+### 16.1 `ai.gebo.<content handler>.systems` — content management systems declared by the configuration
+
+Every content handler that keeps its systems in Mongo also accepts them from this file, under its
+own `systems` list. A declared system is the same object the admin screen edits, so it appears in
+the admin list beside the stored ones and every read path — ingestion, browsing, search — resolves
+it exactly like one created in the UI.
+
+The two sources are combined by `GAbstractContentManagementSystemConfigurationDao`, the
+implementation parent of each handler's DAO, which settles what happens when both name the same
+system: **the declaration wins**. A stored record whose code is declared here is dropped from the
+list and never resolved, so what the file says cannot be displaced by anything written later. A
+blank code, or the same code declared twice, fails the startup.
+
+In exchange, the admin write paths refuse a declared code — insert, update and delete alike. A
+record written under a code the file declares could only ever be persisted and then ignored, so
+changing a declared system means editing this file and restarting, not a UI action.
+
+Credentials are never written here. Each entry carries the *code* of a secret the secrets
+management layer holds — declared under `ai.gebo.secrets.config` (§6.2) or created in the admin
+UI. `contentManagementSystemType` is implied by the handler and can be omitted; only `ai.gebo.git`,
+which registers several handler types, requires it.
+
+Every entry also accepts the fields `GContentManagementSystem` carries: `code` (required),
+`description`, `baseUri`, `readonly`, `usedCapabilities`.
+
+| Property (list) | Binding class | Handler-specific fields | Implemented type |
+|---|---|---|---|
+| `ai.gebo.confluence.systems` | `ConfluenceSystemsConfig` | `confluenceVersion` (`ONPREMISE7X`, `CLOUD`), `secretCode` | `ATLASSIAN-CONFLUENCE` |
+| `ai.gebo.jira.systems` | `JiraSystemsConfig` | `secretCode` | `ATLASSIAN-JIRA` |
+| `ai.gebo.sharepoint.systems` | `SharepointSystemsConfig` | `sharepointVersion` (`CLOUD_VERSION`, `ONPREMISE2019`, required), `secretCode` (required) | `sharepoint-module` |
+| `ai.gebo.webdav.systems` | `WebdavSystemsConfig` | `webdavAuthType` (`NONE`, `BASIC`, `DIGEST`, `NTLM`, `BEARER_TOKEN`), `secretCode` | `WEBDAB-CMS` |
+| `ai.gebo.awss3.systems` | `AwsS3SystemsConfig` | `awsEndpoint`, `s3SecretCode` | `aws-s3-handler` |
+| `ai.gebo.googleworkspace.systems` | `GoogleDriveSystemsConfig` | `driveAccessSecret` | `google-drive-handler` |
+
+Each list is `@Validated`: a declaration that violates its own model's constraints — a SharePoint
+system with no `secretCode` or no `sharepointVersion`, say — fails the startup rather than the
+first connection.
+
+```yaml
+ai.gebo.sharepoint:
+  systems:
+    - code: corporate-sharepoint
+      description: Corporate SharePoint Online
+      baseUri: https://example.sharepoint.com
+      sharepointVersion: CLOUD_VERSION
+      secretCode: msgraph-application
+```
+
+### 16.2 `ai.gebo.<content handler>.datasources` — data sources declared by the configuration
+
+Four handlers also accept their **data sources** (project endpoints) from this file: WebDAV,
+AWS S3, SharePoint — OneDrive drives only — and Google Drive. A declared data source is the same
+object the admin screen edits, appears in the project's source list beside the stored ones, and is
+resolved by every read path through the same DAO.
+
+Unlike the systems of §16.1, which are served straight from the configuration, a declared data
+source is **written into the module's endpoint repository at startup**. It has to be: publishing,
+the central scheduler and `JobLauncherController` all resolve an endpoint through
+`IGPersistentObjectManager` — by `GObjectRef`, or through the flattened
+`GCentralizedProjectEndpoint` a reschedule carries — and none of those paths knows about a handler
+DAO. A source that existed only in memory would list and browse, then fail the moment anyone tried
+to ingest it. The handler's endpoint DAO is therefore built over the repository alone, so there is
+exactly one place a data source can come from.
+
+What the seeding may overwrite is limited on purpose:
+
+- a record that is itself `readonly` — one the seeder wrote on an earlier boot — is replaced;
+- a record an admin created through the UI carries no such marker, and **the startup fails**
+  naming the code rather than throwing away work nobody asked to lose. Rename the declaration or
+  delete the UI record first;
+- a `readonly` record whose declaration has since been removed from the file is **not deleted** —
+  deleting an endpoint properly means replicating the removal and dispatching the disposal that
+  clears its documents and vectors, which a repository write cannot do. Its marker is cleared
+  instead, which hands it back to the admin UI so it can be removed there the normal way. It is
+  logged as a warning.
+
+A broken declaration fails the startup before anything is written, and the admin write paths
+refuse a source the configuration owns.
+
+| Property (list) | Binding class | Path syntax |
+|---|---|---|
+| `ai.gebo.webdav.datasources` | `WebdavDataSourcesConfig` | the resource's full href, `https://host/dav/path/To/Folder` |
+| `ai.gebo.awss3.datasources` | `AwsS3DataSourcesConfig` | `<bucket>/<key>`, or a bare `<bucket>` for the whole bucket |
+| `ai.gebo.sharepoint.datasources` | `SharepointDataSourcesConfig` | `<driveId>/<itemId>`, or a bare `<driveId>` for the whole drive |
+| `ai.gebo.googleworkspace.datasources` | `GoogleDriveDataSourcesConfig` | `<driveId>/<fileId>`, or a bare `<driveId>` for the whole shared drive |
+
+Each entry takes: `code` (required, unique), `description`, `systemCode` (required — a system from
+§16.1 or one created in the UI), `parentProjectCode` (the knowledge base project it feeds),
+`published`, `synchPeriodically`, `openZips`, `personalData`, `vectorizeOnlyExtensions`,
+`programmedTables` (when it is re-ingested — `frequency` plus `times`, where a `DAILY`
+`timeComponent` is `[hour, minutes]`), and `paths` (required, at least one). Each path is `path` plus a `folder` flag — `true` for a folder
+whose contents are walked, `false` (the default) for a single file.
+
+```yaml
+ai.gebo.awss3:
+  datasources:
+    - code: corporate-reports
+      description: Published reports
+      systemCode: corporate-buckets
+      parentProjectCode: COMPANY-KB
+      paths:
+        - path: corporate-docs/reports/2026/
+          folder: true
+        - path: corporate-docs/reports/summary.pdf
+          folder: false
+```
+
+**The path is written in the handler's own addressing, not in a syntax invented for this file.**
+That is what a remote system's notion of "where" actually is, and it is the string the browsing UI
+already stores for a source an admin clicks together. For WebDAV and S3 that reads like a path.
+For Google Drive and OneDrive it is a pair of **opaque ids** — both address items by id and have no
+server-side path — so a folder name will be refused at startup rather than silently matching
+nothing. The ids are the ones in the item's URL, and the ones a source built in the UI already
+carries.
+
+`folder` cannot be derived from the string (no remote call is made while reading the
+configuration), so it is declared. Declaring it wrongly is caught at ingestion, where the
+navigation refuses a node whose kind disagrees.
+
+**SharePoint sites are not declarable** — only OneDrive drives. Under a site the module walks
+lists, list items and site pages, each with its own identity and step type, and a `path`/`folder`
+pair has nothing to say about which is meant. Build site-backed sources in the admin UI.
+
+**Scheduling.** Nothing has to be clicked: every stored endpoint is rescheduled on context
+refresh and the seeders run before that, so a declared source is on the schedule from its first
+boot, governed by its `programmedTables`. When its schedule says it should already have run — the
+normal case on a first boot — the scheduler programs a catch-up run about 30 seconds out. Publish
+stays enabled on a read-only source for when you want a run immediately; it queues the ingestion
+and skips the save.
+
+### 16.3 `ai.gebo.knowledgebases` / `ai.gebo.projects` — the hierarchy above them
+
+The knowledge base and the project a data source feeds can be declared too, so a deployment comes
+up with the whole hierarchy in place rather than needing an admin to build the top of it by hand.
+
+| Property (list) | Binding class | Fields |
+|---|---|---|
+| `ai.gebo.knowledgebases` | `GeboKnowledgeBaseHierarchyConfig` | `code` (required), `description`, `accessibleToAll`, `accessibleUsers`, `accessibleGroups`, `parentKnowledgebaseCode`, `knowledgeBaseReferences`, `projectsReferences`, `embeddingModelReferences`, `objectSpaceType` |
+| `ai.gebo.projects` | `GeboKnowledgeBaseHierarchyConfig` | `code` (required), `description`, `rootKnowledgeBaseCode`, `parentProjectCode`, `accessibleToAll`, `accessibleUsers`, `accessibleGroups`, `objectSpaceType` |
+
+```yaml
+ai.gebo:
+  knowledgebases:
+    - code: COMPANY-KB
+      description: Company knowledge base
+      accessibleToAll: true
+  projects:
+    - code: COMPANY-DOCS
+      description: Corporate documents
+      rootKnowledgeBaseCode: COMPANY-KB
+      accessibleToAll: true
+```
+
+Like the data sources of §16.2 — and for the same reason, since both are resolved by code through
+`IGPersistentObjectManager` from everywhere — these are **written into Mongo at startup** rather
+than served from the configuration. They are seeded top down: knowledge bases, then projects, then
+data sources, so each level exists before the one that names it.
+
+The overwrite rules of §16.2 apply unchanged: a record an admin created under the same code fails
+the startup rather than being replaced, and a record whose declaration is removed has its
+`readonly` marker cleared rather than being deleted — deleting a project or knowledge base means
+disposing of everything beneath it, which a repository write cannot do.
+
+### 16.4 What `readonly` means for a declared system, data source, project or knowledge base
+
+Everything declared in §16.1, §16.2 and §16.3 carries `readonly: true`. The admin UI reads that marker in
+`BaseEntityEditingComponent` and disables **save and delete**, with a message naming the file;
+`GAbstractSystemsArchitectureController` refuses insert, update and delete regardless of the
+client. Publish is deliberately left enabled — it writes nothing on a read-only entity.
+
+For a data source the guard reads the marker off the **stored record**, not off the object the
+client sent back: the record's marker was written by the seeder, while the incoming one is
+whatever the caller chose to send. Editing a declared source would in any case not survive the
+next restart, when the declaration is written back over it.
+
+The filesystem and MCP handlers already used this flag for their own non-editable singleton
+system, so no new concept was introduced for it.
+
+Declared records are also opened to everyone by default, since they belong to the deployment: a
+knowledge base and project get `accessibleToAll: true` (the knowledge base an everyone-read ACL
+entry too), and a data source gets the everyone-read ACL alias its documents inherit — each only
+when the declaration left visibility unset, so an explicit restriction in the file is kept.
+
 ## 17. Ingestion pipeline tuning — chunking, embedding, GraphRAG
 
 Advanced performance/throughput tuning. Defaults are sane for most installs; only touch these for
@@ -286,8 +557,9 @@ large-scale ingestion tuning.
 | Property | Type | Shipped default | Description |
 |---|---|---|---|
 | `ai.gebo.rag-threashold-autotune.config.enabled` | boolean | `true` | Periodically re-computes optimal RAG similarity thresholds per vector store / embedding model / knowledge base, by sampling document fragments, generating synthetic questions, and rating match quality. |
-| `ai.gebo.agents.standard.enabled` | boolean | `false` | Enables the built-in standard document-search agents. |
-| `ai.gebo.chatpipes.defaultPipelineStepIsChatAgent` | boolean | `false` | Whether the default chat pipeline routes straight to the agentic chat-agent flow instead of the LLM-based routing/decision step. |
+| `ai.gebo.agents.standard.enabled` | boolean | `true` | Enables the built-in standard document-search agents, i.e. the default network of agents. On unless explicitly set to `false`. |
+| `ai.gebo.officeplugin.enabled` | boolean | `true` | Enables the office assistant network of agents and its pipeline. Requires `ai.gebo.agents.standard.enabled=true`, whose searcher/tool agents and controller service it reuses. On unless explicitly set to `false`. |
+| `ai.gebo.chatpipes.defaultPipelineStepIsChatAgent` | boolean | `true` | **Currently has no effect** - the value is read and never used. The behaviour it describes (agentic flow vs. the LLM routing/decision step) is governed by `ai.gebo.agents.standard.enabled` instead. See [`CHAT-PIPELINE-ROUTING-ARCHITECTURE.md`](./CHAT-PIPELINE-ROUTING-ARCHITECTURE.md) §8. |
 
 ## 19. Web search tool (Google Custom Search)
 
@@ -320,6 +592,30 @@ this block.
 | `ai.gebo.userflows.mail-user-name` / `mail-password` 🔒 | String | *(unset)* | SMTP credentials. |
 | `ai.gebo.userflows.mail-sender` | String | `no-reply@gebo.ai` | From-address for outbound mail. |
 | `ai.gebo.userflows.gebo-reachable-base-address` | String | `http://localhost:12999` | Public base URL embedded in activation/reset links — **must be set to your real external URL** in any non-localhost deployment. |
+
+## 20b. LLM client networking — timeouts and retries
+
+These govern every outbound call to an LLM provider (chat, embedding, image, ranker,
+speech, transcription). They are bound to `GeboDefaultLlmsServiceClientsProviderConfig`
+and apply to all vendors that route through `IGLlmsServiceClientsProvider` — that is
+every vendor except AWS Bedrock and Google Vertex, which currently run on their own SDK
+defaults. See [`LLMS-NETWORKING-PARAMS.md`](./LLMS-NETWORKING-PARAMS.md) for the
+per-service review.
+
+| Property | Type | Shipped default | Description |
+|---|---|---|---|
+| `ai.gebo.llms.default.clients.config.web-client-config.connect-timeout` | long (ms) | `30000` | Time allowed to establish the TCP/TLS connection to the provider. |
+| `ai.gebo.llms.default.clients.config.web-client-config.response-timeout` | long (ms) | `80000` | Time allowed for the provider to respond. Used as the read **and** write timeout, and as the request timeout of the OpenAI/Anthropic SDK clients. **Raise this if long generations are being cut off mid-stream** — a deep multi-cycle report can stream for well over a minute. |
+| `ai.gebo.llms.default.clients.config.retry-config.max-attempts` | int | `5` | Maximum transport-level attempts per call. |
+| `ai.gebo.llms.default.clients.config.retry-config.backoff-interval` | long (ms) | `5000` | Fixed delay between attempts. |
+| `ai.gebo.llms.default.clients.config.retry-config.retry-timeout` | long (ms) | `80000` | Overall budget for the retry template. |
+
+A dropped stream is **not** retried and cannot be: once tokens have been streamed to
+the client they cannot be replayed, so a response cut by `response-timeout` is
+delivered truncated. The agent network logs
+`Agent <name> failed; continuing network` when that happens.
+
+---
 
 ## 21. Miscellaneous
 
@@ -358,6 +654,7 @@ Every value below ships with a non-secret placeholder in the Docker image and **
 for any deployment reachable outside your own machine:
 
 - `ai.gebo.security.auth.tokenSecret`
+- Every value under `ai.gebo.secrets.config.*` (see §6.2) — plaintext credentials in the config file
 - `ai.gebo.mongodb.connectionString` (embedded Mongo password)
 - `ai.gebo.vectorstore.qdrant.apiKey`
 - `ai.gebo.opensearch.password`

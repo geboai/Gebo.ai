@@ -17,28 +17,40 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GOllamaEmbeddingModelChoice;
+import gebo.microservices.api.client.brain.model.GUserMessage;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * OperationStatusListGOllamaEmbeddingModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class OperationStatusListGOllamaEmbeddingModelChoice {
   @JsonProperty("result")
-  private Object result = null;
+  private List<GOllamaEmbeddingModelChoice> result = null;
 
   @JsonProperty("messages")
-  private Object messages = null;
+  private List<GUserMessage> messages = null;
 
   @JsonProperty("hasErrorMessages")
-  private Object hasErrorMessages = null;
+  private Boolean hasErrorMessages = null;
 
   @JsonProperty("hasWarnMessages")
-  private Object hasWarnMessages = null;
+  private Boolean hasWarnMessages = null;
 
-  public OperationStatusListGOllamaEmbeddingModelChoice result(Object result) {
+  public OperationStatusListGOllamaEmbeddingModelChoice result(List<GOllamaEmbeddingModelChoice> result) {
     this.result = result;
+    return this;
+  }
+
+  public OperationStatusListGOllamaEmbeddingModelChoice addResultItem(GOllamaEmbeddingModelChoice resultItem) {
+    if (this.result == null) {
+      this.result = new ArrayList<>();
+    }
+    this.result.add(resultItem);
     return this;
   }
 
@@ -47,16 +59,24 @@ public class OperationStatusListGOllamaEmbeddingModelChoice {
    * @return result
   **/
   @Schema(description = "")
-  public Object getResult() {
+  public List<GOllamaEmbeddingModelChoice> getResult() {
     return result;
   }
 
-  public void setResult(Object result) {
+  public void setResult(List<GOllamaEmbeddingModelChoice> result) {
     this.result = result;
   }
 
-  public OperationStatusListGOllamaEmbeddingModelChoice messages(Object messages) {
+  public OperationStatusListGOllamaEmbeddingModelChoice messages(List<GUserMessage> messages) {
     this.messages = messages;
+    return this;
+  }
+
+  public OperationStatusListGOllamaEmbeddingModelChoice addMessagesItem(GUserMessage messagesItem) {
+    if (this.messages == null) {
+      this.messages = new ArrayList<>();
+    }
+    this.messages.add(messagesItem);
     return this;
   }
 
@@ -65,15 +85,15 @@ public class OperationStatusListGOllamaEmbeddingModelChoice {
    * @return messages
   **/
   @Schema(description = "")
-  public Object getMessages() {
+  public List<GUserMessage> getMessages() {
     return messages;
   }
 
-  public void setMessages(Object messages) {
+  public void setMessages(List<GUserMessage> messages) {
     this.messages = messages;
   }
 
-  public OperationStatusListGOllamaEmbeddingModelChoice hasErrorMessages(Object hasErrorMessages) {
+  public OperationStatusListGOllamaEmbeddingModelChoice hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
   }
@@ -83,15 +103,15 @@ public class OperationStatusListGOllamaEmbeddingModelChoice {
    * @return hasErrorMessages
   **/
   @Schema(description = "")
-  public Object getHasErrorMessages() {
+  public Boolean isHasErrorMessages() {
     return hasErrorMessages;
   }
 
-  public void setHasErrorMessages(Object hasErrorMessages) {
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
   }
 
-  public OperationStatusListGOllamaEmbeddingModelChoice hasWarnMessages(Object hasWarnMessages) {
+  public OperationStatusListGOllamaEmbeddingModelChoice hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
   }
@@ -101,11 +121,11 @@ public class OperationStatusListGOllamaEmbeddingModelChoice {
    * @return hasWarnMessages
   **/
   @Schema(description = "")
-  public Object getHasWarnMessages() {
+  public Boolean isHasWarnMessages() {
     return hasWarnMessages;
   }
 
-  public void setHasWarnMessages(Object hasWarnMessages) {
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
   }
 

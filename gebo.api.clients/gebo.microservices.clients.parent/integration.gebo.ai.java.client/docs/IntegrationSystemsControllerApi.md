@@ -54,7 +54,7 @@ No authorization required
 
 <a name="findIntegrationEndpointsByProject"></a>
 # **findIntegrationEndpointsByProject**
-> Object findIntegrationEndpointsByProject(parentProjectCode)
+> List&lt;GIntegrationProjectEndpoint&gt; findIntegrationEndpointsByProject(parentProjectCode)
 
 
 
@@ -66,9 +66,9 @@ No authorization required
 
 
 IntegrationSystemsControllerApi apiInstance = new IntegrationSystemsControllerApi();
-Object parentProjectCode = null; // Object | 
+String parentProjectCode = "parentProjectCode_example"; // String | 
 try {
-    Object result = apiInstance.findIntegrationEndpointsByProject(parentProjectCode);
+    List<GIntegrationProjectEndpoint> result = apiInstance.findIntegrationEndpointsByProject(parentProjectCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling IntegrationSystemsControllerApi#findIntegrationEndpointsByProject");
@@ -80,11 +80,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **parentProjectCode** | [**Object**](.md)|  |
+ **parentProjectCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GIntegrationProjectEndpoint&gt;**](GIntegrationProjectEndpoint.md)
 
 ### Authorization
 

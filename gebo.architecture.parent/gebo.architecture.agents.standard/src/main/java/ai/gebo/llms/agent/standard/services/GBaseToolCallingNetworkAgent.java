@@ -103,7 +103,7 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 		// framework-controlled tool-execution loop; the model is cloned with the tool
 		// catalog enabled by the configuration (and the notifyUser tool when the
 		// persona may notify the user).
-		final ToolCallsListener callBacksListener = new ToolCallsListener();
+		final ToolCallsListener callBacksListener = notifyingToolCallsListener(contextAgentPersona, notificationSink);
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 
@@ -111,6 +111,17 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);
 		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Tool-calling agent id:" + getId() + " agentRole:"
+					+ (agentRole != null ? agentRole.getCode() : null) + " contextLength:"
+					+ agentModel.getContextLength() + " promptSize:" + prompt.getTokensSize() + " (tok) tokenBudget:"
+					+ tokenBudget + " (tok) notifyUserAllowed:" + contextAgentPersona.isAllowedToNotifyUser());
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<TOOL_CALLING_AGENT_INPUT agent=" + getId() + ">");
+			LOGGER.trace(String.valueOf(msg.getPayload()));
+			LOGGER.trace("</TOOL_CALLING_AGENT_INPUT>");
+		}
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
 				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
 
@@ -133,7 +144,14 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 		}
 
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End onMessage(...) tool-calling agent id:" + getId() + " produced output:" + (output != null));
+			LOGGER.debug("End onMessage(...) tool-calling agent id:" + getId() + " produced output:" + (output != null)
+					+ " toolCallsExecuted:"
+					+ (callBacksListener.getCalls() != null ? callBacksListener.getCalls().size() : 0));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<TOOL_CALLING_AGENT_OUTPUT agent=" + getId() + ">");
+			LOGGER.trace(String.valueOf(output));
+			LOGGER.trace("</TOOL_CALLING_AGENT_OUTPUT>");
 		}
 
 		AgentsExchangeMessage<OutputType> out = new AgentsExchangeMessage<OutputType>(session.getId(),

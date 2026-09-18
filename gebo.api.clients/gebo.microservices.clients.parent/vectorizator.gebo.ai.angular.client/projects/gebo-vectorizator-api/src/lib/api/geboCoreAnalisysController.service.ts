@@ -62,9 +62,9 @@ export class GeboCoreAnalisysControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public coreDrillDown(body: GStatsHolder, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public coreDrillDown(body: GStatsHolder, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public coreDrillDown(body: GStatsHolder, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public coreDrillDown(body: GStatsHolder, observe?: 'body', reportProgress?: boolean): Observable<Array<GStatsHolder>>;
+    public coreDrillDown(body: GStatsHolder, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GStatsHolder>>>;
+    public coreDrillDown(body: GStatsHolder, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GStatsHolder>>>;
     public coreDrillDown(body: GStatsHolder, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -91,7 +91,7 @@ export class GeboCoreAnalisysControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/GeboCoreAnalisysController/drillDown`,
+        return this.httpClient.request<Array<GStatsHolder>>('post',`${this.basePath}/api/admin/GeboCoreAnalisysController/drillDown`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

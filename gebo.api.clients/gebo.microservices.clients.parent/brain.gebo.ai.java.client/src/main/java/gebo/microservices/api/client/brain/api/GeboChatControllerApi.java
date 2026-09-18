@@ -3,10 +3,12 @@ package gebo.microservices.api.client.brain.api;
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
 import gebo.microservices.api.client.brain.model.GBaseChatModelChoice;
+import gebo.microservices.api.client.brain.model.GBaseObject;
 import gebo.microservices.api.client.brain.model.GeboChatRequest;
 import gebo.microservices.api.client.brain.model.GeboChatResponse;
 import gebo.microservices.api.client.brain.model.GeboChatUserInfo;
 import gebo.microservices.api.client.brain.model.ModelProviderCapabilities;
+import gebo.microservices.api.client.brain.model.ServerSentEventString;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboChatControllerApi {
     private ApiClient apiClient;
@@ -72,7 +74,7 @@ public class GeboChatControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling chat");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboDirectModelChatController/chat").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboDirectModelChatController/chat").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -90,7 +92,7 @@ public class GeboChatControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GeboChatResponse> returnType = new ParameterizedTypeReference<GeboChatResponse>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -100,7 +102,7 @@ public class GeboChatControllerApi {
      * @return GBaseChatModelChoice
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GBaseChatModelChoice getChatModelMetaInfos(Object modelCode) throws RestClientException {
+    public GBaseChatModelChoice getChatModelMetaInfos(String modelCode) throws RestClientException {
         return getChatModelMetaInfosWithHttpInfo(modelCode).getBody();
     }
 
@@ -112,13 +114,13 @@ public class GeboChatControllerApi {
      * @return ResponseEntity&lt;GBaseChatModelChoice&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GBaseChatModelChoice> getChatModelMetaInfosWithHttpInfo(Object modelCode) throws RestClientException {
+    public ResponseEntity<GBaseChatModelChoice> getChatModelMetaInfosWithHttpInfo(String modelCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'modelCode' is set
         if (modelCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'modelCode' when calling getChatModelMetaInfos");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboDirectModelChatController/getChatModelMetaInfos").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboDirectModelChatController/getChatModelMetaInfos").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -135,7 +137,7 @@ public class GeboChatControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GBaseChatModelChoice> returnType = new ParameterizedTypeReference<GBaseChatModelChoice>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -145,7 +147,7 @@ public class GeboChatControllerApi {
      * @return GeboChatUserInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GeboChatUserInfo getChatModelUserInfo(Object modelCode) throws RestClientException {
+    public GeboChatUserInfo getChatModelUserInfo(String modelCode) throws RestClientException {
         return getChatModelUserInfoWithHttpInfo(modelCode).getBody();
     }
 
@@ -157,13 +159,13 @@ public class GeboChatControllerApi {
      * @return ResponseEntity&lt;GeboChatUserInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GeboChatUserInfo> getChatModelUserInfoWithHttpInfo(Object modelCode) throws RestClientException {
+    public ResponseEntity<GeboChatUserInfo> getChatModelUserInfoWithHttpInfo(String modelCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'modelCode' is set
         if (modelCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'modelCode' when calling getChatModelUserInfo");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboDirectModelChatController/getChatModelUserInfo").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboDirectModelChatController/getChatModelUserInfo").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -180,7 +182,7 @@ public class GeboChatControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GeboChatUserInfo> returnType = new ParameterizedTypeReference<GeboChatUserInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -190,7 +192,7 @@ public class GeboChatControllerApi {
      * @return ModelProviderCapabilities
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ModelProviderCapabilities getProviderCapabilities(Object modelCode) throws RestClientException {
+    public ModelProviderCapabilities getProviderCapabilities(String modelCode) throws RestClientException {
         return getProviderCapabilitiesWithHttpInfo(modelCode).getBody();
     }
 
@@ -202,13 +204,13 @@ public class GeboChatControllerApi {
      * @return ResponseEntity&lt;ModelProviderCapabilities&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<ModelProviderCapabilities> getProviderCapabilitiesWithHttpInfo(Object modelCode) throws RestClientException {
+    public ResponseEntity<ModelProviderCapabilities> getProviderCapabilitiesWithHttpInfo(String modelCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'modelCode' is set
         if (modelCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'modelCode' when calling getProviderCapabilities");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboDirectModelChatController/getProviderCapabilities").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboDirectModelChatController/getProviderCapabilities").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -225,16 +227,16 @@ public class GeboChatControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<ModelProviderCapabilities> returnType = new ParameterizedTypeReference<ModelProviderCapabilities>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GBaseObject&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getVisibleKnowledgeBases() throws RestClientException {
+    public List<GBaseObject> getVisibleKnowledgeBases() throws RestClientException {
         return getVisibleKnowledgeBasesWithHttpInfo().getBody();
     }
 
@@ -242,12 +244,12 @@ public class GeboChatControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GBaseObject&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getVisibleKnowledgeBasesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GBaseObject>> getVisibleKnowledgeBasesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboDirectModelChatController/getVisibleKnowledgeBases").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboDirectModelChatController/getVisibleKnowledgeBases").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -262,18 +264,18 @@ public class GeboChatControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GBaseObject>> returnType = new ParameterizedTypeReference<List<GBaseObject>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;ServerSentEventString&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object streamResponse(GeboChatRequest body) throws RestClientException {
+    public List<ServerSentEventString> streamResponse(GeboChatRequest body) throws RestClientException {
         return streamResponseWithHttpInfo(body).getBody();
     }
 
@@ -282,16 +284,16 @@ public class GeboChatControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;ServerSentEventString&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> streamResponseWithHttpInfo(GeboChatRequest body) throws RestClientException {
+    public ResponseEntity<List<ServerSentEventString>> streamResponseWithHttpInfo(GeboChatRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling streamResponse");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboDirectModelChatController/streamResponse").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboDirectModelChatController/streamResponse").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -308,7 +310,7 @@ public class GeboChatControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<ServerSentEventString>> returnType = new ParameterizedTypeReference<List<ServerSentEventString>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

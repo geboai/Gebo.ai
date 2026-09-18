@@ -13,12 +13,9 @@
 /**
  * AI generated comments
  * Repository interface for managing OpenAI embedding model configurations in MongoDB.
- * This repository is only enabled when the "ai.gebo.llms.config.openAIEnabled" property
- * is set to "true" in the application configuration.
  */
 package ai.gebo.llms.openai.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.openai.model.GOpenAIEmbeddingModelConfig;
@@ -27,7 +24,6 @@ import ai.gebo.llms.openai.model.GOpenAIEmbeddingModelConfig;
  * Repository interface for OpenAI embedding model configurations.
  * Extends the base MongoDB repository interface for CRUD operations.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "openAIEnabled", havingValue = "true")
 public interface OpenAIEmbeddingModelConfigRepository extends IGBaseMongoDBRepository<GOpenAIEmbeddingModelConfig> {
 	/**
 	 * Returns the managed entity type for this repository.

@@ -24,6 +24,7 @@ public final class MultiOauth2ConfigJwtAuthenticationManager implements Authenti
 	final List<Oauth2RuntimeConfiguration> oauth2AuthenticationConfigs;
 	final Converter<Jwt, AbstractAuthenticationToken> converter;
 	final JwtDecoderCache decoderCache;
+	final GOauth2ResourceServerUserProvisioner provisioner;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -32,7 +33,7 @@ public final class MultiOauth2ConfigJwtAuthenticationManager implements Authenti
 			String issuerUri = oauth2RuntimeConfiguration.getProviderConfig().getIssuerUri();
 			try {
 				SingleOauth2ConfigJwtAuthenticationManager manager = new SingleOauth2ConfigJwtAuthenticationManager(
-						header, oauth2RuntimeConfiguration, converter, decoderCache);
+						header, oauth2RuntimeConfiguration, converter, decoderCache, provisioner);
 				return manager.authenticate(authentication);
 			} catch (AuthenticationException ex) {
 				// Token not valid for this provider (bad signature/issuer/expiry); try next.

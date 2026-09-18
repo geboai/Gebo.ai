@@ -69,7 +69,7 @@ No authorization required
 
 
 McpClientConfigControllerApi apiInstance = new McpClientConfigControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     OperationStatusMCPClientConfig result = apiInstance.findMCPClientConfigByCode(code);
     System.out.println(result);
@@ -83,7 +83,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

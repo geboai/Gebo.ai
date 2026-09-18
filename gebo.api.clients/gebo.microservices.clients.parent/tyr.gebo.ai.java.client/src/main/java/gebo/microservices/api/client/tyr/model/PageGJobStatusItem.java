@@ -17,50 +17,53 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.tyr.model.GJobStatusItem;
 import gebo.microservices.api.client.tyr.model.PageableObject;
 import gebo.microservices.api.client.tyr.model.SortObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * PageGJobStatusItem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class PageGJobStatusItem {
   @JsonProperty("totalPages")
-  private Object totalPages = null;
+  private Integer totalPages = null;
 
   @JsonProperty("totalElements")
-  private Object totalElements = null;
+  private Long totalElements = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
 
-  @JsonProperty("first")
-  private Object first = null;
-
-  @JsonProperty("last")
-  private Object last = null;
-
   @JsonProperty("size")
-  private Object size = null;
+  private Integer size = null;
 
   @JsonProperty("content")
-  private Object content = null;
+  private List<GJobStatusItem> content = null;
 
   @JsonProperty("number")
-  private Object number = null;
+  private Integer number = null;
 
   @JsonProperty("sort")
   private SortObject sort = null;
 
+  @JsonProperty("first")
+  private Boolean first = null;
+
+  @JsonProperty("last")
+  private Boolean last = null;
+
   @JsonProperty("numberOfElements")
-  private Object numberOfElements = null;
+  private Integer numberOfElements = null;
 
   @JsonProperty("empty")
-  private Object empty = null;
+  private Boolean empty = null;
 
-  public PageGJobStatusItem totalPages(Object totalPages) {
+  public PageGJobStatusItem totalPages(Integer totalPages) {
     this.totalPages = totalPages;
     return this;
   }
@@ -70,15 +73,15 @@ public class PageGJobStatusItem {
    * @return totalPages
   **/
   @Schema(description = "")
-  public Object getTotalPages() {
+  public Integer getTotalPages() {
     return totalPages;
   }
 
-  public void setTotalPages(Object totalPages) {
+  public void setTotalPages(Integer totalPages) {
     this.totalPages = totalPages;
   }
 
-  public PageGJobStatusItem totalElements(Object totalElements) {
+  public PageGJobStatusItem totalElements(Long totalElements) {
     this.totalElements = totalElements;
     return this;
   }
@@ -88,11 +91,11 @@ public class PageGJobStatusItem {
    * @return totalElements
   **/
   @Schema(description = "")
-  public Object getTotalElements() {
+  public Long getTotalElements() {
     return totalElements;
   }
 
-  public void setTotalElements(Object totalElements) {
+  public void setTotalElements(Long totalElements) {
     this.totalElements = totalElements;
   }
 
@@ -114,43 +117,7 @@ public class PageGJobStatusItem {
     this.pageable = pageable;
   }
 
-  public PageGJobStatusItem first(Object first) {
-    this.first = first;
-    return this;
-  }
-
-   /**
-   * Get first
-   * @return first
-  **/
-  @Schema(description = "")
-  public Object getFirst() {
-    return first;
-  }
-
-  public void setFirst(Object first) {
-    this.first = first;
-  }
-
-  public PageGJobStatusItem last(Object last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Object getLast() {
-    return last;
-  }
-
-  public void setLast(Object last) {
-    this.last = last;
-  }
-
-  public PageGJobStatusItem size(Object size) {
+  public PageGJobStatusItem size(Integer size) {
     this.size = size;
     return this;
   }
@@ -160,16 +127,24 @@ public class PageGJobStatusItem {
    * @return size
   **/
   @Schema(description = "")
-  public Object getSize() {
+  public Integer getSize() {
     return size;
   }
 
-  public void setSize(Object size) {
+  public void setSize(Integer size) {
     this.size = size;
   }
 
-  public PageGJobStatusItem content(Object content) {
+  public PageGJobStatusItem content(List<GJobStatusItem> content) {
     this.content = content;
+    return this;
+  }
+
+  public PageGJobStatusItem addContentItem(GJobStatusItem contentItem) {
+    if (this.content == null) {
+      this.content = new ArrayList<>();
+    }
+    this.content.add(contentItem);
     return this;
   }
 
@@ -178,15 +153,15 @@ public class PageGJobStatusItem {
    * @return content
   **/
   @Schema(description = "")
-  public Object getContent() {
+  public List<GJobStatusItem> getContent() {
     return content;
   }
 
-  public void setContent(Object content) {
+  public void setContent(List<GJobStatusItem> content) {
     this.content = content;
   }
 
-  public PageGJobStatusItem number(Object number) {
+  public PageGJobStatusItem number(Integer number) {
     this.number = number;
     return this;
   }
@@ -196,11 +171,11 @@ public class PageGJobStatusItem {
    * @return number
   **/
   @Schema(description = "")
-  public Object getNumber() {
+  public Integer getNumber() {
     return number;
   }
 
-  public void setNumber(Object number) {
+  public void setNumber(Integer number) {
     this.number = number;
   }
 
@@ -222,7 +197,43 @@ public class PageGJobStatusItem {
     this.sort = sort;
   }
 
-  public PageGJobStatusItem numberOfElements(Object numberOfElements) {
+  public PageGJobStatusItem first(Boolean first) {
+    this.first = first;
+    return this;
+  }
+
+   /**
+   * Get first
+   * @return first
+  **/
+  @Schema(description = "")
+  public Boolean isFirst() {
+    return first;
+  }
+
+  public void setFirst(Boolean first) {
+    this.first = first;
+  }
+
+  public PageGJobStatusItem last(Boolean last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Boolean isLast() {
+    return last;
+  }
+
+  public void setLast(Boolean last) {
+    this.last = last;
+  }
+
+  public PageGJobStatusItem numberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
     return this;
   }
@@ -232,15 +243,15 @@ public class PageGJobStatusItem {
    * @return numberOfElements
   **/
   @Schema(description = "")
-  public Object getNumberOfElements() {
+  public Integer getNumberOfElements() {
     return numberOfElements;
   }
 
-  public void setNumberOfElements(Object numberOfElements) {
+  public void setNumberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
   }
 
-  public PageGJobStatusItem empty(Object empty) {
+  public PageGJobStatusItem empty(Boolean empty) {
     this.empty = empty;
     return this;
   }
@@ -250,11 +261,11 @@ public class PageGJobStatusItem {
    * @return empty
   **/
   @Schema(description = "")
-  public Object getEmpty() {
+  public Boolean isEmpty() {
     return empty;
   }
 
-  public void setEmpty(Object empty) {
+  public void setEmpty(Boolean empty) {
     this.empty = empty;
   }
 
@@ -271,19 +282,19 @@ public class PageGJobStatusItem {
     return Objects.equals(this.totalPages, pageGJobStatusItem.totalPages) &&
         Objects.equals(this.totalElements, pageGJobStatusItem.totalElements) &&
         Objects.equals(this.pageable, pageGJobStatusItem.pageable) &&
-        Objects.equals(this.first, pageGJobStatusItem.first) &&
-        Objects.equals(this.last, pageGJobStatusItem.last) &&
         Objects.equals(this.size, pageGJobStatusItem.size) &&
         Objects.equals(this.content, pageGJobStatusItem.content) &&
         Objects.equals(this.number, pageGJobStatusItem.number) &&
         Objects.equals(this.sort, pageGJobStatusItem.sort) &&
+        Objects.equals(this.first, pageGJobStatusItem.first) &&
+        Objects.equals(this.last, pageGJobStatusItem.last) &&
         Objects.equals(this.numberOfElements, pageGJobStatusItem.numberOfElements) &&
         Objects.equals(this.empty, pageGJobStatusItem.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
+    return Objects.hash(totalPages, totalElements, pageable, size, content, number, sort, first, last, numberOfElements, empty);
   }
 
 
@@ -295,12 +306,12 @@ public class PageGJobStatusItem {
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
-    sb.append("    first: ").append(toIndentedString(first)).append("\n");
-    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    first: ").append(toIndentedString(first)).append("\n");
+    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");

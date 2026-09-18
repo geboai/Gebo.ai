@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PrepareChunksRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:46.509035701+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class PrepareChunksRequest {
   @JsonProperty("document")
@@ -34,7 +34,7 @@ public class PrepareChunksRequest {
   private ChunkingParams chunkingSpecs = null;
 
   @JsonProperty("chunkingSessionId")
-  private Object chunkingSessionId = null;
+  private String chunkingSessionId = null;
 
   public PrepareChunksRequest document(IGComponentOriginatedDocument document) {
     this.document = document;
@@ -72,7 +72,7 @@ public class PrepareChunksRequest {
     this.chunkingSpecs = chunkingSpecs;
   }
 
-  public PrepareChunksRequest chunkingSessionId(Object chunkingSessionId) {
+  public PrepareChunksRequest chunkingSessionId(String chunkingSessionId) {
     this.chunkingSessionId = chunkingSessionId;
     return this;
   }
@@ -82,11 +82,11 @@ public class PrepareChunksRequest {
    * @return chunkingSessionId
   **/
   @Schema(description = "")
-  public Object getChunkingSessionId() {
+  public String getChunkingSessionId() {
     return chunkingSessionId;
   }
 
-  public void setChunkingSessionId(Object chunkingSessionId) {
+  public void setChunkingSessionId(String chunkingSessionId) {
     this.chunkingSessionId = chunkingSessionId;
   }
 

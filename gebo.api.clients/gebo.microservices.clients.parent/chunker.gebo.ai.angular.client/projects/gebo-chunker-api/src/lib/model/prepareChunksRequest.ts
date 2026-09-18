@@ -15,5 +15,5 @@ import { IGComponentOriginatedDocument } from './iGComponentOriginatedDocument';
 export interface PrepareChunksRequest { 
     document?: IGComponentOriginatedDocument;
     chunkingSpecs?: ChunkingParams;
-    chunkingSessionId?: any;
+    chunkingSessionId?: string;
 }

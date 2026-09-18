@@ -5,13 +5,14 @@ All URIs are relative to *http://localhost:13018/heimdall*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**checkPassword**](SecurityDirectoryClusterControllerApi.md#checkPassword) | **POST** /api/cluster/SecurityController/checkPassword | 
+[**createUserIfNotExists**](SecurityDirectoryClusterControllerApi.md#createUserIfNotExists) | **POST** /api/cluster/SecurityController/createUserIfNotExists | 
 [**findAllGroups**](SecurityDirectoryClusterControllerApi.md#findAllGroups) | **GET** /api/cluster/SecurityController/findAllGroups | 
 [**findGroupsOfUser**](SecurityDirectoryClusterControllerApi.md#findGroupsOfUser) | **GET** /api/cluster/SecurityController/findGroupsOfUser | 
 [**findUserByUsername**](SecurityDirectoryClusterControllerApi.md#findUserByUsername) | **GET** /api/cluster/SecurityController/findUserByUsername | 
 
 <a name="checkPassword"></a>
 # **checkPassword**
-> Object checkPassword(body)
+> Boolean checkPassword(body)
 
 
 
@@ -25,7 +26,7 @@ Method | HTTP request | Description
 SecurityDirectoryClusterControllerApi apiInstance = new SecurityDirectoryClusterControllerApi();
 CheckPasswordRequest body = new CheckPasswordRequest(); // CheckPasswordRequest | 
 try {
-    Object result = apiInstance.checkPassword(body);
+    Boolean result = apiInstance.checkPassword(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SecurityDirectoryClusterControllerApi#checkPassword");
@@ -41,7 +42,50 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+**Boolean**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="createUserIfNotExists"></a>
+# **createUserIfNotExists**
+> UserInfosImpl createUserIfNotExists(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.heimdall.invoker.ApiException;
+//import gebo.microservices.api.client.heimdall.api.SecurityDirectoryClusterControllerApi;
+
+
+SecurityDirectoryClusterControllerApi apiInstance = new SecurityDirectoryClusterControllerApi();
+CreateUserIfNotExistsRequest body = new CreateUserIfNotExistsRequest(); // CreateUserIfNotExistsRequest | 
+try {
+    UserInfosImpl result = apiInstance.createUserIfNotExists(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling SecurityDirectoryClusterControllerApi#createUserIfNotExists");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**CreateUserIfNotExistsRequest**](CreateUserIfNotExistsRequest.md)|  |
+
+### Return type
+
+[**UserInfosImpl**](UserInfosImpl.md)
 
 ### Authorization
 
@@ -54,7 +98,7 @@ No authorization required
 
 <a name="findAllGroups"></a>
 # **findAllGroups**
-> Object findAllGroups()
+> List&lt;UsersGroup&gt; findAllGroups()
 
 
 
@@ -67,7 +111,7 @@ No authorization required
 
 SecurityDirectoryClusterControllerApi apiInstance = new SecurityDirectoryClusterControllerApi();
 try {
-    Object result = apiInstance.findAllGroups();
+    List<UsersGroup> result = apiInstance.findAllGroups();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SecurityDirectoryClusterControllerApi#findAllGroups");
@@ -80,7 +124,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;UsersGroup&gt;**](UsersGroup.md)
 
 ### Authorization
 
@@ -93,7 +137,7 @@ No authorization required
 
 <a name="findGroupsOfUser"></a>
 # **findGroupsOfUser**
-> Object findGroupsOfUser(username)
+> List&lt;UsersGroup&gt; findGroupsOfUser(username)
 
 
 
@@ -105,9 +149,9 @@ No authorization required
 
 
 SecurityDirectoryClusterControllerApi apiInstance = new SecurityDirectoryClusterControllerApi();
-Object username = null; // Object | 
+String username = "username_example"; // String | 
 try {
-    Object result = apiInstance.findGroupsOfUser(username);
+    List<UsersGroup> result = apiInstance.findGroupsOfUser(username);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SecurityDirectoryClusterControllerApi#findGroupsOfUser");
@@ -119,11 +163,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **username** | [**Object**](.md)|  |
+ **username** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;UsersGroup&gt;**](UsersGroup.md)
 
 ### Authorization
 
@@ -148,7 +192,7 @@ No authorization required
 
 
 SecurityDirectoryClusterControllerApi apiInstance = new SecurityDirectoryClusterControllerApi();
-Object username = null; // Object | 
+String username = "username_example"; // String | 
 try {
     UserInfosImpl result = apiInstance.findUserByUsername(username);
     System.out.println(result);
@@ -162,7 +206,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **username** | [**Object**](.md)|  |
+ **username** | **String**|  |
 
 ### Return type
 

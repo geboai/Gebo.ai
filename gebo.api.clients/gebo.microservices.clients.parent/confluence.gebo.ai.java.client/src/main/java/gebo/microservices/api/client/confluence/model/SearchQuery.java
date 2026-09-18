@@ -18,20 +18,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * SearchQuery
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:50.343715666+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:33.855652885+02:00[Europe/Rome]")
 
 public class SearchQuery {
   @JsonProperty("queryText")
-  private Object queryText = null;
+  private String queryText = null;
 
   @JsonProperty("relevantKeywords")
-  private Object relevantKeywords = null;
+  private List<String> relevantKeywords = null;
 
-  public SearchQuery queryText(Object queryText) {
+  public SearchQuery queryText(String queryText) {
     this.queryText = queryText;
     return this;
   }
@@ -41,16 +43,24 @@ public class SearchQuery {
    * @return queryText
   **/
   @Schema(description = "")
-  public Object getQueryText() {
+  public String getQueryText() {
     return queryText;
   }
 
-  public void setQueryText(Object queryText) {
+  public void setQueryText(String queryText) {
     this.queryText = queryText;
   }
 
-  public SearchQuery relevantKeywords(Object relevantKeywords) {
+  public SearchQuery relevantKeywords(List<String> relevantKeywords) {
     this.relevantKeywords = relevantKeywords;
+    return this;
+  }
+
+  public SearchQuery addRelevantKeywordsItem(String relevantKeywordsItem) {
+    if (this.relevantKeywords == null) {
+      this.relevantKeywords = new ArrayList<>();
+    }
+    this.relevantKeywords.add(relevantKeywordsItem);
     return this;
   }
 
@@ -59,11 +69,11 @@ public class SearchQuery {
    * @return relevantKeywords
   **/
   @Schema(description = "")
-  public Object getRelevantKeywords() {
+  public List<String> getRelevantKeywords() {
     return relevantKeywords;
   }
 
-  public void setRelevantKeywords(Object relevantKeywords) {
+  public void setRelevantKeywords(List<String> relevantKeywords) {
     this.relevantKeywords = relevantKeywords;
   }
 

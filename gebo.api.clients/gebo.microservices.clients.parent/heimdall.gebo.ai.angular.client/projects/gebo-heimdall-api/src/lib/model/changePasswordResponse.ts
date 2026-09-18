@@ -11,7 +11,7 @@
  */
 
 export interface ChangePasswordResponse { 
-    ok?: any;
-    wrongPassword?: any;
-    newPasswordNeverMatch?: any;
+    ok?: boolean;
+    wrongPassword?: boolean;
+    newPasswordNeverMatch?: boolean;
 }

@@ -11,6 +11,13 @@
  */
 
 export interface StartWorkflowData { 
-    email: any;
-    type: any;
+    email: string;
+    type: StartWorkflowData.TypeEnum;
+}
+export namespace StartWorkflowData {
+    export type TypeEnum = 'ACTIVATION' | 'FORGOT_PASSWORD';
+    export const TypeEnum = {
+        ACTIVATION: 'ACTIVATION' as TypeEnum,
+        FORGOTPASSWORD: 'FORGOT_PASSWORD' as TypeEnum
+    };
 }

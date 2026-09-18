@@ -11,6 +11,8 @@ package ai.gebo.llms.ollama.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.ollama.OllamaChatModel;
@@ -18,7 +20,6 @@ import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaChatOptions;
 import org.springframework.ai.ollama.management.ModelManagementOptions;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
@@ -53,11 +54,12 @@ import lombok.AllArgsConstructor;
  * provided configurations. The service is only active when the 'ollamaEnabled'
  * property is set to true.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "ollamaEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class OllamaChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GOllamaChatModelChoice, GOllamaChatModelConfig> {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(OllamaChatModelConfigurationSupportService.class);
 	/**
 	 * Static definition of the Ollama chat model type with its metadata
 	 */
@@ -161,7 +163,19 @@ public class OllamaChatModelConfigurationSupportService
 			// Configure tool callbacks (functions) if enabled
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
-				builder = builder.toolCallbacks(functions);
+				// The condition above tests the tool names that were REQUESTED. getTools filters
+				// the callbacks actually available by those names, so it can return fewer - or
+				// none at all, when the source that exports them failed. Configuring the model
+				// from the request rather than from what resolved leaves it declaring tools it
+				// will never send.
+				if (functions != null && !functions.isEmpty()) {
+					builder = builder.toolCallbacks(functions);
+				} else {
+					LOGGER.warn("Chat model " + config.getCode() + " enables "
+							+ config.getEnabledFunctions().size()
+							+ " tool(s) but none of them resolved to a callback, so it is configured"
+							+ " without tools: " + config.getEnabledFunctions());
+				}
 			}
 			
 			OllamaChatOptions options = builder.build();

@@ -11,10 +11,10 @@
  */
 
 export interface GVirtualFilesystemRoot { 
-    code?: any;
-    description?: any;
-    absolutePath?: any;
-    uri?: any;
-    dateModified?: any;
-    iconKey?: any;
+    code?: string;
+    description?: string;
+    absolutePath?: string;
+    uri?: string;
+    dateModified?: Date;
+    iconKey?: string;
 }

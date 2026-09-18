@@ -25,7 +25,7 @@ Method | HTTP request | Description
 
 UserKnowledgeBaseBrowsingControllerApi apiInstance = new UserKnowledgeBaseBrowsingControllerApi();
 BrowseParam body = new BrowseParam(); // BrowseParam | 
-Object codes = null; // Object | 
+List<String> codes = Arrays.asList("codes_example"); // List<String> | 
 try {
     OperationStatusListPathInfo result = apiInstance.browseKnowledgeBasePath(body, codes);
     System.out.println(result);
@@ -40,7 +40,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**BrowseParam**](BrowseParam.md)|  |
- **codes** | [**Object**](.md)|  |
+ **codes** | [**List&lt;String&gt;**](String.md)|  |
 
 ### Return type
 
@@ -57,7 +57,7 @@ No authorization required
 
 <a name="getAccessibleRootKnowledgeBases"></a>
 # **getAccessibleRootKnowledgeBases**
-> Object getAccessibleRootKnowledgeBases()
+> List&lt;GBaseObject&gt; getAccessibleRootKnowledgeBases()
 
 
 
@@ -70,7 +70,7 @@ No authorization required
 
 UserKnowledgeBaseBrowsingControllerApi apiInstance = new UserKnowledgeBaseBrowsingControllerApi();
 try {
-    Object result = apiInstance.getAccessibleRootKnowledgeBases();
+    List<GBaseObject> result = apiInstance.getAccessibleRootKnowledgeBases();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserKnowledgeBaseBrowsingControllerApi#getAccessibleRootKnowledgeBases");
@@ -83,7 +83,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GBaseObject&gt;**](GBaseObject.md)
 
 ### Authorization
 
@@ -108,8 +108,8 @@ No authorization required
 
 
 UserKnowledgeBaseBrowsingControllerApi apiInstance = new UserKnowledgeBaseBrowsingControllerApi();
-Object body = null; // Object | 
-Object codes = null; // Object | 
+List<VFilesystemReference> body = Arrays.asList(new VFilesystemReference()); // List<VFilesystemReference> | 
+List<String> codes = Arrays.asList("codes_example"); // List<String> | 
 try {
     OperationStatusListVirtualFilesystemNavigationTreeStatus result = apiInstance.getKnowledgeBaseNavigationStatus(body, codes);
     System.out.println(result);
@@ -123,8 +123,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
- **codes** | [**Object**](.md)|  |
+ **body** | [**List&lt;VFilesystemReference&gt;**](VFilesystemReference.md)|  |
+ **codes** | [**List&lt;String&gt;**](String.md)|  |
 
 ### Return type
 
@@ -153,7 +153,7 @@ No authorization required
 
 
 UserKnowledgeBaseBrowsingControllerApi apiInstance = new UserKnowledgeBaseBrowsingControllerApi();
-Object codes = null; // Object | 
+List<String> codes = Arrays.asList("codes_example"); // List<String> | 
 try {
     OperationStatusListGVirtualFilesystemRoot result = apiInstance.getKnowledgeBaseRoots(codes);
     System.out.println(result);
@@ -167,7 +167,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **codes** | [**Object**](.md)|  |
+ **codes** | [**List&lt;String&gt;**](String.md)|  |
 
 ### Return type
 
@@ -184,7 +184,7 @@ No authorization required
 
 <a name="getVisibleKnowledgeBaseByCodes"></a>
 # **getVisibleKnowledgeBaseByCodes**
-> Object getVisibleKnowledgeBaseByCodes(body)
+> List&lt;GKnowledgeBase&gt; getVisibleKnowledgeBaseByCodes(body)
 
 
 
@@ -196,9 +196,9 @@ No authorization required
 
 
 UserKnowledgeBaseBrowsingControllerApi apiInstance = new UserKnowledgeBaseBrowsingControllerApi();
-Object body = null; // Object | 
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    Object result = apiInstance.getVisibleKnowledgeBaseByCodes(body);
+    List<GKnowledgeBase> result = apiInstance.getVisibleKnowledgeBaseByCodes(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserKnowledgeBaseBrowsingControllerApi#getVisibleKnowledgeBaseByCodes");
@@ -210,11 +210,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**List&lt;String&gt;**](String.md)|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GKnowledgeBase&gt;**](GKnowledgeBase.md)
 
 ### Authorization
 

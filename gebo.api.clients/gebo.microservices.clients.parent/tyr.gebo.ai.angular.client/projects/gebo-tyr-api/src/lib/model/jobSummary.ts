@@ -10,14 +10,15 @@
  * Do not edit the class manually.
  */
 import { ComputedWorkflowResult } from './computedWorkflowResult';
+import { JobWorkflowStepSummary } from './jobWorkflowStepSummary';
 
 export interface JobSummary { 
-    code?: any;
-    description?: any;
-    workflowType?: any;
-    workflowId?: any;
-    startDateTime?: any;
-    endDateTime?: any;
+    code?: string;
+    description?: string;
+    workflowType?: string;
+    workflowId?: string;
+    startDateTime?: Date;
+    endDateTime?: Date;
     workflowStatus?: ComputedWorkflowResult;
-    workflowStepsSummaries?: any;
+    workflowStepsSummaries?: Array<JobWorkflowStepSummary>;
 }

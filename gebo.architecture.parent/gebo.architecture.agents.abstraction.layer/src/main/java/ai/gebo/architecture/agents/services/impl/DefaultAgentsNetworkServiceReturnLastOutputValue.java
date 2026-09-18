@@ -9,8 +9,13 @@ import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DefaultAgentsNetworkServiceReturnLastOutputValue<InputType, OutputType>
 		extends GAbstractAgentsNetworkService<InputType, OutputType> {
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(DefaultAgentsNetworkServiceReturnLastOutputValue.class);
 
 	public DefaultAgentsNetworkServiceReturnLastOutputValue(IGAgentServiceRuntimeDao agentsServicesRepository,
 			IAgentRoleDao rolesDao, IGeboThreadManager threadManager, GAgentsNetwork network,
@@ -23,7 +28,10 @@ public class DefaultAgentsNetworkServiceReturnLastOutputValue<InputType, OutputT
 
 	@Override
 	protected <OutputType> OutputType compose(OutputType actualOutput, OutputType incremental) {
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("compose(...) keeping the " + (incremental != null ? "incremental" : "already composed")
+					+ " output value");
+		}
 		return incremental != null ? incremental : actualOutput;
 	}
 
@@ -41,7 +49,9 @@ public class DefaultAgentsNetworkServiceReturnLastOutputValue<InputType, OutputT
 
 	@Override
 	public void dispose() {
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("dispose() nothing to release for " + getId());
+		}
 	}
 
 }

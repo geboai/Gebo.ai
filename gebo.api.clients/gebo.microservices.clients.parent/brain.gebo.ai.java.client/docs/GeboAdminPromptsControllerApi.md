@@ -67,7 +67,7 @@ No authorization required
 
 
 GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GPromptTemplateConfig result = apiInstance.findPromptConfigByCode(code);
     System.out.println(result);
@@ -81,7 +81,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -98,7 +98,7 @@ No authorization required
 
 <a name="getPromptCategories"></a>
 # **getPromptCategories**
-> Object getPromptCategories()
+> List&lt;String&gt; getPromptCategories()
 
 
 
@@ -111,7 +111,7 @@ No authorization required
 
 GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
 try {
-    Object result = apiInstance.getPromptCategories();
+    List<String> result = apiInstance.getPromptCategories();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAdminPromptsControllerApi#getPromptCategories");
@@ -124,7 +124,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**List&lt;String&gt;**
 
 ### Authorization
 

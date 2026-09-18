@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**enablePureModelChat** | **Object** |  |  [optional]
-**defaultUILanguage** | **Object** |  |  [optional]
+**enablePureModelChat** | **Boolean** |  |  [optional]
+**defaultUILanguage** | **String** |  |  [optional]

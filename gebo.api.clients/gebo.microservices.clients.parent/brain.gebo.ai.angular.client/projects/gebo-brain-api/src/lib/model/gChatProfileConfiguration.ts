@@ -13,26 +13,26 @@ import { GObjectRefGBaseChatModelConfig } from './gObjectRefGBaseChatModelConfig
 import { GObjectRefGBaseEmbeddingModelConfig } from './gObjectRefGBaseEmbeddingModelConfig';
 
 export interface GChatProfileConfiguration { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
     embeddingModelReference?: GObjectRefGBaseEmbeddingModelConfig;
     chatModelReference?: GObjectRefGBaseChatModelConfig;
-    enabledFunctions?: any;
-    accessibleGroups?: any;
-    accessibleUsers?: any;
-    accessibleToAll?: any;
-    userChoosesKnowledgeBases?: any;
-    topK?: any;
-    similaritySearchThreshold?: any;
-    knowledgeBaseCodes?: any;
-    forcedRequestDocuments?: any;
-    forcedRequestDocumentsReadonly?: any;
-    disableMultiHopRag?: any;
-    otherSearchSimilarityThreshold?: any;
-    manualThreasholdsConfiguration?: any;
-    useAlsoKeywordSearch?: any;
+    enabledFunctions?: Array<string>;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    userChoosesKnowledgeBases?: boolean;
+    topK?: number;
+    similaritySearchThreshold?: number;
+    knowledgeBaseCodes?: Array<string>;
+    forcedRequestDocuments?: Array<string>;
+    forcedRequestDocumentsReadonly?: boolean;
+    disableMultiHopRag?: boolean;
+    otherSearchSimilarityThreshold?: number;
+    manualThreasholdsConfiguration?: boolean;
+    useAlsoKeywordSearch?: boolean;
 }

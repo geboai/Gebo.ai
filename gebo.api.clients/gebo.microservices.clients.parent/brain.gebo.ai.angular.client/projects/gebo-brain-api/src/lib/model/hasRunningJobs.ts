@@ -13,5 +13,5 @@ import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
 
 export interface HasRunningJobs { 
     endpoint?: GObjectRefGProjectEndpoint;
-    hasRunningJobs?: any;
+    hasRunningJobs?: boolean;
 }

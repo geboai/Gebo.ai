@@ -12,7 +12,7 @@
 import { GeboGoogleJsonSecretContent } from './geboGoogleJsonSecretContent';
 
 export interface SecretWrapperGeboGoogleJsonSecretContent { 
-    contextCode: any;
-    description: any;
+    contextCode: string;
+    description: string;
     secretContent: GeboGoogleJsonSecretContent;
 }

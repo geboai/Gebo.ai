@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * WorkflowStatsDrillDownLevel
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class WorkflowStatsDrillDownLevel {
   @JsonProperty("knowledgeBaseReference")
@@ -38,19 +38,19 @@ public class WorkflowStatsDrillDownLevel {
   private GObjectRefGProjectEndpoint projectEndpointReference = null;
 
   @JsonProperty("workflowType")
-  private Object workflowType = null;
+  private String workflowType = null;
 
   @JsonProperty("workflowId")
-  private Object workflowId = null;
+  private String workflowId = null;
 
   @JsonProperty("workflowStepId")
-  private Object workflowStepId = null;
+  private String workflowStepId = null;
 
   @JsonProperty("year")
-  private Object year = null;
+  private Integer year = null;
 
   @JsonProperty("month")
-  private Object month = null;
+  private Integer month = null;
 
   public WorkflowStatsDrillDownLevel knowledgeBaseReference(GObjectRefGKnowledgeBase knowledgeBaseReference) {
     this.knowledgeBaseReference = knowledgeBaseReference;
@@ -106,7 +106,7 @@ public class WorkflowStatsDrillDownLevel {
     this.projectEndpointReference = projectEndpointReference;
   }
 
-  public WorkflowStatsDrillDownLevel workflowType(Object workflowType) {
+  public WorkflowStatsDrillDownLevel workflowType(String workflowType) {
     this.workflowType = workflowType;
     return this;
   }
@@ -116,15 +116,15 @@ public class WorkflowStatsDrillDownLevel {
    * @return workflowType
   **/
   @Schema(description = "")
-  public Object getWorkflowType() {
+  public String getWorkflowType() {
     return workflowType;
   }
 
-  public void setWorkflowType(Object workflowType) {
+  public void setWorkflowType(String workflowType) {
     this.workflowType = workflowType;
   }
 
-  public WorkflowStatsDrillDownLevel workflowId(Object workflowId) {
+  public WorkflowStatsDrillDownLevel workflowId(String workflowId) {
     this.workflowId = workflowId;
     return this;
   }
@@ -134,15 +134,15 @@ public class WorkflowStatsDrillDownLevel {
    * @return workflowId
   **/
   @Schema(description = "")
-  public Object getWorkflowId() {
+  public String getWorkflowId() {
     return workflowId;
   }
 
-  public void setWorkflowId(Object workflowId) {
+  public void setWorkflowId(String workflowId) {
     this.workflowId = workflowId;
   }
 
-  public WorkflowStatsDrillDownLevel workflowStepId(Object workflowStepId) {
+  public WorkflowStatsDrillDownLevel workflowStepId(String workflowStepId) {
     this.workflowStepId = workflowStepId;
     return this;
   }
@@ -152,15 +152,15 @@ public class WorkflowStatsDrillDownLevel {
    * @return workflowStepId
   **/
   @Schema(description = "")
-  public Object getWorkflowStepId() {
+  public String getWorkflowStepId() {
     return workflowStepId;
   }
 
-  public void setWorkflowStepId(Object workflowStepId) {
+  public void setWorkflowStepId(String workflowStepId) {
     this.workflowStepId = workflowStepId;
   }
 
-  public WorkflowStatsDrillDownLevel year(Object year) {
+  public WorkflowStatsDrillDownLevel year(Integer year) {
     this.year = year;
     return this;
   }
@@ -170,15 +170,15 @@ public class WorkflowStatsDrillDownLevel {
    * @return year
   **/
   @Schema(description = "")
-  public Object getYear() {
+  public Integer getYear() {
     return year;
   }
 
-  public void setYear(Object year) {
+  public void setYear(Integer year) {
     this.year = year;
   }
 
-  public WorkflowStatsDrillDownLevel month(Object month) {
+  public WorkflowStatsDrillDownLevel month(Integer month) {
     this.month = month;
     return this;
   }
@@ -188,11 +188,11 @@ public class WorkflowStatsDrillDownLevel {
    * @return month
   **/
   @Schema(description = "")
-  public Object getMonth() {
+  public Integer getMonth() {
     return month;
   }
 
-  public void setMonth(Object month) {
+  public void setMonth(Integer month) {
     this.month = month;
   }
 

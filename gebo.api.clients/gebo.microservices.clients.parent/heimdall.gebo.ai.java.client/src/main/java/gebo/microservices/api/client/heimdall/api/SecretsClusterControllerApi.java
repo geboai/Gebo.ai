@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class SecretsClusterControllerApi {
     private ApiClient apiClient;
@@ -51,7 +51,7 @@ public class SecretsClusterControllerApi {
      * @param code  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void deleteSecret(Object code) throws RestClientException {
+    public void deleteSecret(String code) throws RestClientException {
         deleteSecretWithHttpInfo(code);
     }
 
@@ -63,13 +63,13 @@ public class SecretsClusterControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> deleteSecretWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<Void> deleteSecretWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling deleteSecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/deleteSecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/deleteSecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -84,16 +84,16 @@ public class SecretsClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAllSecretsId() throws RestClientException {
+    public List<String> getAllSecretsId() throws RestClientException {
         return getAllSecretsIdWithHttpInfo().getBody();
     }
 
@@ -101,12 +101,12 @@ public class SecretsClusterControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;String&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAllSecretsIdWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<String>> getAllSecretsIdWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getAllSecretsId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getAllSecretsId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -121,8 +121,8 @@ public class SecretsClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -132,7 +132,7 @@ public class SecretsClusterControllerApi {
      * @return GeboSecretContentEnvelope
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GeboSecretContentEnvelope getSecretContentById(Object id) throws RestClientException {
+    public GeboSecretContentEnvelope getSecretContentById(String id) throws RestClientException {
         return getSecretContentByIdWithHttpInfo(id).getBody();
     }
 
@@ -144,13 +144,13 @@ public class SecretsClusterControllerApi {
      * @return ResponseEntity&lt;GeboSecretContentEnvelope&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GeboSecretContentEnvelope> getSecretContentByIdWithHttpInfo(Object id) throws RestClientException {
+    public ResponseEntity<GeboSecretContentEnvelope> getSecretContentByIdWithHttpInfo(String id) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'id' is set
         if (id == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'id' when calling getSecretContentById");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretContentById").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretContentById").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -167,17 +167,17 @@ public class SecretsClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GeboSecretContentEnvelope> returnType = new ParameterizedTypeReference<GeboSecretContentEnvelope>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param contextCode  (required)
-     * @return Object
+     * @return List&lt;SecretInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getSecretInfoByContextCode(Object contextCode) throws RestClientException {
+    public List<SecretInfo> getSecretInfoByContextCode(String contextCode) throws RestClientException {
         return getSecretInfoByContextCodeWithHttpInfo(contextCode).getBody();
     }
 
@@ -186,16 +186,16 @@ public class SecretsClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param contextCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;SecretInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getSecretInfoByContextCodeWithHttpInfo(Object contextCode) throws RestClientException {
+    public ResponseEntity<List<SecretInfo>> getSecretInfoByContextCodeWithHttpInfo(String contextCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'contextCode' is set
         if (contextCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'contextCode' when calling getSecretInfoByContextCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretInfoByContextCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretInfoByContextCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -211,8 +211,8 @@ public class SecretsClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<SecretInfo>> returnType = new ParameterizedTypeReference<List<SecretInfo>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -222,7 +222,7 @@ public class SecretsClusterControllerApi {
      * @return SecretInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SecretInfo getSecretInfoById(Object code) throws RestClientException {
+    public SecretInfo getSecretInfoById(String code) throws RestClientException {
         return getSecretInfoByIdWithHttpInfo(code).getBody();
     }
 
@@ -234,13 +234,13 @@ public class SecretsClusterControllerApi {
      * @return ResponseEntity&lt;SecretInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SecretInfo> getSecretInfoByIdWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<SecretInfo> getSecretInfoByIdWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling getSecretInfoById");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretInfoById").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretInfoById").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -257,17 +257,17 @@ public class SecretsClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SecretInfo> returnType = new ParameterizedTypeReference<SecretInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object storeSecret(GeboSecretStoreRequest body) throws RestClientException {
+    public String storeSecret(GeboSecretStoreRequest body) throws RestClientException {
         return storeSecretWithHttpInfo(body).getBody();
     }
 
@@ -276,16 +276,16 @@ public class SecretsClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> storeSecretWithHttpInfo(GeboSecretStoreRequest body) throws RestClientException {
+    public ResponseEntity<String> storeSecretWithHttpInfo(GeboSecretStoreRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling storeSecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/storeSecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/storeSecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -302,8 +302,8 @@ public class SecretsClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -330,7 +330,7 @@ public class SecretsClusterControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateSecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/updateSecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/updateSecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -346,6 +346,6 @@ public class SecretsClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

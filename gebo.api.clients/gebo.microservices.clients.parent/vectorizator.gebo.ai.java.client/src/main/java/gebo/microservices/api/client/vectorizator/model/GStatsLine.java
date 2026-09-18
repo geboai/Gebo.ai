@@ -17,21 +17,24 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.vectorizator.model.GStatsLabelValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * GStatsLine
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:44:05.740376061+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:28.382074718+02:00[Europe/Rome]")
 
 public class GStatsLine {
   @JsonProperty("statsKey")
-  private Object statsKey = null;
+  private String statsKey = null;
 
   @JsonProperty("data")
-  private Object data = null;
+  private List<GStatsLabelValue> data = null;
 
-  public GStatsLine statsKey(Object statsKey) {
+  public GStatsLine statsKey(String statsKey) {
     this.statsKey = statsKey;
     return this;
   }
@@ -41,16 +44,24 @@ public class GStatsLine {
    * @return statsKey
   **/
   @Schema(description = "")
-  public Object getStatsKey() {
+  public String getStatsKey() {
     return statsKey;
   }
 
-  public void setStatsKey(Object statsKey) {
+  public void setStatsKey(String statsKey) {
     this.statsKey = statsKey;
   }
 
-  public GStatsLine data(Object data) {
+  public GStatsLine data(List<GStatsLabelValue> data) {
     this.data = data;
+    return this;
+  }
+
+  public GStatsLine addDataItem(GStatsLabelValue dataItem) {
+    if (this.data == null) {
+      this.data = new ArrayList<>();
+    }
+    this.data.add(dataItem);
     return this;
   }
 
@@ -59,11 +70,11 @@ public class GStatsLine {
    * @return data
   **/
   @Schema(description = "")
-  public Object getData() {
+  public List<GStatsLabelValue> getData() {
     return data;
   }
 
-  public void setData(Object data) {
+  public void setData(List<GStatsLabelValue> data) {
     this.data = data;
   }
 

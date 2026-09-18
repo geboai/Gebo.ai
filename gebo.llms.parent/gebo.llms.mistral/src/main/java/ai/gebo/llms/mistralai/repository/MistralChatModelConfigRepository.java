@@ -12,7 +12,6 @@
 
 package ai.gebo.llms.mistralai.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.mistralai.model.GMistralChatModelConfig;
@@ -23,7 +22,6 @@ import ai.gebo.llms.mistralai.model.GMistralChatModelConfig;
  * This repository is only created when the 'mistralAIEnabled' property is set to 'true'
  * in the application configuration.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "mistralAIEnabled", havingValue = "true")
 public interface MistralChatModelConfigRepository extends IGBaseMongoDBRepository<GMistralChatModelConfig> {
 	
 	/**

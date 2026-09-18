@@ -35,10 +35,26 @@ export class GeboAIChatStreamEventsDisplayComponent implements OnChanges{
     protected inputProcessingEvent?:{document:GResponseDocumentRef};
     protected notifiedPipelineRouting?:PipelineRoutingOption;
     private timer?: Subscription;
+    // A gather cycle or a fast agent hand-off can emit several notifications within a
+    // few milliseconds, and the ticker shows one at a time. Without a floor on how long
+    // each is shown, the latest simply overwrites the previous before it can be read -
+    // measured at zero milliseconds on screen for the search agent's "found N document(s)"
+    // beat, which the controller's next-cycle notification replaced instantly. These
+    // hold each notification for a minimum time and queue the rest, so every beat is
+    // legible; when notifications arrive slower than the dwell the queue stays empty and
+    // there is no added latency.
+    private static readonly MIN_DWELL_MS = 850;
+    private static readonly MAX_QUEUE = 15;
+    private notificationQueue: ChatNotificationContent[] = [];
+    private dwelling = false;
     constructor(private messageService: GeboAIRootNotificationService) {
 
     }
     ngOnChanges(changes: SimpleChanges): void {
+        if (changes["streaming"] && !this.streaming) {
+            // The run ended: drop anything still queued so it does not bleed into the next.
+            this.clearEventsDisplay();
+        }
         if (this.actualPipelineRoutingOption && changes["actualPipelineRoutingOption"]) {
             this.clearEventsDisplay();
             this.notifiedPipelineRouting=this.actualPipelineRoutingOption;
@@ -59,14 +75,47 @@ export class GeboAIChatStreamEventsDisplayComponent implements OnChanges{
         this.currentNotification=undefined;
         this.inputProcessingEvent=undefined;
         this.notifiedPipelineRouting=undefined;
+        this.notificationQueue=[];
+        this.dwelling=false;
         this.clearNotifiationTimer();
     }
-    private startNotificationTimer(duration: number) {
-        this.timer=timer(duration).subscribe({
+    private enqueueNotification(notification?: ChatNotificationContent): void {
+        if (!notification) {
+            return;
+        }
+        // A notification takes over the ticker from the input/routing status.
+        this.inputProcessingEvent=undefined;
+        this.notifiedPipelineRouting=undefined;
+        // Shed the oldest still-pending item if a burst backs the queue up, so the ticker
+        // can never fall arbitrarily far behind the live stream.
+        if (this.notificationQueue.length>=GeboAIChatStreamEventsDisplayComponent.MAX_QUEUE) {
+            this.notificationQueue.shift();
+        }
+        this.notificationQueue.push(notification);
+        if (!this.dwelling) {
+            this.showNextNotification();
+        }
+    }
+    private showNextNotification(): void {
+        const next=this.notificationQueue.shift();
+        if (!next) {
+            // Nothing queued: stop dwelling and leave the last notification on screen, so a
+            // later arrival appears immediately rather than after a needless delay.
+            this.dwelling=false;
+            return;
+        }
+        this.dwelling=true;
+        this.currentNotification=next;
+        this.clearNotifiationTimer();
+        this.timer=timer(GeboAIChatStreamEventsDisplayComponent.MIN_DWELL_MS).subscribe({
             next:()=>{
-                this.currentNotification=undefined;    
+                if (this.notificationQueue.length>0) {
+                    this.showNextNotification();
+                } else {
+                    this.dwelling=false;
+                }
             }
-        })
+        });
     }
     public clearUI():void {
         this.clearEventsDisplay();
@@ -76,12 +125,7 @@ export class GeboAIChatStreamEventsDisplayComponent implements OnChanges{
         if (msg?.contentObjectType) {
             switch (msg.contentObjectType) {
                 case "ChatNotificationContent": {
-                    this.clearNotifiationTimer();
-                    this.clearEventsDisplay();
-                    this.currentNotification= msg.content;
-                    if (this.currentNotification?.duration) {
-                        //this.startNotificationTimer(this.currentNotification?.duration);
-                    }
+                    this.enqueueNotification(msg.content);
                 } break;
                 case "GInputProcessingEvent": {
                     this.clearEventsDisplay();

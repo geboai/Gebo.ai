@@ -11,5 +11,5 @@
  */
 
 export interface IntegrationInputControllerSpoolDocumentBody { 
-    file: any;
+    file: Blob;
 }

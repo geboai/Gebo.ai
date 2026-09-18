@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GDocumentAttributeValue
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:56.984278175+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:30.490254341+02:00[Europe/Rome]")
 
 public class GDocumentAttributeValue {
   @JsonProperty("attributeCode")
-  private Object attributeCode = null;
+  private String attributeCode = null;
 
   @JsonProperty("attributeValue")
   private Object attributeValue = null;
 
-  public GDocumentAttributeValue attributeCode(Object attributeCode) {
+  public GDocumentAttributeValue attributeCode(String attributeCode) {
     this.attributeCode = attributeCode;
     return this;
   }
@@ -41,11 +41,11 @@ public class GDocumentAttributeValue {
    * @return attributeCode
   **/
   @Schema(description = "")
-  public Object getAttributeCode() {
+  public String getAttributeCode() {
     return attributeCode;
   }
 
-  public void setAttributeCode(Object attributeCode) {
+  public void setAttributeCode(String attributeCode) {
     this.attributeCode = attributeCode;
   }
 

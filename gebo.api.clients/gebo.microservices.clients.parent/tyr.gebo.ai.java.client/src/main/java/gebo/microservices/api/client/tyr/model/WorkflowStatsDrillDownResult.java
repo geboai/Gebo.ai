@@ -17,29 +17,40 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.tyr.model.WorkflowStatsAggregationBucket;
 import gebo.microservices.api.client.tyr.model.WorkflowStatsDrillDownLevelSubdimensions;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * WorkflowStatsDrillDownResult
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class WorkflowStatsDrillDownResult {
   @JsonProperty("monthly")
-  private Object monthly = null;
+  private List<WorkflowStatsAggregationBucket> monthly = null;
 
   @JsonProperty("monthlySubdimensions")
   private WorkflowStatsDrillDownLevelSubdimensions monthlySubdimensions = null;
 
   @JsonProperty("currentMonthDaily")
-  private Object currentMonthDaily = null;
+  private List<WorkflowStatsAggregationBucket> currentMonthDaily = null;
 
   @JsonProperty("currentMonthDailySubdimensions")
   private WorkflowStatsDrillDownLevelSubdimensions currentMonthDailySubdimensions = null;
 
-  public WorkflowStatsDrillDownResult monthly(Object monthly) {
+  public WorkflowStatsDrillDownResult monthly(List<WorkflowStatsAggregationBucket> monthly) {
     this.monthly = monthly;
+    return this;
+  }
+
+  public WorkflowStatsDrillDownResult addMonthlyItem(WorkflowStatsAggregationBucket monthlyItem) {
+    if (this.monthly == null) {
+      this.monthly = new ArrayList<>();
+    }
+    this.monthly.add(monthlyItem);
     return this;
   }
 
@@ -48,11 +59,11 @@ public class WorkflowStatsDrillDownResult {
    * @return monthly
   **/
   @Schema(description = "")
-  public Object getMonthly() {
+  public List<WorkflowStatsAggregationBucket> getMonthly() {
     return monthly;
   }
 
-  public void setMonthly(Object monthly) {
+  public void setMonthly(List<WorkflowStatsAggregationBucket> monthly) {
     this.monthly = monthly;
   }
 
@@ -74,8 +85,16 @@ public class WorkflowStatsDrillDownResult {
     this.monthlySubdimensions = monthlySubdimensions;
   }
 
-  public WorkflowStatsDrillDownResult currentMonthDaily(Object currentMonthDaily) {
+  public WorkflowStatsDrillDownResult currentMonthDaily(List<WorkflowStatsAggregationBucket> currentMonthDaily) {
     this.currentMonthDaily = currentMonthDaily;
+    return this;
+  }
+
+  public WorkflowStatsDrillDownResult addCurrentMonthDailyItem(WorkflowStatsAggregationBucket currentMonthDailyItem) {
+    if (this.currentMonthDaily == null) {
+      this.currentMonthDaily = new ArrayList<>();
+    }
+    this.currentMonthDaily.add(currentMonthDailyItem);
     return this;
   }
 
@@ -84,11 +103,11 @@ public class WorkflowStatsDrillDownResult {
    * @return currentMonthDaily
   **/
   @Schema(description = "")
-  public Object getCurrentMonthDaily() {
+  public List<WorkflowStatsAggregationBucket> getCurrentMonthDaily() {
     return currentMonthDaily;
   }
 
-  public void setCurrentMonthDaily(Object currentMonthDaily) {
+  public void setCurrentMonthDaily(List<WorkflowStatsAggregationBucket> currentMonthDaily) {
     this.currentMonthDaily = currentMonthDaily;
   }
 

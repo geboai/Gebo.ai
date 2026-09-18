@@ -65,10 +65,10 @@ export class GoogleDriveBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public browseGoogleDrivePath(body: BrowseParam, driveSystemCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
-    public browseGoogleDrivePath(body: BrowseParam, driveSystemCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
-    public browseGoogleDrivePath(body: BrowseParam, driveSystemCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
-    public browseGoogleDrivePath(body: BrowseParam, driveSystemCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public browseGoogleDrivePath(body: BrowseParam, driveSystemCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
+    public browseGoogleDrivePath(body: BrowseParam, driveSystemCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
+    public browseGoogleDrivePath(body: BrowseParam, driveSystemCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
+    public browseGoogleDrivePath(body: BrowseParam, driveSystemCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling browseGoogleDrivePath.');
@@ -122,10 +122,10 @@ export class GoogleDriveBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGoogleDriveRoots(driveSystemCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
-    public getGoogleDriveRoots(driveSystemCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
-    public getGoogleDriveRoots(driveSystemCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
-    public getGoogleDriveRoots(driveSystemCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getGoogleDriveRoots(driveSystemCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
+    public getGoogleDriveRoots(driveSystemCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
+    public getGoogleDriveRoots(driveSystemCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
+    public getGoogleDriveRoots(driveSystemCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (driveSystemCode === null || driveSystemCode === undefined) {
             throw new Error('Required parameter driveSystemCode was null or undefined when calling getGoogleDriveRoots.');

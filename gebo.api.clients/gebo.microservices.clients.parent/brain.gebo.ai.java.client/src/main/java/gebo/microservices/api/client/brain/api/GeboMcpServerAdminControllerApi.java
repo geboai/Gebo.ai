@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboMcpServerAdminControllerApi {
     private ApiClient apiClient;
@@ -52,7 +52,7 @@ public class GeboMcpServerAdminControllerApi {
      * @param code  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void deleteMcpServer(Object code) throws RestClientException {
+    public void deleteMcpServer(String code) throws RestClientException {
         deleteMcpServerWithHttpInfo(code);
     }
 
@@ -64,13 +64,13 @@ public class GeboMcpServerAdminControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> deleteMcpServerWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<Void> deleteMcpServerWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling deleteMcpServer");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/deleteMcpServer").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/deleteMcpServer").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -85,7 +85,7 @@ public class GeboMcpServerAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -95,7 +95,7 @@ public class GeboMcpServerAdminControllerApi {
      * @return GeboMCPServerConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GeboMCPServerConfig findMcpServerByCode(Object code) throws RestClientException {
+    public GeboMCPServerConfig findMcpServerByCode(String code) throws RestClientException {
         return findMcpServerByCodeWithHttpInfo(code).getBody();
     }
 
@@ -107,13 +107,13 @@ public class GeboMcpServerAdminControllerApi {
      * @return ResponseEntity&lt;GeboMCPServerConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GeboMCPServerConfig> findMcpServerByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GeboMCPServerConfig> findMcpServerByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findMcpServerByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/findMcpServerByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/findMcpServerByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -130,16 +130,16 @@ public class GeboMcpServerAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GeboMCPServerConfig> returnType = new ParameterizedTypeReference<GeboMCPServerConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GeboMCPServerConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAllMcpServers() throws RestClientException {
+    public List<GeboMCPServerConfig> getAllMcpServers() throws RestClientException {
         return getAllMcpServersWithHttpInfo().getBody();
     }
 
@@ -147,12 +147,12 @@ public class GeboMcpServerAdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GeboMCPServerConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAllMcpServersWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GeboMCPServerConfig>> getAllMcpServersWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/getAllMcpServers").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/getAllMcpServers").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -167,8 +167,8 @@ public class GeboMcpServerAdminControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GeboMCPServerConfig>> returnType = new ParameterizedTypeReference<List<GeboMCPServerConfig>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -196,7 +196,7 @@ public class GeboMcpServerAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getMcpServerPagedList");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/getMcpServerPagedList").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/getMcpServerPagedList").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -214,7 +214,7 @@ public class GeboMcpServerAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PageGeboMCPServerConfig> returnType = new ParameterizedTypeReference<PageGeboMCPServerConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -242,7 +242,7 @@ public class GeboMcpServerAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertMcpServer");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/insertMcpServer").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/insertMcpServer").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -260,7 +260,7 @@ public class GeboMcpServerAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GeboMCPServerConfig> returnType = new ParameterizedTypeReference<GeboMCPServerConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -288,7 +288,7 @@ public class GeboMcpServerAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling setMcpServerAccessAcls");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/setMcpServerAccessAcls").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/setMcpServerAccessAcls").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -306,7 +306,7 @@ public class GeboMcpServerAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GeboMCPServerConfig> returnType = new ParameterizedTypeReference<GeboMCPServerConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -334,7 +334,7 @@ public class GeboMcpServerAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateMcpServer");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/updateMcpServer").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/updateMcpServer").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -352,6 +352,6 @@ public class GeboMcpServerAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GeboMCPServerConfig> returnType = new ParameterizedTypeReference<GeboMCPServerConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

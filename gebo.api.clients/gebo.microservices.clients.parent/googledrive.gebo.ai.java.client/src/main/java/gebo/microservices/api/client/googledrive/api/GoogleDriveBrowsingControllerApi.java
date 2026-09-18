@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:12.006082925+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.115295867+02:00[Europe/Rome]")
 
 public class GoogleDriveBrowsingControllerApi {
     private ApiClient apiClient;
@@ -53,7 +53,7 @@ public class GoogleDriveBrowsingControllerApi {
      * @return OperationStatusListPathInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListPathInfo browseGoogleDrivePath(BrowseParam body, Object driveSystemCode) throws RestClientException {
+    public OperationStatusListPathInfo browseGoogleDrivePath(BrowseParam body, String driveSystemCode) throws RestClientException {
         return browseGoogleDrivePathWithHttpInfo(body, driveSystemCode).getBody();
     }
 
@@ -66,7 +66,7 @@ public class GoogleDriveBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListPathInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListPathInfo> browseGoogleDrivePathWithHttpInfo(BrowseParam body, Object driveSystemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListPathInfo> browseGoogleDrivePathWithHttpInfo(BrowseParam body, String driveSystemCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -76,7 +76,7 @@ public class GoogleDriveBrowsingControllerApi {
         if (driveSystemCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'driveSystemCode' when calling browseGoogleDrivePath");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GoogleDriveBrowsingController/browseGoogleDrivePath").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GoogleDriveBrowsingController/browseGoogleDrivePath").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -95,7 +95,7 @@ public class GoogleDriveBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListPathInfo> returnType = new ParameterizedTypeReference<OperationStatusListPathInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -105,7 +105,7 @@ public class GoogleDriveBrowsingControllerApi {
      * @return OperationStatusListGVirtualFilesystemRoot
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListGVirtualFilesystemRoot getGoogleDriveRoots(Object driveSystemCode) throws RestClientException {
+    public OperationStatusListGVirtualFilesystemRoot getGoogleDriveRoots(String driveSystemCode) throws RestClientException {
         return getGoogleDriveRootsWithHttpInfo(driveSystemCode).getBody();
     }
 
@@ -117,13 +117,13 @@ public class GoogleDriveBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListGVirtualFilesystemRoot&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getGoogleDriveRootsWithHttpInfo(Object driveSystemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getGoogleDriveRootsWithHttpInfo(String driveSystemCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'driveSystemCode' is set
         if (driveSystemCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'driveSystemCode' when calling getGoogleDriveRoots");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GoogleDriveBrowsingController/getGoogleDriveRoots").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GoogleDriveBrowsingController/getGoogleDriveRoots").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -140,6 +140,6 @@ public class GoogleDriveBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot> returnType = new ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

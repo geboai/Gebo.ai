@@ -42,7 +42,7 @@ public class GoogleDriveBrowsingControllerApiTest {
     @Test
     public void browseGoogleDrivePathTest() {
         BrowseParam body = null;
-        Object driveSystemCode = null;
+        String driveSystemCode = null;
         OperationStatusListPathInfo response = api.browseGoogleDrivePath(body, driveSystemCode);
 
         // TODO: test validations
@@ -57,7 +57,7 @@ public class GoogleDriveBrowsingControllerApiTest {
      */
     @Test
     public void getGoogleDriveRootsTest() {
-        Object driveSystemCode = null;
+        String driveSystemCode = null;
         OperationStatusListGVirtualFilesystemRoot response = api.getGoogleDriveRoots(driveSystemCode);
 
         // TODO: test validations

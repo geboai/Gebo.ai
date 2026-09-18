@@ -14,6 +14,14 @@ import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
 
 export interface JobsEntriesForProjectEndpointFilter { 
     endpointRef?: GObjectRefGProjectEndpoint;
-    jobType?: any;
+    jobType?: JobsEntriesForProjectEndpointFilter.JobTypeEnum;
     page?: DataPage;
+}
+export namespace JobsEntriesForProjectEndpointFilter {
+    export type JobTypeEnum = 'CONTENTS_READING' | 'VECTORIZING_CONTENTS' | 'CONTENTS_READING_VECTORIZING';
+    export const JobTypeEnum = {
+        CONTENTSREADING: 'CONTENTS_READING' as JobTypeEnum,
+        VECTORIZINGCONTENTS: 'VECTORIZING_CONTENTS' as JobTypeEnum,
+        CONTENTSREADINGVECTORIZING: 'CONTENTS_READING_VECTORIZING' as JobTypeEnum
+    };
 }

@@ -22,25 +22,25 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * UserspaceFolderDto
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:44:00.182052971+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.206631637+02:00[Europe/Rome]")
 
 public class UserspaceFolderDto {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("parentUserspaceKnowledgebaseCode")
-  private Object parentUserspaceKnowledgebaseCode = null;
+  private String parentUserspaceKnowledgebaseCode = null;
 
   @JsonProperty("uploadCode")
-  private Object uploadCode = null;
+  private String uploadCode = null;
 
   @JsonProperty("owner")
-  private Object owner = null;
+  private Boolean owner = null;
 
-  public UserspaceFolderDto code(Object code) {
+  public UserspaceFolderDto code(String code) {
     this.code = code;
     return this;
   }
@@ -50,15 +50,15 @@ public class UserspaceFolderDto {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public UserspaceFolderDto description(Object description) {
+  public UserspaceFolderDto description(String description) {
     this.description = description;
     return this;
   }
@@ -68,15 +68,15 @@ public class UserspaceFolderDto {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public UserspaceFolderDto parentUserspaceKnowledgebaseCode(Object parentUserspaceKnowledgebaseCode) {
+  public UserspaceFolderDto parentUserspaceKnowledgebaseCode(String parentUserspaceKnowledgebaseCode) {
     this.parentUserspaceKnowledgebaseCode = parentUserspaceKnowledgebaseCode;
     return this;
   }
@@ -86,15 +86,15 @@ public class UserspaceFolderDto {
    * @return parentUserspaceKnowledgebaseCode
   **/
   @Schema(required = true, description = "")
-  public Object getParentUserspaceKnowledgebaseCode() {
+  public String getParentUserspaceKnowledgebaseCode() {
     return parentUserspaceKnowledgebaseCode;
   }
 
-  public void setParentUserspaceKnowledgebaseCode(Object parentUserspaceKnowledgebaseCode) {
+  public void setParentUserspaceKnowledgebaseCode(String parentUserspaceKnowledgebaseCode) {
     this.parentUserspaceKnowledgebaseCode = parentUserspaceKnowledgebaseCode;
   }
 
-  public UserspaceFolderDto uploadCode(Object uploadCode) {
+  public UserspaceFolderDto uploadCode(String uploadCode) {
     this.uploadCode = uploadCode;
     return this;
   }
@@ -104,15 +104,15 @@ public class UserspaceFolderDto {
    * @return uploadCode
   **/
   @Schema(description = "")
-  public Object getUploadCode() {
+  public String getUploadCode() {
     return uploadCode;
   }
 
-  public void setUploadCode(Object uploadCode) {
+  public void setUploadCode(String uploadCode) {
     this.uploadCode = uploadCode;
   }
 
-  public UserspaceFolderDto owner(Object owner) {
+  public UserspaceFolderDto owner(Boolean owner) {
     this.owner = owner;
     return this;
   }
@@ -122,11 +122,11 @@ public class UserspaceFolderDto {
    * @return owner
   **/
   @Schema(description = "")
-  public Object getOwner() {
+  public Boolean isOwner() {
     return owner;
   }
 
-  public void setOwner(Object owner) {
+  public void setOwner(Boolean owner) {
     this.owner = owner;
   }
 

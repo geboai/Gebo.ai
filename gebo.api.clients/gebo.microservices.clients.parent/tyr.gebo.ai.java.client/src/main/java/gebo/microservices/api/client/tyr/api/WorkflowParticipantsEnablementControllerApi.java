@@ -21,7 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class WorkflowParticipantsEnablementControllerApi {
     private ApiClient apiClient;
@@ -47,10 +47,10 @@ public class WorkflowParticipantsEnablementControllerApi {
      * <p><b>200</b> - OK
      * @param workflowType  (required)
      * @param workflowId  (required)
-     * @return Object
+     * @return List&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object enabledSteps(Object workflowType, Object workflowId) throws RestClientException {
+    public List<String> enabledSteps(String workflowType, String workflowId) throws RestClientException {
         return enabledStepsWithHttpInfo(workflowType, workflowId).getBody();
     }
 
@@ -60,10 +60,10 @@ public class WorkflowParticipantsEnablementControllerApi {
      * <p><b>200</b> - OK
      * @param workflowType  (required)
      * @param workflowId  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;String&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> enabledStepsWithHttpInfo(Object workflowType, Object workflowId) throws RestClientException {
+    public ResponseEntity<List<String>> enabledStepsWithHttpInfo(String workflowType, String workflowId) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'workflowType' is set
         if (workflowType == null) {
@@ -73,7 +73,7 @@ public class WorkflowParticipantsEnablementControllerApi {
         if (workflowId == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'workflowId' when calling enabledSteps");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/WorkflowParticipantsEnablementController/enabledSteps").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/WorkflowParticipantsEnablementController/enabledSteps").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -90,7 +90,7 @@ public class WorkflowParticipantsEnablementControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

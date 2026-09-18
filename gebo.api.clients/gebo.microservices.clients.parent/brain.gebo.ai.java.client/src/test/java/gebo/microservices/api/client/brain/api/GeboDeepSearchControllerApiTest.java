@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.GBaseObject;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -38,7 +39,7 @@ public class GeboDeepSearchControllerApiTest {
      */
     @Test
     public void getDeepSearchDataSourcesTest() {
-        Object response = api.getDeepSearchDataSources();
+        List<GBaseObject> response = api.getDeepSearchDataSources();
 
         // TODO: test validations
     }

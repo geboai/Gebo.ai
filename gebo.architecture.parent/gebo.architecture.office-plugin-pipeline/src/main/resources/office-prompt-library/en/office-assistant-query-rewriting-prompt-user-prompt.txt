@@ -1,0 +1,13 @@
+INPUTS:
+
+- Latest user question: {question}
+
+- Document fragment(s) the user is currently editing:
+
+ {officeDocumentFragments}
+
+- (G) deliverable types catalog:
+
+ {deliverableTypesList}
+
+- ACTUAL DATE AND TIME: {actualTimestamp}

@@ -57,7 +57,7 @@ public class OnnxTransformersEmbeddingModelsConfigurationControllerApiTest {
      */
     @Test
     public void findONNXTransformersEmbeddingModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GONNXTransformersEmbeddingModelConfig response = api.findONNXTransformersEmbeddingModelConfigByCode(code);
 
         // TODO: test validations

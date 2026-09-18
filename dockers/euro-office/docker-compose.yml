@@ -1,0 +1,112 @@
+# ===========================================================================
+# Euro-Office Document Server + Keycloak SSO — plugin development sandbox.
+#
+# Euro-Office Document Server is a fork of ONLYOFFICE Document Server (a
+# European-sovereignty fork maintained by a consortium including IONOS,
+# Nextcloud, Proton, and others), sharing the same Docker interface and
+# plugin system. It has no built-in OIDC/SSO login of its own either: it is
+# an embeddable editor secured by a shared JWT_SECRET signed between a caller
+# and the server, not a user-facing auth screen. To make "the document server
+# authenticates with the SSO" concrete, oauth2-proxy sits in front of it as an
+# OIDC gate backed by Keycloak: reaching the editor sandbox requires logging
+# in via Keycloak first. The JWT_SECRET below is a SEPARATE concern (it
+# protects editor-config integrity between caller and document server) from
+# the Keycloak login that gates access to that sandbox in the first place.
+#
+# This mirrors dockers/onlyoffice/ - see that folder's README for the
+# rationale behind the oauth2-proxy/Keycloak wiring in detail. Ports here are
+# offset from the onlyoffice sandbox's so both can run at the same time.
+#
+# Usage:
+#   docker compose up -d
+#   Open http://localhost:4181/welcome/ -> redirected to Keycloak login
+#     user: developer / password: developer   (realm: euro-office-dev)
+#   Keycloak admin console: http://keycloak.localtest.me:8082/  (admin/admin)
+#
+# "localtest.me" is a public wildcard DNS entry that always resolves to
+# 127.0.0.1, used here (with a matching Docker network alias) so Keycloak's
+# hostname/issuer resolves identically for the browser AND for the
+# oauth2-proxy container - no port offset between the two, which is what
+# keeps Keycloak's issuer/token validation consistent from both sides. See
+# https://github.com/oauth2-proxy/oauth2-proxy/blob/master/contrib/local-environment/docker-compose-keycloak.yaml
+# for the upstream pattern this follows.
+#
+# Plugin development: ./plugin/hello-world is bind-mounted read-only into
+# the document server's sdkjs-plugins/hello-world folder as a minimal working
+# example - edit its files and `docker compose restart documentserver` to
+# pick up changes, then open it via the editor's Plugins tab. To add another
+# plugin, put it in its own ./plugin/<name> folder and add a matching
+# "./plugin/<name>:/var/www/onlyoffice/documentserver/sdkjs-plugins/<name>:ro"
+# volume line below - never bind-mount the sdkjs-plugins directory itself, it
+# would obscure the server's built-in plugins that already live there.
+# ===========================================================================
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    hostname: keycloak
+    command: ["start-dev", "--http-port=8082", "--import-realm"]
+    environment:
+      KC_HTTP_PORT: 8082
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import:ro
+    ports:
+      - "127.0.0.1:8082:8082"
+    networks:
+      default:
+        aliases:
+          - keycloak.localtest.me
+
+  documentserver:
+    image: ghcr.io/euro-office/documentserver:latest
+    restart: unless-stopped
+    environment:
+      JWT_ENABLED: "true"
+      JWT_SECRET: 232dfab767ecb811e9009b4256cf80c2b10526c65e7e7d82
+      JWT_HEADER: Authorization
+    volumes:
+      - documentserver-data:/var/www/euro-office/Data
+      - documentserver-log:/var/log/euro-office
+      # Mount ONLY a subfolder of sdkjs-plugins, never the directory itself -
+      # bind-mounting sdkjs-plugins directly would obscure the server's
+      # built-in plugins that already live there.
+      #
+      # NOTE: unlike the onlyoffice/documentserver image, this Euro-Office fork
+      # serves its web root from /var/www/euro-office/documentserver (not
+      # .../onlyoffice/...) - verified via `docker exec ... nginx` config, whose
+      # sdkjs-plugins location block aliases to /var/www/euro-office/documentserver/$2$3.
+      # Mounting under .../onlyoffice/... (as the sibling dockers/onlyoffice sandbox
+      # does) lands the files somewhere nginx never serves from - a 404 on every
+      # plugin asset that's easy to miss since the container still starts cleanly.
+      - ./plugin/hello-world:/var/www/euro-office/documentserver/sdkjs-plugins/hello-world:ro
+      # RAG chat + semantic search + "elaborate the selection" against Gebo.ai,
+      # in and out of document context - see plugin/gebo-ai-assistant/README.md.
+      # Run `npm install && npm run build` in that folder first (bundles the
+      # generated brain-ai-js-client stub); it's a build artifact, not checked in.
+      - ./plugin/gebo-ai-assistant:/var/www/euro-office/documentserver/sdkjs-plugins/gebo-ai-assistant:ro
+    networks:
+      default: {}
+
+  oauth2-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.3
+    command: --config /oauth2-proxy.cfg
+    hostname: oauth2-proxy
+    volumes:
+      - ./oauth2-proxy/oauth2-proxy.cfg:/oauth2-proxy.cfg:ro
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:4181:4181"
+    networks:
+      default: {}
+    depends_on:
+      - keycloak
+      - documentserver
+
+volumes:
+  documentserver-data:
+  documentserver-log:
+
+networks:
+  default:
+    name: gebo-euro-office-sso-dev

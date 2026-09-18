@@ -9,19 +9,20 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { MCPClientConfig } from './mCPClientConfig';
 import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
 export interface PageMCPClientConfig { 
-    totalElements?: any;
-    totalPages?: any;
+    totalElements?: number;
+    totalPages?: number;
     pageable?: PageableObject;
-    first?: any;
-    last?: any;
-    size?: any;
-    content?: any;
-    number?: any;
+    first?: boolean;
+    last?: boolean;
+    size?: number;
+    content?: Array<MCPClientConfig>;
+    number?: number;
     sort?: SortObject;
-    numberOfElements?: any;
-    empty?: any;
+    numberOfElements?: number;
+    empty?: boolean;
 }

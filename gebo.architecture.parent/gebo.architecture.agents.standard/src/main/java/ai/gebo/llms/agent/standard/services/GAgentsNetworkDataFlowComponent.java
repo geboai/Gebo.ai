@@ -11,6 +11,8 @@ package ai.gebo.llms.agent.standard.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,6 +31,8 @@ import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.model.base.GeboComponentInfo;
+import ai.gebo.security.services.IGeboSystemUserService;
+import ai.gebo.security.services.IdentityUtil;
 
 /**
  * A <b>symbolic</b> messaging component that puts the agent-network responder's
@@ -52,17 +56,21 @@ import ai.gebo.model.base.GeboComponentInfo;
  */
 @Component
 public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GAgentsNetworkDataFlowComponent.class);
 
 	public static final String AGENT_NETWORK_MODULE = "agent-network-module";
 	public static final String AGENTS_NETWORK_RESPONDER_COMPONENT = "agents-network-responder";
 
 	private final ObjectProvider<IAgentsNetworkDao> agentsNetworkDaoProvider;
 	private final ObjectProvider<ISearchServiceRepositoryPattern> searchServicesProvider;
+	private final ObjectProvider<IGeboSystemUserService> systemUserServiceProvider;
 
 	public GAgentsNetworkDataFlowComponent(@Autowired ObjectProvider<IAgentsNetworkDao> agentsNetworkDaoProvider,
-			@Autowired ObjectProvider<ISearchServiceRepositoryPattern> searchServicesProvider) {
+			@Autowired ObjectProvider<ISearchServiceRepositoryPattern> searchServicesProvider,
+			@Autowired ObjectProvider<IGeboSystemUserService> systemUserServiceProvider) {
 		this.agentsNetworkDaoProvider = agentsNetworkDaoProvider;
 		this.searchServicesProvider = searchServicesProvider;
+		this.systemUserServiceProvider = systemUserServiceProvider;
 	}
 
 	@Override
@@ -87,18 +95,31 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 
 	@Override
 	public GDataFlowMetaInfos getDataFlowMetaInfos() {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin getDataFlowMetaInfos() for the symbolic component:" + getMessagingSystemId());
+		}
 		IAgentsNetworkDao agentsNetworkDao = agentsNetworkDaoProvider.getIfAvailable();
 		if (agentsNetworkDao == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No agents network DAO available yet, the data flow register gets no agent network entry");
+			}
 			return null;
 		}
 		List<GAgentsNetwork> networks;
 		try {
-			networks = agentsNetworkDao.getConfigurations();
+			networks = listNetworks(agentsNetworkDao);
 		} catch (RuntimeException e) {
+			LOGGER.warn("Cannot enumerate the configured agents networks for the data flow register", e);
 			return null;
 		}
 		if (networks == null || networks.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No agents network configured, nothing to report in the data flow register");
+			}
 			return null;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Reporting the data flow of " + networks.size() + " configured agents network(s)");
 		}
 
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
@@ -111,6 +132,10 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 				continue;
 			}
 			String code = network.getCode();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Reporting the query fan-out of network:" + code + " towards the internal knowledge base and "
+						+ webProviders.size() + " external web search provider(s)");
+			}
 
 			DataEndpoint query = new DataEndpoint();
 			query.setId("network-query-" + code);
@@ -141,12 +166,19 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			}
 		}
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End getDataFlowMetaInfos() reporting " + flow.getDataEndpoints().size() + " endpoint(s) and "
+					+ flow.getTransformations().size() + " transformation(s)");
+		}
 		return flow.getDataEndpoints().isEmpty() ? null : flow;
 	}
 
 	private List<ISearchService> enabledWebSearchProviders() {
 		ISearchServiceRepositoryPattern searchServices = searchServicesProvider.getIfAvailable();
 		if (searchServices == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No search service repository available, no external web search provider is reported");
+			}
 			return List.of();
 		}
 		try {
@@ -154,14 +186,20 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			if (all == null) {
 				return List.of();
 			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Filtering " + all.size() + " registered search service(s) down to the enabled ones");
+			}
 			return all.stream().filter(s -> {
 				try {
 					return s != null && s.isEnabled();
 				} catch (Exception e) {
+					LOGGER.warn("Cannot tell whether search service {} is enabled, excluding it from the register",
+							s != null ? s.getId() : null, e);
 					return false;
 				}
 			}).toList();
 		} catch (RuntimeException e) {
+			LOGGER.warn("Cannot enumerate the registered search services for the data flow register", e);
 			return List.of();
 		}
 	}
@@ -195,6 +233,10 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			MetaEndpointType to, String sourceQualifiedId, String destQualifiedId) {
 		DataTransformationMetaInfo engine = DataTransformationMetaInfo.of(kind + "-" + key, description, list(from),
 				list(to));
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Data flow link " + kind + "-" + key + " : " + sourceQualifiedId + " -> " + destQualifiedId
+					+ " (" + from + " -> " + to + ")");
+		}
 		flow.getEngines().add(engine);
 		flow.getTransformations()
 				.add(DataTransformationInfo.of(kind + "-flow-" + key, description, engine, sourceQualifiedId,
@@ -216,5 +258,41 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 
 	private static List<MetaEndpointType> list(MetaEndpointType... types) {
 		return new java.util.ArrayList<MetaEndpointType>(List.of(types));
+	}
+
+	/**
+	 * Enumerates the configured networks under the platform's own system identity.
+	 *
+	 * <p>
+	 * The register is assembled from a {@code ContextRefreshedEvent} (see
+	 * {@code MessageBrokeringAssembler}), on a thread that carries no caller identity,
+	 * while building each network configuration transitively reaches security checks -
+	 * {@code GSecurityServiceImpl.isCurrentUserAdmin()} through the tool repository -
+	 * that require an authenticated {@code SecurityContext}. Without one the MCP tool
+	 * export fails with "Not authenticated" and the snapshot silently describes the
+	 * networks as having no tools at all.
+	 * </p>
+	 *
+	 * <p>
+	 * This impersonation is for the compliance snapshot only, and must not be extended
+	 * to the request path: nothing caches these configurations, so at request time the
+	 * same network is rebuilt on the caller's own thread and each user keeps getting a
+	 * network resolved under their own profile and ACLs.
+	 * </p>
+	 */
+	private List<GAgentsNetwork> listNetworks(IAgentsNetworkDao agentsNetworkDao) {
+		IGeboSystemUserService systemUserService = systemUserServiceProvider.getIfAvailable();
+		if (systemUserService == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No system user service available, listing the networks without impersonation");
+			}
+			return agentsNetworkDao.getConfigurations();
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Listing the configured networks under the platform system identity:"
+					+ systemUserService.getUsername());
+		}
+		return IdentityUtil.create(systemUserService.getUsername(), systemUserService.getRoles())
+				.doRunAsWithReturn(() -> agentsNetworkDao.getConfigurations());
 	}
 }

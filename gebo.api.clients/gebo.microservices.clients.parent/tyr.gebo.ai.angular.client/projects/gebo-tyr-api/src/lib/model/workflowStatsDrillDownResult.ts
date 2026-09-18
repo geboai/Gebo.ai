@@ -9,11 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { WorkflowStatsAggregationBucket } from './workflowStatsAggregationBucket';
 import { WorkflowStatsDrillDownLevelSubdimensions } from './workflowStatsDrillDownLevelSubdimensions';
 
 export interface WorkflowStatsDrillDownResult { 
-    monthly?: any;
+    monthly?: Array<WorkflowStatsAggregationBucket>;
     monthlySubdimensions?: WorkflowStatsDrillDownLevelSubdimensions;
-    currentMonthDaily?: any;
+    currentMonthDaily?: Array<WorkflowStatsAggregationBucket>;
     currentMonthDailySubdimensions?: WorkflowStatsDrillDownLevelSubdimensions;
 }

@@ -32,6 +32,16 @@ Where <value> rules are:
   - Include at least one entry that is the most specific literal string(s) present in  user question or latest chat interactions (if any).
 
 
+LANGUAGE RULE (applies to BOTH lists):
+- Write every query in the SAME language as the user question. Never translate the
+  question, and never translate its domain terms, even when the question is not in English.
+- Keep proper nouns, titles, quoted phrases and rare domain terms EXACTLY as the user
+  spelled them, in at least half of the queries of each list. Do not paraphrase or
+  find synonyms for a rare term: reproduce it verbatim.
+- You may add one query in a second language only when the user question itself mixes
+  languages. Never replace the original-language queries with translated ones.
+
+
 SELECTION GUIDELINES:
 - Use latest user interactions to disambiguate terminology and pick the most relevant angle.
 

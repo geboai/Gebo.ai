@@ -161,7 +161,7 @@ No authorization required
 
 
 ConfluenceSystemsControllerApi apiInstance = new ConfluenceSystemsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GConfluenceProjectEndpoint result = apiInstance.findConfluenceEndpointsByCode(code);
     System.out.println(result);
@@ -175,7 +175,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -192,7 +192,7 @@ No authorization required
 
 <a name="findConfluenceEndpointsByProject"></a>
 # **findConfluenceEndpointsByProject**
-> Object findConfluenceEndpointsByProject(parentProjectCode)
+> List&lt;GConfluenceProjectEndpoint&gt; findConfluenceEndpointsByProject(parentProjectCode)
 
 
 
@@ -204,9 +204,9 @@ No authorization required
 
 
 ConfluenceSystemsControllerApi apiInstance = new ConfluenceSystemsControllerApi();
-Object parentProjectCode = null; // Object | 
+String parentProjectCode = "parentProjectCode_example"; // String | 
 try {
-    Object result = apiInstance.findConfluenceEndpointsByProject(parentProjectCode);
+    List<GConfluenceProjectEndpoint> result = apiInstance.findConfluenceEndpointsByProject(parentProjectCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ConfluenceSystemsControllerApi#findConfluenceEndpointsByProject");
@@ -218,11 +218,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **parentProjectCode** | [**Object**](.md)|  |
+ **parentProjectCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GConfluenceProjectEndpoint&gt;**](GConfluenceProjectEndpoint.md)
 
 ### Authorization
 
@@ -235,7 +235,7 @@ No authorization required
 
 <a name="findConfluenceEndpointsByQbe"></a>
 # **findConfluenceEndpointsByQbe**
-> Object findConfluenceEndpointsByQbe(body)
+> List&lt;GConfluenceProjectEndpoint&gt; findConfluenceEndpointsByQbe(body)
 
 
 
@@ -249,7 +249,7 @@ No authorization required
 ConfluenceSystemsControllerApi apiInstance = new ConfluenceSystemsControllerApi();
 GConfluenceProjectEndpoint body = new GConfluenceProjectEndpoint(); // GConfluenceProjectEndpoint | 
 try {
-    Object result = apiInstance.findConfluenceEndpointsByQbe(body);
+    List<GConfluenceProjectEndpoint> result = apiInstance.findConfluenceEndpointsByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ConfluenceSystemsControllerApi#findConfluenceEndpointsByQbe");
@@ -265,7 +265,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GConfluenceProjectEndpoint&gt;**](GConfluenceProjectEndpoint.md)
 
 ### Authorization
 
@@ -290,7 +290,7 @@ No authorization required
 
 
 ConfluenceSystemsControllerApi apiInstance = new ConfluenceSystemsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GConfluenceSystem result = apiInstance.findConfluenceSystemByCode(code);
     System.out.println(result);
@@ -304,7 +304,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -360,7 +360,7 @@ No authorization required
 
 <a name="getConfluenceSystems"></a>
 # **getConfluenceSystems**
-> Object getConfluenceSystems()
+> List&lt;GConfluenceSystem&gt; getConfluenceSystems()
 
 
 
@@ -373,7 +373,7 @@ No authorization required
 
 ConfluenceSystemsControllerApi apiInstance = new ConfluenceSystemsControllerApi();
 try {
-    Object result = apiInstance.getConfluenceSystems();
+    List<GConfluenceSystem> result = apiInstance.getConfluenceSystems();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ConfluenceSystemsControllerApi#getConfluenceSystems");
@@ -386,7 +386,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GConfluenceSystem&gt;**](GConfluenceSystem.md)
 
 ### Authorization
 

@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 <a name="getAllFunctions"></a>
 # **getAllFunctions**
-> Object getAllFunctions()
+> List&lt;GLookupEntry&gt; getAllFunctions()
 
 
 
@@ -24,7 +24,7 @@ Method | HTTP request | Description
 
 FunctionsLookupControllerApi apiInstance = new FunctionsLookupControllerApi();
 try {
-    Object result = apiInstance.getAllFunctions();
+    List<GLookupEntry> result = apiInstance.getAllFunctions();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FunctionsLookupControllerApi#getAllFunctions");
@@ -37,7 +37,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GLookupEntry&gt;**](GLookupEntry.md)
 
 ### Authorization
 
@@ -50,7 +50,7 @@ No authorization required
 
 <a name="getAllFunctionsTree"></a>
 # **getAllFunctionsTree**
-> Object getAllFunctionsTree(ragContextFunctions)
+> List&lt;ToolCategoriesTree&gt; getAllFunctionsTree(ragContextFunctions)
 
 
 
@@ -62,9 +62,9 @@ No authorization required
 
 
 FunctionsLookupControllerApi apiInstance = new FunctionsLookupControllerApi();
-Object ragContextFunctions = null; // Object | 
+Boolean ragContextFunctions = true; // Boolean | 
 try {
-    Object result = apiInstance.getAllFunctionsTree(ragContextFunctions);
+    List<ToolCategoriesTree> result = apiInstance.getAllFunctionsTree(ragContextFunctions);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FunctionsLookupControllerApi#getAllFunctionsTree");
@@ -76,11 +76,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ragContextFunctions** | [**Object**](.md)|  | [optional]
+ **ragContextFunctions** | **Boolean**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;ToolCategoriesTree&gt;**](ToolCategoriesTree.md)
 
 ### Authorization
 
@@ -93,7 +93,7 @@ No authorization required
 
 <a name="getAllLocalFunctions"></a>
 # **getAllLocalFunctions**
-> Object getAllLocalFunctions()
+> List&lt;GLookupEntry&gt; getAllLocalFunctions()
 
 
 
@@ -106,7 +106,7 @@ No authorization required
 
 FunctionsLookupControllerApi apiInstance = new FunctionsLookupControllerApi();
 try {
-    Object result = apiInstance.getAllLocalFunctions();
+    List<GLookupEntry> result = apiInstance.getAllLocalFunctions();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FunctionsLookupControllerApi#getAllLocalFunctions");
@@ -119,7 +119,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GLookupEntry&gt;**](GLookupEntry.md)
 
 ### Authorization
 
@@ -132,7 +132,7 @@ No authorization required
 
 <a name="getAllLocalFunctionsTree"></a>
 # **getAllLocalFunctionsTree**
-> Object getAllLocalFunctionsTree(ragContextFunctions)
+> List&lt;ToolCategoriesTree&gt; getAllLocalFunctionsTree(ragContextFunctions)
 
 
 
@@ -144,9 +144,9 @@ No authorization required
 
 
 FunctionsLookupControllerApi apiInstance = new FunctionsLookupControllerApi();
-Object ragContextFunctions = null; // Object | 
+Boolean ragContextFunctions = true; // Boolean | 
 try {
-    Object result = apiInstance.getAllLocalFunctionsTree(ragContextFunctions);
+    List<ToolCategoriesTree> result = apiInstance.getAllLocalFunctionsTree(ragContextFunctions);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FunctionsLookupControllerApi#getAllLocalFunctionsTree");
@@ -158,11 +158,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ragContextFunctions** | [**Object**](.md)|  | [optional]
+ **ragContextFunctions** | **Boolean**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;ToolCategoriesTree&gt;**](ToolCategoriesTree.md)
 
 ### Authorization
 

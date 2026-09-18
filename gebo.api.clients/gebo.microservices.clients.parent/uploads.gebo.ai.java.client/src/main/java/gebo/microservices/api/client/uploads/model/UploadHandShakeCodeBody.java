@@ -18,18 +18,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * UploadHandShakeCodeBody
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:55.259662693+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:31.380104145+02:00[Europe/Rome]")
 
 public class UploadHandShakeCodeBody {
   @JsonProperty("files[]")
-  private Object files = null;
+  private List<File> files = new ArrayList<>();
 
-  public UploadHandShakeCodeBody files(Object files) {
+  public UploadHandShakeCodeBody files(List<File> files) {
     this.files = files;
+    return this;
+  }
+
+  public UploadHandShakeCodeBody addFilesItem(File filesItem) {
+    this.files.add(filesItem);
     return this;
   }
 
@@ -38,11 +46,11 @@ public class UploadHandShakeCodeBody {
    * @return files
   **/
   @Schema(required = true, description = "")
-  public Object getFiles() {
+  public List<File> getFiles() {
     return files;
   }
 
-  public void setFiles(Object files) {
+  public void setFiles(List<File> files) {
     this.files = files;
   }
 

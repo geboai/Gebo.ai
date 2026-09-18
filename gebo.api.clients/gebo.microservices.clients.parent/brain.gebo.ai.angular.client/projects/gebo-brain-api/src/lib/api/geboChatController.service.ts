@@ -18,10 +18,12 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GBaseChatModelChoice } from '../model/gBaseChatModelChoice';
+import { GBaseObject } from '../model/gBaseObject';
 import { GeboChatRequest } from '../model/geboChatRequest';
 import { GeboChatResponse } from '../model/geboChatResponse';
 import { GeboChatUserInfo } from '../model/geboChatUserInfo';
 import { ModelProviderCapabilities } from '../model/modelProviderCapabilities';
+import { ServerSentEventString } from '../model/serverSentEventString';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -113,10 +115,10 @@ export class GeboChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatModelMetaInfos(modelCode: any, observe?: 'body', reportProgress?: boolean): Observable<GBaseChatModelChoice>;
-    public getChatModelMetaInfos(modelCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GBaseChatModelChoice>>;
-    public getChatModelMetaInfos(modelCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GBaseChatModelChoice>>;
-    public getChatModelMetaInfos(modelCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getChatModelMetaInfos(modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<GBaseChatModelChoice>;
+    public getChatModelMetaInfos(modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GBaseChatModelChoice>>;
+    public getChatModelMetaInfos(modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GBaseChatModelChoice>>;
+    public getChatModelMetaInfos(modelCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (modelCode === null || modelCode === undefined) {
             throw new Error('Required parameter modelCode was null or undefined when calling getChatModelMetaInfos.');
@@ -160,10 +162,10 @@ export class GeboChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatModelUserInfo(modelCode: any, observe?: 'body', reportProgress?: boolean): Observable<GeboChatUserInfo>;
-    public getChatModelUserInfo(modelCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatUserInfo>>;
-    public getChatModelUserInfo(modelCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatUserInfo>>;
-    public getChatModelUserInfo(modelCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getChatModelUserInfo(modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<GeboChatUserInfo>;
+    public getChatModelUserInfo(modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatUserInfo>>;
+    public getChatModelUserInfo(modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatUserInfo>>;
+    public getChatModelUserInfo(modelCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (modelCode === null || modelCode === undefined) {
             throw new Error('Required parameter modelCode was null or undefined when calling getChatModelUserInfo.');
@@ -207,10 +209,10 @@ export class GeboChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProviderCapabilities(modelCode: any, observe?: 'body', reportProgress?: boolean): Observable<ModelProviderCapabilities>;
-    public getProviderCapabilities(modelCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelProviderCapabilities>>;
-    public getProviderCapabilities(modelCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelProviderCapabilities>>;
-    public getProviderCapabilities(modelCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getProviderCapabilities(modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<ModelProviderCapabilities>;
+    public getProviderCapabilities(modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelProviderCapabilities>>;
+    public getProviderCapabilities(modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelProviderCapabilities>>;
+    public getProviderCapabilities(modelCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (modelCode === null || modelCode === undefined) {
             throw new Error('Required parameter modelCode was null or undefined when calling getProviderCapabilities.');
@@ -253,9 +255,9 @@ export class GeboChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getVisibleKnowledgeBases(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getVisibleKnowledgeBases(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getVisibleKnowledgeBases(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getVisibleKnowledgeBases(observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
+    public getVisibleKnowledgeBases(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
+    public getVisibleKnowledgeBases(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
     public getVisibleKnowledgeBases(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -273,7 +275,7 @@ export class GeboChatControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeboDirectModelChatController/getVisibleKnowledgeBases`,
+        return this.httpClient.request<Array<GBaseObject>>('get',`${this.basePath}/api/users/GeboDirectModelChatController/getVisibleKnowledgeBases`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -290,9 +292,9 @@ export class GeboChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public streamResponse(body: GeboChatRequest, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public streamResponse(body: GeboChatRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public streamResponse(body: GeboChatRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public streamResponse(body: GeboChatRequest, observe?: 'body', reportProgress?: boolean): Observable<Array<ServerSentEventString>>;
+    public streamResponse(body: GeboChatRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ServerSentEventString>>>;
+    public streamResponse(body: GeboChatRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ServerSentEventString>>>;
     public streamResponse(body: GeboChatRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -319,7 +321,7 @@ export class GeboChatControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/users/GeboDirectModelChatController/streamResponse`,
+        return this.httpClient.request<Array<ServerSentEventString>>('post',`${this.basePath}/api/users/GeboDirectModelChatController/streamResponse`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

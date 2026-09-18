@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboMcpServerUserControllerApi {
     private ApiClient apiClient;
@@ -50,7 +50,7 @@ public class GeboMcpServerUserControllerApi {
      * @return UserAccessibleMcpServerView
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public UserAccessibleMcpServerView findAccessibleMcpServerByCode(Object code) throws RestClientException {
+    public UserAccessibleMcpServerView findAccessibleMcpServerByCode(String code) throws RestClientException {
         return findAccessibleMcpServerByCodeWithHttpInfo(code).getBody();
     }
 
@@ -62,13 +62,13 @@ public class GeboMcpServerUserControllerApi {
      * @return ResponseEntity&lt;UserAccessibleMcpServerView&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<UserAccessibleMcpServerView> findAccessibleMcpServerByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<UserAccessibleMcpServerView> findAccessibleMcpServerByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findAccessibleMcpServerByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/GeboMCPServerUserController/findAccessibleMcpServerByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/GeboMCPServerUserController/findAccessibleMcpServerByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -85,16 +85,16 @@ public class GeboMcpServerUserControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<UserAccessibleMcpServerView> returnType = new ParameterizedTypeReference<UserAccessibleMcpServerView>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getUsersCanAccessMcpServersList() throws RestClientException {
+    public Boolean getUsersCanAccessMcpServersList() throws RestClientException {
         return getUsersCanAccessMcpServersListWithHttpInfo().getBody();
     }
 
@@ -102,12 +102,12 @@ public class GeboMcpServerUserControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;Boolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getUsersCanAccessMcpServersListWithHttpInfo() throws RestClientException {
+    public ResponseEntity<Boolean> getUsersCanAccessMcpServersListWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/user/GeboMCPServerUserController/getUsersCanAccessMcpServersList").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/GeboMCPServerUserController/getUsersCanAccessMcpServersList").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -122,17 +122,17 @@ public class GeboMcpServerUserControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<Boolean> returnType = new ParameterizedTypeReference<Boolean>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;UserAccessibleMcpServerView&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object listAccessibleMcpServers() throws RestClientException {
+    public List<UserAccessibleMcpServerView> listAccessibleMcpServers() throws RestClientException {
         return listAccessibleMcpServersWithHttpInfo().getBody();
     }
 
@@ -140,12 +140,12 @@ public class GeboMcpServerUserControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;UserAccessibleMcpServerView&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> listAccessibleMcpServersWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<UserAccessibleMcpServerView>> listAccessibleMcpServersWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/user/GeboMCPServerUserController/listAccessibleMcpServers").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/GeboMCPServerUserController/listAccessibleMcpServers").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -160,7 +160,7 @@ public class GeboMcpServerUserControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<UserAccessibleMcpServerView>> returnType = new ParameterizedTypeReference<List<UserAccessibleMcpServerView>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

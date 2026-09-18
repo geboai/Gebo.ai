@@ -23,7 +23,7 @@ Method | HTTP request | Description
 
 McpClientBrowsingControllerApi apiInstance = new McpClientBrowsingControllerApi();
 BrowseParam body = new BrowseParam(); // BrowseParam | 
-Object mcpClientConfigCode = null; // Object | 
+String mcpClientConfigCode = "mcpClientConfigCode_example"; // String | 
 try {
     OperationStatusListPathInfo result = apiInstance.browseMCPClientPath(body, mcpClientConfigCode);
     System.out.println(result);
@@ -38,7 +38,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**BrowseParam**](BrowseParam.md)|  |
- **mcpClientConfigCode** | [**Object**](.md)|  |
+ **mcpClientConfigCode** | **String**|  |
 
 ### Return type
 
@@ -67,8 +67,8 @@ No authorization required
 
 
 McpClientBrowsingControllerApi apiInstance = new McpClientBrowsingControllerApi();
-Object body = null; // Object | 
-Object mcpClientConfigCode = null; // Object | 
+List<VFilesystemReference> body = Arrays.asList(new VFilesystemReference()); // List<VFilesystemReference> | 
+String mcpClientConfigCode = "mcpClientConfigCode_example"; // String | 
 try {
     OperationStatusListVirtualFilesystemNavigationTreeStatus result = apiInstance.getMCPClientNavigationStatus(body, mcpClientConfigCode);
     System.out.println(result);
@@ -82,8 +82,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
- **mcpClientConfigCode** | [**Object**](.md)|  |
+ **body** | [**List&lt;VFilesystemReference&gt;**](VFilesystemReference.md)|  |
+ **mcpClientConfigCode** | **String**|  |
 
 ### Return type
 
@@ -112,7 +112,7 @@ No authorization required
 
 
 McpClientBrowsingControllerApi apiInstance = new McpClientBrowsingControllerApi();
-Object mcpClientConfigCode = null; // Object | 
+String mcpClientConfigCode = "mcpClientConfigCode_example"; // String | 
 try {
     OperationStatusListGVirtualFilesystemRoot result = apiInstance.getMCPClientRoots(mcpClientConfigCode);
     System.out.println(result);
@@ -126,7 +126,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **mcpClientConfigCode** | [**Object**](.md)|  |
+ **mcpClientConfigCode** | **String**|  |
 
 ### Return type
 

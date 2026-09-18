@@ -11,11 +11,11 @@
  */
 
 export interface AgentServiceDescriptor { 
-    serviceId?: any;
-    description?: any;
-    inputType?: any;
-    outputType?: any;
-    networkAgent?: any;
-    routingAgent?: any;
-    networkAdapter?: any;
+    serviceId?: string;
+    description?: string;
+    inputType?: string;
+    outputType?: string;
+    networkAgent?: boolean;
+    routingAgent?: boolean;
+    networkAdapter?: boolean;
 }

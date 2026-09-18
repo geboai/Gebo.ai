@@ -11,7 +11,6 @@ package ai.gebo.llms.deepseek.controllers;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,12 +32,10 @@ import ai.gebo.security.services.IGSecurityAuditLoggerService;
 /**
  * Controller for managing Deepseek chat model configurations. This controller
  * provides REST endpoints for CRUD operations on Deepseek model configurations.
- * Only enabled when the property ai.gebo.llms.config.deepseekEnabled is set to
- * true. Restricted to users with ADMIN role.
+ * Restricted to users with ADMIN role.
  * 
  * AI generated comments
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "deepseekEnabled", havingValue = "true")
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/DeepseekChatModelsConfigurationController")

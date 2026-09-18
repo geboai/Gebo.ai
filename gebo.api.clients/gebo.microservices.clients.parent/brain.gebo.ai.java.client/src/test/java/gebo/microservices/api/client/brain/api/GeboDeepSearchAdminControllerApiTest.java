@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.DeepSearchConfig;
+import gebo.microservices.api.client.brain.model.GBaseObject;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -54,7 +55,7 @@ public class GeboDeepSearchAdminControllerApiTest {
      */
     @Test
     public void getConfigurableDataSourcesTest() {
-        Object response = api.getConfigurableDataSources();
+        List<GBaseObject> response = api.getConfigurableDataSources();
 
         // TODO: test validations
     }
@@ -68,7 +69,7 @@ public class GeboDeepSearchAdminControllerApiTest {
      */
     @Test
     public void getDeepSeachConfigsTest() {
-        Object response = api.getDeepSeachConfigs();
+        List<DeepSearchConfig> response = api.getDeepSeachConfigs();
 
         // TODO: test validations
     }

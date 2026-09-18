@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-import { Component, Input, OnInit, Optional } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Optional } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserInfo } from '@Gebo.ai/gebo-ai-rest-api';
 import { MegaMenuItem } from 'primeng/api';
@@ -24,12 +24,14 @@ import { ApplicationMenuProviderService } from './application-menu-provider.serv
   styleUrls: ['./gebo-ai-desktop.component.scss'],
   standalone: false
 })
-export class GeboAIDesktopComponent implements OnInit {
+export class GeboAIDesktopComponent implements OnInit, OnDestroy {
   @Input() version: string = '';
   public userLogged: boolean = false;
   public userInfo?: UserInfo;
   public menuItems: MegaMenuItem[] = [];
   private subscription?: Subscription;
+  private bodyClassObserver?: MutationObserver;
+  private scrollLockSweepScheduled: boolean = false;
 
   constructor(
     private primengConfig: PrimeNG,
@@ -47,6 +49,45 @@ export class GeboAIDesktopComponent implements OnInit {
         }
       }
     });
+  }
+
+  /**
+   * Guards against a leaked body scroll-lock. A modal p-dialog adds `p-overflow-hidden` to the
+   * document body (freezing page scroll) and only removes it through its leave animation - but
+   * several of ours are torn down via structural directives / dynamic component destruction, so
+   * that cleanup never runs and the lock stays stuck, killing vertical scroll on every screen.
+   *
+   * We watch the body class and, whenever the lock is present while no modal dialog is actually
+   * open (PrimeNG marks the open ones with data-p-scrollblocker-active), drop it. The check is
+   * deferred a little so a genuine modal opening - which sets that marker in the same render tick
+   * as the class - is never unlocked from under it.
+   */
+  private installBodyScrollLockGuard(): void {
+    if (typeof document === "undefined" || typeof MutationObserver === "undefined") {
+      return;
+    }
+    this.bodyClassObserver = new MutationObserver(() => this.scheduleScrollLockSweep());
+    this.bodyClassObserver.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+    this.scheduleScrollLockSweep();
+  }
+
+  private scheduleScrollLockSweep(): void {
+    if (this.scrollLockSweepScheduled) {
+      return;
+    }
+    this.scrollLockSweepScheduled = true;
+    setTimeout(() => {
+      this.scrollLockSweepScheduled = false;
+      if (document.body.classList.contains("p-overflow-hidden")
+        && document.querySelectorAll('[data-p-scrollblocker-active="true"]').length === 0) {
+        document.body.classList.remove("p-overflow-hidden");
+        document.body.style.removeProperty("--scrollbar-width");
+      }
+    }, 120);
+  }
+
+  ngOnDestroy(): void {
+    this.bodyClassObserver?.disconnect();
   }
 
   private loadUserAndMenu(): void {
@@ -81,6 +122,7 @@ export class GeboAIDesktopComponent implements OnInit {
 
   ngOnInit() {
     this.primengConfig.ripple.set(true);
+    this.installBodyScrollLockGuard();
 
     if (!this.loginService.isOauth2LandingPage()) {
       this.loginService.logged.subscribe(user => {

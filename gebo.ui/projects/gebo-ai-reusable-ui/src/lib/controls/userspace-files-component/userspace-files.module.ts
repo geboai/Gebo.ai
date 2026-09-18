@@ -42,6 +42,7 @@ import { GeboUIEntityFormConfig } from "../../architecture/gebo-ui-entity-form-c
 import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
 import { GeboUIArchitectureModule } from "../../architecture/gebo-ui-architecture.module";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
+import { GeboBlockableContainerDirective } from "../../directives/blockable-container/blockable-container.directive";
 
 /**
  * Configuration object for the UserspaceFolderDto entity.
@@ -83,7 +84,7 @@ export class UserspaceFormsListService extends GeboUIEntityFormsLauncherService 
  * declares components related to userspace file management.
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, PanelModule, DialogModule, TreeModule, BlockUIModule, ButtonModule, GeboAIContentViewerModule, TreeModule, CheckboxModule, FileUploadModule, GeboUIArchitectureModule, InputTextModule, MultiSelectModule, ChipModule, FieldsetModule, GeboAIFieldTranslationContainerModule],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, PanelModule, DialogModule, TreeModule, BlockUIModule, ButtonModule, GeboAIContentViewerModule, TreeModule, CheckboxModule, FileUploadModule, GeboUIArchitectureModule, InputTextModule, MultiSelectModule, ChipModule, FieldsetModule, GeboAIFieldTranslationContainerModule, GeboBlockableContainerDirective],
     declarations: [GeboAIUserpaceFilesComponent, GeboAIUserspaceFolderComponent, GeboAIUserspaceKnowledgebaseComponent, GeboAIUserspaceBrowseComponent, GeboAIUserspaceFilesUploadComponent],
     exports: [GeboAIUserpaceFilesComponent],
     providers: [{

@@ -68,7 +68,7 @@ No authorization required
 
 
 GenericOpenAiapiChatModelsConfigurationControllerApi apiInstance = new GenericOpenAiapiChatModelsConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GenericOpenAIAPIChatModelConfig result = apiInstance.findGenericOpenAIAPIChatModelConfigByCode(code);
     System.out.println(result);
@@ -82,7 +82,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -142,7 +142,7 @@ No authorization required
 
 <a name="getGenericOpenAIChatModelTypes"></a>
 # **getGenericOpenAIChatModelTypes**
-> Object getGenericOpenAIChatModelTypes()
+> List&lt;GenericOpenAIChatModelTypeConfig&gt; getGenericOpenAIChatModelTypes()
 
 
 
@@ -155,7 +155,7 @@ No authorization required
 
 GenericOpenAiapiChatModelsConfigurationControllerApi apiInstance = new GenericOpenAiapiChatModelsConfigurationControllerApi();
 try {
-    Object result = apiInstance.getGenericOpenAIChatModelTypes();
+    List<GenericOpenAIChatModelTypeConfig> result = apiInstance.getGenericOpenAIChatModelTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GenericOpenAiapiChatModelsConfigurationControllerApi#getGenericOpenAIChatModelTypes");
@@ -168,7 +168,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GenericOpenAIChatModelTypeConfig&gt;**](GenericOpenAIChatModelTypeConfig.md)
 
 ### Authorization
 

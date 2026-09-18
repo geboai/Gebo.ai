@@ -33,4 +33,22 @@ public final class OpenAiClientCustomizer {
                 .timeout(Duration.ofMillis(cfg.getReadTimeoutMs()))
                 .interceptor(provider.getOkHttpRetryInterceptor());
     }
+
+    /**
+     * The configured request timeout, to be set on the model's {@code Options} builder
+     * as well as on the HTTP client.
+     * <p>
+     * Setting it on the client alone is not enough: Spring AI's
+     * {@code AbstractOpenAiOptions.DEFAULT_TIMEOUT} is 60 seconds, every OpenAI options
+     * class inherits it, and {@code OpenAiSetup.setupSyncClient/setupAsyncClient} apply
+     * {@code options.getTimeout()} to the SDK {@code ClientOptions} AFTER running the
+     * {@link OpenAiHttpClientBuilderCustomizer}. The customizer's value is therefore
+     * overridden per request, and long generations were cut at 60s mid-stream while
+     * {@code ai.gebo.llms.default.clients.config.web-client-config.response-timeout}
+     * said otherwise. Pass this to {@code Options.builder().timeout(..)} so both layers
+     * carry the same configured value.
+     */
+    public static Duration requestTimeout(IGLlmsServiceClientsProvider provider) {
+        return Duration.ofMillis(provider.getClientConfig().getReadTimeoutMs());
+    }
 }

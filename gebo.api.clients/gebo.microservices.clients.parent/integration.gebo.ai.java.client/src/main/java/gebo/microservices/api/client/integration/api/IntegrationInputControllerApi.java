@@ -2,6 +2,7 @@ package gebo.microservices.api.client.integration.api;
 
 import gebo.microservices.api.client.integration.invoker.ApiClient;
 
+import java.io.File;
 import gebo.microservices.api.client.integration.model.IntegrationDocumentEnvelop;
 import gebo.microservices.api.client.integration.model.JobTicket;
 
@@ -23,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:28.077543371+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:38.304055491+02:00[Europe/Rome]")
 
 public class IntegrationInputControllerApi {
     private ApiClient apiClient;
@@ -52,7 +53,7 @@ public class IntegrationInputControllerApi {
      * @return JobTicket
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public JobTicket publishContents(Object body, Object endpointCode) throws RestClientException {
+    public JobTicket publishContents(List<JobTicket> body, String endpointCode) throws RestClientException {
         return publishContentsWithHttpInfo(body, endpointCode).getBody();
     }
 
@@ -65,7 +66,7 @@ public class IntegrationInputControllerApi {
      * @return ResponseEntity&lt;JobTicket&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<JobTicket> publishContentsWithHttpInfo(Object body, Object endpointCode) throws RestClientException {
+    public ResponseEntity<JobTicket> publishContentsWithHttpInfo(List<JobTicket> body, String endpointCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -75,7 +76,7 @@ public class IntegrationInputControllerApi {
         if (endpointCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling publishContents");
         }
-        String path = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/publishContents").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/publishContents").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -94,7 +95,7 @@ public class IntegrationInputControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<JobTicket> returnType = new ParameterizedTypeReference<JobTicket>() {};
-        return apiClient.invokeAPI(path, HttpMethod.PUT, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.PUT, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -104,7 +105,7 @@ public class IntegrationInputControllerApi {
      * @return JobTicket
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public JobTicket publishSync(Object endpointCode) throws RestClientException {
+    public JobTicket publishSync(String endpointCode) throws RestClientException {
         return publishSyncWithHttpInfo(endpointCode).getBody();
     }
 
@@ -116,13 +117,13 @@ public class IntegrationInputControllerApi {
      * @return ResponseEntity&lt;JobTicket&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<JobTicket> publishSyncWithHttpInfo(Object endpointCode) throws RestClientException {
+    public ResponseEntity<JobTicket> publishSyncWithHttpInfo(String endpointCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'endpointCode' is set
         if (endpointCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling publishSync");
         }
-        String path = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/publishSync").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/publishSync").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -139,7 +140,7 @@ public class IntegrationInputControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<JobTicket> returnType = new ParameterizedTypeReference<JobTicket>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -151,7 +152,7 @@ public class IntegrationInputControllerApi {
      * @return JobTicket
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public JobTicket spoolDocument(IntegrationDocumentEnvelop body, Object endpointCode, Object relativePath) throws RestClientException {
+    public JobTicket spoolDocument(IntegrationDocumentEnvelop body, String endpointCode, String relativePath) throws RestClientException {
         return spoolDocumentWithHttpInfo(body, endpointCode, relativePath).getBody();
     }
 
@@ -165,7 +166,7 @@ public class IntegrationInputControllerApi {
      * @return ResponseEntity&lt;JobTicket&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<JobTicket> spoolDocumentWithHttpInfo(IntegrationDocumentEnvelop body, Object endpointCode, Object relativePath) throws RestClientException {
+    public ResponseEntity<JobTicket> spoolDocumentWithHttpInfo(IntegrationDocumentEnvelop body, String endpointCode, String relativePath) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -179,7 +180,7 @@ public class IntegrationInputControllerApi {
         if (relativePath == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'relativePath' when calling spoolDocument");
         }
-        String path = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/spoolDocument").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/spoolDocument").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -199,7 +200,7 @@ public class IntegrationInputControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<JobTicket> returnType = new ParameterizedTypeReference<JobTicket>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -211,7 +212,7 @@ public class IntegrationInputControllerApi {
      * @return JobTicket
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public JobTicket spoolDocument1(Object file, Object endpointCode, Object relativePath) throws RestClientException {
+    public JobTicket spoolDocument1(File file, String endpointCode, String relativePath) throws RestClientException {
         return spoolDocument1WithHttpInfo(file, endpointCode, relativePath).getBody();
     }
 
@@ -225,7 +226,7 @@ public class IntegrationInputControllerApi {
      * @return ResponseEntity&lt;JobTicket&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<JobTicket> spoolDocument1WithHttpInfo(Object file, Object endpointCode, Object relativePath) throws RestClientException {
+    public ResponseEntity<JobTicket> spoolDocument1WithHttpInfo(File file, String endpointCode, String relativePath) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'file' is set
         if (file == null) {
@@ -239,7 +240,7 @@ public class IntegrationInputControllerApi {
         if (relativePath == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'relativePath' when calling spoolDocument1");
         }
-        String path = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/spoolDocument").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/spoolDocument").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -247,7 +248,7 @@ public class IntegrationInputControllerApi {
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "endpointCode", endpointCode));
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "relativePath", relativePath));
         if (file != null)
-            formParams.add("file", file);
+            formParams.add("file", new FileSystemResource(file));
 
         final String[] accepts = { 
             "application/json"
@@ -261,6 +262,6 @@ public class IntegrationInputControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<JobTicket> returnType = new ParameterizedTypeReference<JobTicket>() {};
-        return apiClient.invokeAPI(path, HttpMethod.PUT, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.PUT, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

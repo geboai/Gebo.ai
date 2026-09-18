@@ -14,7 +14,7 @@
 
 <p-button id="PromptWizardBtn" gebo-ai-label icon="pi pi-sparkles" label="Prompt wizard" [outlined]="true"
     title="Use this to use an LLM to generate the prompt for your objectives" (onClick)="dialogVisible=true"></p-button>
-<p-dialog [maximizable]="true" [visible]="dialogVisible" [modal]="true" [style]="{width:'100%',height:'100%'}"
+<p-dialog [maximizable]="true" [visible]="dialogVisible" [modal]="true" styleClass="gebo-entity-dialog"
     (onHide)="closeModal($event)" [closable]="false" [showHeader]="false">
     <p-blockUI [target]="promptWizardUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>

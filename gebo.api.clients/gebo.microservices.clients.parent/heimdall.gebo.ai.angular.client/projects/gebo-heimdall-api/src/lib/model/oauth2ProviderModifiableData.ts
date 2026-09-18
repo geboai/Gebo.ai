@@ -13,13 +13,52 @@ import { GeboOauth2SecretContent } from './geboOauth2SecretContent';
 import { Oauth2ProviderConfig } from './oauth2ProviderConfig';
 
 export interface Oauth2ProviderModifiableData { 
-    code?: any;
-    authProvider: any;
+    code?: string;
+    authProvider: Oauth2ProviderModifiableData.AuthProviderEnum;
     providerConfiguration?: Oauth2ProviderConfig;
     oauth2ClientContent: GeboOauth2SecretContent;
-    authClientMethod?: any;
-    authGrantType?: any;
-    configurationType: any;
-    description: any;
-    readOnly: any;
+    authClientMethod?: Oauth2ProviderModifiableData.AuthClientMethodEnum;
+    authGrantType?: Oauth2ProviderModifiableData.AuthGrantTypeEnum;
+    configurationType: Oauth2ProviderModifiableData.ConfigurationTypeEnum;
+    description: string;
+    readOnly: boolean;
+}
+export namespace Oauth2ProviderModifiableData {
+    export type AuthProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'aws_identity_center' | 'keycloak' | 'oauth2_generic' | 'ldap';
+    export const AuthProviderEnum = {
+        Local: 'local' as AuthProviderEnum,
+        Google: 'google' as AuthProviderEnum,
+        Microsoft: 'microsoft' as AuthProviderEnum,
+        MicrosoftMultitenant: 'microsoft_multitenant' as AuthProviderEnum,
+        AwsCognito: 'aws_cognito' as AuthProviderEnum,
+        AwsIdentityCenter: 'aws_identity_center' as AuthProviderEnum,
+        Keycloak: 'keycloak' as AuthProviderEnum,
+        Oauth2Generic: 'oauth2_generic' as AuthProviderEnum,
+        Ldap: 'ldap' as AuthProviderEnum
+    };
+    export type AuthClientMethodEnum = 'CLIENT_SECRET_BASIC' | 'CLIENT_SECRET_POST' | 'CLIENT_SECRET_JWT' | 'PRIVATE_KEY_JWT' | 'NONE' | 'TLS_CLIENT_AUTH' | 'SELF_SIGNED_TLS_CLIENT_AUTH';
+    export const AuthClientMethodEnum = {
+        CLIENTSECRETBASIC: 'CLIENT_SECRET_BASIC' as AuthClientMethodEnum,
+        CLIENTSECRETPOST: 'CLIENT_SECRET_POST' as AuthClientMethodEnum,
+        CLIENTSECRETJWT: 'CLIENT_SECRET_JWT' as AuthClientMethodEnum,
+        PRIVATEKEYJWT: 'PRIVATE_KEY_JWT' as AuthClientMethodEnum,
+        NONE: 'NONE' as AuthClientMethodEnum,
+        TLSCLIENTAUTH: 'TLS_CLIENT_AUTH' as AuthClientMethodEnum,
+        SELFSIGNEDTLSCLIENTAUTH: 'SELF_SIGNED_TLS_CLIENT_AUTH' as AuthClientMethodEnum
+    };
+    export type AuthGrantTypeEnum = 'AUTHORIZATION_CODE' | 'REFRESH_TOKEN' | 'CLIENT_CREDENTIALS' | 'PASSWORD' | 'JWT_BEARER' | 'DEVICE_CODE' | 'TOKEN_EXCHANGE';
+    export const AuthGrantTypeEnum = {
+        AUTHORIZATIONCODE: 'AUTHORIZATION_CODE' as AuthGrantTypeEnum,
+        REFRESHTOKEN: 'REFRESH_TOKEN' as AuthGrantTypeEnum,
+        CLIENTCREDENTIALS: 'CLIENT_CREDENTIALS' as AuthGrantTypeEnum,
+        PASSWORD: 'PASSWORD' as AuthGrantTypeEnum,
+        JWTBEARER: 'JWT_BEARER' as AuthGrantTypeEnum,
+        DEVICECODE: 'DEVICE_CODE' as AuthGrantTypeEnum,
+        TOKENEXCHANGE: 'TOKEN_EXCHANGE' as AuthGrantTypeEnum
+    };
+    export type ConfigurationTypeEnum = 'AUTHENTICATION' | 'INTEGRATION';
+    export const ConfigurationTypeEnum = {
+        AUTHENTICATION: 'AUTHENTICATION' as ConfigurationTypeEnum,
+        INTEGRATION: 'INTEGRATION' as ConfigurationTypeEnum
+    };
 }

@@ -232,9 +232,17 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 					discarded);
 			if (discarded <= 0)
 				return ranked;
+			final double discardRate = ((double) discarded) / ranked.size();
 			if (kept.size() == 1) {
 				LOGGER.warn("The irrelevance filter found no relevant fragment among the " + ranked.size()
 						+ " ranked one(s), only the best ranked one is kept");
+			} else if (discardRate >= ragSearchConfig.getRankerIrrelevanceFilterWarnRate()) {
+				// Not a complaint about the filter, which only drops what the model judged
+				// useless on every one of its pieces: a sustained high rate means the
+				// retrieval probes are off target, and that is worth seeing without TRACE.
+				LOGGER.warn("Irrelevance filter discarded " + discarded + " of " + ranked.size()
+						+ " ranked fragment(s) (" + Math.round(discardRate * 100)
+						+ "%): the retrieval probes look off target for query:" + query);
 			} else if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Irrelevance filter discarded " + discarded + " of " + ranked.size()
 						+ " ranked fragment(s)");

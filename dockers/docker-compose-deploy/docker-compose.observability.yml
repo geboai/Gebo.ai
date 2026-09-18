@@ -1,0 +1,82 @@
+#================================================================
+# OPTIONAL observability overlay for the Gebo.ai monolith.
+#
+# Adds metrics, distributed traces and Grafana dashboards on top of
+# docker-compose.yml, and points gebo.ai's OTLP exporter at the collector.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.observability.yml up -d
+#
+# Grafana is then on http://localhost:3000 (anonymous viewer access),
+# pre-provisioned with Prometheus and Tempo datasources and a starter
+# "Gebo overview" dashboard: services up, HTTP request rate and latency,
+# message-broker throughput, JVM memory.
+#
+# UNLIKE docker-compose.yml, this overlay is NOT self-contained: it mounts
+# otel-collector-config.yaml, prometheus.yml, tempo-config.yaml and
+# grafana/provisioning from this directory, so it needs the repository:
+#
+#   git clone --depth 1 https://github.com/geboai/Gebo.ai
+#   cd Gebo.ai/dockers/gebo.ai
+#
+# To stop collecting telemetry, bring the stack back up with docker-compose.yml
+# alone; the application keeps running untouched.
+#
+# See dockers/PERSISTENCE.md - the three volumes here hold telemetry history
+# only, and are safe to discard.
+# ---------------------------------------------------------------------------
+
+services:
+  # Turn tracing back on and ship it to the collector. Without the overlay the
+  # base file pins sampling to 0, because there is nothing listening.
+  gebo.ai:
+    environment:
+      MANAGEMENT_TRACING_SAMPLING_PROBABILITY: "1.0"
+      MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-collector:4318/v1/traces
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    restart: unless-stopped
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+      - "127.0.0.1:4318:4318"
+    networks: [gebo-monolith-net]
+
+  prometheus:
+    image: prom/prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+    networks: [gebo-monolith-net]
+
+  tempo:
+    image: grafana/tempo
+    restart: unless-stopped
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo.yaml:ro
+      - tempo-data:/var/tempo
+    networks: [gebo-monolith-net]
+
+  grafana:
+    image: grafana/grafana
+    restart: unless-stopped
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks: [gebo-monolith-net]
+
+# Telemetry history only - reconstructible, not part of the backup set.
+volumes:
+  prometheus-data:
+  grafana-data:
+  tempo-data:

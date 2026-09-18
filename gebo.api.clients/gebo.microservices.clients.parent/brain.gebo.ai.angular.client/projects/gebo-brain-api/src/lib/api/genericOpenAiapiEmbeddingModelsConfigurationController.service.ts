@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GenericOpenAIAPIEmbeddingModelConfig } from '../model/genericOpenAIAPIEmbeddingModelConfig';
+import { GenericOpenAIEmbeddingModelTypeConfig } from '../model/genericOpenAIEmbeddingModelTypeConfig';
 import { OperationStatusBoolean } from '../model/operationStatusBoolean';
 import { OperationStatusGenericOpenAIAPIEmbeddingModelConfig } from '../model/operationStatusGenericOpenAIAPIEmbeddingModelConfig';
 import { OperationStatusListGenericOpenAIAPIEmbeddingModelChoice } from '../model/operationStatusListGenericOpenAIAPIEmbeddingModelChoice';
@@ -112,10 +113,10 @@ export class GenericOpenAiapiEmbeddingModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGenericOpenAIAPIEmbeddingModelConfigByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIAPIEmbeddingModelConfig>;
-    public findGenericOpenAIAPIEmbeddingModelConfigByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIAPIEmbeddingModelConfig>>;
-    public findGenericOpenAIAPIEmbeddingModelConfigByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIAPIEmbeddingModelConfig>>;
-    public findGenericOpenAIAPIEmbeddingModelConfigByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGenericOpenAIAPIEmbeddingModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIAPIEmbeddingModelConfig>;
+    public findGenericOpenAIAPIEmbeddingModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIAPIEmbeddingModelConfig>>;
+    public findGenericOpenAIAPIEmbeddingModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIAPIEmbeddingModelConfig>>;
+    public findGenericOpenAIAPIEmbeddingModelConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findGenericOpenAIAPIEmbeddingModelConfigByCode.');
@@ -205,9 +206,9 @@ export class GenericOpenAiapiEmbeddingModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGenericOpenAIEmbeddingModelTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGenericOpenAIEmbeddingModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGenericOpenAIEmbeddingModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGenericOpenAIEmbeddingModelTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GenericOpenAIEmbeddingModelTypeConfig>>;
+    public getGenericOpenAIEmbeddingModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GenericOpenAIEmbeddingModelTypeConfig>>>;
+    public getGenericOpenAIEmbeddingModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GenericOpenAIEmbeddingModelTypeConfig>>>;
     public getGenericOpenAIEmbeddingModelTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -225,7 +226,7 @@ export class GenericOpenAiapiEmbeddingModelsConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GenericOpenAIAPIEmbeddingModelsConfigurationController/getGenericOpenAIEmbeddingModelTypes`,
+        return this.httpClient.request<Array<GenericOpenAIEmbeddingModelTypeConfig>>('get',`${this.basePath}/api/admin/GenericOpenAIAPIEmbeddingModelsConfigurationController/getGenericOpenAIEmbeddingModelTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

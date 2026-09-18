@@ -11,7 +11,6 @@ package ai.gebo.llms.mistralai.controllers;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +37,6 @@ import ai.gebo.security.services.IGSecurityAuditLoggerService;
  * controller is only enabled when the 'mistralAIEnabled' property is set to
  * true. It requires admin privileges to access its endpoints.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "mistralAIEnabled", havingValue = "true")
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/MistralAIChatModelsConfigurationController")

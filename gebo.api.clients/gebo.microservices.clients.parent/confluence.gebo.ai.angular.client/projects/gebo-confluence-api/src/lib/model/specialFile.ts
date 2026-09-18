@@ -11,6 +11,6 @@
  */
 
 export interface SpecialFile { 
-    fileName?: any;
-    description?: any;
+    fileName?: string;
+    description?: string;
 }

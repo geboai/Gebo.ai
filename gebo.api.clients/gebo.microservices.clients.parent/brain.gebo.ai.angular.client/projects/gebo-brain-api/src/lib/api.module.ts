@@ -3,16 +3,27 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { A2AClientConfigControllerService } from './api/a2AClientConfigController.service';
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
+import { BedrockChatModelsConfigurationControllerService } from './api/bedrockChatModelsConfigurationController.service';
+import { BedrockEmbeddingModelsConfigurationControllerService } from './api/bedrockEmbeddingModelsConfigurationController.service';
+import { BedrockImageModelsConfigurationControllerService } from './api/bedrockImageModelsConfigurationController.service';
+import { BedrockRankerModelsConfigurationControllerService } from './api/bedrockRankerModelsConfigurationController.service';
+import { BedrockTextToSpeechModelsConfigurationControllerService } from './api/bedrockTextToSpeechModelsConfigurationController.service';
+import { BedrockTranscriptModelsConfigurationControllerService } from './api/bedrockTranscriptModelsConfigurationController.service';
+import { BraveSearchConfigurationControllerService } from './api/braveSearchConfigurationController.service';
 import { BuildSystemsControllerService } from './api/buildSystemsController.service';
 import { ChatModelsControllerService } from './api/chatModelsController.service';
 import { ChatModelsLookupControllerService } from './api/chatModelsLookupController.service';
 import { CompanySystemsControllerService } from './api/companySystemsController.service';
 import { ContentMetaInfosControllerService } from './api/contentMetaInfosController.service';
 import { ContentsResetControllerService } from './api/contentsResetController.service';
+import { DataFlowMetaInfoControllerService } from './api/dataFlowMetaInfoController.service';
+import { DeepseekChatModelsConfigurationControllerService } from './api/deepseekChatModelsConfigurationController.service';
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { EmbeddingModelsControllersService } from './api/embeddingModelsControllers.service';
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
+import { GeboA2AServerAdminControllerService } from './api/geboA2AServerAdminController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
 import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
 import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsController.service';
@@ -32,6 +43,7 @@ import { GeboFastVectorStoreSetupControllerService } from './api/geboFastVectorS
 import { GeboLlmGeneratedResourceControllerService } from './api/geboLlmGeneratedResourceController.service';
 import { GeboMcpServerAdminControllerService } from './api/geboMcpServerAdminController.service';
 import { GeboMcpServerUserControllerService } from './api/geboMcpServerUserController.service';
+import { GeboNeo4jModuleSetupControllerService } from './api/geboNeo4jModuleSetupController.service';
 import { GeboRagChatControllerService } from './api/geboRagChatController.service';
 import { GeboTextToSpeechControllerService } from './api/geboTextToSpeechController.service';
 import { GeboTranscriptControllerService } from './api/geboTranscriptController.service';
@@ -48,6 +60,8 @@ import { GenericOpenAiapiTranscriptModelsConfigurationControllerService } from '
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { GoogleSearchConfigurationControllerService } from './api/googleSearchConfigurationController.service';
 import { GoogleSearchControllerService } from './api/googleSearchController.service';
+import { GoogleVertexChatModelsConfigurationControllerService } from './api/googleVertexChatModelsConfigurationController.service';
+import { GoogleVertexEmbeddingModelsConfigurationControllerService } from './api/googleVertexEmbeddingModelsConfigurationController.service';
 import { ImageModelsControllerService } from './api/imageModelsController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
@@ -55,6 +69,8 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
 import { KnowledgeBaseControllerService } from './api/knowledgeBaseController.service';
 import { LogViewControllerService } from './api/logViewController.service';
 import { McpClientConfigControllerService } from './api/mcpClientConfigController.service';
+import { MistralAiChatModelsConfigurationControllerService } from './api/mistralAiChatModelsConfigurationController.service';
+import { MistralAiEmbeddingModelsConfigurationControllerService } from './api/mistralAiEmbeddingModelsConfigurationController.service';
 import { OllamaChatModelsConfigurationControllerService } from './api/ollamaChatModelsConfigurationController.service';
 import { OllamaEmbeddingModelsConfigurationControllerService } from './api/ollamaEmbeddingModelsConfigurationController.service';
 import { OnnxTransformersEmbeddingModelsConfigurationControllerService } from './api/onnxTransformersEmbeddingModelsConfigurationController.service';
@@ -66,6 +82,9 @@ import { OpenAiTranscriptModelsConfigurationControllerService } from './api/open
 import { ProjectsControllerService } from './api/projectsController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
 import { RankerModelsControllerService } from './api/rankerModelsController.service';
+import { SearxngSearchConfigurationControllerService } from './api/searxngSearchConfigurationController.service';
+import { SerpapiSearchConfigurationControllerService } from './api/serpapiSearchConfigurationController.service';
+import { TavilySearchConfigurationControllerService } from './api/tavilySearchConfigurationController.service';
 import { TextToSpeechModelsControllerService } from './api/textToSpeechModelsController.service';
 import { TranscriptModelsControllerService } from './api/transcriptModelsController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
@@ -75,16 +94,27 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
   declarations: [],
   exports:      [],
   providers: [
+    A2AClientConfigControllerService,
     AnthropicChatModelsConfigurationControllerService,
+    BedrockChatModelsConfigurationControllerService,
+    BedrockEmbeddingModelsConfigurationControllerService,
+    BedrockImageModelsConfigurationControllerService,
+    BedrockRankerModelsConfigurationControllerService,
+    BedrockTextToSpeechModelsConfigurationControllerService,
+    BedrockTranscriptModelsConfigurationControllerService,
+    BraveSearchConfigurationControllerService,
     BuildSystemsControllerService,
     ChatModelsControllerService,
     ChatModelsLookupControllerService,
     CompanySystemsControllerService,
     ContentMetaInfosControllerService,
     ContentsResetControllerService,
+    DataFlowMetaInfoControllerService,
+    DeepseekChatModelsConfigurationControllerService,
     DocumentContentStreamerControllerService,
     EmbeddingModelsControllersService,
     FunctionsLookupControllerService,
+    GeboA2AServerAdminControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
     GeboAdminPromptUseInfoControllerService,
     GeboAdminPromptsControllerService,
@@ -104,6 +134,7 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     GeboLlmGeneratedResourceControllerService,
     GeboMcpServerAdminControllerService,
     GeboMcpServerUserControllerService,
+    GeboNeo4jModuleSetupControllerService,
     GeboRagChatControllerService,
     GeboTextToSpeechControllerService,
     GeboTranscriptControllerService,
@@ -120,6 +151,8 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     GenericalPublisherControllerService,
     GoogleSearchConfigurationControllerService,
     GoogleSearchControllerService,
+    GoogleVertexChatModelsConfigurationControllerService,
+    GoogleVertexEmbeddingModelsConfigurationControllerService,
     ImageModelsControllerService,
     IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService,
@@ -127,6 +160,8 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     KnowledgeBaseControllerService,
     LogViewControllerService,
     McpClientConfigControllerService,
+    MistralAiChatModelsConfigurationControllerService,
+    MistralAiEmbeddingModelsConfigurationControllerService,
     OllamaChatModelsConfigurationControllerService,
     OllamaEmbeddingModelsConfigurationControllerService,
     OnnxTransformersEmbeddingModelsConfigurationControllerService,
@@ -138,6 +173,9 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     ProjectsControllerService,
     PromptTemplatesControllerService,
     RankerModelsControllerService,
+    SearxngSearchConfigurationControllerService,
+    SerpapiSearchConfigurationControllerService,
+    TavilySearchConfigurationControllerService,
     TextToSpeechModelsControllerService,
     TranscriptModelsControllerService,
     UserKnowledgeBaseBrowsingControllerService ]

@@ -23,19 +23,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SecretWrapperGeboGoogleJsonSecretContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class SecretWrapperGeboGoogleJsonSecretContent {
   @JsonProperty("contextCode")
-  private Object contextCode = null;
+  private String contextCode = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("secretContent")
   private GeboGoogleJsonSecretContent secretContent = null;
 
-  public SecretWrapperGeboGoogleJsonSecretContent contextCode(Object contextCode) {
+  public SecretWrapperGeboGoogleJsonSecretContent contextCode(String contextCode) {
     this.contextCode = contextCode;
     return this;
   }
@@ -45,15 +45,15 @@ public class SecretWrapperGeboGoogleJsonSecretContent {
    * @return contextCode
   **/
   @Schema(required = true, description = "")
-  public Object getContextCode() {
+  public String getContextCode() {
     return contextCode;
   }
 
-  public void setContextCode(Object contextCode) {
+  public void setContextCode(String contextCode) {
     this.contextCode = contextCode;
   }
 
-  public SecretWrapperGeboGoogleJsonSecretContent description(Object description) {
+  public SecretWrapperGeboGoogleJsonSecretContent description(String description) {
     this.description = description;
     return this;
   }
@@ -63,11 +63,11 @@ public class SecretWrapperGeboGoogleJsonSecretContent {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 

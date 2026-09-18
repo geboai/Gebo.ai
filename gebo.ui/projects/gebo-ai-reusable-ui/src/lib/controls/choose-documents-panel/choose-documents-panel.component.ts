@@ -77,11 +77,6 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
     private loadingDocuments: boolean = false;
 
     /**
-     * Flag to track if file types are currently being loaded
-     */
-    private loadingFileTypes: boolean = false;
-
-    /**
      * Code of the document currently being viewed
      */
     public currentViewedDocumentCode?: string;
@@ -99,7 +94,7 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
      * Getter that returns the overall loading state by checking if documents or file types are loading
      */
     public get loading(): boolean {
-        return this.loadingDocuments || this.loadingFileTypes;
+        return this.loadingDocuments;
     }
 
     /**

@@ -11,8 +11,20 @@
  */
 
 export interface SharepointAdditionalSearchFilter { 
-    textTerms?: any;
-    textTermsMatchMode?: any;
-    titleTerms?: any;
-    titleTermsMatchMode?: any;
+    textTerms?: Array<string>;
+    textTermsMatchMode?: SharepointAdditionalSearchFilter.TextTermsMatchModeEnum;
+    titleTerms?: Array<string>;
+    titleTermsMatchMode?: SharepointAdditionalSearchFilter.TitleTermsMatchModeEnum;
+}
+export namespace SharepointAdditionalSearchFilter {
+    export type TextTermsMatchModeEnum = 'ANY' | 'ALL';
+    export const TextTermsMatchModeEnum = {
+        ANY: 'ANY' as TextTermsMatchModeEnum,
+        ALL: 'ALL' as TextTermsMatchModeEnum
+    };
+    export type TitleTermsMatchModeEnum = 'ANY' | 'ALL';
+    export const TitleTermsMatchModeEnum = {
+        ANY: 'ANY' as TitleTermsMatchModeEnum,
+        ALL: 'ALL' as TitleTermsMatchModeEnum
+    };
 }

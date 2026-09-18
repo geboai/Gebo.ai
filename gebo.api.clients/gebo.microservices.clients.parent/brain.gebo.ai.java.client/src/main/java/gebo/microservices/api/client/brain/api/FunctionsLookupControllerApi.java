@@ -2,6 +2,8 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.GLookupEntry;
+import gebo.microservices.api.client.brain.model.ToolCategoriesTree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class FunctionsLookupControllerApi {
     private ApiClient apiClient;
@@ -45,10 +47,10 @@ public class FunctionsLookupControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GLookupEntry&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAllFunctions() throws RestClientException {
+    public List<GLookupEntry> getAllFunctions() throws RestClientException {
         return getAllFunctionsWithHttpInfo().getBody();
     }
 
@@ -56,12 +58,12 @@ public class FunctionsLookupControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GLookupEntry&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAllFunctionsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GLookupEntry>> getAllFunctionsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllFunctions").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllFunctions").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -76,18 +78,18 @@ public class FunctionsLookupControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GLookupEntry>> returnType = new ParameterizedTypeReference<List<GLookupEntry>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param ragContextFunctions  (optional)
-     * @return Object
+     * @return List&lt;ToolCategoriesTree&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAllFunctionsTree(Object ragContextFunctions) throws RestClientException {
+    public List<ToolCategoriesTree> getAllFunctionsTree(Boolean ragContextFunctions) throws RestClientException {
         return getAllFunctionsTreeWithHttpInfo(ragContextFunctions).getBody();
     }
 
@@ -96,12 +98,12 @@ public class FunctionsLookupControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param ragContextFunctions  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;ToolCategoriesTree&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAllFunctionsTreeWithHttpInfo(Object ragContextFunctions) throws RestClientException {
+    public ResponseEntity<List<ToolCategoriesTree>> getAllFunctionsTreeWithHttpInfo(Boolean ragContextFunctions) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllFunctionsTree").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllFunctionsTree").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -117,17 +119,17 @@ public class FunctionsLookupControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<ToolCategoriesTree>> returnType = new ParameterizedTypeReference<List<ToolCategoriesTree>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GLookupEntry&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAllLocalFunctions() throws RestClientException {
+    public List<GLookupEntry> getAllLocalFunctions() throws RestClientException {
         return getAllLocalFunctionsWithHttpInfo().getBody();
     }
 
@@ -135,12 +137,12 @@ public class FunctionsLookupControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GLookupEntry&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAllLocalFunctionsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GLookupEntry>> getAllLocalFunctionsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllLocalFunctions").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllLocalFunctions").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -155,18 +157,18 @@ public class FunctionsLookupControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<GLookupEntry>> returnType = new ParameterizedTypeReference<List<GLookupEntry>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param ragContextFunctions  (optional)
-     * @return Object
+     * @return List&lt;ToolCategoriesTree&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAllLocalFunctionsTree(Object ragContextFunctions) throws RestClientException {
+    public List<ToolCategoriesTree> getAllLocalFunctionsTree(Boolean ragContextFunctions) throws RestClientException {
         return getAllLocalFunctionsTreeWithHttpInfo(ragContextFunctions).getBody();
     }
 
@@ -175,12 +177,12 @@ public class FunctionsLookupControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param ragContextFunctions  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;ToolCategoriesTree&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAllLocalFunctionsTreeWithHttpInfo(Object ragContextFunctions) throws RestClientException {
+    public ResponseEntity<List<ToolCategoriesTree>> getAllLocalFunctionsTreeWithHttpInfo(Boolean ragContextFunctions) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllLocalFunctionsTree").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllLocalFunctionsTree").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -196,7 +198,7 @@ public class FunctionsLookupControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<List<ToolCategoriesTree>> returnType = new ParameterizedTypeReference<List<ToolCategoriesTree>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

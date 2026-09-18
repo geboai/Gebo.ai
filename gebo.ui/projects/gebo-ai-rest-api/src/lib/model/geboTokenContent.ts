@@ -11,6 +11,7 @@
  */
 
 export interface GeboTokenContent { 
+    readOnly?: boolean;
     token: string;
     user: string;
 }

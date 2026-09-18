@@ -24,20 +24,55 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMExistingConfiguration
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMExistingConfiguration {
   @JsonProperty("existingModelConfig")
   private GObjectRefGBaseModelConfig existingModelConfig = null;
 
-  @JsonProperty("modelType")
-  private Object modelType = null;
+  /**
+   * Gets or Sets modelType
+   */
+  public enum ModelTypeEnum {
+    CHAT("CHAT"),
+    EMBEDDING("EMBEDDING"),
+    RANKING("RANKING"),
+    IMAGESGEN("IMAGESGEN"),
+    TTS("TTS"),
+    TRANSCRIPT("TRANSCRIPT");
+
+    private String value;
+
+    ModelTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ModelTypeEnum fromValue(String input) {
+      for (ModelTypeEnum b : ModelTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("modelType")
+  private ModelTypeEnum modelType = null;
 
   @JsonProperty("secretInfo")
   private SecretInfo secretInfo = null;
 
   @JsonProperty("baseUrl")
-  private Object baseUrl = null;
+  private String baseUrl = null;
 
   public LLMExistingConfiguration existingModelConfig(GObjectRefGBaseModelConfig existingModelConfig) {
     this.existingModelConfig = existingModelConfig;
@@ -57,7 +92,7 @@ public class LLMExistingConfiguration {
     this.existingModelConfig = existingModelConfig;
   }
 
-  public LLMExistingConfiguration modelType(Object modelType) {
+  public LLMExistingConfiguration modelType(ModelTypeEnum modelType) {
     this.modelType = modelType;
     return this;
   }
@@ -67,11 +102,11 @@ public class LLMExistingConfiguration {
    * @return modelType
   **/
   @Schema(required = true, description = "")
-  public Object getModelType() {
+  public ModelTypeEnum getModelType() {
     return modelType;
   }
 
-  public void setModelType(Object modelType) {
+  public void setModelType(ModelTypeEnum modelType) {
     this.modelType = modelType;
   }
 
@@ -93,7 +128,7 @@ public class LLMExistingConfiguration {
     this.secretInfo = secretInfo;
   }
 
-  public LLMExistingConfiguration baseUrl(Object baseUrl) {
+  public LLMExistingConfiguration baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
   }
@@ -103,11 +138,11 @@ public class LLMExistingConfiguration {
    * @return baseUrl
   **/
   @Schema(description = "")
-  public Object getBaseUrl() {
+  public String getBaseUrl() {
     return baseUrl;
   }
 
-  public void setBaseUrl(Object baseUrl) {
+  public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 

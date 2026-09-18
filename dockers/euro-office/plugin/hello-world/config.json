@@ -1,0 +1,13 @@
+{
+  "name": "Hello World",
+  "guid": "asc.{BB22E091-EF65-47B9-9412-FA8185DC1568}",
+  "version": "1.0.0",
+  "variations": [
+    {
+      "url": "index.html",
+      "isViewer": false,
+      "EditorsSupport": ["word", "cell", "slide"],
+      "isVisual": true
+    }
+  ]
+}

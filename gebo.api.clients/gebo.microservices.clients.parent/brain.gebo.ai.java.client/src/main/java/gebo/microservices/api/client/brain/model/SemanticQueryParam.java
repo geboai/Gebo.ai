@@ -18,23 +18,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * SemanticQueryParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class SemanticQueryParam {
   @JsonProperty("query")
-  private Object query = null;
+  private String query = null;
 
   @JsonProperty("knowledgeBaseCodes")
-  private Object knowledgeBaseCodes = null;
+  private List<String> knowledgeBaseCodes = new ArrayList<>();
 
   @JsonProperty("topK")
-  private Object topK = null;
+  private Integer topK = null;
 
-  public SemanticQueryParam query(Object query) {
+  public SemanticQueryParam query(String query) {
     this.query = query;
     return this;
   }
@@ -44,16 +46,21 @@ public class SemanticQueryParam {
    * @return query
   **/
   @Schema(required = true, description = "")
-  public Object getQuery() {
+  public String getQuery() {
     return query;
   }
 
-  public void setQuery(Object query) {
+  public void setQuery(String query) {
     this.query = query;
   }
 
-  public SemanticQueryParam knowledgeBaseCodes(Object knowledgeBaseCodes) {
+  public SemanticQueryParam knowledgeBaseCodes(List<String> knowledgeBaseCodes) {
     this.knowledgeBaseCodes = knowledgeBaseCodes;
+    return this;
+  }
+
+  public SemanticQueryParam addKnowledgeBaseCodesItem(String knowledgeBaseCodesItem) {
+    this.knowledgeBaseCodes.add(knowledgeBaseCodesItem);
     return this;
   }
 
@@ -62,15 +69,15 @@ public class SemanticQueryParam {
    * @return knowledgeBaseCodes
   **/
   @Schema(required = true, description = "")
-  public Object getKnowledgeBaseCodes() {
+  public List<String> getKnowledgeBaseCodes() {
     return knowledgeBaseCodes;
   }
 
-  public void setKnowledgeBaseCodes(Object knowledgeBaseCodes) {
+  public void setKnowledgeBaseCodes(List<String> knowledgeBaseCodes) {
     this.knowledgeBaseCodes = knowledgeBaseCodes;
   }
 
-  public SemanticQueryParam topK(Object topK) {
+  public SemanticQueryParam topK(Integer topK) {
     this.topK = topK;
     return this;
   }
@@ -80,11 +87,11 @@ public class SemanticQueryParam {
    * @return topK
   **/
   @Schema(description = "")
-  public Object getTopK() {
+  public Integer getTopK() {
     return topK;
   }
 
-  public void setTopK(Object topK) {
+  public void setTopK(Integer topK) {
     this.topK = topK;
   }
 

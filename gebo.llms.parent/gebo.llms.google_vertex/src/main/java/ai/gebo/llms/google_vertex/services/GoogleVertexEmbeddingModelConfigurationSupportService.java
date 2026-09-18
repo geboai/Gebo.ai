@@ -16,7 +16,6 @@ import org.springframework.ai.vertexai.embedding.text.VertexAiTextEmbeddingModel
 import org.springframework.ai.vertexai.embedding.text.VertexAiTextEmbeddingModelName;
 import org.springframework.ai.vertexai.embedding.text.VertexAiTextEmbeddingOptions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -43,10 +42,8 @@ import lombok.AllArgsConstructor;
  * AI generated comments
  * 
  * Service responsible for configuring and creating Google Vertex AI embedding
- * models. This service is conditionally enabled when the property
- * ai.gebo.llms.config.googleVertexEnabled is set to true.
+ * models.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "googleVertexEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class GoogleVertexEmbeddingModelConfigurationSupportService implements

@@ -11,7 +11,7 @@
  */
 
 export interface GenerateAdminGeneratedApiKeyParam { 
-    description: any;
-    impersonatedUser: any;
-    expiration: any;
+    description: string;
+    impersonatedUser: string;
+    expiration: Date;
 }

@@ -21,7 +21,7 @@
   }
 
 </div>
-<p-dialog [maximizable]="true" [visible]="openEditWindow" [modal]="true" [style]="{width:'95%',height:'800px'}"
+<p-dialog [maximizable]="true" [visible]="openEditWindow" [modal]="true" styleClass="gebo-entity-dialog"
   [closable]="true" header="Insert values" [showHeader]="true" (onHide)="this.openEditWindow=false;"
   (visibleChange)="this.openEditWindow=false;">
   <p-panel #window [showHeader]="false">

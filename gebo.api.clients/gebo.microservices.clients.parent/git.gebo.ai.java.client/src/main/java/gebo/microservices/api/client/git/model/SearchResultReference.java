@@ -22,31 +22,31 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SearchResultReference
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:07.116206835+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.835643861+02:00[Europe/Rome]")
 
 public class SearchResultReference {
   @JsonProperty("uri")
-  private Object uri = null;
+  private String uri = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("contentType")
-  private Object contentType = null;
+  private String contentType = null;
 
   @JsonProperty("extension")
-  private Object extension = null;
+  private String extension = null;
 
   @JsonProperty("size")
-  private Object size = null;
+  private Long size = null;
 
   @JsonProperty("title")
-  private Object title = null;
+  private String title = null;
 
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
-  public SearchResultReference uri(Object uri) {
+  public SearchResultReference uri(String uri) {
     this.uri = uri;
     return this;
   }
@@ -56,15 +56,15 @@ public class SearchResultReference {
    * @return uri
   **/
   @Schema(description = "")
-  public Object getUri() {
+  public String getUri() {
     return uri;
   }
 
-  public void setUri(Object uri) {
+  public void setUri(String uri) {
     this.uri = uri;
   }
 
-  public SearchResultReference name(Object name) {
+  public SearchResultReference name(String name) {
     this.name = name;
     return this;
   }
@@ -74,15 +74,15 @@ public class SearchResultReference {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public SearchResultReference contentType(Object contentType) {
+  public SearchResultReference contentType(String contentType) {
     this.contentType = contentType;
     return this;
   }
@@ -92,15 +92,15 @@ public class SearchResultReference {
    * @return contentType
   **/
   @Schema(description = "")
-  public Object getContentType() {
+  public String getContentType() {
     return contentType;
   }
 
-  public void setContentType(Object contentType) {
+  public void setContentType(String contentType) {
     this.contentType = contentType;
   }
 
-  public SearchResultReference extension(Object extension) {
+  public SearchResultReference extension(String extension) {
     this.extension = extension;
     return this;
   }
@@ -110,15 +110,15 @@ public class SearchResultReference {
    * @return extension
   **/
   @Schema(description = "")
-  public Object getExtension() {
+  public String getExtension() {
     return extension;
   }
 
-  public void setExtension(Object extension) {
+  public void setExtension(String extension) {
     this.extension = extension;
   }
 
-  public SearchResultReference size(Object size) {
+  public SearchResultReference size(Long size) {
     this.size = size;
     return this;
   }
@@ -128,15 +128,15 @@ public class SearchResultReference {
    * @return size
   **/
   @Schema(description = "")
-  public Object getSize() {
+  public Long getSize() {
     return size;
   }
 
-  public void setSize(Object size) {
+  public void setSize(Long size) {
     this.size = size;
   }
 
-  public SearchResultReference title(Object title) {
+  public SearchResultReference title(String title) {
     this.title = title;
     return this;
   }
@@ -146,15 +146,15 @@ public class SearchResultReference {
    * @return title
   **/
   @Schema(description = "")
-  public Object getTitle() {
+  public String getTitle() {
     return title;
   }
 
-  public void setTitle(Object title) {
+  public void setTitle(String title) {
     this.title = title;
   }
 
-  public SearchResultReference id(Object id) {
+  public SearchResultReference id(String id) {
     this.id = id;
     return this;
   }
@@ -164,11 +164,11 @@ public class SearchResultReference {
    * @return id
   **/
   @Schema(description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 

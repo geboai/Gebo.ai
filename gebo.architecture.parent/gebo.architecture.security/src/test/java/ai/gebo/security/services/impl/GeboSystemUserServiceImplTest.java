@@ -161,7 +161,9 @@ class GeboSystemUserServiceImplTest {
 
 		assertThat(service.getUsername()).isEqualTo("heimdall@bifrost.gebo.ai");
 		assertThat(service.getUserInfos().getRoles()).contains("ADMIN");
-		assertThat(service.getUser().getPassword()).isNull();
+		// UserPrincipal.create(User) no longer carries a password at all - User has no such
+		// field any more - so the startup paths cannot reach the encoder through it either.
+		assertThat(UserPrincipal.create(service.getUser()).getPassword()).isNull();
 		// And a token can still be minted with the crypting service down - it is signed,
 		// not encrypted.
 		assertThat(service.createToken()).isNotBlank();

@@ -85,7 +85,14 @@ public class JobLauncherController {
 			throws GeboJobServiceException, GeboPersistenceException {
 
 		GProjectEndpoint endpointObject = persistentObjectManager.findByReference(endpoint, GProjectEndpoint.class);
-		if (endpointObject.getPublished() == null || !endpointObject.getPublished()) {
+		if (Boolean.TRUE.equals(endpointObject.getReadonly())) {
+			// Declared in the configuration, and seeded into the repository already
+			// published: there is nothing to write, and writing would only be overwritten
+			// by the declaration at the next startup. The reschedule is still sent - it is
+			// what registers the source with the central scheduler, which is driven by
+			// reschedule requests that only a write path emits.
+			requestReschedule(GCentralizedProjectEndpoint.of(endpointObject));
+		} else if (endpointObject.getPublished() == null || !endpointObject.getPublished()) {
 			endpointObject.setPublished(true);
 			GProjectEndpoint updated = persistentObjectManager.update(endpointObject);
 			requestReschedule(GCentralizedProjectEndpoint.of(updated));

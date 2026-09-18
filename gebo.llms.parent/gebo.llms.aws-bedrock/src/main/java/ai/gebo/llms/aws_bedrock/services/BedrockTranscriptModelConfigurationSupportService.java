@@ -19,10 +19,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.aws_bedrock.http.BedrockClientCustomizer;
 import ai.gebo.llms.abstraction.layer.model.GTranscriptModelType;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportService;
@@ -50,7 +51,6 @@ import software.amazon.awssdk.services.transcribestreaming.model.TranscriptEvent
  * other categories. The audio input stream is streamed to Transcribe and the
  * final (non-partial) results are concatenated into the returned transcript.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class BedrockTranscriptModelConfigurationSupportService implements
@@ -68,6 +68,12 @@ public class BedrockTranscriptModelConfigurationSupportService implements
 	static final long TRANSCRIBE_TIMEOUT_SECONDS = 300;
 
 	final BedrockCredentialsResolver credentialsResolver;
+	/**
+	 * Supplies the configured connect/read timeouts and retry budget
+	 * ({@code ai.gebo.llms.default.clients.config}); the AWS SDK defaults are
+	 * tighter and are not otherwise overridable from configuration.
+	 */
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 
 	class BedrockTranscribeConfigurableTranscriptModel
@@ -108,6 +114,7 @@ public class BedrockTranscriptModelConfigurationSupportService implements
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
 			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
 			this.client = TranscribeStreamingAsyncClient.builder().region(region).credentialsProvider(credentials)
+					.overrideConfiguration(BedrockClientCustomizer.overrideConfiguration(serviceClientsProviderFactory.get(type.getCode())))
 					.build();
 			this.languageCode = config.getLanguageCode() != null ? config.getLanguageCode() : "en-US";
 			this.mediaEncoding = config.getMediaEncoding() != null ? MediaEncoding.fromValue(config.getMediaEncoding())

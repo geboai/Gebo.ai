@@ -9,15 +9,24 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { AbstractChunkingSpecs } from './abstractChunkingSpecs';
 
 export interface ChunkingParams { 
-    chunkingPolicy?: any;
-    tokensThreashold?: any;
-    keywordHits?: any;
-    matchingKeywords?: any;
-    chunkingSpecs?: any;
-    enrichWithMetaData?: any;
-    tokensPerChunkSet?: any;
-    sampledTokens?: any;
-    samplingMode?: any;
+    chunkingPolicy?: ChunkingParams.ChunkingPolicyEnum;
+    tokensThreashold?: number;
+    keywordHits?: number;
+    matchingKeywords?: Array<string>;
+    chunkingSpecs?: Array<AbstractChunkingSpecs>;
+    enrichWithMetaData?: boolean;
+    tokensPerChunkSet?: number;
+    sampledTokens?: number;
+    samplingMode?: boolean;
+}
+export namespace ChunkingParams {
+    export type ChunkingPolicyEnum = 'SPLIT_CHUNKS' | 'ONLY_MATCHING_CHUNKS' | 'MATCHING_CHUNKS_AFTER_THREASHOLD';
+    export const ChunkingPolicyEnum = {
+        SPLITCHUNKS: 'SPLIT_CHUNKS' as ChunkingPolicyEnum,
+        ONLYMATCHINGCHUNKS: 'ONLY_MATCHING_CHUNKS' as ChunkingPolicyEnum,
+        MATCHINGCHUNKSAFTERTHREASHOLD: 'MATCHING_CHUNKS_AFTER_THREASHOLD' as ChunkingPolicyEnum
+    };
 }

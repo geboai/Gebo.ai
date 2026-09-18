@@ -38,6 +38,7 @@ public class Oauth2RuntimeConfiguration {
 		this.registrationId = copyFrom.registrationId;
 		this.configurationType = copyFrom.configurationType;
 		this.providerConfig = copyFrom.providerConfig;
+		this.resourceServerAudiences = copyFrom.resourceServerAudiences;
 	}
 
 	@Id
@@ -95,5 +96,24 @@ public class Oauth2RuntimeConfiguration {
 	private Oauth2AuthorizationGrantType authGrantType = Oauth2AuthorizationGrantType.AUTHORIZATION_CODE;
 
 	private Boolean readOnly = null;
+
+	/**
+	 * Audiences (or client ids) a bearer JWT presented on the resource-server path
+	 * must be addressed to, for this registration to accept it. Matched against the
+	 * token's {@code aud} values and its {@code client_id} claim (the latter is
+	 * where AWS Cognito access tokens carry the recipient).
+	 *
+	 * <p>
+	 * Optional: {@code null}/empty means no audience check - only signature, issuer
+	 * and expiry are enforced, which is the pre-existing behaviour, so existing
+	 * configurations are unaffected. Set it to pin a registration to tokens minted
+	 * for this deployment and keep out tokens from other clients of the same issuer.
+	 * Applies only to JWT resource-server validation; the interactive oauth2Login
+	 * flow already binds the audience to the client during the code exchange, and
+	 * opaque-token introspection is scoped by the introspecting client's own
+	 * credentials.
+	 * </p>
+	 */
+	private java.util.List<String> resourceServerAudiences = null;
 
 }

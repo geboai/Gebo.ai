@@ -22,13 +22,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ComponentSetupStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ComponentSetupStatus {
   @JsonProperty("isSetup")
-  private Object isSetup = null;
+  private Boolean isSetup = null;
 
-  public ComponentSetupStatus isSetup(Object isSetup) {
+  public ComponentSetupStatus isSetup(Boolean isSetup) {
     this.isSetup = isSetup;
     return this;
   }
@@ -38,11 +38,11 @@ public class ComponentSetupStatus {
    * @return isSetup
   **/
   @Schema(description = "")
-  public Object getIsSetup() {
+  public Boolean isIsSetup() {
     return isSetup;
   }
 
-  public void setIsSetup(Object isSetup) {
+  public void setIsSetup(Boolean isSetup) {
     this.isSetup = isSetup;
   }
 

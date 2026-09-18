@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getRuntimeConfiguredTranscriptModels"></a>
 # **getRuntimeConfiguredTranscriptModels**
-> Object getRuntimeConfiguredTranscriptModels(modelTypeCode)
+> List&lt;ConfigurationEntryGBaseTranscriptModelConfig&gt; getRuntimeConfiguredTranscriptModels(modelTypeCode)
 
 
 
@@ -21,9 +21,9 @@ Method | HTTP request | Description
 
 
 TranscriptModelsControllerApi apiInstance = new TranscriptModelsControllerApi();
-Object modelTypeCode = null; // Object | 
+String modelTypeCode = "modelTypeCode_example"; // String | 
 try {
-    Object result = apiInstance.getRuntimeConfiguredTranscriptModels(modelTypeCode);
+    List<ConfigurationEntryGBaseTranscriptModelConfig> result = apiInstance.getRuntimeConfiguredTranscriptModels(modelTypeCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling TranscriptModelsControllerApi#getRuntimeConfiguredTranscriptModels");
@@ -35,11 +35,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional]
+ **modelTypeCode** | **String**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;ConfigurationEntryGBaseTranscriptModelConfig&gt;**](ConfigurationEntryGBaseTranscriptModelConfig.md)
 
 ### Authorization
 
@@ -52,7 +52,7 @@ No authorization required
 
 <a name="getTranscriptModelTypes"></a>
 # **getTranscriptModelTypes**
-> Object getTranscriptModelTypes()
+> List&lt;GTranscriptModelType&gt; getTranscriptModelTypes()
 
 
 
@@ -65,7 +65,7 @@ No authorization required
 
 TranscriptModelsControllerApi apiInstance = new TranscriptModelsControllerApi();
 try {
-    Object result = apiInstance.getTranscriptModelTypes();
+    List<GTranscriptModelType> result = apiInstance.getTranscriptModelTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling TranscriptModelsControllerApi#getTranscriptModelTypes");
@@ -78,7 +78,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GTranscriptModelType&gt;**](GTranscriptModelType.md)
 
 ### Authorization
 

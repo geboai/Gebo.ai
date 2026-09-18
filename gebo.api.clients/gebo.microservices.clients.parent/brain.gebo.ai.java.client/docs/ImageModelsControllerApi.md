@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getImageModelTypes"></a>
 # **getImageModelTypes**
-> Object getImageModelTypes()
+> List&lt;GImageModelType&gt; getImageModelTypes()
 
 
 
@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 ImageModelsControllerApi apiInstance = new ImageModelsControllerApi();
 try {
-    Object result = apiInstance.getImageModelTypes();
+    List<GImageModelType> result = apiInstance.getImageModelTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ImageModelsControllerApi#getImageModelTypes");
@@ -35,7 +35,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GImageModelType&gt;**](GImageModelType.md)
 
 ### Authorization
 
@@ -48,7 +48,7 @@ No authorization required
 
 <a name="getRuntimeConfiguredImageModels"></a>
 # **getRuntimeConfiguredImageModels**
-> Object getRuntimeConfiguredImageModels(modelTypeCode)
+> List&lt;ConfigurationEntryGBaseImageModelConfig&gt; getRuntimeConfiguredImageModels(modelTypeCode)
 
 
 
@@ -60,9 +60,9 @@ No authorization required
 
 
 ImageModelsControllerApi apiInstance = new ImageModelsControllerApi();
-Object modelTypeCode = null; // Object | 
+String modelTypeCode = "modelTypeCode_example"; // String | 
 try {
-    Object result = apiInstance.getRuntimeConfiguredImageModels(modelTypeCode);
+    List<ConfigurationEntryGBaseImageModelConfig> result = apiInstance.getRuntimeConfiguredImageModels(modelTypeCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ImageModelsControllerApi#getRuntimeConfiguredImageModels");
@@ -74,11 +74,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional]
+ **modelTypeCode** | **String**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;ConfigurationEntryGBaseImageModelConfig&gt;**](ConfigurationEntryGBaseImageModelConfig.md)
 
 ### Authorization
 

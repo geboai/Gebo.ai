@@ -17,7 +17,7 @@
           <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true" styleClass="w-full"></p-button>
         </div>
         <div class="col-3">
-          <p-button id="PublishBtn" gebo-ai-label [outlined]="true" label="Publish!" title="Saves and let these contents being available in knowledge base to LLm's" severity="success" icon="pi pi-microchip-ai" (onClick)="doPublish()" [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true" styleClass="w-full" />
+          <p-button id="PublishBtn" gebo-ai-label [outlined]="true" label="Publish!" title="Saves and let these contents being available in knowledge base to LLm's" severity="success" icon="pi pi-microchip-ai" (onClick)="doPublish()" [disabled]="this.formGroup.invalid || canPublish===false || relatedBackendProcessingRunning===true" styleClass="w-full" />
         </div>
         <div class="col-3">
           <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" styleClass="w-full" />
@@ -68,7 +68,7 @@
           </div>
           <div class="col-12">
             <gebo-ai-field id="tree" label="Choosed file or folder" help="Shared google drive spaces and pages contents" [required]="true">
-              <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable" [readonly]="mode==='EDIT'" formControlName="paths" selectionMode="multiple" [browsePathObservable]="browsePathObservable" class="col-12" gebo-ai-field-element></gebo-ai-vfilesystem-selector-component>
+              <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable" [readonly]="mode==='EDIT'" formControlName="paths" [required]="true" selectionMode="multiple" [browsePathObservable]="browsePathObservable" class="col-12" gebo-ai-field-element></gebo-ai-vfilesystem-selector-component>
             </gebo-ai-field>
           </div>
           <div class="col-2">

@@ -42,6 +42,8 @@ public class GUserChatSession extends GBaseObject {
 	private Date chatCreationDateTime = null; // Timestamp for chat creation
 	@HashIndexed
 	private String username = null; // Username for the chat context
+	@HashIndexed
+	private String contextCode = null; // Code of the external context this chat belongs to
 	@GObjectReference(referencedType = GChatProfileConfiguration.class)
 	private String chatProfileCode = null; // Chat profile configuration code
 	private GObjectRef<GBaseChatModelConfig> modelReference = null; // Reference to the chat model configuration

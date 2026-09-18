@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * WorkflowStatsAggregationBucket
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class WorkflowStatsAggregationBucket {
   @JsonProperty("knowledgeBaseReference")
@@ -38,46 +38,46 @@ public class WorkflowStatsAggregationBucket {
   private GObjectRefGProjectEndpoint projectEndpointReference = null;
 
   @JsonProperty("workflowType")
-  private Object workflowType = null;
+  private String workflowType = null;
 
   @JsonProperty("workflowId")
-  private Object workflowId = null;
+  private String workflowId = null;
 
   @JsonProperty("workflowStepId")
-  private Object workflowStepId = null;
+  private String workflowStepId = null;
 
   @JsonProperty("year")
-  private Object year = null;
+  private Integer year = null;
 
   @JsonProperty("month")
-  private Object month = null;
+  private Integer month = null;
 
   @JsonProperty("day")
-  private Object day = null;
+  private Integer day = null;
 
   @JsonProperty("batchDocumentsInput")
-  private Object batchDocumentsInput = null;
+  private Long batchDocumentsInput = null;
 
   @JsonProperty("batchDocumentsProcessed")
-  private Object batchDocumentsProcessed = null;
+  private Long batchDocumentsProcessed = null;
 
   @JsonProperty("batchDocumentsProcessingErrors")
-  private Object batchDocumentsProcessingErrors = null;
+  private Long batchDocumentsProcessingErrors = null;
 
   @JsonProperty("batchSentToNextStep")
-  private Object batchSentToNextStep = null;
+  private Long batchSentToNextStep = null;
 
   @JsonProperty("batchDiscardedInput")
-  private Object batchDiscardedInput = null;
+  private Long batchDiscardedInput = null;
 
   @JsonProperty("chunksProcessed")
-  private Object chunksProcessed = null;
+  private Long chunksProcessed = null;
 
   @JsonProperty("tokensProcessed")
-  private Object tokensProcessed = null;
+  private Long tokensProcessed = null;
 
   @JsonProperty("nrSnapshots")
-  private Object nrSnapshots = null;
+  private Long nrSnapshots = null;
 
   public WorkflowStatsAggregationBucket knowledgeBaseReference(GObjectRefGKnowledgeBase knowledgeBaseReference) {
     this.knowledgeBaseReference = knowledgeBaseReference;
@@ -133,7 +133,7 @@ public class WorkflowStatsAggregationBucket {
     this.projectEndpointReference = projectEndpointReference;
   }
 
-  public WorkflowStatsAggregationBucket workflowType(Object workflowType) {
+  public WorkflowStatsAggregationBucket workflowType(String workflowType) {
     this.workflowType = workflowType;
     return this;
   }
@@ -143,15 +143,15 @@ public class WorkflowStatsAggregationBucket {
    * @return workflowType
   **/
   @Schema(description = "")
-  public Object getWorkflowType() {
+  public String getWorkflowType() {
     return workflowType;
   }
 
-  public void setWorkflowType(Object workflowType) {
+  public void setWorkflowType(String workflowType) {
     this.workflowType = workflowType;
   }
 
-  public WorkflowStatsAggregationBucket workflowId(Object workflowId) {
+  public WorkflowStatsAggregationBucket workflowId(String workflowId) {
     this.workflowId = workflowId;
     return this;
   }
@@ -161,15 +161,15 @@ public class WorkflowStatsAggregationBucket {
    * @return workflowId
   **/
   @Schema(description = "")
-  public Object getWorkflowId() {
+  public String getWorkflowId() {
     return workflowId;
   }
 
-  public void setWorkflowId(Object workflowId) {
+  public void setWorkflowId(String workflowId) {
     this.workflowId = workflowId;
   }
 
-  public WorkflowStatsAggregationBucket workflowStepId(Object workflowStepId) {
+  public WorkflowStatsAggregationBucket workflowStepId(String workflowStepId) {
     this.workflowStepId = workflowStepId;
     return this;
   }
@@ -179,15 +179,15 @@ public class WorkflowStatsAggregationBucket {
    * @return workflowStepId
   **/
   @Schema(description = "")
-  public Object getWorkflowStepId() {
+  public String getWorkflowStepId() {
     return workflowStepId;
   }
 
-  public void setWorkflowStepId(Object workflowStepId) {
+  public void setWorkflowStepId(String workflowStepId) {
     this.workflowStepId = workflowStepId;
   }
 
-  public WorkflowStatsAggregationBucket year(Object year) {
+  public WorkflowStatsAggregationBucket year(Integer year) {
     this.year = year;
     return this;
   }
@@ -197,15 +197,15 @@ public class WorkflowStatsAggregationBucket {
    * @return year
   **/
   @Schema(description = "")
-  public Object getYear() {
+  public Integer getYear() {
     return year;
   }
 
-  public void setYear(Object year) {
+  public void setYear(Integer year) {
     this.year = year;
   }
 
-  public WorkflowStatsAggregationBucket month(Object month) {
+  public WorkflowStatsAggregationBucket month(Integer month) {
     this.month = month;
     return this;
   }
@@ -215,15 +215,15 @@ public class WorkflowStatsAggregationBucket {
    * @return month
   **/
   @Schema(description = "")
-  public Object getMonth() {
+  public Integer getMonth() {
     return month;
   }
 
-  public void setMonth(Object month) {
+  public void setMonth(Integer month) {
     this.month = month;
   }
 
-  public WorkflowStatsAggregationBucket day(Object day) {
+  public WorkflowStatsAggregationBucket day(Integer day) {
     this.day = day;
     return this;
   }
@@ -233,15 +233,15 @@ public class WorkflowStatsAggregationBucket {
    * @return day
   **/
   @Schema(description = "")
-  public Object getDay() {
+  public Integer getDay() {
     return day;
   }
 
-  public void setDay(Object day) {
+  public void setDay(Integer day) {
     this.day = day;
   }
 
-  public WorkflowStatsAggregationBucket batchDocumentsInput(Object batchDocumentsInput) {
+  public WorkflowStatsAggregationBucket batchDocumentsInput(Long batchDocumentsInput) {
     this.batchDocumentsInput = batchDocumentsInput;
     return this;
   }
@@ -251,15 +251,15 @@ public class WorkflowStatsAggregationBucket {
    * @return batchDocumentsInput
   **/
   @Schema(description = "")
-  public Object getBatchDocumentsInput() {
+  public Long getBatchDocumentsInput() {
     return batchDocumentsInput;
   }
 
-  public void setBatchDocumentsInput(Object batchDocumentsInput) {
+  public void setBatchDocumentsInput(Long batchDocumentsInput) {
     this.batchDocumentsInput = batchDocumentsInput;
   }
 
-  public WorkflowStatsAggregationBucket batchDocumentsProcessed(Object batchDocumentsProcessed) {
+  public WorkflowStatsAggregationBucket batchDocumentsProcessed(Long batchDocumentsProcessed) {
     this.batchDocumentsProcessed = batchDocumentsProcessed;
     return this;
   }
@@ -269,15 +269,15 @@ public class WorkflowStatsAggregationBucket {
    * @return batchDocumentsProcessed
   **/
   @Schema(description = "")
-  public Object getBatchDocumentsProcessed() {
+  public Long getBatchDocumentsProcessed() {
     return batchDocumentsProcessed;
   }
 
-  public void setBatchDocumentsProcessed(Object batchDocumentsProcessed) {
+  public void setBatchDocumentsProcessed(Long batchDocumentsProcessed) {
     this.batchDocumentsProcessed = batchDocumentsProcessed;
   }
 
-  public WorkflowStatsAggregationBucket batchDocumentsProcessingErrors(Object batchDocumentsProcessingErrors) {
+  public WorkflowStatsAggregationBucket batchDocumentsProcessingErrors(Long batchDocumentsProcessingErrors) {
     this.batchDocumentsProcessingErrors = batchDocumentsProcessingErrors;
     return this;
   }
@@ -287,15 +287,15 @@ public class WorkflowStatsAggregationBucket {
    * @return batchDocumentsProcessingErrors
   **/
   @Schema(description = "")
-  public Object getBatchDocumentsProcessingErrors() {
+  public Long getBatchDocumentsProcessingErrors() {
     return batchDocumentsProcessingErrors;
   }
 
-  public void setBatchDocumentsProcessingErrors(Object batchDocumentsProcessingErrors) {
+  public void setBatchDocumentsProcessingErrors(Long batchDocumentsProcessingErrors) {
     this.batchDocumentsProcessingErrors = batchDocumentsProcessingErrors;
   }
 
-  public WorkflowStatsAggregationBucket batchSentToNextStep(Object batchSentToNextStep) {
+  public WorkflowStatsAggregationBucket batchSentToNextStep(Long batchSentToNextStep) {
     this.batchSentToNextStep = batchSentToNextStep;
     return this;
   }
@@ -305,15 +305,15 @@ public class WorkflowStatsAggregationBucket {
    * @return batchSentToNextStep
   **/
   @Schema(description = "")
-  public Object getBatchSentToNextStep() {
+  public Long getBatchSentToNextStep() {
     return batchSentToNextStep;
   }
 
-  public void setBatchSentToNextStep(Object batchSentToNextStep) {
+  public void setBatchSentToNextStep(Long batchSentToNextStep) {
     this.batchSentToNextStep = batchSentToNextStep;
   }
 
-  public WorkflowStatsAggregationBucket batchDiscardedInput(Object batchDiscardedInput) {
+  public WorkflowStatsAggregationBucket batchDiscardedInput(Long batchDiscardedInput) {
     this.batchDiscardedInput = batchDiscardedInput;
     return this;
   }
@@ -323,15 +323,15 @@ public class WorkflowStatsAggregationBucket {
    * @return batchDiscardedInput
   **/
   @Schema(description = "")
-  public Object getBatchDiscardedInput() {
+  public Long getBatchDiscardedInput() {
     return batchDiscardedInput;
   }
 
-  public void setBatchDiscardedInput(Object batchDiscardedInput) {
+  public void setBatchDiscardedInput(Long batchDiscardedInput) {
     this.batchDiscardedInput = batchDiscardedInput;
   }
 
-  public WorkflowStatsAggregationBucket chunksProcessed(Object chunksProcessed) {
+  public WorkflowStatsAggregationBucket chunksProcessed(Long chunksProcessed) {
     this.chunksProcessed = chunksProcessed;
     return this;
   }
@@ -341,15 +341,15 @@ public class WorkflowStatsAggregationBucket {
    * @return chunksProcessed
   **/
   @Schema(description = "")
-  public Object getChunksProcessed() {
+  public Long getChunksProcessed() {
     return chunksProcessed;
   }
 
-  public void setChunksProcessed(Object chunksProcessed) {
+  public void setChunksProcessed(Long chunksProcessed) {
     this.chunksProcessed = chunksProcessed;
   }
 
-  public WorkflowStatsAggregationBucket tokensProcessed(Object tokensProcessed) {
+  public WorkflowStatsAggregationBucket tokensProcessed(Long tokensProcessed) {
     this.tokensProcessed = tokensProcessed;
     return this;
   }
@@ -359,15 +359,15 @@ public class WorkflowStatsAggregationBucket {
    * @return tokensProcessed
   **/
   @Schema(description = "")
-  public Object getTokensProcessed() {
+  public Long getTokensProcessed() {
     return tokensProcessed;
   }
 
-  public void setTokensProcessed(Object tokensProcessed) {
+  public void setTokensProcessed(Long tokensProcessed) {
     this.tokensProcessed = tokensProcessed;
   }
 
-  public WorkflowStatsAggregationBucket nrSnapshots(Object nrSnapshots) {
+  public WorkflowStatsAggregationBucket nrSnapshots(Long nrSnapshots) {
     this.nrSnapshots = nrSnapshots;
     return this;
   }
@@ -377,11 +377,11 @@ public class WorkflowStatsAggregationBucket {
    * @return nrSnapshots
   **/
   @Schema(description = "")
-  public Object getNrSnapshots() {
+  public Long getNrSnapshots() {
     return nrSnapshots;
   }
 
-  public void setNrSnapshots(Object nrSnapshots) {
+  public void setNrSnapshots(Long nrSnapshots) {
     this.nrSnapshots = nrSnapshots;
   }
 

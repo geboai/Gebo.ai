@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ChangePasswordResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class ChangePasswordResponse {
   @JsonProperty("ok")
-  private Object ok = null;
+  private Boolean ok = null;
 
   @JsonProperty("wrongPassword")
-  private Object wrongPassword = null;
+  private Boolean wrongPassword = null;
 
   @JsonProperty("newPasswordNeverMatch")
-  private Object newPasswordNeverMatch = null;
+  private Boolean newPasswordNeverMatch = null;
 
-  public ChangePasswordResponse ok(Object ok) {
+  public ChangePasswordResponse ok(Boolean ok) {
     this.ok = ok;
     return this;
   }
@@ -44,15 +44,15 @@ public class ChangePasswordResponse {
    * @return ok
   **/
   @Schema(description = "")
-  public Object getOk() {
+  public Boolean isOk() {
     return ok;
   }
 
-  public void setOk(Object ok) {
+  public void setOk(Boolean ok) {
     this.ok = ok;
   }
 
-  public ChangePasswordResponse wrongPassword(Object wrongPassword) {
+  public ChangePasswordResponse wrongPassword(Boolean wrongPassword) {
     this.wrongPassword = wrongPassword;
     return this;
   }
@@ -62,15 +62,15 @@ public class ChangePasswordResponse {
    * @return wrongPassword
   **/
   @Schema(description = "")
-  public Object getWrongPassword() {
+  public Boolean isWrongPassword() {
     return wrongPassword;
   }
 
-  public void setWrongPassword(Object wrongPassword) {
+  public void setWrongPassword(Boolean wrongPassword) {
     this.wrongPassword = wrongPassword;
   }
 
-  public ChangePasswordResponse newPasswordNeverMatch(Object newPasswordNeverMatch) {
+  public ChangePasswordResponse newPasswordNeverMatch(Boolean newPasswordNeverMatch) {
     this.newPasswordNeverMatch = newPasswordNeverMatch;
     return this;
   }
@@ -80,11 +80,11 @@ public class ChangePasswordResponse {
    * @return newPasswordNeverMatch
   **/
   @Schema(description = "")
-  public Object getNewPasswordNeverMatch() {
+  public Boolean isNewPasswordNeverMatch() {
     return newPasswordNeverMatch;
   }
 
-  public void setNewPasswordNeverMatch(Object newPasswordNeverMatch) {
+  public void setNewPasswordNeverMatch(Boolean newPasswordNeverMatch) {
     this.newPasswordNeverMatch = newPasswordNeverMatch;
   }
 

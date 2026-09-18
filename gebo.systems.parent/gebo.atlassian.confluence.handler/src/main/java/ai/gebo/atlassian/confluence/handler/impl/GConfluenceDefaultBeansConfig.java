@@ -20,7 +20,6 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.atlassian.confluence.handler.IGConfluenceContentManagementHandler;
 import ai.gebo.atlassian.confluence.handler.IGConfluenceVirtualFilesystemConsumingService;
 import ai.gebo.atlassian.confluence.handler.repositories.ConfluenceProjectEndpointRepository;
-import ai.gebo.atlassian.confluence.handler.repositories.ConfluenceSystemRepository;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
@@ -44,13 +43,13 @@ public class GConfluenceDefaultBeansConfig {
 	@ConditionalOnMissingBean(IGConfluenceContentManagementHandler.class)
 	public IGConfluenceContentManagementHandler confluenceContentManagementHandler(
 			IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
-			IGDocumentReferenceFactory contentHandler, ConfluenceSystemRepository systemsRepo,
+			IGDocumentReferenceFactory contentHandler, ConfluenceSystemsConfigurationDao systemsDao,
 			ConfluenceProjectEndpointRepository endpointRepo,
 			IGLocalPersistentFolderDiscoveryService localFolderDiscoveryService,
 			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			IGeboSecretsAccessService secretsService, IGConfluenceVirtualFilesystemConsumingService consumingService,
 			IGDocumentReferenceIngestionHandler ingestionHandler) {
-		return new ConfluenceContentManagementHandlerImpl(buildSystemHandlerRepository, contentHandler, systemsRepo,
+		return new ConfluenceContentManagementHandlerImpl(buildSystemHandlerRepository, contentHandler, systemsDao,
 				endpointRepo, localFolderDiscoveryService, persistentObjectManager, messageBroker, secretsService,
 				consumingService, ingestionHandler);
 	}

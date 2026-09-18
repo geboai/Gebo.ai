@@ -11,6 +11,6 @@
  */
 
 export interface LoginRequest { 
-    username: any;
-    password: any;
+    username: string;
+    password: string;
 }

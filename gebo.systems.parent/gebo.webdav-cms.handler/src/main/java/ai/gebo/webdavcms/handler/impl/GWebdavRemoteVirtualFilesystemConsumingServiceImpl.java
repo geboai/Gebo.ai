@@ -2,6 +2,7 @@ package ai.gebo.webdavcms.handler.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -174,6 +175,52 @@ public class GWebdavRemoteVirtualFilesystemConsumingServiceImpl extends
 		return natives;
 	}
 
+	/**
+	 * Resolves an href returned by the server against the URI that was listed.
+	 *
+	 * <p>
+	 * RFC 4918 lets a {@code <D:href>} carry either a full URI or a relative
+	 * reference, so a client has to resolve one. In practice every common server
+	 * returns the relative form: Nextcloud/SabreDAV answers
+	 * {@code /remote.php/dav/files/<user>/Documents/} and Apache {@code mod_dav}
+	 * answers {@code /Documents/}. Those strings are what this module stores as a
+	 * node's code and later hands back to {@code Sardine.list}, which builds the
+	 * request with {@code URI.create} and no base - so an unresolved href is
+	 * rejected as having no host, and the walk stops at the first subfolder with
+	 * an access error rather than reading it.
+	 * </p>
+	 *
+	 * <p>
+	 * Resolution is against the LISTED uri rather than the system's
+	 * {@code baseUri}. For the absolute-path form the two agree, since only scheme
+	 * and authority are taken from the base; they differ for the relative-path form
+	 * ({@code Documents/}), which is equally legal and which only the listed uri
+	 * resolves correctly.
+	 * </p>
+	 *
+	 * @param href       the href as the server returned it.
+	 * @param requestUri the absolute uri that was listed to obtain it.
+	 * @return an absolute href, unchanged when it already was one.
+	 */
+	// Package-visible for its unit test: the three href forms are the whole point.
+	static String absolutize(String href, String requestUri) {
+		if (href == null) {
+			return null;
+		}
+		try {
+			URI parsed = URI.create(href);
+			if (parsed.isAbsolute() || requestUri == null) {
+				return href;
+			}
+			return URI.create(requestUri).resolve(parsed).toString();
+		} catch (IllegalArgumentException e) {
+			// Not parseable as a URI - leave it as it is and let the caller fail with the
+			// server's own string in the message, which says more than this would.
+			LOGGER.debug("Cannot resolve the href {} against {}", href, requestUri, e);
+			return href;
+		}
+	}
+
 	private WebdavNativePositionObject loadRoot(GVirtualFilesystemRoot root, GWebdavContentManagementSystem system,
 			Map<String, Object> environment) throws GeboRestIntegrationException {
 		try {
@@ -181,14 +228,15 @@ public class GWebdavRemoteVirtualFilesystemConsumingServiceImpl extends
 			String href = WebdavNavigationUtil.decodeRoot(root);
 			List<DavResource> resources = sardine.list(href, 0);
 			for (DavResource res : resources) {
-				String resHref = res.getHref().toString();
+				String resHref = absolutize(res.getHref().toString(), href);
 				String rootHref = href;
 				if (!rootHref.endsWith("/"))
 					rootHref += "/";
 				if (!resHref.endsWith("/"))
 					resHref += "/";
 				if (rootHref.equals(resHref) || resHref.equals(href)) {
-					return WebdavNativePositionObject.createFolder(res.getHref().toString(), res.getName());
+					return WebdavNativePositionObject.createFolder(absolutize(res.getHref().toString(), href),
+							res.getName());
 				}
 			}
 			return WebdavNativePositionObject.createFolder(href, root.getDescription());
@@ -205,13 +253,13 @@ public class GWebdavRemoteVirtualFilesystemConsumingServiceImpl extends
 			String href = customitem.id;
 			List<DavResource> resources = sardine.list(href, 0);
 			for (DavResource res : resources) {
-				if (res.getHref().toString().equals(href) || res.getHref().toString().equals(href + "/")) {
+				String resHref = absolutize(res.getHref().toString(), href);
+				if (resHref.equals(href) || resHref.equals(href + "/") || (resHref + "/").equals(href)) {
 					if (res.isDirectory()) {
-						return WebdavNativePositionObject.createFolder(res.getHref().toString(), res.getName());
+						return WebdavNativePositionObject.createFolder(resHref, res.getName());
 					} else {
-						return WebdavNativePositionObject.createFile(res.getHref().toString(), res.getName(),
-								res.getContentType(), res.getContentLength(),
-								res.getModified() != null ? res.getModified() : null);
+						return WebdavNativePositionObject.createFile(resHref, res.getName(), res.getContentType(),
+								res.getContentLength(), res.getModified() != null ? res.getModified() : null);
 					}
 				}
 			}
@@ -236,7 +284,12 @@ public class GWebdavRemoteVirtualFilesystemConsumingServiceImpl extends
 			LOGGER.debug("retrieveChilds got {} resources from href={}", resources.size(), href);
 			for (DavResource res : resources) {
 				String name = res.getName();
-				String resHref = res.getHref().toString();
+				// Resolved BEFORE the self-check below, not only where the child is built:
+				// the listed href is absolute and a returned one usually is not, so an
+				// unresolved comparison never recognises the collection's own entry and the
+				// listing re-adds itself as its own child - which is an infinite descent the
+				// moment the hrefs become listable.
+				String resHref = absolutize(res.getHref().toString(), href);
 				LOGGER.debug("retrieveChilds item: name='{}' href={} isDir={} isSelf={}", name, resHref, res.isDirectory(),
 						href != null && (href.equals(resHref) || (href + "/").equals(resHref) || href.equals(resHref + "/")));
 				if (name == null || name.trim().isEmpty()) {
@@ -252,9 +305,9 @@ public class GWebdavRemoteVirtualFilesystemConsumingServiceImpl extends
 				NativeCoordinatePointer pointer = new NativeCoordinatePointer();
 				pointer.parentCoordinates = new ArrayList<WebdavNativePositionObject>(nativeCoordinates);
 				if (res.isDirectory()) {
-					pointer.child = WebdavNativePositionObject.createFolder(res.getHref().toString(), res.getName());
+					pointer.child = WebdavNativePositionObject.createFolder(resHref, res.getName());
 				} else {
-					pointer.child = WebdavNativePositionObject.createFile(res.getHref().toString(), res.getName(),
+					pointer.child = WebdavNativePositionObject.createFile(resHref, res.getName(),
 							res.getContentType(), res.getContentLength(),
 							res.getModified() != null ? res.getModified() : null);
 				}

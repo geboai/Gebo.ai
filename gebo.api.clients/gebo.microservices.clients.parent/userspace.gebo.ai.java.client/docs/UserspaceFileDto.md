@@ -3,11 +3,11 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  |  [optional]
-**name** | **Object** |  |  [optional]
-**extension** | **Object** |  |  [optional]
-**parentUserspaceUploadCode** | **Object** |  |  [optional]
-**processed** | **Object** |  |  [optional]
-**modificationTime** | **Object** |  |  [optional]
-**size** | **Object** |  |  [optional]
-**owner** | **Object** |  |  [optional]
+**code** | **String** |  |  [optional]
+**name** | **String** |  |  [optional]
+**extension** | **String** |  |  [optional]
+**parentUserspaceUploadCode** | **String** |  |  [optional]
+**processed** | **Boolean** |  |  [optional]
+**modificationTime** | [**Date**](Date.md) |  |  [optional]
+**size** | **Long** |  |  [optional]
+**owner** | **Boolean** |  |  [optional]

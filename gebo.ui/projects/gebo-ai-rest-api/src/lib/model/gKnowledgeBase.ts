@@ -30,6 +30,7 @@ export interface GKnowledgeBase {
     objectSpaceType?: GKnowledgeBase.ObjectSpaceTypeEnum;
     acl?: Array<GAclEntry>;
     aclAliases?: Array<number>;
+    readonly?: boolean;
 }
 export namespace GKnowledgeBase {
     export type ObjectSpaceTypeEnum = 'COMPANY' | 'USERSPACE';

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World Plugin</title>
+    <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            background: #FF6F3D;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #E55A2B;
+        }
+    </style>
+</head>
+<body>
+    <h2>Hello World Plugin</h2>
+    <p>Starting point for developing an ONLYOFFICE JavaScript plugin against
+       this SSO-gated sandbox. Edit this file and code alongside it, then
+       <code>docker compose restart documentserver</code> to pick up changes.</p>
+    <button onclick="insertText()">Insert Hello World</button>
+    <script>
+        function insertText() {
+            window.Asc.plugin.executeMethod("PasteText", ["Hello World!"]);
+        }
+    </script>
+</body>
+</html>

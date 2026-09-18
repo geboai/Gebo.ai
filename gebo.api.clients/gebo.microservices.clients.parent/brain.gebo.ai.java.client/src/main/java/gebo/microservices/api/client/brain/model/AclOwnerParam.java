@@ -18,23 +18,88 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * AclOwnerParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class AclOwnerParam {
-  @JsonProperty("ownerType")
-  private Object ownerType = null;
+  /**
+   * Gets or Sets ownerType
+   */
+  public enum OwnerTypeEnum {
+    GROUP("GROUP"),
+    USER("USER");
+
+    private String value;
+
+    OwnerTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static OwnerTypeEnum fromValue(String input) {
+      for (OwnerTypeEnum b : OwnerTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("ownerType")
+  private OwnerTypeEnum ownerType = null;
 
   @JsonProperty("ownerCode")
-  private Object ownerCode = null;
+  private String ownerCode = null;
 
-  @JsonProperty("grants")
-  private Object grants = null;
+  /**
+   * Gets or Sets grants
+   */
+  public enum GrantsEnum {
+    READ("READ"),
+    WRITE("WRITE"),
+    EXECUTE("EXECUTE");
 
-  public AclOwnerParam ownerType(Object ownerType) {
+    private String value;
+
+    GrantsEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static GrantsEnum fromValue(String input) {
+      for (GrantsEnum b : GrantsEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("grants")
+  private List<GrantsEnum> grants = new ArrayList<>();
+
+  public AclOwnerParam ownerType(OwnerTypeEnum ownerType) {
     this.ownerType = ownerType;
     return this;
   }
@@ -44,15 +109,15 @@ public class AclOwnerParam {
    * @return ownerType
   **/
   @Schema(required = true, description = "")
-  public Object getOwnerType() {
+  public OwnerTypeEnum getOwnerType() {
     return ownerType;
   }
 
-  public void setOwnerType(Object ownerType) {
+  public void setOwnerType(OwnerTypeEnum ownerType) {
     this.ownerType = ownerType;
   }
 
-  public AclOwnerParam ownerCode(Object ownerCode) {
+  public AclOwnerParam ownerCode(String ownerCode) {
     this.ownerCode = ownerCode;
     return this;
   }
@@ -62,16 +127,21 @@ public class AclOwnerParam {
    * @return ownerCode
   **/
   @Schema(required = true, description = "")
-  public Object getOwnerCode() {
+  public String getOwnerCode() {
     return ownerCode;
   }
 
-  public void setOwnerCode(Object ownerCode) {
+  public void setOwnerCode(String ownerCode) {
     this.ownerCode = ownerCode;
   }
 
-  public AclOwnerParam grants(Object grants) {
+  public AclOwnerParam grants(List<GrantsEnum> grants) {
     this.grants = grants;
+    return this;
+  }
+
+  public AclOwnerParam addGrantsItem(GrantsEnum grantsItem) {
+    this.grants.add(grantsItem);
     return this;
   }
 
@@ -80,11 +150,11 @@ public class AclOwnerParam {
    * @return grants
   **/
   @Schema(required = true, description = "")
-  public Object getGrants() {
+  public List<GrantsEnum> getGrants() {
     return grants;
   }
 
-  public void setGrants(Object grants) {
+  public void setGrants(List<GrantsEnum> grants) {
     this.grants = grants;
   }
 

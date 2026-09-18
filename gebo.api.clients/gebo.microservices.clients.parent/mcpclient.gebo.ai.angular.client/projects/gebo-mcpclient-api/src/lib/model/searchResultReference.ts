@@ -11,11 +11,11 @@
  */
 
 export interface SearchResultReference { 
-    uri?: any;
-    name?: any;
-    contentType?: any;
-    extension?: any;
-    size?: any;
-    title?: any;
-    id?: any;
+    uri?: string;
+    name?: string;
+    contentType?: string;
+    extension?: string;
+    size?: number;
+    title?: string;
+    id?: string;
 }

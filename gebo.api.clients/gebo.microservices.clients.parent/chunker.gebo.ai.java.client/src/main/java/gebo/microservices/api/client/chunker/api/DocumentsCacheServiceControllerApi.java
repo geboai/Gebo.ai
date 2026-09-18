@@ -2,6 +2,7 @@ package gebo.microservices.api.client.chunker.api;
 
 import gebo.microservices.api.client.chunker.invoker.ApiClient;
 
+import java.io.File;
 import gebo.microservices.api.client.chunker.model.StreamDocumentRequest;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:46.509035701+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class DocumentsCacheServiceControllerApi {
     private ApiClient apiClient;
@@ -47,10 +48,10 @@ public class DocumentsCacheServiceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return File
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object streamDocument(StreamDocumentRequest body) throws RestClientException {
+    public File streamDocument(StreamDocumentRequest body) throws RestClientException {
         return streamDocumentWithHttpInfo(body).getBody();
     }
 
@@ -59,16 +60,16 @@ public class DocumentsCacheServiceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;File&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> streamDocumentWithHttpInfo(StreamDocumentRequest body) throws RestClientException {
+    public ResponseEntity<File> streamDocumentWithHttpInfo(StreamDocumentRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling streamDocument");
         }
-        String path = UriComponentsBuilder.fromPath("/api/DocumentsCacheServiceController/streamDocument").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/DocumentsCacheServiceController/streamDocument").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -85,7 +86,7 @@ public class DocumentsCacheServiceControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        ParameterizedTypeReference<File> returnType = new ParameterizedTypeReference<File>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

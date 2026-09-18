@@ -9,11 +9,32 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Oauth2CustomAttribute } from './oauth2CustomAttribute';
 
 export interface AuthProviderDto { 
-    provider: any;
-    type: any;
-    description: any;
-    multitenant: any;
-    customAttributes: any;
+    provider: AuthProviderDto.ProviderEnum;
+    type: AuthProviderDto.TypeEnum;
+    description: string;
+    multitenant: boolean;
+    customAttributes: Array<Oauth2CustomAttribute>;
+}
+export namespace AuthProviderDto {
+    export type ProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'aws_identity_center' | 'keycloak' | 'oauth2_generic' | 'ldap';
+    export const ProviderEnum = {
+        Local: 'local' as ProviderEnum,
+        Google: 'google' as ProviderEnum,
+        Microsoft: 'microsoft' as ProviderEnum,
+        MicrosoftMultitenant: 'microsoft_multitenant' as ProviderEnum,
+        AwsCognito: 'aws_cognito' as ProviderEnum,
+        AwsIdentityCenter: 'aws_identity_center' as ProviderEnum,
+        Keycloak: 'keycloak' as ProviderEnum,
+        Oauth2Generic: 'oauth2_generic' as ProviderEnum,
+        Ldap: 'ldap' as ProviderEnum
+    };
+    export type TypeEnum = 'LOCAL_JWT' | 'OAUTH2' | 'LDAP';
+    export const TypeEnum = {
+        LOCALJWT: 'LOCAL_JWT' as TypeEnum,
+        OAUTH2: 'OAUTH2' as TypeEnum,
+        LDAP: 'LDAP' as TypeEnum
+    };
 }

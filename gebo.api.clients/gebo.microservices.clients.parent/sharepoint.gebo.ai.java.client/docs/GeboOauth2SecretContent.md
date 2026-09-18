@@ -3,8 +3,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**providerName** | **Object** |  | 
-**clientId** | **Object** |  | 
-**secret** | **Object** |  | 
-**scopes** | **Object** |  |  [optional]
-**customAttributes** | **Object** |  |  [optional]
+**readOnly** | **Boolean** |  |  [optional]
+**providerName** | **String** |  | 
+**clientId** | **String** |  | 
+**secret** | **String** |  | 
+**scopes** | **List&lt;String&gt;** |  |  [optional]
+**customAttributes** | **Map&lt;String, String&gt;** |  |  [optional]

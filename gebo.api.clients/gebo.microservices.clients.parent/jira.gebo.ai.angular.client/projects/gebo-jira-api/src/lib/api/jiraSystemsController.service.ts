@@ -206,10 +206,10 @@ export class JiraSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findJiraEndpointsByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GJiraProjectEndpoint>;
-    public findJiraEndpointsByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GJiraProjectEndpoint>>;
-    public findJiraEndpointsByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GJiraProjectEndpoint>>;
-    public findJiraEndpointsByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findJiraEndpointsByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GJiraProjectEndpoint>;
+    public findJiraEndpointsByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GJiraProjectEndpoint>>;
+    public findJiraEndpointsByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GJiraProjectEndpoint>>;
+    public findJiraEndpointsByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findJiraEndpointsByCode.');
@@ -253,10 +253,10 @@ export class JiraSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findJiraEndpointsByProject(parentProjectCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findJiraEndpointsByProject(parentProjectCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findJiraEndpointsByProject(parentProjectCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findJiraEndpointsByProject(parentProjectCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findJiraEndpointsByProject(parentProjectCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GJiraProjectEndpoint>>;
+    public findJiraEndpointsByProject(parentProjectCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GJiraProjectEndpoint>>>;
+    public findJiraEndpointsByProject(parentProjectCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GJiraProjectEndpoint>>>;
+    public findJiraEndpointsByProject(parentProjectCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (parentProjectCode === null || parentProjectCode === undefined) {
             throw new Error('Required parameter parentProjectCode was null or undefined when calling findJiraEndpointsByProject.');
@@ -282,7 +282,7 @@ export class JiraSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/JiraSystemsController/findJiraEndpointsByProject`,
+        return this.httpClient.request<Array<GJiraProjectEndpoint>>('get',`${this.basePath}/api/admin/JiraSystemsController/findJiraEndpointsByProject`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -300,9 +300,9 @@ export class JiraSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findJiraEndpointsByQbe(body: GJiraProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findJiraEndpointsByQbe(body: GJiraProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findJiraEndpointsByQbe(body: GJiraProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findJiraEndpointsByQbe(body: GJiraProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<GJiraProjectEndpoint>>;
+    public findJiraEndpointsByQbe(body: GJiraProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GJiraProjectEndpoint>>>;
+    public findJiraEndpointsByQbe(body: GJiraProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GJiraProjectEndpoint>>>;
     public findJiraEndpointsByQbe(body: GJiraProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -329,7 +329,7 @@ export class JiraSystemsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/JiraSystemsController/findJiraEndpointsByQbe`,
+        return this.httpClient.request<Array<GJiraProjectEndpoint>>('post',`${this.basePath}/api/admin/JiraSystemsController/findJiraEndpointsByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -347,10 +347,10 @@ export class JiraSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findJiraSystemByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GJiraSystem>;
-    public findJiraSystemByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GJiraSystem>>;
-    public findJiraSystemByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GJiraSystem>>;
-    public findJiraSystemByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findJiraSystemByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GJiraSystem>;
+    public findJiraSystemByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GJiraSystem>>;
+    public findJiraSystemByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GJiraSystem>>;
+    public findJiraSystemByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findJiraSystemByCode.');
@@ -429,9 +429,9 @@ export class JiraSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJiraSystems(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getJiraSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getJiraSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getJiraSystems(observe?: 'body', reportProgress?: boolean): Observable<Array<GJiraSystem>>;
+    public getJiraSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GJiraSystem>>>;
+    public getJiraSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GJiraSystem>>>;
     public getJiraSystems(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -449,7 +449,7 @@ export class JiraSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/JiraSystemsController/getJiraSystems`,
+        return this.httpClient.request<Array<GJiraSystem>>('get',`${this.basePath}/api/admin/JiraSystemsController/getJiraSystems`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

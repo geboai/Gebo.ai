@@ -12,6 +12,13 @@
 import { SearchResult } from './searchResult';
 
 export interface SearchResultStreamRequest { 
-    streamingPurpose: any;
+    streamingPurpose: SearchResultStreamRequest.StreamingPurposeEnum;
     reference: SearchResult;
+}
+export namespace SearchResultStreamRequest {
+    export type StreamingPurposeEnum = 'SERVING' | 'INGESTING';
+    export const StreamingPurposeEnum = {
+        SERVING: 'SERVING' as StreamingPurposeEnum,
+        INGESTING: 'INGESTING' as StreamingPurposeEnum
+    };
 }

@@ -23,16 +23,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * FastGoogleDriveSystemInsert
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:12.006082925+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.115295867+02:00[Europe/Rome]")
 
 public class FastGoogleDriveSystemInsert {
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("googleJsonCredentials")
   private GeboGoogleJsonSecretContent googleJsonCredentials = null;
 
-  public FastGoogleDriveSystemInsert description(Object description) {
+  public FastGoogleDriveSystemInsert description(String description) {
     this.description = description;
     return this;
   }
@@ -42,11 +42,11 @@ public class FastGoogleDriveSystemInsert {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 

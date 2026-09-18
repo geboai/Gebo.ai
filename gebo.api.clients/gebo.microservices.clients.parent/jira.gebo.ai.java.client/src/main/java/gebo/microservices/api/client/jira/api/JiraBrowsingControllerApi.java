@@ -6,6 +6,7 @@ import gebo.microservices.api.client.jira.model.BrowseParam;
 import gebo.microservices.api.client.jira.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.jira.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.jira.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.jira.model.VFilesystemReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:33.251328392+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:34.676208947+02:00[Europe/Rome]")
 
 public class JiraBrowsingControllerApi {
     private ApiClient apiClient;
@@ -54,7 +55,7 @@ public class JiraBrowsingControllerApi {
      * @return OperationStatusListPathInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListPathInfo browseJiraPath(BrowseParam body, Object systemCode) throws RestClientException {
+    public OperationStatusListPathInfo browseJiraPath(BrowseParam body, String systemCode) throws RestClientException {
         return browseJiraPathWithHttpInfo(body, systemCode).getBody();
     }
 
@@ -67,7 +68,7 @@ public class JiraBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListPathInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListPathInfo> browseJiraPathWithHttpInfo(BrowseParam body, Object systemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListPathInfo> browseJiraPathWithHttpInfo(BrowseParam body, String systemCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -77,7 +78,7 @@ public class JiraBrowsingControllerApi {
         if (systemCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemCode' when calling browseJiraPath");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraBrowsingController/browseJiraPath").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraBrowsingController/browseJiraPath").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -96,7 +97,7 @@ public class JiraBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListPathInfo> returnType = new ParameterizedTypeReference<OperationStatusListPathInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -107,7 +108,7 @@ public class JiraBrowsingControllerApi {
      * @return OperationStatusListVirtualFilesystemNavigationTreeStatus
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListVirtualFilesystemNavigationTreeStatus getJiraNavigationStatus(Object body, Object systemCode) throws RestClientException {
+    public OperationStatusListVirtualFilesystemNavigationTreeStatus getJiraNavigationStatus(List<VFilesystemReference> body, String systemCode) throws RestClientException {
         return getJiraNavigationStatusWithHttpInfo(body, systemCode).getBody();
     }
 
@@ -120,7 +121,7 @@ public class JiraBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListVirtualFilesystemNavigationTreeStatus&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getJiraNavigationStatusWithHttpInfo(Object body, Object systemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getJiraNavigationStatusWithHttpInfo(List<VFilesystemReference> body, String systemCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -130,7 +131,7 @@ public class JiraBrowsingControllerApi {
         if (systemCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemCode' when calling getJiraNavigationStatus");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraBrowsingController/getJiraNavigationStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraBrowsingController/getJiraNavigationStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -149,7 +150,7 @@ public class JiraBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus> returnType = new ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -159,7 +160,7 @@ public class JiraBrowsingControllerApi {
      * @return OperationStatusListGVirtualFilesystemRoot
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListGVirtualFilesystemRoot getJiraRoots(Object systemCode) throws RestClientException {
+    public OperationStatusListGVirtualFilesystemRoot getJiraRoots(String systemCode) throws RestClientException {
         return getJiraRootsWithHttpInfo(systemCode).getBody();
     }
 
@@ -171,13 +172,13 @@ public class JiraBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListGVirtualFilesystemRoot&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getJiraRootsWithHttpInfo(Object systemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getJiraRootsWithHttpInfo(String systemCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'systemCode' is set
         if (systemCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemCode' when calling getJiraRoots");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraBrowsingController/getJiraRoots").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraBrowsingController/getJiraRoots").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -194,6 +195,6 @@ public class JiraBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot> returnType = new ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

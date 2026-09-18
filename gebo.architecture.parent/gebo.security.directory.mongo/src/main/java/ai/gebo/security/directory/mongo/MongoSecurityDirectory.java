@@ -10,10 +10,12 @@
 package ai.gebo.security.directory.mongo;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.ObjectProvider;
 
+import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
@@ -21,6 +23,8 @@ import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.repository.UsersGroupRepository;
 import ai.gebo.security.services.IGSecurityDirectory;
+import ai.gebo.security.services.IGUserPasswordService;
+import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.IGeboSystemUserService;
 import lombok.AllArgsConstructor;
 
@@ -53,8 +57,18 @@ public class MongoSecurityDirectory implements IGSecurityDirectory {
 
 	private final UserRepository usersRepo;
 	private final UsersGroupRepository groupsRepo;
-	private final PasswordEncoder passwordEncoder;
+	// Not a PasswordEncoder any more: the password is no longer a field of the user
+	// document, it is a USERNAME_PASSWORD secret under "user:<username>". See
+	// IGUserPasswordService.
+	private final IGUserPasswordService userPasswordService;
 	private final IGeboSystemUserService systemUserService;
+	// ObjectProvider, not a direct IGUsersAdminService dependency: GUsersAdminServiceImpl
+	// depends (transitively, through AclGrantedAccessorServiceImpl) on IGSecurityDirectory
+	// itself, so injecting it directly here is a circular bean reference that fails
+	// context startup. ObjectProvider defers the actual lookup to first use (inside
+	// createUserIfNotExists, well after the context has finished refreshing), which
+	// breaks the cycle without changing what gets called or when.
+	private final ObjectProvider<IGUsersAdminService> userAdminService;
 
 	@Override
 	public UserInfos findUserByUsername(String username) {
@@ -86,9 +100,22 @@ public class MongoSecurityDirectory implements IGSecurityDirectory {
 			return false;
 		}
 		Optional<User> user = usersRepo.findById(username);
-		if (user.isEmpty() || user.get().getPassword() == null) {
+		if (user.isEmpty()) {
 			return false;
 		}
-		return passwordEncoder.matches(rawPassword, user.get().getPassword());
+		// The persisted username, not the one presented: it is what the password secret's
+		// context code was built from, and Mongo ids are case-sensitive.
+		return userPasswordService.matches(user.get().getUsername(), rawPassword);
+	}
+
+	@Override
+	public UserInfos createUserIfNotExists(String username, Map<String, Object> attributes,
+			AuthProvider authProvider) {
+		// createUserIfNotExists() is idempotent and already the single chokepoint for
+		// user creation (see GUsersAdminServiceImpl) - reused as-is rather than
+		// duplicating the system-identity guard / role defaulting / ACL grant setup it
+		// already does.
+		userAdminService.getObject().createUserIfNotExists(username, attributes, authProvider);
+		return findUserByUsername(username);
 	}
 }

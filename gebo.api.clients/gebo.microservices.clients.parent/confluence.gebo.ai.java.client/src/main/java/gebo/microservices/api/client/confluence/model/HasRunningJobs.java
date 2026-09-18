@@ -23,14 +23,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * HasRunningJobs
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:50.343715666+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:33.855652885+02:00[Europe/Rome]")
 
 public class HasRunningJobs {
   @JsonProperty("endpoint")
   private GObjectRefGProjectEndpoint endpoint = null;
 
   @JsonProperty("hasRunningJobs")
-  private Object hasRunningJobs = null;
+  private Boolean hasRunningJobs = null;
 
   public HasRunningJobs endpoint(GObjectRefGProjectEndpoint endpoint) {
     this.endpoint = endpoint;
@@ -50,7 +50,7 @@ public class HasRunningJobs {
     this.endpoint = endpoint;
   }
 
-  public HasRunningJobs hasRunningJobs(Object hasRunningJobs) {
+  public HasRunningJobs hasRunningJobs(Boolean hasRunningJobs) {
     this.hasRunningJobs = hasRunningJobs;
     return this;
   }
@@ -60,11 +60,11 @@ public class HasRunningJobs {
    * @return hasRunningJobs
   **/
   @Schema(description = "")
-  public Object getHasRunningJobs() {
+  public Boolean isHasRunningJobs() {
     return hasRunningJobs;
   }
 
-  public void setHasRunningJobs(Object hasRunningJobs) {
+  public void setHasRunningJobs(Boolean hasRunningJobs) {
     this.hasRunningJobs = hasRunningJobs;
   }
 

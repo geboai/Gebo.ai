@@ -11,9 +11,21 @@
  */
 
 export interface JiraAdditionalSearchFilter { 
-    issueKeys?: any;
-    summaryTerms?: any;
-    summaryTermsMatchMode?: any;
-    descriptionTerms?: any;
-    descriptionTermsMatchMode?: any;
+    issueKeys?: Array<string>;
+    summaryTerms?: Array<string>;
+    summaryTermsMatchMode?: JiraAdditionalSearchFilter.SummaryTermsMatchModeEnum;
+    descriptionTerms?: Array<string>;
+    descriptionTermsMatchMode?: JiraAdditionalSearchFilter.DescriptionTermsMatchModeEnum;
+}
+export namespace JiraAdditionalSearchFilter {
+    export type SummaryTermsMatchModeEnum = 'ANY' | 'ALL';
+    export const SummaryTermsMatchModeEnum = {
+        ANY: 'ANY' as SummaryTermsMatchModeEnum,
+        ALL: 'ALL' as SummaryTermsMatchModeEnum
+    };
+    export type DescriptionTermsMatchModeEnum = 'ANY' | 'ALL';
+    export const DescriptionTermsMatchModeEnum = {
+        ANY: 'ANY' as DescriptionTermsMatchModeEnum,
+        ALL: 'ALL' as DescriptionTermsMatchModeEnum
+    };
 }

@@ -89,7 +89,7 @@ public class ConfluenceSystemsControllerApiTest {
      */
     @Test
     public void findConfluenceEndpointsByCodeTest() {
-        Object code = null;
+        String code = null;
         GConfluenceProjectEndpoint response = api.findConfluenceEndpointsByCode(code);
 
         // TODO: test validations
@@ -104,8 +104,8 @@ public class ConfluenceSystemsControllerApiTest {
      */
     @Test
     public void findConfluenceEndpointsByProjectTest() {
-        Object parentProjectCode = null;
-        Object response = api.findConfluenceEndpointsByProject(parentProjectCode);
+        String parentProjectCode = null;
+        List<GConfluenceProjectEndpoint> response = api.findConfluenceEndpointsByProject(parentProjectCode);
 
         // TODO: test validations
     }
@@ -120,7 +120,7 @@ public class ConfluenceSystemsControllerApiTest {
     @Test
     public void findConfluenceEndpointsByQbeTest() {
         GConfluenceProjectEndpoint body = null;
-        Object response = api.findConfluenceEndpointsByQbe(body);
+        List<GConfluenceProjectEndpoint> response = api.findConfluenceEndpointsByQbe(body);
 
         // TODO: test validations
     }
@@ -134,7 +134,7 @@ public class ConfluenceSystemsControllerApiTest {
      */
     @Test
     public void findConfluenceSystemByCodeTest() {
-        Object code = null;
+        String code = null;
         GConfluenceSystem response = api.findConfluenceSystemByCode(code);
 
         // TODO: test validations
@@ -163,7 +163,7 @@ public class ConfluenceSystemsControllerApiTest {
      */
     @Test
     public void getConfluenceSystemsTest() {
-        Object response = api.getConfluenceSystems();
+        List<GConfluenceSystem> response = api.getConfluenceSystems();
 
         // TODO: test validations
     }

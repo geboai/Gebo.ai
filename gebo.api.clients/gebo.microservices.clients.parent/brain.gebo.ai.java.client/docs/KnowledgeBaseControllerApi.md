@@ -68,7 +68,7 @@ No authorization required
 
 
 KnowledgeBaseControllerApi apiInstance = new KnowledgeBaseControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GKnowledgeBase result = apiInstance.findKnowledgeBaseByCode(code);
     System.out.println(result);
@@ -82,7 +82,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -99,7 +99,7 @@ No authorization required
 
 <a name="findKnowledgeBasesByQbe"></a>
 # **findKnowledgeBasesByQbe**
-> Object findKnowledgeBasesByQbe(body)
+> List&lt;GKnowledgeBase&gt; findKnowledgeBasesByQbe(body)
 
 
 
@@ -113,7 +113,7 @@ No authorization required
 KnowledgeBaseControllerApi apiInstance = new KnowledgeBaseControllerApi();
 GKnowledgeBase body = new GKnowledgeBase(); // GKnowledgeBase | 
 try {
-    Object result = apiInstance.findKnowledgeBasesByQbe(body);
+    List<GKnowledgeBase> result = apiInstance.findKnowledgeBasesByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling KnowledgeBaseControllerApi#findKnowledgeBasesByQbe");
@@ -129,7 +129,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GKnowledgeBase&gt;**](GKnowledgeBase.md)
 
 ### Authorization
 
@@ -142,7 +142,7 @@ No authorization required
 
 <a name="getChildKnowledgeBases"></a>
 # **getChildKnowledgeBases**
-> Object getChildKnowledgeBases(code)
+> List&lt;GKnowledgeBase&gt; getChildKnowledgeBases(code)
 
 
 
@@ -154,9 +154,9 @@ No authorization required
 
 
 KnowledgeBaseControllerApi apiInstance = new KnowledgeBaseControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
-    Object result = apiInstance.getChildKnowledgeBases(code);
+    List<GKnowledgeBase> result = apiInstance.getChildKnowledgeBases(code);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling KnowledgeBaseControllerApi#getChildKnowledgeBases");
@@ -168,11 +168,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GKnowledgeBase&gt;**](GKnowledgeBase.md)
 
 ### Authorization
 
@@ -185,7 +185,7 @@ No authorization required
 
 <a name="getKnowledgeBases"></a>
 # **getKnowledgeBases**
-> Object getKnowledgeBases()
+> List&lt;GKnowledgeBase&gt; getKnowledgeBases()
 
 
 
@@ -198,7 +198,7 @@ No authorization required
 
 KnowledgeBaseControllerApi apiInstance = new KnowledgeBaseControllerApi();
 try {
-    Object result = apiInstance.getKnowledgeBases();
+    List<GKnowledgeBase> result = apiInstance.getKnowledgeBases();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling KnowledgeBaseControllerApi#getKnowledgeBases");
@@ -211,7 +211,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GKnowledgeBase&gt;**](GKnowledgeBase.md)
 
 ### Authorization
 

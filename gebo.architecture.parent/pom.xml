@@ -3,7 +3,7 @@
   <parent>
    <groupId>ai.gebo</groupId>
 	<artifactId>ai.gebo.parent</artifactId>
-    <version>1.0.2.4</version>
+    <version>1.0.3.0</version>
   </parent>
   <groupId>ai.gebo.architecture</groupId>
   <artifactId>gebo.architecture.parent</artifactId>
@@ -43,10 +43,14 @@
   	<module>gebo.architecture.swagger</module>
   	<module>gebo.architecture.mcp-clients</module>
   	<module>gebo.architecture.mcp-server</module>
+  	<module>gebo.architecture.a2a-clients</module>
+  	<module>gebo.architecture.a2a-server</module>
   	<module>gebo.architecture.graphrag.extraction</module>
+  	<module>gebo.architecture.graphrag.extraction.controllers</module>
   	<module>gebo.architecture.graphrag.persistence</module>
   	<module>gebo.architecture.documents.cache</module>
   	<module>gebo.architecture.neo4j</module>
+  	<module>gebo.architecture.neo4j.controllers</module>
   	<module>gebo.architecture.setup</module>
   	<module>gebo.architecture.hazelcast</module>
   	<module>gebo.architecture.search.abstraction.layer</module>
@@ -57,6 +61,7 @@
   	<module>gebo.architecture.redis</module>
   	<module>gebo.architecture.agents.abstraction.layer</module>
   	<module>gebo.architecture.agents.standard</module>
+  	<module>gebo.architecture.office-plugin-pipeline</module>
   	<module>gebo.architecture.environment.monolithic</module>
   	<module>gebo.architecture.documents.cache.impl</module>
   	<module>gebo.architecture.documents.access</module>
@@ -71,5 +76,6 @@
    	<module>gebo.architecture.fastsetup</module>
    	<module>gebo.architecture.fastsetup.rag</module>
    	<module>gebo.architecture.fastsetup.system</module>
+   	<module>gebo.architecture.topology-provider-controller</module>
   </modules>
 </project>

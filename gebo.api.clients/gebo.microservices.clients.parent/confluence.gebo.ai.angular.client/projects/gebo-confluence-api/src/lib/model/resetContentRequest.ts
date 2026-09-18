@@ -12,7 +12,7 @@
 import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
 
 export interface ResetContentRequest { 
-    knowledgeBaseCode?: any;
-    projectCode?: any;
+    knowledgeBaseCode?: string;
+    projectCode?: string;
     projectEndpoint?: GObjectRefGProjectEndpoint;
 }

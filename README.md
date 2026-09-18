@@ -1,4 +1,4 @@
-![Gebo.ai image logo](./gebo.ui/projects/gebo-ai-reusable-ui/src/assets/Gebo-1000.png) 
+![Gebo.ai image logo](./images/gebo-ai-readme-header-home-logo.svg) 
 # Gebo.ai, The open source Enterprise AI vendor agnostic platform (visit https://gebo.ai)
 This software is an open source enterprise AI and retrieve augmented generation platform that can be installed in every company
 to take the most out from their documentation and informations using modern large language models.
@@ -37,6 +37,7 @@ an enterprise version with more feature and support is also available.
     - **Reranking** models to improve retrieve augmented generation relevance (AWS Bedrock, Regolo.ai, OpenRouter.ai, vLLM & OpenAI-compatible providers)
  - Most providers support **guided fast-setup** with ready-to-use model presets and automatic models lookup
  - Connect to **Model Context Protocol (MCP)** servers to give your chatbots extra tools & data sources, or expose Gebo.ai itself as an **MCP server**
+ - **Agent-to-agent interoperability** — through the open **Agent2Agent (A2A) protocol**, Gebo.ai plugs into the wider agentic ecosystem in **both directions**: **connect external A2A agents** — whatever framework or vendor built them — and put them to work as tools and participants inside your own agent networks, or **publish your Gebo.ai agents, a single agent or an entire network of agents, as standards-compliant A2A agents** with their own Agent Card, ready to be consumed by any A2A-capable platform. It is **secure by default**: every import/export is admin-enabled, off and invisible until you switch it on, inbound calls are validated by the platform security chain (self-issued JWT / API key or corporate OAuth2) and run under the caller's own identity, and outbound credentials are handled by the platform secrets vault with OAuth2 token relay. The **"no AI vendor lock-in"** promise now reaches the agents themselves.
  - Configure gebo.ai rag system to access several company documents repository and information sharing tools such as:
     - **Microsoft Onedrive/Sharepoint**
     - **Atlassian Confluence**
@@ -50,7 +51,9 @@ an enterprise version with more feature and support is also available.
  	- **Microsoft Entra**
  	- **Google auth**   
  	- **AWS Cognito**
- 	- **KeyCloak** (as Generic oauth2)
+ 	- **AWS IAM Identity Center** (ex AWS SSO)
+ 	- **KeyCloak**, with its own dedicated single sign on settings
+ 	- Any other standard **oauth2/OpenID Connect** identity provider, through the **generic oauth2** connector
  - Configure **GraphRag** features (experimental)
  	- The software can use cheap models provided (on premise or in cloud) to export knowledge graphs persisted with neo4j. 	
  - Create knowledge bases collectioning documents from the previus mentioned system.  
@@ -106,7 +109,15 @@ an enterprise version with more feature and support is also available.
 You can use docker, docker-compose, download an already configured appliance or install a Ubuntu or windows package, 
 visit [https://gebo.ai/downloads/](https://gebo.ai/downloads/)
 
-For the monolith via Docker Compose, use [`dockers/gebo.ai/docker-compose.yml`](./dockers/gebo.ai/docker-compose.yml) on Linux hosts and [`dockers/gebo.ai/windows/docker-compose.yml`](./dockers/gebo.ai/windows/docker-compose.yml) on Docker Desktop for Windows — both keep all data on named volumes so it survives updates/upgrades (see [dockers/PERSISTENCE.md](./dockers/PERSISTENCE.md)).
+For the monolith via Docker Compose there is **one file for every operating system** — [`dockers/docker-compose-deploy/docker-compose.yml`](./dockers/docker-compose-deploy/docker-compose.yml) runs unchanged on Linux, macOS and Docker Desktop for Windows. It uses named volumes only, with no host bind mounts, so all data survives updates/upgrades (see [dockers/PERSISTENCE.md](./dockers/PERSISTENCE.md)) and downloading that single file into an empty directory is a complete install:
+
+```bash
+curl -O https://raw.githubusercontent.com/geboai/Gebo.ai/develop/dockers/docker-compose-deploy/docker-compose.yml
+docker compose pull
+docker compose up -d
+```
+
+On Windows PowerShell, write `curl.exe -O` on the first line.
 
 ### Post install configuration procedure:
 
@@ -119,7 +130,8 @@ The docker-compose file installs the required
 - Neo4J Graph Database 
 - OpenSearch
 - geboai/gebo.ai open source version software https://hub.docker.com/r/geboai/gebo.ai  
-- An **observability stack** — OpenTelemetry Collector, Prometheus, Tempo and Grafana (pre-provisioned with datasources and a starter dashboard) — see [Observability & monitoring](#observability--monitoring) below
+
+That is the whole default stack, and the compose file is self-contained — downloading just that one file into an empty directory is a complete install. An **observability stack** — OpenTelemetry Collector, Prometheus, Tempo and Grafana (pre-provisioned with datasources and a starter dashboard) — is available as an **optional overlay**, [`dockers/docker-compose-deploy/docker-compose.observability.yml`](./dockers/docker-compose-deploy/docker-compose.observability.yml) — see [Observability & monitoring](#observability--monitoring) below.
 
 ## For devs/software architects/software companies 
 
@@ -134,6 +146,7 @@ The platform can run either as a single **bootable jar** (monolith) or be deploy
 | Target | What | Where |
 |---|---|---|
 | Monolith (single jar) | One bootable Spring Boot fat jar, all controllers in one process | `gebo.apps.parent/gebo.ai.app` |
+| Docker Compose monolith | The monolith plus Mongo, Qdrant, Neo4j and OpenSearch — one OS-neutral file, optional observability overlay | `dockers/docker-compose-deploy/docker-compose.yml` |
 | Docker Compose microservices | 20 containerized microservices + infra (Mongo, Rabbit, Qdrant, Neo4j, OpenSearch, Eureka, gateway) | `dockers/gebo.microservices/docker-compose.yml` |
 | Kubernetes (Helm) | The same microservices stack as Helm charts with per-service install toggles, topology-synced ConfigMaps, and optional in-cluster observability | `deploy/helm/gebo-microservices` |
 
@@ -158,7 +171,14 @@ Every service (the monolith and each microservice) ships with **Micrometer** + *
 - `micrometer-registry-prometheus` exposes `/actuator/prometheus` metrics (JVM, HTTP, message-broker routing rate/latency).
 - `micrometer-tracing-bridge-otel` + `opentelemetry-exporter-otlp` export distributed traces (including message-broker hops) over OTLP.
 
-**Docker Compose** — both `dockers/gebo.ai/docker-compose.yml` (monolith) and `dockers/gebo.microservices/docker-compose.yml` bundle the full stack out of the box: an `otel-collector`, `prometheus` (scraping every service's `/actuator/prometheus`), `tempo` (trace storage) and `grafana` — provisioned with Prometheus/Tempo datasources and a starter "Gebo overview" dashboard (services up, HTTP request rate/latency, message-broker throughput, JVM memory). Reach it at `http://<host>:3000` after `docker compose up`.
+**Docker Compose** — `dockers/gebo.microservices/docker-compose.yml` bundles the full stack out of the box. For the monolith it is an opt-in overlay, so the default install stays at five containers:
+
+```bash
+cd dockers/docker-compose-deploy
+docker compose -f docker-compose.yml -f docker-compose.observability.yml up -d
+```
+
+Either way you get an `otel-collector`, `prometheus` (scraping every service's `/actuator/prometheus`), `tempo` (trace storage) and `grafana` — provisioned with Prometheus/Tempo datasources and a starter "Gebo overview" dashboard (services up, HTTP request rate/latency, message-broker throughput, JVM memory). Reach it at `http://<host>:3000`.
 
 **Kubernetes / Helm** — the same stack is available as an opt-in add-on (`observability.enabled: true`), see [deploy/helm/gebo-microservices/README.md](./deploy/helm/gebo-microservices/README.md#observability-optional).
 

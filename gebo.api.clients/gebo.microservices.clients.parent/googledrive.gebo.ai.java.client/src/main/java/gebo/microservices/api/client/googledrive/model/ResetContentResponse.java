@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ResetContentResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:12.006082925+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.115295867+02:00[Europe/Rome]")
 
 public class ResetContentResponse {
   @JsonProperty("resetEntries")
-  private Object resetEntries = null;
+  private Integer resetEntries = null;
 
   @JsonProperty("deletedAll")
-  private Object deletedAll = null;
+  private Boolean deletedAll = null;
 
-  public ResetContentResponse resetEntries(Object resetEntries) {
+  public ResetContentResponse resetEntries(Integer resetEntries) {
     this.resetEntries = resetEntries;
     return this;
   }
@@ -41,15 +41,15 @@ public class ResetContentResponse {
    * @return resetEntries
   **/
   @Schema(description = "")
-  public Object getResetEntries() {
+  public Integer getResetEntries() {
     return resetEntries;
   }
 
-  public void setResetEntries(Object resetEntries) {
+  public void setResetEntries(Integer resetEntries) {
     this.resetEntries = resetEntries;
   }
 
-  public ResetContentResponse deletedAll(Object deletedAll) {
+  public ResetContentResponse deletedAll(Boolean deletedAll) {
     this.deletedAll = deletedAll;
     return this;
   }
@@ -59,11 +59,11 @@ public class ResetContentResponse {
    * @return deletedAll
   **/
   @Schema(description = "")
-  public Object getDeletedAll() {
+  public Boolean isDeletedAll() {
     return deletedAll;
   }
 
-  public void setDeletedAll(Object deletedAll) {
+  public void setDeletedAll(Boolean deletedAll) {
     this.deletedAll = deletedAll;
   }
 

@@ -12,12 +12,15 @@
 <p-blockUI id="BlockUI"  [target]="llmSystems" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel id="MainPanel" gebo-ai-label #llmSystems>
+<p-panel id="MainPanel" gebo-ai-label #llmSystems styleClass="gebo-llms-admin">
+  <p-popover #codePopover>
+    <div class="gebo-code-cell__full" gebo-ai-text>{{ selectedCode }}</div>
+  </p-popover>
 
-  <div class="grid geboFullHeight">
-    <div class="col-12 ">
-      <div class="grid" [formGroup]="createChoices">
-        <div class="col-4">
+  <div class="gebo-llms-admin__layout">
+    <div class="gebo-llms-admin__create">
+      <div class="gebo-llms-admin__create-grid" [formGroup]="createChoices">
+        <div class="gebo-llms-admin__create-option">
           <gebo-ai-field id="chat" label="New chat model"
             help="Select the supplier to add a new chat model capable of chatting with user or executing automations"
             placeholder="Select the chat model provider">
@@ -30,7 +33,7 @@
             [disabled]="createChoices.controls['chat'].value?false:true"
           (onClick)="configureChatModel()"></p-button>
         </div>
-        <div class="col-4">
+        <div class="gebo-llms-admin__create-option">
           <gebo-ai-field id="embed"  label="New embedding model" help="Select the supplier to add a new embedding model capable of doing semantical indexing of contents" placeholder="Select the embedding model provider">
             <geboai-editable-listbox-component formControlName="embed"
               [data]="embeddingModelsTypes" gebo-ai-field-element>
@@ -41,7 +44,7 @@
             [disabled]="createChoices.controls['embed'].value?false:true"
           (onClick)="configureEmbeddingModel();"></p-button>
         </div>
-        <div class="col-4">
+        <div class="gebo-llms-admin__create-option">
           <gebo-ai-field id="ranker"  label="New rerank model" help="Select the supplier to add a new reranker model" placeholder="Select the reranker model provider">
             <geboai-editable-listbox-component formControlName="rerank"
               [data]="rerankerModelsTypes" gebo-ai-field-element>
@@ -52,7 +55,7 @@
             [disabled]="createChoices.controls['rerank'].value?false:true"
           (onClick)="configureRerankerModel();"></p-button>
         </div>
-        <div class="col-4">
+        <div class="gebo-llms-admin__create-option">
           <gebo-ai-field id="tts"  label="New text to speech model" help="Select the supplier to add a new text to speech model" placeholder="Select the text to speech model provider">
             <geboai-editable-listbox-component formControlName="tts"
               [data]="textToSpeechModelsTypes" gebo-ai-field-element>
@@ -63,7 +66,7 @@
             [disabled]="createChoices.controls['tts'].value?false:true"
           (onClick)="configureTextToSpeechModel();"></p-button>
         </div>
-        <div class="col-4">
+        <div class="gebo-llms-admin__create-option">
           <gebo-ai-field id="transcript"  label="New transcript model" help="Select the supplier to add a new transcript model" placeholder="Select the transcript model provider">
             <geboai-editable-listbox-component formControlName="transcript"
               [data]="transcriptModelsTypes" gebo-ai-field-element>
@@ -74,7 +77,7 @@
             [disabled]="createChoices.controls['transcript'].value?false:true"
           (onClick)="configureTranscriptModel();"></p-button>
         </div>
-        <div class="col-4">
+        <div class="gebo-llms-admin__create-option">
           <gebo-ai-field id="image"  label="New image model" help="Select the supplier to add a new image model" placeholder="Select the image model provider">
             <geboai-editable-listbox-component formControlName="image"
               [data]="imageModelsTypes" gebo-ai-field-element>
@@ -87,7 +90,7 @@
         </div>
       </div>
     </div>
-    <div class="col-12 geboThirdHeight">
+    <div class="gebo-llms-admin__section">
       @if (chatModels && chatModels.length) {
         <p-panel id="ChatmodelsZone" gebo-ai-label header="Configured chat models"
           >
@@ -104,7 +107,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-model>
               <tr>
-                <td>{{ model.configuration?.code }}</td>
+                <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                 <td>{{ model.configuration?.description }}</td>
                 <td>{{ model.configuration?.modelTypeCode }}</td>
                 <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -122,7 +125,7 @@
         </p-panel>
       }
     </div>
-    <div class="col-12 geboThirdHeight">
+    <div class="gebo-llms-admin__section">
       @if (embeddingModels && embeddingModels.length) {
         <p-panel id="EmneddingModelsZone" gebo-ai-label
           header="Configured embedding models">
@@ -140,7 +143,7 @@
               </ng-template>
               <ng-template pTemplate="body" let-model>
                 <tr>
-                  <td>{{ model.configuration?.code }}</td>
+                  <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                   <td>{{ model.configuration?.description }}</td>
                   <td>{{ model.configuration?.modelTypeCode }}</td>
                   <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -154,7 +157,7 @@
           }</p-panel>
         }
       </div>
-      <div class="col-12 geboThirdHeight">
+      <div class="gebo-llms-admin__section">
         @if (rerankerModels && rerankerModels.length) {
           <p-panel id="RerankerModelsZone" gebo-ai-label
             header="Configured rerank models">
@@ -172,7 +175,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-model>
                   <tr>
-                    <td>{{ model.configuration?.code }}</td>
+                    <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                     <td>{{ model.configuration?.description }}</td>
                     <td>{{ model.configuration?.modelTypeCode }}</td>
                     <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -186,7 +189,7 @@
             }</p-panel>
           }
         </div>
-        <div class="col-12 geboThirdHeight">
+        <div class="gebo-llms-admin__section">
           @if (textToSpeechModels && textToSpeechModels.length) {
             <p-panel id="TextToSpeechModelsZone" gebo-ai-label
               header="Configured text to speech models">
@@ -204,7 +207,7 @@
                   </ng-template>
                   <ng-template pTemplate="body" let-model>
                     <tr>
-                      <td>{{ model.configuration?.code }}</td>
+                      <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                       <td>{{ model.configuration?.description }}</td>
                       <td>{{ model.configuration?.modelTypeCode }}</td>
                       <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -217,7 +220,7 @@
               }</p-panel>
             }
           </div>
-          <div class="col-12 geboThirdHeight">
+          <div class="gebo-llms-admin__section">
             @if (transcriptModels && transcriptModels.length) {
               <p-panel id="TranscriptModelsZone" gebo-ai-label
                 header="Configured transcript models">
@@ -235,7 +238,7 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-model>
                       <tr>
-                        <td>{{ model.configuration?.code }}</td>
+                        <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                         <td>{{ model.configuration?.description }}</td>
                         <td>{{ model.configuration?.modelTypeCode }}</td>
                         <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -248,7 +251,7 @@
                 }</p-panel>
               }
             </div>
-            <div class="col-12 geboThirdHeight">
+            <div class="gebo-llms-admin__section">
               @if (imageModels && imageModels.length) {
                 <p-panel id="ImageModelsZone" gebo-ai-label
                   header="Configured image models">
@@ -266,7 +269,7 @@
                       </ng-template>
                       <ng-template pTemplate="body" let-model>
                         <tr>
-                          <td>{{ model.configuration?.code }}</td>
+                          <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                           <td>{{ model.configuration?.description }}</td>
                           <td>{{ model.configuration?.modelTypeCode }}</td>
                           <td>{{ model.configuration?.choosedModel?.code }}</td>

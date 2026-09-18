@@ -112,10 +112,10 @@ export class OpenAiTranscriptModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findOpenAITranscriptModelConfigByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GOpenAITranscriptModelConfig>;
-    public findOpenAITranscriptModelConfigByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GOpenAITranscriptModelConfig>>;
-    public findOpenAITranscriptModelConfigByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GOpenAITranscriptModelConfig>>;
-    public findOpenAITranscriptModelConfigByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findOpenAITranscriptModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GOpenAITranscriptModelConfig>;
+    public findOpenAITranscriptModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GOpenAITranscriptModelConfig>>;
+    public findOpenAITranscriptModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GOpenAITranscriptModelConfig>>;
+    public findOpenAITranscriptModelConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findOpenAITranscriptModelConfigByCode.');

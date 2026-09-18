@@ -16,7 +16,6 @@ import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -36,7 +35,6 @@ import software.amazon.awssdk.services.bedrock.model.ModelModality;
  * filtered by output modality so each model category (chat/text, embedding,
  * image) only offers the relevant foundation models.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 @Service
 public class BedrockFoundationModelsLookupService {
 
