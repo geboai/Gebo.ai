@@ -1,6 +1,6 @@
 {
   "name": "gebo-ai-microservices-clients",
-  "version": "1.0.3.0",
+  "version": "1.0.4.0-SNAPSHOT",
   "scripts": {
     "ng": "ng",
     "build": "ng build gebo-microservices-clients",
