@@ -253,7 +253,7 @@
 										<option>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</option>
 										<option>--enable-native-access=ALL-UNNAMED</option>
 										<option>-Xms2g</option>
-										<option>-Xmx6g</option>
+										<option>-Xmx8g</option>
 										<option>-XX:+AggressiveHeap</option>
 										<option>-XX:MaxMetaspaceSize=512m</option>
 										<option>-XX:+PrintGCDetails</option>
@@ -402,7 +402,7 @@
 										<option>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</option>
 										<option>--enable-native-access=ALL-UNNAMED</option>
 										<option>-Xms2g</option>
-										<option>-Xmx6g</option>
+										<option>-Xmx8g</option>
 										<option>-XX:+AggressiveHeap</option>
 										<option>-XX:MaxMetaspaceSize=512m</option>
 										<option>-XX:+PrintGCDetails</option>
