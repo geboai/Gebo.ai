@@ -94,7 +94,18 @@ public class GeboAdminPromptsController {
 				byCode.put(config.getCode(), config);
 			}
 		}
-		return byCode.values().stream().map(GPromptTemplateLightView::of).toList();
+		return byCode.values().stream().map(config -> {
+			GPromptTemplateLightView view = GPromptTemplateLightView.of(config);
+			// Most static library templates carry no description of their own; fall back
+			// to the GPromptUseInfo catalog entry so the list stays informative.
+			if ((view.getDescription() == null || view.getDescription().trim().isEmpty()) && view.getPromptUse() != null) {
+				GPromptUseInfo useInfo = promptUseInfoDao.findByCode(view.getPromptUse());
+				if (useInfo != null && useInfo.getDescription() != null) {
+					view.setDescription(useInfo.getDescription());
+				}
+			}
+			return view;
+		}).toList();
 	}
 
 	/**

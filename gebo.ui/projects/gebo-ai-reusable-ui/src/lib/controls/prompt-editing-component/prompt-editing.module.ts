@@ -25,6 +25,7 @@ import { SelectModule } from "primeng/select";
 import { CheckboxModule } from "primeng/checkbox";
 import { TableModule } from "primeng/table";
 import { MessageModule } from "primeng/message";
+import { TabsModule } from "primeng/tabs";
 
 
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
@@ -32,7 +33,7 @@ import { EditableListboxModule } from "../editable-listbox-component/editable-li
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 import { GeboAINotificationsModule } from "../../notifications/notifications.module";
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, TextareaModule, PanelModule, DialogModule, ButtonModule, BlockUIModule, InputTextModule, SelectModule, CheckboxModule, TableModule, MessageModule, EditableListboxModule, MonacoEditorModule, GeboAIFieldTranslationContainerModule,GeboAINotificationsModule],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, TextareaModule, PanelModule, DialogModule, ButtonModule, BlockUIModule, InputTextModule, SelectModule, CheckboxModule, TableModule, MessageModule, TabsModule, EditableListboxModule, MonacoEditorModule, GeboAIFieldTranslationContainerModule,GeboAINotificationsModule],
     declarations: [GeboAIPromptEditingComponent, GeboAIPromptWizardComponent],
     exports: [GeboAIPromptEditingComponent],
     providers: []

@@ -4521,6 +4521,12 @@
   },
   "PromptEditingModule": {
     "PromptEditingComponent": {
+      "TemplateSettingsTab": {
+        "label": "Template settings"
+      },
+      "TemplateCodesTab": {
+        "label": "Template code(s)"
+      },
       "PromptEditingPanel": {
         "label": "Prompt template editing"
       },
@@ -4597,6 +4603,25 @@
       "agentId": {
         "label": "Agent id",
         "help": "Identifier of the agent owning this prompt (optional)"
+      }
+    }
+  },
+  "PromptsPanelModule": {
+    "PromptsPanelComponent": {
+      "PromptsPanel": {
+        "label": "Prompt templates"
+      },
+      "UseCodeHeader": {
+        "label": "Use code"
+      },
+      "LanguageHeader": {
+        "label": "Language"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "ConfigureBtn": {
+        "label": "configure"
       }
     }
   }
