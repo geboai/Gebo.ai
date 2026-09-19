@@ -987,11 +987,65 @@ public class GeboLLMSSetupService {
 		}
 	}
 
+	/**
+	 * Fills the generation settings the setup library defines for the requested model
+	 * when the caller did not send them.
+	 *
+	 * <p>
+	 * The context window, the generation cap and the thinking level belong to the preset
+	 * choice in library.yml, not to whoever is asking for the model: a client that knows
+	 * which model to create does not necessarily know how that model is meant to be run.
+	 * {@link #createChatModel} resolves them for the autoconfigure flow and the startup
+	 * initialization does the same, but this entry point used to take them only from the
+	 * request - so the guided wizard, which builds its own {@code LLMCreateModelData} and
+	 * sends no generation settings, created chat models with no thinking level and no
+	 * generation cap at all, whatever the library declared for them.
+	 * </p>
+	 *
+	 * <p>
+	 * Only null fields are filled, so a caller that does state a value keeps it: the
+	 * library provides the default, it does not override a decision.
+	 * </p>
+	 *
+	 * @param config the requested model, modified in place
+	 */
+	private void applyPresetDefaults(LLMCreateModelData config) {
+		if (config.getType() == null || config.getServiceHandler() == null || config.getModelCode() == null)
+			return;
+		if (config.getContextWindow() != null && config.getMaxGeneratedTokens() != null && config.getThinking() != null)
+			return;
+		vendorsSetupConfig.getVendors().stream()
+				.flatMap(vendor -> vendor.getPresets().stream())
+				.filter(preset -> preset.getType() == config.getType()
+						&& config.getServiceHandler().equals(preset.getServiceHandler()))
+				.flatMap(preset -> preset.getChoices().stream())
+				.filter(choice -> config.getModelCode().equals(choice.getCode()))
+				.findFirst()
+				.ifPresent(choice -> {
+					if (config.getContextWindow() == null && choice.getContextWindow() != null) {
+						config.setContextWindow(choice.getContextWindow());
+					}
+					if (config.getMaxGeneratedTokens() == null && choice.getMaxGeneratedTokens() != null) {
+						config.setMaxGeneratedTokens(choice.getMaxGeneratedTokens());
+					}
+					if (config.getThinking() == null && choice.getThinking() != null) {
+						config.setThinking(choice.getThinking());
+					}
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug(
+								"Model '{}' on {} takes the setup library defaults contextWindow={} maxGeneratedTokens={} thinking={}",
+								config.getModelCode(), config.getServiceHandler(), config.getContextWindow(),
+								config.getMaxGeneratedTokens(), config.getThinking());
+					}
+				});
+	}
+
 	public OperationStatus<LLMSModelsCreationResult> createLLMS(List<LLMCreateModelData> configs) {
 
 		LLMSModelsCreationResult result = new LLMSModelsCreationResult();
 		List<OperationStatus<GBaseModelConfig>> operationsOutput = new ArrayList<>();
 		for (LLMCreateModelData config : configs) {
+			applyPresetDefaults(config);
 			// The guided flows (easy tab / suggested presets) gate by existence in the UI,
 			// so they never resend an already-configured kind. The expert Advanced tab may
 			// deliberately add extra models and override the default, so the requested
