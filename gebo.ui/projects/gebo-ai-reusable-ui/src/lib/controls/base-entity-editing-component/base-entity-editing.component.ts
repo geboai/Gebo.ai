@@ -617,11 +617,16 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
         this.codeWhasNotPresent = this.entity.code ? false : true;
         this.canSave = true;
         if (this.mode === "EDIT" && !this.codeWhasNotPresent) {
+          // Both branches are the editor opening on an entity that carries a code, which
+          // is the one the backend already holds - the first one reloads it, the second
+          // one has it already. A save reaching EDIT does not come through here: it
+          // assigns the entity to the field rather than to the input, so ngOnChanges
+          // does not run for it and the flag stays where the opening left it.
+          this.openedOnPersistedEntity = true;
           if (this.refreshedByCode === false) {
             this.refreshedByCode = true;
             this.doReloadByCode();
           } else {
-            this.openedOnPersistedEntity = true;
             this.onLoadedPersistentData(this.entity);
             this.checkCanBeDeleted(this.entity);
           }
