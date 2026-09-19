@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GPromptTemplateConfig } from '../model/gPromptTemplateConfig';
+import { GPromptUseInfo } from '../model/gPromptUseInfo';
 import { PromptFilter } from '../model/promptFilter';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -94,6 +95,53 @@ export class GeboAdminPromptsControllerService {
         return this.httpClient.request<any>('post',`${this.basePath}/api/admin/GeboAdminPromptsController/deletePromptConfig`,
             {
                 body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param useCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public findGPromptUseInfoByUseCode(useCode: string, observe?: 'body', reportProgress?: boolean): Observable<GPromptUseInfo>;
+    public findGPromptUseInfoByUseCode(useCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptUseInfo>>;
+    public findGPromptUseInfoByUseCode(useCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptUseInfo>>;
+    public findGPromptUseInfoByUseCode(useCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (useCode === null || useCode === undefined) {
+            throw new Error('Required parameter useCode was null or undefined when calling findGPromptUseInfoByUseCode.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (useCode !== undefined && useCode !== null) {
+            queryParameters = queryParameters.set('useCode', <any>useCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GPromptUseInfo>('get',`${this.basePath}/api/admin/GeboAdminPromptsController/findGPromptUseInfoByUseCode`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.model.GPromptUseInfo;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.architecture.ai.service.IGPromptUseInfoDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,8 +50,13 @@ public class GeboAdminPromptsController {
 	final IGPromptConfigDao promptConfigDao;
 
 	/**
+	 * Catalog (description/module/placeholders metadata) of the prompt uses.
+	 */
+	final IGPromptUseInfoDao promptUseInfoDao;
+
+	/**
 	 * Retrieves a prompt configuration by its code.
-	 * 
+	 *
 	 * @param code The unique identifier for the prompt configuration
 	 * @return The found GPromptConfig object
 	 * @throws GeboPersistenceException If there's an error during the database
@@ -58,6 +65,20 @@ public class GeboAdminPromptsController {
 	@GetMapping(value = "findPromptConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GPromptTemplateConfig findPromptConfigByCode(@RequestParam("code") String code) throws GeboPersistenceException {
 		return promptConfigDao.findByCode(code);
+	}
+
+	/**
+	 * Retrieves the {@link GPromptUseInfo} catalog entry (description, owning
+	 * module and documented placeholders) for a given prompt use code, so the
+	 * prompt-editing UI can render the placeholders reference and validate that
+	 * every documented placeholder is present in the edited templates.
+	 *
+	 * @param useCode The prompt use code (the {@code promptUse} of a template)
+	 * @return The matching GPromptUseInfo, or {@code null} if none is declared
+	 */
+	@GetMapping(value = "findGPromptUseInfoByUseCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GPromptUseInfo findGPromptUseInfoByUseCode(@RequestParam("useCode") String useCode) {
+		return promptUseInfoDao.findByCode(useCode);
 	}
 
 	/**

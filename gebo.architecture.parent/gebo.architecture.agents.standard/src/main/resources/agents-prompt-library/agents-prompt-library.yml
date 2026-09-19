@@ -26,3 +26,70 @@ ai.gebo.agents.prompts.library:
     chatHistory: NOT_REQUIRED
     contextDocuments: NOT_REQUIRED
     toolsCalling: REQUIRED
+ai.gebo.agents.prompts.uses:
+  - code: controller-coordinator-agent-prompt
+    description: Main loop prompt for the network's coordinator/controller agent, which turns the user's request into a routing plan dispatching the other agents in the network.
+    module: agents-standard
+    placeholders:
+      - placeholder: AGENT_IDENTITY
+        description: Description of this agent's persona, role, and capabilities within the network.
+      - placeholder: format
+        description: The structured-output format/schema instructions the routing plan must comply with.
+      - placeholder: CURRENT_CONTROLLER_CYCLE
+        description: The current coordinator cycle number in the network's iteration protocol.
+      - placeholder: MAX_CONTROLLER_CYCLES
+        description: The maximum number of coordinator cycles allowed before the plan must finalize.
+      - placeholder: REQUIRED_AGENT_COMPLETENESS
+        description: The completeness level required for the deliverable (e.g. QA, HOWTO, ANALISYS), driving how deep the routing plan must go.
+      - placeholder: AGENT_COMUNICATION_CAPABILITY
+        description: Description of which peer agents this agent is allowed to address and how.
+      - placeholder: INPUT
+        description: The actual task input this agent turn must act on.
+      - placeholder: NETWORK_AGENTS_CAPABILITIES
+        description: Catalog describing what each peer agent in the network can do.
+      - placeholder: NETWORK_SCENARY
+        description: Description of the overall multi-agent network scenario this agent operates in.
+      - placeholder: PRIVATE_CONTEXT
+        description: This agent's own private working context/memory, not shared with other agents.
+      - placeholder: question
+        description: The user's original question or request driving the network.
+      - placeholder: SHARED_CONTEXT
+        description: The context/evidence shared across all agents in the network so far.
+  - code: report-answer-writer-agent-prompt
+    description: Main loop prompt for the writer/reporter agent, which produces the single user-facing answer from the evidence gathered by the other agents in the network.
+    module: agents-standard
+    placeholders:
+      - placeholder: AGENT_COMUNICATION_CAPABILITY
+        description: Description of which peer agents this agent is allowed to address and how.
+      - placeholder: AGENT_IDENTITY
+        description: Description of this agent's persona, role, and capabilities within the network.
+      - placeholder: NETWORK_SCENARY
+        description: Description of the overall multi-agent network scenario this agent operates in.
+      - placeholder: DELIVERABLE_FORMATTING_RULES
+        description: Formatting rules the final user-facing deliverable must follow.
+      - placeholder: INPUT
+        description: The writing instruction this agent turn must act on.
+      - placeholder: PRIVATE_CONTEXT
+        description: This agent's own private working context/memory, not shared with other agents.
+      - placeholder: question
+        description: The user's original question or request driving the network.
+      - placeholder: REQUIRED_AGENT_COMPLETENESS
+        description: The completeness level required for the deliverable (e.g. QA, HOWTO, ANALISYS), driving how deep the answer must go.
+      - placeholder: SHARED_CONTEXT
+        description: The evidence gathered by the other agents in the network, to be turned into the final answer.
+  - code: tool-calling-agent-prompt
+    description: Main loop prompt for the generic string-to-string tool-calling agent, which executes tool calls on behalf of the network.
+    module: agents-standard
+    placeholders:
+      - placeholder: AGENT_COMUNICATION_CAPABILITY
+        description: Description of which peer agents this agent is allowed to address and how.
+      - placeholder: AGENT_IDENTITY
+        description: Description of this agent's persona, role, and capabilities within the network.
+      - placeholder: NETWORK_SCENARY
+        description: Description of the overall multi-agent network scenario this agent operates in.
+      - placeholder: INPUT
+        description: The tool-calling instruction this agent turn must act on.
+      - placeholder: PRIVATE_CONTEXT
+        description: This agent's own private working context/memory, not shared with other agents.
+      - placeholder: SHARED_CONTEXT
+        description: The context/evidence shared across all agents in the network so far.

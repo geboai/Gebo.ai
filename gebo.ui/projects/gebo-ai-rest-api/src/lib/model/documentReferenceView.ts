@@ -18,8 +18,8 @@ export interface DocumentReferenceView {
     code?: string;
     messagingModuleId?: string;
     deleted?: boolean;
-    rootKnowledgebaseCode?: string;
     parentProjectCode?: string;
+    rootKnowledgebaseCode?: string;
     modificationDate?: Date;
     relativePath?: string;
     parentVirtualFolderCode?: string;

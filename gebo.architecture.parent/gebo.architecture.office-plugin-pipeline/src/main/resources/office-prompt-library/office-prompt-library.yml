@@ -24,3 +24,64 @@ ai.gebo.officeplugin.prompts.library:
     chatHistory: NOT_REQUIRED
     contextDocuments: NOT_REQUIRED
     toolsCalling: NOT_REQUIRED
+ai.gebo.officeplugin.prompts.uses:
+  - code: office-assistant-query-rewriting-prompt
+    description: Rewrites the office-plugin user's request into a clearer, self-contained query, taking the open document's fragments into account, before the office assistant pipeline routes it.
+    module: office-plugin
+    placeholders:
+      - placeholder: actualTimestamp
+        description: The current date/time, given to the model for time-aware reasoning.
+      - placeholder: deliverableTypesList
+        description: List of the deliverable/output types the rewritten query may need to support.
+      - placeholder: officeDocumentFragments
+        description: Fragments extracted from the office document currently open in the plugin.
+      - placeholder: question
+        description: The user's raw current question or request text.
+  - code: office-assistant-coordinator-agent-prompt
+    description: Main loop prompt for the office assistant's coordinator/controller agent, which turns the user's request into a routing plan dispatching the other agents in the office assistant network.
+    module: office-plugin
+    placeholders:
+      - placeholder: AGENT_IDENTITY
+        description: Description of this agent's persona, role, and capabilities within the network.
+      - placeholder: CURRENT_CONTROLLER_CYCLE
+        description: The current coordinator cycle number in the network's iteration protocol.
+      - placeholder: format
+        description: The structured-output format/schema instructions the routing plan must comply with.
+      - placeholder: MAX_CONTROLLER_CYCLES
+        description: The maximum number of coordinator cycles allowed before the plan must finalize.
+      - placeholder: REQUIRED_AGENT_COMPLETENESS
+        description: The completeness level required for the deliverable, driving how deep the routing plan must go.
+      - placeholder: AGENT_COMUNICATION_CAPABILITY
+        description: Description of which peer agents this agent is allowed to address and how.
+      - placeholder: INPUT
+        description: The actual task input this agent turn must act on.
+      - placeholder: NETWORK_AGENTS_CAPABILITIES
+        description: Catalog describing what each peer agent in the office assistant network can do.
+      - placeholder: NETWORK_SCENARY
+        description: Description of the overall office assistant multi-agent network scenario.
+      - placeholder: PRIVATE_CONTEXT
+        description: This agent's own private working context/memory, not shared with other agents.
+      - placeholder: question
+        description: The user's original question or request driving the network.
+      - placeholder: SHARED_CONTEXT
+        description: The context/evidence shared across all agents in the network so far.
+  - code: office-assistant-report-writer-agent-prompt
+    description: Main loop prompt for the office assistant's writer/reporter agent, which produces the single user-facing answer from the evidence gathered by the other agents in the office assistant network.
+    module: office-plugin
+    placeholders:
+      - placeholder: AGENT_COMUNICATION_CAPABILITY
+        description: Description of which peer agents this agent is allowed to address and how.
+      - placeholder: AGENT_IDENTITY
+        description: Description of this agent's persona, role, and capabilities within the network.
+      - placeholder: NETWORK_SCENARY
+        description: Description of the overall office assistant multi-agent network scenario.
+      - placeholder: REQUIRED_AGENT_COMPLETENESS
+        description: The completeness level required for the deliverable, driving how deep the answer must go.
+      - placeholder: INPUT
+        description: The writing instruction this agent turn must act on.
+      - placeholder: PRIVATE_CONTEXT
+        description: This agent's own private working context/memory, not shared with other agents.
+      - placeholder: question
+        description: The user's original question or request driving the network.
+      - placeholder: SHARED_CONTEXT
+        description: The evidence gathered by the other agents in the network, to be turned into the final answer.

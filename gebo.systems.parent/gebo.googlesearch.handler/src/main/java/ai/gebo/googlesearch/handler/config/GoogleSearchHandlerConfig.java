@@ -7,14 +7,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.architecture.ai.model.ContextContentRequired;
+import ai.gebo.architecture.ai.model.GPromptPlaceholderInfo;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.model.GPromptUseInfo;
+import ai.gebo.architecture.ai.service.IGStaticPromptUseInfoProvider;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import lombok.Data;
 
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.googlesearch")
 @Data
-public class GoogleSearchHandlerConfig implements IGStaticPromptsProvider {
+public class GoogleSearchHandlerConfig implements IGStaticPromptsProvider, IGStaticPromptUseInfoProvider {
 	public static final String GOOGLE_SEARCH_QUERY_EXTRACTION_PROMPT = "google-search-query-extraction-prompt";
 	final static String queryExtractionPrompt = "You are a GOOGLE SEARCH QUERY PLANNER.\r\n" + "\r\n" + "GOAL\r\n"
 			+ "Given a user question, you must generate a small set of optimized Google Search queries.\r\n" + "\r\n"
@@ -56,6 +59,23 @@ public class GoogleSearchHandlerConfig implements IGStaticPromptsProvider {
 	public List<GPromptTemplateConfig> promptsList() {
 
 		return List.of(prompt);
+	}
+
+	@Override
+	public List<GPromptUseInfo> uses() {
+		GPromptUseInfo info = new GPromptUseInfo();
+		info.setCode(GOOGLE_SEARCH_QUERY_EXTRACTION_PROMPT);
+		info.setDescription(
+				"Plans a small set of optimized Google Search query strings (with operators such as exact match, site:, filetype: when useful) from the user's question.");
+		info.setModule("googlesearch");
+		GPromptPlaceholderInfo format = new GPromptPlaceholderInfo();
+		format.setPlaceholder("format");
+		format.setDescription("The structured-output format/schema instructions the generated queries must comply with.");
+		GPromptPlaceholderInfo question = new GPromptPlaceholderInfo();
+		question.setPlaceholder("question");
+		question.setDescription("The user's current question or request text.");
+		info.setPlaceholders(List.of(format, question));
+		return List.of(info);
 	}
 
 }

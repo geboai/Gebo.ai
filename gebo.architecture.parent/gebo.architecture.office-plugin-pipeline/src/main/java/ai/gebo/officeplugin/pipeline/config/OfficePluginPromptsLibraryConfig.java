@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateLibraryReference;
+import ai.gebo.architecture.ai.model.GPromptUseInfo;
 import ai.gebo.architecture.ai.service.IGStaticPromptUseInfoProvider;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import ai.gebo.architecture.ai.service.PromptTemplateProvidersImplementation;
@@ -43,15 +44,16 @@ public class OfficePluginPromptsLibraryConfig {
 	public static final String OFFICE_REPORT_WRITER_AGENT_PROMPT = "office-assistant-report-writer-agent-prompt";
 
 	private List<GPromptTemplateLibraryReference> library = null;
+	private List<GPromptUseInfo> uses = null;
 
 	@Bean
 	public IGStaticPromptsProvider officePluginPromptsProvider(GeboOverriddenPromptsLibrary overridenLibrary) {
-		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary());
+		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary(), uses);
 	}
 
 	@Bean
 	public IGStaticPromptUseInfoProvider officePluginPromptsUseInfoProvider(
 			GeboOverriddenPromptsLibrary overridenLibrary) {
-		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary());
+		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary(), uses);
 	}
 }

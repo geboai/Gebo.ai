@@ -3,6 +3,7 @@ package ai.gebo.monolithic.api.client.api;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
 import ai.gebo.monolithic.api.client.model.GPromptTemplateConfig;
+import ai.gebo.monolithic.api.client.model.GPromptUseInfo;
 import ai.gebo.monolithic.api.client.model.PromptFilter;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-19T10:42:53.370064967+02:00[Europe/Rome]")
 
 public class GeboAdminPromptsControllerApi {
     private ApiClient apiClient;
@@ -85,6 +86,51 @@ public class GeboAdminPromptsControllerApi {
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param useCode  (required)
+     * @return GPromptUseInfo
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public GPromptUseInfo findGPromptUseInfoByUseCode(String useCode) throws RestClientException {
+        return findGPromptUseInfoByUseCodeWithHttpInfo(useCode).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param useCode  (required)
+     * @return ResponseEntity&lt;GPromptUseInfo&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<GPromptUseInfo> findGPromptUseInfoByUseCodeWithHttpInfo(String useCode) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'useCode' is set
+        if (useCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'useCode' when calling findGPromptUseInfoByUseCode");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/findGPromptUseInfoByUseCode").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "useCode", useCode));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<GPromptUseInfo> returnType = new ParameterizedTypeReference<GPromptUseInfo>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 

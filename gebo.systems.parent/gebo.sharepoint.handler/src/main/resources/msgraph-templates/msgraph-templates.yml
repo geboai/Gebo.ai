@@ -11,3 +11,20 @@ ai.gebo.sharepoint.library:
       userReference: /msgraph-templates/en/msgraph-standard-query-extraction-prompt-user-prompt.txt
       chatHistory: REQUIRED
       contextDocuments: NOT_REQUIRED
+ai.gebo.sharepoint.uses:
+  - code: msgraph-native-search-prompts-template
+    description: Generates a native Microsoft Graph/SharePoint search query from the user's question and the available Graph catalog, used for native search against SharePoint/OneDrive content.
+    module: sharepoint
+    placeholders:
+      - placeholder: msGraphCatalog
+        description: Catalog describing the Microsoft Graph/SharePoint sites and drives available to be searched.
+      - placeholder: question
+        description: The user's current question or request text.
+  - code: msgraph-standard-query-extraction-prompt
+    description: Extracts a set of plain-text, operator-free search strings from the user's question, for generic full-text search against SharePoint.
+    module: sharepoint
+    placeholders:
+      - placeholder: format
+        description: The structured-output format/schema instructions the extracted search filter must comply with.
+      - placeholder: question
+        description: The user's current question or request text.

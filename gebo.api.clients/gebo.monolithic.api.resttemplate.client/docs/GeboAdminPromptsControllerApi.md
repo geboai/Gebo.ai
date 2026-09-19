@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost:12999*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**deletePromptConfig**](GeboAdminPromptsControllerApi.md#deletePromptConfig) | **POST** /api/admin/GeboAdminPromptsController/deletePromptConfig | 
+[**findGPromptUseInfoByUseCode**](GeboAdminPromptsControllerApi.md#findGPromptUseInfoByUseCode) | **GET** /api/admin/GeboAdminPromptsController/findGPromptUseInfoByUseCode | 
 [**findPromptConfigByCode**](GeboAdminPromptsControllerApi.md#findPromptConfigByCode) | **GET** /api/admin/GeboAdminPromptsController/findPromptConfigByCode | 
 [**getPromptCategories**](GeboAdminPromptsControllerApi.md#getPromptCategories) | **GET** /api/admin/GeboAdminPromptsController/getPromptCategories | 
 [**getPromptConfigByFilter**](GeboAdminPromptsControllerApi.md#getPromptConfigByFilter) | **POST** /api/admin/GeboAdminPromptsController/getPromptConfigByFilter | 
@@ -52,6 +53,49 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
+
+<a name="findGPromptUseInfoByUseCode"></a>
+# **findGPromptUseInfoByUseCode**
+> GPromptUseInfo findGPromptUseInfoByUseCode(useCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboAdminPromptsControllerApi;
+
+
+GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
+String useCode = "useCode_example"; // String | 
+try {
+    GPromptUseInfo result = apiInstance.findGPromptUseInfoByUseCode(useCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAdminPromptsControllerApi#findGPromptUseInfoByUseCode");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **useCode** | **String**|  |
+
+### Return type
+
+[**GPromptUseInfo**](GPromptUseInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 <a name="findPromptConfigByCode"></a>
 # **findPromptConfigByCode**
