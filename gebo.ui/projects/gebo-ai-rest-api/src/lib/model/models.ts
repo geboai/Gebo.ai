@@ -191,6 +191,7 @@ export * from './gProject';
 export * from './gProjectEndpoint';
 export * from './gPromptPlaceholderInfo';
 export * from './gPromptTemplateConfig';
+export * from './gPromptTemplateLightView';
 export * from './gPromptUseInfo';
 export * from './gRankerModelType';
 export * from './gResponseDocumentRef';

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateLibraryReference;
+import ai.gebo.architecture.ai.model.GPromptUseInfo;
 import ai.gebo.architecture.ai.service.IGStaticPromptUseInfoProvider;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import ai.gebo.architecture.ai.service.PromptTemplateProvidersImplementation;
@@ -22,17 +23,18 @@ public class RagThreasholdAutotunePromptConfig {
 	public final static String RAG_AUTOTUNE_RATING_PROMPT = "rag-autotune-rating";
 	public final  static  String RAG_IN_TOPIC_QUERY_GENERATOR_PROMPT = "in-topic-query-generator";
 	private List<GPromptTemplateLibraryReference> library = null;
+	private List<GPromptUseInfo> uses = null;
 
 	@Bean
 	public IGStaticPromptsProvider ragThreasholdAlgorithmPromptsProvider() {
 
-		return new PromptTemplateProvidersImplementation(this, library);
+		return new PromptTemplateProvidersImplementation(this, library, List.of(), uses);
 	}
 
 	@Bean
 	public IGStaticPromptUseInfoProvider ragThreasholdAlgorithmPromptsUseInfoProvider() {
 
-		return new PromptTemplateProvidersImplementation(this, library);
+		return new PromptTemplateProvidersImplementation(this, library, List.of(), uses);
 	}
 
 }

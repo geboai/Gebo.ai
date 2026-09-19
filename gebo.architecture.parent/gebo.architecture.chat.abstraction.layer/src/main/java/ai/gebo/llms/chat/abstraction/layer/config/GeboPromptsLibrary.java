@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateLibraryReference;
+import ai.gebo.architecture.ai.model.GPromptUseInfo;
 import ai.gebo.architecture.ai.service.IGStaticPromptUseInfoProvider;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import ai.gebo.architecture.ai.service.PromptTemplateProvidersImplementation;
@@ -20,6 +21,7 @@ import lombok.Data;
 @Data
 public class GeboPromptsLibrary {
 	private List<GPromptTemplateLibraryReference> library = null;
+	private List<GPromptUseInfo> uses = null;
 	public static final String PROMPT_USE_STANDARD_CHAT_PROMPT = "standard-chat-prompt";
 	public static final String PROMPT_USE_STANDARD_RAG_PROMPT = "standard-rag-prompt";
 	public static final String DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT = "default-pipeline-chat-output-prompt";
@@ -56,19 +58,20 @@ public class GeboPromptsLibrary {
 			DEEP_SEARCH_DATA_SOURCES_FILE_ANALISYS_PROMPT, DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT,
 			DEFAULT_PIPELINE_PURE_SEARCH_CHOSE_DATASOURCES_PROMPT, DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_PROMPT,
 			DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_FALLBACK_PROMPT, DEFAULT_CHAT_AGENT_PROMPT,
-			DEFAULT_PIPELINE_IMAGE_PROMPT_CRAFTING_PROMPT, RANKER_IRRELEVANT_FRAGMENTS_FILTER_PROMPT);
+			DEFAULT_PIPELINE_IMAGE_PROMPT_CRAFTING_PROMPT, RANKER_IRRELEVANT_FRAGMENTS_FILTER_PROMPT,
+			DEFAULT_PIPELINE_RAG_SEARCH_PLANNER_PROMPT, DEFAULT_PIPELINE_CHAT_WITH_DOCUMENTS_PROMPT);
 
 	@Bean
 	public IGStaticPromptsProvider standardChatsPromptsProvider(GeboOverriddenPromptsLibrary overridenLibrary) {
 
-		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary());
+		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary(), uses);
 	}
 
 	@Bean
 	public IGStaticPromptUseInfoProvider standardChatsPromptsUseInfoProvider(
 			GeboOverriddenPromptsLibrary overridenLibrary) {
 
-		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary());
+		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary(), uses);
 	}
 
 }

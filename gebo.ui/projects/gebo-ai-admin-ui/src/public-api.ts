@@ -56,6 +56,7 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generi
 export * from "./lib/admin-ui/gebo-ai-standard-modules-injections.module";
 export * from "./lib/admin-ui/main-panels/build-packaging-systems/build-packaging-systems.component";
 export * from "./lib/admin-ui/main-panels/chat-profiles/chat-profiles.component";
+export * from "./lib/admin-ui/main-panels/prompts-panel/prompts-panel.component";
 export * from "./lib/admin-ui/main-panels/company-systems/systems.component";
 export * from "./lib/admin-ui/main-panels/knowledge-bases/knowledge-bases.component";
 export * from "./lib/admin-ui/main-panels/llms-systems/llms-systems.component";

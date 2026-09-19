@@ -23,8 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.architecture.ai.config.GPromptTemplateEditingConfig;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateLightView;
+import ai.gebo.architecture.ai.model.GPromptUseInfo;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.architecture.ai.service.IGPromptUseInfoDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,8 +52,65 @@ public class GeboAdminPromptsController {
 	final IGPromptConfigDao promptConfigDao;
 
 	/**
+	 * Catalog (description/module/placeholders metadata) of the prompt uses.
+	 */
+	final IGPromptUseInfoDao promptUseInfoDao;
+
+	/**
+	 * Deployment switch telling whether prompt templates may be edited from the UI.
+	 */
+	final GPromptTemplateEditingConfig editingConfig;
+
+	/**
+	 * Tells the UI whether prompt template editing (save/delete) is enabled for
+	 * this deployment. When false the admin editor keeps save and delete disabled
+	 * regardless of the other rules.
+	 *
+	 * @return true when {@code ai.gebo.prompt-templates.editingEnabled} is set
+	 */
+	@GetMapping(value = "isPromptTemplateEditingEnabled", produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean isPromptTemplateEditingEnabled() {
+		return editingConfig.isEditingEnabled();
+	}
+
+	/**
+	 * Returns a lightweight view (use code, language, description) of every prompt
+	 * template known at runtime (static library ones plus their mongo overrides),
+	 * for the prompt templates list. The full template texts are not shipped.
+	 *
+	 * @return the light views of all prompt templates
+	 */
+	@GetMapping(value = "getAllPromptConfigsLightList", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GPromptTemplateLightView> getAllPromptConfigsLightList() {
+		// getConfigurations() unions the static library templates with their mongo
+		// copies; a static template and its override share the same code, and the
+		// override is the one that actually resolves, so collapse duplicates by code
+		// keeping the non-static (mongo) one when both are present.
+		java.util.LinkedHashMap<String, GPromptTemplateConfig> byCode = new java.util.LinkedHashMap<>();
+		for (GPromptTemplateConfig config : promptConfigDao.getConfigurations()) {
+			GPromptTemplateConfig existing = byCode.get(config.getCode());
+			boolean isDynamic = config.getConfigDeclarated() == null || !config.getConfigDeclarated();
+			if (existing == null || isDynamic) {
+				byCode.put(config.getCode(), config);
+			}
+		}
+		return byCode.values().stream().map(config -> {
+			GPromptTemplateLightView view = GPromptTemplateLightView.of(config);
+			// Most static library templates carry no description of their own; fall back
+			// to the GPromptUseInfo catalog entry so the list stays informative.
+			if ((view.getDescription() == null || view.getDescription().trim().isEmpty()) && view.getPromptUse() != null) {
+				GPromptUseInfo useInfo = promptUseInfoDao.findByCode(view.getPromptUse());
+				if (useInfo != null && useInfo.getDescription() != null) {
+					view.setDescription(useInfo.getDescription());
+				}
+			}
+			return view;
+		}).toList();
+	}
+
+	/**
 	 * Retrieves a prompt configuration by its code.
-	 * 
+	 *
 	 * @param code The unique identifier for the prompt configuration
 	 * @return The found GPromptConfig object
 	 * @throws GeboPersistenceException If there's an error during the database
@@ -58,6 +119,20 @@ public class GeboAdminPromptsController {
 	@GetMapping(value = "findPromptConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GPromptTemplateConfig findPromptConfigByCode(@RequestParam("code") String code) throws GeboPersistenceException {
 		return promptConfigDao.findByCode(code);
+	}
+
+	/**
+	 * Retrieves the {@link GPromptUseInfo} catalog entry (description, owning
+	 * module and documented placeholders) for a given prompt use code, so the
+	 * prompt-editing UI can render the placeholders reference and validate that
+	 * every documented placeholder is present in the edited templates.
+	 *
+	 * @param useCode The prompt use code (the {@code promptUse} of a template)
+	 * @return The matching GPromptUseInfo, or {@code null} if none is declared
+	 */
+	@GetMapping(value = "findGPromptUseInfoByUseCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GPromptUseInfo findGPromptUseInfoByUseCode(@RequestParam("useCode") String useCode) {
+		return promptUseInfoDao.findByCode(useCode);
 	}
 
 	/**

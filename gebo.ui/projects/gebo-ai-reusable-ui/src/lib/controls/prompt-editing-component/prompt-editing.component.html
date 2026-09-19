@@ -1,26 +1,169 @@
-
 <!--
 /**
- * This Source Code is subject to the terms of the 
+ * This Source Code is subject to the terms of the
  * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
  * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
+ * Copyright (c) 2025+ Gebo.ai
  */
  -->
- 
-<div class="grid" [formGroup]="formGroup">
-    <div class="col-12">
-        <ngx-monaco-editor #monaco style='height: 250px;width: 100%' [options]='options' formControlName='prompt'></ngx-monaco-editor>
-        <!-- 
-        <textarea [rows]="rows" [cols]="cols" pTextarea formControlName="prompt" [autoResize]="true">
-            
-        </textarea> -->
-    </div>
-    <div class="col-3">
-        <gebo-ai-prompt-wizard-control [deliveryFormGroup]="formGroup" deliveryPromptControlName="prompt"></gebo-ai-prompt-wizard-control>
-    </div>
-</div>
+
+<p-panel #promptPanel id="PromptEditingPanel" gebo-ai-label header="Prompt template editing" [formGroup]="formGroup">
+  <p-blockUI [target]="promptPanel" [blocked]="loading">
+    <i class="pi pi-spin pi-spinner" style="font-size: 3rem"></i>
+  </p-blockUI>
+
+  <div class="col-12 p-0 mb-2">
+    <p-message severity="warn" styleClass="w-full">
+      <span id="PromptChangeDisclaimer" gebo-ai-text>Changing a prompt template will change the behavior of llms decisions and responses, if unsure of what you are doing do not modify it</span>
+    </p-message>
+  </div>
+
+  <p-tabs [value]="0">
+    <p-tablist>
+      <p-tab id="TemplateSettingsTab" [value]="0" gebo-ai-text>Template settings</p-tab>
+      <p-tab id="TemplateCodesTab" [value]="1" gebo-ai-text>Template code(s)</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+
+      <p-tabpanel [value]="0">
+        <div class="grid">
+          <div class="col-12 md:col-6">
+            <gebo-ai-field id="promptUse" label="Prompt use code" help="The immutable use code identifying this prompt template">
+              <input pInputText id="promptUse" formControlName="promptUse" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <gebo-ai-field id="code" label="Template code" help="The derived unique identifier of this template">
+              <input pInputText id="code" formControlName="code" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+
+          <div class="col-12">
+            <gebo-ai-field id="description" label="Description" help="Human readable description of what this prompt template is for">
+              <input pInputText id="description" formControlName="description" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+
+          <div class="col-12 md:col-4">
+            <gebo-ai-field id="chatHistory" label="Chat history" placeholder="Select an option" help="Whether the chat history is required by this prompt" [required]="true">
+              <p-select [options]="contextContentOptions" optionLabel="labelCode" optionValue="value" formControlName="chatHistory" class="w-full" gebo-ai-field-element></p-select>
+            </gebo-ai-field>
+          </div>
+
+          <div class="col-12 md:col-4">
+            <gebo-ai-field id="contextDocuments" label="Context documents" placeholder="Select an option" help="Whether context documents are required by this prompt" [required]="true">
+              <p-select [options]="contextContentOptions" optionLabel="labelCode" optionValue="value" formControlName="contextDocuments" class="w-full" gebo-ai-field-element></p-select>
+            </gebo-ai-field>
+          </div>
+
+          <div class="col-12 md:col-4">
+            <gebo-ai-field id="toolsCalling" label="Tools calling" placeholder="Select an option" help="Whether tools calling is required by this prompt" [required]="true">
+              <p-select [options]="contextContentOptions" optionLabel="labelCode" optionValue="value" formControlName="toolsCalling" class="w-full" gebo-ai-field-element></p-select>
+            </gebo-ai-field>
+          </div>
+
+          <div class="col-12 md:col-3">
+            <gebo-ai-field id="langCode" label="Language code" help="Language code this template applies to (e.g. en)">
+              <input pInputText id="langCode" formControlName="langCode" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+
+          <div class="col-12 md:col-3">
+            <gebo-ai-field id="modelProvider" label="Model provider" help="Restrict this template to a specific model provider (optional)">
+              <input pInputText id="modelProvider" formControlName="modelProvider" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+
+          <div class="col-12 md:col-3">
+            <gebo-ai-field id="modelCode" label="Model code" help="Restrict this template to a specific model code (optional)">
+              <input pInputText id="modelCode" formControlName="modelCode" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+
+          <div class="col-12 md:col-3">
+            <gebo-ai-field id="promptCategory" label="Prompt category" help="Category used to group prompt templates (optional)">
+              <input pInputText id="promptCategory" formControlName="promptCategory" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <gebo-ai-field id="agentId" label="Agent id" help="Identifier of the agent owning this prompt (optional)">
+              <input pInputText id="agentId" formControlName="agentId" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+
+          <div class="col-12 md:col-6 flex align-items-center">
+            <div class="flex align-items-center gap-2 mt-4">
+              <p-checkbox inputId="agentPrompt" formControlName="agentPrompt" [binary]="true"></p-checkbox>
+              <label for="agentPrompt" id="agentPromptLabel" gebo-ai-text>Agent prompt</label>
+            </div>
+          </div>
+        </div>
+      </p-tabpanel>
+
+      <p-tabpanel [value]="1">
+        <div class="grid">
+          @if (missingPlaceholders.length > 0) {
+            <div class="col-12">
+              <p-message severity="error" styleClass="w-full">
+                <span>
+                  <span id="MissingPlaceholdersLabel" gebo-ai-text>Missing mandatory placeholders</span>:
+                  <strong>{{ missingPlaceholders.join(", ") }}</strong>
+                </span>
+              </p-message>
+            </div>
+          }
+
+          <div class="col-12">
+            <p-panel #placeholdersPanel id="PlaceholdersPanel" gebo-ai-label header="Available placeholders" [toggleable]="true">
+              <p-table [value]="placeholders" responsiveLayout="scroll" styleClass="p-datatable-striped p-datatable-sm">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th id="ThPlaceholderCode" gebo-ai-text style="width: 30%">Placeholder code</th>
+                    <th id="ThPlaceholderDescription" gebo-ai-text style="width: 70%">Description</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-placeholder>
+                  <tr>
+                    <td>
+                      <code>{{ "{" + placeholder.placeholder + "}" }}</code>
+                      @if (missingPlaceholders.indexOf(placeholder.placeholder) >= 0) {
+                        <i class="pi pi-exclamation-triangle text-red-500 ml-2"></i>
+                      }
+                    </td>
+                    <td>{{ placeholder.description }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="2">
+                      <span id="NoPlaceholders" gebo-ai-text>No placeholders are documented for this prompt use</span>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </p-panel>
+          </div>
+
+          <div class="col-12">
+            <label id="systemPromptTemplateLabel" gebo-ai-text>System prompt template</label>
+            <ngx-monaco-editor #systemMonaco style="height: 250px; width: 100%" [options]="options"
+              formControlName="systemPromptTemplate" (onInit)="onSystemEditorInit($event)"></ngx-monaco-editor>
+          </div>
+
+          <div class="col-12">
+            <label id="userPromptTemplateLabel" gebo-ai-text>User prompt template</label>
+            <ngx-monaco-editor #userMonaco style="height: 250px; width: 100%" [options]="options"
+              formControlName="userPromptTemplate" (onInit)="onUserEditorInit($event)"></ngx-monaco-editor>
+          </div>
+        </div>
+      </p-tabpanel>
+
+    </p-tabpanels>
+  </p-tabs>
+</p-panel>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

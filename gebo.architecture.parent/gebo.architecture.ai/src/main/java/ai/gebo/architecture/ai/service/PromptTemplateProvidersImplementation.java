@@ -25,12 +25,14 @@ public class PromptTemplateProvidersImplementation implements IGStaticPromptsPro
 	final Object objectFromActualClassLoader;
 	final List<GPromptTemplateLibraryReference> library;
 	final List<GPromptTemplateLibraryReference> override;
+	final List<GPromptUseInfo> uses;
 
 	public PromptTemplateProvidersImplementation(Object objectFromActualClassLoader,
 			List<GPromptTemplateLibraryReference> library) {
 		this.objectFromActualClassLoader = objectFromActualClassLoader;
 		this.library = library;
 		this.override = List.of();
+		this.uses = List.of();
 	}
 
 	public PromptTemplateProvidersImplementation(Object objectFromActualClassLoader,
@@ -38,6 +40,21 @@ public class PromptTemplateProvidersImplementation implements IGStaticPromptsPro
 		this.objectFromActualClassLoader = objectFromActualClassLoader;
 		this.library = library;
 		this.override = override;
+		this.uses = List.of();
+	}
+
+	/**
+	 * Full constructor also declaring the {@link GPromptUseInfo} catalog entries
+	 * (description/module/placeholders metadata) for the promptUse codes declared
+	 * by {@code library}.
+	 */
+	public PromptTemplateProvidersImplementation(Object objectFromActualClassLoader,
+			List<GPromptTemplateLibraryReference> library, List<GPromptTemplateLibraryReference> override,
+			List<GPromptUseInfo> uses) {
+		this.objectFromActualClassLoader = objectFromActualClassLoader;
+		this.library = library;
+		this.override = override;
+		this.uses = uses != null ? uses : List.of();
 	}
 
 	@Override
@@ -121,7 +138,12 @@ public class PromptTemplateProvidersImplementation implements IGStaticPromptsPro
 
 	@Override
 	public List<GPromptUseInfo> uses() {
-
-		return List.of();
+		if (uses == null || uses.isEmpty())
+			return List.of();
+		Map<String, GPromptUseInfo> uniqueByCode = new HashMap<>();
+		for (GPromptUseInfo info : uses) {
+			uniqueByCode.put(info.getCode(), info);
+		}
+		return new ArrayList<>(uniqueByCode.values());
 	}
 }

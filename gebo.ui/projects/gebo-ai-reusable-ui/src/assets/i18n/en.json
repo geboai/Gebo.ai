@@ -1036,11 +1036,15 @@
       "NewPromptConfigurationBtn": { "label": "New prompt configuration" },
       "NewChatProfileBtn": { "label": "New chat profile" },
       "MainPanel": { "label": "Retrivial augmented generation chat profiles" },
-      "PromptsPanel": { "label": "Prompts collection & default prompts" },
+      "PromptsPanel": { "label": "Prompt templates" },
       "KnowledgeBasesHeader": { "label": "Knowledge bases" },
       "DescriptionHeader": { "label": "Description" },
       "ConfigureBtn1": { "label": "configure" },
-      "CodeHeader": { "label": "Code" }
+      "CodeHeader": { "label": "Code" },
+      "UseCodeHeader": { "label": "Use code" },
+      "LanguageHeader": { "label": "Language" },
+      "DescriptionHeader2": { "label": "Description" },
+      "ConfigureBtn2": { "label": "configure" }
     }
   },
   "KnowledgeBasesPanelModule": {
@@ -2839,7 +2843,8 @@
       "PromptCategorySelect": {
         "placeholder": "Enter or insert the prompt category"
       },
-      "MainPanel": { "label": "Editing prompt" },
+      "MainPanel": { "label": "Editing prompt template" },
+      "EditingDisabledText": { "label": "Prompt template editing is disabled on this deployment; the editor is read only." },
       "promptCategory": {
         "label": "Prompt category",
         "help": "Select or insert the prompt category."
@@ -4512,6 +4517,112 @@
       "GeneratedApiKeyLabel": { "label": "Your Generated API Key" },
       "ApiKeyGeneratedDialog": { "label": "API Key Generated Successfully" },
       "SecurityNoticeHeader": { "label": "Important Security Notice" }
+    }
+  },
+  "PromptEditingModule": {
+    "PromptEditingComponent": {
+      "TemplateSettingsTab": {
+        "label": "Template settings"
+      },
+      "TemplateCodesTab": {
+        "label": "Template code(s)"
+      },
+      "PromptEditingPanel": {
+        "label": "Prompt template editing"
+      },
+      "PlaceholdersPanel": {
+        "label": "Available placeholders"
+      },
+      "PromptChangeDisclaimer": {
+        "label": "Changing a prompt template will change the behavior of llms decisions and responses, if unsure of what you are doing do not modify it"
+      },
+      "MissingPlaceholdersLabel": {
+        "label": "Missing mandatory placeholders"
+      },
+      "agentPromptLabel": {
+        "label": "Agent prompt"
+      },
+      "systemPromptTemplateLabel": {
+        "label": "System prompt template"
+      },
+      "userPromptTemplateLabel": {
+        "label": "User prompt template"
+      },
+      "ThPlaceholderCode": {
+        "label": "Placeholder code"
+      },
+      "ThPlaceholderDescription": {
+        "label": "Description"
+      },
+      "NoPlaceholders": {
+        "label": "No placeholders are documented for this prompt use"
+      },
+      "promptUse": {
+        "label": "Prompt use code",
+        "help": "The immutable use code identifying this prompt template"
+      },
+      "code": {
+        "label": "Template code",
+        "help": "The derived unique identifier of this template"
+      },
+      "description": {
+        "label": "Description",
+        "help": "Human readable description of what this prompt template is for"
+      },
+      "chatHistory": {
+        "label": "Chat history",
+        "placeholder": "Select an option",
+        "help": "Whether the chat history is required by this prompt"
+      },
+      "contextDocuments": {
+        "label": "Context documents",
+        "placeholder": "Select an option",
+        "help": "Whether context documents are required by this prompt"
+      },
+      "toolsCalling": {
+        "label": "Tools calling",
+        "placeholder": "Select an option",
+        "help": "Whether tools calling is required by this prompt"
+      },
+      "langCode": {
+        "label": "Language code",
+        "help": "Language code this template applies to (e.g. en)"
+      },
+      "modelProvider": {
+        "label": "Model provider",
+        "help": "Restrict this template to a specific model provider (optional)"
+      },
+      "modelCode": {
+        "label": "Model code",
+        "help": "Restrict this template to a specific model code (optional)"
+      },
+      "promptCategory": {
+        "label": "Prompt category",
+        "help": "Category used to group prompt templates (optional)"
+      },
+      "agentId": {
+        "label": "Agent id",
+        "help": "Identifier of the agent owning this prompt (optional)"
+      }
+    }
+  },
+  "PromptsPanelModule": {
+    "PromptsPanelComponent": {
+      "PromptsPanel": {
+        "label": "Prompt templates"
+      },
+      "UseCodeHeader": {
+        "label": "Use code"
+      },
+      "LanguageHeader": {
+        "label": "Language"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "ConfigureBtn": {
+        "label": "configure"
+      }
     }
   }
 }

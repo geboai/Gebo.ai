@@ -11,3 +11,20 @@ ai.gebo.jira.library:
     userReference: /jira-prompts-library/en/jira-native-query-extraction-prompt-user-prompt.txt
     chatHistory: REQUIRED
     contextDocuments: NOT_REQUIRED
+ai.gebo.jira.uses:
+  - code: jira-standard-query-extraction-prompt
+    description: Extracts a set of plain-text, operator-free search strings from the user's question, for generic (non-JQL) full-text search against Jira.
+    module: jira
+    placeholders:
+      - placeholder: format
+        description: The structured-output format/schema instructions the extracted search filter must comply with.
+      - placeholder: question
+        description: The user's current question or request text.
+  - code: jira-native-query-extraction-prompt
+    description: Generates a structured Jira JQL search filter (as JSON) from the user's question and the available Jira projects, later translated server-side into a native JQL query.
+    module: jira
+    placeholders:
+      - placeholder: jiraProjects
+        description: Catalog of the Jira projects available to be searched.
+      - placeholder: question
+        description: The user's current question or request text.

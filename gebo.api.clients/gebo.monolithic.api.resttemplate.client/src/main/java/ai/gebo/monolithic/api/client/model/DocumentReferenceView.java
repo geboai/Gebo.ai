@@ -23,7 +23,7 @@ import java.util.Date;
  * DocumentReferenceView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-19T11:22:54.359561129+02:00[Europe/Rome]")
 
 public class DocumentReferenceView {
   @JsonProperty("name")
@@ -44,11 +44,11 @@ public class DocumentReferenceView {
   @JsonProperty("deleted")
   private Boolean deleted = null;
 
-  @JsonProperty("rootKnowledgebaseCode")
-  private String rootKnowledgebaseCode = null;
-
   @JsonProperty("parentProjectCode")
   private String parentProjectCode = null;
+
+  @JsonProperty("rootKnowledgebaseCode")
+  private String rootKnowledgebaseCode = null;
 
   @JsonProperty("modificationDate")
   private Date modificationDate = null;
@@ -173,24 +173,6 @@ public class DocumentReferenceView {
     this.deleted = deleted;
   }
 
-  public DocumentReferenceView rootKnowledgebaseCode(String rootKnowledgebaseCode) {
-    this.rootKnowledgebaseCode = rootKnowledgebaseCode;
-    return this;
-  }
-
-   /**
-   * Get rootKnowledgebaseCode
-   * @return rootKnowledgebaseCode
-  **/
-  @Schema(description = "")
-  public String getRootKnowledgebaseCode() {
-    return rootKnowledgebaseCode;
-  }
-
-  public void setRootKnowledgebaseCode(String rootKnowledgebaseCode) {
-    this.rootKnowledgebaseCode = rootKnowledgebaseCode;
-  }
-
   public DocumentReferenceView parentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
     return this;
@@ -207,6 +189,24 @@ public class DocumentReferenceView {
 
   public void setParentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
+  }
+
+  public DocumentReferenceView rootKnowledgebaseCode(String rootKnowledgebaseCode) {
+    this.rootKnowledgebaseCode = rootKnowledgebaseCode;
+    return this;
+  }
+
+   /**
+   * Get rootKnowledgebaseCode
+   * @return rootKnowledgebaseCode
+  **/
+  @Schema(description = "")
+  public String getRootKnowledgebaseCode() {
+    return rootKnowledgebaseCode;
+  }
+
+  public void setRootKnowledgebaseCode(String rootKnowledgebaseCode) {
+    this.rootKnowledgebaseCode = rootKnowledgebaseCode;
   }
 
   public DocumentReferenceView modificationDate(Date modificationDate) {
@@ -315,8 +315,8 @@ public class DocumentReferenceView {
         Objects.equals(this.code, documentReferenceView.code) &&
         Objects.equals(this.messagingModuleId, documentReferenceView.messagingModuleId) &&
         Objects.equals(this.deleted, documentReferenceView.deleted) &&
-        Objects.equals(this.rootKnowledgebaseCode, documentReferenceView.rootKnowledgebaseCode) &&
         Objects.equals(this.parentProjectCode, documentReferenceView.parentProjectCode) &&
+        Objects.equals(this.rootKnowledgebaseCode, documentReferenceView.rootKnowledgebaseCode) &&
         Objects.equals(this.modificationDate, documentReferenceView.modificationDate) &&
         Objects.equals(this.relativePath, documentReferenceView.relativePath) &&
         Objects.equals(this.parentVirtualFolderCode, documentReferenceView.parentVirtualFolderCode) &&
@@ -326,7 +326,7 @@ public class DocumentReferenceView {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, extension, description, code, messagingModuleId, deleted, rootKnowledgebaseCode, parentProjectCode, modificationDate, relativePath, parentVirtualFolderCode, creationDate, contentType);
+    return Objects.hash(name, extension, description, code, messagingModuleId, deleted, parentProjectCode, rootKnowledgebaseCode, modificationDate, relativePath, parentVirtualFolderCode, creationDate, contentType);
   }
 
 
@@ -341,8 +341,8 @@ public class DocumentReferenceView {
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
     sb.append("    deleted: ").append(toIndentedString(deleted)).append("\n");
-    sb.append("    rootKnowledgebaseCode: ").append(toIndentedString(rootKnowledgebaseCode)).append("\n");
     sb.append("    parentProjectCode: ").append(toIndentedString(parentProjectCode)).append("\n");
+    sb.append("    rootKnowledgebaseCode: ").append(toIndentedString(rootKnowledgebaseCode)).append("\n");
     sb.append("    modificationDate: ").append(toIndentedString(modificationDate)).append("\n");
     sb.append("    relativePath: ").append(toIndentedString(relativePath)).append("\n");
     sb.append("    parentVirtualFolderCode: ").append(toIndentedString(parentVirtualFolderCode)).append("\n");
