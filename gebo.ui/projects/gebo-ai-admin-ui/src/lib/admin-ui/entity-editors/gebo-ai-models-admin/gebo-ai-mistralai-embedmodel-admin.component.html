@@ -36,9 +36,12 @@
        was indexed with THIS model, and vectors produced by one model are not comparable
        with those of another. Changing the model here does not re-index anything, so the
        existing vectors stop matching what is searched and retrieval silently degrades
-       until the knowledge bases are ingested again. Shown only in EDIT mode - on a new
-       model there is nothing indexed yet to invalidate. -->
-  @if (mode === 'EDIT') {
+       until the knowledge bases are ingested again.
+       The condition is not mode==='EDIT': mode defaults to EDIT and is only resolved
+       against the backend when the entity carries a code, so the creation form - routed
+       with the model type alone - would show this too, and a save sets mode to EDIT,
+       so a model created a moment ago would start warning about vectors it never made. -->
+  @if (editingAlreadyPersistedEntity) {
     <div class="grid">
       <div class="col-12">
         <p-message id="EmbeddingModelChangeWarning" severity="error" styleClass="w-full" gebo-ai-text>
