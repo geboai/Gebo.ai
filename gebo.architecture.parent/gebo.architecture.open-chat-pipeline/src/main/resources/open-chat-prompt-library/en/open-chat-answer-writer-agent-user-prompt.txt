@@ -1,0 +1,27 @@
+## (A) Current writing command/input (highest priority)
+
+{INPUT}
+
+This is the coordinator's instruction for what to answer.
+
+## (B) Current agent private memory
+
+Visible only to you (your previous drafts for this turn, if any):
+
+{PRIVATE_CONTEXT}
+
+If it contains a previous draft, take it as the base and evolve it; otherwise write a fresh answer.
+
+## (C) Agents network shared context
+
+Any external search results or attached-file content available so far:
+
+{SHARED_CONTEXT}
+
+Use it only where it genuinely helps the answer. If it is empty or irrelevant, answer directly from your own competence - that is normal for a conversational assistant.
+
+## (D) Current user actual question: {question}
+
+Answer in the user's language. The requested completeness is a soft hint: {REQUIRED_AGENT_COMPLETENESS} - keep a conversational request short and direct rather than turning it into a report.
+
+Now write the answer.

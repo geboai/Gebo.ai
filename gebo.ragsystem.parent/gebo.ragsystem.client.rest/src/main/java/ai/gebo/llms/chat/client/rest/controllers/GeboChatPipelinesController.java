@@ -86,10 +86,13 @@ public class GeboChatPipelinesController {
 		return chatPipelineService.getPersonalPipelinesChatMenu(pipelineCode, chatProfileCode);
 	}
 
+	// chatProfileCode is declared first (and both params optional) so the generated
+	// client keeps the stable (chatProfileCode, pipelineCode) argument order. A
+	// pipeline-only chat (no chat profile) passes chatProfileCode undefined.
 	@GetMapping(value = "personalPipelinesChatMenu", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<PipelineChatMenu> getPersonalPipelinesChatMenu(
-			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
-			@RequestParam(name = "chatProfileCode", required = true) String chatProfileCode)
+			@RequestParam(name = "chatProfileCode", required = false) String chatProfileCode,
+			@RequestParam(name = "pipelineCode", required = false) String pipelineCode)
 			throws ChatPipelineException {
 		return chatPipelineService.getPersonalPipelinesChatMenu(pipelineCode, chatProfileCode);
 	}

@@ -213,16 +213,26 @@ public class GeboUserChatsController {
 
 	@GetMapping(value = "createCleanChatByModelCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GUserChatInfo createCleanChatByModelCode(
-			@RequestParam(value = "modelCode", required = true) String modelCode) throws GeboPersistenceException {
-		return this.sessionLifeCycleService.createCleanChatByModelCode(modelCode);
+			@RequestParam(value = "modelCode", required = true) String modelCode,
+			@RequestParam(value = "pipelineCode", required = false) String pipelineCode)
+			throws GeboPersistenceException {
+		return this.sessionLifeCycleService.createCleanChatByModelCode(modelCode, pipelineCode);
+	}
+
+	@GetMapping(value = "createCleanChatByDefaultModel", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo createCleanChatByDefaultModel(
+			@RequestParam(value = "pipelineCode", required = false) String pipelineCode)
+			throws GeboPersistenceException {
+		return this.sessionLifeCycleService.createCleanChatByDefaultModel(pipelineCode);
 	}
 
 	@GetMapping(value = "createCleanChatByChatProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GUserChatInfo createCleanChatByChatProfileCode(
 			@RequestParam(value = "chatProfileCode", required = true) String chatProfileCode,
-			@RequestParam(value = "contextCode", required = false) String contextCode)
+			@RequestParam(value = "contextCode", required = false) String contextCode,
+			@RequestParam(value = "pipelineCode", required = false) String pipelineCode)
 			throws GeboPersistenceException {
-		return this.sessionLifeCycleService.createCleanChatByChatProfileCode(chatProfileCode, contextCode);
+		return this.sessionLifeCycleService.createCleanChatByChatProfileCode(chatProfileCode, contextCode, pipelineCode);
 	}
 
 	@DeleteMapping("deleteChat")

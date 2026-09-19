@@ -68,6 +68,10 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     protected openRagChat: boolean = false;
     /** Flag indicating if a regular chat is currently open */
     protected openChat: boolean = false;
+    /** Flag indicating if an open-chat (no company-KB RAG) chat is currently open */
+    protected openOpenChat: boolean = false;
+    /** Pipeline code of the open-chat pipeline (no internal-KB RAG; external search + files). */
+    protected readonly OPEN_CHAT_PIPELINE: string = 'open-chat';
     /** Stores the current page of chat history */
     protected chatsPage?: PagedModelGUserChatInfo;
     /** Stores the currently active chat information */
@@ -169,18 +173,38 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     protected doOpenRagChat(): void {
         this.openRagChat = true;
         this.openChat = false;
+        this.openOpenChat = false;
+        this.chatsListAndOptionsVisible = false;
+    }
+
+    /**
+     * Opens the open-chat interface and hides other chat views
+     */
+    protected doOpenOpenChat(): void {
+        this.openOpenChat = true;
+        this.openRagChat = false;
+        this.openChat = false;
         this.chatsListAndOptionsVisible = false;
     }
 
 
+    /**
+     * Creates and opens a new open-chat session: a model-based "pure chat" that never
+     * RAGs the company knowledge base but can search external systems and chat over
+     * uploaded/picked files. The chosen model is created with the open-chat pipeline
+     * pinned on the session (persisted pipelineCode), and the reusable chat control
+     * runs it through that pipeline. This replaces the former plain-LLM chat: the
+     * model picker still selects the LLM, but the session runs the open-chat pipeline.
+     */
     protected routeNewChat(): void {
-        const value = this.chatFormGroup.value;
-        const chatModelCode = value.chatModelCode;
+        // The open-chat network of agents runs on the system default chat model, so the
+        // user does not pick a model: the session is created on the default model and
+        // pinned to the open-chat pipeline.
         this.chatDataLoading = true;
-        this.geboUserChatsControllerService.createCleanChatByModelCode(chatModelCode).subscribe({
+        this.geboUserChatsControllerService.createCleanChatByDefaultModel(this.OPEN_CHAT_PIPELINE).subscribe({
             next: (chatInfo: GUserChatInfo) => {
                 if (chatInfo.code) {
-                    this.doOpenChat();
+                    this.doOpenOpenChat();
                     const route: string[] = ["/", "ui", "chat", chatInfo.code, "load"];
                     this.router.navigate(route, { replaceUrl: true, onSameUrlNavigation: "reload" }).then(ok => console.log('Navigation result:', ok)).catch(err => console.error('Navigation error:', err));
                 }
@@ -199,6 +223,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     protected doOpenChat(): void {
         this.openChat = true;
         this.openRagChat = false;
+        this.openOpenChat = false;
         this.chatsListAndOptionsVisible = false;
     }
     protected scrollIndexChange(indexChange: TreeScrollIndexChangeEvent) {
@@ -282,6 +307,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         this.currentChat = {};
         this.openChat = false;
         this.openRagChat = false;
+        this.openOpenChat = false;
         this.loadChatList();
     }
 
@@ -404,7 +430,11 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
      */
     protected activateChat(chat: GUserChatInfo) {
         this.currentChat = chat;
-        if (chat.ragChat === true) {
+        if (chat.pipelineCode === this.OPEN_CHAT_PIPELINE) {
+            // A session pinned to the open-chat pipeline reopens in open-chat mode,
+            // regardless of its ragChat flag.
+            this.doOpenOpenChat();
+        } else if (chat.ragChat === true) {
             this.doOpenRagChat();
         } else {
             this.doOpenChat();

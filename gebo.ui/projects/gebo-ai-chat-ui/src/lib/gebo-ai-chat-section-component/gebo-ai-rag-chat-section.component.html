@@ -46,10 +46,11 @@
       @if (llmsSetupDone!==false && chatUIOptions?.enablePureModelChat===true) {
       @if (chatModelsData?.length) {
       <p-button icon="pi pi-pen-to-square" id="NewChatMiniBtn" label="Chat"
-        title="Create a new chat with large language models" gebo-ai-label [text]="true"
-        (onClick)="chatModelsData.length>1?newChatDialog.toggle($event):routeNewChat()"></p-button>
+        title="Chat freely with external web/systems search and your files, without company knowledge base retrieval"
+        gebo-ai-label [text]="true"
+        (onClick)="routeNewChat()"></p-button>
       }
-      }
+      }<br />
       <p-popover #newRagChatDialog>
         <div class="grid">
           <div class="col-12" [formGroup]="formGroup">
@@ -67,25 +68,6 @@
               [disabled]="formGroup.invalid" styleClass="w-full" severity="success" [outlined]="true"
               icon="pi pi-microchip-ai"></p-button>
           </div>
-        </div>
-      </p-popover>
-      <p-popover #newChatDialog>
-        <div class="grid">
-          <div class="col-12" [formGroup]="chatFormGroup">
-            <gebo-ai-field id="chatModelCode" label="Chat without knowledge bases"
-              help="Choose the LLMs for a chat session"
-              placeholder="Select a chat model"><geboai-editable-listbox-component formControlName="chatModelCode"
-                [data]="chatModelsData" [required]="true" gebo-ai-field-element>
-              </geboai-editable-listbox-component></gebo-ai-field>
-
-
-          </div>
-          <div class="col-6">
-            <p-button id="CreateChatBtn" gebo-ai-label label="New chat" (onClick)="routeNewChat()"
-              [disabled]="chatFormGroup.invalid" styleClass="w-full" severity="success" [outlined]="true"
-              icon="pi pi-microchip-ai"></p-button>
-          </div>
-
         </div>
       </p-popover>
     </div>
@@ -119,6 +101,12 @@
     }
     @if (openChat===true) {
     <gebo-ai-reusable-chat-component [ragsystem]="false" [chatInfo]="currentChat"
+      [disableFilesBrowsers]="disableFilesBrowsers"
+      (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
+      (updatedChatAction)="onUpdatedChat($event)" [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
+    }
+    @if (openOpenChat===true) {
+    <gebo-ai-reusable-chat-component [ragsystem]="true" [pipelineId]="OPEN_CHAT_PIPELINE" [chatInfo]="currentChat"
       [disableFilesBrowsers]="disableFilesBrowsers"
       (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
       (updatedChatAction)="onUpdatedChat($event)" [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
