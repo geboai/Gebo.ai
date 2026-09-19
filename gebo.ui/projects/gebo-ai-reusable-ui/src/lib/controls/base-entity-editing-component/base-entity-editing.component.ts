@@ -956,7 +956,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
         accept: confirmCallback,
         icon: 'pi pi-exclamation-triangle',
         header: "Delete confirm",
-        message: "Are you shure you want to delete this data?",
+        message: "Are you sure you want to delete this data?",
         closeOnEscape: true
       });
     }

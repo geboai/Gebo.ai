@@ -295,7 +295,7 @@ export class KnowledgeBaseWizardComponent extends BaseWizardSectionComponent {
         }
         this.confirmationService.confirm({
             header: "Confirm pubblication",
-            message: "Are you shure you want to publish the selected data source in the knowledge base?",
+            message: "Are you sure you want to publish the selected data source in the knowledge base?",
             accept: callback
         })
     }

@@ -63,8 +63,8 @@
                     </div>
                     @if (!searchType || searchType==='MULTI_HOP') {
                       <div class="col-6">
-                        <gebo-ai-field id="firstHopSimilarityThreashold" label="Search similarity threashold"
-                          help="First hop semantic similarity threashold (between 0.5 to 1.0)">
+                        <gebo-ai-field id="firstHopSimilarityThreashold" label="Search similarity threshold"
+                          help="First hop semantic similarity threshold (between 0.5 to 1.0)">
                           <p-inputNumber id="firstHopSimilarityThreashold"
                             formControlName="firstHopSimilarityThreashold" [min]="minThreashold"
                             [max]="maxThreashold" [maxFractionDigits]="2" styleClass="w-full"
@@ -74,8 +74,8 @@
                       }
                       @if (!searchType || searchType==='MULTI_HOP') {
                         <div class="col-6">
-                          <gebo-ai-field id="secondHopSimilarityThreashold" label="Second hop similarity threashold"
-                            help="Second hop semantic similarity threashold (between 0.5 to 1.0)">
+                          <gebo-ai-field id="secondHopSimilarityThreashold" label="Second hop similarity threshold"
+                            help="Second hop semantic similarity threshold (between 0.5 to 1.0)">
                             <p-inputNumber id="secondHopSimilarityThreashold"
                               formControlName="secondHopSimilarityThreashold" [min]="minThreashold"
                               [max]="maxThreashold" [maxFractionDigits]="2" styleClass="w-full"
@@ -85,8 +85,8 @@
                         }
                         @if (searchType==='SINGLE_HOP') {
                           <div class="col-6" [formGroup]="getform('ragQueryOptions')">
-                            <gebo-ai-field id="similarityThreashold" label="Search similarity threashold"
-                              help="Semantic similarity threashold (between 0.5 to 1.0)">
+                            <gebo-ai-field id="similarityThreashold" label="Search similarity threshold"
+                              help="Semantic similarity threshold (between 0.5 to 1.0)">
                               <p-inputNumber formControlName="similarityThreashold" [min]="minThreashold"
                                 [max]="maxThreashold" [maxFractionDigits]="2" styleClass="w-full"
                                 gebo-ai-field-element />

@@ -173,7 +173,7 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
                 this.mandatoryUnsatisfiedEntriesWindowOpened=this.userShowedMandatoryUnsatisfiedEntries===false && this.mandatoryUnsatisfiedEntries && this.mandatoryUnsatisfiedEntries.length>0;
                 this.setupStatusRefresh.emit(this.actualSetupStatus);
                 
-                const completeMessage: ToastMessageOptions = {id:"SETUP-DONE_DO_MORE", summary: "Gebo.ai setup mandatory steps done...", detail: "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software", severity: "warn" };
+                const completeMessage: ToastMessageOptions = {id:"SETUP-DONE_DO_MORE", summary: "Gebo.ai setup mandatory steps done...", detail: "Mandatory setup steps have been completed but some missing steps prevent your organization from getting the most out of this software", severity: "warn" };
                 const incompleteMessage: ToastMessageOptions = {id:"SETUP-MISSING_SOME", summary: "Gebo.ai setup is missing some mandatory step", detail: "Please review the red steps of the setup process", severity: "error" };
                 const okMessage: ToastMessageOptions = {id:"SETUP-OK", summary: "Gebo.ai setup OK!", detail: "", severity: "success" };
                 this.viewSelectedStep(this.stepId);
