@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.architecture.ai.config.GPromptTemplateEditingConfig;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateLightView;
 import ai.gebo.architecture.ai.model.GPromptUseInfo;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGPromptUseInfoDao;
@@ -53,6 +55,47 @@ public class GeboAdminPromptsController {
 	 * Catalog (description/module/placeholders metadata) of the prompt uses.
 	 */
 	final IGPromptUseInfoDao promptUseInfoDao;
+
+	/**
+	 * Deployment switch telling whether prompt templates may be edited from the UI.
+	 */
+	final GPromptTemplateEditingConfig editingConfig;
+
+	/**
+	 * Tells the UI whether prompt template editing (save/delete) is enabled for
+	 * this deployment. When false the admin editor keeps save and delete disabled
+	 * regardless of the other rules.
+	 *
+	 * @return true when {@code ai.gebo.prompt-templates.editingEnabled} is set
+	 */
+	@GetMapping(value = "isPromptTemplateEditingEnabled", produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean isPromptTemplateEditingEnabled() {
+		return editingConfig.isEditingEnabled();
+	}
+
+	/**
+	 * Returns a lightweight view (use code, language, description) of every prompt
+	 * template known at runtime (static library ones plus their mongo overrides),
+	 * for the prompt templates list. The full template texts are not shipped.
+	 *
+	 * @return the light views of all prompt templates
+	 */
+	@GetMapping(value = "getAllPromptConfigsLightList", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GPromptTemplateLightView> getAllPromptConfigsLightList() {
+		// getConfigurations() unions the static library templates with their mongo
+		// copies; a static template and its override share the same code, and the
+		// override is the one that actually resolves, so collapse duplicates by code
+		// keeping the non-static (mongo) one when both are present.
+		java.util.LinkedHashMap<String, GPromptTemplateConfig> byCode = new java.util.LinkedHashMap<>();
+		for (GPromptTemplateConfig config : promptConfigDao.getConfigurations()) {
+			GPromptTemplateConfig existing = byCode.get(config.getCode());
+			boolean isDynamic = config.getConfigDeclarated() == null || !config.getConfigDeclarated();
+			if (existing == null || isDynamic) {
+				byCode.put(config.getCode(), config);
+			}
+		}
+		return byCode.values().stream().map(GPromptTemplateLightView::of).toList();
+	}
 
 	/**
 	 * Retrieves a prompt configuration by its code.

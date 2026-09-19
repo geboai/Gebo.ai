@@ -46,37 +46,39 @@
   }
 
 </p-panel>
-<!--
-<p-blockUI id="BlockUI2"  [target]="promptUI" [blocked]="loadingPrompts">
+<p-blockUI id="BlockUI2" [target]="promptUI" [blocked]="loadingPrompts">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel id="PromptsPanel" gebo-ai-label  #promptUI header="Prompts collection & default prompts">
-  <p-button id="NewPromptConfigurationBtn" gebo-ai-label (onClick)="newPrompt()" label="New prompt configuration" icon="pi pi-hashtag"
-  [outlined]="true"></p-button>
-  <p-table *ngIf="prompts?.length" [value]="(prompts?prompts:[])">
-    <ng-template pTemplate="header">
-      <tr>
-        <th id="CodeHeader2" gebo-ai-text>Code</th>
-        <th id="DescriptionHeader2" gebo-ai-text>Description</th>
-        <th id="CategoryHeader" gebo-ai-text>Category</th>
-        <th id="EmptyHeader2" gebo-ai-text></th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-model>
-      <tr>
-        <td>{{ model.code }}</td>
-        <td>{{ model.description }}</td>
-        <td>{{ model.promptCategory}}</td>
-        <td><p-button id="ConfigureBtn2" gebo-ai-label (onClick)="editPrompt(model)" [outlined]="true" label="configure"
-        icon="pi pi-wrench"></p-button></td>
-      </tr>
-    </ng-template>
-  </p-table>
-
-
-
+<p-panel id="PromptsPanel" gebo-ai-label #promptUI header="Prompt templates">
+  @if (prompts?.length) {
+    <p-table [value]="prompts" [paginator]="true" [rows]="promptsPageSize" [first]="promptsFirst"
+      [rowsPerPageOptions]="[10, 20, 30]" (onPage)="onPromptPageChange($event)"
+      responsiveLayout="scroll" styleClass="p-datatable-striped">
+      <ng-template pTemplate="header">
+        <tr>
+          <th id="UseCodeHeader" gebo-ai-text>Use code</th>
+          <th id="LanguageHeader" gebo-ai-text>Language</th>
+          <th id="DescriptionHeader2" gebo-ai-text>Description</th>
+          <th id="EmptyHeader2" gebo-ai-text></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-model>
+        <tr>
+          <td>
+            {{ model.promptUse }}
+            @if (model.configDeclarated) {
+              <i class="pi pi-lock ml-2 text-secondary" title="Declared in the server configuration"></i>
+            }
+          </td>
+          <td>{{ model.langCode }}</td>
+          <td>{{ model.description }}</td>
+          <td><p-button id="ConfigureBtn2" gebo-ai-label (onClick)="editPrompt(model)" [outlined]="true"
+            label="configure" icon="pi pi-wrench"></p-button></td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
 </p-panel>
--->
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
 

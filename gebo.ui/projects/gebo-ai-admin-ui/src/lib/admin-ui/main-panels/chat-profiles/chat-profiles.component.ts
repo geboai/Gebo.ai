@@ -18,7 +18,7 @@
  * and edit both chat profiles and prompts with pagination support.
  */
 import { Component, OnInit } from "@angular/core";
-import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, PagedModelGChatProfileConfiguration } from "@Gebo.ai/gebo-ai-rest-api";
+import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, GPromptTemplateLightView, PagedModelGChatProfileConfiguration } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
@@ -45,13 +45,18 @@ export class ChatProfilesComponent extends AncestorPanelComponent implements OnI
     }
 
     /**
-     * Pagination configuration for prompts list.
+     * Client-side pagination state for the prompts list (index of the first row).
      */
-    promptsPage: DataPage = {
-        page: 0,
-        pageSize: 20
-    };
-    
+    public promptsFirst: number = 0;
+
+    /** Page size for the prompts list. */
+    public promptsPageSize: number = 20;
+
+    /**
+     * Full light list of prompt templates (loaded once, paged client-side).
+     */
+    public prompts: GPromptTemplateLightView[] = [];
+
     /**
      * Pagination configuration for chat profiles list.
      */
@@ -102,12 +107,38 @@ export class ChatProfilesComponent extends AncestorPanelComponent implements OnI
     }
     
     /**
-     * Loads prompt configurations from the server using the configured pagination.
-     * Sets the loading flag during the operation.
+     * Loads the lightweight prompt templates list (use code, language, description)
+     * from the server. The list is paged client-side, so it is fetched once here.
      */
     private loadPrompts() {
-        //this.loadingPrompts = true;
-        
+        this.loadingPrompts = true;
+        this.geboPromptAdminService.getAllPromptConfigsLightList().subscribe({
+            next: (data) => {
+                this.prompts = data ?? [];
+            },
+            complete: () => {
+                this.loadingPrompts = false;
+            }
+        });
+    }
+
+    /**
+     * Opens the prompt template editor for a given light view (loaded fully by code),
+     * refreshing the list after the edit completes.
+     *
+     * @param prompt the light view of the prompt template to edit
+     */
+    editPrompt(prompt: GPromptTemplateLightView) {
+        this.geboUIActionEventService.routeEvent({
+            actionType: GeboActionType.OPEN,
+            context: {},
+            contextType: "chatList",
+            target: { code: prompt.code, description: prompt.description },
+            targetType: "GPromptConfig",
+            onActionPerformed: (evt) => {
+                this.loadPrompts();
+            }
+        });
     }
     
     /**
@@ -158,9 +189,8 @@ export class ChatProfilesComponent extends AncestorPanelComponent implements OnI
      * @param p The new paginator state
      */
     onPromptPageChange(p: PaginatorState) {
-        this.promptsPage.page = p.page;
-        this.profilesPage.pageSize = p.rows;
-        this.loadPrompts();
+        this.promptsFirst = p.first ?? 0;
+        this.promptsPageSize = p.rows ?? this.promptsPageSize;
     }
     
     /**

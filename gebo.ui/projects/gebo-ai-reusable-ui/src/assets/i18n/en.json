@@ -1036,11 +1036,15 @@
       "NewPromptConfigurationBtn": { "label": "New prompt configuration" },
       "NewChatProfileBtn": { "label": "New chat profile" },
       "MainPanel": { "label": "Retrivial augmented generation chat profiles" },
-      "PromptsPanel": { "label": "Prompts collection & default prompts" },
+      "PromptsPanel": { "label": "Prompt templates" },
       "KnowledgeBasesHeader": { "label": "Knowledge bases" },
       "DescriptionHeader": { "label": "Description" },
       "ConfigureBtn1": { "label": "configure" },
-      "CodeHeader": { "label": "Code" }
+      "CodeHeader": { "label": "Code" },
+      "UseCodeHeader": { "label": "Use code" },
+      "LanguageHeader": { "label": "Language" },
+      "DescriptionHeader2": { "label": "Description" },
+      "ConfigureBtn2": { "label": "configure" }
     }
   },
   "KnowledgeBasesPanelModule": {
@@ -2839,7 +2843,8 @@
       "PromptCategorySelect": {
         "placeholder": "Enter or insert the prompt category"
       },
-      "MainPanel": { "label": "Editing prompt" },
+      "MainPanel": { "label": "Editing prompt template" },
+      "EditingDisabledText": { "label": "Prompt template editing is disabled on this deployment; the editor is read only." },
       "promptCategory": {
         "label": "Prompt category",
         "help": "Select or insert the prompt category."

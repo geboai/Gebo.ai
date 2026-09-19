@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GPromptTemplateConfig } from '../model/gPromptTemplateConfig';
+import { GPromptTemplateLightView } from '../model/gPromptTemplateLightView';
 import { GPromptUseInfo } from '../model/gPromptUseInfo';
 import { PromptFilter } from '../model/promptFilter';
 
@@ -203,6 +204,42 @@ export class GeboAdminPromptsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public getAllPromptConfigsLightList(observe?: 'body', reportProgress?: boolean): Observable<Array<GPromptTemplateLightView>>;
+    public getAllPromptConfigsLightList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GPromptTemplateLightView>>>;
+    public getAllPromptConfigsLightList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GPromptTemplateLightView>>>;
+    public getAllPromptConfigsLightList(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<GPromptTemplateLightView>>('get',`${this.basePath}/api/admin/GeboAdminPromptsController/getAllPromptConfigsLightList`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
     public getPromptCategories(observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
     public getPromptCategories(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
     public getPromptCategories(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
@@ -319,6 +356,42 @@ export class GeboAdminPromptsControllerService {
         return this.httpClient.request<GPromptTemplateConfig>('post',`${this.basePath}/api/admin/GeboAdminPromptsController/insertPromptConfig`,
             {
                 body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public isPromptTemplateEditingEnabled(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public isPromptTemplateEditingEnabled(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public isPromptTemplateEditingEnabled(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
+    public isPromptTemplateEditingEnabled(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<boolean>('get',`${this.basePath}/api/admin/GeboAdminPromptsController/isPromptTemplateEditingEnabled`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
