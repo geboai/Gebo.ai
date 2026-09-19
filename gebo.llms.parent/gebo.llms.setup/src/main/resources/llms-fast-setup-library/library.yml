@@ -23,9 +23,14 @@ ai.gebo.llms.vendors.setup.config:
             - code: gpt-oss-120b
               description: OpenAI Gpt OSS 120b
               uses: CHAT
-            - code: Llama-3.3-70B-Instruct
-              description: Meta LLama 3.3 70b instruct
+            # Replaces Llama-3.3-70B-Instruct, which regolo.ai no longer serves.
+            - code: glm5.2
+              description: Z.ai GLM 5.2
               uses: CHAT
+            # NO_THINKING states the intent - an internal services model should not spend
+            # tokens reasoning - but an openai compatible provider has no portable way to
+            # ask for it, so this one is not sent: see the thinking handling in
+            # GenericOpenAIAPIChatModelConfigurationSupportService.
             - code: gpt-oss-20b
               description: OpenAI Gpt OSS 20b
               uses: INTERNAL_SERVICES
@@ -59,6 +64,14 @@ ai.gebo.llms.vendors.setup.config:
             - code: faster-whisper-large-v3
               description: Faster Whisper Large v3 (speech to text)
               defaultChoice: true
+        # Regolo documents /audio/speech (OpenAI createSpeech parameters), but its model
+        # catalog publishes no model with mode=audio_speech yet, so there is no code to
+        # preset here: the choices are left to the lookup, which RegoloAIModelsListProviderService
+        # already resolves by that mode. Add a defaultChoice once Regolo lists a voice
+        # model - a code guessed now would only be reported back as unresolved.
+        - type: TTS
+          serviceHandler: tts-regolo.ai
+          doModelsLookup: true
 
     - vendorInfo:
         vendorId: openai
@@ -398,18 +411,49 @@ ai.gebo.llms.vendors.setup.config:
         vendorId: groq
         name: Groq
         description: Groq AI provider
-        acquireKeyUrl: https://dashboard.regolo.ai/api-keys
+        acquireKeyUrl: https://console.groq.com/keys
         requiresApiKey: true
         requiresCustomUrl: false
         webSite: https://groq.com/
         apiKeySecretContext: groq
+        minContextWindow: 131072
       presets:
+        # No EMBEDDING preset: groq does not document an embeddings endpoint and its
+        # models list carries no embedding model, so the type can only ever offer an
+        # empty choice list. The embedding-groq handler was removed with it.
         - type: CHAT
           serviceHandler: chatmodel-groq
           doModelsLookup: true
-        - type: EMBEDDING
-          serviceHandler: embedding-groq
-          doModelsLookup: true
+          choices:
+            - code: llama-3.3-70b-versatile
+              description: Meta Llama 3.3 70b versatile
+              contextWindow: 131072
+              uses: CHAT
+              defaultChoice: true
+            - code: openai/gpt-oss-120b
+              description: OpenAI Gpt OSS 120b
+              contextWindow: 131072
+              uses: CHAT
+            - code: groq/compound
+              description: Groq Compound (agentic system with built in tools)
+              contextWindow: 131072
+              uses: CHAT
+            - code: llama-3.1-8b-instant
+              description: Meta Llama 3.1 8b instant
+              contextWindow: 131072
+              uses: INTERNAL_SERVICES
+        # doModelsLookup=false: the transcript handler has no models list for groq, so
+        # its lookup would answer with the OpenAI whisper-1 suggestion and every code
+        # below would be rejected as unavailable. The preset codes are trusted instead.
+        - type: TRANSCRIPT
+          serviceHandler: transcript-groq
+          doModelsLookup: false
+          choices:
+            - code: whisper-large-v3-turbo
+              description: Whisper Large v3 Turbo (fast speech to text)
+              defaultChoice: true
+            - code: whisper-large-v3
+              description: Whisper Large v3 (speech to text)
     - vendorInfo:
         vendorId: openrouter.ai
         name: OpenRouter.ai
@@ -425,10 +469,25 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chatmodel-openrouter.ai
           doModelsLookup: true
           choices:
-            - code: openai/gpt-oss-120b
-              description: OpenAI Gpt OSS 120b
+            # The default is the cheapest model here that stays reliable once tools are
+            # in play, which is what a chat pipeline spends most of its calls on: glm
+            # 5.3 flash costs 0.09/0.30 per million in and out, carries a 1.3M context
+            # and scores above the other flash-class models on the agentic benchmarks.
+            - code: z-ai/glm-5.3-flash
+              description: Z.ai GLM 5.3 Flash
+              contextWindow: 1310720
               uses: CHAT
               defaultChoice: true
+            # Kept as an option but no longer the default: gpt-oss-120b is unreliable at
+            # function calling, which a chat that dispatches tools depends on.
+            - code: openai/gpt-oss-120b
+              description: OpenAI Gpt OSS 120b
+              contextWindow: 131072
+              uses: CHAT
+            - code: deepseek/deepseek-v4-flash
+              description: DeepSeek V4 Flash
+              contextWindow: 1048576
+              uses: CHAT
             - code: openai/gpt-oss-20b
               description: OpenAI Gpt OSS 20b
               uses: INTERNAL_SERVICES
@@ -446,6 +505,36 @@ ai.gebo.llms.vendors.setup.config:
             - code: cohere/rerank-4-pro
               description: Chohere Rerank 4 pro
               defaultChoice: true
+        # Image generation was the one model type openrouter.ai had a handler for -
+        # images-openrouter.ai, which resolves its choices by the image output modality -
+        # without anything offering it in the setup.
+        #
+        # The default is picked on the same grounds as the chat one: the cheapest model
+        # that is still a full text-to-image generator, not the most capable one. Image
+        # output is billed per output token, and the openai gpt-image-2.5 tier that used
+        # to be the default sits at 0.00003 - the top band - while qwen-image-3 is at
+        # 0.0000072, so a default nobody changed cost four times what it had to.
+        #
+        # Every code here outputs image ONLY (text+image->image). The gemini and gpt-5
+        # families answer text+image, so the reply carries prose alongside the picture
+        # and the image response handler has to fish it out; they are deliberately not
+        # offered, and google/gemini-3-pro-image was dropped from this list for that
+        # reason as much as for its price.
+        - type: IMAGESGEN
+          serviceHandler: images-openrouter.ai
+          doModelsLookup: true
+          choices:
+            - code: qwen/qwen-image-3
+              description: Qwen Image 3 (text to image generation)
+              defaultChoice: true
+            - code: black-forest-labs/flux.2-pro
+              description: Black Forest Labs FLUX.2 Pro
+            - code: openai/gpt-image-1-mini
+              description: OpenAI GPT Image 1 mini (low cost)
+            - code: openai/gpt-image-2.5-flare
+              description: OpenAI GPT Image 2.5 Flare (fast image generation)
+            - code: openai/gpt-image-2.5-sunburst
+              description: OpenAI GPT Image 2.5 Sunburst (highest quality, highest cost)
         - type: TRANSCRIPT
           serviceHandler: transcript-openrouter.ai
           doModelsLookup: true
@@ -457,17 +546,28 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: tts-openrouter.ai
           doModelsLookup: true
           choices:
+            # The widest voice coverage here belongs to gemini 3.1 flash tts, which is also
+            # the most used model of this type on openrouter.ai - 70+ languages against the
+            # 15 of the microsoft voice and the 8 of kokoro - but it cannot be the default
+            # while the generic text to speech handler asks every provider for mp3:
+            # tested against a live key it answers
+            #   400 Gemini TTS only supports response_format="pcm". Got "mp3".
+            # and the call fails. It stays listed for the day the handler negotiates the
+            # format per model, and the default is the widest-reaching voice that does
+            # answer in mp3, verified end to end on this installation.
             - code: minimax/speech-2.8-hd
-              description: MiniMax Speech 2.8 HD
+              description: MiniMax Speech 2.8 HD (multilanguage)
               defaultChoice: true
             - code: minimax/speech-2.8-turbo
-              description: MiniMax Speech 2.8 Turbo
+              description: MiniMax Speech 2.8 Turbo (multilanguage)
+            - code: microsoft/mai-voice-2
+              description: Microsoft MAI Voice 2 (15 languages)
+            - code: google/gemini-3.1-flash-tts-preview
+              description: Google Gemini 3.1 Flash TTS (70+ languages, needs pcm support)
             - code: deepgram/aura-2
               description: Deepgram Aura 2
-            - code: microsoft/mai-voice-2
-              description: Microsoft MAI Voice 2
             - code: hexgrad/kokoro-82m
-              description: Kokoro 82M
+              description: Kokoro 82M (8 languages)
 
     - vendorInfo:
         vendorId: ollama

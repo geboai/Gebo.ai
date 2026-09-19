@@ -28,6 +28,28 @@
       </div>
     </div>
   }
+
+  <!-- An embedding model that already exists has vectors behind it: every knowledge base
+       was indexed with THIS model, and vectors produced by one model are not comparable
+       with those of another. Changing the model here does not re-index anything, so the
+       existing vectors stop matching what is searched and retrieval silently degrades
+       until the knowledge bases are ingested again.
+       The condition is not mode==='EDIT': mode defaults to EDIT and is only resolved
+       against the backend when the entity carries a code, so the creation form - routed
+       with the model type alone - would show this too, and a save sets mode to EDIT,
+       so a model created a moment ago would start warning about vectors it never made. -->
+  @if (editingAlreadyPersistedEntity) {
+    <div class="grid">
+      <div class="col-12">
+        <p-message id="EmbeddingModelChangeWarning" severity="error" styleClass="w-full" gebo-ai-text>
+          Changing the embedding model of an existing configuration invalidates the vectors already
+          stored: the knowledge bases must be ingested again, otherwise retrieval keeps searching
+          vectors that this model did not produce.
+        </p-message>
+      </div>
+    </div>
+  }
+
   <div class="geboDialogContent">
     <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
     <div class="grid standardTabDialogueHeight">

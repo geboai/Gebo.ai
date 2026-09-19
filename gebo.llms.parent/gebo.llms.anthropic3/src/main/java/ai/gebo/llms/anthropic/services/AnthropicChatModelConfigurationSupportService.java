@@ -21,6 +21,8 @@ import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
+import com.anthropic.models.messages.OutputConfig;
+
 import ai.gebo.llms.anthropic.http.AnthropicClientCustomizer;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -157,6 +159,61 @@ public class AnthropicChatModelConfigurationSupportService
 				builder = builder.topP(config.getTopP());
 			}
 
+			// Claude expresses thinking in two generations of api, and which one a model
+			// takes is not negotiable:
+			// - the current models let the model decide adaptively and take the depth as an
+			//   effort level. They reject a token budget outright, with a 400.
+			// - the older ones (4.5 and earlier, of which claude-haiku-4-5 is the one this
+			//   installation presets) know neither adaptive nor effort: they want an
+			//   explicit budget in tokens, which has to be at least 1024 and stay below
+			//   maxTokens - a pair we cannot derive when no generation cap is configured.
+			// Sending the wrong one of the two is a failed call rather than a degraded
+			// answer, so only the adaptive form is sent here and a model of the older
+			// generation keeps the provider default, exactly as before this was mapped.
+			// Newer models default to the adaptive branch: the exclusion names the
+			// generations known to need a budget instead of listing the ones that do not,
+			// so a model released after this code keeps working.
+			if (config.getThinking() != null) {
+				String modelCode = config.getChoosedModel() != null ? config.getChoosedModel().getCode() : null;
+				if (isBudgetOnlyThinkingModel(modelCode)) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug(
+								"Chat model {} asks for thinking {} but {} belongs to the claude generation configured"
+										+ " by token budget, which needs a generation cap to be expressed: the model is"
+										+ " left at the provider default",
+								config.getCode(), config.getThinking(), modelCode);
+					}
+				} else {
+					switch (config.getThinking()) {
+					case NO_THINKING: {
+						builder = builder.thinkingDisabled();
+					}
+						break;
+					case LOW_THINKING: {
+						builder = builder.thinkingAdaptive().effort(OutputConfig.Effort.LOW);
+					}
+						break;
+					case MEDIUM_THINKING: {
+						builder = builder.thinkingAdaptive().effort(OutputConfig.Effort.MEDIUM);
+					}
+						break;
+					case HIGH_THINKING: {
+						// Our HIGH_THINKING is labelled "maximum thinking" in the admin screens,
+						// so it reaches for the top of claude's scale rather than for HIGH, which
+						// is merely what a request gets when it asks for nothing.
+						builder = builder.thinkingAdaptive().effort(OutputConfig.Effort.MAX);
+					}
+						break;
+					default:
+						break;
+					}
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Chat model {} ({}) configured with thinking {}", config.getCode(), modelCode,
+								config.getThinking());
+					}
+				}
+			}
+
 			// Add any enabled functions/tools
 			List<ToolCallback> functions = new ArrayList<ToolCallback>();
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
@@ -259,5 +316,28 @@ public class AnthropicChatModelConfigurationSupportService
 			throws GeboPersistenceException, LLMConfigException {
 
 		return configureHandler.insertAndConfigure(config, type);
+	}
+
+	/**
+	 * Whether the model configures its thinking by a token budget rather than by the
+	 * adaptive mode and an effort level.
+	 *
+	 * <p>
+	 * The claude 4.5 generation and everything before it knows neither adaptive thinking
+	 * nor an effort level and answers both with a 400; the generations after it answer a
+	 * token budget the same way. There is no capability flag to read this from, the
+	 * model code being all that identifies the generation, so the test names the older
+	 * ones: a model this code has never heard of is taken as one of the newer ones,
+	 * which is the direction releases move in.
+	 * </p>
+	 *
+	 * @param modelCode the configured model code, null when none is chosen yet
+	 * @return true when the model takes a token budget
+	 */
+	static boolean isBudgetOnlyThinkingModel(String modelCode) {
+		if (modelCode == null || modelCode.isBlank())
+			return false;
+		String code = modelCode.toLowerCase();
+		return code.contains("-4-5") || code.contains("-4.5") || code.contains("claude-3");
 	}
 }

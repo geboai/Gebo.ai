@@ -166,6 +166,37 @@ public class DeepseekChatModelConfigurationSupportService
 			if (config.getTopP() != null) {
 				builder = builder.topP(config.getTopP());
 			}
+			// Deepseek carries the two halves of the setting separately: thinking switches
+			// the mode on or off, reasoning_effort says how deep it goes once it is on.
+			// The depth scale is shorter than ours - the api offers HIGH, which is what a
+			// normal request gets anyway, and MAX above it - so LOW and MEDIUM can only
+			// turn thinking on and leave the depth at the provider default: deepseek has
+			// no level below it to ask for. HIGH_THINKING, our "maximum thinking", is the
+			// one that reaches for MAX.
+			// AUTO sends neither, which is what it means: leave the provider default alone.
+			if (config.getThinking() != null) {
+				switch (config.getThinking()) {
+				case NO_THINKING: {
+					builder = builder.thinking(DeepSeekApi.ChatCompletionRequest.Thinking.DISABLED);
+				}
+					break;
+				case LOW_THINKING:
+				case MEDIUM_THINKING: {
+					builder = builder.thinking(DeepSeekApi.ChatCompletionRequest.Thinking.ENABLED);
+				}
+					break;
+				case HIGH_THINKING: {
+					builder = builder.thinking(DeepSeekApi.ChatCompletionRequest.Thinking.ENABLED)
+							.reasoningEffort(DeepSeekApi.ChatCompletionRequest.ReasoningEffort.MAX);
+				}
+					break;
+				default:
+					break;
+				}
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model {} configured with thinking {}", config.getCode(), config.getThinking());
+				}
+			}
 			List<ToolCallback> functions = new ArrayList<ToolCallback>();
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				// Get tools based on enabled functions

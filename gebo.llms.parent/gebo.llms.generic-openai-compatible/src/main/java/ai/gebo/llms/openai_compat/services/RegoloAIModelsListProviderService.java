@@ -3,6 +3,10 @@ package ai.gebo.llms.openai_compat.services;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -35,14 +39,15 @@ import lombok.Data;
 @Service
 @AllArgsConstructor
 public class RegoloAIModelsListProviderService implements IGModelsListProvider {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RegoloAIModelsListProviderService.class);
 	private static final String REGOLO_AI_MODELS_LIST = "regolo-ai-models-list";
 	// LiteLLM model_info.mode values (regolo.ai is served through a LiteLLM proxy).
+	private static final String CHAT = "chat";
 	private static final String EMBEDDING = "embedding";
 	private static final String RERANK = "rerank";
 	private static final String IMAGE_GENERATION = "image_generation";
 	private static final String AUDIO_SPEECH = "audio_speech";
 	private static final String AUDIO_TRANSCRIPTION = "audio_transcription";
-	private static final String MODERATION = "moderation";
 	private static final String REGOLO_AI_MODELS_INFO_URL = "https://api.regolo.ai/v1/model/info";
 	final IGModelChoiceMetaInfoEnricherService enricherService;
 	final RestTemplateWrapperService restTemplateWrapper;
@@ -74,7 +79,8 @@ public class RegoloAIModelsListProviderService implements IGModelsListProvider {
 			ResponseEntity<RegoloAIModelList> response = restTemplateWrapper.exchange(REGOLO_AI_MODELS_INFO_URL,
 					HttpMethod.GET, request, RegoloAIModelList.class);
 			RegoloAIModelList result = response.hasBody() ? response.getBody() : new RegoloAIModelList();
-			List<RegoloAIModel> data = result.getData() != null ? result.getData() : new ArrayList<RegoloAIModel>();
+			List<RegoloAIModel> data = distinctByName(
+					result.getData() != null ? result.getData() : new ArrayList<RegoloAIModel>());
 
 			if (GBaseEmbeddingModelChoice.class.isAssignableFrom(choiceType)) {
 				List<GBaseEmbeddingModelChoice> list = new ArrayList<GBaseEmbeddingModelChoice>();
@@ -144,13 +150,50 @@ public class RegoloAIModelsListProviderService implements IGModelsListProvider {
 	 * A chat model is anything that is not one of the specialised modes. Models with
 	 * no declared mode are kept as chat, preserving the previous lenient behaviour.
 	 */
+	/**
+	 * Whether the model is a chat one.
+	 *
+	 * <p>
+	 * This used to exclude the known non chat modes instead of accepting the chat one,
+	 * which made every mode regolo added afterwards default to chat: {@code ocr} arrived
+	 * with deepseek-ocr-2 and the model started being offered as a chat model. Accepting
+	 * only {@code chat} keeps the next new mode out on its own.
+	 * </p>
+	 *
+	 * <p>
+	 * A model whose mode is absent is still taken as a chat one: the field is not
+	 * guaranteed and dropping those would hide usable models.
+	 * </p>
+	 */
 	private boolean isChatMode(RegoloAIModel model) {
 		String mode = getMode(model);
 		if (mode == null)
 			return true;
-		return !(mode.equalsIgnoreCase(EMBEDDING) || mode.equalsIgnoreCase(RERANK)
-				|| mode.equalsIgnoreCase(IMAGE_GENERATION) || mode.equalsIgnoreCase(AUDIO_SPEECH)
-				|| mode.equalsIgnoreCase(AUDIO_TRANSCRIPTION) || mode.equalsIgnoreCase(MODERATION));
+		return mode.equalsIgnoreCase(CHAT);
+	}
+
+	/**
+	 * The models of the payload, keeping the first entry of every model name.
+	 *
+	 * <p>
+	 * regolo.ai answers /model/info with one entry per backend serving a model, so a
+	 * model served by two of them is listed twice (gpt-oss-20b and qwen3.5-9b are, at the
+	 * time of writing) and without this every one of its duplicates became a separate
+	 * choice in the dropdown. Its /models endpoint does the same deduplication.
+	 * </p>
+	 */
+	private List<RegoloAIModel> distinctByName(List<RegoloAIModel> data) {
+		Map<String, RegoloAIModel> byName = new LinkedHashMap<String, RegoloAIModel>();
+		for (RegoloAIModel model : data) {
+			if (model.getModel_name() == null)
+				continue;
+			byName.putIfAbsent(model.getModel_name(), model);
+		}
+		if (LOGGER.isDebugEnabled() && byName.size() != data.size()) {
+			LOGGER.debug("Regolo.ai answered with {} entries for {} distinct model names, the duplicates are dropped",
+					data.size(), byName.size());
+		}
+		return new ArrayList<RegoloAIModel>(byName.values());
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

@@ -151,6 +151,31 @@ public class MistralChatModelConfigurationSupportService
 			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
 				builder.maxTokens(config.getMaxGeneratedTokens());
 			}
+			// Mistral's adjustable reasoning is a switch rather than a scale: its
+			// reasoning_effort offers HIGH and NONE and nothing between them, so the three
+			// levels above zero all ask for HIGH - asking for less is not something the
+			// api can express. NONE, on the other hand, it can, which makes this one of
+			// the few providers where NO_THINKING is honoured rather than approximated.
+			// AUTO sends nothing: it means leaving the provider default alone.
+			if (config.getThinking() != null) {
+				switch (config.getThinking()) {
+				case NO_THINKING: {
+					builder = builder.reasoningEffort(MistralAiApi.ChatCompletionRequest.ReasoningEffort.NONE);
+				}
+					break;
+				case LOW_THINKING:
+				case MEDIUM_THINKING:
+				case HIGH_THINKING: {
+					builder = builder.reasoningEffort(MistralAiApi.ChatCompletionRequest.ReasoningEffort.HIGH);
+				}
+					break;
+				default:
+					break;
+				}
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model {} configured with thinking {}", config.getCode(), config.getThinking());
+				}
+			}
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
 				// The condition above tests the tool names that were REQUESTED. getTools filters

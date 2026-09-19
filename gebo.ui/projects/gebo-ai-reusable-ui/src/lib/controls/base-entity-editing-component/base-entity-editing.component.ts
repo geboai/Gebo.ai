@@ -225,6 +225,34 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
   /** Flag to track if entity has been refreshed by code */
   private refreshedByCode: boolean = false;
 
+  /** Backing flag for {@link editingAlreadyPersistedEntity}, latched when the editor opens */
+  private openedOnPersistedEntity: boolean = false;
+
+  /**
+   * Whether this editor was opened on an entity that <b>already existed</b> in the backend,
+   * as opposed to one being created in it now.
+   *
+   * <p>
+   * Neither {@link mode} nor the persistent-data hook answers that question. {@code mode}
+   * defaults to {@code "EDIT"} and is only resolved against the backend when the entity
+   * carries a code, so a creation form - which is routed with the model type and no code -
+   * keeps the default and looks like an edit; and a successful save or insert sets
+   * {@code mode} to {@code "EDIT"} and calls {@code onLoadedPersistentData} as well, so a
+   * brand new entity becomes indistinguishable from an old one the moment it is stored.
+   * </p>
+   *
+   * <p>
+   * This flag is therefore latched on the two paths that load an entity when the editor
+   * opens, and never on the ones that follow a save, so that it keeps meaning "was already
+   * there before this editing session" for as long as the editor lives. It exists for the
+   * screens that must warn about the consequences of changing something on existing data -
+   * the embedding model editors, whose stored vectors a change invalidates.
+   * </p>
+   */
+  public get editingAlreadyPersistedEntity(): boolean {
+    return this.openedOnPersistedEntity;
+  }
+
   /**
    * Determines if any backend operation is in progress
    */
@@ -589,6 +617,12 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
         this.codeWhasNotPresent = this.entity.code ? false : true;
         this.canSave = true;
         if (this.mode === "EDIT" && !this.codeWhasNotPresent) {
+          // Both branches are the editor opening on an entity that carries a code, which
+          // is the one the backend already holds - the first one reloads it, the second
+          // one has it already. A save reaching EDIT does not come through here: it
+          // assigns the entity to the field rather than to the input, so ngOnChanges
+          // does not run for it and the flag stays where the opening left it.
+          this.openedOnPersistedEntity = true;
           if (this.refreshedByCode === false) {
             this.refreshedByCode = true;
             this.doReloadByCode();
@@ -624,6 +658,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
           if (value) {
             this.mode = "EDIT";
             this.refreshedByCode = true;
+            this.openedOnPersistedEntity = true;
             this.entity = value;
             this.formGroup.patchValue(value);
             this.updateObjectReference();

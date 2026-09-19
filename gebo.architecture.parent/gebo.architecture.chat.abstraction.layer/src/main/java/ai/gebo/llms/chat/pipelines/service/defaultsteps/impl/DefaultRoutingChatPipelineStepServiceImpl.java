@@ -418,6 +418,18 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			int threasholdForForcedDeepSearch = getChatWithDocsAndUploadedSizeTriggersDeepSearchThreashold(chatModel);
 			if (forcedDocumentsTotal >= threasholdForForcedDeepSearch) {
 				rd = createKnowledgeBaseSearchHeavyDocumentsFixedRoute(emitter, runtimeData);
+			} else if (firstDecision.getUserIntent() == DeliverableIntent.IMAGE_GENERATION
+					&& isImageGenerationAvailable()) {
+				// The first step already decided this one: an explicit request for a new image
+				// has a single destination, so it goes there instead of being handed to
+				// doDecideRoute, which would ask the model again and can answer with something
+				// else entirely. The availability test is repeated rather than trusted from the
+				// intent step because an image model can be removed between the two.
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("User intent is {}: routing straight to the image generation service",
+							DeliverableIntent.IMAGE_GENERATION.name());
+				}
+				rd = createImageGenerationFixedRoute(emitter);
 			} else {
 				if (runtimeData.getRequestResources().getCurrentRequest() != null
 						&& runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId() != null
@@ -512,6 +524,52 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		RespondingWith _decision = ordered.isEmpty() ? RespondingWith.PURE_LLM_RESPONSE
 				: ordered.firstEntry().getValue();
 		return _decision;
+	}
+
+	/**
+	 * The route an explicit request for a new image takes, without asking the model a
+	 * second time where to go.
+	 *
+	 * <p>
+	 * IMAGE_GENERATION is the one deliverable whose destination the first step already
+	 * settles: the catalog describes it as the user having EXPLICITLY asked to generate,
+	 * create, draw, render or design a NEW image, and there is exactly one service that
+	 * produces one. Left to {@link #doDecideRoute} the question is put to the model a
+	 * second time, with the intent demoted to a hint among the routing parameters, and an
+	 * answer that is already known can come back as a knowledge base search instead - the
+	 * user asks for a picture and gets a document lookup. That second call is also paid
+	 * for, in latency and tokens, to re-derive what the first one decided.
+	 * </p>
+	 *
+	 * <p>
+	 * The decision is the same object {@link #decideStepsChain} builds for
+	 * IMAGE_GENERATION_RESPONSE, so nothing downstream sees a new shape.
+	 * </p>
+	 */
+	private RoutingDecision createImageGenerationFixedRoute(ISinkUIEmitter emitter) {
+		notifyUser(emitter, CHOOSED_AGENTIC_FLOW, CHOOSED_AGENTIC_FLOW_ANSWERING_AGENT_RUNNING, null, 2000l,
+				NotificationType.INFO);
+		return new RoutingDecision(
+				List.of(DefaultImageGenerationStreamingOutputChatPipelineServiceImpl.IMAGE_GENERATION_STREAMING_SERVICE),
+				new IChatPipelineStepRuntimeData() {
+
+					@Override
+					public String getStepId() {
+
+						return DefaultRoutingChatPipelineStepServiceImpl.this.getStepId();
+					}
+
+					@Override
+					public List<IStepContribution> getContextEnrichingContribution() {
+						return List.of();
+					}
+
+					@Override
+					public Map<String, Object> getEnvironmentContributions() {
+
+						return Map.of();
+					}
+				}, RespondingWith.IMAGE_GENERATION_RESPONSE.name(), Map.of());
 	}
 
 	private RoutingDecision createKnowledgeBaseSearchHeavyDocumentsFixedRoute(ISinkUIEmitter emitter,
