@@ -86,7 +86,7 @@
 
 
                 <div class="col-2">
-                  <gebo-ai-field id="publicAccess" label="public" help="If true the repository access does not require autentication">
+                  <gebo-ai-field id="publicAccess" label="public" help="If true the repository access does not require authentication">
                     <p-checkbox formControlName="publicAccess" id="publicAccess" [binary]="true" [trueValue]="true"
                     [falseValue]="false" (onBlur)="onGitConnectivityChange()" gebo-ai-field-element></p-checkbox>
                   </gebo-ai-field>
@@ -106,12 +106,12 @@
                   </gebo-ai-field>
                 </div>
                 <div class="col-12">
-                  <gebo-ai-field id="programmedTables" label="Contents updates checks schedule" help="Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated">
+                  <gebo-ai-field id="programmedTables" label="Contents updates checks schedule" help="Configure the scheduling of changed contents to maintain the retrieval-augmented generation system updated">
                     <gebo-ai-content-reindex-scheduler-component formControlName="programmedTables" id="programmedTables" gebo-ai-field-element></gebo-ai-content-reindex-scheduler-component>
                   </gebo-ai-field>
                 </div>
                 <div class="col-10">
-                  <gebo-ai-field id="buildSystemsRefs" label="Configure build systems" help="List of build/packaging systems to inspect for meta informations and additional artifacts infos">
+                  <gebo-ai-field id="buildSystemsRefs" label="Configure build systems" help="List of build/packaging systems to inspect for meta information and additional artifacts infos">
                     <gebo-ai-build-systems-chooser id="buildSystemsRefs"
                     formControlName="buildSystemsRefs" gebo-ai-field-element></gebo-ai-build-systems-chooser>
                   </gebo-ai-field>

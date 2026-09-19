@@ -75,7 +75,7 @@
                   </div>
                   <div class="col-6"></div>
                   <div class="col-12">
-                    <gebo-ai-field id="tree" label="Choosed files or folders" [required]="true"
+                    <gebo-ai-field id="tree" label="Selected files or folders" [required]="true"
                       help="Shared filesystems files or directories available on the server">
                       <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable"
                         [readonly]="mode==='EDIT'" formControlName="path" [required]="true" selectionMode="multiple"
@@ -101,7 +101,7 @@
                   </div>
                   <div class="col-12">
                     <gebo-ai-field id="programmedTables" label="Contents updates checks schedule"
-                      help="Configure the scheduling of changed contents to maintain the retrieve augmented generation system updated">
+                      help="Configure the scheduling of changed contents to maintain the retrieval-augmented generation system updated">
                       <gebo-ai-content-reindex-scheduler-component formControlName="programmedTables" id="programmedTables"
                       gebo-ai-field-element></gebo-ai-content-reindex-scheduler-component>
                     </gebo-ai-field>
@@ -117,7 +117,7 @@
               <p-tabpanel [value]="1">
                 <div class="col-12">
                   <gebo-ai-field id="buildSystemsRefs" label="Configure build systems"
-                    help="List of build/packaging systems to inspect for meta informations and additional artifacts infos (leave empty if no software code is contained)">
+                    help="List of build/packaging systems to inspect for meta information and additional artifacts infos (leave empty if no software code is contained)">
                     <gebo-ai-build-systems-chooser id="buildSystemsRefs" formControlName="buildSystemsRefs"
                     gebo-ai-field-element></gebo-ai-build-systems-chooser>
                   </gebo-ai-field>

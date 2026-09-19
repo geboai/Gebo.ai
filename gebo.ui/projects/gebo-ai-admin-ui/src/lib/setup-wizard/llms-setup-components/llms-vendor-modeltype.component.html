@@ -70,7 +70,7 @@
             @if (chatPresets.length>0 && showServiceChat) {
               <div class="col-6" [formGroup]="serviceChatModelPresetsFormGroup">
                 <gebo-ai-field id="serviceChatPresetChoice" label="Internal services chat model"
-                  help="The chat model used for internal services (extracting informations, summarizing and executing internal workflows). It is created as a non-default model.">
+                  help="The chat model used for internal services (extracting information, summarizing and executing internal workflows). It is created as a non-default model.">
                   <geboai-editable-listbox-component formControlName="choosedModel" [data]="chatPresets"
                   gebo-ai-field-element></geboai-editable-listbox-component>
                 </gebo-ai-field>

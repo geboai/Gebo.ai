@@ -5,21 +5,39 @@
         "label": "Default system language",
         "help": "Default system language for this Gebo.ai installation"
       },
-      "username": { "label": "E-mail", "help": "E-mail as username to login" },
-      "passwordC": { "label": "Confirm password", "help": "Confirm password" },
+      "username": {
+        "label": "E-mail",
+        "help": "E-mail as username to login"
+      },
+      "passwordC": {
+        "label": "Confirm password",
+        "help": "Confirm password"
+      },
       "password": {
         "label": "Password",
         "help": "Password to login (at least 8 characters)"
       },
-      "PasswordNotMatching": { "label": " passwords do not match " },
-      "LocalAdmin": { "label": "Create your local admin account" },
+      "PasswordNotMatching": {
+        "label": " passwords do not match "
+      },
+      "LocalAdmin": {
+        "label": "Create your local admin account"
+      },
       "LocalAdminExplanation": {
         "label": "You'll use this account in the future to setup/administer the software, this data will remain local to your system and is not sent over the network"
       },
-      "EnterBtn": { "label": "Go to the login page to enter" },
-      "SetupPage": { "label": "Setup your gebo.ai installation" },
-      "CreateBtn": { "label": "Create system setup" },
-      "LicenceFieldSet": { "label": "Read & accept the licence" },
+      "EnterBtn": {
+        "label": "Go to the login page to enter"
+      },
+      "SetupPage": {
+        "label": "Setup your gebo.ai installation"
+      },
+      "CreateBtn": {
+        "label": "Create system setup"
+      },
+      "LicenceFieldSet": {
+        "label": "Read & accept the licence"
+      },
       "AcceptMark": {
         "label": "I accept the terms",
         "help": "By clicking here you accept the term & conditions in the licence"
@@ -32,15 +50,27 @@
   },
   "LoginModule": {
     "LoginComponent": {
-      "username": { "label": "e-mail", "help": "E-mail as username to login" },
-      "password": { "label": "Password", "help": "Password to login" },
-      "LoginPanel": { "label": "Login to gebo.ai" },
-      "LoginBtn": { "label": "Login" },
+      "username": {
+        "label": "e-mail",
+        "help": "E-mail as username to login"
+      },
+      "password": {
+        "label": "Password",
+        "help": "Password to login"
+      },
+      "LoginPanel": {
+        "label": "Login to gebo.ai"
+      },
+      "LoginBtn": {
+        "label": "Login"
+      },
       "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f": {
         "summary": "Operation failed",
         "detail": "Cannot authenticate with supplied credentials"
       },
-      "ForgotPasswordLink": { "label": "Forgot password?" }
+      "ForgotPasswordLink": {
+        "label": "Forgot password?"
+      }
     },
     "message": {
       "LoginComponent": {
@@ -69,26 +99,40 @@
   },
   "SetupWizardPanelModule": {
     "Oauth2WizardComponent": {
-      "Oauth2ConfigBtn": { "label": "Oauth2 config" },
-      "ProviderNameHeader": { "label": "Provider name" },
-      "DescriptionHeader": { "label": "Description" },
-      "MainPanel": { "label": "Oauth2 security settings" },
-      "IdHeader": { "label": "Id" }
+      "Oauth2ConfigBtn": {
+        "label": "Oauth2 config"
+      },
+      "ProviderNameHeader": {
+        "label": "Provider name"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "MainPanel": {
+        "label": "Oauth2 security settings"
+      },
+      "IdHeader": {
+        "label": "Id"
+      }
     },
     "SetupWizardPanelComponent": {
-      "WizardBackBtn": { "label": "Back to setup home page" },
-      "WizardUi": { "label": "Choose a setup section" },
+      "WizardBackBtn": {
+        "label": "Back to setup home page"
+      },
+      "WizardUi": {
+        "label": "Choose a setup section"
+      },
       "adminUserSetupSection": {
         "label": "Administrator & others account setup",
-        "description": "At least an administration account is required to grant that this gebo.ai installation is properly managed, add other users if necessary"
+        "description": "At least an administration account is required to ensure that this gebo.ai installation is properly managed, add other users if necessary"
       },
       "geboWorkDirectorySetupSection": {
         "label": "Gebo.ai work directory",
-        "description": "Configure a work directory, it will be the folder where configurations and all working files of this installation will be stored. It's also a great idea to backup it periodically."
+        "description": "Configure a work directory, it will be the folder where configurations and all working files of this installation will be stored. It's also a great idea to back it up periodically."
       },
       "VectorStoreSetupSection": {
         "label": "Vector database configuration",
-        "description": "A vector database have to be configured for Gebo.ai to provide retrieve augmented generation services, you can choose between a local vector database, Qdrant or Mongo Atlas"
+        "description": "A vector database has to be configured for Gebo.ai to provide retrieval-augmented generation services, you can choose between a local vector database, Qdrant or Mongo Atlas"
       },
       "oauth2SetupSection": {
         "label": "Single signon, oauth2 authentication",
@@ -96,15 +140,15 @@
       },
       "adminLLMSSetupSection": {
         "label": "Large language models setup",
-        "description": "Configure various llms with cloud or local/lan infrastructure backend services, at least one chat model and one embedding models are to be configured to let the software work properly."
+        "description": "Configure various llms with cloud or local/lan infrastructure backend services, at least one chat model and one embedding model is to be configured to let the software work properly."
       },
       "graphRagBaseSetupSection": {
-        "label": "Graph rag/Knowledge extraction stup",
+        "label": "Graph rag/Knowledge extraction setup",
         "description": "Configure graph rag and knowledge extraction subsystem"
       },
       "sharedFileSystemSetupSection": {
         "label": "Shared filesystems paths setup",
-        "description": "Configure the company shared filesystems paths to be used as retrieve augmented generation documents area in various knowledge bases"
+        "description": "Configure the company shared filesystems paths to be used as retrieval-augmented generation documents area in various knowledge bases"
       },
       "atlassianConfluenceSystemSetupSection": {
         "label": "Atlassian confluence integration",
@@ -120,17 +164,19 @@
       },
       "firstKnowledgeBaseSetupSection": {
         "label": "Configure at least a knowledge base",
-        "description": "Configure at least a knowledge base to let your users enjoy the retrieve augmented generations services of Gebo.ai"
+        "description": "Configure at least a knowledge base to let your users enjoy the retrieval-augmented generation services of Gebo.ai"
       },
       "firstChatProfileBaseSetupSection": {
         "label": "Configure at least a \"R.A.G.\" chat profile",
-        "description": "Configure at least a retrieve augmented chat profile for your users based on one of your configured knowledge bases"
+        "description": "Configure at least a retrieval-augmented chat profile for your users based on one of your configured knowledge bases"
       },
       "mandatory-done": {
         "summary": "Gebo.ai setup mandatory steps done...",
-        "detail": "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software"
+        "detail": "Mandatory setup steps have been completed but some missing steps prevent your organization from getting the most out of this software"
       },
-      "setup-ok": { "summary": "Gebo.ai setup OK!" },
+      "setup-ok": {
+        "summary": "Gebo.ai setup OK!"
+      },
       "mandatory-missing": {
         "summary": "Gebo.ai setup is missing some mandatory step",
         "detail": "Please review the red steps of the setup process"
@@ -149,16 +195,26 @@
       },
       "ragAutotuneSetupSection": {
         "label": "R.a.g. autotune",
-        "description": "Automatic retrieve augmented generation parameters tuning"
+        "description": "Automatic retrieval-augmented generation parameters tuning"
       },
-      "Description": { "label": "Description" },
-      "LastAutotunedDate": { "label": "Last tuning update" },
-      "Code": { "label": "Embedding model/VectorStore code" },
-      "ComputedThreashold": { "label": "Computed threashold" },
-      "Autotuned": { "label": "Autotuned" },
+      "Description": {
+        "label": "Description"
+      },
+      "LastAutotunedDate": {
+        "label": "Last tuning update"
+      },
+      "Code": {
+        "label": "Embedding model/VectorStore code"
+      },
+      "ComputedThreashold": {
+        "label": "Computed threshold"
+      },
+      "Autotuned": {
+        "label": "Autotuned"
+      },
       "SETUP-DONE_DO_MORE": {
         "summary": "Gebo.ai setup mandatory steps done...",
-        "detail": "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software"
+        "detail": "Mandatory setup steps have been completed but some missing steps prevent your organization from getting the most out of this software"
       },
       "SETUP-MISSING_SOME": {
         "summary": "Gebo.ai setup is missing some mandatory step",
@@ -168,12 +224,24 @@
         "label": "Configure Agent Services",
         "description": "Configure Agent Services and their available tools"
       },
-      "AgentAddBtn": { "label": "Add agent" },
-      "MainPanel": { "label": "Setup Agents" },
-      "ConfigCodeHeader": { "label": "Config code" },
-      "DescriptionHeader": { "label": "Description" },
-      "EditAgentBtn": { "label": "Edit agent" },
-      "ExitMandatorySetupPopupBtn": { "label": "Exit setup checklist" },
+      "AgentAddBtn": {
+        "label": "Add agent"
+      },
+      "MainPanel": {
+        "label": "Setup Agents"
+      },
+      "ConfigCodeHeader": {
+        "label": "Config code"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "EditAgentBtn": {
+        "label": "Edit agent"
+      },
+      "ExitMandatorySetupPopupBtn": {
+        "label": "Exit setup checklist"
+      },
       "awsS3SystemSetupSection": {
         "label": "AWS S3 integration",
         "description": "Configure Gebo.ai to access your AWS S3 (or S3-compatible) buckets contents"
@@ -208,30 +276,62 @@
       }
     },
     "ConfluenceWizardComponent": {
-      "MainPanel": { "label": "Setup company Atlassian Confluence systems" },
-      "DescriptionHeader": { "label": "Description" },
-      "SystemTypeHeader": { "label": "System type" },
-      "ConfigCodeHeader": { "label": "Config code" },
-      "ConfluenceSystemBtn": { "label": "Confluence system" },
-      "EditSystemBtn": { "label": "Edit system" }
+      "MainPanel": {
+        "label": "Setup company Atlassian Confluence systems"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "SystemTypeHeader": {
+        "label": "System type"
+      },
+      "ConfigCodeHeader": {
+        "label": "Config code"
+      },
+      "ConfluenceSystemBtn": {
+        "label": "Confluence system"
+      },
+      "EditSystemBtn": {
+        "label": "Edit system"
+      }
     },
     "JiraWizardComponent": {
-      "JiraSystemBtn": { "label": "Jira system" },
-      "DescriptionHeader": { "label": "Description" },
-      "ConfigCodeHeader": { "label": "Config code" },
-      "MainPanel": { "label": "Setup company Atlassian Jira systems" },
-      "SystemTypeHeader": { "label": "System type" }
+      "JiraSystemBtn": {
+        "label": "Jira system"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "ConfigCodeHeader": {
+        "label": "Config code"
+      },
+      "MainPanel": {
+        "label": "Setup company Atlassian Jira systems"
+      },
+      "SystemTypeHeader": {
+        "label": "System type"
+      }
     },
     "SharepointWizardComponent": {
-      "DescriptionHeader": { "label": "Description" },
-      "ConfigCodeHeader": { "label": "Config code" },
-      "MainPanel": { "label": "Setup company Microsoft Sharepoint systems" },
-      "SystemTypeHeader": { "label": "System type" },
-      "SharepointSystemBtn": { "label": "Sharepoint system" }
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "ConfigCodeHeader": {
+        "label": "Config code"
+      },
+      "MainPanel": {
+        "label": "Setup company Microsoft Sharepoint systems"
+      },
+      "SystemTypeHeader": {
+        "label": "System type"
+      },
+      "SharepointSystemBtn": {
+        "label": "Sharepoint system"
+      }
     },
     "LLMSetupWizardComponent": {
       "InstructionText": {
-        "label": "Provide an api-key with proper available credit. If OpenAI is choosen you must add some specific credit (10-30$ can be enough) to your usual plan for api use, otherwise no available llms traffic will be available in this application."
+        "label": "Provide an api-key with proper available credit. If OpenAI is chosen you must add some specific credit (10-30$ can be enough) to your usual plan for api use, otherwise no available llms traffic will be available in this application."
       },
       "MainPanel": {
         "label": "Setup Gebo.ai llms providers access with your own api key"
@@ -244,67 +344,131 @@
         "label": "User",
         "help": "Enter the user associated to the apiKey"
       },
-      "ConfigureBtn": { "label": "Configure" },
+      "ConfigureBtn": {
+        "label": "Configure"
+      },
       "apiKey": {
         "label": "Api key",
         "help": "Your api key of the LLMS providers to be used"
       },
-      "ProviderHeader": { "label": "Provider" },
-      "ConfigurationCodeHeader": { "label": "Configuration code" },
-      "ModelHeader": { "label": "Model" },
-      "ModelTypeHeader": { "label": "Model type" },
-      "DefaultModelHeader": { "label": "Default model" },
-      "MainPanelHeader": { "label": "Setup Gebo.ai llms providers access" },
-      "ExtensiveStup": { "label": "Extended infrastructure/suppliers choices" },
-      "MainPanelTitle": { "label": "Setup used Large language models" },
-      "EasySetup": { "label": "Easy initial setup/configuration fix" },
-      "MainLLMSPanelTitle": { "label": "Setup Large language models" },
-      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a": {
-        "summary": "Exception during operation:Cannot create vector store or embedding model initialization exception: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
-        "detail": "Server error: Cannot create vector store or embedding model initialization exception: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
+      "ProviderHeader": {
+        "label": "Provider"
+      },
+      "ConfigurationCodeHeader": {
+        "label": "Configuration code"
+      },
+      "ModelHeader": {
+        "label": "Model"
+      },
+      "ModelTypeHeader": {
+        "label": "Model type"
+      },
+      "DefaultModelHeader": {
+        "label": "Default model"
+      },
+      "MainPanelHeader": {
+        "label": "Setup Gebo.ai llms providers access"
+      },
+      "ExtensiveStup": {
+        "label": "Extended infrastructure/suppliers choices"
+      },
+      "MainPanelTitle": {
+        "label": "Setup used Large language models"
+      },
+      "EasySetup": {
+        "label": "Easy initial setup/configuration fix"
+      },
+      "MainLLMSPanelTitle": {
+        "label": "Setup Large language models"
       }
     },
     "GraphRagWizardComponent": {
-      "DescriptionHeader": { "label": "Description" },
-      "CreateGraphRagConfigBtn": { "label": "Create graph rag config" },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "CreateGraphRagConfigBtn": {
+        "label": "Create graph rag config"
+      },
       "MainPanel": {
         "label": "Setup Graph Rag & knowledge extraction default configuration"
       },
-      "ConfigCodeHeader": { "label": "Config code" },
-      "EditConfigBtn": { "label": "Edit config" }
+      "ConfigCodeHeader": {
+        "label": "Config code"
+      },
+      "EditConfigBtn": {
+        "label": "Edit config"
+      }
     },
     "KnowledgeBaseWizardComponent": {
-      "ProjectHeader": { "label": "Project" },
-      "AddAKnowledgeBaseBtn": { "label": "Add a Knowledge base" },
-      "KnowledgeBaseHeader": { "label": "Knowledge base" },
-      "MainPanel": { "label": "Knowledge bases & contents configurations" },
-      "ContentsSourceHeader": { "label": "Contents source" },
-      "PublishedHeader": { "label": "Published" },
-      "NrOfDocumentsHeader": { "label": "Nr of documents" },
+      "ProjectHeader": {
+        "label": "Project"
+      },
+      "AddAKnowledgeBaseBtn": {
+        "label": "Add a Knowledge base"
+      },
+      "KnowledgeBaseHeader": {
+        "label": "Knowledge base"
+      },
+      "MainPanel": {
+        "label": "Knowledge bases & contents configurations"
+      },
+      "ContentsSourceHeader": {
+        "label": "Contents source"
+      },
+      "PublishedHeader": {
+        "label": "Published"
+      },
+      "NrOfDocumentsHeader": {
+        "label": "Nr of documents"
+      },
       "AddAProjectItemBtn": {
         "label": "Add a project/item",
         "help": "create new project"
       },
-      "Button1": { "help": "open knowledge base" },
-      "Button2": { "help": "open project form" },
-      "Button3": { "help": "open data source" }
+      "Button1": {
+        "help": "open knowledge base"
+      },
+      "Button2": {
+        "help": "open project form"
+      },
+      "Button3": {
+        "help": "open data source"
+      }
     },
     "WorkFolderWizardComponent": {
-      "MainPanel": { "label": "Gebo.ai work folder configuration" },
-      "ConfigureBtn": { "label": "Configure" },
+      "MainPanel": {
+        "label": "Gebo.ai work folder configuration"
+      },
+      "ConfigureBtn": {
+        "label": "Configure"
+      },
       "workDirectory": {
         "label": "Choose a folder as Gebo.ai work directory",
         "help": "Choose a server folder that this installation will use as work folder for its configurations and contents storage."
       }
     },
     "SharedFilesystemWizardComponent": {
-      "AddFolderBtn2": { "label": "Add folder" },
-      "AddFolderBtn": { "label": "Add folder" },
-      "CodeHeader": { "label": "Code" },
-      "MainPanel": { "label": "Server shared filesystem paths" },
-      "DescriptionHeader": { "label": "Description" },
-      "AbsolutePathHeader": { "label": "Absolute path" },
-      "DeleteHeader": { "label": "Delete" },
+      "AddFolderBtn2": {
+        "label": "Add folder"
+      },
+      "AddFolderBtn": {
+        "label": "Add folder"
+      },
+      "CodeHeader": {
+        "label": "Code"
+      },
+      "MainPanel": {
+        "label": "Server shared filesystem paths"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "AbsolutePathHeader": {
+        "label": "Absolute path"
+      },
+      "DeleteHeader": {
+        "label": "Delete"
+      },
       "path": {
         "label": "Add a root folder of a shared filesystem",
         "help": "Choose a server folder that is a root path for the shared filesystem used in your organization as a document repository"
@@ -313,75 +477,120 @@
         "label": "Description",
         "help": "Enter filesystem entry description"
       },
-      "RemovePathBtn": { "label": "Remove path" }
+      "RemovePathBtn": {
+        "label": "Remove path"
+      }
     },
     "VectorStoreWizardComponent": {
-      "ConfigureBtn": { "label": "Configure" },
-      "MainPanel": { "label": "Vector database configuration" },
+      "ConfigureBtn": {
+        "label": "Configure"
+      },
+      "MainPanel": {
+        "label": "Vector database configuration"
+      },
       "host": {
         "label": "Qdrant host",
         "help": "Qdrant host name or ip address"
       },
-      "QdrantConnectionFieldset": { "label": "Qdrant connection settings" },
+      "QdrantConnectionFieldset": {
+        "label": "Qdrant connection settings"
+      },
       "port": {
         "label": "Qdrant port",
-        "help": "Qdrant comunication port (6334 is the standard)"
+        "help": "Qdrant communication port (6334 is the standard)"
       },
       "apiKey": {
         "label": "Qdrant api key",
         "help": "Api key for Qdrant authentication"
       },
-      "tls": { "label": "Qdrant TLS parameter", "help": "TLS" }
+      "tls": {
+        "label": "Qdrant TLS parameter",
+        "help": "TLS"
+      }
     },
     "message": {
       "SetupWizardPanelComponent-mandatory-done": {
         "summary": "Gebo.ai setup mandatory steps done...",
-        "detail": "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software"
+        "detail": "Mandatory setup steps have been completed but some missing steps prevent your organization from getting the most out of this software"
       },
       "SetupWizardPanelComponent-mandatory-missing": {
         "summary": "Gebo.ai setup is missing some mandatory step",
         "detail": "Please review the red steps of the setup process"
       },
-      "SetupWizardPanelComponent-setup-ok": { "summary": "Gebo.ai setup OK!" }
+      "SetupWizardPanelComponent-setup-ok": {
+        "summary": "Gebo.ai setup OK!"
+      }
     },
     "ChatProfileWizardComponent": {
       "AddNewRAGChatProfileFieldset": {
         "label": "Add new R.A.G. chat profile"
       },
-      "AddRAGChatProfileBtn": { "label": "Add R.A.G. chat profile" },
-      "MainPanel": {
-        "label": "Retrieve augmented generation (r.a.g.) chat profiles settings"
+      "AddRAGChatProfileBtn": {
+        "label": "Add R.A.G. chat profile"
       },
-      "CodeHeader": { "label": "Code" },
+      "MainPanel": {
+        "label": "Retrieval-augmented generation (r.a.g.) chat profiles settings"
+      },
+      "CodeHeader": {
+        "label": "Code"
+      },
       "ExistingRAGChatProfilesFieldset": {
         "label": "Existing R.A.G. chat profiles"
       },
-      "DescriptionHeader": { "label": "Description" },
-      "EditRAGChatProfileBtn": { "label": "Edit R.A.G. chat profile" },
-      "KnowledgeBaseCodesHeader": { "label": "Knowledge base codes" }
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "EditRAGChatProfileBtn": {
+        "label": "Edit R.A.G. chat profile"
+      },
+      "KnowledgeBaseCodesHeader": {
+        "label": "Knowledge base codes"
+      }
     },
     "GoogleWorkspacesWizardComponent": {
-      "MainPanel": { "label": "Setup company Google Drive/Workspaces systems" },
-      "ConfigCodeHeader": { "label": "Config code" },
-      "GoogleDriveBtn": { "label": "Google Drive" },
-      "DescriptionHeader": { "label": "Description" }
+      "MainPanel": {
+        "label": "Setup company Google Drive/Workspaces systems"
+      },
+      "ConfigCodeHeader": {
+        "label": "Config code"
+      },
+      "GoogleDriveBtn": {
+        "label": "Google Drive"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      }
     },
     "GeboAIGoogleSearchWizardComponent": {
-      "CancelBtn": { "label": "Cancel" },
-      "GoogleSearchCredentialsBtn": { "label": "Google search api key" },
-      "CreateCredentialsPanel": { "label": "Create google search credentials" },
-      "CreateBtn": { "label": "Create" },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "GoogleSearchCredentialsBtn": {
+        "label": "Google search api key"
+      },
+      "CreateCredentialsPanel": {
+        "label": "Create google search credentials"
+      },
+      "CreateBtn": {
+        "label": "Create"
+      },
       "customSearchEngineId": {
         "label": "Search engine id",
         "help": "Enter the search engine id obtained in the google search api credentials registration."
       },
-      "ConfigCodeHeader": { "label": "Config code" },
-      "DescriptionHeader": { "label": "Description" },
+      "ConfigCodeHeader": {
+        "label": "Config code"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
       "apiKey": {
         "label": "Api key",
         "help": "Enter the api key obtained in the google search api credentials registration."
       },
-      "MainPanel": { "label": "Setup Deep search configuration" },
+      "MainPanel": {
+        "label": "Setup Deep search configuration"
+      },
       "DeleteCredentialsBtn": {
         "label": "Delete",
         "help": "Delete Google search api credentials"
@@ -390,61 +599,131 @@
         "label": "Deep search config",
         "help": "Add a deep search configuration"
       },
-      "EditSystemBtn": { "label": "Edit config" }
+      "EditSystemBtn": {
+        "label": "Edit config"
+      }
     },
     "LLMSEasySetupWizardComponent": {
-      "NextBtn": { "label": "Next" },
+      "NextBtn": {
+        "label": "Next"
+      },
       "MainEasyLLMSPanelTitle": {
         "label": "Guided large language models setup"
       },
-      "BackBtn": { "label": "Back" },
-      "ApplyBtn": { "label": "Apply and continue" },
-      "FinishBtn": { "label": "Finish" },
+      "BackBtn": {
+        "label": "Back"
+      },
+      "ApplyBtn": {
+        "label": "Apply and continue"
+      },
+      "FinishBtn": {
+        "label": "Finish"
+      },
       "IntroExplanation": {
         "label": "Gebo.ai uses several classes of language models. Two are required for the system to work, the others are suggested and enable extra capabilities. The wizard will help you configure them from a single provider; you can always add or change models later from the LLMs admin screens."
       }
     },
     "AwsS3WizardComponent": {
-      "ConfigCodeHeader": { "label": "Config code" },
-      "MainPanel": { "label": "Setup AWS S3 systems" },
-      "DescriptionHeader": { "label": "Description" },
-      "AwsS3SystemBtn": { "label": "AWS S3 system" },
-      "SystemTypeHeader": { "label": "System type" }
+      "ConfigCodeHeader": {
+        "label": "Config code"
+      },
+      "MainPanel": {
+        "label": "Setup AWS S3 systems"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "AwsS3SystemBtn": {
+        "label": "AWS S3 system"
+      },
+      "SystemTypeHeader": {
+        "label": "System type"
+      }
     },
     "WebdavWizardComponent": {
-      "MainPanel": { "label": "Setup company WebDAV systems" },
-      "WebdavSystemBtn": { "label": "WebDAV system" },
-      "ConfigCodeHeader": { "label": "Config code" },
-      "DescriptionHeader": { "label": "Description" },
-      "AuthTypeHeader": { "label": "Auth type" }
+      "MainPanel": {
+        "label": "Setup company WebDAV systems"
+      },
+      "WebdavSystemBtn": {
+        "label": "WebDAV system"
+      },
+      "ConfigCodeHeader": {
+        "label": "Config code"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "AuthTypeHeader": {
+        "label": "Auth type"
+      }
     },
     "McpServerWizardComponent": {
-      "McpAddBtn": { "label": "Add MCP Server" },
-      "MainPanel": { "label": "Setup MCP Server Connections" },
-      "ConfigCodeHeader": { "label": "Config code" },
-      "DescriptionHeader": { "label": "Description" }
+      "McpAddBtn": {
+        "label": "Add MCP Server"
+      },
+      "MainPanel": {
+        "label": "Setup MCP Server Connections"
+      },
+      "ConfigCodeHeader": {
+        "label": "Config code"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      }
     },
     "GeboAIMCPServerWizardComponent": {
-      "MainPanel": { "label": "Configure Gebo MCP Servers" },
-      "McpAddBtn": { "label": "Add MCP Server Configuration" },
-      "DescriptionHeader": { "label": "Description" },
-      "ConfigCodeHeader": { "label": "Config code" },
-      "UrlHeader": { "label": "Relative URL" },
-      "EnabledHeader": { "label": "Enabled" }
+      "MainPanel": {
+        "label": "Configure Gebo MCP Servers"
+      },
+      "McpAddBtn": {
+        "label": "Add MCP Server Configuration"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "ConfigCodeHeader": {
+        "label": "Config code"
+      },
+      "UrlHeader": {
+        "label": "Relative URL"
+      },
+      "EnabledHeader": {
+        "label": "Enabled"
+      }
     },
     "A2AExportWizardComponent": {
-      "MainPanel": { "label": "Expose Gebo agents over A2A" },
-      "A2AExportAddBtn": { "label": "Add A2A Server" }
+      "MainPanel": {
+        "label": "Expose Gebo agents over A2A"
+      },
+      "A2AExportAddBtn": {
+        "label": "Add A2A Server"
+      }
     },
     "GeneratedAdminApiKeyWizardComponent": {
-      "CreateBtn": { "label": "Generate" },
-      "GenerateApiKeyBtn": { "label": "Generate new API key" },
-      "MainPanel": { "label": "Setup Administrator API Keys" },
-      "CreateApiKeyPanel": { "label": "Generate API key" },
-      "ImpersonatedUserHeader": { "label": "Impersonated User" },
-      "DescriptionHeader": { "label": "Description" },
-      "CreatedHeader": { "label": "Created Date" },
-      "ExpirationHeader": { "label": "Expiration Date" },
+      "CreateBtn": {
+        "label": "Generate"
+      },
+      "GenerateApiKeyBtn": {
+        "label": "Generate new API key"
+      },
+      "MainPanel": {
+        "label": "Setup Administrator API Keys"
+      },
+      "CreateApiKeyPanel": {
+        "label": "Generate API key"
+      },
+      "ImpersonatedUserHeader": {
+        "label": "Impersonated User"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "CreatedHeader": {
+        "label": "Created Date"
+      },
+      "ExpirationHeader": {
+        "label": "Expiration Date"
+      },
       "impersonatedUserField": {
         "label": "Impersonate User",
         "help": "Select the user whose permissions this API key will run under."
@@ -459,8 +738,12 @@
       }
     },
     "A2AImportWizardComponent": {
-      "A2AImportAddBtn": { "label": "Register A2A Agent" },
-      "MainPanel": { "label": "Import external A2A agents" }
+      "A2AImportAddBtn": {
+        "label": "Register A2A Agent"
+      },
+      "MainPanel": {
+        "label": "Import external A2A agents"
+      }
     }
   },
   "GeboAIOauth2RegistrationModule": {
@@ -505,13 +788,21 @@
         "label": "Token URL",
         "help": "Enter the OAUTH2 Token URL of the provider"
       },
-      "SaveBtn": { "label": "Save" },
-      "Oauth2ProviderUrls": { "label": "OAUTH2 provider URLS" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "Oauth2ProviderUrls": {
+        "label": "OAUTH2 provider URLS"
+      },
       "MainPanel": {
         "label": "Insert new OAUTH2 Authentication/Integration infos"
       },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" }
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      }
     }
   },
   "GeboOauth2SecretModule": {
@@ -528,13 +819,19 @@
   },
   "GeboAIConfluenceModule": {
     "GeboAIConfluenceSystemFastComponent": {
-      "MainPanel": { "label": "Create confluence system configuration" },
-      "CancelBtn": { "label": "Cancel" },
+      "MainPanel": {
+        "label": "Create confluence system configuration"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the confluence system."
       },
-      "CreateBtn": { "label": "Create" },
+      "CreateBtn": {
+        "label": "Create"
+      },
       "username": {
         "label": "Confluence username",
         "help": "Confluence user name"
@@ -553,7 +850,7 @@
       },
       "token": {
         "label": "Confluence cloud api key",
-        "help": "Confluence CLOUD apikey acquired in the confluence backoffic, here \"API Token for your Atlassian Account\" have to be inserted."
+        "help": "Confluence CLOUD apikey acquired in the confluence back office, here \"API Token for your Atlassian Account\" have to be inserted."
       }
     },
     "GConfluenceProjectEndpoint": {
@@ -561,12 +858,24 @@
         "label": "Publish!",
         "help": "Saves and let these contents being available in knowledge base to LLm's"
       },
-      "SaveBtn": { "label": "Save" },
-      "DeleteBtn": { "label": "Delete" },
-      "CancelBtn": { "label": "Cancel" },
-      "SettingsTab": { "label": "Settings" },
-      "MainPanel": { "label": "Sharing confluence contents" },
-      "LogsTab": { "label": "Logs" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "SettingsTab": {
+        "label": "Settings"
+      },
+      "MainPanel": {
+        "label": "Sharing confluence contents"
+      },
+      "LogsTab": {
+        "label": "Logs"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the contents."
@@ -588,12 +897,12 @@
         "help": "Enable zip files opening and content extraction"
       },
       "tree": {
-        "label": "Choosed spaces or pages/subpages",
+        "label": "Selected spaces or pages/subpages",
         "help": "Shared confluence spaces and pages contents"
       },
       "programmedTables": {
         "label": "Contents updates checks schedule",
-        "help": "Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated"
+        "help": "Configure the scheduling of changed contents to maintain the retrieval-augmented generation system updated"
       },
       "catalogingCriteria": {
         "label": "Spaces, pages and subpages organization criterias",
@@ -605,11 +914,21 @@
       }
     },
     "GConfluenceSystem": {
-      "GeneralSettingsTab": { "label": "General settings" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "MainPanel": { "label": "Editing confluence system" },
-      "SaveBtn": { "label": "Save" },
+      "GeneralSettingsTab": {
+        "label": "General settings"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "MainPanel": {
+        "label": "Editing confluence system"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
       "baseUri": {
         "label": "Base internet address",
         "help": "Url of the base confluence system address"
@@ -634,34 +953,82 @@
   },
   "GeboAIUsersGroupPanelModule": {
     "GeboAIUsersManagementComponent": {
-      "NewGroupBtn": { "label": "new group" },
-      "NewUserBtn": { "label": "new user" },
-      "UsersListPanel": { "label": "Users list" },
-      "GroupsListPanel": { "label": "Groups list" },
-      "SournameHeader": { "label": "surname" },
-      "UsernameHeader": { "label": "username" },
-      "RolesHeader": { "label": "roles" },
-      "NameHeader": { "label": "name" },
-      "EditBtn": { "label": "Edit" },
-      "DisabledHeader": { "label": "disabled" },
-      "EditGroupBtn": { "label": "Edit" },
-      "CodeHeader": { "label": "code" },
-      "DescriptionHeader": { "label": "description" },
-      "UsersHeader": { "label": "users" },
-      "searchNameInput": { "placeholder": "Search name" },
-      "searchUsernameInput": { "placeholder": "Search username" },
-      "SearchUsersBtn": { "label": "search" },
-      "searchRoleDropdown": { "placeholder": "Select role" },
-      "searchSournameInput": { "placeholder": "Search surname" }
+      "NewGroupBtn": {
+        "label": "new group"
+      },
+      "NewUserBtn": {
+        "label": "new user"
+      },
+      "UsersListPanel": {
+        "label": "Users list"
+      },
+      "GroupsListPanel": {
+        "label": "Groups list"
+      },
+      "SournameHeader": {
+        "label": "surname"
+      },
+      "UsernameHeader": {
+        "label": "username"
+      },
+      "RolesHeader": {
+        "label": "roles"
+      },
+      "NameHeader": {
+        "label": "name"
+      },
+      "EditBtn": {
+        "label": "Edit"
+      },
+      "DisabledHeader": {
+        "label": "disabled"
+      },
+      "EditGroupBtn": {
+        "label": "Edit"
+      },
+      "CodeHeader": {
+        "label": "code"
+      },
+      "DescriptionHeader": {
+        "label": "description"
+      },
+      "UsersHeader": {
+        "label": "users"
+      },
+      "searchNameInput": {
+        "placeholder": "Search name"
+      },
+      "searchUsernameInput": {
+        "placeholder": "Search username"
+      },
+      "SearchUsersBtn": {
+        "label": "search"
+      },
+      "searchRoleDropdown": {
+        "placeholder": "Select role"
+      },
+      "searchSournameInput": {
+        "placeholder": "Search surname"
+      }
     }
   },
   "GeboAIUsersGroupModule": {
     "UsersGroup": {
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
-      "UserIds": { "placeholder": "Select users" },
-      "CancelBtn": { "label": "Cancel" },
-      "MainPanel": { "label": "Editing user group" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "UserIds": {
+        "placeholder": "Select users"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "MainPanel": {
+        "label": "Editing user group"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the user group"
@@ -672,13 +1039,19 @@
       },
       "userIds": {
         "label": "Users list",
-        "help": "Select users partecipating the group"
+        "help": "Select users participating in the group"
       }
     },
     "GeboAIChangeUserPasswordComponent": {
-      "UserPasswordChangePanel": { "label": "Change user's password" },
-      "CancelBtn": { "label": "Cancel" },
-      "ChangePasswordBtn": { "label": "Change" },
+      "UserPasswordChangePanel": {
+        "label": "Change user's password"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "ChangePasswordBtn": {
+        "label": "Change"
+      },
       "username": {
         "label": "User name",
         "help": "Enter your password to validate this action"
@@ -699,17 +1072,26 @@
   },
   "GeboAIJiraModule": {
     "GeboAIJiraSystemFastComponent": {
-      "CreateBtn": { "label": "Create" },
+      "CreateBtn": {
+        "label": "Create"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the jira system."
       },
-      "MainPanel": { "label": "Create jira system configuration" },
-      "CancelBtn": { "label": "Cancel" },
-      "username": { "label": "jira username", "help": "jira user name" },
+      "MainPanel": {
+        "label": "Create jira system configuration"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "username": {
+        "label": "jira username",
+        "help": "jira user name"
+      },
       "token": {
         "label": "jira cloud api key",
-        "help": "jira CLOUD apikey acquired in the jira backoffic, here \"API Token for your Atlassian Account\" have to be inserted."
+        "help": "jira CLOUD apikey acquired in the jira back office, here \"API Token for your Atlassian Account\" have to be inserted."
       },
       "baseUri": {
         "label": "Base internet address",
@@ -717,16 +1099,28 @@
       }
     },
     "GJiraProjectEndpoint": {
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
       "PublishBtn": {
         "label": "Publish!",
         "help": "Saves and let these contents being available in knowledge base to LLm's"
       },
-      "CancelBtn": { "label": "Cancel" },
-      "SettingsTab": { "label": "Settings" },
-      "LogsTab": { "label": "Logs" },
-      "MainPanel": { "label": "Sharing jira contents" },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "SettingsTab": {
+        "label": "Settings"
+      },
+      "LogsTab": {
+        "label": "Logs"
+      },
+      "MainPanel": {
+        "label": "Sharing jira contents"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the contents."
@@ -745,14 +1139,14 @@
       },
       "programmedTables": {
         "label": "Contents updates checks schedule",
-        "help": "Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated"
+        "help": "Configure the scheduling of changed contents to maintain the retrieval-augmented generation system updated"
       },
       "openZips": {
         "label": "Open zip files",
         "help": "Enable zip files opening and content extraction"
       },
       "tree": {
-        "label": "Choosed spaces or pages/subpages",
+        "label": "Selected spaces or pages/subpages",
         "help": "Shared jira projects and tickets hierarchy contents"
       },
       "catalogingCriteria": {
@@ -769,10 +1163,18 @@
         "label": "Description",
         "help": "Enter the description of the jira system."
       },
-      "DeleteBtn": { "label": "Delete" },
-      "MainPanel": { "label": "Editing jira system" },
-      "CancelBtn": { "label": "Cancel" },
-      "SaveBtn": { "label": "Save" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "MainPanel": {
+        "label": "Editing jira system"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
       "baseUri": {
         "label": "Base internet address",
         "help": "Url of the base jira system address"
@@ -791,7 +1193,7 @@
     "GeboAISharepointSystemFastComponent": {
       "description": {
         "label": "Description",
-        "help": "Enter the description of the SharPpoint/OneDrive system."
+        "help": "Enter the description of the SharePoint/OneDrive system."
       },
       "sharepointVersion": {
         "label": "Sharepoint version",
@@ -810,25 +1212,41 @@
         "help": "Oauth2 tenant identifier for you organization microsoft \"entra\" product (to be retrieved in microsoft cloud admin console)"
       },
       "MicrosofOauth2Fieldset": {
-        "label": "Microsof oauth2 app registration infos for Gebo.ai"
+        "label": "Microsoft oauth2 app registration infos for Gebo.ai"
       },
-      "CreateBtn": { "label": "Create" },
-      "CancelBtn": { "label": "Cancel" },
+      "CreateBtn": {
+        "label": "Create"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "MainPanel": {
         "label": "Create SharePoint/OneDrive system configuration"
       }
     },
     "GSharepointProjectEndpoint": {
-      "CancelBtn": { "label": "Cancel" },
-      "SaveBtn": { "label": "Save" },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
       "PublishBtn": {
         "label": "Publish!",
         "help": "Saves and let these contents being available in knowledge base to LLm's"
       },
-      "SettingsTab": { "label": "Settings" },
-      "MainPanel": { "label": "Sharing SharePoint/OneDrive contents" },
-      "LogsTab": { "label": "Logs" },
-      "DeleteBtn": { "label": "Delete" },
+      "SettingsTab": {
+        "label": "Settings"
+      },
+      "MainPanel": {
+        "label": "Sharing SharePoint/OneDrive contents"
+      },
+      "LogsTab": {
+        "label": "Logs"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the contents."
@@ -850,12 +1268,12 @@
         "help": "Enable zip files opening and content extraction"
       },
       "tree": {
-        "label": "Choosed Sharepoint sites/pages/subpages or OneDrive drives/folder/files",
+        "label": "Selected Sharepoint sites/pages/subpages or OneDrive drives/folder/files",
         "help": "Shared sharepoint/OneDrive contents"
       },
       "programmedTables": {
         "label": "Contents updates checks schedule",
-        "help": "Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated"
+        "help": "Configure the scheduling of changed contents to maintain the retrieval-augmented generation system updated"
       },
       "catalogingCriteria": {
         "label": "Spaces, pages and subpages organization criterias",
@@ -867,11 +1285,21 @@
       }
     },
     "GSharepointContentManagementSystem": {
-      "MainPanel": { "label": "Editing sharepoint system" },
-      "GeneralSettingsTab": { "label": "General settings" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
+      "MainPanel": {
+        "label": "Editing sharepoint system"
+      },
+      "GeneralSettingsTab": {
+        "label": "General settings"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
       "secretCode": {
         "label": "Identity used",
         "help": "Select or create the identity to access the sharepoint system"
@@ -892,18 +1320,28 @@
   },
   "GeboAIGraphRagExtractionModule": {
     "GraphRagExtractionConfig": {
-      "graphRagConfigUI_Delete": { "label": "Delete" },
-      "graphRagConfigUI_Save": { "label": "Save" },
-      "graphRagConfigUI_Cancel": { "label": "Cancel" },
+      "graphRagConfigUI_Delete": {
+        "label": "Delete"
+      },
+      "graphRagConfigUI_Save": {
+        "label": "Save"
+      },
+      "graphRagConfigUI_Cancel": {
+        "label": "Cancel"
+      },
       "graphRagConfigUI_ContextSettings": {
         "label": "General infos/contents settings"
       },
-      "graphRagConfigUI_LLMSSettings": { "label": "LLms settings" },
+      "graphRagConfigUI_LLMSSettings": {
+        "label": "LLms settings"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the knowledge graph data extraction\n                                    stage"
       },
-      "MainPanel": { "label": "Graphrag/knowledge extraction configuration" },
+      "MainPanel": {
+        "label": "Graphrag/knowledge extraction configuration"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of this knowledge graph data extraction stage\n                                    configuration"
@@ -926,7 +1364,7 @@
       },
       "processEveryDocument": {
         "label": "Apply graph rag to all files",
-        "help": "The graph rag algoritms will be applied to all file this will enhance the\n                                            details of\n                                            analisys that the system is capable of but will high the cost and time\n                                            required to process\n                                            documents"
+        "help": "The graph rag algorithms will be applied to all file this will enhance the\n                                            details of\n                                            analysis that the system is capable of but will high the cost and time\n                                            required to process\n                                            documents"
       },
       "contentSelectionFilter": {
         "label": "File selection criterias for graphrag processing",
@@ -941,20 +1379,34 @@
   },
   "GeboAIContentSelectionFilterModule": {
     "SelectionFilterCriteria": {
-      "extensions": { "placeholder": "Select file types" },
-      "nameFilterCriteria": { "placeholder": "File name filtering criteria" },
+      "extensions": {
+        "placeholder": "Select file types"
+      },
+      "nameFilterCriteria": {
+        "placeholder": "File name filtering criteria"
+      },
       "maxModificationAgeInDays": {
         "placeholder": "File last modification, days ago"
       },
-      "nameFilter": { "placeholder": "File name" },
-      "maxFileSize": { "placeholder": "Max file size in Bytes" }
+      "nameFilter": {
+        "placeholder": "File name"
+      },
+      "maxFileSize": {
+        "placeholder": "Max file size in Bytes"
+      }
     }
   },
   "GeboAiKnowledgeBaseModule": {
     "GKnowledgeBase": {
-      "GeneralInfosTab": { "label": "General infos" },
-      "MainPanel": { "label": "Editing a Knowledge base" },
-      "AccessSettingsTab": { "label": "Knowledge base access settings" },
+      "GeneralInfosTab": {
+        "label": "General infos"
+      },
+      "MainPanel": {
+        "label": "Editing a Knowledge base"
+      },
+      "AccessSettingsTab": {
+        "label": "Knowledge base access settings"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the knowledge base."
@@ -967,14 +1419,27 @@
         "label": "Used embedding models (leave empty to use system default)",
         "help": "Embedding models for the knowledge base, leave empty will use the default one."
       },
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "IndexBtn": { "label": "Index", "help": "Reindex contents" },
-      "CANNOT-DELETE": { "detail": "You cannot delete this" }
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "IndexBtn": {
+        "label": "Index",
+        "help": "Reindex contents"
+      },
+      "CANNOT-DELETE": {
+        "detail": "You cannot delete this"
+      }
     },
     "GProject": {
-      "MainPanel": { "label": "Editing a project or item" },
+      "MainPanel": {
+        "label": "Editing a project or item"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the project."
@@ -987,13 +1452,25 @@
         "label": "knowledge base",
         "help": "knowledge base."
       },
-      "DeleteBtn": { "label": "Delete" },
-      "IndexBtn": { "label": "Index", "help": "Reindex contents" },
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" }
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "IndexBtn": {
+        "label": "Index",
+        "help": "Reindex contents"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      }
     },
     "GeboAiKnowledgeBaseTreeComponent": {
-      "addNewAnchor": { "label": "+ Add item/project", "help": "add new..." }
+      "addNewAnchor": {
+        "label": "+ Add item/project",
+        "help": "add new..."
+      }
     }
   },
   "GeboAIAccessControlModule": {
@@ -1014,42 +1491,90 @@
   },
   "GeboAiAdminPanelModule": {
     "GeboAiAdminComponent": {
-      "DashboardTab": { "label": "Dashboard" },
-      "LLMSTab": { "label": "LLMs for chat & embedding" },
-      "RagChatConfigTab": { "label": "Rag chat profiles/Model prompts" },
-      "KnowledgeBaseTab": { "label": "Knowledge bases & projects" },
-      "UsersGroupTab": { "label": "Users and groups" },
-      "GeboModulesTab": { "label": "Gebo.ai modules config" },
-      "LogsTab": { "label": "Logs" }
+      "DashboardTab": {
+        "label": "Dashboard"
+      },
+      "LLMSTab": {
+        "label": "LLMs for chat & embedding"
+      },
+      "RagChatConfigTab": {
+        "label": "Rag chat profiles/Model prompts"
+      },
+      "KnowledgeBaseTab": {
+        "label": "Knowledge bases & projects"
+      },
+      "UsersGroupTab": {
+        "label": "Users and groups"
+      },
+      "GeboModulesTab": {
+        "label": "Gebo.ai modules config"
+      },
+      "LogsTab": {
+        "label": "Logs"
+      }
     }
   },
   "SystemsPanelModule": {
     "SystemsComponent": {
-      "CodeHeader": { "label": "Code" },
-      "DescriptionHeader": { "label": "Description" },
-      "ConfigureBtn2": { "label": "Configure" },
-      "ConfigureBtn": { "label": "Configure" }
+      "CodeHeader": {
+        "label": "Code"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "ConfigureBtn2": {
+        "label": "Configure"
+      },
+      "ConfigureBtn": {
+        "label": "Configure"
+      }
     }
   },
   "ChatProfilesPanelModule": {
     "ChatProfilesComponent": {
-      "NewPromptConfigurationBtn": { "label": "New prompt configuration" },
-      "NewChatProfileBtn": { "label": "New chat profile" },
-      "MainPanel": { "label": "Retrivial augmented generation chat profiles" },
-      "PromptsPanel": { "label": "Prompt templates" },
-      "KnowledgeBasesHeader": { "label": "Knowledge bases" },
-      "DescriptionHeader": { "label": "Description" },
-      "ConfigureBtn1": { "label": "configure" },
-      "CodeHeader": { "label": "Code" },
-      "UseCodeHeader": { "label": "Use code" },
-      "LanguageHeader": { "label": "Language" },
-      "DescriptionHeader2": { "label": "Description" },
-      "ConfigureBtn2": { "label": "configure" }
+      "NewPromptConfigurationBtn": {
+        "label": "New prompt configuration"
+      },
+      "NewChatProfileBtn": {
+        "label": "New chat profile"
+      },
+      "MainPanel": {
+        "label": "Retrieval-augmented generation chat profiles"
+      },
+      "PromptsPanel": {
+        "label": "Prompt templates"
+      },
+      "KnowledgeBasesHeader": {
+        "label": "Knowledge bases"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "ConfigureBtn1": {
+        "label": "configure"
+      },
+      "CodeHeader": {
+        "label": "Code"
+      },
+      "UseCodeHeader": {
+        "label": "Use code"
+      },
+      "LanguageHeader": {
+        "label": "Language"
+      },
+      "DescriptionHeader2": {
+        "label": "Description"
+      },
+      "ConfigureBtn2": {
+        "label": "configure"
+      }
     }
   },
   "KnowledgeBasesPanelModule": {
     "KnowledgeBasesComponent": {
-      "NewKnowledgeBaseBtn": { "label": "New knowledge base" }
+      "NewKnowledgeBaseBtn": {
+        "label": "New knowledge base"
+      }
     }
   },
   "LlmsPanelModule": {
@@ -1060,18 +1585,42 @@
       "NewChatModelConfigurationBtn": {
         "label": "New chat model configuration"
       },
-      "DescriptionHeader": { "label": "Description" },
-      "CodeHeader": { "label": "Code" },
-      "ModelHeader": { "label": "Model " },
-      "ModelProviderHeader": { "label": "Model provider" },
-      "ConfigureBtn": { "label": "configure" },
-      "CodeHeader2": { "label": "Code" },
-      "DescriptionHeader2": { "label": "Description" },
-      "ModelProviderHeader2": { "label": "Model provider" },
-      "ConfigureBtn2": { "label": "configure" },
-      "ModelHeader2": { "label": "Model " },
-      "ChatmodelsZone": { "label": "Configured chat models" },
-      "EmneddingModelsZone": { "label": "Configured embedding models" },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "CodeHeader": {
+        "label": "Code"
+      },
+      "ModelHeader": {
+        "label": "Model "
+      },
+      "ModelProviderHeader": {
+        "label": "Model provider"
+      },
+      "ConfigureBtn": {
+        "label": "configure"
+      },
+      "CodeHeader2": {
+        "label": "Code"
+      },
+      "DescriptionHeader2": {
+        "label": "Description"
+      },
+      "ModelProviderHeader2": {
+        "label": "Model provider"
+      },
+      "ConfigureBtn2": {
+        "label": "configure"
+      },
+      "ModelHeader2": {
+        "label": "Model "
+      },
+      "ChatmodelsZone": {
+        "label": "Configured chat models"
+      },
+      "EmneddingModelsZone": {
+        "label": "Configured embedding models"
+      },
       "chat": {
         "label": "New chat model",
         "help": "Select the supplier to add a new chat model capable of chatting with user or executing automations",
@@ -1090,11 +1639,21 @@
       "NewRerankerModelConfigurationBtn": {
         "label": "New reranker model configuration"
       },
-      "CodeHeader3": { "label": "Code" },
-      "DescriptionHeader3": { "label": "Description" },
-      "ModelProviderHeader3": { "label": "Model provider" },
-      "ModelHeader3": { "label": "Model " },
-      "RerankerModelsZone": { "label": "Configured rerank models" },
+      "CodeHeader3": {
+        "label": "Code"
+      },
+      "DescriptionHeader3": {
+        "label": "Description"
+      },
+      "ModelProviderHeader3": {
+        "label": "Model provider"
+      },
+      "ModelHeader3": {
+        "label": "Model "
+      },
+      "RerankerModelsZone": {
+        "label": "Configured rerank models"
+      },
       "NewTextToSpeechModelConfigurationBtn": {
         "label": "New text to speech model configuration"
       },
@@ -1104,19 +1663,45 @@
       "NewTranscriptModelConfigurationBtn": {
         "label": "New transcript model configuration"
       },
-      "ConfigureBtn3": { "label": "configure" },
-      "CodeHeader5": { "label": "Code" },
-      "DescriptionHeader5": { "label": "Description" },
-      "ModelProviderHeader5": { "label": "Model provider" },
-      "ModelHeader5": { "label": "Model " },
-      "ConfigureBtn5": { "label": "configure" },
-      "DescriptionHeader6": { "label": "Description" },
-      "TranscriptModelsZone": { "label": "Configured transcript models" },
-      "CodeHeader6": { "label": "Code" },
-      "ConfigureBtn6": { "label": "configure" },
-      "ModelProviderHeader6": { "label": "Model provider" },
-      "ModelHeader6": { "label": "Model " },
-      "ImageModelsZone": { "label": "Configured image models" },
+      "ConfigureBtn3": {
+        "label": "configure"
+      },
+      "CodeHeader5": {
+        "label": "Code"
+      },
+      "DescriptionHeader5": {
+        "label": "Description"
+      },
+      "ModelProviderHeader5": {
+        "label": "Model provider"
+      },
+      "ModelHeader5": {
+        "label": "Model "
+      },
+      "ConfigureBtn5": {
+        "label": "configure"
+      },
+      "DescriptionHeader6": {
+        "label": "Description"
+      },
+      "TranscriptModelsZone": {
+        "label": "Configured transcript models"
+      },
+      "CodeHeader6": {
+        "label": "Code"
+      },
+      "ConfigureBtn6": {
+        "label": "configure"
+      },
+      "ModelProviderHeader6": {
+        "label": "Model provider"
+      },
+      "ModelHeader6": {
+        "label": "Model "
+      },
+      "ImageModelsZone": {
+        "label": "Configured image models"
+      },
       "tts": {
         "label": "New text to speech model",
         "help": "Select the supplier to add a new text to speech model",
@@ -1132,23 +1717,45 @@
         "help": "Select the supplier to add a new image model",
         "placeholder": "Select the supplier to add a new image model"
       },
-      "ModelProviderHeader4": { "label": "Model provider" },
-      "DescriptionHeader4": { "label": "Description" },
-      "CodeHeader4": { "label": "Code" },
-      "ModelHeader4": { "label": "Model " },
-      "TextToSpeechModelsZone": { "label": "Configured text to speech models" },
-      "ConfigureBtn4": { "label": "configure" }
+      "ModelProviderHeader4": {
+        "label": "Model provider"
+      },
+      "DescriptionHeader4": {
+        "label": "Description"
+      },
+      "CodeHeader4": {
+        "label": "Code"
+      },
+      "ModelHeader4": {
+        "label": "Model "
+      },
+      "TextToSpeechModelsZone": {
+        "label": "Configured text to speech models"
+      },
+      "ConfigureBtn4": {
+        "label": "configure"
+      }
     }
   },
   "GeboAiLargeLanguageModelsModule": {
     "GeboAITestChatComponent": {
-      "TestingModelDialog": { "label": "Testing model" },
-      "TestChatBtn": { "label": "Test chat" }
+      "TestingModelDialog": {
+        "label": "Testing model"
+      },
+      "TestChatBtn": {
+        "label": "Test chat"
+      }
     },
     "GOpenAIChatModelConfig": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the model configuration"
@@ -1169,10 +1776,18 @@
         "label": "OpenAI chat model choice",
         "help": "Choose the OpenAI chat model to work with."
       },
-      "GeneralInfosTab": { "label": "General infos" },
-      "AdvancedSettingsTab": { "label": "Advanced settings" },
-      "MainPanel": { "label": "Editing OpenAI chat model configuration" },
-      "ModelAccessSettingsTab": { "label": "Model access settings" },
+      "GeneralInfosTab": {
+        "label": "General infos"
+      },
+      "AdvancedSettingsTab": {
+        "label": "Advanced settings"
+      },
+      "MainPanel": {
+        "label": "Editing OpenAI chat model configuration"
+      },
+      "ModelAccessSettingsTab": {
+        "label": "Model access settings"
+      },
       "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2": {
         "summary": "AI remote provider OK",
         "detail": "Provider is up and running and successfully configured"
@@ -1188,10 +1803,18 @@
       }
     },
     "GOpenAIEmbeddingModelConfig": {
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "MainPanel": { "label": "Editing OpenAI embedding model configuration" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "MainPanel": {
+        "label": "Editing OpenAI embedding model configuration"
+      },
       "apiSecretCode": {
         "label": "OpenAI token",
         "help": "Choose the OpenAI token to be used for this model"
@@ -1218,8 +1841,12 @@
       }
     },
     "GOllamaChatModelConfig": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the model configuration"
@@ -1228,7 +1855,9 @@
         "label": "Description",
         "help": "Enter the description of the model configuration"
       },
-      "DeleteBtn": { "label": "Delete" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
       "baseUrl": {
         "label": "Base ollama server address",
         "help": "Base address (like http://servername:234/) the ollama local or lan server responds."
@@ -1260,9 +1889,15 @@
       }
     },
     "GAnthropicChatModelConfig": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the model configuration"
@@ -1284,10 +1919,18 @@
         "label": "set this as default chat model",
         "help": "If true this will be used as default chat model where chat model is not indicated"
       },
-      "AdvancedSettingsTab": { "label": "Advanced settings" },
-      "GeneralInfosTab": { "label": "General infos" },
-      "ModelAccessSettingsTab": { "label": "Model access settings" },
-      "MainPanel": { "label": "Editing Anthropic chat model configuration" },
+      "AdvancedSettingsTab": {
+        "label": "Advanced settings"
+      },
+      "GeneralInfosTab": {
+        "label": "General infos"
+      },
+      "ModelAccessSettingsTab": {
+        "label": "Model access settings"
+      },
+      "MainPanel": {
+        "label": "Editing Anthropic chat model configuration"
+      },
       "forUses": {
         "label": "Model usage(s)",
         "help": "Uses that the Gebo.ai platform will consider this model for.",
@@ -1295,7 +1938,9 @@
       }
     },
     "GMistralChatModelConfig": {
-      "SaveBtn": { "label": "Save" },
+      "SaveBtn": {
+        "label": "Save"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the model configuration"
@@ -1304,8 +1949,12 @@
         "label": "Unique Code",
         "help": "Automatically generated unique code of the model configuration"
       },
-      "DeleteBtn": { "label": "Delete" },
-      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "apiSecretCode": {
         "label": "MistralAI token",
         "help": "Choose the MistralAI token to be used for this model"
@@ -1318,10 +1967,18 @@
         "label": "MistralAI chat model choice",
         "help": "Choose the MistralAI chat model to work with."
       },
-      "GeneralInfosTab": { "label": "General infos" },
-      "AdvancedSettingsTab": { "label": "Advanced settings" },
-      "ModelAccessSettingsTab": { "label": "Model access settings" },
-      "MainPanel": { "label": "Editing MistralAI chat model configuration" },
+      "GeneralInfosTab": {
+        "label": "General infos"
+      },
+      "AdvancedSettingsTab": {
+        "label": "Advanced settings"
+      },
+      "ModelAccessSettingsTab": {
+        "label": "Model access settings"
+      },
+      "MainPanel": {
+        "label": "Editing MistralAI chat model configuration"
+      },
       "forUses": {
         "label": "Model usage(s)",
         "help": "Uses that the Gebo.ai platform will consider this model for.",
@@ -1329,7 +1986,9 @@
       }
     },
     "GGoogleVertexChatModelConfig": {
-      "SaveBtn": { "label": "Save" },
+      "SaveBtn": {
+        "label": "Save"
+      },
       "defaultModel": {
         "label": "set this as default chat model",
         "help": "If true this will be used as default chat model where chat model is not indicated"
@@ -1350,11 +2009,21 @@
         "label": "Unique Code",
         "help": "Automatically generated unique code of the model configuration"
       },
-      "DeleteBtn": { "label": "Delete" },
-      "CancelBtn": { "label": "Cancel" },
-      "TabGeneralInfos": { "label": "General infos" },
-      "TabModelAccessSettings": { "label": "Model access settings" },
-      "TabAdvancedSettings": { "label": "Advanced settings" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "TabGeneralInfos": {
+        "label": "General infos"
+      },
+      "TabModelAccessSettings": {
+        "label": "Model access settings"
+      },
+      "TabAdvancedSettings": {
+        "label": "Advanced settings"
+      },
       "MainPanel": {
         "label": "Editing Google Vertex AI chat model configuration"
       },
@@ -1365,9 +2034,15 @@
       }
     },
     "GDeepseekChatModelConfig": {
-      "DeleteBtn": { "label": "Delete" },
-      "CancelBtn": { "label": "Cancel" },
-      "SaveBtn": { "label": "Save" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
       "apiSecretCode": {
         "label": "Deepseek token",
         "help": "Choose the Deepseek token to be used for this model"
@@ -1389,10 +2064,18 @@
         "label": "set this as default chat model",
         "help": "If true this will be used as default chat model where chat model is not indicated"
       },
-      "AdvancedSettingsTab": { "label": "Advanced settings" },
-      "GeneralInfosTab": { "label": "General infos" },
-      "MainPanel": { "label": "Editing Deepseek chat model configuration" },
-      "ModelAccessSettingsTab": { "label": "Model access settings" },
+      "AdvancedSettingsTab": {
+        "label": "Advanced settings"
+      },
+      "GeneralInfosTab": {
+        "label": "General infos"
+      },
+      "MainPanel": {
+        "label": "Editing Deepseek chat model configuration"
+      },
+      "ModelAccessSettingsTab": {
+        "label": "Model access settings"
+      },
       "forUses": {
         "label": "Model usage(s)",
         "help": "Uses that the Gebo.ai platform will consider this model for.",
@@ -1400,13 +2083,19 @@
       }
     },
     "GenericOpenAIAPIChatModelConfig": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the model configuration"
       },
-      "DeleteBtn": { "label": "Delete" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the model configuration"
@@ -1427,10 +2116,18 @@
         "label": "Chat model  chat model choice",
         "help": "Choose the Chat model  chat model to work with."
       },
-      "GeneralInfosTab": { "label": "General infos" },
-      "TitleFragment": { "label": "Editing chat model provider:" },
-      "AdvancedSettingsTab": { "label": "Advanced settings" },
-      "ModelAccessSettingsTab": { "label": "Model access settings" },
+      "GeneralInfosTab": {
+        "label": "General infos"
+      },
+      "TitleFragment": {
+        "label": "Editing chat model provider:"
+      },
+      "AdvancedSettingsTab": {
+        "label": "Advanced settings"
+      },
+      "ModelAccessSettingsTab": {
+        "label": "Model access settings"
+      },
       "forUses": {
         "label": "Model usage(s)",
         "help": "Uses that the Gebo.ai platform will consider this model for.",
@@ -1486,13 +2183,19 @@
       }
     },
     "GOllamaEmbeddingModelConfig": {
-      "CancelBtn": { "label": "Cancel" },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the embedding model configuration"
       },
-      "SaveBtn": { "label": "Save" },
-      "DeleteBtn": { "label": "Delete" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
       "MainPanel": {
         "label": "Editing Ollama local (or lan) embedding model configuration"
       },
@@ -1525,9 +2228,15 @@
       "MainPanel": {
         "label": "Editing MistralAI embedding model configuration"
       },
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the embedding model configuration"
@@ -1553,9 +2262,15 @@
         "label": "Description",
         "help": "Enter the description of the embedding model configuration"
       },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
       "choosedModel": {
         "label": "Google Vertex AI embedding model choice",
         "help": "Choose the Google Vertex AI embedding model to work with."
@@ -1574,10 +2289,18 @@
       }
     },
     "GenericOpenAIAPIEmbeddingModelConfig": {
-      "CancelBtn": { "label": "Cancel" },
-      "SaveBtn": { "label": "Save" },
-      "DeleteBtn": { "label": "Delete" },
-      "TitleFragment": { "label": "Editing embedding model provider:" },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "TitleFragment": {
+        "label": "Editing embedding model provider:"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the Embedding model  configuration"
@@ -1608,10 +2331,18 @@
       }
     },
     "GenericOpenAIRankerModelConfig": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "TitleFragment": { "label": "Editing ranking model provider:" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "TitleFragment": {
+        "label": "Editing ranking model provider:"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the model configuration"
@@ -1646,10 +2377,18 @@
       }
     },
     "GOpenAIImageModelConfig": {
-      "SaveBtn": { "label": "Save" },
-      "DeleteBtn": { "label": "Delete" },
-      "CancelBtn": { "label": "Cancel" },
-      "MainPanel": { "label": "Editing OpenAI image model configuration" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "MainPanel": {
+        "label": "Editing OpenAI image model configuration"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the image model configuration"
@@ -1676,9 +2415,15 @@
       }
     },
     "GOpenAITextToSpeechModelConfig": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
       "MainPanel": {
         "label": "Editing OpenAI text to speech model configuration"
       },
@@ -1708,10 +2453,18 @@
       }
     },
     "GOpenAITranscriptModelConfig": {
-      "DeleteBtn": { "label": "Delete" },
-      "MainPanel": { "label": "Editing OpenAI transcript model configuration" },
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "MainPanel": {
+        "label": "Editing OpenAI transcript model configuration"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the transcript model configuration"
@@ -1738,10 +2491,18 @@
       }
     },
     "GenericOpenAIAPIImageModelConfig": {
-      "SaveBtn": { "label": "Save" },
-      "DeleteBtn": { "label": "Delete" },
-      "CancelBtn": { "label": "Cancel" },
-      "TitleFragment": { "label": "Editing image model provider:" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "TitleFragment": {
+        "label": "Editing image model provider:"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the model configuration"
@@ -1768,10 +2529,18 @@
       }
     },
     "GenericOpenAIAPIRankerModelConfig": {
-      "SaveBtn": { "label": "Save" },
-      "DeleteBtn": { "label": "Delete" },
-      "TitleFragment": { "label": "Editing ranking model provider:" },
-      "CancelBtn": { "label": "Cancel" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "TitleFragment": {
+        "label": "Editing ranking model provider:"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the model configuration"
@@ -1814,10 +2583,18 @@
       }
     },
     "GenericOpenAIAPITextToSpeechModelConfig": {
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
-      "TitleFragment": { "label": "Editing text to speech model provider:" },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "TitleFragment": {
+        "label": "Editing text to speech model provider:"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the model configuration"
@@ -1844,10 +2621,18 @@
       }
     },
     "GenericOpenAIAPITranscriptModelConfig": {
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
-      "TitleFragment": { "label": "Editing transcript model provider:" },
-      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "TitleFragment": {
+        "label": "Editing transcript model provider:"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "apiSecretCode": {
         "label": "Transcript model API token",
         "help": "Choose the transcript model API token to be used for this model (optional)"
@@ -1874,11 +2659,21 @@
       }
     },
     "GBedrockChatModelConfig": {
-      "DeleteBtn": { "label": "Delete" },
-      "CancelBtn": { "label": "Cancel" },
-      "SaveBtn": { "label": "Save" },
-      "SelectModel": { "placeholder": "Select a model" },
-      "MainPanel": { "label": "Editing AWS Bedrock chat model configuration" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "SelectModel": {
+        "placeholder": "Select a model"
+      },
+      "MainPanel": {
+        "label": "Editing AWS Bedrock chat model configuration"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the model configuration"
@@ -1909,9 +2704,15 @@
       "MainPanel": {
         "label": "Editing AWS Bedrock embedding model configuration"
       },
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the embedding model configuration"
@@ -1934,10 +2735,18 @@
       }
     },
     "GBedrockImageModelConfig": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "MainPanel": { "label": "Editing AWS Bedrock image model configuration" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "MainPanel": {
+        "label": "Editing AWS Bedrock image model configuration"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the image model configuration"
@@ -1976,9 +2785,15 @@
       }
     },
     "GBedrockRankerModelConfig": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
       "MainPanel": {
         "label": "Editing AWS Bedrock reranking model configuration"
       },
@@ -2020,9 +2835,15 @@
       }
     },
     "GBedrockTextToSpeechModelConfig": {
-      "SaveBtn": { "label": "Save" },
-      "DeleteBtn": { "label": "Delete" },
-      "CancelBtn": { "label": "Cancel" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "MainPanel": {
         "label": "Editing Amazon Polly text to speech configuration"
       },
@@ -2042,16 +2863,25 @@
         "label": "AWS credentials",
         "help": "Choose the AWS credentials (access key id / secret access key). Leave empty to use the instance IAM role."
       },
-      "engine": { "label": "Engine", "help": "Amazon Polly synthesis engine" },
+      "engine": {
+        "label": "Engine",
+        "help": "Amazon Polly synthesis engine"
+      },
       "defaultModel": {
         "label": "set this as default text to speech model",
         "help": "If true this will be used as default text to speech model where none is indicated"
       }
     },
     "GBedrockTranscriptModelConfig": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
       "MainPanel": {
         "label": "Editing Amazon Transcribe speech to text configuration"
       },
@@ -2095,36 +2925,68 @@
   },
   "GeboAIChatControlModule": {
     "GeboAIReusableChatComponent": {
-      "chatConfigInfosBtn": { "help": "Chat configuration infos" },
-      "chaDeleteBtn": { "help": "Delete this chat session" },
-      "chatNameChangeBtn": { "help": "Rename the chat session" },
-      "QueryControl": { "placeholder": "Write a message for the chat bot" },
+      "chatConfigInfosBtn": {
+        "help": "Chat configuration infos"
+      },
+      "chaDeleteBtn": {
+        "help": "Delete this chat session"
+      },
+      "chatNameChangeBtn": {
+        "help": "Rename the chat session"
+      },
+      "QueryControl": {
+        "placeholder": "Write a message for the chat bot"
+      },
       "ChatWithDocsBtnNew": {
         "help": "Browse or search and select documents to chat with"
       },
-      "UploadFileBtn": { "help": "Upload a file to chat or work with" },
-      "SubmiQuestion": { "help": "Submit your question" },
-      "WithParams": { "label": "with params:" },
-      "CalledFunctionsCtl": { "label": "AI Called functions" },
-      "UploadedDocs": { "label": "Uploaded docs" },
+      "UploadFileBtn": {
+        "help": "Upload a file to chat or work with"
+      },
+      "SubmiQuestion": {
+        "help": "Submit your question"
+      },
+      "WithParams": {
+        "label": "with params:"
+      },
+      "CalledFunctionsCtl": {
+        "label": "AI Called functions"
+      },
+      "UploadedDocs": {
+        "label": "Uploaded docs"
+      },
       "CHAT_HISTORY_LOADED": {
         "summary": "Chat history loaded",
         "detail": "Chat history loaded successfully"
       },
-      "YOUR_SPEECH_IS_UPLOADING": { "summary": "Your speech is uploading" },
-      "LOADING_VOCAL_ANSWER": { "summary": "Vocal answer received" },
-      "ScrollUpBtn": { "help": "Scroll Up" },
-      "ScrollDownBtn": { "help": "Scroll down" },
-      "FoundRelatedDocs": { "label": "Found docs" },
+      "YOUR_SPEECH_IS_UPLOADING": {
+        "summary": "Your speech is uploading"
+      },
+      "LOADING_VOCAL_ANSWER": {
+        "summary": "Vocal answer received"
+      },
+      "ScrollUpBtn": {
+        "help": "Scroll Up"
+      },
+      "ScrollDownBtn": {
+        "help": "Scroll down"
+      },
+      "FoundRelatedDocs": {
+        "label": "Found docs"
+      },
       "DELETE_CHAT_ACTION": {
-        "message": "Are you shure you whant to delete this chat?",
+        "message": "Are you sure you want to delete this chat?",
         "header": "Delete chat action"
       },
-      "PlusContextualMenu": { "help": "Add content or modify search behavior" },
+      "PlusContextualMenu": {
+        "help": "Add content or modify search behavior"
+      },
       "[object HTMLElement]": {
         "help": "Add content or modify search behavior"
       },
-      "ContextMenuBtn": { "help": "Add content or modify search behavior" },
+      "ContextMenuBtn": {
+        "help": "Add content or modify search behavior"
+      },
       "DeepSearchDetailsButton": {
         "label": "Sources",
         "help": "Open the list of analyzed documents"
@@ -2133,7 +2995,7 @@
         "label": "Deep search answer and sources details"
       },
       "DeepSearchResultAccordionItem": {
-        "label": "Deep Search analisys result"
+        "label": "Deep Search analysis result"
       },
       "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4": {
         "summary": "Error searching Confluence Search",
@@ -2143,15 +3005,27 @@
         "summary": "New chat loaded",
         "detail": "New chat loaded successfully"
       },
-      "SelectSourcesBtn": { "label": "Select sources" },
+      "SelectSourcesBtn": {
+        "label": "Select sources"
+      },
       "ChooseAtLeastMessage": {
         "label": "Choose at least one of the following options"
       },
-      "SkipDeepSearch": { "label": "Skip deep search" },
-      "KnowledgeBaseChoicesArea": { "label": "Choosed knowledge bases" },
-      "DataSourceChoicesArea": { "label": "Choosed systems" },
-      "wordExport": { "help": "Export response to Word" },
-      "pdfExport": { "help": "Export response to PDF" },
+      "SkipDeepSearch": {
+        "label": "Skip deep search"
+      },
+      "KnowledgeBaseChoicesArea": {
+        "label": "Selected knowledge bases"
+      },
+      "DataSourceChoicesArea": {
+        "label": "Selected systems"
+      },
+      "wordExport": {
+        "help": "Export response to Word"
+      },
+      "pdfExport": {
+        "help": "Export response to PDF"
+      },
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2": {
         "summary": "Error while streaming chat respose",
         "detail": "Server error: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
@@ -2261,15 +3135,22 @@
       }
     },
     "ChangeDescriptionComponent": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "description": {
         "label": "Chat description",
         "help": "Enter the description of the chat session."
       }
     },
     "GeboChatUserInfoComponent": {
-      "usedModel": { "label": "Used model", "help": "Model code" },
+      "usedModel": {
+        "label": "Used model",
+        "help": "Model code"
+      },
       "providerId": {
         "label": "Chat model provider",
         "help": "LLms provider driver"
@@ -2278,27 +3159,49 @@
         "label": "Chat model callable functions",
         "help": "List of functions available to the chat model"
       },
-      "NameCol": { "label": "Name" },
-      "DescriptionCol": { "label": "Description" },
+      "NameCol": {
+        "label": "Name"
+      },
+      "DescriptionCol": {
+        "label": "Description"
+      },
       "kbases": {
         "label": "Available knowledge bases",
         "help": "List of knowledge bases used in this RAG chat"
       },
-      "CloseBtn": { "help": "Close" }
+      "CloseBtn": {
+        "help": "Close"
+      }
     },
     "DocumentRefComponent": {
-      "AddDocsBtn": { "help": "Add document to 'chat with' list " }
+      "AddDocsBtn": {
+        "help": "Add document to 'chat with' list "
+      }
     },
     "GeboAIExtensiblePipelineRouteDisplayComponent": {
-      "DeepSearchName": { "label": "Running deep search" },
-      "RagLLMResponse": { "label": "Running retrieve augmented generation" },
-      "PureLLMResponse": { "label": "Asking llm" },
-      "Waiting": { "label": "Analyzing the best response plan.." },
-      "ToolsLLMResponse": { "label": "Running tools" },
-      "ShallowSearchResponse": { "label": "Running AI assisted search" }
+      "DeepSearchName": {
+        "label": "Running deep search"
+      },
+      "RagLLMResponse": {
+        "label": "Running retrieval-augmented generation"
+      },
+      "PureLLMResponse": {
+        "label": "Asking llm"
+      },
+      "Waiting": {
+        "label": "Analyzing the best response plan.."
+      },
+      "ToolsLLMResponse": {
+        "label": "Running tools"
+      },
+      "ShallowSearchResponse": {
+        "label": "Running AI assisted search"
+      }
     },
     "GeboAIChatStreamEventsDisplayComponent": {
-      "DeepSearchProcessingFile": { "label": "Analized file" },
+      "DeepSearchProcessingFile": {
+        "label": "Analyzed file"
+      },
       "DeepSearchDataSourceProcessingDocument": {
         "label": "Analyzed search result"
       },
@@ -2308,41 +3211,77 @@
       "DeepSearchingConsolidating": {
         "label": "Consolidating the final report"
       },
-      "RUNNING": { "label": "Running " },
-      "DOING_USER_INTENT_ANALISYS": { "label": "I'm analyzing your request" },
-      "CHOOSED_AGENTIC_FLOW": {
-        "label": "Choosed agentic flow, answering agent running"
+      "RUNNING": {
+        "label": "Running "
       },
-      "SERVICE_LEVEL_DETECTED": { "label": "Service level is: QA" },
-      "USER_CHOOSED_AGENT": { "label": "Executing your choosed agent" },
-      "PureSearchProcessingDocument": { "label": "Processing document:" },
-      "StreamingResults": { "label": "Generating analisys.." }
+      "DOING_USER_INTENT_ANALISYS": {
+        "label": "I'm analyzing your request"
+      },
+      "CHOOSED_AGENTIC_FLOW": {
+        "label": "Selected agentic flow, answering agent running"
+      },
+      "SERVICE_LEVEL_DETECTED": {
+        "label": "Service level is: QA"
+      },
+      "USER_CHOOSED_AGENT": {
+        "label": "Executing your selected agent"
+      },
+      "PureSearchProcessingDocument": {
+        "label": "Processing document:"
+      },
+      "StreamingResults": {
+        "label": "Generating analysis.."
+      }
     },
     "ChatPipelinesMenu": {
-      "UploadFileMenuItem": { "label": "Upload file(s)" },
-      "ChatWithDocsMenuItem": { "label": "Browse/search company file(s)" },
-      "ChatWithChoosenDocsMenuItem": { "label": "Choosen doc. chat" },
-      "agenticChat": { "label": "Agentic chat" },
-      "rag": { "label": "R.a.g. chat" },
-      "deepSearch": { "label": "Deep search/Multiple sources" },
+      "UploadFileMenuItem": {
+        "label": "Upload file(s)"
+      },
+      "ChatWithDocsMenuItem": {
+        "label": "Browse/search company file(s)"
+      },
+      "ChatWithChoosenDocsMenuItem": {
+        "label": "Chosen doc. chat"
+      },
+      "agenticChat": {
+        "label": "Agentic chat"
+      },
+      "rag": {
+        "label": "R.a.g. chat"
+      },
+      "deepSearch": {
+        "label": "Deep search/Multiple sources"
+      },
       "SHALLOW_SEARCH_RESPONSE.google-search-service": {
         "label": "Deep search/Google Web Search"
       },
       "SHALLOW_SEARCH_RESPONSE.confluence": {
         "label": "Deep search/Confluence Search"
       },
-      "SHALLOW_SEARCH_RESPONSE.jira": { "label": "Deep search/Jira Search" },
-      "internalKnowledgeOption": { "label": "Knowledge base deep search" },
-      "CHAT_WITH_FILES": { "label": "Chat with file(s)" },
+      "SHALLOW_SEARCH_RESPONSE.jira": {
+        "label": "Deep search/Jira Search"
+      },
+      "internalKnowledgeOption": {
+        "label": "Knowledge base deep search"
+      },
+      "CHAT_WITH_FILES": {
+        "label": "Chat with file(s)"
+      },
       "DEEP_SEARCH_RESPONSE.google-search-service": {
         "label": "Deep search/Google Web Search"
       },
       "DEEP_SEARCH_RESPONSE.confluence": {
         "label": "Deep search/Confluence Search"
       },
-      "DEEP_SEARCH_RESPONSE.jira": { "label": "Deep search/Jira Search" },
-      "PURE_SEARCH": { "label": "Assisted search" },
-      "imageGeneration": { "label": "Image generation" }
+      "DEEP_SEARCH_RESPONSE.jira": {
+        "label": "Deep search/Jira Search"
+      },
+      "PURE_SEARCH": {
+        "label": "Assisted search"
+      },
+      "imageGeneration": {
+        "label": "Image generation"
+      }
     }
   },
   "GeboAIAudioControlModule": {
@@ -2351,35 +3290,77 @@
         "label": "Record",
         "help": "Start recording an audio track and send it"
       },
-      "StopBtn": { "label": "Recording", "help": "Recording" },
-      "AbortBtn": { "label": "Abort recording", "help": "Abort recording" },
-      "AbortRecordingBtn": { "help": "Abort recording" }
+      "StopBtn": {
+        "label": "Recording",
+        "help": "Recording"
+      },
+      "AbortBtn": {
+        "label": "Abort recording",
+        "help": "Abort recording"
+      },
+      "AbortRecordingBtn": {
+        "help": "Abort recording"
+      }
     }
   },
   "GeboAIJobStatusModule": {
     "LogTableComponent": {
-      "ReloadDataBtn": { "label": "reload data" },
-      "DeleteBtn": { "label": "Delete" },
-      "SelectHeader": { "label": "Select" },
-      "EndDateTimeHeader": { "label": "end date/time" },
-      "StartDateTimeHeader": { "label": "start date/time" },
-      "ProcessingHeader": { "label": "processing" },
-      "DescriptionHeader": { "label": "Description" },
-      "CodeHeader": { "label": "Code" },
-      "FinishedHeader": { "label": "finished" },
-      "WithErrorHeader": { "label": "with error" },
+      "ReloadDataBtn": {
+        "label": "reload data"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SelectHeader": {
+        "label": "Select"
+      },
+      "EndDateTimeHeader": {
+        "label": "end date/time"
+      },
+      "StartDateTimeHeader": {
+        "label": "start date/time"
+      },
+      "ProcessingHeader": {
+        "label": "processing"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "CodeHeader": {
+        "label": "Code"
+      },
+      "FinishedHeader": {
+        "label": "finished"
+      },
+      "WithErrorHeader": {
+        "label": "with error"
+      },
       "LogTableComponent": {
         "help": "This MCP server data source ingestion log"
       },
-      "SearchInput": { "placeholder": "search logs" },
-      "NoLogEntries": { "label": "No log entry matches the current filters" }
+      "SearchInput": {
+        "placeholder": "search logs"
+      },
+      "NoLogEntries": {
+        "label": "No log entry matches the current filters"
+      }
     },
     "GJobStatus": {
-      "ProcessesStatsTab": { "label": "Processes stats" },
-      "DeleteBtn": { "label": "Delete" },
-      "CloseBtn": { "label": "Close" },
-      "PublicationLogTab": { "label": "Publication log" },
-      "MainPanel": { "label": "Publishing log" },
+      "ProcessesStatsTab": {
+        "label": "Processes stats"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "CloseBtn": {
+        "label": "Close"
+      },
+      "PublicationLogTab": {
+        "label": "Publication log"
+      },
+      "MainPanel": {
+        "label": "Publishing log"
+      },
       "actualStatus": {
         "label": "Status",
         "help": "Status of the task, still running, finished or finished with errors."
@@ -2396,37 +3377,53 @@
         "label": "End date/time",
         "help": "End date and time of the content synchronization task"
       },
-      "NotProcessedCompletely": { "label": "Not processed completely" },
-      "ProcessedCompletely": { "label": "Processed completely" }
+      "NotProcessedCompletely": {
+        "label": "Not processed completely"
+      },
+      "ProcessedCompletely": {
+        "label": "Processed completely"
+      }
     }
   },
   "GeboAIDashboardPanelModule": {
     "GeboAIDashboardComponent": {
-      "SpanEmbedding": { "label": "embedding vs total nr of documents" },
-      "MoreDetailsBtn": { "label": "More details" }
+      "SpanEmbedding": {
+        "label": "embedding vs total nr of documents"
+      },
+      "MoreDetailsBtn": {
+        "label": "More details"
+      }
     }
   },
   "GeboAIPromptWizardModule": {
     "GeboAIPromptWizardComponent": {
-      "generatePrompt": { "label": "Generate prompt" },
+      "generatePrompt": {
+        "label": "Generate prompt"
+      },
       "PromptWizardBtn": {
         "label": "Prompt wizard",
         "help": "Use this to use an LLM to generate the prompt for your objectives"
       },
-      "acceptPrompt": { "label": "Accept prompt" },
-      "promptWizardUI": { "label": "Prompt template generation wizard" },
-      "cancel": { "label": "Cancel" },
+      "acceptPrompt": {
+        "label": "Accept prompt"
+      },
+      "promptWizardUI": {
+        "label": "Prompt template generation wizard"
+      },
+      "cancel": {
+        "label": "Cancel"
+      },
       "response": {
         "label": "Suggested prompt template",
         "help": "Generated template text for your objective (you can change or correct/modify it)"
       },
       "modelCode": {
         "label": "Chat model to use",
-        "help": "Choose the chat model you whant to ask the prompt template generation"
+        "help": "Choose the chat model you want to ask the prompt template generation"
       },
       "query": {
         "label": "Prompt template request",
-        "help": "Specify in 2nd person wich is the objective that the AI will support the user"
+        "help": "Specify in 2nd person which is the objective that the AI will support the user"
       }
     }
   },
@@ -2480,17 +3477,34 @@
         "label": "Identity type",
         "help": "Select the identity type to create for the remote system"
       },
-      "InsertBtn": { "label": "Insert" },
-      "token": { "label": "Token", "help": "Enter the token." },
+      "InsertBtn": {
+        "label": "Insert"
+      },
+      "token": {
+        "label": "Token",
+        "help": "Enter the token."
+      },
       "user": {
         "label": "User",
         "help": "Enter the user indicated by the token."
       },
-      "MainPanel": { "label": "Creating identity" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "username": { "label": "User name", "help": "Enter the user name." },
-      "password": { "label": "Password", "help": "Enter the password." },
+      "MainPanel": {
+        "label": "Creating identity"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "username": {
+        "label": "User name",
+        "help": "Enter the user name."
+      },
+      "password": {
+        "label": "Password",
+        "help": "Enter the password."
+      },
       "email": {
         "label": "E-mail/User name",
         "help": "Enter the e-mail or user name associated to the ssh key."
@@ -2522,12 +3536,24 @@
       }
     },
     "GeboAiSecretsAdminListComponent": {
-      "MainPanel": { "label": "Identities" },
-      "NewIdentityBtn": { "label": "New identity" },
-      "CodeHeader": { "label": "Code" },
-      "DescriptionHeader": { "label": "Description" },
-      "TypeOfIdentityHeader": { "label": "Type of identity" },
-      "DbOrYmlFileConfigHeader": { "label": "db or yml file config" }
+      "MainPanel": {
+        "label": "Identities"
+      },
+      "NewIdentityBtn": {
+        "label": "New identity"
+      },
+      "CodeHeader": {
+        "label": "Code"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "TypeOfIdentityHeader": {
+        "label": "Type of identity"
+      },
+      "DbOrYmlFileConfigHeader": {
+        "label": "db or yml file config"
+      }
     }
   },
   "GeboAIUploadsModule": {
@@ -2556,17 +3582,31 @@
         "label": "Publish!",
         "help": "Saves and let these contents being available in knowledge base to LLm's"
       },
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "LogsTab": { "label": "Logs" },
-      "MainPanel": { "label": "Editing uploaded content" },
-      "SettingsTab": { "label": "Settings" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "LogsTab": {
+        "label": "Logs"
+      },
+      "MainPanel": {
+        "label": "Editing uploaded content"
+      },
+      "SettingsTab": {
+        "label": "Settings"
+      },
       "buildSystemsRefs": {
         "label": "Configure build systems",
-        "help": "List of build/packaging systems to inspect for meta informations and additional artifacts infos (leave empty if no software code is contained)"
+        "help": "List of build/packaging systems to inspect for meta information and additional artifacts infos (leave empty if no software code is contained)"
       },
-      "RefreshContentsBtn": { "label": "Refresh" },
+      "RefreshContentsBtn": {
+        "label": "Refresh"
+      },
       "contents": {
         "label": "Files of this data source",
         "help": "The files this data source physically holds: open one to see it, add new ones at any time, sign the ones to remove. Removals are applied when you save; the corresponding contents leave the knowledge base at the next publish."
@@ -2579,12 +3619,24 @@
   },
   "VFilesystemSelectorModule": {
     "VFilesystemSelectorComponent": {
-      "ChoosedElementsArea": { "label": "Choosed elements" },
-      "ChooseOk": { "label": "OK" },
-      "ChooseCancel": { "label": "Cancel" },
-      "EditBtn": { "help": "Modify selected" },
-      "ChooseElementsArea": { "label": "Choose elements" },
-      "VFileSystemSelector": { "label": "Choose elements" },
+      "ChoosedElementsArea": {
+        "label": "Selected elements"
+      },
+      "ChooseOk": {
+        "label": "OK"
+      },
+      "ChooseCancel": {
+        "label": "Cancel"
+      },
+      "EditBtn": {
+        "help": "Modify selected"
+      },
+      "ChooseElementsArea": {
+        "label": "Choose elements"
+      },
+      "VFileSystemSelector": {
+        "label": "Choose elements"
+      },
       "RefreshBtn": {
         "label": "Refresh",
         "help": "Reload the contents from the remote system"
@@ -2593,9 +3645,15 @@
   },
   "GeboAIContentReindexModule": {
     "GeboAIContentReindexScheduleComponent": {
-      "EditBtn": { "help": "Edit scheduling" },
-      "ConfirmBtn": { "label": "Confirm" },
-      "AddBtn": { "label": "+Add" }
+      "EditBtn": {
+        "help": "Edit scheduling"
+      },
+      "ConfirmBtn": {
+        "label": "Confirm"
+      },
+      "AddBtn": {
+        "label": "+Add"
+      }
     }
   },
   "GeboAIFileSystemModule": {
@@ -2604,13 +3662,27 @@
         "label": "Publish!",
         "help": "Saves and let these contents being available in knowledge base to LLm's"
       },
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "SettingsTab": { "label": "Settings" },
-      "SourceCodeTreatmentTab": { "label": "Source code treatment" },
-      "LogsTab": { "label": "Logs" },
-      "MainPanel": { "label": "Editing existing filesystem content" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SettingsTab": {
+        "label": "Settings"
+      },
+      "SourceCodeTreatmentTab": {
+        "label": "Source code treatment"
+      },
+      "LogsTab": {
+        "label": "Logs"
+      },
+      "MainPanel": {
+        "label": "Editing existing filesystem content"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the uploaded content of filesystem entry."
@@ -2624,7 +3696,7 @@
         "help": "Automatically generated unique code of the contents."
       },
       "tree": {
-        "label": "Choosed files or folders",
+        "label": "Selected files or folders",
         "help": "Shared filesystems files or directories available on the server"
       },
       "parentProjectCode": {
@@ -2633,7 +3705,7 @@
       },
       "programmedTables": {
         "label": "Contents updates checks schedule",
-        "help": "Configure the scheduling of changed contents to maintain the retrieve augmented generation system updated"
+        "help": "Configure the scheduling of changed contents to maintain the retrieval-augmented generation system updated"
       },
       "catalogingCriteria": {
         "label": "Folders organization criteria",
@@ -2641,7 +3713,7 @@
       },
       "buildSystemsRefs": {
         "label": "Configure build systems",
-        "help": "List of build/packaging systems to inspect for meta informations and additional artifacts infos (leave empty if no software code is contained)"
+        "help": "List of build/packaging systems to inspect for meta information and additional artifacts infos (leave empty if no software code is contained)"
       },
       "personalData": {
         "label": "Contains personal data",
@@ -2649,16 +3721,28 @@
       }
     },
     "GeboAISharedFilesystemsComponent": {
-      "NewFileShareAreaBtn": { "label": "New file share area" },
-      "AbsolutePathHeader": { "label": "Absolute path" },
-      "DbOrYmlFileConfigHeader": { "label": "db or yml file config" },
-      "DescriptionHeader": { "label": "Description" },
-      "CodeHeader": { "label": "Code" },
-      "ModifyHeader": { "label": "Modify" }
+      "NewFileShareAreaBtn": {
+        "label": "New file share area"
+      },
+      "AbsolutePathHeader": {
+        "label": "Absolute path"
+      },
+      "DbOrYmlFileConfigHeader": {
+        "label": "db or yml file config"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "CodeHeader": {
+        "label": "Code"
+      },
+      "ModifyHeader": {
+        "label": "Modify"
+      }
     },
     "GFileSystemShareReference": {
       "reference": {
-        "label": "Choosed shared filesystem folder",
+        "label": "Selected shared filesystem folder",
         "help": "Choose a server folder that is a root path for the shared filesystem used in your organization as a document repository"
       },
       "description": {
@@ -2669,22 +3753,38 @@
         "label": "Unique Code",
         "help": "Automatically generated unique code of the contents."
       },
-      "InsertBtn": { "label": "Insert" },
-      "CancelBtn": { "label": "Cancel" },
-      "MainPanel": { "label": "Editing server shared file folder" },
-      "DeleteBtn": { "label": "Delete" }
+      "InsertBtn": {
+        "label": "Insert"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "MainPanel": {
+        "label": "Editing server shared file folder"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      }
     }
   },
   "GeboAiGitModule": {
     "GGitProjectEndpoint": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
       "PublishBtn": {
         "label": "Publish!",
         "help": "Save and let these contents being available in knowledge base to LLm's"
       },
-      "MainPanel": { "label": "Editing git source/documentation repository" },
+      "MainPanel": {
+        "label": "Editing git source/documentation repository"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the git repo."
@@ -2715,7 +3815,7 @@
       },
       "publicAccess": {
         "label": "public",
-        "help": "If true the repository access does not require autentication"
+        "help": "If true the repository access does not require authentication"
       },
       "openZips": {
         "label": "Open zip files",
@@ -2723,11 +3823,11 @@
       },
       "programmedTables": {
         "label": "Contents updates checks schedule",
-        "help": "Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated"
+        "help": "Configure the scheduling of changed contents to maintain the retrieval-augmented generation system updated"
       },
       "buildSystemsRefs": {
         "label": "Configure build systems",
-        "help": "List of build/packaging systems to inspect for meta informations and additional artifacts infos"
+        "help": "List of build/packaging systems to inspect for meta information and additional artifacts infos"
       },
       "personalData": {
         "label": "Contains personal data",
@@ -2735,12 +3835,18 @@
       }
     },
     "GGitContentManagementSystem": {
-      "DeleteBtn": { "label": "Delete" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
       "MainPanel": {
         "label": "Editing git compatible system (bitbucket/github/gitlab)"
       },
-      "CancelBtn": { "label": "Cancel" },
-      "SaveBtn": { "label": "Save" },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
       "contentManagementSystemType": {
         "label": "Git driver",
         "help": "Git driver for cloning/pull of repos"
@@ -2765,25 +3871,47 @@
   },
   "GeboAIChatProfileModule": {
     "GChatProfileConfiguration": {
-      "CancelBtn": { "label": "Cancel" },
-      "SaveBtn": { "label": "Save" },
-      "DeleteBtn": { "label": "Delete" },
-      "GeneralInfosTab": { "label": "General infos" },
-      "UseChatModelLabel": { "label": "Use chat model" },
-      "ChooseChatModelRadio": { "label": "choose" },
-      "ChatModelSelect": { "placeholder": "Select a chat model configuration" },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "GeneralInfosTab": {
+        "label": "General infos"
+      },
+      "UseChatModelLabel": {
+        "label": "Use chat model"
+      },
+      "ChooseChatModelRadio": {
+        "label": "choose"
+      },
+      "ChatModelSelect": {
+        "placeholder": "Select a chat model configuration"
+      },
       "EmbeddingModelSelect": {
         "placeholder": "Select an embedding model configuration"
       },
-      "ChooseEmbeddingModelRadio": { "label": "choose" },
-      "RagSettingsTab": { "label": "RAG settings" },
+      "ChooseEmbeddingModelRadio": {
+        "label": "choose"
+      },
+      "RagSettingsTab": {
+        "label": "RAG settings"
+      },
       "LanguageModelTab": {
         "label": "Large language model & usable tools settings"
       },
-      "UseEmbeddingModelLabel": { "label": "Use embedding model" },
-      "SecurityAccessSettingsTab": { "label": "Security access settings" },
+      "UseEmbeddingModelLabel": {
+        "label": "Use embedding model"
+      },
+      "SecurityAccessSettingsTab": {
+        "label": "Security access settings"
+      },
       "MainPanel": {
-        "label": "Editing retrieve augmented generation chat profile"
+        "label": "Editing retrieval-augmented generation chat profile"
       },
       "code": {
         "label": "Unique Code",
@@ -2799,7 +3927,7 @@
       },
       "knowledgeBaseCodes": {
         "label": "Knowledge bases",
-        "help": "Knowledge bases to use for document retrivial."
+        "help": "Knowledge bases to use for document retrieval."
       },
       "similaritySearchThreshold": {
         "label": "Similarity threshold",
@@ -2815,7 +3943,7 @@
       },
       "topK": {
         "label": "Considered document fragments (TopK)",
-        "help": "In the retrieve augmented generation, Top N found considered document fragments in semantic search"
+        "help": "In the retrieval-augmented generation, Top N found considered document fragments in semantic search"
       },
       "enabledFunctions": {
         "label": "Enabled functions call for this RAG chat",
@@ -2823,11 +3951,11 @@
       },
       "prompt": {
         "label": "Prompt",
-        "help": "Edit the prompt for the retrieve augmented generation sessions."
+        "help": "Edit the prompt for the retrieval-augmented generation sessions."
       },
       "manualThreasholdsConfiguration": {
-        "label": "Manual or Autotuned threashold configuration",
-        "help": "Use manual distance threashold instead of Autotune it"
+        "label": "Manual or Autotuned threshold configuration",
+        "help": "Use manual distance threshold instead of Autotune it"
       },
       "useAlsoKeywordSearch": {
         "label": "Use keyword search when available",
@@ -2837,14 +3965,24 @@
   },
   "GeboAIPromptAdminModule": {
     "GPromptConfig": {
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "PromptCategorySelect": {
         "placeholder": "Enter or insert the prompt category"
       },
-      "MainPanel": { "label": "Editing prompt template" },
-      "EditingDisabledText": { "label": "Prompt template editing is disabled on this deployment; the editor is read only." },
+      "MainPanel": {
+        "label": "Editing prompt template"
+      },
+      "EditingDisabledText": {
+        "label": "Prompt template editing is disabled on this deployment; the editor is read only."
+      },
       "promptCategory": {
         "label": "Prompt category",
         "help": "Select or insert the prompt category."
@@ -2865,19 +4003,35 @@
   },
   "GeboAIUserProfileModule": {
     "GeboAIUserProfileComponent": {
-      "ChangePasswdBtn": { "label": "Change password" },
-      "YourUserName": { "label": "Your user name" }
+      "ChangePasswdBtn": {
+        "label": "Change password"
+      },
+      "YourUserName": {
+        "label": "Your user name"
+      }
     },
     "GeboAIChangePasswordComponent": {
       "oldPassword": {
         "label": "Old Password",
         "help": "Actual password to login"
       },
-      "newPassword": { "label": "New password", "help": "new password" },
-      "username": { "label": "E-mail", "help": "E-mail as username to login" },
-      "ChangePasswordUI": { "label": "Change password form" },
-      "CancelBtn": { "label": "Cancel" },
-      "ChangePwdBtn": { "label": "change password" },
+      "newPassword": {
+        "label": "New password",
+        "help": "new password"
+      },
+      "username": {
+        "label": "E-mail",
+        "help": "E-mail as username to login"
+      },
+      "ChangePasswordUI": {
+        "label": "Change password form"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "ChangePwdBtn": {
+        "label": "change password"
+      },
       "newPassword1": {
         "label": "Confirm new password",
         "help": "Confirm new password"
@@ -2886,17 +4040,25 @@
   },
   "GeboAIGoogleSearchAccountModule": {
     "GGoogleSearchApiCredentials": {
-      "DeleteBtn": { "label": "Delete" },
-      "CancelBtn": { "label": "Cancel" },
-      "SaveBtn": { "label": "Save" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
       "ForMoreInformations": {
-        "label": "For more informations on Google custom search API or getting your api key (for free) visit: https://developers.google.com/custom-search"
+        "label": "For more information on Google custom search API or getting your api key (for free) visit: https://developers.google.com/custom-search"
       },
       "code": {
         "label": "Unique Code",
         "help": "unique code of the google search api configuration."
       },
-      "MainPanel": { "label": "Editing google custom search api credentials" },
+      "MainPanel": {
+        "label": "Editing google custom search api credentials"
+      },
       "secretCode": {
         "label": "Google search api token",
         "help": "Choose or insert the google search api token"
@@ -2918,17 +4080,29 @@
         "help": "Choose the LLMs for a chat session",
         "placeholder": "Choose the LLMs for a chat session"
       },
-      "ChevronLeftBtn": { "help": "Open chat options section" },
-      "CreateChatBtn": { "label": "New chat" },
-      "NewChatSessionPanel": { "label": "New chat session" },
+      "ChevronLeftBtn": {
+        "help": "Open chat options section"
+      },
+      "CreateChatBtn": {
+        "label": "New chat"
+      },
+      "NewChatSessionPanel": {
+        "label": "New chat session"
+      },
       "chatProfileCode": {
         "label": "Chat with knowledge bases",
         "help": "Choose the company chat profile to interact with company (and your) documents and LLMs",
         "placeholder": "Choose the company chat profile to interact with company (and your) documents and LLMs"
       },
-      "NewChatBtn": { "label": "New chat" },
-      "ChatSessionsPanel": { "label": "Chat sessions" },
-      "CloseSiderBarBtn": { "help": "Close side bar" },
+      "NewChatBtn": {
+        "label": "New chat"
+      },
+      "ChatSessionsPanel": {
+        "label": "Chat sessions"
+      },
+      "CloseSiderBarBtn": {
+        "help": "Close side bar"
+      },
       "NewChatMiniBtn": {
         "help": "Create a new chat with large language models",
         "label": "Chat"
@@ -2937,8 +4111,12 @@
         "help": "Create a new RAG chat with company contents",
         "label": "Chat with knowledge base"
       },
-      "ChatsTitle": { "label": "Chats" },
-      "ChevronLeftBtn2": { "help": "Open chat options section" }
+      "ChatsTitle": {
+        "label": "Chats"
+      },
+      "ChevronLeftBtn2": {
+        "help": "Open chat options section"
+      }
     }
   },
   "GeboAIChooseDocumentsPanelModule": {
@@ -2947,20 +4125,30 @@
         "label": "Chat with docs",
         "help": "Browse or search and select documents to work with"
       },
-      "chooseFilesDialog": { "label": "Choose files to chat with" },
+      "chooseFilesDialog": {
+        "label": "Choose files to chat with"
+      },
       "ChatWithDocsBtnNew": {
         "help": "Browse or search and select documents to chat with"
       },
-      "FULL_DOCS_LIST_WINDOW": { "label": "Selected Documents" }
+      "FULL_DOCS_LIST_WINDOW": {
+        "label": "Selected Documents"
+      }
     },
     "GeboAISearchDocumentsComponent": {
-      "confirmBtn": { "label": "Confirm" },
+      "confirmBtn": {
+        "label": "Confirm"
+      },
       "userspaceBrowsing": {
         "label": "Upload or choose your documents",
         "help": "Choose/upload documents from your user space"
       },
-      "fileSearchBtn": { "label": "Search" },
-      "semanticSearchBtn": { "label": "Search" },
+      "fileSearchBtn": {
+        "label": "Search"
+      },
+      "semanticSearchBtn": {
+        "label": "Search"
+      },
       "query": {
         "label": "Semantic search phrase",
         "help": "Enter a meaningful phrase related to your search"
@@ -2973,22 +4161,42 @@
         "label": "Searched file name",
         "help": "Enter a filename part for your searched content"
       },
-      "SearchFilesLabel": { "label": "Filename search" },
-      "BrowseCompanyFilesLabel": { "label": "Browse company files" },
-      "SemanticSearchFilesLabel": { "label": "Semantic search" },
-      "chooseFilesDialog": { "label": "Choose files to chat with" }
+      "SearchFilesLabel": {
+        "label": "Filename search"
+      },
+      "BrowseCompanyFilesLabel": {
+        "label": "Browse company files"
+      },
+      "SemanticSearchFilesLabel": {
+        "label": "Semantic search"
+      },
+      "chooseFilesDialog": {
+        "label": "Choose files to chat with"
+      }
     }
   },
   "UserSpaceFilesModule": {
     "GeboAIUserpaceFilesComponent": {
-      "ModifySelectedBtn": { "help": "Modify selected" },
-      "ChooseUserFilesDialog": { "label": "Choose users files" }
+      "ModifySelectedBtn": {
+        "help": "Modify selected"
+      },
+      "ChooseUserFilesDialog": {
+        "label": "Choose users files"
+      }
     },
     "GeboAIUserspaceBrowseComponent": {
-      "cancelBtn": { "label": "Cancel" },
-      "okBtn": { "label": "OK" },
-      "chooseUserUploadedContent": { "label": "Choose user uploaded content" },
-      "UserspaceBrowser": { "label": "Knowledge bases & user files" }
+      "cancelBtn": {
+        "label": "Cancel"
+      },
+      "okBtn": {
+        "label": "OK"
+      },
+      "chooseUserUploadedContent": {
+        "label": "Choose user uploaded content"
+      },
+      "UserspaceBrowser": {
+        "label": "Knowledge bases & user files"
+      }
     }
   },
   "AddProjectMenuModule": {
@@ -3029,28 +4237,56 @@
   },
   "AppModule": {
     "AppComponent": {
-      "chat": { "label": "Gebo.ai Chat" },
-      "setup": { "label": "Setup" },
-      "admin": { "label": "Gebo.ai admin" },
-      "currentProfile": { "label": "my profile" },
-      "logout": { "label": "logout" },
-      "ChangeLanguageItem": { "label": "Change language" },
-      "MyProfile": { "label": "your profile" },
-      "MyProfileItem": { "label": "your profile" },
-      "chatMenuItem": { "label": "Chat" },
+      "chat": {
+        "label": "Gebo.ai Chat"
+      },
+      "setup": {
+        "label": "Setup"
+      },
+      "admin": {
+        "label": "Gebo.ai admin"
+      },
+      "currentProfile": {
+        "label": "my profile"
+      },
+      "logout": {
+        "label": "logout"
+      },
+      "ChangeLanguageItem": {
+        "label": "Change language"
+      },
+      "MyProfile": {
+        "label": "your profile"
+      },
+      "MyProfileItem": {
+        "label": "your profile"
+      },
+      "chatMenuItem": {
+        "label": "Chat"
+      },
       "setupMenuItem": {
         "label": "Setup",
         "help": "Setup is incomplete, please consider press here and manage it"
       },
-      "adminMenuItem": { "label": "Admin" },
-      "editMyProfileMenuItem": { "label": "edit profile" },
-      "logoutMenuItem": { "label": "logout" },
-      "userIntegrationsMenuItem": { "label": "Api Keys/MCP" }
+      "adminMenuItem": {
+        "label": "Admin"
+      },
+      "editMyProfileMenuItem": {
+        "label": "edit profile"
+      },
+      "logoutMenuItem": {
+        "label": "logout"
+      },
+      "userIntegrationsMenuItem": {
+        "label": "Api Keys/MCP"
+      }
     }
   },
   "GeboAIJobStatsVisualizerModule": {
     "GeboAIStatsVisualizerComponent": {
-      "DOCUMENT_DISCOVERY": { "description": "Analyzing documents list" },
+      "DOCUMENT_DISCOVERY": {
+        "description": "Analyzing documents list"
+      },
       "DOCUMENT_DISCOVERY-docs-histogram": {
         "label-0": "Not treated docs",
         "label-1": "Error processing docs",
@@ -3064,7 +4300,9 @@
         "dataset-2-label": "Error docs",
         "dataset-3-label": "Discarded docs"
       },
-      "TOKENIZATION": { "description": "Documents tokenization" },
+      "TOKENIZATION": {
+        "description": "Documents tokenization"
+      },
       "TOKENIZATION-docs-histogram": {
         "label-0": "Not treated docs",
         "label-1": "Error processing docs",
@@ -3123,13 +4361,17 @@
       }
     },
     "GeboAIJobGraphicVisualizerComponent": {
-      "DOCUMENT_DISCOVERY": { "description": "Analyzing documents list" },
+      "DOCUMENT_DISCOVERY": {
+        "description": "Analyzing documents list"
+      },
       "DOCUMENT_DISCOVERY-docs-histogram": {
         "label-0": "Not treated docs",
         "label-1": "Error processing docs",
         "label-2": "Processed docs"
       },
-      "TOKENIZATION": { "description": "Documents tokenization" },
+      "TOKENIZATION": {
+        "description": "Documents tokenization"
+      },
       "DOCUMENT_DISCOVERY-documents-chart": {
         "dataset-0-label": "Received docs",
         "dataset-1-label": "Processed docs",
@@ -3183,7 +4425,9 @@
         "dataset-2-label": "Error docs",
         "dataset-3-label": "Discarded docs"
       },
-      "FULLTEXT_INDEXING": { "description": "Full text indexing" },
+      "FULLTEXT_INDEXING": {
+        "description": "Full text indexing"
+      },
       "FULLTEXT_INDEXING-docs-histogram": {
         "label-0": "Not treated docs",
         "label-1": "Error processing docs",
@@ -3203,18 +4447,34 @@
   },
   "GeboSetupWizardsModule": {
     "GeboAILLMSVendorConfiguration": {
-      "ProviderBuy": { "label": "Buy Apy key credit link" },
+      "ProviderBuy": {
+        "label": "Buy Apy key credit link"
+      },
       "ModifyBtn": {
         "label": "Modify",
         "help": "View/modify model configuration"
       },
-      "ExistingModelCode": { "label": "Code" },
-      "ExistingModelDesc": { "label": "Description" },
-      "ExistingModelType": { "label": "Model type" },
-      "ExistingModelsSection": { "label": "Existing configurations" },
-      "ProviderWWW": { "label": "Web site link" },
-      "ModelTypeFieldSet": { "label": "Provider credentials" },
-      "ProviderInfos": { "label": "Provider informations" },
+      "ExistingModelCode": {
+        "label": "Code"
+      },
+      "ExistingModelDesc": {
+        "label": "Description"
+      },
+      "ExistingModelType": {
+        "label": "Model type"
+      },
+      "ExistingModelsSection": {
+        "label": "Existing configurations"
+      },
+      "ProviderWWW": {
+        "label": "Web site link"
+      },
+      "ModelTypeFieldSet": {
+        "label": "Provider credentials"
+      },
+      "ProviderInfos": {
+        "label": "Provider information"
+      },
       "ExistingApiKey": {
         "label": "Api key/credentials",
         "help": "Choose api key or credentials for this provider"
@@ -3239,20 +4499,32 @@
         "label": "New Chat model",
         "help": "Create a new chat model configuration"
       },
-      "NewModelDialog": { "label": "Add new model" },
-      "PiSave": { "label": "Save" },
+      "NewModelDialog": {
+        "label": "Add new model"
+      },
+      "PiSave": {
+        "label": "Save"
+      },
       "NewModelsButton": {
         "label": "New models",
         "help": "Create new models configuration"
       },
-      "NewModelsDialog": { "label": "Add new models" },
+      "NewModelsDialog": {
+        "label": "Add new models"
+      },
       "baseUrl": {
         "label": "Base api url",
         "help": "Base url for the api services of the provider"
       },
-      "ModelTypePanel": { "label": "Add new models" },
-      "ModelsChoices": { "label": "Models choices" },
-      "PresetsAccordionPanel": { "label": "Suggested models selection" },
+      "ModelTypePanel": {
+        "label": "Add new models"
+      },
+      "ModelsChoices": {
+        "label": "Models choices"
+      },
+      "PresetsAccordionPanel": {
+        "label": "Suggested models selection"
+      },
       "embeddingPresetChoice": {
         "label": "Embedding model",
         "help": "Select one of the predefined embedding models"
@@ -3261,7 +4533,9 @@
         "label": "Chat model",
         "help": "Select one of the predefined chat models"
       },
-      "AdvancedAccordionPanel": { "label": "Advanced models selection" },
+      "AdvancedAccordionPanel": {
+        "label": "Advanced models selection"
+      },
       "embeddingAdvancedChoice": {
         "label": "Embedding model",
         "help": "Select one of the  supplier published  embedding models"
@@ -3271,7 +4545,7 @@
         "help": "Select one of the supplier published chat models"
       },
       "PresedAccordionDesc": {
-        "label": " Use this selection mode only if you are expert or by checking on the supplier site wich models fit your needs. "
+        "label": " Use this selection mode only if you are expert or by checking on the supplier site which models fit your needs. "
       },
       "chatPresetSetAsDefault": {
         "label": "set as default chat model",
@@ -3293,11 +4567,17 @@
         "help": "Set this model as the default one, this will be used for every task no other embedding model is configured for"
       },
       "AdvancedAccordionDesc": {
-        "label": " Use this selection mode only if you are expert or by checking on the supplier site wich models fit your needs. "
+        "label": " Use this selection mode only if you are expert or by checking on the supplier site which models fit your needs. "
       },
-      "CreatePresetBtn": { "label": "Create and activate" },
-      "CreateAdvancedBtn": { "label": "Create and activate" },
-      "ProviderNameField": { "label": "Provider" },
+      "CreatePresetBtn": {
+        "label": "Create and activate"
+      },
+      "CreateAdvancedBtn": {
+        "label": "Create and activate"
+      },
+      "ProviderNameField": {
+        "label": "Provider"
+      },
       "requireApiKeyAniway": {
         "label": "The provider requires credentials",
         "help": "The provider/server application is configured for authenticated access via api key or other credentials"
@@ -3330,11 +4610,17 @@
         "summary": "OK!",
         "detail": "Operation done successfully"
       },
-      "SuggestedModelsTab": { "label": "Suggested models selection" },
-      "AdvancedModelsTab": { "label": "Advanced models selection" }
+      "SuggestedModelsTab": {
+        "label": "Suggested models selection"
+      },
+      "AdvancedModelsTab": {
+        "label": "Advanced models selection"
+      }
     },
     "GeboAIEasyVendorConfigurationComponent": {
-      "CreateAdvancedBtn": { "label": "Create and activate" },
+      "CreateAdvancedBtn": {
+        "label": "Create and activate"
+      },
       "vendorId": {
         "label": "Choose your large language model vendor",
         "help": "Choose the initial vendor for your default chat and embedding models"
@@ -3345,17 +4631,21 @@
       },
       "InternalServiceModel": {
         "label": "Internal services chat model",
-        "help": "The chat model configured for internal services will be responsable on extracting informations, summarizing and executing internal workflows."
+        "help": "The chat model configured for internal services will be responsible on extracting information, summarizing and executing internal workflows."
       },
       "ChatModel": {
         "label": "Default chat model",
-        "help": "The default chat model will be responsable on answering users questions, and executing worflows for wich there aren't specifically configured models. It has to be powerfull and reliable, with a good balance between cost, performance and outcome quality."
+        "help": "The default chat model will be responsible on answering users questions, and executing workflows for which there aren't specifically configured models. It has to be powerful and reliable, with a good balance between cost, performance and outcome quality."
       },
-      "ProviderBuy": { "label": "Buy Apy key credit link" },
-      "ProviderWWW": { "label": "Web site link" },
+      "ProviderBuy": {
+        "label": "Buy Apy key credit link"
+      },
+      "ProviderWWW": {
+        "label": "Web site link"
+      },
       "WebSiteLink": {
         "label": "Provider web site",
-        "help": "Click here for general provider informations."
+        "help": "Click here for general provider information."
       },
       "AcquireCreditLink": {
         "label": "Purchase provider's credit",
@@ -3363,37 +4653,49 @@
       },
       "EmbeddingModel": {
         "label": "Default embedding model",
-        "help": "This model will be responsable of doing semantic indexing (embedding) and retrieve of your data and documents"
+        "help": "This model will be responsible of doing semantic indexing (embedding) and retrieve of your data and documents"
       },
       "RankingModel": {
         "label": "Default ranker model",
-        "help": "This model will be responsable of doing reranking on your documents and score most fitting for your questions"
+        "help": "This model will be responsible of doing reranking on your documents and score most fitting for your questions"
       },
       "TranscriptModel": {
         "label": "Default transcript model",
-        "help": "This model will be responsable of transcript service"
+        "help": "This model will be responsible of transcript service"
       },
       "TtsModel": {
         "label": "Default text to speech model",
-        "help": "This model will be responsable of doing text to speech conversion"
+        "help": "This model will be responsible of doing text to speech conversion"
       },
       "ImagesModel": {
         "label": "Default image generation model",
-        "help": "This model will be responsable of doing image generation"
+        "help": "This model will be responsible of doing image generation"
       }
     },
     "LLMSetupWizardComponent": {
-      "MainLLMSPanelTitle": { "label": "Setup Large language models" },
-      "EasySetupTab": { "label": "Easy initial setup/configuration fix" },
+      "MainLLMSPanelTitle": {
+        "label": "Setup Large language models"
+      },
+      "EasySetupTab": {
+        "label": "Easy initial setup/configuration fix"
+      },
       "ExtendedSetupTab": {
         "label": "Extended infrastructure/suppliers choices"
       }
     },
     "LLMSEasySetupWizardComponent": {
-      "IntroStep": { "label": "Model classes" },
-      "ProviderStep": { "label": "Provider" },
-      "ModelsStep": { "label": "Models" },
-      "SummaryStep": { "label": "Summary" },
+      "IntroStep": {
+        "label": "Model classes"
+      },
+      "ProviderStep": {
+        "label": "Provider"
+      },
+      "ModelsStep": {
+        "label": "Models"
+      },
+      "SummaryStep": {
+        "label": "Summary"
+      },
       "MainEasyLLMSPanelTitle": {
         "label": "Guided large language models setup"
       },
@@ -3406,26 +4708,48 @@
       "ModelsExplanation": {
         "label": "Choose new models and/or modify existing"
       },
-      "SummaryExplanation": { "label": "Actual configured models overview" },
-      "ResolutionsSection": { "label": "Choose a replacement model" },
+      "SummaryExplanation": {
+        "label": "Actual configured models overview"
+      },
+      "ResolutionsSection": {
+        "label": "Choose a replacement model"
+      },
       "ResolutionField": {
         "label": "Model no longer offered",
         "help": "The chosen model is not offered by the provider anymore, please select a replacement"
       },
-      "ResolveBtn": { "label": "Apply replacements" },
-      "BackBtn": { "label": "Back" },
-      "NextBtn": { "label": "Next" },
-      "ApplyBtn": { "label": "Apply and continue" },
-      "FinishBtn": { "label": "Finish" }
+      "ResolveBtn": {
+        "label": "Apply replacements"
+      },
+      "BackBtn": {
+        "label": "Back"
+      },
+      "NextBtn": {
+        "label": "Next"
+      },
+      "ApplyBtn": {
+        "label": "Apply and continue"
+      },
+      "FinishBtn": {
+        "label": "Finish"
+      }
     },
     "LLMSEasyIntroStepComponent": {
       "IntroExplanation": {
         "label": " Gebo.ai uses several classes of language models. Two are required for the system to work, the others are suggested and enable extra capabilities. The wizard will help you configure them from a single provider; you can always add or change models later from the LLMs admin screens. "
       },
-      "RequiredClassesSection": { "label": "Required models" },
-      "SuggestedClassesSection": { "label": "Suggested models" },
-      "NotConfiguredRequired": { "label": "Not configured yet" },
-      "NotConfiguredSuggested": { "label": "Not configured yet" },
+      "RequiredClassesSection": {
+        "label": "Required models"
+      },
+      "SuggestedClassesSection": {
+        "label": "Suggested models"
+      },
+      "NotConfiguredRequired": {
+        "label": "Not configured yet"
+      },
+      "NotConfiguredSuggested": {
+        "label": "Not configured yet"
+      },
       "ClassChat": {
         "label": "Default chat model",
         "help": "Answers users and runs the workflows that have no model of their own. It should be capable and reliable, with a good balance of cost, speed and quality."
@@ -3454,7 +4778,9 @@
         "label": "Image generation model",
         "help": "Generates images from text prompts."
       },
-      "SupportedByLabel": { "label": "Supported by providers:" }
+      "SupportedByLabel": {
+        "label": "Supported by providers:"
+      }
     },
     "LLMSEasyProviderStepComponent": {
       "ProviderChoice": {
@@ -3513,38 +4839,66 @@
       "ClassChatNotOffered": {
         "label": "The provider does not offer this model type"
       },
-      "ClassChatModify": { "label": "Change this model" },
-      "ClassChatEnable": { "label": "Configure this model" },
+      "ClassChatModify": {
+        "label": "Change this model"
+      },
+      "ClassChatEnable": {
+        "label": "Configure this model"
+      },
       "ClassEmbeddingNotOffered": {
         "label": "The provider does not offer this model type"
       },
-      "ClassEmbeddingModify": { "label": "Change this model" },
-      "ClassEmbeddingEnable": { "label": "Configure this model" },
+      "ClassEmbeddingModify": {
+        "label": "Change this model"
+      },
+      "ClassEmbeddingEnable": {
+        "label": "Configure this model"
+      },
       "ClassServiceNotOffered": {
         "label": "The provider does not offer this model type"
       },
-      "ClassServiceModify": { "label": "Change this model" },
-      "ClassServiceEnable": { "label": "Configure this model" },
+      "ClassServiceModify": {
+        "label": "Change this model"
+      },
+      "ClassServiceEnable": {
+        "label": "Configure this model"
+      },
       "ClassRankingNotOffered": {
         "label": "The provider does not offer this model type"
       },
-      "ClassRankingModify": { "label": "Change this model" },
-      "ClassRankingEnable": { "label": "Configure this model" },
+      "ClassRankingModify": {
+        "label": "Change this model"
+      },
+      "ClassRankingEnable": {
+        "label": "Configure this model"
+      },
       "ClassTranscriptNotOffered": {
         "label": "The provider does not offer this model type"
       },
-      "ClassTranscriptModify": { "label": "Change this model" },
-      "ClassTranscriptEnable": { "label": "Configure this model" },
+      "ClassTranscriptModify": {
+        "label": "Change this model"
+      },
+      "ClassTranscriptEnable": {
+        "label": "Configure this model"
+      },
       "ClassTtsNotOffered": {
         "label": "The provider does not offer this model type"
       },
-      "ClassTtsModify": { "label": "Change this model" },
-      "ClassTtsEnable": { "label": "Configure this model" },
+      "ClassTtsModify": {
+        "label": "Change this model"
+      },
+      "ClassTtsEnable": {
+        "label": "Configure this model"
+      },
       "ClassImagesNotOffered": {
         "label": "The provider does not offer this model type"
       },
-      "ClassImagesModify": { "label": "Change this model" },
-      "ClassImagesEnable": { "label": "Configure this model" },
+      "ClassImagesModify": {
+        "label": "Change this model"
+      },
+      "ClassImagesEnable": {
+        "label": "Configure this model"
+      },
       "ChatEnableFunctions": {
         "label": "Enable all function calls for this chat model"
       }
@@ -3556,25 +4910,59 @@
       "SummaryIncomplete": {
         "label": "A default chat model and an embedding model are still required for the system to work."
       },
-      "ActiveConfigSection": { "label": "Active configuration" },
-      "ClassChat": { "label": "Default chat model" },
-      "ClassChatSummaryNone": { "label": "Not configured" },
-      "ClassEmbedding": { "label": "Embedding model" },
-      "ClassEmbeddingSummaryNone": { "label": "Not configured" },
-      "ClassService": { "label": "Internal services chat model" },
-      "ClassServiceSummaryNone": { "label": "Not configured" },
-      "ClassRanking": { "label": "Ranker model" },
-      "ClassRankingSummaryNone": { "label": "Not configured" },
-      "ClassTranscript": { "label": "Transcription model" },
-      "ClassTranscriptSummaryNone": { "label": "Not configured" },
-      "ClassTts": { "label": "Text to speech model" },
-      "ClassTtsSummaryNone": { "label": "Not configured" },
-      "ClassImages": { "label": "Image generation model" },
-      "ClassImagesSummaryNone": { "label": "Not configured" }
+      "ActiveConfigSection": {
+        "label": "Active configuration"
+      },
+      "ClassChat": {
+        "label": "Default chat model"
+      },
+      "ClassChatSummaryNone": {
+        "label": "Not configured"
+      },
+      "ClassEmbedding": {
+        "label": "Embedding model"
+      },
+      "ClassEmbeddingSummaryNone": {
+        "label": "Not configured"
+      },
+      "ClassService": {
+        "label": "Internal services chat model"
+      },
+      "ClassServiceSummaryNone": {
+        "label": "Not configured"
+      },
+      "ClassRanking": {
+        "label": "Ranker model"
+      },
+      "ClassRankingSummaryNone": {
+        "label": "Not configured"
+      },
+      "ClassTranscript": {
+        "label": "Transcription model"
+      },
+      "ClassTranscriptSummaryNone": {
+        "label": "Not configured"
+      },
+      "ClassTts": {
+        "label": "Text to speech model"
+      },
+      "ClassTtsSummaryNone": {
+        "label": "Not configured"
+      },
+      "ClassImages": {
+        "label": "Image generation model"
+      },
+      "ClassImagesSummaryNone": {
+        "label": "Not configured"
+      }
     },
     "LLMSEasyClassStatusComponent": {
-      "ClassStatusNotConfigured": { "label": "Not configured yet" },
-      "ClassStatusSupportedBy": { "label": "Supported by providers:" }
+      "ClassStatusNotConfigured": {
+        "label": "Not configured yet"
+      },
+      "ClassStatusSupportedBy": {
+        "label": "Supported by providers:"
+      }
     }
   },
   "BackendMSGSModule": {
@@ -3639,13 +5027,27 @@
   },
   "GeboAIUploadChatDocumentModule": {
     "GeboAIUploadChatDocumentComponent": {
-      "FilesToChatHeader": { "label": "Upload files to chat with" },
-      "ChooseFile": { "help": "Choose files" },
-      "UploadFile": { "help": "Upload files" },
-      "DragDropHere": { "label": "Drag and drop files to here to upload" },
-      "RemoveAll": { "help": "Remove all" },
-      "UploadPending": { "label": "Pending for upload" },
-      "CompletedData": { "label": "Completed" },
+      "FilesToChatHeader": {
+        "label": "Upload files to chat with"
+      },
+      "ChooseFile": {
+        "help": "Choose files"
+      },
+      "UploadFile": {
+        "help": "Upload files"
+      },
+      "DragDropHere": {
+        "label": "Drag and drop files to here to upload"
+      },
+      "RemoveAll": {
+        "help": "Remove all"
+      },
+      "UploadPending": {
+        "label": "Pending for upload"
+      },
+      "CompletedData": {
+        "label": "Completed"
+      },
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f": {
         "summary": "OK!",
         "detail": "Operation done successfully"
@@ -3657,22 +5059,32 @@
       "ConfigureGraphragLabel": {
         "label": "Configure graphrag in the setup area if you want to use it in this section"
       },
-      "GraphragSettingsLabel": { "label": "Graphrag settings" },
+      "GraphragSettingsLabel": {
+        "label": "Graphrag settings"
+      },
       "button-help": {
         "label": "Click here to configure information extraction for graphrag (actually not configured)"
       },
-      "AddConfigurationBtn": { "label": "Add configuration" }
+      "AddConfigurationBtn": {
+        "label": "Add configuration"
+      }
     }
   },
   "GeboAiGoogleWorkspacesModule": {
     "GeboAIGoogleDriveFastComponent": {
-      "CreateBtn": { "label": "Create" },
+      "CreateBtn": {
+        "label": "Create"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the Google Drive system."
       },
-      "MainPanel": { "label": "Create Google Drive/Workspace connection" },
-      "CancelBtn": { "label": "Cancel" },
+      "MainPanel": {
+        "label": "Create Google Drive/Workspace connection"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "delegatedUser": {
         "label": "Google user to impersonate",
         "help": "The user that will be impersonated by the provided credentials",
@@ -3685,16 +5097,28 @@
       }
     },
     "GGoogleDriveProjectEndpoint": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "PublishBtn": {
         "label": "Publish!",
         "help": "Saves and let these contents being available in knowledge base to LLm's"
       },
-      "DeleteBtn": { "label": "Delete" },
-      "MainPanel": { "label": "Sharing google drive contents" },
-      "SettingsTab": { "label": "Settings" },
-      "LogsTab": { "label": "Logs" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "MainPanel": {
+        "label": "Sharing google drive contents"
+      },
+      "SettingsTab": {
+        "label": "Settings"
+      },
+      "LogsTab": {
+        "label": "Logs"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the uploaded content of google drive entries."
@@ -3704,7 +5128,7 @@
         "help": "Automatically generated unique code of the contents."
       },
       "tree": {
-        "label": "Choosed file or folder",
+        "label": "Selected file or folder",
         "help": "Shared google drive spaces and pages contents"
       },
       "driveSystemCode": {
@@ -3721,7 +5145,7 @@
       },
       "programmedTables": {
         "label": "Contents updates checks schedule",
-        "help": "Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated"
+        "help": "Configure the scheduling of changed contents to maintain the retrieval-augmented generation system updated"
       },
       "catalogingCriteria": {
         "label": "Folders and subfolders organization criteria",
@@ -3733,11 +5157,21 @@
       }
     },
     "GGoogleDriveSystem": {
-      "GeneralSettingsTab": { "label": "General settings" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
-      "MainPanel": { "label": "Editing google drive integration" },
+      "GeneralSettingsTab": {
+        "label": "General settings"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "MainPanel": {
+        "label": "Editing google drive integration"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the google drive system."
@@ -3754,15 +5188,21 @@
   },
   "GeboAIReusableChatModel": {
     "GeboAIChatInputShellComponent": {
-      "standard-chat": { "label": "Chat" },
-      "deep-search": { "label": "Deep search" }
+      "standard-chat": {
+        "label": "Chat"
+      },
+      "deep-search": {
+        "label": "Deep search"
+      }
     }
   },
   "GeboAIDeepSearchModule": {
     "GeboAIDeepSearchComponent": {
-      "deepSearchUI": { "label": "Deep Search" },
+      "deepSearchUI": {
+        "label": "Deep Search"
+      },
       "DeepSearchProcessingSearch": {
-        "label": "Searching relevant informations"
+        "label": "Searching relevant information"
       },
       "DeepSearchingConsolidating": {
         "label": " Consolidating the final report"
@@ -3776,28 +5216,52 @@
       "ChooseAtLeastMessage": {
         "label": "Choose at least one of the following options"
       },
-      "LaunchBtn": { "label": "Run search" },
-      "SkipDeepSearch": { "label": "Skip deep search" },
-      "KnowledgeBaseChoicesArea": { "label": "Choosed knowledge bases" },
-      "DataSourceChoicesArea": { "label": "Choosed systems" },
-      "SelectSourcesBtn": { "label": "Select sources" },
-      "DeepSearchProcessingFile": { "label": "Analized file" }
+      "LaunchBtn": {
+        "label": "Run search"
+      },
+      "SkipDeepSearch": {
+        "label": "Skip deep search"
+      },
+      "KnowledgeBaseChoicesArea": {
+        "label": "Selected knowledge bases"
+      },
+      "DataSourceChoicesArea": {
+        "label": "Selected systems"
+      },
+      "SelectSourcesBtn": {
+        "label": "Select sources"
+      },
+      "DeepSearchProcessingFile": {
+        "label": "Analyzed file"
+      }
     }
   },
   "GeboAIDeepSearchConfigAdminModule": {
     "DeepSearchConfig": {
-      "InsertBtn": { "label": "Insert" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "SearchSettingTab": { "label": "Search setting" },
+      "InsertBtn": {
+        "label": "Insert"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SearchSettingTab": {
+        "label": "Search setting"
+      },
       "analisysPromptCtrl": {
         "placeholder": "Insert prompt for documents relevant information extraction"
       },
       "consolidationPromptCtrl": {
         "placeholder": "Insert prompt for extracted relevant information consolidation"
       },
-      "MainPanel": { "label": "Editing deep search configuration" },
-      "LLmsSettingsTab": { "label": "Large language model setting" },
+      "MainPanel": {
+        "label": "Editing deep search configuration"
+      },
+      "LLmsSettingsTab": {
+        "label": "Large language model setting"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the deep search configuration"
@@ -3810,51 +5274,69 @@
         "label": "Search type",
         "help": "Select between single hop semantic search or multi hop"
       },
-      "topK": { "label": "Number of retrieved text segments (TopK)" },
+      "topK": {
+        "label": "Number of retrieved text segments (TopK)"
+      },
       "chatModelConfiguration": {
         "label": "Used llm",
         "help": "Specify large language model used for Deep search, default one will be\n                                    used if none is selected."
       },
       "analisysPrompt": {
-        "label": "Documents analisys prompt",
+        "label": "Documents analysis prompt",
         "help": "Edit the prompt that will be used for documents fragment relevant information extraction."
       },
       "consolidationPrompt": {
-        "label": "Extracted informations consolidation prompt",
-        "help": "Edit the prompt that will be used to consolidate in a single report rilevant informations extracted from retrieved documents."
+        "label": "Extracted information consolidation prompt",
+        "help": "Edit the prompt that will be used to consolidate in a single report rilevant information extracted from retrieved documents."
       },
       "firstHopSimilarityThreashold": {
-        "label": "Search similarity threashold",
-        "help": "First hop semantic similarity threashold (between 0.5 to 1.0)"
+        "label": "Search similarity threshold",
+        "help": "First hop semantic similarity threshold (between 0.5 to 1.0)"
       },
       "secondHopSimilarityThreashold": {
-        "label": "Second hop similarity threashold",
-        "help": "Second hop semantic similarity threashold (between 0.5 to 1.0)"
+        "label": "Second hop similarity threshold",
+        "help": "Second hop semantic similarity threshold (between 0.5 to 1.0)"
       },
       "defaultModel": {
         "label": "Default large language model",
         "help": "The default large language model will be used for Deep search processing"
       },
       "similarityThreashold": {
-        "label": "Search similarity threashold",
-        "help": "Semantic similarity threashold (between 0.5 to 1.0)"
+        "label": "Search similarity threshold",
+        "help": "Semantic similarity threshold (between 0.5 to 1.0)"
       },
-      "SecuritySettingsTab": { "label": "Security settings" },
-      "accessibleToAll": { "label": "Accessible to All" },
-      "datasource": { "label": "Data Source" },
-      "allowedGroups": { "label": "Allowed Groups" },
-      "allowedUsers": { "label": "Allowed Users" },
+      "SecuritySettingsTab": {
+        "label": "Security settings"
+      },
+      "accessibleToAll": {
+        "label": "Accessible to All"
+      },
+      "datasource": {
+        "label": "Data Source"
+      },
+      "allowedGroups": {
+        "label": "Allowed Groups"
+      },
+      "allowedUsers": {
+        "label": "Allowed Users"
+      },
       "perDataSourceConfigured": {
         "label": "Per data source user/groups access",
         "help": "Deep search will be enabled for each external data source and user or group"
       },
-      "SIMPLEMODE": { "label": "Simple per user/group access" },
-      "PERDATASOURCEMODE": { "label": "Per data source user/group access" }
+      "SIMPLEMODE": {
+        "label": "Simple per user/group access"
+      },
+      "PERDATASOURCEMODE": {
+        "label": "Per data source user/group access"
+      }
     }
   },
   "GeboAIApiKeyModule": {
     "GeboAIApiKeyComponent": {
-      "HeaderFieldSet": { "label": "Use or create api key credentials" },
+      "HeaderFieldSet": {
+        "label": "Use or create api key credentials"
+      },
       "ExistingApiKey": {
         "label": "Api key/credentials",
         "help": "Choose api key or credentials for this provider"
@@ -3863,7 +5345,9 @@
         "label": "New api key",
         "help": "Insert a new api key to be used with this provider"
       },
-      "PiSave": { "label": "Save" },
+      "PiSave": {
+        "label": "Save"
+      },
       "NewUserName": {
         "label": "User name",
         "help": "User name used to access provider services"
@@ -3888,27 +5372,49 @@
   },
   "GeboAIChatModelUseModule": {
     "GeboAIChatModelUseComponent": {
-      "CHAT": { "description": "Chat with users" },
-      "INTERNAL_SERVICES": { "description": "Model used for internal services" }
+      "CHAT": {
+        "description": "Chat with users"
+      },
+      "INTERNAL_SERVICES": {
+        "description": "Model used for internal services"
+      }
     }
   },
   "GeboAIAgentsAdminModule": {
     "GAgentConfig": {
-      "SaveBtn": { "label": "Save" },
-      "UseChatModelLabel": { "label": "Agent used chat model" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "GeneralInfosTab": { "label": "General infos" },
-      "ChooseChatModelRadio": { "label": "choose" },
-      "ChatModelSelect": { "placeholder": "Select a chat model configuration" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "UseChatModelLabel": {
+        "label": "Agent used chat model"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "GeneralInfosTab": {
+        "label": "General infos"
+      },
+      "ChooseChatModelRadio": {
+        "label": "choose"
+      },
+      "ChatModelSelect": {
+        "placeholder": "Select a chat model configuration"
+      },
       "defaultChatModel-help": {
         "label": " Use system default chat model to perform the Agent's task or specify one. "
       },
       "LanguageModelTab": {
         "label": "Large language model & usable tools settings"
       },
-      "SecurityAccessSettingsTab": { "label": "Security access settings" },
-      "MainPanel": { "label": "Editing Agent configuration" },
+      "SecurityAccessSettingsTab": {
+        "label": "Security access settings"
+      },
+      "MainPanel": {
+        "label": "Editing Agent configuration"
+      },
       "description": {
         "label": "Description",
         "help": "Enter chat Agent description."
@@ -3960,14 +5466,22 @@
       "NoWorkflowMessage": {
         "label": "No user registration or recovery workflows are currently enabled on the system."
       },
-      "UserWorkflowsStartPanel": { "label": "Start account recovery" },
-      "DisabledWorkflowsPanel": { "label": "Workflows disabled" },
-      "StartWorkflowBtn": { "label": "Start account recovery" },
+      "UserWorkflowsStartPanel": {
+        "label": "Start account recovery"
+      },
+      "DisabledWorkflowsPanel": {
+        "label": "Workflows disabled"
+      },
+      "StartWorkflowBtn": {
+        "label": "Start account recovery"
+      },
       "email": {
         "label": "E-mail",
         "help": "Insert your email to start the workflow"
       },
-      "GoToLogin": { "label": "Login page" },
+      "GoToLogin": {
+        "label": "Login page"
+      },
       "invalidAccountState": {
         "summary": "Error",
         "detail": "Check the inserted data and its validity."
@@ -3975,24 +5489,35 @@
       "LookEMail": {
         "label": "We've sent you an email with a link to continue your account recovery."
       },
-      "StartedWorkflowsPanel": { "label": "Account recovery started" },
+      "StartedWorkflowsPanel": {
+        "label": "Account recovery started"
+      },
       "workflowType": {
         "label": "Workflow type",
         "help": "Choose the type of workflow to start"
       }
     },
     "GeboAIUserWorkflowsLandComponent": {
-      "DisabledWorkflowsPanel": { "label": "Workflows disabled" },
+      "DisabledWorkflowsPanel": {
+        "label": "Workflows disabled"
+      },
       "NoWorkflowMessage": {
         "label": "No user registration or recovery workflows are currently enabled on the system."
       },
-      "UserWorkflowsLandPanel": { "label": "Assign new password" },
-      "ChangePasswordBtn": { "label": "Change Password" },
+      "UserWorkflowsLandPanel": {
+        "label": "Assign new password"
+      },
+      "ChangePasswordBtn": {
+        "label": "Change Password"
+      },
       "password": {
         "label": "New password",
         "help": "Password must be at least 10 characters with uppercase, lowercase, numbers, and special characters"
       },
-      "email": { "label": "E-mail", "help": "Insert your email address" },
+      "email": {
+        "label": "E-mail",
+        "help": "Insert your email address"
+      },
       "confirmPassword": {
         "label": "Confirm password",
         "help": "Confirm your new password"
@@ -4001,7 +5526,9 @@
         "summary": "Error",
         "detail": "Failed to change password. Please check the e-mail or that your account exists."
       },
-      "GoToLoginBtn": { "label": "Go to login page" },
+      "GoToLoginBtn": {
+        "label": "Go to login page"
+      },
       "wkfSuccess": {
         "summary": "Success",
         "detail": "Password changed successfully. You can now login."
@@ -4010,20 +5537,42 @@
   },
   "GeboAIOfficeAssistantModule": {
     "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": { "label": "Gebo AI Assistant" },
-      "AssistantSuggestion": { "label": "Assistant suggestion" },
-      "ConnectingTheAssistant": { "label": "Connecting the assistant…" },
-      "ChooseChatProfile": { "label": "Choose a chat profile to start:" },
-      "PreparingTheAssistant": { "label": "Preparing the assistant…" },
-      "ReplaceButton": { "label": "Replace", "help": "Replace selected text" },
-      "InsertButton": { "label": "Insert", "help": "Insert in document" },
-      "ConnectedToEditorText": { "label": "Connected to editor" },
-      "WaitingForEditorText": { "label": "Waiting for editor" }
+      "AssistantTab": {
+        "label": "Gebo AI Assistant"
+      },
+      "AssistantSuggestion": {
+        "label": "Assistant suggestion"
+      },
+      "ConnectingTheAssistant": {
+        "label": "Connecting the assistant…"
+      },
+      "ChooseChatProfile": {
+        "label": "Choose a chat profile to start:"
+      },
+      "PreparingTheAssistant": {
+        "label": "Preparing the assistant…"
+      },
+      "ReplaceButton": {
+        "label": "Replace",
+        "help": "Replace selected text"
+      },
+      "InsertButton": {
+        "label": "Insert",
+        "help": "Insert in document"
+      },
+      "ConnectedToEditorText": {
+        "label": "Connected to editor"
+      },
+      "WaitingForEditorText": {
+        "label": "Waiting for editor"
+      }
     }
   },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
-      "MicroLanguageBtn": { "help": "Change language" }
+      "MicroLanguageBtn": {
+        "help": "Change language"
+      }
     }
   },
   "GeboAiLogsViewPanelModule": {
@@ -4032,33 +5581,57 @@
         "label": "Data source types",
         "help": "Data source types whose ingestion logs are listed. Leave empty to list them all."
       },
-      "datasourceTypesSelector": { "placeholder": "All data source types" }
+      "datasourceTypesSelector": {
+        "placeholder": "All data source types"
+      }
     }
   },
   "AgentNetworksModule": {
     "AgentNetworksComponent": {
-      "MainPanel": { "label": "Agents and Agents Networks" },
-      "ConfigureBtn1": { "label": "configure" },
-      "DescriptionHeader": { "label": "Description" },
-      "CodeHeader": { "label": "Code" }
+      "MainPanel": {
+        "label": "Agents and Agents Networks"
+      },
+      "ConfigureBtn1": {
+        "label": "configure"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "CodeHeader": {
+        "label": "Code"
+      }
     }
   },
   "ComplianceModule": {
     "ComplianceComponent": {
-      "ExportDataFlowCsvBtn": { "label": "Export register (CSV)" },
-      "ComplianceMainPanel": { "label": "Compliance" },
+      "ExportDataFlowCsvBtn": {
+        "label": "Export register (CSV)"
+      },
+      "ComplianceMainPanel": {
+        "label": "Compliance"
+      },
       "OpenDataFlowRegisterBtn": {
         "label": "GDPR Art. 30 · NIS2 Art. 21 — Data Flow Register"
       },
-      "RefreshDataFlowBtn": { "label": "Refresh" }
+      "RefreshDataFlowBtn": {
+        "label": "Refresh"
+      }
     }
   },
   "GeboAIAwsS3Module": {
     "GAwsS3System": {
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "MainPanel": { "label": "Editing AWS S3 system" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "MainPanel": {
+        "label": "Editing AWS S3 system"
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the AWS S3 system."
@@ -4077,14 +5650,22 @@
       }
     },
     "GAwsS3ProjectEndpoint": {
-      "SaveBtn": { "label": "Save" },
+      "SaveBtn": {
+        "label": "Save"
+      },
       "PublishBtn": {
         "label": "Publish!",
         "help": "Saves and let these contents being available in knowledge base to LLm's"
       },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "MainPanel": { "label": "Sharing AWS S3 contents" },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "MainPanel": {
+        "label": "Sharing AWS S3 contents"
+      },
       "parentProjectCode": {
         "label": "Project",
         "help": "Parent project reference."
@@ -4094,7 +5675,7 @@
         "help": "Automatically generated unique code of the contents."
       },
       "tree": {
-        "label": "Choosed AWS S3 buckets/folders/files",
+        "label": "Selected AWS S3 buckets/folders/files",
         "help": "Shared AWS S3 contents"
       },
       "s3SystemCode": {
@@ -4115,7 +5696,7 @@
       },
       "programmedTables": {
         "label": "Contents updates checks schedule",
-        "help": "Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated"
+        "help": "Configure the scheduling of changed contents to maintain the retrieval-augmented generation system updated"
       },
       "personalData": {
         "label": "Contains personal data",
@@ -4123,7 +5704,9 @@
       }
     },
     "GeboAIAwsS3SystemFastComponent": {
-      "CreateBtn": { "label": "Create" },
+      "CreateBtn": {
+        "label": "Create"
+      },
       "region": {
         "placeholder": "Select an AWS region",
         "label": "AWS region",
@@ -4132,8 +5715,12 @@
       "AwsConnectionFieldset": {
         "label": "AWS connection credentials for Gebo.ai"
       },
-      "CancelBtn": { "label": "Cancel" },
-      "MainPanel": { "label": "Create AWS S3 system configuration" },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "MainPanel": {
+        "label": "Create AWS S3 system configuration"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of the AWS S3 system."
@@ -4154,10 +5741,18 @@
   },
   "GeboAIWebdavModule": {
     "GWebdavContentManagementSystem": {
-      "DeleteBtn": { "label": "Delete" },
-      "MainPanel": { "label": "Editing WebDAV system" },
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "MainPanel": {
+        "label": "Editing WebDAV system"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "baseUri": {
         "label": "Base internet address",
         "help": "Base URL for the WebDAV server"
@@ -4176,10 +5771,18 @@
       }
     },
     "GWebdavProjectEndpoint": {
-      "MainPanel": { "label": "Sharing WebDAV contents" },
-      "CancelBtn": { "label": "Cancel" },
-      "SaveBtn": { "label": "Save" },
-      "DeleteBtn": { "label": "Delete" },
+      "MainPanel": {
+        "label": "Sharing WebDAV contents"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
       "PublishBtn": {
         "label": "Publish!",
         "help": "Saves and let these contents be available in knowledge base for LLMs"
@@ -4221,9 +5824,15 @@
       "AuthTypeSystemsLegendFieldset": {
         "label": "Authentication type legenda"
       },
-      "CreateBtn": { "label": "Create" },
-      "CancelBtn": { "label": "Cancel" },
-      "MainPanel": { "label": "Create WebDAV system configuration" },
+      "CreateBtn": {
+        "label": "Create"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "MainPanel": {
+        "label": "Create WebDAV system configuration"
+      },
       "baseUri": {
         "label": "Base internet address",
         "help": "Base URL for the WebDAV server (e.g. https://webdav.example.com/remote.php/dav/)"
@@ -4248,21 +5857,51 @@
   },
   "GeboAIMcpClientAdminModule": {
     "MCPClientConfig": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "MainPanel": { "label": "Editing MCP Client Configuration" },
-      "DeleteBtn": { "label": "Delete" },
-      "ToolNameHeader": { "label": "Name" },
-      "ToolDescriptionHeader": { "label": "Description" },
-      "ToolAccessibleHeader": { "label": "Everyone Uses" },
-      "ToolStatusHeader": { "label": "Status" },
-      "ResNameHeader": { "label": "Name" },
-      "ResStatusHeader": { "label": "Status" },
-      "ResAccessibleHeader": { "label": "Everyone Uses" },
-      "ResUriHeader": { "label": "URI" },
-      "PromptNameHeader": { "label": "Name" },
-      "PromptAccessibleHeader": { "label": "Everyone Uses" },
-      "PromptStatusHeader": { "label": "Status" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "MainPanel": {
+        "label": "Editing MCP Client Configuration"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "ToolNameHeader": {
+        "label": "Name"
+      },
+      "ToolDescriptionHeader": {
+        "label": "Description"
+      },
+      "ToolAccessibleHeader": {
+        "label": "Everyone Uses"
+      },
+      "ToolStatusHeader": {
+        "label": "Status"
+      },
+      "ResNameHeader": {
+        "label": "Name"
+      },
+      "ResStatusHeader": {
+        "label": "Status"
+      },
+      "ResAccessibleHeader": {
+        "label": "Everyone Uses"
+      },
+      "ResUriHeader": {
+        "label": "URI"
+      },
+      "PromptNameHeader": {
+        "label": "Name"
+      },
+      "PromptAccessibleHeader": {
+        "label": "Everyone Uses"
+      },
+      "PromptStatusHeader": {
+        "label": "Status"
+      },
       "authMode": {
         "label": "Authentication Mode",
         "help": "Select how to authenticate calls to the MCP Server."
@@ -4299,14 +5938,22 @@
   },
   "GeboAIMCPClientModule": {
     "MCPClientProjectEndpoint": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
       "PublishBtn": {
         "label": "Publish!",
         "help": "Saves and let these contents being available in knowledge base to LLm's"
       },
-      "DeleteBtn": { "label": "Delete" },
-      "MainPanel": { "label": "Editing MCP server data source" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "MainPanel": {
+        "label": "Editing MCP server data source"
+      },
       "mcpClientConfigCode": {
         "label": "MCP server",
         "help": "Choose the configured MCP client (transport, endpoint and credentials) whose resources this virtual drive integrates."
@@ -4325,7 +5972,7 @@
       },
       "programmedTables": {
         "label": "Contents updates checks schedule",
-        "help": "Configure the scheduling of changed contents to maintain the retrieve augmented generation system updated"
+        "help": "Configure the scheduling of changed contents to maintain the retrieval-augmented generation system updated"
       },
       "personalData": {
         "label": "Contains personal data",
@@ -4335,10 +5982,18 @@
   },
   "GeboAIMcpServerAdminModule": {
     "GeboMCPServerConfig": {
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "MainPanel": { "label": "Editing MCP Server Configuration" },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "MainPanel": {
+        "label": "Editing MCP Server Configuration"
+      },
       "description": {
         "label": "Description",
         "help": "Enter the description of this MCP Server configuration."
@@ -4399,11 +6054,21 @@
         "label": "Enabled",
         "help": "When enabled, the remote agent is mounted as a selectable network participant."
       },
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "DeleteBtn": { "label": "Delete" },
-      "DiscoverBtn": { "label": "Test connectivity & discover skills" },
-      "MainPanel": { "label": "Editing A2A Remote Agent" }
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "DiscoverBtn": {
+        "label": "Test connectivity & discover skills"
+      },
+      "MainPanel": {
+        "label": "Editing A2A Remote Agent"
+      }
     }
   },
   "GeboAIA2AServerAdminModule": {
@@ -4416,7 +6081,9 @@
         "label": "Unique Code",
         "help": "Automatically generated unique code."
       },
-      "SaveBtn": { "label": "Save" },
+      "SaveBtn": {
+        "label": "Save"
+      },
       "enabled": {
         "label": "Enabled",
         "help": "When enabled, the endpoint is published and callable."
@@ -4425,9 +6092,15 @@
         "label": "Exported Relative URL",
         "help": "URL segment the endpoint is served under: /a2a/<url> (card at /a2a/<url>/.well-known/agent-card.json)."
       },
-      "CancelBtn": { "label": "Cancel" },
-      "MainPanel": { "label": "Editing A2A Server (export)" },
-      "DeleteBtn": { "label": "Delete" },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "MainPanel": {
+        "label": "Editing A2A Server (export)"
+      },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
       "newCode": {
         "label": "Network / Agent code",
         "help": "The GAgentsNetwork code (network) or GAgentConfig code (agent) to export."
@@ -4444,10 +6117,18 @@
   },
   "GeboAIAgentsNetworkAdminModule": {
     "GAgentsNetwork": {
-      "DeleteBtn": { "label": "Delete" },
-      "SaveBtn": { "label": "Save" },
-      "CancelBtn": { "label": "Cancel" },
-      "MainPanel": { "label": "Editing Agents Network configuration" },
+      "DeleteBtn": {
+        "label": "Delete"
+      },
+      "SaveBtn": {
+        "label": "Save"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "MainPanel": {
+        "label": "Editing Agents Network configuration"
+      },
       "description": {
         "label": "Description",
         "help": "Enter Agents Network description."
@@ -4475,23 +6156,51 @@
       "McpServersDescription": {
         "label": " These are the Model Context Protocol (MCP) servers configured in the system that you have access to. You can connect external MCP clients (like Claude Desktop, Cursor, or IDE extensions) to these servers using their SSE endpoints. "
       },
-      "ExposedMcpServersHeader": { "label": "Exposed MCP Servers" },
+      "ExposedMcpServersHeader": {
+        "label": "Exposed MCP Servers"
+      },
       "UserApiKeysDescription": {
         "label": " Generate personal API keys to authenticate your external MCP clients or scripts when connecting to Gebo.ai services. "
       },
-      "UserApiKeysHeader": { "label": "User API Keys" },
-      "GenerateNewKeyBtn": { "label": "Generate New Key" },
-      "userIntegrationsUI": { "label": "Integrations & API Access" },
-      "ThServerCapabilities": { "label": "Capabilities" },
-      "ThServerNameCode": { "label": "Server Name & Code" },
-      "ThServerDescription": { "label": "Description" },
-      "ThServerStatus": { "label": "Status" },
-      "ThServerSSE": { "label": "SSE Connection Endpoint" },
-      "ThKeyDescription": { "label": "Description" },
-      "NoMcpServersText": { "label": "No accessible MCP servers found." },
-      "ThKeyCreatedAt": { "label": "Created At" },
-      "ThKeyExpirationDate": { "label": "Expiration Date" },
-      "ThKeyActions": { "label": "Actions" },
+      "UserApiKeysHeader": {
+        "label": "User API Keys"
+      },
+      "GenerateNewKeyBtn": {
+        "label": "Generate New Key"
+      },
+      "userIntegrationsUI": {
+        "label": "Integrations & API Access"
+      },
+      "ThServerCapabilities": {
+        "label": "Capabilities"
+      },
+      "ThServerNameCode": {
+        "label": "Server Name & Code"
+      },
+      "ThServerDescription": {
+        "label": "Description"
+      },
+      "ThServerStatus": {
+        "label": "Status"
+      },
+      "ThServerSSE": {
+        "label": "SSE Connection Endpoint"
+      },
+      "ThKeyDescription": {
+        "label": "Description"
+      },
+      "NoMcpServersText": {
+        "label": "No accessible MCP servers found."
+      },
+      "ThKeyCreatedAt": {
+        "label": "Created At"
+      },
+      "ThKeyExpirationDate": {
+        "label": "Expiration Date"
+      },
+      "ThKeyActions": {
+        "label": "Actions"
+      },
       "NoApiKeysText": {
         "label": "No generated API keys found. Click \"Generate New Key\" to create one."
       },
@@ -4503,20 +6212,36 @@
         "label": "Expiration",
         "help": "Choose when this API key expires"
       },
-      "VerifyingAccessPanel": { "label": "Verifying Access" },
-      "ConfirmGenerateBtn": { "label": "Generate Key" },
-      "CancelGenerateBtn": { "label": "Cancel" },
+      "VerifyingAccessPanel": {
+        "label": "Verifying Access"
+      },
+      "ConfirmGenerateBtn": {
+        "label": "Generate Key"
+      },
+      "CancelGenerateBtn": {
+        "label": "Cancel"
+      },
       "LoadingIntegrationsText": {
         "label": "Loading integrations configuration..."
       },
-      "GenerateApiKeyDialog": { "label": "Generate New API Key" },
-      "CopiedKeyBtn": { "label": "I Have Copied the Key" },
+      "GenerateApiKeyDialog": {
+        "label": "Generate New API Key"
+      },
+      "CopiedKeyBtn": {
+        "label": "I Have Copied the Key"
+      },
       "SecurityNoticeText": {
         "label": " Please copy this API key now. For your security, it will not be displayed again once you close this dialog. "
       },
-      "GeneratedApiKeyLabel": { "label": "Your Generated API Key" },
-      "ApiKeyGeneratedDialog": { "label": "API Key Generated Successfully" },
-      "SecurityNoticeHeader": { "label": "Important Security Notice" }
+      "GeneratedApiKeyLabel": {
+        "label": "Your Generated API Key"
+      },
+      "ApiKeyGeneratedDialog": {
+        "label": "API Key Generated Successfully"
+      },
+      "SecurityNoticeHeader": {
+        "label": "Important Security Notice"
+      }
     }
   },
   "PromptEditingModule": {

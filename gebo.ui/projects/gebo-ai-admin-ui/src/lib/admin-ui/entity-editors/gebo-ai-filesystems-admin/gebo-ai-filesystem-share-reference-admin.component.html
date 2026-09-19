@@ -52,7 +52,7 @@
               </gebo-ai-field>
             </div>
             <div class="col-12">
-              <gebo-ai-field id="reference" label="Choosed shared filesystem folder" help="Choose a server folder that is a root path for the shared filesystem used in your organization as a document repository" [required]="true">
+              <gebo-ai-field id="reference" label="Selected shared filesystem folder" help="Choose a server folder that is a root path for the shared filesystem used in your organization as a document repository" [required]="true">
                 <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable"
                   [readonly]="mode!=='NEW'" formControlName="reference" selectionMode="single" id="path"
                   [browsePathObservable]="browsePathObservable" [reconstructNavigationCallback]="reconstructNavigationObservableCallback"

@@ -82,7 +82,7 @@
 
                   @if (selectedConfigCode) {
                     <div class="col-12">
-                      <gebo-ai-field id="tree" label="Choosed MCP resources" [required]="true"
+                      <gebo-ai-field id="tree" label="Selected MCP resources" [required]="true"
                         help="Resources exposed by the MCP server. Pick the whole server to ingest every resource, or select individual resources.">
                         <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable"
                           [readonly]="mode==='EDIT'" formControlName="paths" [required]="true" selectionMode="multiple"
@@ -101,7 +101,7 @@
 
                 <div class="col-12">
                   <gebo-ai-field id="programmedTables" label="Contents updates checks schedule"
-                    help="Configure the scheduling of changed contents to maintain the retrieve augmented generation system updated">
+                    help="Configure the scheduling of changed contents to maintain the retrieval-augmented generation system updated">
                     <gebo-ai-content-reindex-scheduler-component formControlName="programmedTables" id="programmedTables"
                     gebo-ai-field-element></gebo-ai-content-reindex-scheduler-component>
                   </gebo-ai-field>

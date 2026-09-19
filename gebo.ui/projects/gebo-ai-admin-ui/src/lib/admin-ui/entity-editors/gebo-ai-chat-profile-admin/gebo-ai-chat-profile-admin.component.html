@@ -15,7 +15,7 @@
 <p-blockUI id="BlockUi"  [target]="chatProfileUI" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel id="MainPanel" gebo-ai-label  #chatProfileUI header="Editing retrieve augmented generation chat profile" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label  #chatProfileUI header="Editing retrieval-augmented generation chat profile" [formGroup]="formGroup">
   @if (!isWizardMode) {
     <div class="geboButtonsBar" style="vertical-align: bottom">
       <div class="grid">
@@ -67,7 +67,7 @@
                     </gebo-ai-field>
                   </div>
                   <div class="col-8">
-                    <gebo-ai-field id="knowledgeBaseCodes" label="Knowledge bases" help="Knowledge bases to use for document retrivial.">
+                    <gebo-ai-field id="knowledgeBaseCodes" label="Knowledge bases" help="Knowledge bases to use for document retrieval.">
                       <p-multiSelect id="KnowledgeBaseCodesMultiSelect" gebo-ai-label styleClass="w-full" formControlName="knowledgeBaseCodes" optionLabel="description" optionValue="code" dataKey="code"
                         [options]="allKnowledgeBaseData" showClear="true" styleClass="w-full"
                       display="chip" gebo-ai-field-element></p-multiSelect>
@@ -149,7 +149,7 @@
               <div class="grid standardTabDialogueHeight">
                 <div class="col-6">
 
-                  <gebo-ai-field id="manualThreasholdsConfiguration" label="Manual or Autotuned threashold configuration" help="Use manual distance threashold instead of Autotune it">
+                  <gebo-ai-field id="manualThreasholdsConfiguration" label="Manual or Autotuned threshold configuration" help="Use manual distance threshold instead of Autotune it">
                     <p-check-box formControlName="manualThreasholdsConfiguration" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-check-box>
                   </gebo-ai-field>
                 </div>
@@ -160,7 +160,7 @@
                   </gebo-ai-field>
                 </div>
                 <div class="col-6">
-                  <gebo-ai-field id="topK" label="Considered document fragments (TopK)" help="In the retrieve augmented generation, Top N found considered document fragments in semantic search">
+                  <gebo-ai-field id="topK" label="Considered document fragments (TopK)" help="In the retrieval-augmented generation, Top N found considered document fragments in semantic search">
                     <p-inputNumber id="TopKInputNumber" gebo-ai-label formControlName="topK"
                       class="col-6" inputId="integeronly" [min]="4" [max]="100" gebo-ai-field-element/>
                     </gebo-ai-field>
@@ -189,7 +189,7 @@
                       </div>
                       <!--
                       <div class="col-12">
-                        <gebo-ai-field id="prompt" label="Prompt" help="Edit the prompt for the retrieve augmented generation sessions." [required]="true">
+                        <gebo-ai-field id="prompt" label="Prompt" help="Edit the prompt for the retrieval-augmented generation sessions." [required]="true">
                           <textarea id="PromptTextarea" gebo-ai-label rows="6" cols="250" [required]="true" pTextarea
                           formControlName="prompt" gebo-ai-field-element></textarea>
                         </gebo-ai-field>

@@ -89,7 +89,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 const adminUserSetupSection: SetupWizardsSection = {
     orderEntry: 1,
     label: "Administrator & others account setup",
-    description: "At least an administration account is required to grant that this gebo.ai installation is properly managed, add other users if necessary",
+    description: "At least an administration account is required to ensure that this gebo.ai installation is properly managed, add other users if necessary",
     enabledService: AlwaysTrueStatusService,
     setupCompletedService: AlwaysTrueStatusService,
     wizardComponent: UsersWizardComponent,
@@ -107,7 +107,7 @@ const adminUserSetupSection: SetupWizardsSection = {
 const geboWorkDirectorySetupSection: SetupWizardsSection = {
     orderEntry: 3,
     label: "Gebo.ai work directory",
-    description: "Configure a work directory, it will be the folder where configurations and all working files of this installation will be stored. It's also a great idea to backup it periodically.",
+    description: "Configure a work directory, it will be the folder where configurations and all working files of this installation will be stored. It's also a great idea to back it up periodically.",
     enabledService: AlwaysTrueStatusService,
     setupCompletedService: WorkFolderWizardStatusService,
     wizardComponent: WorkFolderWizardComponent,
@@ -125,7 +125,7 @@ const VectorStoreSetupSection: SetupWizardsSection = {
     orderEntry: 4,
     requredStepsIds: ["geboWorkDirectorySetupSection"],
     label: "Vector database configuration",
-    description: "A vector database have to be configured for Gebo.ai to provide retrieve augmented generation services, you can choose between a local vector database, Qdrant or Mongo Atlas",
+    description: "A vector database has to be configured for Gebo.ai to provide retrieval-augmented generation services, you can choose between a local vector database, Qdrant or Mongo Atlas",
     enabledService: AlwaysTrueStatusService,
     setupCompletedService: VectorStoreWizardService,
     wizardComponent: VectorStoreWizardComponent,
@@ -153,7 +153,7 @@ const adminLLMSSetupSection: SetupWizardsSection = {
     orderEntry: 6,
     requredStepsIds: ["VectorStoreSetupSection"],
     label: "Large language models setup",
-    description: "Configure various llms with cloud or local/lan infrastructure backend services, at least one chat model and one embedding models are to be configured to let the software work properly.",
+    description: "Configure various llms with cloud or local/lan infrastructure backend services, at least one chat model and one embedding model is to be configured to let the software work properly.",
     enabledService: AlwaysTrueStatusService,
     setupCompletedService: LLMSetupWizardService,
     // Guided ("easy") stepper flow. The previous flat easy/expert component
@@ -165,7 +165,7 @@ const adminLLMSSetupSection: SetupWizardsSection = {
 const graphRagBaseSetupSection: SetupWizardsSection = {
     orderEntry: 7,
     requredStepsIds: ["VectorStoreSetupSection", "adminLLMSSetupSection"],
-    label: "Graph rag/Knowledge extraction stup",
+    label: "Graph rag/Knowledge extraction setup",
     description: "Configure graph rag and knowledge extraction subsystem",
     installedModule: Neo4jModuleEnabledService,
     enabledService: AlwaysTrueStatusService,
@@ -183,7 +183,7 @@ const graphRagBaseSetupSection: SetupWizardsSection = {
 const sharedFileSystemSetupSection: SetupWizardsSection = {
     orderEntry: 8,
     label: "Shared filesystems paths setup",
-    description: "Configure the company shared filesystems paths to be used as retrieve augmented generation documents area in various knowledge bases",
+    description: "Configure the company shared filesystems paths to be used as retrieval-augmented generation documents area in various knowledge bases",
     enabledService: SharedFilesystemEnabledService,
     setupCompletedService: SharedFilesystemAlreadySetupService,
     wizardComponent: SharedFilesystemWizardComponent,
@@ -296,7 +296,7 @@ const firstKnowledgeBaseSetupSection: SetupWizardsSection = {
     orderEntry: 13,
     requredStepsIds: ["geboWorkDirectorySetupSection", "VectorStoreSetupSection", "adminLLMSSetupSection"],
     label: "Configure at least a knowledge base",
-    description: "Configure at least a knowledge base to let your users enjoy the retrieve augmented generations services of Gebo.ai",
+    description: "Configure at least a knowledge base to let your users enjoy the retrieval-augmented generation services of Gebo.ai",
 
     enabledService: AlwaysTrueStatusService,
     setupCompletedService: KnowledgeBasePresentService,
@@ -314,7 +314,7 @@ const firstChatProfileBaseSetupSection: SetupWizardsSection = {
     orderEntry: 14,
     requredStepsIds: ["firstKnowledgeBaseSetupSection", "geboWorkDirectorySetupSection", "VectorStoreSetupSection", "adminLLMSSetupSection"],
     label: "Configure at least a \"R.A.G.\" chat profile",
-    description: "Configure at least a retrieve augmented chat profile for your users based on one of your configured knowledge bases",
+    description: "Configure at least a retrieval-augmented chat profile for your users based on one of your configured knowledge bases",
     enabledService: AlwaysTrueStatusService,
     setupCompletedService: ChatProfileStatusService,
     wizardComponent: ChatProfileWizardComponent,
@@ -327,7 +327,7 @@ const ragAutotuneSetupSection: SetupWizardsSection = {
     enabledService: AlwaysTrueStatusService,
     setupCompletedService: RagAutotuneStatusService,
     label: "R.a.g. autotune",
-    description: "Automatic retrieve augmented generation parameters tuning",
+    description: "Automatic retrieval-augmented generation parameters tuning",
     wizardComponent: GeboAIRagAutotuneWizardComponent,
     wizardSectionId: "ragAutotuneSetupSection",
     mandatory: false

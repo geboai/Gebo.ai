@@ -33,7 +33,7 @@
       <div class="grid">
 
         <div class="col-6">
-          <gebo-ai-field id="description" label="Description" help="Enter the description of the SharPpoint/OneDrive system.">
+          <gebo-ai-field id="description" label="Description" help="Enter the description of the SharePoint/OneDrive system.">
             <input pInputText id="description" formControlName="description" maxlength="120" gebo-ai-field-element />
           </gebo-ai-field>
         </div>
@@ -54,7 +54,7 @@
 
         @if (currentSharepointVersion==='CLOUD_VERSION') {
           <div class="col-12" [formGroup]="oauth2Credentials">
-            <p-fieldset id="MicrosofOauth2Fieldset" gebo-ai-label legend="Microsof oauth2 app registration infos for Gebo.ai">
+            <p-fieldset id="MicrosofOauth2Fieldset" gebo-ai-label legend="Microsoft oauth2 app registration infos for Gebo.ai">
               <p>Please go to your organization Microsoft Azure Administrative section or Microsoft Entra
                 Administrative section, add a new app for this Gebo.ai installation,
               note the client-id, tenant-id, and client-secret and report them here</p>

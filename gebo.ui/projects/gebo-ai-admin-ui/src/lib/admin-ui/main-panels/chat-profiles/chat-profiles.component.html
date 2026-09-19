@@ -16,7 +16,7 @@
 </p-blockUI>
 
 
-<p-panel id="MainPanel" gebo-ai-label  #ragProfilesUI header="Retrivial augmented generation chat profiles">
+<p-panel id="MainPanel" gebo-ai-label  #ragProfilesUI header="Retrieval-augmented generation chat profiles">
   <p-button id="NewChatProfileBtn" gebo-ai-label (onClick)="newChatProfile()" label="New chat profile" icon="pi pi-comments" [outlined]="true"></p-button>
   @if (chatprofiles?.content?.length) {
     <p-table [value]="(chatprofiles.content?chatprofiles.content:[])">

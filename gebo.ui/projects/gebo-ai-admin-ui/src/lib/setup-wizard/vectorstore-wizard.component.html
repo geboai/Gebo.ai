@@ -12,7 +12,7 @@
       </div>
     </div>
     <p>The augmented generation features of <b>Gebo.ai</b> require the use of a vector database to perform semantic
-  search, please choose wich of the supported products you'ld like to use</p>
+  search, please choose which of the supported products you'ld like to use</p>
   <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
   <div style="height: 500px;">
     @for (item of vectorStoreProducts; track item) {
@@ -32,7 +32,7 @@
             </gebo-ai-field>
           </div>
           <div class="col-4">
-            <gebo-ai-field id="port" label="Qdrant port" help="Qdrant comunication port (6334 is the standard)" [required]="true">
+            <gebo-ai-field id="port" label="Qdrant port" help="Qdrant communication port (6334 is the standard)" [required]="true">
               <input pInputText id="port" formControlName="port" class="col-12" [required]="true" gebo-ai-field-element />
             </gebo-ai-field>
           </div>
@@ -58,7 +58,7 @@
             </gebo-ai-field>
           </div>
           <div class="col-6">
-            <gebo-ai-field id="port" label="Redis port" help="Redis comunication port (6334 is the standard)" [required]="true">
+            <gebo-ai-field id="port" label="Redis port" help="Redis communication port (6334 is the standard)" [required]="true">
               <input pInputText id="port" formControlName="port" class="col-12" [required]="true" gebo-ai-field-element />
             </gebo-ai-field>
           </div>

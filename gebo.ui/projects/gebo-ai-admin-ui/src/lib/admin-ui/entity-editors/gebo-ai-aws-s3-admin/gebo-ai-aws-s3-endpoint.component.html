@@ -99,7 +99,7 @@
                       </gebo-ai-field>
                     </div>
                     <div class="col-12">
-                      <gebo-ai-field id="tree" label="Choosed AWS S3 buckets/folders/files" help="Shared AWS S3 contents" [required]="true">
+                      <gebo-ai-field id="tree" label="Selected AWS S3 buckets/folders/files" help="Shared AWS S3 contents" [required]="true">
                         <gebo-ai-vfilesystem-selector-component
                           [loadRootsObservable]="loadRootsObservable"
                           [readonly]="mode==='EDIT'"
@@ -137,7 +137,7 @@
                       </gebo-ai-field>
                     </div>
                     <div class="col-12">
-                      <gebo-ai-field id="programmedTables" label="Contents updates checks schedule" help="Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated">
+                      <gebo-ai-field id="programmedTables" label="Contents updates checks schedule" help="Configure the scheduling of changed contents to maintain the retrieval-augmented generation system updated">
                         <gebo-ai-content-reindex-scheduler-component
                           formControlName="programmedTables"
                           id="programmedTables"

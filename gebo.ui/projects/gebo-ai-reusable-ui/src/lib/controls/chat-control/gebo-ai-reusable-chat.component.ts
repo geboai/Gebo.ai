@@ -788,7 +788,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         const confirmation: ExtendedConfirmation = {
             id: "DELETE_CHAT_ACTION",
             header: "Delete chat action",
-            message: "Are you shure you whant to delete this chat?",
+            message: "Are you sure you whant to delete this chat?",
             accept: () => {
                 this.geboUserChatsControllerService.deleteChat(actualChat.code).subscribe({
                     next: (value) => {
