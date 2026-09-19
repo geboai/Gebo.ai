@@ -532,21 +532,24 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: tts-openrouter.ai
           doModelsLookup: true
           choices:
-            # An installation that speaks as many languages as this one does wants the
-            # widest voice coverage by default, and gemini 3.1 flash tts is both the most
-            # used model of this type on openrouter.ai and the one with the broadest
-            # reach, 70+ languages against the 15 of the microsoft voice and the 8 of
-            # kokoro. It is also an order of magnitude cheaper than the minimax voice it
-            # replaces as the default, which stays below as the alternative.
-            - code: google/gemini-3.1-flash-tts-preview
-              description: Google Gemini 3.1 Flash TTS (70+ languages)
-              defaultChoice: true
+            # The widest voice coverage here belongs to gemini 3.1 flash tts, which is also
+            # the most used model of this type on openrouter.ai - 70+ languages against the
+            # 15 of the microsoft voice and the 8 of kokoro - but it cannot be the default
+            # while the generic text to speech handler asks every provider for mp3:
+            # tested against a live key it answers
+            #   400 Gemini TTS only supports response_format="pcm". Got "mp3".
+            # and the call fails. It stays listed for the day the handler negotiates the
+            # format per model, and the default is the widest-reaching voice that does
+            # answer in mp3, verified end to end on this installation.
             - code: minimax/speech-2.8-hd
-              description: MiniMax Speech 2.8 HD
+              description: MiniMax Speech 2.8 HD (multilanguage)
+              defaultChoice: true
             - code: minimax/speech-2.8-turbo
-              description: MiniMax Speech 2.8 Turbo
+              description: MiniMax Speech 2.8 Turbo (multilanguage)
             - code: microsoft/mai-voice-2
               description: Microsoft MAI Voice 2 (15 languages)
+            - code: google/gemini-3.1-flash-tts-preview
+              description: Google Gemini 3.1 Flash TTS (70+ languages, needs pcm support)
             - code: deepgram/aura-2
               description: Deepgram Aura 2
             - code: hexgrad/kokoro-82m
