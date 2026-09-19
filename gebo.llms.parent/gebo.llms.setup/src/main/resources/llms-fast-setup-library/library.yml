@@ -508,19 +508,33 @@ ai.gebo.llms.vendors.setup.config:
         # Image generation was the one model type openrouter.ai had a handler for -
         # images-openrouter.ai, which resolves its choices by the image output modality -
         # without anything offering it in the setup.
+        #
+        # The default is picked on the same grounds as the chat one: the cheapest model
+        # that is still a full text-to-image generator, not the most capable one. Image
+        # output is billed per output token, and the openai gpt-image-2.5 tier that used
+        # to be the default sits at 0.00003 - the top band - while qwen-image-3 is at
+        # 0.0000072, so a default nobody changed cost four times what it had to.
+        #
+        # Every code here outputs image ONLY (text+image->image). The gemini and gpt-5
+        # families answer text+image, so the reply carries prose alongside the picture
+        # and the image response handler has to fish it out; they are deliberately not
+        # offered, and google/gemini-3-pro-image was dropped from this list for that
+        # reason as much as for its price.
         - type: IMAGESGEN
           serviceHandler: images-openrouter.ai
           doModelsLookup: true
           choices:
-            - code: openai/gpt-image-2.5-sunburst
-              description: OpenAI GPT Image 2.5 Sunburst (high quality image generation)
+            - code: qwen/qwen-image-3
+              description: Qwen Image 3 (text to image generation)
               defaultChoice: true
-            - code: openai/gpt-image-2.5-flare
-              description: OpenAI GPT Image 2.5 Flare (fast image generation)
             - code: black-forest-labs/flux.2-pro
               description: Black Forest Labs FLUX.2 Pro
-            - code: google/gemini-3-pro-image
-              description: Google Gemini 3 Pro Image
+            - code: openai/gpt-image-1-mini
+              description: OpenAI GPT Image 1 mini (low cost)
+            - code: openai/gpt-image-2.5-flare
+              description: OpenAI GPT Image 2.5 Flare (fast image generation)
+            - code: openai/gpt-image-2.5-sunburst
+              description: OpenAI GPT Image 2.5 Sunburst (highest quality, highest cost)
         - type: TRANSCRIPT
           serviceHandler: transcript-openrouter.ai
           doModelsLookup: true
