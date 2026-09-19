@@ -469,10 +469,25 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chatmodel-openrouter.ai
           doModelsLookup: true
           choices:
-            - code: openai/gpt-oss-120b
-              description: OpenAI Gpt OSS 120b
+            # The default is the cheapest model here that stays reliable once tools are
+            # in play, which is what a chat pipeline spends most of its calls on: glm
+            # 5.3 flash costs 0.09/0.30 per million in and out, carries a 1.3M context
+            # and scores above the other flash-class models on the agentic benchmarks.
+            - code: z-ai/glm-5.3-flash
+              description: Z.ai GLM 5.3 Flash
+              contextWindow: 1310720
               uses: CHAT
               defaultChoice: true
+            # Kept as an option but no longer the default: gpt-oss-120b is unreliable at
+            # function calling, which a chat that dispatches tools depends on.
+            - code: openai/gpt-oss-120b
+              description: OpenAI Gpt OSS 120b
+              contextWindow: 131072
+              uses: CHAT
+            - code: deepseek/deepseek-v4-flash
+              description: DeepSeek V4 Flash
+              contextWindow: 1048576
+              uses: CHAT
             - code: openai/gpt-oss-20b
               description: OpenAI Gpt OSS 20b
               uses: INTERNAL_SERVICES
@@ -490,6 +505,22 @@ ai.gebo.llms.vendors.setup.config:
             - code: cohere/rerank-4-pro
               description: Chohere Rerank 4 pro
               defaultChoice: true
+        # Image generation was the one model type openrouter.ai had a handler for -
+        # images-openrouter.ai, which resolves its choices by the image output modality -
+        # without anything offering it in the setup.
+        - type: IMAGESGEN
+          serviceHandler: images-openrouter.ai
+          doModelsLookup: true
+          choices:
+            - code: openai/gpt-image-2.5-sunburst
+              description: OpenAI GPT Image 2.5 Sunburst (high quality image generation)
+              defaultChoice: true
+            - code: openai/gpt-image-2.5-flare
+              description: OpenAI GPT Image 2.5 Flare (fast image generation)
+            - code: black-forest-labs/flux.2-pro
+              description: Black Forest Labs FLUX.2 Pro
+            - code: google/gemini-3-pro-image
+              description: Google Gemini 3 Pro Image
         - type: TRANSCRIPT
           serviceHandler: transcript-openrouter.ai
           doModelsLookup: true
@@ -501,17 +532,25 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: tts-openrouter.ai
           doModelsLookup: true
           choices:
+            # An installation that speaks as many languages as this one does wants the
+            # widest voice coverage by default, and gemini 3.1 flash tts is both the most
+            # used model of this type on openrouter.ai and the one with the broadest
+            # reach, 70+ languages against the 15 of the microsoft voice and the 8 of
+            # kokoro. It is also an order of magnitude cheaper than the minimax voice it
+            # replaces as the default, which stays below as the alternative.
+            - code: google/gemini-3.1-flash-tts-preview
+              description: Google Gemini 3.1 Flash TTS (70+ languages)
+              defaultChoice: true
             - code: minimax/speech-2.8-hd
               description: MiniMax Speech 2.8 HD
-              defaultChoice: true
             - code: minimax/speech-2.8-turbo
               description: MiniMax Speech 2.8 Turbo
+            - code: microsoft/mai-voice-2
+              description: Microsoft MAI Voice 2 (15 languages)
             - code: deepgram/aura-2
               description: Deepgram Aura 2
-            - code: microsoft/mai-voice-2
-              description: Microsoft MAI Voice 2
             - code: hexgrad/kokoro-82m
-              description: Kokoro 82M
+              description: Kokoro 82M (8 languages)
 
     - vendorInfo:
         vendorId: ollama
