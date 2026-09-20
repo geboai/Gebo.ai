@@ -48,6 +48,7 @@ public class GUserChatSession extends GBaseObject {
 	private String chatProfileCode = null; // Chat profile configuration code
 	private GObjectRef<GBaseChatModelConfig> modelReference = null; // Reference to the chat model configuration
 	private Boolean ragChat = null; // Indicates if the chat supports Retrieval-Augmented Generation
+	private String pipelineCode = null; // Chat pipeline this session runs through (null = default pipeline; e.g. "open-chat")
 	private String chatMemoryId = null; // Identifier for chat memory
 	private List<ChatInteractions> interactions = new ArrayList<ChatInteractions>(); // List of chat interactions
 	private String chatModelCode = null; // Code for the chat model used

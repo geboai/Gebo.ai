@@ -258,3 +258,36 @@ adding it to the `doDecideRoute(..)` guard** — see invariant 1.
 | `gebo.architecture.parent/gebo.architecture.office-plugin-pipeline/src/main/java/ai/gebo/officeplugin/pipeline/config/OfficeAgentsInitialization.java` | office network; must back off with the standard agents |
 | `gebo.architecture.parent/gebo.architecture.office-plugin-pipeline/src/main/java/ai/gebo/officeplugin/pipeline/ui/OfficeAssistantPipelineUserMenuProviderService.java` | office chat menu |
 | `gebo.ui/projects/gebo-ai-reusable-ui/src/lib/controls/chat-control/chat-input-shell.component.ts` | renders the menu, sets `chatPipelineProcessId` |
+
+---
+
+## 10. The `open-chat` pipeline — pure chat, no internal-KB RAG
+
+Module `gebo.architecture.parent/gebo.architecture.open-chat-pipeline`, gated by
+`ai.gebo.openchat.enabled` (default `true`, `matchIfMissing`), selected with
+`pipelineCode=open-chat`. It is a second pipeline built on the office precedent, for a
+"pure chat" experience that **never retrieves the internal knowledge base**: no RAG,
+no `IKB_SYSTEM` deep search. It can still search **external** systems and chat over
+**uploaded / picked files**, and its default experience is a **KB-free network of
+agents** that answers freely.
+
+| Key | Value |
+| --- | --- |
+| Pipeline id | `open-chat` (`OpenChatConstants.OPEN_CHAT_PIPELINE`) |
+| Input step | reuses `default-input-step` (`DefaultInputChatPipelineStepServiceImpl`) |
+| Router step | `open-chat-routing-step` — `OpenChatRoutingStepService` (programmatic, no LLM) |
+| Network step | `open-chat-network-streaming-step` — `OpenChatAgentsNetworkStreamingStepService` |
+| Agents network | `OPEN_CHAT_AGENTS_NETWORK`, built by `OpenChatAgentsInitialization` via `StandardAgentsInitialization.createChatAgentsNetwork(..., null)` — the **`null` internal-KB config drops the internal-KB searcher node** |
+| Menu provider | `OpenChatPipelineUserMenuProviderService` (Agentic chat + external Web search; **no** R.a.g. / internal-KB items) |
+| Prompts | `OpenChatPromptsLibraryConfig` + `resources/open-chat-prompt-library/*` — free-response coordinator + answer-writer prompts that deliberately drop the evidence/citation/deliverable-format discipline of the standard network |
+| Network gate | requires **both** `ai.gebo.openchat.enabled` and `ai.gebo.agents.standard.enabled` (same back-off contract as `OfficeAgentsInitialization`) |
+
+Router decision (`OpenChatRoutingStepService.execute`), in order: (1) forced
+heavy-documents guard → `CHAT_WITH_FILES` (same resource guard as §3.1); (2) non-blank
+`chatPipelineProcessId` → `RespondingWith.valueOf(..)` whitelisted to
+`PURE_LLM_RESPONSE` / `DEEP_SEARCH_RESPONSE` / `CHAT_WITH_FILES` (`RAG_LLM_RESPONSE` and
+anything else degrade to `PURE_LLM_RESPONSE`); (3) blank → the open-chat network, else
+`PURE_LLM_RESPONSE` when the network is disabled. For any deep-search route it forces
+`deepSearchedSystems` to the enabled **external (non-`IKB_SYSTEM`)** sources and never
+leaves it empty (an empty list would make the shared deep-search handler fall back to
+the internal KB — see §5 / `DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl`).

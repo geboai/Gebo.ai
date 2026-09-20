@@ -732,18 +732,30 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public GUserChatInfo createCleanChatByModelCode(String modelCode) throws GeboPersistenceException {
+	public GUserChatInfo createCleanChatByModelCode(String modelCode, String pipelineCode)
+			throws GeboPersistenceException {
 		IGConfigurableChatModel model = this.chatModelsDao.findByCode(modelCode);
 		if (model != null)
-			return createCleanChatByModel(model);
+			return createCleanChatByModel(model, pipelineCode);
 		throw new IllegalStateException("The model :" + modelCode + " does not exist");
 	}
 
 	@Override
-	public GUserChatInfo createCleanChatByModel(IGConfigurableChatModel chatModel) throws GeboPersistenceException {
+	public GUserChatInfo createCleanChatByDefaultModel(String pipelineCode) throws GeboPersistenceException {
+		IGConfigurableChatModel model = this.chatModelsDao.defaultHandler();
+		if (model == null) {
+			throw new IllegalStateException("No default chat model is configured");
+		}
+		return createCleanChatByModel(model, pipelineCode);
+	}
+
+	@Override
+	public GUserChatInfo createCleanChatByModel(IGConfigurableChatModel chatModel, String pipelineCode)
+			throws GeboPersistenceException {
 		UserInfos user = securityService.getCurrentUser();
 		GUserChatSession userContext = new GUserChatSession();
 		userContext.setChatModelCode(chatModel.getCode());
+		userContext.setPipelineCode(pipelineCode != null && !pipelineCode.isBlank() ? pipelineCode : null);
 		String description = "Chat with "
 				+ (chatModel.getConfig() != null && chatModel.getConfig().getChoosedModel() != null
 						? chatModel.getConfig().getChoosedModel().getCode()
@@ -796,8 +808,8 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode)
-			throws GeboPersistenceException {
+	public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode,
+			String pipelineCode) throws GeboPersistenceException {
 		Optional<GChatProfileConfiguration> profileOpt = this.chatProfilesRepository.findById(chatProfileCode);
 		if (profileOpt.isPresent()) {
 			UserInfos user = this.securityService.getCurrentUser();
@@ -808,6 +820,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			GUserChatSession userContext = new GUserChatSession();
 			userContext.setRagChat(true);
 			userContext.setChatProfileCode(chatProfileCode);
+			userContext.setPipelineCode(pipelineCode != null && !pipelineCode.isBlank() ? pipelineCode : null);
 			userContext.setContextCode(contextCode != null && !contextCode.isBlank() ? contextCode : null);
 			userContext.setDescription(profile.getDescription());
 			userContext.setUsername(user.getUsername());

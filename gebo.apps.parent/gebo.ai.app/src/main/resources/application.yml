@@ -463,6 +463,12 @@ ai.gebo.agents.standard.enabled: true
 # Office assistant pipeline (requires ai.gebo.agents.standard.enabled=true; it reuses
 # the standard searcher/tool agents and the controller service).
 ai.gebo.officeplugin.enabled: true
+# Open-chat pipeline (pipelineCode=open-chat): a "pure chat" experience that never
+# RAGs the internal knowledge base. It answers freely via a KB-free network of agents,
+# can search external systems, and can chat over uploaded/picked files. Its agents
+# network also requires ai.gebo.agents.standard.enabled=true (it reuses the standard
+# searcher/tool agents and controller/writer services with free-response prompts).
+ai.gebo.openchat.enabled: true
 ai.gebo.chatpipes.defaultPipelineStepIsChatAgent: true
 # Secrets declared by the configuration instead of created through the admin UI:
 # one list per secret type, each entry with the code the rest of the configuration

@@ -91,7 +91,20 @@ public interface IGChatSessionLifeCycleService {
 	public void chatRequestCompleted(GeboChatRequest request, IGConfigurableChatModel targetChatModel)
 			throws GeboChatSessionLifecycleException, LLMConfigException, IOException;
 
-	public GUserChatInfo createCleanChatByModel(IGConfigurableChatModel chatModel) throws GeboPersistenceException;
+	public default GUserChatInfo createCleanChatByModel(IGConfigurableChatModel chatModel)
+			throws GeboPersistenceException {
+		return createCleanChatByModel(chatModel, null);
+	}
+
+	/**
+	 * Creates a clean model-based chat (no chat profile, no RAG), optionally pinning
+	 * the chat pipeline the session runs through. A {@code null} pipelineCode uses the
+	 * default pipeline; a non-null value (e.g. {@code "open-chat"}) is persisted on the
+	 * session so it reopens through that pipeline. This is the path a pipeline-only
+	 * chat takes: it needs only a model, not a chat profile (profiles are for RAG).
+	 */
+	public GUserChatInfo createCleanChatByModel(IGConfigurableChatModel chatModel, String pipelineCode)
+			throws GeboPersistenceException;
 
 	public default GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode)
 			throws GeboPersistenceException {
@@ -103,10 +116,40 @@ public interface IGChatSessionLifeCycleService {
 	 * context code (e.g. the office document the chat assists). A {@code null}
 	 * contextCode creates an unbound chat, as the single-argument overload does.
 	 */
-	public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode)
+	public default GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode)
+			throws GeboPersistenceException {
+		return createCleanChatByChatProfileCode(chatProfileCode, contextCode, null);
+	}
+
+	/**
+	 * Creates a clean chat for the given chat profile, additionally pinning the chat
+	 * pipeline the session runs through. A {@code null} pipelineCode uses the default
+	 * pipeline (identical to the two-argument overload); a non-null value (e.g.
+	 * {@code "open-chat"}) is persisted on the session so it reopens through that
+	 * pipeline.
+	 */
+	public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode,
+			String pipelineCode) throws GeboPersistenceException;
+
+	public default GUserChatInfo createCleanChatByModelCode(String modelCode) throws GeboPersistenceException {
+		return createCleanChatByModelCode(modelCode, null);
+	}
+
+	/**
+	 * Creates a clean model-based chat by model code, optionally pinning the chat
+	 * pipeline (e.g. {@code "open-chat"}) the session reopens through. No chat profile
+	 * is involved.
+	 */
+	public GUserChatInfo createCleanChatByModelCode(String modelCode, String pipelineCode)
 			throws GeboPersistenceException;
 
-	public GUserChatInfo createCleanChatByModelCode(String modelCode) throws GeboPersistenceException;
+	/**
+	 * Creates a clean model-based chat on the system default chat model, pinned to the
+	 * given pipeline (e.g. {@code "open-chat"}). Used by pipeline-only chats where the
+	 * user does not pick a model: the open-chat network of agents runs on the default
+	 * chat model anyway, so the session simply adopts it.
+	 */
+	public GUserChatInfo createCleanChatByDefaultModel(String pipelineCode) throws GeboPersistenceException;
 
 	public GUserChatInfo suggestChatDescription(String id) throws GeboChatSessionLifecycleException;
 

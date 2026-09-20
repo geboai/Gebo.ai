@@ -65,4 +65,13 @@ public interface GUserChatInfo {
 	 * @return a String representing the model code of the chat.
 	 */
 	public String getChatModelCode();
+
+	/**
+	 * Gets the chat pipeline code this session runs through, or {@code null} for the
+	 * default pipeline. For example {@code "open-chat"} for a session that must reopen
+	 * through the open-chat pipeline (no internal-KB RAG, external search + files).
+	 *
+	 * @return a String representing the pipeline code, or {@code null}.
+	 */
+	public String getPipelineCode();
 }

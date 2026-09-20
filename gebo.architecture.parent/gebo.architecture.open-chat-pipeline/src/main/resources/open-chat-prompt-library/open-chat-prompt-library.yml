@@ -1,0 +1,68 @@
+ai.gebo.openchat.prompts.library:
+  - promptUse: open-chat-coordinator-agent-prompt
+    langCode: en
+    systemReference: /open-chat-prompt-library/en/open-chat-coordinator-agent-system-prompt.txt
+    userReference: /open-chat-prompt-library/en/open-chat-coordinator-agent-user-prompt.txt
+    agentPrompt: true
+    agentId: controllerAgent
+    chatHistory: REQUIRED
+    contextDocuments: REQUIRED
+    toolsCalling: REQUIRED
+  - promptUse: open-chat-answer-writer-agent-prompt
+    langCode: en
+    systemReference: /open-chat-prompt-library/en/open-chat-answer-writer-agent-system-prompt.txt
+    userReference: /open-chat-prompt-library/en/open-chat-answer-writer-agent-user-prompt.txt
+    agentPrompt: true
+    agentId: ReportWriterNetworkAgentService
+    chatHistory: NOT_REQUIRED
+    contextDocuments: NOT_REQUIRED
+    toolsCalling: NOT_REQUIRED
+ai.gebo.openchat.prompts.uses:
+  - code: open-chat-coordinator-agent-prompt
+    description: Main loop prompt for the open-chat coordinator/controller agent. It turns the user's request into a routing plan but, unlike the default coordinator, it has no internal company knowledge base to search and dispatches the external search agents only when the request actually needs fresh external information; otherwise it finalizes straight to the free-response writer.
+    module: open-chat
+    placeholders:
+      - placeholder: AGENT_IDENTITY
+        description: Description of this agent's persona, role, and capabilities within the network.
+      - placeholder: format
+        description: The structured-output format/schema instructions the routing plan must comply with.
+      - placeholder: CURRENT_CONTROLLER_CYCLE
+        description: The current coordinator cycle number in the network's iteration protocol.
+      - placeholder: MAX_CONTROLLER_CYCLES
+        description: The maximum number of coordinator cycles allowed before the plan must finalize.
+      - placeholder: REQUIRED_AGENT_COMPLETENESS
+        description: The completeness level requested by the user (open-chat defaults it to a direct answer), driving how deep the routing plan must go.
+      - placeholder: AGENT_COMUNICATION_CAPABILITY
+        description: Description of which peer agents this agent is allowed to address and how.
+      - placeholder: INPUT
+        description: The actual task input this agent turn must act on.
+      - placeholder: NETWORK_AGENTS_CAPABILITIES
+        description: Catalog describing what each peer agent in the open-chat network can do (external searchers, tool-calling agent, writer).
+      - placeholder: NETWORK_SCENARY
+        description: Description of the overall open-chat multi-agent network scenario.
+      - placeholder: PRIVATE_CONTEXT
+        description: This agent's own private working context/memory, not shared with other agents.
+      - placeholder: question
+        description: The user's original question or request driving the network.
+      - placeholder: SHARED_CONTEXT
+        description: The context/evidence shared across all agents in the network so far.
+  - code: open-chat-answer-writer-agent-prompt
+    description: Main loop prompt for the open-chat writer agent. It produces a free-form, conversational answer to any kind of question, using external search results or attached files only when present and relevant, and does not force citations, evidence organization or a deliverable-format template.
+    module: open-chat
+    placeholders:
+      - placeholder: AGENT_IDENTITY
+        description: Description of this agent's persona, role, and capabilities within the network.
+      - placeholder: AGENT_COMUNICATION_CAPABILITY
+        description: Description of which peer agents this agent is allowed to address and how.
+      - placeholder: NETWORK_SCENARY
+        description: Description of the overall open-chat multi-agent network scenario.
+      - placeholder: REQUIRED_AGENT_COMPLETENESS
+        description: The completeness level requested by the user, used only as a soft hint to the free-form answer.
+      - placeholder: INPUT
+        description: The writing instruction this agent turn must act on.
+      - placeholder: PRIVATE_CONTEXT
+        description: This agent's own private working context/memory (its previous drafts), not shared with other agents.
+      - placeholder: question
+        description: The user's original question or request driving the network.
+      - placeholder: SHARED_CONTEXT
+        description: Any evidence gathered by the external search agents or content of attached files, to be woven into the answer only when relevant.

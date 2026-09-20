@@ -655,10 +655,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.loadChatHistory();
 
         }
-        //here we load the proper menu for the actual chat pipeline
-        if (menu2BeReloaded === true && this.chatInfo?.chatProfileCode) {
+        //here we load the proper menu for the actual chat pipeline. A pipeline-only
+        //chat (a pipelineId with no chat profile - profiles are a RAG concept) still
+        //has a menu to load, so the presence of a pipelineId is enough on its own.
+        if (menu2BeReloaded === true && (this.chatInfo?.chatProfileCode || this.pipelineId)) {
             this.loadingChatMenu = true;
-            this.geboChatPipelineService.getPersonalPipelinesChatMenu(this.chatInfo.chatProfileCode, this.pipelineId).subscribe({
+            this.geboChatPipelineService.getPersonalPipelinesChatMenu(this.chatInfo?.chatProfileCode, this.pipelineId).subscribe({
                 next: (menu) => {
                     this.chatPipelinesMenu = menu;
                     this.loadingChatMenu = false;
