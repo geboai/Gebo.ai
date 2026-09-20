@@ -40,6 +40,8 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGResponseToFileService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
+import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
+import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
 import ai.gebo.llms.chat.client.rest.config.GeboChatUIConfig;
 import ai.gebo.llms.chat.client.rest.model.ChatUIOptions;
 import ai.gebo.model.base.GBaseObject;
@@ -70,6 +72,18 @@ public class GeboUserChatsController {
 	final IGResponseToFileService response2fileService;
 	final IGChatModelRuntimeConfigurationDao chatModelRuntimeDao;
 	final IGEmbeddingModelRuntimeConfigurationDao embeddingModelRuntimeDao;
+	final ChatPipelinesConfiguration chatPipelinesConfiguration;
+	final IChatPipelineStepServiceRepositoryPattern pipelineStepsRepository;
+
+	/** Pipeline code of the open-chat pipeline (mirrors OpenChatConstants.OPEN_CHAT_PIPELINE). */
+	private static final String OPEN_CHAT_PIPELINE = "open-chat";
+	/**
+	 * Streaming step of the open-chat network of agents (mirrors
+	 * OpenChatConstants.OPEN_CHAT_NETWORK_STREAMING_STEP). It is registered only when
+	 * both {@code ai.gebo.openchat.enabled} and {@code ai.gebo.agents.standard.enabled}
+	 * are on, so its presence confirms the open-chat network of agents can run.
+	 */
+	private static final String OPEN_CHAT_NETWORK_STREAMING_STEP = "open-chat-network-streaming-step";
 
 	/**
 	 * Parameter class for filtering chat information using Query By Example
@@ -249,7 +263,27 @@ public class GeboUserChatsController {
 
 	@GetMapping(value = "getUIConfig", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ChatUIOptions getUIConfig() {
-		return new ChatUIOptions(uiConfig);
+		ChatUIOptions options = new ChatUIOptions(uiConfig);
+		options.setOpenChatAvailable(isOpenChatAvailable());
+		return options;
+	}
+
+	/**
+	 * @return true when the open-chat experience can actually run: the open-chat
+	 *         pipeline is registered AND its network-of-agents streaming step is
+	 *         present. The step is registered only when {@code ai.gebo.openchat.enabled}
+	 *         and {@code ai.gebo.agents.standard.enabled} are both on (it reuses the
+	 *         standard/default agents network), so this single presence check also
+	 *         covers the agents-network conditions.
+	 */
+	private boolean isOpenChatAvailable() {
+		boolean pipelineRegistered = chatPipelinesConfiguration != null
+				&& chatPipelinesConfiguration.getPipelines() != null
+				&& chatPipelinesConfiguration.getPipelines().stream()
+						.anyMatch(p -> OPEN_CHAT_PIPELINE.equals(p.getCode()));
+		boolean networkRunning = pipelineStepsRepository != null
+				&& pipelineStepsRepository.findByCode(OPEN_CHAT_NETWORK_STREAMING_STEP) != null;
+		return pipelineRegistered && networkRunning;
 	}
 
 	/**
