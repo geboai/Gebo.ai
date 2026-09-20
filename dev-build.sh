@@ -1,2 +1,2 @@
 #!/bin/bash
-mvn clean package -DskipTests  -P swagger-on -P under-development
+mvn clean install -DskipTests  -P swagger-on -P under-development

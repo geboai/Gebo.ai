@@ -1,1 +1,1 @@
-mvn clean package -P bootables,angular-ui  -DskipTests
+mvn clean install -P bootables,angular-ui  -DskipTests
