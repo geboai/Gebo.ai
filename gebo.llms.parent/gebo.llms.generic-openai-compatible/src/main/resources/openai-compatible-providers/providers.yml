@@ -40,6 +40,44 @@ ai.gebo.llms.generic.config:
       description: VLLM hosted chat model
       applyThinkingMarkupHandling: true
       baseUrl:
+
+    # The providers below are chat/reasoning-only OpenAI-compatible gateways added as
+    # bare model types (no fast-setup preset in gebo.llms.setup). Each exposes a plain
+    # GET /v1/models, so the generic lookup (no modelsListProvider) already populates the
+    # model dropdown - none needs a custom IGModelsListProvider. That endpoint returns
+    # only model ids though (no context_length), so the context window stays a per-model
+    # value the admin sets on the config through the CRUD controller.
+    # Some of these chat models also accept image input (vision); that is a chat
+    # capability, not a separate image-generation modality, so no imageModelProviders
+    # row is added. None documents embeddings, TTS, STT or image generation.
+    # The baseUrl is the UNVERSIONED host on purpose: the chat client appends
+    # /v1/chat/completions and the models reader appends v1/models, so a /v1 suffix here
+    # would produce /v1/v1/... (same convention as nvidia, x.ai and regolo above).
+    - code: chatmodel-subconscious
+      providerId: subconscious
+      description: Subconscious.dev chat model (US, flat subscription)
+      baseUrl: https://api.subconscious.dev
+
+    - code: chatmodel-awanllm
+      providerId: awanllm
+      description: Awan LLM chat model (flat subscription)
+      baseUrl: https://api.awanllm.com
+
+    - code: chatmodel-llmax
+      providerId: llmax
+      description: llmax.ai chat model (EU, flat subscription)
+      # /v1/models lists the stable aliases - llmax-all-round / llmax-smart / llmax-best.
+      baseUrl: https://run.llmax.ai
+
+    - code: chatmodel-cheapestinference
+      providerId: cheapestinference
+      description: CheapestInference chat model (US, flat subscription)
+      baseUrl: https://api.cheapestinference.com
+
+    - code: chatmodel-profundoai
+      providerId: profundoai
+      description: Profundo AI chat model (flat subscription)
+      baseUrl: https://api.profundoai.com
   embeddingModelProviders:
     #  Nvidia seems do not give embedding services
     - code: embedding-nvidia
