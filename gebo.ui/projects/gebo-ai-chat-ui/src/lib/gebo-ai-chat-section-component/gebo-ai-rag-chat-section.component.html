@@ -43,7 +43,7 @@
         title="Create a new RAG chat with company contents" gebo-ai-label [text]="true"
         (onClick)="chatProfilesData.length>1? newRagChatDialog.toggle($event):routeNewRagChat()"></p-button>
       }<br />
-      @if (llmsSetupDone!==false && chatUIOptions?.enablePureModelChat===true) {
+      @if (llmsSetupDone!==false && chatUIOptions?.enablePureModelChat===true && chatUIOptions?.openChatAvailable===true) {
       @if (chatModelsData?.length) {
       <p-button icon="pi pi-pen-to-square" id="NewChatMiniBtn" label="Chat"
         title="Chat freely with external web/systems search and your files, without company knowledge base retrieval"
