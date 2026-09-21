@@ -599,6 +599,55 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     }
 
     /**
+     * Knowledge-base refs resolved from the picker's forcedRequestDocuments codes, kept
+     * in sync so the unified "documents to chat with" control can show knowledge-base and
+     * external documents together as GResponseDocumentRef.
+     */
+    private internalChatDocs: GResponseDocumentRef[] = [];
+
+    /**
+     * The unified list of documents chosen to chat with: knowledge-base documents
+     * (resolved from the picker codes) plus external-search results. Rendered by the
+     * gebo-ai-selected-chat-documents control - the choose-documents-panel keeps only the
+     * knowledge-base selection role.
+     */
+    public get selectedChatDocuments(): GResponseDocumentRef[] {
+        return [...this.internalChatDocs, ...this.selectedExternalRefs];
+    }
+
+    /**
+     * Removes one document from the chat-with list, routing to the right store: an
+     * external result leaves selectedExternalRefs; a knowledge-base document leaves the
+     * forcedRequestDocuments codes (whose valueChanges re-resolves internalChatDocs).
+     */
+    public onRemoveChatDocument(dr: GResponseDocumentRef): void {
+        if (dr.nestedSearchResult) {
+            this.removeExternalRef(dr);
+            return;
+        }
+        const codes: string[] = this.formGroup.controls["forcedRequestDocuments"].value || [];
+        this.formGroup.controls["forcedRequestDocuments"].setValue(codes.filter(c => c !== dr.documentCode));
+    }
+
+    /** Clears every document chosen to chat with (knowledge-base and external). */
+    public onClearChatDocuments(): void {
+        this.selectedExternalRefs = [];
+        this.formGroup.controls["forcedRequestDocuments"].setValue([]);
+    }
+
+    /** Resolves the picker's document codes into refs for the unified display. */
+    private refreshInternalChatDocs(codes?: string[] | null): void {
+        if (!codes || codes.length === 0) {
+            this.internalChatDocs = [];
+            return;
+        }
+        this.ragChatService.resolveForcedDocumentsRef(codes).subscribe({
+            next: (refs) => { this.internalChatDocs = refs ?? []; },
+            error: () => { this.internalChatDocs = []; }
+        });
+    }
+
+    /**
      * Adds a document to the selected documents list
      * 
      * @param dr Document reference to add
@@ -792,6 +841,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     this.docSelectedMap.set(x, true);
                 });
             }
+            // Keep the unified "documents to chat with" display in sync with the picker.
+            this.refreshInternalChatDocs(selectedDocuments);
         });
     }
 
