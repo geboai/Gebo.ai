@@ -80,6 +80,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	public static final String PIPELINE_EXECUTOR_SUGGESTION = "pipelineExecutorSuggestion";
 	private static final String SCANNING_HUGE_FILE_WITH_LLMS = "Scanning huge file with llms";
 	private static final String RUNNING_HEAVY_CHAT_WITH_DOCUMENTS = "RUNNING_HEAVY_CHAT_WITH_DOCUMENTS";
+	private static final String ANSWERING_FROM_YOUR_DOCUMENTS = "Answering from your selected documents";
+	private static final String CHATTING_WITH_YOUR_DOCUMENTS = "CHATTING_WITH_YOUR_DOCUMENTS";
 	private static final String EXECUTING_YOUR_CHOOSED_AGENT = "Executing your choosed agent";
 	private static final String USER_CHOOSED_AGENT = "USER_CHOOSED_AGENT";
 	private static final String CHOOSED_AGENTIC_FLOW_ANSWERING_AGENT_RUNNING = "Choosed agentic flow, answering agent running";
@@ -410,14 +412,20 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 					serviceModel, latestInteractions);
 			String rewrited_query = firstDecision.getRewrited_query();
 
-			// if actual resource has chat with documents or uploads with more than actual
-			// tokens budget than doing a deep search ONLY on
-			// Documents being in requests
+			// Any explicitly selected chat-with document (or uploaded file) grounds the
+			// answer on that set: route to the dedicated CHAT_WITH_FILES service, which
+			// keeps small documents in context and deep-searches only the huge ones, and
+			// never launches an independent web/agent search. This used to be gated on a
+			// token-size threshold, so a small forced document (e.g. a single web page)
+			// fell through to the free router and got augmented with an unwanted web
+			// search. The threshold now only decides whether to warn the user that the
+			// forced documents are large enough to be scanned with a heavy deep search.
 			int forcedDocumentsTotal = runtimeData.getRequestResources().getChatWithDocuments().getTokensSize()
 					+ runtimeData.getRequestResources().getUploadedDocuments().getTokensSize();
 			int threasholdForForcedDeepSearch = getChatWithDocsAndUploadedSizeTriggersDeepSearchThreashold(chatModel);
-			if (forcedDocumentsTotal >= threasholdForForcedDeepSearch) {
-				rd = createKnowledgeBaseSearchHeavyDocumentsFixedRoute(emitter, runtimeData);
+			if (forcedDocumentsTotal > 0) {
+				boolean heavy = forcedDocumentsTotal >= threasholdForForcedDeepSearch;
+				rd = createChatWithForcedDocumentsFixedRoute(emitter, heavy);
 			} else if (firstDecision.getUserIntent() == DeliverableIntent.IMAGE_GENERATION
 					&& isImageGenerationAvailable()) {
 				// The first step already decided this one: an explicit request for a new image
@@ -572,10 +580,16 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				}, RespondingWith.IMAGE_GENERATION_RESPONSE.name(), Map.of());
 	}
 
-	private RoutingDecision createKnowledgeBaseSearchHeavyDocumentsFixedRoute(ISinkUIEmitter emitter,
-			ChatPipelineExecutionRuntimeData runtimeData) {
-		notifyUser(emitter, RUNNING_HEAVY_CHAT_WITH_DOCUMENTS, SCANNING_HUGE_FILE_WITH_LLMS, null, 3000l,
-				NotificationType.INFO);
+	private RoutingDecision createChatWithForcedDocumentsFixedRoute(ISinkUIEmitter emitter, boolean heavy) {
+		// The same grounded CHAT_WITH_FILES route serves both sizes; only the user-facing
+		// notice differs, so a small selection is not announced as a huge-file scan.
+		if (heavy) {
+			notifyUser(emitter, RUNNING_HEAVY_CHAT_WITH_DOCUMENTS, SCANNING_HUGE_FILE_WITH_LLMS, null, 3000l,
+					NotificationType.INFO);
+		} else {
+			notifyUser(emitter, CHATTING_WITH_YOUR_DOCUMENTS, ANSWERING_FROM_YOUR_DOCUMENTS, null, 3000l,
+					NotificationType.INFO);
+		}
 		RoutingDecision rd = new RoutingDecision(
 				List.of(DefaultChatWithFilesStreamingOutputPipelineServiceImpl.DEFAULT_CHAT_WITH_DOCS_STREAMING),
 				new IChatPipelineStepRuntimeData() {
