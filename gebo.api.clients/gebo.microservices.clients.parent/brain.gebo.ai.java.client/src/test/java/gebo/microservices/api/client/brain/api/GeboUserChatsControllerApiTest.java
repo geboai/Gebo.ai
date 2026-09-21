@@ -61,7 +61,23 @@ public class GeboUserChatsControllerApiTest {
     public void createCleanChatByChatProfileCodeTest() {
         String chatProfileCode = null;
         String contextCode = null;
-        GUserChatInfo response = api.createCleanChatByChatProfileCode(chatProfileCode, contextCode);
+        String pipelineCode = null;
+        GUserChatInfo response = api.createCleanChatByChatProfileCode(chatProfileCode, contextCode, pipelineCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void createCleanChatByDefaultModelTest() {
+        String pipelineCode = null;
+        GUserChatInfo response = api.createCleanChatByDefaultModel(pipelineCode);
 
         // TODO: test validations
     }
@@ -76,7 +92,8 @@ public class GeboUserChatsControllerApiTest {
     @Test
     public void createCleanChatByModelCodeTest() {
         String modelCode = null;
-        GUserChatInfo response = api.createCleanChatByModelCode(modelCode);
+        String pipelineCode = null;
+        GUserChatInfo response = api.createCleanChatByModelCode(modelCode, pipelineCode);
 
         // TODO: test validations
     }

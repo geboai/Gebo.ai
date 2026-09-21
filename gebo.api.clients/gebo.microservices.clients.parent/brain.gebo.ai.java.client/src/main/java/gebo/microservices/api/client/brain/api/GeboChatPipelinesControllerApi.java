@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:44:15.128868800+02:00[Europe/Rome]")
 
 public class GeboChatPipelinesControllerApi {
     private ApiClient apiClient;
@@ -189,7 +189,7 @@ public class GeboChatPipelinesControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @param chatProfileCode  (required)
+     * @param chatProfileCode  (optional)
      * @param pipelineCode  (optional)
      * @return List&lt;PipelineChatMenu&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
@@ -202,24 +202,20 @@ public class GeboChatPipelinesControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @param chatProfileCode  (required)
+     * @param chatProfileCode  (optional)
      * @param pipelineCode  (optional)
      * @return ResponseEntity&lt;List&lt;PipelineChatMenu&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
     public ResponseEntity<List<PipelineChatMenu>> getPersonalPipelinesChatMenuWithHttpInfo(String chatProfileCode, String pipelineCode) throws RestClientException {
         Object postBody = null;
-        // verify the required parameter 'chatProfileCode' is set
-        if (chatProfileCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'chatProfileCode' when calling getPersonalPipelinesChatMenu");
-        }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboChatPipelinesController/personalPipelinesChatMenu").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
-        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "pipelineCode", pipelineCode));
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "chatProfileCode", chatProfileCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "pipelineCode", pipelineCode));
 
         final String[] accepts = { 
             "application/json"

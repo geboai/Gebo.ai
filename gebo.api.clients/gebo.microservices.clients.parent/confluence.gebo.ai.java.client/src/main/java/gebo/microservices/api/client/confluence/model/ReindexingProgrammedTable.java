@@ -25,7 +25,7 @@ import java.util.List;
  * ReindexingProgrammedTable
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:33.855652885+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:44:30.918410122+02:00[Europe/Rome]")
 
 public class ReindexingProgrammedTable {
   /**

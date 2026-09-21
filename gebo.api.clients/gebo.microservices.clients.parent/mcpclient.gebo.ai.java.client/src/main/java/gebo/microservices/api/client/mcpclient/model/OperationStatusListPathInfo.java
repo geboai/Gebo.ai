@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusListPathInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.887590537+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:45:20.368602949+02:00[Europe/Rome]")
 
 public class OperationStatusListPathInfo {
   @JsonProperty("result")

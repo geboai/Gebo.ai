@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**changeChatDescription**](GeboUserChatsControllerApi.md#changeChatDescription) | **POST** /api/users/GeboUserChatsController/changeChatDescription | 
 [**createCleanChatByChatProfileCode**](GeboUserChatsControllerApi.md#createCleanChatByChatProfileCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByChatProfileCode | 
+[**createCleanChatByDefaultModel**](GeboUserChatsControllerApi.md#createCleanChatByDefaultModel) | **GET** /api/users/GeboUserChatsController/createCleanChatByDefaultModel | 
 [**createCleanChatByModelCode**](GeboUserChatsControllerApi.md#createCleanChatByModelCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByModelCode | 
 [**deleteChat**](GeboUserChatsControllerApi.md#deleteChat) | **DELETE** /api/users/GeboUserChatsController/deleteChat | 
 [**exportResponse2file**](GeboUserChatsControllerApi.md#exportResponse2file) | **GET** /api/users/GeboUserChatsController/exportResponse2file | 
@@ -64,7 +65,7 @@ No authorization required
 
 <a name="createCleanChatByChatProfileCode"></a>
 # **createCleanChatByChatProfileCode**
-> GUserChatInfo createCleanChatByChatProfileCode(chatProfileCode, contextCode)
+> GUserChatInfo createCleanChatByChatProfileCode(chatProfileCode, contextCode, pipelineCode)
 
 
 
@@ -78,8 +79,9 @@ No authorization required
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
 String chatProfileCode = "chatProfileCode_example"; // String | 
 String contextCode = "contextCode_example"; // String | 
+String pipelineCode = "pipelineCode_example"; // String | 
 try {
-    GUserChatInfo result = apiInstance.createCleanChatByChatProfileCode(chatProfileCode, contextCode);
+    GUserChatInfo result = apiInstance.createCleanChatByChatProfileCode(chatProfileCode, contextCode, pipelineCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboUserChatsControllerApi#createCleanChatByChatProfileCode");
@@ -93,6 +95,50 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **chatProfileCode** | **String**|  |
  **contextCode** | **String**|  | [optional]
+ **pipelineCode** | **String**|  | [optional]
+
+### Return type
+
+[**GUserChatInfo**](GUserChatInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="createCleanChatByDefaultModel"></a>
+# **createCleanChatByDefaultModel**
+> GUserChatInfo createCleanChatByDefaultModel(pipelineCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboUserChatsControllerApi;
+
+
+GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
+String pipelineCode = "pipelineCode_example"; // String | 
+try {
+    GUserChatInfo result = apiInstance.createCleanChatByDefaultModel(pipelineCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatsControllerApi#createCleanChatByDefaultModel");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **pipelineCode** | **String**|  | [optional]
 
 ### Return type
 
@@ -109,7 +155,7 @@ No authorization required
 
 <a name="createCleanChatByModelCode"></a>
 # **createCleanChatByModelCode**
-> GUserChatInfo createCleanChatByModelCode(modelCode)
+> GUserChatInfo createCleanChatByModelCode(modelCode, pipelineCode)
 
 
 
@@ -122,8 +168,9 @@ No authorization required
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
 String modelCode = "modelCode_example"; // String | 
+String pipelineCode = "pipelineCode_example"; // String | 
 try {
-    GUserChatInfo result = apiInstance.createCleanChatByModelCode(modelCode);
+    GUserChatInfo result = apiInstance.createCleanChatByModelCode(modelCode, pipelineCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboUserChatsControllerApi#createCleanChatByModelCode");
@@ -136,6 +183,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **modelCode** | **String**|  |
+ **pipelineCode** | **String**|  | [optional]
 
 ### Return type
 

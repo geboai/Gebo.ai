@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * CatalogingLabel
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:38.304055491+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:45:10.631133939+02:00[Europe/Rome]")
 
 public class CatalogingLabel {
   @JsonProperty("code")

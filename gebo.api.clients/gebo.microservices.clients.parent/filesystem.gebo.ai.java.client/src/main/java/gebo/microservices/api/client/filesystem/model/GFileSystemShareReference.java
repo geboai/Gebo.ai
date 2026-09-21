@@ -24,7 +24,7 @@ import java.util.Date;
  * GFileSystemShareReference
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:30.490254341+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:44:38.736781174+02:00[Europe/Rome]")
 
 public class GFileSystemShareReference {
   @JsonProperty("code")

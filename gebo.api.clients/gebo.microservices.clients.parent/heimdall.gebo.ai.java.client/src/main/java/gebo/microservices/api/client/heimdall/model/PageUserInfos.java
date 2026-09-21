@@ -27,14 +27,14 @@ import java.util.List;
  * PageUserInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:45:04.557631084+02:00[Europe/Rome]")
 
 public class PageUserInfos {
-  @JsonProperty("totalPages")
-  private Integer totalPages = null;
-
   @JsonProperty("totalElements")
   private Long totalElements = null;
+
+  @JsonProperty("totalPages")
+  private Integer totalPages = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
@@ -63,24 +63,6 @@ public class PageUserInfos {
   @JsonProperty("empty")
   private Boolean empty = null;
 
-  public PageUserInfos totalPages(Integer totalPages) {
-    this.totalPages = totalPages;
-    return this;
-  }
-
-   /**
-   * Get totalPages
-   * @return totalPages
-  **/
-  @Schema(description = "")
-  public Integer getTotalPages() {
-    return totalPages;
-  }
-
-  public void setTotalPages(Integer totalPages) {
-    this.totalPages = totalPages;
-  }
-
   public PageUserInfos totalElements(Long totalElements) {
     this.totalElements = totalElements;
     return this;
@@ -97,6 +79,24 @@ public class PageUserInfos {
 
   public void setTotalElements(Long totalElements) {
     this.totalElements = totalElements;
+  }
+
+  public PageUserInfos totalPages(Integer totalPages) {
+    this.totalPages = totalPages;
+    return this;
+  }
+
+   /**
+   * Get totalPages
+   * @return totalPages
+  **/
+  @Schema(description = "")
+  public Integer getTotalPages() {
+    return totalPages;
+  }
+
+  public void setTotalPages(Integer totalPages) {
+    this.totalPages = totalPages;
   }
 
   public PageUserInfos pageable(PageableObject pageable) {
@@ -279,8 +279,8 @@ public class PageUserInfos {
       return false;
     }
     PageUserInfos pageUserInfos = (PageUserInfos) o;
-    return Objects.equals(this.totalPages, pageUserInfos.totalPages) &&
-        Objects.equals(this.totalElements, pageUserInfos.totalElements) &&
+    return Objects.equals(this.totalElements, pageUserInfos.totalElements) &&
+        Objects.equals(this.totalPages, pageUserInfos.totalPages) &&
         Objects.equals(this.pageable, pageUserInfos.pageable) &&
         Objects.equals(this.first, pageUserInfos.first) &&
         Objects.equals(this.last, pageUserInfos.last) &&
@@ -294,7 +294,7 @@ public class PageUserInfos {
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
+    return Objects.hash(totalElements, totalPages, pageable, first, last, size, content, number, sort, numberOfElements, empty);
   }
 
 
@@ -303,8 +303,8 @@ public class PageUserInfos {
     StringBuilder sb = new StringBuilder();
     sb.append("class PageUserInfos {\n");
     
-    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
+    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    last: ").append(toIndentedString(last)).append("\n");

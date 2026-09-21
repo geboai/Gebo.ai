@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.AdditionalContent;
+import gebo.microservices.api.client.brain.model.GResponseDocumentRef;
 import gebo.microservices.api.client.brain.model.GeboRagRequestCustomConfig;
 import gebo.microservices.api.client.brain.model.UserUploadedContent;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,7 +28,7 @@ import java.util.List;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:44:15.128868800+02:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -62,6 +63,9 @@ public class GeboChatRequest {
 
   @JsonProperty("forcedRequestDocuments")
   private List<String> forcedRequestDocuments = null;
+
+  @JsonProperty("forcedDocumentsRef")
+  private List<GResponseDocumentRef> forcedDocumentsRef = null;
 
   @JsonProperty("userUploadedContents")
   private List<UserUploadedContent> userUploadedContents = null;
@@ -329,6 +333,32 @@ public class GeboChatRequest {
     this.forcedRequestDocuments = forcedRequestDocuments;
   }
 
+  public GeboChatRequest forcedDocumentsRef(List<GResponseDocumentRef> forcedDocumentsRef) {
+    this.forcedDocumentsRef = forcedDocumentsRef;
+    return this;
+  }
+
+  public GeboChatRequest addForcedDocumentsRefItem(GResponseDocumentRef forcedDocumentsRefItem) {
+    if (this.forcedDocumentsRef == null) {
+      this.forcedDocumentsRef = new ArrayList<>();
+    }
+    this.forcedDocumentsRef.add(forcedDocumentsRefItem);
+    return this;
+  }
+
+   /**
+   * Get forcedDocumentsRef
+   * @return forcedDocumentsRef
+  **/
+  @Schema(description = "")
+  public List<GResponseDocumentRef> getForcedDocumentsRef() {
+    return forcedDocumentsRef;
+  }
+
+  public void setForcedDocumentsRef(List<GResponseDocumentRef> forcedDocumentsRef) {
+    this.forcedDocumentsRef = forcedDocumentsRef;
+  }
+
   public GeboChatRequest userUploadedContents(List<UserUploadedContent> userUploadedContents) {
     this.userUploadedContents = userUploadedContents;
     return this;
@@ -464,6 +494,7 @@ public class GeboChatRequest {
         Objects.equals(this.choosedKnowledgeBases, geboChatRequest.choosedKnowledgeBases) &&
         Objects.equals(this.chatPipelineProcessId, geboChatRequest.chatPipelineProcessId) &&
         Objects.equals(this.forcedRequestDocuments, geboChatRequest.forcedRequestDocuments) &&
+        Objects.equals(this.forcedDocumentsRef, geboChatRequest.forcedDocumentsRef) &&
         Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents) &&
         Objects.equals(this.deepSearchDataSources, geboChatRequest.deepSearchDataSources) &&
         Objects.equals(this.userIntent, geboChatRequest.userIntent) &&
@@ -473,7 +504,7 @@ public class GeboChatRequest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, userIntent, additionalContents, tokensSize);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, forcedDocumentsRef, userUploadedContents, deepSearchDataSources, userIntent, additionalContents, tokensSize);
   }
 
 
@@ -493,6 +524,7 @@ public class GeboChatRequest {
     sb.append("    choosedKnowledgeBases: ").append(toIndentedString(choosedKnowledgeBases)).append("\n");
     sb.append("    chatPipelineProcessId: ").append(toIndentedString(chatPipelineProcessId)).append("\n");
     sb.append("    forcedRequestDocuments: ").append(toIndentedString(forcedRequestDocuments)).append("\n");
+    sb.append("    forcedDocumentsRef: ").append(toIndentedString(forcedDocumentsRef)).append("\n");
     sb.append("    userUploadedContents: ").append(toIndentedString(userUploadedContents)).append("\n");
     sb.append("    deepSearchDataSources: ").append(toIndentedString(deepSearchDataSources)).append("\n");
     sb.append("    userIntent: ").append(toIndentedString(userIntent)).append("\n");

@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **chatProfileCode** | **String** |  |  [optional]
 **modelReference** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
 **ragChat** | **Boolean** |  |  [optional]
+**pipelineCode** | **String** |  |  [optional]
 **chatMemoryId** | **String** |  |  [optional]
 **interactions** | [**List&lt;ChatInteractions&gt;**](ChatInteractions.md) |  |  [optional]
 **chatModelCode** | **String** |  |  [optional]

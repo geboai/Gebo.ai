@@ -13,6 +13,8 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.GPromptTemplateConfig;
+import gebo.microservices.api.client.brain.model.GPromptTemplateLightView;
+import gebo.microservices.api.client.brain.model.GPromptUseInfo;
 import gebo.microservices.api.client.brain.model.PromptFilter;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -54,9 +56,38 @@ public class GeboAdminPromptsControllerApiTest {
      *          if the Api call fails
      */
     @Test
+    public void findGPromptUseInfoByUseCodeTest() {
+        String useCode = null;
+        GPromptUseInfo response = api.findGPromptUseInfoByUseCode(useCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
     public void findPromptConfigByCodeTest() {
         String code = null;
         GPromptTemplateConfig response = api.findPromptConfigByCode(code);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getAllPromptConfigsLightListTest() {
+        List<GPromptTemplateLightView> response = api.getAllPromptConfigsLightList();
 
         // TODO: test validations
     }
@@ -101,6 +132,20 @@ public class GeboAdminPromptsControllerApiTest {
     public void insertPromptConfigTest() {
         GPromptTemplateConfig body = null;
         GPromptTemplateConfig response = api.insertPromptConfig(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void isPromptTemplateEditingEnabledTest() {
+        Boolean response = api.isPromptTemplateEditingEnabled();
 
         // TODO: test validations
     }

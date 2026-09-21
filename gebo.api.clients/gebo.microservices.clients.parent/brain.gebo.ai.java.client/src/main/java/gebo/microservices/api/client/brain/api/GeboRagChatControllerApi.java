@@ -5,6 +5,7 @@ import gebo.microservices.api.client.brain.invoker.ApiClient;
 import gebo.microservices.api.client.brain.model.GBaseChatModelChoice;
 import gebo.microservices.api.client.brain.model.GBaseObject;
 import gebo.microservices.api.client.brain.model.GChatProfileConfiguration;
+import gebo.microservices.api.client.brain.model.GResponseDocumentRef;
 import gebo.microservices.api.client.brain.model.GeboChatRequest;
 import gebo.microservices.api.client.brain.model.GeboChatResponse;
 import gebo.microservices.api.client.brain.model.GeboChatUserInfo;
@@ -29,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:44:15.128868800+02:00[Europe/Rome]")
 
 public class GeboRagChatControllerApi {
     private ApiClient apiClient;
@@ -311,6 +312,52 @@ public class GeboRagChatControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GeboChatResponse> returnType = new ParameterizedTypeReference<GeboChatResponse>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return List&lt;GResponseDocumentRef&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<GResponseDocumentRef> resolveForcedDocumentsRef(List<String> body) throws RestClientException {
+        return resolveForcedDocumentsRefWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;List&lt;GResponseDocumentRef&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<GResponseDocumentRef>> resolveForcedDocumentsRefWithHttpInfo(List<String> body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling resolveForcedDocumentsRef");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboChatController/resolveForcedDocumentsRef").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<GResponseDocumentRef>> returnType = new ParameterizedTypeReference<List<GResponseDocumentRef>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

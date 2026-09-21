@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusAuthResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:45:04.557631084+02:00[Europe/Rome]")
 
 public class OperationStatusAuthResponse {
   @JsonProperty("result")

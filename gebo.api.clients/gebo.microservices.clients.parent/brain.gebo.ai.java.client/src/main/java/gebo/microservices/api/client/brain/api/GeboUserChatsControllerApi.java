@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:44:15.128868800+02:00[Europe/Rome]")
 
 public class GeboUserChatsControllerApi {
     private ApiClient apiClient;
@@ -99,11 +99,12 @@ public class GeboUserChatsControllerApi {
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
      * @param contextCode  (optional)
+     * @param pipelineCode  (optional)
      * @return GUserChatInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode) throws RestClientException {
-        return createCleanChatByChatProfileCodeWithHttpInfo(chatProfileCode, contextCode).getBody();
+    public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode, String pipelineCode) throws RestClientException {
+        return createCleanChatByChatProfileCodeWithHttpInfo(chatProfileCode, contextCode, pipelineCode).getBody();
     }
 
     /**
@@ -112,10 +113,11 @@ public class GeboUserChatsControllerApi {
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
      * @param contextCode  (optional)
+     * @param pipelineCode  (optional)
      * @return ResponseEntity&lt;GUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GUserChatInfo> createCleanChatByChatProfileCodeWithHttpInfo(String chatProfileCode, String contextCode) throws RestClientException {
+    public ResponseEntity<GUserChatInfo> createCleanChatByChatProfileCodeWithHttpInfo(String chatProfileCode, String contextCode, String pipelineCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'chatProfileCode' is set
         if (chatProfileCode == null) {
@@ -128,6 +130,48 @@ public class GeboUserChatsControllerApi {
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "chatProfileCode", chatProfileCode));
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "contextCode", contextCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "pipelineCode", pipelineCode));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<GUserChatInfo> returnType = new ParameterizedTypeReference<GUserChatInfo>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param pipelineCode  (optional)
+     * @return GUserChatInfo
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public GUserChatInfo createCleanChatByDefaultModel(String pipelineCode) throws RestClientException {
+        return createCleanChatByDefaultModelWithHttpInfo(pipelineCode).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param pipelineCode  (optional)
+     * @return ResponseEntity&lt;GUserChatInfo&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<GUserChatInfo> createCleanChatByDefaultModelWithHttpInfo(String pipelineCode) throws RestClientException {
+        Object postBody = null;
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/createCleanChatByDefaultModel").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "pipelineCode", pipelineCode));
 
         final String[] accepts = { 
             "application/json"
@@ -146,11 +190,12 @@ public class GeboUserChatsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelCode  (required)
+     * @param pipelineCode  (optional)
      * @return GUserChatInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GUserChatInfo createCleanChatByModelCode(String modelCode) throws RestClientException {
-        return createCleanChatByModelCodeWithHttpInfo(modelCode).getBody();
+    public GUserChatInfo createCleanChatByModelCode(String modelCode, String pipelineCode) throws RestClientException {
+        return createCleanChatByModelCodeWithHttpInfo(modelCode, pipelineCode).getBody();
     }
 
     /**
@@ -158,10 +203,11 @@ public class GeboUserChatsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelCode  (required)
+     * @param pipelineCode  (optional)
      * @return ResponseEntity&lt;GUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GUserChatInfo> createCleanChatByModelCodeWithHttpInfo(String modelCode) throws RestClientException {
+    public ResponseEntity<GUserChatInfo> createCleanChatByModelCodeWithHttpInfo(String modelCode, String pipelineCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'modelCode' is set
         if (modelCode == null) {
@@ -173,6 +219,7 @@ public class GeboUserChatsControllerApi {
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "modelCode", modelCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "pipelineCode", pipelineCode));
 
         final String[] accepts = { 
             "application/json"
