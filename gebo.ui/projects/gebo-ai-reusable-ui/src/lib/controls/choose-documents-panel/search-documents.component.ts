@@ -336,7 +336,15 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges, GeboAI
      * Updates searchByFileNameResultsDocuments with the results
      */
     doSearchByFileName() {
-        const param: SearchDocumentByNameParam = this.fileNameSearchFormGroup.value;
+        // The form control is named "filename" for the UI, but the backend param field
+        // is "name"; map it explicitly so the request carries the (required) name and
+        // does not fail server-side validation. knowledgeBaseCodes stays optional: when
+        // empty the backend scopes the search to every knowledge base the user may see.
+        const fgValue = this.fileNameSearchFormGroup.value;
+        const param: SearchDocumentByNameParam = {
+            name: fgValue.filename,
+            knowledgeBaseCodes: fgValue.knowledgeBaseCodes
+        };
         this.runningFileNameSearch = true;
         this.enrichedDocumentsMetaInfosService.searchByDocumentName(param).pipe(
             finalize(() => { this.runningFileNameSearch = false; })
