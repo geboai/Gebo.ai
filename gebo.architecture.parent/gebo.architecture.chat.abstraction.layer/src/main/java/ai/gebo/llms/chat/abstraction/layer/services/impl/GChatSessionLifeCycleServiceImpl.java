@@ -43,8 +43,10 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatSessionLifeCycleConfig;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboChatUIServerConfig;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
@@ -100,6 +102,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final IGChatSessionStateShrinkerService shrinkerService;
 	private final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao;
 	private final IMessageEnvelopeFactory envelopeFactory;
+	private final GeboChatUIServerConfig uiServerConfig;
 
 	@NoArgsConstructor
 
@@ -194,11 +197,59 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		if (addInteraction)
 			context.getInteractions().add(interaction);
 
+		List<GResponseDocumentRef> forcedDocumentsRef = request.getForcedDocumentsRef();
 		List<String> documentsList = request.getForcedRequestDocuments();
 		List<UserUploadedContent> uploadedContents = request.getUserUploadedContents();
 		this.fullSessionStateService.addRequestToState(state, request, index);
 		this.shrinkedSessionStateService.addRequestToState(shrinked, request, index);
-		if (documentsList != null && !documentsList.isEmpty()) {
+		if (forcedDocumentsRef != null && !forcedDocumentsRef.isEmpty()) {
+			// Rich references are authoritative when present: unlike the flat code list
+			// they can carry external search results (nestedSearchResult) that no internal
+			// document code can address. The chatWithExternalFiles gate is enforced here,
+			// on the server, so an external ref received while the feature is disabled is
+			// silently skipped rather than trusted.
+			for (GResponseDocumentRef ref : forcedDocumentsRef) {
+				if (ref == null) {
+					continue;
+				}
+				if (ref.getNestedSearchResult() != null) {
+					if (!uiServerConfig.isChatWithExternalFiles()) {
+						continue;
+					}
+					AIDocumentReferenceItem ingested;
+					try {
+						ingested = this.documentsCacheService.retrieve(ref.getNestedSearchResult());
+					} catch (GeboPersistenceException | GeboContentHandlerSystemException | IOException
+							| GeboIngestionException | DocumentContentStreamerException e) {
+						throw new GeboChatSessionLifecycleException("Exception in ingesting external search result", e);
+					}
+					if (ingested == null) {
+						continue;
+					}
+					GDocumentReference displayReference = toDisplayReference(ref);
+					state = this.fullSessionStateService.addChatWithDocumentToState(state, displayReference, ingested,
+							index);
+					shrinked = this.shrinkedSessionStateService.addChatWithDocumentToState(shrinked, displayReference,
+							ingested, index);
+				} else if (ref.getDocumentCode() != null) {
+					GDocumentReference doc = documentsRepository.findById(ref.getDocumentCode()).orElse(null);
+					if (doc == null) {
+						continue;
+					}
+					AIDocumentReferenceItem ingested;
+					try {
+						ingested = this.documentsCacheService.retrieve(doc);
+					} catch (GeboPersistenceException | GeboContentHandlerSystemException | IOException
+							| GeboIngestionException | DocumentContentStreamerException e) {
+						throw new GeboChatSessionLifecycleException("Exception in ingesting docs", e);
+					}
+					state = this.fullSessionStateService.addChatWithDocumentToState(state, doc, ingested, index);
+					shrinked = this.shrinkedSessionStateService.addChatWithDocumentToState(shrinked, doc, ingested,
+							index);
+				}
+			}
+		} else if (documentsList != null && !documentsList.isEmpty()) {
+			// Back-compat path for older clients that populate only the flat code list.
 			List<GDocumentReference> docs = documentsRepository.findAllById(documentsList);
 			for (GDocumentReference doc : docs) {
 				AIDocumentReferenceItem ingested = null;
@@ -241,6 +292,35 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			return shrinked.createChatRequestResources(policy);
 		}
 		return applyGenerationPolicy(shrinked, budget, policy);
+	}
+
+	@Override
+	public List<GResponseDocumentRef> resolveResponseDocumentRefs(List<String> codes) {
+		List<GResponseDocumentRef> out = new ArrayList<GResponseDocumentRef>();
+		if (codes != null && !codes.isEmpty()) {
+			for (GDocumentReference doc : documentsRepository.findAllById(codes)) {
+				out.add(new GResponseDocumentRef(doc));
+			}
+		}
+		return out;
+	}
+
+	/**
+	 * Builds a transient {@link GDocumentReference} used only as the display handle
+	 * for an external search result in the chat session state - the actual content
+	 * comes from the ingested {@link AIDocumentReferenceItem}. This mirrors the
+	 * "fake reference" idiom the platform already uses to route search results
+	 * through GDocumentReference-typed layers.
+	 */
+	private GDocumentReference toDisplayReference(GResponseDocumentRef ref) {
+		GDocumentReference reference = new GDocumentReference();
+		reference.setCode(ref.getDocumentCode());
+		reference.setName(ref.getName());
+		reference.setContentType(ref.getContentType());
+		reference.setExtension(ref.getExtension());
+		reference.setRootKnowledgebaseCode(ref.getKnowledgeBaseCode());
+		reference.setParentProjectCode(ref.getProjectCode());
+		return reference;
 	}
 
 	private CacheEntry getCache(GeboChatRequest r) throws GeboChatSessionLifecycleException {

@@ -63,8 +63,20 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 	/** List of knowledge bases selected for the request */
 	private List<String> choosedKnowledgeBases = null;
 	private String chatPipelineProcessId = null;
-	/** List of documents that are forcibly requested */
+	/** List of documents that are forcibly requested (knowledge-base document codes) */
 	private List<String> forcedRequestDocuments = new ArrayList<String>();
+
+	/**
+	 * Rich references of the documents the user wants to "chat with". Unlike
+	 * {@link #forcedRequestDocuments} - which can only carry knowledge-base document
+	 * codes - this list can also carry external search results: a
+	 * {@link GResponseDocumentRef} whose {@code nestedSearchResult} is populated
+	 * represents data retrieved from an external data source, which cannot be
+	 * addressed by an internal document code. When present, this list is
+	 * authoritative and {@link #forcedRequestDocuments} is used only as a fallback
+	 * for older clients that don't populate it.
+	 */
+	private List<GResponseDocumentRef> forcedDocumentsRef = new ArrayList<GResponseDocumentRef>();
 
 	private List<UserUploadedContent> userUploadedContents = new ArrayList<>();
 	private List<String> deepSearchDataSources = null;

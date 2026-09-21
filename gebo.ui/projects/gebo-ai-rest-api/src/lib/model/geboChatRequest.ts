@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { AdditionalContent } from './additionalContent';
+import { GResponseDocumentRef } from './gResponseDocumentRef';
 import { GeboRagRequestCustomConfig } from './geboRagRequestCustomConfig';
 import { UserUploadedContent } from './userUploadedContent';
 
@@ -25,6 +26,7 @@ export interface GeboChatRequest {
     choosedKnowledgeBases?: Array<string>;
     chatPipelineProcessId?: string;
     forcedRequestDocuments?: Array<string>;
+    forcedDocumentsRef?: Array<GResponseDocumentRef>;
     userUploadedContents?: Array<UserUploadedContent>;
     deepSearchDataSources?: Array<string>;
     userIntent?: GeboChatRequest.UserIntentEnum;

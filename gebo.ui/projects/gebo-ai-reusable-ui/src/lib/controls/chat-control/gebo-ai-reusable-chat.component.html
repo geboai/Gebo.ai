@@ -115,6 +115,7 @@
             @for (document of getDocs(interaction); track document.uuid; let i = $index) {
               @if(document && (isInteractionDocsExpanded(interaction.request.id) || i < maxDisplayedDocs)) {
                 <gebo-ai-chat-docref [ref]="document" [choosed]="isChoosed(document)"
+                [chatWithExternalFiles]="chatWithExternalFiles"
                 (addToChoosed)="addToChoosed($event)"></gebo-ai-chat-docref>
               }
             }
@@ -176,8 +177,19 @@
   </div>
   <div
     [className]="(interactions && interactions?.length)? 'gebo-ai-reusable-chat__footer':'gebo-ai-reusable-chat__clean_chat_middle'">
+    @if (chosenExternalRefs.length) {
+      <div class="gebo-ai-reusable-chat__external-refs card flex items-center gap-2 flex-wrap">
+        <span class="gebo-ai-reusable-chat__external-refs-label" gebo-ai-text>External documents to chat with</span>
+        @for (extRef of chosenExternalRefs; track extRef.uuid || extRef.documentCode) {
+          <p-chip id="ChatWithExternalRefChip" [label]="externalRefLabel(extRef)" icon="pi pi-globe"
+            [removable]="true" (onRemove)="removeExternalRef(extRef)"
+            [title]="externalRefLabel(extRef) + ' (external search result)'"></p-chip>
+        }
+      </div>
+    }
     <gebo-ai-chat-input-shell [interactions]="interactions" [formGroup]="formGroup" [ragsystem]="ragsystem"
       [disableFilesBrowsers]="disableFilesBrowsers"
+      [hasExternalChatWithDocs]="chosenExternalRefs.length > 0"
       [chatUserInfos]="chatUserInfos" [knowledgeBaseCodes]="knowledgeBaseCodes" [chatInfo]="chatInfo"
       [userChatContextCode]="userChatContextCode" [capabilities]="capabilities" [currentAudioTrack]="currentAudioTrack"
       [loading]="loading" [(openSelectDocumentsWindow)]="openSelectDocumentsWindow"

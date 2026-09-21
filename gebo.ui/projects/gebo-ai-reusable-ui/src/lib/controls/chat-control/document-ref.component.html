@@ -11,7 +11,7 @@
 <div class="gebo-ai-chat-docref">
   @if(ref) {
 
-  @if(!choosed) {
+  @if(!choosed && canBeChosen) {
   <p-button id="AddDocsBtn"
             gebo-ai-label
             (onClick)="addToChoosed.emit(ref)"
