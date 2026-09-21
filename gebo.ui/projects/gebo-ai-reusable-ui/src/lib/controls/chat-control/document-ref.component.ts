@@ -41,6 +41,26 @@ export class DocumentRefComponent implements OnInit, OnChanges {
     @Input() choosed: boolean = false;
 
     /**
+     * Whether chatting with external-search results is allowed (backend option
+     * ai.gebo.chatui.chatWithExternalFiles). Internal documents are always
+     * chattable; an external result (one carrying a nestedSearchResult) can be added
+     * to the "chat with" list only when this is true. It stays viewable either way.
+     */
+    @Input() chatWithExternalFiles: boolean = true;
+
+    /**
+     * True when the add-to-chat ("+") button may be shown for this ref: always for
+     * internal documents, and for external search results only when
+     * {@link chatWithExternalFiles} is enabled.
+     */
+    public get canBeChosen(): boolean {
+        if (this.ref?.nestedSearchResult) {
+            return this.chatWithExternalFiles === true;
+        }
+        return true;
+    }
+
+    /**
      * Controls visibility of the document viewing window
      */
     public openDocumentWindow: boolean = false;

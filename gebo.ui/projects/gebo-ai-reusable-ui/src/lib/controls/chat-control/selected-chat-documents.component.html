@@ -1,0 +1,50 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+@if (documents && documents.length > 0) {
+  <div class="gebo-ai-selected-chat-documents card flex items-center gap-2 flex-wrap">
+    <span class="gebo-ai-selected-chat-documents__label" gebo-ai-text id="SelectedChatDocsLabel">Documents to chat with</span>
+    @for (doc of displayedDocuments; track doc.uuid || doc.documentCode) {
+      <span class="gebo-ai-selected-chat-documents__item">
+        <gebo-ai-chat-docref [ref]="doc" [choosed]="true"></gebo-ai-chat-docref>
+        @if (canInteract) {
+          <p-button id="SelectedChatDocRemoveBtn" class="custom-blue-btn" gebo-ai-label icon="pi pi-times-circle"
+            [text]="true" (onClick)="remove(doc)" label="" title="Remove this document"></p-button>
+        }
+      </span>
+    }
+    @if (hasMoreDocuments) {
+      <p-button class="custom-blue-btn" [text]="true"
+        [label]="'... (' + hiddenDocumentsCount + ')'"
+        (onClick)="openedFullListWindow = true" title="Show all documents"></p-button>
+    }
+    @if (canInteract) {
+      <p-button id="SelectedChatDocsClearAllBtn" class="custom-blue-btn" gebo-ai-label icon="pi pi-trash"
+        [text]="true" label="Clear list" (onClick)="clearAll()" title="Clear all selected documents"></p-button>
+    }
+  </div>
+}
+
+<p-dialog header="Documents to chat with" id="SELECTED_CHAT_DOCS_WINDOW" gebo-ai-label
+  [(visible)]="openedFullListWindow" [modal]="true" styleClass="gebo-entity-dialog" [maximizable]="true"
+  [draggable]="false" [resizable]="false">
+  <div class="flex flex-column gap-2 mt-3">
+    @for (doc of documents; track doc.uuid || doc.documentCode) {
+      <div class="flex align-items-center justify-content-between mb-2">
+        <gebo-ai-chat-docref [ref]="doc" [choosed]="true"></gebo-ai-chat-docref>
+        @if (canInteract) {
+          <p-button id="SelectedChatDocRemoveBtnFullList" class="custom-blue-btn" gebo-ai-label
+            icon="pi pi-times-circle" [text]="true" (onClick)="remove(doc)"></p-button>
+        }
+      </div>
+    }
+  </div>
+</p-dialog>

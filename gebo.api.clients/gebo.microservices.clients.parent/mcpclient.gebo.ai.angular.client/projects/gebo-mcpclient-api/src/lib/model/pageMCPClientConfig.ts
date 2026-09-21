@@ -14,15 +14,15 @@ import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
 export interface PageMCPClientConfig { 
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     pageable?: PageableObject;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Array<MCPClientConfig>;
     number?: number;
     sort?: SortObject;
     numberOfElements?: number;
+    first?: boolean;
+    last?: boolean;
     empty?: boolean;
 }

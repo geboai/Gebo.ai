@@ -10,6 +10,7 @@ Method | HTTP request | Description
 [**getProfileProviderModelCapabilities**](GeboRagChatControllerApi.md#getProfileProviderModelCapabilities) | **GET** /api/users/GeboChatController/getProfileProviderModelCapabilities | 
 [**getVisibleKnowledgeBasesByProfileCode**](GeboRagChatControllerApi.md#getVisibleKnowledgeBasesByProfileCode) | **GET** /api/users/GeboChatController/getVisibleKnowledgeBasesByProfileCode | 
 [**ragChat**](GeboRagChatControllerApi.md#ragChat) | **POST** /api/users/GeboChatController/ragChat | 
+[**resolveForcedDocumentsRef**](GeboRagChatControllerApi.md#resolveForcedDocumentsRef) | **POST** /api/users/GeboChatController/resolveForcedDocumentsRef | 
 [**streamRagResponse**](GeboRagChatControllerApi.md#streamRagResponse) | **POST** /api/users/GeboChatController/streamRagResponse | 
 
 <a name="getChatModelUserInfoByChatProfileCode"></a>
@@ -256,6 +257,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**GeboChatResponse**](GeboChatResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="resolveForcedDocumentsRef"></a>
+# **resolveForcedDocumentsRef**
+> List&lt;GResponseDocumentRef&gt; resolveForcedDocumentsRef(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboRagChatControllerApi;
+
+
+GeboRagChatControllerApi apiInstance = new GeboRagChatControllerApi();
+List<String> body = Arrays.asList("body_example"); // List<String> | 
+try {
+    List<GResponseDocumentRef> result = apiInstance.resolveForcedDocumentsRef(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboRagChatControllerApi#resolveForcedDocumentsRef");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  |
+
+### Return type
+
+[**List&lt;GResponseDocumentRef&gt;**](GResponseDocumentRef.md)
 
 ### Authorization
 

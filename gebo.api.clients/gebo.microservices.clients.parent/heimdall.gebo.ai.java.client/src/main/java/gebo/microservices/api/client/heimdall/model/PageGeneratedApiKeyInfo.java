@@ -27,14 +27,14 @@ import java.util.List;
  * PageGeneratedApiKeyInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:45:04.557631084+02:00[Europe/Rome]")
 
 public class PageGeneratedApiKeyInfo {
-  @JsonProperty("totalPages")
-  private Integer totalPages = null;
-
   @JsonProperty("totalElements")
   private Long totalElements = null;
+
+  @JsonProperty("totalPages")
+  private Integer totalPages = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
@@ -63,24 +63,6 @@ public class PageGeneratedApiKeyInfo {
   @JsonProperty("empty")
   private Boolean empty = null;
 
-  public PageGeneratedApiKeyInfo totalPages(Integer totalPages) {
-    this.totalPages = totalPages;
-    return this;
-  }
-
-   /**
-   * Get totalPages
-   * @return totalPages
-  **/
-  @Schema(description = "")
-  public Integer getTotalPages() {
-    return totalPages;
-  }
-
-  public void setTotalPages(Integer totalPages) {
-    this.totalPages = totalPages;
-  }
-
   public PageGeneratedApiKeyInfo totalElements(Long totalElements) {
     this.totalElements = totalElements;
     return this;
@@ -97,6 +79,24 @@ public class PageGeneratedApiKeyInfo {
 
   public void setTotalElements(Long totalElements) {
     this.totalElements = totalElements;
+  }
+
+  public PageGeneratedApiKeyInfo totalPages(Integer totalPages) {
+    this.totalPages = totalPages;
+    return this;
+  }
+
+   /**
+   * Get totalPages
+   * @return totalPages
+  **/
+  @Schema(description = "")
+  public Integer getTotalPages() {
+    return totalPages;
+  }
+
+  public void setTotalPages(Integer totalPages) {
+    this.totalPages = totalPages;
   }
 
   public PageGeneratedApiKeyInfo pageable(PageableObject pageable) {
@@ -279,8 +279,8 @@ public class PageGeneratedApiKeyInfo {
       return false;
     }
     PageGeneratedApiKeyInfo pageGeneratedApiKeyInfo = (PageGeneratedApiKeyInfo) o;
-    return Objects.equals(this.totalPages, pageGeneratedApiKeyInfo.totalPages) &&
-        Objects.equals(this.totalElements, pageGeneratedApiKeyInfo.totalElements) &&
+    return Objects.equals(this.totalElements, pageGeneratedApiKeyInfo.totalElements) &&
+        Objects.equals(this.totalPages, pageGeneratedApiKeyInfo.totalPages) &&
         Objects.equals(this.pageable, pageGeneratedApiKeyInfo.pageable) &&
         Objects.equals(this.first, pageGeneratedApiKeyInfo.first) &&
         Objects.equals(this.last, pageGeneratedApiKeyInfo.last) &&
@@ -294,7 +294,7 @@ public class PageGeneratedApiKeyInfo {
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
+    return Objects.hash(totalElements, totalPages, pageable, first, last, size, content, number, sort, numberOfElements, empty);
   }
 
 
@@ -303,8 +303,8 @@ public class PageGeneratedApiKeyInfo {
     StringBuilder sb = new StringBuilder();
     sb.append("class PageGeneratedApiKeyInfo {\n");
     
-    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
+    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    last: ").append(toIndentedString(last)).append("\n");

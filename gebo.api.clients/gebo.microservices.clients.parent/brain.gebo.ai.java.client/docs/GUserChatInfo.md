@@ -11,3 +11,4 @@ Name | Type | Description | Notes
 **ragChat** | **Boolean** |  |  [optional]
 **chatCreationDateTime** | [**Date**](Date.md) |  |  [optional]
 **contextCode** | **String** |  |  [optional]
+**pipelineCode** | **String** |  |  [optional]

@@ -10,6 +10,7 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
@@ -81,6 +82,15 @@ public interface IGChatSessionLifeCycleService {
 			throws GeboChatSessionLifecycleException;
 
 	public void endRequest(GeboChatRequest request, GeboChatResponse response) throws GeboChatSessionLifecycleException;
+
+	/**
+	 * Resolves knowledge-base document codes into the rich {@link GResponseDocumentRef}
+	 * incarnation used by the chat request's {@code forcedDocumentsRef}. This lets the
+	 * UI keep its document pickers working purely with codes while the chat control
+	 * converts them to the ref type at submit time (external search results, which
+	 * cannot be addressed by a code, are carried whole by the client instead).
+	 */
+	public List<GResponseDocumentRef> resolveResponseDocumentRefs(List<String> codes);
 
 	public List<GKnowledgeBase> getSessionAvailableKnowledgeBases(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException;

@@ -8,6 +8,7 @@
 
     @if (ragsystem && !disableFilesBrowsers) {
       <gebo-ai-choose-documents-panel-component [interactionDisabled]="loading"
+        [displaySelectedList]="false"
         [maxDisplayedDocuments]="3" [knowledgeBaseCodes]="knowledgeBaseCodes"
         [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
         [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"

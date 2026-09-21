@@ -138,6 +138,19 @@
     border-top: 1px solid var(--gebo-border-subtle, #e5e7eb);
     background-color: var(--gebo-white, #fff);
   }
+  &__external-refs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 0.25rem 0.75rem 0.35rem;
+  }
+  &__external-refs-label {
+    font-size: var(--gebo-font-size-2xs, 0.6875rem);
+    color: var(--gebo-text-subtle, #6b7280);
+    margin-right: 0.25rem;
+  }
   &__disclaimer {
     display: flex;
     align-items: flex-start;

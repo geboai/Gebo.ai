@@ -115,6 +115,7 @@
             @for (document of getDocs(interaction); track document.uuid; let i = $index) {
               @if(document && (isInteractionDocsExpanded(interaction.request.id) || i < maxDisplayedDocs)) {
                 <gebo-ai-chat-docref [ref]="document" [choosed]="isChoosed(document)"
+                [chatWithExternalFiles]="chatWithExternalFiles"
                 (addToChoosed)="addToChoosed($event)"></gebo-ai-chat-docref>
               }
             }
@@ -176,8 +177,13 @@
   </div>
   <div
     [className]="(interactions && interactions?.length)? 'gebo-ai-reusable-chat__footer':'gebo-ai-reusable-chat__clean_chat_middle'">
+    <gebo-ai-selected-chat-documents [documents]="selectedChatDocuments" [maxDisplayedDocuments]="maxDisplayedDocs"
+      [interactionDisabled]="loading" (removeDocument)="onRemoveChatDocument($event)"
+      (clearDocuments)="onClearChatDocuments()">
+    </gebo-ai-selected-chat-documents>
     <gebo-ai-chat-input-shell [interactions]="interactions" [formGroup]="formGroup" [ragsystem]="ragsystem"
       [disableFilesBrowsers]="disableFilesBrowsers"
+      [hasExternalChatWithDocs]="chosenExternalRefs.length > 0"
       [chatUserInfos]="chatUserInfos" [knowledgeBaseCodes]="knowledgeBaseCodes" [chatInfo]="chatInfo"
       [userChatContextCode]="userChatContextCode" [capabilities]="capabilities" [currentAudioTrack]="currentAudioTrack"
       [loading]="loading" [(openSelectDocumentsWindow)]="openSelectDocumentsWindow"

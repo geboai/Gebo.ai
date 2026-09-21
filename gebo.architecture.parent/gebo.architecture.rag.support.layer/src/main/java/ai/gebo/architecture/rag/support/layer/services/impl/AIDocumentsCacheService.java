@@ -13,14 +13,20 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.documents.access.DocumentContentStreamerException;
 import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.architecture.documents.access.StreamingPurpose;
+import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentCacheItem;
@@ -62,6 +68,17 @@ public class AIDocumentsCacheService implements IGAIDocumentsCacheService {
 	final IGDocumentReferenceIngestionHandler ingestionHandler;
 
 	final DocumentReferenceSnapshotRepository documentSnapshotRepository;
+
+	/**
+	 * Factory used to build the transient {@link GDocumentReference} that adapts an
+	 * external {@link SearchResult} to the (GDocumentReference-typed) ingestion
+	 * layer, mirroring the idiom in {@code DocumentsChunkServiceImpl}.
+	 */
+	final IGDocumentReferenceFactory docReferenceFactory;
+
+	private final static Logger LOGGER = LoggerFactory.getLogger(AIDocumentsCacheService.class);
+
+	private final static ObjectMapper objectMapper = new ObjectMapper();
 
 	/**
 	 * Adds documents to the cache or retrieves them if they already exist.
@@ -137,6 +154,13 @@ public class AIDocumentsCacheService implements IGAIDocumentsCacheService {
 	 * @param result    Result object to store retrieved document information
 	 */
 	public void addToRetrieved(AIDocumentCacheItem cacheItem, GDocumentReference document, AIDocumentsSet result) {
+		// The document reference is not needed here - the retrieved item is rebuilt
+		// entirely from the cached item - so the same body serves both internal
+		// documents and external search results.
+		addToRetrieved(cacheItem, result);
+	}
+
+	private void addToRetrieved(AIDocumentCacheItem cacheItem, AIDocumentsSet result) {
 		// Add metadata to result
 		if (cacheItem.getTokensSize() != null) {
 			cacheItem.getMetaData().put(DocumentMetaInfos.GEBO_TOKEN_LENGTH, cacheItem.getTokensSize());
@@ -190,6 +214,108 @@ public class AIDocumentsCacheService implements IGAIDocumentsCacheService {
 			// Add cache item to retrieved results
 			addToRetrieved(cacheItem, document, result);
 		}
+	}
+
+	@Override
+	public AIDocumentReferenceItem retrieve(SearchResult searchResult) throws GeboPersistenceException,
+			GeboContentHandlerSystemException, IOException, GeboIngestionException, DocumentContentStreamerException {
+		AIDocumentsSet set = new AIDocumentsSet();
+		addCacheOrRetrieve(searchResult, set);
+		if (!set.getDocumentItems().isEmpty())
+			return set.getDocumentItems().get(0);
+		return null;
+	}
+
+	@Override
+	public void addCachedOrRetrieve(List<SearchResult> searchResults, AIDocumentsSet result)
+			throws GeboPersistenceException, GeboContentHandlerSystemException, IOException, GeboIngestionException,
+			DocumentContentStreamerException {
+		if (searchResults != null) {
+			for (SearchResult searchResult : searchResults) {
+				addCacheOrRetrieve(searchResult, result);
+			}
+		}
+	}
+
+	@Override
+	public void addCacheOrRetrieve(SearchResult searchResult, AIDocumentsSet result)
+			throws GeboContentHandlerSystemException, IOException, GeboIngestionException, GeboPersistenceException,
+			DocumentContentStreamerException {
+		// Same RAG cache as internal documents, keyed by the search result's own code.
+		// External results carry no reliable modification date to compare against, so a
+		// cached copy is served as-is; the byte-level freshness/eviction is handled by
+		// the chunker's own cache behind IGDocumentContentStreamer on a miss.
+		Optional<AIDocumentCacheItem> entry = cacheItemsRepository.findById(searchResult.getCode());
+		if (entry.isPresent()) {
+			addToRetrieved(entry.get(), result);
+		} else {
+			loadAddCacheAndAddToRetrieved(searchResult, result);
+		}
+	}
+
+	/**
+	 * Streams the external search result's raw content through the injected
+	 * {@link IGDocumentContentStreamer} (never the chunker-local
+	 * {@code IDocumentsCacheService}), ingests it through the standard ingestion
+	 * layer via a transient adapter {@link GDocumentReference}, caches the resulting
+	 * text and adds it to the retrieved set.
+	 */
+	private void loadAddCacheAndAddToRetrieved(SearchResult searchResult, AIDocumentsSet result)
+			throws GeboContentHandlerSystemException, IOException, GeboIngestionException, GeboPersistenceException,
+			DocumentContentStreamerException {
+		TypedInputStream is = streamer.streamContent(StreamingPurpose.INGESTING, searchResult);
+		if (is == null || is.getInputStream() == null) {
+			return;
+		}
+		GDocumentReference adapterReference = encodeDocumentReference(searchResult, is);
+		IngestionHandlerData readData = ingestionHandler.handleContent(adapterReference, is);
+		if (!readData.isUnmanagedContent()) {
+			AIDocumentCacheItem cacheItem = AIDocumentCacheItem.of(readData.getStream());
+			cacheItem.setCode(searchResult.getCode());
+			persistentObject.update(cacheItem);
+			addToRetrieved(cacheItem, result);
+		}
+	}
+
+	/**
+	 * Builds the transient {@link GDocumentReference} that adapts a
+	 * {@link SearchResult} to the GDocumentReference-typed ingestion layer, mirroring
+	 * {@code DocumentsChunkServiceImpl.encodeDocumentReference}: the content type and
+	 * extension come from the streamed content, and the serialized search result is
+	 * embedded in the metadata so downstream consumers can reconstruct it.
+	 */
+	private GDocumentReference encodeDocumentReference(SearchResult searchResult, TypedInputStream is)
+			throws GeboContentHandlerSystemException {
+		String code = searchResult.getCode();
+		String uriCandidate = searchResult.getResultReference() != null
+				&& searchResult.getResultReference().getUri() != null ? searchResult.getResultReference().getUri()
+						: null;
+		String nameCandidate = searchResult.getResultReference() != null
+				&& searchResult.getResultReference().getName() != null ? searchResult.getResultReference().getName()
+						: null;
+		if (nameCandidate == null && searchResult.getNavigationReference() != null
+				&& searchResult.getNavigationReference().path != null
+				&& searchResult.getNavigationReference().path.name != null) {
+			nameCandidate = searchResult.getNavigationReference().path.name;
+		}
+		String uri = uriCandidate != null ? uriCandidate : code;
+		String name = nameCandidate != null ? nameCandidate : uri;
+		GDocumentReference adapterReference = docReferenceFactory.createReference(uri, name, is.getContentType(),
+				is.getExtension(), null, searchResult.getOriginComponent().getMessagingModuleId(),
+				searchResult.getOriginComponent().getMessagingComponentId());
+		adapterReference.getCustomMetaInfos().put(DocumentMetaInfos.CONTENT_CODE, code);
+		adapterReference.getCustomMetaInfos().put(DocumentMetaInfos.GEBO_FILE_NAME, name);
+		if (uriCandidate != null) {
+			adapterReference.getCustomMetaInfos().put(DocumentMetaInfos.CONTENT_ORIGINAL_URL, uriCandidate);
+		}
+		try {
+			String searchResultJSON = objectMapper.writeValueAsString(searchResult);
+			adapterReference.getCustomMetaInfos().put(DocumentMetaInfos.GEBO_EXTERNAL_SEARCH_RESULT_JSON,
+					searchResultJSON);
+		} catch (Throwable th) {
+			LOGGER.error("Cannot serialize search result for ingestion adapter reference", th);
+		}
+		return adapterReference;
 	}
 
 }

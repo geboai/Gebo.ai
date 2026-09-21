@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.ai.document.Document;
 
+import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.SearchAgentCommand;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.INotificationSink;
@@ -25,6 +27,7 @@ import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.security.services.IGSecurityService;
 
@@ -146,6 +149,41 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 				LOGGER.debug("Disposing the chunking session:" + chunkingSession + " of agent id:" + getId());
 			}
 			chunkingService.disposeChunkingSession(chunkingSession);
+		}
+	}
+
+	/**
+	 * Publishes rich {@link GResponseDocumentRef}s for the given external search results
+	 * into the shared session environment, keyed by {@link SearchResult#getCode()} - the
+	 * same code the ingested Document is keyed on (CONTENT_CODE). Built here, upstream,
+	 * where the typed {@link SearchResult} is available, so the ref carries
+	 * {@code nestedSearchResult} and the user can "chat with" the external result; the
+	 * report writer prefers these over rebuilding a (SearchResult-less) ref from the
+	 * Document. Entries are merged across searchers, first write per code wins.
+	 */
+	protected void publishChatWithDocumentRefs(List<SearchResult> results, AgentsCollaborationSessionContext session) {
+		if (results == null || results.isEmpty() || session == null) {
+			return;
+		}
+		final Map<String, GResponseDocumentRef> byCode = chatWithDocumentRefs(session);
+		for (SearchResult result : results) {
+			if (result != null && result.getCode() != null) {
+				byCode.computeIfAbsent(result.getCode(), key -> new GResponseDocumentRef(result));
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private Map<String, GResponseDocumentRef> chatWithDocumentRefs(AgentsCollaborationSessionContext session) {
+		final Map<String, Object> environment = session.getEnvironment();
+		synchronized (environment) {
+			Object existing = environment.get(StandardAgentsNetworkEnvironmentEntries.CHAT_WITH_DOC_REFS_BY_CODE);
+			if (existing instanceof Map<?, ?>) {
+				return (Map<String, GResponseDocumentRef>) existing;
+			}
+			Map<String, GResponseDocumentRef> byCode = new ConcurrentHashMap<>();
+			environment.put(StandardAgentsNetworkEnvironmentEntries.CHAT_WITH_DOC_REFS_BY_CODE, byCode);
+			return byCode;
 		}
 	}
 

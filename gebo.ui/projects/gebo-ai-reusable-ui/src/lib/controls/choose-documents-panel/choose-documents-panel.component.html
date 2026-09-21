@@ -12,6 +12,7 @@
 
 
 
+@if (displaySelectedList) {
 <div class="grid" #chooseDocsPanel="geboBlockableContainer" geboBlockableContainer>
   <!-- [target] scopes the mask to this panel; without it PrimeNG masks the whole
        document (and locks body scroll), which left a stuck page-wide lock. -->
@@ -43,6 +44,7 @@
     }
   </div>
 </div>
+}
 <p-dialog [maximizable]="true" [visible]="openedSearchDocumentsWindows" [modal]="true"
   styleClass="gebo-entity-dialog" [closable]="true" [showHeader]="true"
   (visibleChange)="this.openedSearchDocumentsWindowsChange.emit(false)" [formGroup]="editingFormGroup">
@@ -51,6 +53,7 @@
   (closeMe)="this.openedSearchDocumentsWindows=false;"></gebo-ai-search-documents-component>
 </p-dialog>
 
+@if (displaySelectedList) {
 <p-dialog header="Selected Documents" id="FULL_DOCS_LIST_WINDOW" gebo-ai-label
   [(visible)]="openedFullListDocumentsWindow" [modal]="true" styleClass="gebo-entity-dialog" [maximizable]="true"
   [draggable]="false" [resizable]="false">
@@ -67,3 +70,4 @@
     }
   </div>
 </p-dialog>
+}

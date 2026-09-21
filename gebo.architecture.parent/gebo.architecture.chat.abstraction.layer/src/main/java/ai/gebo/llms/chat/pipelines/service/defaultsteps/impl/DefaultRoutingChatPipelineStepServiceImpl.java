@@ -31,6 +31,7 @@ import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsParametersCacheConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -80,6 +81,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	public static final String PIPELINE_EXECUTOR_SUGGESTION = "pipelineExecutorSuggestion";
 	private static final String SCANNING_HUGE_FILE_WITH_LLMS = "Scanning huge file with llms";
 	private static final String RUNNING_HEAVY_CHAT_WITH_DOCUMENTS = "RUNNING_HEAVY_CHAT_WITH_DOCUMENTS";
+	private static final String ANSWERING_FROM_YOUR_DOCUMENTS = "Answering from your selected documents";
+	private static final String CHATTING_WITH_YOUR_DOCUMENTS = "CHATTING_WITH_YOUR_DOCUMENTS";
 	private static final String EXECUTING_YOUR_CHOOSED_AGENT = "Executing your choosed agent";
 	private static final String USER_CHOOSED_AGENT = "USER_CHOOSED_AGENT";
 	private static final String CHOOSED_AGENTIC_FLOW_ANSWERING_AGENT_RUNNING = "Choosed agentic flow, answering agent running";
@@ -410,14 +413,24 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 					serviceModel, latestInteractions);
 			String rewrited_query = firstDecision.getRewrited_query();
 
-			// if actual resource has chat with documents or uploads with more than actual
-			// tokens budget than doing a deep search ONLY on
-			// Documents being in requests
+			// Ground the answer on the documents the user selected or uploaded ON THIS
+			// TURN: route to the dedicated CHAT_WITH_FILES service, which keeps small
+			// documents in context and deep-searches only the huge ones, and never
+			// launches an independent web/agent search. This used to be gated on a
+			// token-size threshold, so a small forced document (e.g. a single web page)
+			// fell through to the free router and got augmented with an unwanted web
+			// search. It is keyed on the current request rather than the accumulated
+			// session chat-with state, so a later turn - for instance one that explicitly
+			// asks for a deep search - is not hijacked by documents chatted with earlier
+			// in the same session. The threshold now only decides whether to warn the
+			// user that the forced documents are large enough for a heavy scan.
+			GeboChatRequest currentRequest = runtimeData.getRequestResources().getCurrentRequest();
 			int forcedDocumentsTotal = runtimeData.getRequestResources().getChatWithDocuments().getTokensSize()
 					+ runtimeData.getRequestResources().getUploadedDocuments().getTokensSize();
 			int threasholdForForcedDeepSearch = getChatWithDocsAndUploadedSizeTriggersDeepSearchThreashold(chatModel);
-			if (forcedDocumentsTotal >= threasholdForForcedDeepSearch) {
-				rd = createKnowledgeBaseSearchHeavyDocumentsFixedRoute(emitter, runtimeData);
+			if (requestCarriesForcedDocuments(currentRequest)) {
+				boolean heavy = forcedDocumentsTotal >= threasholdForForcedDeepSearch;
+				rd = createChatWithForcedDocumentsFixedRoute(emitter, heavy);
 			} else if (firstDecision.getUserIntent() == DeliverableIntent.IMAGE_GENERATION
 					&& isImageGenerationAvailable()) {
 				// The first step already decided this one: an explicit request for a new image
@@ -572,10 +585,33 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				}, RespondingWith.IMAGE_GENERATION_RESPONSE.name(), Map.of());
 	}
 
-	private RoutingDecision createKnowledgeBaseSearchHeavyDocumentsFixedRoute(ISinkUIEmitter emitter,
-			ChatPipelineExecutionRuntimeData runtimeData) {
-		notifyUser(emitter, RUNNING_HEAVY_CHAT_WITH_DOCUMENTS, SCANNING_HUGE_FILE_WITH_LLMS, null, 3000l,
-				NotificationType.INFO);
+	/**
+	 * Whether the current request explicitly carries documents to chat with - rich
+	 * refs, plain knowledge-base codes, or freshly uploaded files. This is deliberately
+	 * scoped to the request and not to the accumulated session chat-with state, so
+	 * grounding follows the user's per-turn selection rather than sticking for the rest
+	 * of the conversation.
+	 */
+	private boolean requestCarriesForcedDocuments(GeboChatRequest request) {
+		if (request == null) {
+			return false;
+		}
+		boolean refs = request.getForcedDocumentsRef() != null && !request.getForcedDocumentsRef().isEmpty();
+		boolean codes = request.getForcedRequestDocuments() != null && !request.getForcedRequestDocuments().isEmpty();
+		boolean uploads = request.getUserUploadedContents() != null && !request.getUserUploadedContents().isEmpty();
+		return refs || codes || uploads;
+	}
+
+	private RoutingDecision createChatWithForcedDocumentsFixedRoute(ISinkUIEmitter emitter, boolean heavy) {
+		// The same grounded CHAT_WITH_FILES route serves both sizes; only the user-facing
+		// notice differs, so a small selection is not announced as a huge-file scan.
+		if (heavy) {
+			notifyUser(emitter, RUNNING_HEAVY_CHAT_WITH_DOCUMENTS, SCANNING_HUGE_FILE_WITH_LLMS, null, 3000l,
+					NotificationType.INFO);
+		} else {
+			notifyUser(emitter, CHATTING_WITH_YOUR_DOCUMENTS, ANSWERING_FROM_YOUR_DOCUMENTS, null, 3000l,
+					NotificationType.INFO);
+		}
 		RoutingDecision rd = new RoutingDecision(
 				List.of(DefaultChatWithFilesStreamingOutputPipelineServiceImpl.DEFAULT_CHAT_WITH_DOCS_STREAMING),
 				new IChatPipelineStepRuntimeData() {

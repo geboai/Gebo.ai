@@ -13,5 +13,6 @@
 export interface ChatUIOptions { 
     enablePureModelChat?: boolean;
     defaultUILanguage?: string;
+    chatWithExternalFiles?: boolean;
     openChatAvailable?: boolean;
 }

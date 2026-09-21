@@ -82,6 +82,12 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
    * file(s)" menu entry is hidden.
    */
   @Input() disableFilesBrowsers: boolean = false;
+  /**
+   * True when the host holds selected external-search results to chat with. These
+   * are not part of the form, so they must be signalled explicitly to keep the
+   * "chat with documents" modality active.
+   */
+  @Input() hasExternalChatWithDocs: boolean = false;
   @Input() chatUserInfos?: GeboChatUserInfo;
   @Input() knowledgeBaseCodes?: string[] = undefined;
 
@@ -304,6 +310,12 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
               hasDocuments = true;
             }
             if (req.userUploadedContents && req.userUploadedContents.length) {
+              hasDocuments = true;
+            }
+            // Selected external-search results are "chat with" documents too, but they
+            // live outside the form (they cannot be addressed by a code), so factor
+            // their presence in explicitly to avoid reverting the modality.
+            if (this.hasExternalChatWithDocs) {
               hasDocuments = true;
             }
             if (!hasDocuments && this.defaultPipelineRouting) {

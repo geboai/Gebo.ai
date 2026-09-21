@@ -29,8 +29,10 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
@@ -58,11 +60,30 @@ public class GeboRagChatController {
 	@Autowired
 	IGRagChatService chatService;
 
+	/** Session lifecycle service, used to resolve document codes into rich refs */
+	@Autowired
+	IGChatSessionLifeCycleService sessionLifeCycleService;
+
 	/**
 	 * Default constructor for the controller
 	 */
 	public GeboRagChatController() {
 
+	}
+
+	/**
+	 * Resolves knowledge-base document codes into the rich {@link GResponseDocumentRef}
+	 * incarnation used by {@code GeboChatRequest.forcedDocumentsRef}. The chat control
+	 * calls this at submit time to convert its code-based document picker selection
+	 * into refs, so the pickers keep working with plain codes while external search
+	 * results (which no code can address) are carried whole by the client.
+	 *
+	 * @param codes the knowledge-base document codes to resolve
+	 * @return the resolved rich document references
+	 */
+	@PostMapping(value = "resolveForcedDocumentsRef", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public List<GResponseDocumentRef> resolveForcedDocumentsRef(@RequestBody List<String> codes) {
+		return sessionLifeCycleService.resolveResponseDocumentRefs(codes);
 	}
 
 	/**

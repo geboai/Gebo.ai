@@ -25,7 +25,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { AdditionalContent, BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
-import { forkJoin, Observable } from "rxjs";
+import { forkJoin, map, Observable, of } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 import { AgenticChatRequestBody, ReactiveRagChatService } from "./reactive-chat.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
@@ -361,6 +361,22 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     private docSelectedMap: Map<string, boolean> = new Map();
 
     /**
+     * When true, the user may "chat with" external-search results (a retrieved
+     * GResponseDocumentRef carrying a nestedSearchResult) as if they were internal
+     * documents. Fed from the backend ai.gebo.chatui.chatWithExternalFiles option.
+     */
+    @Input() chatWithExternalFiles: boolean = true;
+
+    /**
+     * External-search results the user picked to "chat with". Unlike internal
+     * documents (tracked as plain codes in the forcedRequestDocuments control) these
+     * cannot be addressed by a code, so their whole GResponseDocumentRef - including
+     * its nestedSearchResult - is carried here and merged into the request's
+     * forcedDocumentsRef at submit time.
+     */
+    private selectedExternalRefs: GResponseDocumentRef[] = [];
+
+    /**
      * Flag to control visibility of the description change dialog
      */
     protected changeDescriptionDialogOpened: boolean = false;
@@ -535,8 +551,100 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * @returns True if the document is selected
      */
     public isChoosed(dr: GResponseDocumentRef): boolean {
+        if (dr.nestedSearchResult) {
+            return this.isExternalRefChosen(dr);
+        }
         if (!dr.documentCode) return false;
-        return (dr.documentCode ? true : false) && this.docSelectedMap.get(dr.documentCode) === true;
+        return this.docSelectedMap.get(dr.documentCode) === true;
+    }
+
+    /**
+     * Identity of an external ref: its uuid when present, else its document code.
+     */
+    private externalRefKey(dr: GResponseDocumentRef): string | undefined {
+        return dr.uuid ? dr.uuid : dr.documentCode;
+    }
+
+    private isExternalRefChosen(dr: GResponseDocumentRef): boolean {
+        const key = this.externalRefKey(dr);
+        if (!key) return false;
+        return this.selectedExternalRefs.some(x => this.externalRefKey(x) === key);
+    }
+
+    /**
+     * The external-search results the user picked to chat with, shown as removable
+     * chips distinct from the internal knowledge-base documents (which live in the
+     * document picker panel, tracked as codes).
+     */
+    public get chosenExternalRefs(): GResponseDocumentRef[] {
+        return this.selectedExternalRefs;
+    }
+
+    /**
+     * Display label for an external ref chip.
+     */
+    public externalRefLabel(dr: GResponseDocumentRef): string {
+        return dr.name ? dr.name : dr.shortCode ? dr.shortCode : dr.documentCode ? dr.documentCode : "";
+    }
+
+    /**
+     * Removes a previously-selected external-search result from the chat-with list.
+     */
+    public removeExternalRef(dr: GResponseDocumentRef): void {
+        const key = this.externalRefKey(dr);
+        if (!key) {
+            return;
+        }
+        this.selectedExternalRefs = this.selectedExternalRefs.filter(x => this.externalRefKey(x) !== key);
+    }
+
+    /**
+     * Knowledge-base refs resolved from the picker's forcedRequestDocuments codes, kept
+     * in sync so the unified "documents to chat with" control can show knowledge-base and
+     * external documents together as GResponseDocumentRef.
+     */
+    private internalChatDocs: GResponseDocumentRef[] = [];
+
+    /**
+     * The unified list of documents chosen to chat with: knowledge-base documents
+     * (resolved from the picker codes) plus external-search results. Rendered by the
+     * gebo-ai-selected-chat-documents control - the choose-documents-panel keeps only the
+     * knowledge-base selection role.
+     */
+    public get selectedChatDocuments(): GResponseDocumentRef[] {
+        return [...this.internalChatDocs, ...this.selectedExternalRefs];
+    }
+
+    /**
+     * Removes one document from the chat-with list, routing to the right store: an
+     * external result leaves selectedExternalRefs; a knowledge-base document leaves the
+     * forcedRequestDocuments codes (whose valueChanges re-resolves internalChatDocs).
+     */
+    public onRemoveChatDocument(dr: GResponseDocumentRef): void {
+        if (dr.nestedSearchResult) {
+            this.removeExternalRef(dr);
+            return;
+        }
+        const codes: string[] = this.formGroup.controls["forcedRequestDocuments"].value || [];
+        this.formGroup.controls["forcedRequestDocuments"].setValue(codes.filter(c => c !== dr.documentCode));
+    }
+
+    /** Clears every document chosen to chat with (knowledge-base and external). */
+    public onClearChatDocuments(): void {
+        this.selectedExternalRefs = [];
+        this.formGroup.controls["forcedRequestDocuments"].setValue([]);
+    }
+
+    /** Resolves the picker's document codes into refs for the unified display. */
+    private refreshInternalChatDocs(codes?: string[] | null): void {
+        if (!codes || codes.length === 0) {
+            this.internalChatDocs = [];
+            return;
+        }
+        this.ragChatService.resolveForcedDocumentsRef(codes).subscribe({
+            next: (refs) => { this.internalChatDocs = refs ?? []; },
+            error: () => { this.internalChatDocs = []; }
+        });
     }
 
     /**
@@ -545,6 +653,19 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * @param dr Document reference to add
      */
     public addToChoosed(dr: GResponseDocumentRef): void {
+        if (dr.nestedSearchResult) {
+            // External search result: carry the whole ref - a document code cannot
+            // address it - and only when the feature is enabled (the backend enforces
+            // the same gate, this just keeps the UI honest).
+            if (!this.chatWithExternalFiles) {
+                return;
+            }
+            if (!this.isExternalRefChosen(dr)) {
+                this.selectedExternalRefs.push(dr);
+                this.chatInputShell.switchToChatWithDocuments();
+            }
+            return;
+        }
         let actualChoosed: string[] = this.formGroup.controls["forcedRequestDocuments"].value;
         if (!actualChoosed) {
             actualChoosed = [];
@@ -720,6 +841,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     this.docSelectedMap.set(x, true);
                 });
             }
+            // Keep the unified "documents to chat with" display in sync with the picker.
+            this.refreshInternalChatDocs(selectedDocuments);
         });
     }
 
@@ -986,6 +1109,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     forcedRequestDocuments: []
                 };
                 this.formGroup.patchValue(dataUpdate);
+                // The chat-with selection is per-request: reset the external refs too,
+                // mirroring the forcedRequestDocuments reset above.
+                this.selectedExternalRefs = [];
                 if (doSpeach === true && lastMessage === true && response.queryResponse) {
                     this.speechPlay(response.queryResponse);
                 }
@@ -1163,11 +1289,44 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         // this.loadingSearchResult = true;
         this.formGroup.controls["query"].setValue(null);
         this.formGroup.controls["userUploadedContents"].setValue([]);
+        // Resolve the picker's internal document codes into rich refs on the backend
+        // and merge the externally-selected search-result refs, so the request carries
+        // a uniform forcedDocumentsRef. The pickers themselves keep working with codes.
+        this.resolveForcedDocumentsRef(qry.forcedRequestDocuments).subscribe({
+            next: (refs) => {
+                qry.forcedDocumentsRef = refs;
+                this.dispatchMessage(qry, doSpeach);
+            },
+            error: () => {
+                // On lookup failure, still send the external refs; the backend falls
+                // back to forcedRequestDocuments (codes) for the internal documents.
+                qry.forcedDocumentsRef = [...this.selectedExternalRefs];
+                this.dispatchMessage(qry, doSpeach);
+            }
+        });
+    }
+
+    private dispatchMessage(qry: GeboChatRequest, doSpeach: boolean): void {
         if (this.useRestOnly === true) {
             this.callRestChat(qry, doSpeach);
         } else {
             this.callReactiveChat(qry, doSpeach);
         }
+    }
+
+    /**
+     * Builds the request's forcedDocumentsRef: the picker's internal document codes
+     * resolved to GResponseDocumentRef via the backend, plus the whole external refs
+     * the user selected from retrieved search results.
+     */
+    private resolveForcedDocumentsRef(codes?: string[]): Observable<GResponseDocumentRef[]> {
+        const external = [...this.selectedExternalRefs];
+        if (!codes || codes.length === 0) {
+            return of(external);
+        }
+        return this.ragChatService.resolveForcedDocumentsRef(codes).pipe(
+            map(internal => [...(internal ?? []), ...external])
+        );
     }
     /**
      * Sends a text-to-speech request and plays the audio
