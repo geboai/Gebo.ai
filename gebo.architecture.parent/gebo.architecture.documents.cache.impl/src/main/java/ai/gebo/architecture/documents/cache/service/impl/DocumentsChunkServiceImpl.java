@@ -482,6 +482,11 @@ public class DocumentsChunkServiceImpl
 		GDocumentReference fakeDr = docReferenceFactory.createReference(uri, name, is.getContentType(),
 				is.getExtension(), null, document.getOriginComponent().getMessagingModuleId(),
 				document.getOriginComponent().getMessagingComponentId());
+		// createReference() defaults the code to the URL; use the search result's own unique
+		// code so the ingested Document's CONTENT_CODE is the SearchResult identity (matching
+		// the internal path, where CONTENT_CODE is the GDocumentReference code), which lets a
+		// ref built upstream from the typed SearchResult be joined to this Document by getCode().
+		fakeDr.setCode(code);
 		fakeDr.getCustomMetaInfos().put(DocumentMetaInfos.CONTENT_CODE, code);
 		fakeDr.getCustomMetaInfos().put(DocumentMetaInfos.GEBO_FILE_NAME, name);
 		if (uriCandidate1 != null)

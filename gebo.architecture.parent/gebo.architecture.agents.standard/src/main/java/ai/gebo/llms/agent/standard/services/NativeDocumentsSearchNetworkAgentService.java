@@ -140,6 +140,9 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 			LOGGER.debug("End retrieveDocuments(...) native search agent id:" + getId() + " collected " + results.size()
 					+ " raw result(s)");
 		}
+		// Publish rich refs for these external results (built from the typed SearchResult, so
+		// they carry nestedSearchResult) so the report writer can expose them as chat-with-able.
+		publishChatWithDocumentRefs(results, session);
 		return maybeRank(chunkToDocuments(results, notificationSink, agentModel, command, keywords), command,
 				notificationSink);
 	}

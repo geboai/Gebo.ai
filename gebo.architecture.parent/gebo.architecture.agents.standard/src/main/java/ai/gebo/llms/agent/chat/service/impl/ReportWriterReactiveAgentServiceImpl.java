@@ -367,7 +367,21 @@ public class ReportWriterReactiveAgentServiceImpl
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("Referenced document codes: " + forDocCode.keySet());
 		}
-		return forDocCode.values().stream().map(x -> new GResponseDocumentRef(x)).toList();
+		// Prefer the rich refs the external-search agents published upstream (keyed by the same
+		// getCode() as the Document's CONTENT_CODE): those were built from the typed SearchResult
+		// and carry nestedSearchResult, so the user can "chat with" them. Fall back to building
+		// from the Document for anything not published (internal knowledge-base documents).
+		final Map<String, GResponseDocumentRef> publishedRefs = chatWithDocumentRefs(session);
+		return forDocCode.entrySet().stream().map(entry -> {
+			GResponseDocumentRef published = publishedRefs.get(entry.getKey());
+			return published != null ? published : new GResponseDocumentRef(entry.getValue());
+		}).toList();
+	}
+
+	@SuppressWarnings("unchecked")
+	private Map<String, GResponseDocumentRef> chatWithDocumentRefs(AgentsCollaborationSessionContext session) {
+		Object existing = session.getEnvironment().get(StandardAgentsNetworkEnvironmentEntries.CHAT_WITH_DOC_REFS_BY_CODE);
+		return existing instanceof Map<?, ?> ? (Map<String, GResponseDocumentRef>) existing : Map.of();
 	}
 
 	protected Flux<String> streamWithTokenBudgetCoordinator(IGConfigurableChatModel agentModel,
