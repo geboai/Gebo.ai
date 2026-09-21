@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **choosedKnowledgeBases** | **List&lt;String&gt;** |  |  [optional]
 **chatPipelineProcessId** | **String** |  |  [optional]
 **forcedRequestDocuments** | **List&lt;String&gt;** |  |  [optional]
+**forcedDocumentsRef** | [**List&lt;GResponseDocumentRef&gt;**](GResponseDocumentRef.md) |  |  [optional]
 **userUploadedContents** | [**List&lt;UserUploadedContent&gt;**](UserUploadedContent.md) |  |  [optional]
 **deepSearchDataSources** | **List&lt;String&gt;** |  |  [optional]
 **userIntent** | [**UserIntentEnum**](#UserIntentEnum) |  |  [optional]

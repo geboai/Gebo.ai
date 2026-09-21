@@ -1,6 +1,6 @@
 # GeboChatPipelinesControllerApi
 
-All URIs are relative to *http://localhost:12999*
+All URIs are relative to *http://localhost:12998*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -172,7 +172,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | **String**|  |
+ **chatProfileCode** | **String**|  | [optional]
  **pipelineCode** | **String**|  | [optional]
 
 ### Return type

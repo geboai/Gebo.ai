@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ChatUIOptions
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-19T11:22:54.359561129+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T09:25:59.411243076+02:00[Europe/Rome]")
 
 public class ChatUIOptions {
   @JsonProperty("enablePureModelChat")
@@ -30,6 +30,12 @@ public class ChatUIOptions {
 
   @JsonProperty("defaultUILanguage")
   private String defaultUILanguage = null;
+
+  @JsonProperty("chatWithExternalFiles")
+  private Boolean chatWithExternalFiles = null;
+
+  @JsonProperty("openChatAvailable")
+  private Boolean openChatAvailable = null;
 
   public ChatUIOptions enablePureModelChat(Boolean enablePureModelChat) {
     this.enablePureModelChat = enablePureModelChat;
@@ -67,6 +73,42 @@ public class ChatUIOptions {
     this.defaultUILanguage = defaultUILanguage;
   }
 
+  public ChatUIOptions chatWithExternalFiles(Boolean chatWithExternalFiles) {
+    this.chatWithExternalFiles = chatWithExternalFiles;
+    return this;
+  }
+
+   /**
+   * Get chatWithExternalFiles
+   * @return chatWithExternalFiles
+  **/
+  @Schema(description = "")
+  public Boolean isChatWithExternalFiles() {
+    return chatWithExternalFiles;
+  }
+
+  public void setChatWithExternalFiles(Boolean chatWithExternalFiles) {
+    this.chatWithExternalFiles = chatWithExternalFiles;
+  }
+
+  public ChatUIOptions openChatAvailable(Boolean openChatAvailable) {
+    this.openChatAvailable = openChatAvailable;
+    return this;
+  }
+
+   /**
+   * Get openChatAvailable
+   * @return openChatAvailable
+  **/
+  @Schema(description = "")
+  public Boolean isOpenChatAvailable() {
+    return openChatAvailable;
+  }
+
+  public void setOpenChatAvailable(Boolean openChatAvailable) {
+    this.openChatAvailable = openChatAvailable;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -78,12 +120,14 @@ public class ChatUIOptions {
     }
     ChatUIOptions chatUIOptions = (ChatUIOptions) o;
     return Objects.equals(this.enablePureModelChat, chatUIOptions.enablePureModelChat) &&
-        Objects.equals(this.defaultUILanguage, chatUIOptions.defaultUILanguage);
+        Objects.equals(this.defaultUILanguage, chatUIOptions.defaultUILanguage) &&
+        Objects.equals(this.chatWithExternalFiles, chatUIOptions.chatWithExternalFiles) &&
+        Objects.equals(this.openChatAvailable, chatUIOptions.openChatAvailable);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(enablePureModelChat, defaultUILanguage);
+    return Objects.hash(enablePureModelChat, defaultUILanguage, chatWithExternalFiles, openChatAvailable);
   }
 
 
@@ -94,6 +138,8 @@ public class ChatUIOptions {
     
     sb.append("    enablePureModelChat: ").append(toIndentedString(enablePureModelChat)).append("\n");
     sb.append("    defaultUILanguage: ").append(toIndentedString(defaultUILanguage)).append("\n");
+    sb.append("    chatWithExternalFiles: ").append(toIndentedString(chatWithExternalFiles)).append("\n");
+    sb.append("    openChatAvailable: ").append(toIndentedString(openChatAvailable)).append("\n");
     sb.append("}");
     return sb.toString();
   }
