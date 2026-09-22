@@ -26,6 +26,10 @@ COMPOSE_FILE="$REPO_ROOT/dockers/gebo.microservices/docker-compose.yml"
 CLIENTS_PARENT="$REPO_ROOT/gebo.api.clients/gebo.microservices.clients.parent"
 MICROSERVICES_PARENT="$REPO_ROOT/gebo.apps.parent/gebo.microservices.apps.parent"
 STASH_REF=""
+# How restore_snapshot must undo Stage 4/5. "stash" when Stage 3.5 actually
+# stashed something, "checkout" when the tree was already clean and there was
+# nothing to stash - see the note there.
+SNAPSHOT_MODE=""
 ATOMIC_SUCCESS=0
 
 # ---- Service -> port map ---------------------------------------------------
@@ -61,6 +65,23 @@ restore_snapshot() {
   if [ "$ATOMIC_SUCCESS" -eq 1 ]; then
     return 0
   fi
+
+  # Clean-tree case: there was nothing to stash, so the pre-run state is simply
+  # HEAD. Restoring it is a checkout of the tracked stubs plus a clean of the
+  # untracked files regeneration may have added. This branch used to be
+  # `[ -z "$STASH_REF" ] && return 0`, which inverted the whole guarantee: a
+  # DIRTY tree was protected and a CLEAN one - the normal case - was left with
+  # every regenerated file in place after a failure. Both paths are scoped to
+  # $CLIENTS_PARENT, and this one only ever runs when Stage 3.5 confirmed the
+  # path had no local changes, so the clean can discard nothing of value.
+  if [ "$SNAPSHOT_MODE" = "checkout" ]; then
+    yellow ""
+    yellow "Restoring pre-regeneration state (git checkout + clean) ..."
+    git -C "$REPO_ROOT" checkout -- "$CLIENTS_PARENT" 2>/dev/null || true
+    git -C "$REPO_ROOT" clean -fdq -- "$CLIENTS_PARENT" 2>/dev/null || true
+    return 0
+  fi
+
   if [ -z "$STASH_REF" ]; then
     return 0
   fi
@@ -211,6 +232,9 @@ STASH_OUT=$(git -C "$REPO_ROOT" stash push --include-untracked \
 STASH_REF=""
 if echo "$STASH_OUT" | grep -q "No local changes"; then
   yellow "  No changes to stash — working tree was already clean"
+  # Nothing stashed, so rollback cannot be a stash pop: record that the way back
+  # to the pre-run state is checkout + clean of the stubs (see restore_snapshot).
+  SNAPSHOT_MODE="checkout"
 elif git -C "$REPO_ROOT" rev-parse -q --verify refs/stash >/dev/null 2>&1; then
   # `git stash push` prints "Saved working directory and index state ..." and
   # never a stash@{N} handle - only the retired `git stash save` did. Scraping
@@ -219,6 +243,7 @@ elif git -C "$REPO_ROOT" rev-parse -q --verify refs/stash >/dev/null 2>&1; then
   # was dirty (a clean tree takes the branch above and never reached it). The
   # entry git just pushed is always at index 0.
   STASH_REF="stash@{0}"
+  SNAPSHOT_MODE="stash"
   green "  Stashed as $STASH_REF"
 else
   red "  WARNING: stash push reported changes but no stash ref exists"
