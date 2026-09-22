@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
 import com.hazelcast.config.Config;
+import com.hazelcast.config.DiscoveryStrategyConfig;
 import com.hazelcast.config.JoinConfig;
 import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
@@ -49,6 +50,12 @@ public class GeboHazelcastConfiguration {
 
 	private static final String DEFAULT_CLUSTER_NAME = "gebo-models-cluster";
 	private static final String DEFAULT_INSTANCE_NAME = "gebo-models-hazelcast";
+
+	/** First split-brain merge attempt, seconds after start (Hazelcast default: 300). */
+	private static final int MERGE_FIRST_RUN_DELAY_SECONDS = 30;
+
+	/** Interval between later merge attempts, seconds (Hazelcast default: 120). */
+	private static final int MERGE_NEXT_RUN_DELAY_SECONDS = 30;
 
 	/**
 	 * Exposes the cluster message bus. When a topology provider bean is present the
@@ -93,6 +100,33 @@ public class GeboHazelcastConfiguration {
 		network.setPortAutoIncrement(topology.isPortAutoIncrement());
 
 		JoinConfig join = network.getJoin();
+
+		// A live resolver, when the topology supplies one, replaces the static TCP/IP
+		// list entirely: Hazelcast re-asks it on every join attempt and on every
+		// split-brain merge cycle, so start order and instance counts stop mattering
+		// and a member that came up alone rejoins on its own. See
+		// GSuppliedMembersDiscoveryStrategy for why a static list cannot do that.
+		if (topology.getLiveMembers() != null) {
+			join.getMulticastConfig().setEnabled(false);
+			join.getTcpIpConfig().setEnabled(false);
+			join.getDiscoveryConfig().addDiscoveryStrategyConfig(new DiscoveryStrategyConfig(
+					new GSuppliedMembersDiscoveryStrategy.Factory(topology.getLiveMembers(), topology.getPort())));
+			// Without this the discovery SPI is configured but never consulted.
+			config.setProperty("hazelcast.discovery.enabled", "true");
+			// Defaults are a 300s first run then every 120s, which would leave a member
+			// that started alone isolated for five minutes before the first attempt to
+			// rejoin. These are the cycles that heal a cold start, so they run sooner.
+			config.setProperty("hazelcast.merge.first.run.delay.seconds",
+					String.valueOf(MERGE_FIRST_RUN_DELAY_SECONDS));
+			config.setProperty("hazelcast.merge.next.run.delay.seconds",
+					String.valueOf(MERGE_NEXT_RUN_DELAY_SECONDS));
+			LOGGER.info(
+					"Models replication Hazelcast member '{}' on cluster '{}' using LIVE discovery "
+							+ "(re-resolved on every join and merge cycle), initial members {}",
+					config.getInstanceName(), config.getClusterName(), topology.getMembers());
+			return Hazelcast.getOrCreateHazelcastInstance(config);
+		}
+
 		// Multicast is never used: participation is explicit via the provided topology.
 		join.getMulticastConfig().setEnabled(false);
 		// TCP/IP join stays enabled even with an empty member list (unlike disabling
