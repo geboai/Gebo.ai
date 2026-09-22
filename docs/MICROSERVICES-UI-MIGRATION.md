@@ -186,7 +186,7 @@ a handler (or brain) **and** tyr. This is grounded, not accidental:
 | service | exposed by | decision | grounding |
 |---|---|---|---|
 | `GeboVectorStoreConfigurationControllerService` | brain, graphicator, vectorizator | n/a | not imported by any UI `.ts` as a service — no migration action |
-| `GeboAdvancedSetupStatusControllerService` | brain, heimdall | **brain** | shared `fastsetup` controller compiled into both; the only UI caller is `setup-wizard/llms-setup-wizard.service.ts`, whose domain (LLMs setup) is brain. `[CONFIRM]` heimdall if this status must reflect installation-level setup |
+| `GeboAdvancedSetupStatusControllerService` | ~~brain, heimdall~~ | **REMOVED** | investigation found it had no consumer: the only UI reference was a dead import in `setup-wizard/llms-setup-wizard.service.ts` (the live status call there is `GeboFastLlmsSetupControllerService.getLLMSSetupStatus()`), and the KB + published-datasource gate the setup wizard shows is computed from `GeboFastKnowledgeBaseSetupControllerService` + client-side aggregation, not from this controller. The controller, its `GeboAdvancedSetupStatusService`, and the `GeboAdvancedSetupStatus` model were deleted (shared `gebo.architecture.fastsetup` module), and the generated stubs dropped from every client set. No migration action |
 | `McpClientConfigControllerService` | brain, mcpclient | **mcpclient** in the mcpclient *endpoint* editor (ingestion); **brain** in `gebo-ai-mcp-client-admin` and `setup-wizard/mcp-server-wizard` (agent/tool MCP connections) | both expose the same class over different stores; split by caller domain. `[CONFIRM]` against backend data ownership of `listMCPClientConfig`/`updateMCPClientConfig` |
 
 ### 3.4 Orphans — no microservice client (4)
