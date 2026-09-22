@@ -43,7 +43,6 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-sharepoint-admin/gebo-ai-sh
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-system-fast.component";
 export * from "./lib/setup-wizard/llms-setup-wizard.component";
 export * from "./lib/setup-wizard/setup-wizards.component";
-export * from "./lib/setup-wizard/vectorstore-wizard.component";
 export * from "./lib/setup-wizard/work-folder-wizard.component";
 export * from "./lib/setup-wizard/agent-setup-wizard.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generic-openai-api-ranker-admin.component";
