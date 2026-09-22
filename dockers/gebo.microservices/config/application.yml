@@ -146,14 +146,6 @@ ai.gebo.opensearch:
 gebo.models.replication:
   discovery-attempts: 3
   discovery-retry-interval-millis: 2000
-  # Pin each participant to its compose service name, which is stable and
-  # resolvable on gebo-net. host-overrides is consulted BEFORE discovery, so this
-  # makes every participant emit the COMPLETE member list immediately, whatever
-  # is up yet - which is what the cache's semantics actually need.
-  host-overrides:
-    brain_gebo_ai: brain
-    vectorizator_gebo_ai: vectorizator
-    graphicator_gebo_ai: graphicator
 
 # Semantic retrieval threshold (used by the RAG search service). Autotune off so
 # the static threshold below is authoritative.
