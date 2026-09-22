@@ -45,38 +45,6 @@ public class ModelsReplicationClusterProperties {
 	private String clusterName = "gebo-models-cluster";
 
 	/**
-	 * How many times to poll service discovery for a stable member snapshot before
-	 * giving up and seeding an isolated single-member cluster. Combined with
-	 * {@link #discoveryRetryIntervalMillis} this is the startup budget the
-	 * seeding blocks the main thread for.
-	 * <p>
-	 * <b>Measured caveat before tuning this up.</b> On the docker-compose cluster
-	 * the retry loop cannot observe a registration that happens after it starts:
-	 * the view returned by {@code DiscoveryClient.getInstances(...)} stays at
-	 * whatever the Eureka client held when it initialised, for the whole loop.
-	 * Verified end to end - all three participants registered with correct VIPs
-	 * ~100s into a cold start and appeared in the local Eureka cache
-	 * ("Added instance ...:brain_gebo_ai:13001 to the existing apps"), yet every
-	 * one of the 24 polls still read an empty list and the service ended isolated
-	 * after 240s. Disabling delta fetching did not change it. The same service
-	 * restarted against an already-populated registry converged on its SECOND poll
-	 * and started in 20s instead of 296s.
-	 * <p>
-	 * So a bigger budget does not buy a better snapshot on a cold cluster - it only
-	 * delays serving, by up to attempts x interval, before reaching the same
-	 * isolated outcome. It is worth something only where the registry is already
-	 * populated when this service's discovery client starts (a rolling restart),
-	 * and there two or three polls are enough.
-	 */
-	private int discoveryAttempts = 24;
-
-	/**
-	 * Delay between the discovery polls counted by {@link #discoveryAttempts}, in
-	 * milliseconds. Default 10s, i.e. a 240s budget with the default attempts.
-	 */
-	private long discoveryRetryIntervalMillis = 10000L;
-
-	/**
 	 * Optional overrides of the network host used to reach a participant, keyed by
 	 * microservice id (underscore form). When absent, the host is derived from the
 	 * microservice id by turning it back into its dotted application-name form

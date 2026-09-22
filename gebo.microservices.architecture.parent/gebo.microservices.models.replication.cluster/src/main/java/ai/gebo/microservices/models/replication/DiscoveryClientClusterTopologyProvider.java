@@ -139,37 +139,15 @@ public class DiscoveryClientClusterTopologyProvider implements IGModelsReplicati
 	@Override
 	public GModelsReplicationClusterTopology getModelsReplicationClusterTopology() {
 		String instanceName = GeboMicroservice.normalizeName(localApplicationName);
-		List<String> memberList = new ArrayList<>();
-		List<String> previous = null;
-		final int maxAttempts = Math.max(1, properties.getDiscoveryAttempts());
-		final long retryDelayMillis = Math.max(0L, properties.getDiscoveryRetryIntervalMillis());
-		for (int attempt = 1; attempt <= maxAttempts; attempt++) {
-			memberList = resolveMembers();
-			// Non-empty AND unchanged since the previous poll: a single non-empty read is
-			// not enough on its own - a peer that is slower to register than this one would
-			// otherwise be silently left out of a list accepted on the very first sighting
-			// of any member at all. Requiring one stable repeat gives stragglers one more
-			// retry interval to show up before this snapshot is taken as final.
-			if (!memberList.isEmpty() && memberList.equals(previous)) {
-				break;
-			}
-			previous = memberList;
-			if (attempt < maxAttempts) {
-				LOGGER.info(
-						"Service discovery member snapshot for '{}' not yet stable (attempt {}/{}, members so far={}); "
-								+ "retrying in {} ms - peers routinely still be starting up.",
-						instanceName, attempt, maxAttempts, memberList, retryDelayMillis);
-				sleep(retryDelayMillis);
-			}
-		}
+		List<String> initialMembers = resolveMembers();
 
-		if (memberList.isEmpty()) {
-			LOGGER.warn("Service discovery still reports no instance of any topology member after {} attempts: '{}' "
-					+ "will start an ISOLATED single-member cache and merge once it meets the others. Is the "
-					+ "registry reachable?", maxAttempts, instanceName);
+		if (initialMembers.isEmpty()) {
+			LOGGER.info("Service discovery reports no instance of any models-replication participant yet for '{}'; "
+					+ "starting anyway - discovery is re-asked on every Hazelcast join and merge cycle, so peers "
+					+ "are picked up as they register.", instanceName);
 		} else {
 			LOGGER.info("Replication cluster seeded from discovery for '{}': cluster='{}', port={}, members={}",
-					instanceName, properties.getClusterName(), properties.getPort(), memberList);
+					instanceName, properties.getClusterName(), properties.getPort(), initialMembers);
 		}
 
 		return GModelsReplicationClusterTopology.builder()
@@ -177,7 +155,11 @@ public class DiscoveryClientClusterTopologyProvider implements IGModelsReplicati
 				.instanceName(instanceName)
 				.port(properties.getPort())
 				.portAutoIncrement(properties.isPortAutoIncrement())
-				.members(memberList)
+				.members(initialMembers)
+				// The live resolver is the point: it is re-asked by Hazelcast on every
+				// join attempt and merge cycle, so this snapshot being empty is no
+				// longer terminal and no startup wait is needed to avoid it.
+				.liveMembers(this::resolveMembers)
 				.build();
 	}
 
@@ -208,13 +190,5 @@ public class DiscoveryClientClusterTopologyProvider implements IGModelsReplicati
 		}
 
 		return new ArrayList<>(members);
-	}
-
-	private static void sleep(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
 	}
 }
