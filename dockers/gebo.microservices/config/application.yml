@@ -119,6 +119,42 @@ ai.gebo.opensearch:
   username: admin
   password: dothesearch1973-Advanced
 
+# ---------------------------------------------------------------------------
+# LLM models-replication cache (brain / vectorizator / graphicator only - the
+# participant set is the topology default; every other service ignores this).
+#
+# DiscoveryClientClusterTopologyProvider polls service discovery for a stable
+# member snapshot before Hazelcast starts, and it does so on the MAIN THREAD
+# during context refresh - so the budget below is added directly to those three
+# services' time-to-serve.
+#
+# Cut from the 24 x 10s default because on this cluster the retries cannot do
+# what the default was sized for. Measured on a cold `docker compose up`: all
+# three participants registered with correct VIPs ~100s in and showed up in each
+# other's local Eureka cache, yet every one of the 24 polls still read an empty
+# list, and each member ended isolated after 240s - brain started in 296s.
+# Disabling delta fetching changed nothing. The view the loop reads stays at
+# whatever the Eureka client held when it initialised, so poll 24 returns what
+# poll 1 returned. Restarted against an already-populated registry the same
+# service converged on its SECOND poll and started in 20s.
+#
+# 3 x 2s therefore keeps the only case the retries actually help - a rolling
+# restart, where two polls are enough to confirm a stable non-empty list - while
+# taking ~234s off a cold start that reaches the identical isolated outcome
+# either way. Raise it if a deployment measures different discovery behaviour.
+# ---------------------------------------------------------------------------
+gebo.models.replication:
+  discovery-attempts: 3
+  discovery-retry-interval-millis: 2000
+  # Pin each participant to its compose service name, which is stable and
+  # resolvable on gebo-net. host-overrides is consulted BEFORE discovery, so this
+  # makes every participant emit the COMPLETE member list immediately, whatever
+  # is up yet - which is what the cache's semantics actually need.
+  host-overrides:
+    brain_gebo_ai: brain
+    vectorizator_gebo_ai: vectorizator
+    graphicator_gebo_ai: graphicator
+
 # Semantic retrieval threshold (used by the RAG search service). Autotune off so
 # the static threshold below is authoritative.
 ai.gebo.rag-threashold-autotune.config.enabled: false
