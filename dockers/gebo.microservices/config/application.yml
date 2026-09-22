@@ -103,7 +103,14 @@ ai.gebo.vectorstore:
     tls: false
     apiKey: ce7c85bc-f037-4c64-91d8-70335638329d
 
-# OpenSearch (used by the fulltextor / full-text service).
+# OpenSearch - the SHARED full-text store, same shape as qdrant above: fulltextor
+# WRITES the kb_chunks index and brain READS it for the lexical leg of hybrid
+# retrieval. Turning `enabled` off switches full-text search off everywhere:
+# every bean in gebo.architecture.opensearch is @ConditionalOnProperty on it, so
+# brain publishes no IGFullTextSearchService, FullTextSearchDocumentsCachedDaoImpl
+# (@ConditionalOnBean on it) is not registered, GeboRagSearchConfig takes the null
+# its @Autowired(required=false) allows and GDocumentsSearchServiceImpl runs
+# semantic-only.
 ai.gebo.opensearch:
   enabled: true
   protocol: https
