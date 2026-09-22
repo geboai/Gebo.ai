@@ -9,22 +9,20 @@
 */
 -->
 <p-drawer [(visible)]="chatsListAndOptionsVisible" (visibleChange)="chatsListAndOptionsVisible=$event;"
-  [dismissible]="false" [modal]="true" baseZIndex="10000" styleClass="w-30rem" [showCloseIcon]="false">
+  [dismissible]="false" [modal]="true" baseZIndex="10000" styleClass="gebo-ai-chat-section__drawer"
+  [showCloseIcon]="false">
   <ng-template pTemplate="header">
-    <div class="grid w-full">
-      <div class="col-11">
+    <!-- A flex row rather than a col-11/col-1 grid: one twelfth of a phone-width
+         drawer is about 30px, which is narrower than the close button itself, so
+         the grid pushed it out of view exactly where it matters most. -->
+    <div class="gebo-ai-rag-chat-section__drawer-header">
 
-        <img class="gebo-ai-rag-chat-section__brand" src="assets/Gebo.png" alt="Gebo.ai">
+      <img class="gebo-ai-rag-chat-section__brand" src="assets/Gebo.png" alt="Gebo.ai">
 
-      </div>
+      <p-button id="TimesBtn" gebo-ai-label icon="pi pi-times" text="true" outlined="true"
+        ariaLabel="Close chat navigation"
+        (onClick)="chatsListAndOptionsVisible=false;"></p-button>
 
-      <div class="col-1  flex justify-content-end">
-
-        <p-button id="TimesBtn" gebo-ai-label icon="pi pi-times" text="true" outlined="true"
-          ariaLabel="Close chat navigation"
-          (onClick)="chatsListAndOptionsVisible=false;"></p-button>
-
-      </div>
     </div>
   </ng-template>
 
