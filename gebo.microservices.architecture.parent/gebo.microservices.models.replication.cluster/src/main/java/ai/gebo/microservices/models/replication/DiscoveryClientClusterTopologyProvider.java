@@ -88,11 +88,30 @@ public class DiscoveryClientClusterTopologyProvider implements IGModelsReplicati
 	 * of every topology member, and a retry budget generous enough to outlast a
 	 * slow participant's registration rather than one merely long enough to dodge a
 	 * momentary empty read.
+	 * <p>
+	 * <b>What was actually measured, which limits what the budget can buy.</b> On
+	 * the docker-compose cluster the loop never observes a registration made after
+	 * it starts: the list returned by {@link DiscoveryClient#getInstances(String)}
+	 * stays at whatever the Eureka client held when it initialised, for the whole
+	 * loop. On a cold start all three participants registered with the right VIPs
+	 * about 100s in, and the local Eureka cache logged them being added
+	 * ("Added instance ...:brain_gebo_ai:13001 to the existing apps in region
+	 * null") - yet all 24 polls still read an empty list and the member ended
+	 * isolated after 240s, starting in 296s. Disabling delta fetching
+	 * ({@code eureka.client.disable-delta=true}) changed nothing. The same service
+	 * restarted against an already-populated registry converged on its SECOND poll
+	 * and started in 20s.
+	 * <p>
+	 * So on a cold cluster the retries are dead time before an outcome that is
+	 * identical to the one the first poll already implied; the budget only pays for
+	 * itself when the registry is populated at discovery-client init (a rolling
+	 * restart), where two polls suffice. Both knobs are therefore configuration
+	 * ({@code gebo.models.replication.discovery-attempts} /
+	 * {@code ...discovery-retry-interval-millis}) rather than constants, so a
+	 * deployment that measures differently can raise them and one that does not
+	 * want to pay the startup delay can cut them - see the microservices compose
+	 * overlay, which does exactly that.
 	 */
-	private static final int MAX_DISCOVERY_ATTEMPTS = 24;
-
-	/** Delay between snapshot retries. 24 attempts * 10s = up to 240s. */
-	private static final long RETRY_DELAY_MILLIS = 10000L;
 
 	private final DiscoveryClient discoveryClient;
 	private final GeboModelsReplicationParticipants participants;
@@ -122,7 +141,9 @@ public class DiscoveryClientClusterTopologyProvider implements IGModelsReplicati
 		String instanceName = GeboMicroservice.normalizeName(localApplicationName);
 		List<String> memberList = new ArrayList<>();
 		List<String> previous = null;
-		for (int attempt = 1; attempt <= MAX_DISCOVERY_ATTEMPTS; attempt++) {
+		final int maxAttempts = Math.max(1, properties.getDiscoveryAttempts());
+		final long retryDelayMillis = Math.max(0L, properties.getDiscoveryRetryIntervalMillis());
+		for (int attempt = 1; attempt <= maxAttempts; attempt++) {
 			memberList = resolveMembers();
 			// Non-empty AND unchanged since the previous poll: a single non-empty read is
 			// not enough on its own - a peer that is slower to register than this one would
@@ -133,19 +154,19 @@ public class DiscoveryClientClusterTopologyProvider implements IGModelsReplicati
 				break;
 			}
 			previous = memberList;
-			if (attempt < MAX_DISCOVERY_ATTEMPTS) {
+			if (attempt < maxAttempts) {
 				LOGGER.info(
 						"Service discovery member snapshot for '{}' not yet stable (attempt {}/{}, members so far={}); "
 								+ "retrying in {} ms - peers routinely still be starting up.",
-						instanceName, attempt, MAX_DISCOVERY_ATTEMPTS, memberList, RETRY_DELAY_MILLIS);
-				sleep(RETRY_DELAY_MILLIS);
+						instanceName, attempt, maxAttempts, memberList, retryDelayMillis);
+				sleep(retryDelayMillis);
 			}
 		}
 
 		if (memberList.isEmpty()) {
 			LOGGER.warn("Service discovery still reports no instance of any topology member after {} attempts: '{}' "
 					+ "will start an ISOLATED single-member cache and merge once it meets the others. Is the "
-					+ "registry reachable?", MAX_DISCOVERY_ATTEMPTS, instanceName);
+					+ "registry reachable?", maxAttempts, instanceName);
 		} else {
 			LOGGER.info("Replication cluster seeded from discovery for '{}': cluster='{}', port={}, members={}",
 					instanceName, properties.getClusterName(), properties.getPort(), memberList);
