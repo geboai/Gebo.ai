@@ -236,7 +236,13 @@ services:
     environment:
       <<: *microservice-env
       SPRING_NEO4J_URI: bolt://neo4j:7687
-    depends_on: [eureka, rabbit, mongo, qdrant, neo4j]
+    # opensearch joins neo4j/qdrant here because brain now READS the shared
+    # full-text index (gebo.architecture.opensearch, enabled cluster-wide by the
+    # config overlay): with it enabled the index-bootstrap and health-check
+    # ApplicationRunners connect DURING STARTUP, so an OpenSearch that is not up
+    # yet stops brain booting rather than degrading it - same boot-time coupling
+    # neo4j already has. fulltextor, which WRITES that index, declares it too.
+    depends_on: [eureka, rabbit, mongo, qdrant, neo4j, opensearch]
     ports:
       - "13001:13001"
 

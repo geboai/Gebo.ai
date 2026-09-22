@@ -181,6 +181,54 @@
 			<artifactId>gebo.architecture.a2a-server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- OpenSearch: the SHARED full-text store, written by fulltextor and READ
+		     here. brain already carried gebo.architecture.fulltext (the abstraction)
+		     but not this implementation, and that silently disabled its lexical leg:
+		     FullTextSearchDocumentsCachedDaoImpl is @ConditionalOnBean(IGFullTextSearchService),
+		     so with no implementation the DAO was never registered, GeboRagSearchConfig
+		     took the null its @Autowired(required=false) allows, and
+		     GDocumentsSearchServiceImpl's `lexicalLegAvailable = fullTextSearch != null`
+		     was ALWAYS false - hybrid retrieval quietly degraded to semantic-only even
+		     though the shared config overlay sets ai.gebo.opensearch.enabled=true for
+		     the whole cluster.
+
+		     Same shape as the other two shared stores: brain holds a CLIENT for the
+		     store its companion service fills (neo4j <- graphicator, qdrant <-
+		     vectorizator, opensearch <- fulltextor) and reads the same index
+		     (kb_chunks) from the same host, resolved from the same shared overlay.
+
+		     Deliberately NOT gebo.ragsystem.content.fulltext.processor, which is what
+		     fulltextor depends on: that module carries FullTextIndexingBatchMessageReceiver,
+		     the INGESTION driver. brain reads the index, it must not become a second
+		     writer to it.
+
+		     Inert unless switched on: every bean in this module is
+		     @ConditionalOnProperty(ai.gebo.opensearch.enabled) and OpenSearchConfig
+		     defaults it to false, so full-text search stays cleanly disable-able and a
+		     standalone brain is unaffected. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.opensearch</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- BrainFullTopologyContextTest boots brain in its FULL configuration, which
+		     means a live Neo4j: with ai.gebo.neo4j.enabled=true (brain's shipped
+		     default) Neo4jDdlRunner executes the graph DDL as an ApplicationRunner
+		     during startup, so the context cannot load without one. The Mongo/JUnit
+		     testcontainers deps are inherited from gebo.microservices.apps.parent;
+		     this module is the only microservice besides graphicator that also needs
+		     the graph store, so it is declared here rather than in that parent. -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-neo4j</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.opensearch</groupId>
+			<artifactId>opensearch-testcontainers</artifactId>
+			<version>4.1.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<profiles>

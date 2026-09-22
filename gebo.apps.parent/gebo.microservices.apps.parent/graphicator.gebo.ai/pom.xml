@@ -28,6 +28,18 @@
 			<artifactId>gebo.architecture.graphrag.extraction.controllers</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- GraphicatorContextTest boots graphicator against a live Neo4j: it is the
+		     service that WRITES the graph brain reads, so there is no meaningful
+		     topology for it with GraphRAG off, and with it on Neo4jDdlRunner executes
+		     the graph DDL as an ApplicationRunner during startup - the context cannot
+		     load without a reachable graph store. The Mongo/JUnit testcontainers deps
+		     are inherited from gebo.microservices.apps.parent; graphicator and brain
+		     are the only two microservices that also need this one. -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-neo4j</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<profiles>
