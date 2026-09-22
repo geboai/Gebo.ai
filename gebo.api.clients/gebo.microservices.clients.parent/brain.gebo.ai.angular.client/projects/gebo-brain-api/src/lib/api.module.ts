@@ -28,7 +28,6 @@ import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboA
 import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
 import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsController.service';
 import { GeboAdminRagAutotuneControllerService } from './api/geboAdminRagAutotuneController.service';
-import { GeboAdvancedSetupStatusControllerService } from './api/geboAdvancedSetupStatusController.service';
 import { GeboAgentAdminControllerService } from './api/geboAgentAdminController.service';
 import { GeboAgentsNetworkAdminControllerService } from './api/geboAgentsNetworkAdminController.service';
 import { GeboChatControllerService } from './api/geboChatController.service';
@@ -119,7 +118,6 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     GeboAdminPromptUseInfoControllerService,
     GeboAdminPromptsControllerService,
     GeboAdminRagAutotuneControllerService,
-    GeboAdvancedSetupStatusControllerService,
     GeboAgentAdminControllerService,
     GeboAgentsNetworkAdminControllerService,
     GeboChatControllerService,

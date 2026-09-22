@@ -294,7 +294,6 @@ import GeboAdminChatProfilesConfigurationControllerApi from './api/GeboAdminChat
 import GeboAdminPromptUseInfoControllerApi from './api/GeboAdminPromptUseInfoControllerApi';
 import GeboAdminPromptsControllerApi from './api/GeboAdminPromptsControllerApi';
 import GeboAdminRagAutotuneControllerApi from './api/GeboAdminRagAutotuneControllerApi';
-import GeboAdvancedSetupStatusControllerApi from './api/GeboAdvancedSetupStatusControllerApi';
 import GeboAgentAdminControllerApi from './api/GeboAgentAdminControllerApi';
 import GeboAgentsNetworkAdminControllerApi from './api/GeboAgentsNetworkAdminControllerApi';
 import GeboChatControllerApi from './api/GeboChatControllerApi';
@@ -2069,11 +2068,6 @@ export {
     */
     GeboAdminRagAutotuneControllerApi,
 
-    /**
-    * The GeboAdvancedSetupStatusControllerApi service constructor.
-    * @property {module:api/GeboAdvancedSetupStatusControllerApi}
-    */
-    GeboAdvancedSetupStatusControllerApi,
 
     /**
     * The GeboAgentAdminControllerApi service constructor.
