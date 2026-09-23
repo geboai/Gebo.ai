@@ -13,7 +13,7 @@
 /* AI generated comments */
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ValidationErrors, ValidatorFn } from "@angular/forms";
-import { ReindexTimeStructureMetaInfo, ReindexingFrequencyOptionsControllerService, ReindexingProgrammedTable, ReindexingTime } from '@Gebo.ai/tyr';
+import { ReindexingFrequencyOptionsControllerService, ReindexingProgrammedTable, ReindexingTime, ReindexTimeStructureMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /**

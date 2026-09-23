@@ -18,8 +18,7 @@
 
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AuthProviderDto, SecretInfo, SecretsControllerService } from '@Gebo.ai/heimdall';
-import { GSharepointContentManagementSystem, SharepointSystemsControllerService } from '@Gebo.ai/sharepoint';
+import { AuthProviderDto, GSharepointContentManagementSystem, SecretInfo, SecretsControllerService, SharepointSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";

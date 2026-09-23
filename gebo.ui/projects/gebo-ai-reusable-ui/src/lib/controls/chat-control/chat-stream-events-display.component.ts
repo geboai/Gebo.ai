@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { IGeboChatMessage } from "../../services/gebo-chat-message";
-import { GResponseDocumentRef } from '@Gebo.ai/brain';
+import { GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
 import { PipelineRoutingOption } from "./pipeline-routing-option";

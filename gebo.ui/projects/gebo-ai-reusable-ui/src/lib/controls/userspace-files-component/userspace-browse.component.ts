@@ -19,7 +19,7 @@
 
 import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
-import { UserspaceControllerService, UserspaceFileDto, UserspaceFolderDto, UserspaceKnowledgebaseDto } from '@Gebo.ai/userspace';
+import { UserspaceControllerService, UserspaceFileDto, UserspaceFolderDto, UserspaceKnowledgebaseDto } from "@Gebo.ai/gebo-ai-rest-api";
 
 import { TreeNode } from "primeng/api";
 import { TreeNodeExpandEvent } from "primeng/tree";

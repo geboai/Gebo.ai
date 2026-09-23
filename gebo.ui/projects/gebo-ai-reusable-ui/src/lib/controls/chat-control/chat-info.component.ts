@@ -18,7 +18,7 @@
  * the user information display should be closed/dismissed.
  */
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { GeboChatUserInfo } from '@Gebo.ai/brain';
+import { GeboChatUserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /**

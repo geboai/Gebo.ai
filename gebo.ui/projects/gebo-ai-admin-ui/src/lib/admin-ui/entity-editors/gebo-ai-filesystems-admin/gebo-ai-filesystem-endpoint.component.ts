@@ -13,8 +13,7 @@
 /* AI generated comments */
 import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BrowseParam, GProject, ProjectsControllerService } from '@Gebo.ai/brain';
-import { FileSystemsBrowsingControllerService, FileSystemsControllerService, GFilesystemProjectEndpoint, JobLauncherControllerService } from '@Gebo.ai/filesystem';
+import { BrowseParam, FileSystemsBrowsingControllerService, FileSystemsControllerService, GFilesystemProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, browsePathObservableCallback, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback, reconstructNavigationObservableCallback, VFilesystemReference } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { map, Observable, of } from "rxjs";

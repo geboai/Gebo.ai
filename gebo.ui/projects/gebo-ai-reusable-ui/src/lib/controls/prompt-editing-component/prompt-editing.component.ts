@@ -24,7 +24,7 @@ import {
     AbstractControl, ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
     ValidationErrors, Validator, Validators
 } from "@angular/forms";
-import { GPromptPlaceholderInfo, GPromptTemplateConfig, GPromptUseInfo, GeboAdminPromptsControllerService } from '@Gebo.ai/brain';
+import { GeboAdminPromptsControllerService, GPromptPlaceholderInfo, GPromptTemplateConfig, GPromptUseInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { Subscription } from "rxjs";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 

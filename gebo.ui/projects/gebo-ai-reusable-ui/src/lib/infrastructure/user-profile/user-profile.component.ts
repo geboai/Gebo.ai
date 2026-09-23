@@ -19,7 +19,7 @@
  */
 import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { LoginService } from "../login/login.service";
-import { UserInfo } from '@Gebo.ai/heimdall';
+import { UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 
 @Component({

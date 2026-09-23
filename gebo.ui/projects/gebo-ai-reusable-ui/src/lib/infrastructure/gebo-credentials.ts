@@ -17,7 +17,7 @@ import { HttpEventType, HttpHeaders } from '@angular/common/http';
  * stored in local storage.
  */
 
-import { SecurityHeaderData } from '@Gebo.ai/heimdall';
+import { SecurityHeaderData } from "@Gebo.ai/gebo-ai-rest-api";
 export const AUTHORIZATION_HEADER: string = "Authorization";
 export const AUTHORIZATION_TYPE_HEADER: string = "X-AuthType";
 export const AUTHORIZATION_PROVIDER_ID_HEADER: string = "X-Authprovider-id";

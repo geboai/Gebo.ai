@@ -11,7 +11,7 @@
 
 
 import { Injectable } from "@angular/core";
-import { ContentMetaInfosControllerService, DocumentReferenceView, GeboUserKnowledgeBaseSemanticSearchControllerService, IngestionFileType, IngestionFileTypesLibraryControllerService, LLMGeneratedResource, SearchDocumentByNameParam, SemanticQueryParam, UserUploadedContent } from '@Gebo.ai/brain';
+import { ContentMetaInfosControllerService, DocumentReferenceView, GeboUserKnowledgeBaseSemanticSearchControllerService, IngestionFileType, IngestionFileTypesLibraryControllerService, LLMGeneratedResource, SearchDocumentByNameParam, SemanticQueryParam, UserUploadedContent } from "@Gebo.ai/gebo-ai-rest-api";
 import { forkJoin, map, Observable, of } from "rxjs";
 /**
  * AI generated comments

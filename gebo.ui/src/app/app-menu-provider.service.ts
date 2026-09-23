@@ -9,8 +9,7 @@
 
 import { Injectable } from '@angular/core';
 import { ApplicationMenuProviderService, SetupStatus } from '@Gebo.ai/reusable-ui';
-import { GeneratedUserApiKeyControllerService, UserInfo } from '@Gebo.ai/heimdall';
-import { GeboMcpServerUserControllerService } from '@Gebo.ai/brain';
+import { UserInfo, GeboMcpServerUserControllerService, GeneratedUserApiKeyControllerService } from '@Gebo.ai/gebo-ai-rest-api';
 import { MegaMenuItem } from 'primeng/api';
 import { Observable, BehaviorSubject, forkJoin, of } from 'rxjs';
 import { catchError, map, shareReplay } from 'rxjs/operators';

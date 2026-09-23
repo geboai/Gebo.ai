@@ -19,7 +19,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 import { EmbeddingData } from "./graphics-data";
-import { GStatsHolder } from '@Gebo.ai/vectorizator';
+import { GStatsHolder } from "@Gebo.ai/gebo-ai-rest-api";
 
 /**
  * TypeScript interface defining the structure for pie chart data.

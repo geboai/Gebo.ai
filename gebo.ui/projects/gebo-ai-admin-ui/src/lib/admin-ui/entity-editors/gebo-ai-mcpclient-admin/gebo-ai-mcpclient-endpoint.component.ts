@@ -9,8 +9,7 @@
 
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BrowseParam, DataPage, GProject, MCPClientConfig, McpClientConfigControllerService, ProjectsControllerService, VFilesystemReference } from '@Gebo.ai/brain';
-import { JobLauncherControllerService, MCPClientProjectEndpoint, McpClientBrowsingControllerService, McpClientSystemsControllerService } from '@Gebo.ai/mcpclient';
+import { BrowseParam, DataPage, GProject, JobLauncherControllerService, MCPClientConfig, McpClientBrowsingControllerService, McpClientConfigControllerService, McpClientSystemsControllerService, MCPClientProjectEndpoint, ProjectsControllerService, VFilesystemReference } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, browsePathObservableCallback, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback, reconstructNavigationObservableCallback } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { map, Observable, of } from "rxjs";

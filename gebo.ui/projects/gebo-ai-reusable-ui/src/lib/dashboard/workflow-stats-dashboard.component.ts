@@ -8,7 +8,11 @@
  */
 
 import { Directive, OnInit } from "@angular/core";
-import { WorkflowStatsAggregationBucket, WorkflowStatsDrillDownLevel, WorkflowStatsDrillDownResult } from '@Gebo.ai/tyr';
+import {
+  WorkflowStatsDrillDownLevel,
+  WorkflowStatsDrillDownResult,
+  WorkflowStatsAggregationBucket
+} from "@Gebo.ai/gebo-ai-rest-api";
 import { Observable } from "rxjs";
 
 @Directive()

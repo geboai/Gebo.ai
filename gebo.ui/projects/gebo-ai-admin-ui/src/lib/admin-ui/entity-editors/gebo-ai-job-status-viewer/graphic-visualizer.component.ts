@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { ComputedWorkflowStatus } from '@Gebo.ai/tyr';
+import { ComputedWorkflowStatus } from "@Gebo.ai/gebo-ai-rest-api";
 import { NGPieChart, renderData, StatusRendering } from "./graphic-rendering";
 import { findMatchingTranlations, GeboAITranslationService, UIExistingText } from "@Gebo.ai/reusable-ui";
 import { map, Observable, of, Subscription } from "rxjs";

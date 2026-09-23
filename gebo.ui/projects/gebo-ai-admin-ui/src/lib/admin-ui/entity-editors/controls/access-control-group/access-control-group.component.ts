@@ -19,7 +19,7 @@
 
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { UserInfos, UsersAdminControllerService, UsersGroup } from '@Gebo.ai/heimdall';
+import { UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { forkJoin, Observable } from "rxjs";
 

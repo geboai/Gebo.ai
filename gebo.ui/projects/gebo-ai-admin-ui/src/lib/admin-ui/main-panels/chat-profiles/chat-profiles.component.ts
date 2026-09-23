@@ -17,7 +17,7 @@
  * pagination. Prompt templates live in their own admin panel (PromptsPanelComponent).
  */
 import { Component, OnInit } from "@angular/core";
-import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, PageGChatProfileConfiguration } from '@Gebo.ai/brain';
+import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, PagedModelGChatProfileConfiguration } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
@@ -51,7 +51,7 @@ export class ChatProfilesComponent extends AncestorPanelComponent implements OnI
     /**
      * Container for chat profiles data retrieved from the server.
      */
-    chatprofiles: PageGChatProfileConfiguration = {
+    chatprofiles: PagedModelGChatProfileConfiguration = {
         content: []
     };
 

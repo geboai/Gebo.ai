@@ -1,5 +1,4 @@
-import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
-import { AuthControllerService, GUserMessage, Oauth2ClientConfig, SecurityHeaderData } from '@Gebo.ai/heimdall';
+import { SecurityHeaderData, Oauth2ClientConfig, BASE_PATH, AuthControllerService, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 import { Subject, Subscription } from "rxjs";
 import { getAuth, resetAuth } from "../../gebo-credentials";
 import { OAuthService, AuthConfig, OAuthEvent } from 'angular-oauth2-oidc';

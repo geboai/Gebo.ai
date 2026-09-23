@@ -1,6 +1,5 @@
 import { Component, Injectable } from "@angular/core";
-import { GeboNeo4jModuleSetupControllerService } from '@Gebo.ai/brain';
-import { GraphRagConfigurationControllerService, GraphRagExtractionConfig } from '@Gebo.ai/graphicator';
+import { GeboNeo4jModuleSetupControllerService, GraphRagConfigurationControllerService, GraphRagExtractionConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractInstalledModuleService, AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { concatMap, map, Observable, of } from "rxjs";
 @Injectable()

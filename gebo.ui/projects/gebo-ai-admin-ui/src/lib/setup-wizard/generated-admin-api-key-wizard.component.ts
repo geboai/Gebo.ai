@@ -9,7 +9,7 @@
 
 import { Component, Injectable, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { DataPage, GeneratedAdminApiKeyControllerService, GeneratedApiKey, GeneratedApiKeyInfo, PageGeneratedApiKeyInfo, UserInfos, UsersAdminControllerService } from '@Gebo.ai/heimdall';
+import { GeneratedAdminApiKeyControllerService, GeneratedApiKeyInfo, GeneratedApiKey, UserInfos, UsersAdminControllerService, DataPage, PagedModelGeneratedApiKeyInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService, AbstractStatusService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { PaginatorState } from "primeng/paginator";
@@ -36,7 +36,7 @@ export class GeneratedAdminApiKeyEnabledService extends AbstractStatusService {
 })
 export class GeneratedAdminApiKeyWizardComponent extends BaseWizardSectionComponent implements OnInit {
     /** Paged list of API keys returned from the server */
-    protected apiKeysPaged?: PageGeneratedApiKeyInfo;
+    protected apiKeysPaged?: PagedModelGeneratedApiKeyInfo;
     
     /** List of all system users to populate the impersonate dropdown */
     protected users: UserInfos[] = [];
@@ -133,7 +133,7 @@ export class GeneratedAdminApiKeyWizardComponent extends BaseWizardSectionCompon
     public override reloadData(): void {
         this.loading = true;
         this.apiKeyService.getAdminGeneratedApiKeyPagedList(this.page).subscribe({
-            next: (res: PageGeneratedApiKeyInfo) => {
+            next: (res: PagedModelGeneratedApiKeyInfo) => {
                 this.apiKeysPaged = res;
                 this.isSetupCompleted = (this.apiKeysPaged?.content && this.apiKeysPaged.content.length > 0) || false;
             },

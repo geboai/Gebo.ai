@@ -1,6 +1,6 @@
 import { HttpRequest } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
-import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
+import { BASE_PATH } from "@Gebo.ai/gebo-ai-rest-api";
 
 @Injectable({
     providedIn: "root"

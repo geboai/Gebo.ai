@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { BaseEntityEditingComponent } from "./base-entity-editing.component";
 import { concatMap, map, Observable, of } from "rxjs";
-import { DeletableStatus, GeboAngularFormGroupMetaInfoControllerService, SimpleGObjectRef } from '@Gebo.ai/gebo-ai-rest-api';
+import { DeletableStatus, GeboAngularFormGroupMetaInfoControllerService, SimpleGObjectRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 
 

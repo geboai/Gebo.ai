@@ -19,9 +19,7 @@
 
 import { Component, Host, OnInit, Self } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { CompanySystemsControllerService, GContentManagementSystem, GGoogleSearchApiCredentials } from '@Gebo.ai/brain';
-import { FileSystemSharesSettingControllerService, SharedFilesystemUIConfig } from '@Gebo.ai/filesystem';
-import { GGitContentManagementSystem } from '@Gebo.ai/git';
+import { CompanySystemsControllerService, FileSystemSharesSettingControllerService, GContentManagementSystem, GGitContentManagementSystem, GGoogleSearchApiCredentials, SharedFilesystemUIConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 import { forkJoin, Observable } from "rxjs";

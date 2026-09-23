@@ -10,7 +10,7 @@
  
  
 
-import { GKnowledgeBase } from '@Gebo.ai/brain';
+import { GKnowledgeBase } from "@Gebo.ai/gebo-ai-rest-api";
 
 /***
  * AI generated comments

@@ -18,8 +18,7 @@
  */
 import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BrowseParam, GProject, ProjectsControllerService } from '@Gebo.ai/brain';
-import { ConfluenceBrowsingControllerService, ConfluenceSystemsControllerService, GConfluenceProjectEndpoint, GConfluenceSystem, JobLauncherControllerService } from '@Gebo.ai/confluence';
+import { BrowseParam, GConfluenceProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, ConfluenceSystemsControllerService, ConfluenceBrowsingControllerService, GConfluenceSystem } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboAIRootNotificationService, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { UploadEvent } from "primeng/fileupload";

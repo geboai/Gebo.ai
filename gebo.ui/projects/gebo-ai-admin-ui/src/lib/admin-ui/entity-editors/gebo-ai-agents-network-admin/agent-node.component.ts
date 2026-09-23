@@ -3,7 +3,7 @@ import { Component, input, Inject, forwardRef } from "@angular/core";
 import { ButtonModule } from "primeng/button";
 import { SimpleNode, NgDiagramNodeTemplate, NgDiagramNodeSelectedDirective, NgDiagramPortComponent } from "ng-diagram";
 import { GeboAIAgentsNetworkAdminComponent } from "./gebo-ai-agents-network-admin.component";
-import { AgentNetworkParticipant } from '@Gebo.ai/brain';
+import { AgentNetworkParticipant } from "@Gebo.ai/gebo-ai-rest-api";
 
 @Component({
     selector: "gebo-ai-agent-node-component",

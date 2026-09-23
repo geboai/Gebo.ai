@@ -1,7 +1,7 @@
 import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { GBaseChatModelConfig } from '@Gebo.ai/brain';
+import { GBaseChatModelConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 import { findMatchingTranlations, UIExistingText } from "../field-translation-container/text-language-resources";
 import { map } from "rxjs";

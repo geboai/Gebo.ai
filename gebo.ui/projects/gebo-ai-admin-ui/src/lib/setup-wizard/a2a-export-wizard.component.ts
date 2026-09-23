@@ -8,7 +8,7 @@
  */
 
 import { Component, Injectable } from "@angular/core";
-import { A2AServerConfig, GeboA2AServerAdminControllerService } from '@Gebo.ai/brain';
+import { A2AServerConfig, GeboA2AServerAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 

@@ -13,7 +13,7 @@
  * default and the provider that owns it, or that it is not configured yet). Read only.
  */
 import { Component, Input } from "@angular/core";
-import { ComponentLLMSStatus, LLMSSetupConfigurationData } from '@Gebo.ai/brain';
+import { ComponentLLMSStatus, LLMSSetupConfigurationData } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { CLASS_TEXT, MODEL_CLASSES, ModelClassDescriptor } from "./model-classes";
 

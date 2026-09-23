@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { GBaseModelConfig, GeboFastLlmsSetupControllerService, LLMExistingConfiguration, LLMSSetupConfiguration } from '@Gebo.ai/brain';
+import { GBaseModelConfig, GeboFastLlmsSetupControllerService, LLMExistingConfiguration, LLMSSetupConfiguration } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 @Component({
     selector: "gebo-ai-llms-vendor-configuration",

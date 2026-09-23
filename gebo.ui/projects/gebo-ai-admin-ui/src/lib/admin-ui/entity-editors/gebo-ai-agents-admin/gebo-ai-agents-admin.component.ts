@@ -1,6 +1,6 @@
 import { Component, forwardRef, inject, Injector } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, GAgentConfig, GBaseChatModelConfig, GBaseObject, GPromptTemplateConfig, GeboAgentAdminControllerService } from '@Gebo.ai/brain';
+import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, GAgentConfig, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GPromptTemplateConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";

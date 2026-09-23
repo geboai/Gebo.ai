@@ -12,7 +12,7 @@
 
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, ConfigurationEntryGBaseEmbeddingModelConfig, ConfigurationEntryGBaseImageModelConfig, ConfigurationEntryGBaseRankerModelConfig, ConfigurationEntryGBaseTextToSpeachModelConfig, ConfigurationEntryGBaseTranscriptModelConfig, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GEmbeddingModelType, GImageModelType, GRankerModelType, GTextToSpeechModelType, GTranscriptModelType, ImageModelsControllerService, RankerModelsControllerService, TextToSpeechModelsControllerService, TranscriptModelsControllerService } from '@Gebo.ai/brain';
+import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, ConfigurationEntryGBaseEmbeddingModelConfig, ConfigurationEntryGBaseImageModelConfig, ConfigurationEntryGBaseRankerModelConfig, ConfigurationEntryGBaseTextToSpeachModelConfig, ConfigurationEntryGBaseTranscriptModelConfig, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GEmbeddingModelType, GImageModelType, GRankerModelType, GTextToSpeechModelType, GTranscriptModelType, ImageModelsControllerService, RankerModelsControllerService, TextToSpeechModelsControllerService, TranscriptModelsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { forkJoin } from "rxjs";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";

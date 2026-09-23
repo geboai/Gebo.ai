@@ -10,7 +10,7 @@
 
 
 
-import { AuthProviderDto, GeboTokenContent, SecretInfo } from '@Gebo.ai/heimdall';
+import { AuthProviderDto, GeboTokenContent, SecretInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboActionType, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
 import { SecretWrapper } from "../gebo-ai-secrets-admin/gebo-ai-secrets-admin-edit.component";
 

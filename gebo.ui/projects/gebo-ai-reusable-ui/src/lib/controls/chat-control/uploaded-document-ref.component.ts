@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { UserUploadedContent } from '@Gebo.ai/brain';
+import { UserUploadedContent } from "@Gebo.ai/gebo-ai-rest-api";
 import { EnrichedDocumentReferenceViewRetrieveService, EnrichedUserUploadedContentView } from "../content-viewer/enriched-document-reference-view.service";
 @Component({
     templateUrl: "uploaded-document-ref.component.html",

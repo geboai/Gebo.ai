@@ -19,7 +19,7 @@
 
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { UserControllerService, UserInfo } from '@Gebo.ai/heimdall';
+import { UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboUIActionRoutingService, GeboActionType, SetupWizardService, SetupStatus, GeboAIPluggableModulesConfigService, GeboAIEnabledModulesConfig, GEBO_AI_FIELD_HOST, fieldHostComponentName, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { AncestorPanelComponent } from "./main-panels/ancestor-panel/ancestor-admin-panel.component";
 

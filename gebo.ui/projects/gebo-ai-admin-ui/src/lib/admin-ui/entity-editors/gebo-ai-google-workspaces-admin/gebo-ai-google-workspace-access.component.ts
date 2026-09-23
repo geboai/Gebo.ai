@@ -20,8 +20,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { UserControllerService } from '@Gebo.ai/heimdall';
-import { GGoogleDriveSystem, GoogleWorkspaceAccessHandshakeControllerService, StartGooglWorkspaceAccessRequest, StartGooglWorkspaceAccessRespose } from '@Gebo.ai/googledrive';
+import { GGoogleDriveSystem, GoogleWorkspaceAccessHandshakeControllerService, StartGooglWorkspaceAccessRequest, StartGooglWorkspaceAccessRespose, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 

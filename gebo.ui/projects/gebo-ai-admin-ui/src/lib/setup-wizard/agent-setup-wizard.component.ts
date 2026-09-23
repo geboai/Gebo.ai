@@ -1,5 +1,5 @@
 import { Component, Injectable, OnInit } from "@angular/core";
-import { GAgentConfig, GBaseObject, GeboAgentAdminControllerService } from '@Gebo.ai/brain';
+import { GAgentConfig, GBaseObject, GeboAgentAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, GeboActionType, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 @Injectable()

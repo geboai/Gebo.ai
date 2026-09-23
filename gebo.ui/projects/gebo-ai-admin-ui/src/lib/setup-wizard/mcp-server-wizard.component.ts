@@ -8,7 +8,7 @@
  */
 
 import { Component, Injectable } from "@angular/core";
-import { MCPClientConfig, McpClientConfigControllerService } from '@Gebo.ai/brain';
+import { McpClientConfigControllerService, MCPClientConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 

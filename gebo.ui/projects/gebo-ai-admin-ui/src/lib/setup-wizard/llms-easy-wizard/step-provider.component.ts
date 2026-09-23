@@ -17,7 +17,7 @@
  */
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { GeboFastLlmsSetupControllerService, LLMSSetupConfiguration, LLMSSetupConfigurationData, SecretInfo } from '@Gebo.ai/brain';
+import { GeboFastLlmsSetupControllerService, LLMSSetupConfiguration, LLMSSetupConfigurationData, SecretInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIValidators, IOperationStatus } from "@Gebo.ai/reusable-ui";
 import { Observable, of } from "rxjs";
 

@@ -10,7 +10,7 @@
  
  
 
-import { GStatsHolder, GStatsLabelValue } from '@Gebo.ai/vectorizator';
+import { GStatsHolder, GStatsLabelValue } from "@Gebo.ai/gebo-ai-rest-api";
 /**
  * AI generated comments
  * File containing interfaces and utility function to transform statistical data 

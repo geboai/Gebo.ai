@@ -11,7 +11,7 @@
 
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { FileSystemSharesSettingControllerService, GFileSystemShareReference, SharedFilesystemUIConfig } from '@Gebo.ai/filesystem';
+import { FileSystemSharesSettingControllerService, GFileSystemShareReference, SharedFilesystemUIConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 
 /**

@@ -1,6 +1,6 @@
 import { Component, Injectable } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { GGoogleSearchApiCredentials, GoogleSearchConfig, GoogleSearchConfigurationControllerService } from '@Gebo.ai/brain';
+import { GGoogleSearchApiCredentials, GoogleSearchConfig, GoogleSearchConfigurationControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 

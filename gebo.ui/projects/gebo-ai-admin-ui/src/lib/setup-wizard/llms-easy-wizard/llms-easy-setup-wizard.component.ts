@@ -22,7 +22,10 @@
  * original easy setup uses, so the two flows stay interchangeable at the API level.
  */
 import { Component } from "@angular/core";
-import { ComponentLLMSStatus, GBaseModelChoice, GUserMessage, GeboFastLlmsSetupControllerService, LLMCreateModelData, LLMSSetupConfiguration, LLMSSetupConfigurationData } from '@Gebo.ai/brain';
+import {
+    ComponentLLMSStatus, GBaseModelChoice, GeboFastLlmsSetupControllerService, GUserMessage,
+    LLMCreateModelData, LLMSSetupConfiguration, LLMSSetupConfigurationData
+} from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboAITranslationService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { MenuItem, ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable } from "rxjs";

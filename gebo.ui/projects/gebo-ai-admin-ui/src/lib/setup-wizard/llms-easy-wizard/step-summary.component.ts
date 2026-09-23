@@ -12,7 +12,7 @@
  * so the user sees what is now in place before closing the wizard. Read only.
  */
 import { Component, Input } from "@angular/core";
-import { ComponentLLMSStatus, LLMSSetupConfigurationData } from '@Gebo.ai/brain';
+import { ComponentLLMSStatus, LLMSSetupConfigurationData } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { CLASS_TEXT, MODEL_CLASSES, ModelClassDescriptor } from "./model-classes";
 

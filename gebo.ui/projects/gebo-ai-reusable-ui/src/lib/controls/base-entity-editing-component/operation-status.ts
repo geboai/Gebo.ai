@@ -10,7 +10,7 @@
  
  
 
-import { GUserMessage } from '@Gebo.ai/heimdall';
+import { GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 /**
  * @fileoverview Provides utilities for handling operation status and error checking
  * AI generated comments

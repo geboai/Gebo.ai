@@ -19,7 +19,7 @@
  */
 
 import { Component } from "@angular/core";
-import { UserInfos, UsersAdminControllerService } from '@Gebo.ai/heimdall';
+import { UserInfos, UsersAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 
 /**

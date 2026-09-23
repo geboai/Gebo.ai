@@ -1,6 +1,5 @@
 import { Component, Injectable } from "@angular/core";
-import { GeboModulesConfigControllerService } from '@Gebo.ai/gebo-ai-rest-api';
-import { GWebdavContentManagementSystem, WebdavSystemsControllerService } from '@Gebo.ai/webdav';
+import { GeboModulesConfigControllerService, GWebdavContentManagementSystem, WebdavSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService, WEBDAB_CMS_MODULE } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 import { GeboRootInstalledModuleService } from "./abstract-module-installed.service";

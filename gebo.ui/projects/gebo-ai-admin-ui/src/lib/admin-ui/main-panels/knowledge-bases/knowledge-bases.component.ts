@@ -11,7 +11,7 @@
 
 
 import { Component, OnInit } from "@angular/core";
-import { GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService } from '@Gebo.ai/brain';
+import { GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { EnrichedChild, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 

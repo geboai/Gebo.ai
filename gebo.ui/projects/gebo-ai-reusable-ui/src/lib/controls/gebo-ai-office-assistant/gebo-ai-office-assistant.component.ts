@@ -20,7 +20,11 @@ import {
   untracked,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { AdditionalContent, GChatProfileConfiguration, GUserChatInfo } from '@Gebo.ai/brain';
+import type {
+  AdditionalContent,
+  GChatProfileConfiguration,
+  GUserChatInfo,
+} from '@Gebo.ai/gebo-ai-rest-api';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from '../field-host-component-iface/field-host-component-iface';
 import { UI_COMPANY_FILES_NOT_SELECTABLE } from '../chat-control/company-files-selection.token';
 

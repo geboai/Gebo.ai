@@ -18,9 +18,7 @@
  */
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { AuthProviderDto, UserControllerService } from '@Gebo.ai/heimdall';
-import { FastSharepointSystemInsertRequest, GSharepointContentManagementSystem, SharepointSystemsControllerService } from '@Gebo.ai/sharepoint';
-import { GConfluenceSystem } from '@Gebo.ai/confluence';
+import { AuthProviderDto, FastSharepointSystemInsertRequest, GConfluenceSystem, GSharepointContentManagementSystem, SharepointSystemsControllerService, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { SharepointUrlService } from "./confluence-url.service";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";

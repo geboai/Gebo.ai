@@ -9,7 +9,13 @@
 
 import { Component, Injectable } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { BraveSearchConfigurationControllerService, GoogleSearchConfigurationControllerService, SearxngSearchConfigurationControllerService, SerpapiSearchConfigurationControllerService, TavilySearchConfigurationControllerService } from '@Gebo.ai/brain';
+import {
+    BraveSearchConfigurationControllerService,
+    GoogleSearchConfigurationControllerService,
+    SearxngSearchConfigurationControllerService,
+    SerpapiSearchConfigurationControllerService,
+    TavilySearchConfigurationControllerService
+} from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { forkJoin, map, Observable, of, switchMap } from "rxjs";
 

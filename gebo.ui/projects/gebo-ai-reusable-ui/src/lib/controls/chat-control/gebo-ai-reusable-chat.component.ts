@@ -22,8 +22,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
-import { AdditionalContent, CalledFunction, GBaseChatModelChoice, GResponseDocumentRef, GUserChatInfo, GUserMessage, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from '@Gebo.ai/brain';
+import { AdditionalContent, BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";

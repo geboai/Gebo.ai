@@ -12,7 +12,7 @@
 
 import { Component, forwardRef, Injector, Input, SimpleChanges } from "@angular/core";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { GeboAwsConnectionCredentials, GeboCustomSecretContent, GeboGoogleJsonSecretContent, GeboGoogleOauth2SecretContent, GeboOauth2SecretContent, GeboSshKeySecretContent, GeboTokenContent, GeboUsernamePasswordContent, SecretInfo, SecretWrapperGeboAwsConnectionCredentials, SecretWrapperGeboCustomSecretContent, SecretWrapperGeboGoogleJsonSecretContent, SecretWrapperGeboGoogleOauth2SecretContent, SecretWrapperGeboOauth2SecretContent, SecretWrapperGeboSshKeySecretContent, SecretWrapperGeboTokenContent, SecretWrapperGeboUsernamePasswordContent, SecretsControllerService } from '@Gebo.ai/heimdall';
+import { GeboSshKeySecretContent, GeboTokenContent, SecretInfo, GeboUsernamePasswordContent, SecretWrapperGeboSshKeySecretContent, SecretWrapperGeboTokenContent, SecretWrapperGeboUsernamePasswordContent, SecretsControllerService, GeboCustomSecretContent, GeboOauth2SecretContent, GeboGoogleOauth2SecretContent, GeboGoogleJsonSecretContent, SecretWrapperGeboGoogleOauth2SecretContent, SecretWrapperGeboOauth2SecretContent, SecretWrapperGeboCustomSecretContent, SecretWrapperGeboGoogleJsonSecretContent, GeboAwsConnectionCredentials, SecretWrapperGeboAwsConnectionCredentials } from "@Gebo.ai/gebo-ai-rest-api"
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { map, Observable, of } from "rxjs";
 import { ConfirmationService } from "primeng/api";

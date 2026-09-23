@@ -21,9 +21,7 @@
 
 import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { SecretInfo, SecretsControllerService } from '@Gebo.ai/heimdall';
-import { BrowseParam, GProject, ProjectsControllerService } from '@Gebo.ai/brain';
-import { AwsS3BrowsingControllerService, AwsS3SystemsControllerService, GAwsS3ProjectEndpoint, GAwsS3System, JobLauncherControllerService } from '@Gebo.ai/awss3';
+import { AwsS3BrowsingControllerService, AwsS3SystemsControllerService, BrowseParam, GAwsS3ProjectEndpoint, GAwsS3System, GProject, JobLauncherControllerService, ProjectsControllerService, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";

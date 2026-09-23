@@ -12,7 +12,7 @@
 
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { GBaseChatModelConfig, ModelMetaInfo } from '@Gebo.ai/brain';
+import { GBaseChatModelConfig, ModelMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 /**
  * AI generated comments

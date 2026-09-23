@@ -11,7 +11,7 @@
  
 
 import { Injectable } from "@angular/core";
-import { IngestionFileTypesLibraryControllerService } from '@Gebo.ai/brain';
+import { IngestionFileTypesLibraryControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { map, Observable, of } from "rxjs";
 
 /**

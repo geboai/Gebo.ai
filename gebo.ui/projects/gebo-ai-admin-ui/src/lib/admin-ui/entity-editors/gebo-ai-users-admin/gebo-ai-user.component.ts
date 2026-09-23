@@ -18,7 +18,7 @@
  */
 import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { AuthProviderDto, AuthProvidersControllerService, EditableUser, UsersAdminControllerService } from '@Gebo.ai/heimdall';
+import { AuthProviderDto, AuthProvidersControllerService, EditableUser, UsersAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { map, Observable } from "rxjs";

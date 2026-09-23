@@ -9,8 +9,7 @@
 
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { SecretInfo, SecretsControllerService } from '@Gebo.ai/heimdall';
-import { BedrockTranscriptModelsConfigurationControllerService, GBedrockTranscriptModelChoice, GBedrockTranscriptModelConfig } from '@Gebo.ai/brain';
+import { GBedrockTranscriptModelChoice, GBedrockTranscriptModelConfig, BedrockTranscriptModelsConfigurationControllerService, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable } from "rxjs";

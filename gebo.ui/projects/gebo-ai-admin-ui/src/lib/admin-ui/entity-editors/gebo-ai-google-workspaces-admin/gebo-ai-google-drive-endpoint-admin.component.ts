@@ -21,8 +21,7 @@
  */
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BrowseParam, GProject, ProjectsControllerService } from '@Gebo.ai/brain';
-import { GGoogleDriveProjectEndpoint, GGoogleDriveSystem, GoogleDriveBrowsingControllerService, GoogleDriveSystemsControllerService, JobLauncherControllerService } from '@Gebo.ai/googledrive';
+import { BrowseParam, GGoogleDriveProjectEndpoint, GGoogleDriveSystem, GoogleDriveBrowsingControllerService, GoogleDriveSystemsControllerService, GProject, JobLauncherControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, browsePathObservableCallback, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { map, Observable, of } from "rxjs";

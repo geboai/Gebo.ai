@@ -18,7 +18,7 @@
  */
 import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ContentObject } from '@Gebo.ai/brain';
+import { ContentObject } from "@Gebo.ai/gebo-ai-rest-api";
 import { EditorComponent, NgxEditorModel } from "ngx-monaco-editor-v2";
 
 /**

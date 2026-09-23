@@ -17,8 +17,7 @@
  * The component integrates with the Gebo.ai framework for handling actions and routing events.
  */
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { GeboModulesConfigControllerService } from '@Gebo.ai/gebo-ai-rest-api';
-import { GProject } from '@Gebo.ai/brain';
+import { GProject, GeboModulesConfigControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 
 import { MenuItem } from "primeng/api";
 import { GeboAIEntitiesSettingWizardConfiguration } from "../base-entity-editing-component/entities-modification-wizard";

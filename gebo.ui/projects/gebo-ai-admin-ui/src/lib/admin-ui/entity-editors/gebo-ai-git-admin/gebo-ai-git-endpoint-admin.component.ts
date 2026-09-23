@@ -16,11 +16,10 @@
  * in the Gebo.ai application. It extends the BaseEntityEditingComponent to provide CRUD operations
  * for Git project endpoints.
  */
-import { SecretInfo, SecretsControllerService } from '@Gebo.ai/heimdall';
-import { GJobStatus, GProject, ProjectsControllerService } from '@Gebo.ai/brain';
-import { GGitContentManagementSystem, GGitProjectEndpoint, GitSystemsControllerService, JobLauncherControllerService } from '@Gebo.ai/git';
+import { JobLauncherControllerService } from '@Gebo.ai/gebo-ai-rest-api';
 import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { GGitContentManagementSystem, GitSystemsControllerService, GProject, GGitProjectEndpoint, ProjectsControllerService, SecretsControllerService, SecretInfo, GJobStatus } from "@Gebo.ai/gebo-ai-rest-api";
 import { map, Observable, of } from "rxjs";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, IOperationStatus } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from 'primeng/api';

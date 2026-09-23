@@ -9,8 +9,7 @@
 
 import { Component, forwardRef, Injector, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { SecretInfo, SecretsControllerService, UserInfos, UsersAdminControllerService, UsersGroup } from '@Gebo.ai/heimdall';
-import { A2AClientConfigControllerService, A2ARemoteAgentConfig, A2ARemoteSkill } from '@Gebo.ai/brain';
+import { A2AClientConfigControllerService, A2ARemoteAgentConfig, A2ARemoteSkill, SecretInfo, SecretsControllerService, UsersAdminControllerService, UserInfos, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { Observable, of } from "rxjs";

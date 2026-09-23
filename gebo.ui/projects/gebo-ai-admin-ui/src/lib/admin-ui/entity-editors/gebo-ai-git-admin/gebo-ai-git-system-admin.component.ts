@@ -19,8 +19,7 @@
  */
 import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { SecretInfo, SecretsControllerService } from '@Gebo.ai/heimdall';
-import { GContentManagementSystemType, GGitContentManagementSystem, GitSystemsControllerService } from '@Gebo.ai/git';
+import { GGitContentManagementSystem, GContentManagementSystemType, GitSystemsControllerService, SecretsControllerService, SecretInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { map, Observable, of } from "rxjs";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";

@@ -17,8 +17,7 @@
  */
 
 import { Component, Injectable } from "@angular/core";
-import { GeboModulesConfigControllerService } from '@Gebo.ai/gebo-ai-rest-api';
-import { ConfluenceSystemsControllerService, GConfluenceSystem } from '@Gebo.ai/confluence';
+import { ConfluenceSystemsControllerService, GConfluenceSystem, GeboModulesConfigControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, CONFLUENCE_MODULE, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 import { GeboRootInstalledModuleService } from "./abstract-module-installed.service";

@@ -20,9 +20,7 @@
 
 import { Component, forwardRef, Inject, Injector, Input, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
-import { BrowseParam, GProject, ProjectsControllerService } from '@Gebo.ai/brain';
-import { FileUploadControllerService, FileUploadsControllerService, GUploadsProjectEndpoint, JobLauncherControllerService, UploadedFileInfo, UploadsBrowsingControllerService } from '@Gebo.ai/uploads';
+import { BASE_PATH, BrowseParam, FileUploadControllerService, GUploadsProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, FileUploadsControllerService, UploadedFileInfo, UploadsBrowsingControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, browsePathObservableCallback, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboAIRootNotificationService, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback, reconstructNavigationObservableCallback, ServedFileReference, VFilesystemDeletableReference, VFilesystemReference, VFilesystemSelectorComponent } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { FileBeforeUploadEvent, FileProgressEvent, UploadEvent } from "primeng/fileupload";

@@ -8,7 +8,11 @@
  */
 
 import { Component } from "@angular/core";
-import { LLMUsageDrillDownLevel, LLMUsageDrillDownResult, LlmsUsageAdminLevelControllerService } from '@Gebo.ai/tyr';
+import { 
+  LlmsUsageAdminLevelControllerService, 
+  LLMUsageDrillDownLevel, 
+  LLMUsageDrillDownResult 
+} from "@Gebo.ai/gebo-ai-rest-api";
 import { Observable } from "rxjs";
 import { GEBO_AI_FIELD_HOST, fieldHostComponentName, GEBO_AI_MODULE } from "../controls/field-host-component-iface/field-host-component-iface";
 import { BaseLLMSUsageDashboardComponent } from "./llms-usage-dashboard.component";

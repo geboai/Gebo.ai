@@ -18,8 +18,7 @@
  */
 import { HttpClient } from "@angular/common/http";
 import { Component, Input, OnChanges, OnInit, SimpleChanges, Inject, Output, EventEmitter } from "@angular/core";
-import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
-import { ContentMetaInfo, ContentMetaInfosControllerService, ContentObject, IngestionFileType, IngestionFileTypesLibraryControllerService, UserUploadedContent } from '@Gebo.ai/brain';
+import { BASE_PATH, ContentMetaInfo, ContentMetaInfosControllerService, ContentObject, IngestionFileType, IngestionFileTypesLibraryControllerService, UserUploadedContent } from "@Gebo.ai/gebo-ai-rest-api";
 import { EnrichedLLMGeneratedResource, EnrichedUserUploadedContentView } from "./enriched-document-reference-view.service";
 import { getAuthHeader } from "../../infrastructure/gebo-credentials";
 

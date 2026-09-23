@@ -17,8 +17,7 @@
  */
 
 import { Component, Injectable } from "@angular/core";
-import { GeboModulesConfigControllerService } from '@Gebo.ai/gebo-ai-rest-api';
-import { GGoogleDriveSystem, GoogleDriveSystemsControllerService } from '@Gebo.ai/googledrive';
+import { GeboModulesConfigControllerService, GGoogleDriveSystem, GoogleDriveSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, GOOGLEDRIVE_MODULE, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 import { GeboRootInstalledModuleService } from "./abstract-module-installed.service";

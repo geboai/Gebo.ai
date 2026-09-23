@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { DeepSearchConfig, GeboDeepSearchAdminControllerService } from '@Gebo.ai/brain';
+import { DeepSearchConfig, GeboDeepSearchAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 
 @Component({

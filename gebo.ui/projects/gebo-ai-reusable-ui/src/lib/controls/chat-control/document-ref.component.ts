@@ -19,7 +19,7 @@
  * The component emits events when a document is selected to be added to a chosen items collection.
  */
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { GResponseDocumentRef } from '@Gebo.ai/brain';
+import { GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 @Component({

@@ -11,7 +11,7 @@
 
 
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { GKnowledgeBase, GProject, IngestionFileType, IngestionFileTypesLibraryControllerService, IngestionHandlerConfig, VDocumentInfo } from '@Gebo.ai/brain';
+import { GKnowledgeBase, GProject, IngestionFileType, IngestionFileTypesLibraryControllerService, IngestionHandlerConfig, VDocumentInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { cloneTreeNode, EnrichedChild, extractTargetType, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboUIActionRequest, GeboUIActionRoutingService, getNodeIcon, getVFSIcon, isProjectEndpoint, refreshTreeBranch, treeNodeTrackBy } from "@Gebo.ai/reusable-ui";
 import { TreeNode } from "primeng/api";
 import { TreeNodeExpandEvent, TreeNodeSelectEvent } from "primeng/tree";

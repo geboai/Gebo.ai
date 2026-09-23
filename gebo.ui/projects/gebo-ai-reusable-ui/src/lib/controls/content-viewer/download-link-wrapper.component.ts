@@ -19,8 +19,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, ElementRef, Inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 import { getAuthHeader } from "../../infrastructure/gebo-credentials";
-import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
-import { ContentMetaInfo, IngestionFileType } from '@Gebo.ai/brain';
+import { BASE_PATH, ContentMetaInfo, IngestionFileType } from "@Gebo.ai/gebo-ai-rest-api";
 
 /**
  * External JavaScript function declaration for opening documents in an iframe

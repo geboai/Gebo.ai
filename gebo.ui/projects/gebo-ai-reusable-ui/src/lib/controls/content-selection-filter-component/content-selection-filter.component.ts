@@ -1,7 +1,6 @@
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { AbstractControl, ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators } from "@angular/forms";
-import { IngestionFileTypesLibraryControllerService } from '@Gebo.ai/brain';
-import { GContentSelectionFilter } from '@Gebo.ai/graphicator';
+import { GContentSelectionFilter, IngestionFileTypesLibraryControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { validateCriteria } from "./validate-content-selection-filter-criteria";
 import { NonNullAssert } from "@angular/compiler";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";

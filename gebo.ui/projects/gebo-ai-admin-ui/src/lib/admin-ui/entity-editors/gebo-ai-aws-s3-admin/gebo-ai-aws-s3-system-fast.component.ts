@@ -19,7 +19,7 @@
  */
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { AwsS3SystemsControllerService, FastAwsS3SystemInsertRequest, GAwsS3System, GeboAwsConnectionCredentials } from '@Gebo.ai/awss3';
+import { AwsS3SystemsControllerService, FastAwsS3SystemInsertRequest, GAwsS3System, GeboAwsConnectionCredentials } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 
