@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { GraphRagConfigurationControllerService } from './api/graphRagConfigurationController.service';
-import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 
 @NgModule({
@@ -13,7 +12,6 @@ import { InternalMessagingTopologyControllerService } from './api/internalMessag
   exports:      [],
   providers: [
     GraphRagConfigurationControllerService,
-    IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService ]
 })
 export class ApiModule {

@@ -6,7 +6,6 @@ import { HttpClient } from '@angular/common/http';
 import { ContentsResetControllerService } from './api/contentsResetController.service';
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
-import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { McpClientBrowsingControllerService } from './api/mcpClientBrowsingController.service';
@@ -20,7 +19,6 @@ import { McpClientSystemsControllerService } from './api/mcpClientSystemsControl
     ContentsResetControllerService,
     DocumentContentStreamerControllerService,
     GenericalPublisherControllerService,
-    IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService,
     JobLauncherControllerService,
     McpClientBrowsingControllerService,

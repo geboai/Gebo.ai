@@ -10,7 +10,6 @@ import { GoogleDriveBrowsingControllerService } from './api/googleDriveBrowsingC
 import { GoogleDriveSearchServiceControllerService } from './api/googleDriveSearchServiceController.service';
 import { GoogleDriveSystemsControllerService } from './api/googleDriveSystemsController.service';
 import { GoogleWorkspaceAccessHandshakeControllerService } from './api/googleWorkspaceAccessHandshakeController.service';
-import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 
@@ -26,7 +25,6 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
     GoogleDriveSearchServiceControllerService,
     GoogleDriveSystemsControllerService,
     GoogleWorkspaceAccessHandshakeControllerService,
-    IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService,
     JobLauncherControllerService ]
 })
