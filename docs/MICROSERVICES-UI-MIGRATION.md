@@ -11,27 +11,25 @@ per-microservice client libraries under
 `gebo.api.clients/gebo.microservices.clients.parent/gebo.microservices.clients.angular.module`
 (`@Gebo.ai/microservices-clients`) in the host `AppModule`.
 
-Every mapping and decision below is **grounded in the current Angular code**:
-the reverse index was computed from the `*.service.ts` files actually present in
-each client library, and every target was assigned from the services a `.ts`
-file actually imports and how it calls them — not from any controller-location
-document. Where the code alone cannot decide (a controller that several
-services expose), the rule used is stated and the residual decisions are flagged
-`[CONFIRM]`.
+Every mapping is **grounded in the current Angular and client code**: the reverse
+index is computed from the `*.service.ts` files actually present in each client
+library, and every target is assigned from the services a `.ts` file actually
+imports and how it calls them. Where the code alone cannot decide (a controller
+that several services expose), the rule used is stated.
 
 ### Numbers (measured)
 
 | | count |
 |---|---|
-| Monolithic stub services (`gebo-ai-rest-api/src/lib/api/*.service.ts`) | 140 |
+| Monolithic stub services (`gebo-ai-rest-api/src/lib/api/*.service.ts`) | 138 |
 | Target microservice client libraries | 21 |
-| UI `.ts` files importing `@Gebo.ai/gebo-ai-rest-api` | 217 |
-| …importing ≥1 **service** class (need retargeting) | 166 |
+| UI `.ts` files importing `@Gebo.ai/gebo-ai-rest-api` | 216 |
+| …importing ≥1 **service** class (need retargeting) | 165 |
 | …importing **only models / infra** (no service) | 51 |
-| Distinct service references across the UI | 332 |
+| Distinct service references across the UI | 330 |
 | Files touching **>1** microservice after the split | 61 |
-| Monolith services with exactly **one** microservice home (clean 1:1) | 128 |
-| Monolith services exposed by **several** microservices (rule needed) | 8 |
+| Monolith services with exactly **one** microservice home (clean 1:1) | 130 |
+| Monolith services exposed by **several** microservices (rule needed) | 4 |
 | Monolith services with **no** microservice client (orphans) | 4 |
 
 ---
@@ -107,22 +105,22 @@ Notes grounded in `app.module.ts`:
 Computed by intersecting each UI file’s imported service classes with the
 `*.service.ts` inventory of every client library.
 
-### 3.1 Clean 1:1 (128 services) — mechanical import-source change
+### 3.1 Clean 1:1 (130 services) — mechanical import-source change
 
 Where a controller exists in exactly one library, the target is unambiguous.
 Distribution of the **references actually made by the UI**:
 
 | target library | service references |
 |---|---|
-| `@Gebo.ai/brain` | 142 |
+| `@Gebo.ai/brain` | 151 |
 | `@Gebo.ai/heimdall` | 79 |
 | `@Gebo.ai/filesystem` | 8 |
-| `@Gebo.ai/googledrive` | 7 |
 | `@Gebo.ai/confluence` | 7 |
-| `@Gebo.ai/jira` | 6 |
-| `@Gebo.ai/webdav` | 6 |
-| `@Gebo.ai/sharepoint` | 6 |
+| `@Gebo.ai/googledrive` | 7 |
 | `@Gebo.ai/aws-s3` | 6 |
+| `@Gebo.ai/webdav` | 6 |
+| `@Gebo.ai/jira` | 6 |
+| `@Gebo.ai/sharepoint` | 6 |
 | `@Gebo.ai/tyr` | 5 |
 | `@Gebo.ai/userspace` | 5 |
 | `@Gebo.ai/uploads` | 4 |
@@ -137,13 +135,16 @@ knowledge-base admin surface (`brain`) and the auth/user/secret/setup surface
 
 ### 3.2 Duplicated content-handler controllers (rule needed)
 
-Five controllers are shipped by **every** content-handler library because they
+Four controllers are shipped by **every** content-handler library because they
 come from the shared content-handler starter, and each instance operates on
 **that handler’s** content:
 
 `ContentsResetControllerService`, `DocumentContentStreamerControllerService`,
-`GenericalPublisherControllerService`, `JobLauncherControllerService`,
-`IngestionFileTypesLibraryControllerService`.
+`GenericalPublisherControllerService`, `JobLauncherControllerService`.
+
+They are exposed by the 13-member set `aws-s3, brain, confluence, filesystem,
+git, googledrive, integration, jira, mcpclient, sharepoint, uploads, userspace,
+webdav`.
 
 **Grounding:** in every content-handler *endpoint editor*, the handler type is
 fixed by the file, and the call is scoped to it — e.g.
@@ -167,11 +168,6 @@ SharePoint endpoint. So:
 > `ContentsResetControllerService.resetContentsIngestion({...})` at project
 > scope.
 
-> **Rule L — lookup:** `IngestionFileTypesLibraryControllerService` is a
-> read-only file-type lookup, byte-identical on every handler. Its canonical
-> home is **`@Gebo.ai/brain`** (always deployed) except inside a handler editor,
-> where Rule H keeps it local to avoid a second import source in one file.
-
 **Job launch vs. job status — a real split to preserve.** `JobLauncher…`
 (`createJob`, `getHasRunningJobs`) is per-handler (Rule H/A). Job **status** is
 `JobStatusControllerService`, which exists **only** in `@Gebo.ai/tyr` — the
@@ -181,15 +177,7 @@ a handler (or brain) **and** tyr. This is grounded, not accidental:
 `gebo-ai-job-status-viewer.component.ts` → `tyr[JobStatusControllerService]` +
 `brain[LogViewControllerService, CompanySystemsControllerService]`.
 
-### 3.3 Other duplicated controllers
-
-| service | exposed by | decision | grounding |
-|---|---|---|---|
-| `GeboVectorStoreConfigurationControllerService` | brain, graphicator, vectorizator | n/a | not imported by any UI `.ts` as a service — no migration action |
-| `GeboAdvancedSetupStatusControllerService` | ~~brain, heimdall~~ | **REMOVED** | investigation found it had no consumer: the only UI reference was a dead import in `setup-wizard/llms-setup-wizard.service.ts` (the live status call there is `GeboFastLlmsSetupControllerService.getLLMSSetupStatus()`), and the KB + published-datasource gate the setup wizard shows is computed from `GeboFastKnowledgeBaseSetupControllerService` + client-side aggregation, not from this controller. The controller, its `GeboAdvancedSetupStatusService`, and the `GeboAdvancedSetupStatus` model were deleted (shared `gebo.architecture.fastsetup` module), and the generated stubs dropped from every client set. No migration action |
-| `McpClientConfigControllerService` | brain, mcpclient | **mcpclient** in the mcpclient *endpoint* editor (ingestion); **brain** in `gebo-ai-mcp-client-admin` and `setup-wizard/mcp-server-wizard` (agent/tool MCP connections) | both expose the same class over different stores; split by caller domain. `[CONFIRM]` against backend data ownership of `listMCPClientConfig`/`updateMCPClientConfig` |
-
-### 3.4 Orphans — no microservice client (4)
+### 3.3 Orphans — no microservice client (4)
 
 Four monolith services have **no** matching `*.service.ts` in any client
 library. Three are referenced by the UI (below) and must be resolved before
@@ -198,13 +186,13 @@ orphan with **no** UI usage — no action:
 
 | service | UI files | options |
 |---|---|---|
-| `GeboModulesConfigControllerService` | 10 | modules-config is cluster/aggregate metadata. **Decide the owning service** (likely `heimdall` or `brain`) and regenerate that client to expose it, or route via the gateway. Highest-impact orphan — used across every setup wizard and `gebo-ai-modules.service.ts` |
+| `GeboModulesConfigControllerService` | 10 | modules-config is cluster/aggregate metadata. **Decide the owning service** (likely `heimdall` or `brain`) and expose it on that client, or route via the gateway. Highest-impact orphan — used across every setup wizard and `gebo-ai-modules.service.ts` |
 | `GeboAngularFormGroupMetaInfoControllerService` | 3 | form-metadata endpoint used by `gebo-form-groups.service.ts` and base editors. Pick the owning service and expose it, or keep a thin monolith-compat client |
 | `UiTextResourcesControllerService` | 1 | i18n text resources (`gebo-translation.service.ts`). Likely `heimdall`/gateway static content |
 
 > **Action required (blocking):** the 3 UI-referenced orphan controllers are not
 > in scope of the generated clients today. Each needs an owner decision + a
-> client regeneration (or an explicit gateway route), otherwise the ~14 files
+> client that exposes it (or an explicit gateway route), otherwise the ~14 files
 > using them cannot leave the monolith stub. Track these as prerequisites, not
 > per-file edits.
 
@@ -268,8 +256,8 @@ dropped (each library has its own; the module wires them).
 ## 6. Models — nominal type identity (do not skip)
 
 Each client library ships **only** the models its own controllers reference, as
-its own generated copies (`@Gebo.ai/brain` 346, `@Gebo.ai/heimdall` 88,
-`@Gebo.ai/tyr` 38, …; the monolith’s 526 is the superset). Two copies of
+its own generated copies (`@Gebo.ai/brain` the largest, `@Gebo.ai/heimdall`,
+`@Gebo.ai/tyr`, …; the monolith’s set is the superset). Two copies of
 `MCPClientConfig` (brain and mcpclient) are structurally identical but are
 **distinct TypeScript types**.
 
@@ -300,11 +288,38 @@ package(s) and the exact services to move. `<br>` separates targets within one
 file (a multi-microservice file). Paths are relative to each project’s
 `src/lib/` (host app noted as `HOST/src/`).
 
-
 #### gebo-ai-admin-ui — admin-ui
 
 | File | Target `@Gebo.ai/<lib>` [ services ] |
 |---|---|
+| `admin-ui/entity-editors/controls/access-control-group/access-control-group.component.ts` | heimdall[UsersAdminControllerService] |
+| `admin-ui/entity-editors/controls/advanced-settings-chatmodel-group/advanced-settings-chatmodel-group.component.ts` | brain[FunctionsLookupControllerService,PromptTemplatesControllerService] |
+| `admin-ui/entity-editors/controls/build-systems-chooser/build-systems-chooser.component.ts` | brain[BuildSystemsControllerService] |
+| `admin-ui/entity-editors/controls/graphrag-config/graphrag-config.component.ts` | brain[GeboNeo4jModuleSetupControllerService]<br>graphicator[GraphRagConfigurationControllerService] |
+| `admin-ui/entity-editors/controls/prompt-wizard/prompt-wizard.component.ts` | brain[ChatModelsLookupControllerService] |
+| `admin-ui/entity-editors/gebo-ai-a2a-client-admin/gebo-ai-a2a-client-admin.component.ts` | brain[A2AClientConfigControllerService]<br>heimdall[SecretsControllerService,UsersAdminControllerService] |
+| `admin-ui/entity-editors/gebo-ai-a2a-server-admin/gebo-ai-a2a-server-admin.component.ts` | brain[GeboA2AServerAdminControllerService] |
+| `admin-ui/entity-editors/gebo-ai-agents-admin/gebo-ai-agents-admin.component.ts` | brain[ChatModelsControllerService,GeboAgentAdminControllerService] |
+| `admin-ui/entity-editors/gebo-ai-agents-network-admin/gebo-ai-agents-network-admin.component.ts` | brain[GeboAgentAdminControllerService,GeboAgentsNetworkAdminControllerService] |
+| `admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-confluence-endpoint.component.ts` | brain[ProjectsControllerService]<br>confluence[ConfluenceBrowsingControllerService,ConfluenceSystemsControllerService,JobLauncherControllerService] |
+| `admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-confluence-system-admin.component.ts` | confluence[ConfluenceSystemsControllerService]<br>heimdall[SecretsControllerService] |
+| `admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-confluence-system-fast.component.ts` | confluence[ConfluenceSystemsControllerService]<br>heimdall[UserControllerService] |
+| `admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-endpoint.component.ts` | brain[ProjectsControllerService]<br>jira[JiraBrowsingControllerService,JiraSystemsControllerService,JobLauncherControllerService] |
+| `admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-system-admin.component.ts` | heimdall[SecretsControllerService]<br>jira[JiraSystemsControllerService] |
+| `admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-system-fast.component.ts` | heimdall[UserControllerService]<br>jira[JiraSystemsControllerService] |
+| `admin-ui/entity-editors/gebo-ai-aws-s3-admin/gebo-ai-aws-s3-endpoint.component.ts` | aws-s3[AwsS3BrowsingControllerService,AwsS3SystemsControllerService,JobLauncherControllerService]<br>brain[ProjectsControllerService]<br>heimdall[SecretsControllerService] |
+| `admin-ui/entity-editors/gebo-ai-aws-s3-admin/gebo-ai-aws-s3-system-admin.component.ts` | aws-s3[AwsS3SystemsControllerService]<br>heimdall[SecretsControllerService] |
+| `admin-ui/entity-editors/gebo-ai-aws-s3-admin/gebo-ai-aws-s3-system-fast.component.ts` | aws-s3[AwsS3SystemsControllerService] |
+| `admin-ui/entity-editors/gebo-ai-chat-profile-admin/gebo-ai-chat-profile-admin.component.ts` | brain[ChatModelsControllerService,EmbeddingModelsControllersService,GeboAdminChatProfilesConfigurationControllerService,KnowledgeBaseControllerService,PromptTemplatesControllerService] |
+| `admin-ui/entity-editors/gebo-ai-filesystems-admin/gebo-ai-filesystem-endpoint.component.ts` | brain[ProjectsControllerService]<br>filesystem[FileSystemsBrowsingControllerService,FileSystemsControllerService,JobLauncherControllerService] |
+| `admin-ui/entity-editors/gebo-ai-filesystems-admin/gebo-ai-filesystem-share-reference-admin.component.ts` | filesystem[FileSystemSharesSettingControllerService] |
+| `admin-ui/entity-editors/gebo-ai-filesystems-admin/gebo-ai-shared-filesystems.component.ts` | filesystem[FileSystemSharesSettingControllerService] |
+| `admin-ui/entity-editors/gebo-ai-git-admin/gebo-ai-git-endpoint-admin.component.ts` | brain[ProjectsControllerService]<br>git[GitSystemsControllerService,JobLauncherControllerService]<br>heimdall[SecretsControllerService] |
+| `admin-ui/entity-editors/gebo-ai-git-admin/gebo-ai-git-system-admin.component.ts` | git[GitSystemsControllerService]<br>heimdall[SecretsControllerService] |
+| `admin-ui/entity-editors/gebo-ai-google-search-admin/gebo-ai-google-search-account.component.ts` | brain[GoogleSearchConfigurationControllerService]<br>heimdall[SecretsControllerService] |
+| `admin-ui/entity-editors/gebo-ai-google-workspaces-admin/gebo-ai-google-drive-admin.component.ts` | googledrive[GoogleDriveSystemsControllerService]<br>heimdall[SecretsControllerService] |
+| `admin-ui/entity-editors/gebo-ai-google-workspaces-admin/gebo-ai-google-drive-endpoint-admin.component.ts` | brain[ProjectsControllerService]<br>googledrive[GoogleDriveBrowsingControllerService,GoogleDriveSystemsControllerService,JobLauncherControllerService] |
+| `admin-ui/entity-editors/gebo-ai-google-workspaces-admin/gebo-ai-google-drive-fast.component.ts` | googledrive[GoogleDriveSystemsControllerService] |
 | `admin-ui/entity-editors/gebo-ai-google-workspaces-admin/gebo-ai-google-workspace-access.component.ts` | googledrive[GoogleWorkspaceAccessHandshakeControllerService]<br>heimdall[UserControllerService] |
 | `admin-ui/entity-editors/gebo-ai-job-status-viewer/gebo-ai-job-status-viewer.component.ts` | brain[CompanySystemsControllerService,LogViewControllerService]<br>tyr[JobStatusControllerService] |
 | `admin-ui/entity-editors/gebo-ai-job-status-viewer/log-table.component.ts` | brain[LogViewControllerService] |
@@ -313,7 +328,7 @@ file (a multi-microservice file). Paths are relative to each project’s
 | `admin-ui/entity-editors/gebo-ai-knowledgebase-admin/gebo-ai-project-admin.component.ts` | brain[ContentsResetControllerService,KnowledgeBaseControllerService,ProjectsControllerService] |
 | `admin-ui/entity-editors/gebo-ai-mcp-client-admin/gebo-ai-mcp-client-admin.component.ts` | brain[McpClientConfigControllerService]<br>heimdall[SecretsControllerService,UsersAdminControllerService] |
 | `admin-ui/entity-editors/gebo-ai-mcp-server-admin/gebo-ai-mcp-server-admin.component.ts` | brain[GeboMcpServerAdminControllerService] |
-| `admin-ui/entity-editors/gebo-ai-mcpclient-admin/gebo-ai-mcpclient-endpoint.component.ts` | brain[ProjectsControllerService]<br>mcpclient[JobLauncherControllerService,McpClientBrowsingControllerService,McpClientConfigControllerService,McpClientSystemsControllerService] |
+| `admin-ui/entity-editors/gebo-ai-mcpclient-admin/gebo-ai-mcpclient-endpoint.component.ts` | brain[McpClientConfigControllerService,ProjectsControllerService]<br>mcpclient[JobLauncherControllerService,McpClientBrowsingControllerService,McpClientSystemsControllerService] |
 | `admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-anthropic-chatmodel-admin.component.ts` | brain[AnthropicChatModelsConfigurationControllerService,FunctionsLookupControllerService]<br>heimdall[SecretsControllerService] |
 | `admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-chatmodel-admin.component.ts` | brain[BedrockChatModelsConfigurationControllerService,FunctionsLookupControllerService]<br>heimdall[SecretsControllerService] |
 | `admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-embedmodel-admin.component.ts` | brain[BedrockEmbeddingModelsConfigurationControllerService]<br>heimdall[SecretsControllerService] |
@@ -395,14 +410,13 @@ file (a multi-microservice file). Paths are relative to each project’s
 | `setup-wizard/llms-setup-components/llms-vendor-configuration.component.ts` | brain[GeboFastLlmsSetupControllerService] |
 | `setup-wizard/llms-setup-components/llms-vendor-modeltype.component.ts` | brain[GeboFastLlmsSetupControllerService] |
 | `setup-wizard/llms-setup-wizard.component.ts` | heimdall[UserControllerService] |
-| `setup-wizard/llms-setup-wizard.service.ts` | brain[GeboAdvancedSetupStatusControllerService,GeboFastLlmsSetupControllerService] |
+| `setup-wizard/llms-setup-wizard.service.ts` | brain[GeboFastLlmsSetupControllerService] |
 | `setup-wizard/mcp-server-wizard.component.ts` | brain[McpClientConfigControllerService] |
 | `setup-wizard/oauth2-wizard.component.ts` | heimdall[AuthProvidersControllerService,Oauth2ModuleStatusControllerService] |
 | `setup-wizard/rag-autotune-wizard.component.ts` | brain[GeboAdminRagAutotuneControllerService] |
 | `setup-wizard/shared-filesystem-wizard.component.ts` | filesystem[FileSystemSharesSettingControllerService] |
 | `setup-wizard/sharepoint-wizard.component.ts` | ORPHAN[GeboModulesConfigControllerService]<br>sharepoint[SharepointSystemsControllerService] |
 | `setup-wizard/users-wizard.component.ts` | heimdall[UsersAdminControllerService] |
-| `setup-wizard/vectorstore-wizard.component.ts` | brain[GeboFastVectorStoreSetupControllerService] |
 | `setup-wizard/web-search-wizard.component.ts` | brain[BraveSearchConfigurationControllerService,GoogleSearchConfigurationControllerService,SearxngSearchConfigurationControllerService,SerpapiSearchConfigurationControllerService,TavilySearchConfigurationControllerService] |
 | `setup-wizard/webdav-wizard.component.ts` | ORPHAN[GeboModulesConfigControllerService]<br>webdav[WebdavSystemsControllerService] |
 | `setup-wizard/wizards-navigation.ts` | brain[JobLauncherControllerService] |
@@ -443,7 +457,7 @@ file (a multi-microservice file). Paths are relative to each project’s
 | `controls/prompt-editing-component/prompt-wizard.component.ts` | brain[ChatModelsLookupControllerService] |
 | `controls/userspace-files-component/user-knowledgebase.component.ts` | heimdall[UserControllerService]<br>userspace[UserspaceControllerService] |
 | `controls/userspace-files-component/userspace-browse.component.ts` | userspace[UserspaceControllerService] |
-| `controls/userspace-files-component/userspace-files-upload.component.ts` | userspace[IngestionFileTypesLibraryControllerService] |
+| `controls/userspace-files-component/userspace-files-upload.component.ts` | brain[IngestionFileTypesLibraryControllerService] |
 | `controls/userspace-files-component/userspace-files-upload.service.ts` | userspace[UserspaceControllerService] |
 | `controls/userspace-files-component/userspace-files.component.ts` | userspace[UserspaceControllerService] |
 | `controls/userspace-files-component/userspace-folder.component.ts` | userspace[UserspaceControllerService] |
@@ -547,14 +561,15 @@ is missed:
 | `gebo-ai-reusable-ui/src/lib/services/enriched-child.ts` |
 | `gebo-ai-reusable-ui/src/lib/services/gebo-backends-list.service.ts` |
 
+
 ---
 
 ## 9. Execution plan
 
-1. **Prerequisites (blocking).** Resolve the 4 orphans (§3.4): assign an owner
-   and regenerate that client, or add a gateway route. Add
-   `@Gebo.ai/microservices-clients` + the 21 `@Gebo.ai/*` packages to the UI’s
-   dependencies and tsconfig `paths`.
+1. **Prerequisites (blocking).** Resolve the 3 UI-referenced orphans (§3.3):
+   assign an owner and expose the controller on that client, or add a gateway
+   route. Add `@Gebo.ai/microservices-clients` + the 21 `@Gebo.ai/*` packages to
+   the UI’s dependencies and tsconfig `paths`.
 2. **Root wiring (§2).** Swap `ApiModule`+`BASE_PATH` for
    `MicroservicesClientsModule.forRoot({ baseUrl: getBaseUrl() })` in
    `app.module.ts`. App still builds against the monolith backend because the
@@ -565,7 +580,7 @@ is missed:
 4. **Clean 1:1 files first (§3.1).** Single-target files are pure import-source
    edits; move them per microservice, `brain` and `heimdall` first (they cover
    the bulk).
-5. **Duplicated-controller files (§3.2/3.3).** Apply Rules H / A / L; keep the
+5. **Duplicated-controller files (§3.2).** Apply Rules H / A; keep the
    `JobLauncher`(handler) vs `JobStatus`(tyr) split.
 6. **Multi-microservice files (§4) and models (§6).** Split imports by target;
    let `tsc` flag the model-identity seams and fix them one at a time.
