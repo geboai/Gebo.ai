@@ -12,7 +12,7 @@
 
 import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, RequiredValidator } from "@angular/forms";
-import { ReindexTimeComponentMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { ReindexTimeComponentMetaInfo } from '@Gebo.ai/tyr';
 /**
  * AI generated comments
  * 

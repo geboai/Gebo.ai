@@ -8,7 +8,7 @@
  */
 
 import { Component, EventEmitter, forwardRef, Input, Output } from "@angular/core";
-import { GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
+import { GResponseDocumentRef } from '@Gebo.ai/brain';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /**

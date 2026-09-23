@@ -8,11 +8,7 @@
  */
 
 import { Directive, OnInit } from "@angular/core";
-import { 
-  LLMUsageDrillDownLevel, 
-  LLMUsageDrillDownResult, 
-  LLMUsageAggregationBucket 
-} from "@Gebo.ai/gebo-ai-rest-api";
+import { LLMUsageAggregationBucket, LLMUsageDrillDownLevel, LLMUsageDrillDownResult } from '@Gebo.ai/tyr';
 import { Observable } from "rxjs";
 
 @Directive()

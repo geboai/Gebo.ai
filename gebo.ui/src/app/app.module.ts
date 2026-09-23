@@ -16,7 +16,13 @@ import { RouterModule, Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
 import { BrowserModule } from "@angular/platform-browser";
 import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
-import { BASE_PATH, ApiModule as GeboAiChatApiModule } from '@Gebo.ai/gebo-ai-rest-api';
+import { MicroservicesClientsModule } from '@Gebo.ai/microservices-clients';
+// The monolith stub survives ONLY as the compat home of the controllers no
+// microservice client exposes yet (GeboModulesConfig / GeboAngularFormGroupMetaInfo /
+// UiTextResources and their models). Its ApiModule + BASE_PATH still resolve those
+// against the installation origin; every migrated client resolves its own per-service
+// context through MicroservicesClientsModule. See docs/MICROSERVICES-UI-MIGRATION.md §3.3.
+import { ApiModule as GeboAiChatApiModule, BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { MegaMenuModule } from 'primeng/megamenu';
@@ -198,6 +204,12 @@ const GeboAIPreset = definePreset(Aura, {
   bootstrap: [AppComponent],
   imports: [CommonModule,
     BrowserModule,
+    // One import wires all 21 generated microservice clients: an app initializer reads
+    // GET <baseUrl>/public/ClientsTopologyProviderController and provides every client's
+    // BASE_PATH from it, so the SAME build addresses a monolith (all at the origin) and a
+    // microservices gateway (each at its /brain, /heimdall, ... context) with one URL.
+    MicroservicesClientsModule.forRoot({ baseUrl: getBaseUrl() }),
+    // Kept for the not-yet-split orphan controllers only (see the import note above).
     GeboAiChatApiModule,
     MegaMenuModule,
     LoginModule,

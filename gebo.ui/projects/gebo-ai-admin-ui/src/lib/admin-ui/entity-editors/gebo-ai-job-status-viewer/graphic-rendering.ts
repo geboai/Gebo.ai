@@ -1,4 +1,4 @@
-import { ComputedWorkflowStatus, JobWorkflowStepSummary } from '@Gebo.ai/gebo-ai-rest-api';
+import { ComputedWorkflowStatus, JobWorkflowStepSummary } from '@Gebo.ai/tyr';
 function n(d?: number): number {
   if (d && d > 0) return d;
   else return 0;

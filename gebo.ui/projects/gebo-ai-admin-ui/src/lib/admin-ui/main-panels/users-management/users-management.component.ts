@@ -17,7 +17,7 @@
  */
 
 import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { DataPage, EditableUser, PagedModelUserInfos, PagedModelUsersGroup, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
+import { DataPage, EditableUser, PageUserInfos, PageUsersGroup, UserInfos, UsersAdminControllerService, UsersGroup } from '@Gebo.ai/heimdall';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
@@ -56,12 +56,12 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
     groupsPage: DataPage = { page: 0, pageSize: 20 };
 
     // Container for paginated user information
-    usersPaged: PagedModelUserInfos = {
+    usersPaged: PageUserInfos = {
         content: []
     };
 
     // Container for paginated group information
-    groupsPaged: PagedModelUsersGroup = {
+    groupsPaged: PageUsersGroup = {
         content: []
     };
 
@@ -121,7 +121,7 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
             qbeUser.roles = [this.searchRole];
         }
 
-        this.geboAiUserAdminControllerService.findUserByQbe({
+        this.geboAiUserAdminControllerService.findUserByQbe2({
             qbe: qbeUser as EditableUser,
             page: this.usersPage
         }).subscribe({
@@ -140,7 +140,7 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
      */
     private loadGroups(): void {
         this.loadingGroups = true;
-        this.geboAiUserAdminControllerService.findUsersGroupByQbe({
+        this.geboAiUserAdminControllerService.findUsersGroupByQbe1({
             qbe: {
 
             } as UsersGroup,

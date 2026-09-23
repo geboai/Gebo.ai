@@ -17,7 +17,7 @@
  * folders, and file uploads within the Gebo.ai application.
  */
 
-import { UserspaceFolderDto, UserspaceKnowledgebaseDto } from "@Gebo.ai/gebo-ai-rest-api";
+import { UserspaceFolderDto, UserspaceKnowledgebaseDto } from '@Gebo.ai/userspace';
 
 import { of } from "rxjs";
 import { UserspaceFilesUploadModel } from "./userspace-files-upload.service";

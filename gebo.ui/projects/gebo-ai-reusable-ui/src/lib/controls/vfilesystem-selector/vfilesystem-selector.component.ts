@@ -19,7 +19,9 @@
 
 import { ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { BrowseParam, GSharepointProjectEndpoint, GVirtualFilesystemRoot, VirtualFilesystemNavigationNode, VirtualFilesystemNavigationTreeStatus } from "@Gebo.ai/gebo-ai-rest-api";
+import { GVirtualFilesystemRoot } from '@Gebo.ai/heimdall';
+import { BrowseParam, VirtualFilesystemNavigationNode, VirtualFilesystemNavigationTreeStatus } from '@Gebo.ai/brain';
+import { GSharepointProjectEndpoint } from '@Gebo.ai/sharepoint';
 import { ToastMessageOptions, TreeNode } from "primeng/api";
 import { TreeNodeExpandEvent, TreeNodeSelectEvent, TreeNodeUnSelectEvent } from "primeng/tree";
 import { of } from "rxjs";

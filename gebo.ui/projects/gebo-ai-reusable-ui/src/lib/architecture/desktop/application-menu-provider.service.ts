@@ -8,7 +8,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { UserInfo } from '@Gebo.ai/gebo-ai-rest-api';
+import { UserInfo } from '@Gebo.ai/heimdall';
 import { MegaMenuItem } from 'primeng/api';
 import { Observable } from 'rxjs';
 

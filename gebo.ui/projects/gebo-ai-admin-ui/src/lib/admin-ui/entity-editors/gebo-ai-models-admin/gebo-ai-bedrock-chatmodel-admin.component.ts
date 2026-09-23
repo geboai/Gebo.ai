@@ -9,7 +9,8 @@
 
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { FunctionsLookupControllerService, GBaseChatModelChoice, GLookupEntry, SecretInfo, SecretsControllerService, GBedrockChatModelConfig, BedrockChatModelsConfigurationControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { SecretInfo, SecretsControllerService } from '@Gebo.ai/heimdall';
+import { BedrockChatModelsConfigurationControllerService, FunctionsLookupControllerService, GBaseChatModelChoice, GBedrockChatModelConfig, GLookupEntry } from '@Gebo.ai/brain';
 import { BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable } from "rxjs";

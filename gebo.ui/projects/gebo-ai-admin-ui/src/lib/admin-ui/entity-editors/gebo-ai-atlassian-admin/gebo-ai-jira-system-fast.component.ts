@@ -20,7 +20,8 @@
  */
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { FastJiraSystemInsertRequest, GJiraSystem, JiraSystemsControllerService, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { UserControllerService } from '@Gebo.ai/heimdall';
+import { FastJiraSystemInsertRequest, GJiraSystem, JiraSystemsControllerService } from '@Gebo.ai/jira';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
-import { StartWorkflowData, UserWorkFlowChangePasswordResponse, UserWorkflowsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { StartWorkflowData, UserWorkFlowChangePasswordResponse, UserWorkflowsControllerService } from '@Gebo.ai/heimdall';
 import { ActivatedRoute, Router } from "@angular/router";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { ToastMessageOptions } from "primeng/api";

@@ -9,13 +9,9 @@
 
 import { Component, Inject, OnInit, Optional } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { 
-    BASE_PATH, 
-    GeboMcpServerUserControllerService, 
-    GeneratedUserApiKeyControllerService, 
-    UserAccessibleMcpServerView, 
-    GeneratedApiKeyInfo 
-} from "@Gebo.ai/gebo-ai-rest-api";
+import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
+import { GeneratedApiKeyInfo, GeneratedUserApiKeyControllerService } from '@Gebo.ai/heimdall';
+import { GeboMcpServerUserControllerService, UserAccessibleMcpServerView } from '@Gebo.ai/brain';
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, of } from "rxjs";
 import { catchError, finalize } from "rxjs/operators";

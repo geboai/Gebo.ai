@@ -17,7 +17,8 @@
  */
 
 import { Component } from "@angular/core";
-import { LLMSSetupConfiguration, LLMSSetupConfigurationData, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { UserControllerService, UserInfo } from '@Gebo.ai/heimdall';
+import { LLMSSetupConfiguration, LLMSSetupConfigurationData } from '@Gebo.ai/brain';
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { LLMSetupWizardService } from "./llms-setup-wizard.service";
 import { forkJoin, Observable } from "rxjs";

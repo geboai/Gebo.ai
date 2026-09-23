@@ -17,7 +17,7 @@
  */
 
 import { Component, OnInit } from "@angular/core";
-import { BuildSystemsControllerService, GBuildSystem,  GBuildSystemType } from "@Gebo.ai/gebo-ai-rest-api";
+import { BuildSystemsControllerService, GBuildSystem, GBuildSystemType } from '@Gebo.ai/brain';
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 

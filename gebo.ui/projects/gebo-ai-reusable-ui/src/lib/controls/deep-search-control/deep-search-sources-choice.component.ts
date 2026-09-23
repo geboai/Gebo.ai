@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
-import { GBaseObject, GeboChatControllerService, GeboDeepSearchControllerService, GeboRagChatControllerService } from '@Gebo.ai/gebo-ai-rest-api';
+import { GBaseObject, GeboChatControllerService, GeboDeepSearchControllerService, GeboRagChatControllerService } from '@Gebo.ai/brain';
 import { forkJoin, Observable } from 'rxjs';
 
 export interface IChooseSources {

@@ -19,7 +19,7 @@
  */
 
 import { Component } from "@angular/core";
-import { UserInfos, UsersAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { UserInfos, UsersAdminControllerService } from '@Gebo.ai/heimdall';
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 
 /**
@@ -59,7 +59,7 @@ export class UsersWizardComponent extends BaseWizardSectionComponent {
      */
     public override reloadData(): void {
         this.loading = true;
-        this.usersController.getAllUsers().subscribe({
+        this.usersController.getAllUsers1().subscribe({
             next: (users) => {
                 this.users = users;
             },

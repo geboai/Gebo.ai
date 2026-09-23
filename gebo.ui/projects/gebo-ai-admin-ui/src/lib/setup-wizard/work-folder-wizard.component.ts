@@ -19,7 +19,8 @@
 
 import { Component, Injectable } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BrowseParam, ComponentEnabledStatus, FastWorkDirectorySetupData, FileSystemSharesSettingControllerService, GeboFastWorkFolderSetupControllerService, WorkFolderSetupStatus } from "@Gebo.ai/gebo-ai-rest-api";
+import { ComponentEnabledStatus, FastWorkDirectorySetupData, GeboFastWorkFolderSetupControllerService, WorkFolderSetupStatus } from '@Gebo.ai/heimdall';
+import { BrowseParam, FileSystemSharesSettingControllerService } from '@Gebo.ai/filesystem';
 import { AbstractStatusService, BaseWizardSectionComponent, browsePathObservableCallback, fieldHostComponentName, GEBO_AI_FIELD_HOST, loadRootsObservableCallback, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";

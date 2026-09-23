@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { DEFAULT_LANGUAGE, UIExistingText, UILanguageResources } from "./text-language-resources";
 import { Observable, of, Subject, concat, map } from "rxjs";
-import { UiTextResourcesControllerService, UIExistingText as LibraryUIExistingText, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
+import { UIExistingText as LibraryUIExistingText, UiTextResourcesControllerService } from '@Gebo.ai/gebo-ai-rest-api';
+import { GUserMessage } from '@Gebo.ai/heimdall';
 import { InterpolatableTranslationObject, Language, TranslateService } from "@ngx-translate/core";
 import { Confirmation, MegaMenuItem, MenuItem, ToastMessageOptions } from "primeng/api";
 import { findMatchingTranlations } from "./text-language-resources";

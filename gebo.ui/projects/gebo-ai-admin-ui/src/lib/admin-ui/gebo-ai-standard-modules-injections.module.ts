@@ -15,7 +15,17 @@
  * Exports constants representing different module identifiers used throughout the application.
  * These constants are used to identify various modules that can be plugged into the system.
  */
-import { AwsS3SystemsControllerService, ConfluenceSystemsControllerService, FileSystemsControllerService, FileUploadsControllerService, GAwsS3ProjectEndpoint, GConfluenceProjectEndpoint, GFilesystemProjectEndpoint, GGitProjectEndpoint, GitSystemsControllerService, GJiraProjectEndpoint, GoogleDriveSystemsControllerService, GProject, GSharepointProjectEndpoint, GUploadsProjectEndpoint, GWebdavProjectEndpoint, JiraSystemsControllerService, MCPClientProjectEndpoint, McpClientSystemsControllerService, SharepointSystemsControllerService, WebdavSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GProject } from '@Gebo.ai/brain';
+import { FileSystemsControllerService, GFilesystemProjectEndpoint } from '@Gebo.ai/filesystem';
+import { GGitProjectEndpoint, GitSystemsControllerService } from '@Gebo.ai/git';
+import { FileUploadsControllerService, GUploadsProjectEndpoint } from '@Gebo.ai/uploads';
+import { GSharepointProjectEndpoint, SharepointSystemsControllerService } from '@Gebo.ai/sharepoint';
+import { ConfluenceSystemsControllerService, GConfluenceProjectEndpoint } from '@Gebo.ai/confluence';
+import { GJiraProjectEndpoint, JiraSystemsControllerService } from '@Gebo.ai/jira';
+import { AwsS3SystemsControllerService, GAwsS3ProjectEndpoint } from '@Gebo.ai/awss3';
+import { GoogleDriveSystemsControllerService } from '@Gebo.ai/googledrive';
+import { MCPClientProjectEndpoint, McpClientSystemsControllerService } from '@Gebo.ai/mcpclient';
+import { GWebdavProjectEndpoint, WebdavSystemsControllerService } from '@Gebo.ai/webdav';
 import { GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, GeboActionType, GeboAIEntitiesSettingWizardConfiguration, GeboAIModulesModule, GeboAIPluggableProjectEndpointModule, GeboAIPluggableProjectEndpointModuleService, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
 import { Observable } from "rxjs";
 import { EnvironmentProviders, Injectable, ModuleWithProviders, NgModule, Provider, Type } from "@angular/core";

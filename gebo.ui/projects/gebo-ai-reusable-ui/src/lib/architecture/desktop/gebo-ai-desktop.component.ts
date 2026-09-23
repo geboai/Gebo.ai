@@ -9,7 +9,7 @@
 
 import { Component, Input, OnDestroy, OnInit, Optional } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { UserInfo } from '@Gebo.ai/gebo-ai-rest-api';
+import { UserInfo } from '@Gebo.ai/heimdall';
 import { MegaMenuItem } from 'primeng/api';
 import { LoginService } from '../../infrastructure/login/login.service';
 import { PrimeNG } from 'primeng/config';

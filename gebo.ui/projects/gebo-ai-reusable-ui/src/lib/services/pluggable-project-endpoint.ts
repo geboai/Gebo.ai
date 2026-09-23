@@ -17,7 +17,8 @@
  */
 
 import { inject, Injectable, InjectionToken, Injector, Type } from "@angular/core";
-import { GeboModuleInfo, GeboModulesConfigControllerService, GProject } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboModuleInfo, GeboModulesConfigControllerService } from '@Gebo.ai/gebo-ai-rest-api';
+import { GProject } from '@Gebo.ai/brain';
 
 import { forkJoin, map, Observable } from "rxjs";
 import { GeboAIEntitiesSettingWizardConfiguration } from "../controls/base-entity-editing-component/entities-modification-wizard";

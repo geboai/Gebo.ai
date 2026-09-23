@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GUserChatInfo, PipelineChatMenu, PipelineChatMenuItem } from '@Gebo.ai/gebo-ai-rest-api';
+import { GUserChatInfo, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, PipelineChatMenu, PipelineChatMenuItem } from '@Gebo.ai/brain';
 import { GeboAITranslationService } from '../field-translation-container/gebo-translation.service';
 import { findMatchingTranlations, UIExistingText } from '../field-translation-container/text-language-resources';
 import { MenuItem } from 'primeng/api';

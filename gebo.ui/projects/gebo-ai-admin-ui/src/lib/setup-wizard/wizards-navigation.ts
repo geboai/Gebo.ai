@@ -18,7 +18,7 @@
  */
 
 import { Injector } from "@angular/core";
-import { GJobStatus, GKnowledgeBase, GObjectRef, GObjectRefGProjectEndpoint, GProject, GProjectEndpoint, JobLauncherControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GJobStatus, GKnowledgeBase, GObjectRef, GObjectRefGProjectEndpoint, GProject, GProjectEndpoint, JobLauncherControllerService } from '@Gebo.ai/brain';
 import { BaseEntityEditingComponent, ChooseDataSourceType, GeboActionType, GeboAIEntitiesSettingWizardConfiguration, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
 import { map, Observable, of } from "rxjs";
 

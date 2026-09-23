@@ -23,7 +23,7 @@ import { Component, OnInit } from "@angular/core";
 import { LoginService } from "./login.service";
 import { ToastMessageOptions } from "primeng/api";
 import { FormControl, FormGroup } from "@angular/forms";
-import { GeboFastInstallationSetupControllerService, GUserMessage, Oauth2ClientAuthorizativeInfo, UserWorkflowsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GUserMessage, GeboFastInstallationSetupControllerService, Oauth2ClientAuthorizativeInfo, UserWorkflowsControllerService } from '@Gebo.ai/heimdall';
 import { ActivatedRoute, Router } from "@angular/router";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 import { Subscription } from "rxjs";

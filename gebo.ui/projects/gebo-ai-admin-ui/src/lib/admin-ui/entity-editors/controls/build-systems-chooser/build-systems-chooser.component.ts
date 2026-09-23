@@ -12,7 +12,7 @@
 
 import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { BuildSystemRef, BuildSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { BuildSystemRef, BuildSystemsControllerService } from '@Gebo.ai/brain';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { forkJoin, map, Observable, of } from "rxjs";
 /**

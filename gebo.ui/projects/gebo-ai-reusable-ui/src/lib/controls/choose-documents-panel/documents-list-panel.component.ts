@@ -20,7 +20,7 @@
 
 import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { DocumentReferenceView } from "@Gebo.ai/gebo-ai-rest-api";
+import { DocumentReferenceView } from '@Gebo.ai/brain';
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 
 /**

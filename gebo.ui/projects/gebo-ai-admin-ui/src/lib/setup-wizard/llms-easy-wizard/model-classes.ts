@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { ComponentLLMSStatus, LLMCreateModelData } from "@Gebo.ai/gebo-ai-rest-api";
+import { ComponentLLMSStatus, LLMCreateModelData } from '@Gebo.ai/brain';
 
 /**
  * The seven model "classes" the easy wizard drives, in the order they are shown. A class is a

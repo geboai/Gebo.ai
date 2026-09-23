@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
-import { GBaseModelChoice, GeboFastLlmsSetupControllerService, GUserMessage, LLMAutoconfigureCreationData, LLMModelPresetChoice, LLMSModelsPresets, LLMSSetupConfiguration, LLMSSetupConfigurationData, LLMSVendorInfo, SecretInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { GBaseModelChoice, GUserMessage, GeboFastLlmsSetupControllerService, LLMAutoconfigureCreationData, LLMModelPresetChoice, LLMSModelsPresets, LLMSSetupConfiguration, LLMSSetupConfigurationData, LLMSVendorInfo, SecretInfo } from '@Gebo.ai/brain';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, IOperationStatus } from "@Gebo.ai/reusable-ui";
 import { Observable, of } from "rxjs";
 /**

@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { GeboNeo4jModuleSetupControllerService, GObjectRef, GraphRagConfigurationControllerService, GraphRagExtractionConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { GObjectRef, GeboNeo4jModuleSetupControllerService } from '@Gebo.ai/brain';
+import { GraphRagConfigurationControllerService, GraphRagExtractionConfig } from '@Gebo.ai/graphicator';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 
 @Component({

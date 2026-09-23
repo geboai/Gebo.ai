@@ -11,7 +11,7 @@
  
 
 import { Injectable } from "@angular/core";
-import { GeboModuleInfo, GeboModulesConfigControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboModuleInfo, GeboModulesConfigControllerService } from '@Gebo.ai/gebo-ai-rest-api';
 import { forkJoin, Observable } from "rxjs";
 
 /**

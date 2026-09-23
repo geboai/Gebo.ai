@@ -1,6 +1,7 @@
 import { Component, forwardRef, Injector, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { GenericOpenAIAPIRankerModelChoice , GenericOpenAIAPIRankerModelConfig, GenericOpenAiRankerModelsConfigurationControllerService, GenericOpenAIRankerModelTypeConfig, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { SecretInfo, SecretsControllerService } from '@Gebo.ai/heimdall';
+import { GenericOpenAIAPIRankerModelChoice, GenericOpenAIAPIRankerModelConfig, GenericOpenAIRankerModelTypeConfig, GenericOpenAiRankerModelsConfigurationControllerService } from '@Gebo.ai/brain';
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";

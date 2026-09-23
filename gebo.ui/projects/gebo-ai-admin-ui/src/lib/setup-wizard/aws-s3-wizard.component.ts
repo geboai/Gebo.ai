@@ -18,7 +18,8 @@
  */
 
 import { Component, Injectable } from "@angular/core";
-import { AwsS3SystemsControllerService, GAwsS3System, GeboModulesConfigControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboModulesConfigControllerService } from '@Gebo.ai/gebo-ai-rest-api';
+import { AwsS3SystemsControllerService, GAwsS3System } from '@Gebo.ai/awss3';
 import { AbstractStatusService, AWS_S3_MODULE, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 import { GeboRootInstalledModuleService } from "./abstract-module-installed.service";

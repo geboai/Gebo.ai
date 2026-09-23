@@ -11,7 +11,7 @@
  
 
 import { Injectable } from "@angular/core";
-import { UserspaceFolderDto, UserspaceFileDto, UserspaceControllerService, PublishingStatus } from "@Gebo.ai/gebo-ai-rest-api";
+import { PublishingStatus, UserspaceControllerService, UserspaceFileDto, UserspaceFolderDto } from '@Gebo.ai/userspace';
 
 import { Observable, concatMap, map, of } from "rxjs";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";

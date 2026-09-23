@@ -1,6 +1,6 @@
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, Output, EventEmitter } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { GeboUserChatUploadsControllerService, IngestionFileTypesLibraryControllerService, UserUploadedContent, GUserMessage, GUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { GUserChatInfo, GUserMessage, GeboUserChatUploadsControllerService, IngestionFileTypesLibraryControllerService, UserUploadedContent } from '@Gebo.ai/brain';
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 

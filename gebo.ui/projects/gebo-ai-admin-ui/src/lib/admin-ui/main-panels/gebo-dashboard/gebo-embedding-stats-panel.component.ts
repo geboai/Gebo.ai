@@ -18,7 +18,7 @@
  * to drill down into categories for more detailed information.
  */
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { GeboCoreAnalisysControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboCoreAnalisysControllerService } from '@Gebo.ai/vectorizator';
 import { TotalHistogramBar, transformData } from "./graphics-data";
 
 @Component({

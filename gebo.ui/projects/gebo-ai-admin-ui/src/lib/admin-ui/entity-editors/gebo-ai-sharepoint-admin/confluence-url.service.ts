@@ -19,7 +19,7 @@
 
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { GSharepointContentManagementSystem } from "@Gebo.ai/gebo-ai-rest-api";
+import { GSharepointContentManagementSystem } from '@Gebo.ai/sharepoint';
 
 /**
  * Interface representing the result of SharePoint URL validation.

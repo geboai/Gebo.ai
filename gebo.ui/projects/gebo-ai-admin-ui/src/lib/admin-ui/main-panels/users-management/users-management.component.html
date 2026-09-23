@@ -78,7 +78,7 @@
             @if (usersPaged?.content?.length) {
               <p-paginator id="PaginatorUsers" gebo-ai-label (onPageChange)="onUsersPageChange($event)"
                 [first]="(usersPage.page ?? 0) * (usersPage.pageSize ?? 20)" [rows]="usersPage.pageSize"
-                [totalRecords]="usersPaged?.page?.totalElements"
+                [totalRecords]="usersPaged?.totalElements"
                 [rowsPerPageOptions]="[10, 20, 30]" />
             }
           </div>
@@ -123,7 +123,7 @@
             @if (groupsPaged?.content?.length) {
               <p-paginator id="PaginatorGroups" gebo-ai-label (onPageChange)="onGroupsPageChange($event)" [first]="0"
                 [rows]="groupsPage.pageSize"
-                [totalRecords]="groupsPaged?.page?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" />
+                [totalRecords]="groupsPaged?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" />
             }
           </div>
 

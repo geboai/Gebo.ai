@@ -19,7 +19,7 @@
 
 import { Component, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { UserspaceControllerService, UserspaceFolderDto, UserspaceKnowledgebaseDto } from "@Gebo.ai/gebo-ai-rest-api";
+import { UserspaceControllerService, UserspaceFolderDto, UserspaceKnowledgebaseDto } from '@Gebo.ai/userspace';
 
 import { ConfirmationService } from "primeng/api";
 import { Observable, of } from "rxjs";

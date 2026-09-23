@@ -18,7 +18,7 @@
  */
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { UserspaceControllerService, UserspaceFileDto } from "@Gebo.ai/gebo-ai-rest-api";
+import { UserspaceControllerService, UserspaceFileDto } from '@Gebo.ai/userspace';
 import { GeboAIUserspaceFolderComponent } from "./userspace-folder.component";
 import { GeboAIUserspaceKnowledgebaseComponent } from "./user-knowledgebase.component";
 import { GeboAIUserspaceFilesUploadComponent } from "./userspace-files-upload.component";

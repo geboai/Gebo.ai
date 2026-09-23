@@ -18,7 +18,8 @@
 import { Component, forwardRef, Injector, SimpleChanges } from '@angular/core';
 
 import { FormControl, FormGroup } from "@angular/forms";
-import { CompanySystemsControllerService, DataPage, GJobStatus, JobStatusControllerService, JobSummary, LogViewControllerService, PagedModelGUserMessage, SystemInfos } from "@Gebo.ai/gebo-ai-rest-api";
+import { CompanySystemsControllerService, DataPage, GJobStatus, LogViewControllerService, PageGUserMessage, SystemInfos } from '@Gebo.ai/brain';
+import { JobStatusControllerService, JobSummary } from '@Gebo.ai/tyr';
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from 'primeng/api';
 import { PaginatorState } from 'primeng/paginator';
@@ -79,7 +80,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
   /**
    * Current page of user messages
    */
-  public actualPageData?: PagedModelGUserMessage;
+  public actualPageData?: PageGUserMessage;
 
   public rootGraphicData?: StatusRendering;
 
@@ -131,7 +132,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
   private reloadPeriodically(): void {
     if (this.entity?.code) {
 
-      const observables: [Observable<GJobStatus>, Observable<PagedModelGUserMessage>, Observable<JobSummary>] = [this.jobStatusControllerService.getJobStatus(this.entity.code), this.logViewControllerService.getJobMessagesPaged({
+      const observables: [Observable<GJobStatus>, Observable<PageGUserMessage>, Observable<JobSummary>] = [this.jobStatusControllerService.getJobStatus(this.entity.code), this.logViewControllerService.getJobMessagesPaged({
         jobId: this.entity?.code,
         dataPage: this.actualPage
       }), this.jobStatusControllerService.getJobSummary(this.entity.code)];

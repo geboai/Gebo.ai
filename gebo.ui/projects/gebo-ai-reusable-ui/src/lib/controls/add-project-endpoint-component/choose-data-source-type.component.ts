@@ -23,7 +23,7 @@ import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
 import { Observable, of, Subscription } from "rxjs";
 import { ChooseDataSourceType } from "./choose-data-source-type";
 import { ConfirmationService, MenuItem } from "primeng/api";
-import { GProject, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GProject, ProjectsControllerService } from '@Gebo.ai/brain';
 import { BaseEntityEditingComponent } from "../base-entity-editing-component/base-entity-editing.component";
 import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.service";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";

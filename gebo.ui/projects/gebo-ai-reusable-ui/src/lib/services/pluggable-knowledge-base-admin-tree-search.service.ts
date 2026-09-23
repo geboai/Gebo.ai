@@ -10,7 +10,7 @@
 
 
 
-import { ChildVirtualFSParam, GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService, VDocumentInfo, VFolderInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChildVirtualFSParam, GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService, VDocumentInfo, VFolderInfo } from '@Gebo.ai/brain';
 import { forkJoin, map, Observable, of } from "rxjs";
 import { EnrichedChild, EnrichedVFilesystemItem } from "./enriched-child";
 import { Injectable } from "@angular/core";

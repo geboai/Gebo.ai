@@ -17,7 +17,7 @@
  */
 
 import { Component, Injectable } from "@angular/core";
-import { GeboContentProcessRow, GeboFastKnowledgeBaseSetupControllerService, GeboKnowledgeBaseSetupStatus, GKnowledgeBase, GObjectRefGProjectEndpoint, GProject, JobLauncherControllerService, KnowledgeBaseControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GKnowledgeBase, GObjectRefGProjectEndpoint, GProject, GeboContentProcessRow, GeboFastKnowledgeBaseSetupControllerService, GeboKnowledgeBaseSetupStatus, JobLauncherControllerService, KnowledgeBaseControllerService } from '@Gebo.ai/brain';
 import { AbstractStatusService, BaseWizardSectionComponent, ChooseDataSourceType, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService, sliceWizard } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable } from "rxjs";

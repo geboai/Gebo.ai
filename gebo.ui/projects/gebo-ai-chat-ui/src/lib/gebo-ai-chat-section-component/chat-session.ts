@@ -16,7 +16,7 @@
  * It defines the structure for chat requests, responses, and complete chat sessions.
  */
 
-import { GChatProfileConfiguration, GeboChatRequest, GeboChatResponse } from "@Gebo.ai/gebo-ai-rest-api";
+import { GChatProfileConfiguration, GeboChatRequest, GeboChatResponse } from '@Gebo.ai/brain';
 
 /**
  * Represents a single interaction between a user and the chat system.

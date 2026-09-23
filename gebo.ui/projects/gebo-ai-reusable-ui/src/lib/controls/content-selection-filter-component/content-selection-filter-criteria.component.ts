@@ -1,6 +1,7 @@
 import { Component, forwardRef, Input } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { GContentSelectionFilterCriteria, IngestionFileType } from "@Gebo.ai/gebo-ai-rest-api";
+import { IngestionFileType } from '@Gebo.ai/brain';
+import { GContentSelectionFilterCriteria } from '@Gebo.ai/graphicator';
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 const entityName: string = "SelectionFilterCriteria";
 @Component({

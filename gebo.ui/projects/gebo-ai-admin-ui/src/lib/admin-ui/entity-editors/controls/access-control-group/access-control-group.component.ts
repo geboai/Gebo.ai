@@ -19,7 +19,7 @@
 
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
+import { UserInfos, UsersAdminControllerService, UsersGroup } from '@Gebo.ai/heimdall';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { forkJoin, Observable } from "rxjs";
 
@@ -82,7 +82,7 @@ export class GeboAIAccessControlComponent implements OnInit, OnChanges {
      */
     ngOnInit(): void {
         this.loadingRelatedBackend = true;
-        const lists: [Observable<UserInfos[]>, Observable<UsersGroup[]>] = [this.userAdminControllerService.getAllUsers(), this.userAdminControllerService.getAllGroups()];
+        const lists: [Observable<UserInfos[]>, Observable<UsersGroup[]>] = [this.userAdminControllerService.getAllUsers1(), this.userAdminControllerService.getAllGroups1()];
         forkJoin(lists).subscribe({
             next: (data) => {
                 this.users = data[0];

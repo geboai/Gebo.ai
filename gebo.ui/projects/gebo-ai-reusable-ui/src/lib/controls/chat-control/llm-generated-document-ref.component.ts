@@ -1,5 +1,6 @@
 import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
-import { BASE_PATH, LLMGeneratedResource } from "@Gebo.ai/gebo-ai-rest-api";
+import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
+import { LLMGeneratedResource } from '@Gebo.ai/brain';
 import { getAuthHeader } from "../../infrastructure/gebo-credentials";
 import { EnrichedDocumentReferenceViewRetrieveService, EnrichedLLMGeneratedResource } from "../content-viewer/enriched-document-reference-view.service";
 

@@ -12,7 +12,7 @@
 
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
+import { UserInfos, UsersAdminControllerService, UsersGroup } from '@Gebo.ai/heimdall';
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { Observable, of } from "rxjs";
@@ -65,7 +65,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
     override ngOnInit(): void {
         super.ngOnInit();
         this.loadingRelatedBackend = true;
-        this.userAdminControllerService.getAllUsers().subscribe({
+        this.userAdminControllerService.getAllUsers1().subscribe({
             next: (array) => {
                 this.users = array;
             }, complete: () => {
@@ -95,7 +95,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
      * @returns An Observable containing the found group or null if not found
      */
     override findByCode(code: string): Observable<UsersGroup | null> {
-        return this.userAdminControllerService.findGroupByCode(code);
+        return this.userAdminControllerService.findGroupByCode1(code);
     }
 
     /**
@@ -105,7 +105,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
      * @returns An Observable containing the updated group
      */
     override save(value: UsersGroup): Observable<UsersGroup> {
-        return this.userAdminControllerService.updateGroup(value);
+        return this.userAdminControllerService.updateGroup1(value);
     }
 
     /**
@@ -115,7 +115,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
      * @returns An Observable containing the created group
      */
     override insert(value: UsersGroup): Observable<UsersGroup> {
-        return this.userAdminControllerService.insertGroup(value);
+        return this.userAdminControllerService.insertGroup1(value);
     }
 
     /**
@@ -125,7 +125,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
      * @returns An Observable containing a boolean indicating success
      */
     override delete(value: UsersGroup): Observable<boolean> {
-        return this.userAdminControllerService.deleteGroup(value);
+        return this.userAdminControllerService.deleteGroup1(value);
     }
 
     /**

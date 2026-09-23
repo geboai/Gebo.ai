@@ -1,6 +1,7 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, DeepSearchConfig, DeepSearchDataSourceAccess, GBaseChatModelConfig, GBaseObject, GeboDeepSearchAdminControllerService, GObjectRefGBaseModelConfig, GroupInfo, UserInfo, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
+import { GroupInfo, UserInfo, UserInfos, UsersAdminControllerService, UsersGroup } from '@Gebo.ai/heimdall';
+import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, DeepSearchConfig, DeepSearchDataSourceAccess, GBaseChatModelConfig, GBaseObject, GObjectRefGBaseModelConfig, GeboDeepSearchAdminControllerService } from '@Gebo.ai/brain';
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
@@ -96,7 +97,7 @@ export class GeboAIDeepSearchConfigAdminComponent extends BaseEntityEditingCompo
         super.ngOnInit();
         this.loadingRelatedBackend = true;
 
-        const ug: [Observable<UserInfos[]>, Observable<UsersGroup[]>, Observable<GBaseObject[]>] = [this.usersService.getAllUsers(), this.usersService.getAllGroups(), this.deepSearchConfigService.getConfigurableDataSources()];
+        const ug: [Observable<UserInfos[]>, Observable<UsersGroup[]>, Observable<GBaseObject[]>] = [this.usersService.getAllUsers1(), this.usersService.getAllGroups1(), this.deepSearchConfigService.getConfigurableDataSources()];
         forkJoin(ug).subscribe({
             next: (data) => {
                 this.users = data[0];

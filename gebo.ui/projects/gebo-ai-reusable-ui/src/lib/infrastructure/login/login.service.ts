@@ -18,7 +18,8 @@
 
 import { Inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthControllerService, BASE_PATH, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, AuthProvidersControllerService, SecurityHeaderData, UserControllerService, UserInfo, TokenRenewControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
+import { AuthControllerService, AuthProvidersControllerService, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, SecurityHeaderData, TokenRenewControllerService, UserControllerService, UserInfo } from '@Gebo.ai/heimdall';
 import { ToastMessageOptions } from "primeng/api";
 import { map, Observable, of, Subject, Subscription } from "rxjs";
 import { getAuth, resetAuth, saveAuth } from "../gebo-credentials";

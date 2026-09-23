@@ -19,7 +19,8 @@
 
 import { Component, Directive, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
-import { ReindexingProgrammedTable, ReindexingTime, ReindexTimeStructureMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { ReindexingProgrammedTable, ReindexingTime } from '@Gebo.ai/brain';
+import { ReindexTimeStructureMetaInfo } from '@Gebo.ai/tyr';
 
 /**
  * Component responsible for managing period scheduling.

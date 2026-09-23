@@ -18,7 +18,7 @@
  */
 import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { AuthProviderDto, AuthProvidersControllerService, EditableUser, UsersAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { AuthProviderDto, AuthProvidersControllerService, EditableUser, UsersAdminControllerService } from '@Gebo.ai/heimdall';
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { map, Observable } from "rxjs";
@@ -125,7 +125,7 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes["user"] && this.user && this.mode == "EDIT" && this.user?.username) {
             this.loading = true;
-            this.usersAdminControllerService.findUserByUsername(this.user.username).subscribe({
+            this.usersAdminControllerService.findUserByUsername2(this.user.username).subscribe({
                 next: (value) => {
                     if (!value.roles) {
                         value.roles = ["USER"];
@@ -148,10 +148,10 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
         const user: EditableUser = this.formGroup.value;
         const pwdFormValue = this.pwdFormGroup.value;
         this.loading = true;
-        this.usersAdminControllerService.findUserByUsername(user.username).subscribe({
+        this.usersAdminControllerService.findUserByUsername2(user.username).subscribe({
             next: (value) => {
                 if (!value) {
-                    this.usersAdminControllerService.insertUser({
+                    this.usersAdminControllerService.insertUser1({
                         user: user,
                         password: pwdFormValue.password
                     }).subscribe({
@@ -198,7 +198,7 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
         const value: EditableUser = this.formGroup.value;
 
         this.loading = true;
-        this.usersAdminControllerService.updateUser(value).subscribe({
+        this.usersAdminControllerService.updateUser1(value).subscribe({
             next: (value) => {
                 this.mode = "EDIT";
                 this.formGroup.patchValue(value);
@@ -222,7 +222,7 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
     private doPhisicalDelete() {
         this.loading = true;
         const value: EditableUser = this.formGroup.value;
-        this.usersAdminControllerService.deleteUser(value).subscribe({
+        this.usersAdminControllerService.deleteUser1(value).subscribe({
             next: (value) => {
                 this.user = undefined;
                 this.changedData.emit(undefined);

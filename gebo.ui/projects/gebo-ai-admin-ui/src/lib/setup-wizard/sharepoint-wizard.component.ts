@@ -18,7 +18,8 @@
  */
 
 import { Component, Injectable } from "@angular/core";
-import { GeboModulesConfigControllerService, GSharepointContentManagementSystem, SharepointSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboModulesConfigControllerService } from '@Gebo.ai/gebo-ai-rest-api';
+import { GSharepointContentManagementSystem, SharepointSystemsControllerService } from '@Gebo.ai/sharepoint';
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService, SHAREPOINT_MODULE } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 import { GeboRootInstalledModuleService } from "./abstract-module-installed.service";

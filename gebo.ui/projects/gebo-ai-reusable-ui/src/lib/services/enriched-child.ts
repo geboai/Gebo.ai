@@ -17,7 +17,7 @@
  * types, extracting information, and selecting appropriate icons for UI representation.
  */
 
-import { VDocumentInfo, VFolderInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { VDocumentInfo, VFolderInfo } from '@Gebo.ai/brain';
 
 /**
  * Interface representing an enriched child element with additional metadata

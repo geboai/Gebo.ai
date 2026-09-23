@@ -1,6 +1,6 @@
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
-import { GUserMessage, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GUserMessage, SecretInfo, SecretsControllerService } from '@Gebo.ai/heimdall';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { Observable, of } from "rxjs";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
@@ -184,7 +184,7 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
                             } else {
                                 this.messages = value.messages;
                                 this.deleting = true;
-                                this.secretController.deleteSecret(secret).subscribe({
+                                this.secretController.deleteSecret1(secret).subscribe({
                                     next: () => {
 
                                     },

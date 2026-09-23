@@ -21,7 +21,7 @@
  */
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { GJobStatusItem, GObjectRefGProjectEndpoint, JobsEntriesFilter, LogViewControllerService, PagedModelGJobStatusItem } from "@Gebo.ai/gebo-ai-rest-api";
+import { GJobStatusItem, GObjectRefGProjectEndpoint, JobsEntriesFilter, LogViewControllerService, PageGJobStatusItem } from '@Gebo.ai/brain';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { TableLazyLoadEvent } from "primeng/table";
 import { Subject, Subscription } from "rxjs";
@@ -65,7 +65,7 @@ export class LogTableComponent implements OnChanges, OnDestroy {
   /** Free text the entries are currently searched with */
   public searchText: string = "";
   /** Raw paginated data returned from the API */
-  data?: PagedModelGJobStatusItem;
+  data?: PageGJobStatusItem;
   /** Processed job status items */
   actualData: GJobStatusItem[] = [];
   /** Form group for the component */
@@ -217,7 +217,7 @@ export class LogTableComponent implements OnChanges, OnDestroy {
       next: (value) => {
         this.data = value;
         this.actualData = this.data?.content ? this.data.content : [];
-        this.totalRecords = this.data?.page?.totalElements ? this.data.page.totalElements : 0;
+        this.totalRecords = this.data?.totalElements ? this.data.totalElements : 0;
       },
       error: (error) => { },
       complete: () => {

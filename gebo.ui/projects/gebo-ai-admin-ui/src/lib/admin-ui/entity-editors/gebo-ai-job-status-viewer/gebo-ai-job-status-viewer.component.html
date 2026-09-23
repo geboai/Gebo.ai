@@ -96,7 +96,7 @@
         <p-tabpanel [value]="1">
           <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
           <p-paginator id="PaginatorComponent" gebo-ai-label (onPageChange)="onPageChange($event)" [first]="0"
-            [rows]="actualPage.pageSize" [totalRecords]="actualPageData?.page?.totalElements"
+            [rows]="actualPage.pageSize" [totalRecords]="actualPageData?.totalElements"
           [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
         </p-tabpanel>
       </p-tabpanels>

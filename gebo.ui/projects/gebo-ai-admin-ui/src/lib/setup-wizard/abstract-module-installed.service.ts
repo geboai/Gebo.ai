@@ -10,7 +10,7 @@
  
  
 
-import { GeboModulesConfigControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboModulesConfigControllerService } from '@Gebo.ai/gebo-ai-rest-api';
 import { AbstractInstalledModuleService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 // AI generated comments

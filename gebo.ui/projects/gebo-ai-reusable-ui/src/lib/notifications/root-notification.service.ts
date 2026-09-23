@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
+import { GUserMessage } from '@Gebo.ai/heimdall';
 
 import { MessageService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Subscription } from "rxjs";

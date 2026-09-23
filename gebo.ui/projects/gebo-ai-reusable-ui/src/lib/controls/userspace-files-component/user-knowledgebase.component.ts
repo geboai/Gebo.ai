@@ -12,7 +12,8 @@
 
 import { Component, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { GroupInfo, UserControllerService, UserspaceControllerService, UserspaceKnowledgebaseDto } from "@Gebo.ai/gebo-ai-rest-api";
+import { GroupInfo, UserControllerService } from '@Gebo.ai/heimdall';
+import { UserspaceControllerService, UserspaceKnowledgebaseDto } from '@Gebo.ai/userspace';
 import { ConfirmationService } from "primeng/api";
 import { Observable, of } from "rxjs";
 import { BaseEntityEditingComponent } from "../base-entity-editing-component/base-entity-editing.component";

@@ -1,6 +1,7 @@
 import { Component, forwardRef, Inject, Injector, Input } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
-import { AuthProviderDto, BASE_PATH, OAuth2AdminControllerService, Oauth2ProviderModifiableData } from "@Gebo.ai/gebo-ai-rest-api";
+import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
+import { AuthProviderDto, OAuth2AdminControllerService, Oauth2ProviderModifiableData } from '@Gebo.ai/heimdall';
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";

@@ -11,7 +11,7 @@
 
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { SecretInfo, SecretsControllerService } from '@Gebo.ai/heimdall';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 
 /**

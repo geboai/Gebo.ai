@@ -1,7 +1,7 @@
 import { Component, Inject, Injectable, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { GeboAIRootNotificationService } from "./root-notification.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../controls/field-host-component-iface/field-host-component-iface";
-import { GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
+import { GUserMessage } from '@Gebo.ai/heimdall';
 import { ToastMessageOptions } from "primeng/api";
 import { NotificationLayerEnum } from "./notification-layer";
 /*************************

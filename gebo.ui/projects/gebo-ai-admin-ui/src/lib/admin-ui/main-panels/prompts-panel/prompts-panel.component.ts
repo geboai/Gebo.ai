@@ -17,7 +17,7 @@
  * the chat-profiles panel so prompts have their own admin tab.
  */
 import { Component, OnInit } from "@angular/core";
-import { GeboAdminPromptsControllerService, GPromptTemplateLightView } from "@Gebo.ai/gebo-ai-rest-api";
+import { GPromptTemplateLightView, GeboAdminPromptsControllerService } from '@Gebo.ai/brain';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";

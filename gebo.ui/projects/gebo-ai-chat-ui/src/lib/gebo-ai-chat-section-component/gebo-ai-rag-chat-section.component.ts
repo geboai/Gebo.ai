@@ -11,7 +11,7 @@
 
 
 import { ChangeDetectorRef, Component, Inject, OnChanges, OnInit, Optional, SimpleChanges } from "@angular/core";
-import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PagedModelGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GUserChatInfo, GeboRagChatControllerService, GeboUserChatsControllerService, PageGUserChatInfo } from '@Gebo.ai/brain';
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginatorState } from "primeng/paginator";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, refreshTreeNodes, UI_COMPANY_FILES_NOT_SELECTABLE } from "@Gebo.ai/reusable-ui";
@@ -73,7 +73,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     /** Pipeline code of the open-chat pipeline (no internal-KB RAG; external search + files). */
     protected readonly OPEN_CHAT_PIPELINE: string = 'open-chat';
     /** Stores the current page of chat history */
-    protected chatsPage?: PagedModelGUserChatInfo;
+    protected chatsPage?: PageGUserChatInfo;
     /** Stores the currently active chat information */
     protected currentChat: GUserChatInfo = {};
 

@@ -1,5 +1,5 @@
 import { ValidationErrors } from "@angular/forms";
-import { GContentSelectionFilterCriteria } from "@Gebo.ai/gebo-ai-rest-api";
+import { GContentSelectionFilterCriteria } from '@Gebo.ai/graphicator';
 
 export function validateCriteria(value: GContentSelectionFilterCriteria): ValidationErrors | null {
     let validationValue: ValidationErrors | null = null;

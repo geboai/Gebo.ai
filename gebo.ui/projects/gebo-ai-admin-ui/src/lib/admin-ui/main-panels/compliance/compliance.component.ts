@@ -8,7 +8,7 @@
  */
 
 import { afterNextRender, Component, ElementRef, Injector, OnInit, runInInjectionContext, ViewChild } from "@angular/core";
-import { DataFlowMetaInfoControllerService, GDataFlowReport } from "@Gebo.ai/gebo-ai-rest-api";
+import { DataFlowMetaInfoControllerService, GDataFlowReport } from '@Gebo.ai/brain';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { initializeModel, NgDiagramNodeTemplateMap, NgDiagramConfig, provideNgDiagram, NgDiagramViewportService } from "ng-diagram";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";

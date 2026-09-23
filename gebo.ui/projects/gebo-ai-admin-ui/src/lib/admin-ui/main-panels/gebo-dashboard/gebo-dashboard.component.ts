@@ -18,7 +18,7 @@
  * It communicates with the GeboCoreAnalisysControllerService to fetch data.
  */
 import { Component, OnInit } from "@angular/core";
-import { GeboCoreAnalisysControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboCoreAnalisysControllerService } from '@Gebo.ai/vectorizator';
 import { TotalHistogramBar, transformData } from "./graphics-data";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 

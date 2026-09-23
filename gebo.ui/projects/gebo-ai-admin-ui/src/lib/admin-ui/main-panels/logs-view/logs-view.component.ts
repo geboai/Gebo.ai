@@ -18,7 +18,8 @@
  * of the datasource types selected by the administrator.
  */
 import { Component, OnInit } from "@angular/core";
-import { FormGroupMetaInfo, GeboAngularFormGroupMetaInfoControllerService, JobLauncherControllerService, LogViewControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { FormGroupMetaInfo, GeboAngularFormGroupMetaInfoControllerService } from '@Gebo.ai/gebo-ai-rest-api';
+import { JobLauncherControllerService, LogViewControllerService } from '@Gebo.ai/brain';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 

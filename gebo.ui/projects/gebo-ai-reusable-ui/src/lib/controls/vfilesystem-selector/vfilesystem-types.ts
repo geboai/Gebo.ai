@@ -10,7 +10,8 @@
  
  
 
-import { GVirtualFilesystemRoot, PathInfo, BrowseParam, GUserMessage, VirtualFilesystemNavigationTreeStatus } from "@Gebo.ai/gebo-ai-rest-api";
+import { GUserMessage, GVirtualFilesystemRoot, PathInfo } from '@Gebo.ai/heimdall';
+import { BrowseParam, VirtualFilesystemNavigationTreeStatus } from '@Gebo.ai/brain';
 
 import { Observable } from "rxjs";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";

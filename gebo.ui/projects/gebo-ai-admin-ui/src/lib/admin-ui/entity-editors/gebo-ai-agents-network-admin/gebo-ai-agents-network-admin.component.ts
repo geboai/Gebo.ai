@@ -1,6 +1,6 @@
 import { afterNextRender, Component, DestroyRef, ElementRef, forwardRef, Injector, OnInit, runInInjectionContext, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GBaseObject, GAgentConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { AgentNetworkParticipant, GAgentConfig, GAgentsNetwork, GBaseObject, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService } from '@Gebo.ai/brain';
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";

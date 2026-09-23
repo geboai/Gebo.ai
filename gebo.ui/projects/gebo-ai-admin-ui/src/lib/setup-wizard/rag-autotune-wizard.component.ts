@@ -1,5 +1,5 @@
 import { Component, Injectable, OnChanges, OnInit } from "@angular/core";
-import { AutotuneVectorStoreInfo, GeboAdminRagAutotuneControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { AutotuneVectorStoreInfo, GeboAdminRagAutotuneControllerService } from '@Gebo.ai/brain';
 import { AbstractStatusService, BaseWizardSectionComponent, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable, of } from "rxjs";
 @Injectable({ providedIn: "root" })

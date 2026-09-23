@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { UserWorkflowsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { UserWorkflowsControllerService } from '@Gebo.ai/heimdall';
 import { getAuth } from "../gebo-credentials";
 @Component({
     selector:"gebo-ai-check-device-activation-component",

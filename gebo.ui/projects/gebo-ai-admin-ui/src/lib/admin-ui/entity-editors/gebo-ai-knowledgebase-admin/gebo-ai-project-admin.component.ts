@@ -22,7 +22,7 @@
 
 import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ContentsResetControllerService, GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService, GObjectRef } from "@Gebo.ai/gebo-ai-rest-api";
+import { ContentsResetControllerService, GKnowledgeBase, GObjectRef, GProject, KnowledgeBaseControllerService, ProjectsControllerService } from '@Gebo.ai/brain';
 import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, EnrichedChild, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 
 import { ConfirmationService } from "primeng/api";

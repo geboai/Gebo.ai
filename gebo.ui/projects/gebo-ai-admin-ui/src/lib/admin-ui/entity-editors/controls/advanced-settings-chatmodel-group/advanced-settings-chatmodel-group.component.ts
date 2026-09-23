@@ -19,7 +19,7 @@
  */
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { FunctionsLookupControllerService, GLookupEntry, GPromptTemplateConfig, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { FunctionsLookupControllerService, GLookupEntry, GPromptTemplateConfig, PromptTemplatesControllerService } from '@Gebo.ai/brain';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 
 @Component({

@@ -16,7 +16,7 @@
  */
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { FunctionsLookupControllerService, ToolCategoriesTree, ToolReference } from "@Gebo.ai/gebo-ai-rest-api";
+import { FunctionsLookupControllerService, ToolCategoriesTree, ToolReference } from '@Gebo.ai/brain';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { TreeNode } from "primeng/api";
 import { Observable } from "rxjs";

@@ -41,7 +41,7 @@
   }
   @if (chatprofiles?.content?.length) {
     <p-paginator id="Paginator1" gebo-ai-label (onPageChange)="onChatProfilePageChange($event)" [first]="0" [rows]="profilesPage.pageSize"
-      [totalRecords]="chatprofiles?.page?.totalElements"
+      [totalRecords]="chatprofiles?.totalElements"
       [rowsPerPageOptions]="[10, 20, 30]" />
   }
 

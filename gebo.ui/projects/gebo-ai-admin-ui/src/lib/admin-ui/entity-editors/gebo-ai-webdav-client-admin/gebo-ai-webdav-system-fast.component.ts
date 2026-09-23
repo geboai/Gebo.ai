@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { FastWebdavSystemInsertRequest, GWebdavContentManagementSystem, WebdavSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { FastWebdavSystemInsertRequest, GWebdavContentManagementSystem, WebdavSystemsControllerService } from '@Gebo.ai/webdav';
 import { ToastMessageOptions } from "primeng/api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 

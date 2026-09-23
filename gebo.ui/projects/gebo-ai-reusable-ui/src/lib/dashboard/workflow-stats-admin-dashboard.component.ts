@@ -8,11 +8,7 @@
  */
 
 import { Component } from "@angular/core";
-import {
-  WorkflowStatsAdminLevelControllerService,
-  WorkflowStatsDrillDownLevel,
-  WorkflowStatsDrillDownResult
-} from "@Gebo.ai/gebo-ai-rest-api";
+import { WorkflowStatsAdminLevelControllerService, WorkflowStatsDrillDownLevel, WorkflowStatsDrillDownResult } from '@Gebo.ai/tyr';
 import { Observable } from "rxjs";
 import { GEBO_AI_FIELD_HOST, fieldHostComponentName, GEBO_AI_MODULE } from "../controls/field-host-component-iface/field-host-component-iface";
 import { BaseWorkflowStatsDashboardComponent } from "./workflow-stats-dashboard.component";

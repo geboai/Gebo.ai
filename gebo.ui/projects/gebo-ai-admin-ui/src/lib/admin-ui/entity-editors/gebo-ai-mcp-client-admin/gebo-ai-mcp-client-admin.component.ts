@@ -9,7 +9,8 @@
 
 import { Component, forwardRef, Injector, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { McpClientConfigControllerService, MCPClientConfig, SecretInfo, SecretsControllerService, UsersAdminControllerService, UserInfos, UsersGroup, MCPTool, MCPResource, MCPPrompt } from "@Gebo.ai/gebo-ai-rest-api";
+import { SecretInfo, SecretsControllerService, UserInfos, UsersAdminControllerService, UsersGroup } from '@Gebo.ai/heimdall';
+import { MCPClientConfig, MCPPrompt, MCPResource, MCPTool, McpClientConfigControllerService } from '@Gebo.ai/brain';
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { Observable, of } from "rxjs";
@@ -141,8 +142,8 @@ export class GeboAIMcpClientAdminComponent extends BaseEntityEditingComponent<MC
 
     override ngOnInit(): void {
         super.ngOnInit();
-        this.userAdminControllerService.getAllUsers().subscribe(u => this.users = u || []);
-        this.userAdminControllerService.getAllGroups().subscribe(g => this.groups = g || []);
+        this.userAdminControllerService.getAllUsers1().subscribe(u => this.users = u || []);
+        this.userAdminControllerService.getAllGroups1().subscribe(g => this.groups = g || []);
     }
 
     override onLoadedPersistentData(actualValue: MCPClientConfig): void {
