@@ -3,10 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>ai.gebo</groupId>
-		<artifactId>ai.gebo.parent</artifactId>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
 		<version>1.0.4.0-SNAPSHOT</version>
 	</parent>
+	<!-- Physically relocated under gebo.architecture.parent. Its coordinates stay
+	     ai.gebo:gebo.system.ingestion (explicit groupId overriding the parent's
+	     ai.gebo.architecture) so every existing dependent is unaffected. -->
+	<groupId>ai.gebo</groupId>
 	<artifactId>gebo.system.ingestion</artifactId>
 	<dependencies>
 		<dependency>

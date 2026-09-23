@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.4.0-SNAPSHOT</version>
+	</parent>
+	<!--
+	  IngestionFileTypesLibraryController, split out of gebo.system.ingestion. The
+	  base module is on the classpath of every ingesting service - brain, chunker,
+	  graphicator and all content handlers (15 in total) - so leaving the
+	  controller there exposed the same read-only file-type-library endpoint on all
+	  of them. The library DATA (IGIngestionHandlerConfigDao + models) stays in the
+	  base module, so every ingesting service still resolves file types locally;
+	  only the REST controller moves here, and this module is added ONLY to the
+	  monolithic starter and to brain.gebo.ai - so the lookup endpoint is served by
+	  brain (and the monolith), not by every content-handler microservice.
+
+	  Coordinates stay in the ai.gebo group (explicit groupId) to match the base
+	  gebo.system.ingestion module it is split from, rather than inheriting the
+	  parent's ai.gebo.architecture.
+	-->
+	<groupId>ai.gebo</groupId>
+	<artifactId>gebo.system.ingestion.controllers</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo</groupId>
+			<artifactId>gebo.system.ingestion</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>
