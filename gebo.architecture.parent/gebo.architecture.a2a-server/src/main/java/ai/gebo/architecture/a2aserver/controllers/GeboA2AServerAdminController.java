@@ -34,27 +34,27 @@ public class GeboA2AServerAdminController {
 	private final A2AServerConfigManagerService managementService;
 
 	@GetMapping(value = "findAll", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<A2AServerConfig> findAll() {
+	public List<A2AServerConfig> findAllA2AServer() {
 		return managementService.findAll();
 	}
 
 	@GetMapping(value = "findByCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<A2AServerConfig> findByCode(@RequestParam("code") String code) {
+	public OperationStatus<A2AServerConfig> findByCodeA2AServer(@RequestParam("code") String code) {
 		return managementService.findByCode(code);
 	}
 
 	@PostMapping(value = "insertA2AServer", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<A2AServerConfig> insert(@RequestBody @Valid @NotNull A2AServerConfig config) {
+	public OperationStatus<A2AServerConfig> insertA2AServer(@RequestBody @Valid @NotNull A2AServerConfig config) {
 		return managementService.insert(config);
 	}
 
 	@PostMapping(value = "updateA2AServer", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<A2AServerConfig> update(@RequestBody @Valid @NotNull A2AServerConfig config) {
+	public OperationStatus<A2AServerConfig> updateA2AServer(@RequestBody @Valid @NotNull A2AServerConfig config) {
 		return managementService.update(config);
 	}
 
 	@DeleteMapping(value = "deleteA2AServer", produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<Boolean> delete(@RequestParam("code") String code) {
+	public OperationStatus<Boolean> deleteA2AServer(@RequestParam("code") String code) {
 		return managementService.delete(code);
 	}
 }

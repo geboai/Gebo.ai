@@ -19,7 +19,7 @@ export class A2AImportWizardStatusService extends AbstractStatusService {
         super();
     }
     public override getBooleanStatus(): Observable<boolean> {
-        return this.service.list(0, 1).pipe(map(r => !!(r && r.content && r.content.length)));
+        return this.service.listA2AClientConfig(0, 1).pipe(map(r => !!(r && r.content && r.content.length)));
     }
 }
 
@@ -47,7 +47,7 @@ export class A2AImportWizardComponent extends BaseWizardSectionComponent {
 
     public override reloadData(): void {
         this.loading = true;
-        this.service.list(0, 100).subscribe({
+        this.service.listA2AClientConfig(0, 100).subscribe({
             next: (value) => {
                 this.configs = value.content || [];
                 this.isSetupCompleted = this.configs.length > 0;

@@ -40,9 +40,9 @@ public class GeboA2AServerAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void deleteTest() {
+    public void deleteA2AServerTest() {
         String code = null;
-        OperationStatusBoolean response = api.delete(code);
+        OperationStatusBoolean response = api.deleteA2AServer(code);
 
         // TODO: test validations
     }
@@ -55,8 +55,8 @@ public class GeboA2AServerAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findAll1Test() {
-        List<A2AServerConfig> response = api.findAll1();
+    public void findAllA2AServerTest() {
+        List<A2AServerConfig> response = api.findAllA2AServer();
 
         // TODO: test validations
     }
@@ -69,9 +69,9 @@ public class GeboA2AServerAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findByCode1Test() {
+    public void findByCodeA2AServerTest() {
         String code = null;
-        OperationStatusA2AServerConfig response = api.findByCode1(code);
+        OperationStatusA2AServerConfig response = api.findByCodeA2AServer(code);
 
         // TODO: test validations
     }
@@ -84,9 +84,9 @@ public class GeboA2AServerAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void insertTest() {
+    public void insertA2AServerTest() {
         A2AServerConfig body = null;
-        OperationStatusA2AServerConfig response = api.insert(body);
+        OperationStatusA2AServerConfig response = api.insertA2AServer(body);
 
         // TODO: test validations
     }
@@ -99,9 +99,9 @@ public class GeboA2AServerAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void updateTest() {
+    public void updateA2AServerTest() {
         A2AServerConfig body = null;
-        OperationStatusA2AServerConfig response = api.update(body);
+        OperationStatusA2AServerConfig response = api.updateA2AServer(body);
 
         // TODO: test validations
     }

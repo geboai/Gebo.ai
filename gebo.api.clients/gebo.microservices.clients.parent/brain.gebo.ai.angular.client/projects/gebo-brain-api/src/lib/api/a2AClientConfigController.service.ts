@@ -65,13 +65,13 @@ export class A2AClientConfigControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public delete1(body: A2ARemoteAgentConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
-    public delete1(body: A2ARemoteAgentConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
-    public delete1(body: A2ARemoteAgentConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
-    public delete1(body: A2ARemoteAgentConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteA2AClientConfig(body: A2ARemoteAgentConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
+    public deleteA2AClientConfig(body: A2ARemoteAgentConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
+    public deleteA2AClientConfig(body: A2ARemoteAgentConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
+    public deleteA2AClientConfig(body: A2ARemoteAgentConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling delete1.');
+            throw new Error('Required parameter body was null or undefined when calling deleteA2AClientConfig.');
         }
 
         let headers = this.defaultHeaders;
@@ -112,13 +112,13 @@ export class A2AClientConfigControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findByCode2(code: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2ARemoteAgentConfig>;
-    public findByCode2(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2ARemoteAgentConfig>>;
-    public findByCode2(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2ARemoteAgentConfig>>;
-    public findByCode2(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findByCodeA2AClientConfig(code: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2ARemoteAgentConfig>;
+    public findByCodeA2AClientConfig(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2ARemoteAgentConfig>>;
+    public findByCodeA2AClientConfig(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2ARemoteAgentConfig>>;
+    public findByCodeA2AClientConfig(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
-            throw new Error('Required parameter code was null or undefined when calling findByCode2.');
+            throw new Error('Required parameter code was null or undefined when calling findByCodeA2AClientConfig.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -159,13 +159,13 @@ export class A2AClientConfigControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public insert1(body: A2ARemoteAgentConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2ARemoteAgentConfig>;
-    public insert1(body: A2ARemoteAgentConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2ARemoteAgentConfig>>;
-    public insert1(body: A2ARemoteAgentConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2ARemoteAgentConfig>>;
-    public insert1(body: A2ARemoteAgentConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public insertA2AClientConfig(body: A2ARemoteAgentConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2ARemoteAgentConfig>;
+    public insertA2AClientConfig(body: A2ARemoteAgentConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2ARemoteAgentConfig>>;
+    public insertA2AClientConfig(body: A2ARemoteAgentConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2ARemoteAgentConfig>>;
+    public insertA2AClientConfig(body: A2ARemoteAgentConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling insert1.');
+            throw new Error('Required parameter body was null or undefined when calling insertA2AClientConfig.');
         }
 
         let headers = this.defaultHeaders;
@@ -207,10 +207,10 @@ export class A2AClientConfigControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public list(page?: number, size?: number, observe?: 'body', reportProgress?: boolean): Observable<PageA2ARemoteAgentConfig>;
-    public list(page?: number, size?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageA2ARemoteAgentConfig>>;
-    public list(page?: number, size?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageA2ARemoteAgentConfig>>;
-    public list(page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public listA2AClientConfig(page?: number, size?: number, observe?: 'body', reportProgress?: boolean): Observable<PageA2ARemoteAgentConfig>;
+    public listA2AClientConfig(page?: number, size?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageA2ARemoteAgentConfig>>;
+    public listA2AClientConfig(page?: number, size?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageA2ARemoteAgentConfig>>;
+    public listA2AClientConfig(page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
 
@@ -255,13 +255,13 @@ export class A2AClientConfigControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public testAndDiscovery1(body: A2ARemoteAgentConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2ARemoteAgentConfig>;
-    public testAndDiscovery1(body: A2ARemoteAgentConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2ARemoteAgentConfig>>;
-    public testAndDiscovery1(body: A2ARemoteAgentConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2ARemoteAgentConfig>>;
-    public testAndDiscovery1(body: A2ARemoteAgentConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public testAndDiscoveryA2AClientConfig(body: A2ARemoteAgentConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2ARemoteAgentConfig>;
+    public testAndDiscoveryA2AClientConfig(body: A2ARemoteAgentConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2ARemoteAgentConfig>>;
+    public testAndDiscoveryA2AClientConfig(body: A2ARemoteAgentConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2ARemoteAgentConfig>>;
+    public testAndDiscoveryA2AClientConfig(body: A2ARemoteAgentConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling testAndDiscovery1.');
+            throw new Error('Required parameter body was null or undefined when calling testAndDiscoveryA2AClientConfig.');
         }
 
         let headers = this.defaultHeaders;
@@ -302,13 +302,13 @@ export class A2AClientConfigControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public update1(body: A2ARemoteAgentConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2ARemoteAgentConfig>;
-    public update1(body: A2ARemoteAgentConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2ARemoteAgentConfig>>;
-    public update1(body: A2ARemoteAgentConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2ARemoteAgentConfig>>;
-    public update1(body: A2ARemoteAgentConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateA2AClientConfig(body: A2ARemoteAgentConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2ARemoteAgentConfig>;
+    public updateA2AClientConfig(body: A2ARemoteAgentConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2ARemoteAgentConfig>>;
+    public updateA2AClientConfig(body: A2ARemoteAgentConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2ARemoteAgentConfig>>;
+    public updateA2AClientConfig(body: A2ARemoteAgentConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling update1.');
+            throw new Error('Required parameter body was null or undefined when calling updateA2AClientConfig.');
         }
 
         let headers = this.defaultHeaders;

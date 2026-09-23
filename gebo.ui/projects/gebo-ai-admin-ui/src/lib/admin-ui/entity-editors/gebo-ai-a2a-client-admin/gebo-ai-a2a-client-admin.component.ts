@@ -144,7 +144,7 @@ export class GeboAIA2AClientAdminComponent extends BaseEntityEditingComponent<A2
     public testAndDiscoveryConnection(): void {
         const config: A2ARemoteAgentConfig = { ...this.entity, ...this.formGroup.value };
         this.loadingRelatedBackend = true;
-        this.service.testAndDiscovery1(config).subscribe({
+        this.service.testAndDiscoveryA2AClientConfig(config).subscribe({
             next: (status) => {
                 this.updateLastOperationStatus(status);
                 if (status && status.hasErrorMessages !== true && status.result) {
@@ -164,25 +164,25 @@ export class GeboAIA2AClientAdminComponent extends BaseEntityEditingComponent<A2
     }
 
     override findByCode(code: string): Observable<A2ARemoteAgentConfig | null> {
-        return this.service.findByCode2(code).pipe(map(r => r.result || null));
+        return this.service.findByCodeA2AClientConfig(code).pipe(map(r => r.result || null));
     }
 
     override save(value: any): Observable<A2ARemoteAgentConfig> {
-        return this.service.update1(value).pipe(map(r => {
+        return this.service.updateA2AClientConfig(value).pipe(map(r => {
             this.updateLastOperationStatus(r);
             return r.result ? r.result : value;
         }));
     }
 
     override insert(value: any): Observable<A2ARemoteAgentConfig> {
-        return this.service.insert1(value).pipe(map(r => {
+        return this.service.insertA2AClientConfig(value).pipe(map(r => {
             this.updateLastOperationStatus(r);
             return r.result ? r.result : value;
         }));
     }
 
     override delete(value: A2ARemoteAgentConfig): Observable<boolean> {
-        return this.service.delete1(value).pipe(map(r => {
+        return this.service.deleteA2AClientConfig(value).pipe(map(r => {
             this.assignBackendMessages(r.messages);
             return true;
         }));

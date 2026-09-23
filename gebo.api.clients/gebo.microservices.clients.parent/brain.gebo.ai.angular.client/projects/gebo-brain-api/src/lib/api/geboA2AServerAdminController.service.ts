@@ -64,13 +64,13 @@ export class GeboA2AServerAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public _delete(code: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
-    public _delete(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
-    public _delete(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
-    public _delete(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteA2AServer(code: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
+    public deleteA2AServer(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
+    public deleteA2AServer(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
+    public deleteA2AServer(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
-            throw new Error('Required parameter code was null or undefined when calling _delete.');
+            throw new Error('Required parameter code was null or undefined when calling deleteA2AServer.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -110,10 +110,10 @@ export class GeboA2AServerAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAll1(observe?: 'body', reportProgress?: boolean): Observable<Array<A2AServerConfig>>;
-    public findAll1(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<A2AServerConfig>>>;
-    public findAll1(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<A2AServerConfig>>>;
-    public findAll1(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findAllA2AServer(observe?: 'body', reportProgress?: boolean): Observable<Array<A2AServerConfig>>;
+    public findAllA2AServer(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<A2AServerConfig>>>;
+    public findAllA2AServer(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<A2AServerConfig>>>;
+    public findAllA2AServer(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -147,13 +147,13 @@ export class GeboA2AServerAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findByCode1(code: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2AServerConfig>;
-    public findByCode1(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2AServerConfig>>;
-    public findByCode1(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2AServerConfig>>;
-    public findByCode1(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findByCodeA2AServer(code: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2AServerConfig>;
+    public findByCodeA2AServer(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2AServerConfig>>;
+    public findByCodeA2AServer(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2AServerConfig>>;
+    public findByCodeA2AServer(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
-            throw new Error('Required parameter code was null or undefined when calling findByCode1.');
+            throw new Error('Required parameter code was null or undefined when calling findByCodeA2AServer.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -194,13 +194,13 @@ export class GeboA2AServerAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public insert(body: A2AServerConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2AServerConfig>;
-    public insert(body: A2AServerConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2AServerConfig>>;
-    public insert(body: A2AServerConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2AServerConfig>>;
-    public insert(body: A2AServerConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public insertA2AServer(body: A2AServerConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2AServerConfig>;
+    public insertA2AServer(body: A2AServerConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2AServerConfig>>;
+    public insertA2AServer(body: A2AServerConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2AServerConfig>>;
+    public insertA2AServer(body: A2AServerConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling insert.');
+            throw new Error('Required parameter body was null or undefined when calling insertA2AServer.');
         }
 
         let headers = this.defaultHeaders;
@@ -241,13 +241,13 @@ export class GeboA2AServerAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public update(body: A2AServerConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2AServerConfig>;
-    public update(body: A2AServerConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2AServerConfig>>;
-    public update(body: A2AServerConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2AServerConfig>>;
-    public update(body: A2AServerConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateA2AServer(body: A2AServerConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2AServerConfig>;
+    public updateA2AServer(body: A2AServerConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2AServerConfig>>;
+    public updateA2AServer(body: A2AServerConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2AServerConfig>>;
+    public updateA2AServer(body: A2AServerConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling update.');
+            throw new Error('Required parameter body was null or undefined when calling updateA2AServer.');
         }
 
         let headers = this.defaultHeaders;

@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:53:22.373080167+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T16:15:03.117398324+02:00[Europe/Rome]")
 
 public class GeboA2AServerAdminControllerApi {
     private ApiClient apiClient;
@@ -52,8 +52,8 @@ public class GeboA2AServerAdminControllerApi {
      * @return OperationStatusBoolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusBoolean delete(String code) throws RestClientException {
-        return deleteWithHttpInfo(code).getBody();
+    public OperationStatusBoolean deleteA2AServer(String code) throws RestClientException {
+        return deleteA2AServerWithHttpInfo(code).getBody();
     }
 
     /**
@@ -64,11 +64,11 @@ public class GeboA2AServerAdminControllerApi {
      * @return ResponseEntity&lt;OperationStatusBoolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusBoolean> deleteWithHttpInfo(String code) throws RestClientException {
+    public ResponseEntity<OperationStatusBoolean> deleteA2AServerWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling delete");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling deleteA2AServer");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboA2AServerAdminController/deleteA2AServer").build().toUriString();
         
@@ -96,8 +96,8 @@ public class GeboA2AServerAdminControllerApi {
      * @return List&lt;A2AServerConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<A2AServerConfig> findAll1() throws RestClientException {
-        return findAll1WithHttpInfo().getBody();
+    public List<A2AServerConfig> findAllA2AServer() throws RestClientException {
+        return findAllA2AServerWithHttpInfo().getBody();
     }
 
     /**
@@ -107,7 +107,7 @@ public class GeboA2AServerAdminControllerApi {
      * @return ResponseEntity&lt;List&lt;A2AServerConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<A2AServerConfig>> findAll1WithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<A2AServerConfig>> findAllA2AServerWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboA2AServerAdminController/findAll").build().toUriString();
         
@@ -135,8 +135,8 @@ public class GeboA2AServerAdminControllerApi {
      * @return OperationStatusA2AServerConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusA2AServerConfig findByCode1(String code) throws RestClientException {
-        return findByCode1WithHttpInfo(code).getBody();
+    public OperationStatusA2AServerConfig findByCodeA2AServer(String code) throws RestClientException {
+        return findByCodeA2AServerWithHttpInfo(code).getBody();
     }
 
     /**
@@ -147,11 +147,11 @@ public class GeboA2AServerAdminControllerApi {
      * @return ResponseEntity&lt;OperationStatusA2AServerConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusA2AServerConfig> findByCode1WithHttpInfo(String code) throws RestClientException {
+    public ResponseEntity<OperationStatusA2AServerConfig> findByCodeA2AServerWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findByCode1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findByCodeA2AServer");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboA2AServerAdminController/findByCode").build().toUriString();
         
@@ -180,8 +180,8 @@ public class GeboA2AServerAdminControllerApi {
      * @return OperationStatusA2AServerConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusA2AServerConfig insert(A2AServerConfig body) throws RestClientException {
-        return insertWithHttpInfo(body).getBody();
+    public OperationStatusA2AServerConfig insertA2AServer(A2AServerConfig body) throws RestClientException {
+        return insertA2AServerWithHttpInfo(body).getBody();
     }
 
     /**
@@ -192,11 +192,11 @@ public class GeboA2AServerAdminControllerApi {
      * @return ResponseEntity&lt;OperationStatusA2AServerConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusA2AServerConfig> insertWithHttpInfo(A2AServerConfig body) throws RestClientException {
+    public ResponseEntity<OperationStatusA2AServerConfig> insertA2AServerWithHttpInfo(A2AServerConfig body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insert");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertA2AServer");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboA2AServerAdminController/insertA2AServer").build().toUriString();
         
@@ -226,8 +226,8 @@ public class GeboA2AServerAdminControllerApi {
      * @return OperationStatusA2AServerConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusA2AServerConfig update(A2AServerConfig body) throws RestClientException {
-        return updateWithHttpInfo(body).getBody();
+    public OperationStatusA2AServerConfig updateA2AServer(A2AServerConfig body) throws RestClientException {
+        return updateA2AServerWithHttpInfo(body).getBody();
     }
 
     /**
@@ -238,11 +238,11 @@ public class GeboA2AServerAdminControllerApi {
      * @return ResponseEntity&lt;OperationStatusA2AServerConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusA2AServerConfig> updateWithHttpInfo(A2AServerConfig body) throws RestClientException {
+    public ResponseEntity<OperationStatusA2AServerConfig> updateA2AServerWithHttpInfo(A2AServerConfig body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling update");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateA2AServer");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboA2AServerAdminController/updateA2AServer").build().toUriString();
         
