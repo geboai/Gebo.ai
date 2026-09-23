@@ -42,6 +42,7 @@
 
   	<module>gebo.architecture.swagger</module>
   	<module>gebo.architecture.mcp-clients</module>
+  	<module>gebo.architecture.mcp-clients.controllers</module>
   	<module>gebo.architecture.mcp-server</module>
   	<module>gebo.architecture.a2a-clients</module>
   	<module>gebo.architecture.a2a-server</module>

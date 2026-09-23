@@ -164,6 +164,15 @@
 			<artifactId>gebo.architecture.mcp-clients</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- McpClientConfigController lives here, not in the base mcp-clients
+		     module, so the config admin endpoint is served by brain but NOT by the
+		     mcpclient content-handler microservice (which shares the same Mongo and
+		     still reads the configs through the base module). -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.mcp-clients.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.mcp-server</artifactId>

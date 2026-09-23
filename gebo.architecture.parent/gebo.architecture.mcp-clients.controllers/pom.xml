@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.4.0-SNAPSHOT</version>
+	</parent>
+	<!--
+	  McpClientConfigController, split out of gebo.architecture.mcp-clients. That
+	  base module is on the classpath of every service that works with MCP client
+	  connections - brain (agent/tool MCP) directly, and the mcpclient content
+	  handler microservice transitively via gebo.mcp-client.content.handler - so
+	  leaving the controller there exposed the same admin endpoint on BOTH, backed
+	  by the SAME shared Mongo the two share. Managing MCP client configs from two
+	  places against one store is what we do not want.
+
+	  The base module keeps the model/repository/service, so the mcpclient content
+	  handler still READS those configs from the shared Mongo it shares with brain.
+	  Only the REST controller moves here, and this module is added ONLY to the
+	  monolithic starter and to brain.gebo.ai - so the config admin surface is
+	  served by brain (and the monolith), never by the content-handler microservice.
+	-->
+	<artifactId>gebo.architecture.mcp-clients.controllers</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.mcp-clients</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>
