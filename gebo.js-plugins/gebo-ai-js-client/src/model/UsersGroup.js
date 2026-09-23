@@ -44,6 +44,8 @@ export default class UsersGroup {
         obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userIds'))
         obj.userIds = ApiClient.convertToType(data['userIds'], ['String']);
+      if (data.hasOwnProperty('extCode'))
+        obj.extCode = ApiClient.convertToType(data['extCode'], 'String');
     }
     return obj;
   }
@@ -63,4 +65,9 @@ UsersGroup.prototype.description = undefined;
  * @member {Array.<String>} userIds
  */
 UsersGroup.prototype.userIds = undefined;
+
+/**
+ * @member {String} extCode
+ */
+UsersGroup.prototype.extCode = undefined;
 

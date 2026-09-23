@@ -4,6 +4,6 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **root** | [**GVirtualFilesystemRoot**](GVirtualFilesystemRoot.md) |  | [optional] 
-**selected** | **Object** |  | [optional] 
-**opened** | **Object** |  | [optional] 
-**childs** | **Object** |  | [optional] 
+**selected** | **Boolean** |  | [optional] 
+**opened** | **Boolean** |  | [optional] 
+**childs** | [**[VirtualFilesystemNavigationNode]**](VirtualFilesystemNavigationNode.md) |  | [optional] 

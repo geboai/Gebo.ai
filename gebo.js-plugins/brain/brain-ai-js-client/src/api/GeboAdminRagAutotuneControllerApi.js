@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from "../ApiClient";
+import AutotuneVectorStoreInfo from '../model/AutotuneVectorStoreInfo';
 
 /**
 * GeboAdminRagAutotuneController service.
@@ -36,7 +37,7 @@ export default class GeboAdminRagAutotuneControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/AutotuneVectorStoreInfo>} and HTTP response
      */
     getLatestComputedVectorStoresWithHttpInfo() {
       
@@ -58,7 +59,7 @@ export default class GeboAdminRagAutotuneControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [AutotuneVectorStoreInfo];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAdminRagAutotuneController/getLatestComputedVectorStores', 'GET',
@@ -68,7 +69,7 @@ export default class GeboAdminRagAutotuneControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/AutotuneVectorStoreInfo>}
      */
     getLatestComputedVectorStores() {
       return this.getLatestComputedVectorStoresWithHttpInfo()

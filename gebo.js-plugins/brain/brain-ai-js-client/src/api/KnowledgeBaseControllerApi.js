@@ -86,7 +86,7 @@ export default class KnowledgeBaseControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GKnowledgeBase} and HTTP response
      */
     findKnowledgeBaseByCodeWithHttpInfo(code) {
@@ -136,7 +136,7 @@ export default class KnowledgeBaseControllerApi {
 
     /**
      * @param {module:model/GKnowledgeBase} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GKnowledgeBase>} and HTTP response
      */
     findKnowledgeBasesByQbeWithHttpInfo(body) {
       
@@ -162,7 +162,7 @@ export default class KnowledgeBaseControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GKnowledgeBase];
 
       return this.apiClient.callApi(
         '/api/admin/KnowledgeBaseController/findKnowledgeBasesByQbe', 'POST',
@@ -173,7 +173,7 @@ export default class KnowledgeBaseControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GKnowledgeBase>}
      */
     findKnowledgeBasesByQbe(body) {
       return this.findKnowledgeBasesByQbeWithHttpInfo(body)
@@ -184,8 +184,8 @@ export default class KnowledgeBaseControllerApi {
 
 
     /**
-     * @param {Object} code 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} code 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GKnowledgeBase>} and HTTP response
      */
     getChildKnowledgeBasesWithHttpInfo(code) {
       
@@ -211,7 +211,7 @@ export default class KnowledgeBaseControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GKnowledgeBase];
 
       return this.apiClient.callApi(
         '/api/admin/KnowledgeBaseController/getChildKnowledgeBases', 'GET',
@@ -222,7 +222,7 @@ export default class KnowledgeBaseControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} code 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GKnowledgeBase>}
      */
     getChildKnowledgeBases(code) {
       return this.getChildKnowledgeBasesWithHttpInfo(code)
@@ -233,7 +233,7 @@ export default class KnowledgeBaseControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GKnowledgeBase>} and HTTP response
      */
     getKnowledgeBasesWithHttpInfo() {
       
@@ -255,7 +255,7 @@ export default class KnowledgeBaseControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GKnowledgeBase];
 
       return this.apiClient.callApi(
         '/api/admin/KnowledgeBaseController/getKnowledgeBases', 'GET',
@@ -265,7 +265,7 @@ export default class KnowledgeBaseControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GKnowledgeBase>}
      */
     getKnowledgeBases() {
       return this.getKnowledgeBasesWithHttpInfo()

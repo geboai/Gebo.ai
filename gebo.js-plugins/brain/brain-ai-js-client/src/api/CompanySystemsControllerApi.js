@@ -41,8 +41,8 @@ export default class CompanySystemsControllerApi {
 
 
     /**
-     * @param {Object} systemTypeCode 
-     * @param {Object} systemCode 
+     * @param {String} systemTypeCode 
+     * @param {String} systemCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GContentManagementSystem} and HTTP response
      */
     getContentSystemWithHttpInfo(systemTypeCode, systemCode) {
@@ -96,7 +96,7 @@ export default class CompanySystemsControllerApi {
 
 
     /**
-     * @param {Object} systemTypeCode 
+     * @param {String} systemTypeCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GContentManagementSystemType} and HTTP response
      */
     getContentSystemTypeWithHttpInfo(systemTypeCode) {
@@ -145,7 +145,7 @@ export default class CompanySystemsControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GContentManagementSystemType>} and HTTP response
      */
     getContentSystemTypesWithHttpInfo() {
       
@@ -167,7 +167,7 @@ export default class CompanySystemsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GContentManagementSystemType];
 
       return this.apiClient.callApi(
         '/api/admin/CompanySystemsController/getContentSystemTypes()', 'GET',
@@ -177,7 +177,7 @@ export default class CompanySystemsControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GContentManagementSystemType>}
      */
     getContentSystemTypes() {
       return this.getContentSystemTypesWithHttpInfo()
@@ -188,7 +188,7 @@ export default class CompanySystemsControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GContentManagementSystem>} and HTTP response
      */
     getContentSystemsWithHttpInfo() {
       
@@ -210,7 +210,7 @@ export default class CompanySystemsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GContentManagementSystem];
 
       return this.apiClient.callApi(
         '/api/admin/CompanySystemsController/getContentSystems', 'GET',
@@ -220,7 +220,7 @@ export default class CompanySystemsControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GContentManagementSystem>}
      */
     getContentSystems() {
       return this.getContentSystemsWithHttpInfo()
@@ -231,9 +231,9 @@ export default class CompanySystemsControllerApi {
 
 
     /**
-     * @param {Object} systemTypeCode 
-     * @param {Object} systemCode 
-     * @param {Object} projectEndpointCode 
+     * @param {String} systemTypeCode 
+     * @param {String} systemCode 
+     * @param {String} projectEndpointCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GProjectEndpoint} and HTTP response
      */
     getProjectEndpointWithHttpInfo(systemTypeCode, systemCode, projectEndpointCode) {

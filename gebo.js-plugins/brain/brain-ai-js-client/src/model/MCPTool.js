@@ -39,70 +39,70 @@ export default class MCPTool {
     if (data) {
       obj = obj || new MCPTool();
       if (data.hasOwnProperty('accessibleGroups'))
-        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], Object);
+        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], ['String']);
       if (data.hasOwnProperty('accessibleUsers'))
-        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], Object);
+        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], ['String']);
       if (data.hasOwnProperty('accessibleToAll'))
-        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], Object);
+        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], 'Boolean');
       if (data.hasOwnProperty('aclAliases'))
-        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], Object);
+        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('deletedOnMCPServer'))
-        obj.deletedOnMCPServer = ApiClient.convertToType(data['deletedOnMCPServer'], Object);
+        obj.deletedOnMCPServer = ApiClient.convertToType(data['deletedOnMCPServer'], 'Boolean');
       if (data.hasOwnProperty('addedOnMCPServer'))
-        obj.addedOnMCPServer = ApiClient.convertToType(data['addedOnMCPServer'], Object);
+        obj.addedOnMCPServer = ApiClient.convertToType(data['addedOnMCPServer'], 'Boolean');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('inputSchema'))
-        obj.inputSchema = ApiClient.convertToType(data['inputSchema'], Object);
+        obj.inputSchema = ApiClient.convertToType(data['inputSchema'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} accessibleGroups
+ * @member {Array.<String>} accessibleGroups
  */
 MCPTool.prototype.accessibleGroups = undefined;
 
 /**
- * @member {Object} accessibleUsers
+ * @member {Array.<String>} accessibleUsers
  */
 MCPTool.prototype.accessibleUsers = undefined;
 
 /**
- * @member {Object} accessibleToAll
+ * @member {Boolean} accessibleToAll
  */
 MCPTool.prototype.accessibleToAll = undefined;
 
 /**
- * @member {Object} aclAliases
+ * @member {Array.<Number>} aclAliases
  */
 MCPTool.prototype.aclAliases = undefined;
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 MCPTool.prototype.name = undefined;
 
 /**
- * @member {Object} deletedOnMCPServer
+ * @member {Boolean} deletedOnMCPServer
  */
 MCPTool.prototype.deletedOnMCPServer = undefined;
 
 /**
- * @member {Object} addedOnMCPServer
+ * @member {Boolean} addedOnMCPServer
  */
 MCPTool.prototype.addedOnMCPServer = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 MCPTool.prototype.description = undefined;
 
 /**
- * @member {Object} inputSchema
+ * @member {String} inputSchema
  */
 MCPTool.prototype.inputSchema = undefined;
 

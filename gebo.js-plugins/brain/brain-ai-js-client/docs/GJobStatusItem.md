@@ -3,14 +3,22 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**jobType** | **Object** |  | [optional] 
-**code** | **Object** |  | [optional] 
-**finished** | **Object** |  | [optional] 
-**endDateTime** | **Object** |  | [optional] 
-**startDateTime** | **Object** |  | [optional] 
-**processing** | **Object** |  | [optional] 
-**error** | **Object** |  | [optional] 
-**description** | **Object** |  | [optional] 
-**workflowType** | **Object** |  | [optional] 
-**workflowId** | **Object** |  | [optional] 
+**description** | **String** |  | [optional] 
+**code** | **String** |  | [optional] 
+**workflowType** | **String** |  | [optional] 
+**workflowId** | **String** |  | [optional] 
 **projectEndpointReference** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  | [optional] 
+**error** | **Boolean** |  | [optional] 
+**startDateTime** | **Date** |  | [optional] 
+**endDateTime** | **Date** |  | [optional] 
+**processing** | **Boolean** |  | [optional] 
+**finished** | **Boolean** |  | [optional] 
+**jobType** | **String** |  | [optional] 
+
+<a name="JobTypeEnum"></a>
+## Enum: JobTypeEnum
+
+* `CONTENTS_READING` (value: `"CONTENTS_READING"`)
+* `VECTORIZING_CONTENTS` (value: `"VECTORIZING_CONTENTS"`)
+* `CONTENTS_READING_VECTORIZING` (value: `"CONTENTS_READING_VECTORIZING"`)
+

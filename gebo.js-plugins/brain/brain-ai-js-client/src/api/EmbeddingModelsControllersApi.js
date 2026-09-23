@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from "../ApiClient";
+import ConfigurationEntryGBaseEmbeddingModelConfig from '../model/ConfigurationEntryGBaseEmbeddingModelConfig';
+import GEmbeddingModelType from '../model/GEmbeddingModelType';
 
 /**
 * EmbeddingModelsControllers service.
@@ -36,7 +38,7 @@ export default class EmbeddingModelsControllersApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GEmbeddingModelType>} and HTTP response
      */
     getEmbeddingModelTypesWithHttpInfo() {
       
@@ -58,7 +60,7 @@ export default class EmbeddingModelsControllersApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GEmbeddingModelType];
 
       return this.apiClient.callApi(
         '/api/admin/EmbeddingModelsControllers/getEmbeddingModelTypes', 'GET',
@@ -68,7 +70,7 @@ export default class EmbeddingModelsControllersApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GEmbeddingModelType>}
      */
     getEmbeddingModelTypes() {
       return this.getEmbeddingModelTypesWithHttpInfo()
@@ -80,8 +82,8 @@ export default class EmbeddingModelsControllersApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ConfigurationEntryGBaseEmbeddingModelConfig>} and HTTP response
      */
     getRuntimeConfiguredEmbeddingModelsWithHttpInfo(opts) {
       opts = opts || {};
@@ -103,7 +105,7 @@ export default class EmbeddingModelsControllersApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [ConfigurationEntryGBaseEmbeddingModelConfig];
 
       return this.apiClient.callApi(
         '/api/admin/EmbeddingModelsControllers/getRuntimeConfiguredEmbeddingModels', 'GET',
@@ -114,8 +116,8 @@ export default class EmbeddingModelsControllersApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ConfigurationEntryGBaseEmbeddingModelConfig>}
      */
     getRuntimeConfiguredEmbeddingModels(opts) {
       return this.getRuntimeConfiguredEmbeddingModelsWithHttpInfo(opts)

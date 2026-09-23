@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **Object** |  | 
-**knowledgeBaseCodes** | **Object** |  | 
+**name** | **String** |  | 
+**knowledgeBaseCodes** | **[String]** |  | [optional] 
 **page** | [**DataPage**](DataPage.md) |  | 

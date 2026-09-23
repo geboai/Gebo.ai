@@ -13,6 +13,9 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GObjectRefGProjectEndpoint from './GObjectRefGProjectEndpoint';
+import GeboMCPAgentTool from './GeboMCPAgentTool';
+import GeboMCPAgentsNetworkTool from './GeboMCPAgentsNetworkTool';
 
 /**
  * The GeboMCPServerConfig model module.
@@ -24,7 +27,7 @@ export default class GeboMCPServerConfig {
    * Constructs a new <code>GeboMCPServerConfig</code>.
    * @alias module:model/GeboMCPServerConfig
    * @class
-   * @param exportedUniqueRelativeUrl {Object} 
+   * @param exportedUniqueRelativeUrl {String} 
    */
   constructor(exportedUniqueRelativeUrl) {
     this.exportedUniqueRelativeUrl = exportedUniqueRelativeUrl;
@@ -41,147 +44,147 @@ export default class GeboMCPServerConfig {
     if (data) {
       obj = obj || new GeboMCPServerConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('exportedUniqueRelativeUrl'))
-        obj.exportedUniqueRelativeUrl = ApiClient.convertToType(data['exportedUniqueRelativeUrl'], Object);
+        obj.exportedUniqueRelativeUrl = ApiClient.convertToType(data['exportedUniqueRelativeUrl'], 'String');
       if (data.hasOwnProperty('enabled'))
-        obj.enabled = ApiClient.convertToType(data['enabled'], Object);
+        obj.enabled = ApiClient.convertToType(data['enabled'], 'Boolean');
       if (data.hasOwnProperty('accessibleGroups'))
-        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], Object);
+        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], ['String']);
       if (data.hasOwnProperty('accessibleUsers'))
-        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], Object);
+        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], ['String']);
       if (data.hasOwnProperty('accessibleToAll'))
-        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], Object);
+        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], 'Boolean');
       if (data.hasOwnProperty('aclAliases'))
-        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], Object);
+        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
       if (data.hasOwnProperty('shareAllPersonallyVisible'))
-        obj.shareAllPersonallyVisible = ApiClient.convertToType(data['shareAllPersonallyVisible'], Object);
+        obj.shareAllPersonallyVisible = ApiClient.convertToType(data['shareAllPersonallyVisible'], 'Boolean');
       if (data.hasOwnProperty('enabledTools'))
-        obj.enabledTools = ApiClient.convertToType(data['enabledTools'], Object);
+        obj.enabledTools = ApiClient.convertToType(data['enabledTools'], ['String']);
       if (data.hasOwnProperty('exportedKnowledgeBasesAsResources'))
-        obj.exportedKnowledgeBasesAsResources = ApiClient.convertToType(data['exportedKnowledgeBasesAsResources'], Object);
+        obj.exportedKnowledgeBasesAsResources = ApiClient.convertToType(data['exportedKnowledgeBasesAsResources'], ['String']);
       if (data.hasOwnProperty('exportedProjectsAsResources'))
-        obj.exportedProjectsAsResources = ApiClient.convertToType(data['exportedProjectsAsResources'], Object);
+        obj.exportedProjectsAsResources = ApiClient.convertToType(data['exportedProjectsAsResources'], ['String']);
       if (data.hasOwnProperty('exportedProjectEndpoints'))
-        obj.exportedProjectEndpoints = ApiClient.convertToType(data['exportedProjectEndpoints'], Object);
+        obj.exportedProjectEndpoints = ApiClient.convertToType(data['exportedProjectEndpoints'], [GObjectRefGProjectEndpoint]);
       if (data.hasOwnProperty('exportedPrompts'))
-        obj.exportedPrompts = ApiClient.convertToType(data['exportedPrompts'], Object);
+        obj.exportedPrompts = ApiClient.convertToType(data['exportedPrompts'], ['String']);
       if (data.hasOwnProperty('agentAsTools'))
-        obj.agentAsTools = ApiClient.convertToType(data['agentAsTools'], Object);
+        obj.agentAsTools = ApiClient.convertToType(data['agentAsTools'], [GeboMCPAgentTool]);
       if (data.hasOwnProperty('agentNetworkAsTools'))
-        obj.agentNetworkAsTools = ApiClient.convertToType(data['agentNetworkAsTools'], Object);
+        obj.agentNetworkAsTools = ApiClient.convertToType(data['agentNetworkAsTools'], [GeboMCPAgentsNetworkTool]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GeboMCPServerConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GeboMCPServerConfig.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GeboMCPServerConfig.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GeboMCPServerConfig.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GeboMCPServerConfig.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GeboMCPServerConfig.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} exportedUniqueRelativeUrl
+ * @member {String} exportedUniqueRelativeUrl
  */
 GeboMCPServerConfig.prototype.exportedUniqueRelativeUrl = undefined;
 
 /**
- * @member {Object} enabled
+ * @member {Boolean} enabled
  */
 GeboMCPServerConfig.prototype.enabled = undefined;
 
 /**
- * @member {Object} accessibleGroups
+ * @member {Array.<String>} accessibleGroups
  */
 GeboMCPServerConfig.prototype.accessibleGroups = undefined;
 
 /**
- * @member {Object} accessibleUsers
+ * @member {Array.<String>} accessibleUsers
  */
 GeboMCPServerConfig.prototype.accessibleUsers = undefined;
 
 /**
- * @member {Object} accessibleToAll
+ * @member {Boolean} accessibleToAll
  */
 GeboMCPServerConfig.prototype.accessibleToAll = undefined;
 
 /**
- * @member {Object} aclAliases
+ * @member {Array.<Number>} aclAliases
  */
 GeboMCPServerConfig.prototype.aclAliases = undefined;
 
 /**
- * @member {Object} shareAllPersonallyVisible
+ * @member {Boolean} shareAllPersonallyVisible
  */
 GeboMCPServerConfig.prototype.shareAllPersonallyVisible = undefined;
 
 /**
- * @member {Object} enabledTools
+ * @member {Array.<String>} enabledTools
  */
 GeboMCPServerConfig.prototype.enabledTools = undefined;
 
 /**
- * @member {Object} exportedKnowledgeBasesAsResources
+ * @member {Array.<String>} exportedKnowledgeBasesAsResources
  */
 GeboMCPServerConfig.prototype.exportedKnowledgeBasesAsResources = undefined;
 
 /**
- * @member {Object} exportedProjectsAsResources
+ * @member {Array.<String>} exportedProjectsAsResources
  */
 GeboMCPServerConfig.prototype.exportedProjectsAsResources = undefined;
 
 /**
- * @member {Object} exportedProjectEndpoints
+ * @member {Array.<module:model/GObjectRefGProjectEndpoint>} exportedProjectEndpoints
  */
 GeboMCPServerConfig.prototype.exportedProjectEndpoints = undefined;
 
 /**
- * @member {Object} exportedPrompts
+ * @member {Array.<String>} exportedPrompts
  */
 GeboMCPServerConfig.prototype.exportedPrompts = undefined;
 
 /**
- * @member {Object} agentAsTools
+ * @member {Array.<module:model/GeboMCPAgentTool>} agentAsTools
  */
 GeboMCPServerConfig.prototype.agentAsTools = undefined;
 
 /**
- * @member {Object} agentNetworkAsTools
+ * @member {Array.<module:model/GeboMCPAgentsNetworkTool>} agentNetworkAsTools
  */
 GeboMCPServerConfig.prototype.agentNetworkAsTools = undefined;
 

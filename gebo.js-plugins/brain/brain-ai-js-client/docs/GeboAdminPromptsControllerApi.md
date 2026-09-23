@@ -5,10 +5,13 @@ All URIs are relative to *http://localhost:13001/brain*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**deletePromptConfig**](GeboAdminPromptsControllerApi.md#deletePromptConfig) | **POST** /api/admin/GeboAdminPromptsController/deletePromptConfig | 
+[**findGPromptUseInfoByUseCode**](GeboAdminPromptsControllerApi.md#findGPromptUseInfoByUseCode) | **GET** /api/admin/GeboAdminPromptsController/findGPromptUseInfoByUseCode | 
 [**findPromptConfigByCode**](GeboAdminPromptsControllerApi.md#findPromptConfigByCode) | **GET** /api/admin/GeboAdminPromptsController/findPromptConfigByCode | 
+[**getAllPromptConfigsLightList**](GeboAdminPromptsControllerApi.md#getAllPromptConfigsLightList) | **GET** /api/admin/GeboAdminPromptsController/getAllPromptConfigsLightList | 
 [**getPromptCategories**](GeboAdminPromptsControllerApi.md#getPromptCategories) | **GET** /api/admin/GeboAdminPromptsController/getPromptCategories | 
 [**getPromptConfigByFilter**](GeboAdminPromptsControllerApi.md#getPromptConfigByFilter) | **POST** /api/admin/GeboAdminPromptsController/getPromptConfigByFilter | 
 [**insertPromptConfig**](GeboAdminPromptsControllerApi.md#insertPromptConfig) | **POST** /api/admin/GeboAdminPromptsController/insertPromptConfig | 
+[**isPromptTemplateEditingEnabled**](GeboAdminPromptsControllerApi.md#isPromptTemplateEditingEnabled) | **GET** /api/admin/GeboAdminPromptsController/isPromptTemplateEditingEnabled | 
 [**updatePromptConfig**](GeboAdminPromptsControllerApi.md#updatePromptConfig) | **POST** /api/admin/GeboAdminPromptsController/updatePromptConfig | 
 
 <a name="deletePromptConfig"></a>
@@ -51,6 +54,46 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: Not defined
 
+<a name="findGPromptUseInfoByUseCode"></a>
+# **findGPromptUseInfoByUseCode**
+> GPromptUseInfo findGPromptUseInfoByUseCode(useCode)
+
+
+
+### Example
+```javascript
+import {BrainClient} from 'gebo.brain.client.js';
+
+let apiInstance = new BrainClient.GeboAdminPromptsControllerApi();
+let useCode = "useCode_example"; // String | 
+
+apiInstance.findGPromptUseInfoByUseCode(useCode).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **useCode** | **String**|  | 
+
+### Return type
+
+[**GPromptUseInfo**](GPromptUseInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
 <a name="findPromptConfigByCode"></a>
 # **findPromptConfigByCode**
 > GPromptTemplateConfig findPromptConfigByCode(code)
@@ -62,7 +105,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboAdminPromptsControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findPromptConfigByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -76,7 +119,7 @@ apiInstance.findPromptConfigByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -91,9 +134,44 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
+<a name="getAllPromptConfigsLightList"></a>
+# **getAllPromptConfigsLightList**
+> [GPromptTemplateLightView] getAllPromptConfigsLightList()
+
+
+
+### Example
+```javascript
+import {BrainClient} from 'gebo.brain.client.js';
+
+let apiInstance = new BrainClient.GeboAdminPromptsControllerApi();
+apiInstance.getAllPromptConfigsLightList().then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**[GPromptTemplateLightView]**](GPromptTemplateLightView.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
 <a name="getPromptCategories"></a>
 # **getPromptCategories**
-> Object getPromptCategories()
+> [&#x27;String&#x27;] getPromptCategories()
 
 
 
@@ -115,7 +193,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**[&#x27;String&#x27;]**
 
 ### Authorization
 
@@ -204,6 +282,41 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="isPromptTemplateEditingEnabled"></a>
+# **isPromptTemplateEditingEnabled**
+> &#x27;Boolean&#x27; isPromptTemplateEditingEnabled()
+
+
+
+### Example
+```javascript
+import {BrainClient} from 'gebo.brain.client.js';
+
+let apiInstance = new BrainClient.GeboAdminPromptsControllerApi();
+apiInstance.isPromptTemplateEditingEnabled().then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+**&#x27;Boolean&#x27;**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 <a name="updatePromptConfig"></a>

@@ -19,7 +19,7 @@ Method | HTTP request | Description
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboChatProfileLookupControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findChatProfileConfigurationLookupByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -33,7 +33,7 @@ apiInstance.findChatProfileConfigurationLookupByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 

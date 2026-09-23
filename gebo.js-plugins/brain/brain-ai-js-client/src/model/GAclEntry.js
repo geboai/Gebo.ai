@@ -39,21 +39,45 @@ export default class GAclEntry {
     if (data) {
       obj = obj || new GAclEntry();
       if (data.hasOwnProperty('aclGrantedUniqueId'))
-        obj.aclGrantedUniqueId = ApiClient.convertToType(data['aclGrantedUniqueId'], Object);
+        obj.aclGrantedUniqueId = ApiClient.convertToType(data['aclGrantedUniqueId'], 'String');
       if (data.hasOwnProperty('grant'))
-        obj.grant = ApiClient.convertToType(data['grant'], Object);
+        obj.grant = ApiClient.convertToType(data['grant'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} aclGrantedUniqueId
+ * @member {String} aclGrantedUniqueId
  */
 GAclEntry.prototype.aclGrantedUniqueId = undefined;
 
 /**
- * @member {Object} grant
+ * Allowed values for the <code>grant</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GAclEntry.GrantEnum = {
+  /**
+   * value: "READ"
+   * @const
+   */
+  READ: "READ",
+
+  /**
+   * value: "WRITE"
+   * @const
+   */
+  WRITE: "WRITE",
+
+  /**
+   * value: "EXECUTE"
+   * @const
+   */
+  EXECUTE: "EXECUTE"
+};
+/**
+ * @member {module:model/GAclEntry.GrantEnum} grant
  */
 GAclEntry.prototype.grant = undefined;
 

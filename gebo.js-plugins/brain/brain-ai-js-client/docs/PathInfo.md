@@ -3,8 +3,18 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**absolutePath** | **Object** |  | [optional] 
-**name** | **Object** |  | [optional] 
-**folder** | **Object** |  | [optional] 
-**metaType** | **Object** |  | [optional] 
-**iconKey** | **Object** |  | [optional] 
+**absolutePath** | **String** |  | [optional] 
+**name** | **String** |  | [optional] 
+**folder** | **Boolean** |  | [optional] 
+**metaType** | **String** |  | [optional] 
+**iconKey** | **String** |  | [optional] 
+
+<a name="MetaTypeEnum"></a>
+## Enum: MetaTypeEnum
+
+* `WEB_PAGE` (value: `"WEB_PAGE"`)
+* `FILE` (value: `"FILE"`)
+* `FOLDER` (value: `"FOLDER"`)
+* `DEVICE` (value: `"DEVICE"`)
+* `UNKNOWN` (value: `"UNKNOWN"`)
+

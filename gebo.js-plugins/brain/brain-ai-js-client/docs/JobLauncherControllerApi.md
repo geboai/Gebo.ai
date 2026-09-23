@@ -19,7 +19,7 @@ Method | HTTP request | Description
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.JobLauncherControllerApi();
-let jobCode = null; // Object | 
+let jobCode = "jobCode_example"; // String | 
 
 apiInstance.abortJob(jobCode).then(() => {
   console.log('API called successfully.');
@@ -33,7 +33,7 @@ apiInstance.abortJob(jobCode).then(() => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **jobCode** | [**Object**](.md)|  | 
+ **jobCode** | **String**|  | 
 
 ### Return type
 

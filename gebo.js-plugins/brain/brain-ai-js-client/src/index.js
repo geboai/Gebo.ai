@@ -13,10 +13,16 @@
  *
  */
 import ApiClient from './ApiClient';
+import A2AExportedAgent from './model/A2AExportedAgent';
+import A2ARemoteAgentConfig from './model/A2ARemoteAgentConfig';
+import A2ARemoteSkill from './model/A2ARemoteSkill';
+import A2AServerConfig from './model/A2AServerConfig';
 import AclOwnerParam from './model/AclOwnerParam';
+import AdditionalContent from './model/AdditionalContent';
 import AgentNetworkParticipant from './model/AgentNetworkParticipant';
 import AgentServiceDescriptor from './model/AgentServiceDescriptor';
 import AutotuneVectorStoreInfo from './model/AutotuneVectorStoreInfo';
+import BraveSearchConfig from './model/BraveSearchConfig';
 import BrowseParam from './model/BrowseParam';
 import BuildSystemRef from './model/BuildSystemRef';
 import CalledFunction from './model/CalledFunction';
@@ -40,7 +46,10 @@ import ConfigurationEntryGBaseTextToSpeachModelConfig from './model/Configuratio
 import ConfigurationEntryGBaseTranscriptModelConfig from './model/ConfigurationEntryGBaseTranscriptModelConfig';
 import ContentMetaInfo from './model/ContentMetaInfo';
 import ContentObject from './model/ContentObject';
+import DataEndpoint from './model/DataEndpoint';
 import DataPage from './model/DataPage';
+import DataTransformationInfo from './model/DataTransformationInfo';
+import DataTransformationMetaInfo from './model/DataTransformationMetaInfo';
 import DeepSearchConfig from './model/DeepSearchConfig';
 import DeepSearchDataSourceAccess from './model/DeepSearchDataSourceAccess';
 import DefaultPromptForChatModelParam from './model/DefaultPromptForChatModelParam';
@@ -70,6 +79,19 @@ import GBaseTextToSpeachModelChice from './model/GBaseTextToSpeachModelChice';
 import GBaseTextToSpeachModelConfig from './model/GBaseTextToSpeachModelConfig';
 import GBaseTranscriptModelChoice from './model/GBaseTranscriptModelChoice';
 import GBaseTranscriptModelConfig from './model/GBaseTranscriptModelConfig';
+import GBedrockChatModelChoice from './model/GBedrockChatModelChoice';
+import GBedrockChatModelConfig from './model/GBedrockChatModelConfig';
+import GBedrockEmbeddingModelChoice from './model/GBedrockEmbeddingModelChoice';
+import GBedrockEmbeddingModelConfig from './model/GBedrockEmbeddingModelConfig';
+import GBedrockImageModelChoice from './model/GBedrockImageModelChoice';
+import GBedrockImageModelConfig from './model/GBedrockImageModelConfig';
+import GBedrockRankerModelChoice from './model/GBedrockRankerModelChoice';
+import GBedrockRankerModelConfig from './model/GBedrockRankerModelConfig';
+import GBedrockTextToSpeechModelChoice from './model/GBedrockTextToSpeechModelChoice';
+import GBedrockTextToSpeechModelConfig from './model/GBedrockTextToSpeechModelConfig';
+import GBedrockTranscriptModelChoice from './model/GBedrockTranscriptModelChoice';
+import GBedrockTranscriptModelConfig from './model/GBedrockTranscriptModelConfig';
+import GBraveSearchApiCredentials from './model/GBraveSearchApiCredentials';
 import GBuildSystem from './model/GBuildSystem';
 import GBuildSystemType from './model/GBuildSystemType';
 import GCentralizedProjectEndpoint from './model/GCentralizedProjectEndpoint';
@@ -77,17 +99,29 @@ import GChatModelType from './model/GChatModelType';
 import GChatProfileConfiguration from './model/GChatProfileConfiguration';
 import GContentManagementSystem from './model/GContentManagementSystem';
 import GContentManagementSystemType from './model/GContentManagementSystemType';
+import GDataFlowMetaInfos from './model/GDataFlowMetaInfos';
+import GDataFlowReport from './model/GDataFlowReport';
+import GDeepseekChatModelChoice from './model/GDeepseekChatModelChoice';
+import GDeepseekChatModelConfig from './model/GDeepseekChatModelConfig';
 import GDocumentAttributeValue from './model/GDocumentAttributeValue';
 import GDocumentReference from './model/GDocumentReference';
 import GDocumentReferenceStreamRequest from './model/GDocumentReferenceStreamRequest';
 import GEmbeddingModelType from './model/GEmbeddingModelType';
 import GGoogleSearchApiCredentials from './model/GGoogleSearchApiCredentials';
+import GGoogleVertexChatModelChoice from './model/GGoogleVertexChatModelChoice';
+import GGoogleVertexChatModelConfig from './model/GGoogleVertexChatModelConfig';
+import GGoogleVertexEmbeddingModelChoice from './model/GGoogleVertexEmbeddingModelChoice';
+import GGoogleVertexEmbeddingModelConfig from './model/GGoogleVertexEmbeddingModelConfig';
 import GImageModelType from './model/GImageModelType';
 import GJobStatus from './model/GJobStatus';
 import GJobStatusItem from './model/GJobStatusItem';
 import GKnowledgeBase from './model/GKnowledgeBase';
 import GLookupEntry from './model/GLookupEntry';
 import GLookupEntryRefGBaseChatModelConfig from './model/GLookupEntryRefGBaseChatModelConfig';
+import GMistralChatModelChoice from './model/GMistralChatModelChoice';
+import GMistralChatModelConfig from './model/GMistralChatModelConfig';
+import GMistralEmbeddingModelChoice from './model/GMistralEmbeddingModelChoice';
+import GMistralEmbeddingModelConfig from './model/GMistralEmbeddingModelConfig';
 import GModuleMetaInfo from './model/GModuleMetaInfo';
 import GONNXTransformersEmbeddingModelChoice from './model/GONNXTransformersEmbeddingModelChoice';
 import GONNXTransformersEmbeddingModelConfig from './model/GONNXTransformersEmbeddingModelConfig';
@@ -100,6 +134,10 @@ import GObjectRefGBaseRankerModelConfig from './model/GObjectRefGBaseRankerModel
 import GObjectRefGBaseTextToSpeachModelConfig from './model/GObjectRefGBaseTextToSpeachModelConfig';
 import GObjectRefGBaseTranscriptModelConfig from './model/GObjectRefGBaseTranscriptModelConfig';
 import GObjectRefGProjectEndpoint from './model/GObjectRefGProjectEndpoint';
+import GOllamaChatModelChoice from './model/GOllamaChatModelChoice';
+import GOllamaChatModelConfig from './model/GOllamaChatModelConfig';
+import GOllamaEmbeddingModelChoice from './model/GOllamaEmbeddingModelChoice';
+import GOllamaEmbeddingModelConfig from './model/GOllamaEmbeddingModelConfig';
 import GOpenAIChatModelChoice from './model/GOpenAIChatModelChoice';
 import GOpenAIChatModelConfig from './model/GOpenAIChatModelConfig';
 import GOpenAIEmbeddingModelChoice from './model/GOpenAIEmbeddingModelChoice';
@@ -114,9 +152,13 @@ import GProject from './model/GProject';
 import GProjectEndpoint from './model/GProjectEndpoint';
 import GPromptPlaceholderInfo from './model/GPromptPlaceholderInfo';
 import GPromptTemplateConfig from './model/GPromptTemplateConfig';
+import GPromptTemplateLightView from './model/GPromptTemplateLightView';
 import GPromptUseInfo from './model/GPromptUseInfo';
 import GRankerModelType from './model/GRankerModelType';
 import GResponseDocumentRef from './model/GResponseDocumentRef';
+import GSearxngSearchApiCredentials from './model/GSearxngSearchApiCredentials';
+import GSerpapiSearchApiCredentials from './model/GSerpapiSearchApiCredentials';
+import GTavilySearchApiCredentials from './model/GTavilySearchApiCredentials';
 import GTextToSpeechModelType from './model/GTextToSpeechModelType';
 import GTranscriptModelType from './model/GTranscriptModelType';
 import GUserChatInfo from './model/GUserChatInfo';
@@ -133,7 +175,7 @@ import GeboKnowledgeBaseSetupStatus from './model/GeboKnowledgeBaseSetupStatus';
 import GeboMCPAgentTool from './model/GeboMCPAgentTool';
 import GeboMCPAgentsNetworkTool from './model/GeboMCPAgentsNetworkTool';
 import GeboMCPServerConfig from './model/GeboMCPServerConfig';
-import GeboMongoVectorStoreConfig from './model/GeboMongoVectorStoreConfig';
+import GeboNeo4jModuleConfigDto from './model/GeboNeo4jModuleConfigDto';
 import GeboRagRequestCustomConfig from './model/GeboRagRequestCustomConfig';
 import GeboTemplatedChatResponse from './model/GeboTemplatedChatResponse';
 import GeboWorkingMemoryWindowOccupation from './model/GeboWorkingMemoryWindowOccupation';
@@ -163,6 +205,7 @@ import GoogleSearchResults from './model/GoogleSearchResults';
 import HasRunningJobs from './model/HasRunningJobs';
 import IngestionFileType from './model/IngestionFileType';
 import IngestionHandlerConfig from './model/IngestionHandlerConfig';
+import JobsEntriesFilter from './model/JobsEntriesFilter';
 import JobsEntriesForClassNameFilter from './model/JobsEntriesForClassNameFilter';
 import JobsEntriesForJobType from './model/JobsEntriesForJobType';
 import JobsEntriesForProjectEndpointFilter from './model/JobsEntriesForProjectEndpointFilter';
@@ -184,21 +227,36 @@ import MCPClientConfig from './model/MCPClientConfig';
 import MCPPrompt from './model/MCPPrompt';
 import MCPResource from './model/MCPResource';
 import MCPTool from './model/MCPTool';
+import MistralBaseModelCard from './model/MistralBaseModelCard';
+import MistralModelCapabilities from './model/MistralModelCapabilities';
 import ModelMetaInfo from './model/ModelMetaInfo';
 import ModelProviderCapabilities from './model/ModelProviderCapabilities';
-import MongoConfig from './model/MongoConfig';
+import OperationStatusA2ARemoteAgentConfig from './model/OperationStatusA2ARemoteAgentConfig';
+import OperationStatusA2AServerConfig from './model/OperationStatusA2AServerConfig';
 import OperationStatusBoolean from './model/OperationStatusBoolean';
 import OperationStatusComponentVectorStoreStatus from './model/OperationStatusComponentVectorStoreStatus';
 import OperationStatusGAgentsNetwork from './model/OperationStatusGAgentsNetwork';
 import OperationStatusGAnthropicChatModelConfig from './model/OperationStatusGAnthropicChatModelConfig';
+import OperationStatusGBedrockChatModelConfig from './model/OperationStatusGBedrockChatModelConfig';
+import OperationStatusGBedrockEmbeddingModelConfig from './model/OperationStatusGBedrockEmbeddingModelConfig';
+import OperationStatusGBedrockImageModelConfig from './model/OperationStatusGBedrockImageModelConfig';
+import OperationStatusGBedrockRankerModelConfig from './model/OperationStatusGBedrockRankerModelConfig';
+import OperationStatusGBedrockTextToSpeechModelConfig from './model/OperationStatusGBedrockTextToSpeechModelConfig';
+import OperationStatusGBedrockTranscriptModelConfig from './model/OperationStatusGBedrockTranscriptModelConfig';
+import OperationStatusGDeepseekChatModelConfig from './model/OperationStatusGDeepseekChatModelConfig';
+import OperationStatusGGoogleVertexChatModelConfig from './model/OperationStatusGGoogleVertexChatModelConfig';
+import OperationStatusGGoogleVertexEmbeddingModelConfig from './model/OperationStatusGGoogleVertexEmbeddingModelConfig';
 import OperationStatusGJobStatus from './model/OperationStatusGJobStatus';
+import OperationStatusGMistralChatModelConfig from './model/OperationStatusGMistralChatModelConfig';
+import OperationStatusGMistralEmbeddingModelConfig from './model/OperationStatusGMistralEmbeddingModelConfig';
 import OperationStatusGONNXTransformersEmbeddingModelConfig from './model/OperationStatusGONNXTransformersEmbeddingModelConfig';
+import OperationStatusGOllamaChatModelConfig from './model/OperationStatusGOllamaChatModelConfig';
+import OperationStatusGOllamaEmbeddingModelConfig from './model/OperationStatusGOllamaEmbeddingModelConfig';
 import OperationStatusGOpenAIChatModelConfig from './model/OperationStatusGOpenAIChatModelConfig';
 import OperationStatusGOpenAIEmbeddingModelConfig from './model/OperationStatusGOpenAIEmbeddingModelConfig';
 import OperationStatusGOpenAIImageModelConfig from './model/OperationStatusGOpenAIImageModelConfig';
 import OperationStatusGOpenAITextToSpeechModelConfig from './model/OperationStatusGOpenAITextToSpeechModelConfig';
 import OperationStatusGOpenAITranscriptModelConfig from './model/OperationStatusGOpenAITranscriptModelConfig';
-import OperationStatusGeboMongoVectorStoreConfig from './model/OperationStatusGeboMongoVectorStoreConfig';
 import OperationStatusGenericOpenAIAPIChatModelConfig from './model/OperationStatusGenericOpenAIAPIChatModelConfig';
 import OperationStatusGenericOpenAIAPIEmbeddingModelConfig from './model/OperationStatusGenericOpenAIAPIEmbeddingModelConfig';
 import OperationStatusGenericOpenAIAPIImageModelConfig from './model/OperationStatusGenericOpenAIAPIImageModelConfig';
@@ -209,7 +267,20 @@ import OperationStatusLLMSModelsCreationResult from './model/OperationStatusLLMS
 import OperationStatusListGAnthropicChatModelChoice from './model/OperationStatusListGAnthropicChatModelChoice';
 import OperationStatusListGBaseModelChoice from './model/OperationStatusListGBaseModelChoice';
 import OperationStatusListGBaseModelConfig from './model/OperationStatusListGBaseModelConfig';
+import OperationStatusListGBedrockChatModelChoice from './model/OperationStatusListGBedrockChatModelChoice';
+import OperationStatusListGBedrockEmbeddingModelChoice from './model/OperationStatusListGBedrockEmbeddingModelChoice';
+import OperationStatusListGBedrockImageModelChoice from './model/OperationStatusListGBedrockImageModelChoice';
+import OperationStatusListGBedrockRankerModelChoice from './model/OperationStatusListGBedrockRankerModelChoice';
+import OperationStatusListGBedrockTextToSpeechModelChoice from './model/OperationStatusListGBedrockTextToSpeechModelChoice';
+import OperationStatusListGBedrockTranscriptModelChoice from './model/OperationStatusListGBedrockTranscriptModelChoice';
+import OperationStatusListGDeepseekChatModelChoice from './model/OperationStatusListGDeepseekChatModelChoice';
+import OperationStatusListGGoogleVertexChatModelChoice from './model/OperationStatusListGGoogleVertexChatModelChoice';
+import OperationStatusListGGoogleVertexEmbeddingModelChoice from './model/OperationStatusListGGoogleVertexEmbeddingModelChoice';
+import OperationStatusListGMistralChatModelChoice from './model/OperationStatusListGMistralChatModelChoice';
+import OperationStatusListGMistralEmbeddingModelChoice from './model/OperationStatusListGMistralEmbeddingModelChoice';
 import OperationStatusListGONNXTransformersEmbeddingModelChoice from './model/OperationStatusListGONNXTransformersEmbeddingModelChoice';
+import OperationStatusListGOllamaChatModelChoice from './model/OperationStatusListGOllamaChatModelChoice';
+import OperationStatusListGOllamaEmbeddingModelChoice from './model/OperationStatusListGOllamaEmbeddingModelChoice';
 import OperationStatusListGOpenAIChatModelChoice from './model/OperationStatusListGOpenAIChatModelChoice';
 import OperationStatusListGOpenAIEmbeddingModelChoice from './model/OperationStatusListGOpenAIEmbeddingModelChoice';
 import OperationStatusListGOpenAIImageModelChoice from './model/OperationStatusListGOpenAIImageModelChoice';
@@ -229,6 +300,7 @@ import OperationStatusMCPClientConfig from './model/OperationStatusMCPClientConf
 import OperationStatusSecretInfo from './model/OperationStatusSecretInfo';
 import OptimizedThreashold from './model/OptimizedThreashold';
 import Order from './model/Order';
+import PageA2ARemoteAgentConfig from './model/PageA2ARemoteAgentConfig';
 import PageDocumentReferenceView from './model/PageDocumentReferenceView';
 import PageGChatProfileConfiguration from './model/PageGChatProfileConfiguration';
 import PageGJobStatusItem from './model/PageGJobStatusItem';
@@ -258,14 +330,17 @@ import SearchDocumentByNameParam from './model/SearchDocumentByNameParam';
 import SearchResult from './model/SearchResult';
 import SearchResultReference from './model/SearchResultReference';
 import SearchResultStreamRequest from './model/SearchResultStreamRequest';
+import SearxngSearchConfig from './model/SearxngSearchConfig';
 import SecretInfo from './model/SecretInfo';
 import SemanticQueryParam from './model/SemanticQueryParam';
+import SerpapiSearchConfig from './model/SerpapiSearchConfig';
 import ServerSentEventString from './model/ServerSentEventString';
 import SetMcpServerAclsParam from './model/SetMcpServerAclsParam';
 import SortObject from './model/SortObject';
 import SpecialFile from './model/SpecialFile';
 import SpeechRequest from './model/SpeechRequest';
 import SystemInfos from './model/SystemInfos';
+import TavilySearchConfig from './model/TavilySearchConfig';
 import ThreasholdAutotuneProcessResult from './model/ThreasholdAutotuneProcessResult';
 import ToolCategoriesTree from './model/ToolCategoriesTree';
 import ToolReference from './model/ToolReference';
@@ -280,16 +355,27 @@ import VFolderInfo from './model/VFolderInfo';
 import VirtualFilesystemNavigationNode from './model/VirtualFilesystemNavigationNode';
 import VirtualFilesystemNavigationTreeStatus from './model/VirtualFilesystemNavigationTreeStatus';
 import WorkflowStatus from './model/WorkflowStatus';
+import A2AClientConfigControllerApi from './api/A2AClientConfigControllerApi';
 import AnthropicChatModelsConfigurationControllerApi from './api/AnthropicChatModelsConfigurationControllerApi';
+import BedrockChatModelsConfigurationControllerApi from './api/BedrockChatModelsConfigurationControllerApi';
+import BedrockEmbeddingModelsConfigurationControllerApi from './api/BedrockEmbeddingModelsConfigurationControllerApi';
+import BedrockImageModelsConfigurationControllerApi from './api/BedrockImageModelsConfigurationControllerApi';
+import BedrockRankerModelsConfigurationControllerApi from './api/BedrockRankerModelsConfigurationControllerApi';
+import BedrockTextToSpeechModelsConfigurationControllerApi from './api/BedrockTextToSpeechModelsConfigurationControllerApi';
+import BedrockTranscriptModelsConfigurationControllerApi from './api/BedrockTranscriptModelsConfigurationControllerApi';
+import BraveSearchConfigurationControllerApi from './api/BraveSearchConfigurationControllerApi';
 import BuildSystemsControllerApi from './api/BuildSystemsControllerApi';
 import ChatModelsControllerApi from './api/ChatModelsControllerApi';
 import ChatModelsLookupControllerApi from './api/ChatModelsLookupControllerApi';
 import CompanySystemsControllerApi from './api/CompanySystemsControllerApi';
 import ContentMetaInfosControllerApi from './api/ContentMetaInfosControllerApi';
 import ContentsResetControllerApi from './api/ContentsResetControllerApi';
+import DataFlowMetaInfoControllerApi from './api/DataFlowMetaInfoControllerApi';
+import DeepseekChatModelsConfigurationControllerApi from './api/DeepseekChatModelsConfigurationControllerApi';
 import DocumentContentStreamerControllerApi from './api/DocumentContentStreamerControllerApi';
 import EmbeddingModelsControllersApi from './api/EmbeddingModelsControllersApi';
 import FunctionsLookupControllerApi from './api/FunctionsLookupControllerApi';
+import GeboA2AServerAdminControllerApi from './api/GeboA2AServerAdminControllerApi';
 import GeboAdminChatProfilesConfigurationControllerApi from './api/GeboAdminChatProfilesConfigurationControllerApi';
 import GeboAdminPromptUseInfoControllerApi from './api/GeboAdminPromptUseInfoControllerApi';
 import GeboAdminPromptsControllerApi from './api/GeboAdminPromptsControllerApi';
@@ -308,6 +394,7 @@ import GeboFastVectorStoreSetupControllerApi from './api/GeboFastVectorStoreSetu
 import GeboLlmGeneratedResourceControllerApi from './api/GeboLlmGeneratedResourceControllerApi';
 import GeboMcpServerAdminControllerApi from './api/GeboMcpServerAdminControllerApi';
 import GeboMcpServerUserControllerApi from './api/GeboMcpServerUserControllerApi';
+import GeboNeo4jModuleSetupControllerApi from './api/GeboNeo4jModuleSetupControllerApi';
 import GeboRagChatControllerApi from './api/GeboRagChatControllerApi';
 import GeboTextToSpeechControllerApi from './api/GeboTextToSpeechControllerApi';
 import GeboTranscriptControllerApi from './api/GeboTranscriptControllerApi';
@@ -323,6 +410,8 @@ import GenericOpenAiapiTranscriptModelsConfigurationControllerApi from './api/Ge
 import GenericalPublisherControllerApi from './api/GenericalPublisherControllerApi';
 import GoogleSearchConfigurationControllerApi from './api/GoogleSearchConfigurationControllerApi';
 import GoogleSearchControllerApi from './api/GoogleSearchControllerApi';
+import GoogleVertexChatModelsConfigurationControllerApi from './api/GoogleVertexChatModelsConfigurationControllerApi';
+import GoogleVertexEmbeddingModelsConfigurationControllerApi from './api/GoogleVertexEmbeddingModelsConfigurationControllerApi';
 import ImageModelsControllerApi from './api/ImageModelsControllerApi';
 import IngestionFileTypesLibraryControllerApi from './api/IngestionFileTypesLibraryControllerApi';
 import InternalMessagingTopologyControllerApi from './api/InternalMessagingTopologyControllerApi';
@@ -330,6 +419,10 @@ import JobLauncherControllerApi from './api/JobLauncherControllerApi';
 import KnowledgeBaseControllerApi from './api/KnowledgeBaseControllerApi';
 import LogViewControllerApi from './api/LogViewControllerApi';
 import McpClientConfigControllerApi from './api/McpClientConfigControllerApi';
+import MistralAiChatModelsConfigurationControllerApi from './api/MistralAiChatModelsConfigurationControllerApi';
+import MistralAiEmbeddingModelsConfigurationControllerApi from './api/MistralAiEmbeddingModelsConfigurationControllerApi';
+import OllamaChatModelsConfigurationControllerApi from './api/OllamaChatModelsConfigurationControllerApi';
+import OllamaEmbeddingModelsConfigurationControllerApi from './api/OllamaEmbeddingModelsConfigurationControllerApi';
 import OnnxTransformersEmbeddingModelsConfigurationControllerApi from './api/OnnxTransformersEmbeddingModelsConfigurationControllerApi';
 import OpenAiChatModelsConfigurationControllerApi from './api/OpenAiChatModelsConfigurationControllerApi';
 import OpenAiEmbeddingModelsConfigurationControllerApi from './api/OpenAiEmbeddingModelsConfigurationControllerApi';
@@ -339,6 +432,9 @@ import OpenAiTranscriptModelsConfigurationControllerApi from './api/OpenAiTransc
 import ProjectsControllerApi from './api/ProjectsControllerApi';
 import PromptTemplatesControllerApi from './api/PromptTemplatesControllerApi';
 import RankerModelsControllerApi from './api/RankerModelsControllerApi';
+import SearxngSearchConfigurationControllerApi from './api/SearxngSearchConfigurationControllerApi';
+import SerpapiSearchConfigurationControllerApi from './api/SerpapiSearchConfigurationControllerApi';
+import TavilySearchConfigurationControllerApi from './api/TavilySearchConfigurationControllerApi';
 import TextToSpeechModelsControllerApi from './api/TextToSpeechModelsControllerApi';
 import TranscriptModelsControllerApi from './api/TranscriptModelsControllerApi';
 import UserKnowledgeBaseBrowsingControllerApi from './api/UserKnowledgeBaseBrowsingControllerApi';
@@ -382,10 +478,40 @@ export {
     ApiClient,
 
     /**
+     * The A2AExportedAgent model constructor.
+     * @property {module:model/A2AExportedAgent}
+     */
+    A2AExportedAgent,
+
+    /**
+     * The A2ARemoteAgentConfig model constructor.
+     * @property {module:model/A2ARemoteAgentConfig}
+     */
+    A2ARemoteAgentConfig,
+
+    /**
+     * The A2ARemoteSkill model constructor.
+     * @property {module:model/A2ARemoteSkill}
+     */
+    A2ARemoteSkill,
+
+    /**
+     * The A2AServerConfig model constructor.
+     * @property {module:model/A2AServerConfig}
+     */
+    A2AServerConfig,
+
+    /**
      * The AclOwnerParam model constructor.
      * @property {module:model/AclOwnerParam}
      */
     AclOwnerParam,
+
+    /**
+     * The AdditionalContent model constructor.
+     * @property {module:model/AdditionalContent}
+     */
+    AdditionalContent,
 
     /**
      * The AgentNetworkParticipant model constructor.
@@ -404,6 +530,12 @@ export {
      * @property {module:model/AutotuneVectorStoreInfo}
      */
     AutotuneVectorStoreInfo,
+
+    /**
+     * The BraveSearchConfig model constructor.
+     * @property {module:model/BraveSearchConfig}
+     */
+    BraveSearchConfig,
 
     /**
      * The BrowseParam model constructor.
@@ -544,10 +676,28 @@ export {
     ContentObject,
 
     /**
+     * The DataEndpoint model constructor.
+     * @property {module:model/DataEndpoint}
+     */
+    DataEndpoint,
+
+    /**
      * The DataPage model constructor.
      * @property {module:model/DataPage}
      */
     DataPage,
+
+    /**
+     * The DataTransformationInfo model constructor.
+     * @property {module:model/DataTransformationInfo}
+     */
+    DataTransformationInfo,
+
+    /**
+     * The DataTransformationMetaInfo model constructor.
+     * @property {module:model/DataTransformationMetaInfo}
+     */
+    DataTransformationMetaInfo,
 
     /**
      * The DeepSearchConfig model constructor.
@@ -724,6 +874,84 @@ export {
     GBaseTranscriptModelConfig,
 
     /**
+     * The GBedrockChatModelChoice model constructor.
+     * @property {module:model/GBedrockChatModelChoice}
+     */
+    GBedrockChatModelChoice,
+
+    /**
+     * The GBedrockChatModelConfig model constructor.
+     * @property {module:model/GBedrockChatModelConfig}
+     */
+    GBedrockChatModelConfig,
+
+    /**
+     * The GBedrockEmbeddingModelChoice model constructor.
+     * @property {module:model/GBedrockEmbeddingModelChoice}
+     */
+    GBedrockEmbeddingModelChoice,
+
+    /**
+     * The GBedrockEmbeddingModelConfig model constructor.
+     * @property {module:model/GBedrockEmbeddingModelConfig}
+     */
+    GBedrockEmbeddingModelConfig,
+
+    /**
+     * The GBedrockImageModelChoice model constructor.
+     * @property {module:model/GBedrockImageModelChoice}
+     */
+    GBedrockImageModelChoice,
+
+    /**
+     * The GBedrockImageModelConfig model constructor.
+     * @property {module:model/GBedrockImageModelConfig}
+     */
+    GBedrockImageModelConfig,
+
+    /**
+     * The GBedrockRankerModelChoice model constructor.
+     * @property {module:model/GBedrockRankerModelChoice}
+     */
+    GBedrockRankerModelChoice,
+
+    /**
+     * The GBedrockRankerModelConfig model constructor.
+     * @property {module:model/GBedrockRankerModelConfig}
+     */
+    GBedrockRankerModelConfig,
+
+    /**
+     * The GBedrockTextToSpeechModelChoice model constructor.
+     * @property {module:model/GBedrockTextToSpeechModelChoice}
+     */
+    GBedrockTextToSpeechModelChoice,
+
+    /**
+     * The GBedrockTextToSpeechModelConfig model constructor.
+     * @property {module:model/GBedrockTextToSpeechModelConfig}
+     */
+    GBedrockTextToSpeechModelConfig,
+
+    /**
+     * The GBedrockTranscriptModelChoice model constructor.
+     * @property {module:model/GBedrockTranscriptModelChoice}
+     */
+    GBedrockTranscriptModelChoice,
+
+    /**
+     * The GBedrockTranscriptModelConfig model constructor.
+     * @property {module:model/GBedrockTranscriptModelConfig}
+     */
+    GBedrockTranscriptModelConfig,
+
+    /**
+     * The GBraveSearchApiCredentials model constructor.
+     * @property {module:model/GBraveSearchApiCredentials}
+     */
+    GBraveSearchApiCredentials,
+
+    /**
      * The GBuildSystem model constructor.
      * @property {module:model/GBuildSystem}
      */
@@ -766,6 +994,30 @@ export {
     GContentManagementSystemType,
 
     /**
+     * The GDataFlowMetaInfos model constructor.
+     * @property {module:model/GDataFlowMetaInfos}
+     */
+    GDataFlowMetaInfos,
+
+    /**
+     * The GDataFlowReport model constructor.
+     * @property {module:model/GDataFlowReport}
+     */
+    GDataFlowReport,
+
+    /**
+     * The GDeepseekChatModelChoice model constructor.
+     * @property {module:model/GDeepseekChatModelChoice}
+     */
+    GDeepseekChatModelChoice,
+
+    /**
+     * The GDeepseekChatModelConfig model constructor.
+     * @property {module:model/GDeepseekChatModelConfig}
+     */
+    GDeepseekChatModelConfig,
+
+    /**
      * The GDocumentAttributeValue model constructor.
      * @property {module:model/GDocumentAttributeValue}
      */
@@ -794,6 +1046,30 @@ export {
      * @property {module:model/GGoogleSearchApiCredentials}
      */
     GGoogleSearchApiCredentials,
+
+    /**
+     * The GGoogleVertexChatModelChoice model constructor.
+     * @property {module:model/GGoogleVertexChatModelChoice}
+     */
+    GGoogleVertexChatModelChoice,
+
+    /**
+     * The GGoogleVertexChatModelConfig model constructor.
+     * @property {module:model/GGoogleVertexChatModelConfig}
+     */
+    GGoogleVertexChatModelConfig,
+
+    /**
+     * The GGoogleVertexEmbeddingModelChoice model constructor.
+     * @property {module:model/GGoogleVertexEmbeddingModelChoice}
+     */
+    GGoogleVertexEmbeddingModelChoice,
+
+    /**
+     * The GGoogleVertexEmbeddingModelConfig model constructor.
+     * @property {module:model/GGoogleVertexEmbeddingModelConfig}
+     */
+    GGoogleVertexEmbeddingModelConfig,
 
     /**
      * The GImageModelType model constructor.
@@ -830,6 +1106,30 @@ export {
      * @property {module:model/GLookupEntryRefGBaseChatModelConfig}
      */
     GLookupEntryRefGBaseChatModelConfig,
+
+    /**
+     * The GMistralChatModelChoice model constructor.
+     * @property {module:model/GMistralChatModelChoice}
+     */
+    GMistralChatModelChoice,
+
+    /**
+     * The GMistralChatModelConfig model constructor.
+     * @property {module:model/GMistralChatModelConfig}
+     */
+    GMistralChatModelConfig,
+
+    /**
+     * The GMistralEmbeddingModelChoice model constructor.
+     * @property {module:model/GMistralEmbeddingModelChoice}
+     */
+    GMistralEmbeddingModelChoice,
+
+    /**
+     * The GMistralEmbeddingModelConfig model constructor.
+     * @property {module:model/GMistralEmbeddingModelConfig}
+     */
+    GMistralEmbeddingModelConfig,
 
     /**
      * The GModuleMetaInfo model constructor.
@@ -902,6 +1202,30 @@ export {
      * @property {module:model/GObjectRefGProjectEndpoint}
      */
     GObjectRefGProjectEndpoint,
+
+    /**
+     * The GOllamaChatModelChoice model constructor.
+     * @property {module:model/GOllamaChatModelChoice}
+     */
+    GOllamaChatModelChoice,
+
+    /**
+     * The GOllamaChatModelConfig model constructor.
+     * @property {module:model/GOllamaChatModelConfig}
+     */
+    GOllamaChatModelConfig,
+
+    /**
+     * The GOllamaEmbeddingModelChoice model constructor.
+     * @property {module:model/GOllamaEmbeddingModelChoice}
+     */
+    GOllamaEmbeddingModelChoice,
+
+    /**
+     * The GOllamaEmbeddingModelConfig model constructor.
+     * @property {module:model/GOllamaEmbeddingModelConfig}
+     */
+    GOllamaEmbeddingModelConfig,
 
     /**
      * The GOpenAIChatModelChoice model constructor.
@@ -988,6 +1312,12 @@ export {
     GPromptTemplateConfig,
 
     /**
+     * The GPromptTemplateLightView model constructor.
+     * @property {module:model/GPromptTemplateLightView}
+     */
+    GPromptTemplateLightView,
+
+    /**
      * The GPromptUseInfo model constructor.
      * @property {module:model/GPromptUseInfo}
      */
@@ -1004,6 +1334,24 @@ export {
      * @property {module:model/GResponseDocumentRef}
      */
     GResponseDocumentRef,
+
+    /**
+     * The GSearxngSearchApiCredentials model constructor.
+     * @property {module:model/GSearxngSearchApiCredentials}
+     */
+    GSearxngSearchApiCredentials,
+
+    /**
+     * The GSerpapiSearchApiCredentials model constructor.
+     * @property {module:model/GSerpapiSearchApiCredentials}
+     */
+    GSerpapiSearchApiCredentials,
+
+    /**
+     * The GTavilySearchApiCredentials model constructor.
+     * @property {module:model/GTavilySearchApiCredentials}
+     */
+    GTavilySearchApiCredentials,
 
     /**
      * The GTextToSpeechModelType model constructor.
@@ -1102,10 +1450,10 @@ export {
     GeboMCPServerConfig,
 
     /**
-     * The GeboMongoVectorStoreConfig model constructor.
-     * @property {module:model/GeboMongoVectorStoreConfig}
+     * The GeboNeo4jModuleConfigDto model constructor.
+     * @property {module:model/GeboNeo4jModuleConfigDto}
      */
-    GeboMongoVectorStoreConfig,
+    GeboNeo4jModuleConfigDto,
 
     /**
      * The GeboRagRequestCustomConfig model constructor.
@@ -1282,6 +1630,12 @@ export {
     IngestionHandlerConfig,
 
     /**
+     * The JobsEntriesFilter model constructor.
+     * @property {module:model/JobsEntriesFilter}
+     */
+    JobsEntriesFilter,
+
+    /**
      * The JobsEntriesForClassNameFilter model constructor.
      * @property {module:model/JobsEntriesForClassNameFilter}
      */
@@ -1408,6 +1762,18 @@ export {
     MCPTool,
 
     /**
+     * The MistralBaseModelCard model constructor.
+     * @property {module:model/MistralBaseModelCard}
+     */
+    MistralBaseModelCard,
+
+    /**
+     * The MistralModelCapabilities model constructor.
+     * @property {module:model/MistralModelCapabilities}
+     */
+    MistralModelCapabilities,
+
+    /**
      * The ModelMetaInfo model constructor.
      * @property {module:model/ModelMetaInfo}
      */
@@ -1420,10 +1786,16 @@ export {
     ModelProviderCapabilities,
 
     /**
-     * The MongoConfig model constructor.
-     * @property {module:model/MongoConfig}
+     * The OperationStatusA2ARemoteAgentConfig model constructor.
+     * @property {module:model/OperationStatusA2ARemoteAgentConfig}
      */
-    MongoConfig,
+    OperationStatusA2ARemoteAgentConfig,
+
+    /**
+     * The OperationStatusA2AServerConfig model constructor.
+     * @property {module:model/OperationStatusA2AServerConfig}
+     */
+    OperationStatusA2AServerConfig,
 
     /**
      * The OperationStatusBoolean model constructor.
@@ -1450,16 +1822,94 @@ export {
     OperationStatusGAnthropicChatModelConfig,
 
     /**
+     * The OperationStatusGBedrockChatModelConfig model constructor.
+     * @property {module:model/OperationStatusGBedrockChatModelConfig}
+     */
+    OperationStatusGBedrockChatModelConfig,
+
+    /**
+     * The OperationStatusGBedrockEmbeddingModelConfig model constructor.
+     * @property {module:model/OperationStatusGBedrockEmbeddingModelConfig}
+     */
+    OperationStatusGBedrockEmbeddingModelConfig,
+
+    /**
+     * The OperationStatusGBedrockImageModelConfig model constructor.
+     * @property {module:model/OperationStatusGBedrockImageModelConfig}
+     */
+    OperationStatusGBedrockImageModelConfig,
+
+    /**
+     * The OperationStatusGBedrockRankerModelConfig model constructor.
+     * @property {module:model/OperationStatusGBedrockRankerModelConfig}
+     */
+    OperationStatusGBedrockRankerModelConfig,
+
+    /**
+     * The OperationStatusGBedrockTextToSpeechModelConfig model constructor.
+     * @property {module:model/OperationStatusGBedrockTextToSpeechModelConfig}
+     */
+    OperationStatusGBedrockTextToSpeechModelConfig,
+
+    /**
+     * The OperationStatusGBedrockTranscriptModelConfig model constructor.
+     * @property {module:model/OperationStatusGBedrockTranscriptModelConfig}
+     */
+    OperationStatusGBedrockTranscriptModelConfig,
+
+    /**
+     * The OperationStatusGDeepseekChatModelConfig model constructor.
+     * @property {module:model/OperationStatusGDeepseekChatModelConfig}
+     */
+    OperationStatusGDeepseekChatModelConfig,
+
+    /**
+     * The OperationStatusGGoogleVertexChatModelConfig model constructor.
+     * @property {module:model/OperationStatusGGoogleVertexChatModelConfig}
+     */
+    OperationStatusGGoogleVertexChatModelConfig,
+
+    /**
+     * The OperationStatusGGoogleVertexEmbeddingModelConfig model constructor.
+     * @property {module:model/OperationStatusGGoogleVertexEmbeddingModelConfig}
+     */
+    OperationStatusGGoogleVertexEmbeddingModelConfig,
+
+    /**
      * The OperationStatusGJobStatus model constructor.
      * @property {module:model/OperationStatusGJobStatus}
      */
     OperationStatusGJobStatus,
 
     /**
+     * The OperationStatusGMistralChatModelConfig model constructor.
+     * @property {module:model/OperationStatusGMistralChatModelConfig}
+     */
+    OperationStatusGMistralChatModelConfig,
+
+    /**
+     * The OperationStatusGMistralEmbeddingModelConfig model constructor.
+     * @property {module:model/OperationStatusGMistralEmbeddingModelConfig}
+     */
+    OperationStatusGMistralEmbeddingModelConfig,
+
+    /**
      * The OperationStatusGONNXTransformersEmbeddingModelConfig model constructor.
      * @property {module:model/OperationStatusGONNXTransformersEmbeddingModelConfig}
      */
     OperationStatusGONNXTransformersEmbeddingModelConfig,
+
+    /**
+     * The OperationStatusGOllamaChatModelConfig model constructor.
+     * @property {module:model/OperationStatusGOllamaChatModelConfig}
+     */
+    OperationStatusGOllamaChatModelConfig,
+
+    /**
+     * The OperationStatusGOllamaEmbeddingModelConfig model constructor.
+     * @property {module:model/OperationStatusGOllamaEmbeddingModelConfig}
+     */
+    OperationStatusGOllamaEmbeddingModelConfig,
 
     /**
      * The OperationStatusGOpenAIChatModelConfig model constructor.
@@ -1490,12 +1940,6 @@ export {
      * @property {module:model/OperationStatusGOpenAITranscriptModelConfig}
      */
     OperationStatusGOpenAITranscriptModelConfig,
-
-    /**
-     * The OperationStatusGeboMongoVectorStoreConfig model constructor.
-     * @property {module:model/OperationStatusGeboMongoVectorStoreConfig}
-     */
-    OperationStatusGeboMongoVectorStoreConfig,
 
     /**
      * The OperationStatusGenericOpenAIAPIChatModelConfig model constructor.
@@ -1558,10 +2002,88 @@ export {
     OperationStatusListGBaseModelConfig,
 
     /**
+     * The OperationStatusListGBedrockChatModelChoice model constructor.
+     * @property {module:model/OperationStatusListGBedrockChatModelChoice}
+     */
+    OperationStatusListGBedrockChatModelChoice,
+
+    /**
+     * The OperationStatusListGBedrockEmbeddingModelChoice model constructor.
+     * @property {module:model/OperationStatusListGBedrockEmbeddingModelChoice}
+     */
+    OperationStatusListGBedrockEmbeddingModelChoice,
+
+    /**
+     * The OperationStatusListGBedrockImageModelChoice model constructor.
+     * @property {module:model/OperationStatusListGBedrockImageModelChoice}
+     */
+    OperationStatusListGBedrockImageModelChoice,
+
+    /**
+     * The OperationStatusListGBedrockRankerModelChoice model constructor.
+     * @property {module:model/OperationStatusListGBedrockRankerModelChoice}
+     */
+    OperationStatusListGBedrockRankerModelChoice,
+
+    /**
+     * The OperationStatusListGBedrockTextToSpeechModelChoice model constructor.
+     * @property {module:model/OperationStatusListGBedrockTextToSpeechModelChoice}
+     */
+    OperationStatusListGBedrockTextToSpeechModelChoice,
+
+    /**
+     * The OperationStatusListGBedrockTranscriptModelChoice model constructor.
+     * @property {module:model/OperationStatusListGBedrockTranscriptModelChoice}
+     */
+    OperationStatusListGBedrockTranscriptModelChoice,
+
+    /**
+     * The OperationStatusListGDeepseekChatModelChoice model constructor.
+     * @property {module:model/OperationStatusListGDeepseekChatModelChoice}
+     */
+    OperationStatusListGDeepseekChatModelChoice,
+
+    /**
+     * The OperationStatusListGGoogleVertexChatModelChoice model constructor.
+     * @property {module:model/OperationStatusListGGoogleVertexChatModelChoice}
+     */
+    OperationStatusListGGoogleVertexChatModelChoice,
+
+    /**
+     * The OperationStatusListGGoogleVertexEmbeddingModelChoice model constructor.
+     * @property {module:model/OperationStatusListGGoogleVertexEmbeddingModelChoice}
+     */
+    OperationStatusListGGoogleVertexEmbeddingModelChoice,
+
+    /**
+     * The OperationStatusListGMistralChatModelChoice model constructor.
+     * @property {module:model/OperationStatusListGMistralChatModelChoice}
+     */
+    OperationStatusListGMistralChatModelChoice,
+
+    /**
+     * The OperationStatusListGMistralEmbeddingModelChoice model constructor.
+     * @property {module:model/OperationStatusListGMistralEmbeddingModelChoice}
+     */
+    OperationStatusListGMistralEmbeddingModelChoice,
+
+    /**
      * The OperationStatusListGONNXTransformersEmbeddingModelChoice model constructor.
      * @property {module:model/OperationStatusListGONNXTransformersEmbeddingModelChoice}
      */
     OperationStatusListGONNXTransformersEmbeddingModelChoice,
+
+    /**
+     * The OperationStatusListGOllamaChatModelChoice model constructor.
+     * @property {module:model/OperationStatusListGOllamaChatModelChoice}
+     */
+    OperationStatusListGOllamaChatModelChoice,
+
+    /**
+     * The OperationStatusListGOllamaEmbeddingModelChoice model constructor.
+     * @property {module:model/OperationStatusListGOllamaEmbeddingModelChoice}
+     */
+    OperationStatusListGOllamaEmbeddingModelChoice,
 
     /**
      * The OperationStatusListGOpenAIChatModelChoice model constructor.
@@ -1676,6 +2198,12 @@ export {
      * @property {module:model/Order}
      */
     Order,
+
+    /**
+     * The PageA2ARemoteAgentConfig model constructor.
+     * @property {module:model/PageA2ARemoteAgentConfig}
+     */
+    PageA2ARemoteAgentConfig,
 
     /**
      * The PageDocumentReferenceView model constructor.
@@ -1852,6 +2380,12 @@ export {
     SearchResultStreamRequest,
 
     /**
+     * The SearxngSearchConfig model constructor.
+     * @property {module:model/SearxngSearchConfig}
+     */
+    SearxngSearchConfig,
+
+    /**
      * The SecretInfo model constructor.
      * @property {module:model/SecretInfo}
      */
@@ -1862,6 +2396,12 @@ export {
      * @property {module:model/SemanticQueryParam}
      */
     SemanticQueryParam,
+
+    /**
+     * The SerpapiSearchConfig model constructor.
+     * @property {module:model/SerpapiSearchConfig}
+     */
+    SerpapiSearchConfig,
 
     /**
      * The ServerSentEventString model constructor.
@@ -1898,6 +2438,12 @@ export {
      * @property {module:model/SystemInfos}
      */
     SystemInfos,
+
+    /**
+     * The TavilySearchConfig model constructor.
+     * @property {module:model/TavilySearchConfig}
+     */
+    TavilySearchConfig,
 
     /**
      * The ThreasholdAutotuneProcessResult model constructor.
@@ -1984,10 +2530,58 @@ export {
     WorkflowStatus,
 
     /**
+    * The A2AClientConfigControllerApi service constructor.
+    * @property {module:api/A2AClientConfigControllerApi}
+    */
+    A2AClientConfigControllerApi,
+
+    /**
     * The AnthropicChatModelsConfigurationControllerApi service constructor.
     * @property {module:api/AnthropicChatModelsConfigurationControllerApi}
     */
     AnthropicChatModelsConfigurationControllerApi,
+
+    /**
+    * The BedrockChatModelsConfigurationControllerApi service constructor.
+    * @property {module:api/BedrockChatModelsConfigurationControllerApi}
+    */
+    BedrockChatModelsConfigurationControllerApi,
+
+    /**
+    * The BedrockEmbeddingModelsConfigurationControllerApi service constructor.
+    * @property {module:api/BedrockEmbeddingModelsConfigurationControllerApi}
+    */
+    BedrockEmbeddingModelsConfigurationControllerApi,
+
+    /**
+    * The BedrockImageModelsConfigurationControllerApi service constructor.
+    * @property {module:api/BedrockImageModelsConfigurationControllerApi}
+    */
+    BedrockImageModelsConfigurationControllerApi,
+
+    /**
+    * The BedrockRankerModelsConfigurationControllerApi service constructor.
+    * @property {module:api/BedrockRankerModelsConfigurationControllerApi}
+    */
+    BedrockRankerModelsConfigurationControllerApi,
+
+    /**
+    * The BedrockTextToSpeechModelsConfigurationControllerApi service constructor.
+    * @property {module:api/BedrockTextToSpeechModelsConfigurationControllerApi}
+    */
+    BedrockTextToSpeechModelsConfigurationControllerApi,
+
+    /**
+    * The BedrockTranscriptModelsConfigurationControllerApi service constructor.
+    * @property {module:api/BedrockTranscriptModelsConfigurationControllerApi}
+    */
+    BedrockTranscriptModelsConfigurationControllerApi,
+
+    /**
+    * The BraveSearchConfigurationControllerApi service constructor.
+    * @property {module:api/BraveSearchConfigurationControllerApi}
+    */
+    BraveSearchConfigurationControllerApi,
 
     /**
     * The BuildSystemsControllerApi service constructor.
@@ -2026,6 +2620,18 @@ export {
     ContentsResetControllerApi,
 
     /**
+    * The DataFlowMetaInfoControllerApi service constructor.
+    * @property {module:api/DataFlowMetaInfoControllerApi}
+    */
+    DataFlowMetaInfoControllerApi,
+
+    /**
+    * The DeepseekChatModelsConfigurationControllerApi service constructor.
+    * @property {module:api/DeepseekChatModelsConfigurationControllerApi}
+    */
+    DeepseekChatModelsConfigurationControllerApi,
+
+    /**
     * The DocumentContentStreamerControllerApi service constructor.
     * @property {module:api/DocumentContentStreamerControllerApi}
     */
@@ -2042,6 +2648,12 @@ export {
     * @property {module:api/FunctionsLookupControllerApi}
     */
     FunctionsLookupControllerApi,
+
+    /**
+    * The GeboA2AServerAdminControllerApi service constructor.
+    * @property {module:api/GeboA2AServerAdminControllerApi}
+    */
+    GeboA2AServerAdminControllerApi,
 
     /**
     * The GeboAdminChatProfilesConfigurationControllerApi service constructor.
@@ -2066,7 +2678,6 @@ export {
     * @property {module:api/GeboAdminRagAutotuneControllerApi}
     */
     GeboAdminRagAutotuneControllerApi,
-
 
     /**
     * The GeboAgentAdminControllerApi service constructor.
@@ -2153,6 +2764,12 @@ export {
     GeboMcpServerUserControllerApi,
 
     /**
+    * The GeboNeo4jModuleSetupControllerApi service constructor.
+    * @property {module:api/GeboNeo4jModuleSetupControllerApi}
+    */
+    GeboNeo4jModuleSetupControllerApi,
+
+    /**
     * The GeboRagChatControllerApi service constructor.
     * @property {module:api/GeboRagChatControllerApi}
     */
@@ -2187,7 +2804,6 @@ export {
     * @property {module:api/GeboUserKnowledgeBaseSemanticSearchControllerApi}
     */
     GeboUserKnowledgeBaseSemanticSearchControllerApi,
-
 
     /**
     * The GenericOpenAiRankerModelsConfigurationControllerApi service constructor.
@@ -2244,6 +2860,18 @@ export {
     GoogleSearchControllerApi,
 
     /**
+    * The GoogleVertexChatModelsConfigurationControllerApi service constructor.
+    * @property {module:api/GoogleVertexChatModelsConfigurationControllerApi}
+    */
+    GoogleVertexChatModelsConfigurationControllerApi,
+
+    /**
+    * The GoogleVertexEmbeddingModelsConfigurationControllerApi service constructor.
+    * @property {module:api/GoogleVertexEmbeddingModelsConfigurationControllerApi}
+    */
+    GoogleVertexEmbeddingModelsConfigurationControllerApi,
+
+    /**
     * The ImageModelsControllerApi service constructor.
     * @property {module:api/ImageModelsControllerApi}
     */
@@ -2284,6 +2912,30 @@ export {
     * @property {module:api/McpClientConfigControllerApi}
     */
     McpClientConfigControllerApi,
+
+    /**
+    * The MistralAiChatModelsConfigurationControllerApi service constructor.
+    * @property {module:api/MistralAiChatModelsConfigurationControllerApi}
+    */
+    MistralAiChatModelsConfigurationControllerApi,
+
+    /**
+    * The MistralAiEmbeddingModelsConfigurationControllerApi service constructor.
+    * @property {module:api/MistralAiEmbeddingModelsConfigurationControllerApi}
+    */
+    MistralAiEmbeddingModelsConfigurationControllerApi,
+
+    /**
+    * The OllamaChatModelsConfigurationControllerApi service constructor.
+    * @property {module:api/OllamaChatModelsConfigurationControllerApi}
+    */
+    OllamaChatModelsConfigurationControllerApi,
+
+    /**
+    * The OllamaEmbeddingModelsConfigurationControllerApi service constructor.
+    * @property {module:api/OllamaEmbeddingModelsConfigurationControllerApi}
+    */
+    OllamaEmbeddingModelsConfigurationControllerApi,
 
     /**
     * The OnnxTransformersEmbeddingModelsConfigurationControllerApi service constructor.
@@ -2338,6 +2990,24 @@ export {
     * @property {module:api/RankerModelsControllerApi}
     */
     RankerModelsControllerApi,
+
+    /**
+    * The SearxngSearchConfigurationControllerApi service constructor.
+    * @property {module:api/SearxngSearchConfigurationControllerApi}
+    */
+    SearxngSearchConfigurationControllerApi,
+
+    /**
+    * The SerpapiSearchConfigurationControllerApi service constructor.
+    * @property {module:api/SerpapiSearchConfigurationControllerApi}
+    */
+    SerpapiSearchConfigurationControllerApi,
+
+    /**
+    * The TavilySearchConfigurationControllerApi service constructor.
+    * @property {module:api/TavilySearchConfigurationControllerApi}
+    */
+    TavilySearchConfigurationControllerApi,
 
     /**
     * The TextToSpeechModelsControllerApi service constructor.

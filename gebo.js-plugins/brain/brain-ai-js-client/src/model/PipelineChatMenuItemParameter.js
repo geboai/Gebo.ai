@@ -24,7 +24,7 @@ export default class PipelineChatMenuItemParameter {
    * Constructs a new <code>PipelineChatMenuItemParameter</code>.
    * @alias module:model/PipelineChatMenuItemParameter
    * @class
-   * @param parameterName {Object} 
+   * @param parameterName {String} 
    * @param parameterValue {Object} 
    */
   constructor(parameterName, parameterValue) {
@@ -43,7 +43,7 @@ export default class PipelineChatMenuItemParameter {
     if (data) {
       obj = obj || new PipelineChatMenuItemParameter();
       if (data.hasOwnProperty('parameterName'))
-        obj.parameterName = ApiClient.convertToType(data['parameterName'], Object);
+        obj.parameterName = ApiClient.convertToType(data['parameterName'], 'String');
       if (data.hasOwnProperty('parameterValue'))
         obj.parameterValue = ApiClient.convertToType(data['parameterValue'], Object);
     }
@@ -52,7 +52,7 @@ export default class PipelineChatMenuItemParameter {
 }
 
 /**
- * @member {Object} parameterName
+ * @member {String} parameterName
  */
 PipelineChatMenuItemParameter.prototype.parameterName = undefined;
 

@@ -42,6 +42,8 @@ export default class GeboUsernamePasswordContent {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new GeboUsernamePasswordContent();
+      if (data.hasOwnProperty('readOnly'))
+        obj.readOnly = ApiClient.convertToType(data['readOnly'], 'Boolean');
       if (data.hasOwnProperty('username'))
         obj.username = ApiClient.convertToType(data['username'], 'String');
       if (data.hasOwnProperty('password'))
@@ -50,6 +52,11 @@ export default class GeboUsernamePasswordContent {
     return obj;
   }
 }
+
+/**
+ * @member {Boolean} readOnly
+ */
+GeboUsernamePasswordContent.prototype.readOnly = undefined;
 
 /**
  * @member {String} username

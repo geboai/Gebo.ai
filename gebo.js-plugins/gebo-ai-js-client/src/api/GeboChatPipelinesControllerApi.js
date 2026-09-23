@@ -191,24 +191,20 @@ export default class GeboChatPipelinesControllerApi {
 
 
     /**
-     * @param {String} chatProfileCode 
      * @param {Object} opts Optional parameters
+     * @param {String} opts.chatProfileCode 
      * @param {String} opts.pipelineCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/PipelineChatMenu>} and HTTP response
      */
-    getPersonalPipelinesChatMenuWithHttpInfo(chatProfileCode, opts) {
+    getPersonalPipelinesChatMenuWithHttpInfo(opts) {
       opts = opts || {};
       let postBody = null;
-      // verify the required parameter 'chatProfileCode' is set
-      if (chatProfileCode === undefined || chatProfileCode === null) {
-        throw new Error("Missing the required parameter 'chatProfileCode' when calling getPersonalPipelinesChatMenu");
-      }
 
       let pathParams = {
         
       };
       let queryParams = {
-        'pipelineCode': opts['pipelineCode'],'chatProfileCode': chatProfileCode
+        'chatProfileCode': opts['chatProfileCode'],'pipelineCode': opts['pipelineCode']
       };
       let headerParams = {
         
@@ -230,13 +226,13 @@ export default class GeboChatPipelinesControllerApi {
     }
 
     /**
-     * @param {<&vendorExtensions.x-jsdoc-type>} chatProfileCode 
      * @param {Object} opts Optional parameters
+     * @param {String} opts.chatProfileCode 
      * @param {String} opts.pipelineCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/PipelineChatMenu>}
      */
-    getPersonalPipelinesChatMenu(chatProfileCode, opts) {
-      return this.getPersonalPipelinesChatMenuWithHttpInfo(chatProfileCode, opts)
+    getPersonalPipelinesChatMenu(opts) {
+      return this.getPersonalPipelinesChatMenuWithHttpInfo(opts)
         .then(function(response_and_data) {
           return response_and_data.data;
         });

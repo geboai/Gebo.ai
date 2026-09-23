@@ -63,7 +63,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GenericOpenAiapiImageModelsConfigurationControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findGenericOpenAIAPIImageModelConfigByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -77,7 +77,7 @@ apiInstance.findGenericOpenAIAPIImageModelConfigByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -134,7 +134,7 @@ No authorization required
 
 <a name="getGenericOpenAIImageModelConfigs"></a>
 # **getGenericOpenAIImageModelConfigs**
-> Object getGenericOpenAIImageModelConfigs()
+> [GenericOpenAIAPIImageModelConfig] getGenericOpenAIImageModelConfigs()
 
 
 
@@ -156,7 +156,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GenericOpenAIAPIImageModelConfig]**](GenericOpenAIAPIImageModelConfig.md)
 
 ### Authorization
 
@@ -169,7 +169,7 @@ No authorization required
 
 <a name="getGenericOpenAIImageModelTypes"></a>
 # **getGenericOpenAIImageModelTypes**
-> Object getGenericOpenAIImageModelTypes()
+> [GenericOpenAIImageModelTypeConfig] getGenericOpenAIImageModelTypes()
 
 
 
@@ -191,7 +191,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GenericOpenAIImageModelTypeConfig]**](GenericOpenAIImageModelTypeConfig.md)
 
 ### Authorization
 

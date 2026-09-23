@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 <a name="getLocalTopology"></a>
 # **getLocalTopology**
-> Object getLocalTopology()
+> [GModuleMetaInfo] getLocalTopology()
 
 
 
@@ -30,7 +30,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GModuleMetaInfo]**](GModuleMetaInfo.md)
 
 ### Authorization
 

@@ -38,8 +38,6 @@ export default class DocumentReferenceView {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new DocumentReferenceView();
-      if (data.hasOwnProperty('creationDate'))
-        obj.creationDate = ApiClient.convertToType(data['creationDate'], 'Date');
       if (data.hasOwnProperty('name'))
         obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('extension'))
@@ -50,29 +48,26 @@ export default class DocumentReferenceView {
         obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('messagingModuleId'))
         obj.messagingModuleId = ApiClient.convertToType(data['messagingModuleId'], 'String');
-      if (data.hasOwnProperty('rootKnowledgebaseCode'))
-        obj.rootKnowledgebaseCode = ApiClient.convertToType(data['rootKnowledgebaseCode'], 'String');
-      if (data.hasOwnProperty('parentProjectCode'))
-        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], 'String');
-      if (data.hasOwnProperty('parentVirtualFolderCode'))
-        obj.parentVirtualFolderCode = ApiClient.convertToType(data['parentVirtualFolderCode'], 'String');
-      if (data.hasOwnProperty('relativePath'))
-        obj.relativePath = ApiClient.convertToType(data['relativePath'], 'String');
       if (data.hasOwnProperty('deleted'))
         obj.deleted = ApiClient.convertToType(data['deleted'], 'Boolean');
+      if (data.hasOwnProperty('parentProjectCode'))
+        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], 'String');
+      if (data.hasOwnProperty('rootKnowledgebaseCode'))
+        obj.rootKnowledgebaseCode = ApiClient.convertToType(data['rootKnowledgebaseCode'], 'String');
       if (data.hasOwnProperty('modificationDate'))
         obj.modificationDate = ApiClient.convertToType(data['modificationDate'], 'Date');
+      if (data.hasOwnProperty('relativePath'))
+        obj.relativePath = ApiClient.convertToType(data['relativePath'], 'String');
+      if (data.hasOwnProperty('parentVirtualFolderCode'))
+        obj.parentVirtualFolderCode = ApiClient.convertToType(data['parentVirtualFolderCode'], 'String');
+      if (data.hasOwnProperty('creationDate'))
+        obj.creationDate = ApiClient.convertToType(data['creationDate'], 'Date');
       if (data.hasOwnProperty('contentType'))
         obj.contentType = ApiClient.convertToType(data['contentType'], 'String');
     }
     return obj;
   }
 }
-
-/**
- * @member {Date} creationDate
- */
-DocumentReferenceView.prototype.creationDate = undefined;
 
 /**
  * @member {String} name
@@ -100,9 +95,9 @@ DocumentReferenceView.prototype.code = undefined;
 DocumentReferenceView.prototype.messagingModuleId = undefined;
 
 /**
- * @member {String} rootKnowledgebaseCode
+ * @member {Boolean} deleted
  */
-DocumentReferenceView.prototype.rootKnowledgebaseCode = undefined;
+DocumentReferenceView.prototype.deleted = undefined;
 
 /**
  * @member {String} parentProjectCode
@@ -110,9 +105,14 @@ DocumentReferenceView.prototype.rootKnowledgebaseCode = undefined;
 DocumentReferenceView.prototype.parentProjectCode = undefined;
 
 /**
- * @member {String} parentVirtualFolderCode
+ * @member {String} rootKnowledgebaseCode
  */
-DocumentReferenceView.prototype.parentVirtualFolderCode = undefined;
+DocumentReferenceView.prototype.rootKnowledgebaseCode = undefined;
+
+/**
+ * @member {Date} modificationDate
+ */
+DocumentReferenceView.prototype.modificationDate = undefined;
 
 /**
  * @member {String} relativePath
@@ -120,14 +120,14 @@ DocumentReferenceView.prototype.parentVirtualFolderCode = undefined;
 DocumentReferenceView.prototype.relativePath = undefined;
 
 /**
- * @member {Boolean} deleted
+ * @member {String} parentVirtualFolderCode
  */
-DocumentReferenceView.prototype.deleted = undefined;
+DocumentReferenceView.prototype.parentVirtualFolderCode = undefined;
 
 /**
- * @member {Date} modificationDate
+ * @member {Date} creationDate
  */
-DocumentReferenceView.prototype.modificationDate = undefined;
+DocumentReferenceView.prototype.creationDate = undefined;
 
 /**
  * @member {String} contentType

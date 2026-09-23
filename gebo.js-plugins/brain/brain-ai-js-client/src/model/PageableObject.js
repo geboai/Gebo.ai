@@ -39,25 +39,40 @@ export default class PageableObject {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new PageableObject();
+      if (data.hasOwnProperty('paged'))
+        obj.paged = ApiClient.convertToType(data['paged'], 'Boolean');
+      if (data.hasOwnProperty('pageNumber'))
+        obj.pageNumber = ApiClient.convertToType(data['pageNumber'], 'Number');
+      if (data.hasOwnProperty('pageSize'))
+        obj.pageSize = ApiClient.convertToType(data['pageSize'], 'Number');
       if (data.hasOwnProperty('offset'))
-        obj.offset = ApiClient.convertToType(data['offset'], Object);
+        obj.offset = ApiClient.convertToType(data['offset'], 'Number');
       if (data.hasOwnProperty('sort'))
         obj.sort = SortObject.constructFromObject(data['sort']);
-      if (data.hasOwnProperty('pageSize'))
-        obj.pageSize = ApiClient.convertToType(data['pageSize'], Object);
-      if (data.hasOwnProperty('pageNumber'))
-        obj.pageNumber = ApiClient.convertToType(data['pageNumber'], Object);
-      if (data.hasOwnProperty('paged'))
-        obj.paged = ApiClient.convertToType(data['paged'], Object);
       if (data.hasOwnProperty('unpaged'))
-        obj.unpaged = ApiClient.convertToType(data['unpaged'], Object);
+        obj.unpaged = ApiClient.convertToType(data['unpaged'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} offset
+ * @member {Boolean} paged
+ */
+PageableObject.prototype.paged = undefined;
+
+/**
+ * @member {Number} pageNumber
+ */
+PageableObject.prototype.pageNumber = undefined;
+
+/**
+ * @member {Number} pageSize
+ */
+PageableObject.prototype.pageSize = undefined;
+
+/**
+ * @member {Number} offset
  */
 PageableObject.prototype.offset = undefined;
 
@@ -67,22 +82,7 @@ PageableObject.prototype.offset = undefined;
 PageableObject.prototype.sort = undefined;
 
 /**
- * @member {Object} pageSize
- */
-PageableObject.prototype.pageSize = undefined;
-
-/**
- * @member {Object} pageNumber
- */
-PageableObject.prototype.pageNumber = undefined;
-
-/**
- * @member {Object} paged
- */
-PageableObject.prototype.paged = undefined;
-
-/**
- * @member {Object} unpaged
+ * @member {Boolean} unpaged
  */
 PageableObject.prototype.unpaged = undefined;
 

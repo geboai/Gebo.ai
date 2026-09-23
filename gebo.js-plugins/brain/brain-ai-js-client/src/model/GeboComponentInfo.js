@@ -24,8 +24,8 @@ export default class GeboComponentInfo {
    * Constructs a new <code>GeboComponentInfo</code>.
    * @alias module:model/GeboComponentInfo
    * @class
-   * @param messagingModuleId {Object} 
-   * @param messagingComponentId {Object} 
+   * @param messagingModuleId {String} 
+   * @param messagingComponentId {String} 
    */
   constructor(messagingModuleId, messagingComponentId) {
     this.messagingModuleId = messagingModuleId;
@@ -43,28 +43,28 @@ export default class GeboComponentInfo {
     if (data) {
       obj = obj || new GeboComponentInfo();
       if (data.hasOwnProperty('messagingModuleId'))
-        obj.messagingModuleId = ApiClient.convertToType(data['messagingModuleId'], Object);
+        obj.messagingModuleId = ApiClient.convertToType(data['messagingModuleId'], 'String');
       if (data.hasOwnProperty('messagingComponentId'))
-        obj.messagingComponentId = ApiClient.convertToType(data['messagingComponentId'], Object);
+        obj.messagingComponentId = ApiClient.convertToType(data['messagingComponentId'], 'String');
       if (data.hasOwnProperty('completeComponentId'))
-        obj.completeComponentId = ApiClient.convertToType(data['completeComponentId'], Object);
+        obj.completeComponentId = ApiClient.convertToType(data['completeComponentId'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} messagingModuleId
+ * @member {String} messagingModuleId
  */
 GeboComponentInfo.prototype.messagingModuleId = undefined;
 
 /**
- * @member {Object} messagingComponentId
+ * @member {String} messagingComponentId
  */
 GeboComponentInfo.prototype.messagingComponentId = undefined;
 
 /**
- * @member {Object} completeComponentId
+ * @member {String} completeComponentId
  */
 GeboComponentInfo.prototype.completeComponentId = undefined;
 

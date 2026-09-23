@@ -3,20 +3,28 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  | [optional] 
-**description** | **Object** |  | [optional] 
-**userModified** | **Object** |  | [optional] 
-**userCreated** | **Object** |  | [optional] 
-**dateModified** | **Object** |  | [optional] 
-**dateCreated** | **Object** |  | [optional] 
-**accessibleGroups** | **Object** |  | [optional] 
-**accessibleUsers** | **Object** |  | [optional] 
-**accessibleToAll** | **Object** |  | [optional] 
-**knowledgeBaseReferences** | **Object** |  | [optional] 
-**projectsReferences** | **Object** |  | [optional] 
-**embeddingModelReferences** | **Object** |  | [optional] 
-**username** | **Object** |  | [optional] 
-**parentKnowledgebaseCode** | **Object** |  | [optional] 
-**objectSpaceType** | **Object** |  | [optional] 
-**acl** | **Object** |  | [optional] 
-**aclAliases** | **Object** |  | [optional] 
+**code** | **String** |  | [optional] 
+**description** | **String** |  | [optional] 
+**userModified** | **String** |  | [optional] 
+**userCreated** | **String** |  | [optional] 
+**dateModified** | **Date** |  | [optional] 
+**dateCreated** | **Date** |  | [optional] 
+**accessibleGroups** | **[String]** |  | [optional] 
+**accessibleUsers** | **[String]** |  | [optional] 
+**accessibleToAll** | **Boolean** |  | [optional] 
+**knowledgeBaseReferences** | **[String]** |  | [optional] 
+**projectsReferences** | **[String]** |  | [optional] 
+**embeddingModelReferences** | [**[GObjectRef]**](GObjectRef.md) |  | [optional] 
+**username** | **String** |  | [optional] 
+**parentKnowledgebaseCode** | **String** |  | [optional] 
+**objectSpaceType** | **String** |  | [optional] 
+**acl** | [**[GAclEntry]**](GAclEntry.md) |  | [optional] 
+**aclAliases** | **[Number]** |  | [optional] 
+**readonly** | **Boolean** |  | [optional] 
+
+<a name="ObjectSpaceTypeEnum"></a>
+## Enum: ObjectSpaceTypeEnum
+
+* `COMPANY` (value: `"COMPANY"`)
+* `USERSPACE` (value: `"USERSPACE"`)
+

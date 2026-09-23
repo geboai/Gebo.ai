@@ -14,6 +14,7 @@
  */
 import ApiClient from "../ApiClient";
 import GenericOpenAIAPIImageModelConfig from '../model/GenericOpenAIAPIImageModelConfig';
+import GenericOpenAIImageModelTypeConfig from '../model/GenericOpenAIImageModelTypeConfig';
 import OperationStatusBoolean from '../model/OperationStatusBoolean';
 import OperationStatusGenericOpenAIAPIImageModelConfig from '../model/OperationStatusGenericOpenAIAPIImageModelConfig';
 import OperationStatusListGenericOpenAIAPIImageModelChoice from '../model/OperationStatusListGenericOpenAIAPIImageModelChoice';
@@ -89,7 +90,7 @@ export default class GenericOpenAiapiImageModelsConfigurationControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GenericOpenAIAPIImageModelConfig} and HTTP response
      */
     findGenericOpenAIAPIImageModelConfigByCodeWithHttpInfo(code) {
@@ -187,7 +188,7 @@ export default class GenericOpenAiapiImageModelsConfigurationControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GenericOpenAIAPIImageModelConfig>} and HTTP response
      */
     getGenericOpenAIImageModelConfigsWithHttpInfo() {
       
@@ -209,7 +210,7 @@ export default class GenericOpenAiapiImageModelsConfigurationControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GenericOpenAIAPIImageModelConfig];
 
       return this.apiClient.callApi(
         '/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelConfigs', 'GET',
@@ -219,7 +220,7 @@ export default class GenericOpenAiapiImageModelsConfigurationControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GenericOpenAIAPIImageModelConfig>}
      */
     getGenericOpenAIImageModelConfigs() {
       return this.getGenericOpenAIImageModelConfigsWithHttpInfo()
@@ -230,7 +231,7 @@ export default class GenericOpenAiapiImageModelsConfigurationControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GenericOpenAIImageModelTypeConfig>} and HTTP response
      */
     getGenericOpenAIImageModelTypesWithHttpInfo() {
       
@@ -252,7 +253,7 @@ export default class GenericOpenAiapiImageModelsConfigurationControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GenericOpenAIImageModelTypeConfig];
 
       return this.apiClient.callApi(
         '/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelTypes', 'GET',
@@ -262,7 +263,7 @@ export default class GenericOpenAiapiImageModelsConfigurationControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GenericOpenAIImageModelTypeConfig>}
      */
     getGenericOpenAIImageModelTypes() {
       return this.getGenericOpenAIImageModelTypesWithHttpInfo()

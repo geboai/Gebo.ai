@@ -39,21 +39,21 @@ export default class ResetContentResponse {
     if (data) {
       obj = obj || new ResetContentResponse();
       if (data.hasOwnProperty('resetEntries'))
-        obj.resetEntries = ApiClient.convertToType(data['resetEntries'], Object);
+        obj.resetEntries = ApiClient.convertToType(data['resetEntries'], 'Number');
       if (data.hasOwnProperty('deletedAll'))
-        obj.deletedAll = ApiClient.convertToType(data['deletedAll'], Object);
+        obj.deletedAll = ApiClient.convertToType(data['deletedAll'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} resetEntries
+ * @member {Number} resetEntries
  */
 ResetContentResponse.prototype.resetEntries = undefined;
 
 /**
- * @member {Object} deletedAll
+ * @member {Boolean} deletedAll
  */
 ResetContentResponse.prototype.deletedAll = undefined;
 

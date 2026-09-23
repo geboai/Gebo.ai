@@ -72,14 +72,14 @@ export default class GResponseDocumentRef {
         obj.loadPercentage = ApiClient.convertToType(data['loadPercentage'], 'Number');
       if (data.hasOwnProperty('references'))
         obj.references = ApiClient.convertToType(data['references'], [DocInternalRef]);
+      if (data.hasOwnProperty('ntokensRelevant'))
+        obj.ntokensRelevant = ApiClient.convertToType(data['ntokensRelevant'], 'Number');
       if (data.hasOwnProperty('ntotalContentTokens'))
         obj.ntotalContentTokens = ApiClient.convertToType(data['ntotalContentTokens'], 'Number');
       if (data.hasOwnProperty('nbytesRelevant'))
         obj.nbytesRelevant = ApiClient.convertToType(data['nbytesRelevant'], 'Number');
       if (data.hasOwnProperty('shortCode'))
         obj.shortCode = ApiClient.convertToType(data['shortCode'], 'String');
-      if (data.hasOwnProperty('ntokensRelevant'))
-        obj.ntokensRelevant = ApiClient.convertToType(data['ntokensRelevant'], 'Number');
     }
     return obj;
   }
@@ -184,6 +184,11 @@ GResponseDocumentRef.prototype.loadPercentage = undefined;
 GResponseDocumentRef.prototype.references = undefined;
 
 /**
+ * @member {Number} ntokensRelevant
+ */
+GResponseDocumentRef.prototype.ntokensRelevant = undefined;
+
+/**
  * @member {Number} ntotalContentTokens
  */
 GResponseDocumentRef.prototype.ntotalContentTokens = undefined;
@@ -197,9 +202,4 @@ GResponseDocumentRef.prototype.nbytesRelevant = undefined;
  * @member {String} shortCode
  */
 GResponseDocumentRef.prototype.shortCode = undefined;
-
-/**
- * @member {Number} ntokensRelevant
- */
-GResponseDocumentRef.prototype.ntokensRelevant = undefined;
 

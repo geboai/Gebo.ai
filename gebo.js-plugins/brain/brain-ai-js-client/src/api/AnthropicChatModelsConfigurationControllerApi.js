@@ -89,7 +89,7 @@ export default class AnthropicChatModelsConfigurationControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GAnthropicChatModelConfig} and HTTP response
      */
     findAnthropicChatModelConfigByCodeWithHttpInfo(code) {

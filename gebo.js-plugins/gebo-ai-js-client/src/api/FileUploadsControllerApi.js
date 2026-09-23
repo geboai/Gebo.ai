@@ -17,6 +17,8 @@ import GContentManagementSystemType from '../model/GContentManagementSystemType'
 import GUploadsContentManagementSystem from '../model/GUploadsContentManagementSystem';
 import GUploadsProjectEndpoint from '../model/GUploadsProjectEndpoint';
 import OperationStatusGJobStatus from '../model/OperationStatusGJobStatus';
+import OperationStatusGUploadsProjectEndpoint from '../model/OperationStatusGUploadsProjectEndpoint';
+import UploadedFileInfo from '../model/UploadedFileInfo';
 
 /**
 * FileUploadsController service.
@@ -37,6 +39,61 @@ export default class FileUploadsControllerApi {
         this.apiClient = apiClient || ApiClient.instance;
     }
 
+
+
+    /**
+     * @param {Array.<String>} body 
+     * @param {String} endpointCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/OperationStatusGUploadsProjectEndpoint} and HTTP response
+     */
+    deleteUploadedFilesWithHttpInfo(body, endpointCode) {
+      
+      let postBody = body;
+      // verify the required parameter 'body' is set
+      if (body === undefined || body === null) {
+        throw new Error("Missing the required parameter 'body' when calling deleteUploadedFiles");
+      }
+      // verify the required parameter 'endpointCode' is set
+      if (endpointCode === undefined || endpointCode === null) {
+        throw new Error("Missing the required parameter 'endpointCode' when calling deleteUploadedFiles");
+      }
+
+      let pathParams = {
+        
+      };
+      let queryParams = {
+        'endpointCode': endpointCode
+      };
+      let headerParams = {
+        
+      };
+      let formParams = {
+        
+      };
+
+      let authNames = [];
+      let contentTypes = ['application/json'];
+      let accepts = ['application/json'];
+      let returnType = OperationStatusGUploadsProjectEndpoint;
+
+      return this.apiClient.callApi(
+        '/api/admin/FileUploadsController/deleteUploadedFiles', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * @param {<&vendorExtensions.x-jsdoc-type>} body 
+     * @param {<&vendorExtensions.x-jsdoc-type>} endpointCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/OperationStatusGUploadsProjectEndpoint}
+     */
+    deleteUploadedFiles(body, endpointCode) {
+      return this.deleteUploadedFilesWithHttpInfo(body, endpointCode)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
 
 
     /**
@@ -362,6 +419,55 @@ export default class FileUploadsControllerApi {
      */
     insertUploadsEndpoint(body) {
       return this.insertUploadsEndpointWithHttpInfo(body)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
+     * @param {String} endpointCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/UploadedFileInfo>} and HTTP response
+     */
+    listUploadedFilesWithHttpInfo(endpointCode) {
+      
+      let postBody = null;
+      // verify the required parameter 'endpointCode' is set
+      if (endpointCode === undefined || endpointCode === null) {
+        throw new Error("Missing the required parameter 'endpointCode' when calling listUploadedFiles");
+      }
+
+      let pathParams = {
+        
+      };
+      let queryParams = {
+        'endpointCode': endpointCode
+      };
+      let headerParams = {
+        
+      };
+      let formParams = {
+        
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = ['application/json'];
+      let returnType = [UploadedFileInfo];
+
+      return this.apiClient.callApi(
+        '/api/admin/FileUploadsController/listUploadedFiles', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * @param {<&vendorExtensions.x-jsdoc-type>} endpointCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/UploadedFileInfo>}
+     */
+    listUploadedFiles(endpointCode) {
+      return this.listUploadedFilesWithHttpInfo(endpointCode)
         .then(function(response_and_data) {
           return response_and_data.data;
         });

@@ -14,4 +14,5 @@ Name | Type | Description | Notes
 
 * `oAUTH2` (value: `"OAUTH2"`)
 * `LOCAL_JWT` (value: `"LOCAL_JWT"`)
+* `AUTO` (value: `"AUTO"`)
 

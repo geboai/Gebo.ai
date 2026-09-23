@@ -39,63 +39,63 @@ export default class MCPResource {
     if (data) {
       obj = obj || new MCPResource();
       if (data.hasOwnProperty('accessibleGroups'))
-        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], Object);
+        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], ['String']);
       if (data.hasOwnProperty('accessibleUsers'))
-        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], Object);
+        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], ['String']);
       if (data.hasOwnProperty('accessibleToAll'))
-        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], Object);
+        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], 'Boolean');
       if (data.hasOwnProperty('aclAliases'))
-        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], Object);
+        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('deletedOnMCPServer'))
-        obj.deletedOnMCPServer = ApiClient.convertToType(data['deletedOnMCPServer'], Object);
+        obj.deletedOnMCPServer = ApiClient.convertToType(data['deletedOnMCPServer'], 'Boolean');
       if (data.hasOwnProperty('addedOnMCPServer'))
-        obj.addedOnMCPServer = ApiClient.convertToType(data['addedOnMCPServer'], Object);
+        obj.addedOnMCPServer = ApiClient.convertToType(data['addedOnMCPServer'], 'Boolean');
       if (data.hasOwnProperty('uri'))
-        obj.uri = ApiClient.convertToType(data['uri'], Object);
+        obj.uri = ApiClient.convertToType(data['uri'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} accessibleGroups
+ * @member {Array.<String>} accessibleGroups
  */
 MCPResource.prototype.accessibleGroups = undefined;
 
 /**
- * @member {Object} accessibleUsers
+ * @member {Array.<String>} accessibleUsers
  */
 MCPResource.prototype.accessibleUsers = undefined;
 
 /**
- * @member {Object} accessibleToAll
+ * @member {Boolean} accessibleToAll
  */
 MCPResource.prototype.accessibleToAll = undefined;
 
 /**
- * @member {Object} aclAliases
+ * @member {Array.<Number>} aclAliases
  */
 MCPResource.prototype.aclAliases = undefined;
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 MCPResource.prototype.name = undefined;
 
 /**
- * @member {Object} deletedOnMCPServer
+ * @member {Boolean} deletedOnMCPServer
  */
 MCPResource.prototype.deletedOnMCPServer = undefined;
 
 /**
- * @member {Object} addedOnMCPServer
+ * @member {Boolean} addedOnMCPServer
  */
 MCPResource.prototype.addedOnMCPServer = undefined;
 
 /**
- * @member {Object} uri
+ * @member {String} uri
  */
 MCPResource.prototype.uri = undefined;
 

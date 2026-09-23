@@ -4,4 +4,4 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** |  | 
-**knowledgeBaseCodes** | **[String]** |  | 
+**knowledgeBaseCodes** | **[String]** |  | [optional] 

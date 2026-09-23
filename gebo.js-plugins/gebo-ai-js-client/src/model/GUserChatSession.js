@@ -56,12 +56,16 @@ export default class GUserChatSession {
         obj.chatCreationDateTime = ApiClient.convertToType(data['chatCreationDateTime'], 'Date');
       if (data.hasOwnProperty('username'))
         obj.username = ApiClient.convertToType(data['username'], 'String');
+      if (data.hasOwnProperty('contextCode'))
+        obj.contextCode = ApiClient.convertToType(data['contextCode'], 'String');
       if (data.hasOwnProperty('chatProfileCode'))
         obj.chatProfileCode = ApiClient.convertToType(data['chatProfileCode'], 'String');
       if (data.hasOwnProperty('modelReference'))
         obj.modelReference = GObjectRefGBaseChatModelConfig.constructFromObject(data['modelReference']);
       if (data.hasOwnProperty('ragChat'))
         obj.ragChat = ApiClient.convertToType(data['ragChat'], 'Boolean');
+      if (data.hasOwnProperty('pipelineCode'))
+        obj.pipelineCode = ApiClient.convertToType(data['pipelineCode'], 'String');
       if (data.hasOwnProperty('chatMemoryId'))
         obj.chatMemoryId = ApiClient.convertToType(data['chatMemoryId'], 'String');
       if (data.hasOwnProperty('interactions'))
@@ -116,6 +120,11 @@ GUserChatSession.prototype.chatCreationDateTime = undefined;
 GUserChatSession.prototype.username = undefined;
 
 /**
+ * @member {String} contextCode
+ */
+GUserChatSession.prototype.contextCode = undefined;
+
+/**
  * @member {String} chatProfileCode
  */
 GUserChatSession.prototype.chatProfileCode = undefined;
@@ -129,6 +138,11 @@ GUserChatSession.prototype.modelReference = undefined;
  * @member {Boolean} ragChat
  */
 GUserChatSession.prototype.ragChat = undefined;
+
+/**
+ * @member {String} pipelineCode
+ */
+GUserChatSession.prototype.pipelineCode = undefined;
 
 /**
  * @member {String} chatMemoryId

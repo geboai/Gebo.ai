@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 <a name="getDeepSearchDataSources"></a>
 # **getDeepSearchDataSources**
-> Object getDeepSearchDataSources()
+> [GBaseObject] getDeepSearchDataSources()
 
 
 
@@ -30,7 +30,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GBaseObject]**](GBaseObject.md)
 
 ### Authorization
 

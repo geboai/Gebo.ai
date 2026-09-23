@@ -24,8 +24,8 @@ export default class GGoogleSearchApiCredentials {
    * Constructs a new <code>GGoogleSearchApiCredentials</code>.
    * @alias module:model/GGoogleSearchApiCredentials
    * @class
-   * @param secretCode {Object} 
-   * @param customSearchEngineId {Object} 
+   * @param secretCode {String} 
+   * @param customSearchEngineId {String} 
    */
   constructor(secretCode, customSearchEngineId) {
     this.secretCode = secretCode;
@@ -43,63 +43,63 @@ export default class GGoogleSearchApiCredentials {
     if (data) {
       obj = obj || new GGoogleSearchApiCredentials();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('secretCode'))
-        obj.secretCode = ApiClient.convertToType(data['secretCode'], Object);
+        obj.secretCode = ApiClient.convertToType(data['secretCode'], 'String');
       if (data.hasOwnProperty('customSearchEngineId'))
-        obj.customSearchEngineId = ApiClient.convertToType(data['customSearchEngineId'], Object);
+        obj.customSearchEngineId = ApiClient.convertToType(data['customSearchEngineId'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GGoogleSearchApiCredentials.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GGoogleSearchApiCredentials.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GGoogleSearchApiCredentials.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GGoogleSearchApiCredentials.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GGoogleSearchApiCredentials.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GGoogleSearchApiCredentials.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} secretCode
+ * @member {String} secretCode
  */
 GGoogleSearchApiCredentials.prototype.secretCode = undefined;
 
 /**
- * @member {Object} customSearchEngineId
+ * @member {String} customSearchEngineId
  */
 GGoogleSearchApiCredentials.prototype.customSearchEngineId = undefined;
 

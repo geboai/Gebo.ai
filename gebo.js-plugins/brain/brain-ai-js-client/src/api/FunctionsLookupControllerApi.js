@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from "../ApiClient";
+import GLookupEntry from '../model/GLookupEntry';
+import ToolCategoriesTree from '../model/ToolCategoriesTree';
 
 /**
 * FunctionsLookupController service.
@@ -36,7 +38,7 @@ export default class FunctionsLookupControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GLookupEntry>} and HTTP response
      */
     getAllFunctionsWithHttpInfo() {
       
@@ -58,7 +60,7 @@ export default class FunctionsLookupControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GLookupEntry];
 
       return this.apiClient.callApi(
         '/api/admin/FunctionsLookupController/getAllFunctions', 'GET',
@@ -68,7 +70,7 @@ export default class FunctionsLookupControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GLookupEntry>}
      */
     getAllFunctions() {
       return this.getAllFunctionsWithHttpInfo()
@@ -80,8 +82,8 @@ export default class FunctionsLookupControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.ragContextFunctions 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {Boolean} opts.ragContextFunctions 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ToolCategoriesTree>} and HTTP response
      */
     getAllFunctionsTreeWithHttpInfo(opts) {
       opts = opts || {};
@@ -103,7 +105,7 @@ export default class FunctionsLookupControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [ToolCategoriesTree];
 
       return this.apiClient.callApi(
         '/api/admin/FunctionsLookupController/getAllFunctionsTree', 'GET',
@@ -114,8 +116,8 @@ export default class FunctionsLookupControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.ragContextFunctions 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @param {Boolean} opts.ragContextFunctions 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ToolCategoriesTree>}
      */
     getAllFunctionsTree(opts) {
       return this.getAllFunctionsTreeWithHttpInfo(opts)
@@ -126,7 +128,7 @@ export default class FunctionsLookupControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GLookupEntry>} and HTTP response
      */
     getAllLocalFunctionsWithHttpInfo() {
       
@@ -148,7 +150,7 @@ export default class FunctionsLookupControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GLookupEntry];
 
       return this.apiClient.callApi(
         '/api/admin/FunctionsLookupController/getAllLocalFunctions', 'GET',
@@ -158,7 +160,7 @@ export default class FunctionsLookupControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GLookupEntry>}
      */
     getAllLocalFunctions() {
       return this.getAllLocalFunctionsWithHttpInfo()
@@ -170,8 +172,8 @@ export default class FunctionsLookupControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.ragContextFunctions 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {Boolean} opts.ragContextFunctions 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ToolCategoriesTree>} and HTTP response
      */
     getAllLocalFunctionsTreeWithHttpInfo(opts) {
       opts = opts || {};
@@ -193,7 +195,7 @@ export default class FunctionsLookupControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [ToolCategoriesTree];
 
       return this.apiClient.callApi(
         '/api/admin/FunctionsLookupController/getAllLocalFunctionsTree', 'GET',
@@ -204,8 +206,8 @@ export default class FunctionsLookupControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.ragContextFunctions 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @param {Boolean} opts.ragContextFunctions 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ToolCategoriesTree>}
      */
     getAllLocalFunctionsTree(opts) {
       return this.getAllLocalFunctionsTreeWithHttpInfo(opts)

@@ -24,8 +24,8 @@ export default class GeboMCPAgentsNetworkTool {
    * Constructs a new <code>GeboMCPAgentsNetworkTool</code>.
    * @alias module:model/GeboMCPAgentsNetworkTool
    * @class
-   * @param agentsNetworkCode {Object} 
-   * @param toolName {Object} 
+   * @param agentsNetworkCode {String} 
+   * @param toolName {String} 
    */
   constructor(agentsNetworkCode, toolName) {
     this.agentsNetworkCode = agentsNetworkCode;
@@ -43,21 +43,21 @@ export default class GeboMCPAgentsNetworkTool {
     if (data) {
       obj = obj || new GeboMCPAgentsNetworkTool();
       if (data.hasOwnProperty('agentsNetworkCode'))
-        obj.agentsNetworkCode = ApiClient.convertToType(data['agentsNetworkCode'], Object);
+        obj.agentsNetworkCode = ApiClient.convertToType(data['agentsNetworkCode'], 'String');
       if (data.hasOwnProperty('toolName'))
-        obj.toolName = ApiClient.convertToType(data['toolName'], Object);
+        obj.toolName = ApiClient.convertToType(data['toolName'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} agentsNetworkCode
+ * @member {String} agentsNetworkCode
  */
 GeboMCPAgentsNetworkTool.prototype.agentsNetworkCode = undefined;
 
 /**
- * @member {Object} toolName
+ * @member {String} toolName
  */
 GeboMCPAgentsNetworkTool.prototype.toolName = undefined;
 

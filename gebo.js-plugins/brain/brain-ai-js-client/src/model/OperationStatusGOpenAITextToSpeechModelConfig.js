@@ -14,6 +14,7 @@
  */
 import ApiClient from '../ApiClient';
 import GOpenAITextToSpeechModelConfig from './GOpenAITextToSpeechModelConfig';
+import GUserMessage from './GUserMessage';
 
 /**
  * The OperationStatusGOpenAITextToSpeechModelConfig model module.
@@ -42,11 +43,11 @@ export default class OperationStatusGOpenAITextToSpeechModelConfig {
       if (data.hasOwnProperty('result'))
         obj.result = GOpenAITextToSpeechModelConfig.constructFromObject(data['result']);
       if (data.hasOwnProperty('messages'))
-        obj.messages = ApiClient.convertToType(data['messages'], Object);
+        obj.messages = ApiClient.convertToType(data['messages'], [GUserMessage]);
       if (data.hasOwnProperty('hasErrorMessages'))
-        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], Object);
+        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], 'Boolean');
       if (data.hasOwnProperty('hasWarnMessages'))
-        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], Object);
+        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], 'Boolean');
     }
     return obj;
   }
@@ -58,17 +59,17 @@ export default class OperationStatusGOpenAITextToSpeechModelConfig {
 OperationStatusGOpenAITextToSpeechModelConfig.prototype.result = undefined;
 
 /**
- * @member {Object} messages
+ * @member {Array.<module:model/GUserMessage>} messages
  */
 OperationStatusGOpenAITextToSpeechModelConfig.prototype.messages = undefined;
 
 /**
- * @member {Object} hasErrorMessages
+ * @member {Boolean} hasErrorMessages
  */
 OperationStatusGOpenAITextToSpeechModelConfig.prototype.hasErrorMessages = undefined;
 
 /**
- * @member {Object} hasWarnMessages
+ * @member {Boolean} hasWarnMessages
  */
 OperationStatusGOpenAITextToSpeechModelConfig.prototype.hasWarnMessages = undefined;
 

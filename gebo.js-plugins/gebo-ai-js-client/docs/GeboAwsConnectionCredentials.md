@@ -3,6 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**readOnly** | **Boolean** |  | [optional] 
 **accessKeyId** | **String** |  | 
 **secretAccessKey** | **String** |  | 
 **region** | **String** |  | 

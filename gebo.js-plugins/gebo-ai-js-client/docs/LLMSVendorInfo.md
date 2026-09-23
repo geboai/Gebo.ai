@@ -39,6 +39,8 @@ Name | Type | Description | Notes
 * `microsoft` (value: `"microsoft"`)
 * `microsoftMultitenant` (value: `"microsoft_multitenant"`)
 * `awsCognito` (value: `"aws_cognito"`)
+* `awsIdentityCenter` (value: `"aws_identity_center"`)
+* `keycloak` (value: `"keycloak"`)
 * `oauth2Generic` (value: `"oauth2_generic"`)
 * `ldap` (value: `"ldap"`)
 

@@ -41,9 +41,9 @@ export default class ComponentVectorStoreStatus {
     if (data) {
       obj = obj || new ComponentVectorStoreStatus();
       if (data.hasOwnProperty('isSetup'))
-        obj.isSetup = ApiClient.convertToType(data['isSetup'], Object);
+        obj.isSetup = ApiClient.convertToType(data['isSetup'], 'Boolean');
       if (data.hasOwnProperty('product'))
-        obj.product = ApiClient.convertToType(data['product'], Object);
+        obj.product = ApiClient.convertToType(data['product'], 'String');
       if (data.hasOwnProperty('qdrantConfig'))
         obj.qdrantConfig = QdrantConfig.constructFromObject(data['qdrantConfig']);
       if (data.hasOwnProperty('redisConfig'))
@@ -54,12 +54,42 @@ export default class ComponentVectorStoreStatus {
 }
 
 /**
- * @member {Object} isSetup
+ * @member {Boolean} isSetup
  */
 ComponentVectorStoreStatus.prototype.isSetup = undefined;
 
 /**
- * @member {Object} product
+ * Allowed values for the <code>product</code> property.
+ * @enum {String}
+ * @readonly
+ */
+ComponentVectorStoreStatus.ProductEnum = {
+  /**
+   * value: "MONGO"
+   * @const
+   */
+  MONGO: "MONGO",
+
+  /**
+   * value: "QDRANT"
+   * @const
+   */
+  QDRANT: "QDRANT",
+
+  /**
+   * value: "REDIS"
+   * @const
+   */
+  REDIS: "REDIS",
+
+  /**
+   * value: "TEST"
+   * @const
+   */
+  TEST: "TEST"
+};
+/**
+ * @member {module:model/ComponentVectorStoreStatus.ProductEnum} product
  */
 ComponentVectorStoreStatus.prototype.product = undefined;
 

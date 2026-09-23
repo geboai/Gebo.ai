@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from "../ApiClient";
+import GModuleMetaInfo from '../model/GModuleMetaInfo';
 
 /**
 * InternalMessagingTopologyController service.
@@ -36,7 +37,7 @@ export default class InternalMessagingTopologyControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GModuleMetaInfo>} and HTTP response
      */
     getLocalTopologyWithHttpInfo() {
       
@@ -58,7 +59,7 @@ export default class InternalMessagingTopologyControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GModuleMetaInfo];
 
       return this.apiClient.callApi(
         '/api/admin/InternalMessagingTopologyController/getLocalTopology', 'GET',
@@ -68,7 +69,7 @@ export default class InternalMessagingTopologyControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GModuleMetaInfo>}
      */
     getLocalTopology() {
       return this.getLocalTopologyWithHttpInfo()

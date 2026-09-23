@@ -40,78 +40,78 @@ export default class GBaseEmbeddingModelConfig {
     if (data) {
       obj = obj || new GBaseEmbeddingModelConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('modelTypeCode'))
-        obj.modelTypeCode = ApiClient.convertToType(data['modelTypeCode'], Object);
+        obj.modelTypeCode = ApiClient.convertToType(data['modelTypeCode'], 'String');
       if (data.hasOwnProperty('defaultModel'))
-        obj.defaultModel = ApiClient.convertToType(data['defaultModel'], Object);
+        obj.defaultModel = ApiClient.convertToType(data['defaultModel'], 'Boolean');
       if (data.hasOwnProperty('apiSecretCode'))
-        obj.apiSecretCode = ApiClient.convertToType(data['apiSecretCode'], Object);
+        obj.apiSecretCode = ApiClient.convertToType(data['apiSecretCode'], 'String');
       if (data.hasOwnProperty('choosedModel'))
         obj.choosedModel = GBaseEmbeddingModelChoice.constructFromObject(data['choosedModel']);
       if (data.hasOwnProperty('baseUrl'))
-        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], Object);
+        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], 'String');
       if (data.hasOwnProperty('contextLength'))
-        obj.contextLength = ApiClient.convertToType(data['contextLength'], Object);
+        obj.contextLength = ApiClient.convertToType(data['contextLength'], 'Number');
       if (data.hasOwnProperty('tokenizationThreshold'))
-        obj.tokenizationThreshold = ApiClient.convertToType(data['tokenizationThreshold'], Object);
+        obj.tokenizationThreshold = ApiClient.convertToType(data['tokenizationThreshold'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GBaseEmbeddingModelConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GBaseEmbeddingModelConfig.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GBaseEmbeddingModelConfig.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GBaseEmbeddingModelConfig.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GBaseEmbeddingModelConfig.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GBaseEmbeddingModelConfig.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} modelTypeCode
+ * @member {String} modelTypeCode
  */
 GBaseEmbeddingModelConfig.prototype.modelTypeCode = undefined;
 
 /**
- * @member {Object} defaultModel
+ * @member {Boolean} defaultModel
  */
 GBaseEmbeddingModelConfig.prototype.defaultModel = undefined;
 
 /**
- * @member {Object} apiSecretCode
+ * @member {String} apiSecretCode
  */
 GBaseEmbeddingModelConfig.prototype.apiSecretCode = undefined;
 
@@ -121,17 +121,17 @@ GBaseEmbeddingModelConfig.prototype.apiSecretCode = undefined;
 GBaseEmbeddingModelConfig.prototype.choosedModel = undefined;
 
 /**
- * @member {Object} baseUrl
+ * @member {String} baseUrl
  */
 GBaseEmbeddingModelConfig.prototype.baseUrl = undefined;
 
 /**
- * @member {Object} contextLength
+ * @member {Number} contextLength
  */
 GBaseEmbeddingModelConfig.prototype.contextLength = undefined;
 
 /**
- * @member {Object} tokenizationThreshold
+ * @member {Number} tokenizationThreshold
  */
 GBaseEmbeddingModelConfig.prototype.tokenizationThreshold = undefined;
 

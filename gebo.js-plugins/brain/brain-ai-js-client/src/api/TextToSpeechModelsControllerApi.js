@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from "../ApiClient";
+import ConfigurationEntryGBaseTextToSpeachModelConfig from '../model/ConfigurationEntryGBaseTextToSpeachModelConfig';
+import GTextToSpeechModelType from '../model/GTextToSpeechModelType';
 
 /**
 * TextToSpeechModelsController service.
@@ -37,8 +39,8 @@ export default class TextToSpeechModelsControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ConfigurationEntryGBaseTextToSpeachModelConfig>} and HTTP response
      */
     getRuntimeConfiguredTextToSpeechModelsWithHttpInfo(opts) {
       opts = opts || {};
@@ -60,7 +62,7 @@ export default class TextToSpeechModelsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [ConfigurationEntryGBaseTextToSpeachModelConfig];
 
       return this.apiClient.callApi(
         '/api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels', 'GET',
@@ -71,8 +73,8 @@ export default class TextToSpeechModelsControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ConfigurationEntryGBaseTextToSpeachModelConfig>}
      */
     getRuntimeConfiguredTextToSpeechModels(opts) {
       return this.getRuntimeConfiguredTextToSpeechModelsWithHttpInfo(opts)
@@ -83,7 +85,7 @@ export default class TextToSpeechModelsControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GTextToSpeechModelType>} and HTTP response
      */
     getTextToSpeechModelTypesWithHttpInfo() {
       
@@ -105,7 +107,7 @@ export default class TextToSpeechModelsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GTextToSpeechModelType];
 
       return this.apiClient.callApi(
         '/api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes', 'GET',
@@ -115,7 +117,7 @@ export default class TextToSpeechModelsControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GTextToSpeechModelType>}
      */
     getTextToSpeechModelTypes() {
       return this.getTextToSpeechModelTypesWithHttpInfo()

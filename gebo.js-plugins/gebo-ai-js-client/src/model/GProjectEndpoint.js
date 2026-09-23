@@ -76,6 +76,8 @@ export default class GProjectEndpoint {
         obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], 'String');
       if (data.hasOwnProperty('aclAliases'))
         obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
+      if (data.hasOwnProperty('personalData'))
+        obj.personalData = ApiClient.convertToType(data['personalData'], 'Boolean');
     }
     return obj;
   }
@@ -206,4 +208,9 @@ GProjectEndpoint.prototype.objectSpaceType = undefined;
  * @member {Array.<Number>} aclAliases
  */
 GProjectEndpoint.prototype.aclAliases = undefined;
+
+/**
+ * @member {Boolean} personalData
+ */
+GProjectEndpoint.prototype.personalData = undefined;
 

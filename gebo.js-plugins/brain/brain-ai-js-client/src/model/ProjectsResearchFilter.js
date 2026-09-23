@@ -39,21 +39,21 @@ export default class ProjectsResearchFilter {
     if (data) {
       obj = obj || new ProjectsResearchFilter();
       if (data.hasOwnProperty('rootKnowledgeBaseCode'))
-        obj.rootKnowledgeBaseCode = ApiClient.convertToType(data['rootKnowledgeBaseCode'], Object);
+        obj.rootKnowledgeBaseCode = ApiClient.convertToType(data['rootKnowledgeBaseCode'], 'String');
       if (data.hasOwnProperty('parentProjectCode'))
-        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], Object);
+        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} rootKnowledgeBaseCode
+ * @member {String} rootKnowledgeBaseCode
  */
 ProjectsResearchFilter.prototype.rootKnowledgeBaseCode = undefined;
 
 /**
- * @member {Object} parentProjectCode
+ * @member {String} parentProjectCode
  */
 ProjectsResearchFilter.prototype.parentProjectCode = undefined;
 

@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GBaseModelChoice from './GBaseModelChoice';
 
 /**
  * The LLMUnresolvedModel model module.
@@ -39,42 +40,102 @@ export default class LLMUnresolvedModel {
     if (data) {
       obj = obj || new LLMUnresolvedModel();
       if (data.hasOwnProperty('type'))
-        obj.type = ApiClient.convertToType(data['type'], Object);
+        obj.type = ApiClient.convertToType(data['type'], 'String');
       if (data.hasOwnProperty('uses'))
-        obj.uses = ApiClient.convertToType(data['uses'], Object);
+        obj.uses = ApiClient.convertToType(data['uses'], ['String']);
       if (data.hasOwnProperty('serviceHandler'))
-        obj.serviceHandler = ApiClient.convertToType(data['serviceHandler'], Object);
+        obj.serviceHandler = ApiClient.convertToType(data['serviceHandler'], 'String');
       if (data.hasOwnProperty('requestedModelCode'))
-        obj.requestedModelCode = ApiClient.convertToType(data['requestedModelCode'], Object);
+        obj.requestedModelCode = ApiClient.convertToType(data['requestedModelCode'], 'String');
       if (data.hasOwnProperty('availableChoices'))
-        obj.availableChoices = ApiClient.convertToType(data['availableChoices'], Object);
+        obj.availableChoices = ApiClient.convertToType(data['availableChoices'], [GBaseModelChoice]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} type
+ * Allowed values for the <code>type</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LLMUnresolvedModel.TypeEnum = {
+  /**
+   * value: "CHAT"
+   * @const
+   */
+  CHAT: "CHAT",
+
+  /**
+   * value: "EMBEDDING"
+   * @const
+   */
+  EMBEDDING: "EMBEDDING",
+
+  /**
+   * value: "RANKING"
+   * @const
+   */
+  RANKING: "RANKING",
+
+  /**
+   * value: "IMAGESGEN"
+   * @const
+   */
+  IMAGESGEN: "IMAGESGEN",
+
+  /**
+   * value: "TTS"
+   * @const
+   */
+  TTS: "TTS",
+
+  /**
+   * value: "TRANSCRIPT"
+   * @const
+   */
+  TRANSCRIPT: "TRANSCRIPT"
+};
+/**
+ * @member {module:model/LLMUnresolvedModel.TypeEnum} type
  */
 LLMUnresolvedModel.prototype.type = undefined;
 
 /**
- * @member {Object} uses
+ * Allowed values for the <code>uses</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LLMUnresolvedModel.UsesEnum = {
+  /**
+   * value: "CHAT"
+   * @const
+   */
+  CHAT: "CHAT",
+
+  /**
+   * value: "INTERNAL_SERVICES"
+   * @const
+   */
+  INTERNAL_SERVICES: "INTERNAL_SERVICES"
+};
+/**
+ * @member {Array.<module:model/LLMUnresolvedModel.UsesEnum>} uses
  */
 LLMUnresolvedModel.prototype.uses = undefined;
 
 /**
- * @member {Object} serviceHandler
+ * @member {String} serviceHandler
  */
 LLMUnresolvedModel.prototype.serviceHandler = undefined;
 
 /**
- * @member {Object} requestedModelCode
+ * @member {String} requestedModelCode
  */
 LLMUnresolvedModel.prototype.requestedModelCode = undefined;
 
 /**
- * @member {Object} availableChoices
+ * @member {Array.<module:model/GBaseModelChoice>} availableChoices
  */
 LLMUnresolvedModel.prototype.availableChoices = undefined;
 

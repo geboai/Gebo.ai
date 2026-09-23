@@ -62,7 +62,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboChatControllerApi();
-let modelCode = null; // Object | 
+let modelCode = "modelCode_example"; // String | 
 
 apiInstance.getChatModelMetaInfos(modelCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -76,7 +76,7 @@ apiInstance.getChatModelMetaInfos(modelCode).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelCode** | [**Object**](.md)|  | 
+ **modelCode** | **String**|  | 
 
 ### Return type
 
@@ -102,7 +102,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboChatControllerApi();
-let modelCode = null; // Object | 
+let modelCode = "modelCode_example"; // String | 
 
 apiInstance.getChatModelUserInfo(modelCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -116,7 +116,7 @@ apiInstance.getChatModelUserInfo(modelCode).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelCode** | [**Object**](.md)|  | 
+ **modelCode** | **String**|  | 
 
 ### Return type
 
@@ -142,7 +142,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboChatControllerApi();
-let modelCode = null; // Object | 
+let modelCode = "modelCode_example"; // String | 
 
 apiInstance.getProviderCapabilities(modelCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -156,7 +156,7 @@ apiInstance.getProviderCapabilities(modelCode).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelCode** | [**Object**](.md)|  | 
+ **modelCode** | **String**|  | 
 
 ### Return type
 
@@ -173,7 +173,7 @@ No authorization required
 
 <a name="getVisibleKnowledgeBases"></a>
 # **getVisibleKnowledgeBases**
-> Object getVisibleKnowledgeBases()
+> [GBaseObject] getVisibleKnowledgeBases()
 
 
 
@@ -195,7 +195,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GBaseObject]**](GBaseObject.md)
 
 ### Authorization
 
@@ -208,7 +208,7 @@ No authorization required
 
 <a name="streamResponse"></a>
 # **streamResponse**
-> Object streamResponse(body)
+> [ServerSentEventString] streamResponse(body)
 
 
 
@@ -235,7 +235,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**[ServerSentEventString]**](ServerSentEventString.md)
 
 ### Authorization
 

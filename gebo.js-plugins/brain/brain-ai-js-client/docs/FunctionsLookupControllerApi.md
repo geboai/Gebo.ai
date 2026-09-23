@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 <a name="getAllFunctions"></a>
 # **getAllFunctions**
-> Object getAllFunctions()
+> [GLookupEntry] getAllFunctions()
 
 
 
@@ -33,7 +33,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GLookupEntry]**](GLookupEntry.md)
 
 ### Authorization
 
@@ -46,7 +46,7 @@ No authorization required
 
 <a name="getAllFunctionsTree"></a>
 # **getAllFunctionsTree**
-> Object getAllFunctionsTree(opts)
+> [ToolCategoriesTree] getAllFunctionsTree(opts)
 
 
 
@@ -56,7 +56,7 @@ import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.FunctionsLookupControllerApi();
 let opts = { 
-  'ragContextFunctions': null // Object | 
+  'ragContextFunctions': true // Boolean | 
 };
 apiInstance.getAllFunctionsTree(opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -70,11 +70,11 @@ apiInstance.getAllFunctionsTree(opts).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ragContextFunctions** | [**Object**](.md)|  | [optional] 
+ **ragContextFunctions** | **Boolean**|  | [optional] 
 
 ### Return type
 
-**Object**
+[**[ToolCategoriesTree]**](ToolCategoriesTree.md)
 
 ### Authorization
 
@@ -87,7 +87,7 @@ No authorization required
 
 <a name="getAllLocalFunctions"></a>
 # **getAllLocalFunctions**
-> Object getAllLocalFunctions()
+> [GLookupEntry] getAllLocalFunctions()
 
 
 
@@ -109,7 +109,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GLookupEntry]**](GLookupEntry.md)
 
 ### Authorization
 
@@ -122,7 +122,7 @@ No authorization required
 
 <a name="getAllLocalFunctionsTree"></a>
 # **getAllLocalFunctionsTree**
-> Object getAllLocalFunctionsTree(opts)
+> [ToolCategoriesTree] getAllLocalFunctionsTree(opts)
 
 
 
@@ -132,7 +132,7 @@ import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.FunctionsLookupControllerApi();
 let opts = { 
-  'ragContextFunctions': null // Object | 
+  'ragContextFunctions': true // Boolean | 
 };
 apiInstance.getAllLocalFunctionsTree(opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -146,11 +146,11 @@ apiInstance.getAllLocalFunctionsTree(opts).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ragContextFunctions** | [**Object**](.md)|  | [optional] 
+ **ragContextFunctions** | **Boolean**|  | [optional] 
 
 ### Return type
 
-**Object**
+[**[ToolCategoriesTree]**](ToolCategoriesTree.md)
 
 ### Authorization
 

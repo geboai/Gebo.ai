@@ -62,7 +62,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GenericOpenAiapiEmbeddingModelsConfigurationControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findGenericOpenAIAPIEmbeddingModelConfigByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -76,7 +76,7 @@ apiInstance.findGenericOpenAIAPIEmbeddingModelConfigByCode(code).then((data) => 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -133,7 +133,7 @@ No authorization required
 
 <a name="getGenericOpenAIEmbeddingModelTypes"></a>
 # **getGenericOpenAIEmbeddingModelTypes**
-> Object getGenericOpenAIEmbeddingModelTypes()
+> [GenericOpenAIEmbeddingModelTypeConfig] getGenericOpenAIEmbeddingModelTypes()
 
 
 
@@ -155,7 +155,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GenericOpenAIEmbeddingModelTypeConfig]**](GenericOpenAIEmbeddingModelTypeConfig.md)
 
 ### Authorization
 

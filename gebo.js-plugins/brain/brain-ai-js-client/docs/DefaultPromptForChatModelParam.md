@@ -4,4 +4,4 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **chatModelConfig** | [**GBaseChatModelConfig**](GBaseChatModelConfig.md) |  | 
-**ragPrompt** | **Object** |  | 
+**ragPrompt** | **Boolean** |  | 

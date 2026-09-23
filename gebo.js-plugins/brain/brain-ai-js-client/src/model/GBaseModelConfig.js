@@ -40,76 +40,76 @@ export default class GBaseModelConfig {
     if (data) {
       obj = obj || new GBaseModelConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('modelTypeCode'))
-        obj.modelTypeCode = ApiClient.convertToType(data['modelTypeCode'], Object);
+        obj.modelTypeCode = ApiClient.convertToType(data['modelTypeCode'], 'String');
       if (data.hasOwnProperty('defaultModel'))
-        obj.defaultModel = ApiClient.convertToType(data['defaultModel'], Object);
+        obj.defaultModel = ApiClient.convertToType(data['defaultModel'], 'Boolean');
       if (data.hasOwnProperty('apiSecretCode'))
-        obj.apiSecretCode = ApiClient.convertToType(data['apiSecretCode'], Object);
+        obj.apiSecretCode = ApiClient.convertToType(data['apiSecretCode'], 'String');
       if (data.hasOwnProperty('choosedModel'))
         obj.choosedModel = GBaseModelChoice.constructFromObject(data['choosedModel']);
       if (data.hasOwnProperty('baseUrl'))
-        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], Object);
+        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], 'String');
       if (data.hasOwnProperty('contextLength'))
-        obj.contextLength = ApiClient.convertToType(data['contextLength'], Object);
+        obj.contextLength = ApiClient.convertToType(data['contextLength'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GBaseModelConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GBaseModelConfig.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GBaseModelConfig.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GBaseModelConfig.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GBaseModelConfig.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GBaseModelConfig.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} modelTypeCode
+ * @member {String} modelTypeCode
  */
 GBaseModelConfig.prototype.modelTypeCode = undefined;
 
 /**
- * @member {Object} defaultModel
+ * @member {Boolean} defaultModel
  */
 GBaseModelConfig.prototype.defaultModel = undefined;
 
 /**
- * @member {Object} apiSecretCode
+ * @member {String} apiSecretCode
  */
 GBaseModelConfig.prototype.apiSecretCode = undefined;
 
@@ -119,12 +119,12 @@ GBaseModelConfig.prototype.apiSecretCode = undefined;
 GBaseModelConfig.prototype.choosedModel = undefined;
 
 /**
- * @member {Object} baseUrl
+ * @member {String} baseUrl
  */
 GBaseModelConfig.prototype.baseUrl = undefined;
 
 /**
- * @member {Object} contextLength
+ * @member {Number} contextLength
  */
 GBaseModelConfig.prototype.contextLength = undefined;
 

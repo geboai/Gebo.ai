@@ -40,11 +40,11 @@ export default class VFolderInfo {
     if (data) {
       obj = obj || new VFolderInfo();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('parentFolderCode'))
-        obj.parentFolderCode = ApiClient.convertToType(data['parentFolderCode'], Object);
+        obj.parentFolderCode = ApiClient.convertToType(data['parentFolderCode'], 'String');
       if (data.hasOwnProperty('endpointRef'))
         obj.endpointRef = GObjectRefGProjectEndpoint.constructFromObject(data['endpointRef']);
     }
@@ -53,17 +53,17 @@ export default class VFolderInfo {
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 VFolderInfo.prototype.code = undefined;
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 VFolderInfo.prototype.name = undefined;
 
 /**
- * @member {Object} parentFolderCode
+ * @member {String} parentFolderCode
  */
 VFolderInfo.prototype.parentFolderCode = undefined;
 

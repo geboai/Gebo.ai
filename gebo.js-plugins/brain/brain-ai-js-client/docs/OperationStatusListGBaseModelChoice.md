@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**result** | **Object** |  | [optional] 
-**messages** | **Object** |  | [optional] 
-**hasErrorMessages** | **Object** |  | [optional] 
-**hasWarnMessages** | **Object** |  | [optional] 
+**result** | [**[GBaseModelChoice]**](GBaseModelChoice.md) |  | [optional] 
+**messages** | [**[GUserMessage]**](GUserMessage.md) |  | [optional] 
+**hasErrorMessages** | **Boolean** |  | [optional] 
+**hasWarnMessages** | **Boolean** |  | [optional] 

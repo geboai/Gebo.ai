@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from "../ApiClient";
+import ConfigurationEntryGBaseRankerModelConfig from '../model/ConfigurationEntryGBaseRankerModelConfig';
+import GRankerModelType from '../model/GRankerModelType';
 
 /**
 * RankerModelsController service.
@@ -36,7 +38,7 @@ export default class RankerModelsControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GRankerModelType>} and HTTP response
      */
     getRankerModelTypesWithHttpInfo() {
       
@@ -58,7 +60,7 @@ export default class RankerModelsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GRankerModelType];
 
       return this.apiClient.callApi(
         '/api/admin/RankerModelsController/getRankerModelTypes', 'GET',
@@ -68,7 +70,7 @@ export default class RankerModelsControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GRankerModelType>}
      */
     getRankerModelTypes() {
       return this.getRankerModelTypesWithHttpInfo()
@@ -80,8 +82,8 @@ export default class RankerModelsControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ConfigurationEntryGBaseRankerModelConfig>} and HTTP response
      */
     getRuntimeConfiguredRankerModelsWithHttpInfo(opts) {
       opts = opts || {};
@@ -103,7 +105,7 @@ export default class RankerModelsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [ConfigurationEntryGBaseRankerModelConfig];
 
       return this.apiClient.callApi(
         '/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels', 'GET',
@@ -114,8 +116,8 @@ export default class RankerModelsControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ConfigurationEntryGBaseRankerModelConfig>}
      */
     getRuntimeConfiguredRankerModels(opts) {
       return this.getRuntimeConfiguredRankerModelsWithHttpInfo(opts)

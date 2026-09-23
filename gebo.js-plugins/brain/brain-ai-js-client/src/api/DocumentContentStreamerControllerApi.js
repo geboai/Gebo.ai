@@ -39,7 +39,7 @@ export default class DocumentContentStreamerControllerApi {
 
     /**
      * @param {module:model/GDocumentReferenceStreamRequest} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link 'Blob'} and HTTP response
      */
     streamDocumentReferenceWithHttpInfo(body) {
       
@@ -65,7 +65,7 @@ export default class DocumentContentStreamerControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/octet-stream'];
-      let returnType = Object;
+      let returnType = 'Blob';
 
       return this.apiClient.callApi(
         '/api/users/DocumentContentStreamerController/streamDocumentReference', 'POST',
@@ -76,7 +76,7 @@ export default class DocumentContentStreamerControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link 'Blob'}
      */
     streamDocumentReference(body) {
       return this.streamDocumentReferenceWithHttpInfo(body)
@@ -88,7 +88,7 @@ export default class DocumentContentStreamerControllerApi {
 
     /**
      * @param {module:model/SearchResultStreamRequest} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link 'Blob'} and HTTP response
      */
     streamSearchResultWithHttpInfo(body) {
       
@@ -114,7 +114,7 @@ export default class DocumentContentStreamerControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/octet-stream'];
-      let returnType = Object;
+      let returnType = 'Blob';
 
       return this.apiClient.callApi(
         '/api/users/DocumentContentStreamerController/streamSearchResult', 'POST',
@@ -125,7 +125,7 @@ export default class DocumentContentStreamerControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link 'Blob'}
      */
     streamSearchResult(body) {
       return this.streamSearchResultWithHttpInfo(body)

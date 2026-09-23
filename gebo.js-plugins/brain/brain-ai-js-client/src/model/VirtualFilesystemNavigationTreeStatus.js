@@ -14,6 +14,7 @@
  */
 import ApiClient from '../ApiClient';
 import GVirtualFilesystemRoot from './GVirtualFilesystemRoot';
+import VirtualFilesystemNavigationNode from './VirtualFilesystemNavigationNode';
 
 /**
  * The VirtualFilesystemNavigationTreeStatus model module.
@@ -42,11 +43,11 @@ export default class VirtualFilesystemNavigationTreeStatus {
       if (data.hasOwnProperty('root'))
         obj.root = GVirtualFilesystemRoot.constructFromObject(data['root']);
       if (data.hasOwnProperty('selected'))
-        obj.selected = ApiClient.convertToType(data['selected'], Object);
+        obj.selected = ApiClient.convertToType(data['selected'], 'Boolean');
       if (data.hasOwnProperty('opened'))
-        obj.opened = ApiClient.convertToType(data['opened'], Object);
+        obj.opened = ApiClient.convertToType(data['opened'], 'Boolean');
       if (data.hasOwnProperty('childs'))
-        obj.childs = ApiClient.convertToType(data['childs'], Object);
+        obj.childs = ApiClient.convertToType(data['childs'], [VirtualFilesystemNavigationNode]);
     }
     return obj;
   }
@@ -58,17 +59,17 @@ export default class VirtualFilesystemNavigationTreeStatus {
 VirtualFilesystemNavigationTreeStatus.prototype.root = undefined;
 
 /**
- * @member {Object} selected
+ * @member {Boolean} selected
  */
 VirtualFilesystemNavigationTreeStatus.prototype.selected = undefined;
 
 /**
- * @member {Object} opened
+ * @member {Boolean} opened
  */
 VirtualFilesystemNavigationTreeStatus.prototype.opened = undefined;
 
 /**
- * @member {Object} childs
+ * @member {Array.<module:model/VirtualFilesystemNavigationNode>} childs
  */
 VirtualFilesystemNavigationTreeStatus.prototype.childs = undefined;
 

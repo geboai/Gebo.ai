@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GBaseModelConfig from './GBaseModelConfig';
+import LLMUnresolvedModel from './LLMUnresolvedModel';
 
 /**
  * The LLMSModelsCreationResult model module.
@@ -39,21 +41,21 @@ export default class LLMSModelsCreationResult {
     if (data) {
       obj = obj || new LLMSModelsCreationResult();
       if (data.hasOwnProperty('created'))
-        obj.created = ApiClient.convertToType(data['created'], Object);
+        obj.created = ApiClient.convertToType(data['created'], [GBaseModelConfig]);
       if (data.hasOwnProperty('unresolved'))
-        obj.unresolved = ApiClient.convertToType(data['unresolved'], Object);
+        obj.unresolved = ApiClient.convertToType(data['unresolved'], [LLMUnresolvedModel]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} created
+ * @member {Array.<module:model/GBaseModelConfig>} created
  */
 LLMSModelsCreationResult.prototype.created = undefined;
 
 /**
- * @member {Object} unresolved
+ * @member {Array.<module:model/LLMUnresolvedModel>} unresolved
  */
 LLMSModelsCreationResult.prototype.unresolved = undefined;
 

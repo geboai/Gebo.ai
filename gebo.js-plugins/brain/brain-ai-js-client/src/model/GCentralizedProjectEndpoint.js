@@ -13,7 +13,9 @@
  *
  */
 import ApiClient from '../ApiClient';
+import BuildSystemRef from './BuildSystemRef';
 import GObjectRefGProjectEndpoint from './GObjectRefGProjectEndpoint';
+import ReindexingProgrammedTable from './ReindexingProgrammedTable';
 
 /**
  * The GCentralizedProjectEndpoint model module.
@@ -40,41 +42,43 @@ export default class GCentralizedProjectEndpoint {
     if (data) {
       obj = obj || new GCentralizedProjectEndpoint();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('parentProjectCode'))
-        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], Object);
+        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], 'String');
       if (data.hasOwnProperty('readonly'))
-        obj.readonly = ApiClient.convertToType(data['readonly'], Object);
+        obj.readonly = ApiClient.convertToType(data['readonly'], 'Boolean');
       if (data.hasOwnProperty('published'))
-        obj.published = ApiClient.convertToType(data['published'], Object);
+        obj.published = ApiClient.convertToType(data['published'], 'Boolean');
       if (data.hasOwnProperty('synchPeriodically'))
-        obj.synchPeriodically = ApiClient.convertToType(data['synchPeriodically'], Object);
+        obj.synchPeriodically = ApiClient.convertToType(data['synchPeriodically'], 'Boolean');
       if (data.hasOwnProperty('openZips'))
-        obj.openZips = ApiClient.convertToType(data['openZips'], Object);
+        obj.openZips = ApiClient.convertToType(data['openZips'], 'Boolean');
       if (data.hasOwnProperty('buildSystemsRefs'))
-        obj.buildSystemsRefs = ApiClient.convertToType(data['buildSystemsRefs'], Object);
+        obj.buildSystemsRefs = ApiClient.convertToType(data['buildSystemsRefs'], [BuildSystemRef]);
       if (data.hasOwnProperty('catalogingCriteria'))
-        obj.catalogingCriteria = ApiClient.convertToType(data['catalogingCriteria'], Object);
+        obj.catalogingCriteria = ApiClient.convertToType(data['catalogingCriteria'], 'String');
       if (data.hasOwnProperty('programmedTables'))
-        obj.programmedTables = ApiClient.convertToType(data['programmedTables'], Object);
+        obj.programmedTables = ApiClient.convertToType(data['programmedTables'], [ReindexingProgrammedTable]);
       if (data.hasOwnProperty('vectorizeOnlyExtensions'))
-        obj.vectorizeOnlyExtensions = ApiClient.convertToType(data['vectorizeOnlyExtensions'], Object);
+        obj.vectorizeOnlyExtensions = ApiClient.convertToType(data['vectorizeOnlyExtensions'], ['String']);
       if (data.hasOwnProperty('synchroStrategy'))
-        obj.synchroStrategy = ApiClient.convertToType(data['synchroStrategy'], Object);
+        obj.synchroStrategy = ApiClient.convertToType(data['synchroStrategy'], 'String');
       if (data.hasOwnProperty('objectSpaceType'))
-        obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], Object);
+        obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], 'String');
       if (data.hasOwnProperty('aclAliases'))
-        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], Object);
+        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
+      if (data.hasOwnProperty('personalData'))
+        obj.personalData = ApiClient.convertToType(data['personalData'], 'Boolean');
       if (data.hasOwnProperty('remoteProjectReference'))
         obj.remoteProjectReference = GObjectRefGProjectEndpoint.constructFromObject(data['remoteProjectReference']);
     }
@@ -83,94 +87,135 @@ export default class GCentralizedProjectEndpoint {
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GCentralizedProjectEndpoint.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GCentralizedProjectEndpoint.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GCentralizedProjectEndpoint.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GCentralizedProjectEndpoint.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GCentralizedProjectEndpoint.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GCentralizedProjectEndpoint.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} parentProjectCode
+ * @member {String} parentProjectCode
  */
 GCentralizedProjectEndpoint.prototype.parentProjectCode = undefined;
 
 /**
- * @member {Object} readonly
+ * @member {Boolean} readonly
  */
 GCentralizedProjectEndpoint.prototype.readonly = undefined;
 
 /**
- * @member {Object} published
+ * @member {Boolean} published
  */
 GCentralizedProjectEndpoint.prototype.published = undefined;
 
 /**
- * @member {Object} synchPeriodically
+ * @member {Boolean} synchPeriodically
  */
 GCentralizedProjectEndpoint.prototype.synchPeriodically = undefined;
 
 /**
- * @member {Object} openZips
+ * @member {Boolean} openZips
  */
 GCentralizedProjectEndpoint.prototype.openZips = undefined;
 
 /**
- * @member {Object} buildSystemsRefs
+ * @member {Array.<module:model/BuildSystemRef>} buildSystemsRefs
  */
 GCentralizedProjectEndpoint.prototype.buildSystemsRefs = undefined;
 
 /**
- * @member {Object} catalogingCriteria
+ * @member {String} catalogingCriteria
  */
 GCentralizedProjectEndpoint.prototype.catalogingCriteria = undefined;
 
 /**
- * @member {Object} programmedTables
+ * @member {Array.<module:model/ReindexingProgrammedTable>} programmedTables
  */
 GCentralizedProjectEndpoint.prototype.programmedTables = undefined;
 
 /**
- * @member {Object} vectorizeOnlyExtensions
+ * @member {Array.<String>} vectorizeOnlyExtensions
  */
 GCentralizedProjectEndpoint.prototype.vectorizeOnlyExtensions = undefined;
 
 /**
- * @member {Object} synchroStrategy
+ * Allowed values for the <code>synchroStrategy</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GCentralizedProjectEndpoint.SynchroStrategyEnum = {
+  /**
+   * value: "SIZE_AND_TIMESTAMP_AND_HASH_CHECK"
+   * @const
+   */
+  SIZE_AND_TIMESTAMP_AND_HASH_CHECK: "SIZE_AND_TIMESTAMP_AND_HASH_CHECK",
+
+  /**
+   * value: "HASH_CHECK"
+   * @const
+   */
+  HASH_CHECK: "HASH_CHECK"
+};
+/**
+ * @member {module:model/GCentralizedProjectEndpoint.SynchroStrategyEnum} synchroStrategy
  */
 GCentralizedProjectEndpoint.prototype.synchroStrategy = undefined;
 
 /**
- * @member {Object} objectSpaceType
+ * Allowed values for the <code>objectSpaceType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GCentralizedProjectEndpoint.ObjectSpaceTypeEnum = {
+  /**
+   * value: "COMPANY"
+   * @const
+   */
+  COMPANY: "COMPANY",
+
+  /**
+   * value: "USERSPACE"
+   * @const
+   */
+  USERSPACE: "USERSPACE"
+};
+/**
+ * @member {module:model/GCentralizedProjectEndpoint.ObjectSpaceTypeEnum} objectSpaceType
  */
 GCentralizedProjectEndpoint.prototype.objectSpaceType = undefined;
 
 /**
- * @member {Object} aclAliases
+ * @member {Array.<Number>} aclAliases
  */
 GCentralizedProjectEndpoint.prototype.aclAliases = undefined;
+
+/**
+ * @member {Boolean} personalData
+ */
+GCentralizedProjectEndpoint.prototype.personalData = undefined;
 
 /**
  * @member {module:model/GObjectRefGProjectEndpoint} remoteProjectReference

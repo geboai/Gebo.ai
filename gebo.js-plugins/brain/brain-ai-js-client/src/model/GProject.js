@@ -39,119 +39,144 @@ export default class GProject {
     if (data) {
       obj = obj || new GProject();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('creationDate'))
-        obj.creationDate = ApiClient.convertToType(data['creationDate'], Object);
+        obj.creationDate = ApiClient.convertToType(data['creationDate'], 'Date');
       if (data.hasOwnProperty('modificationDate'))
-        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], Object);
+        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], 'Date');
       if (data.hasOwnProperty('version'))
-        obj.version = ApiClient.convertToType(data['version'], Object);
+        obj.version = ApiClient.convertToType(data['version'], 'String');
       if (data.hasOwnProperty('accessibleGroups'))
-        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], Object);
+        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], ['String']);
       if (data.hasOwnProperty('accessibleUsers'))
-        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], Object);
+        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], ['String']);
       if (data.hasOwnProperty('accessibleToAll'))
-        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], Object);
+        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], 'Boolean');
       if (data.hasOwnProperty('rootKnowledgeBaseCode'))
-        obj.rootKnowledgeBaseCode = ApiClient.convertToType(data['rootKnowledgeBaseCode'], Object);
+        obj.rootKnowledgeBaseCode = ApiClient.convertToType(data['rootKnowledgeBaseCode'], 'String');
       if (data.hasOwnProperty('objectSpaceType'))
-        obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], Object);
+        obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], 'String');
       if (data.hasOwnProperty('aclAliases'))
-        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], Object);
+        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
       if (data.hasOwnProperty('parentProjectCode'))
-        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], Object);
+        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], 'String');
+      if (data.hasOwnProperty('readonly'))
+        obj.readonly = ApiClient.convertToType(data['readonly'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GProject.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GProject.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GProject.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GProject.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GProject.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GProject.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} creationDate
+ * @member {Date} creationDate
  */
 GProject.prototype.creationDate = undefined;
 
 /**
- * @member {Object} modificationDate
+ * @member {Date} modificationDate
  */
 GProject.prototype.modificationDate = undefined;
 
 /**
- * @member {Object} version
+ * @member {String} version
  */
 GProject.prototype.version = undefined;
 
 /**
- * @member {Object} accessibleGroups
+ * @member {Array.<String>} accessibleGroups
  */
 GProject.prototype.accessibleGroups = undefined;
 
 /**
- * @member {Object} accessibleUsers
+ * @member {Array.<String>} accessibleUsers
  */
 GProject.prototype.accessibleUsers = undefined;
 
 /**
- * @member {Object} accessibleToAll
+ * @member {Boolean} accessibleToAll
  */
 GProject.prototype.accessibleToAll = undefined;
 
 /**
- * @member {Object} rootKnowledgeBaseCode
+ * @member {String} rootKnowledgeBaseCode
  */
 GProject.prototype.rootKnowledgeBaseCode = undefined;
 
 /**
- * @member {Object} objectSpaceType
+ * Allowed values for the <code>objectSpaceType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GProject.ObjectSpaceTypeEnum = {
+  /**
+   * value: "COMPANY"
+   * @const
+   */
+  COMPANY: "COMPANY",
+
+  /**
+   * value: "USERSPACE"
+   * @const
+   */
+  USERSPACE: "USERSPACE"
+};
+/**
+ * @member {module:model/GProject.ObjectSpaceTypeEnum} objectSpaceType
  */
 GProject.prototype.objectSpaceType = undefined;
 
 /**
- * @member {Object} aclAliases
+ * @member {Array.<Number>} aclAliases
  */
 GProject.prototype.aclAliases = undefined;
 
 /**
- * @member {Object} parentProjectCode
+ * @member {String} parentProjectCode
  */
 GProject.prototype.parentProjectCode = undefined;
+
+/**
+ * @member {Boolean} readonly
+ */
+GProject.prototype.readonly = undefined;
 

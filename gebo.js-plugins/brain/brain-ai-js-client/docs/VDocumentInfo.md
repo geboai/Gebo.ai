@@ -3,11 +3,11 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  | [optional] 
-**name** | **Object** |  | [optional] 
-**parentFolderCode** | **Object** |  | [optional] 
+**code** | **String** |  | [optional] 
+**name** | **String** |  | [optional] 
+**parentFolderCode** | **String** |  | [optional] 
 **endpointRef** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  | [optional] 
-**creationDate** | **Object** |  | [optional] 
-**modificationDate** | **Object** |  | [optional] 
-**extension** | **Object** |  | [optional] 
-**contentType** | **Object** |  | [optional] 
+**creationDate** | **Date** |  | [optional] 
+**modificationDate** | **Date** |  | [optional] 
+**extension** | **String** |  | [optional] 
+**contentType** | **String** |  | [optional] 

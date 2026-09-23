@@ -38,99 +38,99 @@ export default class DocumentReferenceView {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new DocumentReferenceView();
-      if (data.hasOwnProperty('contentType'))
-        obj.contentType = ApiClient.convertToType(data['contentType'], Object);
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('extension'))
-        obj.extension = ApiClient.convertToType(data['extension'], Object);
-      if (data.hasOwnProperty('modificationDate'))
-        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], Object);
-      if (data.hasOwnProperty('rootKnowledgebaseCode'))
-        obj.rootKnowledgebaseCode = ApiClient.convertToType(data['rootKnowledgebaseCode'], Object);
-      if (data.hasOwnProperty('parentProjectCode'))
-        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], Object);
-      if (data.hasOwnProperty('parentVirtualFolderCode'))
-        obj.parentVirtualFolderCode = ApiClient.convertToType(data['parentVirtualFolderCode'], Object);
-      if (data.hasOwnProperty('relativePath'))
-        obj.relativePath = ApiClient.convertToType(data['relativePath'], Object);
-      if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
-      if (data.hasOwnProperty('creationDate'))
-        obj.creationDate = ApiClient.convertToType(data['creationDate'], Object);
-      if (data.hasOwnProperty('messagingModuleId'))
-        obj.messagingModuleId = ApiClient.convertToType(data['messagingModuleId'], Object);
+        obj.extension = ApiClient.convertToType(data['extension'], 'String');
+      if (data.hasOwnProperty('contentType'))
+        obj.contentType = ApiClient.convertToType(data['contentType'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
+      if (data.hasOwnProperty('code'))
+        obj.code = ApiClient.convertToType(data['code'], 'String');
+      if (data.hasOwnProperty('messagingModuleId'))
+        obj.messagingModuleId = ApiClient.convertToType(data['messagingModuleId'], 'String');
+      if (data.hasOwnProperty('rootKnowledgebaseCode'))
+        obj.rootKnowledgebaseCode = ApiClient.convertToType(data['rootKnowledgebaseCode'], 'String');
+      if (data.hasOwnProperty('parentProjectCode'))
+        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], 'String');
+      if (data.hasOwnProperty('modificationDate'))
+        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], 'Date');
+      if (data.hasOwnProperty('relativePath'))
+        obj.relativePath = ApiClient.convertToType(data['relativePath'], 'String');
+      if (data.hasOwnProperty('parentVirtualFolderCode'))
+        obj.parentVirtualFolderCode = ApiClient.convertToType(data['parentVirtualFolderCode'], 'String');
       if (data.hasOwnProperty('deleted'))
-        obj.deleted = ApiClient.convertToType(data['deleted'], Object);
+        obj.deleted = ApiClient.convertToType(data['deleted'], 'Boolean');
+      if (data.hasOwnProperty('creationDate'))
+        obj.creationDate = ApiClient.convertToType(data['creationDate'], 'Date');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} contentType
- */
-DocumentReferenceView.prototype.contentType = undefined;
-
-/**
- * @member {Object} name
+ * @member {String} name
  */
 DocumentReferenceView.prototype.name = undefined;
 
 /**
- * @member {Object} extension
+ * @member {String} extension
  */
 DocumentReferenceView.prototype.extension = undefined;
 
 /**
- * @member {Object} modificationDate
+ * @member {String} contentType
  */
-DocumentReferenceView.prototype.modificationDate = undefined;
+DocumentReferenceView.prototype.contentType = undefined;
 
 /**
- * @member {Object} rootKnowledgebaseCode
- */
-DocumentReferenceView.prototype.rootKnowledgebaseCode = undefined;
-
-/**
- * @member {Object} parentProjectCode
- */
-DocumentReferenceView.prototype.parentProjectCode = undefined;
-
-/**
- * @member {Object} parentVirtualFolderCode
- */
-DocumentReferenceView.prototype.parentVirtualFolderCode = undefined;
-
-/**
- * @member {Object} relativePath
- */
-DocumentReferenceView.prototype.relativePath = undefined;
-
-/**
- * @member {Object} code
- */
-DocumentReferenceView.prototype.code = undefined;
-
-/**
- * @member {Object} creationDate
- */
-DocumentReferenceView.prototype.creationDate = undefined;
-
-/**
- * @member {Object} messagingModuleId
- */
-DocumentReferenceView.prototype.messagingModuleId = undefined;
-
-/**
- * @member {Object} description
+ * @member {String} description
  */
 DocumentReferenceView.prototype.description = undefined;
 
 /**
- * @member {Object} deleted
+ * @member {String} code
+ */
+DocumentReferenceView.prototype.code = undefined;
+
+/**
+ * @member {String} messagingModuleId
+ */
+DocumentReferenceView.prototype.messagingModuleId = undefined;
+
+/**
+ * @member {String} rootKnowledgebaseCode
+ */
+DocumentReferenceView.prototype.rootKnowledgebaseCode = undefined;
+
+/**
+ * @member {String} parentProjectCode
+ */
+DocumentReferenceView.prototype.parentProjectCode = undefined;
+
+/**
+ * @member {Date} modificationDate
+ */
+DocumentReferenceView.prototype.modificationDate = undefined;
+
+/**
+ * @member {String} relativePath
+ */
+DocumentReferenceView.prototype.relativePath = undefined;
+
+/**
+ * @member {String} parentVirtualFolderCode
+ */
+DocumentReferenceView.prototype.parentVirtualFolderCode = undefined;
+
+/**
+ * @member {Boolean} deleted
  */
 DocumentReferenceView.prototype.deleted = undefined;
+
+/**
+ * @member {Date} creationDate
+ */
+DocumentReferenceView.prototype.creationDate = undefined;
 

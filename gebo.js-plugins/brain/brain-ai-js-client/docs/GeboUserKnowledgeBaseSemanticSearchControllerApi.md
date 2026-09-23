@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 <a name="semanticSearch"></a>
 # **semanticSearch**
-> Object semanticSearch(body)
+> [&#x27;String&#x27;] semanticSearch(body)
 
 
 
@@ -35,7 +35,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+**[&#x27;String&#x27;]**
 
 ### Authorization
 

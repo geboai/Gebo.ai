@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import SpecialFile from './SpecialFile';
 
 /**
  * The IngestionFileType model module.
@@ -39,91 +40,91 @@ export default class IngestionFileType {
     if (data) {
       obj = obj || new IngestionFileType();
       if (data.hasOwnProperty('fileTypeId'))
-        obj.fileTypeId = ApiClient.convertToType(data['fileTypeId'], Object);
+        obj.fileTypeId = ApiClient.convertToType(data['fileTypeId'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('treatAs'))
-        obj.treatAs = ApiClient.convertToType(data['treatAs'], Object);
+        obj.treatAs = ApiClient.convertToType(data['treatAs'], 'String');
       if (data.hasOwnProperty('uiViewable'))
-        obj.uiViewable = ApiClient.convertToType(data['uiViewable'], Object);
+        obj.uiViewable = ApiClient.convertToType(data['uiViewable'], 'Boolean');
       if (data.hasOwnProperty('programmingLanguage'))
-        obj.programmingLanguage = ApiClient.convertToType(data['programmingLanguage'], Object);
+        obj.programmingLanguage = ApiClient.convertToType(data['programmingLanguage'], 'String');
       if (data.hasOwnProperty('commentEscapeBegin'))
-        obj.commentEscapeBegin = ApiClient.convertToType(data['commentEscapeBegin'], Object);
+        obj.commentEscapeBegin = ApiClient.convertToType(data['commentEscapeBegin'], 'String');
       if (data.hasOwnProperty('commentEscapeEnd'))
-        obj.commentEscapeEnd = ApiClient.convertToType(data['commentEscapeEnd'], Object);
+        obj.commentEscapeEnd = ApiClient.convertToType(data['commentEscapeEnd'], 'String');
       if (data.hasOwnProperty('commentRowEscape'))
-        obj.commentRowEscape = ApiClient.convertToType(data['commentRowEscape'], Object);
+        obj.commentRowEscape = ApiClient.convertToType(data['commentRowEscape'], 'String');
       if (data.hasOwnProperty('enrichWithCatalogInfos'))
-        obj.enrichWithCatalogInfos = ApiClient.convertToType(data['enrichWithCatalogInfos'], Object);
+        obj.enrichWithCatalogInfos = ApiClient.convertToType(data['enrichWithCatalogInfos'], 'Boolean');
       if (data.hasOwnProperty('specialfiles'))
-        obj.specialfiles = ApiClient.convertToType(data['specialfiles'], Object);
+        obj.specialfiles = ApiClient.convertToType(data['specialfiles'], [SpecialFile]);
       if (data.hasOwnProperty('extensions'))
-        obj.extensions = ApiClient.convertToType(data['extensions'], Object);
+        obj.extensions = ApiClient.convertToType(data['extensions'], ['String']);
       if (data.hasOwnProperty('contentTypes'))
-        obj.contentTypes = ApiClient.convertToType(data['contentTypes'], Object);
+        obj.contentTypes = ApiClient.convertToType(data['contentTypes'], ['String']);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} fileTypeId
+ * @member {String} fileTypeId
  */
 IngestionFileType.prototype.fileTypeId = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 IngestionFileType.prototype.description = undefined;
 
 /**
- * @member {Object} treatAs
+ * @member {String} treatAs
  */
 IngestionFileType.prototype.treatAs = undefined;
 
 /**
- * @member {Object} uiViewable
+ * @member {Boolean} uiViewable
  */
 IngestionFileType.prototype.uiViewable = undefined;
 
 /**
- * @member {Object} programmingLanguage
+ * @member {String} programmingLanguage
  */
 IngestionFileType.prototype.programmingLanguage = undefined;
 
 /**
- * @member {Object} commentEscapeBegin
+ * @member {String} commentEscapeBegin
  */
 IngestionFileType.prototype.commentEscapeBegin = undefined;
 
 /**
- * @member {Object} commentEscapeEnd
+ * @member {String} commentEscapeEnd
  */
 IngestionFileType.prototype.commentEscapeEnd = undefined;
 
 /**
- * @member {Object} commentRowEscape
+ * @member {String} commentRowEscape
  */
 IngestionFileType.prototype.commentRowEscape = undefined;
 
 /**
- * @member {Object} enrichWithCatalogInfos
+ * @member {Boolean} enrichWithCatalogInfos
  */
 IngestionFileType.prototype.enrichWithCatalogInfos = undefined;
 
 /**
- * @member {Object} specialfiles
+ * @member {Array.<module:model/SpecialFile>} specialfiles
  */
 IngestionFileType.prototype.specialfiles = undefined;
 
 /**
- * @member {Object} extensions
+ * @member {Array.<String>} extensions
  */
 IngestionFileType.prototype.extensions = undefined;
 
 /**
- * @member {Object} contentTypes
+ * @member {Array.<String>} contentTypes
  */
 IngestionFileType.prototype.contentTypes = undefined;
 

@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import Order from './Order';
 
 /**
  * The DataPage model module.
@@ -39,35 +40,35 @@ export default class DataPage {
     if (data) {
       obj = obj || new DataPage();
       if (data.hasOwnProperty('page'))
-        obj.page = ApiClient.convertToType(data['page'], Object);
+        obj.page = ApiClient.convertToType(data['page'], 'Number');
       if (data.hasOwnProperty('pageSize'))
-        obj.pageSize = ApiClient.convertToType(data['pageSize'], Object);
+        obj.pageSize = ApiClient.convertToType(data['pageSize'], 'Number');
       if (data.hasOwnProperty('numrecords'))
-        obj.numrecords = ApiClient.convertToType(data['numrecords'], Object);
+        obj.numrecords = ApiClient.convertToType(data['numrecords'], 'Number');
       if (data.hasOwnProperty('sort'))
-        obj.sort = ApiClient.convertToType(data['sort'], Object);
+        obj.sort = ApiClient.convertToType(data['sort'], [Order]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} page
+ * @member {Number} page
  */
 DataPage.prototype.page = undefined;
 
 /**
- * @member {Object} pageSize
+ * @member {Number} pageSize
  */
 DataPage.prototype.pageSize = undefined;
 
 /**
- * @member {Object} numrecords
+ * @member {Number} numrecords
  */
 DataPage.prototype.numrecords = undefined;
 
 /**
- * @member {Object} sort
+ * @member {Array.<module:model/Order>} sort
  */
 DataPage.prototype.sort = undefined;
 

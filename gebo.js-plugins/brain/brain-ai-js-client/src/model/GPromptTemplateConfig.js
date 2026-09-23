@@ -24,11 +24,11 @@ export default class GPromptTemplateConfig {
    * Constructs a new <code>GPromptTemplateConfig</code>.
    * @alias module:model/GPromptTemplateConfig
    * @class
-   * @param userPromptTemplate {Object} 
-   * @param chatHistory {Object} 
-   * @param contextDocuments {Object} 
-   * @param toolsCalling {Object} 
-   * @param promptUse {Object} 
+   * @param userPromptTemplate {String} 
+   * @param chatHistory {module:model/GPromptTemplateConfig.ChatHistoryEnum} 
+   * @param contextDocuments {module:model/GPromptTemplateConfig.ContextDocumentsEnum} 
+   * @param toolsCalling {module:model/GPromptTemplateConfig.ToolsCallingEnum} 
+   * @param promptUse {String} 
    */
   constructor(userPromptTemplate, chatHistory, contextDocuments, toolsCalling, promptUse) {
     this.userPromptTemplate = userPromptTemplate;
@@ -49,126 +49,180 @@ export default class GPromptTemplateConfig {
     if (data) {
       obj = obj || new GPromptTemplateConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('systemPromptTemplate'))
-        obj.systemPromptTemplate = ApiClient.convertToType(data['systemPromptTemplate'], Object);
+        obj.systemPromptTemplate = ApiClient.convertToType(data['systemPromptTemplate'], 'String');
       if (data.hasOwnProperty('userPromptTemplate'))
-        obj.userPromptTemplate = ApiClient.convertToType(data['userPromptTemplate'], Object);
+        obj.userPromptTemplate = ApiClient.convertToType(data['userPromptTemplate'], 'String');
       if (data.hasOwnProperty('chatHistory'))
-        obj.chatHistory = ApiClient.convertToType(data['chatHistory'], Object);
+        obj.chatHistory = ApiClient.convertToType(data['chatHistory'], 'String');
       if (data.hasOwnProperty('contextDocuments'))
-        obj.contextDocuments = ApiClient.convertToType(data['contextDocuments'], Object);
+        obj.contextDocuments = ApiClient.convertToType(data['contextDocuments'], 'String');
       if (data.hasOwnProperty('toolsCalling'))
-        obj.toolsCalling = ApiClient.convertToType(data['toolsCalling'], Object);
+        obj.toolsCalling = ApiClient.convertToType(data['toolsCalling'], 'String');
       if (data.hasOwnProperty('langCode'))
-        obj.langCode = ApiClient.convertToType(data['langCode'], Object);
+        obj.langCode = ApiClient.convertToType(data['langCode'], 'String');
       if (data.hasOwnProperty('promptUse'))
-        obj.promptUse = ApiClient.convertToType(data['promptUse'], Object);
+        obj.promptUse = ApiClient.convertToType(data['promptUse'], 'String');
       if (data.hasOwnProperty('modelProvider'))
-        obj.modelProvider = ApiClient.convertToType(data['modelProvider'], Object);
+        obj.modelProvider = ApiClient.convertToType(data['modelProvider'], 'String');
       if (data.hasOwnProperty('modelCode'))
-        obj.modelCode = ApiClient.convertToType(data['modelCode'], Object);
+        obj.modelCode = ApiClient.convertToType(data['modelCode'], 'String');
       if (data.hasOwnProperty('promptCategory'))
-        obj.promptCategory = ApiClient.convertToType(data['promptCategory'], Object);
+        obj.promptCategory = ApiClient.convertToType(data['promptCategory'], 'String');
       if (data.hasOwnProperty('tokensSize'))
-        obj.tokensSize = ApiClient.convertToType(data['tokensSize'], Object);
+        obj.tokensSize = ApiClient.convertToType(data['tokensSize'], 'Number');
       if (data.hasOwnProperty('configDeclarated'))
-        obj.configDeclarated = ApiClient.convertToType(data['configDeclarated'], Object);
+        obj.configDeclarated = ApiClient.convertToType(data['configDeclarated'], 'Boolean');
       if (data.hasOwnProperty('agentPrompt'))
-        obj.agentPrompt = ApiClient.convertToType(data['agentPrompt'], Object);
+        obj.agentPrompt = ApiClient.convertToType(data['agentPrompt'], 'Boolean');
       if (data.hasOwnProperty('agentId'))
-        obj.agentId = ApiClient.convertToType(data['agentId'], Object);
+        obj.agentId = ApiClient.convertToType(data['agentId'], 'String');
       if (data.hasOwnProperty('placeholders'))
-        obj.placeholders = ApiClient.convertToType(data['placeholders'], Object);
+        obj.placeholders = ApiClient.convertToType(data['placeholders'], {'String': 'Boolean'});
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GPromptTemplateConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GPromptTemplateConfig.prototype.description = undefined;
 
 /**
- * @member {Object} systemPromptTemplate
+ * @member {String} systemPromptTemplate
  */
 GPromptTemplateConfig.prototype.systemPromptTemplate = undefined;
 
 /**
- * @member {Object} userPromptTemplate
+ * @member {String} userPromptTemplate
  */
 GPromptTemplateConfig.prototype.userPromptTemplate = undefined;
 
 /**
- * @member {Object} chatHistory
+ * Allowed values for the <code>chatHistory</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GPromptTemplateConfig.ChatHistoryEnum = {
+  /**
+   * value: "REQUIRED"
+   * @const
+   */
+  REQUIRED: "REQUIRED",
+
+  /**
+   * value: "NOT_REQUIRED"
+   * @const
+   */
+  NOT_REQUIRED: "NOT_REQUIRED"
+};
+/**
+ * @member {module:model/GPromptTemplateConfig.ChatHistoryEnum} chatHistory
  */
 GPromptTemplateConfig.prototype.chatHistory = undefined;
 
 /**
- * @member {Object} contextDocuments
+ * Allowed values for the <code>contextDocuments</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GPromptTemplateConfig.ContextDocumentsEnum = {
+  /**
+   * value: "REQUIRED"
+   * @const
+   */
+  REQUIRED: "REQUIRED",
+
+  /**
+   * value: "NOT_REQUIRED"
+   * @const
+   */
+  NOT_REQUIRED: "NOT_REQUIRED"
+};
+/**
+ * @member {module:model/GPromptTemplateConfig.ContextDocumentsEnum} contextDocuments
  */
 GPromptTemplateConfig.prototype.contextDocuments = undefined;
 
 /**
- * @member {Object} toolsCalling
+ * Allowed values for the <code>toolsCalling</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GPromptTemplateConfig.ToolsCallingEnum = {
+  /**
+   * value: "REQUIRED"
+   * @const
+   */
+  REQUIRED: "REQUIRED",
+
+  /**
+   * value: "NOT_REQUIRED"
+   * @const
+   */
+  NOT_REQUIRED: "NOT_REQUIRED"
+};
+/**
+ * @member {module:model/GPromptTemplateConfig.ToolsCallingEnum} toolsCalling
  */
 GPromptTemplateConfig.prototype.toolsCalling = undefined;
 
 /**
- * @member {Object} langCode
+ * @member {String} langCode
  */
 GPromptTemplateConfig.prototype.langCode = undefined;
 
 /**
- * @member {Object} promptUse
+ * @member {String} promptUse
  */
 GPromptTemplateConfig.prototype.promptUse = undefined;
 
 /**
- * @member {Object} modelProvider
+ * @member {String} modelProvider
  */
 GPromptTemplateConfig.prototype.modelProvider = undefined;
 
 /**
- * @member {Object} modelCode
+ * @member {String} modelCode
  */
 GPromptTemplateConfig.prototype.modelCode = undefined;
 
 /**
- * @member {Object} promptCategory
+ * @member {String} promptCategory
  */
 GPromptTemplateConfig.prototype.promptCategory = undefined;
 
 /**
- * @member {Object} tokensSize
+ * @member {Number} tokensSize
  */
 GPromptTemplateConfig.prototype.tokensSize = undefined;
 
 /**
- * @member {Object} configDeclarated
+ * @member {Boolean} configDeclarated
  */
 GPromptTemplateConfig.prototype.configDeclarated = undefined;
 
 /**
- * @member {Object} agentPrompt
+ * @member {Boolean} agentPrompt
  */
 GPromptTemplateConfig.prototype.agentPrompt = undefined;
 
 /**
- * @member {Object} agentId
+ * @member {String} agentId
  */
 GPromptTemplateConfig.prototype.agentId = undefined;
 
 /**
- * @member {Object} placeholders
+ * @member {Object.<String, Boolean>} placeholders
  */
 GPromptTemplateConfig.prototype.placeholders = undefined;
 

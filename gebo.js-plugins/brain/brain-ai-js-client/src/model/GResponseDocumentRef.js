@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import DocInternalRef from './DocInternalRef';
 import SearchResult from './SearchResult';
 
 /**
@@ -40,112 +41,130 @@ export default class GResponseDocumentRef {
     if (data) {
       obj = obj || new GResponseDocumentRef();
       if (data.hasOwnProperty('referenceType'))
-        obj.referenceType = ApiClient.convertToType(data['referenceType'], Object);
+        obj.referenceType = ApiClient.convertToType(data['referenceType'], 'String');
       if (data.hasOwnProperty('uuid'))
-        obj.uuid = ApiClient.convertToType(data['uuid'], Object);
+        obj.uuid = ApiClient.convertToType(data['uuid'], 'String');
       if (data.hasOwnProperty('documentCode'))
-        obj.documentCode = ApiClient.convertToType(data['documentCode'], Object);
+        obj.documentCode = ApiClient.convertToType(data['documentCode'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('contentType'))
-        obj.contentType = ApiClient.convertToType(data['contentType'], Object);
+        obj.contentType = ApiClient.convertToType(data['contentType'], 'String');
       if (data.hasOwnProperty('extension'))
-        obj.extension = ApiClient.convertToType(data['extension'], Object);
+        obj.extension = ApiClient.convertToType(data['extension'], 'String');
       if (data.hasOwnProperty('knowledgeBaseCode'))
-        obj.knowledgeBaseCode = ApiClient.convertToType(data['knowledgeBaseCode'], Object);
+        obj.knowledgeBaseCode = ApiClient.convertToType(data['knowledgeBaseCode'], 'String');
       if (data.hasOwnProperty('projectCode'))
-        obj.projectCode = ApiClient.convertToType(data['projectCode'], Object);
+        obj.projectCode = ApiClient.convertToType(data['projectCode'], 'String');
       if (data.hasOwnProperty('geboTreatAs'))
-        obj.geboTreatAs = ApiClient.convertToType(data['geboTreatAs'], Object);
+        obj.geboTreatAs = ApiClient.convertToType(data['geboTreatAs'], 'String');
       if (data.hasOwnProperty('geboFileTypeDescription'))
-        obj.geboFileTypeDescription = ApiClient.convertToType(data['geboFileTypeDescription'], Object);
+        obj.geboFileTypeDescription = ApiClient.convertToType(data['geboFileTypeDescription'], 'String');
       if (data.hasOwnProperty('geboFileTypeId'))
-        obj.geboFileTypeId = ApiClient.convertToType(data['geboFileTypeId'], Object);
+        obj.geboFileTypeId = ApiClient.convertToType(data['geboFileTypeId'], 'String');
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('knowledgeBaseDocument'))
-        obj.knowledgeBaseDocument = ApiClient.convertToType(data['knowledgeBaseDocument'], Object);
+        obj.knowledgeBaseDocument = ApiClient.convertToType(data['knowledgeBaseDocument'], 'Boolean');
       if (data.hasOwnProperty('nestedSearchResult'))
         obj.nestedSearchResult = SearchResult.constructFromObject(data['nestedSearchResult']);
       if (data.hasOwnProperty('loadPercentage'))
-        obj.loadPercentage = ApiClient.convertToType(data['loadPercentage'], Object);
+        obj.loadPercentage = ApiClient.convertToType(data['loadPercentage'], 'Number');
       if (data.hasOwnProperty('references'))
-        obj.references = ApiClient.convertToType(data['references'], Object);
+        obj.references = ApiClient.convertToType(data['references'], [DocInternalRef]);
       if (data.hasOwnProperty('ntokensRelevant'))
-        obj.ntokensRelevant = ApiClient.convertToType(data['ntokensRelevant'], Object);
-      if (data.hasOwnProperty('nbytesRelevant'))
-        obj.nbytesRelevant = ApiClient.convertToType(data['nbytesRelevant'], Object);
-      if (data.hasOwnProperty('shortCode'))
-        obj.shortCode = ApiClient.convertToType(data['shortCode'], Object);
+        obj.ntokensRelevant = ApiClient.convertToType(data['ntokensRelevant'], 'Number');
       if (data.hasOwnProperty('ntotalContentTokens'))
-        obj.ntotalContentTokens = ApiClient.convertToType(data['ntotalContentTokens'], Object);
+        obj.ntotalContentTokens = ApiClient.convertToType(data['ntotalContentTokens'], 'Number');
+      if (data.hasOwnProperty('nbytesRelevant'))
+        obj.nbytesRelevant = ApiClient.convertToType(data['nbytesRelevant'], 'Number');
+      if (data.hasOwnProperty('shortCode'))
+        obj.shortCode = ApiClient.convertToType(data['shortCode'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} referenceType
+ * Allowed values for the <code>referenceType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GResponseDocumentRef.ReferenceTypeEnum = {
+  /**
+   * value: "FILE"
+   * @const
+   */
+  FILE: "FILE",
+
+  /**
+   * value: "WEB"
+   * @const
+   */
+  WEB: "WEB"
+};
+/**
+ * @member {module:model/GResponseDocumentRef.ReferenceTypeEnum} referenceType
  */
 GResponseDocumentRef.prototype.referenceType = undefined;
 
 /**
- * @member {Object} uuid
+ * @member {String} uuid
  */
 GResponseDocumentRef.prototype.uuid = undefined;
 
 /**
- * @member {Object} documentCode
+ * @member {String} documentCode
  */
 GResponseDocumentRef.prototype.documentCode = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GResponseDocumentRef.prototype.description = undefined;
 
 /**
- * @member {Object} contentType
+ * @member {String} contentType
  */
 GResponseDocumentRef.prototype.contentType = undefined;
 
 /**
- * @member {Object} extension
+ * @member {String} extension
  */
 GResponseDocumentRef.prototype.extension = undefined;
 
 /**
- * @member {Object} knowledgeBaseCode
+ * @member {String} knowledgeBaseCode
  */
 GResponseDocumentRef.prototype.knowledgeBaseCode = undefined;
 
 /**
- * @member {Object} projectCode
+ * @member {String} projectCode
  */
 GResponseDocumentRef.prototype.projectCode = undefined;
 
 /**
- * @member {Object} geboTreatAs
+ * @member {String} geboTreatAs
  */
 GResponseDocumentRef.prototype.geboTreatAs = undefined;
 
 /**
- * @member {Object} geboFileTypeDescription
+ * @member {String} geboFileTypeDescription
  */
 GResponseDocumentRef.prototype.geboFileTypeDescription = undefined;
 
 /**
- * @member {Object} geboFileTypeId
+ * @member {String} geboFileTypeId
  */
 GResponseDocumentRef.prototype.geboFileTypeId = undefined;
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 GResponseDocumentRef.prototype.name = undefined;
 
 /**
- * @member {Object} knowledgeBaseDocument
+ * @member {Boolean} knowledgeBaseDocument
  */
 GResponseDocumentRef.prototype.knowledgeBaseDocument = undefined;
 
@@ -155,32 +174,32 @@ GResponseDocumentRef.prototype.knowledgeBaseDocument = undefined;
 GResponseDocumentRef.prototype.nestedSearchResult = undefined;
 
 /**
- * @member {Object} loadPercentage
+ * @member {Number} loadPercentage
  */
 GResponseDocumentRef.prototype.loadPercentage = undefined;
 
 /**
- * @member {Object} references
+ * @member {Array.<module:model/DocInternalRef>} references
  */
 GResponseDocumentRef.prototype.references = undefined;
 
 /**
- * @member {Object} ntokensRelevant
+ * @member {Number} ntokensRelevant
  */
 GResponseDocumentRef.prototype.ntokensRelevant = undefined;
 
 /**
- * @member {Object} nbytesRelevant
+ * @member {Number} ntotalContentTokens
+ */
+GResponseDocumentRef.prototype.ntotalContentTokens = undefined;
+
+/**
+ * @member {Number} nbytesRelevant
  */
 GResponseDocumentRef.prototype.nbytesRelevant = undefined;
 
 /**
- * @member {Object} shortCode
+ * @member {String} shortCode
  */
 GResponseDocumentRef.prototype.shortCode = undefined;
-
-/**
- * @member {Object} ntotalContentTokens
- */
-GResponseDocumentRef.prototype.ntotalContentTokens = undefined;
 

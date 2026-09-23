@@ -61,7 +61,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.OpenAiChatModelsConfigurationControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findOpenAIChatModelConfigByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -75,7 +75,7 @@ apiInstance.findOpenAIChatModelConfigByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 

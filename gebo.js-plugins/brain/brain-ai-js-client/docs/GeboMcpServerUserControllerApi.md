@@ -19,7 +19,7 @@ Method | HTTP request | Description
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboMcpServerUserControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findAccessibleMcpServerByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -33,7 +33,7 @@ apiInstance.findAccessibleMcpServerByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -50,7 +50,7 @@ No authorization required
 
 <a name="getUsersCanAccessMcpServersList"></a>
 # **getUsersCanAccessMcpServersList**
-> Object getUsersCanAccessMcpServersList()
+> &#x27;Boolean&#x27; getUsersCanAccessMcpServersList()
 
 
 
@@ -72,7 +72,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**&#x27;Boolean&#x27;**
 
 ### Authorization
 
@@ -85,7 +85,7 @@ No authorization required
 
 <a name="listAccessibleMcpServers"></a>
 # **listAccessibleMcpServers**
-> Object listAccessibleMcpServers()
+> [UserAccessibleMcpServerView] listAccessibleMcpServers()
 
 
 
@@ -107,7 +107,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[UserAccessibleMcpServerView]**](UserAccessibleMcpServerView.md)
 
 ### Authorization
 

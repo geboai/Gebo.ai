@@ -44,7 +44,7 @@ No authorization required
 
 <a name="getContentProcessRows"></a>
 # **getContentProcessRows**
-> Object getContentProcessRows()
+> [GeboContentProcessRow] getContentProcessRows()
 
 
 
@@ -66,7 +66,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GeboContentProcessRow]**](GeboContentProcessRow.md)
 
 ### Authorization
 

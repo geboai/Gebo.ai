@@ -19,10 +19,10 @@ Name | Type | Description | Notes
 **nestedSearchResult** | [**SearchResult**](SearchResult.md) |  | [optional] 
 **loadPercentage** | **Number** |  | [optional] 
 **references** | [**[DocInternalRef]**](DocInternalRef.md) |  | [optional] 
+**ntokensRelevant** | **Number** |  | [optional] 
 **ntotalContentTokens** | **Number** |  | [optional] 
 **nbytesRelevant** | **Number** |  | [optional] 
 **shortCode** | **String** |  | [optional] 
-**ntokensRelevant** | **Number** |  | [optional] 
 
 <a name="ReferenceTypeEnum"></a>
 ## Enum: ReferenceTypeEnum

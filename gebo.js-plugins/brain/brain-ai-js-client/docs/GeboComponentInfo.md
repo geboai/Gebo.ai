@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**messagingModuleId** | **Object** |  | 
-**messagingComponentId** | **Object** |  | 
-**completeComponentId** | **Object** |  | [optional] 
+**messagingModuleId** | **String** |  | 
+**messagingComponentId** | **String** |  | 
+**completeComponentId** | **String** |  | [optional] 

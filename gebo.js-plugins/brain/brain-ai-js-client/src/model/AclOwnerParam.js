@@ -24,9 +24,9 @@ export default class AclOwnerParam {
    * Constructs a new <code>AclOwnerParam</code>.
    * @alias module:model/AclOwnerParam
    * @class
-   * @param ownerType {Object} 
-   * @param ownerCode {Object} 
-   * @param grants {Object} 
+   * @param ownerType {module:model/AclOwnerParam.OwnerTypeEnum} 
+   * @param ownerCode {String} 
+   * @param grants {Array.<module:model/AclOwnerParam.GrantsEnum>} 
    */
   constructor(ownerType, ownerCode, grants) {
     this.ownerType = ownerType;
@@ -45,28 +45,70 @@ export default class AclOwnerParam {
     if (data) {
       obj = obj || new AclOwnerParam();
       if (data.hasOwnProperty('ownerType'))
-        obj.ownerType = ApiClient.convertToType(data['ownerType'], Object);
+        obj.ownerType = ApiClient.convertToType(data['ownerType'], 'String');
       if (data.hasOwnProperty('ownerCode'))
-        obj.ownerCode = ApiClient.convertToType(data['ownerCode'], Object);
+        obj.ownerCode = ApiClient.convertToType(data['ownerCode'], 'String');
       if (data.hasOwnProperty('grants'))
-        obj.grants = ApiClient.convertToType(data['grants'], Object);
+        obj.grants = ApiClient.convertToType(data['grants'], ['String']);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} ownerType
+ * Allowed values for the <code>ownerType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+AclOwnerParam.OwnerTypeEnum = {
+  /**
+   * value: "GROUP"
+   * @const
+   */
+  GROUP: "GROUP",
+
+  /**
+   * value: "USER"
+   * @const
+   */
+  USER: "USER"
+};
+/**
+ * @member {module:model/AclOwnerParam.OwnerTypeEnum} ownerType
  */
 AclOwnerParam.prototype.ownerType = undefined;
 
 /**
- * @member {Object} ownerCode
+ * @member {String} ownerCode
  */
 AclOwnerParam.prototype.ownerCode = undefined;
 
 /**
- * @member {Object} grants
+ * Allowed values for the <code>grants</code> property.
+ * @enum {String}
+ * @readonly
+ */
+AclOwnerParam.GrantsEnum = {
+  /**
+   * value: "READ"
+   * @const
+   */
+  READ: "READ",
+
+  /**
+   * value: "WRITE"
+   * @const
+   */
+  WRITE: "WRITE",
+
+  /**
+   * value: "EXECUTE"
+   * @const
+   */
+  EXECUTE: "EXECUTE"
+};
+/**
+ * @member {Array.<module:model/AclOwnerParam.GrantsEnum>} grants
  */
 AclOwnerParam.prototype.grants = undefined;
 

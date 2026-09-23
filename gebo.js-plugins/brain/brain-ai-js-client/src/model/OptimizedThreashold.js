@@ -39,28 +39,28 @@ export default class OptimizedThreashold {
     if (data) {
       obj = obj || new OptimizedThreashold();
       if (data.hasOwnProperty('optimizedThreashold'))
-        obj.optimizedThreashold = ApiClient.convertToType(data['optimizedThreashold'], Object);
+        obj.optimizedThreashold = ApiClient.convertToType(data['optimizedThreashold'], 'Number');
       if (data.hasOwnProperty('firstHopOptimizedThreashold'))
-        obj.firstHopOptimizedThreashold = ApiClient.convertToType(data['firstHopOptimizedThreashold'], Object);
+        obj.firstHopOptimizedThreashold = ApiClient.convertToType(data['firstHopOptimizedThreashold'], 'Number');
       if (data.hasOwnProperty('secondHopOptimizedThreashold'))
-        obj.secondHopOptimizedThreashold = ApiClient.convertToType(data['secondHopOptimizedThreashold'], Object);
+        obj.secondHopOptimizedThreashold = ApiClient.convertToType(data['secondHopOptimizedThreashold'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} optimizedThreashold
+ * @member {Number} optimizedThreashold
  */
 OptimizedThreashold.prototype.optimizedThreashold = undefined;
 
 /**
- * @member {Object} firstHopOptimizedThreashold
+ * @member {Number} firstHopOptimizedThreashold
  */
 OptimizedThreashold.prototype.firstHopOptimizedThreashold = undefined;
 
 /**
- * @member {Object} secondHopOptimizedThreashold
+ * @member {Number} secondHopOptimizedThreashold
  */
 OptimizedThreashold.prototype.secondHopOptimizedThreashold = undefined;
 

@@ -26,12 +26,12 @@ export default class GJobStatus {
    * Constructs a new <code>GJobStatus</code>.
    * @alias module:model/GJobStatus
    * @class
-   * @param jobType {Object} 
-   * @param workflowType {Object} 
-   * @param workflowId {Object} 
+   * @param jobType {module:model/GJobStatus.JobTypeEnum} 
+   * @param workflowType {String} 
+   * @param workflowId {String} 
    * @param projectEndpointReference {module:model/GObjectRefGProjectEndpoint} 
-   * @param knowledgeBaseCode {Object} 
-   * @param projectCode {Object} 
+   * @param knowledgeBaseCode {String} 
+   * @param projectCode {String} 
    */
   constructor(jobType, workflowType, workflowId, projectEndpointReference, knowledgeBaseCode, projectCode) {
     this.jobType = jobType;
@@ -53,41 +53,41 @@ export default class GJobStatus {
     if (data) {
       obj = obj || new GJobStatus();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('jobType'))
-        obj.jobType = ApiClient.convertToType(data['jobType'], Object);
+        obj.jobType = ApiClient.convertToType(data['jobType'], 'String');
       if (data.hasOwnProperty('workflowType'))
-        obj.workflowType = ApiClient.convertToType(data['workflowType'], Object);
+        obj.workflowType = ApiClient.convertToType(data['workflowType'], 'String');
       if (data.hasOwnProperty('workflowId'))
-        obj.workflowId = ApiClient.convertToType(data['workflowId'], Object);
+        obj.workflowId = ApiClient.convertToType(data['workflowId'], 'String');
       if (data.hasOwnProperty('processing'))
-        obj.processing = ApiClient.convertToType(data['processing'], Object);
+        obj.processing = ApiClient.convertToType(data['processing'], 'Boolean');
       if (data.hasOwnProperty('finished'))
-        obj.finished = ApiClient.convertToType(data['finished'], Object);
+        obj.finished = ApiClient.convertToType(data['finished'], 'Boolean');
       if (data.hasOwnProperty('error'))
-        obj.error = ApiClient.convertToType(data['error'], Object);
+        obj.error = ApiClient.convertToType(data['error'], 'Boolean');
       if (data.hasOwnProperty('startDateTime'))
-        obj.startDateTime = ApiClient.convertToType(data['startDateTime'], Object);
+        obj.startDateTime = ApiClient.convertToType(data['startDateTime'], 'Date');
       if (data.hasOwnProperty('endDateTime'))
-        obj.endDateTime = ApiClient.convertToType(data['endDateTime'], Object);
+        obj.endDateTime = ApiClient.convertToType(data['endDateTime'], 'Date');
       if (data.hasOwnProperty('projectEndpointReference'))
         obj.projectEndpointReference = GObjectRefGProjectEndpoint.constructFromObject(data['projectEndpointReference']);
       if (data.hasOwnProperty('knowledgeBaseCode'))
-        obj.knowledgeBaseCode = ApiClient.convertToType(data['knowledgeBaseCode'], Object);
+        obj.knowledgeBaseCode = ApiClient.convertToType(data['knowledgeBaseCode'], 'String');
       if (data.hasOwnProperty('projectCode'))
-        obj.projectCode = ApiClient.convertToType(data['projectCode'], Object);
+        obj.projectCode = ApiClient.convertToType(data['projectCode'], 'String');
       if (data.hasOwnProperty('parentJobCode'))
-        obj.parentJobCode = ApiClient.convertToType(data['parentJobCode'], Object);
+        obj.parentJobCode = ApiClient.convertToType(data['parentJobCode'], 'String');
       if (data.hasOwnProperty('workflowStatus'))
         obj.workflowStatus = WorkflowStatus.constructFromObject(data['workflowStatus']);
     }
@@ -96,72 +96,96 @@ export default class GJobStatus {
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GJobStatus.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GJobStatus.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GJobStatus.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GJobStatus.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GJobStatus.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GJobStatus.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} jobType
+ * Allowed values for the <code>jobType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GJobStatus.JobTypeEnum = {
+  /**
+   * value: "CONTENTS_READING"
+   * @const
+   */
+  CONTENTS_READING: "CONTENTS_READING",
+
+  /**
+   * value: "VECTORIZING_CONTENTS"
+   * @const
+   */
+  VECTORIZING_CONTENTS: "VECTORIZING_CONTENTS",
+
+  /**
+   * value: "CONTENTS_READING_VECTORIZING"
+   * @const
+   */
+  CONTENTS_READING_VECTORIZING: "CONTENTS_READING_VECTORIZING"
+};
+/**
+ * @member {module:model/GJobStatus.JobTypeEnum} jobType
  */
 GJobStatus.prototype.jobType = undefined;
 
 /**
- * @member {Object} workflowType
+ * @member {String} workflowType
  */
 GJobStatus.prototype.workflowType = undefined;
 
 /**
- * @member {Object} workflowId
+ * @member {String} workflowId
  */
 GJobStatus.prototype.workflowId = undefined;
 
 /**
- * @member {Object} processing
+ * @member {Boolean} processing
  */
 GJobStatus.prototype.processing = undefined;
 
 /**
- * @member {Object} finished
+ * @member {Boolean} finished
  */
 GJobStatus.prototype.finished = undefined;
 
 /**
- * @member {Object} error
+ * @member {Boolean} error
  */
 GJobStatus.prototype.error = undefined;
 
 /**
- * @member {Object} startDateTime
+ * @member {Date} startDateTime
  */
 GJobStatus.prototype.startDateTime = undefined;
 
 /**
- * @member {Object} endDateTime
+ * @member {Date} endDateTime
  */
 GJobStatus.prototype.endDateTime = undefined;
 
@@ -171,17 +195,17 @@ GJobStatus.prototype.endDateTime = undefined;
 GJobStatus.prototype.projectEndpointReference = undefined;
 
 /**
- * @member {Object} knowledgeBaseCode
+ * @member {String} knowledgeBaseCode
  */
 GJobStatus.prototype.knowledgeBaseCode = undefined;
 
 /**
- * @member {Object} projectCode
+ * @member {String} projectCode
  */
 GJobStatus.prototype.projectCode = undefined;
 
 /**
- * @member {Object} parentJobCode
+ * @member {String} parentJobCode
  */
 GJobStatus.prototype.parentJobCode = undefined;
 

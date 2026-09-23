@@ -39,105 +39,135 @@ export default class GContentManagementSystem {
     if (data) {
       obj = obj || new GContentManagementSystem();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('creationDate'))
-        obj.creationDate = ApiClient.convertToType(data['creationDate'], Object);
+        obj.creationDate = ApiClient.convertToType(data['creationDate'], 'Date');
       if (data.hasOwnProperty('modificationDate'))
-        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], Object);
+        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], 'Date');
       if (data.hasOwnProperty('version'))
-        obj.version = ApiClient.convertToType(data['version'], Object);
+        obj.version = ApiClient.convertToType(data['version'], 'String');
       if (data.hasOwnProperty('contentManagementSystemType'))
-        obj.contentManagementSystemType = ApiClient.convertToType(data['contentManagementSystemType'], Object);
+        obj.contentManagementSystemType = ApiClient.convertToType(data['contentManagementSystemType'], 'String');
       if (data.hasOwnProperty('readonly'))
-        obj.readonly = ApiClient.convertToType(data['readonly'], Object);
+        obj.readonly = ApiClient.convertToType(data['readonly'], 'Boolean');
       if (data.hasOwnProperty('baseUri'))
-        obj.baseUri = ApiClient.convertToType(data['baseUri'], Object);
+        obj.baseUri = ApiClient.convertToType(data['baseUri'], 'String');
       if (data.hasOwnProperty('usedCapabilities'))
-        obj.usedCapabilities = ApiClient.convertToType(data['usedCapabilities'], Object);
+        obj.usedCapabilities = ApiClient.convertToType(data['usedCapabilities'], ['String']);
       if (data.hasOwnProperty('aclAliases'))
-        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], Object);
+        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GContentManagementSystem.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GContentManagementSystem.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GContentManagementSystem.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GContentManagementSystem.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GContentManagementSystem.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GContentManagementSystem.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} creationDate
+ * @member {Date} creationDate
  */
 GContentManagementSystem.prototype.creationDate = undefined;
 
 /**
- * @member {Object} modificationDate
+ * @member {Date} modificationDate
  */
 GContentManagementSystem.prototype.modificationDate = undefined;
 
 /**
- * @member {Object} version
+ * @member {String} version
  */
 GContentManagementSystem.prototype.version = undefined;
 
 /**
- * @member {Object} contentManagementSystemType
+ * @member {String} contentManagementSystemType
  */
 GContentManagementSystem.prototype.contentManagementSystemType = undefined;
 
 /**
- * @member {Object} readonly
+ * @member {Boolean} readonly
  */
 GContentManagementSystem.prototype.readonly = undefined;
 
 /**
- * @member {Object} baseUri
+ * @member {String} baseUri
  */
 GContentManagementSystem.prototype.baseUri = undefined;
 
 /**
- * @member {Object} usedCapabilities
+ * Allowed values for the <code>usedCapabilities</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GContentManagementSystem.UsedCapabilitiesEnum = {
+  /**
+   * value: "TICKETS_MANAGEMENT"
+   * @const
+   */
+  TICKETS_MANAGEMENT: "TICKETS_MANAGEMENT",
+
+  /**
+   * value: "DOCUMENTS_MANAGEMENT"
+   * @const
+   */
+  DOCUMENTS_MANAGEMENT: "DOCUMENTS_MANAGEMENT",
+
+  /**
+   * value: "SOURCE_MANAGEMENT"
+   * @const
+   */
+  SOURCE_MANAGEMENT: "SOURCE_MANAGEMENT",
+
+  /**
+   * value: "ARTIFACTS_REPOSITORY_MANAGEMENT"
+   * @const
+   */
+  ARTIFACTS_REPOSITORY_MANAGEMENT: "ARTIFACTS_REPOSITORY_MANAGEMENT"
+};
+/**
+ * @member {Array.<module:model/GContentManagementSystem.UsedCapabilitiesEnum>} usedCapabilities
  */
 GContentManagementSystem.prototype.usedCapabilities = undefined;
 
 /**
- * @member {Object} aclAliases
+ * @member {Array.<Number>} aclAliases
  */
 GContentManagementSystem.prototype.aclAliases = undefined;
 

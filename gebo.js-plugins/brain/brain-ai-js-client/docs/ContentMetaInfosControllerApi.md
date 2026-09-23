@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 <a name="findDocumentReferenceViewByCode"></a>
 # **findDocumentReferenceViewByCode**
-> Object findDocumentReferenceViewByCode(body)
+> [DocumentReferenceView] findDocumentReferenceViewByCode(body)
 
 
 
@@ -21,7 +21,7 @@ Method | HTTP request | Description
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.ContentMetaInfosControllerApi();
-let body = null; // Object | 
+let body = ["body_example"]; // [String] | 
 
 apiInstance.findDocumentReferenceViewByCode(body).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -35,11 +35,11 @@ apiInstance.findDocumentReferenceViewByCode(body).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  | 
+ **body** | [**[String]**](String.md)|  | 
 
 ### Return type
 
-**Object**
+[**[DocumentReferenceView]**](DocumentReferenceView.md)
 
 ### Authorization
 
@@ -61,7 +61,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.ContentMetaInfosControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.getContentMetaInfos(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -75,7 +75,7 @@ apiInstance.getContentMetaInfos(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -101,7 +101,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.ContentMetaInfosControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.getContentObject(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -115,7 +115,7 @@ apiInstance.getContentObject(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -132,7 +132,7 @@ No authorization required
 
 <a name="searchByDocumentName"></a>
 # **searchByDocumentName**
-> Object searchByDocumentName(body)
+> [DocumentReferenceView] searchByDocumentName(body)
 
 
 
@@ -159,7 +159,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**[DocumentReferenceView]**](DocumentReferenceView.md)
 
 ### Authorization
 

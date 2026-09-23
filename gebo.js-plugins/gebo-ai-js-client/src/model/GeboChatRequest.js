@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from '../ApiClient';
+import AdditionalContent from './AdditionalContent';
+import GResponseDocumentRef from './GResponseDocumentRef';
 import GeboRagRequestCustomConfig from './GeboRagRequestCustomConfig';
 import UserUploadedContent from './UserUploadedContent';
 
@@ -62,12 +64,16 @@ export default class GeboChatRequest {
         obj.chatPipelineProcessId = ApiClient.convertToType(data['chatPipelineProcessId'], 'String');
       if (data.hasOwnProperty('forcedRequestDocuments'))
         obj.forcedRequestDocuments = ApiClient.convertToType(data['forcedRequestDocuments'], ['String']);
+      if (data.hasOwnProperty('forcedDocumentsRef'))
+        obj.forcedDocumentsRef = ApiClient.convertToType(data['forcedDocumentsRef'], [GResponseDocumentRef]);
       if (data.hasOwnProperty('userUploadedContents'))
         obj.userUploadedContents = ApiClient.convertToType(data['userUploadedContents'], [UserUploadedContent]);
       if (data.hasOwnProperty('deepSearchDataSources'))
         obj.deepSearchDataSources = ApiClient.convertToType(data['deepSearchDataSources'], ['String']);
       if (data.hasOwnProperty('userIntent'))
         obj.userIntent = ApiClient.convertToType(data['userIntent'], 'String');
+      if (data.hasOwnProperty('additionalContents'))
+        obj.additionalContents = ApiClient.convertToType(data['additionalContents'], [AdditionalContent]);
       if (data.hasOwnProperty('tokensSize'))
         obj.tokensSize = ApiClient.convertToType(data['tokensSize'], 'Number');
     }
@@ -129,6 +135,11 @@ GeboChatRequest.prototype.chatPipelineProcessId = undefined;
  * @member {Array.<String>} forcedRequestDocuments
  */
 GeboChatRequest.prototype.forcedRequestDocuments = undefined;
+
+/**
+ * @member {Array.<module:model/GResponseDocumentRef>} forcedDocumentsRef
+ */
+GeboChatRequest.prototype.forcedDocumentsRef = undefined;
 
 /**
  * @member {Array.<module:model/UserUploadedContent>} userUploadedContents
@@ -198,6 +209,11 @@ GeboChatRequest.UserIntentEnum = {
  * @member {module:model/GeboChatRequest.UserIntentEnum} userIntent
  */
 GeboChatRequest.prototype.userIntent = undefined;
+
+/**
+ * @member {Array.<module:model/AdditionalContent>} additionalContents
+ */
+GeboChatRequest.prototype.additionalContents = undefined;
 
 /**
  * @member {Number} tokensSize

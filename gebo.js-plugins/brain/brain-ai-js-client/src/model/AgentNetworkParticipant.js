@@ -24,8 +24,8 @@ export default class AgentNetworkParticipant {
    * Constructs a new <code>AgentNetworkParticipant</code>.
    * @alias module:model/AgentNetworkParticipant
    * @class
-   * @param agentConfigCode {Object} 
-   * @param communicationPolicy {Object} 
+   * @param agentConfigCode {String} 
+   * @param communicationPolicy {module:model/AgentNetworkParticipant.CommunicationPolicyEnum} 
    */
   constructor(agentConfigCode, communicationPolicy) {
     this.agentConfigCode = agentConfigCode;
@@ -43,91 +43,121 @@ export default class AgentNetworkParticipant {
     if (data) {
       obj = obj || new AgentNetworkParticipant();
       if (data.hasOwnProperty('agentConfigCode'))
-        obj.agentConfigCode = ApiClient.convertToType(data['agentConfigCode'], Object);
+        obj.agentConfigCode = ApiClient.convertToType(data['agentConfigCode'], 'String');
       if (data.hasOwnProperty('agentContextualName'))
-        obj.agentContextualName = ApiClient.convertToType(data['agentContextualName'], Object);
+        obj.agentContextualName = ApiClient.convertToType(data['agentContextualName'], 'String');
       if (data.hasOwnProperty('inputNode'))
-        obj.inputNode = ApiClient.convertToType(data['inputNode'], Object);
+        obj.inputNode = ApiClient.convertToType(data['inputNode'], 'Boolean');
       if (data.hasOwnProperty('outputNode'))
-        obj.outputNode = ApiClient.convertToType(data['outputNode'], Object);
+        obj.outputNode = ApiClient.convertToType(data['outputNode'], 'Boolean');
       if (data.hasOwnProperty('allowedToNotifyUser'))
-        obj.allowedToNotifyUser = ApiClient.convertToType(data['allowedToNotifyUser'], Object);
+        obj.allowedToNotifyUser = ApiClient.convertToType(data['allowedToNotifyUser'], 'Boolean');
       if (data.hasOwnProperty('communicationPolicy'))
-        obj.communicationPolicy = ApiClient.convertToType(data['communicationPolicy'], Object);
+        obj.communicationPolicy = ApiClient.convertToType(data['communicationPolicy'], 'String');
       if (data.hasOwnProperty('communicationList'))
-        obj.communicationList = ApiClient.convertToType(data['communicationList'], Object);
+        obj.communicationList = ApiClient.convertToType(data['communicationList'], ['String']);
       if (data.hasOwnProperty('maxInvocations'))
-        obj.maxInvocations = ApiClient.convertToType(data['maxInvocations'], Object);
+        obj.maxInvocations = ApiClient.convertToType(data['maxInvocations'], 'Number');
       if (data.hasOwnProperty('maxConsecutiveInvocations'))
-        obj.maxConsecutiveInvocations = ApiClient.convertToType(data['maxConsecutiveInvocations'], Object);
+        obj.maxConsecutiveInvocations = ApiClient.convertToType(data['maxConsecutiveInvocations'], 'Number');
       if (data.hasOwnProperty('canCallTools'))
-        obj.canCallTools = ApiClient.convertToType(data['canCallTools'], Object);
+        obj.canCallTools = ApiClient.convertToType(data['canCallTools'], 'Boolean');
       if (data.hasOwnProperty('canCallOtherAgents'))
-        obj.canCallOtherAgents = ApiClient.convertToType(data['canCallOtherAgents'], Object);
+        obj.canCallOtherAgents = ApiClient.convertToType(data['canCallOtherAgents'], 'Boolean');
       if (data.hasOwnProperty('networkAgentName'))
-        obj.networkAgentName = ApiClient.convertToType(data['networkAgentName'], Object);
+        obj.networkAgentName = ApiClient.convertToType(data['networkAgentName'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} agentConfigCode
+ * @member {String} agentConfigCode
  */
 AgentNetworkParticipant.prototype.agentConfigCode = undefined;
 
 /**
- * @member {Object} agentContextualName
+ * @member {String} agentContextualName
  */
 AgentNetworkParticipant.prototype.agentContextualName = undefined;
 
 /**
- * @member {Object} inputNode
+ * @member {Boolean} inputNode
  */
 AgentNetworkParticipant.prototype.inputNode = undefined;
 
 /**
- * @member {Object} outputNode
+ * @member {Boolean} outputNode
  */
 AgentNetworkParticipant.prototype.outputNode = undefined;
 
 /**
- * @member {Object} allowedToNotifyUser
+ * @member {Boolean} allowedToNotifyUser
  */
 AgentNetworkParticipant.prototype.allowedToNotifyUser = undefined;
 
 /**
- * @member {Object} communicationPolicy
+ * Allowed values for the <code>communicationPolicy</code> property.
+ * @enum {String}
+ * @readonly
+ */
+AgentNetworkParticipant.CommunicationPolicyEnum = {
+  /**
+   * value: "ALLOW_ALL"
+   * @const
+   */
+  ALLOW_ALL: "ALLOW_ALL",
+
+  /**
+   * value: "DENY_ALL"
+   * @const
+   */
+  DENY_ALL: "DENY_ALL",
+
+  /**
+   * value: "ALLOW_LIST"
+   * @const
+   */
+  ALLOW_LIST: "ALLOW_LIST",
+
+  /**
+   * value: "DENY_LIST"
+   * @const
+   */
+  DENY_LIST: "DENY_LIST"
+};
+/**
+ * @member {module:model/AgentNetworkParticipant.CommunicationPolicyEnum} communicationPolicy
  */
 AgentNetworkParticipant.prototype.communicationPolicy = undefined;
 
 /**
- * @member {Object} communicationList
+ * @member {Array.<String>} communicationList
  */
 AgentNetworkParticipant.prototype.communicationList = undefined;
 
 /**
- * @member {Object} maxInvocations
+ * @member {Number} maxInvocations
  */
 AgentNetworkParticipant.prototype.maxInvocations = undefined;
 
 /**
- * @member {Object} maxConsecutiveInvocations
+ * @member {Number} maxConsecutiveInvocations
  */
 AgentNetworkParticipant.prototype.maxConsecutiveInvocations = undefined;
 
 /**
- * @member {Object} canCallTools
+ * @member {Boolean} canCallTools
  */
 AgentNetworkParticipant.prototype.canCallTools = undefined;
 
 /**
- * @member {Object} canCallOtherAgents
+ * @member {Boolean} canCallOtherAgents
  */
 AgentNetworkParticipant.prototype.canCallOtherAgents = undefined;
 
 /**
- * @member {Object} networkAgentName
+ * @member {String} networkAgentName
  */
 AgentNetworkParticipant.prototype.networkAgentName = undefined;
 

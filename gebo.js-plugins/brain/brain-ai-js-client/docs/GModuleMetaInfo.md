@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**messagingModuleId** | **Object** |  | [optional] 
-**components** | **Object** |  | [optional] 
+**messagingModuleId** | **String** |  | [optional] 
+**components** | [**[ComponentMetaInfo]**](ComponentMetaInfo.md) |  | [optional] 

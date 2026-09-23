@@ -3,21 +3,36 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  | [optional] 
-**description** | **Object** |  | [optional] 
-**userModified** | **Object** |  | [optional] 
-**userCreated** | **Object** |  | [optional] 
-**dateModified** | **Object** |  | [optional] 
-**dateCreated** | **Object** |  | [optional] 
-**parentProjectCode** | **Object** |  | [optional] 
-**readonly** | **Object** |  | [optional] 
-**published** | **Object** |  | [optional] 
-**synchPeriodically** | **Object** |  | [optional] 
-**openZips** | **Object** |  | [optional] 
-**buildSystemsRefs** | **Object** |  | [optional] 
-**catalogingCriteria** | **Object** |  | [optional] 
-**programmedTables** | **Object** |  | [optional] 
-**vectorizeOnlyExtensions** | **Object** |  | [optional] 
-**synchroStrategy** | **Object** |  | [optional] 
-**objectSpaceType** | **Object** |  | [optional] 
-**aclAliases** | **Object** |  | [optional] 
+**code** | **String** |  | [optional] 
+**description** | **String** |  | [optional] 
+**userModified** | **String** |  | [optional] 
+**userCreated** | **String** |  | [optional] 
+**dateModified** | **Date** |  | [optional] 
+**dateCreated** | **Date** |  | [optional] 
+**parentProjectCode** | **String** |  | [optional] 
+**readonly** | **Boolean** |  | [optional] 
+**published** | **Boolean** |  | [optional] 
+**synchPeriodically** | **Boolean** |  | [optional] 
+**openZips** | **Boolean** |  | [optional] 
+**buildSystemsRefs** | [**[BuildSystemRef]**](BuildSystemRef.md) |  | [optional] 
+**catalogingCriteria** | **String** |  | [optional] 
+**programmedTables** | [**[ReindexingProgrammedTable]**](ReindexingProgrammedTable.md) |  | [optional] 
+**vectorizeOnlyExtensions** | **[String]** |  | [optional] 
+**synchroStrategy** | **String** |  | [optional] 
+**objectSpaceType** | **String** |  | [optional] 
+**aclAliases** | **[Number]** |  | [optional] 
+**personalData** | **Boolean** |  | [optional] 
+
+<a name="SynchroStrategyEnum"></a>
+## Enum: SynchroStrategyEnum
+
+* `SIZE_AND_TIMESTAMP_AND_HASH_CHECK` (value: `"SIZE_AND_TIMESTAMP_AND_HASH_CHECK"`)
+* `HASH_CHECK` (value: `"HASH_CHECK"`)
+
+
+<a name="ObjectSpaceTypeEnum"></a>
+## Enum: ObjectSpaceTypeEnum
+
+* `COMPANY` (value: `"COMPANY"`)
+* `USERSPACE` (value: `"USERSPACE"`)
+

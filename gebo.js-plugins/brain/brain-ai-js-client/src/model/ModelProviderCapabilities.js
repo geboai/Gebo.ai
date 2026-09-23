@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import ToolCategoriesTree from './ToolCategoriesTree';
 
 /**
  * The ModelProviderCapabilities model module.
@@ -39,49 +40,49 @@ export default class ModelProviderCapabilities {
     if (data) {
       obj = obj || new ModelProviderCapabilities();
       if (data.hasOwnProperty('configurationCode'))
-        obj.configurationCode = ApiClient.convertToType(data['configurationCode'], Object);
+        obj.configurationCode = ApiClient.convertToType(data['configurationCode'], 'String');
       if (data.hasOwnProperty('supportsTranscript'))
-        obj.supportsTranscript = ApiClient.convertToType(data['supportsTranscript'], Object);
+        obj.supportsTranscript = ApiClient.convertToType(data['supportsTranscript'], 'Boolean');
       if (data.hasOwnProperty('supportsSpeech'))
-        obj.supportsSpeech = ApiClient.convertToType(data['supportsSpeech'], Object);
+        obj.supportsSpeech = ApiClient.convertToType(data['supportsSpeech'], 'Boolean');
       if (data.hasOwnProperty('supportsStructuredOutput'))
-        obj.supportsStructuredOutput = ApiClient.convertToType(data['supportsStructuredOutput'], Object);
+        obj.supportsStructuredOutput = ApiClient.convertToType(data['supportsStructuredOutput'], 'Boolean');
       if (data.hasOwnProperty('supportsFunctionCalls'))
-        obj.supportsFunctionCalls = ApiClient.convertToType(data['supportsFunctionCalls'], Object);
+        obj.supportsFunctionCalls = ApiClient.convertToType(data['supportsFunctionCalls'], 'Boolean');
       if (data.hasOwnProperty('functionsTreeList'))
-        obj.functionsTreeList = ApiClient.convertToType(data['functionsTreeList'], Object);
+        obj.functionsTreeList = ApiClient.convertToType(data['functionsTreeList'], [ToolCategoriesTree]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} configurationCode
+ * @member {String} configurationCode
  */
 ModelProviderCapabilities.prototype.configurationCode = undefined;
 
 /**
- * @member {Object} supportsTranscript
+ * @member {Boolean} supportsTranscript
  */
 ModelProviderCapabilities.prototype.supportsTranscript = undefined;
 
 /**
- * @member {Object} supportsSpeech
+ * @member {Boolean} supportsSpeech
  */
 ModelProviderCapabilities.prototype.supportsSpeech = undefined;
 
 /**
- * @member {Object} supportsStructuredOutput
+ * @member {Boolean} supportsStructuredOutput
  */
 ModelProviderCapabilities.prototype.supportsStructuredOutput = undefined;
 
 /**
- * @member {Object} supportsFunctionCalls
+ * @member {Boolean} supportsFunctionCalls
  */
 ModelProviderCapabilities.prototype.supportsFunctionCalls = undefined;
 
 /**
- * @member {Object} functionsTreeList
+ * @member {Array.<module:model/ToolCategoriesTree>} functionsTreeList
  */
 ModelProviderCapabilities.prototype.functionsTreeList = undefined;
 

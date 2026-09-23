@@ -24,12 +24,12 @@ export default class GUserMessage {
    * Constructs a new <code>GUserMessage</code>.
    * @alias module:model/GUserMessage
    * @class
-   * @param severity {Object} 
-   * @param summary {Object} 
-   * @param detail {Object} 
-   * @param id {Object} 
-   * @param jobId {Object} 
-   * @param timestamp {Object} 
+   * @param severity {module:model/GUserMessage.SeverityEnum} 
+   * @param summary {String} 
+   * @param detail {String} 
+   * @param id {String} 
+   * @param jobId {String} 
+   * @param timestamp {Number} 
    */
   constructor(severity, summary, detail, id, jobId, timestamp) {
     this.severity = severity;
@@ -51,56 +51,86 @@ export default class GUserMessage {
     if (data) {
       obj = obj || new GUserMessage();
       if (data.hasOwnProperty('severity'))
-        obj.severity = ApiClient.convertToType(data['severity'], Object);
+        obj.severity = ApiClient.convertToType(data['severity'], 'String');
       if (data.hasOwnProperty('summary'))
-        obj.summary = ApiClient.convertToType(data['summary'], Object);
+        obj.summary = ApiClient.convertToType(data['summary'], 'String');
       if (data.hasOwnProperty('detail'))
-        obj.detail = ApiClient.convertToType(data['detail'], Object);
+        obj.detail = ApiClient.convertToType(data['detail'], 'String');
       if (data.hasOwnProperty('id'))
-        obj.id = ApiClient.convertToType(data['id'], Object);
+        obj.id = ApiClient.convertToType(data['id'], 'String');
       if (data.hasOwnProperty('key'))
-        obj.key = ApiClient.convertToType(data['key'], Object);
+        obj.key = ApiClient.convertToType(data['key'], 'String');
       if (data.hasOwnProperty('jobId'))
-        obj.jobId = ApiClient.convertToType(data['jobId'], Object);
+        obj.jobId = ApiClient.convertToType(data['jobId'], 'String');
       if (data.hasOwnProperty('timestamp'))
-        obj.timestamp = ApiClient.convertToType(data['timestamp'], Object);
+        obj.timestamp = ApiClient.convertToType(data['timestamp'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} severity
+ * Allowed values for the <code>severity</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GUserMessage.SeverityEnum = {
+  /**
+   * value: "info"
+   * @const
+   */
+  info: "info",
+
+  /**
+   * value: "warn"
+   * @const
+   */
+  warn: "warn",
+
+  /**
+   * value: "error"
+   * @const
+   */
+  error: "error",
+
+  /**
+   * value: "success"
+   * @const
+   */
+  success: "success"
+};
+/**
+ * @member {module:model/GUserMessage.SeverityEnum} severity
  */
 GUserMessage.prototype.severity = undefined;
 
 /**
- * @member {Object} summary
+ * @member {String} summary
  */
 GUserMessage.prototype.summary = undefined;
 
 /**
- * @member {Object} detail
+ * @member {String} detail
  */
 GUserMessage.prototype.detail = undefined;
 
 /**
- * @member {Object} id
+ * @member {String} id
  */
 GUserMessage.prototype.id = undefined;
 
 /**
- * @member {Object} key
+ * @member {String} key
  */
 GUserMessage.prototype.key = undefined;
 
 /**
- * @member {Object} jobId
+ * @member {String} jobId
  */
 GUserMessage.prototype.jobId = undefined;
 
 /**
- * @member {Object} timestamp
+ * @member {Number} timestamp
  */
 GUserMessage.prototype.timestamp = undefined;
 

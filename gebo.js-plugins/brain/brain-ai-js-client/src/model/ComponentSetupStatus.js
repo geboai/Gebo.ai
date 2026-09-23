@@ -39,14 +39,14 @@ export default class ComponentSetupStatus {
     if (data) {
       obj = obj || new ComponentSetupStatus();
       if (data.hasOwnProperty('isSetup'))
-        obj.isSetup = ApiClient.convertToType(data['isSetup'], Object);
+        obj.isSetup = ApiClient.convertToType(data['isSetup'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} isSetup
+ * @member {Boolean} isSetup
  */
 ComponentSetupStatus.prototype.isSetup = undefined;
 

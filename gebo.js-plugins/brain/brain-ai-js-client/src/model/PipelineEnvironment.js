@@ -25,6 +25,7 @@ export default class PipelineEnvironment {
    * Arbitrary environment entries
    * @alias module:model/PipelineEnvironment
    * @class
+   * @extends 
    */
   constructor() {
   }
@@ -39,6 +40,7 @@ export default class PipelineEnvironment {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new PipelineEnvironment();
+      ApiClient.constructFromObject(data, obj, '');
     }
     return obj;
   }
