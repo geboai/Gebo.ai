@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusWorkFolderSetupStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:53:44.548149783+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T15:45:03.167494770+02:00[Europe/Rome]")
 
 public class OperationStatusWorkFolderSetupStatus {
   @JsonProperty("result")

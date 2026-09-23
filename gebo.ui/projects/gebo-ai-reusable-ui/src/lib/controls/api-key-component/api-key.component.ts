@@ -184,7 +184,7 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
                             } else {
                                 this.messages = value.messages;
                                 this.deleting = true;
-                                this.secretController.deleteSecret1(secret).subscribe({
+                                this.secretController.deleteSecret(secret).subscribe({
                                     next: () => {
 
                                     },

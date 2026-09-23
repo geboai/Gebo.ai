@@ -82,7 +82,7 @@ export class GeboAIAccessControlComponent implements OnInit, OnChanges {
      */
     ngOnInit(): void {
         this.loadingRelatedBackend = true;
-        const lists: [Observable<UserInfos[]>, Observable<UsersGroup[]>] = [this.userAdminControllerService.getAllUsers1(), this.userAdminControllerService.getAllGroups1()];
+        const lists: [Observable<UserInfos[]>, Observable<UsersGroup[]>] = [this.userAdminControllerService.getAllUsers(), this.userAdminControllerService.getAllGroups()];
         forkJoin(lists).subscribe({
             next: (data) => {
                 this.users = data[0];

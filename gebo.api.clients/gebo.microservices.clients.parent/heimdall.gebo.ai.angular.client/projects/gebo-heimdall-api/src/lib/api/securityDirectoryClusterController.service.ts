@@ -65,13 +65,13 @@ export class SecurityDirectoryClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public checkPassword(body: CheckPasswordRequest, observe?: 'body', reportProgress?: boolean): Observable<boolean>;
-    public checkPassword(body: CheckPasswordRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
-    public checkPassword(body: CheckPasswordRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
-    public checkPassword(body: CheckPasswordRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureCheckPassword(body: CheckPasswordRequest, observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public infrastructureCheckPassword(body: CheckPasswordRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public infrastructureCheckPassword(body: CheckPasswordRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
+    public infrastructureCheckPassword(body: CheckPasswordRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling checkPassword.');
+            throw new Error('Required parameter body was null or undefined when calling infrastructureCheckPassword.');
         }
 
         let headers = this.defaultHeaders;
@@ -112,13 +112,13 @@ export class SecurityDirectoryClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createUserIfNotExists(body: CreateUserIfNotExistsRequest, observe?: 'body', reportProgress?: boolean): Observable<UserInfosImpl>;
-    public createUserIfNotExists(body: CreateUserIfNotExistsRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserInfosImpl>>;
-    public createUserIfNotExists(body: CreateUserIfNotExistsRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserInfosImpl>>;
-    public createUserIfNotExists(body: CreateUserIfNotExistsRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureCreateUserIfNotExists(body: CreateUserIfNotExistsRequest, observe?: 'body', reportProgress?: boolean): Observable<UserInfosImpl>;
+    public infrastructureCreateUserIfNotExists(body: CreateUserIfNotExistsRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserInfosImpl>>;
+    public infrastructureCreateUserIfNotExists(body: CreateUserIfNotExistsRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserInfosImpl>>;
+    public infrastructureCreateUserIfNotExists(body: CreateUserIfNotExistsRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling createUserIfNotExists.');
+            throw new Error('Required parameter body was null or undefined when calling infrastructureCreateUserIfNotExists.');
         }
 
         let headers = this.defaultHeaders;
@@ -158,10 +158,10 @@ export class SecurityDirectoryClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAllGroups(observe?: 'body', reportProgress?: boolean): Observable<Array<UsersGroup>>;
-    public findAllGroups(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UsersGroup>>>;
-    public findAllGroups(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UsersGroup>>>;
-    public findAllGroups(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureFindAllGroups(observe?: 'body', reportProgress?: boolean): Observable<Array<UsersGroup>>;
+    public infrastructureFindAllGroups(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UsersGroup>>>;
+    public infrastructureFindAllGroups(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UsersGroup>>>;
+    public infrastructureFindAllGroups(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -195,13 +195,13 @@ export class SecurityDirectoryClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGroupsOfUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<UsersGroup>>;
-    public findGroupsOfUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UsersGroup>>>;
-    public findGroupsOfUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UsersGroup>>>;
-    public findGroupsOfUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureFindGroupsOfUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<UsersGroup>>;
+    public infrastructureFindGroupsOfUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UsersGroup>>>;
+    public infrastructureFindGroupsOfUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UsersGroup>>>;
+    public infrastructureFindGroupsOfUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
-            throw new Error('Required parameter username was null or undefined when calling findGroupsOfUser.');
+            throw new Error('Required parameter username was null or undefined when calling infrastructureFindGroupsOfUser.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -242,13 +242,13 @@ export class SecurityDirectoryClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUserByUsername(username: string, observe?: 'body', reportProgress?: boolean): Observable<UserInfosImpl>;
-    public findUserByUsername(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserInfosImpl>>;
-    public findUserByUsername(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserInfosImpl>>;
-    public findUserByUsername(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureFindUserByUsername(username: string, observe?: 'body', reportProgress?: boolean): Observable<UserInfosImpl>;
+    public infrastructureFindUserByUsername(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserInfosImpl>>;
+    public infrastructureFindUserByUsername(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserInfosImpl>>;
+    public infrastructureFindUserByUsername(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
-            throw new Error('Required parameter username was null or undefined when calling findUserByUsername.');
+            throw new Error('Required parameter username was null or undefined when calling infrastructureFindUserByUsername.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});

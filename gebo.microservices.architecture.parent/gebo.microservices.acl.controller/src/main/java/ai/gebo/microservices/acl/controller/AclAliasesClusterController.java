@@ -78,7 +78,7 @@ public class AclAliasesClusterController {
 	// --- Reads --------------------------------------------------------------
 
 	@GetMapping(value = "findAliasesByAclGrantedUniqueId", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Integer> findAliasesByAclGrantedUniqueId(@RequestParam("uniqueId") String aclGrantedUniqueId,
+	public List<Integer> infrastructureFindAliasesByAclGrantedUniqueId(@RequestParam("uniqueId") String aclGrantedUniqueId,
 			HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return aliasesDao.findAliasesByAclGrantedUniqueId(aclGrantedUniqueId);
@@ -86,7 +86,7 @@ public class AclAliasesClusterController {
 
 	@GetMapping(value = "findAliasesByAclGrantedUniqueIdAndAclGrantType",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Integer> findAliasesByAclGrantedUniqueIdAndAclGrantType(
+	public List<Integer> infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType(
 			@RequestParam("uniqueId") String aclGrantedUniqueId, @RequestParam("grantType") AclGrantType grantType,
 			HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
@@ -99,7 +99,7 @@ public class AclAliasesClusterController {
 	 */
 	@PostMapping(value = "findAliasesByAclGrantedUniqueIdIn", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Integer> findAliasesByAclGrantedUniqueIdIn(@RequestBody List<String> aclGrantedUniqueIds,
+	public List<Integer> infrastructureFindAliasesByAclGrantedUniqueIdIn(@RequestBody List<String> aclGrantedUniqueIds,
 			HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return aliasesDao.findAliasesByAclGrantedUniqueIdIn(aclGrantedUniqueIds);
@@ -107,7 +107,7 @@ public class AclAliasesClusterController {
 
 	@PostMapping(value = "findAliasesByAclGrantedUniqueIdInAndAclGrantType",
 			consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Integer> findAliasesByAclGrantedUniqueIdInAndAclGrantType(
+	public List<Integer> infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType(
 			@RequestParam("grantType") AclGrantType grantType, @RequestBody List<String> aclGrantedUniqueIds,
 			HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
@@ -115,14 +115,14 @@ public class AclAliasesClusterController {
 	}
 
 	@GetMapping(value = "findAcl", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GAclEntry findAcl(@RequestParam("alias") int alias, HttpServletRequest request) {
+	public GAclEntry infrastructureFindAcl(@RequestParam("alias") int alias, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return aliasesDao.findAcl(alias);
 	}
 
 	@PostMapping(value = "findAlias", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Integer findAlias(@RequestBody GAclEntry entry, HttpServletRequest request) {
+	public Integer infrastructureFindAlias(@RequestBody GAclEntry entry, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return aliasesDao.findAlias(entry);
 	}
@@ -135,13 +135,13 @@ public class AclAliasesClusterController {
 	 */
 	@PostMapping(value = "addAcl", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public int addAcl(@RequestBody GAclEntry entry, HttpServletRequest request) {
+	public int infrastructureAddAcl(@RequestBody GAclEntry entry, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return aliasesDao.addAcl(entry);
 	}
 
 	@DeleteMapping("removeAcl")
-	public void removeAcl(@RequestParam("alias") int alias, HttpServletRequest request) {
+	public void infrastructureRemoveAcl(@RequestParam("alias") int alias, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		aliasesDao.removeAcl(alias);
 	}

@@ -81,7 +81,7 @@ public class SecurityDirectoryClusterController {
 	 *         contract the local directory has
 	 */
 	@GetMapping(value = "findUserByUsername", produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserInfosImpl findUserByUsername(@RequestParam("username") String username, HttpServletRequest request) {
+	public UserInfosImpl infrastructureFindUserByUsername(@RequestParam("username") String username, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		UserInfos user = directory.findUserByUsername(username);
 		// UserInfos is an interface; the wire needs the concrete carrier.
@@ -89,13 +89,13 @@ public class SecurityDirectoryClusterController {
 	}
 
 	@GetMapping(value = "findGroupsOfUser", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<UsersGroup> findGroupsOfUser(@RequestParam("username") String username, HttpServletRequest request) {
+	public List<UsersGroup> infrastructureFindGroupsOfUser(@RequestParam("username") String username, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return directory.findGroupsOfUser(username);
 	}
 
 	@GetMapping(value = "findAllGroups", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<UsersGroup> findAllGroups(HttpServletRequest request) {
+	public List<UsersGroup> infrastructureFindAllGroups(HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return directory.findAllGroups();
 	}
@@ -114,7 +114,7 @@ public class SecurityDirectoryClusterController {
 	 */
 	@PostMapping(value = "checkPassword", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public boolean checkPassword(@RequestBody @NotNull CheckPasswordRequest checkRequest, HttpServletRequest request) {
+	public boolean infrastructureCheckPassword(@RequestBody @NotNull CheckPasswordRequest checkRequest, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return directory.checkPassword(checkRequest.getUsername(), checkRequest.getPassword());
 	}
@@ -130,7 +130,7 @@ public class SecurityDirectoryClusterController {
 	 */
 	@PostMapping(value = "createUserIfNotExists", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserInfosImpl createUserIfNotExists(@RequestBody @NotNull CreateUserIfNotExistsRequest createRequest,
+	public UserInfosImpl infrastructureCreateUserIfNotExists(@RequestBody @NotNull CreateUserIfNotExistsRequest createRequest,
 			HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		UserInfos user = directory.createUserIfNotExists(createRequest.getUsername(), createRequest.getAttributes(),

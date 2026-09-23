@@ -4,25 +4,25 @@ All URIs are relative to *http://localhost:13018/heimdall*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**changePassword1**](UsersAdminClusterControllerApi.md#changePassword1) | **POST** /api/cluster/SecurityController/UsersAdmin/changePassword | 
-[**createUserIfNotExists1**](UsersAdminClusterControllerApi.md#createUserIfNotExists1) | **POST** /api/cluster/SecurityController/UsersAdmin/createUserIfNotExists | 
-[**deleteGroup**](UsersAdminClusterControllerApi.md#deleteGroup) | **POST** /api/cluster/SecurityController/UsersAdmin/deleteGroup | 
-[**deleteUser**](UsersAdminClusterControllerApi.md#deleteUser) | **POST** /api/cluster/SecurityController/UsersAdmin/deleteUser | 
-[**findGroupByCode**](UsersAdminClusterControllerApi.md#findGroupByCode) | **GET** /api/cluster/SecurityController/UsersAdmin/findGroupByCode | 
-[**findUserByQbe**](UsersAdminClusterControllerApi.md#findUserByQbe) | **POST** /api/cluster/SecurityController/UsersAdmin/findUserByQbe | 
-[**findUserByQbe1**](UsersAdminClusterControllerApi.md#findUserByQbe1) | **POST** /api/cluster/SecurityController/UsersAdmin/findEditableUserByQbe | 
-[**findUserByUsername1**](UsersAdminClusterControllerApi.md#findUserByUsername1) | **GET** /api/cluster/SecurityController/UsersAdmin/findUserByUsername | 
-[**findUsersGroupByQbe**](UsersAdminClusterControllerApi.md#findUsersGroupByQbe) | **POST** /api/cluster/SecurityController/UsersAdmin/findUsersGroupByQbe | 
-[**getAllGroups**](UsersAdminClusterControllerApi.md#getAllGroups) | **GET** /api/cluster/SecurityController/UsersAdmin/getAllGroups | 
-[**getAllUsers**](UsersAdminClusterControllerApi.md#getAllUsers) | **GET** /api/cluster/SecurityController/UsersAdmin/getAllUsers | 
-[**insertGroup**](UsersAdminClusterControllerApi.md#insertGroup) | **POST** /api/cluster/SecurityController/UsersAdmin/insertGroup | 
-[**insertUser**](UsersAdminClusterControllerApi.md#insertUser) | **POST** /api/cluster/SecurityController/UsersAdmin/insertUser | 
-[**updateGroup**](UsersAdminClusterControllerApi.md#updateGroup) | **POST** /api/cluster/SecurityController/UsersAdmin/updateGroup | 
-[**updateUser**](UsersAdminClusterControllerApi.md#updateUser) | **POST** /api/cluster/SecurityController/UsersAdmin/updateUser | 
+[**infrastructureChangePassword**](UsersAdminClusterControllerApi.md#infrastructureChangePassword) | **POST** /api/cluster/SecurityController/UsersAdmin/changePassword | 
+[**infrastructureCreateUserIfNotExists1**](UsersAdminClusterControllerApi.md#infrastructureCreateUserIfNotExists1) | **POST** /api/cluster/SecurityController/UsersAdmin/createUserIfNotExists | 
+[**infrastructureDeleteGroup**](UsersAdminClusterControllerApi.md#infrastructureDeleteGroup) | **POST** /api/cluster/SecurityController/UsersAdmin/deleteGroup | 
+[**infrastructureDeleteUser**](UsersAdminClusterControllerApi.md#infrastructureDeleteUser) | **POST** /api/cluster/SecurityController/UsersAdmin/deleteUser | 
+[**infrastructureFindGroupByCode**](UsersAdminClusterControllerApi.md#infrastructureFindGroupByCode) | **GET** /api/cluster/SecurityController/UsersAdmin/findGroupByCode | 
+[**infrastructureFindUserByQbe**](UsersAdminClusterControllerApi.md#infrastructureFindUserByQbe) | **POST** /api/cluster/SecurityController/UsersAdmin/findUserByQbe | 
+[**infrastructureFindUserByQbe1**](UsersAdminClusterControllerApi.md#infrastructureFindUserByQbe1) | **POST** /api/cluster/SecurityController/UsersAdmin/findEditableUserByQbe | 
+[**infrastructureFindUserByUsername1**](UsersAdminClusterControllerApi.md#infrastructureFindUserByUsername1) | **GET** /api/cluster/SecurityController/UsersAdmin/findUserByUsername | 
+[**infrastructureFindUsersGroupByQbe**](UsersAdminClusterControllerApi.md#infrastructureFindUsersGroupByQbe) | **POST** /api/cluster/SecurityController/UsersAdmin/findUsersGroupByQbe | 
+[**infrastructureGetAllGroups**](UsersAdminClusterControllerApi.md#infrastructureGetAllGroups) | **GET** /api/cluster/SecurityController/UsersAdmin/getAllGroups | 
+[**infrastructureGetAllUsers**](UsersAdminClusterControllerApi.md#infrastructureGetAllUsers) | **GET** /api/cluster/SecurityController/UsersAdmin/getAllUsers | 
+[**infrastructureInsertGroup**](UsersAdminClusterControllerApi.md#infrastructureInsertGroup) | **POST** /api/cluster/SecurityController/UsersAdmin/insertGroup | 
+[**infrastructureInsertUser**](UsersAdminClusterControllerApi.md#infrastructureInsertUser) | **POST** /api/cluster/SecurityController/UsersAdmin/insertUser | 
+[**infrastructureUpdateGroup**](UsersAdminClusterControllerApi.md#infrastructureUpdateGroup) | **POST** /api/cluster/SecurityController/UsersAdmin/updateGroup | 
+[**infrastructureUpdateUser**](UsersAdminClusterControllerApi.md#infrastructureUpdateUser) | **POST** /api/cluster/SecurityController/UsersAdmin/updateUser | 
 
-<a name="changePassword1"></a>
-# **changePassword1**
-> changePassword1(body)
+<a name="infrastructureChangePassword"></a>
+# **infrastructureChangePassword**
+> infrastructureChangePassword(body)
 
 
 
@@ -36,9 +36,9 @@ Method | HTTP request | Description
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 ChangePasswordRequest body = new ChangePasswordRequest(); // ChangePasswordRequest | 
 try {
-    apiInstance.changePassword1(body);
+    apiInstance.infrastructureChangePassword(body);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#changePassword1");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureChangePassword");
     e.printStackTrace();
 }
 ```
@@ -62,9 +62,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: Not defined
 
-<a name="createUserIfNotExists1"></a>
-# **createUserIfNotExists1**
-> createUserIfNotExists1(body)
+<a name="infrastructureCreateUserIfNotExists1"></a>
+# **infrastructureCreateUserIfNotExists1**
+> infrastructureCreateUserIfNotExists1(body)
 
 
 
@@ -78,9 +78,9 @@ No authorization required
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 CreateUserIfNotExistsRequest body = new CreateUserIfNotExistsRequest(); // CreateUserIfNotExistsRequest | 
 try {
-    apiInstance.createUserIfNotExists1(body);
+    apiInstance.infrastructureCreateUserIfNotExists1(body);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#createUserIfNotExists1");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureCreateUserIfNotExists1");
     e.printStackTrace();
 }
 ```
@@ -104,9 +104,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: Not defined
 
-<a name="deleteGroup"></a>
-# **deleteGroup**
-> deleteGroup(body)
+<a name="infrastructureDeleteGroup"></a>
+# **infrastructureDeleteGroup**
+> infrastructureDeleteGroup(body)
 
 
 
@@ -120,9 +120,9 @@ No authorization required
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 UsersGroup body = new UsersGroup(); // UsersGroup | 
 try {
-    apiInstance.deleteGroup(body);
+    apiInstance.infrastructureDeleteGroup(body);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#deleteGroup");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureDeleteGroup");
     e.printStackTrace();
 }
 ```
@@ -146,9 +146,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: Not defined
 
-<a name="deleteUser"></a>
-# **deleteUser**
-> deleteUser(body)
+<a name="infrastructureDeleteUser"></a>
+# **infrastructureDeleteUser**
+> infrastructureDeleteUser(body)
 
 
 
@@ -162,9 +162,9 @@ No authorization required
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 EditableUser body = new EditableUser(); // EditableUser | 
 try {
-    apiInstance.deleteUser(body);
+    apiInstance.infrastructureDeleteUser(body);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#deleteUser");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureDeleteUser");
     e.printStackTrace();
 }
 ```
@@ -188,9 +188,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: Not defined
 
-<a name="findGroupByCode"></a>
-# **findGroupByCode**
-> UsersGroup findGroupByCode(code)
+<a name="infrastructureFindGroupByCode"></a>
+# **infrastructureFindGroupByCode**
+> UsersGroup infrastructureFindGroupByCode(code)
 
 
 
@@ -204,10 +204,10 @@ No authorization required
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 String code = "code_example"; // String | 
 try {
-    UsersGroup result = apiInstance.findGroupByCode(code);
+    UsersGroup result = apiInstance.infrastructureFindGroupByCode(code);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#findGroupByCode");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureFindGroupByCode");
     e.printStackTrace();
 }
 ```
@@ -231,9 +231,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="findUserByQbe"></a>
-# **findUserByQbe**
-> PageResultUserInfos findUserByQbe(body)
+<a name="infrastructureFindUserByQbe"></a>
+# **infrastructureFindUserByQbe**
+> PageResultUserInfos infrastructureFindUserByQbe(body)
 
 
 
@@ -247,10 +247,10 @@ No authorization required
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 UserQbeRequest body = new UserQbeRequest(); // UserQbeRequest | 
 try {
-    PageResultUserInfos result = apiInstance.findUserByQbe(body);
+    PageResultUserInfos result = apiInstance.infrastructureFindUserByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#findUserByQbe");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureFindUserByQbe");
     e.printStackTrace();
 }
 ```
@@ -274,9 +274,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="findUserByQbe1"></a>
-# **findUserByQbe1**
-> PageResultUserInfos findUserByQbe1(body)
+<a name="infrastructureFindUserByQbe1"></a>
+# **infrastructureFindUserByQbe1**
+> PageResultUserInfos infrastructureFindUserByQbe1(body)
 
 
 
@@ -290,10 +290,10 @@ No authorization required
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 EditableUserQbeRequest body = new EditableUserQbeRequest(); // EditableUserQbeRequest | 
 try {
-    PageResultUserInfos result = apiInstance.findUserByQbe1(body);
+    PageResultUserInfos result = apiInstance.infrastructureFindUserByQbe1(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#findUserByQbe1");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureFindUserByQbe1");
     e.printStackTrace();
 }
 ```
@@ -317,9 +317,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="findUserByUsername1"></a>
-# **findUserByUsername1**
-> EditableUser findUserByUsername1(email)
+<a name="infrastructureFindUserByUsername1"></a>
+# **infrastructureFindUserByUsername1**
+> EditableUser infrastructureFindUserByUsername1(email)
 
 
 
@@ -333,10 +333,10 @@ No authorization required
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 String email = "email_example"; // String | 
 try {
-    EditableUser result = apiInstance.findUserByUsername1(email);
+    EditableUser result = apiInstance.infrastructureFindUserByUsername1(email);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#findUserByUsername1");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureFindUserByUsername1");
     e.printStackTrace();
 }
 ```
@@ -360,9 +360,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="findUsersGroupByQbe"></a>
-# **findUsersGroupByQbe**
-> PageResultUsersGroup findUsersGroupByQbe(body)
+<a name="infrastructureFindUsersGroupByQbe"></a>
+# **infrastructureFindUsersGroupByQbe**
+> PageResultUsersGroup infrastructureFindUsersGroupByQbe(body)
 
 
 
@@ -376,10 +376,10 @@ No authorization required
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 GroupQbeRequest body = new GroupQbeRequest(); // GroupQbeRequest | 
 try {
-    PageResultUsersGroup result = apiInstance.findUsersGroupByQbe(body);
+    PageResultUsersGroup result = apiInstance.infrastructureFindUsersGroupByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#findUsersGroupByQbe");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureFindUsersGroupByQbe");
     e.printStackTrace();
 }
 ```
@@ -403,9 +403,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="getAllGroups"></a>
-# **getAllGroups**
-> List&lt;UsersGroup&gt; getAllGroups()
+<a name="infrastructureGetAllGroups"></a>
+# **infrastructureGetAllGroups**
+> List&lt;UsersGroup&gt; infrastructureGetAllGroups()
 
 
 
@@ -418,10 +418,10 @@ No authorization required
 
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 try {
-    List<UsersGroup> result = apiInstance.getAllGroups();
+    List<UsersGroup> result = apiInstance.infrastructureGetAllGroups();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#getAllGroups");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureGetAllGroups");
     e.printStackTrace();
 }
 ```
@@ -442,9 +442,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="getAllUsers"></a>
-# **getAllUsers**
-> List&lt;UserInfos&gt; getAllUsers()
+<a name="infrastructureGetAllUsers"></a>
+# **infrastructureGetAllUsers**
+> List&lt;UserInfos&gt; infrastructureGetAllUsers()
 
 
 
@@ -457,10 +457,10 @@ No authorization required
 
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 try {
-    List<UserInfos> result = apiInstance.getAllUsers();
+    List<UserInfos> result = apiInstance.infrastructureGetAllUsers();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#getAllUsers");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureGetAllUsers");
     e.printStackTrace();
 }
 ```
@@ -481,9 +481,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="insertGroup"></a>
-# **insertGroup**
-> UsersGroup insertGroup(body)
+<a name="infrastructureInsertGroup"></a>
+# **infrastructureInsertGroup**
+> UsersGroup infrastructureInsertGroup(body)
 
 
 
@@ -497,10 +497,10 @@ No authorization required
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 UsersGroup body = new UsersGroup(); // UsersGroup | 
 try {
-    UsersGroup result = apiInstance.insertGroup(body);
+    UsersGroup result = apiInstance.infrastructureInsertGroup(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#insertGroup");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureInsertGroup");
     e.printStackTrace();
 }
 ```
@@ -524,9 +524,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="insertUser"></a>
-# **insertUser**
-> EditableUser insertUser(body)
+<a name="infrastructureInsertUser"></a>
+# **infrastructureInsertUser**
+> EditableUser infrastructureInsertUser(body)
 
 
 
@@ -540,10 +540,10 @@ No authorization required
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 InsertUserRequest body = new InsertUserRequest(); // InsertUserRequest | 
 try {
-    EditableUser result = apiInstance.insertUser(body);
+    EditableUser result = apiInstance.infrastructureInsertUser(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#insertUser");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureInsertUser");
     e.printStackTrace();
 }
 ```
@@ -567,9 +567,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="updateGroup"></a>
-# **updateGroup**
-> UsersGroup updateGroup(body)
+<a name="infrastructureUpdateGroup"></a>
+# **infrastructureUpdateGroup**
+> UsersGroup infrastructureUpdateGroup(body)
 
 
 
@@ -583,10 +583,10 @@ No authorization required
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 UsersGroup body = new UsersGroup(); // UsersGroup | 
 try {
-    UsersGroup result = apiInstance.updateGroup(body);
+    UsersGroup result = apiInstance.infrastructureUpdateGroup(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#updateGroup");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureUpdateGroup");
     e.printStackTrace();
 }
 ```
@@ -610,9 +610,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="updateUser"></a>
-# **updateUser**
-> EditableUser updateUser(body)
+<a name="infrastructureUpdateUser"></a>
+# **infrastructureUpdateUser**
+> EditableUser infrastructureUpdateUser(body)
 
 
 
@@ -626,10 +626,10 @@ No authorization required
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 EditableUser body = new EditableUser(); // EditableUser | 
 try {
-    EditableUser result = apiInstance.updateUser(body);
+    EditableUser result = apiInstance.infrastructureUpdateUser(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminClusterControllerApi#updateUser");
+    System.err.println("Exception when calling UsersAdminClusterControllerApi#infrastructureUpdateUser");
     e.printStackTrace();
 }
 ```

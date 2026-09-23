@@ -97,7 +97,7 @@ export class GeboAIDeepSearchConfigAdminComponent extends BaseEntityEditingCompo
         super.ngOnInit();
         this.loadingRelatedBackend = true;
 
-        const ug: [Observable<UserInfos[]>, Observable<UsersGroup[]>, Observable<GBaseObject[]>] = [this.usersService.getAllUsers1(), this.usersService.getAllGroups1(), this.deepSearchConfigService.getConfigurableDataSources()];
+        const ug: [Observable<UserInfos[]>, Observable<UsersGroup[]>, Observable<GBaseObject[]>] = [this.usersService.getAllUsers(), this.usersService.getAllGroups(), this.deepSearchConfigService.getConfigurableDataSources()];
         forkJoin(ug).subscribe({
             next: (data) => {
                 this.users = data[0];

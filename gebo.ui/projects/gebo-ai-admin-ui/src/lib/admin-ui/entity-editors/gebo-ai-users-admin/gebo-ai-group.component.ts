@@ -65,7 +65,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
     override ngOnInit(): void {
         super.ngOnInit();
         this.loadingRelatedBackend = true;
-        this.userAdminControllerService.getAllUsers1().subscribe({
+        this.userAdminControllerService.getAllUsers().subscribe({
             next: (array) => {
                 this.users = array;
             }, complete: () => {
@@ -95,7 +95,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
      * @returns An Observable containing the found group or null if not found
      */
     override findByCode(code: string): Observable<UsersGroup | null> {
-        return this.userAdminControllerService.findGroupByCode1(code);
+        return this.userAdminControllerService.findGroupByCode(code);
     }
 
     /**
@@ -105,7 +105,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
      * @returns An Observable containing the updated group
      */
     override save(value: UsersGroup): Observable<UsersGroup> {
-        return this.userAdminControllerService.updateGroup1(value);
+        return this.userAdminControllerService.updateGroup(value);
     }
 
     /**
@@ -115,7 +115,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
      * @returns An Observable containing the created group
      */
     override insert(value: UsersGroup): Observable<UsersGroup> {
-        return this.userAdminControllerService.insertGroup1(value);
+        return this.userAdminControllerService.insertGroup(value);
     }
 
     /**
@@ -125,7 +125,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
      * @returns An Observable containing a boolean indicating success
      */
     override delete(value: UsersGroup): Observable<boolean> {
-        return this.userAdminControllerService.deleteGroup1(value);
+        return this.userAdminControllerService.deleteGroup(value);
     }
 
     /**

@@ -31,7 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:53:44.548149783+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T15:45:03.167494770+02:00[Europe/Rome]")
 
 public class UsersAdminControllerApi {
     private ApiClient apiClient;
@@ -104,8 +104,8 @@ public class UsersAdminControllerApi {
      * @param body  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void deleteGroup1(UsersGroup body) throws RestClientException {
-        deleteGroup1WithHttpInfo(body);
+    public void deleteGroup(UsersGroup body) throws RestClientException {
+        deleteGroupWithHttpInfo(body);
     }
 
     /**
@@ -116,11 +116,11 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> deleteGroup1WithHttpInfo(UsersGroup body) throws RestClientException {
+    public ResponseEntity<Void> deleteGroupWithHttpInfo(UsersGroup body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteGroup1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteGroup");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/deleteGroup").build().toUriString();
         
@@ -147,8 +147,8 @@ public class UsersAdminControllerApi {
      * @param body  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void deleteUser1(EditableUser body) throws RestClientException {
-        deleteUser1WithHttpInfo(body);
+    public void deleteUser(EditableUser body) throws RestClientException {
+        deleteUserWithHttpInfo(body);
     }
 
     /**
@@ -159,11 +159,11 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> deleteUser1WithHttpInfo(EditableUser body) throws RestClientException {
+    public ResponseEntity<Void> deleteUserWithHttpInfo(EditableUser body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteUser1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteUser");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/deleteUser").build().toUriString();
         
@@ -191,8 +191,8 @@ public class UsersAdminControllerApi {
      * @return UsersGroup
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public UsersGroup findGroupByCode1(String code) throws RestClientException {
-        return findGroupByCode1WithHttpInfo(code).getBody();
+    public UsersGroup findGroupByCode(String code) throws RestClientException {
+        return findGroupByCodeWithHttpInfo(code).getBody();
     }
 
     /**
@@ -203,11 +203,11 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;UsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<UsersGroup> findGroupByCode1WithHttpInfo(String code) throws RestClientException {
+    public ResponseEntity<UsersGroup> findGroupByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findGroupByCode1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findGroupByCode");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/findGroupByCode").build().toUriString();
         
@@ -236,8 +236,8 @@ public class UsersAdminControllerApi {
      * @return PageUserInfos
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageUserInfos findUserByQbe2(FindUserByQbeParam body) throws RestClientException {
-        return findUserByQbe2WithHttpInfo(body).getBody();
+    public PageUserInfos findUserByQbe(FindUserByQbeParam body) throws RestClientException {
+        return findUserByQbeWithHttpInfo(body).getBody();
     }
 
     /**
@@ -248,11 +248,11 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;PageUserInfos&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageUserInfos> findUserByQbe2WithHttpInfo(FindUserByQbeParam body) throws RestClientException {
+    public ResponseEntity<PageUserInfos> findUserByQbeWithHttpInfo(FindUserByQbeParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findUserByQbe2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findUserByQbe");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/findUserByQbe").build().toUriString();
         
@@ -282,8 +282,8 @@ public class UsersAdminControllerApi {
      * @return EditableUser
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public EditableUser findUserByUsername2(String email) throws RestClientException {
-        return findUserByUsername2WithHttpInfo(email).getBody();
+    public EditableUser findUserByUsername(String email) throws RestClientException {
+        return findUserByUsernameWithHttpInfo(email).getBody();
     }
 
     /**
@@ -294,11 +294,11 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;EditableUser&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<EditableUser> findUserByUsername2WithHttpInfo(String email) throws RestClientException {
+    public ResponseEntity<EditableUser> findUserByUsernameWithHttpInfo(String email) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'email' is set
         if (email == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'email' when calling findUserByUsername2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'email' when calling findUserByUsername");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/findUserByUsername").build().toUriString();
         
@@ -327,8 +327,8 @@ public class UsersAdminControllerApi {
      * @return PageUsersGroup
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageUsersGroup findUsersGroupByQbe1(FindUsersGroupParam body) throws RestClientException {
-        return findUsersGroupByQbe1WithHttpInfo(body).getBody();
+    public PageUsersGroup findUsersGroupByQbe(FindUsersGroupParam body) throws RestClientException {
+        return findUsersGroupByQbeWithHttpInfo(body).getBody();
     }
 
     /**
@@ -339,11 +339,11 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;PageUsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageUsersGroup> findUsersGroupByQbe1WithHttpInfo(FindUsersGroupParam body) throws RestClientException {
+    public ResponseEntity<PageUsersGroup> findUsersGroupByQbeWithHttpInfo(FindUsersGroupParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findUsersGroupByQbe1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findUsersGroupByQbe");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/findUsersGroupByQbe").build().toUriString();
         
@@ -372,8 +372,8 @@ public class UsersAdminControllerApi {
      * @return List&lt;UsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<UsersGroup> getAllGroups1() throws RestClientException {
-        return getAllGroups1WithHttpInfo().getBody();
+    public List<UsersGroup> getAllGroups() throws RestClientException {
+        return getAllGroupsWithHttpInfo().getBody();
     }
 
     /**
@@ -383,7 +383,7 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;List&lt;UsersGroup&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<UsersGroup>> getAllGroups1WithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<UsersGroup>> getAllGroupsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/getAllGroups").build().toUriString();
         
@@ -410,8 +410,8 @@ public class UsersAdminControllerApi {
      * @return List&lt;UserInfos&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<UserInfos> getAllUsers1() throws RestClientException {
-        return getAllUsers1WithHttpInfo().getBody();
+    public List<UserInfos> getAllUsers() throws RestClientException {
+        return getAllUsersWithHttpInfo().getBody();
     }
 
     /**
@@ -421,7 +421,7 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;List&lt;UserInfos&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<UserInfos>> getAllUsers1WithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<UserInfos>> getAllUsersWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/getAllUsers").build().toUriString();
         
@@ -449,8 +449,8 @@ public class UsersAdminControllerApi {
      * @return UsersGroup
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public UsersGroup insertGroup1(UsersGroup body) throws RestClientException {
-        return insertGroup1WithHttpInfo(body).getBody();
+    public UsersGroup insertGroup(UsersGroup body) throws RestClientException {
+        return insertGroupWithHttpInfo(body).getBody();
     }
 
     /**
@@ -461,11 +461,11 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;UsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<UsersGroup> insertGroup1WithHttpInfo(UsersGroup body) throws RestClientException {
+    public ResponseEntity<UsersGroup> insertGroupWithHttpInfo(UsersGroup body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertGroup1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertGroup");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/insertGroup").build().toUriString();
         
@@ -495,8 +495,8 @@ public class UsersAdminControllerApi {
      * @return EditableUser
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public EditableUser insertUser1(InsertUserParam body) throws RestClientException {
-        return insertUser1WithHttpInfo(body).getBody();
+    public EditableUser insertUser(InsertUserParam body) throws RestClientException {
+        return insertUserWithHttpInfo(body).getBody();
     }
 
     /**
@@ -507,11 +507,11 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;EditableUser&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<EditableUser> insertUser1WithHttpInfo(InsertUserParam body) throws RestClientException {
+    public ResponseEntity<EditableUser> insertUserWithHttpInfo(InsertUserParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertUser1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertUser");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/insertUser").build().toUriString();
         
@@ -541,8 +541,8 @@ public class UsersAdminControllerApi {
      * @return UsersGroup
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public UsersGroup updateGroup1(UsersGroup body) throws RestClientException {
-        return updateGroup1WithHttpInfo(body).getBody();
+    public UsersGroup updateGroup(UsersGroup body) throws RestClientException {
+        return updateGroupWithHttpInfo(body).getBody();
     }
 
     /**
@@ -553,11 +553,11 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;UsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<UsersGroup> updateGroup1WithHttpInfo(UsersGroup body) throws RestClientException {
+    public ResponseEntity<UsersGroup> updateGroupWithHttpInfo(UsersGroup body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateGroup1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateGroup");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/updateGroup").build().toUriString();
         
@@ -587,8 +587,8 @@ public class UsersAdminControllerApi {
      * @return EditableUser
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public EditableUser updateUser1(EditableUser body) throws RestClientException {
-        return updateUser1WithHttpInfo(body).getBody();
+    public EditableUser updateUser(EditableUser body) throws RestClientException {
+        return updateUserWithHttpInfo(body).getBody();
     }
 
     /**
@@ -599,11 +599,11 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;EditableUser&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<EditableUser> updateUser1WithHttpInfo(EditableUser body) throws RestClientException {
+    public ResponseEntity<EditableUser> updateUserWithHttpInfo(EditableUser body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateUser1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateUser");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/updateUser").build().toUriString();
         

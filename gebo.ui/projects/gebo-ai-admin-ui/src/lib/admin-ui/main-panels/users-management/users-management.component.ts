@@ -121,7 +121,7 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
             qbeUser.roles = [this.searchRole];
         }
 
-        this.geboAiUserAdminControllerService.findUserByQbe2({
+        this.geboAiUserAdminControllerService.findUserByQbe({
             qbe: qbeUser as EditableUser,
             page: this.usersPage
         }).subscribe({
@@ -140,7 +140,7 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
      */
     private loadGroups(): void {
         this.loadingGroups = true;
-        this.geboAiUserAdminControllerService.findUsersGroupByQbe1({
+        this.geboAiUserAdminControllerService.findUsersGroupByQbe({
             qbe: {
 
             } as UsersGroup,

@@ -125,7 +125,7 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes["user"] && this.user && this.mode == "EDIT" && this.user?.username) {
             this.loading = true;
-            this.usersAdminControllerService.findUserByUsername2(this.user.username).subscribe({
+            this.usersAdminControllerService.findUserByUsername(this.user.username).subscribe({
                 next: (value) => {
                     if (!value.roles) {
                         value.roles = ["USER"];
@@ -148,10 +148,10 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
         const user: EditableUser = this.formGroup.value;
         const pwdFormValue = this.pwdFormGroup.value;
         this.loading = true;
-        this.usersAdminControllerService.findUserByUsername2(user.username).subscribe({
+        this.usersAdminControllerService.findUserByUsername(user.username).subscribe({
             next: (value) => {
                 if (!value) {
-                    this.usersAdminControllerService.insertUser1({
+                    this.usersAdminControllerService.insertUser({
                         user: user,
                         password: pwdFormValue.password
                     }).subscribe({
@@ -198,7 +198,7 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
         const value: EditableUser = this.formGroup.value;
 
         this.loading = true;
-        this.usersAdminControllerService.updateUser1(value).subscribe({
+        this.usersAdminControllerService.updateUser(value).subscribe({
             next: (value) => {
                 this.mode = "EDIT";
                 this.formGroup.patchValue(value);
@@ -222,7 +222,7 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
     private doPhisicalDelete() {
         this.loading = true;
         const value: EditableUser = this.formGroup.value;
-        this.usersAdminControllerService.deleteUser1(value).subscribe({
+        this.usersAdminControllerService.deleteUser(value).subscribe({
             next: (value) => {
                 this.user = undefined;
                 this.changedData.emit(undefined);

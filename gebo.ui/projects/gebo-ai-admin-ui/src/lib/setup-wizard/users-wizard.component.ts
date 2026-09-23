@@ -59,7 +59,7 @@ export class UsersWizardComponent extends BaseWizardSectionComponent {
      */
     public override reloadData(): void {
         this.loading = true;
-        this.usersController.getAllUsers1().subscribe({
+        this.usersController.getAllUsers().subscribe({
             next: (users) => {
                 this.users = users;
             },

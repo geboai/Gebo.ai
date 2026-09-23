@@ -96,7 +96,7 @@ export class GeneratedAdminApiKeyWizardComponent extends BaseWizardSectionCompon
      * Fetches all users from the user administration service to populate the dropdown.
      */
     private loadUsers() {
-        this.usersController.getAllUsers1().subscribe({
+        this.usersController.getAllUsers().subscribe({
             next: (users: UserInfos[]) => {
                 this.users = users;
             },

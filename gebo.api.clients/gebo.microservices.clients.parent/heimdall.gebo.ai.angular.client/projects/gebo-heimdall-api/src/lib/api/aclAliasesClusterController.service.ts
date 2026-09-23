@@ -62,13 +62,13 @@ export class AclAliasesClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public addAcl(body: GAclEntry, observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public addAcl(body: GAclEntry, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public addAcl(body: GAclEntry, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public addAcl(body: GAclEntry, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureAddAcl(body: GAclEntry, observe?: 'body', reportProgress?: boolean): Observable<number>;
+    public infrastructureAddAcl(body: GAclEntry, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
+    public infrastructureAddAcl(body: GAclEntry, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
+    public infrastructureAddAcl(body: GAclEntry, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling addAcl.');
+            throw new Error('Required parameter body was null or undefined when calling infrastructureAddAcl.');
         }
 
         let headers = this.defaultHeaders;
@@ -109,13 +109,13 @@ export class AclAliasesClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAcl(alias: number, observe?: 'body', reportProgress?: boolean): Observable<GAclEntry>;
-    public findAcl(alias: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAclEntry>>;
-    public findAcl(alias: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAclEntry>>;
-    public findAcl(alias: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureFindAcl(alias: number, observe?: 'body', reportProgress?: boolean): Observable<GAclEntry>;
+    public infrastructureFindAcl(alias: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAclEntry>>;
+    public infrastructureFindAcl(alias: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAclEntry>>;
+    public infrastructureFindAcl(alias: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (alias === null || alias === undefined) {
-            throw new Error('Required parameter alias was null or undefined when calling findAcl.');
+            throw new Error('Required parameter alias was null or undefined when calling infrastructureFindAcl.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -156,13 +156,13 @@ export class AclAliasesClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAlias(body: GAclEntry, observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public findAlias(body: GAclEntry, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public findAlias(body: GAclEntry, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public findAlias(body: GAclEntry, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureFindAlias(body: GAclEntry, observe?: 'body', reportProgress?: boolean): Observable<number>;
+    public infrastructureFindAlias(body: GAclEntry, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
+    public infrastructureFindAlias(body: GAclEntry, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
+    public infrastructureFindAlias(body: GAclEntry, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling findAlias.');
+            throw new Error('Required parameter body was null or undefined when calling infrastructureFindAlias.');
         }
 
         let headers = this.defaultHeaders;
@@ -203,13 +203,13 @@ export class AclAliasesClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAliasesByAclGrantedUniqueId(uniqueId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<number>>;
-    public findAliasesByAclGrantedUniqueId(uniqueId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<number>>>;
-    public findAliasesByAclGrantedUniqueId(uniqueId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<number>>>;
-    public findAliasesByAclGrantedUniqueId(uniqueId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureFindAliasesByAclGrantedUniqueId(uniqueId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<number>>;
+    public infrastructureFindAliasesByAclGrantedUniqueId(uniqueId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<number>>>;
+    public infrastructureFindAliasesByAclGrantedUniqueId(uniqueId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<number>>>;
+    public infrastructureFindAliasesByAclGrantedUniqueId(uniqueId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (uniqueId === null || uniqueId === undefined) {
-            throw new Error('Required parameter uniqueId was null or undefined when calling findAliasesByAclGrantedUniqueId.');
+            throw new Error('Required parameter uniqueId was null or undefined when calling infrastructureFindAliasesByAclGrantedUniqueId.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -251,17 +251,17 @@ export class AclAliasesClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId: string, grantType: string, observe?: 'body', reportProgress?: boolean): Observable<Array<number>>;
-    public findAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId: string, grantType: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<number>>>;
-    public findAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId: string, grantType: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<number>>>;
-    public findAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId: string, grantType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId: string, grantType: string, observe?: 'body', reportProgress?: boolean): Observable<Array<number>>;
+    public infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId: string, grantType: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<number>>>;
+    public infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId: string, grantType: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<number>>>;
+    public infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId: string, grantType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (uniqueId === null || uniqueId === undefined) {
-            throw new Error('Required parameter uniqueId was null or undefined when calling findAliasesByAclGrantedUniqueIdAndAclGrantType.');
+            throw new Error('Required parameter uniqueId was null or undefined when calling infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType.');
         }
 
         if (grantType === null || grantType === undefined) {
-            throw new Error('Required parameter grantType was null or undefined when calling findAliasesByAclGrantedUniqueIdAndAclGrantType.');
+            throw new Error('Required parameter grantType was null or undefined when calling infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -305,13 +305,13 @@ export class AclAliasesClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAliasesByAclGrantedUniqueIdIn(body: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<number>>;
-    public findAliasesByAclGrantedUniqueIdIn(body: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<number>>>;
-    public findAliasesByAclGrantedUniqueIdIn(body: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<number>>>;
-    public findAliasesByAclGrantedUniqueIdIn(body: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureFindAliasesByAclGrantedUniqueIdIn(body: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<number>>;
+    public infrastructureFindAliasesByAclGrantedUniqueIdIn(body: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<number>>>;
+    public infrastructureFindAliasesByAclGrantedUniqueIdIn(body: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<number>>>;
+    public infrastructureFindAliasesByAclGrantedUniqueIdIn(body: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling findAliasesByAclGrantedUniqueIdIn.');
+            throw new Error('Required parameter body was null or undefined when calling infrastructureFindAliasesByAclGrantedUniqueIdIn.');
         }
 
         let headers = this.defaultHeaders;
@@ -353,17 +353,17 @@ export class AclAliasesClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAliasesByAclGrantedUniqueIdInAndAclGrantType(body: Array<string>, grantType: string, observe?: 'body', reportProgress?: boolean): Observable<Array<number>>;
-    public findAliasesByAclGrantedUniqueIdInAndAclGrantType(body: Array<string>, grantType: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<number>>>;
-    public findAliasesByAclGrantedUniqueIdInAndAclGrantType(body: Array<string>, grantType: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<number>>>;
-    public findAliasesByAclGrantedUniqueIdInAndAclGrantType(body: Array<string>, grantType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType(body: Array<string>, grantType: string, observe?: 'body', reportProgress?: boolean): Observable<Array<number>>;
+    public infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType(body: Array<string>, grantType: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<number>>>;
+    public infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType(body: Array<string>, grantType: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<number>>>;
+    public infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType(body: Array<string>, grantType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling findAliasesByAclGrantedUniqueIdInAndAclGrantType.');
+            throw new Error('Required parameter body was null or undefined when calling infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType.');
         }
 
         if (grantType === null || grantType === undefined) {
-            throw new Error('Required parameter grantType was null or undefined when calling findAliasesByAclGrantedUniqueIdInAndAclGrantType.');
+            throw new Error('Required parameter grantType was null or undefined when calling infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -410,13 +410,13 @@ export class AclAliasesClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public removeAcl(alias: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public removeAcl(alias: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public removeAcl(alias: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public removeAcl(alias: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureRemoveAcl(alias: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public infrastructureRemoveAcl(alias: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public infrastructureRemoveAcl(alias: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public infrastructureRemoveAcl(alias: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (alias === null || alias === undefined) {
-            throw new Error('Required parameter alias was null or undefined when calling removeAcl.');
+            throw new Error('Required parameter alias was null or undefined when calling infrastructureRemoveAcl.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});

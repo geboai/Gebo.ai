@@ -4,18 +4,18 @@ All URIs are relative to *http://localhost:13018/heimdall*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**addAcl**](AclAliasesClusterControllerApi.md#addAcl) | **POST** /api/cluster/AclController/addAcl | 
-[**findAcl**](AclAliasesClusterControllerApi.md#findAcl) | **GET** /api/cluster/AclController/findAcl | 
-[**findAlias**](AclAliasesClusterControllerApi.md#findAlias) | **POST** /api/cluster/AclController/findAlias | 
-[**findAliasesByAclGrantedUniqueId**](AclAliasesClusterControllerApi.md#findAliasesByAclGrantedUniqueId) | **GET** /api/cluster/AclController/findAliasesByAclGrantedUniqueId | 
-[**findAliasesByAclGrantedUniqueIdAndAclGrantType**](AclAliasesClusterControllerApi.md#findAliasesByAclGrantedUniqueIdAndAclGrantType) | **GET** /api/cluster/AclController/findAliasesByAclGrantedUniqueIdAndAclGrantType | 
-[**findAliasesByAclGrantedUniqueIdIn**](AclAliasesClusterControllerApi.md#findAliasesByAclGrantedUniqueIdIn) | **POST** /api/cluster/AclController/findAliasesByAclGrantedUniqueIdIn | 
-[**findAliasesByAclGrantedUniqueIdInAndAclGrantType**](AclAliasesClusterControllerApi.md#findAliasesByAclGrantedUniqueIdInAndAclGrantType) | **POST** /api/cluster/AclController/findAliasesByAclGrantedUniqueIdInAndAclGrantType | 
-[**removeAcl**](AclAliasesClusterControllerApi.md#removeAcl) | **DELETE** /api/cluster/AclController/removeAcl | 
+[**infrastructureAddAcl**](AclAliasesClusterControllerApi.md#infrastructureAddAcl) | **POST** /api/cluster/AclController/addAcl | 
+[**infrastructureFindAcl**](AclAliasesClusterControllerApi.md#infrastructureFindAcl) | **GET** /api/cluster/AclController/findAcl | 
+[**infrastructureFindAlias**](AclAliasesClusterControllerApi.md#infrastructureFindAlias) | **POST** /api/cluster/AclController/findAlias | 
+[**infrastructureFindAliasesByAclGrantedUniqueId**](AclAliasesClusterControllerApi.md#infrastructureFindAliasesByAclGrantedUniqueId) | **GET** /api/cluster/AclController/findAliasesByAclGrantedUniqueId | 
+[**infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType**](AclAliasesClusterControllerApi.md#infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType) | **GET** /api/cluster/AclController/findAliasesByAclGrantedUniqueIdAndAclGrantType | 
+[**infrastructureFindAliasesByAclGrantedUniqueIdIn**](AclAliasesClusterControllerApi.md#infrastructureFindAliasesByAclGrantedUniqueIdIn) | **POST** /api/cluster/AclController/findAliasesByAclGrantedUniqueIdIn | 
+[**infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType**](AclAliasesClusterControllerApi.md#infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType) | **POST** /api/cluster/AclController/findAliasesByAclGrantedUniqueIdInAndAclGrantType | 
+[**infrastructureRemoveAcl**](AclAliasesClusterControllerApi.md#infrastructureRemoveAcl) | **DELETE** /api/cluster/AclController/removeAcl | 
 
-<a name="addAcl"></a>
-# **addAcl**
-> Integer addAcl(body)
+<a name="infrastructureAddAcl"></a>
+# **infrastructureAddAcl**
+> Integer infrastructureAddAcl(body)
 
 
 
@@ -29,10 +29,10 @@ Method | HTTP request | Description
 AclAliasesClusterControllerApi apiInstance = new AclAliasesClusterControllerApi();
 GAclEntry body = new GAclEntry(); // GAclEntry | 
 try {
-    Integer result = apiInstance.addAcl(body);
+    Integer result = apiInstance.infrastructureAddAcl(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AclAliasesClusterControllerApi#addAcl");
+    System.err.println("Exception when calling AclAliasesClusterControllerApi#infrastructureAddAcl");
     e.printStackTrace();
 }
 ```
@@ -56,9 +56,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="findAcl"></a>
-# **findAcl**
-> GAclEntry findAcl(alias)
+<a name="infrastructureFindAcl"></a>
+# **infrastructureFindAcl**
+> GAclEntry infrastructureFindAcl(alias)
 
 
 
@@ -72,10 +72,10 @@ No authorization required
 AclAliasesClusterControllerApi apiInstance = new AclAliasesClusterControllerApi();
 Integer alias = 56; // Integer | 
 try {
-    GAclEntry result = apiInstance.findAcl(alias);
+    GAclEntry result = apiInstance.infrastructureFindAcl(alias);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AclAliasesClusterControllerApi#findAcl");
+    System.err.println("Exception when calling AclAliasesClusterControllerApi#infrastructureFindAcl");
     e.printStackTrace();
 }
 ```
@@ -99,9 +99,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="findAlias"></a>
-# **findAlias**
-> Integer findAlias(body)
+<a name="infrastructureFindAlias"></a>
+# **infrastructureFindAlias**
+> Integer infrastructureFindAlias(body)
 
 
 
@@ -115,10 +115,10 @@ No authorization required
 AclAliasesClusterControllerApi apiInstance = new AclAliasesClusterControllerApi();
 GAclEntry body = new GAclEntry(); // GAclEntry | 
 try {
-    Integer result = apiInstance.findAlias(body);
+    Integer result = apiInstance.infrastructureFindAlias(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AclAliasesClusterControllerApi#findAlias");
+    System.err.println("Exception when calling AclAliasesClusterControllerApi#infrastructureFindAlias");
     e.printStackTrace();
 }
 ```
@@ -142,9 +142,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="findAliasesByAclGrantedUniqueId"></a>
-# **findAliasesByAclGrantedUniqueId**
-> List&lt;Integer&gt; findAliasesByAclGrantedUniqueId(uniqueId)
+<a name="infrastructureFindAliasesByAclGrantedUniqueId"></a>
+# **infrastructureFindAliasesByAclGrantedUniqueId**
+> List&lt;Integer&gt; infrastructureFindAliasesByAclGrantedUniqueId(uniqueId)
 
 
 
@@ -158,10 +158,10 @@ No authorization required
 AclAliasesClusterControllerApi apiInstance = new AclAliasesClusterControllerApi();
 String uniqueId = "uniqueId_example"; // String | 
 try {
-    List<Integer> result = apiInstance.findAliasesByAclGrantedUniqueId(uniqueId);
+    List<Integer> result = apiInstance.infrastructureFindAliasesByAclGrantedUniqueId(uniqueId);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AclAliasesClusterControllerApi#findAliasesByAclGrantedUniqueId");
+    System.err.println("Exception when calling AclAliasesClusterControllerApi#infrastructureFindAliasesByAclGrantedUniqueId");
     e.printStackTrace();
 }
 ```
@@ -185,9 +185,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="findAliasesByAclGrantedUniqueIdAndAclGrantType"></a>
-# **findAliasesByAclGrantedUniqueIdAndAclGrantType**
-> List&lt;Integer&gt; findAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId, grantType)
+<a name="infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType"></a>
+# **infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType**
+> List&lt;Integer&gt; infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId, grantType)
 
 
 
@@ -202,10 +202,10 @@ AclAliasesClusterControllerApi apiInstance = new AclAliasesClusterControllerApi(
 String uniqueId = "uniqueId_example"; // String | 
 String grantType = "grantType_example"; // String | 
 try {
-    List<Integer> result = apiInstance.findAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId, grantType);
+    List<Integer> result = apiInstance.infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId, grantType);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AclAliasesClusterControllerApi#findAliasesByAclGrantedUniqueIdAndAclGrantType");
+    System.err.println("Exception when calling AclAliasesClusterControllerApi#infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType");
     e.printStackTrace();
 }
 ```
@@ -230,9 +230,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="findAliasesByAclGrantedUniqueIdIn"></a>
-# **findAliasesByAclGrantedUniqueIdIn**
-> List&lt;Integer&gt; findAliasesByAclGrantedUniqueIdIn(body)
+<a name="infrastructureFindAliasesByAclGrantedUniqueIdIn"></a>
+# **infrastructureFindAliasesByAclGrantedUniqueIdIn**
+> List&lt;Integer&gt; infrastructureFindAliasesByAclGrantedUniqueIdIn(body)
 
 
 
@@ -246,10 +246,10 @@ No authorization required
 AclAliasesClusterControllerApi apiInstance = new AclAliasesClusterControllerApi();
 List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<Integer> result = apiInstance.findAliasesByAclGrantedUniqueIdIn(body);
+    List<Integer> result = apiInstance.infrastructureFindAliasesByAclGrantedUniqueIdIn(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AclAliasesClusterControllerApi#findAliasesByAclGrantedUniqueIdIn");
+    System.err.println("Exception when calling AclAliasesClusterControllerApi#infrastructureFindAliasesByAclGrantedUniqueIdIn");
     e.printStackTrace();
 }
 ```
@@ -273,9 +273,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="findAliasesByAclGrantedUniqueIdInAndAclGrantType"></a>
-# **findAliasesByAclGrantedUniqueIdInAndAclGrantType**
-> List&lt;Integer&gt; findAliasesByAclGrantedUniqueIdInAndAclGrantType(body, grantType)
+<a name="infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType"></a>
+# **infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType**
+> List&lt;Integer&gt; infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType(body, grantType)
 
 
 
@@ -290,10 +290,10 @@ AclAliasesClusterControllerApi apiInstance = new AclAliasesClusterControllerApi(
 List<String> body = Arrays.asList("body_example"); // List<String> | 
 String grantType = "grantType_example"; // String | 
 try {
-    List<Integer> result = apiInstance.findAliasesByAclGrantedUniqueIdInAndAclGrantType(body, grantType);
+    List<Integer> result = apiInstance.infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType(body, grantType);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AclAliasesClusterControllerApi#findAliasesByAclGrantedUniqueIdInAndAclGrantType");
+    System.err.println("Exception when calling AclAliasesClusterControllerApi#infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType");
     e.printStackTrace();
 }
 ```
@@ -318,9 +318,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="removeAcl"></a>
-# **removeAcl**
-> removeAcl(alias)
+<a name="infrastructureRemoveAcl"></a>
+# **infrastructureRemoveAcl**
+> infrastructureRemoveAcl(alias)
 
 
 
@@ -334,9 +334,9 @@ No authorization required
 AclAliasesClusterControllerApi apiInstance = new AclAliasesClusterControllerApi();
 Integer alias = 56; // Integer | 
 try {
-    apiInstance.removeAcl(alias);
+    apiInstance.infrastructureRemoveAcl(alias);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AclAliasesClusterControllerApi#removeAcl");
+    System.err.println("Exception when calling AclAliasesClusterControllerApi#infrastructureRemoveAcl");
     e.printStackTrace();
 }
 ```

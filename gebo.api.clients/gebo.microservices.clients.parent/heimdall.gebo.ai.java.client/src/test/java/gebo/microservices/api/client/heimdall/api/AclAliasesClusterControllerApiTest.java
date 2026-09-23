@@ -38,9 +38,9 @@ public class AclAliasesClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void addAclTest() {
+    public void infrastructureAddAclTest() {
         GAclEntry body = null;
-        Integer response = api.addAcl(body);
+        Integer response = api.infrastructureAddAcl(body);
 
         // TODO: test validations
     }
@@ -53,9 +53,9 @@ public class AclAliasesClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findAclTest() {
+    public void infrastructureFindAclTest() {
         Integer alias = null;
-        GAclEntry response = api.findAcl(alias);
+        GAclEntry response = api.infrastructureFindAcl(alias);
 
         // TODO: test validations
     }
@@ -68,9 +68,9 @@ public class AclAliasesClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findAliasTest() {
+    public void infrastructureFindAliasTest() {
         GAclEntry body = null;
-        Integer response = api.findAlias(body);
+        Integer response = api.infrastructureFindAlias(body);
 
         // TODO: test validations
     }
@@ -83,9 +83,9 @@ public class AclAliasesClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findAliasesByAclGrantedUniqueIdTest() {
+    public void infrastructureFindAliasesByAclGrantedUniqueIdTest() {
         String uniqueId = null;
-        List<Integer> response = api.findAliasesByAclGrantedUniqueId(uniqueId);
+        List<Integer> response = api.infrastructureFindAliasesByAclGrantedUniqueId(uniqueId);
 
         // TODO: test validations
     }
@@ -98,10 +98,10 @@ public class AclAliasesClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findAliasesByAclGrantedUniqueIdAndAclGrantTypeTest() {
+    public void infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantTypeTest() {
         String uniqueId = null;
         String grantType = null;
-        List<Integer> response = api.findAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId, grantType);
+        List<Integer> response = api.infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId, grantType);
 
         // TODO: test validations
     }
@@ -114,9 +114,9 @@ public class AclAliasesClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findAliasesByAclGrantedUniqueIdInTest() {
+    public void infrastructureFindAliasesByAclGrantedUniqueIdInTest() {
         List<String> body = null;
-        List<Integer> response = api.findAliasesByAclGrantedUniqueIdIn(body);
+        List<Integer> response = api.infrastructureFindAliasesByAclGrantedUniqueIdIn(body);
 
         // TODO: test validations
     }
@@ -129,10 +129,10 @@ public class AclAliasesClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findAliasesByAclGrantedUniqueIdInAndAclGrantTypeTest() {
+    public void infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantTypeTest() {
         List<String> body = null;
         String grantType = null;
-        List<Integer> response = api.findAliasesByAclGrantedUniqueIdInAndAclGrantType(body, grantType);
+        List<Integer> response = api.infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType(body, grantType);
 
         // TODO: test validations
     }
@@ -145,9 +145,9 @@ public class AclAliasesClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void removeAclTest() {
+    public void infrastructureRemoveAclTest() {
         Integer alias = null;
-        api.removeAcl(alias);
+        api.infrastructureRemoveAcl(alias);
 
         // TODO: test validations
     }

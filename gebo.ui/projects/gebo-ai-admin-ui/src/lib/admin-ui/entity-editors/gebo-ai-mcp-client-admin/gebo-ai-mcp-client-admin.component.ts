@@ -142,8 +142,8 @@ export class GeboAIMcpClientAdminComponent extends BaseEntityEditingComponent<MC
 
     override ngOnInit(): void {
         super.ngOnInit();
-        this.userAdminControllerService.getAllUsers1().subscribe(u => this.users = u || []);
-        this.userAdminControllerService.getAllGroups1().subscribe(g => this.groups = g || []);
+        this.userAdminControllerService.getAllUsers().subscribe(u => this.users = u || []);
+        this.userAdminControllerService.getAllGroups().subscribe(g => this.groups = g || []);
     }
 
     override onLoadedPersistentData(actualValue: MCPClientConfig): void {
