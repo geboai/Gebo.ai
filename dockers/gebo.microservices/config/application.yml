@@ -85,6 +85,11 @@ ai.gebo.config:
 #                                                         the vectorizator and graphicator
 #                                                         write embeddings and graph data
 #                                                         against brain's knowledge base)
+#   mcpclient                           ->  brain-gebo   (the MCP client-connection registry
+#                                                         MCPClientConfig is shared state: brain
+#                                                         owns the writes via McpClientConfigController,
+#                                                         the mcp content handler reads it to open
+#                                                         its ingestion connections - one store)
 #   every other service                 ->  <service>-gebo
 #
 # The connection string's trailing /db is ignored - Spring selects the database from
