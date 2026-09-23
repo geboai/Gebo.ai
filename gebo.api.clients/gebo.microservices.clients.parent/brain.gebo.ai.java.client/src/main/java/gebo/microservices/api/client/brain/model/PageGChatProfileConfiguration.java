@@ -27,14 +27,14 @@ import java.util.List;
  * PageGChatProfileConfiguration
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:44:15.128868800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T07:16:54.323911786+02:00[Europe/Rome]")
 
 public class PageGChatProfileConfiguration {
-  @JsonProperty("totalPages")
-  private Integer totalPages = null;
-
   @JsonProperty("totalElements")
   private Long totalElements = null;
+
+  @JsonProperty("totalPages")
+  private Integer totalPages = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
@@ -63,24 +63,6 @@ public class PageGChatProfileConfiguration {
   @JsonProperty("empty")
   private Boolean empty = null;
 
-  public PageGChatProfileConfiguration totalPages(Integer totalPages) {
-    this.totalPages = totalPages;
-    return this;
-  }
-
-   /**
-   * Get totalPages
-   * @return totalPages
-  **/
-  @Schema(description = "")
-  public Integer getTotalPages() {
-    return totalPages;
-  }
-
-  public void setTotalPages(Integer totalPages) {
-    this.totalPages = totalPages;
-  }
-
   public PageGChatProfileConfiguration totalElements(Long totalElements) {
     this.totalElements = totalElements;
     return this;
@@ -97,6 +79,24 @@ public class PageGChatProfileConfiguration {
 
   public void setTotalElements(Long totalElements) {
     this.totalElements = totalElements;
+  }
+
+  public PageGChatProfileConfiguration totalPages(Integer totalPages) {
+    this.totalPages = totalPages;
+    return this;
+  }
+
+   /**
+   * Get totalPages
+   * @return totalPages
+  **/
+  @Schema(description = "")
+  public Integer getTotalPages() {
+    return totalPages;
+  }
+
+  public void setTotalPages(Integer totalPages) {
+    this.totalPages = totalPages;
   }
 
   public PageGChatProfileConfiguration pageable(PageableObject pageable) {
@@ -279,8 +279,8 @@ public class PageGChatProfileConfiguration {
       return false;
     }
     PageGChatProfileConfiguration pageGChatProfileConfiguration = (PageGChatProfileConfiguration) o;
-    return Objects.equals(this.totalPages, pageGChatProfileConfiguration.totalPages) &&
-        Objects.equals(this.totalElements, pageGChatProfileConfiguration.totalElements) &&
+    return Objects.equals(this.totalElements, pageGChatProfileConfiguration.totalElements) &&
+        Objects.equals(this.totalPages, pageGChatProfileConfiguration.totalPages) &&
         Objects.equals(this.pageable, pageGChatProfileConfiguration.pageable) &&
         Objects.equals(this.first, pageGChatProfileConfiguration.first) &&
         Objects.equals(this.last, pageGChatProfileConfiguration.last) &&
@@ -294,7 +294,7 @@ public class PageGChatProfileConfiguration {
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
+    return Objects.hash(totalElements, totalPages, pageable, first, last, size, content, number, sort, numberOfElements, empty);
   }
 
 
@@ -303,8 +303,8 @@ public class PageGChatProfileConfiguration {
     StringBuilder sb = new StringBuilder();
     sb.append("class PageGChatProfileConfiguration {\n");
     
-    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
+    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    last: ").append(toIndentedString(last)).append("\n");

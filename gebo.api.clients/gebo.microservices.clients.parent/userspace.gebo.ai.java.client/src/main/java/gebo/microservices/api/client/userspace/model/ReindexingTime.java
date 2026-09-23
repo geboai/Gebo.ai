@@ -24,7 +24,7 @@ import java.util.List;
  * ReindexingTime
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:45:39.865040933+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T07:17:32.595597329+02:00[Europe/Rome]")
 
 public class ReindexingTime {
   @JsonProperty("createdTime")

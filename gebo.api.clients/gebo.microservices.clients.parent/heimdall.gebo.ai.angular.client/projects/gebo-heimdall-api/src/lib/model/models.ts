@@ -7,7 +7,6 @@ export * from './changeUsernamePasswordData';
 export * from './checkPasswordRequest';
 export * from './componentEnabledStatus';
 export * from './componentMetaInfo';
-export * from './componentSetupStatus';
 export * from './createUserIfNotExistsRequest';
 export * from './dataEndpoint';
 export * from './dataPage';

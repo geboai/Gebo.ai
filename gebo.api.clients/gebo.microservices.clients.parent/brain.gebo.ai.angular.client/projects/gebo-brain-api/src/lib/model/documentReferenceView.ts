@@ -14,8 +14,8 @@ export interface DocumentReferenceView {
     name?: string;
     extension?: string;
     description?: string;
-    messagingModuleId?: string;
     code?: string;
+    messagingModuleId?: string;
     rootKnowledgebaseCode?: string;
     parentProjectCode?: string;
     modificationDate?: Date;

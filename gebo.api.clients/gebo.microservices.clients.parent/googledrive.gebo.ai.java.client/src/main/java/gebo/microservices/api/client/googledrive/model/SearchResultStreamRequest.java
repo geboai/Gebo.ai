@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SearchResultStreamRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:44:54.948825411+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T07:17:12.608260909+02:00[Europe/Rome]")
 
 public class SearchResultStreamRequest {
   /**
