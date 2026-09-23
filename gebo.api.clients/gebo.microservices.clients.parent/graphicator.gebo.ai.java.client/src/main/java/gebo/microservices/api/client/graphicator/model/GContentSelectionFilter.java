@@ -25,7 +25,7 @@ import java.util.List;
  * GContentSelectionFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T07:17:14.888793024+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:53:42.770819479+02:00[Europe/Rome]")
 
 public class GContentSelectionFilter {
   @JsonProperty("criterias")

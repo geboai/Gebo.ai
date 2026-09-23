@@ -11,6 +11,3 @@ export * from './gObjectRefGProjectEndpoint';
 export * from './geboComponentInfo';
 export * from './graphObjectType';
 export * from './graphRagExtractionConfig';
-export * from './ingestionFileType';
-export * from './ingestionHandlerConfig';
-export * from './specialFile';

@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * VFilesystemReference
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T07:16:54.323911786+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:53:22.373080167+02:00[Europe/Rome]")
 
 public class VFilesystemReference {
   @JsonProperty("root")
