@@ -53,14 +53,14 @@ export default class GJobStatusItem {
         obj.projectEndpointReference = GObjectRefGProjectEndpoint.constructFromObject(data['projectEndpointReference']);
       if (data.hasOwnProperty('startDateTime'))
         obj.startDateTime = ApiClient.convertToType(data['startDateTime'], 'Date');
+      if (data.hasOwnProperty('jobType'))
+        obj.jobType = ApiClient.convertToType(data['jobType'], 'String');
       if (data.hasOwnProperty('processing'))
         obj.processing = ApiClient.convertToType(data['processing'], 'Boolean');
       if (data.hasOwnProperty('finished'))
         obj.finished = ApiClient.convertToType(data['finished'], 'Boolean');
       if (data.hasOwnProperty('endDateTime'))
         obj.endDateTime = ApiClient.convertToType(data['endDateTime'], 'Date');
-      if (data.hasOwnProperty('jobType'))
-        obj.jobType = ApiClient.convertToType(data['jobType'], 'String');
     }
     return obj;
   }
@@ -102,21 +102,6 @@ GJobStatusItem.prototype.projectEndpointReference = undefined;
 GJobStatusItem.prototype.startDateTime = undefined;
 
 /**
- * @member {Boolean} processing
- */
-GJobStatusItem.prototype.processing = undefined;
-
-/**
- * @member {Boolean} finished
- */
-GJobStatusItem.prototype.finished = undefined;
-
-/**
- * @member {Date} endDateTime
- */
-GJobStatusItem.prototype.endDateTime = undefined;
-
-/**
  * Allowed values for the <code>jobType</code> property.
  * @enum {String}
  * @readonly
@@ -144,4 +129,19 @@ GJobStatusItem.JobTypeEnum = {
  * @member {module:model/GJobStatusItem.JobTypeEnum} jobType
  */
 GJobStatusItem.prototype.jobType = undefined;
+
+/**
+ * @member {Boolean} processing
+ */
+GJobStatusItem.prototype.processing = undefined;
+
+/**
+ * @member {Boolean} finished
+ */
+GJobStatusItem.prototype.finished = undefined;
+
+/**
+ * @member {Date} endDateTime
+ */
+GJobStatusItem.prototype.endDateTime = undefined;
 

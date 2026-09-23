@@ -10,10 +10,10 @@ Name | Type | Description | Notes
 **workflowId** | **String** |  | [optional] 
 **projectEndpointReference** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  | [optional] 
 **startDateTime** | **Date** |  | [optional] 
+**jobType** | **String** |  | [optional] 
 **processing** | **Boolean** |  | [optional] 
 **finished** | **Boolean** |  | [optional] 
 **endDateTime** | **Date** |  | [optional] 
-**jobType** | **String** |  | [optional] 
 
 <a name="JobTypeEnum"></a>
 ## Enum: JobTypeEnum

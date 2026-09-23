@@ -42,6 +42,8 @@ export default class DocumentReferenceView {
         obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('extension'))
         obj.extension = ApiClient.convertToType(data['extension'], 'String');
+      if (data.hasOwnProperty('contentType'))
+        obj.contentType = ApiClient.convertToType(data['contentType'], 'String');
       if (data.hasOwnProperty('description'))
         obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('code'))
@@ -56,14 +58,12 @@ export default class DocumentReferenceView {
         obj.rootKnowledgebaseCode = ApiClient.convertToType(data['rootKnowledgebaseCode'], 'String');
       if (data.hasOwnProperty('modificationDate'))
         obj.modificationDate = ApiClient.convertToType(data['modificationDate'], 'Date');
-      if (data.hasOwnProperty('relativePath'))
-        obj.relativePath = ApiClient.convertToType(data['relativePath'], 'String');
       if (data.hasOwnProperty('parentVirtualFolderCode'))
         obj.parentVirtualFolderCode = ApiClient.convertToType(data['parentVirtualFolderCode'], 'String');
+      if (data.hasOwnProperty('relativePath'))
+        obj.relativePath = ApiClient.convertToType(data['relativePath'], 'String');
       if (data.hasOwnProperty('creationDate'))
         obj.creationDate = ApiClient.convertToType(data['creationDate'], 'Date');
-      if (data.hasOwnProperty('contentType'))
-        obj.contentType = ApiClient.convertToType(data['contentType'], 'String');
     }
     return obj;
   }
@@ -78,6 +78,11 @@ DocumentReferenceView.prototype.name = undefined;
  * @member {String} extension
  */
 DocumentReferenceView.prototype.extension = undefined;
+
+/**
+ * @member {String} contentType
+ */
+DocumentReferenceView.prototype.contentType = undefined;
 
 /**
  * @member {String} description
@@ -115,22 +120,17 @@ DocumentReferenceView.prototype.rootKnowledgebaseCode = undefined;
 DocumentReferenceView.prototype.modificationDate = undefined;
 
 /**
- * @member {String} relativePath
- */
-DocumentReferenceView.prototype.relativePath = undefined;
-
-/**
  * @member {String} parentVirtualFolderCode
  */
 DocumentReferenceView.prototype.parentVirtualFolderCode = undefined;
 
 /**
+ * @member {String} relativePath
+ */
+DocumentReferenceView.prototype.relativePath = undefined;
+
+/**
  * @member {Date} creationDate
  */
 DocumentReferenceView.prototype.creationDate = undefined;
-
-/**
- * @member {String} contentType
- */
-DocumentReferenceView.prototype.contentType = undefined;
 

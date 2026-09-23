@@ -58,10 +58,10 @@ export default class DocumentReferenceView {
         obj.modificationDate = ApiClient.convertToType(data['modificationDate'], 'Date');
       if (data.hasOwnProperty('relativePath'))
         obj.relativePath = ApiClient.convertToType(data['relativePath'], 'String');
-      if (data.hasOwnProperty('parentVirtualFolderCode'))
-        obj.parentVirtualFolderCode = ApiClient.convertToType(data['parentVirtualFolderCode'], 'String');
       if (data.hasOwnProperty('deleted'))
         obj.deleted = ApiClient.convertToType(data['deleted'], 'Boolean');
+      if (data.hasOwnProperty('parentVirtualFolderCode'))
+        obj.parentVirtualFolderCode = ApiClient.convertToType(data['parentVirtualFolderCode'], 'String');
       if (data.hasOwnProperty('creationDate'))
         obj.creationDate = ApiClient.convertToType(data['creationDate'], 'Date');
     }
@@ -120,14 +120,14 @@ DocumentReferenceView.prototype.modificationDate = undefined;
 DocumentReferenceView.prototype.relativePath = undefined;
 
 /**
- * @member {String} parentVirtualFolderCode
- */
-DocumentReferenceView.prototype.parentVirtualFolderCode = undefined;
-
-/**
  * @member {Boolean} deleted
  */
 DocumentReferenceView.prototype.deleted = undefined;
+
+/**
+ * @member {String} parentVirtualFolderCode
+ */
+DocumentReferenceView.prototype.parentVirtualFolderCode = undefined;
 
 /**
  * @member {Date} creationDate
