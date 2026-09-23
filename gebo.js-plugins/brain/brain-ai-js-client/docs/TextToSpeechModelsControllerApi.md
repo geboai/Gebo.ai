@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getRuntimeConfiguredTextToSpeechModels"></a>
 # **getRuntimeConfiguredTextToSpeechModels**
-> Object getRuntimeConfiguredTextToSpeechModels(opts)
+> [ConfigurationEntryGBaseTextToSpeachModelConfig] getRuntimeConfiguredTextToSpeechModels(opts)
 
 
 
@@ -19,7 +19,7 @@ import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.TextToSpeechModelsControllerApi();
 let opts = { 
-  'modelTypeCode': null // Object | 
+  'modelTypeCode': "modelTypeCode_example" // String | 
 };
 apiInstance.getRuntimeConfiguredTextToSpeechModels(opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -33,11 +33,11 @@ apiInstance.getRuntimeConfiguredTextToSpeechModels(opts).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional] 
+ **modelTypeCode** | **String**|  | [optional] 
 
 ### Return type
 
-**Object**
+[**[ConfigurationEntryGBaseTextToSpeachModelConfig]**](ConfigurationEntryGBaseTextToSpeachModelConfig.md)
 
 ### Authorization
 
@@ -50,7 +50,7 @@ No authorization required
 
 <a name="getTextToSpeechModelTypes"></a>
 # **getTextToSpeechModelTypes**
-> Object getTextToSpeechModelTypes()
+> [GTextToSpeechModelType] getTextToSpeechModelTypes()
 
 
 
@@ -72,7 +72,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GTextToSpeechModelType]**](GTextToSpeechModelType.md)
 
 ### Authorization
 

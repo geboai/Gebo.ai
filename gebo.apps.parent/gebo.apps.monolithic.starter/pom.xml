@@ -226,6 +226,19 @@
 			<artifactId>gebo.architecture.mcp-clients</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- McpClientConfigController was split out of the base mcp-clients module
+		     (which the mcpclient content-handler microservice also pulls); the
+		     monolith serves everything, so it keeps the controller here. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.mcp-clients.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo</groupId>
+			<artifactId>gebo.system.ingestion.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.mcp-server</artifactId>

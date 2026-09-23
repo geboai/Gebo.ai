@@ -24,9 +24,9 @@ export default class LLMCreateModelData {
    * Constructs a new <code>LLMCreateModelData</code>.
    * @alias module:model/LLMCreateModelData
    * @class
-   * @param type {Object} 
-   * @param serviceHandler {Object} 
-   * @param modelCode {Object} 
+   * @param type {module:model/LLMCreateModelData.TypeEnum} 
+   * @param serviceHandler {String} 
+   * @param modelCode {String} 
    */
   constructor(type, serviceHandler, modelCode) {
     this.type = type;
@@ -45,91 +45,187 @@ export default class LLMCreateModelData {
     if (data) {
       obj = obj || new LLMCreateModelData();
       if (data.hasOwnProperty('type'))
-        obj.type = ApiClient.convertToType(data['type'], Object);
+        obj.type = ApiClient.convertToType(data['type'], 'String');
       if (data.hasOwnProperty('doModelsLookup'))
-        obj.doModelsLookup = ApiClient.convertToType(data['doModelsLookup'], Object);
+        obj.doModelsLookup = ApiClient.convertToType(data['doModelsLookup'], 'Boolean');
       if (data.hasOwnProperty('serviceHandler'))
-        obj.serviceHandler = ApiClient.convertToType(data['serviceHandler'], Object);
+        obj.serviceHandler = ApiClient.convertToType(data['serviceHandler'], 'String');
       if (data.hasOwnProperty('setAsDefaultModel'))
-        obj.setAsDefaultModel = ApiClient.convertToType(data['setAsDefaultModel'], Object);
+        obj.setAsDefaultModel = ApiClient.convertToType(data['setAsDefaultModel'], 'Boolean');
       if (data.hasOwnProperty('enableAllFunctions'))
-        obj.enableAllFunctions = ApiClient.convertToType(data['enableAllFunctions'], Object);
+        obj.enableAllFunctions = ApiClient.convertToType(data['enableAllFunctions'], 'Boolean');
       if (data.hasOwnProperty('secretId'))
-        obj.secretId = ApiClient.convertToType(data['secretId'], Object);
+        obj.secretId = ApiClient.convertToType(data['secretId'], 'String');
       if (data.hasOwnProperty('modelCode'))
-        obj.modelCode = ApiClient.convertToType(data['modelCode'], Object);
+        obj.modelCode = ApiClient.convertToType(data['modelCode'], 'String');
       if (data.hasOwnProperty('baseUrl'))
-        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], Object);
+        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], 'String');
       if (data.hasOwnProperty('contextWindow'))
-        obj.contextWindow = ApiClient.convertToType(data['contextWindow'], Object);
+        obj.contextWindow = ApiClient.convertToType(data['contextWindow'], 'Number');
       if (data.hasOwnProperty('uses'))
-        obj.uses = ApiClient.convertToType(data['uses'], Object);
+        obj.uses = ApiClient.convertToType(data['uses'], ['String']);
       if (data.hasOwnProperty('maxGeneratedTokens'))
-        obj.maxGeneratedTokens = ApiClient.convertToType(data['maxGeneratedTokens'], Object);
+        obj.maxGeneratedTokens = ApiClient.convertToType(data['maxGeneratedTokens'], 'Number');
       if (data.hasOwnProperty('thinking'))
-        obj.thinking = ApiClient.convertToType(data['thinking'], Object);
+        obj.thinking = ApiClient.convertToType(data['thinking'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} type
+ * Allowed values for the <code>type</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LLMCreateModelData.TypeEnum = {
+  /**
+   * value: "CHAT"
+   * @const
+   */
+  CHAT: "CHAT",
+
+  /**
+   * value: "EMBEDDING"
+   * @const
+   */
+  EMBEDDING: "EMBEDDING",
+
+  /**
+   * value: "RANKING"
+   * @const
+   */
+  RANKING: "RANKING",
+
+  /**
+   * value: "IMAGESGEN"
+   * @const
+   */
+  IMAGESGEN: "IMAGESGEN",
+
+  /**
+   * value: "TTS"
+   * @const
+   */
+  TTS: "TTS",
+
+  /**
+   * value: "TRANSCRIPT"
+   * @const
+   */
+  TRANSCRIPT: "TRANSCRIPT"
+};
+/**
+ * @member {module:model/LLMCreateModelData.TypeEnum} type
  */
 LLMCreateModelData.prototype.type = undefined;
 
 /**
- * @member {Object} doModelsLookup
+ * @member {Boolean} doModelsLookup
  */
 LLMCreateModelData.prototype.doModelsLookup = undefined;
 
 /**
- * @member {Object} serviceHandler
+ * @member {String} serviceHandler
  */
 LLMCreateModelData.prototype.serviceHandler = undefined;
 
 /**
- * @member {Object} setAsDefaultModel
+ * @member {Boolean} setAsDefaultModel
  */
 LLMCreateModelData.prototype.setAsDefaultModel = undefined;
 
 /**
- * @member {Object} enableAllFunctions
+ * @member {Boolean} enableAllFunctions
  */
 LLMCreateModelData.prototype.enableAllFunctions = undefined;
 
 /**
- * @member {Object} secretId
+ * @member {String} secretId
  */
 LLMCreateModelData.prototype.secretId = undefined;
 
 /**
- * @member {Object} modelCode
+ * @member {String} modelCode
  */
 LLMCreateModelData.prototype.modelCode = undefined;
 
 /**
- * @member {Object} baseUrl
+ * @member {String} baseUrl
  */
 LLMCreateModelData.prototype.baseUrl = undefined;
 
 /**
- * @member {Object} contextWindow
+ * @member {Number} contextWindow
  */
 LLMCreateModelData.prototype.contextWindow = undefined;
 
 /**
- * @member {Object} uses
+ * Allowed values for the <code>uses</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LLMCreateModelData.UsesEnum = {
+  /**
+   * value: "CHAT"
+   * @const
+   */
+  CHAT: "CHAT",
+
+  /**
+   * value: "INTERNAL_SERVICES"
+   * @const
+   */
+  INTERNAL_SERVICES: "INTERNAL_SERVICES"
+};
+/**
+ * @member {Array.<module:model/LLMCreateModelData.UsesEnum>} uses
  */
 LLMCreateModelData.prototype.uses = undefined;
 
 /**
- * @member {Object} maxGeneratedTokens
+ * @member {Number} maxGeneratedTokens
  */
 LLMCreateModelData.prototype.maxGeneratedTokens = undefined;
 
 /**
- * @member {Object} thinking
+ * Allowed values for the <code>thinking</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LLMCreateModelData.ThinkingEnum = {
+  /**
+   * value: "NO_THINKING"
+   * @const
+   */
+  NO_THINKING: "NO_THINKING",
+
+  /**
+   * value: "LOW_THINKING"
+   * @const
+   */
+  LOW_THINKING: "LOW_THINKING",
+
+  /**
+   * value: "MEDIUM_THINKING"
+   * @const
+   */
+  MEDIUM_THINKING: "MEDIUM_THINKING",
+
+  /**
+   * value: "HIGH_THINKING"
+   * @const
+   */
+  HIGH_THINKING: "HIGH_THINKING",
+
+  /**
+   * value: "AUTO"
+   * @const
+   */
+  AUTO: "AUTO"
+};
+/**
+ * @member {module:model/LLMCreateModelData.ThinkingEnum} thinking
  */
 LLMCreateModelData.prototype.thinking = undefined;
 

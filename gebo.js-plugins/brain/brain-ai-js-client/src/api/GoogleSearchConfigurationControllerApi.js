@@ -137,7 +137,7 @@ export default class GoogleSearchConfigurationControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GGoogleSearchApiCredentials>} and HTTP response
      */
     getGoogleSearchApiCredentialsWithHttpInfo() {
       
@@ -159,7 +159,7 @@ export default class GoogleSearchConfigurationControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GGoogleSearchApiCredentials];
 
       return this.apiClient.callApi(
         '/api/admin/GoogleSearchConfigurationController/getGoogleSearchApiCredentials', 'GET',
@@ -169,7 +169,7 @@ export default class GoogleSearchConfigurationControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GGoogleSearchApiCredentials>}
      */
     getGoogleSearchApiCredentials() {
       return this.getGoogleSearchApiCredentialsWithHttpInfo()
@@ -272,7 +272,7 @@ export default class GoogleSearchConfigurationControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GGoogleSearchApiCredentials} and HTTP response
      */
     searchGGoogleSearchApiCredentialsByCodeWithHttpInfo(code) {

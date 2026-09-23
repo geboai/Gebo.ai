@@ -14,6 +14,7 @@
  */
 import ApiClient from '../ApiClient';
 import GAnthropicChatModelConfig from './GAnthropicChatModelConfig';
+import GUserMessage from './GUserMessage';
 
 /**
  * The OperationStatusGAnthropicChatModelConfig model module.
@@ -42,11 +43,11 @@ export default class OperationStatusGAnthropicChatModelConfig {
       if (data.hasOwnProperty('result'))
         obj.result = GAnthropicChatModelConfig.constructFromObject(data['result']);
       if (data.hasOwnProperty('messages'))
-        obj.messages = ApiClient.convertToType(data['messages'], Object);
+        obj.messages = ApiClient.convertToType(data['messages'], [GUserMessage]);
       if (data.hasOwnProperty('hasErrorMessages'))
-        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], Object);
+        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], 'Boolean');
       if (data.hasOwnProperty('hasWarnMessages'))
-        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], Object);
+        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], 'Boolean');
     }
     return obj;
   }
@@ -58,17 +59,17 @@ export default class OperationStatusGAnthropicChatModelConfig {
 OperationStatusGAnthropicChatModelConfig.prototype.result = undefined;
 
 /**
- * @member {Object} messages
+ * @member {Array.<module:model/GUserMessage>} messages
  */
 OperationStatusGAnthropicChatModelConfig.prototype.messages = undefined;
 
 /**
- * @member {Object} hasErrorMessages
+ * @member {Boolean} hasErrorMessages
  */
 OperationStatusGAnthropicChatModelConfig.prototype.hasErrorMessages = undefined;
 
 /**
- * @member {Object} hasWarnMessages
+ * @member {Boolean} hasWarnMessages
  */
 OperationStatusGAnthropicChatModelConfig.prototype.hasWarnMessages = undefined;
 

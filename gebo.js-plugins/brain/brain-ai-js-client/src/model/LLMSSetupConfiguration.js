@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from '../ApiClient';
+import LLMExistingConfiguration from './LLMExistingConfiguration';
+import LLMSModelsPresets from './LLMSModelsPresets';
 import LLMSVendorInfo from './LLMSVendorInfo';
 
 /**
@@ -26,7 +28,7 @@ export default class LLMSSetupConfiguration {
    * @alias module:model/LLMSSetupConfiguration
    * @class
    * @param parentModel {module:model/LLMSVendorInfo} 
-   * @param libraryModel {Object} 
+   * @param libraryModel {Array.<module:model/LLMSModelsPresets>} 
    */
   constructor(parentModel, libraryModel) {
     this.parentModel = parentModel;
@@ -46,9 +48,9 @@ export default class LLMSSetupConfiguration {
       if (data.hasOwnProperty('parentModel'))
         obj.parentModel = LLMSVendorInfo.constructFromObject(data['parentModel']);
       if (data.hasOwnProperty('libraryModel'))
-        obj.libraryModel = ApiClient.convertToType(data['libraryModel'], Object);
+        obj.libraryModel = ApiClient.convertToType(data['libraryModel'], [LLMSModelsPresets]);
       if (data.hasOwnProperty('runtimeConfigs'))
-        obj.runtimeConfigs = ApiClient.convertToType(data['runtimeConfigs'], Object);
+        obj.runtimeConfigs = ApiClient.convertToType(data['runtimeConfigs'], [LLMExistingConfiguration]);
     }
     return obj;
   }
@@ -60,12 +62,12 @@ export default class LLMSSetupConfiguration {
 LLMSSetupConfiguration.prototype.parentModel = undefined;
 
 /**
- * @member {Object} libraryModel
+ * @member {Array.<module:model/LLMSModelsPresets>} libraryModel
  */
 LLMSSetupConfiguration.prototype.libraryModel = undefined;
 
 /**
- * @member {Object} runtimeConfigs
+ * @member {Array.<module:model/LLMExistingConfiguration>} runtimeConfigs
  */
 LLMSSetupConfiguration.prototype.runtimeConfigs = undefined;
 

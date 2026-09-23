@@ -11,7 +11,7 @@
  
 
 import { Injectable } from "@angular/core";
-import { ComponentLLMSStatus, GeboAdvancedSetupStatusControllerService, GeboFastLlmsSetupControllerService, LLMSSetupConfigurationData, OperationStatusBoolean } from "@Gebo.ai/gebo-ai-rest-api";
+import { ComponentLLMSStatus, GeboFastLlmsSetupControllerService, LLMSSetupConfigurationData } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 

@@ -24,8 +24,8 @@ export default class LLMModelsLookupParameter {
    * Constructs a new <code>LLMModelsLookupParameter</code>.
    * @alias module:model/LLMModelsLookupParameter
    * @class
-   * @param type {Object} 
-   * @param serviceHandler {Object} 
+   * @param type {module:model/LLMModelsLookupParameter.TypeEnum} 
+   * @param serviceHandler {String} 
    */
   constructor(type, serviceHandler) {
     this.type = type;
@@ -43,35 +43,77 @@ export default class LLMModelsLookupParameter {
     if (data) {
       obj = obj || new LLMModelsLookupParameter();
       if (data.hasOwnProperty('type'))
-        obj.type = ApiClient.convertToType(data['type'], Object);
+        obj.type = ApiClient.convertToType(data['type'], 'String');
       if (data.hasOwnProperty('serviceHandler'))
-        obj.serviceHandler = ApiClient.convertToType(data['serviceHandler'], Object);
+        obj.serviceHandler = ApiClient.convertToType(data['serviceHandler'], 'String');
       if (data.hasOwnProperty('secretId'))
-        obj.secretId = ApiClient.convertToType(data['secretId'], Object);
+        obj.secretId = ApiClient.convertToType(data['secretId'], 'String');
       if (data.hasOwnProperty('baseUrl'))
-        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], Object);
+        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} type
+ * Allowed values for the <code>type</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LLMModelsLookupParameter.TypeEnum = {
+  /**
+   * value: "CHAT"
+   * @const
+   */
+  CHAT: "CHAT",
+
+  /**
+   * value: "EMBEDDING"
+   * @const
+   */
+  EMBEDDING: "EMBEDDING",
+
+  /**
+   * value: "RANKING"
+   * @const
+   */
+  RANKING: "RANKING",
+
+  /**
+   * value: "IMAGESGEN"
+   * @const
+   */
+  IMAGESGEN: "IMAGESGEN",
+
+  /**
+   * value: "TTS"
+   * @const
+   */
+  TTS: "TTS",
+
+  /**
+   * value: "TRANSCRIPT"
+   * @const
+   */
+  TRANSCRIPT: "TRANSCRIPT"
+};
+/**
+ * @member {module:model/LLMModelsLookupParameter.TypeEnum} type
  */
 LLMModelsLookupParameter.prototype.type = undefined;
 
 /**
- * @member {Object} serviceHandler
+ * @member {String} serviceHandler
  */
 LLMModelsLookupParameter.prototype.serviceHandler = undefined;
 
 /**
- * @member {Object} secretId
+ * @member {String} secretId
  */
 LLMModelsLookupParameter.prototype.secretId = undefined;
 
 /**
- * @member {Object} baseUrl
+ * @member {String} baseUrl
  */
 LLMModelsLookupParameter.prototype.baseUrl = undefined;
 

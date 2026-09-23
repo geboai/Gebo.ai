@@ -37,7 +37,7 @@ export default class GeboTextToSpeechControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link 'Boolean'} and HTTP response
      */
     isEnabled1WithHttpInfo() {
       
@@ -59,7 +59,7 @@ export default class GeboTextToSpeechControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = 'Boolean';
 
       return this.apiClient.callApi(
         '/api/users/GeboTextToSpeechController/isEnabled', 'GET',
@@ -69,7 +69,7 @@ export default class GeboTextToSpeechControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link 'Boolean'}
      */
     isEnabled1() {
       return this.isEnabled1WithHttpInfo()
@@ -81,7 +81,7 @@ export default class GeboTextToSpeechControllerApi {
 
     /**
      * @param {module:model/SpeechRequest} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link 'Blob'} and HTTP response
      */
     speechTextWithHttpInfo(body) {
       
@@ -107,7 +107,7 @@ export default class GeboTextToSpeechControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/octet-stream'];
-      let returnType = Object;
+      let returnType = 'Blob';
 
       return this.apiClient.callApi(
         '/api/users/GeboTextToSpeechController/speechText', 'POST',
@@ -118,7 +118,7 @@ export default class GeboTextToSpeechControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link 'Blob'}
      */
     speechText(body) {
       return this.speechTextWithHttpInfo(body)

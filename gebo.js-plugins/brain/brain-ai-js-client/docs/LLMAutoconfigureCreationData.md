@@ -3,14 +3,14 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**vendorId** | **Object** |  | 
-**secretId** | **Object** |  | [optional] 
-**newApiSecret** | **Object** |  | [optional] 
-**newUserName** | **Object** |  | [optional] 
-**defaultChatModel** | **Object** |  | [optional] 
-**internalServicesModel** | **Object** |  | [optional] 
-**embeddingModel** | **Object** |  | [optional] 
-**rankerModel** | **Object** |  | [optional] 
-**transcriptModel** | **Object** |  | [optional] 
-**ttsModel** | **Object** |  | [optional] 
-**imagesModel** | **Object** |  | [optional] 
+**vendorId** | **String** |  | 
+**secretId** | **String** |  | [optional] 
+**newApiSecret** | **String** |  | [optional] 
+**newUserName** | **String** |  | [optional] 
+**defaultChatModel** | **String** |  | [optional] 
+**internalServicesModel** | **String** |  | [optional] 
+**embeddingModel** | **String** |  | [optional] 
+**rankerModel** | **String** |  | [optional] 
+**transcriptModel** | **String** |  | [optional] 
+**ttsModel** | **String** |  | [optional] 
+**imagesModel** | **String** |  | [optional] 

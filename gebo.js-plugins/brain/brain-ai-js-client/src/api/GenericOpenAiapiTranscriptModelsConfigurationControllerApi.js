@@ -14,6 +14,7 @@
  */
 import ApiClient from "../ApiClient";
 import GenericOpenAIAPITranscriptModelConfig from '../model/GenericOpenAIAPITranscriptModelConfig';
+import GenericOpenAITranscriptModelType from '../model/GenericOpenAITranscriptModelType';
 import OperationStatusBoolean from '../model/OperationStatusBoolean';
 import OperationStatusGenericOpenAIAPITranscriptModelConfig from '../model/OperationStatusGenericOpenAIAPITranscriptModelConfig';
 import OperationStatusListGenericOpenAIAPITranscriptModelChoice from '../model/OperationStatusListGenericOpenAIAPITranscriptModelChoice';
@@ -89,7 +90,7 @@ export default class GenericOpenAiapiTranscriptModelsConfigurationControllerApi 
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GenericOpenAIAPITranscriptModelConfig} and HTTP response
      */
     findGenericOpenAIAPITranscriptModelConfigByCodeWithHttpInfo(code) {
@@ -187,7 +188,7 @@ export default class GenericOpenAiapiTranscriptModelsConfigurationControllerApi 
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GenericOpenAIAPITranscriptModelConfig>} and HTTP response
      */
     getGenericOpenAITranscriptModelConfigsWithHttpInfo() {
       
@@ -209,7 +210,7 @@ export default class GenericOpenAiapiTranscriptModelsConfigurationControllerApi 
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GenericOpenAIAPITranscriptModelConfig];
 
       return this.apiClient.callApi(
         '/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/getGenericOpenAITranscriptModelConfigs', 'GET',
@@ -219,7 +220,7 @@ export default class GenericOpenAiapiTranscriptModelsConfigurationControllerApi 
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GenericOpenAIAPITranscriptModelConfig>}
      */
     getGenericOpenAITranscriptModelConfigs() {
       return this.getGenericOpenAITranscriptModelConfigsWithHttpInfo()
@@ -230,7 +231,7 @@ export default class GenericOpenAiapiTranscriptModelsConfigurationControllerApi 
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GenericOpenAITranscriptModelType>} and HTTP response
      */
     getGenericOpenAITranscriptModelTypesWithHttpInfo() {
       
@@ -252,7 +253,7 @@ export default class GenericOpenAiapiTranscriptModelsConfigurationControllerApi 
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GenericOpenAITranscriptModelType];
 
       return this.apiClient.callApi(
         '/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/getGenericOpenAITranscriptModelTypes', 'GET',
@@ -262,7 +263,7 @@ export default class GenericOpenAiapiTranscriptModelsConfigurationControllerApi 
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GenericOpenAITranscriptModelType>}
      */
     getGenericOpenAITranscriptModelTypes() {
       return this.getGenericOpenAITranscriptModelTypesWithHttpInfo()

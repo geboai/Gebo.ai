@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import ToolReference from './ToolReference';
 import ToolsCategory from './ToolsCategory';
 
 /**
@@ -42,7 +43,7 @@ export default class ToolCategoriesTree {
       if (data.hasOwnProperty('category'))
         obj.category = ToolsCategory.constructFromObject(data['category']);
       if (data.hasOwnProperty('toolsReference'))
-        obj.toolsReference = ApiClient.convertToType(data['toolsReference'], Object);
+        obj.toolsReference = ApiClient.convertToType(data['toolsReference'], [ToolReference]);
     }
     return obj;
   }
@@ -54,7 +55,7 @@ export default class ToolCategoriesTree {
 ToolCategoriesTree.prototype.category = undefined;
 
 /**
- * @member {Object} toolsReference
+ * @member {Array.<module:model/ToolReference>} toolsReference
  */
 ToolCategoriesTree.prototype.toolsReference = undefined;
 

@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**agentsNetworkCode** | **Object** |  | 
-**toolName** | **Object** |  | 
+**agentsNetworkCode** | **String** |  | 
+**toolName** | **String** |  | 

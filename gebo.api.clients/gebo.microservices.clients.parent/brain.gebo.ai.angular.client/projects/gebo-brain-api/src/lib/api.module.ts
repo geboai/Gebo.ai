@@ -28,7 +28,6 @@ import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboA
 import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
 import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsController.service';
 import { GeboAdminRagAutotuneControllerService } from './api/geboAdminRagAutotuneController.service';
-import { GeboAdvancedSetupStatusControllerService } from './api/geboAdvancedSetupStatusController.service';
 import { GeboAgentAdminControllerService } from './api/geboAgentAdminController.service';
 import { GeboAgentsNetworkAdminControllerService } from './api/geboAgentsNetworkAdminController.service';
 import { GeboChatControllerService } from './api/geboChatController.service';
@@ -50,7 +49,6 @@ import { GeboTranscriptControllerService } from './api/geboTranscriptController.
 import { GeboUserChatUploadsControllerService } from './api/geboUserChatUploadsController.service';
 import { GeboUserChatsControllerService } from './api/geboUserChatsController.service';
 import { GeboUserKnowledgeBaseSemanticSearchControllerService } from './api/geboUserKnowledgeBaseSemanticSearchController.service';
-import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorStoreConfigurationController.service';
 import { GenericOpenAiRankerModelsConfigurationControllerService } from './api/genericOpenAiRankerModelsConfigurationController.service';
 import { GenericOpenAiapiChatModelsConfigurationControllerService } from './api/genericOpenAiapiChatModelsConfigurationController.service';
 import { GenericOpenAiapiEmbeddingModelsConfigurationControllerService } from './api/genericOpenAiapiEmbeddingModelsConfigurationController.service';
@@ -119,7 +117,6 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     GeboAdminPromptUseInfoControllerService,
     GeboAdminPromptsControllerService,
     GeboAdminRagAutotuneControllerService,
-    GeboAdvancedSetupStatusControllerService,
     GeboAgentAdminControllerService,
     GeboAgentsNetworkAdminControllerService,
     GeboChatControllerService,
@@ -141,7 +138,6 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     GeboUserChatUploadsControllerService,
     GeboUserChatsControllerService,
     GeboUserKnowledgeBaseSemanticSearchControllerService,
-    GeboVectorStoreConfigurationControllerService,
     GenericOpenAiRankerModelsConfigurationControllerService,
     GenericOpenAiapiChatModelsConfigurationControllerService,
     GenericOpenAiapiEmbeddingModelsConfigurationControllerService,

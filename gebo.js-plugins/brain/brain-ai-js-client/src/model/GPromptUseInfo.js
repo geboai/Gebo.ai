@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GPromptPlaceholderInfo from './GPromptPlaceholderInfo';
 
 /**
  * The GPromptUseInfo model module.
@@ -24,9 +25,9 @@ export default class GPromptUseInfo {
    * Constructs a new <code>GPromptUseInfo</code>.
    * @alias module:model/GPromptUseInfo
    * @class
-   * @param code {Object} 
-   * @param description {Object} 
-   * @param module {Object} 
+   * @param code {String} 
+   * @param description {String} 
+   * @param module {String} 
    */
   constructor(code, description, module) {
     this.code = code;
@@ -45,35 +46,35 @@ export default class GPromptUseInfo {
     if (data) {
       obj = obj || new GPromptUseInfo();
       if (data.hasOwnProperty('placeholders'))
-        obj.placeholders = ApiClient.convertToType(data['placeholders'], Object);
+        obj.placeholders = ApiClient.convertToType(data['placeholders'], [GPromptPlaceholderInfo]);
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('module'))
-        obj.module = ApiClient.convertToType(data['module'], Object);
+        obj.module = ApiClient.convertToType(data['module'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} placeholders
+ * @member {Array.<module:model/GPromptPlaceholderInfo>} placeholders
  */
 GPromptUseInfo.prototype.placeholders = undefined;
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GPromptUseInfo.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GPromptUseInfo.prototype.description = undefined;
 
 /**
- * @member {Object} module
+ * @member {String} module
  */
 GPromptUseInfo.prototype.module = undefined;
 

@@ -23,8 +23,8 @@ Method | HTTP request | Description
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.CompanySystemsControllerApi();
-let systemTypeCode = null; // Object | 
-let systemCode = null; // Object | 
+let systemTypeCode = "systemTypeCode_example"; // String | 
+let systemCode = "systemCode_example"; // String | 
 
 apiInstance.getContentSystem(systemTypeCode, systemCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -38,8 +38,8 @@ apiInstance.getContentSystem(systemTypeCode, systemCode).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **systemTypeCode** | [**Object**](.md)|  | 
- **systemCode** | [**Object**](.md)|  | 
+ **systemTypeCode** | **String**|  | 
+ **systemCode** | **String**|  | 
 
 ### Return type
 
@@ -65,7 +65,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.CompanySystemsControllerApi();
-let systemTypeCode = null; // Object | 
+let systemTypeCode = "systemTypeCode_example"; // String | 
 
 apiInstance.getContentSystemType(systemTypeCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -79,7 +79,7 @@ apiInstance.getContentSystemType(systemTypeCode).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **systemTypeCode** | [**Object**](.md)|  | 
+ **systemTypeCode** | **String**|  | 
 
 ### Return type
 
@@ -96,7 +96,7 @@ No authorization required
 
 <a name="getContentSystemTypes"></a>
 # **getContentSystemTypes**
-> Object getContentSystemTypes()
+> [GContentManagementSystemType] getContentSystemTypes()
 
 
 
@@ -118,7 +118,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GContentManagementSystemType]**](GContentManagementSystemType.md)
 
 ### Authorization
 
@@ -131,7 +131,7 @@ No authorization required
 
 <a name="getContentSystems"></a>
 # **getContentSystems**
-> Object getContentSystems()
+> [GContentManagementSystem] getContentSystems()
 
 
 
@@ -153,7 +153,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GContentManagementSystem]**](GContentManagementSystem.md)
 
 ### Authorization
 
@@ -175,9 +175,9 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.CompanySystemsControllerApi();
-let systemTypeCode = null; // Object | 
-let systemCode = null; // Object | 
-let projectEndpointCode = null; // Object | 
+let systemTypeCode = "systemTypeCode_example"; // String | 
+let systemCode = "systemCode_example"; // String | 
+let projectEndpointCode = "projectEndpointCode_example"; // String | 
 
 apiInstance.getProjectEndpoint(systemTypeCode, systemCode, projectEndpointCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -191,9 +191,9 @@ apiInstance.getProjectEndpoint(systemTypeCode, systemCode, projectEndpointCode).
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **systemTypeCode** | [**Object**](.md)|  | 
- **systemCode** | [**Object**](.md)|  | 
- **projectEndpointCode** | [**Object**](.md)|  | 
+ **systemTypeCode** | **String**|  | 
+ **systemCode** | **String**|  | 
+ **projectEndpointCode** | **String**|  | 
 
 ### Return type
 

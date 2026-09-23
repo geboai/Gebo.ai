@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GObjectRefGUserspaceProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:45:39.865040933+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:54:00.180836910+02:00[Europe/Rome]")
 
 public class GObjectRefGUserspaceProjectEndpoint {
   @JsonProperty("className")

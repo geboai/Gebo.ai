@@ -37,7 +37,7 @@ export default class GeboAdminPromptUseInfoControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GPromptUseInfo>} and HTTP response
      */
     findAllWithHttpInfo() {
       
@@ -59,7 +59,7 @@ export default class GeboAdminPromptUseInfoControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GPromptUseInfo];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAdminPromptUseController/findAll', 'GET',
@@ -69,7 +69,7 @@ export default class GeboAdminPromptUseInfoControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GPromptUseInfo>}
      */
     findAll() {
       return this.findAllWithHttpInfo()
@@ -80,7 +80,7 @@ export default class GeboAdminPromptUseInfoControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GPromptUseInfo} and HTTP response
      */
     findByCodeWithHttpInfo(code) {
@@ -129,8 +129,8 @@ export default class GeboAdminPromptUseInfoControllerApi {
 
 
     /**
-     * @param {Object} module 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} module 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GPromptUseInfo>} and HTTP response
      */
     findByModuleWithHttpInfo(module) {
       
@@ -156,7 +156,7 @@ export default class GeboAdminPromptUseInfoControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GPromptUseInfo];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAdminPromptUseController/findByModule', 'GET',
@@ -167,7 +167,7 @@ export default class GeboAdminPromptUseInfoControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} module 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GPromptUseInfo>}
      */
     findByModule(module) {
       return this.findByModuleWithHttpInfo(module)

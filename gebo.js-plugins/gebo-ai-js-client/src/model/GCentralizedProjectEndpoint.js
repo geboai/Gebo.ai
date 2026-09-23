@@ -77,6 +77,8 @@ export default class GCentralizedProjectEndpoint {
         obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], 'String');
       if (data.hasOwnProperty('aclAliases'))
         obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
+      if (data.hasOwnProperty('personalData'))
+        obj.personalData = ApiClient.convertToType(data['personalData'], 'Boolean');
       if (data.hasOwnProperty('remoteProjectReference'))
         obj.remoteProjectReference = GObjectRefGProjectEndpoint.constructFromObject(data['remoteProjectReference']);
     }
@@ -209,6 +211,11 @@ GCentralizedProjectEndpoint.prototype.objectSpaceType = undefined;
  * @member {Array.<Number>} aclAliases
  */
 GCentralizedProjectEndpoint.prototype.aclAliases = undefined;
+
+/**
+ * @member {Boolean} personalData
+ */
+GCentralizedProjectEndpoint.prototype.personalData = undefined;
 
 /**
  * @member {module:model/GObjectRefGProjectEndpoint} remoteProjectReference

@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from "../ApiClient";
+import GBaseObject from '../model/GBaseObject';
 
 /**
 * GeboDeepSearchController service.
@@ -36,7 +37,7 @@ export default class GeboDeepSearchControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GBaseObject>} and HTTP response
      */
     getDeepSearchDataSourcesWithHttpInfo() {
       
@@ -58,7 +59,7 @@ export default class GeboDeepSearchControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GBaseObject];
 
       return this.apiClient.callApi(
         '/api/users/GeboDeepSearchController/getDeepSearchDataSources', 'GET',
@@ -68,7 +69,7 @@ export default class GeboDeepSearchControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GBaseObject>}
      */
     getDeepSearchDataSources() {
       return this.getDeepSearchDataSourcesWithHttpInfo()

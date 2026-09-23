@@ -201,6 +201,18 @@ LLMSVendorInfo.AuthProviderEnum = {
   awsCognito: "aws_cognito",
 
   /**
+   * value: "aws_identity_center"
+   * @const
+   */
+  awsIdentityCenter: "aws_identity_center",
+
+  /**
+   * value: "keycloak"
+   * @const
+   */
+  keycloak: "keycloak",
+
+  /**
    * value: "oauth2_generic"
    * @const
    */

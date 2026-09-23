@@ -13,6 +13,9 @@
  *
  */
 import ApiClient from '../ApiClient';
+import MCPPrompt from './MCPPrompt';
+import MCPResource from './MCPResource';
+import MCPTool from './MCPTool';
 
 /**
  * The MCPClientConfig model module.
@@ -24,9 +27,9 @@ export default class MCPClientConfig {
    * Constructs a new <code>MCPClientConfig</code>.
    * @alias module:model/MCPClientConfig
    * @class
-   * @param transportType {Object} 
-   * @param authMode {Object} 
-   * @param exportingPrefix {Object} 
+   * @param transportType {module:model/MCPClientConfig.TransportTypeEnum} 
+   * @param authMode {module:model/MCPClientConfig.AuthModeEnum} 
+   * @param exportingPrefix {String} 
    */
   constructor(transportType, authMode, exportingPrefix) {
     this.transportType = transportType;
@@ -45,175 +48,247 @@ export default class MCPClientConfig {
     if (data) {
       obj = obj || new MCPClientConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('baseUrl'))
-        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], Object);
+        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], 'String');
       if (data.hasOwnProperty('mcpEndpoint'))
-        obj.mcpEndpoint = ApiClient.convertToType(data['mcpEndpoint'], Object);
+        obj.mcpEndpoint = ApiClient.convertToType(data['mcpEndpoint'], 'String');
       if (data.hasOwnProperty('sseEndpoint'))
-        obj.sseEndpoint = ApiClient.convertToType(data['sseEndpoint'], Object);
+        obj.sseEndpoint = ApiClient.convertToType(data['sseEndpoint'], 'String');
       if (data.hasOwnProperty('secretCode'))
-        obj.secretCode = ApiClient.convertToType(data['secretCode'], Object);
+        obj.secretCode = ApiClient.convertToType(data['secretCode'], 'String');
       if (data.hasOwnProperty('oauth2AuthenticatorCode'))
-        obj.oauth2AuthenticatorCode = ApiClient.convertToType(data['oauth2AuthenticatorCode'], Object);
+        obj.oauth2AuthenticatorCode = ApiClient.convertToType(data['oauth2AuthenticatorCode'], 'String');
       if (data.hasOwnProperty('stdioCommand'))
-        obj.stdioCommand = ApiClient.convertToType(data['stdioCommand'], Object);
+        obj.stdioCommand = ApiClient.convertToType(data['stdioCommand'], 'String');
       if (data.hasOwnProperty('stdioArgs'))
-        obj.stdioArgs = ApiClient.convertToType(data['stdioArgs'], Object);
+        obj.stdioArgs = ApiClient.convertToType(data['stdioArgs'], ['String']);
       if (data.hasOwnProperty('stdioEnvironment'))
-        obj.stdioEnvironment = ApiClient.convertToType(data['stdioEnvironment'], Object);
+        obj.stdioEnvironment = ApiClient.convertToType(data['stdioEnvironment'], {'String': 'String'});
       if (data.hasOwnProperty('transportType'))
-        obj.transportType = ApiClient.convertToType(data['transportType'], Object);
+        obj.transportType = ApiClient.convertToType(data['transportType'], 'String');
       if (data.hasOwnProperty('authMode'))
-        obj.authMode = ApiClient.convertToType(data['authMode'], Object);
+        obj.authMode = ApiClient.convertToType(data['authMode'], 'String');
       if (data.hasOwnProperty('exportingPrefix'))
-        obj.exportingPrefix = ApiClient.convertToType(data['exportingPrefix'], Object);
+        obj.exportingPrefix = ApiClient.convertToType(data['exportingPrefix'], 'String');
       if (data.hasOwnProperty('accessibleGroups'))
-        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], Object);
+        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], ['String']);
       if (data.hasOwnProperty('accessibleUsers'))
-        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], Object);
+        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], ['String']);
       if (data.hasOwnProperty('accessibleToAll'))
-        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], Object);
+        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], 'Boolean');
       if (data.hasOwnProperty('aclAliases'))
-        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], Object);
+        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
       if (data.hasOwnProperty('tools'))
-        obj.tools = ApiClient.convertToType(data['tools'], Object);
+        obj.tools = ApiClient.convertToType(data['tools'], [MCPTool]);
       if (data.hasOwnProperty('resources'))
-        obj.resources = ApiClient.convertToType(data['resources'], Object);
+        obj.resources = ApiClient.convertToType(data['resources'], [MCPResource]);
       if (data.hasOwnProperty('prompts'))
-        obj.prompts = ApiClient.convertToType(data['prompts'], Object);
+        obj.prompts = ApiClient.convertToType(data['prompts'], [MCPPrompt]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 MCPClientConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 MCPClientConfig.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 MCPClientConfig.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 MCPClientConfig.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 MCPClientConfig.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 MCPClientConfig.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} baseUrl
+ * @member {String} baseUrl
  */
 MCPClientConfig.prototype.baseUrl = undefined;
 
 /**
- * @member {Object} mcpEndpoint
+ * @member {String} mcpEndpoint
  */
 MCPClientConfig.prototype.mcpEndpoint = undefined;
 
 /**
- * @member {Object} sseEndpoint
+ * @member {String} sseEndpoint
  */
 MCPClientConfig.prototype.sseEndpoint = undefined;
 
 /**
- * @member {Object} secretCode
+ * @member {String} secretCode
  */
 MCPClientConfig.prototype.secretCode = undefined;
 
 /**
- * @member {Object} oauth2AuthenticatorCode
+ * @member {String} oauth2AuthenticatorCode
  */
 MCPClientConfig.prototype.oauth2AuthenticatorCode = undefined;
 
 /**
- * @member {Object} stdioCommand
+ * @member {String} stdioCommand
  */
 MCPClientConfig.prototype.stdioCommand = undefined;
 
 /**
- * @member {Object} stdioArgs
+ * @member {Array.<String>} stdioArgs
  */
 MCPClientConfig.prototype.stdioArgs = undefined;
 
 /**
- * @member {Object} stdioEnvironment
+ * @member {Object.<String, String>} stdioEnvironment
  */
 MCPClientConfig.prototype.stdioEnvironment = undefined;
 
 /**
- * @member {Object} transportType
+ * Allowed values for the <code>transportType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+MCPClientConfig.TransportTypeEnum = {
+  /**
+   * value: "STREAMABLE_HTTP"
+   * @const
+   */
+  STREAMABLE_HTTP: "STREAMABLE_HTTP",
+
+  /**
+   * value: "SSE_LEGACY"
+   * @const
+   */
+  SSE_LEGACY: "SSE_LEGACY",
+
+  /**
+   * value: "STDIO"
+   * @const
+   */
+  STDIO: "STDIO"
+};
+/**
+ * @member {module:model/MCPClientConfig.TransportTypeEnum} transportType
  */
 MCPClientConfig.prototype.transportType = undefined;
 
 /**
- * @member {Object} authMode
+ * Allowed values for the <code>authMode</code> property.
+ * @enum {String}
+ * @readonly
+ */
+MCPClientConfig.AuthModeEnum = {
+  /**
+   * value: "NONE"
+   * @const
+   */
+  NONE: "NONE",
+
+  /**
+   * value: "API_KEY"
+   * @const
+   */
+  API_KEY: "API_KEY",
+
+  /**
+   * value: "STATIC_BEARER_TOKEN"
+   * @const
+   */
+  STATIC_BEARER_TOKEN: "STATIC_BEARER_TOKEN",
+
+  /**
+   * value: "OAUTH2_CLIENT_CREDENTIALS"
+   * @const
+   */
+  oAUTH2CLIENTCREDENTIALS: "OAUTH2_CLIENT_CREDENTIALS",
+
+  /**
+   * value: "OAUTH2_AUTHORIZATION_CODE_PER_USER"
+   * @const
+   */
+  oAUTH2AUTHORIZATIONCODEPERUSER: "OAUTH2_AUTHORIZATION_CODE_PER_USER",
+
+  /**
+   * value: "USER_TOKEN_RELAY"
+   * @const
+   */
+  USER_TOKEN_RELAY: "USER_TOKEN_RELAY",
+
+  /**
+   * value: "TOKEN_EXCHANGE"
+   * @const
+   */
+  TOKEN_EXCHANGE: "TOKEN_EXCHANGE"
+};
+/**
+ * @member {module:model/MCPClientConfig.AuthModeEnum} authMode
  */
 MCPClientConfig.prototype.authMode = undefined;
 
 /**
- * @member {Object} exportingPrefix
+ * @member {String} exportingPrefix
  */
 MCPClientConfig.prototype.exportingPrefix = undefined;
 
 /**
- * @member {Object} accessibleGroups
+ * @member {Array.<String>} accessibleGroups
  */
 MCPClientConfig.prototype.accessibleGroups = undefined;
 
 /**
- * @member {Object} accessibleUsers
+ * @member {Array.<String>} accessibleUsers
  */
 MCPClientConfig.prototype.accessibleUsers = undefined;
 
 /**
- * @member {Object} accessibleToAll
+ * @member {Boolean} accessibleToAll
  */
 MCPClientConfig.prototype.accessibleToAll = undefined;
 
 /**
- * @member {Object} aclAliases
+ * @member {Array.<Number>} aclAliases
  */
 MCPClientConfig.prototype.aclAliases = undefined;
 
 /**
- * @member {Object} tools
+ * @member {Array.<module:model/MCPTool>} tools
  */
 MCPClientConfig.prototype.tools = undefined;
 
 /**
- * @member {Object} resources
+ * @member {Array.<module:model/MCPResource>} resources
  */
 MCPClientConfig.prototype.resources = undefined;
 
 /**
- * @member {Object} prompts
+ * @member {Array.<module:model/MCPPrompt>} prompts
  */
 MCPClientConfig.prototype.prompts = undefined;
 

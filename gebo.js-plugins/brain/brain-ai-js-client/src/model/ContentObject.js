@@ -39,14 +39,14 @@ export default class ContentObject {
     if (data) {
       obj = obj || new ContentObject();
       if (data.hasOwnProperty('content'))
-        obj.content = ApiClient.convertToType(data['content'], Object);
+        obj.content = ApiClient.convertToType(data['content'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} content
+ * @member {String} content
  */
 ContentObject.prototype.content = undefined;
 

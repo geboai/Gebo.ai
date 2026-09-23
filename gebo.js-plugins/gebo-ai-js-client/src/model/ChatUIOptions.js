@@ -42,6 +42,10 @@ export default class ChatUIOptions {
         obj.enablePureModelChat = ApiClient.convertToType(data['enablePureModelChat'], 'Boolean');
       if (data.hasOwnProperty('defaultUILanguage'))
         obj.defaultUILanguage = ApiClient.convertToType(data['defaultUILanguage'], 'String');
+      if (data.hasOwnProperty('chatWithExternalFiles'))
+        obj.chatWithExternalFiles = ApiClient.convertToType(data['chatWithExternalFiles'], 'Boolean');
+      if (data.hasOwnProperty('openChatAvailable'))
+        obj.openChatAvailable = ApiClient.convertToType(data['openChatAvailable'], 'Boolean');
     }
     return obj;
   }
@@ -56,4 +60,14 @@ ChatUIOptions.prototype.enablePureModelChat = undefined;
  * @member {String} defaultUILanguage
  */
 ChatUIOptions.prototype.defaultUILanguage = undefined;
+
+/**
+ * @member {Boolean} chatWithExternalFiles
+ */
+ChatUIOptions.prototype.chatWithExternalFiles = undefined;
+
+/**
+ * @member {Boolean} openChatAvailable
+ */
+ChatUIOptions.prototype.openChatAvailable = undefined;
 

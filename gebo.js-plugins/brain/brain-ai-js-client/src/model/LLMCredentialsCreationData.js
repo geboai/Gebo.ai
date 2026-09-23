@@ -24,11 +24,11 @@ export default class LLMCredentialsCreationData {
    * Constructs a new <code>LLMCredentialsCreationData</code>.
    * @alias module:model/LLMCredentialsCreationData
    * @class
-   * @param type {Object} 
-   * @param serviceHandler {Object} 
-   * @param apiKeySecretContext {Object} 
-   * @param newApiSecret {Object} 
-   * @param newUserName {Object} 
+   * @param type {module:model/LLMCredentialsCreationData.TypeEnum} 
+   * @param serviceHandler {String} 
+   * @param apiKeySecretContext {String} 
+   * @param newApiSecret {String} 
+   * @param newUserName {String} 
    */
   constructor(type, serviceHandler, apiKeySecretContext, newApiSecret, newUserName) {
     this.type = type;
@@ -49,56 +49,98 @@ export default class LLMCredentialsCreationData {
     if (data) {
       obj = obj || new LLMCredentialsCreationData();
       if (data.hasOwnProperty('type'))
-        obj.type = ApiClient.convertToType(data['type'], Object);
+        obj.type = ApiClient.convertToType(data['type'], 'String');
       if (data.hasOwnProperty('doModelsLookup'))
-        obj.doModelsLookup = ApiClient.convertToType(data['doModelsLookup'], Object);
+        obj.doModelsLookup = ApiClient.convertToType(data['doModelsLookup'], 'Boolean');
       if (data.hasOwnProperty('serviceHandler'))
-        obj.serviceHandler = ApiClient.convertToType(data['serviceHandler'], Object);
+        obj.serviceHandler = ApiClient.convertToType(data['serviceHandler'], 'String');
       if (data.hasOwnProperty('apiKeySecretContext'))
-        obj.apiKeySecretContext = ApiClient.convertToType(data['apiKeySecretContext'], Object);
+        obj.apiKeySecretContext = ApiClient.convertToType(data['apiKeySecretContext'], 'String');
       if (data.hasOwnProperty('newApiSecret'))
-        obj.newApiSecret = ApiClient.convertToType(data['newApiSecret'], Object);
+        obj.newApiSecret = ApiClient.convertToType(data['newApiSecret'], 'String');
       if (data.hasOwnProperty('newUserName'))
-        obj.newUserName = ApiClient.convertToType(data['newUserName'], Object);
+        obj.newUserName = ApiClient.convertToType(data['newUserName'], 'String');
       if (data.hasOwnProperty('baseUrl'))
-        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], Object);
+        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} type
+ * Allowed values for the <code>type</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LLMCredentialsCreationData.TypeEnum = {
+  /**
+   * value: "CHAT"
+   * @const
+   */
+  CHAT: "CHAT",
+
+  /**
+   * value: "EMBEDDING"
+   * @const
+   */
+  EMBEDDING: "EMBEDDING",
+
+  /**
+   * value: "RANKING"
+   * @const
+   */
+  RANKING: "RANKING",
+
+  /**
+   * value: "IMAGESGEN"
+   * @const
+   */
+  IMAGESGEN: "IMAGESGEN",
+
+  /**
+   * value: "TTS"
+   * @const
+   */
+  TTS: "TTS",
+
+  /**
+   * value: "TRANSCRIPT"
+   * @const
+   */
+  TRANSCRIPT: "TRANSCRIPT"
+};
+/**
+ * @member {module:model/LLMCredentialsCreationData.TypeEnum} type
  */
 LLMCredentialsCreationData.prototype.type = undefined;
 
 /**
- * @member {Object} doModelsLookup
+ * @member {Boolean} doModelsLookup
  */
 LLMCredentialsCreationData.prototype.doModelsLookup = undefined;
 
 /**
- * @member {Object} serviceHandler
+ * @member {String} serviceHandler
  */
 LLMCredentialsCreationData.prototype.serviceHandler = undefined;
 
 /**
- * @member {Object} apiKeySecretContext
+ * @member {String} apiKeySecretContext
  */
 LLMCredentialsCreationData.prototype.apiKeySecretContext = undefined;
 
 /**
- * @member {Object} newApiSecret
+ * @member {String} newApiSecret
  */
 LLMCredentialsCreationData.prototype.newApiSecret = undefined;
 
 /**
- * @member {Object} newUserName
+ * @member {String} newUserName
  */
 LLMCredentialsCreationData.prototype.newUserName = undefined;
 
 /**
- * @member {Object} baseUrl
+ * @member {String} baseUrl
  */
 LLMCredentialsCreationData.prototype.baseUrl = undefined;
 

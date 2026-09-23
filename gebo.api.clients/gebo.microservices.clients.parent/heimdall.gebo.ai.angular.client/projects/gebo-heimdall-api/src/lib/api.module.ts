@@ -6,7 +6,6 @@ import { HttpClient } from '@angular/common/http';
 import { AclAliasesClusterControllerService } from './api/aclAliasesClusterController.service';
 import { AuthControllerService } from './api/authController.service';
 import { AuthProvidersControllerService } from './api/authProvidersController.service';
-import { GeboAdvancedSetupStatusControllerService } from './api/geboAdvancedSetupStatusController.service';
 import { GeboFastInstallationSetupControllerService } from './api/geboFastInstallationSetupController.service';
 import { GeboFastWorkFolderSetupControllerService } from './api/geboFastWorkFolderSetupController.service';
 import { GeneratedAdminApiKeyControllerService } from './api/generatedAdminApiKeyController.service';
@@ -32,7 +31,6 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
     AclAliasesClusterControllerService,
     AuthControllerService,
     AuthProvidersControllerService,
-    GeboAdvancedSetupStatusControllerService,
     GeboFastInstallationSetupControllerService,
     GeboFastWorkFolderSetupControllerService,
     GeneratedAdminApiKeyControllerService,

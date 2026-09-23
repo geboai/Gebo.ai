@@ -40,81 +40,81 @@ export default class GBuildSystem {
     if (data) {
       obj = obj || new GBuildSystem();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('creationDate'))
-        obj.creationDate = ApiClient.convertToType(data['creationDate'], Object);
+        obj.creationDate = ApiClient.convertToType(data['creationDate'], 'Date');
       if (data.hasOwnProperty('modificationDate'))
-        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], Object);
+        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], 'Date');
       if (data.hasOwnProperty('version'))
-        obj.version = ApiClient.convertToType(data['version'], Object);
+        obj.version = ApiClient.convertToType(data['version'], 'String');
       if (data.hasOwnProperty('buildSystemTypeCode'))
-        obj.buildSystemTypeCode = ApiClient.convertToType(data['buildSystemTypeCode'], Object);
+        obj.buildSystemTypeCode = ApiClient.convertToType(data['buildSystemTypeCode'], 'String');
       if (data.hasOwnProperty('config'))
         obj.config = GAbstractBuildSystemConfig.constructFromObject(data['config']);
       if (data.hasOwnProperty('readonly'))
-        obj.readonly = ApiClient.convertToType(data['readonly'], Object);
+        obj.readonly = ApiClient.convertToType(data['readonly'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GBuildSystem.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GBuildSystem.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GBuildSystem.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GBuildSystem.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GBuildSystem.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GBuildSystem.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} creationDate
+ * @member {Date} creationDate
  */
 GBuildSystem.prototype.creationDate = undefined;
 
 /**
- * @member {Object} modificationDate
+ * @member {Date} modificationDate
  */
 GBuildSystem.prototype.modificationDate = undefined;
 
 /**
- * @member {Object} version
+ * @member {String} version
  */
 GBuildSystem.prototype.version = undefined;
 
 /**
- * @member {Object} buildSystemTypeCode
+ * @member {String} buildSystemTypeCode
  */
 GBuildSystem.prototype.buildSystemTypeCode = undefined;
 
@@ -124,7 +124,7 @@ GBuildSystem.prototype.buildSystemTypeCode = undefined;
 GBuildSystem.prototype.config = undefined;
 
 /**
- * @member {Object} readonly
+ * @member {Boolean} readonly
  */
 GBuildSystem.prototype.readonly = undefined;
 

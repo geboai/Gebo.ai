@@ -77,6 +77,8 @@ export default class GWebdavProjectEndpoint {
         obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], 'String');
       if (data.hasOwnProperty('aclAliases'))
         obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
+      if (data.hasOwnProperty('personalData'))
+        obj.personalData = ApiClient.convertToType(data['personalData'], 'Boolean');
       if (data.hasOwnProperty('paths'))
         obj.paths = ApiClient.convertToType(data['paths'], [VFilesystemReference]);
       if (data.hasOwnProperty('webdavSystemCode'))
@@ -211,6 +213,11 @@ GWebdavProjectEndpoint.prototype.objectSpaceType = undefined;
  * @member {Array.<Number>} aclAliases
  */
 GWebdavProjectEndpoint.prototype.aclAliases = undefined;
+
+/**
+ * @member {Boolean} personalData
+ */
+GWebdavProjectEndpoint.prototype.personalData = undefined;
 
 /**
  * @member {Array.<module:model/VFilesystemReference>} paths

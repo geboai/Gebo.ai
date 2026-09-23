@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from "../ApiClient";
+import GLookupEntry from '../model/GLookupEntry';
 import GLookupEntryRefGBaseChatModelConfig from '../model/GLookupEntryRefGBaseChatModelConfig';
 
 /**
@@ -37,7 +38,7 @@ export default class ChatModelsLookupControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GLookupEntry>} and HTTP response
      */
     getChatModelTypesLookupWithHttpInfo() {
       
@@ -59,7 +60,7 @@ export default class ChatModelsLookupControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GLookupEntry];
 
       return this.apiClient.callApi(
         '/api/users/ChatModelsLookupController/getChatModelTypesLookup', 'GET',
@@ -69,7 +70,7 @@ export default class ChatModelsLookupControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GLookupEntry>}
      */
     getChatModelTypesLookup() {
       return this.getChatModelTypesLookupWithHttpInfo()
@@ -124,8 +125,8 @@ export default class ChatModelsLookupControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GLookupEntryRefGBaseChatModelConfig>} and HTTP response
      */
     getRuntimeConfiguredChatModelsLookupWithHttpInfo(opts) {
       opts = opts || {};
@@ -147,7 +148,7 @@ export default class ChatModelsLookupControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GLookupEntryRefGBaseChatModelConfig];
 
       return this.apiClient.callApi(
         '/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup', 'GET',
@@ -158,8 +159,8 @@ export default class ChatModelsLookupControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GLookupEntryRefGBaseChatModelConfig>}
      */
     getRuntimeConfiguredChatModelsLookup(opts) {
       return this.getRuntimeConfiguredChatModelsLookupWithHttpInfo(opts)

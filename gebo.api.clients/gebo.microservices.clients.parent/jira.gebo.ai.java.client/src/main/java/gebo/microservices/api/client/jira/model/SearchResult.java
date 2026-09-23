@@ -29,7 +29,7 @@ import java.util.List;
  * SearchResult
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:45:15.254128623+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:53:49.296527243+02:00[Europe/Rome]")
 
 public class SearchResult {
   @JsonProperty("id")

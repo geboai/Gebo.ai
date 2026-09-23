@@ -3,4 +3,4 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**items** | **Object** |  | [optional] 
+**items** | [**[GoogleSearchResultItem]**](GoogleSearchResultItem.md) |  | [optional] 

@@ -37,7 +37,7 @@ export default class GeboTranscriptControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link 'Boolean'} and HTTP response
      */
     isEnabledWithHttpInfo() {
       
@@ -59,7 +59,7 @@ export default class GeboTranscriptControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = 'Boolean';
 
       return this.apiClient.callApi(
         '/api/users/GeboTranscriptController/isEnabled', 'GET',
@@ -69,7 +69,7 @@ export default class GeboTranscriptControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link 'Boolean'}
      */
     isEnabled() {
       return this.isEnabledWithHttpInfo()

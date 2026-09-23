@@ -13,7 +13,10 @@
  *
  */
 import ApiClient from '../ApiClient';
+import AdditionalContent from './AdditionalContent';
+import GResponseDocumentRef from './GResponseDocumentRef';
 import GeboRagRequestCustomConfig from './GeboRagRequestCustomConfig';
+import UserUploadedContent from './UserUploadedContent';
 
 /**
  * The GeboChatRequest model module.
@@ -40,72 +43,76 @@ export default class GeboChatRequest {
     if (data) {
       obj = obj || new GeboChatRequest();
       if (data.hasOwnProperty('id'))
-        obj.id = ApiClient.convertToType(data['id'], Object);
+        obj.id = ApiClient.convertToType(data['id'], 'String');
       if (data.hasOwnProperty('userChatContextCode'))
-        obj.userChatContextCode = ApiClient.convertToType(data['userChatContextCode'], Object);
+        obj.userChatContextCode = ApiClient.convertToType(data['userChatContextCode'], 'String');
       if (data.hasOwnProperty('chatProfileCode'))
-        obj.chatProfileCode = ApiClient.convertToType(data['chatProfileCode'], Object);
+        obj.chatProfileCode = ApiClient.convertToType(data['chatProfileCode'], 'String');
       if (data.hasOwnProperty('chatModelCode'))
-        obj.chatModelCode = ApiClient.convertToType(data['chatModelCode'], Object);
+        obj.chatModelCode = ApiClient.convertToType(data['chatModelCode'], 'String');
       if (data.hasOwnProperty('streamResponse'))
-        obj.streamResponse = ApiClient.convertToType(data['streamResponse'], Object);
+        obj.streamResponse = ApiClient.convertToType(data['streamResponse'], 'Boolean');
       if (data.hasOwnProperty('query'))
-        obj.query = ApiClient.convertToType(data['query'], Object);
+        obj.query = ApiClient.convertToType(data['query'], 'String');
       if (data.hasOwnProperty('rewrittenQuery'))
-        obj.rewrittenQuery = ApiClient.convertToType(data['rewrittenQuery'], Object);
+        obj.rewrittenQuery = ApiClient.convertToType(data['rewrittenQuery'], 'String');
       if (data.hasOwnProperty('customRagConfig'))
         obj.customRagConfig = GeboRagRequestCustomConfig.constructFromObject(data['customRagConfig']);
       if (data.hasOwnProperty('choosedKnowledgeBases'))
-        obj.choosedKnowledgeBases = ApiClient.convertToType(data['choosedKnowledgeBases'], Object);
+        obj.choosedKnowledgeBases = ApiClient.convertToType(data['choosedKnowledgeBases'], ['String']);
       if (data.hasOwnProperty('chatPipelineProcessId'))
-        obj.chatPipelineProcessId = ApiClient.convertToType(data['chatPipelineProcessId'], Object);
+        obj.chatPipelineProcessId = ApiClient.convertToType(data['chatPipelineProcessId'], 'String');
       if (data.hasOwnProperty('forcedRequestDocuments'))
-        obj.forcedRequestDocuments = ApiClient.convertToType(data['forcedRequestDocuments'], Object);
+        obj.forcedRequestDocuments = ApiClient.convertToType(data['forcedRequestDocuments'], ['String']);
+      if (data.hasOwnProperty('forcedDocumentsRef'))
+        obj.forcedDocumentsRef = ApiClient.convertToType(data['forcedDocumentsRef'], [GResponseDocumentRef]);
       if (data.hasOwnProperty('userUploadedContents'))
-        obj.userUploadedContents = ApiClient.convertToType(data['userUploadedContents'], Object);
+        obj.userUploadedContents = ApiClient.convertToType(data['userUploadedContents'], [UserUploadedContent]);
       if (data.hasOwnProperty('deepSearchDataSources'))
-        obj.deepSearchDataSources = ApiClient.convertToType(data['deepSearchDataSources'], Object);
+        obj.deepSearchDataSources = ApiClient.convertToType(data['deepSearchDataSources'], ['String']);
       if (data.hasOwnProperty('userIntent'))
-        obj.userIntent = ApiClient.convertToType(data['userIntent'], Object);
+        obj.userIntent = ApiClient.convertToType(data['userIntent'], 'String');
+      if (data.hasOwnProperty('additionalContents'))
+        obj.additionalContents = ApiClient.convertToType(data['additionalContents'], [AdditionalContent]);
       if (data.hasOwnProperty('tokensSize'))
-        obj.tokensSize = ApiClient.convertToType(data['tokensSize'], Object);
+        obj.tokensSize = ApiClient.convertToType(data['tokensSize'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} id
+ * @member {String} id
  */
 GeboChatRequest.prototype.id = undefined;
 
 /**
- * @member {Object} userChatContextCode
+ * @member {String} userChatContextCode
  */
 GeboChatRequest.prototype.userChatContextCode = undefined;
 
 /**
- * @member {Object} chatProfileCode
+ * @member {String} chatProfileCode
  */
 GeboChatRequest.prototype.chatProfileCode = undefined;
 
 /**
- * @member {Object} chatModelCode
+ * @member {String} chatModelCode
  */
 GeboChatRequest.prototype.chatModelCode = undefined;
 
 /**
- * @member {Object} streamResponse
+ * @member {Boolean} streamResponse
  */
 GeboChatRequest.prototype.streamResponse = undefined;
 
 /**
- * @member {Object} query
+ * @member {String} query
  */
 GeboChatRequest.prototype.query = undefined;
 
 /**
- * @member {Object} rewrittenQuery
+ * @member {String} rewrittenQuery
  */
 GeboChatRequest.prototype.rewrittenQuery = undefined;
 
@@ -115,37 +122,101 @@ GeboChatRequest.prototype.rewrittenQuery = undefined;
 GeboChatRequest.prototype.customRagConfig = undefined;
 
 /**
- * @member {Object} choosedKnowledgeBases
+ * @member {Array.<String>} choosedKnowledgeBases
  */
 GeboChatRequest.prototype.choosedKnowledgeBases = undefined;
 
 /**
- * @member {Object} chatPipelineProcessId
+ * @member {String} chatPipelineProcessId
  */
 GeboChatRequest.prototype.chatPipelineProcessId = undefined;
 
 /**
- * @member {Object} forcedRequestDocuments
+ * @member {Array.<String>} forcedRequestDocuments
  */
 GeboChatRequest.prototype.forcedRequestDocuments = undefined;
 
 /**
- * @member {Object} userUploadedContents
+ * @member {Array.<module:model/GResponseDocumentRef>} forcedDocumentsRef
+ */
+GeboChatRequest.prototype.forcedDocumentsRef = undefined;
+
+/**
+ * @member {Array.<module:model/UserUploadedContent>} userUploadedContents
  */
 GeboChatRequest.prototype.userUploadedContents = undefined;
 
 /**
- * @member {Object} deepSearchDataSources
+ * @member {Array.<String>} deepSearchDataSources
  */
 GeboChatRequest.prototype.deepSearchDataSources = undefined;
 
 /**
- * @member {Object} userIntent
+ * Allowed values for the <code>userIntent</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GeboChatRequest.UserIntentEnum = {
+  /**
+   * value: "QA"
+   * @const
+   */
+  QA: "QA",
+
+  /**
+   * value: "HOWTO"
+   * @const
+   */
+  HOWTO: "HOWTO",
+
+  /**
+   * value: "DECISION"
+   * @const
+   */
+  DECISION: "DECISION",
+
+  /**
+   * value: "SUMMARY"
+   * @const
+   */
+  SUMMARY: "SUMMARY",
+
+  /**
+   * value: "PURE_SEARCH"
+   * @const
+   */
+  PURE_SEARCH: "PURE_SEARCH",
+
+  /**
+   * value: "ANALISYS"
+   * @const
+   */
+  ANALISYS: "ANALISYS",
+
+  /**
+   * value: "IMAGE_GENERATION"
+   * @const
+   */
+  IMAGE_GENERATION: "IMAGE_GENERATION",
+
+  /**
+   * value: "UNKNOWN"
+   * @const
+   */
+  UNKNOWN: "UNKNOWN"
+};
+/**
+ * @member {module:model/GeboChatRequest.UserIntentEnum} userIntent
  */
 GeboChatRequest.prototype.userIntent = undefined;
 
 /**
- * @member {Object} tokensSize
+ * @member {Array.<module:model/AdditionalContent>} additionalContents
+ */
+GeboChatRequest.prototype.additionalContents = undefined;
+
+/**
+ * @member {Number} tokensSize
  */
 GeboChatRequest.prototype.tokensSize = undefined;
 

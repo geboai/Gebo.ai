@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="findAll"></a>
 # **findAll**
-> Object findAll()
+> [GPromptUseInfo] findAll()
 
 
 
@@ -32,7 +32,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GPromptUseInfo]**](GPromptUseInfo.md)
 
 ### Authorization
 
@@ -54,7 +54,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboAdminPromptUseInfoControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -68,7 +68,7 @@ apiInstance.findByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -85,7 +85,7 @@ No authorization required
 
 <a name="findByModule"></a>
 # **findByModule**
-> Object findByModule(module)
+> [GPromptUseInfo] findByModule(module)
 
 
 
@@ -94,7 +94,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboAdminPromptUseInfoControllerApi();
-let module = null; // Object | 
+let module = "module_example"; // String | 
 
 apiInstance.findByModule(module).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -108,11 +108,11 @@ apiInstance.findByModule(module).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **module** | [**Object**](.md)|  | 
+ **module** | **String**|  | 
 
 ### Return type
 
-**Object**
+[**[GPromptUseInfo]**](GPromptUseInfo.md)
 
 ### Authorization
 

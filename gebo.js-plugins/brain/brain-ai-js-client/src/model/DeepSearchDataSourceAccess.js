@@ -39,35 +39,35 @@ export default class DeepSearchDataSourceAccess {
     if (data) {
       obj = obj || new DeepSearchDataSourceAccess();
       if (data.hasOwnProperty('accessibleGroups'))
-        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], Object);
+        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], ['String']);
       if (data.hasOwnProperty('accessibleUsers'))
-        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], Object);
+        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], ['String']);
       if (data.hasOwnProperty('accessibleToAll'))
-        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], Object);
+        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], 'Boolean');
       if (data.hasOwnProperty('dataSourceId'))
-        obj.dataSourceId = ApiClient.convertToType(data['dataSourceId'], Object);
+        obj.dataSourceId = ApiClient.convertToType(data['dataSourceId'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} accessibleGroups
+ * @member {Array.<String>} accessibleGroups
  */
 DeepSearchDataSourceAccess.prototype.accessibleGroups = undefined;
 
 /**
- * @member {Object} accessibleUsers
+ * @member {Array.<String>} accessibleUsers
  */
 DeepSearchDataSourceAccess.prototype.accessibleUsers = undefined;
 
 /**
- * @member {Object} accessibleToAll
+ * @member {Boolean} accessibleToAll
  */
 DeepSearchDataSourceAccess.prototype.accessibleToAll = undefined;
 
 /**
- * @member {Object} dataSourceId
+ * @member {String} dataSourceId
  */
 DeepSearchDataSourceAccess.prototype.dataSourceId = undefined;
 

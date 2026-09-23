@@ -24,9 +24,9 @@ export default class GeboMCPAgentTool {
    * Constructs a new <code>GeboMCPAgentTool</code>.
    * @alias module:model/GeboMCPAgentTool
    * @class
-   * @param agentConfigCode {Object} 
-   * @param networkConfigCode {Object} 
-   * @param toolName {Object} 
+   * @param agentConfigCode {String} 
+   * @param networkConfigCode {String} 
+   * @param toolName {String} 
    */
   constructor(agentConfigCode, networkConfigCode, toolName) {
     this.agentConfigCode = agentConfigCode;
@@ -45,28 +45,28 @@ export default class GeboMCPAgentTool {
     if (data) {
       obj = obj || new GeboMCPAgentTool();
       if (data.hasOwnProperty('agentConfigCode'))
-        obj.agentConfigCode = ApiClient.convertToType(data['agentConfigCode'], Object);
+        obj.agentConfigCode = ApiClient.convertToType(data['agentConfigCode'], 'String');
       if (data.hasOwnProperty('networkConfigCode'))
-        obj.networkConfigCode = ApiClient.convertToType(data['networkConfigCode'], Object);
+        obj.networkConfigCode = ApiClient.convertToType(data['networkConfigCode'], 'String');
       if (data.hasOwnProperty('toolName'))
-        obj.toolName = ApiClient.convertToType(data['toolName'], Object);
+        obj.toolName = ApiClient.convertToType(data['toolName'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} agentConfigCode
+ * @member {String} agentConfigCode
  */
 GeboMCPAgentTool.prototype.agentConfigCode = undefined;
 
 /**
- * @member {Object} networkConfigCode
+ * @member {String} networkConfigCode
  */
 GeboMCPAgentTool.prototype.networkConfigCode = undefined;
 
 /**
- * @member {Object} toolName
+ * @member {String} toolName
  */
 GeboMCPAgentTool.prototype.toolName = undefined;
 

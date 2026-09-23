@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="isEnabled"></a>
 # **isEnabled**
-> Object isEnabled()
+> &#x27;Boolean&#x27; isEnabled()
 
 
 
@@ -31,7 +31,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**&#x27;Boolean&#x27;**
 
 ### Authorization
 

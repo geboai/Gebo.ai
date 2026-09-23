@@ -40,7 +40,7 @@ export default class GeboMcpServerAdminControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
     deleteMcpServerWithHttpInfo(code) {
@@ -89,7 +89,7 @@ export default class GeboMcpServerAdminControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GeboMCPServerConfig} and HTTP response
      */
     findMcpServerByCodeWithHttpInfo(code) {
@@ -138,7 +138,7 @@ export default class GeboMcpServerAdminControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GeboMCPServerConfig>} and HTTP response
      */
     getAllMcpServersWithHttpInfo() {
       
@@ -160,7 +160,7 @@ export default class GeboMcpServerAdminControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GeboMCPServerConfig];
 
       return this.apiClient.callApi(
         '/api/admin/GeboMCPServerAdminController/getAllMcpServers', 'GET',
@@ -170,7 +170,7 @@ export default class GeboMcpServerAdminControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GeboMCPServerConfig>}
      */
     getAllMcpServers() {
       return this.getAllMcpServersWithHttpInfo()

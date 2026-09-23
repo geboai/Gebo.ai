@@ -23,7 +23,7 @@ import java.util.Date;
  * DocumentReferenceView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T09:25:59.411243076+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
 
 public class DocumentReferenceView {
   @JsonProperty("name")
@@ -56,11 +56,11 @@ public class DocumentReferenceView {
   @JsonProperty("modificationDate")
   private Date modificationDate = null;
 
-  @JsonProperty("relativePath")
-  private String relativePath = null;
-
   @JsonProperty("parentVirtualFolderCode")
   private String parentVirtualFolderCode = null;
+
+  @JsonProperty("relativePath")
+  private String relativePath = null;
 
   @JsonProperty("creationDate")
   private Date creationDate = null;
@@ -245,24 +245,6 @@ public class DocumentReferenceView {
     this.modificationDate = modificationDate;
   }
 
-  public DocumentReferenceView relativePath(String relativePath) {
-    this.relativePath = relativePath;
-    return this;
-  }
-
-   /**
-   * Get relativePath
-   * @return relativePath
-  **/
-  @Schema(description = "")
-  public String getRelativePath() {
-    return relativePath;
-  }
-
-  public void setRelativePath(String relativePath) {
-    this.relativePath = relativePath;
-  }
-
   public DocumentReferenceView parentVirtualFolderCode(String parentVirtualFolderCode) {
     this.parentVirtualFolderCode = parentVirtualFolderCode;
     return this;
@@ -279,6 +261,24 @@ public class DocumentReferenceView {
 
   public void setParentVirtualFolderCode(String parentVirtualFolderCode) {
     this.parentVirtualFolderCode = parentVirtualFolderCode;
+  }
+
+  public DocumentReferenceView relativePath(String relativePath) {
+    this.relativePath = relativePath;
+    return this;
+  }
+
+   /**
+   * Get relativePath
+   * @return relativePath
+  **/
+  @Schema(description = "")
+  public String getRelativePath() {
+    return relativePath;
+  }
+
+  public void setRelativePath(String relativePath) {
+    this.relativePath = relativePath;
   }
 
   public DocumentReferenceView creationDate(Date creationDate) {
@@ -319,14 +319,14 @@ public class DocumentReferenceView {
         Objects.equals(this.parentProjectCode, documentReferenceView.parentProjectCode) &&
         Objects.equals(this.rootKnowledgebaseCode, documentReferenceView.rootKnowledgebaseCode) &&
         Objects.equals(this.modificationDate, documentReferenceView.modificationDate) &&
-        Objects.equals(this.relativePath, documentReferenceView.relativePath) &&
         Objects.equals(this.parentVirtualFolderCode, documentReferenceView.parentVirtualFolderCode) &&
+        Objects.equals(this.relativePath, documentReferenceView.relativePath) &&
         Objects.equals(this.creationDate, documentReferenceView.creationDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, extension, contentType, description, code, messagingModuleId, deleted, parentProjectCode, rootKnowledgebaseCode, modificationDate, relativePath, parentVirtualFolderCode, creationDate);
+    return Objects.hash(name, extension, contentType, description, code, messagingModuleId, deleted, parentProjectCode, rootKnowledgebaseCode, modificationDate, parentVirtualFolderCode, relativePath, creationDate);
   }
 
 
@@ -345,8 +345,8 @@ public class DocumentReferenceView {
     sb.append("    parentProjectCode: ").append(toIndentedString(parentProjectCode)).append("\n");
     sb.append("    rootKnowledgebaseCode: ").append(toIndentedString(rootKnowledgebaseCode)).append("\n");
     sb.append("    modificationDate: ").append(toIndentedString(modificationDate)).append("\n");
-    sb.append("    relativePath: ").append(toIndentedString(relativePath)).append("\n");
     sb.append("    parentVirtualFolderCode: ").append(toIndentedString(parentVirtualFolderCode)).append("\n");
+    sb.append("    relativePath: ").append(toIndentedString(relativePath)).append("\n");
     sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\n");
     sb.append("}");
     return sb.toString();

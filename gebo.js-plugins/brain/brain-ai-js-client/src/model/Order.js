@@ -39,49 +39,91 @@ export default class Order {
     if (data) {
       obj = obj || new Order();
       if (data.hasOwnProperty('direction'))
-        obj.direction = ApiClient.convertToType(data['direction'], Object);
+        obj.direction = ApiClient.convertToType(data['direction'], 'String');
       if (data.hasOwnProperty('property'))
-        obj.property = ApiClient.convertToType(data['property'], Object);
+        obj.property = ApiClient.convertToType(data['property'], 'String');
       if (data.hasOwnProperty('ignoreCase'))
-        obj.ignoreCase = ApiClient.convertToType(data['ignoreCase'], Object);
+        obj.ignoreCase = ApiClient.convertToType(data['ignoreCase'], 'Boolean');
       if (data.hasOwnProperty('nullHandling'))
-        obj.nullHandling = ApiClient.convertToType(data['nullHandling'], Object);
-      if (data.hasOwnProperty('descending'))
-        obj.descending = ApiClient.convertToType(data['descending'], Object);
+        obj.nullHandling = ApiClient.convertToType(data['nullHandling'], 'String');
       if (data.hasOwnProperty('ascending'))
-        obj.ascending = ApiClient.convertToType(data['ascending'], Object);
+        obj.ascending = ApiClient.convertToType(data['ascending'], 'Boolean');
+      if (data.hasOwnProperty('descending'))
+        obj.descending = ApiClient.convertToType(data['descending'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} direction
+ * Allowed values for the <code>direction</code> property.
+ * @enum {String}
+ * @readonly
+ */
+Order.DirectionEnum = {
+  /**
+   * value: "ASC"
+   * @const
+   */
+  ASC: "ASC",
+
+  /**
+   * value: "DESC"
+   * @const
+   */
+  DESC: "DESC"
+};
+/**
+ * @member {module:model/Order.DirectionEnum} direction
  */
 Order.prototype.direction = undefined;
 
 /**
- * @member {Object} property
+ * @member {String} property
  */
 Order.prototype.property = undefined;
 
 /**
- * @member {Object} ignoreCase
+ * @member {Boolean} ignoreCase
  */
 Order.prototype.ignoreCase = undefined;
 
 /**
- * @member {Object} nullHandling
+ * Allowed values for the <code>nullHandling</code> property.
+ * @enum {String}
+ * @readonly
+ */
+Order.NullHandlingEnum = {
+  /**
+   * value: "NATIVE"
+   * @const
+   */
+  NATIVE: "NATIVE",
+
+  /**
+   * value: "NULLS_FIRST"
+   * @const
+   */
+  NULLS_FIRST: "NULLS_FIRST",
+
+  /**
+   * value: "NULLS_LAST"
+   * @const
+   */
+  NULLS_LAST: "NULLS_LAST"
+};
+/**
+ * @member {module:model/Order.NullHandlingEnum} nullHandling
  */
 Order.prototype.nullHandling = undefined;
 
 /**
- * @member {Object} descending
- */
-Order.prototype.descending = undefined;
-
-/**
- * @member {Object} ascending
+ * @member {Boolean} ascending
  */
 Order.prototype.ascending = undefined;
+
+/**
+ * @member {Boolean} descending
+ */
+Order.prototype.descending = undefined;
 

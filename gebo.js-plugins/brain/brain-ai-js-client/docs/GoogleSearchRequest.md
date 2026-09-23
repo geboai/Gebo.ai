@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**language** | **Object** |  | [optional] 
-**query** | **Object** |  | [optional] 
-**topN** | **Object** |  | [optional] 
+**language** | **String** |  | [optional] 
+**query** | **String** |  | [optional] 
+**topN** | **Number** |  | [optional] 

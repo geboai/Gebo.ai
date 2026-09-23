@@ -40,84 +40,84 @@ export default class GAnthropicChatModelChoice {
     if (data) {
       obj = obj || new GAnthropicChatModelChoice();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('creationDate'))
-        obj.creationDate = ApiClient.convertToType(data['creationDate'], Object);
+        obj.creationDate = ApiClient.convertToType(data['creationDate'], 'Date');
       if (data.hasOwnProperty('modificationDate'))
-        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], Object);
+        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], 'Date');
       if (data.hasOwnProperty('version'))
-        obj.version = ApiClient.convertToType(data['version'], Object);
+        obj.version = ApiClient.convertToType(data['version'], 'String');
       if (data.hasOwnProperty('metaInfos'))
         obj.metaInfos = ModelMetaInfo.constructFromObject(data['metaInfos']);
       if (data.hasOwnProperty('informativeUrl'))
-        obj.informativeUrl = ApiClient.convertToType(data['informativeUrl'], Object);
+        obj.informativeUrl = ApiClient.convertToType(data['informativeUrl'], 'String');
       if (data.hasOwnProperty('contextLength'))
-        obj.contextLength = ApiClient.convertToType(data['contextLength'], Object);
+        obj.contextLength = ApiClient.convertToType(data['contextLength'], 'Number');
       if (data.hasOwnProperty('nativeModelMetaInfos'))
         obj.nativeModelMetaInfos = ApiClient.convertToType(data['nativeModelMetaInfos'], Object);
       if (data.hasOwnProperty('supportsStructuredOutput'))
-        obj.supportsStructuredOutput = ApiClient.convertToType(data['supportsStructuredOutput'], Object);
+        obj.supportsStructuredOutput = ApiClient.convertToType(data['supportsStructuredOutput'], 'Boolean');
       if (data.hasOwnProperty('supportsFunctionCalls'))
-        obj.supportsFunctionCalls = ApiClient.convertToType(data['supportsFunctionCalls'], Object);
+        obj.supportsFunctionCalls = ApiClient.convertToType(data['supportsFunctionCalls'], 'Boolean');
       if (data.hasOwnProperty('modelDetails'))
-        obj.modelDetails = ApiClient.convertToType(data['modelDetails'], Object);
+        obj.modelDetails = ApiClient.convertToType(data['modelDetails'], {'String': Object});
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GAnthropicChatModelChoice.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GAnthropicChatModelChoice.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GAnthropicChatModelChoice.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GAnthropicChatModelChoice.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GAnthropicChatModelChoice.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GAnthropicChatModelChoice.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} creationDate
+ * @member {Date} creationDate
  */
 GAnthropicChatModelChoice.prototype.creationDate = undefined;
 
 /**
- * @member {Object} modificationDate
+ * @member {Date} modificationDate
  */
 GAnthropicChatModelChoice.prototype.modificationDate = undefined;
 
 /**
- * @member {Object} version
+ * @member {String} version
  */
 GAnthropicChatModelChoice.prototype.version = undefined;
 
@@ -127,12 +127,12 @@ GAnthropicChatModelChoice.prototype.version = undefined;
 GAnthropicChatModelChoice.prototype.metaInfos = undefined;
 
 /**
- * @member {Object} informativeUrl
+ * @member {String} informativeUrl
  */
 GAnthropicChatModelChoice.prototype.informativeUrl = undefined;
 
 /**
- * @member {Object} contextLength
+ * @member {Number} contextLength
  */
 GAnthropicChatModelChoice.prototype.contextLength = undefined;
 
@@ -142,17 +142,17 @@ GAnthropicChatModelChoice.prototype.contextLength = undefined;
 GAnthropicChatModelChoice.prototype.nativeModelMetaInfos = undefined;
 
 /**
- * @member {Object} supportsStructuredOutput
+ * @member {Boolean} supportsStructuredOutput
  */
 GAnthropicChatModelChoice.prototype.supportsStructuredOutput = undefined;
 
 /**
- * @member {Object} supportsFunctionCalls
+ * @member {Boolean} supportsFunctionCalls
  */
 GAnthropicChatModelChoice.prototype.supportsFunctionCalls = undefined;
 
 /**
- * @member {Object} modelDetails
+ * @member {Object.<String, Object>} modelDetails
  */
 GAnthropicChatModelChoice.prototype.modelDetails = undefined;
 

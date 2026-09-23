@@ -24,8 +24,8 @@ export default class SemanticQueryParam {
    * Constructs a new <code>SemanticQueryParam</code>.
    * @alias module:model/SemanticQueryParam
    * @class
-   * @param query {Object} 
-   * @param knowledgeBaseCodes {Object} 
+   * @param query {String} 
+   * @param knowledgeBaseCodes {Array.<String>} 
    */
   constructor(query, knowledgeBaseCodes) {
     this.query = query;
@@ -43,28 +43,28 @@ export default class SemanticQueryParam {
     if (data) {
       obj = obj || new SemanticQueryParam();
       if (data.hasOwnProperty('query'))
-        obj.query = ApiClient.convertToType(data['query'], Object);
+        obj.query = ApiClient.convertToType(data['query'], 'String');
       if (data.hasOwnProperty('knowledgeBaseCodes'))
-        obj.knowledgeBaseCodes = ApiClient.convertToType(data['knowledgeBaseCodes'], Object);
+        obj.knowledgeBaseCodes = ApiClient.convertToType(data['knowledgeBaseCodes'], ['String']);
       if (data.hasOwnProperty('topK'))
-        obj.topK = ApiClient.convertToType(data['topK'], Object);
+        obj.topK = ApiClient.convertToType(data['topK'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} query
+ * @member {String} query
  */
 SemanticQueryParam.prototype.query = undefined;
 
 /**
- * @member {Object} knowledgeBaseCodes
+ * @member {Array.<String>} knowledgeBaseCodes
  */
 SemanticQueryParam.prototype.knowledgeBaseCodes = undefined;
 
 /**
- * @member {Object} topK
+ * @member {Number} topK
  */
 SemanticQueryParam.prototype.topK = undefined;
 

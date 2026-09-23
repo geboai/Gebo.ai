@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 <a name="getLatestComputedVectorStores"></a>
 # **getLatestComputedVectorStores**
-> Object getLatestComputedVectorStores()
+> [AutotuneVectorStoreInfo] getLatestComputedVectorStores()
 
 
 
@@ -30,7 +30,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[AutotuneVectorStoreInfo]**](AutotuneVectorStoreInfo.md)
 
 ### Authorization
 

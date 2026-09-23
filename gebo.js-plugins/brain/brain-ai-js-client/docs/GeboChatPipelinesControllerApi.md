@@ -25,7 +25,7 @@ import {BrainClient} from 'gebo.brain.client.js';
 let apiInstance = new BrainClient.GeboChatPipelinesControllerApi();
 let body = new BrainClient.PipelineRequestBody(); // PipelineRequestBody | 
 let opts = { 
-  'pipelineCode': null // Object | 
+  'pipelineCode': "pipelineCode_example" // String | 
 };
 apiInstance.executeChatPipeline(body, opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -40,7 +40,7 @@ apiInstance.executeChatPipeline(body, opts).then((data) => {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  | 
- **pipelineCode** | [**Object**](.md)|  | [optional] 
+ **pipelineCode** | **String**|  | [optional] 
 
 ### Return type
 
@@ -97,7 +97,7 @@ No authorization required
 
 <a name="getDefaultPersonalPipelinesChatMenu"></a>
 # **getDefaultPersonalPipelinesChatMenu**
-> Object getDefaultPersonalPipelinesChatMenu(chatProfileCode)
+> [PipelineChatMenu] getDefaultPersonalPipelinesChatMenu(chatProfileCode)
 
 
 
@@ -106,7 +106,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboChatPipelinesControllerApi();
-let chatProfileCode = null; // Object | 
+let chatProfileCode = "chatProfileCode_example"; // String | 
 
 apiInstance.getDefaultPersonalPipelinesChatMenu(chatProfileCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -120,11 +120,11 @@ apiInstance.getDefaultPersonalPipelinesChatMenu(chatProfileCode).then((data) => 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | [**Object**](.md)|  | 
+ **chatProfileCode** | **String**|  | 
 
 ### Return type
 
-**Object**
+[**[PipelineChatMenu]**](PipelineChatMenu.md)
 
 ### Authorization
 
@@ -137,7 +137,7 @@ No authorization required
 
 <a name="getPersonalPipelinesChatMenu"></a>
 # **getPersonalPipelinesChatMenu**
-> Object getPersonalPipelinesChatMenu(chatProfileCode, opts)
+> [PipelineChatMenu] getPersonalPipelinesChatMenu(opts)
 
 
 
@@ -146,11 +146,11 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboChatPipelinesControllerApi();
-let chatProfileCode = null; // Object | 
 let opts = { 
-  'pipelineCode': null // Object | 
+  'chatProfileCode': "chatProfileCode_example", // String | 
+  'pipelineCode': "pipelineCode_example" // String | 
 };
-apiInstance.getPersonalPipelinesChatMenu(chatProfileCode, opts).then((data) => {
+apiInstance.getPersonalPipelinesChatMenu(opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
@@ -162,12 +162,12 @@ apiInstance.getPersonalPipelinesChatMenu(chatProfileCode, opts).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | [**Object**](.md)|  | 
- **pipelineCode** | [**Object**](.md)|  | [optional] 
+ **chatProfileCode** | **String**|  | [optional] 
+ **pipelineCode** | **String**|  | [optional] 
 
 ### Return type
 
-**Object**
+[**[PipelineChatMenu]**](PipelineChatMenu.md)
 
 ### Authorization
 
@@ -189,7 +189,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboChatPipelinesControllerApi();
-let userChatContextCode = null; // Object | 
+let userChatContextCode = "userChatContextCode_example"; // String | 
 
 apiInstance.stopChatPipeline(userChatContextCode).then(() => {
   console.log('API called successfully.');
@@ -203,7 +203,7 @@ apiInstance.stopChatPipeline(userChatContextCode).then(() => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userChatContextCode** | [**Object**](.md)|  | 
+ **userChatContextCode** | **String**|  | 
 
 ### Return type
 
@@ -220,7 +220,7 @@ No authorization required
 
 <a name="streamChatPipeline"></a>
 # **streamChatPipeline**
-> Object streamChatPipeline(body, opts)
+> [GeboChatMessageEnvelope] streamChatPipeline(body, opts)
 
 
 
@@ -231,7 +231,7 @@ import {BrainClient} from 'gebo.brain.client.js';
 let apiInstance = new BrainClient.GeboChatPipelinesControllerApi();
 let body = new BrainClient.PipelineRequestBody(); // PipelineRequestBody | 
 let opts = { 
-  'pipelineCode': null // Object | 
+  'pipelineCode': "pipelineCode_example" // String | 
 };
 apiInstance.streamChatPipeline(body, opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -246,11 +246,11 @@ apiInstance.streamChatPipeline(body, opts).then((data) => {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  | 
- **pipelineCode** | [**Object**](.md)|  | [optional] 
+ **pipelineCode** | **String**|  | [optional] 
 
 ### Return type
 
-**Object**
+[**[GeboChatMessageEnvelope]**](GeboChatMessageEnvelope.md)
 
 ### Authorization
 
@@ -263,7 +263,7 @@ No authorization required
 
 <a name="streamDefaultChatPipeline"></a>
 # **streamDefaultChatPipeline**
-> Object streamDefaultChatPipeline(body)
+> [GeboChatMessageEnvelope] streamDefaultChatPipeline(body)
 
 
 
@@ -290,7 +290,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**[GeboChatMessageEnvelope]**](GeboChatMessageEnvelope.md)
 
 ### Authorization
 

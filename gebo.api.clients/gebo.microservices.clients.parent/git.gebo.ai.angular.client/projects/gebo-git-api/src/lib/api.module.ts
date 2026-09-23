@@ -7,7 +7,6 @@ import { ContentsResetControllerService } from './api/contentsResetController.se
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { GitSystemsControllerService } from './api/gitSystemsController.service';
-import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 
@@ -20,7 +19,6 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
     DocumentContentStreamerControllerService,
     GenericalPublisherControllerService,
     GitSystemsControllerService,
-    IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService,
     JobLauncherControllerService ]
 })

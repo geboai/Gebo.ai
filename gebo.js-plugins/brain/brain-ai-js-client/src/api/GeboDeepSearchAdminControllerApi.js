@@ -14,6 +14,7 @@
  */
 import ApiClient from "../ApiClient";
 import DeepSearchConfig from '../model/DeepSearchConfig';
+import GBaseObject from '../model/GBaseObject';
 
 /**
 * GeboDeepSearchAdminController service.
@@ -86,7 +87,7 @@ export default class GeboDeepSearchAdminControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GBaseObject>} and HTTP response
      */
     getConfigurableDataSourcesWithHttpInfo() {
       
@@ -108,7 +109,7 @@ export default class GeboDeepSearchAdminControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['*/*'];
-      let returnType = Object;
+      let returnType = [GBaseObject];
 
       return this.apiClient.callApi(
         '/api/admin/GeboDeepSearchAdminController/getConfigurableDataSources', 'GET',
@@ -118,7 +119,7 @@ export default class GeboDeepSearchAdminControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GBaseObject>}
      */
     getConfigurableDataSources() {
       return this.getConfigurableDataSourcesWithHttpInfo()
@@ -129,7 +130,7 @@ export default class GeboDeepSearchAdminControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/DeepSearchConfig>} and HTTP response
      */
     getDeepSeachConfigsWithHttpInfo() {
       
@@ -151,7 +152,7 @@ export default class GeboDeepSearchAdminControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [DeepSearchConfig];
 
       return this.apiClient.callApi(
         '/api/admin/GeboDeepSearchAdminController/getDeepSeachConfigs', 'GET',
@@ -161,7 +162,7 @@ export default class GeboDeepSearchAdminControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/DeepSearchConfig>}
      */
     getDeepSeachConfigs() {
       return this.getDeepSeachConfigsWithHttpInfo()

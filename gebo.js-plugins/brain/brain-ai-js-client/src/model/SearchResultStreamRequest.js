@@ -25,7 +25,7 @@ export default class SearchResultStreamRequest {
    * Constructs a new <code>SearchResultStreamRequest</code>.
    * @alias module:model/SearchResultStreamRequest
    * @class
-   * @param streamingPurpose {Object} 
+   * @param streamingPurpose {module:model/SearchResultStreamRequest.StreamingPurposeEnum} 
    * @param reference {module:model/SearchResult} 
    */
   constructor(streamingPurpose, reference) {
@@ -44,7 +44,7 @@ export default class SearchResultStreamRequest {
     if (data) {
       obj = obj || new SearchResultStreamRequest();
       if (data.hasOwnProperty('streamingPurpose'))
-        obj.streamingPurpose = ApiClient.convertToType(data['streamingPurpose'], Object);
+        obj.streamingPurpose = ApiClient.convertToType(data['streamingPurpose'], 'String');
       if (data.hasOwnProperty('reference'))
         obj.reference = SearchResult.constructFromObject(data['reference']);
     }
@@ -53,7 +53,25 @@ export default class SearchResultStreamRequest {
 }
 
 /**
- * @member {Object} streamingPurpose
+ * Allowed values for the <code>streamingPurpose</code> property.
+ * @enum {String}
+ * @readonly
+ */
+SearchResultStreamRequest.StreamingPurposeEnum = {
+  /**
+   * value: "SERVING"
+   * @const
+   */
+  SERVING: "SERVING",
+
+  /**
+   * value: "INGESTING"
+   * @const
+   */
+  INGESTING: "INGESTING"
+};
+/**
+ * @member {module:model/SearchResultStreamRequest.StreamingPurposeEnum} streamingPurpose
  */
 SearchResultStreamRequest.prototype.streamingPurpose = undefined;
 

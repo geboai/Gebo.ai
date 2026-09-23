@@ -10,6 +10,7 @@ Method | HTTP request | Description
 [**getProfileProviderModelCapabilities**](GeboRagChatControllerApi.md#getProfileProviderModelCapabilities) | **GET** /api/users/GeboChatController/getProfileProviderModelCapabilities | 
 [**getVisibleKnowledgeBasesByProfileCode**](GeboRagChatControllerApi.md#getVisibleKnowledgeBasesByProfileCode) | **GET** /api/users/GeboChatController/getVisibleKnowledgeBasesByProfileCode | 
 [**ragChat**](GeboRagChatControllerApi.md#ragChat) | **POST** /api/users/GeboChatController/ragChat | 
+[**resolveForcedDocumentsRef**](GeboRagChatControllerApi.md#resolveForcedDocumentsRef) | **POST** /api/users/GeboChatController/resolveForcedDocumentsRef | 
 [**streamRagResponse**](GeboRagChatControllerApi.md#streamRagResponse) | **POST** /api/users/GeboChatController/streamRagResponse | 
 
 <a name="getChatModelUserInfoByChatProfileCode"></a>
@@ -23,7 +24,7 @@ Method | HTTP request | Description
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboRagChatControllerApi();
-let chatProfileCode = null; // Object | 
+let chatProfileCode = "chatProfileCode_example"; // String | 
 
 apiInstance.getChatModelUserInfoByChatProfileCode(chatProfileCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -37,7 +38,7 @@ apiInstance.getChatModelUserInfoByChatProfileCode(chatProfileCode).then((data) =
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | [**Object**](.md)|  | 
+ **chatProfileCode** | **String**|  | 
 
 ### Return type
 
@@ -63,7 +64,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboRagChatControllerApi();
-let chatProfileCode = null; // Object | 
+let chatProfileCode = "chatProfileCode_example"; // String | 
 
 apiInstance.getChatProfileModelMetaInfos(chatProfileCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -77,7 +78,7 @@ apiInstance.getChatProfileModelMetaInfos(chatProfileCode).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | [**Object**](.md)|  | 
+ **chatProfileCode** | **String**|  | 
 
 ### Return type
 
@@ -94,7 +95,7 @@ No authorization required
 
 <a name="getChatProfiles"></a>
 # **getChatProfiles**
-> Object getChatProfiles()
+> [GChatProfileConfiguration] getChatProfiles()
 
 
 
@@ -116,7 +117,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GChatProfileConfiguration]**](GChatProfileConfiguration.md)
 
 ### Authorization
 
@@ -138,7 +139,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboRagChatControllerApi();
-let chatProfileCode = null; // Object | 
+let chatProfileCode = "chatProfileCode_example"; // String | 
 
 apiInstance.getProfileProviderModelCapabilities(chatProfileCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -152,7 +153,7 @@ apiInstance.getProfileProviderModelCapabilities(chatProfileCode).then((data) => 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | [**Object**](.md)|  | 
+ **chatProfileCode** | **String**|  | 
 
 ### Return type
 
@@ -169,7 +170,7 @@ No authorization required
 
 <a name="getVisibleKnowledgeBasesByProfileCode"></a>
 # **getVisibleKnowledgeBasesByProfileCode**
-> Object getVisibleKnowledgeBasesByProfileCode(profileCode)
+> [GBaseObject] getVisibleKnowledgeBasesByProfileCode(profileCode)
 
 
 
@@ -178,7 +179,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboRagChatControllerApi();
-let profileCode = null; // Object | 
+let profileCode = "profileCode_example"; // String | 
 
 apiInstance.getVisibleKnowledgeBasesByProfileCode(profileCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -192,11 +193,11 @@ apiInstance.getVisibleKnowledgeBasesByProfileCode(profileCode).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **profileCode** | [**Object**](.md)|  | 
+ **profileCode** | **String**|  | 
 
 ### Return type
 
-**Object**
+[**[GBaseObject]**](GBaseObject.md)
 
 ### Authorization
 
@@ -247,9 +248,49 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
+<a name="resolveForcedDocumentsRef"></a>
+# **resolveForcedDocumentsRef**
+> [GResponseDocumentRef] resolveForcedDocumentsRef(body)
+
+
+
+### Example
+```javascript
+import {BrainClient} from 'gebo.brain.client.js';
+
+let apiInstance = new BrainClient.GeboRagChatControllerApi();
+let body = ["body_example"]; // [String] | 
+
+apiInstance.resolveForcedDocumentsRef(body).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**[String]**](String.md)|  | 
+
+### Return type
+
+[**[GResponseDocumentRef]**](GResponseDocumentRef.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
 <a name="streamRagResponse"></a>
 # **streamRagResponse**
-> Object streamRagResponse(body)
+> [ServerSentEventString] streamRagResponse(body)
 
 
 
@@ -276,7 +317,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**[ServerSentEventString]**](ServerSentEventString.md)
 
 ### Authorization
 

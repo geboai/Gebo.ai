@@ -25,13 +25,11 @@ export default class SearchDocumentByNamePagedParam {
    * Constructs a new <code>SearchDocumentByNamePagedParam</code>.
    * @alias module:model/SearchDocumentByNamePagedParam
    * @class
-   * @param name {Object} 
-   * @param knowledgeBaseCodes {Object} 
+   * @param name {String} 
    * @param page {module:model/DataPage} 
    */
-  constructor(name, knowledgeBaseCodes, page) {
+  constructor(name, page) {
     this.name = name;
-    this.knowledgeBaseCodes = knowledgeBaseCodes;
     this.page = page;
   }
 
@@ -46,9 +44,9 @@ export default class SearchDocumentByNamePagedParam {
     if (data) {
       obj = obj || new SearchDocumentByNamePagedParam();
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('knowledgeBaseCodes'))
-        obj.knowledgeBaseCodes = ApiClient.convertToType(data['knowledgeBaseCodes'], Object);
+        obj.knowledgeBaseCodes = ApiClient.convertToType(data['knowledgeBaseCodes'], ['String']);
       if (data.hasOwnProperty('page'))
         obj.page = DataPage.constructFromObject(data['page']);
     }
@@ -57,12 +55,12 @@ export default class SearchDocumentByNamePagedParam {
 }
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 SearchDocumentByNamePagedParam.prototype.name = undefined;
 
 /**
- * @member {Object} knowledgeBaseCodes
+ * @member {Array.<String>} knowledgeBaseCodes
  */
 SearchDocumentByNamePagedParam.prototype.knowledgeBaseCodes = undefined;
 

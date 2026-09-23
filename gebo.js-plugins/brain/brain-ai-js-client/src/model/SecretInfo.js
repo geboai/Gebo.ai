@@ -39,35 +39,102 @@ export default class SecretInfo {
     if (data) {
       obj = obj || new SecretInfo();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('secretType'))
-        obj.secretType = ApiClient.convertToType(data['secretType'], Object);
+        obj.secretType = ApiClient.convertToType(data['secretType'], 'String');
       if (data.hasOwnProperty('contextCode'))
-        obj.contextCode = ApiClient.convertToType(data['contextCode'], Object);
+        obj.contextCode = ApiClient.convertToType(data['contextCode'], 'String');
+      if (data.hasOwnProperty('readOnly'))
+        obj.readOnly = ApiClient.convertToType(data['readOnly'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 SecretInfo.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 SecretInfo.prototype.description = undefined;
 
 /**
- * @member {Object} secretType
+ * Allowed values for the <code>secretType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+SecretInfo.SecretTypeEnum = {
+  /**
+   * value: "USERNAME_PASSWORD"
+   * @const
+   */
+  USERNAME_PASSWORD: "USERNAME_PASSWORD",
+
+  /**
+   * value: "TOKEN"
+   * @const
+   */
+  TOKEN: "TOKEN",
+
+  /**
+   * value: "SSH_KEY"
+   * @const
+   */
+  SSH_KEY: "SSH_KEY",
+
+  /**
+   * value: "CUSTOM_SECRET"
+   * @const
+   */
+  CUSTOM_SECRET: "CUSTOM_SECRET",
+
+  /**
+   * value: "OAUTH2_STANDARD"
+   * @const
+   */
+  oAUTH2STANDARD: "OAUTH2_STANDARD",
+
+  /**
+   * value: "OAUTH2_GOOGLE"
+   * @const
+   */
+  oAUTH2GOOGLE: "OAUTH2_GOOGLE",
+
+  /**
+   * value: "GOOGLE_CLOUD_JSON_CREDENTIALS"
+   * @const
+   */
+  GOOGLE_CLOUD_JSON_CREDENTIALS: "GOOGLE_CLOUD_JSON_CREDENTIALS",
+
+  /**
+   * value: "OAUTH2_AUTHORIZED_CLIENT"
+   * @const
+   */
+  oAUTH2AUTHORIZEDCLIENT: "OAUTH2_AUTHORIZED_CLIENT",
+
+  /**
+   * value: "AWS_CONNECTION"
+   * @const
+   */
+  AWS_CONNECTION: "AWS_CONNECTION"
+};
+/**
+ * @member {module:model/SecretInfo.SecretTypeEnum} secretType
  */
 SecretInfo.prototype.secretType = undefined;
 
 /**
- * @member {Object} contextCode
+ * @member {String} contextCode
  */
 SecretInfo.prototype.contextCode = undefined;
+
+/**
+ * @member {Boolean} readOnly
+ */
+SecretInfo.prototype.readOnly = undefined;
 

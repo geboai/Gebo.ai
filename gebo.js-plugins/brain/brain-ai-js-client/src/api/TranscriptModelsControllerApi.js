@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from "../ApiClient";
+import ConfigurationEntryGBaseTranscriptModelConfig from '../model/ConfigurationEntryGBaseTranscriptModelConfig';
+import GTranscriptModelType from '../model/GTranscriptModelType';
 
 /**
 * TranscriptModelsController service.
@@ -37,8 +39,8 @@ export default class TranscriptModelsControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ConfigurationEntryGBaseTranscriptModelConfig>} and HTTP response
      */
     getRuntimeConfiguredTranscriptModelsWithHttpInfo(opts) {
       opts = opts || {};
@@ -60,7 +62,7 @@ export default class TranscriptModelsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [ConfigurationEntryGBaseTranscriptModelConfig];
 
       return this.apiClient.callApi(
         '/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels', 'GET',
@@ -71,8 +73,8 @@ export default class TranscriptModelsControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ConfigurationEntryGBaseTranscriptModelConfig>}
      */
     getRuntimeConfiguredTranscriptModels(opts) {
       return this.getRuntimeConfiguredTranscriptModelsWithHttpInfo(opts)
@@ -83,7 +85,7 @@ export default class TranscriptModelsControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GTranscriptModelType>} and HTTP response
      */
     getTranscriptModelTypesWithHttpInfo() {
       
@@ -105,7 +107,7 @@ export default class TranscriptModelsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GTranscriptModelType];
 
       return this.apiClient.callApi(
         '/api/admin/TranscriptModelsController/getTranscriptModelTypes', 'GET',
@@ -115,7 +117,7 @@ export default class TranscriptModelsControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GTranscriptModelType>}
      */
     getTranscriptModelTypes() {
       return this.getTranscriptModelTypesWithHttpInfo()

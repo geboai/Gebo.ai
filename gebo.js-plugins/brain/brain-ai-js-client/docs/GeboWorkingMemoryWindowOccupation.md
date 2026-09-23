@@ -3,9 +3,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**historyTokens** | **Object** |  | [optional] 
-**documentsTokens** | **Object** |  | [optional] 
-**queryTokens** | **Object** |  | [optional] 
-**historyPercentage** | **Object** |  | [optional] 
-**documentsPercentage** | **Object** |  | [optional] 
-**totalWindowUsePercentage** | **Object** |  | [optional] 
+**historyTokens** | **Number** |  | [optional] 
+**documentsTokens** | **Number** |  | [optional] 
+**queryTokens** | **Number** |  | [optional] 
+**historyPercentage** | **Number** |  | [optional] 
+**documentsPercentage** | **Number** |  | [optional] 
+**totalWindowUsePercentage** | **Number** |  | [optional] 

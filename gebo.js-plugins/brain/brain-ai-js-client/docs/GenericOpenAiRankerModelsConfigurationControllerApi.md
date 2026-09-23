@@ -63,7 +63,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GenericOpenAiRankerModelsConfigurationControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findGenericOpenAIAPIRankerModelConfigByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -77,7 +77,7 @@ apiInstance.findGenericOpenAIAPIRankerModelConfigByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -134,7 +134,7 @@ No authorization required
 
 <a name="getGenericOpenAIRankerModelConfigs"></a>
 # **getGenericOpenAIRankerModelConfigs**
-> Object getGenericOpenAIRankerModelConfigs()
+> [GenericOpenAIAPIRankerModelConfig] getGenericOpenAIRankerModelConfigs()
 
 
 
@@ -156,7 +156,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GenericOpenAIAPIRankerModelConfig]**](GenericOpenAIAPIRankerModelConfig.md)
 
 ### Authorization
 
@@ -169,7 +169,7 @@ No authorization required
 
 <a name="getGenericOpenAIRankerModelTypes"></a>
 # **getGenericOpenAIRankerModelTypes**
-> Object getGenericOpenAIRankerModelTypes()
+> [GenericOpenAIRankerModelTypeConfig] getGenericOpenAIRankerModelTypes()
 
 
 
@@ -191,7 +191,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GenericOpenAIRankerModelTypeConfig]**](GenericOpenAIRankerModelTypeConfig.md)
 
 ### Authorization
 

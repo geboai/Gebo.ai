@@ -59,7 +59,7 @@ No authorization required
 
 <a name="getAgentConfigs"></a>
 # **getAgentConfigs**
-> Object getAgentConfigs()
+> [GBaseObject] getAgentConfigs()
 
 
 
@@ -81,7 +81,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GBaseObject]**](GBaseObject.md)
 
 ### Authorization
 
@@ -94,7 +94,7 @@ No authorization required
 
 <a name="getAgentConfigsByServiceId"></a>
 # **getAgentConfigsByServiceId**
-> Object getAgentConfigsByServiceId(serviceId)
+> [GAgentConfig] getAgentConfigsByServiceId(serviceId)
 
 
 
@@ -103,7 +103,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboAgentsNetworkAdminControllerApi();
-let serviceId = null; // Object | 
+let serviceId = "serviceId_example"; // String | 
 
 apiInstance.getAgentConfigsByServiceId(serviceId).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -117,11 +117,11 @@ apiInstance.getAgentConfigsByServiceId(serviceId).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **serviceId** | [**Object**](.md)|  | 
+ **serviceId** | **String**|  | 
 
 ### Return type
 
-**Object**
+[**[GAgentConfig]**](GAgentConfig.md)
 
 ### Authorization
 
@@ -134,7 +134,7 @@ No authorization required
 
 <a name="getAgentServices"></a>
 # **getAgentServices**
-> Object getAgentServices()
+> [AgentServiceDescriptor] getAgentServices()
 
 
 
@@ -156,7 +156,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[AgentServiceDescriptor]**](AgentServiceDescriptor.md)
 
 ### Authorization
 
@@ -169,7 +169,7 @@ No authorization required
 
 <a name="getAgentsNetwork"></a>
 # **getAgentsNetwork**
-> Object getAgentsNetwork()
+> [GBaseObject] getAgentsNetwork()
 
 
 
@@ -191,7 +191,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GBaseObject]**](GBaseObject.md)
 
 ### Authorization
 
@@ -213,7 +213,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboAgentsNetworkAdminControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.getAgentsNetworkByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -227,7 +227,7 @@ apiInstance.getAgentsNetworkByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -244,7 +244,7 @@ No authorization required
 
 <a name="getCompatibleNextServices"></a>
 # **getCompatibleNextServices**
-> Object getCompatibleNextServices(serviceId)
+> [AgentServiceDescriptor] getCompatibleNextServices(serviceId)
 
 
 
@@ -253,7 +253,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboAgentsNetworkAdminControllerApi();
-let serviceId = null; // Object | 
+let serviceId = "serviceId_example"; // String | 
 
 apiInstance.getCompatibleNextServices(serviceId).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -267,11 +267,11 @@ apiInstance.getCompatibleNextServices(serviceId).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **serviceId** | [**Object**](.md)|  | 
+ **serviceId** | **String**|  | 
 
 ### Return type
 
-**Object**
+[**[AgentServiceDescriptor]**](AgentServiceDescriptor.md)
 
 ### Authorization
 
@@ -284,7 +284,7 @@ No authorization required
 
 <a name="getCompatiblePreviousServices"></a>
 # **getCompatiblePreviousServices**
-> Object getCompatiblePreviousServices(serviceId)
+> [AgentServiceDescriptor] getCompatiblePreviousServices(serviceId)
 
 
 
@@ -293,7 +293,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboAgentsNetworkAdminControllerApi();
-let serviceId = null; // Object | 
+let serviceId = "serviceId_example"; // String | 
 
 apiInstance.getCompatiblePreviousServices(serviceId).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -307,11 +307,11 @@ apiInstance.getCompatiblePreviousServices(serviceId).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **serviceId** | [**Object**](.md)|  | 
+ **serviceId** | **String**|  | 
 
 ### Return type
 
-**Object**
+[**[AgentServiceDescriptor]**](AgentServiceDescriptor.md)
 
 ### Authorization
 
@@ -324,7 +324,7 @@ No authorization required
 
 <a name="getNetworkAdapterServices"></a>
 # **getNetworkAdapterServices**
-> Object getNetworkAdapterServices()
+> [AgentServiceDescriptor] getNetworkAdapterServices()
 
 
 
@@ -346,7 +346,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[AgentServiceDescriptor]**](AgentServiceDescriptor.md)
 
 ### Authorization
 

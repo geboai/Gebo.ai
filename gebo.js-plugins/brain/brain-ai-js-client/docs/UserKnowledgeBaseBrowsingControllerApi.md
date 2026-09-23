@@ -22,7 +22,7 @@ import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.UserKnowledgeBaseBrowsingControllerApi();
 let body = new BrainClient.BrowseParam(); // BrowseParam | 
-let codes = null; // Object | 
+let codes = ["codes_example"]; // [String] | 
 
 apiInstance.browseKnowledgeBasePath(body, codes).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -37,7 +37,7 @@ apiInstance.browseKnowledgeBasePath(body, codes).then((data) => {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**BrowseParam**](BrowseParam.md)|  | 
- **codes** | [**Object**](.md)|  | 
+ **codes** | [**[String]**](String.md)|  | 
 
 ### Return type
 
@@ -54,7 +54,7 @@ No authorization required
 
 <a name="getAccessibleRootKnowledgeBases"></a>
 # **getAccessibleRootKnowledgeBases**
-> Object getAccessibleRootKnowledgeBases()
+> [GBaseObject] getAccessibleRootKnowledgeBases()
 
 
 
@@ -76,7 +76,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GBaseObject]**](GBaseObject.md)
 
 ### Authorization
 
@@ -98,8 +98,8 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.UserKnowledgeBaseBrowsingControllerApi();
-let body = null; // Object | 
-let codes = null; // Object | 
+let body = [new BrainClient.VFilesystemReference()]; // [VFilesystemReference] | 
+let codes = ["codes_example"]; // [String] | 
 
 apiInstance.getKnowledgeBaseNavigationStatus(body, codes).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -113,8 +113,8 @@ apiInstance.getKnowledgeBaseNavigationStatus(body, codes).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  | 
- **codes** | [**Object**](.md)|  | 
+ **body** | [**[VFilesystemReference]**](VFilesystemReference.md)|  | 
+ **codes** | [**[String]**](String.md)|  | 
 
 ### Return type
 
@@ -140,7 +140,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.UserKnowledgeBaseBrowsingControllerApi();
-let codes = null; // Object | 
+let codes = ["codes_example"]; // [String] | 
 
 apiInstance.getKnowledgeBaseRoots(codes).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -154,7 +154,7 @@ apiInstance.getKnowledgeBaseRoots(codes).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **codes** | [**Object**](.md)|  | 
+ **codes** | [**[String]**](String.md)|  | 
 
 ### Return type
 
@@ -171,7 +171,7 @@ No authorization required
 
 <a name="getVisibleKnowledgeBaseByCodes"></a>
 # **getVisibleKnowledgeBaseByCodes**
-> Object getVisibleKnowledgeBaseByCodes(body)
+> [GKnowledgeBase] getVisibleKnowledgeBaseByCodes(body)
 
 
 
@@ -180,7 +180,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.UserKnowledgeBaseBrowsingControllerApi();
-let body = null; // Object | 
+let body = ["body_example"]; // [String] | 
 
 apiInstance.getVisibleKnowledgeBaseByCodes(body).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -194,11 +194,11 @@ apiInstance.getVisibleKnowledgeBaseByCodes(body).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  | 
+ **body** | [**[String]**](String.md)|  | 
 
 ### Return type
 
-**Object**
+[**[GKnowledgeBase]**](GKnowledgeBase.md)
 
 ### Authorization
 

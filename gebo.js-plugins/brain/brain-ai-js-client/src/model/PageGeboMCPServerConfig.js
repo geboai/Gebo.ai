@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GeboMCPServerConfig from './GeboMCPServerConfig';
 import PageableObject from './PageableObject';
 import SortObject from './SortObject';
 
@@ -41,64 +42,69 @@ export default class PageGeboMCPServerConfig {
     if (data) {
       obj = obj || new PageGeboMCPServerConfig();
       if (data.hasOwnProperty('totalPages'))
-        obj.totalPages = ApiClient.convertToType(data['totalPages'], Object);
+        obj.totalPages = ApiClient.convertToType(data['totalPages'], 'Number');
       if (data.hasOwnProperty('totalElements'))
-        obj.totalElements = ApiClient.convertToType(data['totalElements'], Object);
+        obj.totalElements = ApiClient.convertToType(data['totalElements'], 'Number');
+      if (data.hasOwnProperty('pageable'))
+        obj.pageable = PageableObject.constructFromObject(data['pageable']);
       if (data.hasOwnProperty('first'))
-        obj.first = ApiClient.convertToType(data['first'], Object);
+        obj.first = ApiClient.convertToType(data['first'], 'Boolean');
       if (data.hasOwnProperty('last'))
-        obj.last = ApiClient.convertToType(data['last'], Object);
+        obj.last = ApiClient.convertToType(data['last'], 'Boolean');
       if (data.hasOwnProperty('size'))
-        obj.size = ApiClient.convertToType(data['size'], Object);
+        obj.size = ApiClient.convertToType(data['size'], 'Number');
       if (data.hasOwnProperty('content'))
-        obj.content = ApiClient.convertToType(data['content'], Object);
+        obj.content = ApiClient.convertToType(data['content'], [GeboMCPServerConfig]);
       if (data.hasOwnProperty('number'))
-        obj._number = ApiClient.convertToType(data['number'], Object);
+        obj._number = ApiClient.convertToType(data['number'], 'Number');
       if (data.hasOwnProperty('sort'))
         obj.sort = SortObject.constructFromObject(data['sort']);
       if (data.hasOwnProperty('numberOfElements'))
-        obj.numberOfElements = ApiClient.convertToType(data['numberOfElements'], Object);
-      if (data.hasOwnProperty('pageable'))
-        obj.pageable = PageableObject.constructFromObject(data['pageable']);
+        obj.numberOfElements = ApiClient.convertToType(data['numberOfElements'], 'Number');
       if (data.hasOwnProperty('empty'))
-        obj.empty = ApiClient.convertToType(data['empty'], Object);
+        obj.empty = ApiClient.convertToType(data['empty'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} totalPages
+ * @member {Number} totalPages
  */
 PageGeboMCPServerConfig.prototype.totalPages = undefined;
 
 /**
- * @member {Object} totalElements
+ * @member {Number} totalElements
  */
 PageGeboMCPServerConfig.prototype.totalElements = undefined;
 
 /**
- * @member {Object} first
+ * @member {module:model/PageableObject} pageable
+ */
+PageGeboMCPServerConfig.prototype.pageable = undefined;
+
+/**
+ * @member {Boolean} first
  */
 PageGeboMCPServerConfig.prototype.first = undefined;
 
 /**
- * @member {Object} last
+ * @member {Boolean} last
  */
 PageGeboMCPServerConfig.prototype.last = undefined;
 
 /**
- * @member {Object} size
+ * @member {Number} size
  */
 PageGeboMCPServerConfig.prototype.size = undefined;
 
 /**
- * @member {Object} content
+ * @member {Array.<module:model/GeboMCPServerConfig>} content
  */
 PageGeboMCPServerConfig.prototype.content = undefined;
 
 /**
- * @member {Object} _number
+ * @member {Number} _number
  */
 PageGeboMCPServerConfig.prototype._number = undefined;
 
@@ -108,17 +114,12 @@ PageGeboMCPServerConfig.prototype._number = undefined;
 PageGeboMCPServerConfig.prototype.sort = undefined;
 
 /**
- * @member {Object} numberOfElements
+ * @member {Number} numberOfElements
  */
 PageGeboMCPServerConfig.prototype.numberOfElements = undefined;
 
 /**
- * @member {module:model/PageableObject} pageable
- */
-PageGeboMCPServerConfig.prototype.pageable = undefined;
-
-/**
- * @member {Object} empty
+ * @member {Boolean} empty
  */
 PageGeboMCPServerConfig.prototype.empty = undefined;
 

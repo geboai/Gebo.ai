@@ -24,14 +24,14 @@ import java.util.List;
  * SearchDocumentByNameParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T09:25:59.411243076+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
 
 public class SearchDocumentByNameParam {
   @JsonProperty("name")
   private String name = null;
 
   @JsonProperty("knowledgeBaseCodes")
-  private List<String> knowledgeBaseCodes = new ArrayList<>();
+  private List<String> knowledgeBaseCodes = null;
 
   public SearchDocumentByNameParam name(String name) {
     this.name = name;
@@ -57,6 +57,9 @@ public class SearchDocumentByNameParam {
   }
 
   public SearchDocumentByNameParam addKnowledgeBaseCodesItem(String knowledgeBaseCodesItem) {
+    if (this.knowledgeBaseCodes == null) {
+      this.knowledgeBaseCodes = new ArrayList<>();
+    }
     this.knowledgeBaseCodes.add(knowledgeBaseCodesItem);
     return this;
   }
@@ -65,7 +68,7 @@ public class SearchDocumentByNameParam {
    * Get knowledgeBaseCodes
    * @return knowledgeBaseCodes
   **/
-  @Schema(required = true, description = "")
+  @Schema(description = "")
   public List<String> getKnowledgeBaseCodes() {
     return knowledgeBaseCodes;
   }

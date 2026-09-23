@@ -39,77 +39,77 @@ export default class RedisConfig {
     if (data) {
       obj = obj || new RedisConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('host'))
-        obj.host = ApiClient.convertToType(data['host'], Object);
+        obj.host = ApiClient.convertToType(data['host'], 'String');
       if (data.hasOwnProperty('port'))
-        obj.port = ApiClient.convertToType(data['port'], Object);
+        obj.port = ApiClient.convertToType(data['port'], 'Number');
       if (data.hasOwnProperty('username'))
-        obj.username = ApiClient.convertToType(data['username'], Object);
+        obj.username = ApiClient.convertToType(data['username'], 'String');
       if (data.hasOwnProperty('password'))
-        obj.password = ApiClient.convertToType(data['password'], Object);
+        obj.password = ApiClient.convertToType(data['password'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 RedisConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 RedisConfig.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 RedisConfig.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 RedisConfig.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 RedisConfig.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 RedisConfig.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} host
+ * @member {String} host
  */
 RedisConfig.prototype.host = undefined;
 
 /**
- * @member {Object} port
+ * @member {Number} port
  */
 RedisConfig.prototype.port = undefined;
 
 /**
- * @member {Object} username
+ * @member {String} username
  */
 RedisConfig.prototype.username = undefined;
 
 /**
- * @member {Object} password
+ * @member {String} password
  */
 RedisConfig.prototype.password = undefined;
 

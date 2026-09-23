@@ -3,10 +3,12 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**username** | **String** |  | [optional] 
 **description** | **String** |  | [optional] 
 **code** | **String** |  | [optional] 
+**contextCode** | **String** |  | [optional] 
 **chatProfileCode** | **String** |  | [optional] 
-**ragChat** | **Boolean** |  | [optional] 
-**username** | **String** |  | [optional] 
 **chatModelCode** | **String** |  | [optional] 
+**ragChat** | **Boolean** |  | [optional] 
 **chatCreationDateTime** | **Date** |  | [optional] 
+**pipelineCode** | **String** |  | [optional] 

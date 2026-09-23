@@ -17,8 +17,8 @@ Method | HTTP request | Description
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboLlmGeneratedResourceControllerApi();
-let userSessionCode = null; // Object | 
-let generatedResourceCode = null; // Object | 
+let userSessionCode = "userSessionCode_example"; // String | 
+let generatedResourceCode = "generatedResourceCode_example"; // String | 
 
 apiInstance.serveLLMGeneratedContent(userSessionCode, generatedResourceCode).then(() => {
   console.log('API called successfully.');
@@ -32,8 +32,8 @@ apiInstance.serveLLMGeneratedContent(userSessionCode, generatedResourceCode).the
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userSessionCode** | [**Object**](.md)|  | 
- **generatedResourceCode** | [**Object**](.md)|  | 
+ **userSessionCode** | **String**|  | 
+ **generatedResourceCode** | **String**|  | 
 
 ### Return type
 

@@ -8,7 +8,6 @@ import { DocumentContentStreamerControllerService } from './api/documentContentS
 import { FileUploadControllerService } from './api/fileUploadController.service';
 import { FileUploadsControllerService } from './api/fileUploadsController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
-import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { UploadsBrowsingControllerService } from './api/uploadsBrowsingController.service';
@@ -23,7 +22,6 @@ import { UploadsBrowsingControllerService } from './api/uploadsBrowsingControlle
     FileUploadControllerService,
     FileUploadsControllerService,
     GenericalPublisherControllerService,
-    IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService,
     JobLauncherControllerService,
     UploadsBrowsingControllerService ]

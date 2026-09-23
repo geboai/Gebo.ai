@@ -38,6 +38,8 @@ export default class GeboCustomSecretContent {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new GeboCustomSecretContent();
+      if (data.hasOwnProperty('readOnly'))
+        obj.readOnly = ApiClient.convertToType(data['readOnly'], 'Boolean');
       if (data.hasOwnProperty('customContentDescription'))
         obj.customContentDescription = ApiClient.convertToType(data['customContentDescription'], 'String');
       if (data.hasOwnProperty('content'))
@@ -48,6 +50,11 @@ export default class GeboCustomSecretContent {
     return obj;
   }
 }
+
+/**
+ * @member {Boolean} readOnly
+ */
+GeboCustomSecretContent.prototype.readOnly = undefined;
 
 /**
  * @member {String} customContentDescription

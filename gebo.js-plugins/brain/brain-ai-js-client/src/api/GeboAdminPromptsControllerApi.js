@@ -14,6 +14,8 @@
  */
 import ApiClient from "../ApiClient";
 import GPromptTemplateConfig from '../model/GPromptTemplateConfig';
+import GPromptTemplateLightView from '../model/GPromptTemplateLightView';
+import GPromptUseInfo from '../model/GPromptUseInfo';
 import PromptFilter from '../model/PromptFilter';
 
 /**
@@ -87,7 +89,56 @@ export default class GeboAdminPromptsControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} useCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GPromptUseInfo} and HTTP response
+     */
+    findGPromptUseInfoByUseCodeWithHttpInfo(useCode) {
+      
+      let postBody = null;
+      // verify the required parameter 'useCode' is set
+      if (useCode === undefined || useCode === null) {
+        throw new Error("Missing the required parameter 'useCode' when calling findGPromptUseInfoByUseCode");
+      }
+
+      let pathParams = {
+        
+      };
+      let queryParams = {
+        'useCode': useCode
+      };
+      let headerParams = {
+        
+      };
+      let formParams = {
+        
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = ['application/json'];
+      let returnType = GPromptUseInfo;
+
+      return this.apiClient.callApi(
+        '/api/admin/GeboAdminPromptsController/findGPromptUseInfoByUseCode', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * @param {<&vendorExtensions.x-jsdoc-type>} useCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/GPromptUseInfo}
+     */
+    findGPromptUseInfoByUseCode(useCode) {
+      return this.findGPromptUseInfoByUseCodeWithHttpInfo(useCode)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GPromptTemplateConfig} and HTTP response
      */
     findPromptConfigByCodeWithHttpInfo(code) {
@@ -136,7 +187,50 @@ export default class GeboAdminPromptsControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GPromptTemplateLightView>} and HTTP response
+     */
+    getAllPromptConfigsLightListWithHttpInfo() {
+      
+      let postBody = null;
+
+      let pathParams = {
+        
+      };
+      let queryParams = {
+        
+      };
+      let headerParams = {
+        
+      };
+      let formParams = {
+        
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = ['application/json'];
+      let returnType = [GPromptTemplateLightView];
+
+      return this.apiClient.callApi(
+        '/api/admin/GeboAdminPromptsController/getAllPromptConfigsLightList', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GPromptTemplateLightView>}
+     */
+    getAllPromptConfigsLightList() {
+      return this.getAllPromptConfigsLightListWithHttpInfo()
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<'String'>} and HTTP response
      */
     getPromptCategoriesWithHttpInfo() {
       
@@ -158,7 +252,7 @@ export default class GeboAdminPromptsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = ['String'];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAdminPromptsController/getPromptCategories', 'GET',
@@ -168,7 +262,7 @@ export default class GeboAdminPromptsControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<'String'>}
      */
     getPromptCategories() {
       return this.getPromptCategoriesWithHttpInfo()
@@ -270,6 +364,49 @@ export default class GeboAdminPromptsControllerApi {
      */
     insertPromptConfig(body) {
       return this.insertPromptConfigWithHttpInfo(body)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link 'Boolean'} and HTTP response
+     */
+    isPromptTemplateEditingEnabledWithHttpInfo() {
+      
+      let postBody = null;
+
+      let pathParams = {
+        
+      };
+      let queryParams = {
+        
+      };
+      let headerParams = {
+        
+      };
+      let formParams = {
+        
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = ['application/json'];
+      let returnType = 'Boolean';
+
+      return this.apiClient.callApi(
+        '/api/admin/GeboAdminPromptsController/isPromptTemplateEditingEnabled', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link 'Boolean'}
+     */
+    isPromptTemplateEditingEnabled() {
+      return this.isPromptTemplateEditingEnabledWithHttpInfo()
         .then(function(response_and_data) {
           return response_and_data.data;
         });

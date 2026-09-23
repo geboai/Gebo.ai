@@ -3,5 +3,12 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**streamingPurpose** | **Object** |  | 
+**streamingPurpose** | **String** |  | 
 **reference** | [**GDocumentReference**](GDocumentReference.md) |  | 
+
+<a name="StreamingPurposeEnum"></a>
+## Enum: StreamingPurposeEnum
+
+* `SERVING` (value: `"SERVING"`)
+* `INGESTING` (value: `"INGESTING"`)
+

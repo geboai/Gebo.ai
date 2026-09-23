@@ -62,7 +62,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboAdminChatProfilesConfigurationControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findChatProfileConfigurationByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -76,7 +76,7 @@ apiInstance.findChatProfileConfigurationByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 

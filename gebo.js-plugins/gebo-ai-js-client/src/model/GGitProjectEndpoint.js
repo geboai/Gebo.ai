@@ -76,6 +76,8 @@ export default class GGitProjectEndpoint {
         obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], 'String');
       if (data.hasOwnProperty('aclAliases'))
         obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
+      if (data.hasOwnProperty('personalData'))
+        obj.personalData = ApiClient.convertToType(data['personalData'], 'Boolean');
       if (data.hasOwnProperty('repositoryUri'))
         obj.repositoryUri = ApiClient.convertToType(data['repositoryUri'], 'String');
       if (data.hasOwnProperty('branch'))
@@ -218,6 +220,11 @@ GGitProjectEndpoint.prototype.objectSpaceType = undefined;
  * @member {Array.<Number>} aclAliases
  */
 GGitProjectEndpoint.prototype.aclAliases = undefined;
+
+/**
+ * @member {Boolean} personalData
+ */
+GGitProjectEndpoint.prototype.personalData = undefined;
 
 /**
  * @member {String} repositoryUri

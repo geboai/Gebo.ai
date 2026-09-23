@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="streamDocumentReference"></a>
 # **streamDocumentReference**
-> Object streamDocumentReference(body)
+> &#x27;Blob&#x27; streamDocumentReference(body)
 
 
 
@@ -36,7 +36,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+**&#x27;Blob&#x27;**
 
 ### Authorization
 
@@ -49,7 +49,7 @@ No authorization required
 
 <a name="streamSearchResult"></a>
 # **streamSearchResult**
-> Object streamSearchResult(body)
+> &#x27;Blob&#x27; streamSearchResult(body)
 
 
 
@@ -76,7 +76,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+**&#x27;Blob&#x27;**
 
 ### Authorization
 

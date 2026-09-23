@@ -27,7 +27,7 @@ export default class LLMExistingConfiguration {
    * @alias module:model/LLMExistingConfiguration
    * @class
    * @param existingModelConfig {module:model/GObjectRefGBaseModelConfig} 
-   * @param modelType {Object} 
+   * @param modelType {module:model/LLMExistingConfiguration.ModelTypeEnum} 
    */
   constructor(existingModelConfig, modelType) {
     this.existingModelConfig = existingModelConfig;
@@ -47,11 +47,11 @@ export default class LLMExistingConfiguration {
       if (data.hasOwnProperty('existingModelConfig'))
         obj.existingModelConfig = GObjectRefGBaseModelConfig.constructFromObject(data['existingModelConfig']);
       if (data.hasOwnProperty('modelType'))
-        obj.modelType = ApiClient.convertToType(data['modelType'], Object);
+        obj.modelType = ApiClient.convertToType(data['modelType'], 'String');
       if (data.hasOwnProperty('secretInfo'))
         obj.secretInfo = SecretInfo.constructFromObject(data['secretInfo']);
       if (data.hasOwnProperty('baseUrl'))
-        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], Object);
+        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], 'String');
     }
     return obj;
   }
@@ -63,7 +63,49 @@ export default class LLMExistingConfiguration {
 LLMExistingConfiguration.prototype.existingModelConfig = undefined;
 
 /**
- * @member {Object} modelType
+ * Allowed values for the <code>modelType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LLMExistingConfiguration.ModelTypeEnum = {
+  /**
+   * value: "CHAT"
+   * @const
+   */
+  CHAT: "CHAT",
+
+  /**
+   * value: "EMBEDDING"
+   * @const
+   */
+  EMBEDDING: "EMBEDDING",
+
+  /**
+   * value: "RANKING"
+   * @const
+   */
+  RANKING: "RANKING",
+
+  /**
+   * value: "IMAGESGEN"
+   * @const
+   */
+  IMAGESGEN: "IMAGESGEN",
+
+  /**
+   * value: "TTS"
+   * @const
+   */
+  TTS: "TTS",
+
+  /**
+   * value: "TRANSCRIPT"
+   * @const
+   */
+  TRANSCRIPT: "TRANSCRIPT"
+};
+/**
+ * @member {module:model/LLMExistingConfiguration.ModelTypeEnum} modelType
  */
 LLMExistingConfiguration.prototype.modelType = undefined;
 
@@ -73,7 +115,7 @@ LLMExistingConfiguration.prototype.modelType = undefined;
 LLMExistingConfiguration.prototype.secretInfo = undefined;
 
 /**
- * @member {Object} baseUrl
+ * @member {String} baseUrl
  */
 LLMExistingConfiguration.prototype.baseUrl = undefined;
 

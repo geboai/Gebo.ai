@@ -37,9 +37,18 @@ import ai.gebo.ragsystem.vectorstores.services.GeboVectorStoreConfigurationServi
  * 
  * AI generated comments
  */
-@RestController
-@PreAuthorize("hasRole('ADMIN')")
-@RequestMapping("api/admin/GeboVectorStoreConfigurationController")
+// Vector-store configuration changes are DISABLED from the REST/UI surface on
+// purpose. This controller ships in gebo.ragsystem.vectorstores, which brain,
+// graphicator AND vectorizator all pull in, so all three run this endpoint
+// against the SAME shared vector-store database. Applying/saving a new
+// configuration from one module against a store the others are actively using
+// is too dangerous and nearly unmanageable across the modules that share it.
+// The class is kept (easy to re-enable deliberately) but its annotations are
+// commented so it is no longer component-scanned as a controller and exposes no
+// endpoint. See docs/MICROSERVICES-UI-MIGRATION.md.
+// @RestController
+// @PreAuthorize("hasRole('ADMIN')")
+// @RequestMapping("api/admin/GeboVectorStoreConfigurationController")
 public class GeboVectorStoreConfigurationController {
 	/**
 	 * Logger for this controller.
@@ -58,7 +67,7 @@ public class GeboVectorStoreConfigurationController {
 	 * @return The current vector store configuration
 	 * @throws LLMConfigException if there's an issue retrieving the configuration
 	 */
-	@GetMapping(value = "getActualVectorStoreConfiguration", produces = MediaType.APPLICATION_JSON_VALUE)
+	// @GetMapping(value = "getActualVectorStoreConfiguration", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GeboMongoVectorStoreConfig getActualVectorStoreConfiguration() throws LLMConfigException {
 		return service.getActualConfiguration();
 	}
@@ -70,7 +79,7 @@ public class GeboVectorStoreConfigurationController {
 	 * @return An operation status with the result of the configuration update process
 	 * @throws LLMConfigException if there's an issue with the configuration
 	 */
-	@PostMapping(value = "vectorStoreConfigurationApplyAndSave", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	// @PostMapping(value = "vectorStoreConfigurationApplyAndSave", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<GeboMongoVectorStoreConfig> vectorStoreConfigurationApplyAndSave(
 			@RequestBody GeboMongoVectorStoreConfig configuration) throws LLMConfigException {
 		OperationStatus<GeboMongoVectorStoreConfig> status = null;

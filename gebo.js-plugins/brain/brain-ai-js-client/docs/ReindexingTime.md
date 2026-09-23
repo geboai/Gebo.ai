@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**createdTime** | **Object** |  | [optional] 
-**timeComponent** | **Object** |  | [optional] 
+**createdTime** | **Number** |  | [optional] 
+**timeComponent** | **[Number]** |  | [optional] 

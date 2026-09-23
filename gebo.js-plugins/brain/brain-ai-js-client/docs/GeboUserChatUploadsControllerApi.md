@@ -19,9 +19,9 @@ Method | HTTP request | Description
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboUserChatUploadsControllerApi();
-let userSessionCode = null; // Object | 
+let userSessionCode = "userSessionCode_example"; // String | 
 let opts = { 
-  'files': null // Object | 
+  'files': ["QmFzZTY0IGV4YW1wbGU="] // [Blob] | 
 };
 apiInstance.chatSessionUpload(userSessionCode, opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -35,8 +35,8 @@ apiInstance.chatSessionUpload(userSessionCode, opts).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userSessionCode** | [**Object**](.md)|  | 
- **files** | [**Object**](.md)|  | [optional] 
+ **userSessionCode** | **String**|  | 
+ **files** | [**[Blob]**](Blob.md)|  | [optional] 
 
 ### Return type
 
@@ -97,8 +97,8 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboUserChatUploadsControllerApi();
-let userSessionCode = null; // Object | 
-let uploadedContentId = null; // Object | 
+let userSessionCode = "userSessionCode_example"; // String | 
+let uploadedContentId = "uploadedContentId_example"; // String | 
 
 apiInstance.serveContent(userSessionCode, uploadedContentId).then(() => {
   console.log('API called successfully.');
@@ -112,8 +112,8 @@ apiInstance.serveContent(userSessionCode, uploadedContentId).then(() => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userSessionCode** | [**Object**](.md)|  | 
- **uploadedContentId** | [**Object**](.md)|  | 
+ **userSessionCode** | **String**|  | 
+ **uploadedContentId** | **String**|  | 
 
 ### Return type
 

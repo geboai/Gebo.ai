@@ -89,7 +89,7 @@ export default class GeboAdminChatProfilesConfigurationControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GChatProfileConfiguration} and HTTP response
      */
     findChatProfileConfigurationByCodeWithHttpInfo(code) {

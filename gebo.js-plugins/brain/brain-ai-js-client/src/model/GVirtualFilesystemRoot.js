@@ -39,49 +39,49 @@ export default class GVirtualFilesystemRoot {
     if (data) {
       obj = obj || new GVirtualFilesystemRoot();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('absolutePath'))
-        obj.absolutePath = ApiClient.convertToType(data['absolutePath'], Object);
+        obj.absolutePath = ApiClient.convertToType(data['absolutePath'], 'String');
       if (data.hasOwnProperty('uri'))
-        obj.uri = ApiClient.convertToType(data['uri'], Object);
+        obj.uri = ApiClient.convertToType(data['uri'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('iconKey'))
-        obj.iconKey = ApiClient.convertToType(data['iconKey'], Object);
+        obj.iconKey = ApiClient.convertToType(data['iconKey'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GVirtualFilesystemRoot.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GVirtualFilesystemRoot.prototype.description = undefined;
 
 /**
- * @member {Object} absolutePath
+ * @member {String} absolutePath
  */
 GVirtualFilesystemRoot.prototype.absolutePath = undefined;
 
 /**
- * @member {Object} uri
+ * @member {String} uri
  */
 GVirtualFilesystemRoot.prototype.uri = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GVirtualFilesystemRoot.prototype.dateModified = undefined;
 
 /**
- * @member {Object} iconKey
+ * @member {String} iconKey
  */
 GVirtualFilesystemRoot.prototype.iconKey = undefined;
 

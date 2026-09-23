@@ -13,7 +13,12 @@
  *
  */
 import ApiClient from './ApiClient';
+import A2AExportedAgent from './model/A2AExportedAgent';
+import A2ARemoteAgentConfig from './model/A2ARemoteAgentConfig';
+import A2ARemoteSkill from './model/A2ARemoteSkill';
+import A2AServerConfig from './model/A2AServerConfig';
 import AclOwnerParam from './model/AclOwnerParam';
+import AdditionalContent from './model/AdditionalContent';
 import AgentNetworkParticipant from './model/AgentNetworkParticipant';
 import AgentServiceDescriptor from './model/AgentServiceDescriptor';
 import AggregateRequestBodyConfluenceResultsExtractionData from './model/AggregateRequestBodyConfluenceResultsExtractionData';
@@ -23,6 +28,7 @@ import AggregateRequestBodyMicrosoftResultsExtractionData from './model/Aggregat
 import AuthProviderDto from './model/AuthProviderDto';
 import AuthResponse from './model/AuthResponse';
 import AutotuneVectorStoreInfo from './model/AutotuneVectorStoreInfo';
+import BraveSearchConfig from './model/BraveSearchConfig';
 import BrowseParam from './model/BrowseParam';
 import BuildSystemRef from './model/BuildSystemRef';
 import CalledFunction from './model/CalledFunction';
@@ -41,6 +47,7 @@ import ChatUIOptions from './model/ChatUIOptions';
 import ChildVirtualFSParam from './model/ChildVirtualFSParam';
 import ComponentEnabledStatus from './model/ComponentEnabledStatus';
 import ComponentLLMSStatus from './model/ComponentLLMSStatus';
+import ComponentMetaInfo from './model/ComponentMetaInfo';
 import ComponentSetupStatus from './model/ComponentSetupStatus';
 import ComponentVectorStoreStatus from './model/ComponentVectorStoreStatus';
 import ComputedWorkflowResult from './model/ComputedWorkflowResult';
@@ -59,7 +66,10 @@ import ConfluenceResultsExtractionData from './model/ConfluenceResultsExtraction
 import ContentMetaInfo from './model/ContentMetaInfo';
 import ContentObject from './model/ContentObject';
 import CustomTemplateParamsRequestBody from './model/CustomTemplateParamsRequestBody';
+import DataEndpoint from './model/DataEndpoint';
 import DataPage from './model/DataPage';
+import DataTransformationInfo from './model/DataTransformationInfo';
+import DataTransformationMetaInfo from './model/DataTransformationMetaInfo';
 import DeepSearchConfig from './model/DeepSearchConfig';
 import DeepSearchDataSourceAccess from './model/DeepSearchDataSourceAccess';
 import DefaultPromptForChatModelParam from './model/DefaultPromptForChatModelParam';
@@ -118,6 +128,7 @@ import GBedrockTextToSpeechModelChoice from './model/GBedrockTextToSpeechModelCh
 import GBedrockTextToSpeechModelConfig from './model/GBedrockTextToSpeechModelConfig';
 import GBedrockTranscriptModelChoice from './model/GBedrockTranscriptModelChoice';
 import GBedrockTranscriptModelConfig from './model/GBedrockTranscriptModelConfig';
+import GBraveSearchApiCredentials from './model/GBraveSearchApiCredentials';
 import GBuildSystem from './model/GBuildSystem';
 import GBuildSystemType from './model/GBuildSystemType';
 import GCentralizedProjectEndpoint from './model/GCentralizedProjectEndpoint';
@@ -129,6 +140,8 @@ import GContentManagementSystem from './model/GContentManagementSystem';
 import GContentManagementSystemType from './model/GContentManagementSystemType';
 import GContentSelectionFilter from './model/GContentSelectionFilter';
 import GContentSelectionFilterCriteria from './model/GContentSelectionFilterCriteria';
+import GDataFlowMetaInfos from './model/GDataFlowMetaInfos';
+import GDataFlowReport from './model/GDataFlowReport';
 import GDeepseekChatModelChoice from './model/GDeepseekChatModelChoice';
 import GDeepseekChatModelConfig from './model/GDeepseekChatModelConfig';
 import GDocumentAttributeValue from './model/GDocumentAttributeValue';
@@ -160,6 +173,7 @@ import GMistralChatModelChoice from './model/GMistralChatModelChoice';
 import GMistralChatModelConfig from './model/GMistralChatModelConfig';
 import GMistralEmbeddingModelChoice from './model/GMistralEmbeddingModelChoice';
 import GMistralEmbeddingModelConfig from './model/GMistralEmbeddingModelConfig';
+import GModuleMetaInfo from './model/GModuleMetaInfo';
 import GONNXTransformersEmbeddingModelChoice from './model/GONNXTransformersEmbeddingModelChoice';
 import GONNXTransformersEmbeddingModelConfig from './model/GONNXTransformersEmbeddingModelConfig';
 import GObjectRef from './model/GObjectRef';
@@ -192,14 +206,18 @@ import GProject from './model/GProject';
 import GProjectEndpoint from './model/GProjectEndpoint';
 import GPromptPlaceholderInfo from './model/GPromptPlaceholderInfo';
 import GPromptTemplateConfig from './model/GPromptTemplateConfig';
+import GPromptTemplateLightView from './model/GPromptTemplateLightView';
 import GPromptUseInfo from './model/GPromptUseInfo';
 import GRankerModelType from './model/GRankerModelType';
 import GResponseDocumentRef from './model/GResponseDocumentRef';
+import GSearxngSearchApiCredentials from './model/GSearxngSearchApiCredentials';
+import GSerpapiSearchApiCredentials from './model/GSerpapiSearchApiCredentials';
 import GSharepointContentManagementSystem from './model/GSharepointContentManagementSystem';
 import GSharepointProjectEndpoint from './model/GSharepointProjectEndpoint';
 import GStatsHolder from './model/GStatsHolder';
 import GStatsLabelValue from './model/GStatsLabelValue';
 import GStatsLine from './model/GStatsLine';
+import GTavilySearchApiCredentials from './model/GTavilySearchApiCredentials';
 import GTextToSpeechModelType from './model/GTextToSpeechModelType';
 import GTranscriptModelType from './model/GTranscriptModelType';
 import GUploadsContentManagementSystem from './model/GUploadsContentManagementSystem';
@@ -217,6 +235,7 @@ import GeboChatMessageEnvelope from './model/GeboChatMessageEnvelope';
 import GeboChatRequest from './model/GeboChatRequest';
 import GeboChatResponse from './model/GeboChatResponse';
 import GeboChatUserInfo from './model/GeboChatUserInfo';
+import GeboClientsTopologyInfo from './model/GeboClientsTopologyInfo';
 import GeboComponentInfo from './model/GeboComponentInfo';
 import GeboContentProcessRow from './model/GeboContentProcessRow';
 import GeboCustomSecretContent from './model/GeboCustomSecretContent';
@@ -230,10 +249,10 @@ import GeboMCPAgentsNetworkTool from './model/GeboMCPAgentsNetworkTool';
 import GeboMCPServerConfig from './model/GeboMCPServerConfig';
 import GeboMediaDocumentFragment from './model/GeboMediaDocumentFragment';
 import GeboModuleInfo from './model/GeboModuleInfo';
-import GeboMongoVectorStoreConfig from './model/GeboMongoVectorStoreConfig';
 import GeboNeo4jModuleConfigDto from './model/GeboNeo4jModuleConfigDto';
 import GeboOauth2SecretContent from './model/GeboOauth2SecretContent';
 import GeboRagRequestCustomConfig from './model/GeboRagRequestCustomConfig';
+import GeboServiceWebContextInfo from './model/GeboServiceWebContextInfo';
 import GeboSshKeySecretContent from './model/GeboSshKeySecretContent';
 import GeboTemplatedChatResponse from './model/GeboTemplatedChatResponse';
 import GeboTextDocumentFragment from './model/GeboTextDocumentFragment';
@@ -288,6 +307,7 @@ import JobSummary from './model/JobSummary';
 import JobTicket from './model/JobTicket';
 import JobWorkflowStepSummary from './model/JobWorkflowStepSummary';
 import JobWorkflowStepSummaryTimeSlotStats from './model/JobWorkflowStepSummaryTimeSlotStats';
+import JobsEntriesFilter from './model/JobsEntriesFilter';
 import JobsEntriesForClassNameFilter from './model/JobsEntriesForClassNameFilter';
 import JobsEntriesForJobType from './model/JobsEntriesForJobType';
 import JobsEntriesForProjectEndpointFilter from './model/JobsEntriesForProjectEndpointFilter';
@@ -321,13 +341,14 @@ import MistralModelCapabilities from './model/MistralModelCapabilities';
 import ModelMetaInfo from './model/ModelMetaInfo';
 import ModelProviderCapabilities from './model/ModelProviderCapabilities';
 import ModuleIntegrationAddress from './model/ModuleIntegrationAddress';
-import MongoConfig from './model/MongoConfig';
 import Oauth2ClientAuthorizativeInfo from './model/Oauth2ClientAuthorizativeInfo';
 import Oauth2ClientConfig from './model/Oauth2ClientConfig';
 import Oauth2CustomAttribute from './model/Oauth2CustomAttribute';
 import Oauth2ModuleStatus from './model/Oauth2ModuleStatus';
 import Oauth2ProviderConfig from './model/Oauth2ProviderConfig';
 import Oauth2ProviderModifiableData from './model/Oauth2ProviderModifiableData';
+import OperationStatusA2ARemoteAgentConfig from './model/OperationStatusA2ARemoteAgentConfig';
+import OperationStatusA2AServerConfig from './model/OperationStatusA2AServerConfig';
 import OperationStatusAuthResponse from './model/OperationStatusAuthResponse';
 import OperationStatusBoolean from './model/OperationStatusBoolean';
 import OperationStatusComponentVectorStoreStatus from './model/OperationStatusComponentVectorStoreStatus';
@@ -360,8 +381,8 @@ import OperationStatusGOpenAIImageModelConfig from './model/OperationStatusGOpen
 import OperationStatusGOpenAITextToSpeechModelConfig from './model/OperationStatusGOpenAITextToSpeechModelConfig';
 import OperationStatusGOpenAITranscriptModelConfig from './model/OperationStatusGOpenAITranscriptModelConfig';
 import OperationStatusGSharepointContentManagementSystem from './model/OperationStatusGSharepointContentManagementSystem';
+import OperationStatusGUploadsProjectEndpoint from './model/OperationStatusGUploadsProjectEndpoint';
 import OperationStatusGWebdavContentManagementSystem from './model/OperationStatusGWebdavContentManagementSystem';
-import OperationStatusGeboMongoVectorStoreConfig from './model/OperationStatusGeboMongoVectorStoreConfig';
 import OperationStatusGenericOpenAIAPIChatModelConfig from './model/OperationStatusGenericOpenAIAPIChatModelConfig';
 import OperationStatusGenericOpenAIAPIEmbeddingModelConfig from './model/OperationStatusGenericOpenAIAPIEmbeddingModelConfig';
 import OperationStatusGenericOpenAIAPIImageModelConfig from './model/OperationStatusGenericOpenAIAPIImageModelConfig';
@@ -409,6 +430,7 @@ import OperationStatusWorkFolderSetupStatus from './model/OperationStatusWorkFol
 import OptimizedThreashold from './model/OptimizedThreashold';
 import Order from './model/Order';
 import PageMetadata from './model/PageMetadata';
+import PagedModelA2ARemoteAgentConfig from './model/PagedModelA2ARemoteAgentConfig';
 import PagedModelDocumentReferenceView from './model/PagedModelDocumentReferenceView';
 import PagedModelGChatProfileConfiguration from './model/PagedModelGChatProfileConfiguration';
 import PagedModelGJobStatusItem from './model/PagedModelGJobStatusItem';
@@ -446,6 +468,7 @@ import SearchResultAnalisysOutcome from './model/SearchResultAnalisysOutcome';
 import SearchResultReference from './model/SearchResultReference';
 import SearchResultStreamRequest from './model/SearchResultStreamRequest';
 import SearchableSystemMetaData from './model/SearchableSystemMetaData';
+import SearxngSearchConfig from './model/SearxngSearchConfig';
 import SecretInfo from './model/SecretInfo';
 import SecretWrapperGeboAwsConnectionCredentials from './model/SecretWrapperGeboAwsConnectionCredentials';
 import SecretWrapperGeboCustomSecretContent from './model/SecretWrapperGeboCustomSecretContent';
@@ -457,6 +480,7 @@ import SecretWrapperGeboTokenContent from './model/SecretWrapperGeboTokenContent
 import SecretWrapperGeboUsernamePasswordContent from './model/SecretWrapperGeboUsernamePasswordContent';
 import SecurityHeaderData from './model/SecurityHeaderData';
 import SemanticQueryParam from './model/SemanticQueryParam';
+import SerpapiSearchConfig from './model/SerpapiSearchConfig';
 import ServerSentEventString from './model/ServerSentEventString';
 import SetMcpServerAclsParam from './model/SetMcpServerAclsParam';
 import SharePointContentAttributeFilter from './model/SharePointContentAttributeFilter';
@@ -471,6 +495,7 @@ import StartGooglWorkspaceAccessRequest from './model/StartGooglWorkspaceAccessR
 import StartGooglWorkspaceAccessRespose from './model/StartGooglWorkspaceAccessRespose';
 import StartWorkflowData from './model/StartWorkflowData';
 import SystemInfos from './model/SystemInfos';
+import TavilySearchConfig from './model/TavilySearchConfig';
 import ThreasholdAutotuneProcessResult from './model/ThreasholdAutotuneProcessResult';
 import ToolCategoriesTree from './model/ToolCategoriesTree';
 import ToolReference from './model/ToolReference';
@@ -480,7 +505,9 @@ import UIComponent from './model/UIComponent';
 import UIExistingText from './model/UIExistingText';
 import UiTextResourcesModule from './model/UiTextResourcesModule';
 import UploadHandShakeCodeBody from './model/UploadHandShakeCodeBody';
+import UploadToEndpointEndpointCodeBody from './model/UploadToEndpointEndpointCodeBody';
 import UploadUserspaceFolderCodeBody from './model/UploadUserspaceFolderCodeBody';
+import UploadedFileInfo from './model/UploadedFileInfo';
 import UserAccessibleMcpServerView from './model/UserAccessibleMcpServerView';
 import UserChangePasswordWithTicket from './model/UserChangePasswordWithTicket';
 import UserChatHistory from './model/UserChatHistory';
@@ -506,6 +533,7 @@ import WorkflowStatsDrillDownLevel from './model/WorkflowStatsDrillDownLevel';
 import WorkflowStatsDrillDownLevelSubdimensions from './model/WorkflowStatsDrillDownLevelSubdimensions';
 import WorkflowStatsDrillDownResult from './model/WorkflowStatsDrillDownResult';
 import WorkflowStatus from './model/WorkflowStatus';
+import A2AClientConfigControllerApi from './api/A2AClientConfigControllerApi';
 import AnthropicChatModelsConfigurationControllerApi from './api/AnthropicChatModelsConfigurationControllerApi';
 import AuthControllerApi from './api/AuthControllerApi';
 import AuthProvidersControllerApi from './api/AuthProvidersControllerApi';
@@ -517,15 +545,18 @@ import BedrockImageModelsConfigurationControllerApi from './api/BedrockImageMode
 import BedrockRankerModelsConfigurationControllerApi from './api/BedrockRankerModelsConfigurationControllerApi';
 import BedrockTextToSpeechModelsConfigurationControllerApi from './api/BedrockTextToSpeechModelsConfigurationControllerApi';
 import BedrockTranscriptModelsConfigurationControllerApi from './api/BedrockTranscriptModelsConfigurationControllerApi';
+import BraveSearchConfigurationControllerApi from './api/BraveSearchConfigurationControllerApi';
 import BuildSystemsControllerApi from './api/BuildSystemsControllerApi';
 import ChatModelsControllerApi from './api/ChatModelsControllerApi';
 import ChatModelsLookupControllerApi from './api/ChatModelsLookupControllerApi';
+import ClientsTopologyProviderControllerApi from './api/ClientsTopologyProviderControllerApi';
 import CompanySystemsControllerApi from './api/CompanySystemsControllerApi';
 import ConfluenceBrowsingControllerApi from './api/ConfluenceBrowsingControllerApi';
 import ConfluenceSearchServiceControllerApi from './api/ConfluenceSearchServiceControllerApi';
 import ConfluenceSystemsControllerApi from './api/ConfluenceSystemsControllerApi';
 import ContentMetaInfosControllerApi from './api/ContentMetaInfosControllerApi';
 import ContentsResetControllerApi from './api/ContentsResetControllerApi';
+import DataFlowMetaInfoControllerApi from './api/DataFlowMetaInfoControllerApi';
 import DeepseekChatModelsConfigurationControllerApi from './api/DeepseekChatModelsConfigurationControllerApi';
 import DocumentContentStreamerControllerApi from './api/DocumentContentStreamerControllerApi';
 import EmbeddingModelsControllersApi from './api/EmbeddingModelsControllersApi';
@@ -535,11 +566,11 @@ import FileSystemsControllerApi from './api/FileSystemsControllerApi';
 import FileUploadControllerApi from './api/FileUploadControllerApi';
 import FileUploadsControllerApi from './api/FileUploadsControllerApi';
 import FunctionsLookupControllerApi from './api/FunctionsLookupControllerApi';
+import GeboA2AServerAdminControllerApi from './api/GeboA2AServerAdminControllerApi';
 import GeboAdminChatProfilesConfigurationControllerApi from './api/GeboAdminChatProfilesConfigurationControllerApi';
 import GeboAdminPromptUseInfoControllerApi from './api/GeboAdminPromptUseInfoControllerApi';
 import GeboAdminPromptsControllerApi from './api/GeboAdminPromptsControllerApi';
 import GeboAdminRagAutotuneControllerApi from './api/GeboAdminRagAutotuneControllerApi';
-import GeboAdvancedSetupStatusControllerApi from './api/GeboAdvancedSetupStatusControllerApi';
 import GeboAgentAdminControllerApi from './api/GeboAgentAdminControllerApi';
 import GeboAgentsNetworkAdminControllerApi from './api/GeboAgentsNetworkAdminControllerApi';
 import GeboAngularFormGroupMetaInfoControllerApi from './api/GeboAngularFormGroupMetaInfoControllerApi';
@@ -566,7 +597,6 @@ import GeboTranscriptControllerApi from './api/GeboTranscriptControllerApi';
 import GeboUserChatUploadsControllerApi from './api/GeboUserChatUploadsControllerApi';
 import GeboUserChatsControllerApi from './api/GeboUserChatsControllerApi';
 import GeboUserKnowledgeBaseSemanticSearchControllerApi from './api/GeboUserKnowledgeBaseSemanticSearchControllerApi';
-import GeboVectorStoreConfigurationControllerApi from './api/GeboVectorStoreConfigurationControllerApi';
 import GeneratedAdminApiKeyControllerApi from './api/GeneratedAdminApiKeyControllerApi';
 import GeneratedUserApiKeyControllerApi from './api/GeneratedUserApiKeyControllerApi';
 import GenericOpenAiRankerModelsConfigurationControllerApi from './api/GenericOpenAiRankerModelsConfigurationControllerApi';
@@ -619,14 +649,19 @@ import ProjectsControllerApi from './api/ProjectsControllerApi';
 import PromptTemplatesControllerApi from './api/PromptTemplatesControllerApi';
 import RankerModelsControllerApi from './api/RankerModelsControllerApi';
 import ReindexingFrequencyOptionsControllerApi from './api/ReindexingFrequencyOptionsControllerApi';
+import SearxngSearchConfigurationControllerApi from './api/SearxngSearchConfigurationControllerApi';
 import SecretsControllerApi from './api/SecretsControllerApi';
+import SecurityHeaderDataCompletionControllerApi from './api/SecurityHeaderDataCompletionControllerApi';
+import SerpapiSearchConfigurationControllerApi from './api/SerpapiSearchConfigurationControllerApi';
 import SharePointSearchServiceControllerApi from './api/SharePointSearchServiceControllerApi';
 import SharepointBrowsingControllerApi from './api/SharepointBrowsingControllerApi';
 import SharepointSystemsControllerApi from './api/SharepointSystemsControllerApi';
+import TavilySearchConfigurationControllerApi from './api/TavilySearchConfigurationControllerApi';
 import TextToSpeechModelsControllerApi from './api/TextToSpeechModelsControllerApi';
 import TokenRenewControllerApi from './api/TokenRenewControllerApi';
 import TranscriptModelsControllerApi from './api/TranscriptModelsControllerApi';
 import UiTextResourcesControllerApi from './api/UiTextResourcesControllerApi';
+import UploadsBrowsingControllerApi from './api/UploadsBrowsingControllerApi';
 import UserControllerApi from './api/UserControllerApi';
 import UserKnowledgeBaseBrowsingControllerApi from './api/UserKnowledgeBaseBrowsingControllerApi';
 import UserWorkflowsControllerApi from './api/UserWorkflowsControllerApi';
@@ -676,10 +711,40 @@ export {
     ApiClient,
 
     /**
+     * The A2AExportedAgent model constructor.
+     * @property {module:model/A2AExportedAgent}
+     */
+    A2AExportedAgent,
+
+    /**
+     * The A2ARemoteAgentConfig model constructor.
+     * @property {module:model/A2ARemoteAgentConfig}
+     */
+    A2ARemoteAgentConfig,
+
+    /**
+     * The A2ARemoteSkill model constructor.
+     * @property {module:model/A2ARemoteSkill}
+     */
+    A2ARemoteSkill,
+
+    /**
+     * The A2AServerConfig model constructor.
+     * @property {module:model/A2AServerConfig}
+     */
+    A2AServerConfig,
+
+    /**
      * The AclOwnerParam model constructor.
      * @property {module:model/AclOwnerParam}
      */
     AclOwnerParam,
+
+    /**
+     * The AdditionalContent model constructor.
+     * @property {module:model/AdditionalContent}
+     */
+    AdditionalContent,
 
     /**
      * The AgentNetworkParticipant model constructor.
@@ -734,6 +799,12 @@ export {
      * @property {module:model/AutotuneVectorStoreInfo}
      */
     AutotuneVectorStoreInfo,
+
+    /**
+     * The BraveSearchConfig model constructor.
+     * @property {module:model/BraveSearchConfig}
+     */
+    BraveSearchConfig,
 
     /**
      * The BrowseParam model constructor.
@@ -844,6 +915,12 @@ export {
     ComponentLLMSStatus,
 
     /**
+     * The ComponentMetaInfo model constructor.
+     * @property {module:model/ComponentMetaInfo}
+     */
+    ComponentMetaInfo,
+
+    /**
      * The ComponentSetupStatus model constructor.
      * @property {module:model/ComponentSetupStatus}
      */
@@ -952,10 +1029,28 @@ export {
     CustomTemplateParamsRequestBody,
 
     /**
+     * The DataEndpoint model constructor.
+     * @property {module:model/DataEndpoint}
+     */
+    DataEndpoint,
+
+    /**
      * The DataPage model constructor.
      * @property {module:model/DataPage}
      */
     DataPage,
+
+    /**
+     * The DataTransformationInfo model constructor.
+     * @property {module:model/DataTransformationInfo}
+     */
+    DataTransformationInfo,
+
+    /**
+     * The DataTransformationMetaInfo model constructor.
+     * @property {module:model/DataTransformationMetaInfo}
+     */
+    DataTransformationMetaInfo,
 
     /**
      * The DeepSearchConfig model constructor.
@@ -1306,6 +1401,12 @@ export {
     GBedrockTranscriptModelConfig,
 
     /**
+     * The GBraveSearchApiCredentials model constructor.
+     * @property {module:model/GBraveSearchApiCredentials}
+     */
+    GBraveSearchApiCredentials,
+
+    /**
      * The GBuildSystem model constructor.
      * @property {module:model/GBuildSystem}
      */
@@ -1370,6 +1471,18 @@ export {
      * @property {module:model/GContentSelectionFilterCriteria}
      */
     GContentSelectionFilterCriteria,
+
+    /**
+     * The GDataFlowMetaInfos model constructor.
+     * @property {module:model/GDataFlowMetaInfos}
+     */
+    GDataFlowMetaInfos,
+
+    /**
+     * The GDataFlowReport model constructor.
+     * @property {module:model/GDataFlowReport}
+     */
+    GDataFlowReport,
 
     /**
      * The GDeepseekChatModelChoice model constructor.
@@ -1556,6 +1669,12 @@ export {
      * @property {module:model/GMistralEmbeddingModelConfig}
      */
     GMistralEmbeddingModelConfig,
+
+    /**
+     * The GModuleMetaInfo model constructor.
+     * @property {module:model/GModuleMetaInfo}
+     */
+    GModuleMetaInfo,
 
     /**
      * The GONNXTransformersEmbeddingModelChoice model constructor.
@@ -1750,6 +1869,12 @@ export {
     GPromptTemplateConfig,
 
     /**
+     * The GPromptTemplateLightView model constructor.
+     * @property {module:model/GPromptTemplateLightView}
+     */
+    GPromptTemplateLightView,
+
+    /**
      * The GPromptUseInfo model constructor.
      * @property {module:model/GPromptUseInfo}
      */
@@ -1766,6 +1891,18 @@ export {
      * @property {module:model/GResponseDocumentRef}
      */
     GResponseDocumentRef,
+
+    /**
+     * The GSearxngSearchApiCredentials model constructor.
+     * @property {module:model/GSearxngSearchApiCredentials}
+     */
+    GSearxngSearchApiCredentials,
+
+    /**
+     * The GSerpapiSearchApiCredentials model constructor.
+     * @property {module:model/GSerpapiSearchApiCredentials}
+     */
+    GSerpapiSearchApiCredentials,
 
     /**
      * The GSharepointContentManagementSystem model constructor.
@@ -1796,6 +1933,12 @@ export {
      * @property {module:model/GStatsLine}
      */
     GStatsLine,
+
+    /**
+     * The GTavilySearchApiCredentials model constructor.
+     * @property {module:model/GTavilySearchApiCredentials}
+     */
+    GTavilySearchApiCredentials,
 
     /**
      * The GTextToSpeechModelType model constructor.
@@ -1900,6 +2043,12 @@ export {
     GeboChatUserInfo,
 
     /**
+     * The GeboClientsTopologyInfo model constructor.
+     * @property {module:model/GeboClientsTopologyInfo}
+     */
+    GeboClientsTopologyInfo,
+
+    /**
      * The GeboComponentInfo model constructor.
      * @property {module:model/GeboComponentInfo}
      */
@@ -1978,12 +2127,6 @@ export {
     GeboModuleInfo,
 
     /**
-     * The GeboMongoVectorStoreConfig model constructor.
-     * @property {module:model/GeboMongoVectorStoreConfig}
-     */
-    GeboMongoVectorStoreConfig,
-
-    /**
      * The GeboNeo4jModuleConfigDto model constructor.
      * @property {module:model/GeboNeo4jModuleConfigDto}
      */
@@ -2000,6 +2143,12 @@ export {
      * @property {module:model/GeboRagRequestCustomConfig}
      */
     GeboRagRequestCustomConfig,
+
+    /**
+     * The GeboServiceWebContextInfo model constructor.
+     * @property {module:model/GeboServiceWebContextInfo}
+     */
+    GeboServiceWebContextInfo,
 
     /**
      * The GeboSshKeySecretContent model constructor.
@@ -2326,6 +2475,12 @@ export {
     JobWorkflowStepSummaryTimeSlotStats,
 
     /**
+     * The JobsEntriesFilter model constructor.
+     * @property {module:model/JobsEntriesFilter}
+     */
+    JobsEntriesFilter,
+
+    /**
      * The JobsEntriesForClassNameFilter model constructor.
      * @property {module:model/JobsEntriesForClassNameFilter}
      */
@@ -2524,12 +2679,6 @@ export {
     ModuleIntegrationAddress,
 
     /**
-     * The MongoConfig model constructor.
-     * @property {module:model/MongoConfig}
-     */
-    MongoConfig,
-
-    /**
      * The Oauth2ClientAuthorizativeInfo model constructor.
      * @property {module:model/Oauth2ClientAuthorizativeInfo}
      */
@@ -2564,6 +2713,18 @@ export {
      * @property {module:model/Oauth2ProviderModifiableData}
      */
     Oauth2ProviderModifiableData,
+
+    /**
+     * The OperationStatusA2ARemoteAgentConfig model constructor.
+     * @property {module:model/OperationStatusA2ARemoteAgentConfig}
+     */
+    OperationStatusA2ARemoteAgentConfig,
+
+    /**
+     * The OperationStatusA2AServerConfig model constructor.
+     * @property {module:model/OperationStatusA2AServerConfig}
+     */
+    OperationStatusA2AServerConfig,
 
     /**
      * The OperationStatusAuthResponse model constructor.
@@ -2758,16 +2919,16 @@ export {
     OperationStatusGSharepointContentManagementSystem,
 
     /**
+     * The OperationStatusGUploadsProjectEndpoint model constructor.
+     * @property {module:model/OperationStatusGUploadsProjectEndpoint}
+     */
+    OperationStatusGUploadsProjectEndpoint,
+
+    /**
      * The OperationStatusGWebdavContentManagementSystem model constructor.
      * @property {module:model/OperationStatusGWebdavContentManagementSystem}
      */
     OperationStatusGWebdavContentManagementSystem,
-
-    /**
-     * The OperationStatusGeboMongoVectorStoreConfig model constructor.
-     * @property {module:model/OperationStatusGeboMongoVectorStoreConfig}
-     */
-    OperationStatusGeboMongoVectorStoreConfig,
 
     /**
      * The OperationStatusGenericOpenAIAPIChatModelConfig model constructor.
@@ -3052,6 +3213,12 @@ export {
     PageMetadata,
 
     /**
+     * The PagedModelA2ARemoteAgentConfig model constructor.
+     * @property {module:model/PagedModelA2ARemoteAgentConfig}
+     */
+    PagedModelA2ARemoteAgentConfig,
+
+    /**
      * The PagedModelDocumentReferenceView model constructor.
      * @property {module:model/PagedModelDocumentReferenceView}
      */
@@ -3274,6 +3441,12 @@ export {
     SearchableSystemMetaData,
 
     /**
+     * The SearxngSearchConfig model constructor.
+     * @property {module:model/SearxngSearchConfig}
+     */
+    SearxngSearchConfig,
+
+    /**
      * The SecretInfo model constructor.
      * @property {module:model/SecretInfo}
      */
@@ -3338,6 +3511,12 @@ export {
      * @property {module:model/SemanticQueryParam}
      */
     SemanticQueryParam,
+
+    /**
+     * The SerpapiSearchConfig model constructor.
+     * @property {module:model/SerpapiSearchConfig}
+     */
+    SerpapiSearchConfig,
 
     /**
      * The ServerSentEventString model constructor.
@@ -3424,6 +3603,12 @@ export {
     SystemInfos,
 
     /**
+     * The TavilySearchConfig model constructor.
+     * @property {module:model/TavilySearchConfig}
+     */
+    TavilySearchConfig,
+
+    /**
      * The ThreasholdAutotuneProcessResult model constructor.
      * @property {module:model/ThreasholdAutotuneProcessResult}
      */
@@ -3478,10 +3663,22 @@ export {
     UploadHandShakeCodeBody,
 
     /**
+     * The UploadToEndpointEndpointCodeBody model constructor.
+     * @property {module:model/UploadToEndpointEndpointCodeBody}
+     */
+    UploadToEndpointEndpointCodeBody,
+
+    /**
      * The UploadUserspaceFolderCodeBody model constructor.
      * @property {module:model/UploadUserspaceFolderCodeBody}
      */
     UploadUserspaceFolderCodeBody,
+
+    /**
+     * The UploadedFileInfo model constructor.
+     * @property {module:model/UploadedFileInfo}
+     */
+    UploadedFileInfo,
 
     /**
      * The UserAccessibleMcpServerView model constructor.
@@ -3634,6 +3831,12 @@ export {
     WorkflowStatus,
 
     /**
+    * The A2AClientConfigControllerApi service constructor.
+    * @property {module:api/A2AClientConfigControllerApi}
+    */
+    A2AClientConfigControllerApi,
+
+    /**
     * The AnthropicChatModelsConfigurationControllerApi service constructor.
     * @property {module:api/AnthropicChatModelsConfigurationControllerApi}
     */
@@ -3700,6 +3903,12 @@ export {
     BedrockTranscriptModelsConfigurationControllerApi,
 
     /**
+    * The BraveSearchConfigurationControllerApi service constructor.
+    * @property {module:api/BraveSearchConfigurationControllerApi}
+    */
+    BraveSearchConfigurationControllerApi,
+
+    /**
     * The BuildSystemsControllerApi service constructor.
     * @property {module:api/BuildSystemsControllerApi}
     */
@@ -3716,6 +3925,12 @@ export {
     * @property {module:api/ChatModelsLookupControllerApi}
     */
     ChatModelsLookupControllerApi,
+
+    /**
+    * The ClientsTopologyProviderControllerApi service constructor.
+    * @property {module:api/ClientsTopologyProviderControllerApi}
+    */
+    ClientsTopologyProviderControllerApi,
 
     /**
     * The CompanySystemsControllerApi service constructor.
@@ -3752,6 +3967,12 @@ export {
     * @property {module:api/ContentsResetControllerApi}
     */
     ContentsResetControllerApi,
+
+    /**
+    * The DataFlowMetaInfoControllerApi service constructor.
+    * @property {module:api/DataFlowMetaInfoControllerApi}
+    */
+    DataFlowMetaInfoControllerApi,
 
     /**
     * The DeepseekChatModelsConfigurationControllerApi service constructor.
@@ -3808,6 +4029,12 @@ export {
     FunctionsLookupControllerApi,
 
     /**
+    * The GeboA2AServerAdminControllerApi service constructor.
+    * @property {module:api/GeboA2AServerAdminControllerApi}
+    */
+    GeboA2AServerAdminControllerApi,
+
+    /**
     * The GeboAdminChatProfilesConfigurationControllerApi service constructor.
     * @property {module:api/GeboAdminChatProfilesConfigurationControllerApi}
     */
@@ -3830,12 +4057,6 @@ export {
     * @property {module:api/GeboAdminRagAutotuneControllerApi}
     */
     GeboAdminRagAutotuneControllerApi,
-
-    /**
-    * The GeboAdvancedSetupStatusControllerApi service constructor.
-    * @property {module:api/GeboAdvancedSetupStatusControllerApi}
-    */
-    GeboAdvancedSetupStatusControllerApi,
 
     /**
     * The GeboAgentAdminControllerApi service constructor.
@@ -3992,12 +4213,6 @@ export {
     * @property {module:api/GeboUserKnowledgeBaseSemanticSearchControllerApi}
     */
     GeboUserKnowledgeBaseSemanticSearchControllerApi,
-
-    /**
-    * The GeboVectorStoreConfigurationControllerApi service constructor.
-    * @property {module:api/GeboVectorStoreConfigurationControllerApi}
-    */
-    GeboVectorStoreConfigurationControllerApi,
 
     /**
     * The GeneratedAdminApiKeyControllerApi service constructor.
@@ -4312,10 +4527,28 @@ export {
     ReindexingFrequencyOptionsControllerApi,
 
     /**
+    * The SearxngSearchConfigurationControllerApi service constructor.
+    * @property {module:api/SearxngSearchConfigurationControllerApi}
+    */
+    SearxngSearchConfigurationControllerApi,
+
+    /**
     * The SecretsControllerApi service constructor.
     * @property {module:api/SecretsControllerApi}
     */
     SecretsControllerApi,
+
+    /**
+    * The SecurityHeaderDataCompletionControllerApi service constructor.
+    * @property {module:api/SecurityHeaderDataCompletionControllerApi}
+    */
+    SecurityHeaderDataCompletionControllerApi,
+
+    /**
+    * The SerpapiSearchConfigurationControllerApi service constructor.
+    * @property {module:api/SerpapiSearchConfigurationControllerApi}
+    */
+    SerpapiSearchConfigurationControllerApi,
 
     /**
     * The SharePointSearchServiceControllerApi service constructor.
@@ -4334,6 +4567,12 @@ export {
     * @property {module:api/SharepointSystemsControllerApi}
     */
     SharepointSystemsControllerApi,
+
+    /**
+    * The TavilySearchConfigurationControllerApi service constructor.
+    * @property {module:api/TavilySearchConfigurationControllerApi}
+    */
+    TavilySearchConfigurationControllerApi,
 
     /**
     * The TextToSpeechModelsControllerApi service constructor.
@@ -4358,6 +4597,12 @@ export {
     * @property {module:api/UiTextResourcesControllerApi}
     */
     UiTextResourcesControllerApi,
+
+    /**
+    * The UploadsBrowsingControllerApi service constructor.
+    * @property {module:api/UploadsBrowsingControllerApi}
+    */
+    UploadsBrowsingControllerApi,
 
     /**
     * The UserControllerApi service constructor.

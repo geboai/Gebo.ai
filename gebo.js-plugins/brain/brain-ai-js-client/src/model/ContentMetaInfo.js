@@ -39,77 +39,95 @@ export default class ContentMetaInfo {
     if (data) {
       obj = obj || new ContentMetaInfo();
       if (data.hasOwnProperty('exists'))
-        obj.exists = ApiClient.convertToType(data['exists'], Object);
+        obj.exists = ApiClient.convertToType(data['exists'], 'Boolean');
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('extension'))
-        obj.extension = ApiClient.convertToType(data['extension'], Object);
+        obj.extension = ApiClient.convertToType(data['extension'], 'String');
       if (data.hasOwnProperty('contentType'))
-        obj.contentType = ApiClient.convertToType(data['contentType'], Object);
+        obj.contentType = ApiClient.convertToType(data['contentType'], 'String');
       if (data.hasOwnProperty('fileName'))
-        obj.fileName = ApiClient.convertToType(data['fileName'], Object);
+        obj.fileName = ApiClient.convertToType(data['fileName'], 'String');
       if (data.hasOwnProperty('parentProjectCode'))
-        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], Object);
+        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], 'String');
       if (data.hasOwnProperty('rootKnowledgeBase'))
-        obj.rootKnowledgeBase = ApiClient.convertToType(data['rootKnowledgeBase'], Object);
+        obj.rootKnowledgeBase = ApiClient.convertToType(data['rootKnowledgeBase'], 'String');
       if (data.hasOwnProperty('moduleId'))
-        obj.moduleId = ApiClient.convertToType(data['moduleId'], Object);
+        obj.moduleId = ApiClient.convertToType(data['moduleId'], 'String');
       if (data.hasOwnProperty('url'))
-        obj.url = ApiClient.convertToType(data['url'], Object);
+        obj.url = ApiClient.convertToType(data['url'], 'String');
       if (data.hasOwnProperty('referenceType'))
-        obj.referenceType = ApiClient.convertToType(data['referenceType'], Object);
+        obj.referenceType = ApiClient.convertToType(data['referenceType'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} exists
+ * @member {Boolean} exists
  */
 ContentMetaInfo.prototype.exists = undefined;
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 ContentMetaInfo.prototype.code = undefined;
 
 /**
- * @member {Object} extension
+ * @member {String} extension
  */
 ContentMetaInfo.prototype.extension = undefined;
 
 /**
- * @member {Object} contentType
+ * @member {String} contentType
  */
 ContentMetaInfo.prototype.contentType = undefined;
 
 /**
- * @member {Object} fileName
+ * @member {String} fileName
  */
 ContentMetaInfo.prototype.fileName = undefined;
 
 /**
- * @member {Object} parentProjectCode
+ * @member {String} parentProjectCode
  */
 ContentMetaInfo.prototype.parentProjectCode = undefined;
 
 /**
- * @member {Object} rootKnowledgeBase
+ * @member {String} rootKnowledgeBase
  */
 ContentMetaInfo.prototype.rootKnowledgeBase = undefined;
 
 /**
- * @member {Object} moduleId
+ * @member {String} moduleId
  */
 ContentMetaInfo.prototype.moduleId = undefined;
 
 /**
- * @member {Object} url
+ * @member {String} url
  */
 ContentMetaInfo.prototype.url = undefined;
 
 /**
- * @member {Object} referenceType
+ * Allowed values for the <code>referenceType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+ContentMetaInfo.ReferenceTypeEnum = {
+  /**
+   * value: "FILE"
+   * @const
+   */
+  FILE: "FILE",
+
+  /**
+   * value: "WEB"
+   * @const
+   */
+  WEB: "WEB"
+};
+/**
+ * @member {module:model/ContentMetaInfo.ReferenceTypeEnum} referenceType
  */
 ContentMetaInfo.prototype.referenceType = undefined;
 

@@ -38,29 +38,29 @@ export default class SortObject {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new SortObject();
-      if (data.hasOwnProperty('empty'))
-        obj.empty = ApiClient.convertToType(data['empty'], Object);
       if (data.hasOwnProperty('sorted'))
-        obj.sorted = ApiClient.convertToType(data['sorted'], Object);
+        obj.sorted = ApiClient.convertToType(data['sorted'], 'Boolean');
+      if (data.hasOwnProperty('empty'))
+        obj.empty = ApiClient.convertToType(data['empty'], 'Boolean');
       if (data.hasOwnProperty('unsorted'))
-        obj.unsorted = ApiClient.convertToType(data['unsorted'], Object);
+        obj.unsorted = ApiClient.convertToType(data['unsorted'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} empty
- */
-SortObject.prototype.empty = undefined;
-
-/**
- * @member {Object} sorted
+ * @member {Boolean} sorted
  */
 SortObject.prototype.sorted = undefined;
 
 /**
- * @member {Object} unsorted
+ * @member {Boolean} empty
+ */
+SortObject.prototype.empty = undefined;
+
+/**
+ * @member {Boolean} unsorted
  */
 SortObject.prototype.unsorted = undefined;
 

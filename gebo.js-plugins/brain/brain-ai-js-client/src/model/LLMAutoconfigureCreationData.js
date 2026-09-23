@@ -24,7 +24,7 @@ export default class LLMAutoconfigureCreationData {
    * Constructs a new <code>LLMAutoconfigureCreationData</code>.
    * @alias module:model/LLMAutoconfigureCreationData
    * @class
-   * @param vendorId {Object} 
+   * @param vendorId {String} 
    */
   constructor(vendorId) {
     this.vendorId = vendorId;
@@ -41,84 +41,84 @@ export default class LLMAutoconfigureCreationData {
     if (data) {
       obj = obj || new LLMAutoconfigureCreationData();
       if (data.hasOwnProperty('vendorId'))
-        obj.vendorId = ApiClient.convertToType(data['vendorId'], Object);
+        obj.vendorId = ApiClient.convertToType(data['vendorId'], 'String');
       if (data.hasOwnProperty('secretId'))
-        obj.secretId = ApiClient.convertToType(data['secretId'], Object);
+        obj.secretId = ApiClient.convertToType(data['secretId'], 'String');
       if (data.hasOwnProperty('newApiSecret'))
-        obj.newApiSecret = ApiClient.convertToType(data['newApiSecret'], Object);
+        obj.newApiSecret = ApiClient.convertToType(data['newApiSecret'], 'String');
       if (data.hasOwnProperty('newUserName'))
-        obj.newUserName = ApiClient.convertToType(data['newUserName'], Object);
+        obj.newUserName = ApiClient.convertToType(data['newUserName'], 'String');
       if (data.hasOwnProperty('defaultChatModel'))
-        obj.defaultChatModel = ApiClient.convertToType(data['defaultChatModel'], Object);
+        obj.defaultChatModel = ApiClient.convertToType(data['defaultChatModel'], 'String');
       if (data.hasOwnProperty('internalServicesModel'))
-        obj.internalServicesModel = ApiClient.convertToType(data['internalServicesModel'], Object);
+        obj.internalServicesModel = ApiClient.convertToType(data['internalServicesModel'], 'String');
       if (data.hasOwnProperty('embeddingModel'))
-        obj.embeddingModel = ApiClient.convertToType(data['embeddingModel'], Object);
+        obj.embeddingModel = ApiClient.convertToType(data['embeddingModel'], 'String');
       if (data.hasOwnProperty('rankerModel'))
-        obj.rankerModel = ApiClient.convertToType(data['rankerModel'], Object);
+        obj.rankerModel = ApiClient.convertToType(data['rankerModel'], 'String');
       if (data.hasOwnProperty('transcriptModel'))
-        obj.transcriptModel = ApiClient.convertToType(data['transcriptModel'], Object);
+        obj.transcriptModel = ApiClient.convertToType(data['transcriptModel'], 'String');
       if (data.hasOwnProperty('ttsModel'))
-        obj.ttsModel = ApiClient.convertToType(data['ttsModel'], Object);
+        obj.ttsModel = ApiClient.convertToType(data['ttsModel'], 'String');
       if (data.hasOwnProperty('imagesModel'))
-        obj.imagesModel = ApiClient.convertToType(data['imagesModel'], Object);
+        obj.imagesModel = ApiClient.convertToType(data['imagesModel'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} vendorId
+ * @member {String} vendorId
  */
 LLMAutoconfigureCreationData.prototype.vendorId = undefined;
 
 /**
- * @member {Object} secretId
+ * @member {String} secretId
  */
 LLMAutoconfigureCreationData.prototype.secretId = undefined;
 
 /**
- * @member {Object} newApiSecret
+ * @member {String} newApiSecret
  */
 LLMAutoconfigureCreationData.prototype.newApiSecret = undefined;
 
 /**
- * @member {Object} newUserName
+ * @member {String} newUserName
  */
 LLMAutoconfigureCreationData.prototype.newUserName = undefined;
 
 /**
- * @member {Object} defaultChatModel
+ * @member {String} defaultChatModel
  */
 LLMAutoconfigureCreationData.prototype.defaultChatModel = undefined;
 
 /**
- * @member {Object} internalServicesModel
+ * @member {String} internalServicesModel
  */
 LLMAutoconfigureCreationData.prototype.internalServicesModel = undefined;
 
 /**
- * @member {Object} embeddingModel
+ * @member {String} embeddingModel
  */
 LLMAutoconfigureCreationData.prototype.embeddingModel = undefined;
 
 /**
- * @member {Object} rankerModel
+ * @member {String} rankerModel
  */
 LLMAutoconfigureCreationData.prototype.rankerModel = undefined;
 
 /**
- * @member {Object} transcriptModel
+ * @member {String} transcriptModel
  */
 LLMAutoconfigureCreationData.prototype.transcriptModel = undefined;
 
 /**
- * @member {Object} ttsModel
+ * @member {String} ttsModel
  */
 LLMAutoconfigureCreationData.prototype.ttsModel = undefined;
 
 /**
- * @member {Object} imagesModel
+ * @member {String} imagesModel
  */
 LLMAutoconfigureCreationData.prototype.imagesModel = undefined;
 

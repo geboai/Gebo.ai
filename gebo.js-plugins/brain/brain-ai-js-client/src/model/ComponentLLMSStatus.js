@@ -39,161 +39,161 @@ export default class ComponentLLMSStatus {
     if (data) {
       obj = obj || new ComponentLLMSStatus();
       if (data.hasOwnProperty('isSetup'))
-        obj.isSetup = ApiClient.convertToType(data['isSetup'], Object);
+        obj.isSetup = ApiClient.convertToType(data['isSetup'], 'Boolean');
       if (data.hasOwnProperty('chatModelSetup'))
-        obj.chatModelSetup = ApiClient.convertToType(data['chatModelSetup'], Object);
+        obj.chatModelSetup = ApiClient.convertToType(data['chatModelSetup'], 'Boolean');
       if (data.hasOwnProperty('internalServicesChatModelSetup'))
-        obj.internalServicesChatModelSetup = ApiClient.convertToType(data['internalServicesChatModelSetup'], Object);
+        obj.internalServicesChatModelSetup = ApiClient.convertToType(data['internalServicesChatModelSetup'], 'Boolean');
       if (data.hasOwnProperty('embeddedModelSetup'))
-        obj.embeddedModelSetup = ApiClient.convertToType(data['embeddedModelSetup'], Object);
+        obj.embeddedModelSetup = ApiClient.convertToType(data['embeddedModelSetup'], 'Boolean');
       if (data.hasOwnProperty('rankingModelSetup'))
-        obj.rankingModelSetup = ApiClient.convertToType(data['rankingModelSetup'], Object);
+        obj.rankingModelSetup = ApiClient.convertToType(data['rankingModelSetup'], 'Boolean');
       if (data.hasOwnProperty('imagesModelSetup'))
-        obj.imagesModelSetup = ApiClient.convertToType(data['imagesModelSetup'], Object);
+        obj.imagesModelSetup = ApiClient.convertToType(data['imagesModelSetup'], 'Boolean');
       if (data.hasOwnProperty('ttsModelSetup'))
-        obj.ttsModelSetup = ApiClient.convertToType(data['ttsModelSetup'], Object);
+        obj.ttsModelSetup = ApiClient.convertToType(data['ttsModelSetup'], 'Boolean');
       if (data.hasOwnProperty('transcriptModelSetup'))
-        obj.transcriptModelSetup = ApiClient.convertToType(data['transcriptModelSetup'], Object);
+        obj.transcriptModelSetup = ApiClient.convertToType(data['transcriptModelSetup'], 'Boolean');
       if (data.hasOwnProperty('chatModelCode'))
-        obj.chatModelCode = ApiClient.convertToType(data['chatModelCode'], Object);
+        obj.chatModelCode = ApiClient.convertToType(data['chatModelCode'], 'String');
       if (data.hasOwnProperty('internalServicesChatModelCode'))
-        obj.internalServicesChatModelCode = ApiClient.convertToType(data['internalServicesChatModelCode'], Object);
+        obj.internalServicesChatModelCode = ApiClient.convertToType(data['internalServicesChatModelCode'], 'String');
       if (data.hasOwnProperty('embeddedModelCode'))
-        obj.embeddedModelCode = ApiClient.convertToType(data['embeddedModelCode'], Object);
+        obj.embeddedModelCode = ApiClient.convertToType(data['embeddedModelCode'], 'String');
       if (data.hasOwnProperty('rankingModelCode'))
-        obj.rankingModelCode = ApiClient.convertToType(data['rankingModelCode'], Object);
+        obj.rankingModelCode = ApiClient.convertToType(data['rankingModelCode'], 'String');
       if (data.hasOwnProperty('imagesModelCode'))
-        obj.imagesModelCode = ApiClient.convertToType(data['imagesModelCode'], Object);
+        obj.imagesModelCode = ApiClient.convertToType(data['imagesModelCode'], 'String');
       if (data.hasOwnProperty('ttsModelCode'))
-        obj.ttsModelCode = ApiClient.convertToType(data['ttsModelCode'], Object);
+        obj.ttsModelCode = ApiClient.convertToType(data['ttsModelCode'], 'String');
       if (data.hasOwnProperty('transcriptModelCode'))
-        obj.transcriptModelCode = ApiClient.convertToType(data['transcriptModelCode'], Object);
+        obj.transcriptModelCode = ApiClient.convertToType(data['transcriptModelCode'], 'String');
       if (data.hasOwnProperty('chatModelProviderId'))
-        obj.chatModelProviderId = ApiClient.convertToType(data['chatModelProviderId'], Object);
+        obj.chatModelProviderId = ApiClient.convertToType(data['chatModelProviderId'], 'String');
       if (data.hasOwnProperty('internalServicesChatModelProviderId'))
-        obj.internalServicesChatModelProviderId = ApiClient.convertToType(data['internalServicesChatModelProviderId'], Object);
+        obj.internalServicesChatModelProviderId = ApiClient.convertToType(data['internalServicesChatModelProviderId'], 'String');
       if (data.hasOwnProperty('embeddedModelProviderId'))
-        obj.embeddedModelProviderId = ApiClient.convertToType(data['embeddedModelProviderId'], Object);
+        obj.embeddedModelProviderId = ApiClient.convertToType(data['embeddedModelProviderId'], 'String');
       if (data.hasOwnProperty('rankingModelProviderId'))
-        obj.rankingModelProviderId = ApiClient.convertToType(data['rankingModelProviderId'], Object);
+        obj.rankingModelProviderId = ApiClient.convertToType(data['rankingModelProviderId'], 'String');
       if (data.hasOwnProperty('imagesModelProviderId'))
-        obj.imagesModelProviderId = ApiClient.convertToType(data['imagesModelProviderId'], Object);
+        obj.imagesModelProviderId = ApiClient.convertToType(data['imagesModelProviderId'], 'String');
       if (data.hasOwnProperty('ttsModelProviderId'))
-        obj.ttsModelProviderId = ApiClient.convertToType(data['ttsModelProviderId'], Object);
+        obj.ttsModelProviderId = ApiClient.convertToType(data['ttsModelProviderId'], 'String');
       if (data.hasOwnProperty('transcriptModelProviderId'))
-        obj.transcriptModelProviderId = ApiClient.convertToType(data['transcriptModelProviderId'], Object);
+        obj.transcriptModelProviderId = ApiClient.convertToType(data['transcriptModelProviderId'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} isSetup
+ * @member {Boolean} isSetup
  */
 ComponentLLMSStatus.prototype.isSetup = undefined;
 
 /**
- * @member {Object} chatModelSetup
+ * @member {Boolean} chatModelSetup
  */
 ComponentLLMSStatus.prototype.chatModelSetup = undefined;
 
 /**
- * @member {Object} internalServicesChatModelSetup
+ * @member {Boolean} internalServicesChatModelSetup
  */
 ComponentLLMSStatus.prototype.internalServicesChatModelSetup = undefined;
 
 /**
- * @member {Object} embeddedModelSetup
+ * @member {Boolean} embeddedModelSetup
  */
 ComponentLLMSStatus.prototype.embeddedModelSetup = undefined;
 
 /**
- * @member {Object} rankingModelSetup
+ * @member {Boolean} rankingModelSetup
  */
 ComponentLLMSStatus.prototype.rankingModelSetup = undefined;
 
 /**
- * @member {Object} imagesModelSetup
+ * @member {Boolean} imagesModelSetup
  */
 ComponentLLMSStatus.prototype.imagesModelSetup = undefined;
 
 /**
- * @member {Object} ttsModelSetup
+ * @member {Boolean} ttsModelSetup
  */
 ComponentLLMSStatus.prototype.ttsModelSetup = undefined;
 
 /**
- * @member {Object} transcriptModelSetup
+ * @member {Boolean} transcriptModelSetup
  */
 ComponentLLMSStatus.prototype.transcriptModelSetup = undefined;
 
 /**
- * @member {Object} chatModelCode
+ * @member {String} chatModelCode
  */
 ComponentLLMSStatus.prototype.chatModelCode = undefined;
 
 /**
- * @member {Object} internalServicesChatModelCode
+ * @member {String} internalServicesChatModelCode
  */
 ComponentLLMSStatus.prototype.internalServicesChatModelCode = undefined;
 
 /**
- * @member {Object} embeddedModelCode
+ * @member {String} embeddedModelCode
  */
 ComponentLLMSStatus.prototype.embeddedModelCode = undefined;
 
 /**
- * @member {Object} rankingModelCode
+ * @member {String} rankingModelCode
  */
 ComponentLLMSStatus.prototype.rankingModelCode = undefined;
 
 /**
- * @member {Object} imagesModelCode
+ * @member {String} imagesModelCode
  */
 ComponentLLMSStatus.prototype.imagesModelCode = undefined;
 
 /**
- * @member {Object} ttsModelCode
+ * @member {String} ttsModelCode
  */
 ComponentLLMSStatus.prototype.ttsModelCode = undefined;
 
 /**
- * @member {Object} transcriptModelCode
+ * @member {String} transcriptModelCode
  */
 ComponentLLMSStatus.prototype.transcriptModelCode = undefined;
 
 /**
- * @member {Object} chatModelProviderId
+ * @member {String} chatModelProviderId
  */
 ComponentLLMSStatus.prototype.chatModelProviderId = undefined;
 
 /**
- * @member {Object} internalServicesChatModelProviderId
+ * @member {String} internalServicesChatModelProviderId
  */
 ComponentLLMSStatus.prototype.internalServicesChatModelProviderId = undefined;
 
 /**
- * @member {Object} embeddedModelProviderId
+ * @member {String} embeddedModelProviderId
  */
 ComponentLLMSStatus.prototype.embeddedModelProviderId = undefined;
 
 /**
- * @member {Object} rankingModelProviderId
+ * @member {String} rankingModelProviderId
  */
 ComponentLLMSStatus.prototype.rankingModelProviderId = undefined;
 
 /**
- * @member {Object} imagesModelProviderId
+ * @member {String} imagesModelProviderId
  */
 ComponentLLMSStatus.prototype.imagesModelProviderId = undefined;
 
 /**
- * @member {Object} ttsModelProviderId
+ * @member {String} ttsModelProviderId
  */
 ComponentLLMSStatus.prototype.ttsModelProviderId = undefined;
 
 /**
- * @member {Object} transcriptModelProviderId
+ * @member {String} transcriptModelProviderId
  */
 ComponentLLMSStatus.prototype.transcriptModelProviderId = undefined;
 

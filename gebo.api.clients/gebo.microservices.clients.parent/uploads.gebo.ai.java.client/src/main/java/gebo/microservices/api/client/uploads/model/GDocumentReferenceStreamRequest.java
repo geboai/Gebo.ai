@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GDocumentReferenceStreamRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-21T14:45:35.047619155+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:53:57.984724919+02:00[Europe/Rome]")
 
 public class GDocumentReferenceStreamRequest {
   /**

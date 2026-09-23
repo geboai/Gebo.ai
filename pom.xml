@@ -67,7 +67,6 @@
 		<module>gebo.systems.parent</module>
 		<module>gebo.ragsystem.parent</module>
 		<module>gebo.architecture.parent</module>
-		<module>gebo.system.ingestion</module>
 		<module>gebo.ui</module>
 		<module>gebo.js-plugins</module>
 		<module>gebo.config</module>

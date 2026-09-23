@@ -39,21 +39,21 @@ export default class GPromptPlaceholderInfo {
     if (data) {
       obj = obj || new GPromptPlaceholderInfo();
       if (data.hasOwnProperty('placeholder'))
-        obj.placeholder = ApiClient.convertToType(data['placeholder'], Object);
+        obj.placeholder = ApiClient.convertToType(data['placeholder'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} placeholder
+ * @member {String} placeholder
  */
 GPromptPlaceholderInfo.prototype.placeholder = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GPromptPlaceholderInfo.prototype.description = undefined;
 

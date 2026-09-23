@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="isEnabled1"></a>
 # **isEnabled1**
-> Object isEnabled1()
+> &#x27;Boolean&#x27; isEnabled1()
 
 
 
@@ -31,7 +31,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**&#x27;Boolean&#x27;**
 
 ### Authorization
 
@@ -44,7 +44,7 @@ No authorization required
 
 <a name="speechText"></a>
 # **speechText**
-> Object speechText(body)
+> &#x27;Blob&#x27; speechText(body)
 
 
 
@@ -71,7 +71,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+**&#x27;Blob&#x27;**
 
 ### Authorization
 

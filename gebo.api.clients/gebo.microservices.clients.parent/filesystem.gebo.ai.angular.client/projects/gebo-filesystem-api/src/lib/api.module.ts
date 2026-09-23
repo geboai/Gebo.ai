@@ -9,7 +9,6 @@ import { FileSystemSharesSettingControllerService } from './api/fileSystemShares
 import { FileSystemsBrowsingControllerService } from './api/fileSystemsBrowsingController.service';
 import { FileSystemsControllerService } from './api/fileSystemsController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
-import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 
@@ -24,7 +23,6 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
     FileSystemsBrowsingControllerService,
     FileSystemsControllerService,
     GenericalPublisherControllerService,
-    IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService,
     JobLauncherControllerService ]
 })

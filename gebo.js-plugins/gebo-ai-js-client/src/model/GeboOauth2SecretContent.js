@@ -44,6 +44,8 @@ export default class GeboOauth2SecretContent {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new GeboOauth2SecretContent();
+      if (data.hasOwnProperty('readOnly'))
+        obj.readOnly = ApiClient.convertToType(data['readOnly'], 'Boolean');
       if (data.hasOwnProperty('providerName'))
         obj.providerName = ApiClient.convertToType(data['providerName'], 'String');
       if (data.hasOwnProperty('clientId'))
@@ -58,6 +60,11 @@ export default class GeboOauth2SecretContent {
     return obj;
   }
 }
+
+/**
+ * @member {Boolean} readOnly
+ */
+GeboOauth2SecretContent.prototype.readOnly = undefined;
 
 /**
  * @member {String} providerName

@@ -10,6 +10,7 @@ Method | HTTP request | Description
 [**getProfileProviderModelCapabilities**](GeboRagChatControllerApi.md#getProfileProviderModelCapabilities) | **GET** /api/users/GeboChatController/getProfileProviderModelCapabilities | 
 [**getVisibleKnowledgeBasesByProfileCode**](GeboRagChatControllerApi.md#getVisibleKnowledgeBasesByProfileCode) | **GET** /api/users/GeboChatController/getVisibleKnowledgeBasesByProfileCode | 
 [**ragChat**](GeboRagChatControllerApi.md#ragChat) | **POST** /api/users/GeboChatController/ragChat | 
+[**resolveForcedDocumentsRef**](GeboRagChatControllerApi.md#resolveForcedDocumentsRef) | **POST** /api/users/GeboChatController/resolveForcedDocumentsRef | 
 [**streamRagResponse**](GeboRagChatControllerApi.md#streamRagResponse) | **POST** /api/users/GeboChatController/streamRagResponse | 
 
 <a name="getChatModelUserInfoByChatProfileCode"></a>
@@ -237,6 +238,46 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**GeboChatResponse**](GeboChatResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="resolveForcedDocumentsRef"></a>
+# **resolveForcedDocumentsRef**
+> [GResponseDocumentRef] resolveForcedDocumentsRef(body)
+
+
+
+### Example
+```javascript
+import {GeboAiClient} from 'gebo.ai.client.js';
+
+let apiInstance = new GeboAiClient.GeboRagChatControllerApi();
+let body = ["body_example"]; // [String] | 
+
+apiInstance.resolveForcedDocumentsRef(body).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**[String]**](String.md)|  | 
+
+### Return type
+
+[**[GResponseDocumentRef]**](GResponseDocumentRef.md)
 
 ### Authorization
 

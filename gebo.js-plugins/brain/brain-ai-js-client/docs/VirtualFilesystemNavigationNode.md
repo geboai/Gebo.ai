@@ -4,5 +4,5 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **value** | [**VFilesystemReference**](VFilesystemReference.md) |  | 
-**selected** | **Object** |  | [optional] 
-**opened** | **Object** |  | [optional] 
+**selected** | **Boolean** |  | [optional] 
+**opened** | **Boolean** |  | [optional] 

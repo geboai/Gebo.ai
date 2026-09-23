@@ -42,6 +42,8 @@ export default class GeboGoogleJsonSecretContent {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new GeboGoogleJsonSecretContent();
+      if (data.hasOwnProperty('readOnly'))
+        obj.readOnly = ApiClient.convertToType(data['readOnly'], 'Boolean');
       if (data.hasOwnProperty('jsonContent'))
         obj.jsonContent = ApiClient.convertToType(data['jsonContent'], 'String');
       if (data.hasOwnProperty('delegatedUser'))
@@ -50,6 +52,11 @@ export default class GeboGoogleJsonSecretContent {
     return obj;
   }
 }
+
+/**
+ * @member {Boolean} readOnly
+ */
+GeboGoogleJsonSecretContent.prototype.readOnly = undefined;
 
 /**
  * @member {String} jsonContent

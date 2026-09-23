@@ -137,7 +137,7 @@ No authorization required
 
 <a name="getPersonalPipelinesChatMenu"></a>
 # **getPersonalPipelinesChatMenu**
-> [PipelineChatMenu] getPersonalPipelinesChatMenu(chatProfileCode, opts)
+> [PipelineChatMenu] getPersonalPipelinesChatMenu(opts)
 
 
 
@@ -146,11 +146,11 @@ No authorization required
 import {GeboAiClient} from 'gebo.ai.client.js';
 
 let apiInstance = new GeboAiClient.GeboChatPipelinesControllerApi();
-let chatProfileCode = "chatProfileCode_example"; // String | 
 let opts = { 
+  'chatProfileCode': "chatProfileCode_example", // String | 
   'pipelineCode': "pipelineCode_example" // String | 
 };
-apiInstance.getPersonalPipelinesChatMenu(chatProfileCode, opts).then((data) => {
+apiInstance.getPersonalPipelinesChatMenu(opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
@@ -162,7 +162,7 @@ apiInstance.getPersonalPipelinesChatMenu(chatProfileCode, opts).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | **String**|  | 
+ **chatProfileCode** | **String**|  | [optional] 
  **pipelineCode** | **String**|  | [optional] 
 
 ### Return type

@@ -3,17 +3,26 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  | [optional] 
-**description** | **Object** |  | [optional] 
-**userModified** | **Object** |  | [optional] 
-**userCreated** | **Object** |  | [optional] 
-**dateModified** | **Object** |  | [optional] 
-**dateCreated** | **Object** |  | [optional] 
-**creationDate** | **Object** |  | [optional] 
-**modificationDate** | **Object** |  | [optional] 
-**version** | **Object** |  | [optional] 
-**contentManagementSystemType** | **Object** |  | [optional] 
-**readonly** | **Object** |  | [optional] 
-**baseUri** | **Object** |  | [optional] 
-**usedCapabilities** | **Object** |  | [optional] 
-**aclAliases** | **Object** |  | [optional] 
+**code** | **String** |  | [optional] 
+**description** | **String** |  | [optional] 
+**userModified** | **String** |  | [optional] 
+**userCreated** | **String** |  | [optional] 
+**dateModified** | **Date** |  | [optional] 
+**dateCreated** | **Date** |  | [optional] 
+**creationDate** | **Date** |  | [optional] 
+**modificationDate** | **Date** |  | [optional] 
+**version** | **String** |  | [optional] 
+**contentManagementSystemType** | **String** |  | [optional] 
+**readonly** | **Boolean** |  | [optional] 
+**baseUri** | **String** |  | [optional] 
+**usedCapabilities** | **[String]** |  | [optional] 
+**aclAliases** | **[Number]** |  | [optional] 
+
+<a name="[UsedCapabilitiesEnum]"></a>
+## Enum: [UsedCapabilitiesEnum]
+
+* `TICKETS_MANAGEMENT` (value: `"TICKETS_MANAGEMENT"`)
+* `DOCUMENTS_MANAGEMENT` (value: `"DOCUMENTS_MANAGEMENT"`)
+* `SOURCE_MANAGEMENT` (value: `"SOURCE_MANAGEMENT"`)
+* `ARTIFACTS_REPOSITORY_MANAGEMENT` (value: `"ARTIFACTS_REPOSITORY_MANAGEMENT"`)
+

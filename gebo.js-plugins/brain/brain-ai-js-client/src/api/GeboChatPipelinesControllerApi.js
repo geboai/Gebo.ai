@@ -13,7 +13,9 @@
  *
  */
 import ApiClient from "../ApiClient";
+import GeboChatMessageEnvelope from '../model/GeboChatMessageEnvelope';
 import GeboChatResponse from '../model/GeboChatResponse';
+import PipelineChatMenu from '../model/PipelineChatMenu';
 import PipelineRequestBody from '../model/PipelineRequestBody';
 
 /**
@@ -40,7 +42,7 @@ export default class GeboChatPipelinesControllerApi {
     /**
      * @param {module:model/PipelineRequestBody} body 
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.pipelineCode 
+     * @param {String} opts.pipelineCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GeboChatResponse} and HTTP response
      */
     executeChatPipelineWithHttpInfo(body, opts) {
@@ -79,7 +81,7 @@ export default class GeboChatPipelinesControllerApi {
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.pipelineCode 
+     * @param {String} opts.pipelineCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/GeboChatResponse}
      */
     executeChatPipeline(body, opts) {
@@ -140,8 +142,8 @@ export default class GeboChatPipelinesControllerApi {
 
 
     /**
-     * @param {Object} chatProfileCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} chatProfileCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/PipelineChatMenu>} and HTTP response
      */
     getDefaultPersonalPipelinesChatMenuWithHttpInfo(chatProfileCode) {
       
@@ -167,7 +169,7 @@ export default class GeboChatPipelinesControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [PipelineChatMenu];
 
       return this.apiClient.callApi(
         '/api/users/GeboChatPipelinesController/defaultPersonalPipelinesChatMenu', 'GET',
@@ -178,7 +180,7 @@ export default class GeboChatPipelinesControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} chatProfileCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/PipelineChatMenu>}
      */
     getDefaultPersonalPipelinesChatMenu(chatProfileCode) {
       return this.getDefaultPersonalPipelinesChatMenuWithHttpInfo(chatProfileCode)
@@ -189,24 +191,20 @@ export default class GeboChatPipelinesControllerApi {
 
 
     /**
-     * @param {Object} chatProfileCode 
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.pipelineCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} opts.chatProfileCode 
+     * @param {String} opts.pipelineCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/PipelineChatMenu>} and HTTP response
      */
-    getPersonalPipelinesChatMenuWithHttpInfo(chatProfileCode, opts) {
+    getPersonalPipelinesChatMenuWithHttpInfo(opts) {
       opts = opts || {};
       let postBody = null;
-      // verify the required parameter 'chatProfileCode' is set
-      if (chatProfileCode === undefined || chatProfileCode === null) {
-        throw new Error("Missing the required parameter 'chatProfileCode' when calling getPersonalPipelinesChatMenu");
-      }
 
       let pathParams = {
         
       };
       let queryParams = {
-        'pipelineCode': opts['pipelineCode'],'chatProfileCode': chatProfileCode
+        'chatProfileCode': opts['chatProfileCode'],'pipelineCode': opts['pipelineCode']
       };
       let headerParams = {
         
@@ -218,7 +216,7 @@ export default class GeboChatPipelinesControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [PipelineChatMenu];
 
       return this.apiClient.callApi(
         '/api/users/GeboChatPipelinesController/personalPipelinesChatMenu', 'GET',
@@ -228,13 +226,13 @@ export default class GeboChatPipelinesControllerApi {
     }
 
     /**
-     * @param {<&vendorExtensions.x-jsdoc-type>} chatProfileCode 
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.pipelineCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @param {String} opts.chatProfileCode 
+     * @param {String} opts.pipelineCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/PipelineChatMenu>}
      */
-    getPersonalPipelinesChatMenu(chatProfileCode, opts) {
-      return this.getPersonalPipelinesChatMenuWithHttpInfo(chatProfileCode, opts)
+    getPersonalPipelinesChatMenu(opts) {
+      return this.getPersonalPipelinesChatMenuWithHttpInfo(opts)
         .then(function(response_and_data) {
           return response_and_data.data;
         });
@@ -242,7 +240,7 @@ export default class GeboChatPipelinesControllerApi {
 
 
     /**
-     * @param {Object} userChatContextCode 
+     * @param {String} userChatContextCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
     stopChatPipelineWithHttpInfo(userChatContextCode) {
@@ -293,8 +291,8 @@ export default class GeboChatPipelinesControllerApi {
     /**
      * @param {module:model/PipelineRequestBody} body 
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.pipelineCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} opts.pipelineCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GeboChatMessageEnvelope>} and HTTP response
      */
     streamChatPipelineWithHttpInfo(body, opts) {
       opts = opts || {};
@@ -320,7 +318,7 @@ export default class GeboChatPipelinesControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['text/event-stream'];
-      let returnType = Object;
+      let returnType = [GeboChatMessageEnvelope];
 
       return this.apiClient.callApi(
         '/api/users/GeboChatPipelinesController/streamChatPipeline', 'POST',
@@ -332,8 +330,8 @@ export default class GeboChatPipelinesControllerApi {
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.pipelineCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @param {String} opts.pipelineCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GeboChatMessageEnvelope>}
      */
     streamChatPipeline(body, opts) {
       return this.streamChatPipelineWithHttpInfo(body, opts)
@@ -345,7 +343,7 @@ export default class GeboChatPipelinesControllerApi {
 
     /**
      * @param {module:model/PipelineRequestBody} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GeboChatMessageEnvelope>} and HTTP response
      */
     streamDefaultChatPipelineWithHttpInfo(body) {
       
@@ -371,7 +369,7 @@ export default class GeboChatPipelinesControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['text/event-stream'];
-      let returnType = Object;
+      let returnType = [GeboChatMessageEnvelope];
 
       return this.apiClient.callApi(
         '/api/users/GeboChatPipelinesController/streamDefaultChatPipeline', 'POST',
@@ -382,7 +380,7 @@ export default class GeboChatPipelinesControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GeboChatMessageEnvelope>}
      */
     streamDefaultChatPipeline(body) {
       return this.streamDefaultChatPipelineWithHttpInfo(body)

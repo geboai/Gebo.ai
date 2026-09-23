@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**accessibleGroups** | **Object** |  | [optional] 
-**accessibleUsers** | **Object** |  | [optional] 
-**accessibleToAll** | **Object** |  | [optional] 
-**dataSourceId** | **Object** |  | [optional] 
+**accessibleGroups** | **[String]** |  | [optional] 
+**accessibleUsers** | **[String]** |  | [optional] 
+**accessibleToAll** | **Boolean** |  | [optional] 
+**dataSourceId** | **String** |  | [optional] 

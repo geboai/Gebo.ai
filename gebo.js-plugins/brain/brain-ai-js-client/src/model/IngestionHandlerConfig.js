@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import IngestionFileType from './IngestionFileType';
 
 /**
  * The IngestionHandlerConfig model module.
@@ -39,21 +40,21 @@ export default class IngestionHandlerConfig {
     if (data) {
       obj = obj || new IngestionHandlerConfig();
       if (data.hasOwnProperty('id'))
-        obj.id = ApiClient.convertToType(data['id'], Object);
+        obj.id = ApiClient.convertToType(data['id'], 'String');
       if (data.hasOwnProperty('fileTypes'))
-        obj.fileTypes = ApiClient.convertToType(data['fileTypes'], Object);
+        obj.fileTypes = ApiClient.convertToType(data['fileTypes'], [IngestionFileType]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} id
+ * @member {String} id
  */
 IngestionHandlerConfig.prototype.id = undefined;
 
 /**
- * @member {Object} fileTypes
+ * @member {Array.<module:model/IngestionFileType>} fileTypes
  */
 IngestionHandlerConfig.prototype.fileTypes = undefined;
 

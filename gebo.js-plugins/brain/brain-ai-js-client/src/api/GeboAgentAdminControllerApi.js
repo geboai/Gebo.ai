@@ -14,6 +14,8 @@
  */
 import ApiClient from "../ApiClient";
 import GAgentConfig from '../model/GAgentConfig';
+import GBaseObject from '../model/GBaseObject';
+import GPromptTemplateConfig from '../model/GPromptTemplateConfig';
 
 /**
 * GeboAgentAdminController service.
@@ -86,7 +88,7 @@ export default class GeboAgentAdminControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GAgentConfig} and HTTP response
      */
     getAgentByCodeWithHttpInfo(code) {
@@ -135,7 +137,7 @@ export default class GeboAgentAdminControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GBaseObject>} and HTTP response
      */
     getAgentsWithHttpInfo() {
       
@@ -157,7 +159,7 @@ export default class GeboAgentAdminControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GBaseObject];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAgentAdminController/getAgents', 'GET',
@@ -167,7 +169,7 @@ export default class GeboAgentAdminControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GBaseObject>}
      */
     getAgents() {
       return this.getAgentsWithHttpInfo()
@@ -178,7 +180,7 @@ export default class GeboAgentAdminControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GBaseObject>} and HTTP response
      */
     getAgentsChoicesWithHttpInfo() {
       
@@ -200,7 +202,7 @@ export default class GeboAgentAdminControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GBaseObject];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAgentAdminController/getAgentsChoices', 'GET',
@@ -210,7 +212,7 @@ export default class GeboAgentAdminControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GBaseObject>}
      */
     getAgentsChoices() {
       return this.getAgentsChoicesWithHttpInfo()
@@ -221,8 +223,8 @@ export default class GeboAgentAdminControllerApi {
 
 
     /**
-     * @param {Object} agentId 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} agentId 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GPromptTemplateConfig>} and HTTP response
      */
     getPromptTemplatesByAgentIdWithHttpInfo(agentId) {
       
@@ -248,7 +250,7 @@ export default class GeboAgentAdminControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GPromptTemplateConfig];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAgentAdminController/getPromptTemplateByAgentId', 'GET',
@@ -259,7 +261,7 @@ export default class GeboAgentAdminControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} agentId 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GPromptTemplateConfig>}
      */
     getPromptTemplatesByAgentId(agentId) {
       return this.getPromptTemplatesByAgentIdWithHttpInfo(agentId)

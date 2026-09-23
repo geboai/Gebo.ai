@@ -79,6 +79,8 @@ export default class GGoogleDriveProjectEndpoint {
         obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], 'String');
       if (data.hasOwnProperty('aclAliases'))
         obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
+      if (data.hasOwnProperty('personalData'))
+        obj.personalData = ApiClient.convertToType(data['personalData'], 'Boolean');
       if (data.hasOwnProperty('paths'))
         obj.paths = ApiClient.convertToType(data['paths'], [VFilesystemReference]);
       if (data.hasOwnProperty('driveSystemCode'))
@@ -213,6 +215,11 @@ GGoogleDriveProjectEndpoint.prototype.objectSpaceType = undefined;
  * @member {Array.<Number>} aclAliases
  */
 GGoogleDriveProjectEndpoint.prototype.aclAliases = undefined;
+
+/**
+ * @member {Boolean} personalData
+ */
+GGoogleDriveProjectEndpoint.prototype.personalData = undefined;
 
 /**
  * @member {Array.<module:model/VFilesystemReference>} paths

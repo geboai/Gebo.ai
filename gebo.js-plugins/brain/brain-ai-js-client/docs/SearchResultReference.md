@@ -3,10 +3,10 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**uri** | **Object** |  | [optional] 
-**name** | **Object** |  | [optional] 
-**contentType** | **Object** |  | [optional] 
-**extension** | **Object** |  | [optional] 
-**size** | **Object** |  | [optional] 
-**title** | **Object** |  | [optional] 
-**id** | **Object** |  | [optional] 
+**uri** | **String** |  | [optional] 
+**name** | **String** |  | [optional] 
+**contentType** | **String** |  | [optional] 
+**extension** | **String** |  | [optional] 
+**size** | **Number** |  | [optional] 
+**title** | **String** |  | [optional] 
+**id** | **String** |  | [optional] 

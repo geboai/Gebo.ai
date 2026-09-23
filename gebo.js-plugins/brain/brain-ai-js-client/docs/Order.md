@@ -3,9 +3,24 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**direction** | **Object** |  | [optional] 
-**property** | **Object** |  | [optional] 
-**ignoreCase** | **Object** |  | [optional] 
-**nullHandling** | **Object** |  | [optional] 
-**descending** | **Object** |  | [optional] 
-**ascending** | **Object** |  | [optional] 
+**direction** | **String** |  | [optional] 
+**property** | **String** |  | [optional] 
+**ignoreCase** | **Boolean** |  | [optional] 
+**nullHandling** | **String** |  | [optional] 
+**ascending** | **Boolean** |  | [optional] 
+**descending** | **Boolean** |  | [optional] 
+
+<a name="DirectionEnum"></a>
+## Enum: DirectionEnum
+
+* `ASC` (value: `"ASC"`)
+* `DESC` (value: `"DESC"`)
+
+
+<a name="NullHandlingEnum"></a>
+## Enum: NullHandlingEnum
+
+* `NATIVE` (value: `"NATIVE"`)
+* `NULLS_FIRST` (value: `"NULLS_FIRST"`)
+* `NULLS_LAST` (value: `"NULLS_LAST"`)
+

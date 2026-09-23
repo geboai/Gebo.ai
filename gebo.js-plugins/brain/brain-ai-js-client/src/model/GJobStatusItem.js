@@ -39,80 +39,50 @@ export default class GJobStatusItem {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new GJobStatusItem();
-      if (data.hasOwnProperty('jobType'))
-        obj.jobType = ApiClient.convertToType(data['jobType'], Object);
-      if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
-      if (data.hasOwnProperty('finished'))
-        obj.finished = ApiClient.convertToType(data['finished'], Object);
-      if (data.hasOwnProperty('endDateTime'))
-        obj.endDateTime = ApiClient.convertToType(data['endDateTime'], Object);
-      if (data.hasOwnProperty('startDateTime'))
-        obj.startDateTime = ApiClient.convertToType(data['startDateTime'], Object);
-      if (data.hasOwnProperty('processing'))
-        obj.processing = ApiClient.convertToType(data['processing'], Object);
-      if (data.hasOwnProperty('error'))
-        obj.error = ApiClient.convertToType(data['error'], Object);
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
+      if (data.hasOwnProperty('code'))
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('workflowType'))
-        obj.workflowType = ApiClient.convertToType(data['workflowType'], Object);
+        obj.workflowType = ApiClient.convertToType(data['workflowType'], 'String');
       if (data.hasOwnProperty('workflowId'))
-        obj.workflowId = ApiClient.convertToType(data['workflowId'], Object);
+        obj.workflowId = ApiClient.convertToType(data['workflowId'], 'String');
       if (data.hasOwnProperty('projectEndpointReference'))
         obj.projectEndpointReference = GObjectRefGProjectEndpoint.constructFromObject(data['projectEndpointReference']);
+      if (data.hasOwnProperty('error'))
+        obj.error = ApiClient.convertToType(data['error'], 'Boolean');
+      if (data.hasOwnProperty('startDateTime'))
+        obj.startDateTime = ApiClient.convertToType(data['startDateTime'], 'Date');
+      if (data.hasOwnProperty('endDateTime'))
+        obj.endDateTime = ApiClient.convertToType(data['endDateTime'], 'Date');
+      if (data.hasOwnProperty('processing'))
+        obj.processing = ApiClient.convertToType(data['processing'], 'Boolean');
+      if (data.hasOwnProperty('finished'))
+        obj.finished = ApiClient.convertToType(data['finished'], 'Boolean');
+      if (data.hasOwnProperty('jobType'))
+        obj.jobType = ApiClient.convertToType(data['jobType'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} jobType
- */
-GJobStatusItem.prototype.jobType = undefined;
-
-/**
- * @member {Object} code
- */
-GJobStatusItem.prototype.code = undefined;
-
-/**
- * @member {Object} finished
- */
-GJobStatusItem.prototype.finished = undefined;
-
-/**
- * @member {Object} endDateTime
- */
-GJobStatusItem.prototype.endDateTime = undefined;
-
-/**
- * @member {Object} startDateTime
- */
-GJobStatusItem.prototype.startDateTime = undefined;
-
-/**
- * @member {Object} processing
- */
-GJobStatusItem.prototype.processing = undefined;
-
-/**
- * @member {Object} error
- */
-GJobStatusItem.prototype.error = undefined;
-
-/**
- * @member {Object} description
+ * @member {String} description
  */
 GJobStatusItem.prototype.description = undefined;
 
 /**
- * @member {Object} workflowType
+ * @member {String} code
+ */
+GJobStatusItem.prototype.code = undefined;
+
+/**
+ * @member {String} workflowType
  */
 GJobStatusItem.prototype.workflowType = undefined;
 
 /**
- * @member {Object} workflowId
+ * @member {String} workflowId
  */
 GJobStatusItem.prototype.workflowId = undefined;
 
@@ -120,4 +90,58 @@ GJobStatusItem.prototype.workflowId = undefined;
  * @member {module:model/GObjectRefGProjectEndpoint} projectEndpointReference
  */
 GJobStatusItem.prototype.projectEndpointReference = undefined;
+
+/**
+ * @member {Boolean} error
+ */
+GJobStatusItem.prototype.error = undefined;
+
+/**
+ * @member {Date} startDateTime
+ */
+GJobStatusItem.prototype.startDateTime = undefined;
+
+/**
+ * @member {Date} endDateTime
+ */
+GJobStatusItem.prototype.endDateTime = undefined;
+
+/**
+ * @member {Boolean} processing
+ */
+GJobStatusItem.prototype.processing = undefined;
+
+/**
+ * @member {Boolean} finished
+ */
+GJobStatusItem.prototype.finished = undefined;
+
+/**
+ * Allowed values for the <code>jobType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GJobStatusItem.JobTypeEnum = {
+  /**
+   * value: "CONTENTS_READING"
+   * @const
+   */
+  CONTENTS_READING: "CONTENTS_READING",
+
+  /**
+   * value: "VECTORIZING_CONTENTS"
+   * @const
+   */
+  VECTORIZING_CONTENTS: "VECTORIZING_CONTENTS",
+
+  /**
+   * value: "CONTENTS_READING_VECTORIZING"
+   * @const
+   */
+  CONTENTS_READING_VECTORIZING: "CONTENTS_READING_VECTORIZING"
+};
+/**
+ * @member {module:model/GJobStatusItem.JobTypeEnum} jobType
+ */
+GJobStatusItem.prototype.jobType = undefined;
 

@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getRuntimeConfiguredTranscriptModels"></a>
 # **getRuntimeConfiguredTranscriptModels**
-> Object getRuntimeConfiguredTranscriptModels(opts)
+> [ConfigurationEntryGBaseTranscriptModelConfig] getRuntimeConfiguredTranscriptModels(opts)
 
 
 
@@ -19,7 +19,7 @@ import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.TranscriptModelsControllerApi();
 let opts = { 
-  'modelTypeCode': null // Object | 
+  'modelTypeCode': "modelTypeCode_example" // String | 
 };
 apiInstance.getRuntimeConfiguredTranscriptModels(opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -33,11 +33,11 @@ apiInstance.getRuntimeConfiguredTranscriptModels(opts).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional] 
+ **modelTypeCode** | **String**|  | [optional] 
 
 ### Return type
 
-**Object**
+[**[ConfigurationEntryGBaseTranscriptModelConfig]**](ConfigurationEntryGBaseTranscriptModelConfig.md)
 
 ### Authorization
 
@@ -50,7 +50,7 @@ No authorization required
 
 <a name="getTranscriptModelTypes"></a>
 # **getTranscriptModelTypes**
-> Object getTranscriptModelTypes()
+> [GTranscriptModelType] getTranscriptModelTypes()
 
 
 
@@ -72,7 +72,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GTranscriptModelType]**](GTranscriptModelType.md)
 
 ### Authorization
 

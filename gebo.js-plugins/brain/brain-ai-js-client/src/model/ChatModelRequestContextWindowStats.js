@@ -39,91 +39,91 @@ export default class ChatModelRequestContextWindowStats {
     if (data) {
       obj = obj || new ChatModelRequestContextWindowStats();
       if (data.hasOwnProperty('contextWindowLengthNTokens'))
-        obj.contextWindowLengthNTokens = ApiClient.convertToType(data['contextWindowLengthNTokens'], Object);
+        obj.contextWindowLengthNTokens = ApiClient.convertToType(data['contextWindowLengthNTokens'], 'Number');
       if (data.hasOwnProperty('availableNTokens'))
-        obj.availableNTokens = ApiClient.convertToType(data['availableNTokens'], Object);
+        obj.availableNTokens = ApiClient.convertToType(data['availableNTokens'], 'Number');
       if (data.hasOwnProperty('historyNTokens'))
-        obj.historyNTokens = ApiClient.convertToType(data['historyNTokens'], Object);
+        obj.historyNTokens = ApiClient.convertToType(data['historyNTokens'], 'Number');
       if (data.hasOwnProperty('queryNTokens'))
-        obj.queryNTokens = ApiClient.convertToType(data['queryNTokens'], Object);
+        obj.queryNTokens = ApiClient.convertToType(data['queryNTokens'], 'Number');
       if (data.hasOwnProperty('documentsNTokens'))
-        obj.documentsNTokens = ApiClient.convertToType(data['documentsNTokens'], Object);
+        obj.documentsNTokens = ApiClient.convertToType(data['documentsNTokens'], 'Number');
       if (data.hasOwnProperty('contextDocumentsNTokens'))
-        obj.contextDocumentsNTokens = ApiClient.convertToType(data['contextDocumentsNTokens'], Object);
+        obj.contextDocumentsNTokens = ApiClient.convertToType(data['contextDocumentsNTokens'], 'Number');
       if (data.hasOwnProperty('uploadedDocumentsNTokens'))
-        obj.uploadedDocumentsNTokens = ApiClient.convertToType(data['uploadedDocumentsNTokens'], Object);
+        obj.uploadedDocumentsNTokens = ApiClient.convertToType(data['uploadedDocumentsNTokens'], 'Number');
       if (data.hasOwnProperty('availableSharePerc'))
-        obj.availableSharePerc = ApiClient.convertToType(data['availableSharePerc'], Object);
+        obj.availableSharePerc = ApiClient.convertToType(data['availableSharePerc'], 'Number');
       if (data.hasOwnProperty('historySharePerc'))
-        obj.historySharePerc = ApiClient.convertToType(data['historySharePerc'], Object);
+        obj.historySharePerc = ApiClient.convertToType(data['historySharePerc'], 'Number');
       if (data.hasOwnProperty('documentsSharePerc'))
-        obj.documentsSharePerc = ApiClient.convertToType(data['documentsSharePerc'], Object);
+        obj.documentsSharePerc = ApiClient.convertToType(data['documentsSharePerc'], 'Number');
       if (data.hasOwnProperty('contextDocumentsSharePerc'))
-        obj.contextDocumentsSharePerc = ApiClient.convertToType(data['contextDocumentsSharePerc'], Object);
+        obj.contextDocumentsSharePerc = ApiClient.convertToType(data['contextDocumentsSharePerc'], 'Number');
       if (data.hasOwnProperty('uploadedDocumentsSharePerc'))
-        obj.uploadedDocumentsSharePerc = ApiClient.convertToType(data['uploadedDocumentsSharePerc'], Object);
+        obj.uploadedDocumentsSharePerc = ApiClient.convertToType(data['uploadedDocumentsSharePerc'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} contextWindowLengthNTokens
+ * @member {Number} contextWindowLengthNTokens
  */
 ChatModelRequestContextWindowStats.prototype.contextWindowLengthNTokens = undefined;
 
 /**
- * @member {Object} availableNTokens
+ * @member {Number} availableNTokens
  */
 ChatModelRequestContextWindowStats.prototype.availableNTokens = undefined;
 
 /**
- * @member {Object} historyNTokens
+ * @member {Number} historyNTokens
  */
 ChatModelRequestContextWindowStats.prototype.historyNTokens = undefined;
 
 /**
- * @member {Object} queryNTokens
+ * @member {Number} queryNTokens
  */
 ChatModelRequestContextWindowStats.prototype.queryNTokens = undefined;
 
 /**
- * @member {Object} documentsNTokens
+ * @member {Number} documentsNTokens
  */
 ChatModelRequestContextWindowStats.prototype.documentsNTokens = undefined;
 
 /**
- * @member {Object} contextDocumentsNTokens
+ * @member {Number} contextDocumentsNTokens
  */
 ChatModelRequestContextWindowStats.prototype.contextDocumentsNTokens = undefined;
 
 /**
- * @member {Object} uploadedDocumentsNTokens
+ * @member {Number} uploadedDocumentsNTokens
  */
 ChatModelRequestContextWindowStats.prototype.uploadedDocumentsNTokens = undefined;
 
 /**
- * @member {Object} availableSharePerc
+ * @member {Number} availableSharePerc
  */
 ChatModelRequestContextWindowStats.prototype.availableSharePerc = undefined;
 
 /**
- * @member {Object} historySharePerc
+ * @member {Number} historySharePerc
  */
 ChatModelRequestContextWindowStats.prototype.historySharePerc = undefined;
 
 /**
- * @member {Object} documentsSharePerc
+ * @member {Number} documentsSharePerc
  */
 ChatModelRequestContextWindowStats.prototype.documentsSharePerc = undefined;
 
 /**
- * @member {Object} contextDocumentsSharePerc
+ * @member {Number} contextDocumentsSharePerc
  */
 ChatModelRequestContextWindowStats.prototype.contextDocumentsSharePerc = undefined;
 
 /**
- * @member {Object} uploadedDocumentsSharePerc
+ * @member {Number} uploadedDocumentsSharePerc
  */
 ChatModelRequestContextWindowStats.prototype.uploadedDocumentsSharePerc = undefined;
 

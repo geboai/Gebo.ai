@@ -14,6 +14,7 @@
  */
 import ApiClient from "../ApiClient";
 import GenericOpenAIAPIEmbeddingModelConfig from '../model/GenericOpenAIAPIEmbeddingModelConfig';
+import GenericOpenAIEmbeddingModelTypeConfig from '../model/GenericOpenAIEmbeddingModelTypeConfig';
 import OperationStatusBoolean from '../model/OperationStatusBoolean';
 import OperationStatusGenericOpenAIAPIEmbeddingModelConfig from '../model/OperationStatusGenericOpenAIAPIEmbeddingModelConfig';
 import OperationStatusListGenericOpenAIAPIEmbeddingModelChoice from '../model/OperationStatusListGenericOpenAIAPIEmbeddingModelChoice';
@@ -89,7 +90,7 @@ export default class GenericOpenAiapiEmbeddingModelsConfigurationControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GenericOpenAIAPIEmbeddingModelConfig} and HTTP response
      */
     findGenericOpenAIAPIEmbeddingModelConfigByCodeWithHttpInfo(code) {
@@ -187,7 +188,7 @@ export default class GenericOpenAiapiEmbeddingModelsConfigurationControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GenericOpenAIEmbeddingModelTypeConfig>} and HTTP response
      */
     getGenericOpenAIEmbeddingModelTypesWithHttpInfo() {
       
@@ -209,7 +210,7 @@ export default class GenericOpenAiapiEmbeddingModelsConfigurationControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GenericOpenAIEmbeddingModelTypeConfig];
 
       return this.apiClient.callApi(
         '/api/admin/GenericOpenAIAPIEmbeddingModelsConfigurationController/getGenericOpenAIEmbeddingModelTypes', 'GET',
@@ -219,7 +220,7 @@ export default class GenericOpenAiapiEmbeddingModelsConfigurationControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GenericOpenAIEmbeddingModelTypeConfig>}
      */
     getGenericOpenAIEmbeddingModelTypes() {
       return this.getGenericOpenAIEmbeddingModelTypesWithHttpInfo()

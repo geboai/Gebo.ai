@@ -37,7 +37,6 @@ import { InputTextModule } from "primeng/inputtext";
 import { TextareaModule } from "primeng/textarea";
 
 import { TableModule } from 'primeng/table';
-import { VectorStoreWizardComponent, VectorStoreWizardService } from "./vectorstore-wizard.component";
 import { CheckboxModule } from "primeng/checkbox";
 import { WorkFolderWizardComponent, WorkFolderWizardEnabledService, WorkFolderWizardStatusService } from "./work-folder-wizard.component";
 import { SharedFilesystemAlreadySetupService, SharedFilesystemEnabledService, SharedFilesystemWizardComponent } from "./shared-filesystem-wizard.component";
@@ -115,23 +114,6 @@ const geboWorkDirectorySetupSection: SetupWizardsSection = {
     mandatory: true
 };
 
-/**
- * Setup section for vector database configuration.
- * This mandatory section requires the work directory to be configured first.
- * It allows users to choose between different vector database options like local vector database,
- * Qdrant or MongoDB Atlas for RAG services.
- */
-const VectorStoreSetupSection: SetupWizardsSection = {
-    orderEntry: 4,
-    requredStepsIds: ["geboWorkDirectorySetupSection"],
-    label: "Vector database configuration",
-    description: "A vector database has to be configured for Gebo.ai to provide retrieval-augmented generation services, you can choose between a local vector database, Qdrant or Mongo Atlas",
-    enabledService: AlwaysTrueStatusService,
-    setupCompletedService: VectorStoreWizardService,
-    wizardComponent: VectorStoreWizardComponent,
-    wizardSectionId: "VectorStoreSetupSection",
-    mandatory: true
-};
 
 
 const oauth2SetupSection: SetupWizardsSection = {
@@ -151,7 +133,7 @@ const oauth2SetupSection: SetupWizardsSection = {
  */
 const adminLLMSSetupSection: SetupWizardsSection = {
     orderEntry: 6,
-    requredStepsIds: ["VectorStoreSetupSection"],
+    requredStepsIds: [],
     label: "Large language models setup",
     description: "Configure various llms with cloud or local/lan infrastructure backend services, at least one chat model and one embedding model is to be configured to let the software work properly.",
     enabledService: AlwaysTrueStatusService,
@@ -164,7 +146,7 @@ const adminLLMSSetupSection: SetupWizardsSection = {
 };
 const graphRagBaseSetupSection: SetupWizardsSection = {
     orderEntry: 7,
-    requredStepsIds: ["VectorStoreSetupSection", "adminLLMSSetupSection"],
+    requredStepsIds: ["adminLLMSSetupSection"],
     label: "Graph rag/Knowledge extraction setup",
     description: "Configure graph rag and knowledge extraction subsystem",
     installedModule: Neo4jModuleEnabledService,
@@ -294,7 +276,7 @@ const webdavSystemSetupSection: SetupWizardsSection = {
  */
 const firstKnowledgeBaseSetupSection: SetupWizardsSection = {
     orderEntry: 13,
-    requredStepsIds: ["geboWorkDirectorySetupSection", "VectorStoreSetupSection", "adminLLMSSetupSection"],
+    requredStepsIds: ["geboWorkDirectorySetupSection", "adminLLMSSetupSection"],
     label: "Configure at least a knowledge base",
     description: "Configure at least a knowledge base to let your users enjoy the retrieval-augmented generation services of Gebo.ai",
 
@@ -312,7 +294,7 @@ const firstKnowledgeBaseSetupSection: SetupWizardsSection = {
  */
 const firstChatProfileBaseSetupSection: SetupWizardsSection = {
     orderEntry: 14,
-    requredStepsIds: ["firstKnowledgeBaseSetupSection", "geboWorkDirectorySetupSection", "VectorStoreSetupSection", "adminLLMSSetupSection"],
+    requredStepsIds: ["firstKnowledgeBaseSetupSection", "geboWorkDirectorySetupSection", "adminLLMSSetupSection"],
     label: "Configure at least a \"R.A.G.\" chat profile",
     description: "Configure at least a retrieval-augmented chat profile for your users based on one of your configured knowledge bases",
     enabledService: AlwaysTrueStatusService,
@@ -438,13 +420,12 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
  */
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabsModule, GeboAIApiKeyModule, GeboAINotificationsModule, SelectModule, DatePickerModule, StepsModule],
-    declarations: [LLMSetupWizardComponent, LLMSEasySetupWizardComponent, LLMSEasyIntroStepComponent, LLMSEasyProviderStepComponent, LLMSEasyModelsStepComponent, LLMSEasySummaryStepComponent, LLMSEasyClassStatusComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, A2AImportWizardComponent, A2AExportWizardComponent, GeneratedAdminApiKeyWizardComponent],
+    declarations: [LLMSetupWizardComponent, LLMSEasySetupWizardComponent, LLMSEasyIntroStepComponent, LLMSEasyProviderStepComponent, LLMSEasyModelsStepComponent, LLMSEasySummaryStepComponent, LLMSEasyClassStatusComponent, SetupWizardsComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, A2AImportWizardComponent, A2AExportWizardComponent, GeneratedAdminApiKeyWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
         Oauth2SetupEnabledService,
         LLMSetupWizardService,
-        VectorStoreWizardService,
         WorkFolderWizardEnabledService,
         WorkFolderWizardStatusService,
         SharedFilesystemEnabledService,
@@ -479,7 +460,6 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: geboWorkDirectorySetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: oauth2SetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: adminLLMSSetupSection, multi: true },
-        { provide: WIZARD_SECTION, useValue: VectorStoreSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: graphRagBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: sharedFileSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: atlassianConfluenceSystemSetupSection, multi: true },

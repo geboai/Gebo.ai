@@ -39,56 +39,56 @@ export default class SearchResultReference {
     if (data) {
       obj = obj || new SearchResultReference();
       if (data.hasOwnProperty('uri'))
-        obj.uri = ApiClient.convertToType(data['uri'], Object);
+        obj.uri = ApiClient.convertToType(data['uri'], 'String');
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('contentType'))
-        obj.contentType = ApiClient.convertToType(data['contentType'], Object);
+        obj.contentType = ApiClient.convertToType(data['contentType'], 'String');
       if (data.hasOwnProperty('extension'))
-        obj.extension = ApiClient.convertToType(data['extension'], Object);
+        obj.extension = ApiClient.convertToType(data['extension'], 'String');
       if (data.hasOwnProperty('size'))
-        obj.size = ApiClient.convertToType(data['size'], Object);
+        obj.size = ApiClient.convertToType(data['size'], 'Number');
       if (data.hasOwnProperty('title'))
-        obj.title = ApiClient.convertToType(data['title'], Object);
+        obj.title = ApiClient.convertToType(data['title'], 'String');
       if (data.hasOwnProperty('id'))
-        obj.id = ApiClient.convertToType(data['id'], Object);
+        obj.id = ApiClient.convertToType(data['id'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} uri
+ * @member {String} uri
  */
 SearchResultReference.prototype.uri = undefined;
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 SearchResultReference.prototype.name = undefined;
 
 /**
- * @member {Object} contentType
+ * @member {String} contentType
  */
 SearchResultReference.prototype.contentType = undefined;
 
 /**
- * @member {Object} extension
+ * @member {String} extension
  */
 SearchResultReference.prototype.extension = undefined;
 
 /**
- * @member {Object} size
+ * @member {Number} size
  */
 SearchResultReference.prototype.size = undefined;
 
 /**
- * @member {Object} title
+ * @member {String} title
  */
 SearchResultReference.prototype.title = undefined;
 
 /**
- * @member {Object} id
+ * @member {String} id
  */
 SearchResultReference.prototype.id = undefined;
 

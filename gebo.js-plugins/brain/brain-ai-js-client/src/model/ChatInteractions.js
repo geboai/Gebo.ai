@@ -43,13 +43,13 @@ export default class ChatInteractions {
       if (data.hasOwnProperty('request'))
         obj.request = GeboChatRequest.constructFromObject(data['request']);
       if (data.hasOwnProperty('requestNTokens'))
-        obj.requestNTokens = ApiClient.convertToType(data['requestNTokens'], Object);
+        obj.requestNTokens = ApiClient.convertToType(data['requestNTokens'], 'Number');
       if (data.hasOwnProperty('response'))
         obj.response = GeboTemplatedChatResponse.constructFromObject(data['response']);
       if (data.hasOwnProperty('responseNTokens'))
-        obj.responseNTokens = ApiClient.convertToType(data['responseNTokens'], Object);
+        obj.responseNTokens = ApiClient.convertToType(data['responseNTokens'], 'Number');
       if (data.hasOwnProperty('tokensSize'))
-        obj.tokensSize = ApiClient.convertToType(data['tokensSize'], Object);
+        obj.tokensSize = ApiClient.convertToType(data['tokensSize'], 'Number');
     }
     return obj;
   }
@@ -61,7 +61,7 @@ export default class ChatInteractions {
 ChatInteractions.prototype.request = undefined;
 
 /**
- * @member {Object} requestNTokens
+ * @member {Number} requestNTokens
  */
 ChatInteractions.prototype.requestNTokens = undefined;
 
@@ -71,12 +71,12 @@ ChatInteractions.prototype.requestNTokens = undefined;
 ChatInteractions.prototype.response = undefined;
 
 /**
- * @member {Object} responseNTokens
+ * @member {Number} responseNTokens
  */
 ChatInteractions.prototype.responseNTokens = undefined;
 
 /**
- * @member {Object} tokensSize
+ * @member {Number} tokensSize
  */
 ChatInteractions.prototype.tokensSize = undefined;
 

@@ -39,56 +39,86 @@ export default class GContentManagementSystemType {
     if (data) {
       obj = obj || new GContentManagementSystemType();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('capabilities'))
-        obj.capabilities = ApiClient.convertToType(data['capabilities'], Object);
+        obj.capabilities = ApiClient.convertToType(data['capabilities'], ['String']);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GContentManagementSystemType.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GContentManagementSystemType.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GContentManagementSystemType.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GContentManagementSystemType.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GContentManagementSystemType.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GContentManagementSystemType.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} capabilities
+ * Allowed values for the <code>capabilities</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GContentManagementSystemType.CapabilitiesEnum = {
+  /**
+   * value: "TICKETS_MANAGEMENT"
+   * @const
+   */
+  TICKETS_MANAGEMENT: "TICKETS_MANAGEMENT",
+
+  /**
+   * value: "DOCUMENTS_MANAGEMENT"
+   * @const
+   */
+  DOCUMENTS_MANAGEMENT: "DOCUMENTS_MANAGEMENT",
+
+  /**
+   * value: "SOURCE_MANAGEMENT"
+   * @const
+   */
+  SOURCE_MANAGEMENT: "SOURCE_MANAGEMENT",
+
+  /**
+   * value: "ARTIFACTS_REPOSITORY_MANAGEMENT"
+   * @const
+   */
+  ARTIFACTS_REPOSITORY_MANAGEMENT: "ARTIFACTS_REPOSITORY_MANAGEMENT"
+};
+/**
+ * @member {Array.<module:model/GContentManagementSystemType.CapabilitiesEnum>} capabilities
  */
 GContentManagementSystemType.prototype.capabilities = undefined;
 

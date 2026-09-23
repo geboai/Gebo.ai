@@ -3,9 +3,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**configurationCode** | **Object** |  | [optional] 
-**supportsTranscript** | **Object** |  | [optional] 
-**supportsSpeech** | **Object** |  | [optional] 
-**supportsStructuredOutput** | **Object** |  | [optional] 
-**supportsFunctionCalls** | **Object** |  | [optional] 
-**functionsTreeList** | **Object** |  | [optional] 
+**configurationCode** | **String** |  | [optional] 
+**supportsTranscript** | **Boolean** |  | [optional] 
+**supportsSpeech** | **Boolean** |  | [optional] 
+**supportsStructuredOutput** | **Boolean** |  | [optional] 
+**supportsFunctionCalls** | **Boolean** |  | [optional] 
+**functionsTreeList** | [**[ToolCategoriesTree]**](ToolCategoriesTree.md) |  | [optional] 

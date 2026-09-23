@@ -40,9 +40,9 @@ export default class ResetContentRequest {
     if (data) {
       obj = obj || new ResetContentRequest();
       if (data.hasOwnProperty('knowledgeBaseCode'))
-        obj.knowledgeBaseCode = ApiClient.convertToType(data['knowledgeBaseCode'], Object);
+        obj.knowledgeBaseCode = ApiClient.convertToType(data['knowledgeBaseCode'], 'String');
       if (data.hasOwnProperty('projectCode'))
-        obj.projectCode = ApiClient.convertToType(data['projectCode'], Object);
+        obj.projectCode = ApiClient.convertToType(data['projectCode'], 'String');
       if (data.hasOwnProperty('projectEndpoint'))
         obj.projectEndpoint = GObjectRefGProjectEndpoint.constructFromObject(data['projectEndpoint']);
     }
@@ -51,12 +51,12 @@ export default class ResetContentRequest {
 }
 
 /**
- * @member {Object} knowledgeBaseCode
+ * @member {String} knowledgeBaseCode
  */
 ResetContentRequest.prototype.knowledgeBaseCode = undefined;
 
 /**
- * @member {Object} projectCode
+ * @member {String} projectCode
  */
 ResetContentRequest.prototype.projectCode = undefined;
 
