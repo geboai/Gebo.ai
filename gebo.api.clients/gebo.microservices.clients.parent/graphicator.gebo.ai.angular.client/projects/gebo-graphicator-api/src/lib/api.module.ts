@@ -3,7 +3,6 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
-import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorStoreConfigurationController.service';
 import { GraphRagConfigurationControllerService } from './api/graphRagConfigurationController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
@@ -13,7 +12,6 @@ import { InternalMessagingTopologyControllerService } from './api/internalMessag
   declarations: [],
   exports:      [],
   providers: [
-    GeboVectorStoreConfigurationControllerService,
     GraphRagConfigurationControllerService,
     IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService ]

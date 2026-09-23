@@ -565,7 +565,6 @@ import GeboTranscriptControllerApi from './api/GeboTranscriptControllerApi';
 import GeboUserChatUploadsControllerApi from './api/GeboUserChatUploadsControllerApi';
 import GeboUserChatsControllerApi from './api/GeboUserChatsControllerApi';
 import GeboUserKnowledgeBaseSemanticSearchControllerApi from './api/GeboUserKnowledgeBaseSemanticSearchControllerApi';
-import GeboVectorStoreConfigurationControllerApi from './api/GeboVectorStoreConfigurationControllerApi';
 import GeneratedAdminApiKeyControllerApi from './api/GeneratedAdminApiKeyControllerApi';
 import GeneratedUserApiKeyControllerApi from './api/GeneratedUserApiKeyControllerApi';
 import GenericOpenAiRankerModelsConfigurationControllerApi from './api/GenericOpenAiRankerModelsConfigurationControllerApi';
@@ -3987,11 +3986,6 @@ export {
     */
     GeboUserKnowledgeBaseSemanticSearchControllerApi,
 
-    /**
-    * The GeboVectorStoreConfigurationControllerApi service constructor.
-    * @property {module:api/GeboVectorStoreConfigurationControllerApi}
-    */
-    GeboVectorStoreConfigurationControllerApi,
 
     /**
     * The GeneratedAdminApiKeyControllerApi service constructor.

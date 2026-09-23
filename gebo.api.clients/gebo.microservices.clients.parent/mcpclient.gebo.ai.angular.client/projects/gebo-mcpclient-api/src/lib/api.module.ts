@@ -10,7 +10,6 @@ import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileT
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { McpClientBrowsingControllerService } from './api/mcpClientBrowsingController.service';
-import { McpClientConfigControllerService } from './api/mcpClientConfigController.service';
 import { McpClientSystemsControllerService } from './api/mcpClientSystemsController.service';
 
 @NgModule({
@@ -25,7 +24,6 @@ import { McpClientSystemsControllerService } from './api/mcpClientSystemsControl
     InternalMessagingTopologyControllerService,
     JobLauncherControllerService,
     McpClientBrowsingControllerService,
-    McpClientConfigControllerService,
     McpClientSystemsControllerService ]
 })
 export class ApiModule {

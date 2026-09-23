@@ -67,7 +67,6 @@ import { GeboTranscriptControllerService } from './api/geboTranscriptController.
 import { GeboUserChatUploadsControllerService } from './api/geboUserChatUploadsController.service';
 import { GeboUserChatsControllerService } from './api/geboUserChatsController.service';
 import { GeboUserKnowledgeBaseSemanticSearchControllerService } from './api/geboUserKnowledgeBaseSemanticSearchController.service';
-import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorStoreConfigurationController.service';
 import { GeneratedAdminApiKeyControllerService } from './api/generatedAdminApiKeyController.service';
 import { GeneratedUserApiKeyControllerService } from './api/generatedUserApiKeyController.service';
 import { GenericOpenAiRankerModelsConfigurationControllerService } from './api/genericOpenAiRankerModelsConfigurationController.service';
@@ -212,7 +211,6 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GeboUserChatUploadsControllerService,
     GeboUserChatsControllerService,
     GeboUserKnowledgeBaseSemanticSearchControllerService,
-    GeboVectorStoreConfigurationControllerService,
     GeneratedAdminApiKeyControllerService,
     GeneratedUserApiKeyControllerService,
     GenericOpenAiRankerModelsConfigurationControllerService,
