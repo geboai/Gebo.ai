@@ -17,55 +17,47 @@
 </p-blockUI>
 
 
-<form [formGroup]="formGroup" (ngSubmit)="onSumbit()">
-  <div class="grid">
-    <div class="col-3"></div>
-    <div class="col-6">
-      <p-panel id="LoginPanel" gebo-ai-label #loginUI header="Login to gebo.ai">
-        <div class="grid">
-          <div class="col-12">
-            <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-          </div>
-          <div class="col-12">
-            <gebo-ai-field id="username" label="e-mail" help="E-mail as username to login"
-              [required]="true"> <input pInputText formControlName="username" class="col-12"
-            [required]="true" gebo-ai-field-element></gebo-ai-field>
-          </div>
-          <div class="col-12">
-            <gebo-ai-field id="password" label="Password" help="Password to login" [required]="true">
-              <p-password formControlName="password" class="col-12" [required]="true" [feedback]="false"
-              gebo-ai-field-element></p-password>
-            </gebo-ai-field>
+<div class="gebo-login">
+  <form class="gebo-login__form" [formGroup]="formGroup" (ngSubmit)="onSumbit()">
+    <p-panel id="LoginPanel" gebo-ai-label #loginUI header="Login to gebo.ai" styleClass="gebo-login__panel">
+      <div class="gebo-login__fields">
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
 
-          </div>
-          <div class="col-4">
-            <p-button id="LoginBtn" gebo-ai-label [outlined]="true" icon="pi pi-sign-in" label="Login"
-            (onClick)="login()" [disabled]="formGroup.invalid" type="submit"></p-button>
-          </div>
+        <gebo-ai-field id="username" label="e-mail" help="E-mail as username to login" [required]="true">
+          <input pInputText formControlName="username" class="gebo-login__control" type="email"
+            inputmode="email" autocomplete="username" autocapitalize="none" autocorrect="off"
+            spellcheck="false" [required]="true" gebo-ai-field-element>
+        </gebo-ai-field>
+
+        <gebo-ai-field id="password" label="Password" help="Password to login" [required]="true">
+          <p-password formControlName="password" styleClass="gebo-login__control"
+            inputStyleClass="gebo-login__control" autocomplete="current-password" [required]="true"
+            [feedback]="false" gebo-ai-field-element></p-password>
+        </gebo-ai-field>
+
+        <div class="gebo-login__actions">
+          <p-button id="LoginBtn" gebo-ai-label [outlined]="true" icon="pi pi-sign-in" label="Login"
+            (onClick)="login()" [disabled]="formGroup.invalid" type="submit"
+            styleClass="gebo-login__submit"></p-button>
           @if (showForgotPasswordLink) {
-            <div class="col-8 align-content-center" style="display: flex; align-items: center;">
-              <a id="ForgotPasswordLink" routerLink="/ui/user-workflows/start" [queryParams]="{ type: 'FORGOT_PASSWORD' }" gebo-ai-text>Forgot password?</a>
-            </div>
-          }
-          @if (providers.length) {
-            <div class="col-12">
-              <p-fieldset id="OauthProviders" gebo-ai-label legend="Login using provider">
-                <div class="grid">
-                  @for (provider of providers; track provider) {
-                    <div class="col-12">
-                      <p-button [icon]="'pi pi-'+provider.providerName"
-                        (onClick)="onOauth2Click(provider)" [label]="provider.description"
-                      [outlined]="true"></p-button>
-                    </div>
-                  }
-                </div>
-              </p-fieldset>
-            </div>
+            <a id="ForgotPasswordLink" class="gebo-login__link" routerLink="/ui/user-workflows/start"
+              [queryParams]="{ type: 'FORGOT_PASSWORD' }" gebo-ai-text>Forgot password?</a>
           }
         </div>
-      </p-panel>
-    </div>
-    <div class="col-3"></div>
-  </div>
 
-</form>
+        @if (providers.length) {
+          <p-fieldset id="OauthProviders" gebo-ai-label legend="Login using provider"
+            styleClass="gebo-login__providers">
+            <div class="gebo-login__provider-list">
+              @for (provider of providers; track provider) {
+                <p-button [icon]="'pi pi-'+provider.providerName"
+                  (onClick)="onOauth2Click(provider)" [label]="provider.description"
+                  [outlined]="true" styleClass="gebo-login__provider"></p-button>
+              }
+            </div>
+          </p-fieldset>
+        }
+      </div>
+    </p-panel>
+  </form>
+</div>

@@ -398,6 +398,88 @@ textarea.p-inputtextarea:read-only {
 .p-tab-active { color: var(--gebo-primary-700); }
 .p-tabpanels { padding: var(--gebo-space-6) 0 0; background: var(--gebo-white); }
 
+/* Full-height tab surfaces (the admin console). Opt-in, because a tab strip
+   inside a dialog wants to stay the size of its content.
+
+   p-tabs/p-tablist/p-tabpanels/p-tabpanel all carry their class on the custom
+   element itself, so these direct-child selectors walk the real DOM.
+
+   The active panel has to grow into whatever the tab strip leaves over,
+   otherwise a tab whose content is short (the LLMs tab before any model is
+   configured is a single row of provider pickers) collapses to that row, and
+   a select overlay opened in it is cut off by the .p-panel overflow:clip a few
+   levels up. The chain stops at the panel's own content box: nothing here sets
+   overflow, so content taller than the viewport still grows the page.
+
+   The second selector is the Dashboard tab, whose body is itself a p-tabs; it
+   gets the same chain so its inner panel fills the outer one. It is matched by
+   position rather than by a descendant combinator so that a tab strip further
+   down inside some editor keeps its natural size.
+
+   :not([hidden]) matters - PrimeNG hides inactive panels with the hidden
+   attribute, and an author display:flex would beat the UA rule and render
+   every tab at once. */
+.gebo-full-height-tabs { min-height: var(--gebo-shell-content-height); }
+
+.gebo-full-height-tabs,
+.gebo-full-height-tabs > .p-tabpanels > .p-tabpanel:not([hidden]) > * > .p-tabs {
+  display: flex;
+  flex-direction: column;
+
+  > .p-tablist { flex: 0 0 auto; }
+
+  > .p-tabpanels {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+
+    /* The panel body is one routed-in component element
+       (llms-systems-component, users-management-component, ...), inline by
+       default until flex blockifies it. Give it the height and let its own
+       top-level surface wear it. */
+    > .p-tabpanel:not([hidden]),
+    > .p-tabpanel:not([hidden]) > * {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    /* That surface is a p-panel in most tabs, a PrimeFlex .grid in the modules
+       config / knowledge bases / logs tabs, and a nested p-tabs in the
+       dashboard. A tab with two panels (users and groups) shares the height
+       between them, which is what those two panels want. */
+    > .p-tabpanel:not([hidden]) > * > :is(.p-panel, .grid, .p-tabs) {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    > .p-tabpanel:not([hidden]) > * > .p-panel {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 0;
+
+      > .p-panel-content-container {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+
+        > .p-panel-content {
+          flex: 1 1 auto;
+          min-height: 0;
+        }
+      }
+    }
+
+    /* .grid is a wrapping flex container, so its default align-content:stretch
+       would hand the new height to the ROWS and space the form out. The slack
+       belongs at the bottom instead. */
+    > .p-tabpanel:not([hidden]) > * > .grid { align-content: flex-start; }
+  }
+}
+
 .p-megamenu,
 .p-menubar,
 .p-menu,
@@ -852,6 +934,69 @@ body:has(.p-dialog-mask, .p-drawer-mask) :is(
   border-bottom: 1px solid var(--gebo-border-subtle);
 }
 
+/* Login
+
+   The form used to be a 3/6/3 PrimeFlex row, which is not a responsive grid:
+   col-6 is 50% at every width, so on a phone the panel was half the screen
+   with two empty thirds beside it and the controls unusable. It is a single
+   centred column instead, capped at a comfortable reading width on desktop and
+   edge to edge on small screens. */
+.gebo-login {
+  display: flex;
+  /* safe centring: the card sits in the middle of the page at every viewport,
+     but falls back to start alignment when it is taller than the box, so a
+     long provider list is never clipped off the top with no way to scroll. */
+  align-items: safe center;
+  justify-content: safe center;
+  min-height: var(--gebo-shell-content-height);
+  padding-block: var(--gebo-space-4);
+}
+
+.gebo-login__form {
+  width: 100%;
+  max-width: 26rem;
+}
+
+.gebo-login__panel { margin-bottom: 0; }
+
+.gebo-login__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gebo-space-4);
+}
+
+/* The field wrapper is a block, so its control has to be told to fill it.
+   p-password carries the class twice - styleClass puts it on the inline-flex
+   host, inputStyleClass on the inner input - and both need the width. */
+.gebo-login__control { width: 100%; }
+
+.gebo-login__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gebo-space-3);
+}
+
+.gebo-login__link {
+  color: var(--gebo-primary-700);
+  font-size: var(--gebo-font-size-sm);
+  text-decoration: none;
+}
+
+.gebo-login__link:hover { text-decoration: underline; }
+
+.gebo-login__providers { margin-bottom: 0; }
+
+.gebo-login__provider-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gebo-space-2);
+}
+
+/* Provider names vary in length and there may be several; a stacked column of
+   full-width buttons reads the same at 320px and at 1920px. */
+.gebo-login__provider.p-button { width: 100%; justify-content: flex-start; }
+
 @media (max-width: 64rem) {
   .p-tab { padding-inline: var(--gebo-space-3); }
   .p-dialog-content,
@@ -860,6 +1005,28 @@ body:has(.p-dialog-mask, .p-drawer-mask) :is(
 
 @media (max-width: 48rem) {
   body { font-size: var(--gebo-font-size-sm); }
+
+  /* Phones: the card goes edge to edge and the action row stacks so the submit
+     button keeps a full-width, thumb-sized target. It stays centred - safe
+     centring above already yields to the top once the form outgrows the
+     viewport. */
+  .gebo-login { padding-block: var(--gebo-space-2); }
+
+  .gebo-login__form { max-width: none; }
+
+  .gebo-login__actions { flex-direction: column; align-items: stretch; }
+  .gebo-login__submit.p-button { width: 100%; justify-content: center; }
+  .gebo-login__link { text-align: center; }
+
+  .gebo-login__control,
+  .gebo-login__submit.p-button,
+  .gebo-login__provider.p-button {
+    /* iOS zooms a focused input whose text is under 16px; the 2.75rem floor is
+       the usual minimum touch target. */
+    min-height: 2.75rem;
+    font-size: 1rem;
+  }
+
   .p-dialog.gebo-entity-dialog {
     width: calc(100vw - var(--gebo-space-3));
     height: calc(100vh - var(--gebo-space-3));
