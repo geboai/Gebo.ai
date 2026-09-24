@@ -433,8 +433,12 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 				toolsRepositoryPattern);
 		if (additionalTools != null && !additionalTools.isEmpty()) {
 			wrapped = new ArrayList<ToolCallback>(wrapped);
-			List<ToolCallback> newWrapped = GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener,
-					additionalTools);
+			// Wrap the dynamically-provided tools (e.g. notifyUser, bound to the notification
+			// sink) and ADD them to the resolvable set. Previously the wrapped result was
+			// assigned to a local and dropped, so notifyUser had a name in allFunctions but no
+			// callback in callMap - AgentToolCallingManagerFactory.resolve("notifyUser") returned
+			// null and the tool was never callable.
+			wrapped.addAll(GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener, additionalTools));
 		}
 		final Map<String, ToolCallback> map = new HashMap<>();
 		for (ToolCallback toolCallback : wrapped) {
