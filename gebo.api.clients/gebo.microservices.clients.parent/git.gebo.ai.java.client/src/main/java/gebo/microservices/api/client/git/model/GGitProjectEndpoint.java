@@ -27,7 +27,7 @@ import java.util.List;
  * GGitProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:53:37.964517893+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:39.572734637+02:00[Europe/Rome]")
 
 public class GGitProjectEndpoint {
   @JsonProperty("code")

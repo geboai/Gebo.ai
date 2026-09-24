@@ -3,7 +3,7 @@ package gebo.microservices.api.client.sharepoint.invoker.auth;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:53:53.621613249+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:55.281836446+02:00[Europe/Rome]")
 public class OAuth implements Authentication {
     private String accessToken;
 

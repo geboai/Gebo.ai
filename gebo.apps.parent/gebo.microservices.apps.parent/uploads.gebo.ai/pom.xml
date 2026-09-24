@@ -16,6 +16,20 @@
 	  system.
 	-->
 	<dependencies>
+		<!--
+		  Entity-editor form metadata. GeboAngularFormGroupMetaInfoController
+		  (api/admin/AngularFormGroupController) reflects over the repositories on THIS
+		  service's classpath and reports, per managed entity, the properties an Angular
+		  editor's FormGroup may be missing - the UI then adds the missing controls so a
+		  persisted property is never silently dropped on save. The catalogue is
+		  per-JVM, so every service that manages entities has to publish its own;
+		  the monolith publishes them all from one classpath.
+		-->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.angular.persistence.support</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.microservices.architecture</groupId>
 			<artifactId>gebo.microservices.content-handler.starter</artifactId>

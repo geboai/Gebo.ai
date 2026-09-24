@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { DocumentContentStreamerWithCacheControllerService } from './api/documentContentStreamerWithCacheController.service';
 import { DocumentsCacheServiceControllerService } from './api/documentsCacheServiceController.service';
 import { DocumentsChunkServiceControllerService } from './api/documentsChunkServiceController.service';
+import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 
 @NgModule({
@@ -16,6 +17,7 @@ import { InternalMessagingTopologyControllerService } from './api/internalMessag
     DocumentContentStreamerWithCacheControllerService,
     DocumentsCacheServiceControllerService,
     DocumentsChunkServiceControllerService,
+    GeboAngularFormGroupMetaInfoControllerService,
     InternalMessagingTopologyControllerService ]
 })
 export class ApiModule {

@@ -28,6 +28,7 @@
 		</module>
 		<module>gebo.microservices.content-handler.starter</module>
 		<module>gebo.microservices.cluster.commons</module>
+		<module>gebo.microservices.config.services</module>
 		<module>gebo.microservices.secrets.controller</module>
 		<module>gebo.microservices.secrets.client</module>
 		<module>gebo.microservices.security.controller</module>

@@ -10,6 +10,31 @@
 	<artifactId>brain.gebo.ai</artifactId>
 
 	<dependencies>
+		<!--
+		  UI text resources / i18n. UITextResourcesController (/public/UITextResourcesController)
+		  serves the translated UI text bundles the Angular field-translation container reads,
+		  and LanguageResourcesController the language catalogue. Hosted on brain: it is the
+		  aggregate the UI already talks to, and the surface is unauthenticated static content.
+		-->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.multilanguage.support</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
+		  Entity-editor form metadata. GeboAngularFormGroupMetaInfoController
+		  (api/admin/AngularFormGroupController) reflects over the repositories on THIS
+		  service's classpath and reports, per managed entity, the properties an Angular
+		  editor's FormGroup may be missing - the UI then adds the missing controls so a
+		  persisted property is never silently dropped on save. The catalogue is
+		  per-JVM, so every service that manages entities has to publish its own;
+		  the monolith publishes them all from one classpath.
+		-->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.angular.persistence.support</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- The Spring Security filter chain + LOCAL_JWT provider (GeboAISecurityConfig,
 		     LocalJwtTokenProvider, GSecurityServiceImpl, AclGrantedAccessorServiceImpl).
 		     Deliberately WITHOUT gebo.security.directory.mongo: the

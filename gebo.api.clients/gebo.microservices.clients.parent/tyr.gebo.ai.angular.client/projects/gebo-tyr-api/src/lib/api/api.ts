@@ -1,3 +1,7 @@
+export * from './geboAngularFormGroupMetaInfoController.service';
+import { GeboAngularFormGroupMetaInfoControllerService } from './geboAngularFormGroupMetaInfoController.service';
+export * from './geboModulesConfigController.service';
+import { GeboModulesConfigControllerService } from './geboModulesConfigController.service';
 export * from './globalInternalTopologyController.service';
 import { GlobalInternalTopologyControllerService } from './globalInternalTopologyController.service';
 export * from './internalMessagingTopologyController.service';
@@ -14,4 +18,4 @@ export * from './workflowParticipantsEnablementController.service';
 import { WorkflowParticipantsEnablementControllerService } from './workflowParticipantsEnablementController.service';
 export * from './workflowStatsAdminLevelController.service';
 import { WorkflowStatsAdminLevelControllerService } from './workflowStatsAdminLevelController.service';
-export const APIS = [GlobalInternalTopologyControllerService, InternalMessagingTopologyControllerService, JobStatusControllerService, LlmsUsageAdminLevelControllerService, LlmsUsageUserLevelControllerService, ReindexingFrequencyOptionsControllerService, WorkflowParticipantsEnablementControllerService, WorkflowStatsAdminLevelControllerService];
+export const APIS = [GeboAngularFormGroupMetaInfoControllerService, GeboModulesConfigControllerService, GlobalInternalTopologyControllerService, InternalMessagingTopologyControllerService, JobStatusControllerService, LlmsUsageAdminLevelControllerService, LlmsUsageUserLevelControllerService, ReindexingFrequencyOptionsControllerService, WorkflowParticipantsEnablementControllerService, WorkflowStatsAdminLevelControllerService];

@@ -1,0 +1,78 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.4.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.microservices.config.services</artifactId>
+
+	<!--
+		The cluster-aware answer to "which modules are enabled?".
+
+		gebo.config.services answers it from static configuration: GeboConfig's
+		modulesConfig plus the standard/community defaults. That is the right answer for
+		the monolith, where a module is enabled if it was configured to be - every module
+		runs in the one JVM.
+
+		In a cluster it is the wrong question. A module is only real if some microservice
+		actually hosts it AND that microservice is up: the topology says who hosts what
+		(microserviceId -> messagingModuleId), service discovery says who is currently
+		alive. This module contributes a @Primary IGeboModulesConfigurationHolder that
+		answers from those two sources instead, so GeboModulesConfigController - shipped
+		unchanged by gebo.config.services - reports the modules the cluster is really
+		serving right now.
+
+		Ship BOTH modules on a microservice that must answer this question (today: tyr).
+		The monolith ships only gebo.config.services and is untouched.
+	-->
+	<dependencies>
+		<!-- IGeboModulesConfigurationHolder + the static holder this one overrides and
+		     delegates to for the module catalogue, and GeboModulesConfigController itself. -->
+		<dependency>
+			<groupId>ai.gebo</groupId>
+			<artifactId>gebo.config.services</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- GeboMicroservicesTopology: messagingModuleId -> microserviceId, the "who hosts
+		     what" half of the answer. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- DiscoveryClient / ServiceInstance: the "who is alive" half. The concrete
+		     client (Eureka) is brought by the hosting app. -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<properties>
+		<spring-cloud.version>2025.1.2</spring-cloud.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>

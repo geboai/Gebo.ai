@@ -25,7 +25,7 @@ import java.util.List;
  * ChatSessionUploadUserSessionCodeBody
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T16:15:03.117398324+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:23.233601555+02:00[Europe/Rome]")
 
 public class ChatSessionUploadUserSessionCodeBody {
   @JsonProperty("files[]")

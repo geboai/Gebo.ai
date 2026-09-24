@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { ContentsResetControllerService } from './api/contentsResetController.service';
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
+import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
@@ -18,6 +19,7 @@ import { McpClientSystemsControllerService } from './api/mcpClientSystemsControl
   providers: [
     ContentsResetControllerService,
     DocumentContentStreamerControllerService,
+    GeboAngularFormGroupMetaInfoControllerService,
     GenericalPublisherControllerService,
     InternalMessagingTopologyControllerService,
     JobLauncherControllerService,

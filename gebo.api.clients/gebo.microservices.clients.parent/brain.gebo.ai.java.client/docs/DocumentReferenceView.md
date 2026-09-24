@@ -5,9 +5,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** |  |  [optional]
 **extension** | **String** |  |  [optional]
+**messagingModuleId** | **String** |  |  [optional]
 **description** | **String** |  |  [optional]
 **code** | **String** |  |  [optional]
-**messagingModuleId** | **String** |  |  [optional]
 **rootKnowledgebaseCode** | **String** |  |  [optional]
 **parentProjectCode** | **String** |  |  [optional]
 **modificationDate** | [**Date**](Date.md) |  |  [optional]

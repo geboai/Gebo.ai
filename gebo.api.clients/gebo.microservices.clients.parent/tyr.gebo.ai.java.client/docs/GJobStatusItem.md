@@ -5,11 +5,11 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **description** | **String** |  |  [optional]
 **code** | **String** |  |  [optional]
-**error** | **Boolean** |  |  [optional]
 **workflowId** | **String** |  |  [optional]
 **workflowType** | **String** |  |  [optional]
 **projectEndpointReference** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  |  [optional]
 **startDateTime** | [**Date**](Date.md) |  |  [optional]
+**error** | **Boolean** |  |  [optional]
 **processing** | **Boolean** |  |  [optional]
 **finished** | **Boolean** |  |  [optional]
 **jobType** | [**JobTypeEnum**](#JobTypeEnum) |  |  [optional]
