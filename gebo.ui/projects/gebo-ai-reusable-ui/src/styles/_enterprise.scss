@@ -411,59 +411,73 @@ textarea.p-inputtextarea:read-only {
    levels up. The chain stops at the panel's own content box: nothing here sets
    overflow, so content taller than the viewport still grows the page.
 
+   The second selector is the Dashboard tab, whose body is itself a p-tabs; it
+   gets the same chain so its inner panel fills the outer one. It is matched by
+   position rather than by a descendant combinator so that a tab strip further
+   down inside some editor keeps its natural size.
+
    :not([hidden]) matters - PrimeNG hides inactive panels with the hidden
    attribute, and an author display:flex would beat the UA rule and render
    every tab at once. */
-.gebo-full-height-tabs {
+.gebo-full-height-tabs { min-height: var(--gebo-shell-content-height); }
+
+.gebo-full-height-tabs,
+.gebo-full-height-tabs > .p-tabpanels > .p-tabpanel:not([hidden]) > * > .p-tabs {
   display: flex;
   flex-direction: column;
-  min-height: var(--gebo-shell-content-height);
-}
 
-.gebo-full-height-tabs > .p-tablist { flex: 0 0 auto; }
+  > .p-tablist { flex: 0 0 auto; }
 
-.gebo-full-height-tabs > .p-tabpanels {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-height: 0;
-}
+  > .p-tabpanels {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
 
-.gebo-full-height-tabs > .p-tabpanels > .p-tabpanel:not([hidden]) {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-height: 0;
-}
+    /* The panel body is one routed-in component element
+       (llms-systems-component, users-management-component, ...), inline by
+       default until flex blockifies it. Give it the height and let its own
+       top-level surface wear it. */
+    > .p-tabpanel:not([hidden]),
+    > .p-tabpanel:not([hidden]) > * {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
 
-/* The panel body is one routed-in component element (llms-systems-component,
-   users-management-component, ...), inline by default until flex blockifies
-   it. Give it the height and let its own top-level p-panel wear it. */
-.gebo-full-height-tabs > .p-tabpanels > .p-tabpanel:not([hidden]) > * {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-height: 0;
-}
+    /* That surface is a p-panel in most tabs, a PrimeFlex .grid in the modules
+       config / knowledge bases / logs tabs, and a nested p-tabs in the
+       dashboard. A tab with two panels (users and groups) shares the height
+       between them, which is what those two panels want. */
+    > .p-tabpanel:not([hidden]) > * > :is(.p-panel, .grid, .p-tabs) {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
 
-.gebo-full-height-tabs > .p-tabpanels > .p-tabpanel:not([hidden]) > * > .p-panel {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-height: 0;
-  margin-bottom: 0;
-}
+    > .p-tabpanel:not([hidden]) > * > .p-panel {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 0;
 
-.gebo-full-height-tabs > .p-tabpanels > .p-tabpanel:not([hidden]) > * > .p-panel > .p-panel-content-container {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-height: 0;
-}
+      > .p-panel-content-container {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
 
-.gebo-full-height-tabs > .p-tabpanels > .p-tabpanel:not([hidden]) > * > .p-panel > .p-panel-content-container > .p-panel-content {
-  flex: 1 1 auto;
-  min-height: 0;
+        > .p-panel-content {
+          flex: 1 1 auto;
+          min-height: 0;
+        }
+      }
+    }
+
+    /* .grid is a wrapping flex container, so its default align-content:stretch
+       would hand the new height to the ROWS and space the form out. The slack
+       belongs at the bottom instead. */
+    > .p-tabpanel:not([hidden]) > * > .grid { align-content: flex-start; }
+  }
 }
 
 .p-megamenu,
