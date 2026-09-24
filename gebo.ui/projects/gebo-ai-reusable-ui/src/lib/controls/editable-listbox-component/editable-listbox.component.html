@@ -13,7 +13,11 @@
 
 
 @if (readonly?false:true) {
-  <p-select styleClass="w-full"  [options]="options" optionLabel="description" optionValue="code"
+  <!-- appendTo="body" because the overlay renders inline by default and every
+       surface this control sits on (p-panel is overflow:clip, dialog bodies
+       scroll) clips it. On the LLMs admin tab the provider list was cut at the
+       bottom edge of the panel. -->
+  <p-select styleClass="w-full" appendTo="body" [options]="options" optionLabel="description" optionValue="code"
     [placeholder]="placeholder" [(ngModel)]="value"  [loading]="loading" [disabled]="disabled"
     (onChange)="changedValue($event)" >
     <ng-template let-item pTemplate="item">
