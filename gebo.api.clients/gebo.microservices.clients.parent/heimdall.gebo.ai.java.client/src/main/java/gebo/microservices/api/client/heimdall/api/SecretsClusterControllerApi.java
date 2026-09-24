@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:53:44.548149783+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T15:45:03.167494770+02:00[Europe/Rome]")
 
 public class SecretsClusterControllerApi {
     private ApiClient apiClient;
@@ -51,8 +51,8 @@ public class SecretsClusterControllerApi {
      * @param code  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void deleteSecret(String code) throws RestClientException {
-        deleteSecretWithHttpInfo(code);
+    public void infrastructureDeleteSecret(String code) throws RestClientException {
+        infrastructureDeleteSecretWithHttpInfo(code);
     }
 
     /**
@@ -63,11 +63,11 @@ public class SecretsClusterControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> deleteSecretWithHttpInfo(String code) throws RestClientException {
+    public ResponseEntity<Void> infrastructureDeleteSecretWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling deleteSecret");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling infrastructureDeleteSecret");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/deleteSecret").build().toUriString();
         
@@ -93,8 +93,8 @@ public class SecretsClusterControllerApi {
      * @return List&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<String> getAllSecretsId() throws RestClientException {
-        return getAllSecretsIdWithHttpInfo().getBody();
+    public List<String> infrastructureGetAllSecretsId() throws RestClientException {
+        return infrastructureGetAllSecretsIdWithHttpInfo().getBody();
     }
 
     /**
@@ -104,7 +104,7 @@ public class SecretsClusterControllerApi {
      * @return ResponseEntity&lt;List&lt;String&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<String>> getAllSecretsIdWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<String>> infrastructureGetAllSecretsIdWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getAllSecretsId").build().toUriString();
         
@@ -132,8 +132,8 @@ public class SecretsClusterControllerApi {
      * @return GeboSecretContentEnvelope
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GeboSecretContentEnvelope getSecretContentById(String id) throws RestClientException {
-        return getSecretContentByIdWithHttpInfo(id).getBody();
+    public GeboSecretContentEnvelope infrastructureGetSecretContentById(String id) throws RestClientException {
+        return infrastructureGetSecretContentByIdWithHttpInfo(id).getBody();
     }
 
     /**
@@ -144,11 +144,11 @@ public class SecretsClusterControllerApi {
      * @return ResponseEntity&lt;GeboSecretContentEnvelope&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GeboSecretContentEnvelope> getSecretContentByIdWithHttpInfo(String id) throws RestClientException {
+    public ResponseEntity<GeboSecretContentEnvelope> infrastructureGetSecretContentByIdWithHttpInfo(String id) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'id' when calling getSecretContentById");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'id' when calling infrastructureGetSecretContentById");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretContentById").build().toUriString();
         
@@ -177,8 +177,8 @@ public class SecretsClusterControllerApi {
      * @return List&lt;SecretInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SecretInfo> getSecretInfoByContextCode(String contextCode) throws RestClientException {
-        return getSecretInfoByContextCodeWithHttpInfo(contextCode).getBody();
+    public List<SecretInfo> infrastructureGetSecretInfoByContextCode(String contextCode) throws RestClientException {
+        return infrastructureGetSecretInfoByContextCodeWithHttpInfo(contextCode).getBody();
     }
 
     /**
@@ -189,11 +189,11 @@ public class SecretsClusterControllerApi {
      * @return ResponseEntity&lt;List&lt;SecretInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SecretInfo>> getSecretInfoByContextCodeWithHttpInfo(String contextCode) throws RestClientException {
+    public ResponseEntity<List<SecretInfo>> infrastructureGetSecretInfoByContextCodeWithHttpInfo(String contextCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'contextCode' is set
         if (contextCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'contextCode' when calling getSecretInfoByContextCode");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'contextCode' when calling infrastructureGetSecretInfoByContextCode");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretInfoByContextCode").build().toUriString();
         
@@ -222,8 +222,8 @@ public class SecretsClusterControllerApi {
      * @return SecretInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SecretInfo getSecretInfoById(String code) throws RestClientException {
-        return getSecretInfoByIdWithHttpInfo(code).getBody();
+    public SecretInfo infrastructureGetSecretInfoById(String code) throws RestClientException {
+        return infrastructureGetSecretInfoByIdWithHttpInfo(code).getBody();
     }
 
     /**
@@ -234,11 +234,11 @@ public class SecretsClusterControllerApi {
      * @return ResponseEntity&lt;SecretInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SecretInfo> getSecretInfoByIdWithHttpInfo(String code) throws RestClientException {
+    public ResponseEntity<SecretInfo> infrastructureGetSecretInfoByIdWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling getSecretInfoById");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling infrastructureGetSecretInfoById");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretInfoById").build().toUriString();
         
@@ -267,8 +267,8 @@ public class SecretsClusterControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String storeSecret(GeboSecretStoreRequest body) throws RestClientException {
-        return storeSecretWithHttpInfo(body).getBody();
+    public String infrastructureStoreSecret(GeboSecretStoreRequest body) throws RestClientException {
+        return infrastructureStoreSecretWithHttpInfo(body).getBody();
     }
 
     /**
@@ -279,11 +279,11 @@ public class SecretsClusterControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> storeSecretWithHttpInfo(GeboSecretStoreRequest body) throws RestClientException {
+    public ResponseEntity<String> infrastructureStoreSecretWithHttpInfo(GeboSecretStoreRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling storeSecret");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling infrastructureStoreSecret");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/storeSecret").build().toUriString();
         
@@ -312,8 +312,8 @@ public class SecretsClusterControllerApi {
      * @param body  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void updateSecret(GeboSecretStoreRequest body) throws RestClientException {
-        updateSecretWithHttpInfo(body);
+    public void infrastructureUpdateSecret(GeboSecretStoreRequest body) throws RestClientException {
+        infrastructureUpdateSecretWithHttpInfo(body);
     }
 
     /**
@@ -324,11 +324,11 @@ public class SecretsClusterControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> updateSecretWithHttpInfo(GeboSecretStoreRequest body) throws RestClientException {
+    public ResponseEntity<Void> infrastructureUpdateSecretWithHttpInfo(GeboSecretStoreRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateSecret");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling infrastructureUpdateSecret");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/updateSecret").build().toUriString();
         

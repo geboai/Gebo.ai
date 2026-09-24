@@ -48,9 +48,9 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void changePassword1Test() {
+    public void infrastructureChangePasswordTest() {
         ChangePasswordRequest body = null;
-        api.changePassword1(body);
+        api.infrastructureChangePassword(body);
 
         // TODO: test validations
     }
@@ -63,9 +63,9 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void createUserIfNotExists1Test() {
+    public void infrastructureCreateUserIfNotExists1Test() {
         CreateUserIfNotExistsRequest body = null;
-        api.createUserIfNotExists1(body);
+        api.infrastructureCreateUserIfNotExists1(body);
 
         // TODO: test validations
     }
@@ -78,9 +78,9 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void deleteGroupTest() {
+    public void infrastructureDeleteGroupTest() {
         UsersGroup body = null;
-        api.deleteGroup(body);
+        api.infrastructureDeleteGroup(body);
 
         // TODO: test validations
     }
@@ -93,9 +93,9 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void deleteUserTest() {
+    public void infrastructureDeleteUserTest() {
         EditableUser body = null;
-        api.deleteUser(body);
+        api.infrastructureDeleteUser(body);
 
         // TODO: test validations
     }
@@ -108,9 +108,9 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findGroupByCodeTest() {
+    public void infrastructureFindGroupByCodeTest() {
         String code = null;
-        UsersGroup response = api.findGroupByCode(code);
+        UsersGroup response = api.infrastructureFindGroupByCode(code);
 
         // TODO: test validations
     }
@@ -123,9 +123,9 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findUserByQbeTest() {
+    public void infrastructureFindUserByQbeTest() {
         UserQbeRequest body = null;
-        PageResultUserInfos response = api.findUserByQbe(body);
+        PageResultUserInfos response = api.infrastructureFindUserByQbe(body);
 
         // TODO: test validations
     }
@@ -138,9 +138,9 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findUserByQbe1Test() {
+    public void infrastructureFindUserByQbe1Test() {
         EditableUserQbeRequest body = null;
-        PageResultUserInfos response = api.findUserByQbe1(body);
+        PageResultUserInfos response = api.infrastructureFindUserByQbe1(body);
 
         // TODO: test validations
     }
@@ -153,9 +153,9 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findUserByUsername1Test() {
+    public void infrastructureFindUserByUsername1Test() {
         String email = null;
-        EditableUser response = api.findUserByUsername1(email);
+        EditableUser response = api.infrastructureFindUserByUsername1(email);
 
         // TODO: test validations
     }
@@ -168,9 +168,9 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findUsersGroupByQbeTest() {
+    public void infrastructureFindUsersGroupByQbeTest() {
         GroupQbeRequest body = null;
-        PageResultUsersGroup response = api.findUsersGroupByQbe(body);
+        PageResultUsersGroup response = api.infrastructureFindUsersGroupByQbe(body);
 
         // TODO: test validations
     }
@@ -183,8 +183,8 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void getAllGroupsTest() {
-        List<UsersGroup> response = api.getAllGroups();
+    public void infrastructureGetAllGroupsTest() {
+        List<UsersGroup> response = api.infrastructureGetAllGroups();
 
         // TODO: test validations
     }
@@ -197,8 +197,8 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void getAllUsersTest() {
-        List<UserInfos> response = api.getAllUsers();
+    public void infrastructureGetAllUsersTest() {
+        List<UserInfos> response = api.infrastructureGetAllUsers();
 
         // TODO: test validations
     }
@@ -211,9 +211,9 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void insertGroupTest() {
+    public void infrastructureInsertGroupTest() {
         UsersGroup body = null;
-        UsersGroup response = api.insertGroup(body);
+        UsersGroup response = api.infrastructureInsertGroup(body);
 
         // TODO: test validations
     }
@@ -226,9 +226,9 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void insertUserTest() {
+    public void infrastructureInsertUserTest() {
         InsertUserRequest body = null;
-        EditableUser response = api.insertUser(body);
+        EditableUser response = api.infrastructureInsertUser(body);
 
         // TODO: test validations
     }
@@ -241,9 +241,9 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void updateGroupTest() {
+    public void infrastructureUpdateGroupTest() {
         UsersGroup body = null;
-        UsersGroup response = api.updateGroup(body);
+        UsersGroup response = api.infrastructureUpdateGroup(body);
 
         // TODO: test validations
     }
@@ -256,9 +256,9 @@ public class UsersAdminClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void updateUserTest() {
+    public void infrastructureUpdateUserTest() {
         EditableUser body = null;
-        EditableUser response = api.updateUser(body);
+        EditableUser response = api.infrastructureUpdateUser(body);
 
         // TODO: test validations
     }

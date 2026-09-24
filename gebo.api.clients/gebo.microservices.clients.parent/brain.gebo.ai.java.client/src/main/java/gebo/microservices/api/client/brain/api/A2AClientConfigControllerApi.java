@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:53:22.373080167+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T16:15:03.117398324+02:00[Europe/Rome]")
 
 public class A2AClientConfigControllerApi {
     private ApiClient apiClient;
@@ -53,8 +53,8 @@ public class A2AClientConfigControllerApi {
      * @return OperationStatusBoolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusBoolean delete1(A2ARemoteAgentConfig body) throws RestClientException {
-        return delete1WithHttpInfo(body).getBody();
+    public OperationStatusBoolean deleteA2AClientConfig(A2ARemoteAgentConfig body) throws RestClientException {
+        return deleteA2AClientConfigWithHttpInfo(body).getBody();
     }
 
     /**
@@ -65,11 +65,11 @@ public class A2AClientConfigControllerApi {
      * @return ResponseEntity&lt;OperationStatusBoolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusBoolean> delete1WithHttpInfo(A2ARemoteAgentConfig body) throws RestClientException {
+    public ResponseEntity<OperationStatusBoolean> deleteA2AClientConfigWithHttpInfo(A2ARemoteAgentConfig body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling delete1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteA2AClientConfig");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/A2AClientConfigController/deleteA2AAgent").build().toUriString();
         
@@ -99,8 +99,8 @@ public class A2AClientConfigControllerApi {
      * @return OperationStatusA2ARemoteAgentConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusA2ARemoteAgentConfig findByCode2(String code) throws RestClientException {
-        return findByCode2WithHttpInfo(code).getBody();
+    public OperationStatusA2ARemoteAgentConfig findByCodeA2AClientConfig(String code) throws RestClientException {
+        return findByCodeA2AClientConfigWithHttpInfo(code).getBody();
     }
 
     /**
@@ -111,11 +111,11 @@ public class A2AClientConfigControllerApi {
      * @return ResponseEntity&lt;OperationStatusA2ARemoteAgentConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusA2ARemoteAgentConfig> findByCode2WithHttpInfo(String code) throws RestClientException {
+    public ResponseEntity<OperationStatusA2ARemoteAgentConfig> findByCodeA2AClientConfigWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findByCode2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findByCodeA2AClientConfig");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/A2AClientConfigController/findByCode").build().toUriString();
         
@@ -144,8 +144,8 @@ public class A2AClientConfigControllerApi {
      * @return OperationStatusA2ARemoteAgentConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusA2ARemoteAgentConfig insert1(A2ARemoteAgentConfig body) throws RestClientException {
-        return insert1WithHttpInfo(body).getBody();
+    public OperationStatusA2ARemoteAgentConfig insertA2AClientConfig(A2ARemoteAgentConfig body) throws RestClientException {
+        return insertA2AClientConfigWithHttpInfo(body).getBody();
     }
 
     /**
@@ -156,11 +156,11 @@ public class A2AClientConfigControllerApi {
      * @return ResponseEntity&lt;OperationStatusA2ARemoteAgentConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusA2ARemoteAgentConfig> insert1WithHttpInfo(A2ARemoteAgentConfig body) throws RestClientException {
+    public ResponseEntity<OperationStatusA2ARemoteAgentConfig> insertA2AClientConfigWithHttpInfo(A2ARemoteAgentConfig body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insert1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertA2AClientConfig");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/A2AClientConfigController/insertA2AAgent").build().toUriString();
         
@@ -191,8 +191,8 @@ public class A2AClientConfigControllerApi {
      * @return PageA2ARemoteAgentConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageA2ARemoteAgentConfig list(Integer page, Integer size) throws RestClientException {
-        return listWithHttpInfo(page, size).getBody();
+    public PageA2ARemoteAgentConfig listA2AClientConfig(Integer page, Integer size) throws RestClientException {
+        return listA2AClientConfigWithHttpInfo(page, size).getBody();
     }
 
     /**
@@ -204,7 +204,7 @@ public class A2AClientConfigControllerApi {
      * @return ResponseEntity&lt;PageA2ARemoteAgentConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageA2ARemoteAgentConfig> listWithHttpInfo(Integer page, Integer size) throws RestClientException {
+    public ResponseEntity<PageA2ARemoteAgentConfig> listA2AClientConfigWithHttpInfo(Integer page, Integer size) throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/A2AClientConfigController/list").build().toUriString();
         
@@ -234,8 +234,8 @@ public class A2AClientConfigControllerApi {
      * @return OperationStatusA2ARemoteAgentConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusA2ARemoteAgentConfig testAndDiscovery1(A2ARemoteAgentConfig body) throws RestClientException {
-        return testAndDiscovery1WithHttpInfo(body).getBody();
+    public OperationStatusA2ARemoteAgentConfig testAndDiscoveryA2AClientConfig(A2ARemoteAgentConfig body) throws RestClientException {
+        return testAndDiscoveryA2AClientConfigWithHttpInfo(body).getBody();
     }
 
     /**
@@ -246,11 +246,11 @@ public class A2AClientConfigControllerApi {
      * @return ResponseEntity&lt;OperationStatusA2ARemoteAgentConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusA2ARemoteAgentConfig> testAndDiscovery1WithHttpInfo(A2ARemoteAgentConfig body) throws RestClientException {
+    public ResponseEntity<OperationStatusA2ARemoteAgentConfig> testAndDiscoveryA2AClientConfigWithHttpInfo(A2ARemoteAgentConfig body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling testAndDiscovery1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling testAndDiscoveryA2AClientConfig");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/A2AClientConfigController/testAndDiscovery").build().toUriString();
         
@@ -280,8 +280,8 @@ public class A2AClientConfigControllerApi {
      * @return OperationStatusA2ARemoteAgentConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusA2ARemoteAgentConfig update1(A2ARemoteAgentConfig body) throws RestClientException {
-        return update1WithHttpInfo(body).getBody();
+    public OperationStatusA2ARemoteAgentConfig updateA2AClientConfig(A2ARemoteAgentConfig body) throws RestClientException {
+        return updateA2AClientConfigWithHttpInfo(body).getBody();
     }
 
     /**
@@ -292,11 +292,11 @@ public class A2AClientConfigControllerApi {
      * @return ResponseEntity&lt;OperationStatusA2ARemoteAgentConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusA2ARemoteAgentConfig> update1WithHttpInfo(A2ARemoteAgentConfig body) throws RestClientException {
+    public ResponseEntity<OperationStatusA2ARemoteAgentConfig> updateA2AClientConfigWithHttpInfo(A2ARemoteAgentConfig body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling update1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateA2AClientConfig");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/A2AClientConfigController/updateA2AAgent").build().toUriString();
         

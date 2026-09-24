@@ -166,9 +166,9 @@ public class SecretsControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void deleteSecret1Test() {
+    public void deleteSecretTest() {
         SecretInfo body = null;
-        api.deleteSecret1(body);
+        api.deleteSecret(body);
 
         // TODO: test validations
     }

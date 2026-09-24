@@ -40,9 +40,9 @@ public class SecretsClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void deleteSecretTest() {
+    public void infrastructureDeleteSecretTest() {
         String code = null;
-        api.deleteSecret(code);
+        api.infrastructureDeleteSecret(code);
 
         // TODO: test validations
     }
@@ -55,8 +55,8 @@ public class SecretsClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void getAllSecretsIdTest() {
-        List<String> response = api.getAllSecretsId();
+    public void infrastructureGetAllSecretsIdTest() {
+        List<String> response = api.infrastructureGetAllSecretsId();
 
         // TODO: test validations
     }
@@ -69,9 +69,9 @@ public class SecretsClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void getSecretContentByIdTest() {
+    public void infrastructureGetSecretContentByIdTest() {
         String id = null;
-        GeboSecretContentEnvelope response = api.getSecretContentById(id);
+        GeboSecretContentEnvelope response = api.infrastructureGetSecretContentById(id);
 
         // TODO: test validations
     }
@@ -84,9 +84,9 @@ public class SecretsClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void getSecretInfoByContextCodeTest() {
+    public void infrastructureGetSecretInfoByContextCodeTest() {
         String contextCode = null;
-        List<SecretInfo> response = api.getSecretInfoByContextCode(contextCode);
+        List<SecretInfo> response = api.infrastructureGetSecretInfoByContextCode(contextCode);
 
         // TODO: test validations
     }
@@ -99,9 +99,9 @@ public class SecretsClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void getSecretInfoByIdTest() {
+    public void infrastructureGetSecretInfoByIdTest() {
         String code = null;
-        SecretInfo response = api.getSecretInfoById(code);
+        SecretInfo response = api.infrastructureGetSecretInfoById(code);
 
         // TODO: test validations
     }
@@ -114,9 +114,9 @@ public class SecretsClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void storeSecretTest() {
+    public void infrastructureStoreSecretTest() {
         GeboSecretStoreRequest body = null;
-        String response = api.storeSecret(body);
+        String response = api.infrastructureStoreSecret(body);
 
         // TODO: test validations
     }
@@ -129,9 +129,9 @@ public class SecretsClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void updateSecretTest() {
+    public void infrastructureUpdateSecretTest() {
         GeboSecretStoreRequest body = null;
-        api.updateSecret(body);
+        api.infrastructureUpdateSecret(body);
 
         // TODO: test validations
     }

@@ -64,13 +64,13 @@ export class SecretsClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteSecret(code: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteSecret(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteSecret(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteSecret(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureDeleteSecret(code: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public infrastructureDeleteSecret(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public infrastructureDeleteSecret(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public infrastructureDeleteSecret(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
-            throw new Error('Required parameter code was null or undefined when calling deleteSecret.');
+            throw new Error('Required parameter code was null or undefined when calling infrastructureDeleteSecret.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -109,10 +109,10 @@ export class SecretsClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllSecretsId(observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
-    public getAllSecretsId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
-    public getAllSecretsId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
-    public getAllSecretsId(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureGetAllSecretsId(observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public infrastructureGetAllSecretsId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public infrastructureGetAllSecretsId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
+    public infrastructureGetAllSecretsId(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -146,13 +146,13 @@ export class SecretsClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSecretContentById(id: string, observe?: 'body', reportProgress?: boolean): Observable<GeboSecretContentEnvelope>;
-    public getSecretContentById(id: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboSecretContentEnvelope>>;
-    public getSecretContentById(id: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboSecretContentEnvelope>>;
-    public getSecretContentById(id: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureGetSecretContentById(id: string, observe?: 'body', reportProgress?: boolean): Observable<GeboSecretContentEnvelope>;
+    public infrastructureGetSecretContentById(id: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboSecretContentEnvelope>>;
+    public infrastructureGetSecretContentById(id: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboSecretContentEnvelope>>;
+    public infrastructureGetSecretContentById(id: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getSecretContentById.');
+            throw new Error('Required parameter id was null or undefined when calling infrastructureGetSecretContentById.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -193,13 +193,13 @@ export class SecretsClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSecretInfoByContextCode(contextCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<SecretInfo>>;
-    public getSecretInfoByContextCode(contextCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SecretInfo>>>;
-    public getSecretInfoByContextCode(contextCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SecretInfo>>>;
-    public getSecretInfoByContextCode(contextCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureGetSecretInfoByContextCode(contextCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<SecretInfo>>;
+    public infrastructureGetSecretInfoByContextCode(contextCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SecretInfo>>>;
+    public infrastructureGetSecretInfoByContextCode(contextCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SecretInfo>>>;
+    public infrastructureGetSecretInfoByContextCode(contextCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (contextCode === null || contextCode === undefined) {
-            throw new Error('Required parameter contextCode was null or undefined when calling getSecretInfoByContextCode.');
+            throw new Error('Required parameter contextCode was null or undefined when calling infrastructureGetSecretInfoByContextCode.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -240,13 +240,13 @@ export class SecretsClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSecretInfoById(code: string, observe?: 'body', reportProgress?: boolean): Observable<SecretInfo>;
-    public getSecretInfoById(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SecretInfo>>;
-    public getSecretInfoById(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SecretInfo>>;
-    public getSecretInfoById(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureGetSecretInfoById(code: string, observe?: 'body', reportProgress?: boolean): Observable<SecretInfo>;
+    public infrastructureGetSecretInfoById(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SecretInfo>>;
+    public infrastructureGetSecretInfoById(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SecretInfo>>;
+    public infrastructureGetSecretInfoById(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
-            throw new Error('Required parameter code was null or undefined when calling getSecretInfoById.');
+            throw new Error('Required parameter code was null or undefined when calling infrastructureGetSecretInfoById.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -287,13 +287,13 @@ export class SecretsClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public storeSecret(body: GeboSecretStoreRequest, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public storeSecret(body: GeboSecretStoreRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public storeSecret(body: GeboSecretStoreRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public storeSecret(body: GeboSecretStoreRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureStoreSecret(body: GeboSecretStoreRequest, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public infrastructureStoreSecret(body: GeboSecretStoreRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public infrastructureStoreSecret(body: GeboSecretStoreRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public infrastructureStoreSecret(body: GeboSecretStoreRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling storeSecret.');
+            throw new Error('Required parameter body was null or undefined when calling infrastructureStoreSecret.');
         }
 
         let headers = this.defaultHeaders;
@@ -334,13 +334,13 @@ export class SecretsClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateSecret(body: GeboSecretStoreRequest, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateSecret(body: GeboSecretStoreRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateSecret(body: GeboSecretStoreRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateSecret(body: GeboSecretStoreRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public infrastructureUpdateSecret(body: GeboSecretStoreRequest, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public infrastructureUpdateSecret(body: GeboSecretStoreRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public infrastructureUpdateSecret(body: GeboSecretStoreRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public infrastructureUpdateSecret(body: GeboSecretStoreRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateSecret.');
+            throw new Error('Required parameter body was null or undefined when calling infrastructureUpdateSecret.');
         }
 
         let headers = this.defaultHeaders;

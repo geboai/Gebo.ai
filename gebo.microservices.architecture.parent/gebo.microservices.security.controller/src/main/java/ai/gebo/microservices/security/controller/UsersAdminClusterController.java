@@ -83,33 +83,33 @@ public class UsersAdminClusterController {
 
 	@PostMapping(value = "insertUser", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public EditableUser insertUser(@RequestBody @NotNull InsertUserRequest req, HttpServletRequest request) {
+	public EditableUser infrastructureInsertUser(@RequestBody @NotNull InsertUserRequest req, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return userAdminService.insertUser(req.getUser(), req.getPassword());
 	}
 
 	@PostMapping(value = "updateUser", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public EditableUser updateUser(@RequestBody @NotNull EditableUser user, HttpServletRequest request) {
+	public EditableUser infrastructureUpdateUser(@RequestBody @NotNull EditableUser user, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return userAdminService.updateUser(user);
 	}
 
 	@GetMapping(value = "findUserByUsername", produces = MediaType.APPLICATION_JSON_VALUE)
-	public EditableUser findUserByUsername(@RequestParam("email") String email, HttpServletRequest request) {
+	public EditableUser infrastructureFindUserByUsername(@RequestParam("email") String email, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return userAdminService.findUserByUsername(email);
 	}
 
 	@PostMapping(value = "deleteUser", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void deleteUser(@RequestBody @NotNull EditableUser user, HttpServletRequest request) {
+	public void infrastructureDeleteUser(@RequestBody @NotNull EditableUser user, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		userAdminService.deleteUser(user);
 	}
 
 	@PostMapping(value = "findUserByQbe", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public PageResult<UserInfos> findUserByQbe(@RequestBody @NotNull UserQbeRequest req, HttpServletRequest request) {
+	public PageResult<UserInfos> infrastructureFindUserByQbe(@RequestBody @NotNull UserQbeRequest req, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		Page<UserInfos> page = userAdminService.findUserByQbe(req.getQbe(), req.toPageable());
 		return PageResult.of(page);
@@ -117,7 +117,7 @@ public class UsersAdminClusterController {
 
 	@PostMapping(value = "findEditableUserByQbe", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public PageResult<UserInfos> findUserByQbe(@RequestBody @NotNull EditableUserQbeRequest req,
+	public PageResult<UserInfos> infrastructureFindUserByQbe(@RequestBody @NotNull EditableUserQbeRequest req,
 			HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		Page<UserInfos> page = userAdminService.findUserByQbe(req.getQbe(), req.toPageable());
@@ -126,33 +126,33 @@ public class UsersAdminClusterController {
 
 	@PostMapping(value = "insertGroup", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public UsersGroup insertGroup(@RequestBody @NotNull UsersGroup group, HttpServletRequest request) {
+	public UsersGroup infrastructureInsertGroup(@RequestBody @NotNull UsersGroup group, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return userAdminService.insertGroup(group);
 	}
 
 	@GetMapping(value = "findGroupByCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public UsersGroup findGroupByCode(@RequestParam("code") String code, HttpServletRequest request) {
+	public UsersGroup infrastructureFindGroupByCode(@RequestParam("code") String code, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return userAdminService.findGroupByCode(code);
 	}
 
 	@PostMapping(value = "updateGroup", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public UsersGroup updateGroup(@RequestBody @NotNull UsersGroup group, HttpServletRequest request) {
+	public UsersGroup infrastructureUpdateGroup(@RequestBody @NotNull UsersGroup group, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return userAdminService.updateGroup(group);
 	}
 
 	@PostMapping(value = "deleteGroup", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void deleteGroup(@RequestBody @NotNull UsersGroup group, HttpServletRequest request) {
+	public void infrastructureDeleteGroup(@RequestBody @NotNull UsersGroup group, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		userAdminService.deleteGroup(group);
 	}
 
 	@PostMapping(value = "findUsersGroupByQbe", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public PageResult<UsersGroup> findUsersGroupByQbe(@RequestBody @NotNull GroupQbeRequest req,
+	public PageResult<UsersGroup> infrastructureFindUsersGroupByQbe(@RequestBody @NotNull GroupQbeRequest req,
 			HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		Page<UsersGroup> page = userAdminService.findUsersGroupByQbe(req.getQbe(), req.toPageable());
@@ -160,13 +160,13 @@ public class UsersAdminClusterController {
 	}
 
 	@GetMapping(value = "getAllGroups", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<UsersGroup> getAllGroups(HttpServletRequest request) {
+	public List<UsersGroup> infrastructureGetAllGroups(HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return userAdminService.getAllGroups();
 	}
 
 	@GetMapping(value = "getAllUsers", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<UserInfos> getAllUsers(HttpServletRequest request) {
+	public List<UserInfos> infrastructureGetAllUsers(HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return userAdminService.getAllUsers();
 	}
@@ -185,7 +185,7 @@ public class UsersAdminClusterController {
 	 */
 	@PostMapping(value = "createUserIfNotExists", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public void createUserIfNotExists(@RequestBody @NotNull CreateUserIfNotExistsRequest req,
+	public void infrastructureCreateUserIfNotExists(@RequestBody @NotNull CreateUserIfNotExistsRequest req,
 			HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
@@ -205,7 +205,7 @@ public class UsersAdminClusterController {
 	}
 
 	@PostMapping(value = "changePassword", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void changePassword(@RequestBody @NotNull ChangePasswordRequest req, HttpServletRequest request)
+	public void infrastructureChangePassword(@RequestBody @NotNull ChangePasswordRequest req, HttpServletRequest request)
 			throws GeboCryptSecretException {
 		ClusterParticipantsGuard.check(participants, request);
 		userAdminService.changePassword(req.getUsername(), req.getPassword());

@@ -33,32 +33,32 @@ public class A2AClientConfigController {
 	private final A2AClientManagementService managementService;
 
 	@PostMapping(value = "testAndDiscovery", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<A2ARemoteAgentConfig> testAndDiscovery(@RequestBody @Valid @NotNull A2ARemoteAgentConfig config) {
+	public OperationStatus<A2ARemoteAgentConfig> testAndDiscoveryA2AClientConfig(@RequestBody @Valid @NotNull A2ARemoteAgentConfig config) {
 		return managementService.testAndDiscovery(config);
 	}
 
 	@PostMapping(value = "insertA2AAgent", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<A2ARemoteAgentConfig> insert(@RequestBody @Valid @NotNull A2ARemoteAgentConfig config) {
+	public OperationStatus<A2ARemoteAgentConfig> insertA2AClientConfig(@RequestBody @Valid @NotNull A2ARemoteAgentConfig config) {
 		return managementService.insert(config);
 	}
 
 	@PostMapping(value = "updateA2AAgent", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<A2ARemoteAgentConfig> update(@RequestBody @Valid @NotNull A2ARemoteAgentConfig config) {
+	public OperationStatus<A2ARemoteAgentConfig> updateA2AClientConfig(@RequestBody @Valid @NotNull A2ARemoteAgentConfig config) {
 		return managementService.update(config);
 	}
 
 	@DeleteMapping(value = "deleteA2AAgent", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<Boolean> delete(@RequestBody @Valid @NotNull A2ARemoteAgentConfig config) {
+	public OperationStatus<Boolean> deleteA2AClientConfig(@RequestBody @Valid @NotNull A2ARemoteAgentConfig config) {
 		return managementService.delete(config);
 	}
 
 	@GetMapping(value = "findByCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<A2ARemoteAgentConfig> findByCode(@RequestParam("code") String code) {
+	public OperationStatus<A2ARemoteAgentConfig> findByCodeA2AClientConfig(@RequestParam("code") String code) {
 		return managementService.findByCode(code);
 	}
 
 	@GetMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<A2ARemoteAgentConfig> list(@RequestParam(value = "page", defaultValue = "0") int page,
+	public Page<A2ARemoteAgentConfig> listA2AClientConfig(@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "size", defaultValue = "20") int size) {
 		return managementService.list(PageRequest.of(page, size));
 	}

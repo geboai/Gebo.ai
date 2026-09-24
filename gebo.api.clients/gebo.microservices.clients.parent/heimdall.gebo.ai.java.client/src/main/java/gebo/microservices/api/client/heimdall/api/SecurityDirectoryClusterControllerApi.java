@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:53:44.548149783+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T15:45:03.167494770+02:00[Europe/Rome]")
 
 public class SecurityDirectoryClusterControllerApi {
     private ApiClient apiClient;
@@ -53,8 +53,8 @@ public class SecurityDirectoryClusterControllerApi {
      * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Boolean checkPassword(CheckPasswordRequest body) throws RestClientException {
-        return checkPasswordWithHttpInfo(body).getBody();
+    public Boolean infrastructureCheckPassword(CheckPasswordRequest body) throws RestClientException {
+        return infrastructureCheckPasswordWithHttpInfo(body).getBody();
     }
 
     /**
@@ -65,11 +65,11 @@ public class SecurityDirectoryClusterControllerApi {
      * @return ResponseEntity&lt;Boolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Boolean> checkPasswordWithHttpInfo(CheckPasswordRequest body) throws RestClientException {
+    public ResponseEntity<Boolean> infrastructureCheckPasswordWithHttpInfo(CheckPasswordRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling checkPassword");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling infrastructureCheckPassword");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/checkPassword").build().toUriString();
         
@@ -99,8 +99,8 @@ public class SecurityDirectoryClusterControllerApi {
      * @return UserInfosImpl
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public UserInfosImpl createUserIfNotExists(CreateUserIfNotExistsRequest body) throws RestClientException {
-        return createUserIfNotExistsWithHttpInfo(body).getBody();
+    public UserInfosImpl infrastructureCreateUserIfNotExists(CreateUserIfNotExistsRequest body) throws RestClientException {
+        return infrastructureCreateUserIfNotExistsWithHttpInfo(body).getBody();
     }
 
     /**
@@ -111,11 +111,11 @@ public class SecurityDirectoryClusterControllerApi {
      * @return ResponseEntity&lt;UserInfosImpl&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<UserInfosImpl> createUserIfNotExistsWithHttpInfo(CreateUserIfNotExistsRequest body) throws RestClientException {
+    public ResponseEntity<UserInfosImpl> infrastructureCreateUserIfNotExistsWithHttpInfo(CreateUserIfNotExistsRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createUserIfNotExists");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling infrastructureCreateUserIfNotExists");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/createUserIfNotExists").build().toUriString();
         
@@ -144,8 +144,8 @@ public class SecurityDirectoryClusterControllerApi {
      * @return List&lt;UsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<UsersGroup> findAllGroups() throws RestClientException {
-        return findAllGroupsWithHttpInfo().getBody();
+    public List<UsersGroup> infrastructureFindAllGroups() throws RestClientException {
+        return infrastructureFindAllGroupsWithHttpInfo().getBody();
     }
 
     /**
@@ -155,7 +155,7 @@ public class SecurityDirectoryClusterControllerApi {
      * @return ResponseEntity&lt;List&lt;UsersGroup&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<UsersGroup>> findAllGroupsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<UsersGroup>> infrastructureFindAllGroupsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/findAllGroups").build().toUriString();
         
@@ -183,8 +183,8 @@ public class SecurityDirectoryClusterControllerApi {
      * @return List&lt;UsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<UsersGroup> findGroupsOfUser(String username) throws RestClientException {
-        return findGroupsOfUserWithHttpInfo(username).getBody();
+    public List<UsersGroup> infrastructureFindGroupsOfUser(String username) throws RestClientException {
+        return infrastructureFindGroupsOfUserWithHttpInfo(username).getBody();
     }
 
     /**
@@ -195,11 +195,11 @@ public class SecurityDirectoryClusterControllerApi {
      * @return ResponseEntity&lt;List&lt;UsersGroup&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<UsersGroup>> findGroupsOfUserWithHttpInfo(String username) throws RestClientException {
+    public ResponseEntity<List<UsersGroup>> infrastructureFindGroupsOfUserWithHttpInfo(String username) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'username' is set
         if (username == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'username' when calling findGroupsOfUser");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'username' when calling infrastructureFindGroupsOfUser");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/findGroupsOfUser").build().toUriString();
         
@@ -228,8 +228,8 @@ public class SecurityDirectoryClusterControllerApi {
      * @return UserInfosImpl
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public UserInfosImpl findUserByUsername(String username) throws RestClientException {
-        return findUserByUsernameWithHttpInfo(username).getBody();
+    public UserInfosImpl infrastructureFindUserByUsername(String username) throws RestClientException {
+        return infrastructureFindUserByUsernameWithHttpInfo(username).getBody();
     }
 
     /**
@@ -240,11 +240,11 @@ public class SecurityDirectoryClusterControllerApi {
      * @return ResponseEntity&lt;UserInfosImpl&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<UserInfosImpl> findUserByUsernameWithHttpInfo(String username) throws RestClientException {
+    public ResponseEntity<UserInfosImpl> infrastructureFindUserByUsernameWithHttpInfo(String username) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'username' is set
         if (username == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'username' when calling findUserByUsername");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'username' when calling infrastructureFindUserByUsername");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/findUserByUsername").build().toUriString();
         

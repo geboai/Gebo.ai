@@ -57,6 +57,22 @@ spring:
               uri: lb://heimdall-gebo-ai
               predicates:
                 - Path=/heimdall/api/admin/**
+            # The rest of heimdall's BROWSER-facing surface, routed by hand for the
+            # same reason as the admin one (heimdall has no topology entry). The SPA
+            # cannot even log in without these:
+            #   /heimdall/auth/**       the login endpoint (auth/login);
+            #   /heimdall/public/**     unauthenticated surface the login page reads
+            #                           (AuthProviders, GeboFastSetup, UserWorkflows);
+            #   /heimdall/api/users/**  the signed-in user's own surface (current user,
+            #                           token renew, personal API keys).
+            # Still deliberately NOT /heimdall/** and still NOT /heimdall/api/cluster/**:
+            # the decrypted-content cluster surface must never be reachable from a
+            # browser (see the note on the admin route above). No StripPrefix - the
+            # /heimdall segment is heimdall's own context-path, forwarded unchanged.
+            - id: heimdall_browser
+              uri: lb://heimdall-gebo-ai
+              predicates:
+                - Path=/heimdall/auth/**,/heimdall/public/**,/heimdall/api/users/**
 
 # Dedicated HTTP port. Every Gebo microservice owns one port of the 13000-13017
 # block (gateway 13000 ... eureka 13017), so the whole deployment can run side by

@@ -41,9 +41,9 @@ public class SecurityDirectoryClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void checkPasswordTest() {
+    public void infrastructureCheckPasswordTest() {
         CheckPasswordRequest body = null;
-        Boolean response = api.checkPassword(body);
+        Boolean response = api.infrastructureCheckPassword(body);
 
         // TODO: test validations
     }
@@ -56,9 +56,9 @@ public class SecurityDirectoryClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void createUserIfNotExistsTest() {
+    public void infrastructureCreateUserIfNotExistsTest() {
         CreateUserIfNotExistsRequest body = null;
-        UserInfosImpl response = api.createUserIfNotExists(body);
+        UserInfosImpl response = api.infrastructureCreateUserIfNotExists(body);
 
         // TODO: test validations
     }
@@ -71,8 +71,8 @@ public class SecurityDirectoryClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findAllGroupsTest() {
-        List<UsersGroup> response = api.findAllGroups();
+    public void infrastructureFindAllGroupsTest() {
+        List<UsersGroup> response = api.infrastructureFindAllGroups();
 
         // TODO: test validations
     }
@@ -85,9 +85,9 @@ public class SecurityDirectoryClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findGroupsOfUserTest() {
+    public void infrastructureFindGroupsOfUserTest() {
         String username = null;
-        List<UsersGroup> response = api.findGroupsOfUser(username);
+        List<UsersGroup> response = api.infrastructureFindGroupsOfUser(username);
 
         // TODO: test validations
     }
@@ -100,9 +100,9 @@ public class SecurityDirectoryClusterControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findUserByUsernameTest() {
+    public void infrastructureFindUserByUsernameTest() {
         String username = null;
-        UserInfosImpl response = api.findUserByUsername(username);
+        UserInfosImpl response = api.infrastructureFindUserByUsername(username);
 
         // TODO: test validations
     }
