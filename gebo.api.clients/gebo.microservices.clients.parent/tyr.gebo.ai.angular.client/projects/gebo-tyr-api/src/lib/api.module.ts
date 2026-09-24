@@ -3,6 +3,8 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
+import { GeboModulesConfigControllerService } from './api/geboModulesConfigController.service';
 import { GlobalInternalTopologyControllerService } from './api/globalInternalTopologyController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobStatusControllerService } from './api/jobStatusController.service';
@@ -17,6 +19,8 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
   declarations: [],
   exports:      [],
   providers: [
+    GeboAngularFormGroupMetaInfoControllerService,
+    GeboModulesConfigControllerService,
     GlobalInternalTopologyControllerService,
     InternalMessagingTopologyControllerService,
     JobStatusControllerService,

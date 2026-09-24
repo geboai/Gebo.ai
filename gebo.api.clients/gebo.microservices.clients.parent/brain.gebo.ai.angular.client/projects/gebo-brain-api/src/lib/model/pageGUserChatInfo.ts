@@ -16,9 +16,9 @@ import { SortObject } from './sortObject';
 export interface PageGUserChatInfo { 
     totalPages?: number;
     totalElements?: number;
-    pageable?: PageableObject;
     first?: boolean;
     last?: boolean;
+    pageable?: PageableObject;
     size?: number;
     content?: Array<GUserChatInfo>;
     number?: number;

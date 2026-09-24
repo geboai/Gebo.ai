@@ -8,6 +8,7 @@ import { DocumentContentStreamerControllerService } from './api/documentContentS
 import { FileSystemSharesSettingControllerService } from './api/fileSystemSharesSettingController.service';
 import { FileSystemsBrowsingControllerService } from './api/fileSystemsBrowsingController.service';
 import { FileSystemsControllerService } from './api/fileSystemsController.service';
+import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
@@ -22,6 +23,7 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
     FileSystemSharesSettingControllerService,
     FileSystemsBrowsingControllerService,
     FileSystemsControllerService,
+    GeboAngularFormGroupMetaInfoControllerService,
     GenericalPublisherControllerService,
     InternalMessagingTopologyControllerService,
     JobLauncherControllerService ]

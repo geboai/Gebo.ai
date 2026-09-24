@@ -5,9 +5,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **totalPages** | **Integer** |  |  [optional]
 **totalElements** | **Long** |  |  [optional]
-**pageable** | [**PageableObject**](PageableObject.md) |  |  [optional]
 **first** | **Boolean** |  |  [optional]
 **last** | **Boolean** |  |  [optional]
+**pageable** | [**PageableObject**](PageableObject.md) |  |  [optional]
 **size** | **Integer** |  |  [optional]
 **content** | [**List&lt;GeboMCPServerConfig&gt;**](GeboMCPServerConfig.md) |  |  [optional]
 **number** | **Integer** |  |  [optional]

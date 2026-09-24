@@ -3,7 +3,7 @@ package gebo.microservices.api.client.graphicator.invoker.auth;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:53:42.770819479+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:44.024760458+02:00[Europe/Rome]")
 public class OAuth implements Authentication {
     private String accessToken;
 

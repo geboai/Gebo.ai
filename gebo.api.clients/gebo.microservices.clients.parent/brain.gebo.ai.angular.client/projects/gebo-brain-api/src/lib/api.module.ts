@@ -30,6 +30,7 @@ import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsControl
 import { GeboAdminRagAutotuneControllerService } from './api/geboAdminRagAutotuneController.service';
 import { GeboAgentAdminControllerService } from './api/geboAgentAdminController.service';
 import { GeboAgentsNetworkAdminControllerService } from './api/geboAgentsNetworkAdminController.service';
+import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GeboChatControllerService } from './api/geboChatController.service';
 import { GeboChatPipelinesControllerService } from './api/geboChatPipelinesController.service';
 import { GeboChatProfileLookupControllerService } from './api/geboChatProfileLookupController.service';
@@ -65,6 +66,7 @@ import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileT
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { KnowledgeBaseControllerService } from './api/knowledgeBaseController.service';
+import { LanguageResourcesControllerService } from './api/languageResourcesController.service';
 import { LogViewControllerService } from './api/logViewController.service';
 import { McpClientConfigControllerService } from './api/mcpClientConfigController.service';
 import { MistralAiChatModelsConfigurationControllerService } from './api/mistralAiChatModelsConfigurationController.service';
@@ -85,6 +87,7 @@ import { SerpapiSearchConfigurationControllerService } from './api/serpapiSearch
 import { TavilySearchConfigurationControllerService } from './api/tavilySearchConfigurationController.service';
 import { TextToSpeechModelsControllerService } from './api/textToSpeechModelsController.service';
 import { TranscriptModelsControllerService } from './api/transcriptModelsController.service';
+import { UiTextResourcesControllerService } from './api/uiTextResourcesController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
 
 @NgModule({
@@ -119,6 +122,7 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     GeboAdminRagAutotuneControllerService,
     GeboAgentAdminControllerService,
     GeboAgentsNetworkAdminControllerService,
+    GeboAngularFormGroupMetaInfoControllerService,
     GeboChatControllerService,
     GeboChatPipelinesControllerService,
     GeboChatProfileLookupControllerService,
@@ -154,6 +158,7 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     InternalMessagingTopologyControllerService,
     JobLauncherControllerService,
     KnowledgeBaseControllerService,
+    LanguageResourcesControllerService,
     LogViewControllerService,
     McpClientConfigControllerService,
     MistralAiChatModelsConfigurationControllerService,
@@ -174,6 +179,7 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     TavilySearchConfigurationControllerService,
     TextToSpeechModelsControllerService,
     TranscriptModelsControllerService,
+    UiTextResourcesControllerService,
     UserKnowledgeBaseBrowsingControllerService ]
 })
 export class ApiModule {
