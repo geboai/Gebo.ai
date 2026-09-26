@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Msaidizi wa Gebo AI"
-      },
-      "AssistantSuggestion": {
-        "label": "Pendekezo la msaidizi"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Inaunganisha msaidizi…"
-      },
-      "ChooseChatProfile": {
-        "label": "Chagua wasifu wa gumzo kuanza:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Inatayarisha msaidizi…"
-      },
-      "ReplaceButton": {
-        "label": "Badilisha",
-        "help": "Badilisha maandishi yaliyoteuliwa"
-      },
-      "InsertButton": {
-        "label": "Weka",
-        "help": "Weka kwenye hati"
-      },
-      "ConnectedToEditorText": {
-        "label": "Imeunganishwa na mhariri"
-      },
-      "WaitingForEditorText": {
-        "label": "Inasubiri mhariri"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

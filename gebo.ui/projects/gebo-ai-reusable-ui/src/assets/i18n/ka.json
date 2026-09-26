@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI ასისტენტი"
-      },
-      "AssistantSuggestion": {
-        "label": "ასისტენტის შეთავაზება"
-      },
-      "ConnectingTheAssistant": {
-        "label": "ასისტენტის დაკავშირება…"
-      },
-      "ChooseChatProfile": {
-        "label": "აირჩიეთ ჩატის პროფილი დასაწყებად:"
-      },
-      "PreparingTheAssistant": {
-        "label": "ასისტენტის მომზადება…"
-      },
-      "ReplaceButton": {
-        "label": "ჩანაცვლება",
-        "help": "მონიშნული ტექსტის ჩანაცვლება"
-      },
-      "InsertButton": {
-        "label": "ჩასმა",
-        "help": "ჩასმა დოკუმენტში"
-      },
-      "ConnectedToEditorText": {
-        "label": "დაკავშირებულია რედაქტორთან"
-      },
-      "WaitingForEditorText": {
-        "label": "ველოდებით რედაქტორს"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

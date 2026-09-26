@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Cynorthwyydd Gebo AI"
-      },
-      "AssistantSuggestion": {
-        "label": "Awgrym cynorthwyydd"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Yn cysylltu'r cynorthwyydd…"
-      },
-      "ChooseChatProfile": {
-        "label": "Dewiswch broffil sgwrs i ddechrau:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Yn paratoi'r cynorthwyydd…"
-      },
-      "ReplaceButton": {
-        "label": "Amnewid",
-        "help": "Amnewid y testun a ddewiswyd"
-      },
-      "InsertButton": {
-        "label": "Mewnosod",
-        "help": "Mewnosod yn y ddogfen"
-      },
-      "ConnectedToEditorText": {
-        "label": "Wedi cysylltu â'r golygydd"
-      },
-      "WaitingForEditorText": {
-        "label": "Yn aros am y golygydd"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI Assistant"
-      },
-      "AssistantSuggestion": {
-        "label": "សំណើររបស់ជំនួយការ"
-      },
-      "ConnectingTheAssistant": {
-        "label": "កំពុងភ្ជាប់ជំនួយការ…"
-      },
-      "ChooseChatProfile": {
-        "label": "ជ្រើសប្រវត្តិការជជែកដើម្បីចាប់ផ្តើម:"
-      },
-      "PreparingTheAssistant": {
-        "label": "កំពុងរៀបចំជំនួយការ…"
-      },
-      "ReplaceButton": {
-        "label": "ជំនួស",
-        "help": "ជំនួសអត្ថបទដែលបានជ្រើស"
-      },
-      "InsertButton": {
-        "label": "បញ្ចូល",
-        "help": "បញ្ចូលក្នុងឯកសារ"
-      },
-      "ConnectedToEditorText": {
-        "label": "បានភ្ជាប់ទៅកាន់កម្មវិធីកែសម្រួល"
-      },
-      "WaitingForEditorText": {
-        "label": "កំពុងរង់ចាំកម្មវិធីកែសម្រួល"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

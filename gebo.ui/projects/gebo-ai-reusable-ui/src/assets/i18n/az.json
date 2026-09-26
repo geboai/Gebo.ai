@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI köməkçisi"
-      },
-      "AssistantSuggestion": {
-        "label": "Köməkçi təklifi"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Köməkçi qoşulur…"
-      },
-      "ChooseChatProfile": {
-        "label": "Başlamaq üçün söhbət profilini seçin:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Köməkçi hazırlanır…"
-      },
-      "ReplaceButton": {
-        "label": "Əvəz et",
-        "help": "Seçilmiş mətnin əvəz edilməsi"
-      },
-      "InsertButton": {
-        "label": "Əlavə et",
-        "help": "Sənədə əlavə et"
-      },
-      "ConnectedToEditorText": {
-        "label": "Redaktora qoşuldu"
-      },
-      "WaitingForEditorText": {
-        "label": "Redaktora qoşulma gözlənilir"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

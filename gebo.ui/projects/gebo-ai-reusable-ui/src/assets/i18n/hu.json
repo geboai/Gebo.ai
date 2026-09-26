@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI asszisztens"
-      },
-      "AssistantSuggestion": {
-        "label": "Asszisztens javaslat"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Asszisztens csatlakoztatása…"
-      },
-      "ChooseChatProfile": {
-        "label": "Válassz egy csevegési profilt a kezdéshez:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Asszisztens előkészítése…"
-      },
-      "ReplaceButton": {
-        "label": "Csere",
-        "help": "Kijelölt szöveg cseréje"
-      },
-      "InsertButton": {
-        "label": "Beszúrás",
-        "help": "Beszúrás a dokumentumba"
-      },
-      "ConnectedToEditorText": {
-        "label": "Csatlakozva a szerkesztőhöz"
-      },
-      "WaitingForEditorText": {
-        "label": "Várakozás a szerkesztőre"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

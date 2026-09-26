@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Asistenti Gebo AI"
-      },
-      "AssistantSuggestion": {
-        "label": "Sugjerim i asistentit"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Duke lidhur asistentin…"
-      },
-      "ChooseChatProfile": {
-        "label": "Zgjidhni një profil bisede për të filluar:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Duke përgatitur asistentin…"
-      },
-      "ReplaceButton": {
-        "label": "Zëvendëso",
-        "help": "Zëvendëso tekstin e zgjedhur"
-      },
-      "InsertButton": {
-        "label": "Shto",
-        "help": "Shto në dokument"
-      },
-      "ConnectedToEditorText": {
-        "label": "I lidhur me editorin"
-      },
-      "WaitingForEditorText": {
-        "label": "Duke pritur për editorin"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI አገልጋይ"
-      },
-      "AssistantSuggestion": {
-        "label": "የአገልጋዩ ጥቆማ"
-      },
-      "ConnectingTheAssistant": {
-        "label": "አገልጋዩን በመገናኘት ላይ…"
-      },
-      "ChooseChatProfile": {
-        "label": "ለመጀመር የቻት መገለጫ ይምረጡ:"
-      },
-      "PreparingTheAssistant": {
-        "label": "አገልጋዩን በማዘጋጀት ላይ…"
-      },
-      "ReplaceButton": {
-        "label": "ቀይር",
-        "help": "የተመረጠውን ጽሑፍ ቀይር"
-      },
-      "InsertButton": {
-        "label": "አስገባ",
-        "help": "በሰነዱ ውስጥ አስገባ"
-      },
-      "ConnectedToEditorText": {
-        "label": "ከአርታዒ ጋር ተገናኝቷል"
-      },
-      "WaitingForEditorText": {
-        "label": "አርታዒን በመጠባበቅ ላይ"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

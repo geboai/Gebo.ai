@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI asistent"
-      },
-      "AssistantSuggestion": {
-        "label": "Návrh asistenta"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Připojování asistenta…"
-      },
-      "ChooseChatProfile": {
-        "label": "Vyberte chatovací profil pro zahájení:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Připravuji asistenta…"
-      },
-      "ReplaceButton": {
-        "label": "Nahradit",
-        "help": "Nahradit vybraný text"
-      },
-      "InsertButton": {
-        "label": "Vložit",
-        "help": "Vložit do dokumentu"
-      },
-      "ConnectedToEditorText": {
-        "label": "Připojeno k editoru"
-      },
-      "WaitingForEditorText": {
-        "label": "Čekání na editor"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

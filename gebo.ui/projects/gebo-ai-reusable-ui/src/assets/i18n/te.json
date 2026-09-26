@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI సహాయకుడు"
-      },
-      "AssistantSuggestion": {
-        "label": "సహాయక సూచన"
-      },
-      "ConnectingTheAssistant": {
-        "label": "సహాయకుడిని కనెక్ట్ చేస్తున్నాం…"
-      },
-      "ChooseChatProfile": {
-        "label": "ప్రారంభించడానికి చాట్ ప్రొఫైల్ ఎంచుకోండి:"
-      },
-      "PreparingTheAssistant": {
-        "label": "సహాయకుడిని సిద్ధం చేస్తున్నాం…"
-      },
-      "ReplaceButton": {
-        "label": "మార్చు",
-        "help": "ఎంచుకున్న వచనాన్ని మార్చు"
-      },
-      "InsertButton": {
-        "label": "పొదు",
-        "help": "పత్రంలో చేర్చు"
-      },
-      "ConnectedToEditorText": {
-        "label": "ఎడిటర్‌కు కనెక్ట్ అయింది"
-      },
-      "WaitingForEditorText": {
-        "label": "ఎడిటర్ కోసం వేచి ఉంది"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

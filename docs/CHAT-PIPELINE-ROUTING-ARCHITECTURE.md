@@ -199,9 +199,11 @@ inert when the network is off.
 
 Consequence: **setting `ai.gebo.agents.standard.enabled=false` is the supported way to
 run the default pipeline on the LLM router.** Any configuration that depends on the
-standard agents must back off with it — see `OfficeAgentsInitialization`, which lists
-both `ai.gebo.officeplugin.enabled` and `ai.gebo.agents.standard.enabled` in one
-`@ConditionalOnProperty` for exactly this reason.
+standard agents must back off with it. The worked example is `OfficeAgentsInitialization`,
+which lists both `ai.gebo.officeplugin.enabled` and `ai.gebo.agents.standard.enabled` in
+one `@ConditionalOnProperty` for exactly this reason; it now lives in the pro platform
+(`ai.gebo.pro.architecture.parent/gebo.architecture.office-plugin-pipeline`), so the rule
+holds across both reactors and any new dependent network must follow it.
 
 ---
 
@@ -255,8 +257,8 @@ adding it to the `doDecideRoute(..)` guard** — see invariant 1.
 | `…/chat/abstraction/layer/llmexchange/model/GeboTemplatedChatRequest.java` | carries `chatPipelineProcessId` |
 | `…/chat/abstraction/layer/llmexchange/model/DeliverableIntent.java` | user-intent taxonomy used by the router branch |
 | `gebo.architecture.parent/gebo.architecture.agents.standard/src/main/java/ai/gebo/llms/agent/standard/config/StandardAgentsInitialization.java` | publishes the `DEFAULT_PIPELINE_SERVICE` bean |
-| `gebo.architecture.parent/gebo.architecture.office-plugin-pipeline/src/main/java/ai/gebo/officeplugin/pipeline/config/OfficeAgentsInitialization.java` | office network; must back off with the standard agents |
-| `gebo.architecture.parent/gebo.architecture.office-plugin-pipeline/src/main/java/ai/gebo/officeplugin/pipeline/ui/OfficeAssistantPipelineUserMenuProviderService.java` | office chat menu |
+| _(pro)_ `ai.gebo.pro.architecture.parent/gebo.architecture.office-plugin-pipeline/…/config/OfficeAgentsInitialization.java` | office network; must back off with the standard agents — in the **Gebo.ai.pro** repository |
+| _(pro)_ `ai.gebo.pro.architecture.parent/gebo.architecture.office-plugin-pipeline/…/ui/OfficeAssistantPipelineUserMenuProviderService.java` | office chat menu — in the **Gebo.ai.pro** repository |
 | `gebo.ui/projects/gebo-ai-reusable-ui/src/lib/controls/chat-control/chat-input-shell.component.ts` | renders the menu, sets `chatPipelineProcessId` |
 
 ---
