@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "دستیار Gebo AI"
-      },
-      "AssistantSuggestion": {
-        "label": "پیشنهاد دستیار"
-      },
-      "ConnectingTheAssistant": {
-        "label": "در حال اتصال به دستیار…"
-      },
-      "ChooseChatProfile": {
-        "label": "یک پروفایل گفتگو را برای شروع انتخاب کنید:"
-      },
-      "PreparingTheAssistant": {
-        "label": "در حال آماده‌سازی دستیار…"
-      },
-      "ReplaceButton": {
-        "label": "جایگزین",
-        "help": "جایگزینی متن انتخاب‌شده"
-      },
-      "InsertButton": {
-        "label": "درج",
-        "help": "درج در سند"
-      },
-      "ConnectedToEditorText": {
-        "label": "متصل به ویرایشگر"
-      },
-      "WaitingForEditorText": {
-        "label": "در انتظار ویرایشگر"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

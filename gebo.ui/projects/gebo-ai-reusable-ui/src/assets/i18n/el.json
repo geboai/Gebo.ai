@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Βοηθός Gebo AI"
-      },
-      "AssistantSuggestion": {
-        "label": "Πρόταση βοηθού"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Σύνδεση του βοηθού…"
-      },
-      "ChooseChatProfile": {
-        "label": "Επιλέξτε προφίλ συνομιλίας για να ξεκινήσετε:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Προετοιμασία του βοηθού…"
-      },
-      "ReplaceButton": {
-        "label": "Αντικατάσταση",
-        "help": "Αντικατάσταση επιλεγμένου κειμένου"
-      },
-      "InsertButton": {
-        "label": "Εισαγωγή",
-        "help": "Εισαγωγή στο έγγραφο"
-      },
-      "ConnectedToEditorText": {
-        "label": "Συνδέθηκε με τον επεξεργαστή"
-      },
-      "WaitingForEditorText": {
-        "label": "Αναμονή για τον επεξεργαστή"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

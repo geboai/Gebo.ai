@@ -280,7 +280,6 @@ ai.gebo.ragsearch.config:
   # Minimum cosine similarity a fragment must reach to be retrieved.
   default-similarity-threshold: 0.57
 ai.gebo.agents.standard.enabled: true
-ai.gebo.officeplugin.enabled: true
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
 #                  enabled: true

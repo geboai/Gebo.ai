@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI asistent"
-      },
-      "AssistantSuggestion": {
-        "label": "Predlog asistenta"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Povezivanje asistenta…"
-      },
-      "ChooseChatProfile": {
-        "label": "Izaberite profil za ćaskanje za početak:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Pripremanje asistenta…"
-      },
-      "ReplaceButton": {
-        "label": "Zameni",
-        "help": "Zameni izabrani tekst"
-      },
-      "InsertButton": {
-        "label": "Ubaci",
-        "help": "Ubaci u dokument"
-      },
-      "ConnectedToEditorText": {
-        "label": "Povezano sa uređivačem"
-      },
-      "WaitingForEditorText": {
-        "label": "Čekanje na uređivač"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI સહાયક"
-      },
-      "AssistantSuggestion": {
-        "label": "સહાયક સૂચન"
-      },
-      "ConnectingTheAssistant": {
-        "label": "સહાયક જોડાઈ રહ્યું છે…"
-      },
-      "ChooseChatProfile": {
-        "label": "શરૂ કરવા માટે ચેટ પ્રોફાઇલ પસંદ કરો:"
-      },
-      "PreparingTheAssistant": {
-        "label": "સહાયક તૈયાર કરી રહ્યા છીએ…"
-      },
-      "ReplaceButton": {
-        "label": "બદલો",
-        "help": "પસંદ કરેલ લખાણ બદલો"
-      },
-      "InsertButton": {
-        "label": "દાખલ કરો",
-        "help": "દસ્તાવેજમાં દાખલ કરો"
-      },
-      "ConnectedToEditorText": {
-        "label": "એડિટર સાથે જોડાયેલ"
-      },
-      "WaitingForEditorText": {
-        "label": "એડિટર માટે રાહ જોઈ રહ્યા છીએ"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

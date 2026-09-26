@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI Assistant"
-      },
-      "AssistantSuggestion": {
-        "label": "Cadangan pembantu"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Menyambungkan pembantu…"
-      },
-      "ChooseChatProfile": {
-        "label": "Pilih profil sembang untuk mula:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Menyediakan pembantu…"
-      },
-      "ReplaceButton": {
-        "label": "Ganti",
-        "help": "Ganti teks yang dipilih"
-      },
-      "InsertButton": {
-        "label": "Sisipkan",
-        "help": "Sisipkan dalam dokumen"
-      },
-      "ConnectedToEditorText": {
-        "label": "Bersambung ke editor"
-      },
-      "WaitingForEditorText": {
-        "label": "Menunggu editor"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

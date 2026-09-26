@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI உதவியாளர்"
-      },
-      "AssistantSuggestion": {
-        "label": "உதவியாளர் பரிந்துரை"
-      },
-      "ConnectingTheAssistant": {
-        "label": "உதவியாளரை இணைக்கிறது…"
-      },
-      "ChooseChatProfile": {
-        "label": "தொடங்க ஒரு அரட்டை சுயவிவரத்தை தேர்வு செய்யவும்:"
-      },
-      "PreparingTheAssistant": {
-        "label": "உதவியாளரை தயாராக்குகிறது…"
-      },
-      "ReplaceButton": {
-        "label": "மாற்று",
-        "help": "தேர்ந்தெடுத்த உரையை மாற்று"
-      },
-      "InsertButton": {
-        "label": "நுழை",
-        "help": "ஆவணத்தில் நுழை"
-      },
-      "ConnectedToEditorText": {
-        "label": "எடிட்டருடன் இணைக்கப்பட்டது"
-      },
-      "WaitingForEditorText": {
-        "label": "எடிட்டருக்காக காத்திருக்கிறது"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

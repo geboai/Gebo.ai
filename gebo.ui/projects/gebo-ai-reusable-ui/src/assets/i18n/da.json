@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI-assistent"
-      },
-      "AssistantSuggestion": {
-        "label": "Assistentforslag"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Opretter forbindelse til assistenten…"
-      },
-      "ChooseChatProfile": {
-        "label": "Vælg en chatprofil for at starte:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Forbereder assistenten…"
-      },
-      "ReplaceButton": {
-        "label": "Erstat",
-        "help": "Erstat markeret tekst"
-      },
-      "InsertButton": {
-        "label": "Indsæt",
-        "help": "Indsæt i dokumentet"
-      },
-      "ConnectedToEditorText": {
-        "label": "Forbundet til editor"
-      },
-      "WaitingForEditorText": {
-        "label": "Venter på editor"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {
