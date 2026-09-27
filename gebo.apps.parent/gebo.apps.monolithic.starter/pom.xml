@@ -175,6 +175,12 @@
 			<artifactId>gebo.architecture.security.controllers</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- System messages shown to the logged-in users, routed by role. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.system.messages.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>

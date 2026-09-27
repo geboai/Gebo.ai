@@ -20,7 +20,9 @@
   	<module>gebo.application.messaging</module>
   	
   	<module>gebo.secrets.services</module>
-  	<module>gebo.architecture.security.controllers</module>  	
+  	<module>gebo.architecture.security.controllers</module>
+  	<module>gebo.architecture.system.messages</module>
+  	<module>gebo.architecture.system.messages.controllers</module>  	
   	
   	<module>gebo.architecture.multithreading</module>
   	<module>gebo.architecture.scheduling</module>

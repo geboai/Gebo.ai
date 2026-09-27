@@ -139,6 +139,7 @@ export * from "./lib/controls/field-translation-container/main-micro-language.co
 export * from "./lib/controls/field-translation-container/primeng-components-obsolete-multilanguage-adapters.directive";
 export * from "./lib/notifications/notification.component";
 export * from "./lib/notifications/display-messages.component";
+export * from "./lib/notifications/system-messages.component";
 export * from "./lib/controls/editable-listbox-component/editable-listbox-bound-object-adapter.component";
 export * from "./lib/controls/deep-search-control/deep-search.component";
 export * from "./lib/controls/content-viewer/gebo-ai-content-viewer.component";

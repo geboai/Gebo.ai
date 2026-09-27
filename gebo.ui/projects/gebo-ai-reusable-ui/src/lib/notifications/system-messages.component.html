@@ -1,0 +1,30 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+@if (messages.length) {
+  <div class="gebo-system-messages" role="status" aria-live="polite">
+    @for (message of messages; track trackById($index, message)) {
+      <p-message [severity]="message.severity" styleClass="gebo-system-message">
+        <div class="gebo-system-message-body">
+          <div class="gebo-system-message-text">
+            <strong>{{ message.summary }}</strong>
+            @if (message.detail) {
+              <span class="gebo-system-message-detail">{{ message.detail }}</span>
+            }
+          </div>
+          @if (message.dismissible) {
+            <p-button icon="pi pi-times" [text]="true" [rounded]="true" severity="secondary"
+              ariaLabel="Dismiss" (onClick)="dismiss(message)"></p-button>
+          }
+        </div>
+      </p-message>
+    }
+  </div>
+}

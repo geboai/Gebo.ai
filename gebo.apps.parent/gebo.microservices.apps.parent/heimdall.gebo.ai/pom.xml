@@ -99,6 +99,12 @@
 			<artifactId>gebo.architecture.security.controllers</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- System messages shown to the logged-in users, routed by role. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.system.messages.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Generated API keys (model + repository + service + the two controllers).
 		     Owner-only: a key IS a LOCAL_JWT, so nothing on the request path needs the
 		     key store - only minting, listing and revoking do, and those are admin acts. -->

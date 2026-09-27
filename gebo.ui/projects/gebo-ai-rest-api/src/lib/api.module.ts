@@ -126,6 +126,8 @@ import { SerpapiSearchConfigurationControllerService } from './api/serpapiSearch
 import { SharePointSearchServiceControllerService } from './api/sharePointSearchServiceController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
+import { SystemMessagesAdminControllerService } from './api/systemMessagesAdminController.service';
+import { SystemMessagesControllerService } from './api/systemMessagesController.service';
 import { TavilySearchConfigurationControllerService } from './api/tavilySearchConfigurationController.service';
 import { TextToSpeechModelsControllerService } from './api/textToSpeechModelsController.service';
 import { TokenRenewControllerService } from './api/tokenRenewController.service';
@@ -270,6 +272,8 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     SharePointSearchServiceControllerService,
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,
+    SystemMessagesAdminControllerService,
+    SystemMessagesControllerService,
     TavilySearchConfigurationControllerService,
     TextToSpeechModelsControllerService,
     TokenRenewControllerService,
