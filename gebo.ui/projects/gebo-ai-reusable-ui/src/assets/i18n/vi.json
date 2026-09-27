@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Trợ lý Gebo AI"
-      },
-      "AssistantSuggestion": {
-        "label": "Gợi ý từ trợ lý"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Đang kết nối trợ lý…"
-      },
-      "ChooseChatProfile": {
-        "label": "Chọn hồ sơ trò chuyện để bắt đầu:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Đang chuẩn bị trợ lý…"
-      },
-      "ReplaceButton": {
-        "label": "Thay thế",
-        "help": "Thay thế văn bản đã chọn"
-      },
-      "InsertButton": {
-        "label": "Chèn",
-        "help": "Chèn vào tài liệu"
-      },
-      "ConnectedToEditorText": {
-        "label": "Đã kết nối với trình chỉnh sửa"
-      },
-      "WaitingForEditorText": {
-        "label": "Đang chờ trình chỉnh sửa"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

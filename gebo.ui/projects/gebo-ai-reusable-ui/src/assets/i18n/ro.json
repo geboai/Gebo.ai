@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Asistent Gebo AI"
-      },
-      "AssistantSuggestion": {
-        "label": "Sugestie asistent"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Se conectează asistentul…"
-      },
-      "ChooseChatProfile": {
-        "label": "Alege un profil de chat pentru a începe:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Se pregătește asistentul…"
-      },
-      "ReplaceButton": {
-        "label": "Înlocuiește",
-        "help": "Înlocuiește textul selectat"
-      },
-      "InsertButton": {
-        "label": "Inserează",
-        "help": "Inserează în document"
-      },
-      "ConnectedToEditorText": {
-        "label": "Conectat la editor"
-      },
-      "WaitingForEditorText": {
-        "label": "Se așteaptă editorul"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

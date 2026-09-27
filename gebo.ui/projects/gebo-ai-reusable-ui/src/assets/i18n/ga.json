@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Cúntóir Gebo AI"
-      },
-      "AssistantSuggestion": {
-        "label": "Moladh ón chúntóir"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Ag nascadh an chúntóra…"
-      },
-      "ChooseChatProfile": {
-        "label": "Roghnaigh próifíl chomhrá le tosú:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Ag ullmhú an chúntóra…"
-      },
-      "ReplaceButton": {
-        "label": "Ionadaigh",
-        "help": "Ionadaigh an téacs roghnaithe"
-      },
-      "InsertButton": {
-        "label": "Ionsáigh",
-        "help": "Ionsáigh sa cháipéis"
-      },
-      "ConnectedToEditorText": {
-        "label": "Nascaithe leis an eagarthóir"
-      },
-      "WaitingForEditorText": {
-        "label": "Ag fanacht leis an eagarthóir"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI օգնական"
-      },
-      "AssistantSuggestion": {
-        "label": "Օգնականի առաջարկ"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Կապվում է օգնականի հետ…"
-      },
-      "ChooseChatProfile": {
-        "label": "Ընտրեք զրույցի պրոֆիլը՝ սկսելու համար:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Պատրաստվում է օգնականը…"
-      },
-      "ReplaceButton": {
-        "label": "Փոխարինել",
-        "help": "Փոխարինել ընտրված տեքստը"
-      },
-      "InsertButton": {
-        "label": "Տեղադրել",
-        "help": "Տեղադրել փաստաթղթում"
-      },
-      "ConnectedToEditorText": {
-        "label": "Խմբագրիչին միացված է"
-      },
-      "WaitingForEditorText": {
-        "label": "Սպասում է խմբագրիչին"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

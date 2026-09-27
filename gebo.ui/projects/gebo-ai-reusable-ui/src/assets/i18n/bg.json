@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI Assistant"
-      },
-      "AssistantSuggestion": {
-        "label": "Предложение от асистента"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Свързване с асистента…"
-      },
-      "ChooseChatProfile": {
-        "label": "Изберете чат профил, за да започнете:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Подготвяне на асистента…"
-      },
-      "ReplaceButton": {
-        "label": "Замени",
-        "help": "Замени избрания текст"
-      },
-      "InsertButton": {
-        "label": "Вмъкни",
-        "help": "Вмъкни в документа"
-      },
-      "ConnectedToEditorText": {
-        "label": "Свързан с редактора"
-      },
-      "WaitingForEditorText": {
-        "label": "Изчакване на редактора"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

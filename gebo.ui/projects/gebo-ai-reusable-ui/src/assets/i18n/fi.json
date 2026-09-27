@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI Assistant"
-      },
-      "AssistantSuggestion": {
-        "label": "Avustajan ehdotus"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Yhdistetään avustajaa…"
-      },
-      "ChooseChatProfile": {
-        "label": "Valitse keskusteluprofiili aloittaaksesi:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Valmistellaan avustajaa…"
-      },
-      "ReplaceButton": {
-        "label": "Korvaa",
-        "help": "Korvaa valittu teksti"
-      },
-      "InsertButton": {
-        "label": "Lisää",
-        "help": "Lisää asiakirjaan"
-      },
-      "ConnectedToEditorText": {
-        "label": "Yhdistetty editoriin"
-      },
-      "WaitingForEditorText": {
-        "label": "Odotetaan editoria"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Asystent Gebo AI"
-      },
-      "AssistantSuggestion": {
-        "label": "Sugestia asystenta"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Łączenie z asystentem…"
-      },
-      "ChooseChatProfile": {
-        "label": "Wybierz profil czatu, aby rozpocząć:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Przygotowywanie asystenta…"
-      },
-      "ReplaceButton": {
-        "label": "Zastąp",
-        "help": "Zastąp zaznaczony tekst"
-      },
-      "InsertButton": {
-        "label": "Wstaw",
-        "help": "Wstaw do dokumentu"
-      },
-      "ConnectedToEditorText": {
-        "label": "Połączono z edytorem"
-      },
-      "WaitingForEditorText": {
-        "label": "Oczekiwanie na edytor"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

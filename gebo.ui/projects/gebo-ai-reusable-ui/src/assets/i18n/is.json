@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI aðstoðarmaður"
-      },
-      "AssistantSuggestion": {
-        "label": "Tillaga aðstoðarmanns"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Tengist aðstoðarmanni…"
-      },
-      "ChooseChatProfile": {
-        "label": "Veldu spjallprófíl til að byrja:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Undirbý aðstoðarmanninn…"
-      },
-      "ReplaceButton": {
-        "label": "Skipta út",
-        "help": "Skipta út völdum texta"
-      },
-      "InsertButton": {
-        "label": "Setja inn",
-        "help": "Setja inn í skjal"
-      },
-      "ConnectedToEditorText": {
-        "label": "Tengt ritli"
-      },
-      "WaitingForEditorText": {
-        "label": "Bíð eftir ritli"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

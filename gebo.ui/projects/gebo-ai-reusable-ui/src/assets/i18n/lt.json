@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI asistentas"
-      },
-      "AssistantSuggestion": {
-        "label": "Asistento pasiūlymas"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Jungiamas asistentas…"
-      },
-      "ChooseChatProfile": {
-        "label": "Pasirinkite pokalbio profilį, kad pradėtumėte:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Ruošiamas asistentas…"
-      },
-      "ReplaceButton": {
-        "label": "Pakeisti",
-        "help": "Pakeisti pasirinktą tekstą"
-      },
-      "InsertButton": {
-        "label": "Įterpti",
-        "help": "Įterpti į dokumentą"
-      },
-      "ConnectedToEditorText": {
-        "label": "Prijungta prie redaktoriaus"
-      },
-      "WaitingForEditorText": {
-        "label": "Laukiama redaktoriaus"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

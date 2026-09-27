@@ -460,9 +460,6 @@ ai.gebo.ragsearch.config:
   # weakest neighbours.
   default-similarity-threshold: 0.57
 ai.gebo.agents.standard.enabled: true
-# Office assistant pipeline (requires ai.gebo.agents.standard.enabled=true; it reuses
-# the standard searcher/tool agents and the controller service).
-ai.gebo.officeplugin.enabled: true
 # Open-chat pipeline (pipelineCode=open-chat): a "pure chat" experience that never
 # RAGs the internal knowledge base. It answers freely via a KB-free network of agents,
 # can search external systems, and can chat over uploaded/picked files. Its agents

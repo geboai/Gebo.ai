@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI Assistant"
-      },
-      "AssistantSuggestion": {
-        "label": "도우미 제안"
-      },
-      "ConnectingTheAssistant": {
-        "label": "도우미 연결 중…"
-      },
-      "ChooseChatProfile": {
-        "label": "시작할 채팅 프로필을 선택하세요:"
-      },
-      "PreparingTheAssistant": {
-        "label": "도우미 준비 중…"
-      },
-      "ReplaceButton": {
-        "label": "교체",
-        "help": "선택한 텍스트 교체"
-      },
-      "InsertButton": {
-        "label": "삽입",
-        "help": "문서에 삽입"
-      },
-      "ConnectedToEditorText": {
-        "label": "에디터에 연결됨"
-      },
-      "WaitingForEditorText": {
-        "label": "에디터 대기 중"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

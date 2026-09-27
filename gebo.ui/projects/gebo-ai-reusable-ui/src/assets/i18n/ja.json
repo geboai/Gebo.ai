@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AIアシスタント"
-      },
-      "AssistantSuggestion": {
-        "label": "アシスタントの提案"
-      },
-      "ConnectingTheAssistant": {
-        "label": "アシスタントに接続中…"
-      },
-      "ChooseChatProfile": {
-        "label": "開始するチャットプロファイルを選択してください:"
-      },
-      "PreparingTheAssistant": {
-        "label": "アシスタントを準備中…"
-      },
-      "ReplaceButton": {
-        "label": "置換",
-        "help": "選択したテキストを置換"
-      },
-      "InsertButton": {
-        "label": "挿入",
-        "help": "ドキュメントに挿入"
-      },
-      "ConnectedToEditorText": {
-        "label": "エディターに接続しました"
-      },
-      "WaitingForEditorText": {
-        "label": "エディターを待機中"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

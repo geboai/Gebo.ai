@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "مساعد Gebo AI"
-      },
-      "AssistantSuggestion": {
-        "label": "اقتراح المساعد"
-      },
-      "ConnectingTheAssistant": {
-        "label": "جارٍ توصيل المساعد…"
-      },
-      "ChooseChatProfile": {
-        "label": "اختر ملف دردشة للبدء:"
-      },
-      "PreparingTheAssistant": {
-        "label": "جارٍ تجهيز المساعد…"
-      },
-      "ReplaceButton": {
-        "label": "استبدال",
-        "help": "استبدال النص المحدد"
-      },
-      "InsertButton": {
-        "label": "إدراج",
-        "help": "إدراج في المستند"
-      },
-      "ConnectedToEditorText": {
-        "label": "متصل بالمحرر"
-      },
-      "WaitingForEditorText": {
-        "label": "بانتظار المحرر"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

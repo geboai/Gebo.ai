@@ -29,7 +29,8 @@ import lombok.Data;
 /**
  * Prompt library for the open-chat pipeline: the open-chat coordinator prompt and
  * the open-chat free-response answer-writer prompt. Mirrors
- * {@code StandardAgentsPromptsLibraryConfig} / {@code OfficePluginPromptsLibraryConfig}.
+ * {@code StandardAgentsPromptsLibraryConfig} (and {@code OfficePluginPromptsLibraryConfig},
+ * which now lives in the pro platform).
  * <p>
  * The two prompts deliberately DIVERGE from the standard network's prompts: the
  * writer answers freely and conversationally on any topic and does not force

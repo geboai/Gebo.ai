@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI အကူအညီ"
-      },
-      "AssistantSuggestion": {
-        "label": "အကူအညီ အကြံပြုချက်"
-      },
-      "ConnectingTheAssistant": {
-        "label": "အကူအညီကို ချိတ်ဆက်နေသည်…"
-      },
-      "ChooseChatProfile": {
-        "label": "စတင်ရန် စကားပြောပရိုဖိုင်ကို ရွေးချယ်ပါ:"
-      },
-      "PreparingTheAssistant": {
-        "label": "အကူအညီကို ပြင်ဆင်နေသည်…"
-      },
-      "ReplaceButton": {
-        "label": "အစားထိုးရန်",
-        "help": "ရွေးထားသောစာသားကို အစားထိုးပါ"
-      },
-      "InsertButton": {
-        "label": "ထည့်သွင်းရန်",
-        "help": "စာရွက်စာတမ်းတွင် ထည့်သွင်းပါ"
-      },
-      "ConnectedToEditorText": {
-        "label": "စာတည်းထဲသို့ ချိတ်ဆက်ပြီး"
-      },
-      "WaitingForEditorText": {
-        "label": "စာတည်းကို စောင့်နေသည်"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

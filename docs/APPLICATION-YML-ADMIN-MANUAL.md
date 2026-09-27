@@ -558,7 +558,6 @@ large-scale ingestion tuning.
 |---|---|---|---|
 | `ai.gebo.rag-threashold-autotune.config.enabled` | boolean | `true` | Periodically re-computes optimal RAG similarity thresholds per vector store / embedding model / knowledge base, by sampling document fragments, generating synthetic questions, and rating match quality. |
 | `ai.gebo.agents.standard.enabled` | boolean | `true` | Enables the built-in standard document-search agents, i.e. the default network of agents. On unless explicitly set to `false`. |
-| `ai.gebo.officeplugin.enabled` | boolean | `true` | Enables the office assistant network of agents and its pipeline. Requires `ai.gebo.agents.standard.enabled=true`, whose searcher/tool agents and controller service it reuses. On unless explicitly set to `false`. |
 | `ai.gebo.chatpipes.defaultPipelineStepIsChatAgent` | boolean | `true` | **Currently has no effect** - the value is read and never used. The behaviour it describes (agentic flow vs. the LLM routing/decision step) is governed by `ai.gebo.agents.standard.enabled` instead. See [`CHAT-PIPELINE-ROUTING-ARCHITECTURE.md`](./CHAT-PIPELINE-ROUTING-ARCHITECTURE.md) §8. |
 
 ## 19. Web search tool (Google Custom Search)

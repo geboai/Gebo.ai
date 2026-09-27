@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI Assistant"
-      },
-      "AssistantSuggestion": {
-        "label": "Suggeriment de l'assistent"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Connectant l'assistent…"
-      },
-      "ChooseChatProfile": {
-        "label": "Tria un perfil de xat per començar:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Preparant l'assistent…"
-      },
-      "ReplaceButton": {
-        "label": "Reemplaça",
-        "help": "Reemplaça el text seleccionat"
-      },
-      "InsertButton": {
-        "label": "Insereix",
-        "help": "Insereix al document"
-      },
-      "ConnectedToEditorText": {
-        "label": "Connectat a l'editor"
-      },
-      "WaitingForEditorText": {
-        "label": "Esperant l'editor"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

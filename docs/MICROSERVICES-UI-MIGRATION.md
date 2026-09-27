@@ -545,7 +545,6 @@ is missed:
 | `gebo-ai-reusable-ui/src/lib/controls/content-viewer/download-link-wrapper.component.ts` |
 | `gebo-ai-reusable-ui/src/lib/controls/content-viewer/pdf-viewer-wrapper2.component.ts` |
 | `gebo-ai-reusable-ui/src/lib/controls/deep-search-control/deep-search.component.ts` |
-| `gebo-ai-reusable-ui/src/lib/controls/gebo-ai-office-assistant/gebo-ai-office-assistant.component.ts` |
 | `gebo-ai-reusable-ui/src/lib/controls/userspace-files-component/userspace-wizard.ts` |
 | `gebo-ai-reusable-ui/src/lib/controls/vfilesystem-selector/vfilesystem-selector.component.ts` |
 | `gebo-ai-reusable-ui/src/lib/controls/vfilesystem-selector/vfilesystem-types.ts` |

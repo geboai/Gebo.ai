@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI Assistant"
-      },
-      "AssistantSuggestion": {
-        "label": "הצעת עוזר"
-      },
-      "ConnectingTheAssistant": {
-        "label": "מחבר את העוזר…"
-      },
-      "ChooseChatProfile": {
-        "label": "בחר פרופיל צ'אט כדי להתחיל:"
-      },
-      "PreparingTheAssistant": {
-        "label": "מכין את העוזר…"
-      },
-      "ReplaceButton": {
-        "label": "החלף",
-        "help": "החלף את הטקסט שנבחר"
-      },
-      "InsertButton": {
-        "label": "הוסף",
-        "help": "הוסף במסמך"
-      },
-      "ConnectedToEditorText": {
-        "label": "מחובר לעורך"
-      },
-      "WaitingForEditorText": {
-        "label": "ממתין לעורך"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

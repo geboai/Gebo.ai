@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI 助手"
-      },
-      "AssistantSuggestion": {
-        "label": "助手建议"
-      },
-      "ConnectingTheAssistant": {
-        "label": "正在连接助手…"
-      },
-      "ChooseChatProfile": {
-        "label": "选择一个聊天配置文件开始："
-      },
-      "PreparingTheAssistant": {
-        "label": "正在准备助手…"
-      },
-      "ReplaceButton": {
-        "label": "替换",
-        "help": "替换所选文本"
-      },
-      "InsertButton": {
-        "label": "插入",
-        "help": "插入到文档中"
-      },
-      "ConnectedToEditorText": {
-        "label": "已连接到编辑器"
-      },
-      "WaitingForEditorText": {
-        "label": "正在等待编辑器"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

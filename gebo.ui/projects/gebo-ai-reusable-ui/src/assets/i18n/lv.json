@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI asistents"
-      },
-      "AssistantSuggestion": {
-        "label": "Asistenta ieteikums"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Savieno asistentu…"
-      },
-      "ChooseChatProfile": {
-        "label": "Izvēlieties tērzēšanas profilu, lai sāktu:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Sagatavo asistentu…"
-      },
-      "ReplaceButton": {
-        "label": "Aizvietot",
-        "help": "Aizvietot izvēlēto tekstu"
-      },
-      "InsertButton": {
-        "label": "Ievietot",
-        "help": "Ievietot dokumentā"
-      },
-      "ConnectedToEditorText": {
-        "label": "Savienots ar redaktoru"
-      },
-      "WaitingForEditorText": {
-        "label": "Gaida redaktoru"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

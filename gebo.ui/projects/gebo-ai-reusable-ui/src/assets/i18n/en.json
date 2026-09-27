@@ -5535,39 +5535,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI Assistant"
-      },
-      "AssistantSuggestion": {
-        "label": "Assistant suggestion"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Connecting the assistant…"
-      },
-      "ChooseChatProfile": {
-        "label": "Choose a chat profile to start:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Preparing the assistant…"
-      },
-      "ReplaceButton": {
-        "label": "Replace",
-        "help": "Replace selected text"
-      },
-      "InsertButton": {
-        "label": "Insert",
-        "help": "Insert in document"
-      },
-      "ConnectedToEditorText": {
-        "label": "Connected to editor"
-      },
-      "WaitingForEditorText": {
-        "label": "Waiting for editor"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {

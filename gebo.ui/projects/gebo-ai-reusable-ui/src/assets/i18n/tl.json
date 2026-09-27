@@ -5528,39 +5528,6 @@
       }
     }
   },
-  "GeboAIOfficeAssistantModule": {
-    "GeboAIOfficeAssistantComponent": {
-      "AssistantTab": {
-        "label": "Gebo AI Assistant"
-      },
-      "AssistantSuggestion": {
-        "label": "Mungkahi ng assistant"
-      },
-      "ConnectingTheAssistant": {
-        "label": "Kinokonekta ang assistant…"
-      },
-      "ChooseChatProfile": {
-        "label": "Pumili ng chat profile para magsimula:"
-      },
-      "PreparingTheAssistant": {
-        "label": "Inihahanda ang assistant…"
-      },
-      "ReplaceButton": {
-        "label": "Palitan",
-        "help": "Palitan ang napiling teksto"
-      },
-      "InsertButton": {
-        "label": "Ipasok",
-        "help": "Ipasok sa dokumento"
-      },
-      "ConnectedToEditorText": {
-        "label": "Nakakonekta sa editor"
-      },
-      "WaitingForEditorText": {
-        "label": "Naghihintay sa editor"
-      }
-    }
-  },
   "GeboAIMultilanguageModule": {
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": {
