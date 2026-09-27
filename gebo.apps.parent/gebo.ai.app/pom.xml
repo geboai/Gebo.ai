@@ -252,12 +252,18 @@
 										<option>-Dfile.encoding=UTF-8</option>
 										<option>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</option>
 										<option>--enable-native-access=ALL-UNNAMED</option>
+										<!-- Heap sized for a server install. Deliberately NOT
+										     -XX:+AggressiveHeap: it silently replaces G1 with the
+										     throughput collector. Deliberately NOT
+										     -XX:+PrintGCDetails: it is deprecated and re-routes the
+										     whole GC stream to stdout instead of the log file below.
+										     The -Xlog directory must already exist - the JVM REFUSES
+										     TO START when it cannot open the file (postinst creates
+										     it). -->
 										<option>-Xms2g</option>
 										<option>-Xmx8g</option>
-										<option>-XX:+AggressiveHeap</option>
 										<option>-XX:MaxMetaspaceSize=512m</option>
-										<option>-XX:+PrintGCDetails</option>
-										<option>-Xlog:gc:/var/log/gebo-ai/gc.log</option>
+										<option>-Xlog:gc:file=/var/log/gebo-ai/gc.log:time,uptime:filecount=5,filesize=20M</option>
 									</javaOptions>
 								</configuration>
 							</execution>
@@ -401,12 +407,18 @@
 										<option>-Dfile.encoding=UTF-8</option>
 										<option>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</option>
 										<option>--enable-native-access=ALL-UNNAMED</option>
+										<!-- Heap sized for a server install. Deliberately NOT
+										     -XX:+AggressiveHeap: it silently replaces G1 with the
+										     throughput collector. Deliberately NOT
+										     -XX:+PrintGCDetails: it is deprecated and re-routes the
+										     whole GC stream to stdout instead of the log file below.
+										     The -Xlog directory must already exist - the JVM REFUSES
+										     TO START when it cannot open the file (postinst creates
+										     it). -->
 										<option>-Xms2g</option>
 										<option>-Xmx8g</option>
-										<option>-XX:+AggressiveHeap</option>
 										<option>-XX:MaxMetaspaceSize=512m</option>
-										<option>-XX:+PrintGCDetails</option>
-										<option>-Xlog:gc:/var/log/gebo-ai/gc.log</option>										
+										<option>-Xlog:gc:file=/var/log/gebo-ai/gc.log:time,uptime:filecount=5,filesize=20M</option>										
 									</javaOptions>
 								</configuration>
 							</execution>
@@ -583,14 +595,18 @@
 										<option>-Dfile.encoding=UTF-8</option>
 										<option>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</option>
 										<option>--enable-native-access=ALL-UNNAMED</option>
+										<!-- Heap sized for a server install. Deliberately NOT
+										     -XX:+AggressiveHeap: it silently replaces G1 with the
+										     throughput collector. Deliberately NOT
+										     -XX:+PrintGCDetails: it is deprecated and re-routes the
+										     whole GC stream to stdout instead of the log file below.
+										     instance/logs MUST ship for this to work: the JVM refuses
+										     to start when it cannot open the -Xlog file, which would
+										     make the Windows service fail outright. -->
 										<option>-Xms2g</option>
 										<option>-Xmx8g</option>
-										<option>-XX:+AggressiveHeap</option>
 										<option>-XX:MaxMetaspaceSize=512m</option>
-										<option>-XX:+PrintGCDetails</option>
-										<!--  
-										<option>-Xlog:gc:=$APPDIR\instance\logs\gc.log</option>
-										 -->
+											<option>-Xlog:gc:file=$APPDIR\instance\logs\gc.log:time,uptime:filecount=5,filesize=20M</option>
 									</javaOptions>
 								</configuration>
 							</execution>
