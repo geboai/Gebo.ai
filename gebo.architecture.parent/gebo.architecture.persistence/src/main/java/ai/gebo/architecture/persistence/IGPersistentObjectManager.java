@@ -88,7 +88,7 @@ public interface IGPersistentObjectManager {
 	 */
 	public <T extends GBaseObject> T insert(T element) throws GeboPersistenceException;
 
-	@Transactional
+	@Transactional("mongoTransactionManager")
 	public <T extends GBaseObject> T transactionalInsert(T element) throws GeboPersistenceException;
 
 	/**
@@ -101,7 +101,7 @@ public interface IGPersistentObjectManager {
 	 */
 	public <T extends GBaseObject> T update(T element) throws GeboPersistenceException;
 
-	@Transactional
+	@Transactional("mongoTransactionManager")
 	public <T extends GBaseObject> T transactionalUpdate(T element) throws GeboPersistenceException;
 
 	/**
@@ -126,12 +126,12 @@ public interface IGPersistentObjectManager {
 	 */
 	public <T extends GBaseObject> void delete(T element, boolean checkDeletable) throws GeboPersistenceException;
 
-	@Transactional
+	@Transactional("mongoTransactionManager")
 	public default <T extends GBaseObject> void transactionalDelete(T element) throws GeboPersistenceException {
 		this.transactionalDelete(element, false);
 	}
 
-	@Transactional
+	@Transactional("mongoTransactionManager")
 	public <T extends GBaseObject> void transactionalDelete(T element, boolean checkDeletable)
 			throws GeboPersistenceException;
 
@@ -156,7 +156,7 @@ public interface IGPersistentObjectManager {
 	 */
 	public <T extends GBaseObject> T findById(Class<T> type, String id) throws GeboPersistenceException;
 
-	@Transactional
+	@Transactional("mongoTransactionManager")
 	public <T extends GBaseObject> T transactionalFindById(Class<T> type, String id) throws GeboPersistenceException;
 
 	/**

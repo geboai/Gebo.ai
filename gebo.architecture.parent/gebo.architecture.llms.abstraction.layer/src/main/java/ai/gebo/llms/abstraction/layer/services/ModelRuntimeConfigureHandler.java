@@ -28,7 +28,7 @@ public class ModelRuntimeConfigureHandler {
 	private final IGRuntimeBinder runtimeBinder;
 	private final static Logger LOGGER = LoggerFactory.getLogger(ModelRuntimeConfigureHandler.class);
 
-	@Transactional
+	@Transactional("mongoTransactionManager")
 	public <ModelType extends GBaseModelConfig> OperationStatus<ModelType> insertAndConfigure(ModelType model,
 			GModelType modelType) throws GeboPersistenceException, LLMConfigException {
 		model = persistentManager.insert(model);

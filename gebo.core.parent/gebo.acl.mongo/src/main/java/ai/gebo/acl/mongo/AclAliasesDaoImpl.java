@@ -13,6 +13,17 @@ import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.architecture.persistence.IGMongoSequenceService;
 import lombok.AllArgsConstructor;
 
+/**
+ * The write methods below qualify their transaction manager by name on purpose.
+ *
+ * A bare {@code @Transactional} here resolved to the only manager in the context,
+ * which is the one Spring Boot's Neo4j auto-configuration registers as
+ * {@code transactionManager} - so a MONGO write was opening a NEO4J session. With
+ * the graph stack disabled that failed outright, and
+ * {@code GeboSystemUserAclInitializer} could not allocate the ACL aliases of the
+ * platform's own system identity at startup. See
+ * {@code GeboMongoTransactionConfig}.
+ */
 @Service
 @AllArgsConstructor
 public class AclAliasesDaoImpl implements IAclAliasesDao, ApplicationListener<ContextRefreshedEvent> {
@@ -21,7 +32,7 @@ public class AclAliasesDaoImpl implements IAclAliasesDao, ApplicationListener<Co
 	final IGMongoSequenceService mongoSequenceService;
 
 	@Override
-	@Transactional
+	@Transactional("mongoTransactionManager")
 	public int addAcl(GAclEntry entry) {
 		long aclId = mongoSequenceService.nextSequence(ACL_ENTRY);
 		AclEntryRecord record = new AclEntryRecord();
@@ -46,7 +57,7 @@ public class AclAliasesDaoImpl implements IAclAliasesDao, ApplicationListener<Co
 	}
 
 	@Override
-	@Transactional
+	@Transactional("mongoTransactionManager")
 	public void removeAcl(int alias) {
 		repository.deleteById(alias);
 	}
