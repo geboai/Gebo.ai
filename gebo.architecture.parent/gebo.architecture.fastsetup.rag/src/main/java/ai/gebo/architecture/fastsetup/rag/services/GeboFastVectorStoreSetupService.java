@@ -55,6 +55,8 @@ public class GeboFastVectorStoreSetupService {
 		status.qdrantConfig = actualConfiguration.getQdrantConfig();
 		// Determine if the setup is complete based on the product and its
 		// configuration.
+		// Only QDRANT has a mandatory connection block; every other product is
+		// either configured elsewhere or, like LOCAL, needs no settings at all.
 		status.isSetup = status.product != null && (status.product != VectorStoreProduct.QDRANT
 				|| (status.product == VectorStoreProduct.QDRANT && status.qdrantConfig != null));
 		return status;
@@ -85,6 +87,14 @@ public class GeboFastVectorStoreSetupService {
 			break;
 		case REDIS: {
 			actualConfiguration.setRedisConfig(data.getRedisConfig());
+		}
+			break;
+		case LOCAL: {
+			// The embedded store has nothing to connect to, so the wizard collects no
+			// settings for it: leaving the configuration null makes the builder fall
+			// back to the defaults of LocalConfig, which put the data file under
+			// GEBO_WORK_DIRECTORY. This is the branch the OSS single-dependency
+			// install takes - MongoDB and nothing else.
 		}
 			break;
 

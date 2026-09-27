@@ -70,6 +70,13 @@
 			<artifactId>spring-ai-mongodb-atlas-store</artifactId>
 			<version>${spring.ai.version}</version>
 		</dependency>
+		<!-- EnvironmentHolder: resolves GEBO_WORK_DIRECTORY, the default parent of
+		     the embedded store file. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.environment</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 	</dependencies>
 </project>

@@ -1241,7 +1241,6 @@ Legend: **[E]** existing controller (moves with its module's `.impl`) · **[SP]*
 | Controller | Kind |
 |---|---|
 | `ChatModelsController`, `EmbeddingModelsControllers`, the `Base*/Abstract*` model CRUD bases + **every provider CRUD** (`OpenAI/Anthropic/Mistral/Ollama/Deepseek/GoogleVertex/GenericOpenAI/ONNX …ChatModels/EmbeddingModels/RankerConfigurationController`) | E — LLM model config (Hazelcast-synced, §7.2) |
-| `GeboVectorStoreConfigurationController` | E — vector-store config (brain-admin, shared DB) |
 | `GeboAgentAdminController`, `GeboAgentsNetworkAdminController` | E — agents/networks admin |
 | `GeboChatController` **[E,R]**, `GeboRagChatController` **[E,R]**, `GeboUserChatsController`, `GeboUserChatUploadsController`, `GeboDeepSearchController`, `GeboLLMGeneratedResourceController` | E — user chat / RAG / deep-search erogation (`GeboChatController.streamResponse`, `GeboRagChatController.streamRagResponse` return `Flux<ServerSentEvent<String>>` over SSE, alongside blocking endpoints) |
 | `GeboChatPipelinesController` **[E,R]** (`streamDefaultChatPipeline`/`streamChatPipeline` → `Flux<GeboChatMessageEnvelope>` SSE), `GeboAdminChatProfilesConfigurationController`, `GeboChatProfileLookupController`, `PromptTemplatesController`, `PromptTemplateWizardController`, `GeboAdminPromptsController`, `GeboAdminPromptUseInfoController`, `GeboDeepSearchAdminController`, `GeboAdminRagAutotuneController` | E — chat/prompt/pipeline/autotune admin |

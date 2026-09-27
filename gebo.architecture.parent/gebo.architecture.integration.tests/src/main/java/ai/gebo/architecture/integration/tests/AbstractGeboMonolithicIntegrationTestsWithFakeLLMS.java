@@ -141,6 +141,39 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		embedModelConfig.getChoosedModel().setCode(TestEmbeddingModelSupportServiceImpl.TEST_EMBEDDING_MODEL_001);
 		embedModelConfig.setDefaultModel(true);
 		embeddingModelRuntimeDao.addRuntimeByConfig(embedModelConfig);
+		if (isGraphRagInPerimeter()) {
+			prepareGraphRagEnvironment();
+		}
+		createDefaultUser();
+		beforeEachCallback();
+		LOGGER.info("End initializing chat & embedding model");
+	}
+
+	/**
+	 * Whether the graph (GraphRAG / Neo4j) stack takes part in this test run.
+	 *
+	 * With {@code ai.gebo.neo4j.enabled} off, the ~27 beans of that stack are not
+	 * registered at all - and neither is
+	 * {@code GraphRagExtractionConfigRepository}, which is
+	 * {@code @ConditionalOnProperty} on the same key. Since
+	 * {@code IGPersistentObjectManager} resolves a repository per entity type,
+	 * inserting a {@code GraphRagExtractionConfig} without it fails with "Cannot
+	 * find a repository for entity". So the graph fixtures have to follow the same
+	 * switch as the beans they describe.
+	 *
+	 * @return true unless the perimeter is narrowed to MongoDB alone
+	 */
+	protected boolean isGraphRagInPerimeter() {
+		return !isMongoOnlyPerimeter();
+	}
+
+	/**
+	 * Registers the knowledge extraction model and the GraphRAG extraction
+	 * configuration used by the graph aware tests.
+	 *
+	 * @throws Exception if the fixtures cannot be persisted
+	 */
+	private void prepareGraphRagEnvironment() throws Exception {
 		// Prepare a knowledge extraction (IE) model configuration with default fixed
 		// extraction data
 		TestKnowledgeExtractionModelConfiguration knowledgeExtractionChatModelConfig = new TestKnowledgeExtractionModelConfiguration();
@@ -164,14 +197,17 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		graphragConfig.setDescription("Default knowledge extraction model");
 		graphragConfig.setExtractionFormat(GraphRagExtractionFormat.JSON);
 		persistentObjectManager.insert(graphragConfig);
-		createDefaultUser();
-		beforeEachCallback();
-		LOGGER.info("End initializing chat & embedding model");
 	}
 
 	@Override
 	protected void enableWorkflowSteps(GKnowledgeBase kb, GProject project, GProjectEndpoint endpoint)
 			throws GeboPersistenceException {
+		if (!isGraphRagInPerimeter()) {
+			// Nothing to enable: with the graph stack out of the perimeter the
+			// ingestion workflow keeps only its chunking and vectorisation steps,
+			// which is exactly the single-dependency installation being exercised.
+			return;
+		}
 		IGConfigurableChatModel model = chatModelRuntimeDao.findByCode(DEFAULT_KNOWLEDGE_EXTRACTION_CHAT_MODEL_CODE);
 		GraphRagExtractionConfig graphragConfig = new GraphRagExtractionConfig();
 		graphragConfig.setExtractionPrompt("This is a knowledge extraction prompt \n\n${format}");
