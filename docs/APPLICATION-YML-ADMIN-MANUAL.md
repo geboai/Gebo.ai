@@ -246,12 +246,40 @@ Bound by `GeboAIVectorStoreConfig` (`ai.gebo.vectorstore`).
 
 | Property | Type | Shipped default | Description |
 |---|---|---|---|
-| `ai.gebo.vectorstore.use` | String, one of `QDRANT`\|`MONGO`\|`REDIS`\|`TEST` | `QDRANT` | Selects the active vector-store backend. |
+| `ai.gebo.vectorstore.use` | String, one of `QDRANT`\|`LOCAL`\|`MONGO`\|`REDIS`\|`TEST` | `QDRANT` | Selects the active vector-store backend. |
 | `ai.gebo.vectorstore.qdrant.host` | String | `qdrant` (Docker service name) | Qdrant host. |
 | `ai.gebo.vectorstore.qdrant.port` | int | `6334` | Qdrant gRPC port. |
 | `ai.gebo.vectorstore.qdrant.tls` | boolean | `false` | Enables TLS to Qdrant. |
 | `ai.gebo.vectorstore.qdrant.apiKey` | String | 🔒 shipped with a placeholder value | Qdrant API key — rotate before production. |
 | `ai.gebo.vectorstore.redis.host` / `.port` / `.username` / `.password` 🔒 | String/int | — (not shipped; set to use Redis instead of Qdrant) | Redis vector-store connection, used only when `use: REDIS`. |
+| `ai.gebo.vectorstore.local.directory` | String | — (defaults to `$GEBO_WORK_DIRECTORY/vectorstore-local`) | Directory holding one JSON data file per collection, used only when `use: LOCAL`. |
+| `ai.gebo.vectorstore.local.saveOnEveryWrite` | boolean | `false` | Persists after every batch. Off by default because the store serialises its WHOLE content on each save, which makes one ingestion quadratic in I/O. |
+| `ai.gebo.vectorstore.local.minimumSaveIntervalSeconds` | int | `30` | Shortest delay between two debounced saves. Ignored when `saveOnEveryWrite` is true. |
+| `ai.gebo.vectorstore.local.warnAboveFragments` | int | `100000` | Fragment count above which the store logs a one-time capacity warning. Null disables it. |
+
+### 9.1 `LOCAL` — the single-dependency installation
+
+`use: LOCAL` selects an embedded vector store (Spring AI's `SimpleVectorStore`, persisted as JSON
+under the work directory). It needs **no vector database service at all**, which is what allows an
+installation whose only companion service is MongoDB — the shape that makes a Windows install
+practical, since MongoDB is the one dependency shipping a Windows installer.
+
+MongoDB itself cannot take that role: the `$vectorSearch` stage is served by the separate `mongot`
+binary, which MongoDB publishes for Linux only and which requires a replica set rather than the
+standalone `mongod` the compose files run. `use: MONGO` therefore only works against Atlas or a
+self-managed `mongot`; against a plain `mongod` it accepts writes and cannot answer a query.
+
+Scope and trade-offs of `LOCAL`:
+
+- the corpus lives **in memory** and every query scans all of it, so it targets the community
+  install and small to medium corpora (as a reference point, ~10,000 fragments at 1536 dimensions
+  is roughly 100 MB of JSON on disk and a comparable amount of heap);
+- saves are debounced (see the table above), with a flush on shutdown; a hard kill can lose
+  fragments written since the last save unless `saveOnEveryWrite` is on;
+- past `warnAboveFragments` the log tells you to move `use` to a server-backed product — no data
+  migration path is provided, so plan to re-ingest.
+
+Every setting is optional: `use: LOCAL` alone is a working configuration.
 
 `spring.ai.openai.api-key` / `spring.ai.openai.chat.api-key` ship as literal `DUMMYKEY` — this is a
 Spring AI auto-configuration bootstrap requirement (the bean must construct even before an admin
