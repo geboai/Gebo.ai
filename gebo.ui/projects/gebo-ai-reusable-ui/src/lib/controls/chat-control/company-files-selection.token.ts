@@ -17,6 +17,7 @@ import { InjectionToken } from "@angular/core";
  * files browser can be opened. Missing or false leaves the browsers enabled.
  *
  * It lives here, in the lowest layer, because both the chat section (@Gebo.ai/chat-ui)
- * and the office assistant (this library, used by the office plugins) must read it.
+ * and the office assistant (@Gebo.ai/pro-reusable-ui, in the Gebo.ai.pro repository,
+ * which builds on this library and is used by the office plugins) must read it.
  */
 export const UI_COMPANY_FILES_NOT_SELECTABLE = new InjectionToken<boolean>("UI_COMPANY_FILES_NOT_SELECTABLE");
