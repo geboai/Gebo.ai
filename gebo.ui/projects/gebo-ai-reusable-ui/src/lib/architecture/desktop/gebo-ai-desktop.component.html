@@ -34,6 +34,11 @@
         </div>
     </header>
 
+    @if (userLogged) {
+        <!-- SYSTEM MESSAGES OF THE LOGGED-IN USER, ROUTED BY ROLE -->
+        <gebo-ai-system-messages></gebo-ai-system-messages>
+    }
+
     <main class="gebo-app-content">
         <router-outlet />
     </main>

@@ -1,0 +1,26 @@
+.gebo-system-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.gebo-system-message-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.gebo-system-message-text {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.gebo-system-message-detail {
+  opacity: 0.9;
+}
