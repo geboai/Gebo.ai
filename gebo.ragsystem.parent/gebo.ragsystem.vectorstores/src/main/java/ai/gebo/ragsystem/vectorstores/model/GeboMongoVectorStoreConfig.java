@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorStoreProduct;
 import ai.gebo.ragsystem.vectorstores.mongoatlas.model.MongoConfig;
+import ai.gebo.ragsystem.vectorstores.local.model.LocalConfig;
 import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.redis.model.RedisConfig;
 import jakarta.validation.constraints.NotNull;
@@ -26,7 +27,7 @@ import jakarta.validation.constraints.NotNull;
  * 
  * Represents a MongoDB document for storing vector store configuration.
  * This class contains configuration settings for different vector store products 
- * that can be used in the system, such as Qdrant, Lucene, MongoDB Atlas, and Redis.
+ * that can be used in the system, such as Qdrant, the embedded LOCAL store, MongoDB Atlas, and Redis.
  */
 @Document
 public class GeboMongoVectorStoreConfig {
@@ -51,6 +52,8 @@ public class GeboMongoVectorStoreConfig {
 	
 	/** Configuration settings specific to Redis vector store */
 	RedisConfig redisConfig = null;
+	/** Configuration settings specific to the embedded vector store */
+	LocalConfig localConfig = null;
 	
 	/**
 	 * Gets the configured vector store product
@@ -132,5 +135,21 @@ public class GeboMongoVectorStoreConfig {
 	 */
 	public void setMongoConfig(MongoConfig mongoConfig) {
 		this.mongoConfig = mongoConfig;
+	}
+
+	/**
+	 * Gets the embedded vector store configuration
+	 * @return the configuration, may be null
+	 */
+	public LocalConfig getLocalConfig() {
+		return localConfig;
+	}
+
+	/**
+	 * Sets the embedded vector store configuration
+	 * @param localConfig the configuration object
+	 */
+	public void setLocalConfig(LocalConfig localConfig) {
+		this.localConfig = localConfig;
 	}
 }

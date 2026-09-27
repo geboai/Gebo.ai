@@ -347,8 +347,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `gebo-vector-store-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/brain/api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration` | getActualVectorStoreConfiguration |
-| POST | `/brain/api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave` | vectorStoreConfigurationApplyAndSave |
 
 ### `generic-open-ai-ranker-models-configuration-controller`
 | Method | Path | Operation |
@@ -662,8 +660,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `gebo-vector-store-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/vectorizator/api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration` | getActualVectorStoreConfiguration |
-| POST | `/vectorizator/api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave` | vectorStoreConfigurationApplyAndSave |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -678,8 +674,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `gebo-vector-store-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/graphicator/api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration` | getActualVectorStoreConfiguration |
-| POST | `/graphicator/api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave` | vectorStoreConfigurationApplyAndSave |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |

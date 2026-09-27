@@ -23,6 +23,26 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
  */
 public class TestEmbeddingModelConfiguration extends GBaseEmbeddingModelConfig {
 
+	/**
+	 * Width of the vectors {@link TestEmbeddingModel} produces. Null means the
+	 * model's own default, which is wider than 1024 on purpose - see that class.
+	 */
+	private Integer testDimensions = null;
+
+	/**
+	 * @return the configured vector width, or null for the model default
+	 */
+	public Integer getTestDimensions() {
+		return testDimensions;
+	}
+
+	/**
+	 * @param testDimensions vector width to produce, null for the model default
+	 */
+	public void setTestDimensions(Integer testDimensions) {
+		this.testDimensions = testDimensions;
+	}
+
     /**
      * Default constructor for TestEmbeddingModelConfiguration.
      * Creates an instance with default configuration values from the parent class.

@@ -21,6 +21,7 @@ import org.springframework.ai.embedding.Embedding;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.embedding.EmbeddingRequest;
 import org.springframework.ai.embedding.EmbeddingResponse;
+import org.springframework.ai.vectorstore.SearchRequest;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGExtendedVectorStore;
@@ -123,8 +124,18 @@ public class VectorStoreFactoryBuilderTester {
 
 	/**
 	 * Tests a vector store factory builder with a given configuration.
-	 * Creates a factory, builds a vector store, and adds a test document to verify functionality.
-	 * 
+	 *
+	 * The probe writes a document AND reads it back with a similarity search,
+	 * because writing alone does not prove the store can serve retrieval: on
+	 * MongoDB an insert succeeds against any deployment, while the query side
+	 * needs the {@code $vectorSearch} stage that only Atlas - or a self managed
+	 * {@code mongot} - provides. A store that cannot search is reported as a
+	 * failure here rather than silently breaking RAG later on.
+	 *
+	 * An empty result is NOT a failure: a freshly created index may not have
+	 * caught up with the write yet, and only a raised error tells us the query
+	 * path is unavailable.
+	 *
 	 * @param <T> the type of vector store configuration
 	 * @param config the configuration to test
 	 * @param builder the factory builder to test
@@ -133,13 +144,15 @@ public class VectorStoreFactoryBuilderTester {
 	public static <T extends GBaseVectorStoreConfig> OperationStatus<IGVectorStoreFactory<T>> test(T config,
 			IGVectorStoreFactoryBuilder builder) {
 		IGVectorStoreFactory<T> factory = null;
+		IGExtendedVectorStore vectorStore = null;
 		try {
 			factory = builder.build(config);
 			GBaseEmbeddingModelConfig dummyEmbeddingModelConfiguration = new GBaseEmbeddingModelConfig();
 			dummyEmbeddingModelConfiguration.setCode("test-embedding-vectorstore-gebo-ai");
 			DummyEmbeddingModel dummyEmbeddingModel = new DummyEmbeddingModel();
-			IGExtendedVectorStore vectorStore = factory.create(dummyEmbeddingModelConfiguration, dummyEmbeddingModel);
+			vectorStore = factory.create(dummyEmbeddingModelConfiguration, dummyEmbeddingModel);
 			vectorStore.add(List.of(new Document(EMBEDDING_TEXT)));
+			vectorStore.similaritySearch(SearchRequest.builder().query(EMBEDDING_TEXT).topK(1).build());
 			return OperationStatus.of(factory);
 		} catch (Throwable th) {
 			final String msg = "Error testing " + builder.getProduct().name() + " vector db config";
@@ -148,6 +161,17 @@ public class VectorStoreFactoryBuilderTester {
 			out.getMessages().add(GUserMessage.errorMessage(msg, th));
 			LOGGER.error(msg, th);
 			return out;
+		} finally {
+			// An embedded store holds an exclusive lock on its index directory, so
+			// leaving the probe's store open would make the NEXT test of the same
+			// configuration fail on a lock it took itself.
+			if (vectorStore != null) {
+				try {
+					vectorStore.close();
+				} catch (Throwable th) {
+					LOGGER.warn("Cannot close the probe vector store of " + builder.getProduct().name(), th);
+				}
+			}
 		}
 	}
 }

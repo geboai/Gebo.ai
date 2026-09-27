@@ -31,6 +31,13 @@ public enum VectorStoreProduct {
     // Represents a Redis-based vector store
     REDIS,
 
+    // Represents the embedded, server-less vector store: Spring AI's own
+    // SimpleVectorStore, holding the corpus in memory and persisting it as JSON
+    // under the work directory. It needs no extra service to be installed next
+    // to Gebo.ai, which is what makes a single-dependency installation possible.
+    // Suited to small and medium corpora - see GeboLocalVectorStore.
+    LOCAL,
+
     // Represents a test vector store, possibly used for testing purposes
     TEST
 }
