@@ -1,5 +1,6 @@
 package ai.gebo.llms.abstraction.layer.services.impl;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -33,11 +34,53 @@ public class LLMUsageRecorder {
 	private final ILLMSUsageCrudService usageCrudService;
 
 	/**
-	 * Samples the caller's stack. Must be called on the thread that issued the call,
-	 * before any asynchronous hop, or the sample describes the scheduler instead.
+	 * Package prefixes left out of the caller stack: the platform and the frameworks
+	 * the call travels through (Spring AI's advisor chain and observation wrapping,
+	 * Reactor), which say nothing about who made the call.
+	 */
+	static final List<String> SKIPPED_PACKAGE_PREFIXES = List.of("java.", "javax.", "jdk.", "sun.", "com.sun.",
+			"org.springframework.", "io.micrometer.", "reactor.", "io.netty.", "io.opentelemetry.",
+			"com.fasterxml.", "tools.jackson.", "kotlin.", "kotlinx.");
+
+	/**
+	 * Packages left out exactly (not their subpackages): the LLM abstraction layer's
+	 * own plumbing, which every call crosses whoever makes it. The usage recorders and
+	 * wrappers live in the second one.
+	 */
+	static final List<String> SKIPPED_PACKAGES = List.of("ai.gebo.llms.abstraction.layer.services",
+			"ai.gebo.llms.abstraction.layer.services.impl");
+
+	static boolean isSkippedCallerPackage(String packageName) {
+		if (SKIPPED_PACKAGES.contains(packageName)) {
+			return true;
+		}
+		for (String prefix : SKIPPED_PACKAGE_PREFIXES) {
+			if (packageName.startsWith(prefix)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Samples the caller's stack: the first {@link #CALLER_PACKAGES} distinct
+	 * application packages that led to the call, framework and LLM layer plumbing
+	 * left out, so that calls made by different components are told apart. When no
+	 * application frame is on the stack at all (a stream subscribed from a pure
+	 * Reactor thread), falls back to the unfiltered sample rather than to nothing.
+	 * Must be called on the thread that issued the call, before any asynchronous hop,
+	 * or the sample describes the scheduler instead.
 	 */
 	public static String sampleCaller() {
-		return StackSamplingUtils.sampleCallerPackages(CALLER_PACKAGES);
+		String callers = StackSamplingUtils.sampleCallerPackages(CALLER_PACKAGES,
+				LLMUsageRecorder::isSkippedCallerPackage);
+		if (callers.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No application frame on the caller stack, sampling it unfiltered");
+			}
+			return StackSamplingUtils.sampleCallerPackages(CALLER_PACKAGES);
+		}
+		return callers;
 	}
 
 	/**
