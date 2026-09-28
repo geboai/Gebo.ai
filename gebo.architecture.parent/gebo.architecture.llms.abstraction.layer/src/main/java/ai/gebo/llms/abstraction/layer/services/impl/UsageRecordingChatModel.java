@@ -48,11 +48,12 @@ public class UsageRecordingChatModel implements ChatModel {
 		try {
 			ChatResponse response = delegate.call(prompt);
 			TokenCounters counters = TokenCounters.of(usageOf(response));
-			recorder.record(config, ModelType.CHAT, username, stack, start, counters.input(), counters.output(),
-					counters.total(), LLMCallOutcome.SUCCESS);
+			// No time to first token: a blocking call gives no signal before it is complete.
+			recorder.record(config, ModelType.CHAT, username, stack, start, null, counters.input(),
+					counters.output(), counters.total(), LLMCallOutcome.SUCCESS);
 			return response;
 		} catch (RuntimeException e) {
-			recorder.record(config, ModelType.CHAT, username, stack, start, 0, 0, 0, LLMCallOutcome.ERROR);
+			recorder.record(config, ModelType.CHAT, username, stack, start, null, 0, 0, 0, LLMCallOutcome.ERROR);
 			throw e;
 		}
 	}
@@ -64,9 +65,13 @@ public class UsageRecordingChatModel implements ChatModel {
 		final String stack = LLMUsageRecorder.sampleCaller();
 		final long start = System.nanoTime();
 		final TokenCounters counters = new TokenCounters();
-		return delegate.stream(prompt).doOnNext(response -> counters.max(usageOf(response)))
-				.doFinally(signal -> recorder.record(config, ModelType.CHAT, username, stack, start,
-						counters.input(), counters.output(), counters.total(), outcomeOf(signal)));
+		final FirstTokenTimer firstToken = new FirstTokenTimer();
+		return delegate.stream(prompt).doOnNext(response -> {
+			firstToken.onChunk(response);
+			counters.max(usageOf(response));
+		}).doFinally(signal -> recorder.record(config, ModelType.CHAT, username, stack, start,
+				firstToken.firstTokenNanos(), counters.input(), counters.output(), counters.total(),
+				outcomeOf(signal)));
 	}
 
 	@Override

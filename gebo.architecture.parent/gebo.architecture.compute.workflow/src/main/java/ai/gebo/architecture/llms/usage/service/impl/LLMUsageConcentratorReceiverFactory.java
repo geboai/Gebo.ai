@@ -47,7 +47,8 @@ public class LLMUsageConcentratorReceiverFactory extends GAbstractMessageReceive
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Storing usage detail modelType=" + detail.getModelType() + " provider="
 							+ detail.getProviderId() + " model=" + detail.getModel() + " user=" + detail.getUsername()
-							+ " outcome=" + detail.getOutcome() + " latency=" + detail.getLatency() + "ms tokens="
+							+ " outcome=" + detail.getOutcome() + " responseTime=" + detail.getResponseTime()
+							+ "ms timeToFirstToken=" + detail.getTimeToFirstToken() + " tokens="
 							+ detail.getInputToken() + "/" + detail.getOutputToken() + "/" + detail.getTotalToken());
 				}
 				if (detail.getModelType() == null) {
@@ -68,7 +69,8 @@ public class LLMUsageConcentratorReceiverFactory extends GAbstractMessageReceive
 			detail.setModel(payload.getModel());
 			detail.setCallerStack(payload.getCallerStack());
 			detail.setModelType(payload.getModelType());
-			detail.setLatency(payload.getLatency());
+			detail.setResponseTime(payload.getResponseTime());
+			detail.setTimeToFirstToken(payload.getTimeToFirstToken());
 			detail.setInputToken(payload.getInputToken());
 			detail.setOutputToken(payload.getOutputToken());
 			detail.setTotalToken(payload.getTotalToken());

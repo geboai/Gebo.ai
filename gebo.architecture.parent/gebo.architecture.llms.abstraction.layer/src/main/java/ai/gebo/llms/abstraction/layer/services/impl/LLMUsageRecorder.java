@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
 /**
  * Writes the single usage record of one model call, whatever the model type. The
  * chat usage advisor and the usage recording wrappers of the other model types all
- * go through here, so the user, latency and caller stack of a record are derived
+ * go through here, so the user, response time and caller stack of a record are derived
  * the same way for every type.
  */
 @Service
@@ -98,13 +98,25 @@ public class LLMUsageRecorder {
 	 * no token accounting (speech, transcription, images, ranking) and providers that
 	 * return no usage are still worth counting and timing.
 	 *
-	 * @param modelType the type of the model actually called, stated by the recording
-	 *                  point: it is not inferred from the configuration's class, which
-	 *                  yields no type for a configuration class it does not know.
+	 * @param modelType        the type of the model actually called, stated by the
+	 *                         recording point: it is not inferred from the
+	 *                         configuration's class, which yields no type for a
+	 *                         configuration class it does not know.
+	 * @param startNanos       {@link System#nanoTime()} when the request was issued;
+	 *                         the response time runs from here to now, the response
+	 *                         being complete.
+	 * @param firstTokenNanos  {@link System#nanoTime()} when the first chunk carrying
+	 *                         generated content arrived, for a streamed call; null when
+	 *                         the call was not streamed or produced no content, which
+	 *                         leaves the time to first token unmeasured.
 	 */
 	public void record(GBaseModelConfig config, ModelType modelType, String username, String callerStack,
-			long startNanos, long inputToken, long outputToken, long totalToken, LLMCallOutcome outcome) {
-		long latencyMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNanos);
+			long startNanos, Long firstTokenNanos, long inputToken, long outputToken, long totalToken,
+			LLMCallOutcome outcome) {
+		long responseTimeMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNanos);
+		Long timeToFirstTokenMs = firstTokenNanos != null
+				? TimeUnit.NANOSECONDS.toMillis(firstTokenNanos.longValue() - startNanos)
+				: null;
 		LLMUsageDetailDto detail = LLMUsageDetailDto.of(config);
 		if (modelType != null) {
 			if (detail.getModelType() != null && detail.getModelType() != modelType && LOGGER.isDebugEnabled()) {
@@ -119,12 +131,15 @@ public class LLMUsageRecorder {
 		detail.setTotalToken(totalToken);
 		detail.setUsername(username);
 		detail.setCallerStack(callerStack);
-		detail.setLatency(latencyMs);
+		detail.setResponseTime(responseTimeMs);
+		detail.setTimeToFirstToken(timeToFirstTokenMs);
 		detail.setOutcome(outcome);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Recording usage modelType=" + detail.getModelType() + " provider=" + detail.getProviderId()
-					+ " model=" + detail.getModel() + " user=" + username + " outcome=" + outcome + " latency="
-					+ latencyMs + "ms tokens=" + inputToken + "/" + outputToken + "/" + totalToken);
+					+ " model=" + detail.getModel() + " user=" + username + " outcome=" + outcome
+					+ " responseTime=" + responseTimeMs + "ms timeToFirstToken="
+					+ (timeToFirstTokenMs != null ? timeToFirstTokenMs + "ms" : "n/a") + " tokens=" + inputToken
+					+ "/" + outputToken + "/" + totalToken);
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("<USAGE_CALLER_STACK>" + callerStack + "</USAGE_CALLER_STACK>");
@@ -156,7 +171,7 @@ public class LLMUsageRecorder {
 		private final long startNanos;
 
 		public void success(long inputToken, long outputToken, long totalToken) {
-			record(config, modelType, username, callerStack, startNanos, inputToken, outputToken, totalToken,
+			record(config, modelType, username, callerStack, startNanos, null, inputToken, outputToken, totalToken,
 					LLMCallOutcome.SUCCESS);
 		}
 
@@ -175,7 +190,7 @@ public class LLMUsageRecorder {
 		}
 
 		public void failure() {
-			record(config, modelType, username, callerStack, startNanos, 0, 0, 0, LLMCallOutcome.ERROR);
+			record(config, modelType, username, callerStack, startNanos, null, 0, 0, 0, LLMCallOutcome.ERROR);
 		}
 	}
 }

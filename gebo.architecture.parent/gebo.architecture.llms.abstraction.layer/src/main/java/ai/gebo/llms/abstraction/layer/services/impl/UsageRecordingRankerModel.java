@@ -12,7 +12,7 @@ import ai.gebo.ranker.model.RankingOutput;
  * Records the usage of every ranking call of the ranker model it wraps, through the
  * {@link RankerModel} handed out by {@link #getRankerModel()}, the only way a ranker
  * is invoked. Ranking has no token accounting, so a record carries the call, its
- * latency and its outcome. Installed by the runtime DAO around every model it
+ * response time and its outcome. Installed by the runtime DAO around every model it
  * registers.
  */
 public class UsageRecordingRankerModel<ModelConfig extends GBaseRankerModelConfig>

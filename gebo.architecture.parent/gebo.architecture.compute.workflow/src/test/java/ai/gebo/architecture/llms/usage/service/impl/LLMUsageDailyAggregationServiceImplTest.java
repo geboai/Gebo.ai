@@ -1,6 +1,7 @@
 package ai.gebo.architecture.llms.usage.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -31,7 +32,7 @@ import ai.gebo.model.ModelType;
  */
 class LLMUsageDailyAggregationServiceImplTest {
 
-	private static LLMUsageDetail raw(long timestamp, long tokens, long latency) {
+	private static LLMUsageDetail raw(long timestamp, long tokens, long responseTime) {
 		LLMUsageDetail detail = new LLMUsageDetail();
 		detail.setProviderId("openai");
 		detail.setUsername("user");
@@ -42,7 +43,7 @@ class LLMUsageDailyAggregationServiceImplTest {
 		detail.setInputToken(tokens);
 		detail.setOutputToken(tokens);
 		detail.setTotalToken(2 * tokens);
-		detail.setLatency(latency);
+		detail.setResponseTime(responseTime);
 		detail.setTimestamp(timestamp);
 		return detail;
 	}
@@ -75,9 +76,9 @@ class LLMUsageDailyAggregationServiceImplTest {
 		assertEquals(40, daily.getInputToken());
 		assertEquals(40, daily.getOutputToken());
 		assertEquals(80, daily.getTotalToken());
-		assertEquals(100, daily.getLatencyMin());
-		assertEquals(300, daily.getLatencyMax());
-		assertEquals(200, daily.getLatencyAvg());
+		assertEquals(100, daily.getResponseTimeMin());
+		assertEquals(300, daily.getResponseTimeMax());
+		assertEquals(200, daily.getResponseTimeAvg());
 	}
 
 	@Test
@@ -113,6 +114,65 @@ class LLMUsageDailyAggregationServiceImplTest {
 		assertEquals(15, chatDaily.getInputToken());
 		assertEquals(1, embeddingDaily.getNrRequests());
 		assertEquals(7, embeddingDaily.getInputToken());
+	}
+
+	@Test
+	void timeToFirstTokenIsAggregatedOverTheCallsThatMeasuredIt() {
+		LLMUsageDetailRepository usageRepo = mock(LLMUsageDetailRepository.class);
+		LLMDailyUsageDetailRepository dailyRepo = mock(LLMDailyUsageDetailRepository.class);
+		long now = System.currentTimeMillis();
+		LLMUsageDetail streamedFast = raw(now, 10, 1000);
+		streamedFast.setTimeToFirstToken(200L);
+		LLMUsageDetail streamedSlow = raw(now, 10, 3000);
+		streamedSlow.setTimeToFirstToken(600L);
+		LLMUsageDetail blocking = raw(now, 10, 2000);
+		List<LLMUsageDetail> rows = List.of(streamedFast, streamedSlow, blocking);
+		when(usageRepo.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(anyLong(), anyLong()))
+				.thenAnswer(invocation -> new ArrayList<>(rows).stream());
+		AtomicReference<LLMDailyUsageDetail> stored = new AtomicReference<>();
+		when(dailyRepo.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndYearAndMonthAndDay(
+				any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), anyInt()))
+				.thenAnswer(invocation -> Optional.ofNullable(stored.get()));
+		when(dailyRepo.save(any())).thenAnswer(invocation -> {
+			stored.set(invocation.getArgument(0));
+			return invocation.getArgument(0);
+		});
+
+		new LLMUsageDailyAggregationServiceImpl(usageRepo, dailyRepo).consolidate();
+
+		LLMDailyUsageDetail daily = stored.get();
+		// The response time covers every call, the time to first token only the two
+		// streamed ones: the blocking call must not drag its average toward zero.
+		assertEquals(3, daily.getNrRequests());
+		assertEquals(2000, daily.getResponseTimeAvg());
+		assertEquals(2, daily.getTimeToFirstTokenSamples());
+		assertEquals(200L, daily.getTimeToFirstTokenMin());
+		assertEquals(600L, daily.getTimeToFirstTokenMax());
+		assertEquals(400L, daily.getTimeToFirstTokenAvg());
+	}
+
+	@Test
+	void noStreamedCallLeavesTheTimeToFirstTokenUnset() {
+		LLMUsageDetailRepository usageRepo = mock(LLMUsageDetailRepository.class);
+		LLMDailyUsageDetailRepository dailyRepo = mock(LLMDailyUsageDetailRepository.class);
+		long now = System.currentTimeMillis();
+		when(usageRepo.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(anyLong(), anyLong()))
+				.thenAnswer(invocation -> List.of(raw(now, 10, 1000)).stream());
+		AtomicReference<LLMDailyUsageDetail> stored = new AtomicReference<>();
+		when(dailyRepo.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndYearAndMonthAndDay(
+				any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), anyInt())).thenReturn(Optional.empty());
+		when(dailyRepo.save(any())).thenAnswer(invocation -> {
+			stored.set(invocation.getArgument(0));
+			return invocation.getArgument(0);
+		});
+
+		new LLMUsageDailyAggregationServiceImpl(usageRepo, dailyRepo).consolidate();
+
+		LLMDailyUsageDetail daily = stored.get();
+		assertEquals(0, daily.getTimeToFirstTokenSamples());
+		assertNull(daily.getTimeToFirstTokenMin());
+		assertNull(daily.getTimeToFirstTokenAvg());
+		assertNull(daily.getTimeToFirstTokenMax());
 	}
 
 	@Test
