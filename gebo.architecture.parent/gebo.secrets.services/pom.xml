@@ -19,6 +19,18 @@
 			<artifactId>gebo.architecture.crypting</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!--
+			IGSecretsAdditionalProviderRepositoryPattern extends
+			IGImplementationsRepositoryPattern from this module. It already arrived
+			transitively through gebo.application.messaging, but an extension point
+			of this module's own API should not depend on someone else's dependency
+			graph staying the way it is.
+		-->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.patterns</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.restintegration.abstraction.layer</artifactId>
