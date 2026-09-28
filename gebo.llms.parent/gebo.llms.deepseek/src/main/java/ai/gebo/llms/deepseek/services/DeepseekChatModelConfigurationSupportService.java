@@ -70,6 +70,7 @@ public class DeepseekChatModelConfigurationSupportService
 		type.setCode(DEEPSEEK_CHAT_MODEL_TYPE);
 		type.setDescription("Chat models hosted on Deepseek");
 		type.setModelConfigurationClass(GDeepseekChatModelConfig.class.getName());
+		type.setProviderId("deepseek");
 	}
 
 	/**

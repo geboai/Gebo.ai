@@ -11,6 +11,8 @@ package ai.gebo.llms.abstraction.layer.cluster;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -19,7 +21,9 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableModel;
+import ai.gebo.llms.abstraction.layer.services.IGProviderDealService;
 import ai.gebo.llms.abstraction.layer.services.IGRuntimeModelConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 
@@ -56,6 +60,13 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 
 	@Autowired
 	protected ApplicationContext applicationContext;
+
+	/** Associates the configured API keys with provider deals; optional. */
+	@Autowired(required = false)
+	protected IGProviderDealService providerDealService;
+
+	private static final Logger LOGGER_DEALS = LoggerFactory
+			.getLogger(GAbstractClusteredModelRuntimeConfigurationDao.class);
 
 	protected GAbstractClusteredModelRuntimeConfigurationDao(List<IFacetype> staticConfigs,
 			IGDynamicConfigurationSource<IFacetype> dynamic) {
@@ -97,6 +108,7 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 	@Override
 	public void addRuntimeByConfigClustered(ModelConfig config) throws LLMConfigException {
 		addRuntimeByConfig(config);
+		ensureProviderDeal(config);
 		if (clusterSynchronizer != null) {
 			clusterSynchronizer.broadcastAdd(getClusterCategory(), config);
 		}
@@ -108,8 +120,45 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 		if (handler != null) {
 			handler.reconfigure(config);
 		}
+		ensureProviderDeal(config);
 		if (clusterSynchronizer != null) {
 			clusterSynchronizer.broadcastUpdate(getClusterCategory(), config);
+		}
+	}
+
+	/**
+	 * Makes sure the API key chosen for the model is covered by a deal of the
+	 * model's real provider. Runs on the configuring instance only: these clustered
+	 * operations are the user's configuration, while startup and the replicas apply
+	 * the plain operations, so a configuration change is associated exactly once.
+	 * <p>
+	 * Best effort: the association is bookkeeping, so any failure is logged and never
+	 * fails the model configuration.
+	 */
+	protected void ensureProviderDeal(ModelConfig config) {
+		if (providerDealService == null || config == null) {
+			return;
+		}
+		try {
+			String secretCode = config.getApiSecretCode();
+			if (secretCode == null || secretCode.isBlank()) {
+				if (LOGGER_DEALS.isDebugEnabled()) {
+					LOGGER_DEALS.debug("Model code=" + config.getCode() + " uses no API key, no provider deal");
+				}
+				return;
+			}
+			IFacetype model = findByCode(config.getCode());
+			GModelType type = model != null ? model.getType() : null;
+			String providerId = type != null ? type.getProviderId() : null;
+			if (providerId == null || providerId.isBlank()) {
+				LOGGER_DEALS.warn("Model code=" + config.getCode() + " of type=" + config.getModelTypeCode()
+						+ " declares no provider, its API key is not associated with a provider deal");
+				return;
+			}
+			providerDealService.ensureDeal(providerId, secretCode);
+		} catch (Throwable e) {
+			LOGGER_DEALS.error("Cannot associate the API key of model code=" + config.getCode()
+					+ " with a provider deal, the model is configured all the same", e);
 		}
 	}
 

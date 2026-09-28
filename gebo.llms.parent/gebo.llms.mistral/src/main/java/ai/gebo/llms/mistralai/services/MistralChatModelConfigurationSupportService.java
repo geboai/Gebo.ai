@@ -63,6 +63,7 @@ public class MistralChatModelConfigurationSupportService
 		type.setCode("chatmodel-mistral");
 		type.setDescription("chat model service hosted on Mistral AI");
 		type.setModelConfigurationClass(GMistralChatModelConfig.class.getName());
+		type.setProviderId("mistral");
 	}
 
 	/**

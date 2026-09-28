@@ -26,6 +26,13 @@ public class GModelType extends GBaseObject {
     private String modelConfigurationClass = null;
 
     /**
+     * The real provider behind this model type, e.g. "openai", "anthropic",
+     * "regolo.ai": the same for every model type (chat, embedding, ...) of that
+     * provider, unlike the type code, which is specific to the model type.
+     */
+    private String providerId = null;
+
+    /**
      * Default constructor for GModelType.
      */
     public GModelType() {
@@ -48,5 +55,14 @@ public class GModelType extends GBaseObject {
      */
     public void setModelConfigurationClass(String modelConfigurationClass) {
         this.modelConfigurationClass = modelConfigurationClass;
+    }
+
+    /** @return the real provider behind this model type, see {@link #providerId}. */
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
     }
 }

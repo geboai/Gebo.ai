@@ -58,6 +58,7 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 		type.setCode("embedding-mistral");
 		type.setDescription("embedding service hosted on Mistral AI");
 		type.setModelConfigurationClass(GMistralEmbeddingModelConfig.class.getName());
+		type.setProviderId("mistral");
 	}
 
 	/**

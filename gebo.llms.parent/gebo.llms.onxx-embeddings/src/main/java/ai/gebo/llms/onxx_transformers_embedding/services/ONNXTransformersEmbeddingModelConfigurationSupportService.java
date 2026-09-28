@@ -51,6 +51,7 @@ public class ONNXTransformersEmbeddingModelConfigurationSupportService implement
 		type.setCode("embedding-onnx-transformers");
 		type.setDescription("embedding service hosted local ONNX Transformers system");
 		type.setModelConfigurationClass(GONNXTransformersEmbeddingModelConfig.class.getName());
+		type.setProviderId("onnx-transformers");
 	}
 
 	/**

@@ -56,6 +56,7 @@ public class BedrockEmbeddingModelConfigurationSupportService implements
 		type.setCode("embedding-aws-bedrock");
 		type.setDescription("Embedding models hosted on AWS Bedrock (Amazon Titan / Cohere)");
 		type.setModelConfigurationClass(GBedrockEmbeddingModelConfig.class.getName());
+		type.setProviderId("aws-bedrock");
 	}
 
 	static final Duration API_TIMEOUT = Duration.ofMinutes(2);
