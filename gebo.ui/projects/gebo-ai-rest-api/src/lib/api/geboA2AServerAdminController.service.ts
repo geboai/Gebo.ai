@@ -70,7 +70,7 @@ export class GeboA2AServerAdminControllerService {
     public deleteA2AServer(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
-            throw new Error('Required parameter code was null or undefined when calling _delete.');
+            throw new Error('Required parameter code was null or undefined when calling deleteA2AServer.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -153,7 +153,7 @@ export class GeboA2AServerAdminControllerService {
     public findByCodeA2AServer(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
-            throw new Error('Required parameter code was null or undefined when calling findByCode1.');
+            throw new Error('Required parameter code was null or undefined when calling findByCodeA2AServer.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -200,7 +200,7 @@ export class GeboA2AServerAdminControllerService {
     public insertA2AServer(body: A2AServerConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling insert.');
+            throw new Error('Required parameter body was null or undefined when calling insertA2AServer.');
         }
 
         let headers = this.defaultHeaders;
@@ -247,7 +247,7 @@ export class GeboA2AServerAdminControllerService {
     public updateA2AServer(body: A2AServerConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling update1.');
+            throw new Error('Required parameter body was null or undefined when calling updateA2AServer.');
         }
 
         let headers = this.defaultHeaders;

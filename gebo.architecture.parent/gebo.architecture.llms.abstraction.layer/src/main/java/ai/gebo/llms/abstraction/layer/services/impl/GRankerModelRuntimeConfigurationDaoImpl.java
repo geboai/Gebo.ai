@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tools.jackson.core.JacksonException;
@@ -55,10 +56,34 @@ public class GRankerModelRuntimeConfigurationDaoImpl
 
 	}
 
+	// Accounts every ranking call; optional so a context without usage tracking still
+	// registers its models, unrecorded.
+	@Autowired(required = false)
+	private LLMUsageRecorder usageRecorder;
+
 	@Override
 	public void add(IGConfigurableRankerModel element) {
-		this.staticConfigs.add(element);
+		this.staticConfigs.add(withUsageRecording(element));
 
+	}
+
+	/**
+	 * Wraps a model so that its calls are recorded as usage, once: every model enters
+	 * this DAO through add() or addRuntimeByConfig(), both of which wrap.
+	 */
+	private IGConfigurableRankerModel withUsageRecording(IGConfigurableRankerModel model) {
+		if (model == null || usageRecorder == null || model instanceof UsageRecordingRankerModel) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Ranker model code=" + (model != null ? model.getCode() : null)
+						+ " registered without a new usage wrapper: recorder="
+						+ (usageRecorder != null ? "present" : "absent"));
+			}
+			return model;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Ranker model code=" + model.getCode() + " wrapped for usage recording");
+		}
+		return new UsageRecordingRankerModel<>(model, usageRecorder);
 	}
 
 	@Override
@@ -88,7 +113,7 @@ public class GRankerModelRuntimeConfigurationDaoImpl
 			}
 			IGConfigurableRankerModel imageModel = handler.create(config);
 			LOGGER.info("Initialized reranker successfully");
-			this.staticConfigs.add(imageModel);
+			this.staticConfigs.add(withUsageRecording(imageModel));
 		}
 	}
 

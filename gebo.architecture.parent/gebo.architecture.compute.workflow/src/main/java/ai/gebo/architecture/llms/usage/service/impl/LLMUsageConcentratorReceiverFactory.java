@@ -2,6 +2,8 @@ package ai.gebo.architecture.llms.usage.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +28,7 @@ import ai.gebo.core.messages.LLMUsageDetailPayload;
 @Component
 @Scope("singleton")
 public class LLMUsageConcentratorReceiverFactory extends GAbstractMessageReceiverFactory {
+	private static final Logger LOGGER = LoggerFactory.getLogger(LLMUsageConcentratorReceiverFactory.class);
 	private final IGRuntimeBinder runtimeBinder;
 	public static final MessageReceiverFactoryConfig factoryConfig = new MessageReceiverFactoryConfig();
 
@@ -40,7 +43,19 @@ public class LLMUsageConcentratorReceiverFactory extends GAbstractMessageReceive
 		public void accept(GMessageEnvelope t) {
 			if (t.getPayload() instanceof LLMUsageDetailPayload payload) {
 				LLMUsageDetailRepository usageRepo = runtimeBinder.getImplementationOf(LLMUsageDetailRepository.class);
-				usageRepo.insert(toEntity(payload));
+				LLMUsageDetail detail = toEntity(payload);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Storing usage detail modelType=" + detail.getModelType() + " provider="
+							+ detail.getProviderId() + " model=" + detail.getModel() + " user=" + detail.getUsername()
+							+ " outcome=" + detail.getOutcome() + " latency=" + detail.getLatency() + "ms tokens="
+							+ detail.getInputToken() + "/" + detail.getOutputToken() + "/" + detail.getTotalToken());
+				}
+				if (detail.getModelType() == null) {
+					LOGGER.warn("Usage detail received without a model type from provider=" + detail.getProviderId()
+							+ " model=" + detail.getModel() + ": it will be consolidated as "
+							+ LLMUsageDailyAggregationServiceImpl.LEGACY_MODEL_TYPE);
+				}
+				usageRepo.insert(detail);
 			} else {
 				throw new IllegalStateException("This receiver cannot handle payload type:" + t.getPayloadType());
 			}

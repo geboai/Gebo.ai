@@ -24,6 +24,21 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
   filterTab1: LLMUsageDrillDownLevel = {};
   filterTab2: LLMUsageDrillDownLevel = {};
 
+  /**
+   * Every model type usage is recorded for, not only the ones found in the current
+   * result: the backend stops reporting model type as a sub-dimension once the filter
+   * fixes it, so options built from the result would vanish after the first choice.
+   */
+  readonly modelTypeOptions: { label: string, value?: LLMUsageDrillDownLevel.ModelTypeEnum }[] = [
+    { label: "All", value: undefined },
+    { label: "Chat", value: LLMUsageDrillDownLevel.ModelTypeEnum.CHAT },
+    { label: "Embedding", value: LLMUsageDrillDownLevel.ModelTypeEnum.EMBEDDING },
+    { label: "Ranking", value: LLMUsageDrillDownLevel.ModelTypeEnum.RANKER },
+    { label: "Image generation", value: LLMUsageDrillDownLevel.ModelTypeEnum.IMAGE },
+    { label: "Text to speech", value: LLMUsageDrillDownLevel.ModelTypeEnum.TTS },
+    { label: "Transcription", value: LLMUsageDrillDownLevel.ModelTypeEnum.TRANSCRIPT }
+  ];
+
   // Chart data
   tokenChartDataTab1: any;
   latencyChartDataTab1: any;

@@ -81,9 +81,35 @@ public class GTextToSpeechModelRuntimeConfigurationDaoimpl
      * Adds a configuration model to the static configurations
      * @param element The model to be added
      */
+	/**
+	 * Accounts every speech synthesis call; optional so a context without usage
+	 * tracking still registers its models, unrecorded.
+	 */
+	@Autowired(required = false)
+	LLMUsageRecorder usageRecorder;
+
 	@Override
 	public void add(IGConfigurableTextToSpeechModel element) {
-		this.staticConfigs.add(element);
+		this.staticConfigs.add(withUsageRecording(element));
+	}
+
+	/**
+	 * Wraps a model so that its calls are recorded as usage, once: every model enters
+	 * this DAO through add() or addRuntimeByConfig(), both of which wrap.
+	 */
+	private IGConfigurableTextToSpeechModel withUsageRecording(IGConfigurableTextToSpeechModel model) {
+		if (model == null || usageRecorder == null || model instanceof UsageRecordingTextToSpeechModel) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Text to speech model code=" + (model != null ? model.getCode() : null)
+						+ " registered without a new usage wrapper: recorder="
+						+ (usageRecorder != null ? "present" : "absent"));
+			}
+			return model;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Text to speech model code=" + model.getCode() + " wrapped for usage recording");
+		}
+		return new UsageRecordingTextToSpeechModel<>(model, usageRecorder);
 	}
 
 	/** 
@@ -108,7 +134,7 @@ public class GTextToSpeechModelRuntimeConfigurationDaoimpl
 		}
 		IGConfigurableTextToSpeechModel ttsModel = handler.create(config);
 		LOGGER.info("Initialized chatModel successfully");
-		this.staticConfigs.add(ttsModel);
+		this.staticConfigs.add(withUsageRecording(ttsModel));
 	}
 
 	/** 

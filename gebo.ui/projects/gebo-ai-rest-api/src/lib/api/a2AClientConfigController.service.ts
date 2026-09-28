@@ -71,7 +71,7 @@ export class A2AClientConfigControllerService {
     public deleteA2AClientConfig(body: A2ARemoteAgentConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling delete1.');
+            throw new Error('Required parameter body was null or undefined when calling deleteA2AClientConfig.');
         }
 
         let headers = this.defaultHeaders;
@@ -118,7 +118,7 @@ export class A2AClientConfigControllerService {
     public findByCodeA2AClientConfig(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
-            throw new Error('Required parameter code was null or undefined when calling findByCode2.');
+            throw new Error('Required parameter code was null or undefined when calling findByCodeA2AClientConfig.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -165,7 +165,7 @@ export class A2AClientConfigControllerService {
     public insertA2AClientConfig(body: A2ARemoteAgentConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling insert1.');
+            throw new Error('Required parameter body was null or undefined when calling insertA2AClientConfig.');
         }
 
         let headers = this.defaultHeaders;
@@ -261,7 +261,7 @@ export class A2AClientConfigControllerService {
     public testAndDiscoveryA2AClientConfig(body: A2ARemoteAgentConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling testAndDiscovery1.');
+            throw new Error('Required parameter body was null or undefined when calling testAndDiscoveryA2AClientConfig.');
         }
 
         let headers = this.defaultHeaders;
@@ -308,7 +308,7 @@ export class A2AClientConfigControllerService {
     public updateA2AClientConfig(body: A2ARemoteAgentConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling update2.');
+            throw new Error('Required parameter body was null or undefined when calling updateA2AClientConfig.');
         }
 
         let headers = this.defaultHeaders;

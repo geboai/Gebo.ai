@@ -121,7 +121,31 @@ public class GImageModelRuntimeConfigurationDaoImpl
 	 */
 	@Override
 	public void add(IGConfigurableImageModel element) {
-		this.staticConfigs.add(element);
+		this.staticConfigs.add(withUsageRecording(element));
+	}
+
+	// Accounts every image generation; optional so a context without usage tracking
+	// still registers its models, unrecorded.
+	@Autowired(required = false)
+	LLMUsageRecorder usageRecorder;
+
+	/**
+	 * Wraps a model so that its calls are recorded as usage, once: every model enters
+	 * this DAO through add() or addRuntimeByConfig(), both of which wrap.
+	 */
+	private IGConfigurableImageModel withUsageRecording(IGConfigurableImageModel model) {
+		if (model == null || usageRecorder == null || model instanceof UsageRecordingImageModel) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Image model code=" + (model != null ? model.getCode() : null)
+						+ " registered without a new usage wrapper: recorder="
+						+ (usageRecorder != null ? "present" : "absent"));
+			}
+			return model;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Image model code=" + model.getCode() + " wrapped for usage recording");
+		}
+		return new UsageRecordingImageModel<>(model, usageRecorder);
 	}
 
 	/**
@@ -150,7 +174,7 @@ public class GImageModelRuntimeConfigurationDaoImpl
 			}
 			IGConfigurableImageModel imageModel = handler.create(config);
 			LOGGER.info("Initialized chatModel successfully");
-			this.staticConfigs.add(imageModel);
+			this.staticConfigs.add(withUsageRecording(imageModel));
 		}
 	}
 
