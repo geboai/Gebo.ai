@@ -326,8 +326,46 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	 * @return A list of secret information.
 	 * @throws GeboCryptSecretException if the retrieval fails.
 	 */
+	/**
+	 * Gives every bound {@link IGSecretsAdditionalProvider} a chance to list the
+	 * context before the predefined chain does.
+	 *
+	 * Integrated exactly like
+	 * {@link #resolveFromAdditionalProviders(String, Class)}: providers are
+	 * cycled in repository order, the first non-null answer is returned as-is,
+	 * and a provider that throws is logged and skipped.
+	 *
+	 * An empty list from a provider is an answer, not a decline - it claims the
+	 * context and reports it as holding nothing - so the configured and stored
+	 * secrets of that context are then not listed. Declining is returning null.
+	 *
+	 * @param contextCode the context whose secrets are being listed
+	 * @return the first list a provider produced, or {@code null} if none claimed
+	 *         the context
+	 */
+	private List<SecretInfo> listFromAdditionalProviders(String contextCode) {
+		if (additionalProviders == null)
+			return null;
+		for (IGSecretsAdditionalProvider provider : additionalProviders.getImplementations()) {
+			try {
+				List<SecretInfo> infos = provider.getSecretInfoByContextCode(contextCode);
+				if (infos != null) {
+					LOGGER.debug("Context {} listed by additional provider {}", contextCode, provider.getProviderId());
+					return infos;
+				}
+			} catch (RuntimeException | GeboCryptSecretException e) {
+				LOGGER.error("Additional secrets provider " + provider.getProviderId()
+						+ " failed listing context " + contextCode + "; continuing with the remaining providers", e);
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public List<SecretInfo> getSecretInfoByContextCode(String contextCode) throws GeboCryptSecretException {
+		List<SecretInfo> provided = listFromAdditionalProviders(contextCode);
+		if (provided != null)
+			return provided;
 		// The configured secrets of the context come first, and a stored secret whose
 		// code one of them shadows is left out: the admin surface must not offer a
 		// record that no read of that code can ever reach.

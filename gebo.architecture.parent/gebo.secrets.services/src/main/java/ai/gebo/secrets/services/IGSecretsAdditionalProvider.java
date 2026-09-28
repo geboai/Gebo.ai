@@ -1,7 +1,10 @@
 package ai.gebo.secrets.services;
 
+import java.util.List;
+
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.model.GeboCustomSecretContent;
+import ai.gebo.secrets.model.SecretInfo;
 
 /**
  * Extension point that lets a deployment resolve a custom secret from a source
@@ -59,4 +62,30 @@ public interface IGSecretsAdditionalProvider {
 	 */
 	public <T extends GeboCustomSecretContent> T getCustomSecretContentById(String id, Class<T> type)
 			throws GeboCryptSecretException;
+
+	/**
+	 * Lists the secrets this provider holds for a context, or declines the
+	 * context.
+	 *
+	 * Mirrors
+	 * {@link IGeboSecretsAccessService#getSecretInfoByContextCode(String)} and is
+	 * integrated the same way {@link #getCustomSecretContentById(String, Class)}
+	 * is: the providers are cycled in repository order and the first non-null
+	 * answer is returned as-is, without the predefined chain running at all.
+	 *
+	 * Note what that means for a list. Returning {@code null} is how a provider
+	 * says "this context is not mine, keep looking". Returning an EMPTY list is a
+	 * different statement - "this context is mine and it holds no secrets" - and
+	 * it wins, so the configured and stored secrets of that context are not
+	 * listed. A provider that only wants to contribute to a context must not
+	 * answer it at all.
+	 *
+	 * @param contextCode the context whose secrets are being listed
+	 * @return the secrets this provider holds for the context, or {@code null} to
+	 *         let the next provider - and ultimately the predefined chain -
+	 *         answer
+	 * @throws GeboCryptSecretException if the provider owns the context but
+	 *                                  cannot list it
+	 */
+	public List<SecretInfo> getSecretInfoByContextCode(String contextCode) throws GeboCryptSecretException;
 }
