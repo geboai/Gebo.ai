@@ -50,14 +50,11 @@
                   [(ngModel)]="filterTab2.providerId" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.monthlySubdimensions?.username?.length) {
-                <div class="col-12 sm:col-6 md:col-3 lg:col-2"
-                  >
-                  <label class="block text-700 font-semibold mb-2">Username</label>
-                  <p-select [options]="getOptions(result?.monthlySubdimensions?.username)"
-                  [(ngModel)]="filterTab2.username" placeholder="All" styleClass="w-full"></p-select>
-                </div>
-              }
+              <div class="col-12 sm:col-6 md:col-3 lg:col-2">
+                <label class="block text-700 font-semibold mb-2">Model Type</label>
+                <p-select id="llmUsageMonthlyModelType" [options]="modelTypeOptions" optionLabel="label" optionValue="value"
+                [(ngModel)]="filterTab2.modelType" placeholder="All" styleClass="w-full"></p-select>
+              </div>
               @if (result?.monthlySubdimensions?.model?.length) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
@@ -66,19 +63,6 @@
                   [(ngModel)]="filterTab2.model" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.monthlySubdimensions?.callerStack?.length) {
-                <div class="col-12 sm:col-6 md:col-3 lg:col-2"
-                  >
-                  <label class="block text-700 font-semibold mb-2">Caller Stack</label>
-                  <p-select [options]="getOptions(result?.monthlySubdimensions?.callerStack)"
-                  [(ngModel)]="filterTab2.callerStack" placeholder="All" styleClass="w-full"></p-select>
-                </div>
-              }
-              <div class="col-12 sm:col-6 md:col-3 lg:col-2">
-                <label class="block text-700 font-semibold mb-2">Model Type</label>
-                <p-select id="llmUsageMonthlyModelType" [options]="modelTypeOptions" optionLabel="label" optionValue="value"
-                [(ngModel)]="filterTab2.modelType" placeholder="All" styleClass="w-full"></p-select>
-              </div>
               @if (result?.monthlySubdimensions?.year?.length) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
@@ -93,6 +77,22 @@
                   <label class="block text-700 font-semibold mb-2">Month</label>
                   <p-select [options]="getOptions(result?.monthlySubdimensions?.month)"
                   [(ngModel)]="filterTab2.month" placeholder="All" styleClass="w-full"></p-select>
+                </div>
+              }
+              @if (result?.monthlySubdimensions?.username?.length) {
+                <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                  >
+                  <label class="block text-700 font-semibold mb-2">Username</label>
+                  <p-select [options]="getOptions(result?.monthlySubdimensions?.username)"
+                  [(ngModel)]="filterTab2.username" placeholder="All" styleClass="w-full"></p-select>
+                </div>
+              }
+              @if (result?.monthlySubdimensions?.callerStack?.length) {
+                <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                  >
+                  <label class="block text-700 font-semibold mb-2">Caller Stack</label>
+                  <p-select [options]="getOptions(result?.monthlySubdimensions?.callerStack)"
+                  [(ngModel)]="filterTab2.callerStack" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
               <div class="col-12 sm:col-6 md:col-4 lg:col-3 flex gap-2">
@@ -163,14 +163,11 @@
                   [(ngModel)]="filterTab1.providerId" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.currentMonthDailySubdimensions?.username?.length) {
-                <div class="col-12 sm:col-6 md:col-3 lg:col-2"
-                  >
-                  <label class="block text-700 font-semibold mb-2">Username</label>
-                  <p-select [options]="getOptions(result?.currentMonthDailySubdimensions?.username)"
-                  [(ngModel)]="filterTab1.username" placeholder="All" styleClass="w-full"></p-select>
-                </div>
-              }
+              <div class="col-12 sm:col-6 md:col-3 lg:col-2">
+                <label class="block text-700 font-semibold mb-2">Model Type</label>
+                <p-select id="llmUsageDailyModelType" [options]="modelTypeOptions" optionLabel="label" optionValue="value"
+                [(ngModel)]="filterTab1.modelType" placeholder="All" styleClass="w-full"></p-select>
+              </div>
               @if (result?.currentMonthDailySubdimensions?.model?.length) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
@@ -179,19 +176,6 @@
                   [(ngModel)]="filterTab1.model" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.currentMonthDailySubdimensions?.callerStack?.length) {
-                <div class="col-12 sm:col-6 md:col-3 lg:col-2"
-                  >
-                  <label class="block text-700 font-semibold mb-2">Caller Stack</label>
-                  <p-select [options]="getOptions(result?.currentMonthDailySubdimensions?.callerStack)"
-                  [(ngModel)]="filterTab1.callerStack" placeholder="All" styleClass="w-full"></p-select>
-                </div>
-              }
-              <div class="col-12 sm:col-6 md:col-3 lg:col-2">
-                <label class="block text-700 font-semibold mb-2">Model Type</label>
-                <p-select id="llmUsageDailyModelType" [options]="modelTypeOptions" optionLabel="label" optionValue="value"
-                [(ngModel)]="filterTab1.modelType" placeholder="All" styleClass="w-full"></p-select>
-              </div>
               @if (result?.currentMonthDailySubdimensions?.year?.length) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
@@ -206,6 +190,22 @@
                   <label class="block text-700 font-semibold mb-2">Month</label>
                   <p-select [options]="getOptions(result?.currentMonthDailySubdimensions?.month)"
                   [(ngModel)]="filterTab1.month" placeholder="All" styleClass="w-full"></p-select>
+                </div>
+              }
+              @if (result?.currentMonthDailySubdimensions?.username?.length) {
+                <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                  >
+                  <label class="block text-700 font-semibold mb-2">Username</label>
+                  <p-select [options]="getOptions(result?.currentMonthDailySubdimensions?.username)"
+                  [(ngModel)]="filterTab1.username" placeholder="All" styleClass="w-full"></p-select>
+                </div>
+              }
+              @if (result?.currentMonthDailySubdimensions?.callerStack?.length) {
+                <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                  >
+                  <label class="block text-700 font-semibold mb-2">Caller Stack</label>
+                  <p-select [options]="getOptions(result?.currentMonthDailySubdimensions?.callerStack)"
+                  [(ngModel)]="filterTab1.callerStack" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
               <div class="col-12 sm:col-6 md:col-4 lg:col-3 flex gap-2">
