@@ -21,6 +21,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelChice;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.abstraction.layer.services.IGModelsListProvider;
@@ -49,6 +50,8 @@ public class RegoloAIModelsListProviderService implements IGModelsListProvider {
 	private static final String AUDIO_SPEECH = "audio_speech";
 	private static final String AUDIO_TRANSCRIPTION = "audio_transcription";
 	private static final String REGOLO_AI_MODELS_INFO_URL = "https://api.regolo.ai/v1/model/info";
+	/** LiteLLM expresses every model_info cost in USD. */
+	private static final String LITELLM_CURRENCY = "USD";
 	final IGModelChoiceMetaInfoEnricherService enricherService;
 	final RestTemplateWrapperService restTemplateWrapper;
 
@@ -203,7 +206,47 @@ public class RegoloAIModelsListProviderService implements IGModelsListProvider {
 		entry.setDescription(model.getModel_name());
 		entry.setContextLength(getContextWindowLength(model));
 		entry.setNativeModelMetaInfos(model);
+		entry.setPricingConditions(getPricingConditions(model));
 		return entry;
+	}
+
+	/**
+	 * The pay per use prices LiteLLM publishes in {@code model_info}, per single token
+	 * and per request, in USD (LiteLLM's convention). A model priced per call, like
+	 * regolo.ai's embedding and reranking models, has token prices of 0 and a price
+	 * per request ({@code input_cost_per_request}) or per query
+	 * ({@code input_cost_per_query}).
+	 * <p>
+	 * Best effort: the prices only pre-fill what the user can set in the model
+	 * configuration, so a failure here is logged and leaves the pricing unset, it
+	 * never keeps the model from being listed.
+	 */
+	private GModelPricingConditions getPricingConditions(RegoloAIModel model) {
+		try {
+			Map<String, Object> info = model.getModel_info();
+			if (info == null) {
+				return null;
+			}
+			Double perRequest = asDouble(info.get("input_cost_per_request"));
+			if (perRequest == null) {
+				perRequest = asDouble(info.get("input_cost_per_query"));
+			}
+			GModelPricingConditions pricing = GModelPricingConditions.fromPerTokenPrices(
+					asDouble(info.get("input_cost_per_token")), asDouble(info.get("output_cost_per_token")),
+					perRequest, LITELLM_CURRENCY);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Regolo.ai model={} pricing={}", model.getModel_name(), pricing);
+			}
+			return pricing;
+		} catch (Throwable e) {
+			LOGGER.error("Cannot read the pricing of regolo.ai model=" + model.getModel_name()
+					+ ", it is listed without pricing", e);
+			return null;
+		}
+	}
+
+	private static Double asDouble(Object value) {
+		return value instanceof Number number ? Double.valueOf(number.doubleValue()) : null;
 	}
 
 	private Integer getContextWindowLength(RegoloAIModel model) {

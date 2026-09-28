@@ -41,6 +41,13 @@ public class GModelPricingConditions {
 	 */
 	private Double outputMtokenPrice = null;
 
+	/**
+	 * Price charged per request (per call, or per query for a ranker), on top of the
+	 * token prices. Some models are priced this way only, with no token price: e.g.
+	 * embedding and reranking models of several providers.
+	 */
+	private Double requestPrice = null;
+
 	/** {@link PricingModelType#FLAT} only: the fixed cost charged every month. */
 	private Double monthlyFlatCost = null;
 	/**
@@ -75,5 +82,51 @@ public class GModelPricingConditions {
 		}
 		double output = effectiveOutputMtokenPrice();
 		return (inputTokens * inputMtokenPrice + outputTokens * output) / 1_000_000d;
+	}
+
+	/**
+	 * The pay per use cost of one call: its tokens at the per million token prices
+	 * plus the {@link #requestPrice}. Null when neither a token price nor a request
+	 * price is set.
+	 */
+	public Double callCost(long inputTokens, long outputTokens) {
+		Double tokens = tokenCost(inputTokens, outputTokens);
+		if (tokens == null && requestPrice == null) {
+			return null;
+		}
+		return (tokens != null ? tokens : 0d) + (requestPrice != null ? requestPrice : 0d);
+	}
+
+	/**
+	 * Builds pay per use conditions from the prices a provider publishes in its model
+	 * metadata, which are per single token: converted here to per million tokens.
+	 * A negative price, used by some providers for a dynamically priced model, is
+	 * treated as unknown. Returns null when no price is known at all, leaving the
+	 * pricing unset rather than claiming the model is free.
+	 *
+	 * @param inputPerToken  price of one input token, or null
+	 * @param outputPerToken price of one output token, or null
+	 * @param perRequest     price of one request or query, or null
+	 * @param currencyCode   ISO 4217 code of the prices
+	 */
+	public static GModelPricingConditions fromPerTokenPrices(Double inputPerToken, Double outputPerToken,
+			Double perRequest, String currencyCode) {
+		Double input = known(inputPerToken);
+		Double output = known(outputPerToken);
+		Double request = known(perRequest);
+		if (input == null && output == null && request == null) {
+			return null;
+		}
+		GModelPricingConditions pricing = new GModelPricingConditions();
+		pricing.setPricingType(PricingModelType.MTOKEN);
+		pricing.setCurrencyCode(currencyCode);
+		pricing.setInputMtokenPrice(input != null ? input * 1_000_000d : null);
+		pricing.setOutputMtokenPrice(output != null ? output * 1_000_000d : null);
+		pricing.setRequestPrice(request);
+		return pricing;
+	}
+
+	private static Double known(Double price) {
+		return price != null && price >= 0 && !price.isNaN() && !price.isInfinite() ? price : null;
 	}
 }
