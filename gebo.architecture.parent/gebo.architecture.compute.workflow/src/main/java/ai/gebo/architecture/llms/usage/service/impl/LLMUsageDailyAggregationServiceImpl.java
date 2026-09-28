@@ -165,6 +165,7 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 	}
 
 	static final class DailyAccumulator {
+		private static final Logger LOGGER_ACC = LoggerFactory.getLogger(LLMUsageDailyAggregationServiceImpl.class);
 		private long inputToken;
 		private long outputToken;
 		private long totalToken;
@@ -178,8 +179,18 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 		private long timeToFirstTokenSum;
 		private long timeToFirstTokenMin = Long.MAX_VALUE;
 		private long timeToFirstTokenMax = Long.MIN_VALUE;
+		// Over the priced calls only; the currencies are tracked because costs in
+		// different currencies cannot be summed.
+		private long costSamples;
+		private double costSum;
+		private final java.util.Set<String> currencies = new java.util.LinkedHashSet<>();
 
 		void add(LLMUsageDetail detail) {
+			if (detail.getCost() != null) {
+				costSamples++;
+				costSum += detail.getCost();
+				currencies.add(detail.getCurrencyCode());
+			}
 			inputToken += detail.getInputToken();
 			outputToken += detail.getOutputToken();
 			totalToken += detail.getTotalToken();
@@ -213,6 +224,19 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 			target.setTimeToFirstTokenAvg(timed ? timeToFirstTokenSum / timeToFirstTokenSamples : null);
 			target.setTimeToFirstTokenMin(timed ? timeToFirstTokenMin : null);
 			target.setTimeToFirstTokenMax(timed ? timeToFirstTokenMax : null);
+			target.setCostSamples(costSamples);
+			if (costSamples > 0 && currencies.size() == 1) {
+				target.setCost(costSum);
+				target.setCurrencyCode(currencies.iterator().next());
+			} else {
+				if (currencies.size() > 1) {
+					LOGGER_ACC.warn("Usage of provider=" + target.getProviderId() + " model=" + target.getModel()
+							+ " on " + target.getYear() + "-" + target.getMonth() + "-" + target.getDay()
+							+ " is priced in several currencies " + currencies + ", its daily cost is left unset");
+				}
+				target.setCost(null);
+				target.setCurrencyCode(null);
+			}
 		}
 	}
 

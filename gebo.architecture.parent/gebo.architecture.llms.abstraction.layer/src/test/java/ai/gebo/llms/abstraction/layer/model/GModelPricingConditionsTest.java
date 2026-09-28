@@ -59,6 +59,24 @@ class GModelPricingConditionsTest {
 	}
 
 	@Test
+	void aFlatModelAttributesNoCostToASingleCall() {
+		GModelPricingConditions flat = new GModelPricingConditions();
+		flat.setPricingType(GModelPricingConditions.PricingModelType.FLAT);
+		flat.setMonthlyFlatCost(20d);
+		flat.setInputMtokenPrice(1d);
+		assertNull(flat.usageCost(1000, 1000, true));
+	}
+
+	@Test
+	void aFailedCallPaysItsTokensButNotTheRequest() {
+		GModelPricingConditions pricing = GModelPricingConditions.fromPerTokenPrices(1e-6, 1e-6, 0.01, "USD");
+		assertEquals(0.01 + 2e-3, pricing.usageCost(1000, 1000, true), 1e-12);
+		assertEquals(2e-3, pricing.usageCost(1000, 1000, false), 1e-12);
+		// priced per request only: a failure costs nothing
+		assertEquals(0d, GModelPricingConditions.fromPerTokenPrices(null, null, 0.01, "USD").usageCost(0, 0, false));
+	}
+
+	@Test
 	void noInputPriceMeansNoTokenCost() {
 		assertNull(mtoken(null, 2.00).tokenCost(1000, 1000));
 		assertNull(new GModelPricingConditions().tokenCost(1000, 1000));

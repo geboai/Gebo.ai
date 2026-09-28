@@ -15,7 +15,9 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Service;
 
+import java.util.function.Supplier;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisor;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.model.ModelType;
@@ -33,6 +35,11 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 
 		private final GBaseChatModelConfig config;
 		private final LLMUsageRecorder usageRecorder;
+		/**
+		 * The chat model's {@code IGConfigurableModel.getPricingConditions()}, read when
+		 * a call ends; null for an unpriced model.
+		 */
+		private final Supplier<GModelPricingConditions> pricing;
 
 		@Override
 		public ChatClientResponse adviseCall(ChatClientRequest request, CallAdvisorChain chain) {
@@ -188,23 +195,33 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 						+ counters.input() + "/" + counters.output() + "/" + counters.total() + " firstToken="
 						+ (firstTokenNanos != null ? "timed" : "n/a"));
 			}
-			usageRecorder.record(config, ModelType.CHAT, username, callerStack, startNanos, firstTokenNanos,
+			usageRecorder.record(config, ModelType.CHAT, pricing, username, callerStack, startNanos, firstTokenNanos,
 					counters.input(), counters.output(), counters.total(), outcome);
 		}
 	}
 
 	@Override
 	public IChatModelUsageAdvisor create(GBaseChatModelConfig config) {
+		return create(config, null);
+	}
 
-		return new GeboChatModelUsageAdvisor(config, usageRecorder);
+	@Override
+	public IChatModelUsageAdvisor create(GBaseChatModelConfig config, Supplier<GModelPricingConditions> pricing) {
+		return new GeboChatModelUsageAdvisor(config, usageRecorder, pricing);
 	}
 
 	@Override
 	public ChatModel recording(ChatModel model, GBaseChatModelConfig config) {
+		return recording(model, config, null);
+	}
+
+	@Override
+	public ChatModel recording(ChatModel model, GBaseChatModelConfig config,
+			Supplier<GModelPricingConditions> pricing) {
 		if (model == null || model instanceof UsageRecordingChatModel) {
 			return model;
 		}
-		return new UsageRecordingChatModel(model, config, usageRecorder);
+		return new UsageRecordingChatModel(model, config, usageRecorder, pricing);
 	}
 
 }

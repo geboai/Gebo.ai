@@ -101,7 +101,7 @@ public abstract class GAbstractConfigurableEmbeddingModel<ModelConfig extends GB
 		this.type = type;
 		this.model = this.configureModel(config, type);
 		this.recordingModel = new UsageRecordingEmbeddingModel(this.model, () -> this.config,
-				() -> this.usageRecorder);
+				() -> this.usageRecorder, this::getPricingConditions);
 		this.storeFactory = this.vectorStoreFactoryProvider.get();
 
 		// Close existing vector store if any

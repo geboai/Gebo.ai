@@ -33,7 +33,7 @@ public class UsageRecordingTranscriptModel<ModelConfig extends GBaseTranscriptMo
 
 	@Override
 	public String call(InputStream audioResource) throws LLMConfigException, IOException {
-		LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), ModelType.TRANSCRIPT);
+		LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), ModelType.TRANSCRIPT, delegate::getPricingConditions);
 		try {
 			String transcript = delegate.call(audioResource);
 			call.success();

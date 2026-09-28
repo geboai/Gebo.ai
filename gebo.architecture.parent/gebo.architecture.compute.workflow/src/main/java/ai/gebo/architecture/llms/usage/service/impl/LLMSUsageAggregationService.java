@@ -109,7 +109,8 @@ public class LLMSUsageAggregationService {
 		List<AggregationOperation> ops = new ArrayList<>();
 		ops.add(Aggregation
 				.project("inputToken", "outputToken", "totalToken", "nrRequests", "year", "month", "day",
-						"timeToFirstTokenMin", "timeToFirstTokenMax", "timeToFirstTokenSamples")
+						"timeToFirstTokenMin", "timeToFirstTokenMax", "timeToFirstTokenSamples", "cost",
+						"costSamples", "currencyCode")
 				.and(LLMDailyUsageDetail.RESPONSE_TIME_MIN_FIELD).as("responseTimeMin")
 				.and(LLMDailyUsageDetail.RESPONSE_TIME_MAX_FIELD).as("responseTimeMax")
 				.andExpression(LLMDailyUsageDetail.RESPONSE_TIME_AVG_FIELD + " * nrRequests")
@@ -123,7 +124,8 @@ public class LLMSUsageAggregationService {
 				.as("responseTimeWeighted").min("responseTimeMin").as("responseTimeMin").max("responseTimeMax")
 				.as("responseTimeMax").sum("timeToFirstTokenWeighted").as("timeToFirstTokenWeighted")
 				.sum("timeToFirstTokenSamples").as("timeToFirstTokenSamples").min("timeToFirstTokenMin")
-				.as("timeToFirstTokenMin").max("timeToFirstTokenMax").as("timeToFirstTokenMax");
+				.as("timeToFirstTokenMin").max("timeToFirstTokenMax").as("timeToFirstTokenMax").sum("cost")
+				.as("cost").sum("costSamples").as("costSamples").addToSet("currencyCode").as("currencyCodes");
 		ops.add(group);
 
 		ProjectionOperation flatten = Aggregation.project().and("_id.year").as("year").and("_id.month").as("month")
@@ -132,7 +134,8 @@ public class LLMSUsageAggregationService {
 				.and("responseTimeMax").as("responseTimeMax").and("responseTimeWeighted").as("responseTimeWeighted")
 				.and("timeToFirstTokenWeighted").as("timeToFirstTokenWeighted").and("timeToFirstTokenSamples")
 				.as("timeToFirstTokenSamples").and("timeToFirstTokenMin").as("timeToFirstTokenMin")
-				.and("timeToFirstTokenMax").as("timeToFirstTokenMax");
+				.and("timeToFirstTokenMax").as("timeToFirstTokenMax").and("cost").as("cost").and("costSamples")
+				.as("costSamples").and("currencyCodes").as("currencyCodes");
 		if (includeDay)
 			flatten = flatten.and("_id.day").as("day");
 		ops.add(flatten);
@@ -237,6 +240,15 @@ public class LLMSUsageAggregationService {
 				b.setTimeToFirstTokenMax(r.getTimeToFirstTokenMax());
 				b.setTimeToFirstTokenAvg(r.getTimeToFirstTokenWeighted() / r.getTimeToFirstTokenSamples());
 			}
+			b.setCostSamples(r.getCostSamples());
+			List<String> currencies = r.getCurrencyCodes() == null ? List.of()
+					: r.getCurrencyCodes().stream().filter(x -> x != null).distinct().toList();
+			// Costs in different currencies cannot be summed: the bucket then reports no
+			// cost, a drill down to a provider or model shows each currency's.
+			if (r.getCostSamples() > 0 && currencies.size() == 1) {
+				b.setCost(r.getCost());
+				b.setCurrencyCode(currencies.get(0));
+			}
 			buckets.add(b);
 		}
 		return buckets;
@@ -278,5 +290,8 @@ public class LLMSUsageAggregationService {
 		private Long timeToFirstTokenMax;
 		private long timeToFirstTokenWeighted;
 		private long timeToFirstTokenSamples;
+		private Double cost;
+		private long costSamples;
+		private List<String> currencyCodes;
 	}
 }

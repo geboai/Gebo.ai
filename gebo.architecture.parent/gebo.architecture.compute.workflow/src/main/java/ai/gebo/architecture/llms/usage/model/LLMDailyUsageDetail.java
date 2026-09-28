@@ -57,6 +57,16 @@ public class LLMDailyUsageDetail {
 	private Long timeToFirstTokenAvg;
 	/** How many of the calls aggregated here measured a time to first token. */
 	private long timeToFirstTokenSamples;
+	/**
+	 * Total cost of the priced calls aggregated here, in {@link #currencyCode}; null
+	 * when none was priced, or when they were priced in different currencies, which
+	 * cannot be summed.
+	 */
+	private Double cost;
+	/** ISO 4217 currency of {@link #cost}. */
+	private String currencyCode;
+	/** How many of the calls aggregated here had a cost. */
+	private long costSamples;
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;

@@ -151,6 +151,58 @@ class LLMUsageDailyAggregationServiceImplTest {
 		assertEquals(400L, daily.getTimeToFirstTokenAvg());
 	}
 
+	private LLMDailyUsageDetail consolidateOne(List<LLMUsageDetail> rows) {
+		LLMUsageDetailRepository usageRepo = mock(LLMUsageDetailRepository.class);
+		LLMDailyUsageDetailRepository dailyRepo = mock(LLMDailyUsageDetailRepository.class);
+		when(usageRepo.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(anyLong(), anyLong()))
+				.thenAnswer(invocation -> new ArrayList<>(rows).stream());
+		when(dailyRepo.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndYearAndMonthAndDay(
+				any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), anyInt())).thenReturn(Optional.empty());
+		AtomicReference<LLMDailyUsageDetail> stored = new AtomicReference<>();
+		when(dailyRepo.save(any())).thenAnswer(invocation -> {
+			stored.set(invocation.getArgument(0));
+			return invocation.getArgument(0);
+		});
+		new LLMUsageDailyAggregationServiceImpl(usageRepo, dailyRepo).consolidate();
+		return stored.get();
+	}
+
+	@Test
+	void costIsSummedOverThePricedCalls() {
+		long now = System.currentTimeMillis();
+		LLMUsageDetail a = raw(now, 10, 100);
+		a.setCost(0.25);
+		a.setCurrencyCode("USD");
+		LLMUsageDetail b = raw(now, 10, 100);
+		b.setCost(0.50);
+		b.setCurrencyCode("USD");
+		LLMUsageDetail unpriced = raw(now, 10, 100);
+
+		LLMDailyUsageDetail daily = consolidateOne(List.of(a, b, unpriced));
+
+		assertEquals(3, daily.getNrRequests());
+		assertEquals(2, daily.getCostSamples());
+		assertEquals(0.75, daily.getCost(), 1e-12);
+		assertEquals("USD", daily.getCurrencyCode());
+	}
+
+	@Test
+	void costsInSeveralCurrenciesAreNotSummed() {
+		long now = System.currentTimeMillis();
+		LLMUsageDetail usd = raw(now, 10, 100);
+		usd.setCost(0.25);
+		usd.setCurrencyCode("USD");
+		LLMUsageDetail eur = raw(now, 10, 100);
+		eur.setCost(0.25);
+		eur.setCurrencyCode("EUR");
+
+		LLMDailyUsageDetail daily = consolidateOne(List.of(usd, eur));
+
+		assertEquals(2, daily.getCostSamples());
+		assertNull(daily.getCost());
+		assertNull(daily.getCurrencyCode());
+	}
+
 	@Test
 	void noStreamedCallLeavesTheTimeToFirstTokenUnset() {
 		LLMUsageDetailRepository usageRepo = mock(LLMUsageDetailRepository.class);

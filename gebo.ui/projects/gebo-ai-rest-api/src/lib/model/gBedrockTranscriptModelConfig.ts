@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { GBedrockTranscriptModelChoice } from './gBedrockTranscriptModelChoice';
+import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GBedrockTranscriptModelConfig { 
     code?: string;
@@ -24,6 +25,7 @@ export interface GBedrockTranscriptModelConfig {
     choosedModel?: GBedrockTranscriptModelChoice;
     baseUrl?: string;
     contextLength?: number;
+    pricingConditions?: GModelPricingConditions;
     languageCode?: string;
     sampleRateHertz?: number;
     mediaEncoding?: string;

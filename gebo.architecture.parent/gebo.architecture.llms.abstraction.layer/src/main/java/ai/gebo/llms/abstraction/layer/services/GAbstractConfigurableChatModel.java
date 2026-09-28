@@ -176,7 +176,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		this.type = type;
 		this.model = configureModel(config, type, null);
 		Builder builder = ChatClient.builder(configureModel(config, type, null));
-		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config)).build();
+		// Priced through this model's getPricingConditions(), read when each call ends.
+		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions))
+				.build();
 	}
 
 	@Override
@@ -681,7 +683,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("doWithChatModel() handing out the usage recording raw model of code=" + getCode());
 		}
-		return chatModelCalling.call(usageAdvisorFactory.recording(model, config));
+		return chatModelCalling.call(usageAdvisorFactory.recording(model, config, this::getPricingConditions));
 	}
 
 	@Override
@@ -713,7 +715,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				configurableChatModel.chatClient = ChatClient
 						.builder(configurableChatModel.configureModel(modelConfigClone, type,
 								configOptions.getToolCallingManager()))
-						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone)).build();
+						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone,
+								configurableChatModel::getPricingConditions))
+						.build();
 			} else
 				throw new IllegalStateException(
 						"The actual configurable chat model is not an GAbstractConfigurableChatModel");

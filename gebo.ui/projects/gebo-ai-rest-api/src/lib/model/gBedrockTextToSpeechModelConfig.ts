@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { GBedrockTextToSpeechModelChoice } from './gBedrockTextToSpeechModelChoice';
+import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GBedrockTextToSpeechModelConfig { 
     code?: string;
@@ -24,6 +25,7 @@ export interface GBedrockTextToSpeechModelConfig {
     choosedModel?: GBedrockTextToSpeechModelChoice;
     baseUrl?: string;
     contextLength?: number;
+    pricingConditions?: GModelPricingConditions;
     voice?: string;
     engine?: string;
 }

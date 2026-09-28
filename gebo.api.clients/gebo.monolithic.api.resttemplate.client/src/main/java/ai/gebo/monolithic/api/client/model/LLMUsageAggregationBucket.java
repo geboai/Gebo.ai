@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMUsageAggregationBucket
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-28T16:43:32.993964300+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-28T19:15:37.397358600+02:00[Europe/Rome]")
 
 public class LLMUsageAggregationBucket {
   @JsonProperty("providerId")
@@ -116,6 +116,15 @@ public class LLMUsageAggregationBucket {
 
   @JsonProperty("timeToFirstTokenSamples")
   private Long timeToFirstTokenSamples = null;
+
+  @JsonProperty("cost")
+  private Double cost = null;
+
+  @JsonProperty("currencyCode")
+  private String currencyCode = null;
+
+  @JsonProperty("costSamples")
+  private Long costSamples = null;
 
   public LLMUsageAggregationBucket providerId(String providerId) {
     this.providerId = providerId;
@@ -459,6 +468,60 @@ public class LLMUsageAggregationBucket {
     this.timeToFirstTokenSamples = timeToFirstTokenSamples;
   }
 
+  public LLMUsageAggregationBucket cost(Double cost) {
+    this.cost = cost;
+    return this;
+  }
+
+   /**
+   * Get cost
+   * @return cost
+  **/
+  @Schema(description = "")
+  public Double getCost() {
+    return cost;
+  }
+
+  public void setCost(Double cost) {
+    this.cost = cost;
+  }
+
+  public LLMUsageAggregationBucket currencyCode(String currencyCode) {
+    this.currencyCode = currencyCode;
+    return this;
+  }
+
+   /**
+   * Get currencyCode
+   * @return currencyCode
+  **/
+  @Schema(description = "")
+  public String getCurrencyCode() {
+    return currencyCode;
+  }
+
+  public void setCurrencyCode(String currencyCode) {
+    this.currencyCode = currencyCode;
+  }
+
+  public LLMUsageAggregationBucket costSamples(Long costSamples) {
+    this.costSamples = costSamples;
+    return this;
+  }
+
+   /**
+   * Get costSamples
+   * @return costSamples
+  **/
+  @Schema(description = "")
+  public Long getCostSamples() {
+    return costSamples;
+  }
+
+  public void setCostSamples(Long costSamples) {
+    this.costSamples = costSamples;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -487,12 +550,15 @@ public class LLMUsageAggregationBucket {
         Objects.equals(this.timeToFirstTokenMin, llMUsageAggregationBucket.timeToFirstTokenMin) &&
         Objects.equals(this.timeToFirstTokenMax, llMUsageAggregationBucket.timeToFirstTokenMax) &&
         Objects.equals(this.timeToFirstTokenAvg, llMUsageAggregationBucket.timeToFirstTokenAvg) &&
-        Objects.equals(this.timeToFirstTokenSamples, llMUsageAggregationBucket.timeToFirstTokenSamples);
+        Objects.equals(this.timeToFirstTokenSamples, llMUsageAggregationBucket.timeToFirstTokenSamples) &&
+        Objects.equals(this.cost, llMUsageAggregationBucket.cost) &&
+        Objects.equals(this.currencyCode, llMUsageAggregationBucket.currencyCode) &&
+        Objects.equals(this.costSamples, llMUsageAggregationBucket.costSamples);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(providerId, username, model, callerStack, modelType, year, month, day, inputToken, outputToken, totalToken, nrRequests, responseTimeMin, responseTimeMax, responseTimeAvg, timeToFirstTokenMin, timeToFirstTokenMax, timeToFirstTokenAvg, timeToFirstTokenSamples);
+    return Objects.hash(providerId, username, model, callerStack, modelType, year, month, day, inputToken, outputToken, totalToken, nrRequests, responseTimeMin, responseTimeMax, responseTimeAvg, timeToFirstTokenMin, timeToFirstTokenMax, timeToFirstTokenAvg, timeToFirstTokenSamples, cost, currencyCode, costSamples);
   }
 
 
@@ -520,6 +586,9 @@ public class LLMUsageAggregationBucket {
     sb.append("    timeToFirstTokenMax: ").append(toIndentedString(timeToFirstTokenMax)).append("\n");
     sb.append("    timeToFirstTokenAvg: ").append(toIndentedString(timeToFirstTokenAvg)).append("\n");
     sb.append("    timeToFirstTokenSamples: ").append(toIndentedString(timeToFirstTokenSamples)).append("\n");
+    sb.append("    cost: ").append(toIndentedString(cost)).append("\n");
+    sb.append("    currencyCode: ").append(toIndentedString(currencyCode)).append("\n");
+    sb.append("    costSamples: ").append(toIndentedString(costSamples)).append("\n");
     sb.append("}");
     return sb.toString();
   }

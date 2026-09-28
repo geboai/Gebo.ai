@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { GBedrockRankerModelChoice } from './gBedrockRankerModelChoice';
+import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GBedrockRankerModelConfig { 
     code?: string;
@@ -24,6 +25,7 @@ export interface GBedrockRankerModelConfig {
     choosedModel?: GBedrockRankerModelChoice;
     baseUrl?: string;
     contextLength?: number;
+    pricingConditions?: GModelPricingConditions;
     maxDocumentsPerRequest?: number;
     maxDocumentTokens?: number;
     responseReserveTokens?: number;

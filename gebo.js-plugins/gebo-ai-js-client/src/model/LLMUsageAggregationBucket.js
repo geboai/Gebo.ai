@@ -76,6 +76,12 @@ export default class LLMUsageAggregationBucket {
         obj.timeToFirstTokenAvg = ApiClient.convertToType(data['timeToFirstTokenAvg'], 'Number');
       if (data.hasOwnProperty('timeToFirstTokenSamples'))
         obj.timeToFirstTokenSamples = ApiClient.convertToType(data['timeToFirstTokenSamples'], 'Number');
+      if (data.hasOwnProperty('cost'))
+        obj.cost = ApiClient.convertToType(data['cost'], 'Number');
+      if (data.hasOwnProperty('currencyCode'))
+        obj.currencyCode = ApiClient.convertToType(data['currencyCode'], 'String');
+      if (data.hasOwnProperty('costSamples'))
+        obj.costSamples = ApiClient.convertToType(data['costSamples'], 'Number');
     }
     return obj;
   }
@@ -217,4 +223,19 @@ LLMUsageAggregationBucket.prototype.timeToFirstTokenAvg = undefined;
  * @member {Number} timeToFirstTokenSamples
  */
 LLMUsageAggregationBucket.prototype.timeToFirstTokenSamples = undefined;
+
+/**
+ * @member {Number} cost
+ */
+LLMUsageAggregationBucket.prototype.cost = undefined;
+
+/**
+ * @member {String} currencyCode
+ */
+LLMUsageAggregationBucket.prototype.currencyCode = undefined;
+
+/**
+ * @member {Number} costSamples
+ */
+LLMUsageAggregationBucket.prototype.costSamples = undefined;
 

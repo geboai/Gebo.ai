@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GModelPricingConditions } from './gModelPricingConditions';
 import { GenericOpenAIAPITranscriptModelChoice } from './genericOpenAIAPITranscriptModelChoice';
 
 export interface GenericOpenAIAPITranscriptModelConfig { 
@@ -24,4 +25,5 @@ export interface GenericOpenAIAPITranscriptModelConfig {
     choosedModel?: GenericOpenAIAPITranscriptModelChoice;
     baseUrl?: string;
     contextLength?: number;
+    pricingConditions?: GModelPricingConditions;
 }

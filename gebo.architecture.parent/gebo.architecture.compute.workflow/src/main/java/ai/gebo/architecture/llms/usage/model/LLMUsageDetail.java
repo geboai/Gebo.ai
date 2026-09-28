@@ -34,6 +34,13 @@ public class LLMUsageDetail {
 	 * only for streamed chat calls; null otherwise and on older records.
 	 */
 	private Long timeToFirstToken;
+	/**
+	 * Cost of the call in {@link #currencyCode}, from the model's pricing conditions;
+	 * null when the model has no pay per use price, and on older records.
+	 */
+	private Double cost;
+	/** ISO 4217 currency of {@link #cost}. */
+	private String currencyCode;
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;

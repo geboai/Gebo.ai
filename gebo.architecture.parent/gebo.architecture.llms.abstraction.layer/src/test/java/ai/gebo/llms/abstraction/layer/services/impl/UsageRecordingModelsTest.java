@@ -32,6 +32,7 @@ import ai.gebo.core.messages.LLMCallOutcome;
 import ai.gebo.llms.abstraction.layer.dto.LLMUsageDetailDto;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.ILLMSUsageCrudService;
@@ -57,7 +58,7 @@ class UsageRecordingModelsTest {
 		when(provider.call(any())).thenReturn(embeddingResponse(12));
 		when(provider.dimensions()).thenReturn(1);
 		GBaseEmbeddingModelConfig config = mock(GBaseEmbeddingModelConfig.class);
-		UsageRecordingEmbeddingModel model = new UsageRecordingEmbeddingModel(provider, () -> config, () -> recorder);
+		UsageRecordingEmbeddingModel model = new UsageRecordingEmbeddingModel(provider, () -> config, () -> recorder, null);
 
 		// embed(List<String>) keeps its interface default, which ends in the wrapper's call().
 		model.embed(List.of("a"));
@@ -78,7 +79,7 @@ class UsageRecordingModelsTest {
 		EmbeddingModel provider = mock(EmbeddingModel.class);
 		when(provider.call(any())).thenReturn(embeddingResponse(12));
 		UsageRecordingEmbeddingModel model = new UsageRecordingEmbeddingModel(provider,
-				() -> mock(GBaseEmbeddingModelConfig.class), () -> null);
+				() -> mock(GBaseEmbeddingModelConfig.class), () -> null, null);
 
 		model.embed(List.of("a"));
 
@@ -93,7 +94,7 @@ class UsageRecordingModelsTest {
 		ChatResponse response = new ChatResponse(List.of(new Generation(new AssistantMessage("ok"))),
 				ChatResponseMetadata.builder().usage(new DefaultUsage(50, 5, 55)).build());
 		when(provider.call(any(Prompt.class))).thenReturn(response);
-		ChatModel model = new UsageRecordingChatModel(provider, mock(GBaseChatModelConfig.class), recorder);
+		ChatModel model = new UsageRecordingChatModel(provider, mock(GBaseChatModelConfig.class), recorder, null);
 
 		// call(String) keeps its interface default, which ends in the wrapper's call(Prompt).
 		assertEquals("ok", model.call("hello"));
@@ -115,7 +116,7 @@ class UsageRecordingModelsTest {
 				ChatResponseMetadata.builder().usage(new DefaultUsage(10, 2, 12)).build());
 		when(provider.stream(any(Prompt.class)))
 				.thenReturn(reactor.core.publisher.Flux.just(chunk).delayElements(java.time.Duration.ofMillis(30)));
-		ChatModel model = new UsageRecordingChatModel(provider, mock(GBaseChatModelConfig.class), recorder);
+		ChatModel model = new UsageRecordingChatModel(provider, mock(GBaseChatModelConfig.class), recorder, null);
 
 		model.stream(new Prompt("hello")).blockLast();
 
@@ -136,11 +137,66 @@ class UsageRecordingModelsTest {
 		ChatModel provider = mock(ChatModel.class);
 		when(provider.call(any(Prompt.class))).thenReturn(new ChatResponse(
 				List.of(new Generation(new AssistantMessage("ok"))), ChatResponseMetadata.builder().build()));
-		new UsageRecordingChatModel(provider, mock(GBaseChatModelConfig.class), recorder).call("hello");
+		new UsageRecordingChatModel(provider, mock(GBaseChatModelConfig.class), recorder, null).call("hello");
 
 		ArgumentCaptor<LLMUsageDetailDto> captor = ArgumentCaptor.forClass(LLMUsageDetailDto.class);
 		verify(crud, times(1)).enqueueUsage(captor.capture());
 		assertNull(captor.getValue().getTimeToFirstToken());
+	}
+
+	@Test
+	void pricedEmbeddingCallRecordsItsCost() {
+		ILLMSUsageCrudService crud = mock(ILLMSUsageCrudService.class);
+		LLMUsageRecorder recorder = new LLMUsageRecorder(crud);
+		EmbeddingModel provider = mock(EmbeddingModel.class);
+		when(provider.call(any())).thenReturn(embeddingResponse(12));
+		// Priced per request, as regolo.ai prices its embedding model.
+		GModelPricingConditions pricing = GModelPricingConditions.fromPerTokenPrices(0d, 0d, 0.001, "USD");
+		UsageRecordingEmbeddingModel model = new UsageRecordingEmbeddingModel(provider,
+				() -> mock(GBaseEmbeddingModelConfig.class), () -> recorder, () -> pricing);
+
+		model.embed(List.of("a"));
+
+		ArgumentCaptor<LLMUsageDetailDto> captor = ArgumentCaptor.forClass(LLMUsageDetailDto.class);
+		verify(crud, times(1)).enqueueUsage(captor.capture());
+		assertEquals(0.001, captor.getValue().getCost(), 1e-12);
+		assertEquals("USD", captor.getValue().getCurrencyCode());
+	}
+
+	@Test
+	void pricedChatCallCostsItsTokens() {
+		ILLMSUsageCrudService crud = mock(ILLMSUsageCrudService.class);
+		LLMUsageRecorder recorder = new LLMUsageRecorder(crud);
+		ChatModel provider = mock(ChatModel.class);
+		when(provider.call(any(Prompt.class))).thenReturn(new ChatResponse(
+				List.of(new Generation(new AssistantMessage("ok"))),
+				ChatResponseMetadata.builder().usage(new DefaultUsage(1_000_000, 500_000, 1_500_000)).build()));
+		// 1.00 per M input + 4.20 per M output
+		GModelPricingConditions pricing = GModelPricingConditions.fromPerTokenPrices(1e-6, 4.2e-6, null, "USD");
+		new UsageRecordingChatModel(provider, mock(GBaseChatModelConfig.class), recorder, () -> pricing).call("hi");
+
+		ArgumentCaptor<LLMUsageDetailDto> captor = ArgumentCaptor.forClass(LLMUsageDetailDto.class);
+		verify(crud, times(1)).enqueueUsage(captor.capture());
+		assertEquals(1.0 + 2.1, captor.getValue().getCost(), 1e-9);
+	}
+
+	@Test
+	void aFailingPricingLookupStillRecordsTheCall() {
+		ILLMSUsageCrudService crud = mock(ILLMSUsageCrudService.class);
+		LLMUsageRecorder recorder = new LLMUsageRecorder(crud);
+		EmbeddingModel provider = mock(EmbeddingModel.class);
+		when(provider.call(any())).thenReturn(embeddingResponse(12));
+		UsageRecordingEmbeddingModel model = new UsageRecordingEmbeddingModel(provider,
+				() -> mock(GBaseEmbeddingModelConfig.class), () -> recorder, () -> {
+					throw new IllegalStateException("pricing broken");
+				});
+
+		model.embed(List.of("a"));
+
+		ArgumentCaptor<LLMUsageDetailDto> captor = ArgumentCaptor.forClass(LLMUsageDetailDto.class);
+		verify(crud, times(1)).enqueueUsage(captor.capture());
+		assertNull(captor.getValue().getCost());
+		assertEquals(12, captor.getValue().getInputToken());
 	}
 
 	@Test
@@ -170,7 +226,7 @@ class UsageRecordingModelsTest {
 		EmbeddingModel provider = mock(EmbeddingModel.class);
 		when(provider.dimensions()).thenReturn(3);
 		UsageRecordingEmbeddingModel model = new UsageRecordingEmbeddingModel(provider,
-				() -> mock(GBaseEmbeddingModelConfig.class), () -> new LLMUsageRecorder(crud));
+				() -> mock(GBaseEmbeddingModelConfig.class), () -> new LLMUsageRecorder(crud), null);
 
 		assertEquals(3, model.dimensions());
 

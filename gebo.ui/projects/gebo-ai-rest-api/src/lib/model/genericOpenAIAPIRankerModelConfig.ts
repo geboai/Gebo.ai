@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GModelPricingConditions } from './gModelPricingConditions';
 import { GenericOpenAIAPIRankerModelChoice } from './genericOpenAIAPIRankerModelChoice';
 
 export interface GenericOpenAIAPIRankerModelConfig { 
@@ -24,6 +25,7 @@ export interface GenericOpenAIAPIRankerModelConfig {
     choosedModel?: GenericOpenAIAPIRankerModelChoice;
     baseUrl?: string;
     contextLength?: number;
+    pricingConditions?: GModelPricingConditions;
     maxDocumentsPerRequest?: number;
     maxDocumentTokens?: number;
     responseReserveTokens?: number;

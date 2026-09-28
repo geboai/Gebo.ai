@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { GBaseModelChoice } from './gBaseModelChoice';
+import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GBaseModelConfig { 
     code?: string;
@@ -24,4 +25,5 @@ export interface GBaseModelConfig {
     choosedModel?: GBaseModelChoice;
     baseUrl?: string;
     contextLength?: number;
+    pricingConditions?: GModelPricingConditions;
 }

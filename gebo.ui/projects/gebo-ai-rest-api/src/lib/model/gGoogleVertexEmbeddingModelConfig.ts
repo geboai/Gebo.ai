@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { GGoogleVertexEmbeddingModelChoice } from './gGoogleVertexEmbeddingModelChoice';
+import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GGoogleVertexEmbeddingModelConfig { 
     code?: string;
@@ -24,5 +25,6 @@ export interface GGoogleVertexEmbeddingModelConfig {
     choosedModel?: GGoogleVertexEmbeddingModelChoice;
     baseUrl?: string;
     contextLength?: number;
+    pricingConditions?: GModelPricingConditions;
     tokenizationThreshold?: number;
 }

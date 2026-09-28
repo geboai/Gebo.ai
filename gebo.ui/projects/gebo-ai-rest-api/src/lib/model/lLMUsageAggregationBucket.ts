@@ -30,6 +30,9 @@ export interface LLMUsageAggregationBucket {
     timeToFirstTokenMax?: number;
     timeToFirstTokenAvg?: number;
     timeToFirstTokenSamples?: number;
+    cost?: number;
+    currencyCode?: string;
+    costSamples?: number;
 }
 export namespace LLMUsageAggregationBucket {
     export type ModelTypeEnum = 'CHAT' | 'EMBEDDING' | 'IMAGE' | 'RANKER' | 'TTS' | 'TRANSCRIPT';

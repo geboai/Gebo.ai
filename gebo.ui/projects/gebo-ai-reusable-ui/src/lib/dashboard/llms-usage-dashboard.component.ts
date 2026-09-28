@@ -46,6 +46,11 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
   tokenChartDataTab2: any;
   responseTimeChartDataTab2: any;
   timeToFirstTokenChartDataTab2: any;
+  costChartDataTab1: any;
+  costChartDataTab2: any;
+  /** True when some period's calls were priced in several currencies, which cannot be summed. */
+  costMixedCurrenciesTab1: boolean = false;
+  costMixedCurrenciesTab2: boolean = false;
 
   chartOptions = {
     plugins: {
@@ -149,11 +154,15 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
     this.tokenChartDataTab1 = this.buildTokenChartData(currentMonthDaily, true);
     this.responseTimeChartDataTab1 = this.buildResponseTimeChartData(currentMonthDaily, true);
     this.timeToFirstTokenChartDataTab1 = this.buildTimeToFirstTokenChartData(currentMonthDaily, true);
+    this.costChartDataTab1 = this.buildCostChartData(currentMonthDaily, true);
+    this.costMixedCurrenciesTab1 = this.hasMixedCurrencies(currentMonthDaily);
 
     // Tab 2 (Monthly usage)
     this.tokenChartDataTab2 = this.buildTokenChartData(monthly, false);
     this.responseTimeChartDataTab2 = this.buildResponseTimeChartData(monthly, false);
     this.timeToFirstTokenChartDataTab2 = this.buildTimeToFirstTokenChartData(monthly, false);
+    this.costChartDataTab2 = this.buildCostChartData(monthly, false);
+    this.costMixedCurrenciesTab2 = this.hasMixedCurrencies(monthly);
   }
 
   private buildTokenChartData(buckets: LLMUsageAggregationBucket[], isDaily: boolean): any {
@@ -218,6 +227,41 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
         }
       ]
     };
+  }
+
+  /**
+   * Cost of the priced calls per period, one series per currency: amounts in different
+   * currencies are never summed. A period whose calls were priced in several
+   * currencies reports no cost (the backend cannot sum it) and is a gap; narrowing the
+   * drill down to a provider or model shows it. Not shown when no call was priced.
+   */
+  private buildCostChartData(buckets: LLMUsageAggregationBucket[], isDaily: boolean): any {
+    const currencies = Array.from(new Set(buckets
+      .filter(b => b.cost !== undefined && b.cost !== null && !!b.currencyCode)
+      .map(b => b.currencyCode as string)));
+    if (currencies.length === 0) {
+      return undefined;
+    }
+    const palette = [
+      { backgroundColor: "rgba(255, 202, 40, 0.75)", borderColor: "#FFB300" },
+      { backgroundColor: "rgba(141, 110, 99, 0.75)", borderColor: "#6D4C41" },
+      { backgroundColor: "rgba(120, 144, 156, 0.75)", borderColor: "#546E7A" }
+    ];
+    return {
+      labels: buckets.map(b => this.formatTimeLabel(b, isDaily)),
+      datasets: currencies.map((currency, i) => ({
+        label: `Cost (${currency})`,
+        data: buckets.map(b => b.currencyCode === currency && b.cost !== undefined && b.cost !== null ? b.cost : null),
+        backgroundColor: palette[i % palette.length].backgroundColor,
+        borderColor: palette[i % palette.length].borderColor,
+        borderWidth: 1.5
+      }))
+    };
+  }
+
+  /** Whether some period had priced calls but no summable cost: several currencies. */
+  private hasMixedCurrencies(buckets: LLMUsageAggregationBucket[]): boolean {
+    return buckets.some(b => (b.costSamples || 0) > 0 && (b.cost === undefined || b.cost === null));
   }
 
   /**

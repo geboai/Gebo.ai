@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { GMistralEmbeddingModelChoice } from './gMistralEmbeddingModelChoice';
+import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GMistralEmbeddingModelConfig { 
     code?: string;
@@ -24,5 +25,6 @@ export interface GMistralEmbeddingModelConfig {
     choosedModel?: GMistralEmbeddingModelChoice;
     baseUrl?: string;
     contextLength?: number;
+    pricingConditions?: GModelPricingConditions;
     tokenizationThreshold?: number;
 }

@@ -98,6 +98,29 @@ public class GModelPricingConditions {
 	}
 
 	/**
+	 * The cost attributable to one recorded call, or null when it cannot be
+	 * attributed: a {@link PricingModelType#FLAT} model's monthly fee is not a cost
+	 * of any single call, and a model with no price set has no known cost.
+	 * <p>
+	 * A successful call costs its tokens plus the {@link #requestPrice}; a failed or
+	 * cancelled one costs the tokens it consumed only, since providers do not charge
+	 * the request of a call that did not complete.
+	 */
+	public Double usageCost(long inputTokens, long outputTokens, boolean successful) {
+		if (pricingType == PricingModelType.FLAT) {
+			return null;
+		}
+		if (successful) {
+			return callCost(inputTokens, outputTokens);
+		}
+		Double tokens = tokenCost(inputTokens, outputTokens);
+		if (tokens == null && requestPrice == null) {
+			return null;
+		}
+		return tokens != null ? tokens : 0d;
+	}
+
+	/**
 	 * Builds pay per use conditions from the prices a provider publishes in its model
 	 * metadata, which are per single token: converted here to per million tokens.
 	 * A negative price, used by some providers for a dynamically priced model, is

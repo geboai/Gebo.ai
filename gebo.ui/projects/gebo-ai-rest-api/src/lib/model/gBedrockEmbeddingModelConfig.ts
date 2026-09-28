@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { GBedrockEmbeddingModelChoice } from './gBedrockEmbeddingModelChoice';
+import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GBedrockEmbeddingModelConfig { 
     code?: string;
@@ -24,5 +25,6 @@ export interface GBedrockEmbeddingModelConfig {
     choosedModel?: GBedrockEmbeddingModelChoice;
     baseUrl?: string;
     contextLength?: number;
+    pricingConditions?: GModelPricingConditions;
     tokenizationThreshold?: number;
 }

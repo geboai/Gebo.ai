@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { GBaseChatModelChoice } from './gBaseChatModelChoice';
+import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GBaseChatModelConfig { 
     code?: string;
@@ -24,6 +25,7 @@ export interface GBaseChatModelConfig {
     choosedModel?: GBaseChatModelChoice;
     baseUrl?: string;
     contextLength?: number;
+    pricingConditions?: GModelPricingConditions;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;

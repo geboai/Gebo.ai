@@ -165,6 +165,31 @@
                 }
               </div>
             </div>
+            <div class="col-12 lg:col-6">
+              <div class="card surface-card border-round h-full">
+                <div
+                  class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
+                  <span>Cost</span>
+                  <span class="text-xs text-500 font-normal">priced calls only, per currency</span>
+                </div>
+                @if (costChartDataTab2?.labels?.length) {
+                  <div>
+                    <p-chart type="bar" [data]="costChartDataTab2" [options]="chartOptions"
+                    height="300px"></p-chart>
+                  </div>
+                } @else {
+                  <div class="flex flex-column align-items-center justify-content-center p-5 text-500">
+                    <i class="pi pi-chart-bar text-4xl mb-2"></i>
+                    <span>No priced calls recorded</span>
+                  </div>
+                }
+                @if (costMixedCurrenciesTab2) {
+                  <div class="text-xs text-500 mt-2">
+                    Some periods are priced in several currencies and cannot be summed: filter by provider or model to see them.
+                  </div>
+                }
+              </div>
+            </div>
           </div>
         </p-tabpanel>
         <!-- Tab 1: This month usage -->
@@ -294,6 +319,31 @@
                   <div class="flex flex-column align-items-center justify-content-center p-5 text-500">
                     <i class="pi pi-chart-bar text-4xl mb-2"></i>
                     <span>No streamed chat calls recorded this month</span>
+                  </div>
+                }
+              </div>
+            </div>
+            <div class="col-12 lg:col-6">
+              <div class="card surface-card border-round h-full">
+                <div
+                  class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
+                  <span>Cost</span>
+                  <span class="text-xs text-500 font-normal">priced calls only, per currency</span>
+                </div>
+                @if (costChartDataTab1?.labels?.length) {
+                  <div>
+                    <p-chart type="bar" [data]="costChartDataTab1" [options]="chartOptions"
+                    height="300px"></p-chart>
+                  </div>
+                } @else {
+                  <div class="flex flex-column align-items-center justify-content-center p-5 text-500">
+                    <i class="pi pi-chart-bar text-4xl mb-2"></i>
+                    <span>No priced calls recorded this month</span>
+                  </div>
+                }
+                @if (costMixedCurrenciesTab1) {
+                  <div class="text-xs text-500 mt-2">
+                    Some periods are priced in several currencies and cannot be summed: filter by provider or model to see them.
                   </div>
                 }
               </div>

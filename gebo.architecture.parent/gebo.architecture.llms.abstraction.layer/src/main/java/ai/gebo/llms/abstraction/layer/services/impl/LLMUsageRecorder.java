@@ -2,6 +2,7 @@ package ai.gebo.llms.abstraction.layer.services.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.core.messages.LLMCallOutcome;
 import ai.gebo.llms.abstraction.layer.dto.LLMUsageDetailDto;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.services.ILLMSUsageCrudService;
 import ai.gebo.llms.abstraction.layer.services.StackSamplingUtils;
 import ai.gebo.model.ModelType;
@@ -109,10 +111,15 @@ public class LLMUsageRecorder {
 	 *                         generated content arrived, for a streamed call; null when
 	 *                         the call was not streamed or produced no content, which
 	 *                         leaves the time to first token unmeasured.
+	 * @param pricing          the pricing conditions of the model called, as its
+	 *                         {@code IGConfigurableModel.getPricingConditions()}
+	 *                         returns them; read here, best effort, to price the call.
+	 *                         Null, or a supplier returning null, leaves the call
+	 *                         unpriced.
 	 */
-	public void record(GBaseModelConfig config, ModelType modelType, String username, String callerStack,
-			long startNanos, Long firstTokenNanos, long inputToken, long outputToken, long totalToken,
-			LLMCallOutcome outcome) {
+	public void record(GBaseModelConfig config, ModelType modelType, Supplier<GModelPricingConditions> pricing,
+			String username, String callerStack, long startNanos, Long firstTokenNanos, long inputToken,
+			long outputToken, long totalToken, LLMCallOutcome outcome) {
 		long responseTimeMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNanos);
 		Long timeToFirstTokenMs = firstTokenNanos != null
 				? TimeUnit.NANOSECONDS.toMillis(firstTokenNanos.longValue() - startNanos)
@@ -134,17 +141,51 @@ public class LLMUsageRecorder {
 		detail.setResponseTime(responseTimeMs);
 		detail.setTimeToFirstToken(timeToFirstTokenMs);
 		detail.setOutcome(outcome);
+		priceCall(detail, pricing, inputToken, outputToken, outcome);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Recording usage modelType=" + detail.getModelType() + " provider=" + detail.getProviderId()
 					+ " model=" + detail.getModel() + " user=" + username + " outcome=" + outcome
 					+ " responseTime=" + responseTimeMs + "ms timeToFirstToken="
 					+ (timeToFirstTokenMs != null ? timeToFirstTokenMs + "ms" : "n/a") + " tokens=" + inputToken
-					+ "/" + outputToken + "/" + totalToken);
+					+ "/" + outputToken + "/" + totalToken + " cost="
+					+ (detail.getCost() != null ? detail.getCost() + " " + detail.getCurrencyCode() : "n/a"));
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("<USAGE_CALLER_STACK>" + callerStack + "</USAGE_CALLER_STACK>");
 		}
 		this.usageCrudService.enqueueUsage(detail);
+	}
+
+	/**
+	 * Prices the call from the model's pricing conditions, best effort: pricing only
+	 * enriches the record, so any failure is logged and leaves the call unpriced, the
+	 * call itself is recorded all the same.
+	 */
+	private void priceCall(LLMUsageDetailDto detail, Supplier<GModelPricingConditions> pricing, long inputToken,
+			long outputToken, LLMCallOutcome outcome) {
+		if (pricing == null) {
+			return;
+		}
+		try {
+			GModelPricingConditions conditions = pricing.get();
+			if (conditions == null) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("No pricing conditions for model=" + detail.getModel() + ", call left unpriced");
+				}
+				return;
+			}
+			Double cost = conditions.usageCost(inputToken, outputToken, outcome == LLMCallOutcome.SUCCESS);
+			if (cost != null) {
+				detail.setCost(cost);
+				detail.setCurrencyCode(conditions.getCurrencyCode());
+			} else if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Model=" + detail.getModel() + " pricing type=" + conditions.getPricingType()
+						+ " attributes no cost to a single call");
+			}
+		} catch (Throwable e) {
+			LOGGER.error("Cannot price the usage of model=" + detail.getModel() + ", the call is recorded unpriced",
+					e);
+		}
 	}
 
 	private static long toLong(Integer value) {
@@ -154,9 +195,12 @@ public class LLMUsageRecorder {
 	/**
 	 * Starts the accounting of one call to a model of the given type, capturing on the
 	 * calling thread everything that cannot be read once the call has completed.
+	 *
+	 * @param pricing the model's {@code IGConfigurableModel.getPricingConditions()},
+	 *                read when the call ends; null for an unpriced model
 	 */
-	public Call begin(GBaseModelConfig config, ModelType modelType) {
-		return new Call(config, modelType, currentUsername(), sampleCaller(), System.nanoTime());
+	public Call begin(GBaseModelConfig config, ModelType modelType, Supplier<GModelPricingConditions> pricing) {
+		return new Call(config, modelType, pricing, currentUsername(), sampleCaller(), System.nanoTime());
 	}
 
 	/**
@@ -166,13 +210,14 @@ public class LLMUsageRecorder {
 	public final class Call {
 		private final GBaseModelConfig config;
 		private final ModelType modelType;
+		private final Supplier<GModelPricingConditions> pricing;
 		private final String username;
 		private final String callerStack;
 		private final long startNanos;
 
 		public void success(long inputToken, long outputToken, long totalToken) {
-			record(config, modelType, username, callerStack, startNanos, null, inputToken, outputToken, totalToken,
-					LLMCallOutcome.SUCCESS);
+			record(config, modelType, pricing, username, callerStack, startNanos, null, inputToken, outputToken,
+					totalToken, LLMCallOutcome.SUCCESS);
 		}
 
 		public void success() {
@@ -190,7 +235,8 @@ public class LLMUsageRecorder {
 		}
 
 		public void failure() {
-			record(config, modelType, username, callerStack, startNanos, null, 0, 0, 0, LLMCallOutcome.ERROR);
+			record(config, modelType, pricing, username, callerStack, startNanos, null, 0, 0, 0,
+					LLMCallOutcome.ERROR);
 		}
 	}
 }
