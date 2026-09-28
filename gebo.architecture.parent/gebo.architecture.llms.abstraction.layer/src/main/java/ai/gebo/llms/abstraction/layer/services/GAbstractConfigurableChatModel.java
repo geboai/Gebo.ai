@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -69,7 +71,28 @@ import reactor.core.scheduler.Schedulers;
  *                        ChatModel.
  */
 public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseChatModelConfig, ChatModelType extends ChatModel>
-		implements IGConfigurableChatModel<ModelConfig> {
+		implements IGConfigurableChatModel<ModelConfig>, IGProviderDealPricedModel {
+
+	/**
+	 * Prices this model by its provider deal; attached by the runtime DAO, null
+	 * leaving it priced by its configuration.
+	 */
+	private volatile IGProviderDealService providerDealService = null;
+
+	@Override
+	public void setProviderDealService(IGProviderDealService providerDealService) {
+		this.providerDealService = providerDealService;
+	}
+
+	/**
+	 * The price the provider deal covering this model's API key gives to its model
+	 * code, else the configured one.
+	 */
+	@Override
+	public GModelPricingConditions getPricingConditions() {
+		return IGProviderDealPricedModel.dealOrConfiguredPricing(providerDealService, this);
+	}
+
 	public static final String END_CONTEXT = "END_CONTEXT";
 	public static final String BEGIN_CONTEXT = "BEGIN_CONTEXT";
 	public static final String NEWLINE = "\r\n";
@@ -705,6 +728,10 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				modelConfigClone.setTopP(configOptions.getTopP());
 			}
 			IGConfigurableChatModel handler = cloneMeWithInjection();
+			if (handler instanceof IGProviderDealPricedModel priced) {
+				// The clone is priced like this model, by its provider deal.
+				priced.setProviderDealService(this.providerDealService);
+			}
 			if (configOptions.getToolCallingManager() == null) {
 				handler.initialize(modelConfigClone, type);
 			} else if (handler instanceof GAbstractConfigurableChatModel configurableChatModel) {

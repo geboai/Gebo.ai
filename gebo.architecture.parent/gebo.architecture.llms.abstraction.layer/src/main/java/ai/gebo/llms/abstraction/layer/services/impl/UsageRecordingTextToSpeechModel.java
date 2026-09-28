@@ -3,6 +3,7 @@ package ai.gebo.llms.abstraction.layer.services.impl;
 import java.io.InputStream;
 
 import ai.gebo.model.ModelType;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GTextToSpeechModelType;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
@@ -71,6 +72,16 @@ public class UsageRecordingTextToSpeechModel<ModelConfig extends GBaseTextToSpea
 	@Override
 	public ModelConfig getConfig() {
 		return delegate.getConfig();
+	}
+
+	@Override
+	public GModelPricingConditions getPricingConditions() {
+		return delegate.getPricingConditions();
+	}
+
+	@Override
+	public GModelPricingConditions getConfiguredPricingConditions() {
+		return delegate.getConfiguredPricingConditions();
 	}
 
 	@Override

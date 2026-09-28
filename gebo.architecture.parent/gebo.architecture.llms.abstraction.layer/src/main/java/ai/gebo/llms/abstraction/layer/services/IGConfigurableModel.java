@@ -87,7 +87,21 @@ public interface IGConfigurableModel<ModelConfig extends GBaseModelConfig, Model
 		return modelCode == null ? "unknown" : modelCode;
 	}
 
+	/**
+	 * The model's pricing: by default the configured one
+	 * ({@link #getConfiguredPricingConditions()}). The abstract base implementations
+	 * first look for the price the provider deal covering the model's API key gives
+	 * to {@link #safeGetModelCode()}, see {@link IGProviderDealPricedModel}.
+	 */
 	public default GModelPricingConditions getPricingConditions() {
+		return getConfiguredPricingConditions();
+	}
+
+	/**
+	 * The pricing saved with the model's configuration: the one set in the
+	 * configuration, else the one the models lookup found for the chosen model.
+	 */
+	public default GModelPricingConditions getConfiguredPricingConditions() {
 		ModelConfig cfg = getConfig();
 		if (cfg != null && cfg.getPricingConditions() != null)
 			return cfg.getPricingConditions();

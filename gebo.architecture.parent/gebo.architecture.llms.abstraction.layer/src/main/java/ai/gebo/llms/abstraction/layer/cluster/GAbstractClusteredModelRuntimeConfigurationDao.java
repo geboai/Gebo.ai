@@ -23,6 +23,7 @@ import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableModel;
+import ai.gebo.llms.abstraction.layer.services.IGProviderDealPricedModel;
 import ai.gebo.llms.abstraction.layer.services.IGProviderDealService;
 import ai.gebo.llms.abstraction.layer.services.IGRuntimeModelConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -159,6 +160,26 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 		} catch (Throwable e) {
 			LOGGER_DEALS.error("Cannot associate the API key of model code=" + config.getCode()
 					+ " with a provider deal, the model is configured all the same", e);
+		}
+	}
+
+	/**
+	 * Attaches the provider deals to a model this DAO registers, so that its
+	 * {@code getPricingConditions()} returns the price of the deal covering its API
+	 * key; to be called on every path registering a model, before any wrapping. A
+	 * model not implementing {@link IGProviderDealPricedModel} stays priced by its
+	 * configuration.
+	 */
+	protected void attachProviderDealPricing(IGConfigurableModel model) {
+		if (model instanceof IGProviderDealPricedModel priced) {
+			priced.setProviderDealService(providerDealService);
+			if (LOGGER_DEALS.isDebugEnabled()) {
+				LOGGER_DEALS.debug("Model code=" + model.getCode() + " priced by the provider deals: "
+						+ (providerDealService != null ? "yes" : "no, no deals service"));
+			}
+		} else if (model != null && LOGGER_DEALS.isDebugEnabled()) {
+			LOGGER_DEALS.debug("Model code=" + model.getCode() + " of class=" + model.getClass().getName()
+					+ " is priced by its configuration only");
 		}
 	}
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import ai.gebo.model.ModelType;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GTranscriptModelType;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
@@ -72,6 +73,16 @@ public class UsageRecordingTranscriptModel<ModelConfig extends GBaseTranscriptMo
 	@Override
 	public ModelConfig getConfig() {
 		return delegate.getConfig();
+	}
+
+	@Override
+	public GModelPricingConditions getPricingConditions() {
+		return delegate.getPricingConditions();
+	}
+
+	@Override
+	public GModelPricingConditions getConfiguredPricingConditions() {
+		return delegate.getConfiguredPricingConditions();
 	}
 
 	@Override

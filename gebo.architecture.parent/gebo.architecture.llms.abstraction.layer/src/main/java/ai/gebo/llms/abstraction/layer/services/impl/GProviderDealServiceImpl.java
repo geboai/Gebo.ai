@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +20,23 @@ import org.springframework.stereotype.Service;
 import com.mongodb.client.result.UpdateResult;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
+import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.model.GProviderApiKey;
+import ai.gebo.llms.abstraction.layer.model.GProviderModelPrice;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableModel;
 import ai.gebo.llms.abstraction.layer.model.GProviderDeal;
 import ai.gebo.llms.abstraction.layer.model.GProviderFlatConditions;
+import ai.gebo.llms.abstraction.layer.model.GProviderKeyLimit;
+import ai.gebo.llms.abstraction.layer.model.GProviderSpendingLimits;
 import ai.gebo.llms.abstraction.layer.repository.GProviderDealRepository;
 import ai.gebo.llms.abstraction.layer.services.IGProviderDealService;
+import ai.gebo.llms.abstraction.layer.services.IGProviderKeyLimitsReader;
+import ai.gebo.llms.abstraction.layer.services.IGRuntimeModelConfigurationDao;
+import ai.gebo.secrets.model.AbstractGeboSecretContent;
+import ai.gebo.secrets.model.GeboSecretType;
+import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import lombok.AllArgsConstructor;
@@ -37,9 +50,32 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GProviderDealServiceImpl implements IGProviderDealService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GProviderDealServiceImpl.class);
+	/** What {@code IGConfigurableModel.safeGetModelCode()} returns for a model without code. */
+	private static final String UNKNOWN_MODEL_CODE = "unknown";
 	private final ObjectProvider<GProviderDealRepository> repositoryProvider;
 	private final ObjectProvider<MongoTemplate> mongoTemplateProvider;
 	private final ObjectProvider<IGeboSecretsAccessService> secretsProvider;
+	/**
+	 * The runtime models, to tell which providers have configured models; lazy, the
+	 * DAOs themselves using this service.
+	 */
+	private final ObjectProvider<IGRuntimeModelConfigurationDao<?, ?>> runtimeDaos;
+	/** The per provider readers of the API keys' spending limits. */
+	private final ObjectProvider<IGProviderKeyLimitsReader> limitsReaders;
+
+	/**
+	 * How long the deal covering an API key is served from {@link #dealsByKey}: the
+	 * model prices are read on every model call. A change made on this instance
+	 * empties the cache at once; one made on another cluster instance shows here
+	 * within this delay.
+	 */
+	private static final long DEALS_CACHE_TTL_MILLIS = 60_000L;
+
+	private record CachedDeal(GProviderDeal deal, long expiresAt) {
+	}
+
+	/** The deal covering each "providerId|secretCode", null when none does. */
+	private final Map<String, CachedDeal> dealsByKey = new ConcurrentHashMap<>();
 
 	@Override
 	public GProviderDeal ensureDeal(String providerId, String secretCode) {
@@ -74,6 +110,7 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 				.setOnInsert("_id", GProviderDeal.newId(providerId)).setOnInsert("dateCreated", now)
 				.setOnInsert("description", GProviderDeal.defaultDescription(providerId, true));
 		UpdateResult result = mongoTemplate.upsert(providerDeal, association, GProviderDeal.class);
+		dealsChanged();
 		GProviderDeal deal = repository.findByProviderIdAndSecretCode(providerId, secretCode)
 				.orElseThrow(() -> new IllegalStateException(
 						"The deal of provider=" + providerId + " was not found after associating " + secretCode));
@@ -87,7 +124,8 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("<PROVIDER_DEAL>" + deal + "</PROVIDER_DEAL>");
 		}
-		return deal;
+		// The deal gained a key: its imported limits change.
+		return refreshQuietly(deal);
 	}
 
 	@Override
@@ -150,13 +188,16 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 				: GProviderDeal.defaultDescription(providerId, false));
 		deal.setDateCreated(now);
 		deal.setDateModified(now);
+		List<String> sources = new ArrayList<>();
 		for (String code : codes) {
-			pullFromOtherDeals(providerId, deal.getId(), code);
+			sources.addAll(pullFromOtherDeals(providerId, deal.getId(), code));
 			deal.getSecretCodes().add(code);
 		}
 		deal = requireRepository().insert(deal);
+		dealsChanged();
 		LOGGER.info("Created the deal id=" + deal.getId() + " of provider=" + providerId + " covering " + codes);
-		return deal;
+		refreshSourcesQuietly(sources);
+		return refreshQuietly(deal);
 	}
 
 	@Override
@@ -166,13 +207,16 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin assignApiKey(dealId=" + dealId + ", secretCode=" + secretCode + ")");
 		}
-		long moved = pullFromOtherDeals(deal.getProviderId(), dealId, secretCode);
+		List<String> sources = pullFromOtherDeals(deal.getProviderId(), dealId, secretCode);
 		requireTemplate().updateFirst(new Query(Criteria.where("_id").is(dealId)),
 				new Update().addToSet("secretCodes", secretCode).set("dateModified", new Date()),
 				GProviderDeal.class);
-		LOGGER.info((moved > 0 ? "Transferred" : "Assigned") + " secretCode=" + secretCode + " to the deal id="
-				+ dealId + " of provider=" + deal.getProviderId());
-		return requireDeal(dealId);
+		dealsChanged();
+		LOGGER.info((sources.isEmpty() ? "Assigned" : "Transferred") + " secretCode=" + secretCode
+				+ " to the deal id=" + dealId + " of provider=" + deal.getProviderId()
+				+ (sources.isEmpty() ? "" : " from " + sources));
+		refreshSourcesQuietly(sources);
+		return refreshQuietly(requireDeal(dealId));
 	}
 
 	@Override
@@ -181,9 +225,10 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 		GProviderDeal deal = requireDeal(dealId);
 		requireTemplate().updateFirst(new Query(Criteria.where("_id").is(dealId)),
 				new Update().pull("secretCodes", secretCode).set("dateModified", new Date()), GProviderDeal.class);
+		dealsChanged();
 		LOGGER.info("Removed secretCode=" + secretCode + " from the deal id=" + dealId + " of provider="
 				+ deal.getProviderId());
-		return requireDeal(dealId);
+		return refreshQuietly(requireDeal(dealId));
 	}
 
 	@Override
@@ -193,7 +238,16 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 			throw new IllegalStateException("The deal " + dealId + " still covers the API keys "
 					+ deal.getSecretCodes() + ": transfer or remove them before deleting it");
 		}
+		if (requireRepository().findByProviderId(deal.getProviderId()).size() <= 1) {
+			List<String> models = configuredModelsOf(deal.getProviderId());
+			if (!models.isEmpty()) {
+				throw new IllegalStateException("The deal " + dealId + " is the last deal of provider="
+						+ deal.getProviderId() + ", which still has the configured models " + models
+						+ ": it cannot be deleted");
+			}
+		}
 		requireRepository().deleteById(dealId);
+		dealsChanged();
 		LOGGER.info("Deleted the deal id=" + dealId + " of provider=" + deal.getProviderId());
 	}
 
@@ -228,23 +282,301 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 		return requireDeal(dealId);
 	}
 
+	@Override
+	public GProviderDeal updateModelPricing(String dealId, String modelCode, GModelPricingConditions pricing) {
+		requireText(modelCode, "modelCode");
+		GProviderDeal deal = requireDeal(dealId);
+		if (pricing != null) {
+			requireValidPricing(pricing);
+		}
+		Date now = new Date();
+		List<GProviderModelPrice> prices = new ArrayList<>();
+		if (deal.getModelPrices() != null) {
+			deal.getModelPrices().stream().filter(x -> !modelCode.equals(x.getModelCode())).forEach(prices::add);
+		}
+		if (pricing != null) {
+			prices.add(new GProviderModelPrice(modelCode, pricing, now));
+		}
+		requireTemplate().updateFirst(new Query(Criteria.where("_id").is(dealId)),
+				new Update().set("modelPrices", prices).set("dateModified", now), GProviderDeal.class);
+		dealsChanged();
+		LOGGER.info((pricing != null ? "Set the price " + pricing + " of" : "Removed the price of") + " model="
+				+ modelCode + " in the deal id=" + dealId + " of provider=" + deal.getProviderId());
+		return requireDeal(dealId);
+	}
+
+	private static void requireValidPricing(GModelPricingConditions pricing) {
+		requireText(pricing.getCurrencyCode(), "currencyCode of the model pricing");
+		requireNonNegativeOrUnset(pricing.getInputMtokenPrice(), "inputMtokenPrice");
+		requireNonNegativeOrUnset(pricing.getOutputMtokenPrice(), "outputMtokenPrice");
+		requireNonNegativeOrUnset(pricing.getRequestPrice(), "requestPrice");
+		requireNonNegativeOrUnset(pricing.getMonthlyFlatCost(), "monthlyFlatCost");
+		requirePositiveOrUnset(pricing.getMonthlyTrafficLimits(), "monthlyTrafficLimits");
+		requirePositiveOrUnset(pricing.getDailyTrafficLimits(), "dailyTrafficLimits");
+		if (pricing.getInputMtokenPrice() == null && pricing.getOutputMtokenPrice() == null
+				&& pricing.getRequestPrice() == null && pricing.getMonthlyFlatCost() == null) {
+			throw new IllegalArgumentException(
+					"The model pricing sets no price: remove it to go back to the configured price");
+		}
+	}
+
+	private static void requireNonNegativeOrUnset(Double value, String name) {
+		if (value != null && !(value >= 0)) {
+			throw new IllegalArgumentException(name + " must be zero or more, or unset");
+		}
+	}
+
+	@Override
+	public GModelPricingConditions findModelPricing(IGConfigurableModel<?, ?> model) {
+		if (model == null) {
+			return null;
+		}
+		try {
+			GModelType type = model.getType();
+			GBaseModelConfig<?> config = model.getConfig();
+			return findModelPricing(type != null ? type.getProviderId() : null,
+					config != null ? config.getApiSecretCode() : null, model.safeGetModelCode());
+		} catch (Throwable e) {
+			LOGGER.error("Cannot read the deal pricing of model code=" + model.getCode(), e);
+			return null;
+		}
+	}
+
+	@Override
+	public GModelPricingConditions findModelPricing(String providerId, String secretCode, String modelCode) {
+		if (providerId == null || providerId.isBlank() || secretCode == null || secretCode.isBlank()
+				|| modelCode == null || modelCode.isBlank() || UNKNOWN_MODEL_CODE.equals(modelCode)) {
+			return null;
+		}
+		try {
+			GProviderDeal deal = coveringDeal(providerId, secretCode);
+			GModelPricingConditions pricing = deal != null ? deal.modelPricing(modelCode) : null;
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Deal pricing of provider=" + providerId + " secretCode=" + secretCode + " model="
+						+ modelCode + ": " + (deal == null ? "no deal covers the key"
+								: pricing == null ? "none in the deal id=" + deal.getId()
+										: "found in the deal id=" + deal.getId()));
+			}
+			if (pricing != null && LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<DEAL_MODEL_PRICING>" + pricing + "</DEAL_MODEL_PRICING>");
+			}
+			return pricing;
+		} catch (Throwable e) {
+			LOGGER.error("Cannot read the deal pricing of provider=" + providerId + " secretCode=" + secretCode
+					+ " model=" + modelCode + ", the configured pricing applies", e);
+			return null;
+		}
+	}
+
+	/** The deal covering an API key, through {@link #dealsByKey}; null when none. */
+	private GProviderDeal coveringDeal(String providerId, String secretCode) {
+		String key = providerId + "|" + secretCode;
+		long now = System.currentTimeMillis();
+		CachedDeal cached = dealsByKey.get(key);
+		if (cached != null && cached.expiresAt() > now) {
+			return cached.deal();
+		}
+		GProviderDealRepository repository = repositoryProvider.getIfAvailable();
+		GProviderDeal deal = repository != null
+				? repository.findByProviderIdAndSecretCode(providerId, secretCode).orElse(null)
+				: null;
+		dealsByKey.put(key, new CachedDeal(deal, now + DEALS_CACHE_TTL_MILLIS));
+		return deal;
+	}
+
+	/** Codes of the model configurations running a model of the provider. */
+	private List<String> configuredModelsOf(String providerId) {
+		List<String> codes = new ArrayList<>();
+		runtimeDaos.orderedStream().forEach(dao -> {
+			for (IGConfigurableModel<?, ?> model : dao.getConfigurations()) {
+				GModelType type = model.getType();
+				if (type != null && providerId.equals(type.getProviderId())) {
+					codes.add(model.getConfig() != null ? model.getConfig().getCode() : model.getCode());
+				}
+			}
+		});
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Provider=" + providerId + " has the configured models " + codes);
+		}
+		return codes;
+	}
+
+	/** Forgets the cached deals after a change of the deals' keys or prices. */
+	private void dealsChanged() {
+		dealsByKey.clear();
+	}
+
 	private static void requirePositiveOrUnset(Double value, String name) {
 		if (value != null && !(value > 0)) {
 			throw new IllegalArgumentException(name + " must be positive, or unset for no limit");
 		}
 	}
 
-	/** Removes a key from every other deal of the provider; returns how many held it. */
-	private long pullFromOtherDeals(String providerId, String dealId, String secretCode) {
-		UpdateResult result = requireTemplate().updateMulti(
-				new Query(Criteria.where("providerId").is(providerId).and("_id").ne(dealId).and("secretCodes")
-						.is(secretCode)),
-				new Update().pull("secretCodes", secretCode).set("dateModified", new Date()), GProviderDeal.class);
-		if (result.getModifiedCount() > 0 && LOGGER.isDebugEnabled()) {
-			LOGGER.debug("secretCode=" + secretCode + " moved away from " + result.getModifiedCount()
-					+ " other deal(s) of provider=" + providerId);
+	/** Removes a key from every other deal of the provider; returns the ids of those that held it. */
+	private List<String> pullFromOtherDeals(String providerId, String dealId, String secretCode) {
+		Query holders = new Query(Criteria.where("providerId").is(providerId).and("_id").ne(dealId)
+				.and("secretCodes").is(secretCode));
+		List<String> ids = requireTemplate().find(holders, GProviderDeal.class).stream().map(GProviderDeal::getId)
+				.toList();
+		if (!ids.isEmpty()) {
+			requireTemplate().updateMulti(holders,
+					new Update().pull("secretCodes", secretCode).set("dateModified", new Date()),
+					GProviderDeal.class);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("secretCode=" + secretCode + " moved away from the deals " + ids + " of provider="
+						+ providerId);
+			}
 		}
-		return result.getModifiedCount();
+		return ids;
+	}
+
+	@Override
+	public GProviderDeal refreshImportedLimits(String dealId) {
+		GProviderDeal deal = requireDeal(dealId);
+		GProviderSpendingLimits current = deal.getSpendingLimits();
+		if (current != null && !Boolean.TRUE.equals(current.getAutoImported())) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Deal id=" + dealId + " has spending limits set by an admin, not importing them");
+			}
+			return deal;
+		}
+		IGProviderKeyLimitsReader reader = limitsReaders.orderedStream()
+				.filter(x -> deal.getProviderId().equals(x.getProviderId())).findFirst().orElse(null);
+		if (reader == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No spending limits reader for provider=" + deal.getProviderId()
+						+ ", the limits of the deal id=" + dealId + " are not imported");
+			}
+			return deal;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin refreshImportedLimits(dealId=" + dealId + ") with " + reader.getClass().getName()
+					+ " on " + deal.getSecretCodes().size() + " keys");
+		}
+		GProviderSpendingLimits imported = importLimits(deal, reader);
+		if (imported == null) {
+			return deal;
+		}
+		requireTemplate().updateFirst(new Query(Criteria.where("_id").is(dealId)),
+				new Update().set("spendingLimits", imported).set("dateModified", new Date()), GProviderDeal.class);
+		LOGGER.info("Imported the spending limits " + imported + " of the deal id=" + dealId + " of provider="
+				+ deal.getProviderId());
+		return requireDeal(dealId);
+	}
+
+	/**
+	 * Reads the limit of every API key of the deal and sums them per period. A key
+	 * without a limit leaves the deal unlimited: its imported limits are then all
+	 * unset. Null, leaving the stored limits unchanged, when a key cannot be read or
+	 * the keys are limited in different currencies.
+	 */
+	private GProviderSpendingLimits importLimits(GProviderDeal deal, IGProviderKeyLimitsReader reader) {
+		GProviderSpendingLimits limits = new GProviderSpendingLimits();
+		limits.setAutoImported(Boolean.TRUE);
+		limits.setImportDate(new Date());
+		boolean unlimited = false;
+		for (String code : deal.getSecretCodes()) {
+			GProviderKeyLimit limit;
+			try {
+				limit = reader.readLimit(clearApiKey(code));
+			} catch (Throwable e) {
+				LOGGER.error("Cannot read the spending limit of secretCode=" + code + " from provider="
+						+ deal.getProviderId() + ", the limits of the deal id=" + deal.getId()
+						+ " are left unchanged", e);
+				return null;
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("secretCode=" + code + " of provider=" + deal.getProviderId() + " has limit=" + limit);
+			}
+			if (limit == null || limit.getAmount() == null) {
+				unlimited = true;
+				continue;
+			}
+			if (limits.getCurrencyCode() == null) {
+				limits.setCurrencyCode(limit.getCurrencyCode());
+			} else if (limit.getCurrencyCode() != null && !limits.getCurrencyCode().equals(limit.getCurrencyCode())) {
+				LOGGER.warn("The API keys of the deal id=" + deal.getId() + " are limited in different currencies ("
+						+ limits.getCurrencyCode() + ", " + limit.getCurrencyCode() + "), its limits are left unchanged");
+				return null;
+			}
+			GProviderKeyLimit.Period period = limit.getPeriod() != null ? limit.getPeriod()
+					: GProviderKeyLimit.Period.TOTAL;
+			switch (period) {
+			case DAILY -> limits.setDailySpendingLimit(add(limits.getDailySpendingLimit(), limit.getAmount()));
+			case WEEKLY -> limits.setWeeklySpendingLimit(add(limits.getWeeklySpendingLimit(), limit.getAmount()));
+			case MONTHLY -> limits.setMonthlySpendingLimit(add(limits.getMonthlySpendingLimit(), limit.getAmount()));
+			case TOTAL -> limits.setTotalSpendingLimit(add(limits.getTotalSpendingLimit(), limit.getAmount()));
+			}
+		}
+		if (unlimited) {
+			GProviderSpendingLimits none = new GProviderSpendingLimits();
+			none.setAutoImported(Boolean.TRUE);
+			none.setImportDate(limits.getImportDate());
+			return none;
+		}
+		return limits;
+	}
+
+	private static Double add(Double sum, Double amount) {
+		return sum != null ? sum + amount : amount;
+	}
+
+	/** The clear value of an API key secret, which must be a token. */
+	private String clearApiKey(String secretCode) throws GeboCryptSecretException {
+		IGeboSecretsAccessService secrets = secretsProvider.getIfAvailable();
+		if (secrets == null) {
+			throw new IllegalStateException("No secrets store in this application");
+		}
+		AbstractGeboSecretContent secret = secrets.getSecretContentById(secretCode);
+		if (secret == null || secret.type() != GeboSecretType.TOKEN) {
+			throw new IllegalStateException("The secret " + secretCode + " is not an API key (TOKEN) secret");
+		}
+		return ((GeboTokenContent) secret).getToken();
+	}
+
+	/** {@link #refreshImportedLimits(String)}, never failing the operation it follows. */
+	private GProviderDeal refreshQuietly(GProviderDeal deal) {
+		try {
+			return refreshImportedLimits(deal.getId());
+		} catch (Throwable e) {
+			LOGGER.error("Cannot import the spending limits of the deal id=" + deal.getId(), e);
+			return deal;
+		}
+	}
+
+	/** Refreshes the deals an API key was moved away from, which lost its limit. */
+	private void refreshSourcesQuietly(List<String> dealIds) {
+		for (String id : dealIds.stream().distinct().toList()) {
+			GProviderDeal source = findDeal(id);
+			if (source != null) {
+				refreshQuietly(source);
+			}
+		}
+	}
+
+	@Override
+	public GProviderDeal updateSpendingLimits(String dealId, GProviderSpendingLimits spendingLimits) {
+		GProviderDeal deal = requireDeal(dealId);
+		if (spendingLimits == null) {
+			requireTemplate().updateFirst(new Query(Criteria.where("_id").is(dealId)),
+					new Update().unset("spendingLimits").set("dateModified", new Date()), GProviderDeal.class);
+			LOGGER.info("Cleared the spending limits of the deal id=" + dealId + " of provider="
+					+ deal.getProviderId() + ", importing them again");
+			return refreshQuietly(requireDeal(dealId));
+		}
+		requireText(spendingLimits.getCurrencyCode(), "currencyCode of the spending limits");
+		requirePositiveOrUnset(spendingLimits.getDailySpendingLimit(), "dailySpendingLimit");
+		requirePositiveOrUnset(spendingLimits.getWeeklySpendingLimit(), "weeklySpendingLimit");
+		requirePositiveOrUnset(spendingLimits.getMonthlySpendingLimit(), "monthlySpendingLimit");
+		requirePositiveOrUnset(spendingLimits.getTotalSpendingLimit(), "totalSpendingLimit");
+		spendingLimits.setAutoImported(Boolean.FALSE);
+		spendingLimits.setImportDate(null);
+		requireTemplate().updateFirst(new Query(Criteria.where("_id").is(dealId)),
+				new Update().set("spendingLimits", spendingLimits).set("dateModified", new Date()),
+				GProviderDeal.class);
+		LOGGER.info("Set by hand the spending limits " + spendingLimits + " of the deal id=" + dealId
+				+ " of provider=" + deal.getProviderId());
+		return requireDeal(dealId);
 	}
 
 	/** The provider's API keys: the secrets listed under its context code. */

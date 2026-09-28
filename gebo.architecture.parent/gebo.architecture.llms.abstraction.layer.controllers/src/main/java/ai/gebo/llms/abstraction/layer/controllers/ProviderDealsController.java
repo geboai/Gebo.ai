@@ -18,16 +18,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.llms.abstraction.layer.controllers.model.CreateProviderDealRequest;
+import ai.gebo.llms.abstraction.layer.controllers.model.ProviderDealSpendingLimitsRequest;
 import ai.gebo.llms.abstraction.layer.controllers.model.ProviderDealDescriptionRequest;
 import ai.gebo.llms.abstraction.layer.controllers.model.ProviderDealFlatConditionsRequest;
 import ai.gebo.llms.abstraction.layer.controllers.model.ProviderDealKeyRequest;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.model.GProviderApiKey;
 import ai.gebo.llms.abstraction.layer.model.GProviderDeal;
+import ai.gebo.llms.abstraction.layer.model.GProviderModelPriceInfo;
+import ai.gebo.llms.abstraction.layer.controllers.model.ProviderDealModelPricingRequest;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGProviderDealService;
+import ai.gebo.llms.abstraction.layer.services.IGProviderModelPricesService;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportServiceRepositoryPattern;
@@ -47,6 +51,7 @@ import lombok.AllArgsConstructor;
 public class ProviderDealsController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProviderDealsController.class);
 	private final IGProviderDealService dealService;
+	private final IGProviderModelPricesService modelPricesService;
 	private final IGChatModelConfigurationSupportServiceRepositoryPattern chatTypes;
 	private final IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embeddingTypes;
 	private final IGImageModelConfigurationSupportServiceRepositoryPattern imageTypes;
@@ -56,8 +61,8 @@ public class ProviderDealsController {
 
 	/** The real providers of the model types this installation offers, sorted. */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@GetMapping(value = "getProviders", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getProviders() {
+	@GetMapping(value = "getDealProviders", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getDealProviders() {
 		TreeSet<String> providers = new TreeSet<>();
 		Stream.of(chatTypes.map(x -> x.getType()), embeddingTypes.map(x -> x.getType()),
 				imageTypes.map(x -> x.getType()), rankerTypes.map(x -> x.getType()),
@@ -65,7 +70,7 @@ public class ProviderDealsController {
 				.flatMap(x -> ((List) x).stream()).map(x -> ((GModelType) x).getProviderId())
 				.filter(Objects::nonNull).forEach(x -> providers.add((String) x));
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("getProviders() found " + providers);
+			LOGGER.debug("getDealProviders() found " + providers);
 		}
 		return List.copyOf(providers);
 	}
@@ -113,7 +118,10 @@ public class ProviderDealsController {
 		return run("removeApiKey", () -> dealService.removeApiKey(request.getDealId(), request.getSecretCode()));
 	}
 
-	/** Deletes a deal covering no API key. */
+	/**
+	 * Deletes a deal covering no API key; the last deal of a provider with configured
+	 * models is kept.
+	 */
 	@PostMapping(value = "deleteProviderDeal", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<Boolean> deleteProviderDeal(@RequestBody ProviderDealKeyRequest request) {
 		return run("deleteProviderDeal", () -> {
@@ -137,6 +145,45 @@ public class ProviderDealsController {
 	public OperationStatus<GProviderDeal> updateFlatConditions(@RequestBody ProviderDealFlatConditionsRequest request) {
 		return run("updateFlatConditions",
 				() -> dealService.updateFlatConditions(request.getDealId(), request.getFlatConditions()));
+	}
+
+	/**
+	 * Imports again the deal's spending limits from its provider's API, when the
+	 * provider exposes them and the limits were not set by hand.
+	 */
+	@PostMapping(value = "refreshImportedLimits", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GProviderDeal> refreshImportedLimits(@RequestBody ProviderDealKeyRequest request) {
+		return run("refreshImportedLimits", () -> dealService.refreshImportedLimits(request.getDealId()));
+	}
+
+	/**
+	 * Sets the deal's spending limits by hand, which the imports then leave
+	 * untouched, or clears them to import them again from the provider.
+	 */
+	@PostMapping(value = "updateSpendingLimits", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GProviderDeal> updateSpendingLimits(@RequestBody ProviderDealSpendingLimitsRequest request) {
+		return run("updateSpendingLimits",
+				() -> dealService.updateSpendingLimits(request.getDealId(), request.getSpendingLimits()));
+	}
+
+	/**
+	 * The models of a provider, per deal and model code, as the runtime models run
+	 * them: the price configured with each model and the one its deal gives it.
+	 */
+	@GetMapping(value = "getProviderModelPrices", produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<List<GProviderModelPriceInfo>> getProviderModelPrices(
+			@RequestParam(name = "providerId") String providerId) {
+		return run("getProviderModelPrices", () -> modelPricesService.getProviderModelPrices(providerId));
+	}
+
+	/**
+	 * Sets the price a deal gives to a model, overriding or completing the
+	 * configured one, or removes it (null pricing) to go back to the configured one.
+	 */
+	@PostMapping(value = "updateModelPricing", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GProviderDeal> updateModelPricing(@RequestBody ProviderDealModelPricingRequest request) {
+		return run("updateModelPricing", () -> dealService.updateModelPricing(request.getDealId(),
+				request.getModelCode(), request.getPricingConditions()));
 	}
 
 	/**

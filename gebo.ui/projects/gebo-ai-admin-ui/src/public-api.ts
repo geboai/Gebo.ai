@@ -59,6 +59,7 @@ export * from "./lib/admin-ui/main-panels/prompts-panel/prompts-panel.component"
 export * from "./lib/admin-ui/main-panels/company-systems/systems.component";
 export * from "./lib/admin-ui/main-panels/knowledge-bases/knowledge-bases.component";
 export * from "./lib/admin-ui/main-panels/llms-systems/llms-systems.component";
+export * from "./lib/admin-ui/main-panels/llms-systems/provider-deals.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-git-admin/gebo-ai-git-system-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-git-admin/gebo-ai-git-endpoint-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-knowledgebase-admin/gebo-ai-knowledgebase-admin.component";

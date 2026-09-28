@@ -18,8 +18,8 @@ export interface GenericOpenAIEmbeddingModelTypeConfig {
     dateModified?: Date;
     dateCreated?: Date;
     modelConfigurationClass?: string;
+    providerId?: string;
     baseUrl?: string;
     modelsListProvider?: string;
-    providerId?: string;
     optionalAuthentication?: boolean;
 }

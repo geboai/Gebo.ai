@@ -1,5 +1,6 @@
 package ai.gebo.llms.abstraction.layer.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.retry.support.RetryTemplate;
@@ -17,7 +18,28 @@ import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import lombok.AllArgsConstructor;
 
 public abstract class GAbstractConfigurableRankerModel<ModelConfig extends GBaseRankerModelConfig>
-		implements IGConfigurableRankerModel<ModelConfig> {
+		implements IGConfigurableRankerModel<ModelConfig>, IGProviderDealPricedModel {
+
+	/**
+	 * Prices this model by its provider deal; attached by the runtime DAO, null
+	 * leaving it priced by its configuration.
+	 */
+	private volatile IGProviderDealService providerDealService = null;
+
+	@Override
+	public void setProviderDealService(IGProviderDealService providerDealService) {
+		this.providerDealService = providerDealService;
+	}
+
+	/**
+	 * The price the provider deal covering this model's API key gives to its model
+	 * code, else the configured one.
+	 */
+	@Override
+	public GModelPricingConditions getPricingConditions() {
+		return IGProviderDealPricedModel.dealOrConfiguredPricing(providerDealService, this);
+	}
+
 	private final IGeboSecretsAccessService secretAccessService;
 	private final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 

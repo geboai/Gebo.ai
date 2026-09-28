@@ -51,8 +51,33 @@ public class GProviderDeal {
 	 * its API keys. Null for a pay per use deal.
 	 */
 	private GProviderFlatConditions flatConditions = null;
+	/**
+	 * The deal's spending limits, imported from the provider's API
+	 * ({@link GProviderSpendingLimits#getAutoImported()} true) or set by an admin.
+	 * Null when unknown.
+	 */
+	private GProviderSpendingLimits spendingLimits = null;
+	/**
+	 * The prices of the provider's models under this deal, one entry per model code,
+	 * set by the admin. They win over the prices configured with the models (see
+	 * {@code IGConfigurableModel.getPricingConditions()}).
+	 */
+	private List<GProviderModelPrice> modelPrices = new ArrayList<>();
 	private Date dateCreated = null;
 	private Date dateModified = null;
+
+	/** The price this deal gives to a model, or null. */
+	public GModelPricingConditions modelPricing(String modelCode) {
+		if (modelPrices == null || modelCode == null) {
+			return null;
+		}
+		for (GProviderModelPrice price : modelPrices) {
+			if (modelCode.equals(price.getModelCode())) {
+				return price.getPricingConditions();
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * The description given to a deal created without one, e.g. "regolo.ai deal

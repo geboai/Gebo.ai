@@ -205,6 +205,7 @@ public class GEmbeddingModelRuntimeConfigurationDaoImpl
      * recorder attached here on every call.
      */
     private void attachUsageRecorder(IGConfigurableEmbeddingModel model) {
+        attachProviderDealPricing(model);
         if (model instanceof GAbstractConfigurableEmbeddingModel configurable && usageRecorder != null) {
             configurable.setUsageRecorder(usageRecorder);
             if (LOGGER.isDebugEnabled()) {

@@ -18,4 +18,5 @@ export interface GTranscriptModelType {
     dateModified?: Date;
     dateCreated?: Date;
     modelConfigurationClass?: string;
+    providerId?: string;
 }

@@ -2,9 +2,11 @@ package ai.gebo.llms.abstraction.layer.services;
 
 import java.util.List;
 
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.model.GProviderApiKey;
 import ai.gebo.llms.abstraction.layer.model.GProviderDeal;
 import ai.gebo.llms.abstraction.layer.model.GProviderFlatConditions;
+import ai.gebo.llms.abstraction.layer.model.GProviderSpendingLimits;
 
 /**
  * Maintains the {@link GProviderDeal}s: which API keys each real provider's deal
@@ -67,7 +69,10 @@ public interface IGProviderDealService {
 	/** Removes an API key from a deal, leaving it covered by no deal. */
 	public GProviderDeal removeApiKey(String dealId, String secretCode);
 
-	/** Deletes a deal covering no API key. */
+	/**
+	 * Deletes a deal covering no API key; the last deal of a provider cannot be
+	 * deleted while the provider has configured models.
+	 */
 	public void deleteDeal(String dealId);
 
 	/**
@@ -76,4 +81,45 @@ public interface IGProviderDealService {
 	 * traffic limits, when set, must be positive.
 	 */
 	public GProviderDeal updateFlatConditions(String dealId, GProviderFlatConditions flatConditions);
+
+	/**
+	 * Imports the deal's spending limits from its provider's API, through the
+	 * provider's {@link IGProviderKeyLimitsReader}: the limits of all the deal's API
+	 * keys, summed per period. Does nothing when the provider has no reader, or when
+	 * an admin set the deal's limits. Best effort: a key that cannot be read leaves
+	 * the limits unchanged and is logged. Also run automatically whenever the deal's
+	 * keys change.
+	 */
+	public GProviderDeal refreshImportedLimits(String dealId);
+
+	/**
+	 * Sets the deal's spending limits by hand ({@code autoImported} false), which the
+	 * imports then leave untouched; null clears them and imports them again.
+	 */
+	public GProviderDeal updateSpendingLimits(String dealId, GProviderSpendingLimits spendingLimits);
+
+	/**
+	 * Sets the price the deal gives to one of its provider's models, overriding or
+	 * completing the price configured with the model; null removes it, the model
+	 * going back to its configured price. Set prices need a currency and no negative
+	 * amount.
+	 */
+	public GProviderDeal updateModelPricing(String dealId, String modelCode, GModelPricingConditions pricing);
+
+	/**
+	 * The price given to a model by the provider's deal covering an API key: the
+	 * coordinates API key code -> provider + model code. Read on every model call, so
+	 * served from a short lived cache; never fails.
+	 *
+	 * @return the deal's price of the model, or null when no deal covers the key or
+	 *         the deal gives the model no price
+	 */
+	public GModelPricingConditions findModelPricing(String providerId, String secretCode, String modelCode);
+
+	/**
+	 * {@link #findModelPricing(String, String, String)} at a runtime model's
+	 * coordinates: its type's provider, its configuration's API key and
+	 * {@link IGConfigurableModel#safeGetModelCode()}.
+	 */
+	public GModelPricingConditions findModelPricing(IGConfigurableModel<?, ?> model);
 }

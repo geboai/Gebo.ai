@@ -72,6 +72,7 @@ public class GRankerModelRuntimeConfigurationDaoImpl
 	 * this DAO through add() or addRuntimeByConfig(), both of which wrap.
 	 */
 	private IGConfigurableRankerModel withUsageRecording(IGConfigurableRankerModel model) {
+		attachProviderDealPricing(model);
 		if (model == null || usageRecorder == null || model instanceof UsageRecordingRankerModel) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Ranker model code=" + (model != null ? model.getCode() : null)

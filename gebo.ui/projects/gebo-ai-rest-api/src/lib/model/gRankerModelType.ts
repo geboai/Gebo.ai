@@ -18,4 +18,5 @@ export interface GRankerModelType {
     dateModified?: Date;
     dateCreated?: Date;
     modelConfigurationClass?: string;
+    providerId?: string;
 }

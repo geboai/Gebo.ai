@@ -5,6 +5,7 @@ import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.image.ImageResponse;
 
 import ai.gebo.model.ModelType;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GImageModelType;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableImageModel;
@@ -90,6 +91,16 @@ public class UsageRecordingImageModel<ModelConfig extends GBaseImageModelConfig>
 	@Override
 	public ModelConfig getConfig() {
 		return delegate.getConfig();
+	}
+
+	@Override
+	public GModelPricingConditions getPricingConditions() {
+		return delegate.getPricingConditions();
+	}
+
+	@Override
+	public GModelPricingConditions getConfiguredPricingConditions() {
+		return delegate.getConfiguredPricingConditions();
 	}
 
 	@Override
