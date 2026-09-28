@@ -93,28 +93,46 @@ public class LLMSUsageAggregationService {
 	}
 
 	/**
-	 * Sub-pipeline computing the aggregation buckets. Pre-computes the latency
-	 * weighted by the number of requests so that a correct request-weighted average
-	 * can be recomposed after the grouping.
+	 * Sub-pipeline computing the aggregation buckets. Pre-computes the response time
+	 * weighted by the number of requests, and the time to first token weighted by the
+	 * number of calls that measured it, so that correct weighted averages can be
+	 * recomposed after the grouping.
+	 * <p>
+	 * The response time fields are read under their stored names
+	 * ({@link LLMDailyUsageDetail#RESPONSE_TIME_MIN_FIELD} and siblings), not their
+	 * property names, so the pipeline does not depend on property-to-field mapping
+	 * inside the {@code $facet}. The time to first token of a document where no call
+	 * measured it is null: {@code $min}/{@code $max} skip it and {@code $sum} counts it
+	 * as nothing, so it neither lowers the minimum nor dilutes the average.
 	 */
 	private AggregationOperation[] bucketPipeline(boolean includeDay) {
 		List<AggregationOperation> ops = new ArrayList<>();
 		ops.add(Aggregation
-				.project("inputToken", "outputToken", "totalToken", "nrRequests", "latencyMin", "latencyMax", "year",
-						"month", "day")
-				.andExpression("latencyAvg * nrRequests").as("latencyWeighted"));
+				.project("inputToken", "outputToken", "totalToken", "nrRequests", "year", "month", "day",
+						"timeToFirstTokenMin", "timeToFirstTokenMax", "timeToFirstTokenSamples")
+				.and(LLMDailyUsageDetail.RESPONSE_TIME_MIN_FIELD).as("responseTimeMin")
+				.and(LLMDailyUsageDetail.RESPONSE_TIME_MAX_FIELD).as("responseTimeMax")
+				.andExpression(LLMDailyUsageDetail.RESPONSE_TIME_AVG_FIELD + " * nrRequests")
+				.as("responseTimeWeighted").andExpression("timeToFirstTokenAvg * timeToFirstTokenSamples")
+				.as("timeToFirstTokenWeighted"));
 
 		GroupOperation group = includeDay ? Aggregation.group("year", "month", "day")
 				: Aggregation.group("year", "month");
 		group = group.sum("inputToken").as("inputToken").sum("outputToken").as("outputToken").sum("totalToken")
-				.as("totalToken").sum("nrRequests").as("nrRequests").sum("latencyWeighted").as("latencyWeighted")
-				.min("latencyMin").as("latencyMin").max("latencyMax").as("latencyMax");
+				.as("totalToken").sum("nrRequests").as("nrRequests").sum("responseTimeWeighted")
+				.as("responseTimeWeighted").min("responseTimeMin").as("responseTimeMin").max("responseTimeMax")
+				.as("responseTimeMax").sum("timeToFirstTokenWeighted").as("timeToFirstTokenWeighted")
+				.sum("timeToFirstTokenSamples").as("timeToFirstTokenSamples").min("timeToFirstTokenMin")
+				.as("timeToFirstTokenMin").max("timeToFirstTokenMax").as("timeToFirstTokenMax");
 		ops.add(group);
 
 		ProjectionOperation flatten = Aggregation.project().and("_id.year").as("year").and("_id.month").as("month")
 				.and("inputToken").as("inputToken").and("outputToken").as("outputToken").and("totalToken")
-				.as("totalToken").and("nrRequests").as("nrRequests").and("latencyMin").as("latencyMin")
-				.and("latencyMax").as("latencyMax").and("latencyWeighted").as("latencyWeighted");
+				.as("totalToken").and("nrRequests").as("nrRequests").and("responseTimeMin").as("responseTimeMin")
+				.and("responseTimeMax").as("responseTimeMax").and("responseTimeWeighted").as("responseTimeWeighted")
+				.and("timeToFirstTokenWeighted").as("timeToFirstTokenWeighted").and("timeToFirstTokenSamples")
+				.as("timeToFirstTokenSamples").and("timeToFirstTokenMin").as("timeToFirstTokenMin")
+				.and("timeToFirstTokenMax").as("timeToFirstTokenMax");
 		if (includeDay)
 			flatten = flatten.and("_id.day").as("day");
 		ops.add(flatten);
@@ -210,9 +228,15 @@ public class LLMSUsageAggregationService {
 			b.setOutputToken(r.getOutputToken());
 			b.setTotalToken(r.getTotalToken());
 			b.setNrRequests(r.getNrRequests());
-			b.setLatencyMin(r.getLatencyMin());
-			b.setLatencyMax(r.getLatencyMax());
-			b.setLatencyAvg(r.getNrRequests() > 0 ? r.getLatencyWeighted() / r.getNrRequests() : 0);
+			b.setResponseTimeMin(r.getResponseTimeMin());
+			b.setResponseTimeMax(r.getResponseTimeMax());
+			b.setResponseTimeAvg(r.getNrRequests() > 0 ? r.getResponseTimeWeighted() / r.getNrRequests() : 0);
+			b.setTimeToFirstTokenSamples(r.getTimeToFirstTokenSamples());
+			if (r.getTimeToFirstTokenSamples() > 0) {
+				b.setTimeToFirstTokenMin(r.getTimeToFirstTokenMin());
+				b.setTimeToFirstTokenMax(r.getTimeToFirstTokenMax());
+				b.setTimeToFirstTokenAvg(r.getTimeToFirstTokenWeighted() / r.getTimeToFirstTokenSamples());
+			}
 			buckets.add(b);
 		}
 		return buckets;
@@ -247,8 +271,12 @@ public class LLMSUsageAggregationService {
 		private long outputToken;
 		private long totalToken;
 		private long nrRequests;
-		private long latencyMin;
-		private long latencyMax;
-		private long latencyWeighted;
+		private long responseTimeMin;
+		private long responseTimeMax;
+		private long responseTimeWeighted;
+		private Long timeToFirstTokenMin;
+		private Long timeToFirstTokenMax;
+		private long timeToFirstTokenWeighted;
+		private long timeToFirstTokenSamples;
 	}
 }

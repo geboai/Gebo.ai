@@ -11,7 +11,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 
 /**
  * Records the usage of every transcription call of the transcript model it wraps.
- * Transcription has no token accounting, so a record carries the call, its latency
+ * Transcription has no token accounting, so a record carries the call, its response time
  * and its outcome. Installed by the runtime DAO around every model it registers, so
  * it covers every provider whatever class it extends.
  */

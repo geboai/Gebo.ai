@@ -23,7 +23,17 @@ public class LLMUsageAggregationBucket {
 	private long outputToken;
 	private long totalToken;
 	private long nrRequests;
-	private long latencyMin;
-	private long latencyMax;
-	private long latencyAvg;
+	/** Response time in ms: request issued to response complete. */
+	private long responseTimeMin;
+	private long responseTimeMax;
+	private long responseTimeAvg;
+	/**
+	 * Time to first token in ms, over the calls that measured it (streamed chat calls
+	 * only); null when none of the bucket's calls did.
+	 */
+	private Long timeToFirstTokenMin;
+	private Long timeToFirstTokenMax;
+	private Long timeToFirstTokenAvg;
+	/** How many of the bucket's calls measured a time to first token. */
+	private long timeToFirstTokenSamples;
 }

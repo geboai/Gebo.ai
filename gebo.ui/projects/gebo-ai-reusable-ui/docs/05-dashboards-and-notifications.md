@@ -73,10 +73,12 @@ component you use, not by a bound `@Input`:
 <gebo-ai-llms-usage-user-dashboard></gebo-ai-llms-usage-user-dashboard>
 ```
 
-Each renders two tabs ("This month, daily" and "Monthly history") with Chart.js token-consumption
-and latency charts, plus per-tab dropdown filters (`providerId`, `username` [admin only], `model`,
-`callerStack`, `modelType`, `year`, `month`) whose options come pre-computed from the backend
-response — there is no free-form date-range picker.
+Each renders two tabs ("This month, daily" and "Monthly history") with Chart.js charts for token
+consumption, response time (request issued to response complete, every call) and time to first
+token (the latency in the strict sense, measured for streamed chat calls only), plus per-tab
+dropdown filters in this order: `providerId`, `modelType`, `model`, `year`, `month`, `username`
+[admin only], `callerStack`. The model type filter always lists every model type; the other options
+come pre-computed from the backend response — there is no free-form date-range picker.
 
 ## Workflow stats dashboard — `GeboAIWorkflowStatsDashboardModule`
 

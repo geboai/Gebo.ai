@@ -45,11 +45,13 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 				ChatClientResponse response = chain.nextCall(request);
 				// A blocking call returns the final response only, whose usage already covers
 				// every tool calling round trip the model made (see adviseStream).
-				recordUsage(username, stack, start, TokenCounters.of(usageOf(response)), LLMCallOutcome.SUCCESS);
+				// No time to first token: a blocking call gives no signal before it is complete.
+				recordUsage(username, stack, start, null, TokenCounters.of(usageOf(response)),
+						LLMCallOutcome.SUCCESS);
 				return response;
 			} catch (RuntimeException e) {
 				// A failed call still consumed time and is the interesting part of the tail.
-				recordUsage(username, stack, start, new TokenCounters(), LLMCallOutcome.ERROR);
+				recordUsage(username, stack, start, null, new TokenCounters(), LLMCallOutcome.ERROR);
 				throw e;
 			}
 		}
@@ -73,12 +75,15 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 			// every chunk of the second round repeats the first round's tokens. Summing
 			// counted those once per chunk; the maximum is the total of all the rounds.
 			final TokenCounters counters = new TokenCounters();
+			final FirstTokenTimer firstToken = new FirstTokenTimer();
 			return chain.nextStream(request).doOnNext(response -> {
+				firstToken.onChunk(response != null ? response.chatResponse() : null);
 				Usage usage = usageOf(response);
 				if (isMeaningful(usage)) {
 					counters.max(usage);
 				}
-			}).doFinally(signal -> recordUsage(username, stack, start, counters, outcomeOf(signal)));
+			}).doFinally(signal -> recordUsage(username, stack, start, firstToken.firstTokenNanos(), counters,
+					outcomeOf(signal)));
 		}
 
 		@Override
@@ -173,17 +178,18 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 
 		/**
 		 * Writes the single usage record of one call. Always writes, even when the provider
-		 * never returned usage metadata: the latency is worth recording on its own, and a
+		 * never returned usage metadata: the response time is worth recording on its own, and a
 		 * call that produced no usage used to vanish from the audit entirely.
 		 */
-		private void recordUsage(String username, String callerStack, long startNanos, TokenCounters counters,
-				LLMCallOutcome outcome) {
+		private void recordUsage(String username, String callerStack, long startNanos, Long firstTokenNanos,
+				TokenCounters counters, LLMCallOutcome outcome) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Chat call ended outcome=" + outcome + " model=" + config.getCode() + " tokens="
-						+ counters.input() + "/" + counters.output() + "/" + counters.total());
+						+ counters.input() + "/" + counters.output() + "/" + counters.total() + " firstToken="
+						+ (firstTokenNanos != null ? "timed" : "n/a"));
 			}
-			usageRecorder.record(config, ModelType.CHAT, username, callerStack, startNanos, counters.input(),
-					counters.output(), counters.total(), outcome);
+			usageRecorder.record(config, ModelType.CHAT, username, callerStack, startNanos, firstTokenNanos,
+					counters.input(), counters.output(), counters.total(), outcome);
 		}
 	}
 

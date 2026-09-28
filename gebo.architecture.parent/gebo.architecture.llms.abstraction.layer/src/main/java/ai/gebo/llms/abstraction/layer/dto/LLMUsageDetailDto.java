@@ -26,7 +26,10 @@ public class LLMUsageDetailDto {
 	private String model;
 	private String callerStack;
 	private ModelType modelType;
-	private long latency;
+	/** Response time in ms: request issued to response complete. */
+	private long responseTime;
+	/** Time to first token in ms, for streamed chat calls only; null otherwise. */
+	private Long timeToFirstToken;
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;

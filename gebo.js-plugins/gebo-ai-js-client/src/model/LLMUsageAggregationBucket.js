@@ -62,12 +62,20 @@ export default class LLMUsageAggregationBucket {
         obj.totalToken = ApiClient.convertToType(data['totalToken'], 'Number');
       if (data.hasOwnProperty('nrRequests'))
         obj.nrRequests = ApiClient.convertToType(data['nrRequests'], 'Number');
-      if (data.hasOwnProperty('latencyMin'))
-        obj.latencyMin = ApiClient.convertToType(data['latencyMin'], 'Number');
-      if (data.hasOwnProperty('latencyMax'))
-        obj.latencyMax = ApiClient.convertToType(data['latencyMax'], 'Number');
-      if (data.hasOwnProperty('latencyAvg'))
-        obj.latencyAvg = ApiClient.convertToType(data['latencyAvg'], 'Number');
+      if (data.hasOwnProperty('responseTimeMin'))
+        obj.responseTimeMin = ApiClient.convertToType(data['responseTimeMin'], 'Number');
+      if (data.hasOwnProperty('responseTimeMax'))
+        obj.responseTimeMax = ApiClient.convertToType(data['responseTimeMax'], 'Number');
+      if (data.hasOwnProperty('responseTimeAvg'))
+        obj.responseTimeAvg = ApiClient.convertToType(data['responseTimeAvg'], 'Number');
+      if (data.hasOwnProperty('timeToFirstTokenMin'))
+        obj.timeToFirstTokenMin = ApiClient.convertToType(data['timeToFirstTokenMin'], 'Number');
+      if (data.hasOwnProperty('timeToFirstTokenMax'))
+        obj.timeToFirstTokenMax = ApiClient.convertToType(data['timeToFirstTokenMax'], 'Number');
+      if (data.hasOwnProperty('timeToFirstTokenAvg'))
+        obj.timeToFirstTokenAvg = ApiClient.convertToType(data['timeToFirstTokenAvg'], 'Number');
+      if (data.hasOwnProperty('timeToFirstTokenSamples'))
+        obj.timeToFirstTokenSamples = ApiClient.convertToType(data['timeToFirstTokenSamples'], 'Number');
     }
     return obj;
   }
@@ -176,17 +184,37 @@ LLMUsageAggregationBucket.prototype.totalToken = undefined;
 LLMUsageAggregationBucket.prototype.nrRequests = undefined;
 
 /**
- * @member {Number} latencyMin
+ * @member {Number} responseTimeMin
  */
-LLMUsageAggregationBucket.prototype.latencyMin = undefined;
+LLMUsageAggregationBucket.prototype.responseTimeMin = undefined;
 
 /**
- * @member {Number} latencyMax
+ * @member {Number} responseTimeMax
  */
-LLMUsageAggregationBucket.prototype.latencyMax = undefined;
+LLMUsageAggregationBucket.prototype.responseTimeMax = undefined;
 
 /**
- * @member {Number} latencyAvg
+ * @member {Number} responseTimeAvg
  */
-LLMUsageAggregationBucket.prototype.latencyAvg = undefined;
+LLMUsageAggregationBucket.prototype.responseTimeAvg = undefined;
+
+/**
+ * @member {Number} timeToFirstTokenMin
+ */
+LLMUsageAggregationBucket.prototype.timeToFirstTokenMin = undefined;
+
+/**
+ * @member {Number} timeToFirstTokenMax
+ */
+LLMUsageAggregationBucket.prototype.timeToFirstTokenMax = undefined;
+
+/**
+ * @member {Number} timeToFirstTokenAvg
+ */
+LLMUsageAggregationBucket.prototype.timeToFirstTokenAvg = undefined;
+
+/**
+ * @member {Number} timeToFirstTokenSamples
+ */
+LLMUsageAggregationBucket.prototype.timeToFirstTokenSamples = undefined;
 

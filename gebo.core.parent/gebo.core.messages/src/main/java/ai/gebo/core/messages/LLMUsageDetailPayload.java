@@ -29,7 +29,18 @@ public class LLMUsageDetailPayload extends GBaseMessagePayload {
 	private String model;
 	private String callerStack;
 	private ModelType modelType;
-	private long latency;
+	/**
+	 * Response time of the call in milliseconds: from the request being issued to the
+	 * response being complete, a streamed response included, with any tool calling
+	 * round trips performed inside the call.
+	 */
+	private long responseTime;
+	/**
+	 * Time to first token in milliseconds: from the request being issued to the first
+	 * chunk carrying generated content. Measured only for streamed chat calls, null
+	 * otherwise.
+	 */
+	private Long timeToFirstToken;
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;

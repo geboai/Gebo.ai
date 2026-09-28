@@ -123,8 +123,11 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 				LOGGER.trace("<DAILY_USAGE key=" + key + ">");
 				LOGGER.trace("requests=" + target.getNrRequests() + " inputToken=" + target.getInputToken()
 						+ " outputToken=" + target.getOutputToken() + " totalToken=" + target.getTotalToken()
-						+ " latencyMin=" + target.getLatencyMin() + " latencyAvg=" + target.getLatencyAvg()
-						+ " latencyMax=" + target.getLatencyMax());
+						+ " responseTimeMin=" + target.getResponseTimeMin() + " responseTimeAvg="
+						+ target.getResponseTimeAvg() + " responseTimeMax=" + target.getResponseTimeMax()
+						+ " timeToFirstToken samples=" + target.getTimeToFirstTokenSamples() + " min="
+						+ target.getTimeToFirstTokenMin() + " avg=" + target.getTimeToFirstTokenAvg() + " max="
+						+ target.getTimeToFirstTokenMax());
 				LOGGER.trace("</DAILY_USAGE>");
 			}
 			consolidatedRepo.save(target);
@@ -166,18 +169,31 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 		private long outputToken;
 		private long totalToken;
 		private long nrRequests;
-		private long latencySum;
-		private long latencyMin = Long.MAX_VALUE;
-		private long latencyMax = Long.MIN_VALUE;
+		private long responseTimeSum;
+		private long responseTimeMin = Long.MAX_VALUE;
+		private long responseTimeMax = Long.MIN_VALUE;
+		// Over the calls that measured a time to first token only: the others would
+		// otherwise drag the average toward zero.
+		private long timeToFirstTokenSamples;
+		private long timeToFirstTokenSum;
+		private long timeToFirstTokenMin = Long.MAX_VALUE;
+		private long timeToFirstTokenMax = Long.MIN_VALUE;
 
 		void add(LLMUsageDetail detail) {
 			inputToken += detail.getInputToken();
 			outputToken += detail.getOutputToken();
 			totalToken += detail.getTotalToken();
 			nrRequests++;
-			latencySum += detail.getLatency();
-			latencyMin = Math.min(latencyMin, detail.getLatency());
-			latencyMax = Math.max(latencyMax, detail.getLatency());
+			responseTimeSum += detail.getResponseTime();
+			responseTimeMin = Math.min(responseTimeMin, detail.getResponseTime());
+			responseTimeMax = Math.max(responseTimeMax, detail.getResponseTime());
+			Long timeToFirstToken = detail.getTimeToFirstToken();
+			if (timeToFirstToken != null) {
+				timeToFirstTokenSamples++;
+				timeToFirstTokenSum += timeToFirstToken;
+				timeToFirstTokenMin = Math.min(timeToFirstTokenMin, timeToFirstToken);
+				timeToFirstTokenMax = Math.max(timeToFirstTokenMax, timeToFirstToken);
+			}
 		}
 
 		/**
@@ -189,9 +205,14 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 			target.setOutputToken(outputToken);
 			target.setTotalToken(totalToken);
 			target.setNrRequests(nrRequests);
-			target.setLatencyAvg(nrRequests > 0 ? latencySum / nrRequests : 0);
-			target.setLatencyMin(nrRequests > 0 ? latencyMin : 0);
-			target.setLatencyMax(nrRequests > 0 ? latencyMax : 0);
+			target.setResponseTimeAvg(nrRequests > 0 ? responseTimeSum / nrRequests : 0);
+			target.setResponseTimeMin(nrRequests > 0 ? responseTimeMin : 0);
+			target.setResponseTimeMax(nrRequests > 0 ? responseTimeMax : 0);
+			target.setTimeToFirstTokenSamples(timeToFirstTokenSamples);
+			boolean timed = timeToFirstTokenSamples > 0;
+			target.setTimeToFirstTokenAvg(timed ? timeToFirstTokenSum / timeToFirstTokenSamples : null);
+			target.setTimeToFirstTokenMin(timed ? timeToFirstTokenMin : null);
+			target.setTimeToFirstTokenMax(timed ? timeToFirstTokenMax : null);
 		}
 	}
 

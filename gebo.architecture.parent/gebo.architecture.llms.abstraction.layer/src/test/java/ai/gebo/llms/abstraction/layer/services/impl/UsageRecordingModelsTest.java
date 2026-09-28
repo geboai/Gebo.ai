@@ -1,7 +1,10 @@
 package ai.gebo.llms.abstraction.layer.services.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -101,6 +104,43 @@ class UsageRecordingModelsTest {
 		assertEquals(50, captor.getValue().getInputToken());
 		assertEquals(5, captor.getValue().getOutputToken());
 		assertEquals(55, captor.getValue().getTotalToken());
+	}
+
+	@Test
+	void rawChatModelStreamRecordsTimeToFirstTokenWithinTheResponseTime() {
+		ILLMSUsageCrudService crud = mock(ILLMSUsageCrudService.class);
+		LLMUsageRecorder recorder = new LLMUsageRecorder(crud);
+		ChatModel provider = mock(ChatModel.class);
+		ChatResponse chunk = new ChatResponse(List.of(new Generation(new AssistantMessage("hi"))),
+				ChatResponseMetadata.builder().usage(new DefaultUsage(10, 2, 12)).build());
+		when(provider.stream(any(Prompt.class)))
+				.thenReturn(reactor.core.publisher.Flux.just(chunk).delayElements(java.time.Duration.ofMillis(30)));
+		ChatModel model = new UsageRecordingChatModel(provider, mock(GBaseChatModelConfig.class), recorder);
+
+		model.stream(new Prompt("hello")).blockLast();
+
+		// The stream completes on a Reactor thread, where doFinally records just after
+		// blockLast() has returned: wait for the record rather than race it.
+		ArgumentCaptor<LLMUsageDetailDto> captor = ArgumentCaptor.forClass(LLMUsageDetailDto.class);
+		verify(crud, org.mockito.Mockito.timeout(2000).times(1)).enqueueUsage(captor.capture());
+		LLMUsageDetailDto detail = captor.getValue();
+		assertNotNull(detail.getTimeToFirstToken());
+		assertTrue(detail.getTimeToFirstToken() >= 25, "first token after the delay: " + detail.getTimeToFirstToken());
+		assertTrue(detail.getTimeToFirstToken() <= detail.getResponseTime());
+	}
+
+	@Test
+	void blockingChatCallHasNoTimeToFirstToken() {
+		ILLMSUsageCrudService crud = mock(ILLMSUsageCrudService.class);
+		LLMUsageRecorder recorder = new LLMUsageRecorder(crud);
+		ChatModel provider = mock(ChatModel.class);
+		when(provider.call(any(Prompt.class))).thenReturn(new ChatResponse(
+				List.of(new Generation(new AssistantMessage("ok"))), ChatResponseMetadata.builder().build()));
+		new UsageRecordingChatModel(provider, mock(GBaseChatModelConfig.class), recorder).call("hello");
+
+		ArgumentCaptor<LLMUsageDetailDto> captor = ArgumentCaptor.forClass(LLMUsageDetailDto.class);
+		verify(crud, times(1)).enqueueUsage(captor.capture());
+		assertNull(captor.getValue().getTimeToFirstToken());
 	}
 
 	@Test

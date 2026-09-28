@@ -10,7 +10,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 
 /**
  * Records the usage of every speech synthesis call of the text to speech model it
- * wraps. Speech has no token accounting, so a record carries the call, its latency
+ * wraps. Speech has no token accounting, so a record carries the call, its response time
  * and its outcome. Installed by the runtime DAO around every model it registers, so
  * it covers every provider whatever class it extends.
  */

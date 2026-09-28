@@ -4,6 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -44,6 +46,42 @@ class GeboChatModelUsageAdvisorTest {
 		return new ChatClientResponse(response, Map.of());
 	}
 
+	/** A chunk with no generated content: metadata and usage only. */
+	private static ChatClientResponse emptyChunk(int prompt, int completion, int total) {
+		ChatResponseMetadata metadata = ChatResponseMetadata.builder()
+				.usage(new DefaultUsage(prompt, completion, total)).build();
+		return new ChatClientResponse(new ChatResponse(List.of(), metadata), Map.of());
+	}
+
+	@Test
+	void streamWithoutContentLeavesTheTimeToFirstTokenUnmeasured() {
+		LLMUsageRecorder recorder = mock(LLMUsageRecorder.class);
+		GBaseChatModelConfig config = mock(GBaseChatModelConfig.class);
+		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder);
+		StreamAdvisorChain chain = mock(StreamAdvisorChain.class);
+		when(chain.nextStream(any())).thenReturn(Flux.just(emptyChunk(0, 0, 0), emptyChunk(12, 0, 12)));
+
+		advisor.adviseStream(mock(ChatClientRequest.class), chain).blockLast();
+
+		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(),
+				isNull(), eq(12L), eq(0L), eq(12L), eq(LLMCallOutcome.SUCCESS));
+	}
+
+	@Test
+	void firstTokenIsTimedAtTheFirstChunkWithContent() {
+		FirstTokenTimer timer = new FirstTokenTimer();
+		timer.onChunk(emptyChunk(0, 0, 0).chatResponse());
+		org.junit.jupiter.api.Assertions.assertNull(timer.firstTokenNanos());
+		long before = System.nanoTime();
+		timer.onChunk(chunk(0, 0, 0).chatResponse());
+		Long first = timer.firstTokenNanos();
+		org.junit.jupiter.api.Assertions.assertNotNull(first);
+		org.junit.jupiter.api.Assertions.assertTrue(first >= before);
+		// Later chunks never move it.
+		timer.onChunk(chunk(1, 1, 2).chatResponse());
+		org.junit.jupiter.api.Assertions.assertEquals(first, timer.firstTokenNanos());
+	}
+
 	@Test
 	void streamedToolLoopRecordsTheRunningTotalOnce() {
 		LLMUsageRecorder recorder = mock(LLMUsageRecorder.class);
@@ -57,7 +95,7 @@ class GeboChatModelUsageAdvisorTest {
 
 		advisor.adviseStream(mock(ChatClientRequest.class), chain).blockLast();
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(), eq(250L), eq(30L),
+		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(), notNull(), eq(250L), eq(30L),
 				eq(280L), eq(LLMCallOutcome.SUCCESS));
 	}
 
@@ -71,7 +109,7 @@ class GeboChatModelUsageAdvisorTest {
 
 		advisor.adviseStream(mock(ChatClientRequest.class), chain).blockLast();
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(), eq(0L), eq(0L), eq(0L),
+		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(), notNull(), eq(0L), eq(0L), eq(0L),
 				eq(LLMCallOutcome.SUCCESS));
 	}
 
@@ -90,7 +128,7 @@ class GeboChatModelUsageAdvisorTest {
 			// the failure is propagated to the caller
 		}
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(), eq(40L), eq(0L), eq(40L),
+		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(), notNull(), eq(40L), eq(0L), eq(40L),
 				eq(LLMCallOutcome.ERROR));
 	}
 
@@ -104,7 +142,7 @@ class GeboChatModelUsageAdvisorTest {
 
 		advisor.adviseCall(mock(ChatClientRequest.class), chain);
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(), eq(250L), eq(30L),
+		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(), isNull(), eq(250L), eq(30L),
 				eq(280L), eq(LLMCallOutcome.SUCCESS));
 	}
 }

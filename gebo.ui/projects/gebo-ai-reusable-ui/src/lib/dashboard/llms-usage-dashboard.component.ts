@@ -41,9 +41,11 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
 
   // Chart data
   tokenChartDataTab1: any;
-  latencyChartDataTab1: any;
+  responseTimeChartDataTab1: any;
+  timeToFirstTokenChartDataTab1: any;
   tokenChartDataTab2: any;
-  latencyChartDataTab2: any;
+  responseTimeChartDataTab2: any;
+  timeToFirstTokenChartDataTab2: any;
 
   chartOptions = {
     plugins: {
@@ -145,11 +147,13 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
 
     // Tab 1 (This month usage - Daily)
     this.tokenChartDataTab1 = this.buildTokenChartData(currentMonthDaily, true);
-    this.latencyChartDataTab1 = this.buildLatencyChartData(currentMonthDaily, true);
+    this.responseTimeChartDataTab1 = this.buildResponseTimeChartData(currentMonthDaily, true);
+    this.timeToFirstTokenChartDataTab1 = this.buildTimeToFirstTokenChartData(currentMonthDaily, true);
 
     // Tab 2 (Monthly usage)
     this.tokenChartDataTab2 = this.buildTokenChartData(monthly, false);
-    this.latencyChartDataTab2 = this.buildLatencyChartData(monthly, false);
+    this.responseTimeChartDataTab2 = this.buildResponseTimeChartData(monthly, false);
+    this.timeToFirstTokenChartDataTab2 = this.buildTimeToFirstTokenChartData(monthly, false);
   }
 
   private buildTokenChartData(buckets: LLMUsageAggregationBucket[], isDaily: boolean): any {
@@ -178,34 +182,79 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
     };
   }
 
-  private buildLatencyChartData(buckets: LLMUsageAggregationBucket[], isDaily: boolean): any {
+  /**
+   * Response time: from the request being issued to the response being complete,
+   * for every call.
+   */
+  private buildResponseTimeChartData(buckets: LLMUsageAggregationBucket[], isDaily: boolean): any {
     const labels = buckets.map(b => this.formatTimeLabel(b, isDaily));
-    const minData = buckets.map(b => (b.latencyMin || 0) / 1000);
-    const avgData = buckets.map(b => (b.latencyAvg || 0) / 1000);
-    const maxData = buckets.map(b => (b.latencyMax || 0) / 1000);
+    const minData = buckets.map(b => (b.responseTimeMin || 0) / 1000);
+    const avgData = buckets.map(b => (b.responseTimeAvg || 0) / 1000);
+    const maxData = buckets.map(b => (b.responseTimeMax || 0) / 1000);
 
     return {
       labels: labels,
       datasets: [
         {
-          label: "Min Latency (s)",
+          label: "Min Response Time (s)",
           data: minData,
           backgroundColor: "rgba(102, 187, 106, 0.75)",
           borderColor: "#43A047",
           borderWidth: 1.5
         },
         {
-          label: "Avg Latency (s)",
+          label: "Avg Response Time (s)",
           data: avgData,
           backgroundColor: "rgba(38, 166, 154, 0.75)",
           borderColor: "#00897B",
           borderWidth: 1.5
         },
         {
-          label: "Max Latency (s)",
+          label: "Max Response Time (s)",
           data: maxData,
           backgroundColor: "rgba(239, 83, 80, 0.75)",
           borderColor: "#E53935",
+          borderWidth: 1.5
+        }
+      ]
+    };
+  }
+
+  /**
+   * Time to first token, the latency in the strict sense. Only streamed chat calls
+   * measure it: a period without any is plotted as a gap (null), not as zero, and
+   * when no period has one the chart is not shown at all.
+   */
+  private buildTimeToFirstTokenChartData(buckets: LLMUsageAggregationBucket[], isDaily: boolean): any {
+    if (!buckets.some(b => (b.timeToFirstTokenSamples || 0) > 0)) {
+      return undefined;
+    }
+    const labels = buckets.map(b => this.formatTimeLabel(b, isDaily));
+    const timed = (b: LLMUsageAggregationBucket, value?: number) =>
+      (b.timeToFirstTokenSamples || 0) > 0 && value !== undefined && value !== null ? value / 1000 : null;
+
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: "Min Time to First Token (s)",
+          data: buckets.map(b => timed(b, b.timeToFirstTokenMin)),
+          backgroundColor: "rgba(126, 87, 194, 0.75)",
+          borderColor: "#5E35B1",
+          borderWidth: 1.5
+        },
+        {
+          label: "Avg Time to First Token (s)",
+          data: buckets.map(b => timed(b, b.timeToFirstTokenAvg)),
+          backgroundColor: "rgba(92, 107, 192, 0.75)",
+          borderColor: "#3949AB",
+          borderWidth: 1.5
+        },
+        {
+          label: "Max Time to First Token (s)",
+          data: buckets.map(b => timed(b, b.timeToFirstTokenMax)),
+          backgroundColor: "rgba(236, 64, 122, 0.75)",
+          borderColor: "#D81B60",
           borderWidth: 1.5
         }
       ]

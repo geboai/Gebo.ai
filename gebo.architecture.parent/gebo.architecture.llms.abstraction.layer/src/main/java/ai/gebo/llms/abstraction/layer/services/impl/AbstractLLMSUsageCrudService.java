@@ -57,7 +57,8 @@ public abstract class AbstractLLMSUsageCrudService implements ILLMSUsageCrudServ
 		payload.setModel(usage.getModel());
 		payload.setCallerStack(usage.getCallerStack());
 		payload.setModelType(usage.getModelType());
-		payload.setLatency(usage.getLatency());
+		payload.setResponseTime(usage.getResponseTime());
+		payload.setTimeToFirstToken(usage.getTimeToFirstToken());
 		payload.setInputToken(usage.getInputToken());
 		payload.setOutputToken(usage.getOutputToken());
 		payload.setTotalToken(usage.getTotalToken());

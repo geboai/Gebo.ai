@@ -129,18 +129,38 @@
               <div class="card surface-card border-round h-full">
                 <div
                   class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
-                  <span>Latency</span>
-                  <span class="text-xs text-500 font-normal">in seconds</span>
+                  <span>Response Time</span>
+                  <span class="text-xs text-500 font-normal">request to complete response, in seconds</span>
                 </div>
-                @if (latencyChartDataTab2?.labels?.length) {
+                @if (responseTimeChartDataTab2?.labels?.length) {
                   <div>
-                    <p-chart type="bar" [data]="latencyChartDataTab2" [options]="chartOptions"
+                    <p-chart type="bar" [data]="responseTimeChartDataTab2" [options]="chartOptions"
                     height="300px"></p-chart>
                   </div>
                 } @else {
                   <div class="flex flex-column align-items-center justify-content-center p-5 text-500">
                     <i class="pi pi-chart-bar text-4xl mb-2"></i>
                     <span>No monthly usage data recorded</span>
+                  </div>
+                }
+              </div>
+            </div>
+            <div class="col-12 lg:col-6">
+              <div class="card surface-card border-round h-full">
+                <div
+                  class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
+                  <span>Time to First Token</span>
+                  <span class="text-xs text-500 font-normal">streamed chat calls only, in seconds</span>
+                </div>
+                @if (timeToFirstTokenChartDataTab2?.labels?.length) {
+                  <div>
+                    <p-chart type="bar" [data]="timeToFirstTokenChartDataTab2" [options]="chartOptions"
+                    height="300px"></p-chart>
+                  </div>
+                } @else {
+                  <div class="flex flex-column align-items-center justify-content-center p-5 text-500">
+                    <i class="pi pi-chart-bar text-4xl mb-2"></i>
+                    <span>No streamed chat calls recorded</span>
                   </div>
                 }
               </div>
@@ -242,18 +262,38 @@
               <div class="card surface-card border-round h-full">
                 <div
                   class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
-                  <span>Latency</span>
-                  <span class="text-xs text-500 font-normal">in seconds</span>
+                  <span>Response Time</span>
+                  <span class="text-xs text-500 font-normal">request to complete response, in seconds</span>
                 </div>
-                @if (latencyChartDataTab1?.labels?.length) {
+                @if (responseTimeChartDataTab1?.labels?.length) {
                   <div>
-                    <p-chart type="bar" [data]="latencyChartDataTab1" [options]="chartOptions"
+                    <p-chart type="bar" [data]="responseTimeChartDataTab1" [options]="chartOptions"
                     height="300px"></p-chart>
                   </div>
                 } @else {
                   <div class="flex flex-column align-items-center justify-content-center p-5 text-500">
                     <i class="pi pi-chart-bar text-4xl mb-2"></i>
                     <span>No usage data recorded for this month</span>
+                  </div>
+                }
+              </div>
+            </div>
+            <div class="col-12 lg:col-6">
+              <div class="card surface-card border-round h-full">
+                <div
+                  class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
+                  <span>Time to First Token</span>
+                  <span class="text-xs text-500 font-normal">streamed chat calls only, in seconds</span>
+                </div>
+                @if (timeToFirstTokenChartDataTab1?.labels?.length) {
+                  <div>
+                    <p-chart type="bar" [data]="timeToFirstTokenChartDataTab1" [options]="chartOptions"
+                    height="300px"></p-chart>
+                  </div>
+                } @else {
+                  <div class="flex flex-column align-items-center justify-content-center p-5 text-500">
+                    <i class="pi pi-chart-bar text-4xl mb-2"></i>
+                    <span>No streamed chat calls recorded this month</span>
                   </div>
                 }
               </div>
