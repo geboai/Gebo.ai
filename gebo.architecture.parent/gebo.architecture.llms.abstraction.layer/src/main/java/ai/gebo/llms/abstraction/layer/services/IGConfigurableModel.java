@@ -11,6 +11,7 @@ package ai.gebo.llms.abstraction.layer.services;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 
 /**
  * Gebo.ai comment agent
@@ -85,4 +86,14 @@ public interface IGConfigurableModel<ModelConfig extends GBaseModelConfig, Model
 		}
 		return modelCode == null ? "unknown" : modelCode;
 	}
+
+	public default GModelPricingConditions getPricingConditions() {
+		ModelConfig cfg = getConfig();
+		if (cfg != null && cfg.getPricingConditions() != null)
+			return cfg.getPricingConditions();
+		if (cfg != null && cfg.getChoosedModel() != null && cfg.getChoosedModel().getPricingConditions() != null)
+			return cfg.getChoosedModel().getPricingConditions();
+		return null;
+	}
+
 }

@@ -35,7 +35,7 @@ public class GBaseModelChoice extends GBaseVersionableObject {
 	/** The context length associated with this model choice */
 	private Integer contextLength = null;
 	private Object nativeModelMetaInfos = null;
-
+	protected GModelPricingConditions pricingConditions = null;
 	/**
 	 * Default constructor for GBaseModelChoice
 	 */
