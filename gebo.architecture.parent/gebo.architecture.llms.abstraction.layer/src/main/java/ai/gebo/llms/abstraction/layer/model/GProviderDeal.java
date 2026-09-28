@@ -38,11 +38,33 @@ public class GProviderDeal {
 	 */
 	@Indexed
 	private String providerId = null;
+	/**
+	 * Human readable description, given by the admin or, for a deal created
+	 * automatically, a default one (see {@link #defaultDescription(String, boolean)}).
+	 */
+	private String description = null;
 	/** Secret codes of the API keys this deal covers, each listed once. */
 	@Indexed
 	private List<String> secretCodes = new ArrayList<>();
+	/**
+	 * The deal's flat conditions, if any: monthly price and traffic limits shared by
+	 * its API keys. Null for a pay per use deal.
+	 */
+	private GProviderFlatConditions flatConditions = null;
 	private Date dateCreated = null;
 	private Date dateModified = null;
+
+	/**
+	 * The description given to a deal created without one, e.g. "regolo.ai deal
+	 * (created automatically on 2026-09-28)".
+	 *
+	 * @param automatic whether the deal is created by the model configuration flow
+	 *                  rather than by an admin
+	 */
+	public static String defaultDescription(String providerId, boolean automatic) {
+		return providerId + " deal (" + (automatic ? "created automatically" : "created") + " on "
+				+ java.time.LocalDate.now() + ")";
+	}
 
 	/** A new deal identifier for a provider: its id followed by a UUID. */
 	public static String newId(String providerId) {

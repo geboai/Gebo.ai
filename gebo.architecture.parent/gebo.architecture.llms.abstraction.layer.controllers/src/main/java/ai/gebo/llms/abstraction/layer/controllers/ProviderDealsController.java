@@ -1,0 +1,154 @@
+package ai.gebo.llms.abstraction.layer.controllers;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.TreeSet;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import ai.gebo.llms.abstraction.layer.controllers.model.CreateProviderDealRequest;
+import ai.gebo.llms.abstraction.layer.controllers.model.ProviderDealDescriptionRequest;
+import ai.gebo.llms.abstraction.layer.controllers.model.ProviderDealFlatConditionsRequest;
+import ai.gebo.llms.abstraction.layer.controllers.model.ProviderDealKeyRequest;
+import ai.gebo.llms.abstraction.layer.model.GModelType;
+import ai.gebo.llms.abstraction.layer.model.GProviderApiKey;
+import ai.gebo.llms.abstraction.layer.model.GProviderDeal;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGImageModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGProviderDealService;
+import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.model.OperationStatus;
+import lombok.AllArgsConstructor;
+
+/**
+ * Admin maintenance of the {@link GProviderDeal}s: the deals made with each real
+ * provider and the API keys each covers. The API keys of a provider are the
+ * secrets listed under the provider's context code, the same codes the model
+ * configuration editors look them up by.
+ */
+@RestController
+@PreAuthorize("hasRole('ADMIN')")
+@RequestMapping("api/admin/ProviderDealsController")
+@AllArgsConstructor
+public class ProviderDealsController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProviderDealsController.class);
+	private final IGProviderDealService dealService;
+	private final IGChatModelConfigurationSupportServiceRepositoryPattern chatTypes;
+	private final IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embeddingTypes;
+	private final IGImageModelConfigurationSupportServiceRepositoryPattern imageTypes;
+	private final IGRankerModelConfigurationSupportServiceRepositoryPattern rankerTypes;
+	private final IGTextToSpeechModelConfigurationSupportServiceRepositoryPattern textToSpeechTypes;
+	private final IGTranscriptModelConfigurationSupportServiceRepositoryPattern transcriptTypes;
+
+	/** The real providers of the model types this installation offers, sorted. */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping(value = "getProviders", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getProviders() {
+		TreeSet<String> providers = new TreeSet<>();
+		Stream.of(chatTypes.map(x -> x.getType()), embeddingTypes.map(x -> x.getType()),
+				imageTypes.map(x -> x.getType()), rankerTypes.map(x -> x.getType()),
+				textToSpeechTypes.map(x -> x.getType()), transcriptTypes.map(x -> x.getType()))
+				.flatMap(x -> ((List) x).stream()).map(x -> ((GModelType) x).getProviderId())
+				.filter(Objects::nonNull).forEach(x -> providers.add((String) x));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("getProviders() found " + providers);
+		}
+		return List.copyOf(providers);
+	}
+
+	/** The deals of a provider, or every deal when no provider is given. */
+	@GetMapping(value = "getProviderDeals", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GProviderDeal> getProviderDeals(
+			@RequestParam(name = "providerId", required = false) String providerId) {
+		return dealService.findDeals(providerId);
+	}
+
+	@GetMapping(value = "getProviderDeal", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GProviderDeal getProviderDeal(@RequestParam(name = "dealId") String dealId) {
+		return dealService.findDeal(dealId);
+	}
+
+	/**
+	 * The API keys of a provider, looked up by the provider's context code, each with
+	 * the deal covering it.
+	 */
+	@GetMapping(value = "getProviderApiKeys", produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<List<GProviderApiKey>> getProviderApiKeys(@RequestParam(name = "providerId") String providerId) {
+		return run("getProviderApiKeys", () -> dealService.getProviderApiKeys(providerId));
+	}
+
+	/** Creates a deal for a provider, moving the given API keys into it. */
+	@PostMapping(value = "createProviderDeal", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GProviderDeal> createProviderDeal(@RequestBody CreateProviderDealRequest request) {
+		return run("createProviderDeal", () -> dealService.createDeal(request.getProviderId(), request.getSecretCodes(),
+				request.getDescription()));
+	}
+
+	/**
+	 * Assigns an API key of the deal's provider to the deal, transferring it from the
+	 * provider's other deal covering it.
+	 */
+	@PostMapping(value = "assignApiKey", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GProviderDeal> assignApiKey(@RequestBody ProviderDealKeyRequest request) {
+		return run("assignApiKey", () -> dealService.assignApiKey(request.getDealId(), request.getSecretCode()));
+	}
+
+	/** Removes an API key from a deal. */
+	@PostMapping(value = "removeApiKey", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GProviderDeal> removeApiKey(@RequestBody ProviderDealKeyRequest request) {
+		return run("removeApiKey", () -> dealService.removeApiKey(request.getDealId(), request.getSecretCode()));
+	}
+
+	/** Deletes a deal covering no API key. */
+	@PostMapping(value = "deleteProviderDeal", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<Boolean> deleteProviderDeal(@RequestBody ProviderDealKeyRequest request) {
+		return run("deleteProviderDeal", () -> {
+			dealService.deleteDeal(request.getDealId());
+			return Boolean.TRUE;
+		});
+	}
+
+	/** Changes the description of a deal. */
+	@PostMapping(value = "updateDescription", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GProviderDeal> updateDescription(@RequestBody ProviderDealDescriptionRequest request) {
+		return run("updateDescription",
+				() -> dealService.updateDescription(request.getDealId(), request.getDescription()));
+	}
+
+	/**
+	 * Sets the flat conditions of a deal (monthly price, monthly and daily traffic
+	 * limits), or clears them to make the deal pay per use.
+	 */
+	@PostMapping(value = "updateFlatConditions", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GProviderDeal> updateFlatConditions(@RequestBody ProviderDealFlatConditionsRequest request) {
+		return run("updateFlatConditions",
+				() -> dealService.updateFlatConditions(request.getDealId(), request.getFlatConditions()));
+	}
+
+	/**
+	 * Runs a maintenance operation, turning a broken rule into an error message for
+	 * the admin rather than a server error.
+	 */
+	private <T> OperationStatus<T> run(String operation, Supplier<T> action) {
+		try {
+			return OperationStatus.of(action.get());
+		} catch (IllegalArgumentException | IllegalStateException e) {
+			LOGGER.warn(operation + " refused: " + e.getMessage());
+			return OperationStatus.ofError("Provider deal", e.getMessage());
+		}
+	}
+}
