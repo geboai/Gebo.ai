@@ -61,5 +61,11 @@
 			<artifactId>gebo.architecture.utils</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- Test only: JUnit 5 + Mockito for the daily usage consolidation test. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

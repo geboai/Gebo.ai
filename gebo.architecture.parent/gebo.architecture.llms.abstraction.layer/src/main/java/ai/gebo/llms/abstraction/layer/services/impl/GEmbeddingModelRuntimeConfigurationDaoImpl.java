@@ -37,6 +37,7 @@ import ai.gebo.llms.abstraction.layer.cluster.GAbstractClusteredModelRuntimeConf
 import ai.gebo.llms.abstraction.layer.cluster.GLlmModelClusterCategory;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
+import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportServiceRepositoryPattern;
@@ -187,7 +188,33 @@ public class GEmbeddingModelRuntimeConfigurationDaoImpl
      */
     @Override
     public void add(IGConfigurableEmbeddingModel element) {
+        attachUsageRecorder(element);
         this.staticConfigs.add(element);
+    }
+
+    // Accounts every embedding call; optional so a context without usage tracking
+    // still registers its models, unrecorded.
+    @Autowired(required = false)
+    LLMUsageRecorder usageRecorder;
+
+    /**
+     * Hands the usage recorder to a model. Embedding models are not wrapped here, as
+     * the other model types are: their vector store is built inside initialize() from
+     * the model it embeds with, which a wrapper added now could not reach. The
+     * model's own recording wrapper, already used by that vector store, reads the
+     * recorder attached here on every call.
+     */
+    private void attachUsageRecorder(IGConfigurableEmbeddingModel model) {
+        if (model instanceof GAbstractConfigurableEmbeddingModel configurable && usageRecorder != null) {
+            configurable.setUsageRecorder(usageRecorder);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Embedding model code=" + model.getCode() + " attached to usage recording");
+            }
+        } else if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Embedding model code=" + (model != null ? model.getCode() : null)
+                    + " registered unrecorded: recorder=" + (usageRecorder != null ? "present" : "absent")
+                    + " model class=" + (model != null ? model.getClass().getName() : null));
+        }
     }
 
     /**
@@ -213,6 +240,7 @@ public class GEmbeddingModelRuntimeConfigurationDaoImpl
         }
         IGConfigurableEmbeddingModel embedModel = handler.create(config);
         LOGGER.info("Initialized chatModel successfully");
+        attachUsageRecorder(embedModel);
         this.staticConfigs.add(embedModel);
     }
 

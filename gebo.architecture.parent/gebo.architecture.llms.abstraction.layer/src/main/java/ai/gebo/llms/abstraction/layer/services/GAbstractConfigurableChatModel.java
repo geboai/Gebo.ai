@@ -676,8 +676,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	@Override
 	public <T> T doWithChatModel(UseChatModel<T> chatModelCalling) throws LLMConfigException {
-
-		return chatModelCalling.call(model);
+		// The raw model bypasses the ChatClient and with it the usage advisor: hand out a
+		// recording wrapper so direct calls are accounted as well.
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("doWithChatModel() handing out the usage recording raw model of code=" + getCode());
+		}
+		return chatModelCalling.call(usageAdvisorFactory.recording(model, config));
 	}
 
 	@Override

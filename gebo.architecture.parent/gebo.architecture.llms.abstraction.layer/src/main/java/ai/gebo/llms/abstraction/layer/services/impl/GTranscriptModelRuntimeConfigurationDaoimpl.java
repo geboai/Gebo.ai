@@ -77,9 +77,33 @@ public class GTranscriptModelRuntimeConfigurationDaoimpl
 	 * Adds a configurable transcript model to the static configuration list.
 	 * @param element the model to be added
 	 */
+	// Accounts every transcription call; optional so a context without usage tracking
+	// still registers its models, unrecorded.
+	@Autowired(required = false)
+	LLMUsageRecorder usageRecorder;
+
 	@Override
 	public void add(IGConfigurableTranscriptModel element) {
-		this.staticConfigs.add(element);
+		this.staticConfigs.add(withUsageRecording(element));
+	}
+
+	/**
+	 * Wraps a model so that its calls are recorded as usage, once: every model enters
+	 * this DAO through add() or addRuntimeByConfig(), both of which wrap.
+	 */
+	private IGConfigurableTranscriptModel withUsageRecording(IGConfigurableTranscriptModel model) {
+		if (model == null || usageRecorder == null || model instanceof UsageRecordingTranscriptModel) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Transcript model code=" + (model != null ? model.getCode() : null)
+						+ " registered without a new usage wrapper: recorder="
+						+ (usageRecorder != null ? "present" : "absent"));
+			}
+			return model;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Transcript model code=" + model.getCode() + " wrapped for usage recording");
+		}
+		return new UsageRecordingTranscriptModel<>(model, usageRecorder);
 	}
 
 	/**
@@ -106,7 +130,7 @@ public class GTranscriptModelRuntimeConfigurationDaoimpl
 		}
 		IGConfigurableTranscriptModel model = handler.create(config);
 		LOGGER.info("Initialized chatModel successfully");
-		this.staticConfigs.add(model);
+		this.staticConfigs.add(withUsageRecording(model));
 	}
 
 	/**
