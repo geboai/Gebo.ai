@@ -144,8 +144,42 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	 * @throws GeboCryptSecretException if the secret cannot be decrypted or does
 	 *                                  not exist.
 	 */
+	/**
+	 * Gives every bound {@link IGSecretsAdditionalProvider} a chance to resolve
+	 * the id before the predefined chain does.
+	 *
+	 * The untyped counterpart of
+	 * {@link #resolveFromAdditionalProviders(String, Class)}, integrated
+	 * identically: providers are cycled in repository order, the first non-null
+	 * content wins, and a provider that throws is logged and skipped so it
+	 * cannot take resolution down for ids it does not own.
+	 *
+	 * @param id the secret id being resolved
+	 * @return the first content a provider produced, or {@code null} if none did
+	 */
+	private AbstractGeboSecretContent resolveContentFromAdditionalProviders(String id) {
+		if (additionalProviders == null)
+			return null;
+		for (IGSecretsAdditionalProvider provider : additionalProviders.getImplementations()) {
+			try {
+				AbstractGeboSecretContent content = provider.getSecretContentById(id);
+				if (content != null) {
+					LOGGER.debug("Secret {} resolved by additional provider {}", id, provider.getProviderId());
+					return content;
+				}
+			} catch (RuntimeException | GeboCryptSecretException e) {
+				LOGGER.error("Additional secrets provider " + provider.getProviderId()
+						+ " failed resolving secret " + id + "; continuing with the remaining providers", e);
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public AbstractGeboSecretContent getSecretContentById(String id) throws GeboCryptSecretException {
+		AbstractGeboSecretContent provided = resolveContentFromAdditionalProviders(id);
+		if (provided != null)
+			return provided;
 		AbstractGeboSecretContent configured = staticConfigurationDao.findByCode(id);
 		if (configured != null)
 			return configured;
