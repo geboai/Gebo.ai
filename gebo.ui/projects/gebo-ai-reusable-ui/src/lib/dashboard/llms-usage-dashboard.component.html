@@ -74,14 +74,11 @@
                   [(ngModel)]="filterTab2.callerStack" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.monthlySubdimensions?.modelType?.length) {
-                <div class="col-12 sm:col-6 md:col-3 lg:col-2"
-                  >
-                  <label class="block text-700 font-semibold mb-2">Model Type</label>
-                  <p-select [options]="getOptions(result?.monthlySubdimensions?.modelType)"
-                  [(ngModel)]="filterTab2.modelType" placeholder="All" styleClass="w-full"></p-select>
-                </div>
-              }
+              <div class="col-12 sm:col-6 md:col-3 lg:col-2">
+                <label class="block text-700 font-semibold mb-2">Model Type</label>
+                <p-select id="llmUsageMonthlyModelType" [options]="modelTypeOptions" optionLabel="label" optionValue="value"
+                [(ngModel)]="filterTab2.modelType" placeholder="All" styleClass="w-full"></p-select>
+              </div>
               @if (result?.monthlySubdimensions?.year?.length) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
@@ -190,14 +187,11 @@
                   [(ngModel)]="filterTab1.callerStack" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.currentMonthDailySubdimensions?.modelType?.length) {
-                <div class="col-12 sm:col-6 md:col-3 lg:col-2"
-                  >
-                  <label class="block text-700 font-semibold mb-2">Model Type</label>
-                  <p-select [options]="getOptions(result?.currentMonthDailySubdimensions?.modelType)"
-                  [(ngModel)]="filterTab1.modelType" placeholder="All" styleClass="w-full"></p-select>
-                </div>
-              }
+              <div class="col-12 sm:col-6 md:col-3 lg:col-2">
+                <label class="block text-700 font-semibold mb-2">Model Type</label>
+                <p-select id="llmUsageDailyModelType" [options]="modelTypeOptions" optionLabel="label" optionValue="value"
+                [(ngModel)]="filterTab1.modelType" placeholder="All" styleClass="w-full"></p-select>
+              </div>
               @if (result?.currentMonthDailySubdimensions?.year?.length) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
