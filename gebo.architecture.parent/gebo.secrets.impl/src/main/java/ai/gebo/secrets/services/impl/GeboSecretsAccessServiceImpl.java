@@ -33,6 +33,11 @@ import ai.gebo.secrets.model.GeboUsernamePasswordContent;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.repository.GeboSecretRepository;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ai.gebo.secrets.services.IGSecretsAdditionalProvider;
+import ai.gebo.secrets.services.IGSecretsAdditionalProviderRepositoryPattern;
 import ai.gebo.secrets.services.IGeboSecretsExternalStorageService;
 import ai.gebo.secrets.services.IGSecretsStaticConfigurationDao;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
@@ -80,6 +85,7 @@ import tools.jackson.databind.ObjectMapper;
 @Service
 @AllArgsConstructor
 public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeboSecretsAccessServiceImpl.class);
 	private static final ObjectMapper mapper = new ObjectMapper();
 
 	private final GeboSecretRepository repository;
@@ -87,6 +93,7 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	private final Optional<IGeboSecretsExternalStorageService> externalStorage;
 	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 	private final IGSecretsStaticConfigurationDao staticConfigurationDao;
+	private final IGSecretsAdditionalProviderRepositoryPattern additionalProviders;
 
 	// NOTE: takes an already-created SecurityEvent (never calls newSecurityEvent()
 	// itself) so the caller-stack metadata newSecurityEvent() captures points at
@@ -388,9 +395,47 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 		}
 	}
 
+	/**
+	 * Gives every bound {@link IGSecretsAdditionalProvider} a chance to resolve
+	 * the id before the predefined chain (configuration-declared secrets, the
+	 * external storage service, then the encrypted store) is consulted.
+	 *
+	 * Providers are cycled in repository order and the first non-null content
+	 * wins. A provider that throws is logged and skipped rather than allowed to
+	 * abort resolution: one deployment-supplied provider must not be able to
+	 * take secret access down for every id, including the ones it does not own.
+	 *
+	 * The community platform binds no provider, so this is an iteration over an
+	 * empty list and the behaviour of the chain below is unchanged.
+	 *
+	 * @param id   the secret id being resolved
+	 * @param type the caller-side content subclass to return
+	 * @return the first content a provider produced, or {@code null} if none did
+	 */
+	private <T extends GeboCustomSecretContent> T resolveFromAdditionalProviders(String id, Class<T> type) {
+		if (additionalProviders == null)
+			return null;
+		for (IGSecretsAdditionalProvider provider : additionalProviders.getImplementations()) {
+			try {
+				T content = provider.getCustomSecretContentById(id, type);
+				if (content != null) {
+					LOGGER.debug("Secret {} resolved by additional provider {}", id, provider.getProviderId());
+					return content;
+				}
+			} catch (RuntimeException | GeboCryptSecretException e) {
+				LOGGER.error("Additional secrets provider " + provider.getProviderId()
+						+ " failed resolving secret " + id + "; continuing with the remaining providers", e);
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public <T extends GeboCustomSecretContent> T getCustomSecretContentById(String id, Class<T> type)
 			throws GeboCryptSecretException {
+		T provided = resolveFromAdditionalProviders(id, type);
+		if (provided != null)
+			return provided;
 		AbstractGeboSecretContent configured = staticConfigurationDao.findByCode(id);
 		if (configured != null) {
 			if (configured.type() != GeboSecretType.CUSTOM_SECRET)

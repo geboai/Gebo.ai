@@ -39,6 +39,7 @@ import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.GeboUsernamePasswordContent;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.repository.GeboSecretRepository;
+import ai.gebo.secrets.services.IGSecretsAdditionalProviderRepositoryPattern;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.secrets.services.IGSecretsStaticConfigurationDao;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
@@ -133,7 +134,17 @@ class GeboSecretsAccessServiceImplStaticSecretsTest {
 	}
 
 	private GeboSecretsAccessServiceImpl service(IGSecretsStaticConfigurationDao staticDao) {
-		return new GeboSecretsAccessServiceImpl(repository, null, Optional.empty(), auditLogger, staticDao);
+		return new GeboSecretsAccessServiceImpl(repository, null, Optional.empty(), auditLogger, staticDao,
+				noAdditionalProviders());
+	}
+
+	/**
+	 * The community platform binds no IGSecretsAdditionalProvider, which is the
+	 * arrangement these tests assert against: resolution has to reach the
+	 * predefined chain untouched.
+	 */
+	private IGSecretsAdditionalProviderRepositoryPattern noAdditionalProviders() {
+		return new GSecretsAdditionalProviderRepositoryPatternImpl(List.of());
 	}
 
 	private IGSecretsStaticConfigurationDao staticDao() {
