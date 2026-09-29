@@ -9,25 +9,28 @@
 
 package ai.gebo.ai.app.tests;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
-import ai.gebo.git.content.handler.GGitContentManagementSystem;
-import ai.gebo.git.content.handler.GGitProjectEndpoint;
-import ai.gebo.git.content.handler.controllers.GITSystemsController;
+import ai.gebo.filesystem.content.handler.GFilesystemContentManagementSystem;
+import ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint;
+import ai.gebo.filesystem.content.handler.IGFilesystemContentManagementSystemHandler;
+import ai.gebo.filesystem.content.handler.controllers.FileSystemsController;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.scheduling.ReindexingFrequency;
 import ai.gebo.knlowledgebase.model.scheduling.ReindexingProgrammedTable;
 import ai.gebo.knlowledgebase.model.scheduling.ReindexingTime;
-import ai.gebo.model.OperationStatus;
+import ai.gebo.model.virtualfs.VFilesystemReference;
 
 /**
  * End-to-end proof that the centralized publish scheduler
@@ -37,30 +40,33 @@ import ai.gebo.model.OperationStatus;
  * future (not launched directly), then the test waits for the scheduler's own
  * {@code @Scheduled} tick to dispatch it - proving the whole message chain
  * (controller -> GRescheduleProjectEndpointMessagePayload -> central
- * scheduler -> PublishProjectEndpointMessagePayload -> GitJobLaunchManager)
+ * scheduler -> PublishProjectEndpointMessagePayload -> FilesystemJobLaunchManager)
  * works, not just that a job can be launched synchronously.
+ * <p>
+ * The endpoint is a filesystem one over a test resource file, like the other
+ * ingestion tests: no network source that could fail the test for reasons
+ * unrelated to the scheduler.
  */
 public class SchedulerIntegrationTests extends AbstractBaseTestLLmsIntegrationTests {
 
 	@Autowired
-	private GITSystemsController gitSystemsController;
+	private FileSystemsController fileSystemsController;
+
+	@Autowired
+	private IGFilesystemContentManagementSystemHandler filesystemHandler;
 
 	@Test
 	public void scheduledPublishIsLaunchedByCentralScheduler() throws InstantiationException, IllegalAccessException,
-			GeboPersistenceException, InterruptedException {
+			GeboPersistenceException, GeboContentHandlerSystemException, IOException, InterruptedException {
 		LOGGER.info("Start scheduled publish test");
 
-		GGitContentManagementSystem system = new GGitContentManagementSystem();
-		system.setDescription("Default git system");
-		system.setPublicAccess(true);
-		system.setBaseUri("https://github.com/");
-		system = persistentObjectManager.insert(system);
-
-		GGitProjectEndpoint endpoint = createAndPersist("scheduler test git project", GGitProjectEndpoint.class);
-		endpoint.setPublicAccess(true);
-		endpoint.setRepositoryUri("https://github.com/chrishantha/sample-java-programs.git");
-		endpoint.setBranch("main");
-		endpoint.setContentManagementSystem(system.getCode());
+		GFilesystemProjectEndpoint endpoint = createAndPersist("scheduler test filesystem data",
+				GFilesystemProjectEndpoint.class);
+		GFilesystemContentManagementSystem system = filesystemHandler.getSystem(endpoint);
+		String baseFolder = localFolderDiscoveryService.getLocalPersistentFolder(system, endpoint);
+		Files.createDirectories(Path.of(baseFolder));
+		copyResource(TEST_001_DOCX_FILE, baseFolder);
+		endpoint.setPath(List.of(VFilesystemReference.from(Path.of(baseFolder))));
 		endpoint.setPublished(true);
 		endpoint.setSynchPeriodically(true);
 
@@ -76,10 +82,7 @@ public class SchedulerIntegrationTests extends AbstractBaseTestLLmsIntegrationTe
 		// Goes through the controller (not persistentObjectManager.update directly)
 		// so GAbstractSystemsArchitectureController.processReschedule actually sends
 		// the GRescheduleProjectEndpointMessagePayload to the central scheduler.
-		OperationStatus<GGitProjectEndpoint> result = gitSystemsController.updateGitEndpoint(endpoint);
-		assertFalse(result.isHasErrorMessages(), "Updating the endpoint must not report errors: "
-				+ result.getMessages().stream().map(m -> m.getSummary()).collect(Collectors.joining(", ")));
-		endpoint = result.getResult();
+		endpoint = fileSystemsController.updateFilesystemEndpoint(endpoint);
 
 		LOGGER.info("Endpoint " + endpoint.getCode() + " scheduled for " + scheduledAt
 				+ " - waiting for the central scheduler to dispatch it");
