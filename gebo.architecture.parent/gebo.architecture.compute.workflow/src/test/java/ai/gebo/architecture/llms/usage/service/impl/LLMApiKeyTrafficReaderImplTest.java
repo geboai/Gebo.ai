@@ -37,9 +37,9 @@ class LLMApiKeyTrafficReaderImplTest {
 	@Test
 	void theDaysAreReadMonthByMonthAndSummedPerTypeAndKey() {
 		LLMDailyUsageDetailRepository repo = mock(LLMDailyUsageDetailRepository.class);
-		when(repo.findByYearAndMonthAndDayGreaterThanEqualAndDayLessThanEqual(2026, 8, 30, 31))
+		when(repo.findDaysOfMonth(2026, 8, 30, 31))
 				.thenAnswer(x -> Stream.of(day("regolo-chat", "k1", 10), day("regolo-chat", null, 1)));
-		when(repo.findByYearAndMonthAndDayGreaterThanEqualAndDayLessThanEqual(2026, 9, 1, 2))
+		when(repo.findDaysOfMonth(2026, 9, 1, 2))
 				.thenAnswer(x -> Stream.of(day("regolo-chat", "k1", 5), day("openai-chat", "k2", 7)));
 
 		List<LLMApiKeyTraffic> traffic = new LLMApiKeyTrafficReaderImpl(repo)
