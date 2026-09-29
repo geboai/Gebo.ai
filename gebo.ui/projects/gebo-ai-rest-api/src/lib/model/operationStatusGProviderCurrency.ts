@@ -9,15 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GProviderCurrency } from './gProviderCurrency';
+import { GUserMessage } from './gUserMessage';
 
-export interface GImageModelType { 
-    code?: string;
-    description?: string;
-    userModified?: string;
-    userCreated?: string;
-    dateModified?: Date;
-    dateCreated?: Date;
-    modelConfigurationClass?: string;
-    providerId?: string;
-    defaultCurrencyCode?: string;
+export interface OperationStatusGProviderCurrency { 
+    result?: GProviderCurrency;
+    messages?: Array<GUserMessage>;
+    hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

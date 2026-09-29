@@ -10,14 +10,9 @@
  * Do not edit the class manually.
  */
 
-export interface GImageModelType { 
+export interface GCurrency { 
     code?: string;
-    description?: string;
-    userModified?: string;
-    userCreated?: string;
-    dateModified?: Date;
-    dateCreated?: Date;
-    modelConfigurationClass?: string;
-    providerId?: string;
-    defaultCurrencyCode?: string;
+    name?: string;
+    numericCode?: string;
+    minorUnits?: number;
 }

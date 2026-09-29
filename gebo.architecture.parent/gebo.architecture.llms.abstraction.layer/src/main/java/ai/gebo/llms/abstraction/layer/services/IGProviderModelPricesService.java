@@ -16,4 +16,7 @@ public interface IGProviderModelPricesService {
 	 * their API key, plus the deal prices of models no longer configured.
 	 */
 	public List<GProviderModelPriceInfo> getProviderModelPrices(String providerId);
+
+	/** The providers of the model configurations running, sorted: those a deal can be made with. */
+	public List<String> getConfiguredProviderIds();
 }

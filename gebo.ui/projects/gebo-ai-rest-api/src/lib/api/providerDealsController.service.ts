@@ -18,11 +18,14 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { CreateProviderDealRequest } from '../model/createProviderDealRequest';
+import { GCurrency } from '../model/gCurrency';
 import { GProviderDeal } from '../model/gProviderDeal';
 import { OperationStatusBoolean } from '../model/operationStatusBoolean';
+import { OperationStatusGProviderCurrency } from '../model/operationStatusGProviderCurrency';
 import { OperationStatusGProviderDeal } from '../model/operationStatusGProviderDeal';
 import { OperationStatusListGProviderApiKey } from '../model/operationStatusListGProviderApiKey';
 import { OperationStatusListGProviderModelPriceInfo } from '../model/operationStatusListGProviderModelPriceInfo';
+import { ProviderCurrencyRequest } from '../model/providerCurrencyRequest';
 import { ProviderDealDescriptionRequest } from '../model/providerDealDescriptionRequest';
 import { ProviderDealFlatConditionsRequest } from '../model/providerDealFlatConditionsRequest';
 import { ProviderDealKeyRequest } from '../model/providerDealKeyRequest';
@@ -209,6 +212,78 @@ export class ProviderDealsControllerService {
     /**
      * 
      * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getConfiguredProviderIds(observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public getConfiguredProviderIds(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public getConfiguredProviderIds(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
+    public getConfiguredProviderIds(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<string>>('get',`${this.basePath}/api/admin/ProviderDealsController/getConfiguredProviderIds`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getCurrencies(observe?: 'body', reportProgress?: boolean): Observable<Array<GCurrency>>;
+    public getCurrencies(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GCurrency>>>;
+    public getCurrencies(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GCurrency>>>;
+    public getCurrencies(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<GCurrency>>('get',`${this.basePath}/api/admin/ProviderDealsController/getCurrencies`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param providerId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -243,6 +318,53 @@ export class ProviderDealsControllerService {
         ];
 
         return this.httpClient.request<OperationStatusListGProviderApiKey>('get',`${this.basePath}/api/admin/ProviderDealsController/getProviderApiKeys`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param providerId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getProviderCurrency(providerId: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGProviderCurrency>;
+    public getProviderCurrency(providerId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGProviderCurrency>>;
+    public getProviderCurrency(providerId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGProviderCurrency>>;
+    public getProviderCurrency(providerId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (providerId === null || providerId === undefined) {
+            throw new Error('Required parameter providerId was null or undefined when calling getProviderCurrency.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (providerId !== undefined && providerId !== null) {
+            queryParameters = queryParameters.set('providerId', <any>providerId);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<OperationStatusGProviderCurrency>('get',`${this.basePath}/api/admin/ProviderDealsController/getProviderCurrency`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -652,6 +774,53 @@ export class ProviderDealsControllerService {
         }
 
         return this.httpClient.request<OperationStatusGProviderDeal>('post',`${this.basePath}/api/admin/ProviderDealsController/updateModelPricing`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateProviderCurrency(body: ProviderCurrencyRequest, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGProviderCurrency>;
+    public updateProviderCurrency(body: ProviderCurrencyRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGProviderCurrency>>;
+    public updateProviderCurrency(body: ProviderCurrencyRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGProviderCurrency>>;
+    public updateProviderCurrency(body: ProviderCurrencyRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling updateProviderCurrency.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<OperationStatusGProviderCurrency>('post',`${this.basePath}/api/admin/ProviderDealsController/updateProviderCurrency`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

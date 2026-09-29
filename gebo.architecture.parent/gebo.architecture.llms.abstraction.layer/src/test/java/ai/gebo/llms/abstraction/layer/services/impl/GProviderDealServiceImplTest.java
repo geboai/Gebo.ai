@@ -337,6 +337,22 @@ class GProviderDealServiceImplTest {
 	}
 
 	@Test
+	void anUnknownCurrencyIsRejected() {
+		GProviderDeal deal = deal("openai", "k1");
+		deal.setId("openai-1");
+		MongoTemplate mongo = mock(MongoTemplate.class);
+		GProviderDealServiceImpl service = new GProviderDealServiceImpl(provider(repositoryWith(deal)),
+				provider(mongo), provider(null), daos(), readers());
+		org.springframework.test.util.ReflectionTestUtils.setField(service, "currencies", new GCurrenciesServiceImpl());
+
+		assertThrows(IllegalArgumentException.class,
+				() -> service.updateModelPricing("openai-1", "gpt-4.1", pricing("XYZ", 1d, 2d)));
+		verify(mongo, never()).updateFirst(any(Query.class), any(Update.class), eq(GProviderDeal.class));
+		service.updateModelPricing("openai-1", "gpt-4.1", pricing("EUR", 1d, 2d));
+		verify(mongo).updateFirst(any(Query.class), any(Update.class), eq(GProviderDeal.class));
+	}
+
+	@Test
 	void theProviderApiPriceIsImportedUnlessTheAdminSetOne() {
 		GProviderDeal deal = deal("openrouter.ai", "k1");
 		deal.setId("openrouter.ai-1");

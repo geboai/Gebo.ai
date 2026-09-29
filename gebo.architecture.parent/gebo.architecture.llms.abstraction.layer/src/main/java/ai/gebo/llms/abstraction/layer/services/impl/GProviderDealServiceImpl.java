@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -28,6 +29,7 @@ import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.model.GProviderApiKey;
 import ai.gebo.llms.abstraction.layer.model.GProviderModelPrice;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableModel;
+import ai.gebo.llms.abstraction.layer.services.IGCurrenciesService;
 import ai.gebo.llms.abstraction.layer.model.GProviderDeal;
 import ai.gebo.llms.abstraction.layer.model.GProviderFlatConditions;
 import ai.gebo.llms.abstraction.layer.model.GProviderKeyLimit;
@@ -62,6 +64,9 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 	private final ObjectProvider<IGRuntimeModelConfigurationDao<?, ?>> runtimeDaos;
 	/** The per provider readers of the API keys' spending limits. */
 	private final ObjectProvider<IGProviderKeyLimitsReader> limitsReaders;
+	/** The known currencies, to validate the ones set; optional, no check without it. */
+	@Autowired(required = false)
+	private IGCurrenciesService currencies;
 
 	/**
 	 * The deals' prices by "providerId|coveredKey|modelCode", read on every model
@@ -273,7 +278,7 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 	public GProviderDeal updateFlatConditions(String dealId, GProviderFlatConditions flatConditions) {
 		GProviderDeal deal = requireDeal(dealId);
 		if (flatConditions != null) {
-			requireText(flatConditions.getCurrencyCode(), "currencyCode of the flat conditions");
+			requireCurrency(flatConditions.getCurrencyCode(), "currencyCode of the flat conditions");
 			if (flatConditions.getMonthlyFlatCost() == null || flatConditions.getMonthlyFlatCost() < 0) {
 				throw new IllegalArgumentException("The flat conditions need a monthly cost of zero or more");
 			}
@@ -357,8 +362,16 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 		dealsChanged();
 	}
 
-	private static void requireValidPricing(GModelPricingConditions pricing) {
-		requireText(pricing.getCurrencyCode(), "currencyCode of the model pricing");
+	/** A currency is required and, when the known currencies are available, must be one of them. */
+	private void requireCurrency(String currencyCode, String name) {
+		requireText(currencyCode, name);
+		if (currencies != null && !currencies.isKnown(currencyCode)) {
+			throw new IllegalArgumentException("Unknown currency " + currencyCode + " for the " + name);
+		}
+	}
+
+	private void requireValidPricing(GModelPricingConditions pricing) {
+		requireCurrency(pricing.getCurrencyCode(), "currencyCode of the model pricing");
 		requireNonNegativeOrUnset(pricing.getInputMtokenPrice(), "inputMtokenPrice");
 		requireNonNegativeOrUnset(pricing.getOutputMtokenPrice(), "outputMtokenPrice");
 		requireNonNegativeOrUnset(pricing.getRequestPrice(), "requestPrice");
@@ -666,7 +679,7 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 					+ deal.getProviderId() + ", importing them again");
 			return refreshQuietly(requireDeal(dealId));
 		}
-		requireText(spendingLimits.getCurrencyCode(), "currencyCode of the spending limits");
+		requireCurrency(spendingLimits.getCurrencyCode(), "currencyCode of the spending limits");
 		requirePositiveOrUnset(spendingLimits.getDailySpendingLimit(), "dailySpendingLimit");
 		requirePositiveOrUnset(spendingLimits.getWeeklySpendingLimit(), "weeklySpendingLimit");
 		requirePositiveOrUnset(spendingLimits.getMonthlySpendingLimit(), "monthlySpendingLimit");

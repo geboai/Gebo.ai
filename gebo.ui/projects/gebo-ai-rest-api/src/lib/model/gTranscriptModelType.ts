@@ -19,4 +19,5 @@ export interface GTranscriptModelType {
     dateCreated?: Date;
     modelConfigurationClass?: string;
     providerId?: string;
+    defaultCurrencyCode?: string;
 }

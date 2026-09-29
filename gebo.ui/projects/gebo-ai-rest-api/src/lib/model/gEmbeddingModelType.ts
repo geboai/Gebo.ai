@@ -19,4 +19,5 @@ export interface GEmbeddingModelType {
     dateCreated?: Date;
     modelConfigurationClass?: string;
     providerId?: string;
+    defaultCurrencyCode?: string;
 }

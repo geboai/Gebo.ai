@@ -19,4 +19,5 @@ export interface GRankerModelType {
     dateCreated?: Date;
     modelConfigurationClass?: string;
     providerId?: string;
+    defaultCurrencyCode?: string;
 }

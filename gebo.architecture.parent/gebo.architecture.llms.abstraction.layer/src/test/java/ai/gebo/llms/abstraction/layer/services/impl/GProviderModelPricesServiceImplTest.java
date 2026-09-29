@@ -131,6 +131,17 @@ class GProviderModelPricesServiceImplTest {
 	}
 
 	@Test
+	void theConfiguredProvidersAreTheDistinctProvidersOfTheRunningModels() {
+		List<String> providers = new GProviderModelPricesServiceImpl(daos(
+				List.of(chat("openai", "chat-a", "k1", "gpt-4.1", null), chat("regolo.ai", "chat-r", "k2", "gpt-oss", null),
+						chat("openai", "chat-b", "k1", "gpt-4o", null)),
+				List.of(embedding("mistralai", "emb-a", "k3", "mistral-embed"))), mock(IGProviderDealService.class))
+				.getConfiguredProviderIds();
+
+		assertEquals(List.of("mistralai", "openai", "regolo.ai"), providers);
+	}
+
+	@Test
 	void aModelIsPricedByItsDealElseByTheProviderApi() {
 		IGConfigurableChatModel model = chat("openai", "chat-a", "k1", "gpt-4.1", pricing(2d));
 		IGProviderDealService deals = mock(IGProviderDealService.class);

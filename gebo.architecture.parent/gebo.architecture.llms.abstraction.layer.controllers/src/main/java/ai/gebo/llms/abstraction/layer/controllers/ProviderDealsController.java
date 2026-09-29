@@ -24,13 +24,18 @@ import ai.gebo.llms.abstraction.layer.controllers.model.ProviderDealFlatConditio
 import ai.gebo.llms.abstraction.layer.controllers.model.ProviderDealKeyRequest;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.model.GProviderApiKey;
+import ai.gebo.llms.abstraction.layer.model.GCurrency;
+import ai.gebo.llms.abstraction.layer.model.GProviderCurrency;
 import ai.gebo.llms.abstraction.layer.model.GProviderDeal;
+import ai.gebo.llms.abstraction.layer.controllers.model.ProviderCurrencyRequest;
 import ai.gebo.llms.abstraction.layer.model.GProviderModelPriceInfo;
 import ai.gebo.llms.abstraction.layer.controllers.model.ProviderDealModelPricingRequest;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGCurrenciesService;
 import ai.gebo.llms.abstraction.layer.services.IGProviderDealService;
+import ai.gebo.llms.abstraction.layer.services.IGProviderSettingsService;
 import ai.gebo.llms.abstraction.layer.services.IGProviderModelPricesService;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportServiceRepositoryPattern;
@@ -52,6 +57,8 @@ public class ProviderDealsController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProviderDealsController.class);
 	private final IGProviderDealService dealService;
 	private final IGProviderModelPricesService modelPricesService;
+	private final IGCurrenciesService currenciesService;
+	private final IGProviderSettingsService providerSettingsService;
 	private final IGChatModelConfigurationSupportServiceRepositoryPattern chatTypes;
 	private final IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embeddingTypes;
 	private final IGImageModelConfigurationSupportServiceRepositoryPattern imageTypes;
@@ -73,6 +80,31 @@ public class ProviderDealsController {
 			LOGGER.debug("getProviderDealProviderIds() found " + providers);
 		}
 		return List.copyOf(providers);
+	}
+
+	/** The providers of the model configurations running: those a deal can be made with. */
+	@GetMapping(value = "getConfiguredProviderIds", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getConfiguredProviderIds() {
+		return modelPricesService.getConfiguredProviderIds();
+	}
+
+	/** The currencies prices and limits can be expressed in: the bundled ISO 4217 list. */
+	@GetMapping(value = "getCurrencies", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GCurrency> getCurrencies() {
+		return currenciesService.getCurrencies();
+	}
+
+	/** The default currency of a provider's prices, and whether the admin changed it. */
+	@GetMapping(value = "getProviderCurrency", produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GProviderCurrency> getProviderCurrency(@RequestParam(name = "providerId") String providerId) {
+		return run("getProviderCurrency", () -> providerSettingsService.getProviderCurrency(providerId));
+	}
+
+	/** Sets the default currency of a provider's prices, or resets it (null) to the declared one. */
+	@PostMapping(value = "updateProviderCurrency", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GProviderCurrency> updateProviderCurrency(@RequestBody ProviderCurrencyRequest request) {
+		return run("updateProviderCurrency",
+				() -> providerSettingsService.updateProviderCurrency(request.getProviderId(), request.getCurrencyCode()));
 	}
 
 	/** The deals of a provider, or every deal when no provider is given. */

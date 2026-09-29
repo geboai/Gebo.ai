@@ -100,6 +100,17 @@ public class GProviderModelPricesServiceImpl implements IGProviderModelPricesSer
 		return result;
 	}
 
+	@Override
+	public List<String> getConfiguredProviderIds() {
+		List<String> providers = runtimeDaos.orderedStream().flatMap(dao -> dao.getConfigurations().stream())
+				.map(model -> model.getType() != null ? model.getType().getProviderId() : null)
+				.filter(java.util.Objects::nonNull).distinct().sorted().toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("getConfiguredProviderIds() found " + providers);
+		}
+		return providers;
+	}
+
 	private static GProviderModelPriceInfo row(Map<String, GProviderModelPriceInfo> rows, String providerId,
 			GProviderDeal deal, String modelCode) {
 		String dealId = deal != null ? deal.getId() : null;

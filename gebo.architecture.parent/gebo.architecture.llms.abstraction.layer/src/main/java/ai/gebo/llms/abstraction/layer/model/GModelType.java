@@ -33,6 +33,13 @@ public class GModelType extends GBaseObject {
     private String providerId = null;
 
     /**
+     * ISO 4217 code of the currency the provider prices its models in, e.g. "EUR":
+     * the default currency of the provider's prices, which the admin can change.
+     * Null for USD, the default when the provider declares none.
+     */
+    private String defaultCurrencyCode = null;
+
+    /**
      * Default constructor for GModelType.
      */
     public GModelType() {
@@ -64,5 +71,14 @@ public class GModelType extends GBaseObject {
 
     public void setProviderId(String providerId) {
         this.providerId = providerId;
+    }
+
+    /** @return the provider's price currency, see {@link #defaultCurrencyCode}. */
+    public String getDefaultCurrencyCode() {
+        return defaultCurrencyCode;
+    }
+
+    public void setDefaultCurrencyCode(String defaultCurrencyCode) {
+        this.defaultCurrencyCode = defaultCurrencyCode;
     }
 }
