@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.abstraction.layer.cluster;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -105,6 +106,45 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 			return;
 		}
 		initializeRuntimeModels();
+		ensureProviderDealsOfRunningModels();
+	}
+
+	/**
+	 * Associates the API key of every model brought up at startup with a deal of its
+	 * provider, importing the price the provider's API gave with it, exactly as saving
+	 * the model does: the models configured before the provider deals existed, or
+	 * while their store was unavailable, get covered without being saved again.
+	 * <p>
+	 * Idempotent, so running on every instance of a cluster is harmless. Runs in the
+	 * background: a first association may read the key's spending limits from the
+	 * provider's API, and startup must not wait on the network. Best effort, as the
+	 * association itself.
+	 */
+	@SuppressWarnings("unchecked")
+	protected void ensureProviderDealsOfRunningModels() {
+		if (providerDealService == null) {
+			return;
+		}
+		List<IFacetype> models = new ArrayList<>(getConfigurations());
+		if (models.isEmpty()) {
+			return;
+		}
+		Thread.ofVirtual().name("provider-deals-startup-" + getClusterCategory()).start(() -> {
+			int associated = 0;
+			for (IFacetype model : models) {
+				try {
+					if (model.getConfig() != null) {
+						ensureProviderDeal((ModelConfig) model.getConfig());
+						associated++;
+					}
+				} catch (Throwable e) {
+					LOGGER_DEALS.error("Cannot associate the model code=" + model.getCode()
+							+ " with a provider deal at startup", e);
+				}
+			}
+			LOGGER_DEALS.info("Checked the provider deals of " + associated + " " + getClusterCategory()
+					+ " model(s) running at startup");
+		});
 	}
 
 	@Override
