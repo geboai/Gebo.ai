@@ -78,7 +78,10 @@ class GoogleSearchApi {
 		URL url = new URL(googleSearch + URLEncoder.encode(apiKey, charset) + "&cx="
 				+ URLEncoder.encode(customSearchEngineId, charset) + "&q=" + URLEncoder.encode(search, charset) + "&lr"
 				+ URLEncoder.encode(language, charset));
-		System.out.println(url);
+		if (LOGGER.isDebugEnabled()) {
+			// Never the API key: the logs are read by far more people than the key should be.
+			LOGGER.debug("Google search url:" + url.toString().replace(URLEncoder.encode(apiKey, charset), "***"));
+		}
 		RestTemplate restTemplate = new RestTemplate();
 		URI uri = url.toURI();
 		ResponseEntity<GoogleSearchResults> returned = restTemplate.getForEntity(uri, GoogleSearchResults.class);
