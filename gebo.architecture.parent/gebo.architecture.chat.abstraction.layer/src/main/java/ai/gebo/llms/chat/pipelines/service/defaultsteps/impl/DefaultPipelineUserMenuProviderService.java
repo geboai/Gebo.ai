@@ -6,10 +6,12 @@ import java.util.List;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenuItem;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenuItemParameter;
+import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
 import ai.gebo.llms.chat.pipelines.service.IPipelineUserMenuProviderService;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RespondingWith;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
@@ -39,9 +41,15 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 	private static final String IMAGE_GENERATION_ID = "imageGeneration";
 	private static final String IMAGE_GENERATION_DESCRIPTION = "Image generation";
 	private static final String IMAGE_GENERATION_ICON = "pi pi-image";
+	private static final String AGENTIC_LOOP_ID = "agenticLoop";
+	private static final String AGENTIC_LOOP_DESCRIPTION = "Single agent with tools";
+	private static final String AGENTIC_LOOP_ICON = "pi pi-sync";
 	private final IGReactiveEnabledDeepSearchDataSourceLookupService enabledDeepSearchDataSourceLookupService;
 	private final IGDeepSearchConfigProvider deepSearchConfigProvider;
 	private final IGImageModelRuntimeConfigurationDao imageModelsDao;
+	// Resolved lazily: the step repository aggregates every step, so it cannot be
+	// injected in a menu provider built with them.
+	private final IGRuntimeBinder runtimeBinder;
 	static final PipelineChatMenu agenticChatMenu = new PipelineChatMenu();
 	static final PipelineChatMenuItem agenticChatItem = new PipelineChatMenuItem();
 
@@ -89,7 +97,17 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 		DeepSearchConfig deepSearchConfig = deepSearchConfigProvider.get();
 		List<IGReactiveDeepSearchDataSourceService> enabledDataSources = this.enabledDeepSearchDataSourceLookupService
 				.enabledDataSources(deepSearchConfig);
-		outMenu.add((PipelineChatMenu) agenticChatMenu.clone());
+		PipelineChatMenu thisAgenticChatMenu = (PipelineChatMenu) agenticChatMenu.clone();
+		thisAgenticChatMenu.setItems(new ArrayList<>(agenticChatMenu.getItems()));
+		if (isAgenticLoopAvailable()) {
+			PipelineChatMenuItem agenticLoopItem = new PipelineChatMenuItem();
+			agenticLoopItem.setOptionId(AGENTIC_LOOP_ID);
+			agenticLoopItem.setIcon(AGENTIC_LOOP_ICON);
+			agenticLoopItem.setDescription(AGENTIC_LOOP_DESCRIPTION);
+			agenticLoopItem.setRouteOption(RespondingWith.AGENTIC_LOOP_RESPONSE.name());
+			thisAgenticChatMenu.getItems().add(agenticLoopItem);
+		}
+		outMenu.add(thisAgenticChatMenu);
 		outMenu.add((PipelineChatMenu) ragMenu.clone());
 
 		if (!enabledDataSources.isEmpty()) {
@@ -151,6 +169,14 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 			outMenu.add(imageMenu);
 		}
 		return outMenu;
+	}
+
+	/** Whether the single agent with tools is installed, its step being registered. */
+	private boolean isAgenticLoopAvailable() {
+		IChatPipelineStepServiceRepositoryPattern steps = runtimeBinder
+				.getImplementationOf(IChatPipelineStepServiceRepositoryPattern.class);
+		return steps != null
+				&& steps.findByCode(DefaultRoutingChatPipelineStepServiceImpl.AGENTIC_LOOP_STREAMING_STEP) != null;
 	}
 
 }

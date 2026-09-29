@@ -57,6 +57,7 @@ import ai.gebo.llms.agent.standard.services.InternalKnowledgeBaseSearchNetworkAg
 import ai.gebo.llms.agent.standard.services.NativeDocumentsSearchNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.SearchAgentPromptPatcher;
 import ai.gebo.llms.agent.standard.services.StringToStringToolCallingNetworkAgent;
+import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
 import jakarta.annotation.PostConstruct;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -138,6 +139,14 @@ public class StandardAgentsInitialization {
 		List<String> excludedSources = new ArrayList<>(
 				autoMountingConfig.getExcludedToolSources() != null ? autoMountingConfig.getExcludedToolSources()
 						: List.of());
+		// The default network already has a knowledge base searcher agent: the knowledge
+		// base search tool is for the agents that operate their own tools.
+		if (!excludedSources.contains(InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE)) {
+			excludedSources.add(InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE);
+			autoMountingConfig.setExcludedToolSources(excludedSources);
+			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
+					InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE);
+		}
 		if (!excludedSources.contains(StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE)) {
 			excludedSources.add(StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE);
 			autoMountingConfig.setExcludedToolSources(excludedSources);
