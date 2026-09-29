@@ -7,12 +7,12 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import {
     GModelPricingConditions, GProviderApiKey, GProviderDeal, GProviderModelPriceInfo, GUserMessage,
     ProviderDealsControllerService
 } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
+import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { forkJoin, Observable } from "rxjs";
 
 /** The pseudo API key standing for the configurations running without one (GProviderDeal.NO_API_KEY). */
@@ -34,26 +34,25 @@ interface DealsOperationStatus<T> {
 }
 
 /**
- * Maintenance of the deals Gebo has with each LLM provider and of the prices they
- * give to the provider's models: the API keys each deal covers, its spending limits
- * (imported from the provider when its API exposes them) and, per model, the price
- * overriding or completing the one saved with the model configuration.
+ * Setup section maintaining the deals Gebo has with each LLM provider and the
+ * prices they give to the provider's models: the API keys each deal covers, its
+ * spending limits (imported from the provider when its API exposes them) and, per
+ * model, the price the configurations running it with the deal's keys pay.
  */
 @Component({
-    selector: "gebo-ai-provider-deals-component",
-    templateUrl: "provider-deals.component.html",
+    selector: "gebo-ai-provider-deals-wizard-component",
+    templateUrl: "provider-deals-wizard.component.html",
     standalone: false,
     styles: [`
         .gebo-provider-deals__price { width: 7rem; }
         .gebo-provider-deals__currency { width: 4.5rem; }
         .gebo-provider-deals__code { font-family: monospace; word-break: break-all; }
     `],
-    providers: [{ provide: GEBO_AI_MODULE, useValue: "LlmsPanelModule", multi: false }, {
-        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("ProviderDealsComponent")
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "ProviderDealsWizardModule", multi: false }, {
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("ProviderDealsWizardComponent")
     }]
 })
-export class ProviderDealsComponent implements OnInit {
-    protected loading: boolean = false;
+export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
     protected providers: { label: string, value: string }[] = [];
     protected providerId?: string;
     protected deals: GProviderDeal[] = [];
@@ -68,10 +67,14 @@ export class ProviderDealsComponent implements OnInit {
     protected keyOptions: { label: string, value: string }[] = [];
     protected messages: GUserMessage[] = [];
 
-    constructor(private dealsService: ProviderDealsControllerService) {
+    constructor(setupWizardComunicationService: SetupWizardComunicationService,
+        private dealsService: ProviderDealsControllerService) {
+        super(setupWizardComunicationService);
     }
 
-    ngOnInit(): void {
+    /** Loads the providers, and again the chosen provider's deals when one is chosen. */
+    public override reloadData(): void {
+        this.reload();
         this.loading = true;
         this.dealsService.getProviderDealProviderIds().subscribe({
             next: (providers) => {

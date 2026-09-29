@@ -8,13 +8,11 @@
 * Copyright (c) 2025+ Gebo.ai
 */
 -->
-<p-panel id="ProviderDealsZone" gebo-ai-label header="Provider deals and model prices" [toggleable]="true"
-  [collapsed]="true">
-  <div class="flex flex-column gap-3">
+<div class="flex flex-column gap-3">
     <div id="ProviderDealsHint" gebo-ai-text class="text-sm text-600">
-      Each provider deal groups the API keys sharing the same economic conditions. The price a deal gives to a model
-      wins over the one saved with the model configuration, and prices the usage costs, which remain an evaluation
-      that may differ from the actual costs billed by the suppliers.
+      Each provider deal groups the API keys sharing the same economic conditions. The model configurations running
+      with a deal's API keys pay the deal's price of their model, else the price the provider's API gives, if any; the
+      usage costs computed from them remain an evaluation that may differ from the actual costs billed by the suppliers.
     </div>
     <div class="flex align-items-center gap-2">
       <label id="ProviderLabel" gebo-ai-text class="font-semibold">Provider</label>
@@ -212,5 +210,4 @@
         </p-table>
       </p-panel>
     }
-  </div>
-</p-panel>
+</div>
