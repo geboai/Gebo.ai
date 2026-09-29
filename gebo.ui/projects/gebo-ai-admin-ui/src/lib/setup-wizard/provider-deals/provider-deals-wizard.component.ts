@@ -40,6 +40,8 @@ interface ProviderGroup {
     apiKeys: GProviderApiKey[];
     modelPrices: GProviderModelPriceInfo[];
     currency?: GProviderCurrency;
+    /** Codes of the API keys the running model configurations use (NO_API_KEY for those without one). */
+    usedKeys: Set<string>;
 }
 
 /**
@@ -130,7 +132,8 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
                     ...(currency.messages ?? [])].filter(x => x.severity !== "success");
                     subscriber.next({
                         providerId, deals: deals.sort((a, b) => (a.description ?? "").localeCompare(b.description ?? "")),
-                        apiKeys: keys.result ?? [], modelPrices: prices.result ?? [], currency: currency.result
+                        apiKeys: keys.result ?? [], modelPrices: prices.result ?? [], currency: currency.result,
+                        usedKeys: this.usedKeys(prices.result ?? [])
                     });
                     subscriber.complete();
                 },
@@ -168,24 +171,32 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
         return this.uncoveredModels(group).map(x => x.modelCode).join(", ");
     }
 
+    /** The API keys the running model configurations use, NO_API_KEY standing for those without one. */
+    private usedKeys(modelPrices: GProviderModelPriceInfo[]): Set<string> {
+        return new Set(modelPrices.flatMap(row => row.configurations ?? []).map(config => config.secretCode || NO_API_KEY));
+    }
+
     /** The provider's API keys a deal can take: those it does not cover yet. */
     protected keyOptions(group: ProviderGroup, deal: GProviderDeal): { label: string, value: string }[] {
         return group.apiKeys.filter(x => x.dealId !== deal.id).map(x => ({
-            label: this.keyDescription(x) + (x.dealId ? " - now in " + this.dealDescription(group, x.dealId) : ""),
+            label: this.keyDescription(x, group.usedKeys) + (x.dealId ? " - now in " + this.dealDescription(group, x.dealId) : ""),
             value: x.secretCode ?? ""
         }));
     }
 
-    protected keyDescription(key?: GProviderApiKey): string {
+    /** How an API key is shown: "(unused)" when no running model configuration uses it. */
+    protected keyDescription(key?: GProviderApiKey, usedKeys?: Set<string>): string {
         if (!key) return "";
-        if (key.secretCode === NO_API_KEY) return "No API key (configurations running without one)";
-        return key.description ? key.description + " (" + key.secretCode + ")" : key.secretCode ?? "";
+        const unused = usedKeys && !usedKeys.has(key.secretCode ?? "") ? " (unused)" : "";
+        if (key.secretCode === NO_API_KEY) return "No API key (configurations running without one)" + unused;
+        return (key.description ? key.description + " (" + key.secretCode + ")" : key.secretCode ?? "") + unused;
     }
 
     /** How an API key code of a deal is shown. */
     protected keyLabel(group: ProviderGroup, secretCode?: string): string {
         const key = group.apiKeys.find(x => x.secretCode === secretCode);
-        return key ? this.keyDescription(key) : secretCode === NO_API_KEY ? "No API key" : (secretCode ?? "");
+        const unused = !group.usedKeys.has(secretCode ?? "") ? " (unused)" : "";
+        return key ? this.keyDescription(key, group.usedKeys) : (secretCode === NO_API_KEY ? "No API key" : (secretCode ?? "")) + unused;
     }
 
     private dealDescription(group: ProviderGroup, dealId?: string): string {
@@ -245,12 +256,17 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
         this.newDealKeyOptions = [];
         if (!this.newDealProvider) return;
         const group = this.groups.find(x => x.providerId === this.newDealProvider);
-        const keys: Observable<DealsOperationStatus<GProviderApiKey[]>> = group
-            ? of({ result: group.apiKeys }) : this.dealsService.getProviderApiKeys(this.newDealProvider);
-        keys.subscribe(status => this.newDealKeyOptions = (status.result ?? []).map(x => ({
-            label: this.keyDescription(x) + (x.dealId && group ? " - now in " + this.dealDescription(group, x.dealId) : ""),
-            value: x.secretCode ?? ""
-        })));
+        const loaded: Observable<[DealsOperationStatus<GProviderApiKey[]>, DealsOperationStatus<GProviderModelPriceInfo[]>]> = group
+            ? of([{ result: group.apiKeys }, { result: group.modelPrices }])
+            : forkJoin([this.dealsService.getProviderApiKeys(this.newDealProvider),
+            this.dealsService.getProviderModelPrices(this.newDealProvider)]);
+        loaded.subscribe(([keys, prices]) => {
+            const used = this.usedKeys(prices.result ?? []);
+            this.newDealKeyOptions = (keys.result ?? []).map(x => ({
+                label: this.keyDescription(x, used) + (x.dealId && group ? " - now in " + this.dealDescription(group, x.dealId) : ""),
+                value: x.secretCode ?? ""
+            }));
+        });
     }
 
     /**
