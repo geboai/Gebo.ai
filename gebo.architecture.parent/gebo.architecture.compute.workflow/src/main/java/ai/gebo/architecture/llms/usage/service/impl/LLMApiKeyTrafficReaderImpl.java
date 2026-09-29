@@ -53,7 +53,7 @@ public class LLMApiKeyTrafficReaderImpl implements ILLMApiKeyTrafficReader {
 			int dayFrom = month.equals(YearMonth.from(from)) ? from.getDayOfMonth() : 1;
 			int dayTo = month.equals(YearMonth.from(toInclusive)) ? toInclusive.getDayOfMonth()
 					: month.lengthOfMonth();
-			try (Stream<LLMDailyUsageDetail> days = dailyRepo.findByYearAndMonthAndDayGreaterThanEqualAndDayLessThanEqual(
+			try (Stream<LLMDailyUsageDetail> days = dailyRepo.findDaysOfMonth(
 					month.getYear(), month.getMonthValue(), dayFrom, dayTo)) {
 				days.forEach(day -> tokens.merge(new TrafficKey(day.getProviderId(), day.getApiSecretCode()),
 						day.getTotalToken(), Long::sum));
