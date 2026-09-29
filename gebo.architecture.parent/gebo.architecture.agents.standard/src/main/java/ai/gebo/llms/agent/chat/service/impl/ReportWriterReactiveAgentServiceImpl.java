@@ -12,10 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
@@ -50,6 +48,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
 import ai.gebo.llms.agent.chat.service.IReportWriterReactiveAgentService;
+import ai.gebo.llms.agent.standard.config.StandardAgentsPromptsLibraryConfig;
 import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
@@ -57,16 +56,13 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationCon
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
-import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetCalculator;
-import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetFluxCoordinator;
-import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetFluxCoordinator.GenerativeFunction;
-import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetFluxCoordinator.LastWork;
-import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetFluxCoordinator.TokensLimitCompute;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 @Service
 public class ReportWriterReactiveAgentServiceImpl
@@ -221,6 +217,64 @@ public class ReportWriterReactiveAgentServiceImpl
 		return capabilities;
 	}
 
+	/**
+	 * The writer's private context. The writer works over cycles: each draft already
+	 * includes the evidence of the previous ones, so its last output is the base of
+	 * the new draft and goes in whole, while the older turns are superseded and are
+	 * only recalled by their instruction.
+	 */
+	@Override
+	protected <InputType, OutputType> String render(AgentPrivateSessionContext<InputType, OutputType> mySessionContext,
+			int actualContributionNr, int remainingBudget) {
+		List<AgentPrivateSessionContext<InputType, OutputType>.AgentInteraction> interactions = mySessionContext
+				.getInteractions();
+		if (interactions == null || interactions.isEmpty()) {
+			return "";
+		}
+		StringBuilder buffer = new StringBuilder();
+		buffer.append(BEGIN_PREVIOUS_TURNS).append(NEWLINE);
+		int last = interactions.size() - 1;
+		for (int turn = 0; turn < last; turn++) {
+			buffer.append(SUPERSEDED_TURN).append(turn + 1).append(": ")
+					.append(truncateToTokens(render(interactions.get(turn).getInputMessage()).strip()
+							.replaceAll("\\s+", " "), SUPERSEDED_TURN_INSTRUCTION_TOKENS))
+					.append(NEWLINE);
+		}
+		AgentPrivateSessionContext<InputType, OutputType>.AgentInteraction lastTurn = interactions.get(last);
+		buffer.append(LAST_TURN_INSTRUCTION).append(NEWLINE)
+				.append(renderHandlingTruncate(lastTurn.getInputMessage())).append(NEWLINE);
+		String lastOutput = renderOutput(lastTurn.getOutput());
+		int lastOutputTokens = ITokensCountable.stringsTokensSize(lastOutput);
+		if (lastOutputTokens > remainingBudget) {
+			// Bounded by the model's output tokens, so only reachable with a budget
+			// already spent: the draft still leads the budget, cut to it.
+			LOGGER.warn("Report writer agent id:" + getId() + " last output of " + lastOutputTokens
+					+ " (tok) over the budget of " + remainingBudget + " (tok), it is cut");
+			lastOutput = fitEqually(List.of(lastOutput), Math.max(remainingBudget, MIN_SHARED_CONTEXT_TOKENS)).get(0);
+		}
+		buffer.append(LAST_TURN_OUTPUT).append(NEWLINE).append(lastOutput).append(NEWLINE);
+		buffer.append(END_PREVIOUS_TURNS).append(NEWLINE);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("render(privateContext) report writer agent id:" + getId() + " " + interactions.size()
+					+ " turn(s), last output " + lastOutputTokens + " (tok) whole, size:"
+					+ ITokensCountable.stringsTokensSize(buffer.toString()) + " (tok)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<REPORT_WRITER_PRIVATE_CONTEXT>");
+			LOGGER.trace(buffer.toString());
+			LOGGER.trace("</REPORT_WRITER_PRIVATE_CONTEXT>");
+		}
+		return buffer.toString();
+	}
+
+	private static final String BEGIN_PREVIOUS_TURNS = "BEGIN YOUR PREVIOUS TURNS";
+	private static final String END_PREVIOUS_TURNS = "END YOUR PREVIOUS TURNS";
+	private static final String SUPERSEDED_TURN = "Earlier turn (superseded by your last output) ";
+	private static final String LAST_TURN_INSTRUCTION = "YOUR LAST TURN INSTRUCTION:";
+	private static final String LAST_TURN_OUTPUT = "YOUR LAST OUTPUT (the base to update with the new evidence):";
+	/** Tokens of a superseded turn's instruction recalled in the private context. */
+	private static final int SUPERSEDED_TURN_INSTRUCTION_TOKENS = 40;
+
 	@Override
 	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> createResponse(IChatRequestContext chatRequestContext,
 			GAgentConfig agentConfig, String request, GAgentsNetwork network,
@@ -265,8 +319,9 @@ public class ReportWriterReactiveAgentServiceImpl
 				LOGGER.debug("Report writer using token-budget coordinator over " + params.size()
 						+ " shared-context window(s)");
 			}
-			textStream = streamWithTokenBudgetCoordinator(agentModel, agentPrompt, chatRequestContext, params, runAs,
-					notificationSink);
+			textStream = streamThroughEvidenceExtraction(chatRequestContext, network, agentRole,
+					contextAgentPersona, session, mySessionContext, request, agentModel, agentPrompt, params,
+					tokenBudget, runAs, notificationSink);
 		}
 
 		return renderOutputStream(textStream, response, session, contextAgentPersona, notificationSink,
@@ -384,75 +439,200 @@ public class ReportWriterReactiveAgentServiceImpl
 		return existing instanceof Map<?, ?> ? (Map<String, GResponseDocumentRef>) existing : Map.of();
 	}
 
-	protected Flux<String> streamWithTokenBudgetCoordinator(IGConfigurableChatModel agentModel,
-			GPromptTemplateConfig agentPrompt, IChatRequestContext chatRequestContext, List<Map<String, Object>> params,
-			ReactiveIdentityUtil runAs, INotificationSink notificationSink) {
+	/**
+	 * Writes the report when the cycle's evidence does not fit one writing call. The
+	 * evidence is paged into windows sized for the extraction prompt
+	 * ({@value StandardAgentsPromptsLibraryConfig#REPORT_EVIDENCE_EXTRACTOR_PROMPT}),
+	 * each reduced to the flat list of its relevant facts with their sources; while
+	 * the extractions do not fit the final writing call they are grouped and reduced
+	 * again with the same prompt; the writer prompt then writes the answer from them,
+	 * with its own previous output as the base.
+	 */
+	protected Flux<String> streamThroughEvidenceExtraction(IChatRequestContext chatRequestContext,
+			GAgentsNetwork network, GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> mySessionContext, String request,
+			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt, List<Map<String, Object>> params,
+			int tokenBudget, ReactiveIdentityUtil runAs, INotificationSink notificationSink) throws AgentException {
+		final GPromptTemplateConfig extractorPrompt = resolvePrompt(null,
+				StandardAgentsPromptsLibraryConfig.REPORT_EVIDENCE_EXTRACTOR_PROMPT, false);
+		final int extractorBudget = (agentModel.getContextLength() - extractorPrompt.getTokensSize()) * 2 / 3;
+		final List<Map<String, Object>> windows = createAgentTemplateParams(extractorPrompt, network, agentRole,
+				contextAgentPersona, session, mySessionContext, request, null, 0, extractorBudget, true);
+		// A copy: the windows' own maps must keep their shared context.
+		final Map<String, Object> finalParams = new HashMap<>(params.get(0));
+		finalParams.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, "");
+		finalParams.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
+		final int finalBudget = tokenBudget - tokensOf(finalParams);
+		final Map<String, Object> extractorParams = new HashMap<>(windows.get(0));
+		extractorParams.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, "");
+		final int groupBudget = extractorBudget - tokensOf(extractorParams);
+		final AtomicInteger failures = new AtomicInteger();
+		final ISinkUIEmitter emitter = notificationSink instanceof ISinkUIEmitter em ? em
+				: toSinkUIEmitter(notificationSink);
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin streamWithTokenBudgetCoordinator(...) over " + params.size()
-					+ " shared context window(s)");
+			LOGGER.debug("Report writer agent id:" + getId() + " extracting the evidence of " + params.size()
+					+ " writing window(s) through " + windows.size() + " extraction window(s), extractorBudget:"
+					+ extractorBudget + " (tok) finalBudget:" + finalBudget + " (tok)");
 		}
-		final Map<String, Object> cleanedParams = params.get(0);
-		cleanedParams.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, "");
-		cleanedParams.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
-		Flux<Map<String, Object>> inputFlux = Flux.fromIterable(params);
-		GenerativeFunction<Map<String, Object>, String> intermediateProcess = (initialValue, ignoredEmitter,
-				documentsBatch) -> runAs.doRunAsWithReturnAndException(() -> {
-					Map<String, Object> iterationParams = documentsBatch.get(0);
-					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Consolidating one shared context window through the agent model");
+		notificationSink.next(
+				"Agent: " + contextAgentPersona.getNetworkAgentName() + " is extracting the evidence of "
+						+ windows.size() + " part(s)..",
+				ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
+		return extractAll(windows, agentModel, extractorPrompt, chatRequestContext, runAs, failures, emitter)
+				.publishOn(runAs.wrap(Schedulers.boundedElastic())).flatMapMany(extractions -> {
+					try {
+						return runAs.doRunAsWithReturnAndException(() -> {
+							List<String> reduced = reduceExtractions(extractions, finalBudget, groupBudget,
+									extractorParams, agentModel, extractorPrompt, chatRequestContext, runAs, failures,
+									emitter, contextAgentPersona, notificationSink);
+							StringBuilder evidence = new StringBuilder(String.join(NEWLINE, reduced));
+							if (failures.get() > 0) {
+								LOGGER.warn("Report writer agent id:" + getId() + " " + failures.get()
+										+ " evidence extraction call(s) failed, the answer is written without them");
+								evidence.append(NEWLINE).append("NOTE: ").append(failures.get())
+										.append(" part(s) of the evidence could not be analysed because of model errors,"
+												+ " the evidence above is incomplete.");
+							}
+							Map<String, Object> writing = new HashMap<>(finalParams);
+							writing.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, evidence.toString());
+							if (LOGGER.isTraceEnabled()) {
+								LOGGER.trace("<EXTRACTED_EVIDENCE>");
+								LOGGER.trace(evidence.toString());
+								LOGGER.trace("</EXTRACTED_EVIDENCE>");
+							}
+							return callLLMReactive(agentModel, agentPrompt, chatRequestContext, writing);
+						});
+					} catch (LLMConfigException e) {
+						return Flux.error(e);
 					}
-					return agentModel.textResponse(agentPrompt, iterationParams, chatRequestContext);
 				});
-		LastWork<String, String> finalWork = (consolidations, ignoredEmitter) -> runAs
-				.doRunAsWithReturnAndException(() -> {
-					Map<String, Object> finalParams = new HashMap<>(cleanedParams);
-					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Writing the final report from " + (consolidations != null ? consolidations.size() : 0)
-								+ " consolidated window(s)");
-					}
-					if (LOGGER.isTraceEnabled()) {
-						LOGGER.trace("<CONSOLIDATED_WINDOWS>");
-						LOGGER.trace(String.join("\r\n", consolidations));
-						LOGGER.trace("</CONSOLIDATED_WINDOWS>");
-					}
-					finalParams.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM,
-							String.join("\r\n", consolidations));
-					finalParams.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
-					return callLLMReactive(agentModel, agentPrompt, chatRequestContext, finalParams);
-				});
-
-		Predicate<Map<String, Object>> isValidDocument = (document) -> document != null
-				&& document.containsKey(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM)
-				&& document.get(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM).toString().trim().length() > 0;
-
-		Predicate<String> isOutOfBand = (value) -> value == null || value.equals(LLM_PROCESSING_ERROR);
-		Predicate<String> noEndCondition = (value) -> false;
-		Function<String, String> identityCleaning = (value) -> value;
-		Consumer<Map<String, Object>> unprocessedCumulator = (document) -> {
-		};
-		ISinkUIEmitter emitter = notificationSink instanceof ISinkUIEmitter em ? em : toSinkUIEmitter(notificationSink);
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End streamWithTokenBudgetCoordinator(...) handing the windows to the coordinator, "
-					+ "notificationSink is a native UI emitter:" + (notificationSink instanceof ISinkUIEmitter));
-		}
-		return TokensBudgetFluxCoordinator.tokenBudgetCoordinateAlreadySplitted(inputFlux, emitter, isValidDocument,
-				intermediateProcess, finalWork, "", LLM_PROCESSING_ERROR, isOutOfBand, LLM_PROCESSING_ERROR,
-				isOutOfBand, noEndCondition, identityCleaning, REPORT_STRING_STREAMER, runAs, 4, unprocessedCumulator);
-
 	}
 
-	private static final String LLM_PROCESSING_ERROR = "REPORT_WRITER_LLM_ERROR";
+	/**
+	 * Runs the extraction prompt over every window, a few at a time, keeping the
+	 * windows' order; a failed call is logged, counted and left out.
+	 */
+	protected Mono<List<String>> extractAll(List<Map<String, Object>> windows, IGConfigurableChatModel agentModel,
+			GPromptTemplateConfig extractorPrompt, IChatRequestContext chatRequestContext, ReactiveIdentityUtil runAs,
+			AtomicInteger failures, ISinkUIEmitter emitter) {
+		return Flux.fromIterable(windows).flatMapSequential(window -> Mono
+				.fromCallable(() -> runAs.doRunAsWithReturnAndException(
+						() -> agentModel.textResponse(extractorPrompt, window, chatRequestContext)))
+				.subscribeOn(runAs.wrap(Schedulers.boundedElastic())).onErrorResume(error -> {
+					LOGGER.error("Report writer agent id:" + getId() + " evidence extraction call failed", error);
+					failures.incrementAndGet();
+					try {
+						emitter.notifyLLMProblems();
+					} catch (Throwable th) {
+						LOGGER.error("Cannot notify the evidence extraction failure", th);
+					}
+					return Mono.just("");
+				}), EXTRACTION_PARALLELISM).filter(ReportWriterReactiveAgentServiceImpl::isRelevantExtraction)
+				.collectList();
+	}
 
-	/** Streams a string in small chunks (mirrors the deep-search streamer). */
-	private static final Function<String, Flux<String>> REPORT_STRING_STREAMER = (data) -> {
-		String inputString = data != null ? data : "";
-		List<String> chunks = new ArrayList<>();
-		for (int index = 0; index < inputString.length(); index += 4) {
-			int stopChar = Math.min(index + 4, inputString.length());
-			chunks.add(inputString.substring(index, stopChar));
+	/**
+	 * Reduces the extractions until they fit the final writing call: they are grouped
+	 * as long as a group fits one extraction call, and each group is extracted again.
+	 * When grouping no longer reduces them, the budget is shared equally among them
+	 * as a last resort.
+	 */
+	protected List<String> reduceExtractions(List<String> extractions, int finalBudget, int groupBudget,
+			Map<String, Object> extractorParams, IGConfigurableChatModel agentModel,
+			GPromptTemplateConfig extractorPrompt, IChatRequestContext chatRequestContext, ReactiveIdentityUtil runAs,
+			AtomicInteger failures, ISinkUIEmitter emitter, AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink) {
+		List<String> current = extractions;
+		int round = 0;
+		while (current.size() > 1 && ITokensCountable.stringsTokensSize(String.join(NEWLINE, current)) > finalBudget
+				&& round < MAX_REDUCTION_ROUNDS) {
+			List<String> groups = groupToBudget(current, groupBudget);
+			if (groups.size() >= current.size()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("reduceExtractions(...) " + current.size()
+							+ " extraction(s) cannot be grouped in a budget of " + groupBudget + " (tok)");
+				}
+				break;
+			}
+			round++;
+			notificationSink.next(
+					"Agent: " + contextAgentPersona.getNetworkAgentName() + " is condensing " + current.size()
+							+ " extraction(s) into " + groups.size() + "..",
+					ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
+			List<Map<String, Object>> groupParams = new ArrayList<>();
+			for (String group : groups) {
+				Map<String, Object> params = new HashMap<>(extractorParams);
+				params.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, group);
+				groupParams.add(params);
+			}
+			List<String> reduced = extractAll(groupParams, agentModel, extractorPrompt, chatRequestContext, runAs,
+					failures, emitter).block();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("reduceExtractions(...) round " + round + " reduced " + current.size()
+						+ " extraction(s) to " + (reduced != null ? reduced.size() : 0));
+			}
+			if (reduced == null || reduced.isEmpty()) {
+				break;
+			}
+			current = reduced;
 		}
-		return Flux.fromIterable(chunks);
-	};
+		int size = ITokensCountable.stringsTokensSize(String.join(NEWLINE, current));
+		if (size > finalBudget) {
+			LOGGER.warn("Report writer agent id:" + getId() + " extractions of " + size
+					+ " (tok) still over the final budget of " + finalBudget + " (tok), each is cut to an equal share");
+			return fitEqually(current, finalBudget);
+		}
+		return current;
+	}
+
+	/**
+	 * Joins consecutive extractions into groups of at most the budget each; an
+	 * extraction alone over the budget is a group of its own.
+	 */
+	static List<String> groupToBudget(List<String> extractions, int budget) {
+		List<String> groups = new ArrayList<>();
+		StringBuilder group = new StringBuilder();
+		int used = 0;
+		for (String extraction : extractions) {
+			int size = ITokensCountable.stringsTokensSize(extraction);
+			if (group.length() > 0 && used + size > budget) {
+				groups.add(group.toString());
+				group.setLength(0);
+				used = 0;
+			}
+			if (group.length() > 0) {
+				group.append(NEWLINE);
+			}
+			group.append(extraction);
+			used += size;
+		}
+		if (group.length() > 0) {
+			groups.add(group.toString());
+		}
+		return groups;
+	}
+
+	static boolean isRelevantExtraction(String extraction) {
+		return extraction != null && !extraction.isBlank() && !extraction.strip().equals(NO_RELEVANT_FACTS);
+	}
+
+	private static int tokensOf(Map<String, Object> params) {
+		int tokens = 0;
+		for (Object value : params.values()) {
+			if (value != null) {
+				tokens += ITokensCountable.stringsTokensSize(value.toString());
+			}
+		}
+		return tokens;
+	}
+
+	/** The extraction prompt's answer for a part with nothing relevant. */
+	static final String NO_RELEVANT_FACTS = "NO RELEVANT FACTS";
+	/** Extraction calls run at the same time. */
+	static final int EXTRACTION_PARALLELISM = 4;
+	/** Rounds of reduction of the extractions before sharing the budget among them. */
+	static final int MAX_REDUCTION_ROUNDS = 3;
 
 	private ISinkUIEmitter toSinkUIEmitter(INotificationSink notificationSink) {
 		return new ISinkUIEmitter() {

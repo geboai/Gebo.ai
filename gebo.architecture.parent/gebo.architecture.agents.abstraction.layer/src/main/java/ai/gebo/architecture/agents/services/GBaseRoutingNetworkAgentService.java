@@ -1,11 +1,14 @@
 package ai.gebo.architecture.agents.services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
@@ -31,6 +34,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.Getter;
@@ -49,6 +53,12 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	 * cycle, i.e. the legacy single-pass routing behavior (iteration is opt-in).
 	 */
 	protected static final int DEFAULT_MAX_ROUTING_CYCLES = 1;
+	/**
+	 * Tokens of a document's text kept in the digest the routing agent reads: enough
+	 * to judge what a search covered, the whole text being the writer's business.
+	 */
+	protected static final int DOCUMENT_DIGEST_EXCERPT_TOKENS = 120;
+	private static final String NEWLINE = "\r\n";
 
 	private final String id;
 	private final String description;
@@ -66,6 +76,71 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		this.description = description;
 		this.inputType = inputType;
 		this.outputType = outputType;
+	}
+
+	/**
+	 * The routing agent decides whether the evidence gathered covers the request, it
+	 * does not write the answer: documents reach it as a digest (how many, their
+	 * titles and sources, a short excerpt) rather than their whole text and
+	 * metadata. Any other contribution is rendered as usual.
+	 */
+	@Override
+	protected String renderSharedContributionData(Object data) {
+		if (data instanceof Document document) {
+			return documentsDigest(List.of(document));
+		}
+		if (data instanceof Collection<?> collection && !collection.isEmpty()
+				&& collection.stream().allMatch(Document.class::isInstance)) {
+			return documentsDigest(collection);
+		}
+		return super.renderSharedContributionData(data);
+	}
+
+	/** The digest of the documents a search contributed. */
+	protected String documentsDigest(Collection<?> documents) {
+		StringBuilder digest = new StringBuilder();
+		digest.append(documents.size()).append(" document(s) found:").append(NEWLINE);
+		int index = 1;
+		for (Object item : documents) {
+			Document document = (Document) item;
+			digest.append(index++).append(". ");
+			String title = firstMetadata(document, DocumentMetaInfos.TITLE, DocumentMetaInfos.GEBO_FILE_NAME,
+					DocumentMetaInfos.CONTENT_CODE);
+			digest.append(title != null ? title : document.getId());
+			String source = firstMetadata(document, DocumentMetaInfos.CONTENT_ORIGINAL_URL,
+					DocumentMetaInfos.GEBO_FILE_RELATIVE_PATH, DocumentMetaInfos.KNOWLEDGEBASE_CODE);
+			if (source != null) {
+				digest.append(" (").append(source).append(")");
+			}
+			if (document.getScore() != null) {
+				digest.append(" score:").append(String.format(java.util.Locale.ROOT, "%.3f", document.getScore()));
+			}
+			digest.append(NEWLINE);
+			String text = document.getText();
+			if (text != null && !text.isBlank()) {
+				digest.append("   excerpt: ")
+						.append(truncateToTokens(text.strip().replaceAll("\\s+", " "), DOCUMENT_DIGEST_EXCERPT_TOKENS))
+						.append(NEWLINE);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("documentsDigest(...) digested " + documents.size() + " document(s) into " + digest.length()
+					+ " character(s)");
+		}
+		return digest.toString();
+	}
+
+	private static String firstMetadata(Document document, String... keys) {
+		if (document.getMetadata() == null) {
+			return null;
+		}
+		for (String key : keys) {
+			Object value = document.getMetadata().get(key);
+			if (value != null && !value.toString().isBlank()) {
+				return value.toString();
+			}
+		}
+		return null;
 	}
 
 	@Override
