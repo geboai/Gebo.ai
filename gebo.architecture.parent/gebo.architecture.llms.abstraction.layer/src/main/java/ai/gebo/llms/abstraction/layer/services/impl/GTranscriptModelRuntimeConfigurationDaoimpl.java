@@ -92,6 +92,7 @@ public class GTranscriptModelRuntimeConfigurationDaoimpl
 	 * this DAO through add() or addRuntimeByConfig(), both of which wrap.
 	 */
 	private IGConfigurableTranscriptModel withUsageRecording(IGConfigurableTranscriptModel model) {
+		attachProviderDealPricing(model);
 		if (model == null || usageRecorder == null || model instanceof UsageRecordingTranscriptModel) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Transcript model code=" + (model != null ? model.getCode() : null)

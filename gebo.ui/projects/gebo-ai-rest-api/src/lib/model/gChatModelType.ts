@@ -18,4 +18,6 @@ export interface GChatModelType {
     dateModified?: Date;
     dateCreated?: Date;
     modelConfigurationClass?: string;
+    providerId?: string;
+    defaultCurrencyCode?: string;
 }

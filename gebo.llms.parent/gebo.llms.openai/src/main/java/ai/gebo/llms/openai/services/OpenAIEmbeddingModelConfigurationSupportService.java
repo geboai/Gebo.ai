@@ -64,6 +64,7 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 		type.setCode("embedding-OpenAI");
 		type.setDescription("embedding service hosted on OpenAI");
 		type.setModelConfigurationClass(GOpenAIEmbeddingModelConfig.class.getName());
+		type.setProviderId("openai");
 	}
 
 	/**

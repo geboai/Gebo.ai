@@ -113,6 +113,7 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 	 */
 	static {
 		type.setCode(TEST_CONFIGURABLE_KNOWLEDGE_EXTRACTION_CHAT_MODEL_SERVICE);
+		type.setProviderId("test");
 		model.setCode(TEST_KNOWLEDGE_EXTRACTION_MODEL_001);
 
 	}

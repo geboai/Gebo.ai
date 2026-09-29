@@ -58,6 +58,7 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 		type.setCode("embedding-ollama");
 		type.setDescription("embedding service hosted local Ollama server");
 		type.setModelConfigurationClass(GOllamaEmbeddingModelConfig.class.getName());
+		type.setProviderId("ollama");
 	}
 
 	final OllamaModelsLookupService modelsService;

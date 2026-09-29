@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import ai.gebo.model.ModelType;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GTranscriptModelType;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
@@ -33,7 +34,7 @@ public class UsageRecordingTranscriptModel<ModelConfig extends GBaseTranscriptMo
 
 	@Override
 	public String call(InputStream audioResource) throws LLMConfigException, IOException {
-		LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), ModelType.TRANSCRIPT);
+		LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), ModelType.TRANSCRIPT, delegate::getPricingConditions);
 		try {
 			String transcript = delegate.call(audioResource);
 			call.success();
@@ -72,6 +73,16 @@ public class UsageRecordingTranscriptModel<ModelConfig extends GBaseTranscriptMo
 	@Override
 	public ModelConfig getConfig() {
 		return delegate.getConfig();
+	}
+
+	@Override
+	public GModelPricingConditions getPricingConditions() {
+		return delegate.getPricingConditions();
+	}
+
+	@Override
+	public GModelPricingConditions getProviderApiPricingConditions() {
+		return delegate.getProviderApiPricingConditions();
 	}
 
 	@Override

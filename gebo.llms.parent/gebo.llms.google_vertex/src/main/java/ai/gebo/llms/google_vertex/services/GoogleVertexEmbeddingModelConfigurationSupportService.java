@@ -56,6 +56,7 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 		type.setCode("embedding-google-vertex");
 		type.setDescription("Google vertex embedding models");
 		type.setModelConfigurationClass(GGoogleVertexEmbeddingModelConfig.class.getName());
+		type.setProviderId("google-vertex");
 	}
 
 	/**

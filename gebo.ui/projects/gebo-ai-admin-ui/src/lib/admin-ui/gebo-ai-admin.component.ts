@@ -58,7 +58,6 @@ export class GeboAiAdminComponent implements OnInit {
   /** References to the child ancestor panel components for controlling their behavior */
   @ViewChild("child1") child1?: AncestorPanelComponent;
   @ViewChild("child2") child2?: AncestorPanelComponent;
-  @ViewChild("child3") child3?: AncestorPanelComponent;
   @ViewChild("child4") child4?: AncestorPanelComponent;
   @ViewChild("child5") child5?: AncestorPanelComponent;
   @ViewChild("child6") child6?: AncestorPanelComponent;

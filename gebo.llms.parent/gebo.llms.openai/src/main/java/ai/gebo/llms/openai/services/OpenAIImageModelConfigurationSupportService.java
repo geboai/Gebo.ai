@@ -39,6 +39,7 @@ public class OpenAIImageModelConfigurationSupportService
 		type.setCode("image-generation-OpenAI");
 		type.setDescription("image generation service hosted on OpenAI");
 		type.setModelConfigurationClass(GOpenAIImageModelConfig.class.getName());
+		type.setProviderId("openai");
 	}
 	final IGeboSecretsAccessService secretService;
 	final IGOpenAIApiUtil openaiApiUtil;

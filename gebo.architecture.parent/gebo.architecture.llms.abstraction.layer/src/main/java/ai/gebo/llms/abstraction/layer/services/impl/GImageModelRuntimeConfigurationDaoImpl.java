@@ -134,6 +134,7 @@ public class GImageModelRuntimeConfigurationDaoImpl
 	 * this DAO through add() or addRuntimeByConfig(), both of which wrap.
 	 */
 	private IGConfigurableImageModel withUsageRecording(IGConfigurableImageModel model) {
+		attachProviderDealPricing(model);
 		if (model == null || usageRecorder == null || model instanceof UsageRecordingImageModel) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Image model code=" + (model != null ? model.getCode() : null)

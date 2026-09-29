@@ -59,6 +59,7 @@ public class BedrockChatModelConfigurationSupportService
 		type.setCode("chat-aws-bedrock");
 		type.setDescription("Chat models hosted on AWS Bedrock (Converse API)");
 		type.setModelConfigurationClass(GBedrockChatModelConfig.class.getName());
+		type.setProviderId("aws-bedrock");
 	}
 
 	final BedrockCredentialsResolver credentialsResolver;

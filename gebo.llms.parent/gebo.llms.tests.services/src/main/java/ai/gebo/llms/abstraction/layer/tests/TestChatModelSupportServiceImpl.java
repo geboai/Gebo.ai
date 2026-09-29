@@ -98,6 +98,7 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	 */
 	static {
 		type.setCode(TEST_CONFIGURABLE_CHAT_MODEL_SERVICE);
+		type.setProviderId("test");
 		model.setCode(TEST_MODEL_001);
 
 	}

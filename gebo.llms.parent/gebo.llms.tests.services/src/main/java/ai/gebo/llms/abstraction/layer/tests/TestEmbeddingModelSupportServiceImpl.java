@@ -56,6 +56,7 @@ public class TestEmbeddingModelSupportServiceImpl extends AbstractTestingBusines
 	 */
 	static {
 		type.setCode(TEST_EMBEDDING_MODEL);
+		type.setProviderId("test");
 		model.setCode(TEST_EMBEDDING_MODEL_001);
 		
 	}

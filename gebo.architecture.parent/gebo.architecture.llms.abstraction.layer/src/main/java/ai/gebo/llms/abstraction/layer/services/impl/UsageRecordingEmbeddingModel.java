@@ -11,6 +11,7 @@ import org.springframework.ai.embedding.EmbeddingResponse;
 
 import ai.gebo.model.ModelType;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 
 /**
  * An {@link EmbeddingModel} that records the usage of every call it forwards to the
@@ -32,12 +33,18 @@ public class UsageRecordingEmbeddingModel implements EmbeddingModel {
 	private final EmbeddingModel delegate;
 	private final Supplier<? extends GBaseEmbeddingModelConfig> config;
 	private final Supplier<LLMUsageRecorder> recorder;
+	private final Supplier<GModelPricingConditions> pricing;
 
+	/**
+	 * @param pricing the owning model's {@code IGConfigurableModel.getPricingConditions()},
+	 *                read when a call ends; null for an unpriced model
+	 */
 	public UsageRecordingEmbeddingModel(EmbeddingModel delegate, Supplier<? extends GBaseEmbeddingModelConfig> config,
-			Supplier<LLMUsageRecorder> recorder) {
+			Supplier<LLMUsageRecorder> recorder, Supplier<GModelPricingConditions> pricing) {
 		this.delegate = delegate;
 		this.config = config;
 		this.recorder = recorder;
+		this.pricing = pricing;
 	}
 
 	/** The provider model this wrapper forwards to. */
@@ -55,16 +62,19 @@ public class UsageRecordingEmbeddingModel implements EmbeddingModel {
 			}
 			return delegate.call(request);
 		}
-		LLMUsageRecorder.Call call = usageRecorder.begin(config.get(), ModelType.EMBEDDING);
+		LLMUsageRecorder.Call call = usageRecorder.begin(config.get(), ModelType.EMBEDDING, pricing);
+		final EmbeddingResponse response;
 		try {
-			EmbeddingResponse response = delegate.call(request);
-			call.success(response != null && response.getMetadata() != null ? response.getMetadata().getUsage()
-					: null);
-			return response;
+			response = delegate.call(request);
 		} catch (RuntimeException e) {
 			call.failure();
 			throw e;
 		}
+		// Accounted best effort, outside the call: it never fails a successful call.
+		call.successReading(() -> response != null && response.getMetadata() != null
+				? response.getMetadata().getUsage()
+				: null);
+		return response;
 	}
 
 	@Override
@@ -75,7 +85,7 @@ public class UsageRecordingEmbeddingModel implements EmbeddingModel {
 		if (usageRecorder == null) {
 			return delegate.embed(document);
 		}
-		LLMUsageRecorder.Call call = usageRecorder.begin(config.get(), ModelType.EMBEDDING);
+		LLMUsageRecorder.Call call = usageRecorder.begin(config.get(), ModelType.EMBEDDING, pricing);
 		try {
 			float[] embedding = delegate.embed(document);
 			call.success();

@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -69,7 +71,28 @@ import reactor.core.scheduler.Schedulers;
  *                        ChatModel.
  */
 public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseChatModelConfig, ChatModelType extends ChatModel>
-		implements IGConfigurableChatModel<ModelConfig> {
+		implements IGConfigurableChatModel<ModelConfig>, IGProviderDealPricedModel {
+
+	/**
+	 * Prices this model by its provider deal; attached by the runtime DAO, null
+	 * leaving it priced by the provider API only.
+	 */
+	private volatile IGProviderDealService providerDealService = null;
+
+	@Override
+	public void setProviderDealService(IGProviderDealService providerDealService) {
+		this.providerDealService = providerDealService;
+	}
+
+	/**
+	 * The price the provider deal covering this model's API key gives to its
+	 * model code, else the provider API's one; read from an in-memory snapshot.
+	 */
+	@Override
+	public GModelPricingConditions getPricingConditions() {
+		return IGProviderDealPricedModel.dealOrProviderApiPricing(providerDealService, this);
+	}
+
 	public static final String END_CONTEXT = "END_CONTEXT";
 	public static final String BEGIN_CONTEXT = "BEGIN_CONTEXT";
 	public static final String NEWLINE = "\r\n";
@@ -176,7 +199,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		this.type = type;
 		this.model = configureModel(config, type, null);
 		Builder builder = ChatClient.builder(configureModel(config, type, null));
-		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config)).build();
+		// Priced through this model's getPricingConditions(), read when each call ends.
+		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions))
+				.build();
 	}
 
 	@Override
@@ -681,7 +706,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("doWithChatModel() handing out the usage recording raw model of code=" + getCode());
 		}
-		return chatModelCalling.call(usageAdvisorFactory.recording(model, config));
+		return chatModelCalling.call(usageAdvisorFactory.recording(model, config, this::getPricingConditions));
 	}
 
 	@Override
@@ -703,6 +728,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				modelConfigClone.setTopP(configOptions.getTopP());
 			}
 			IGConfigurableChatModel handler = cloneMeWithInjection();
+			if (handler instanceof IGProviderDealPricedModel priced) {
+				// The clone is priced like this model, by its provider deal; best effort.
+				try {
+					priced.setProviderDealService(this.providerDealService);
+				} catch (Throwable e) {
+					LOGGER.error("Cannot attach the provider deals to a clone of chat model code=" + getCode(), e);
+				}
+			}
 			if (configOptions.getToolCallingManager() == null) {
 				handler.initialize(modelConfigClone, type);
 			} else if (handler instanceof GAbstractConfigurableChatModel configurableChatModel) {
@@ -713,7 +746,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				configurableChatModel.chatClient = ChatClient
 						.builder(configurableChatModel.configureModel(modelConfigClone, type,
 								configOptions.getToolCallingManager()))
-						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone)).build();
+						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone,
+								configurableChatModel::getPricingConditions))
+						.build();
 			} else
 				throw new IllegalStateException(
 						"The actual configurable chat model is not an GAbstractConfigurableChatModel");

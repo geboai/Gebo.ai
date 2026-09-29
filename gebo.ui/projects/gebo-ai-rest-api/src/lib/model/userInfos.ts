@@ -14,6 +14,6 @@ export interface UserInfos {
     name?: string;
     disabled?: boolean;
     sourname?: string;
-    roles?: Array<string>;
     username?: string;
+    roles?: Array<string>;
 }

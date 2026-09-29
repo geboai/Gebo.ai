@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
 
@@ -35,7 +36,7 @@ import ai.gebo.workflows.compute.model.JobSummary;
  * Extends the AbstractBaseTestLLmsIntegrationTests class.
  * AI generated comments
  */
-//@Ignore
+@Disabled("Unstable: it clones a public GitHub repository and often fails for network or remote reasons rather than for a regression")
 public class GitContentSystemIntegrationTests extends AbstractBaseTestLLmsIntegrationTests {
 
     /**

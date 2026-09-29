@@ -35,6 +35,12 @@ public class LLMDailyUsageDetail {
 	 * toward the timeout and hide it at the same time.
 	 */
 	private LLMCallOutcome outcome;
+	/**
+	 * The API secret code the call went through, the pseudo key "__no-api-key__" for a
+	 * model without one: it attributes the traffic to the provider deal covering the
+	 * key. Null in the records written before it existed.
+	 */
+	private String apiSecretCode;
 	private int year;
 	private int month;
 	private int day;
@@ -57,6 +63,16 @@ public class LLMDailyUsageDetail {
 	private Long timeToFirstTokenAvg;
 	/** How many of the calls aggregated here measured a time to first token. */
 	private long timeToFirstTokenSamples;
+	/**
+	 * Total cost of the priced calls aggregated here, in {@link #currencyCode}; null
+	 * when none was priced, or when they were priced in different currencies, which
+	 * cannot be summed.
+	 */
+	private Double cost;
+	/** ISO 4217 currency of {@link #cost}. */
+	private String currencyCode;
+	/** How many of the calls aggregated here had a cost. */
+	private long costSamples;
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;
