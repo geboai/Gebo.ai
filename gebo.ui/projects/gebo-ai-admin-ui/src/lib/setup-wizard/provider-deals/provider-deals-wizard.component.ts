@@ -9,11 +9,11 @@
 
 import { Component } from "@angular/core";
 import {
-    GModelPricingConditions, GProviderApiKey, GProviderDeal, GProviderModelPriceInfo, GUserMessage,
-    ProviderDealsControllerService
+    GCurrency, GModelPricingConditions, GProviderApiKey, GProviderCurrency, GProviderDeal, GProviderModelPriceInfo,
+    GUserMessage, ProviderDealsControllerService
 } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
-import { forkJoin, Observable } from "rxjs";
+import { forkJoin, Observable, of } from "rxjs";
 
 /** The pseudo API key standing for the configurations running without one (GProviderDeal.NO_API_KEY). */
 const NO_API_KEY = "__no-api-key__";
@@ -33,11 +33,22 @@ interface DealsOperationStatus<T> {
     hasErrorMessages?: boolean;
 }
 
+/** Everything shown for one provider: its deals, API keys, model prices and default currency. */
+interface ProviderGroup {
+    providerId: string;
+    deals: GProviderDeal[];
+    apiKeys: GProviderApiKey[];
+    modelPrices: GProviderModelPriceInfo[];
+    currency?: GProviderCurrency;
+}
+
 /**
  * Setup section maintaining the deals Gebo has with each LLM provider and the
- * prices they give to the provider's models: the API keys each deal covers, its
- * spending limits (imported from the provider when its API exposes them) and, per
- * model, the price the configurations running it with the deal's keys pay.
+ * prices they give to the provider's models. Every deal is shown, grouped by
+ * provider, with a "Provider deal" tab (description, API keys, spending limits)
+ * and a "Model prices" tab (the price the configurations running each model with
+ * the deal's keys pay); a new deal can be added for a provider some model
+ * configuration uses.
  */
 @Component({
     selector: "gebo-ai-provider-deals-wizard-component",
@@ -45,7 +56,7 @@ interface DealsOperationStatus<T> {
     standalone: false,
     styles: [`
         .gebo-provider-deals__price { width: 7rem; }
-        .gebo-provider-deals__currency { width: 4.5rem; }
+        .gebo-provider-deals__currency { width: 8rem; }
         .gebo-provider-deals__code { font-family: monospace; word-break: break-all; }
     `],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "ProviderDealsWizardModule", multi: false }, {
@@ -53,74 +64,78 @@ interface DealsOperationStatus<T> {
     }]
 })
 export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
-    protected providers: { label: string, value: string }[] = [];
-    protected providerId?: string;
-    protected deals: GProviderDeal[] = [];
-    protected dealOptions: { label: string, value: string }[] = [];
-    protected apiKeys: GProviderApiKey[] = [];
-    protected modelPrices: GProviderModelPriceInfo[] = [];
+    protected groups: ProviderGroup[] = [];
+    protected messages: GUserMessage[] = [];
+    /** The bundled ISO 4217 currencies, as select options. */
+    protected currencyOptions: { label: string, value: string }[] = [];
+    /** Providers of the configured models: those a new deal can be made with. */
+    protected configuredProviders: { label: string, value: string }[] = [];
     protected priceEdits: { [rowKey: string]: PriceEdit } = {};
     protected descriptionEdits: { [dealId: string]: string } = {};
+    /** The API key chosen to add to each deal. */
+    protected keyToAdd: { [dealId: string]: string | undefined } = {};
+
+    // The new deal form.
+    protected newDealProvider?: string;
     protected newDealDescription: string = "";
-    /** The API keys to move into the new deal. */
     protected newDealKeys: string[] = [];
-    protected keyOptions: { label: string, value: string }[] = [];
-    protected messages: GUserMessage[] = [];
+    protected newDealKeyOptions: { label: string, value: string }[] = [];
 
     constructor(setupWizardComunicationService: SetupWizardComunicationService,
         private dealsService: ProviderDealsControllerService) {
         super(setupWizardComunicationService);
     }
 
-    /** Loads the providers, and again the chosen provider's deals when one is chosen. */
+    /** Loads every deal grouped by provider, with each provider's keys, prices and currency. */
     public override reloadData(): void {
-        this.reload();
         this.loading = true;
-        this.dealsService.getProviderDealProviderIds().subscribe({
-            next: (providers) => {
-                this.providers = (providers ?? []).map(x => ({ label: x, value: x }));
-                this.loading = false;
+        forkJoin([this.dealsService.getProviderDeals(), this.dealsService.getConfiguredProviderIds(),
+        this.dealsService.getCurrencies()]).subscribe({
+            next: ([deals, configured, currencies]) => {
+                this.configuredProviders = (configured ?? []).map(x => ({ label: x, value: x }));
+                this.currencyOptions = (currencies ?? []).map((x: GCurrency) => ({
+                    label: x.code + " - " + x.name, value: x.code ?? ""
+                }));
+                const providerIds = [...new Set((deals ?? []).map(x => x.providerId ?? ""))].filter(x => x).sort();
+                if (!providerIds.length) {
+                    this.groups = [];
+                    this.loading = false;
+                    return;
+                }
+                forkJoin(providerIds.map(providerId => this.loadGroup(providerId, (deals ?? [])
+                    .filter(x => x.providerId === providerId)))).subscribe({
+                        next: (groups) => {
+                            this.groups = groups;
+                            this.priceEdits = {};
+                            this.descriptionEdits = {};
+                            groups.forEach(group => {
+                                group.deals.forEach(deal => { if (deal.id) this.descriptionEdits[deal.id] = deal.description ?? ""; });
+                                group.modelPrices.forEach(row => this.priceEdits[this.rowKey(row)] = this.editOf(row, group));
+                            });
+                            this.loading = false;
+                        },
+                        error: () => this.loading = false
+                    });
             },
             error: () => this.loading = false
         });
     }
 
-    protected onProviderChange(): void {
-        this.messages = [];
-        this.reload();
-    }
-
-    /** Loads the deals, keys and model prices of the chosen provider. */
-    protected reload(): void {
-        const providerId = this.providerId;
-        if (!providerId) {
-            this.deals = [];
-            this.apiKeys = [];
-            this.modelPrices = [];
-            return;
-        }
-        this.loading = true;
-        forkJoin([this.dealsService.getProviderDeals(providerId), this.dealsService.getProviderApiKeys(providerId),
-        this.dealsService.getProviderModelPrices(providerId)]).subscribe({
-            next: ([deals, keys, prices]) => {
-                this.deals = deals ?? [];
-                this.dealOptions = this.deals.map(x => ({ label: x.description ?? x.id ?? "", value: x.id ?? "" }));
-                this.descriptionEdits = {};
-                this.deals.forEach(x => { if (x.id) this.descriptionEdits[x.id] = x.description ?? ""; });
-                this.apiKeys = keys.result ?? [];
-                this.keyOptions = this.apiKeys.map(x => ({
-                    label: x.secretCode === NO_API_KEY ? "No API key (configurations running without one)"
-                        : (x.description ? x.description + " (" + x.secretCode + ")" : x.secretCode ?? "")
-                        + (x.dealId ? " - " + this.dealDescription(x.dealId) : ""),
-                    value: x.secretCode ?? ""
-                }));
-                this.modelPrices = prices.result ?? [];
-                this.priceEdits = {};
-                this.modelPrices.forEach(row => this.priceEdits[this.rowKey(row)] = this.editOf(row));
-                this.messages = [...(keys.messages ?? []), ...(prices.messages ?? [])];
-                this.loading = false;
-            },
-            error: () => this.loading = false
+    private loadGroup(providerId: string, deals: GProviderDeal[]): Observable<ProviderGroup> {
+        return new Observable<ProviderGroup>(subscriber => {
+            forkJoin([this.dealsService.getProviderApiKeys(providerId), this.dealsService.getProviderModelPrices(providerId),
+            this.dealsService.getProviderCurrency(providerId)]).subscribe({
+                next: ([keys, prices, currency]) => {
+                    this.messages = [...this.messages, ...(keys.messages ?? []), ...(prices.messages ?? []),
+                    ...(currency.messages ?? [])].filter(x => x.severity !== "success");
+                    subscriber.next({
+                        providerId, deals: deals.sort((a, b) => (a.description ?? "").localeCompare(b.description ?? "")),
+                        apiKeys: keys.result ?? [], modelPrices: prices.result ?? [], currency: currency.result
+                    });
+                    subscriber.complete();
+                },
+                error: (e) => subscriber.error(e)
+            });
         });
     }
 
@@ -129,28 +144,52 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
     }
 
     /** The editor starts from the deal's price, else from the provider API's one to complete. */
-    private editOf(row: GProviderModelPriceInfo): PriceEdit {
+    private editOf(row: GProviderModelPriceInfo, group: ProviderGroup): PriceEdit {
         const source = row.dealPricing ?? row.providerApiPricing;
         return {
-            currencyCode: source?.currencyCode ?? "USD",
+            currencyCode: source?.currencyCode ?? group.currency?.currencyCode ?? "USD",
             inputMtokenPrice: source?.inputMtokenPrice,
             outputMtokenPrice: source?.outputMtokenPrice,
             requestPrice: source?.requestPrice
         };
     }
 
-    /** How an API key code is shown: the pseudo key of the keyless configurations by name. */
-    protected keyLabel(secretCode?: string): string {
-        return secretCode === NO_API_KEY ? "No API key" : (secretCode ?? "");
+    /** The model price rows of a deal. */
+    protected dealPrices(group: ProviderGroup, deal: GProviderDeal): GProviderModelPriceInfo[] {
+        return group.modelPrices.filter(x => x.dealId === deal.id);
     }
 
-    /** Where the price the configurations pay comes from. */
-    protected priceSource(row: GProviderModelPriceInfo): string {
-        if (row.dealPricing) {
-            return row.dealPricingAutoImported ? "imported from the provider's API" : "set by the admin";
-        }
-        return row.providerApiPricing ? "no deal price: the provider API's price applies"
-            : "no price: the calls of this model are not priced";
+    /** The configurations of a provider running with keys no deal covers. */
+    protected uncoveredModels(group: ProviderGroup): GProviderModelPriceInfo[] {
+        return group.modelPrices.filter(x => !x.dealId);
+    }
+
+    protected uncoveredModelCodes(group: ProviderGroup): string {
+        return this.uncoveredModels(group).map(x => x.modelCode).join(", ");
+    }
+
+    /** The provider's API keys a deal can take: those it does not cover yet. */
+    protected keyOptions(group: ProviderGroup, deal: GProviderDeal): { label: string, value: string }[] {
+        return group.apiKeys.filter(x => x.dealId !== deal.id).map(x => ({
+            label: this.keyDescription(x) + (x.dealId ? " - now in " + this.dealDescription(group, x.dealId) : ""),
+            value: x.secretCode ?? ""
+        }));
+    }
+
+    protected keyDescription(key?: GProviderApiKey): string {
+        if (!key) return "";
+        if (key.secretCode === NO_API_KEY) return "No API key (configurations running without one)";
+        return key.description ? key.description + " (" + key.secretCode + ")" : key.secretCode ?? "";
+    }
+
+    /** How an API key code of a deal is shown. */
+    protected keyLabel(group: ProviderGroup, secretCode?: string): string {
+        const key = group.apiKeys.find(x => x.secretCode === secretCode);
+        return key ? this.keyDescription(key) : secretCode === NO_API_KEY ? "No API key" : (secretCode ?? "");
+    }
+
+    private dealDescription(group: ProviderGroup, dealId?: string): string {
+        return group.deals.find(x => x.id === dealId)?.description ?? "";
     }
 
     protected formatPricing(pricing?: GModelPricingConditions): string {
@@ -179,8 +218,13 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
         return parts.length ? (limits.currencyCode ?? "") + " " + parts.join(", ") : "unlimited";
     }
 
-    protected dealDescription(dealId?: string): string {
-        return this.deals.find(x => x.id === dealId)?.description ?? "";
+    /** Where the price the configurations pay comes from. */
+    protected priceSource(row: GProviderModelPriceInfo): string {
+        if (row.dealPricing) {
+            return row.dealPricingAutoImported ? "imported from the provider's API" : "set by the admin";
+        }
+        return row.providerApiPricing ? "no deal price: the provider API's price applies"
+            : "no price: the calls of this model are not priced";
     }
 
     /** Runs a maintenance operation, then reloads; a refused one shows its messages. */
@@ -189,24 +233,39 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
         operation.subscribe({
             next: (status) => {
                 this.messages = status.messages ?? [];
-                this.loading = false;
-                this.reload();
+                this.reloadData();
             },
             error: () => this.loading = false
         });
     }
 
+    /** Loads the API keys the new deal can take, when its provider is chosen. */
+    protected onNewDealProviderChange(): void {
+        this.newDealKeys = [];
+        this.newDealKeyOptions = [];
+        if (!this.newDealProvider) return;
+        const group = this.groups.find(x => x.providerId === this.newDealProvider);
+        const keys: Observable<DealsOperationStatus<GProviderApiKey[]>> = group
+            ? of({ result: group.apiKeys }) : this.dealsService.getProviderApiKeys(this.newDealProvider);
+        keys.subscribe(status => this.newDealKeyOptions = (status.result ?? []).map(x => ({
+            label: this.keyDescription(x) + (x.dealId && group ? " - now in " + this.dealDescription(group, x.dealId) : ""),
+            value: x.secretCode ?? ""
+        })));
+    }
+
     /**
-     * Creates a deal, moving into it the chosen API keys together with the prices
-     * their deals give to the configurations running with them.
+     * Creates a deal, moving into it the chosen API keys: the configurations running
+     * with them then pay the new deal's model prices.
      */
     protected createDeal(): void {
-        if (!this.providerId) return;
+        if (!this.newDealProvider) return;
         this.run(this.dealsService.createProviderDeal({
-            providerId: this.providerId, description: this.newDealDescription, secretCodes: this.newDealKeys
+            providerId: this.newDealProvider, description: this.newDealDescription, secretCodes: this.newDealKeys
         }));
+        this.newDealProvider = undefined;
         this.newDealDescription = "";
         this.newDealKeys = [];
+        this.newDealKeyOptions = [];
     }
 
     protected saveDescription(deal: GProviderDeal): void {
@@ -224,14 +283,22 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
         this.run(this.dealsService.refreshImportedLimits({ dealId: deal.id }));
     }
 
-    protected assignKey(key: GProviderApiKey, dealId: string): void {
-        if (!dealId || !key.secretCode || dealId === key.dealId) return;
-        this.run(this.dealsService.assignApiKey({ dealId: dealId, secretCode: key.secretCode }));
+    /** Adds an API key to a deal, moving it from the provider's other deal covering it. */
+    protected addKey(deal: GProviderDeal): void {
+        const secretCode = deal.id ? this.keyToAdd[deal.id] : undefined;
+        if (!deal.id || !secretCode) return;
+        this.keyToAdd[deal.id] = undefined;
+        this.run(this.dealsService.assignApiKey({ dealId: deal.id, secretCode: secretCode }));
     }
 
-    protected removeKey(key: GProviderApiKey): void {
-        if (!key.dealId || !key.secretCode) return;
-        this.run(this.dealsService.removeApiKey({ dealId: key.dealId, secretCode: key.secretCode }));
+    protected removeKey(deal: GProviderDeal, secretCode: string): void {
+        if (!deal.id) return;
+        this.run(this.dealsService.removeApiKey({ dealId: deal.id, secretCode: secretCode }));
+    }
+
+    /** Sets a provider's default currency; null goes back to the one it declares. */
+    protected saveProviderCurrency(group: ProviderGroup, currencyCode: string | null): void {
+        this.run(this.dealsService.updateProviderCurrency({ providerId: group.providerId, currencyCode: currencyCode ?? undefined }));
     }
 
     protected savePrice(row: GProviderModelPriceInfo): void {
@@ -241,7 +308,7 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
         const pricing: GModelPricingConditions = {
             ...source,
             pricingType: source?.pricingType ?? GModelPricingConditions.PricingTypeEnum.MTOKEN,
-            currencyCode: edit.currencyCode?.trim().toUpperCase(),
+            currencyCode: edit.currencyCode,
             inputMtokenPrice: edit.inputMtokenPrice ?? undefined,
             outputMtokenPrice: edit.outputMtokenPrice ?? undefined,
             requestPrice: edit.requestPrice ?? undefined
