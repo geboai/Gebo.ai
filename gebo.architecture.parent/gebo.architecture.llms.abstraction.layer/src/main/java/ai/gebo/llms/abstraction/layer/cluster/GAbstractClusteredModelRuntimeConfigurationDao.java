@@ -22,6 +22,7 @@ import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
+import ai.gebo.llms.abstraction.layer.model.GProviderDeal;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableModel;
 import ai.gebo.llms.abstraction.layer.services.IGProviderDealPricedModel;
 import ai.gebo.llms.abstraction.layer.services.IGProviderDealService;
@@ -128,8 +129,10 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 	}
 
 	/**
-	 * Makes sure the API key chosen for the model is covered by a deal of the
-	 * model's real provider. Runs on the configuring instance only: these clustered
+	 * Makes sure the API key chosen for the model, or the NO_API_KEY pseudo key for a
+	 * model without one, is covered by a deal of the model's real provider, and
+	 * imports into that deal the price the provider's API gave with the model, if
+	 * any. Runs on the configuring instance only: these clustered
 	 * operations are the user's configuration, while startup and the replicas apply
 	 * the plain operations, so a configuration change is associated exactly once.
 	 * <p>
@@ -141,13 +144,9 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 			return;
 		}
 		try {
-			String secretCode = config.getApiSecretCode();
-			if (secretCode == null || secretCode.isBlank()) {
-				if (LOGGER_DEALS.isDebugEnabled()) {
-					LOGGER_DEALS.debug("Model code=" + config.getCode() + " uses no API key, no provider deal");
-				}
-				return;
-			}
+			// A configuration without API key is covered by the provider's deal
+			// holding the NO_API_KEY pseudo key.
+			String secretCode = GProviderDeal.coveredKey(config.getApiSecretCode());
 			IFacetype model = findByCode(config.getCode());
 			GModelType type = model != null ? model.getType() : null;
 			String providerId = type != null ? type.getProviderId() : null;
@@ -157,6 +156,12 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 				return;
 			}
 			providerDealService.ensureDeal(providerId, secretCode);
+			// The price the provider's API gave with the chosen model, if any, becomes the
+			// deal's price of the model unless the admin set one.
+			if (model != null && model.getProviderApiPricingConditions() != null) {
+				providerDealService.importModelPricing(providerId, secretCode, model.safeGetModelCode(),
+						model.getProviderApiPricingConditions());
+			}
 		} catch (Throwable e) {
 			LOGGER_DEALS.error("Cannot associate the API key of model code=" + config.getCode()
 					+ " with a provider deal, the model is configured all the same", e);
@@ -179,7 +184,7 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 			}
 		} else if (model != null && LOGGER_DEALS.isDebugEnabled()) {
 			LOGGER_DEALS.debug("Model code=" + model.getCode() + " of class=" + model.getClass().getName()
-					+ " is priced by its configuration only");
+					+ " is priced by the provider API only");
 		}
 	}
 

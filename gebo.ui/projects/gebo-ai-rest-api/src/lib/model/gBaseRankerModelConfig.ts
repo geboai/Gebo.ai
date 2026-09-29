@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 import { GBaseRankerModelChoice } from './gBaseRankerModelChoice';
-import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GBaseRankerModelConfig { 
     code?: string;
@@ -25,7 +24,6 @@ export interface GBaseRankerModelConfig {
     choosedModel?: GBaseRankerModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    pricingConditions?: GModelPricingConditions;
     maxDocumentsPerRequest?: number;
     maxDocumentTokens?: number;
     responseReserveTokens?: number;

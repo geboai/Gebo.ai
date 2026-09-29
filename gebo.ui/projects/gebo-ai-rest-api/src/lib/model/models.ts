@@ -160,6 +160,7 @@ export * from './gMistralChatModelChoice';
 export * from './gMistralChatModelConfig';
 export * from './gMistralEmbeddingModelChoice';
 export * from './gMistralEmbeddingModelConfig';
+export * from './gModelConfigRef';
 export * from './gModelPricingConditions';
 export * from './gModuleMetaInfo';
 export * from './gONNXTransformersEmbeddingModelChoice';

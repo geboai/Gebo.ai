@@ -81,8 +81,8 @@ public class UsageRecordingTranscriptModel<ModelConfig extends GBaseTranscriptMo
 	}
 
 	@Override
-	public GModelPricingConditions getConfiguredPricingConditions() {
-		return delegate.getConfiguredPricingConditions();
+	public GModelPricingConditions getProviderApiPricingConditions() {
+		return delegate.getProviderApiPricingConditions();
 	}
 
 	@Override

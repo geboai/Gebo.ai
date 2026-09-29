@@ -50,8 +50,8 @@ public interface IGProviderDealService {
 
 	/**
 	 * Creates a new deal for a provider, covering the given API keys, which are moved
-	 * from the provider's other deals covering them together with the prices those
-	 * deals give to the model configurations running with them.
+	 * from the provider's other deals covering them: from then on the configurations
+	 * running with them pay the new deal's model prices.
 	 *
 	 * @param secretCodes the keys of the new deal; may be empty
 	 * @param description the deal's description; when blank a default one is given
@@ -63,8 +63,9 @@ public interface IGProviderDealService {
 
 	/**
 	 * Assigns an API key of the deal's provider to the deal, moving it from another
-	 * deal of the same provider covering it, together with the prices that deal gives
-	 * to the model configurations running with the key.
+	 * deal of the same provider covering it: from then on the configurations running
+	 * with it pay this deal's model prices. {@link GProviderDeal#NO_API_KEY} stands
+	 * for the provider's configurations running without an API key.
 	 */
 	public GProviderDeal assignApiKey(String dealId, String secretCode);
 
@@ -101,29 +102,40 @@ public interface IGProviderDealService {
 	public GProviderDeal updateSpendingLimits(String dealId, GProviderSpendingLimits spendingLimits);
 
 	/**
-	 * Sets the price the deal gives to a model configuration, overriding or
-	 * completing the pricing saved in the configuration; null removes it, the
-	 * configuration going back to its own pricing. The configuration must run a model
-	 * of the deal's provider with an API key the deal covers; set prices need a
-	 * currency and no negative amount.
+	 * Sets the price the deal gives to one of its provider's models, which every
+	 * configuration running the model with an API key the deal covers pays; null
+	 * removes it, the model going back to the price of the provider's API, if any.
+	 * The price is marked as set by the admin, which imports never overwrite. Set
+	 * prices need a currency and no negative amount.
 	 */
-	public GProviderDeal updateModelPricing(String dealId, String configCode, GModelPricingConditions pricing);
+	public GProviderDeal updateModelPricing(String dealId, String modelCode, GModelPricingConditions pricing);
 
 	/**
-	 * The price a model configuration gets from the provider's deal covering the API
-	 * key it runs with: the coordinates API key code -> provider + configuration code.
-	 * Read on every model call, so served from an in-memory snapshot of the deals'
-	 * prices, rebuilt after each change and refreshed in the background: no call to
-	 * the store, never fails.
+	 * Imports the price the provider's API gives to a model into the deal covering
+	 * the API key: set, flagged as imported, unless the admin set that model's price.
+	 * Best effort: never fails.
 	 *
-	 * @return the deal's price of the configuration, or null when no deal covering
-	 *         the key gives it one
+	 * @param secretCode the API key the model runs with; null or blank for none
 	 */
-	public GModelPricingConditions findConfigPricing(String providerId, String secretCode, String configCode);
+	public void importModelPricing(String providerId, String secretCode, String modelCode,
+			GModelPricingConditions pricing);
 
 	/**
-	 * {@link #findConfigPricing(String, String, String)} at a runtime model's
-	 * coordinates: its type's provider, its configuration's API key and code.
+	 * The price a model gets from the provider's deal covering an API key: the
+	 * coordinates API key code -> provider + model code. Read on every model call, so
+	 * served from an in-memory snapshot of the deals' prices, rebuilt after each
+	 * change and refreshed in the background: no call to the store, never fails.
+	 *
+	 * @param secretCode the API key the model runs with; null or blank for none
+	 * @return the deal's price of the model, or null when the deal covering the key
+	 *         gives it none
+	 */
+	public GModelPricingConditions findModelPricing(String providerId, String secretCode, String modelCode);
+
+	/**
+	 * {@link #findModelPricing(String, String, String)} at a runtime model's
+	 * coordinates: its type's provider, its configuration's API key and
+	 * {@link IGConfigurableModel#safeGetModelCode()}.
 	 */
 	public GModelPricingConditions findModelPricing(IGConfigurableModel<?, ?> model);
 

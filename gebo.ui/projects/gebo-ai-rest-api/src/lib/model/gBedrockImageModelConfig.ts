@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 import { GBedrockImageModelChoice } from './gBedrockImageModelChoice';
-import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GBedrockImageModelConfig { 
     code?: string;
@@ -25,7 +24,6 @@ export interface GBedrockImageModelConfig {
     choosedModel?: GBedrockImageModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    pricingConditions?: GModelPricingConditions;
     height?: number;
     width?: number;
     cfgScale?: number;

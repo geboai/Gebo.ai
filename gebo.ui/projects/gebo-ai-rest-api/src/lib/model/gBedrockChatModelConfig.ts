@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 import { GBedrockChatModelChoice } from './gBedrockChatModelChoice';
-import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GBedrockChatModelConfig { 
     code?: string;
@@ -25,7 +24,6 @@ export interface GBedrockChatModelConfig {
     choosedModel?: GBedrockChatModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    pricingConditions?: GModelPricingConditions;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;

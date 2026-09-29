@@ -29,7 +29,7 @@ public abstract class GAbstractConfigurableTranscriptModel<ModelConfig extends G
 
 	/**
 	 * Prices this model by its provider deal; attached by the runtime DAO, null
-	 * leaving it priced by its configuration.
+	 * leaving it priced by the provider API only.
 	 */
 	private volatile IGProviderDealService providerDealService = null;
 
@@ -40,11 +40,11 @@ public abstract class GAbstractConfigurableTranscriptModel<ModelConfig extends G
 
 	/**
 	 * The price the provider deal covering this model's API key gives to its
-	 * configuration, else the configured one; read from an in-memory snapshot.
+	 * model code, else the provider API's one; read from an in-memory snapshot.
 	 */
 	@Override
 	public GModelPricingConditions getPricingConditions() {
-		return IGProviderDealPricedModel.dealOrConfiguredPricing(providerDealService, this);
+		return IGProviderDealPricedModel.dealOrProviderApiPricing(providerDealService, this);
 	}
 
 

@@ -1,44 +1,31 @@
 package ai.gebo.llms.abstraction.layer.model;
 
-import ai.gebo.model.ModelType;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
- * One model configuration of a provider, under the deal covering the API key it
- * runs with, with its prices: the pricing saved in the configuration (set by the
- * user, or retrieved from the provider's API) and the one the deal gives it, which
- * wins when set. Also lists the deal prices no longer applied, of configurations
- * deleted or running with a key the deal no longer covers.
+ * One model of a provider under one of its deals, with its prices: the one the
+ * deal gives it, which the configurations using it pay, and the one the provider's
+ * API gave with the model, if any, as a suggestion.
  */
 @Data
 public class GProviderModelPriceInfo {
-	public static enum PricingSource {
-		/** Set by the user in the model configuration. */
-		CONFIGURATION,
-		/** Retrieved from the provider's API by the models lookup, not edited. */
-		PROVIDER_API
-	}
-
 	private String providerId = null;
-	/** The deal covering the configuration's API key; null when none covers it. */
+	/** The deal; null for configurations whose API key no deal covers. */
 	private String dealId = null;
 	private String dealDescription = null;
-	private String configCode = null;
-	private String configDescription = null;
 	/** The model's code at the provider, {@code IGConfigurableModel.safeGetModelCode()}. */
 	private String modelCode = null;
-	private ModelType modelType = null;
-	/** Secret code of the API key the configuration runs with. */
-	private String secretCode = null;
-	/** The pricing saved in the configuration, to confirm as the deal's price. */
-	private GModelPricingConditions configuredPricing = null;
-	/** Where {@link #configuredPricing} comes from; null without pricing. */
-	private PricingSource configuredPricingSource = null;
-	/** The deal's price of the configuration, if any: it wins over the configured one. */
+	/** The configurations running the model with the deal's API keys; empty when none does. */
+	private List<GModelConfigRef> configurations = new ArrayList<>();
+	/** The pricing the provider's API gave with the model, if any. */
+	private GModelPricingConditions providerApiPricing = null;
+	/** The deal's price of the model: what the configurations pay. */
 	private GModelPricingConditions dealPricing = null;
-	/**
-	 * True for a deal price no longer applied: its configuration was deleted, or runs
-	 * with an API key the deal no longer covers.
-	 */
-	private boolean stale = false;
+	/** True when the deal's price was imported from the provider's API, false when set by the admin. */
+	private Boolean dealPricingAutoImported = null;
+	private Date dealPricingDate = null;
 }

@@ -38,7 +38,6 @@ export class GeboAIBedrockImageModelAdminComponent extends BaseEntityEditingComp
         modelTypeCode: new FormControl(),
         defaultModel: new FormControl(),
         choosedModel: new FormControl(),
-        pricingConditions: new FormControl(),
         apiSecretCode: new FormControl(),
         height: new FormControl(),
         width: new FormControl(),

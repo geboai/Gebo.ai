@@ -3,10 +3,9 @@ package ai.gebo.llms.abstraction.layer.services.impl;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelConfigRef;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.model.GProviderDeal;
 import ai.gebo.llms.abstraction.layer.model.GProviderModelPrice;
@@ -54,9 +54,7 @@ public class GProviderModelPricesServiceImpl implements IGProviderModelPricesSer
 				dealOfKey.put(code, deal);
 			}
 		}
-		List<GProviderModelPriceInfo> rows = new ArrayList<>();
-		// The deal prices applied: "dealId|configCode".
-		Set<String> applied = new HashSet<>();
+		Map<String, GProviderModelPriceInfo> rows = new LinkedHashMap<>();
 		runtimeDaos.orderedStream().forEach(dao -> {
 			for (IGConfigurableModel<?, ?> model : dao.getConfigurations()) {
 				GModelType type = model.getType();
@@ -64,68 +62,63 @@ public class GProviderModelPricesServiceImpl implements IGProviderModelPricesSer
 					continue;
 				}
 				GBaseModelConfig<?> config = model.getConfig();
-				String configCode = config != null && config.getCode() != null ? config.getCode() : model.getCode();
 				String secretCode = config != null ? config.getApiSecretCode() : null;
-				GProviderDeal deal = secretCode != null ? dealOfKey.get(secretCode) : null;
-				GProviderModelPriceInfo row = row(providerId, deal, configCode);
-				row.setConfigDescription(config != null ? config.getDescription() : model.getDescription());
-				row.setModelCode(model.safeGetModelCode());
-				row.setModelType(familyOf(model));
-				row.setSecretCode(secretCode);
-				if (config != null && config.getPricingConditions() != null) {
-					row.setConfiguredPricing(config.getPricingConditions());
-					row.setConfiguredPricingSource(GProviderModelPriceInfo.PricingSource.CONFIGURATION);
-				} else if (config != null && config.getChoosedModel() != null
-						&& config.getChoosedModel().getPricingConditions() != null) {
-					row.setConfiguredPricing(config.getChoosedModel().getPricingConditions());
-					row.setConfiguredPricingSource(GProviderModelPriceInfo.PricingSource.PROVIDER_API);
+				GProviderDeal deal = dealOfKey.get(GProviderDeal.coveredKey(secretCode));
+				GProviderModelPriceInfo row = row(rows, providerId, deal, model.safeGetModelCode());
+				GModelConfigRef ref = new GModelConfigRef();
+				ref.setConfigCode(config != null && config.getCode() != null ? config.getCode() : model.getCode());
+				ref.setDescription(config != null ? config.getDescription() : model.getDescription());
+				ref.setModelType(familyOf(model));
+				ref.setSecretCode(secretCode);
+				row.getConfigurations().add(ref);
+				if (row.getProviderApiPricing() == null) {
+					row.setProviderApiPricing(model.getProviderApiPricingConditions());
 				}
-				if (deal != null) {
-					applied.add(deal.getId() + "|" + configCode);
-				}
-				rows.add(row);
 			}
 		});
-		// The deal prices no longer applied, for the admin to see and drop.
+		// The deal prices of models no configuration runs, for the admin to see.
 		for (GProviderDeal deal : deals) {
-			if (deal.getModelPrices() == null) {
-				continue;
-			}
-			for (GProviderModelPrice price : deal.getModelPrices()) {
-				if (price.getConfigCode() != null && !applied.contains(deal.getId() + "|" + price.getConfigCode())) {
-					GProviderModelPriceInfo row = row(providerId, deal, price.getConfigCode());
-					row.setModelCode(price.getModelCode());
-					row.setStale(true);
-					rows.add(row);
+			if (deal.getModelPrices() != null) {
+				for (GProviderModelPrice price : deal.getModelPrices()) {
+					row(rows, providerId, deal, price.getModelCode());
 				}
 			}
 		}
-		rows.sort(Comparator.comparing(GProviderModelPriceInfo::getDealId, Comparator.nullsLast(String::compareTo))
-				.thenComparing(GProviderModelPriceInfo::isStale)
-				.thenComparing(GProviderModelPriceInfo::getConfigCode, Comparator.nullsLast(String::compareTo)));
+		List<GProviderModelPriceInfo> result = new ArrayList<>(rows.values());
+		result.sort(Comparator.comparing(GProviderModelPriceInfo::getDealId, Comparator.nullsLast(String::compareTo))
+				.thenComparing(GProviderModelPriceInfo::getModelCode, Comparator.nullsLast(String::compareTo)));
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("getProviderModelPrices(providerId=" + providerId + ") found " + rows.size()
-					+ " configurations over " + deals.size() + " deals, "
-					+ rows.stream().filter(x -> x.getDealPricing() != null && !x.isStale()).count()
-					+ " priced by their deal, " + rows.stream().filter(GProviderModelPriceInfo::isStale).count()
-					+ " stale deal prices");
+			LOGGER.debug("getProviderModelPrices(providerId=" + providerId + ") found " + result.size()
+					+ " models over " + deals.size() + " deals, "
+					+ result.stream().filter(x -> x.getDealPricing() != null).count() + " priced by their deal, "
+					+ result.stream().filter(x -> x.getDealPricing() == null && x.getProviderApiPricing() == null
+							&& !x.getConfigurations().isEmpty()).count() + " running without any price");
 		}
 		if (LOGGER.isTraceEnabled()) {
-			LOGGER.trace("<PROVIDER_MODEL_PRICES>" + rows + "</PROVIDER_MODEL_PRICES>");
+			LOGGER.trace("<PROVIDER_MODEL_PRICES>" + result + "</PROVIDER_MODEL_PRICES>");
 		}
-		return rows;
+		return result;
 	}
 
-	private static GProviderModelPriceInfo row(String providerId, GProviderDeal deal, String configCode) {
-		GProviderModelPriceInfo row = new GProviderModelPriceInfo();
-		row.setProviderId(providerId);
-		row.setConfigCode(configCode);
-		if (deal != null) {
-			row.setDealId(deal.getId());
-			row.setDealDescription(deal.getDescription());
-			row.setDealPricing(deal.configPricing(configCode));
-		}
-		return row;
+	private static GProviderModelPriceInfo row(Map<String, GProviderModelPriceInfo> rows, String providerId,
+			GProviderDeal deal, String modelCode) {
+		String dealId = deal != null ? deal.getId() : null;
+		return rows.computeIfAbsent(dealId + "|" + modelCode, k -> {
+			GProviderModelPriceInfo row = new GProviderModelPriceInfo();
+			row.setProviderId(providerId);
+			row.setModelCode(modelCode);
+			if (deal != null) {
+				row.setDealId(dealId);
+				row.setDealDescription(deal.getDescription());
+				GProviderModelPrice price = deal.modelPrice(modelCode);
+				if (price != null) {
+					row.setDealPricing(price.getPricingConditions());
+					row.setDealPricingAutoImported(price.getAutoImported());
+					row.setDealPricingDate(price.getDateModified());
+				}
+			}
+			return row;
+		});
 	}
 
 	private static ModelType familyOf(IGConfigurableModel<?, ?> model) {

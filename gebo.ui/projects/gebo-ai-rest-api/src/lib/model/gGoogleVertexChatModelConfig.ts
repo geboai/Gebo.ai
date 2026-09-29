@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 import { GGoogleVertexChatModelChoice } from './gGoogleVertexChatModelChoice';
-import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GGoogleVertexChatModelConfig { 
     code?: string;
@@ -25,7 +24,6 @@ export interface GGoogleVertexChatModelConfig {
     choosedModel?: GGoogleVertexChatModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    pricingConditions?: GModelPricingConditions;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;

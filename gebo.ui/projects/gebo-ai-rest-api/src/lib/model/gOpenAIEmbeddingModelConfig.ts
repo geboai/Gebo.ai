@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GModelPricingConditions } from './gModelPricingConditions';
 import { GOpenAIEmbeddingModelChoice } from './gOpenAIEmbeddingModelChoice';
 
 export interface GOpenAIEmbeddingModelConfig { 
@@ -25,6 +24,5 @@ export interface GOpenAIEmbeddingModelConfig {
     choosedModel?: GOpenAIEmbeddingModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    pricingConditions?: GModelPricingConditions;
     tokenizationThreshold?: number;
 }

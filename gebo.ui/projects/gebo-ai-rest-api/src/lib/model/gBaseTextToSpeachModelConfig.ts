@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 import { GBaseTextToSpeachModelChice } from './gBaseTextToSpeachModelChice';
-import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GBaseTextToSpeachModelConfig { 
     code?: string;
@@ -25,5 +24,4 @@ export interface GBaseTextToSpeachModelConfig {
     choosedModel?: GBaseTextToSpeachModelChice;
     baseUrl?: string;
     contextLength?: number;
-    pricingConditions?: GModelPricingConditions;
 }

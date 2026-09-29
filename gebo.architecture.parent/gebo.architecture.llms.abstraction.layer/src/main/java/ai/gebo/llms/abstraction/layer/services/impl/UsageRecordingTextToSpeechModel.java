@@ -80,8 +80,8 @@ public class UsageRecordingTextToSpeechModel<ModelConfig extends GBaseTextToSpea
 	}
 
 	@Override
-	public GModelPricingConditions getConfiguredPricingConditions() {
-		return delegate.getConfiguredPricingConditions();
+	public GModelPricingConditions getProviderApiPricingConditions() {
+		return delegate.getProviderApiPricingConditions();
 	}
 
 	@Override

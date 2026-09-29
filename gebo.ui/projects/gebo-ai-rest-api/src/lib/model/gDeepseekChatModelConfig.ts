@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 import { GDeepseekChatModelChoice } from './gDeepseekChatModelChoice';
-import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GDeepseekChatModelConfig { 
     code?: string;
@@ -25,7 +24,6 @@ export interface GDeepseekChatModelConfig {
     choosedModel?: GDeepseekChatModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    pricingConditions?: GModelPricingConditions;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;

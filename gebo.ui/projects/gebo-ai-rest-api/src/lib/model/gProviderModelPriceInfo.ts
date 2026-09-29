@@ -9,35 +9,17 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GModelConfigRef } from './gModelConfigRef';
 import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GProviderModelPriceInfo { 
     providerId?: string;
     dealId?: string;
     dealDescription?: string;
-    configCode?: string;
-    configDescription?: string;
     modelCode?: string;
-    modelType?: GProviderModelPriceInfo.ModelTypeEnum;
-    secretCode?: string;
-    configuredPricing?: GModelPricingConditions;
-    configuredPricingSource?: GProviderModelPriceInfo.ConfiguredPricingSourceEnum;
+    configurations?: Array<GModelConfigRef>;
+    providerApiPricing?: GModelPricingConditions;
     dealPricing?: GModelPricingConditions;
-    stale?: boolean;
-}
-export namespace GProviderModelPriceInfo {
-    export type ModelTypeEnum = 'CHAT' | 'EMBEDDING' | 'IMAGE' | 'RANKER' | 'TTS' | 'TRANSCRIPT';
-    export const ModelTypeEnum = {
-        CHAT: 'CHAT' as ModelTypeEnum,
-        EMBEDDING: 'EMBEDDING' as ModelTypeEnum,
-        IMAGE: 'IMAGE' as ModelTypeEnum,
-        RANKER: 'RANKER' as ModelTypeEnum,
-        TTS: 'TTS' as ModelTypeEnum,
-        TRANSCRIPT: 'TRANSCRIPT' as ModelTypeEnum
-    };
-    export type ConfiguredPricingSourceEnum = 'CONFIGURATION' | 'PROVIDER_API';
-    export const ConfiguredPricingSourceEnum = {
-        CONFIGURATION: 'CONFIGURATION' as ConfiguredPricingSourceEnum,
-        PROVIDERAPI: 'PROVIDER_API' as ConfiguredPricingSourceEnum
-    };
+    dealPricingAutoImported?: boolean;
+    dealPricingDate?: Date;
 }

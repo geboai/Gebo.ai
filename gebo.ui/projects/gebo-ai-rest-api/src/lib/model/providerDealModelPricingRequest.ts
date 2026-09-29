@@ -13,6 +13,6 @@ import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface ProviderDealModelPricingRequest { 
     dealId?: string;
-    configCode?: string;
+    modelCode?: string;
     pricingConditions?: GModelPricingConditions;
 }

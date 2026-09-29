@@ -58,31 +58,42 @@ public class GProviderDeal {
 	 */
 	private GProviderSpendingLimits spendingLimits = null;
 	/**
-	 * The prices this deal gives to the model configurations running with its API
-	 * keys, one entry per configuration code, confirmed by the admin. They win over
-	 * the pricing saved in the configurations (see
+	 * The prices this deal gives to its provider's models, one entry per model code:
+	 * what the model configurations running with the deal's API keys pay (see
 	 * {@code IGConfigurableModel.getPricingConditions()}).
 	 */
 	private List<GProviderModelPrice> modelPrices = new ArrayList<>();
 	private Date dateCreated = null;
 	private Date dateModified = null;
 
-	/** The price entry this deal gives to a model configuration, or null. */
-	public GProviderModelPrice configPrice(String configCode) {
-		if (modelPrices == null || configCode == null) {
+	/**
+	 * The pseudo secret code standing for "no API key" among
+	 * {@link #secretCodes}: the deal covering it prices the provider's model
+	 * configurations running without an API key (e.g. local models).
+	 */
+	public static final String NO_API_KEY = "__no-api-key__";
+
+	/** The API key code a configuration is covered by: its own, or {@link #NO_API_KEY}. */
+	public static String coveredKey(String apiSecretCode) {
+		return apiSecretCode != null && !apiSecretCode.isBlank() ? apiSecretCode : NO_API_KEY;
+	}
+
+	/** The price entry this deal gives to a model, or null. */
+	public GProviderModelPrice modelPrice(String modelCode) {
+		if (modelPrices == null || modelCode == null) {
 			return null;
 		}
 		for (GProviderModelPrice price : modelPrices) {
-			if (configCode.equals(price.getConfigCode())) {
+			if (modelCode.equals(price.getModelCode())) {
 				return price;
 			}
 		}
 		return null;
 	}
 
-	/** The price this deal gives to a model configuration, or null. */
-	public GModelPricingConditions configPricing(String configCode) {
-		GProviderModelPrice price = configPrice(configCode);
+	/** The price this deal gives to a model, or null. */
+	public GModelPricingConditions modelPricing(String modelCode) {
+		GProviderModelPrice price = modelPrice(modelCode);
 		return price != null ? price.getPricingConditions() : null;
 	}
 

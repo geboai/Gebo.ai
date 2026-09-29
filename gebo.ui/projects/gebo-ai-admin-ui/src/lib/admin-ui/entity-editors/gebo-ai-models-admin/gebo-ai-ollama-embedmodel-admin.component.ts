@@ -59,7 +59,6 @@ export class GeboAIOllamaEmbedModelAdminComponent extends BaseEntityEditingCompo
         description: new FormControl(),
         baseUrl: new FormControl(),
         choosedModel: new FormControl(),
-        pricingConditions: new FormControl(),
         modelTypeCode: new FormControl(),
         defaultModel:new FormControl(),
         apiSecretCode: new FormControl()        

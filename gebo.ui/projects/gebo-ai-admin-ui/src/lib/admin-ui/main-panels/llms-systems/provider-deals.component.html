@@ -52,7 +52,7 @@
               </td>
               <td>
                 @for (code of deal.secretCodes; track code) {
-                  <p-chip [label]="code" styleClass="mr-1 mb-1"></p-chip>
+                  <p-chip [label]="keyLabel(code)" styleClass="mr-1 mb-1"></p-chip>
                 } @empty {
                   <span class="text-500">-</span>
                 }
@@ -92,8 +92,8 @@
             (onClick)="createDeal()"></p-button>
         </div>
         <div id="NewDealHint" gebo-ai-text class="text-xs text-500 mt-1">
-          The API keys moved into a deal, from the new deal form or the API keys table, take with them the prices their
-          previous deal gave to the model configurations running with them.
+          The configurations running with the API keys of a deal pay the deal's model prices: moving a key into another
+          deal, from the new deal form or the API keys table, makes them pay that deal's prices.
         </div>
       </p-panel>
 
@@ -109,7 +109,7 @@
           </ng-template>
           <ng-template pTemplate="body" let-key>
             <tr>
-              <td class="gebo-provider-deals__code">{{ key.secretCode }}</td>
+              <td class="gebo-provider-deals__code">{{ keyLabel(key.secretCode) }}</td>
               <td>{{ key.description }}</td>
               <td>
                 <p-select [options]="dealOptions" [ngModel]="key.dealId" (onChange)="assignKey(key, $event.value)"
@@ -131,13 +131,19 @@
         </p-table>
       </p-panel>
 
-      <p-panel id="ModelPricesZone" gebo-ai-label header="Model configuration prices">
+      <p-panel id="ModelPricesZone" gebo-ai-label header="Model prices">
+        <div id="ModelPricesHint" gebo-ai-text class="text-xs text-500 mb-2">
+          One price per deal and model, paid by every configuration running the model with the deal's API keys. Prices
+          the provider's API exposes are imported automatically, unless set here; the usage costs computed from them are
+          an evaluation and may differ from the actual costs billed by the supplier.
+        </div>
         <p-table [value]="modelPrices">
           <ng-template pTemplate="header">
             <tr>
-              <th id="PriceConfigHeader" gebo-ai-text>Model configuration</th>
+              <th id="PriceModelHeader" gebo-ai-text>Model</th>
               <th id="PriceDealHeader" gebo-ai-text>Deal</th>
-              <th id="PriceConfiguredHeader" gebo-ai-text>Conditions of the configuration</th>
+              <th id="PriceUsedByHeader" gebo-ai-text>Used by</th>
+              <th id="PriceProviderApiHeader" gebo-ai-text>Provider API price</th>
               <th id="PriceCurrencyHeader" gebo-ai-text>Currency</th>
               <th id="PriceInputHeader" gebo-ai-text>Input per Mtok</th>
               <th id="PriceOutputHeader" gebo-ai-text>Output per Mtok</th>
@@ -148,12 +154,10 @@
           <ng-template pTemplate="body" let-row>
             <tr>
               <td>
-                <div>{{ row.configDescription ?? '-' }}</div>
-                <div class="text-xs text-500 gebo-provider-deals__code">{{ row.configCode }}</div>
-                <div class="text-xs text-500">
-                  <span class="gebo-provider-deals__code">{{ row.modelCode }}</span>
-                  @if (row.modelType) {
-                    - {{ row.modelType }}
+                <div class="gebo-provider-deals__code">{{ row.modelCode }}</div>
+                <div class="text-xs text-500">{{ priceSource(row) }}
+                  @if (row.dealPricing && row.dealPricingDate) {
+                    ({{ row.dealPricingDate | date:'short' }})
                   }
                 </div>
               </td>
@@ -165,28 +169,15 @@
                 }
               </td>
               <td>
-                @if (row.stale) {
-                  <span class="text-orange-600 text-sm">Not applied: the configuration was deleted or runs with a key
-                    this deal no longer covers</span>
-                } @else {
-                  <div class="flex align-items-start gap-2">
-                    <div class="flex-grow-1">
-                      <div class="text-sm">{{ formatPricing(row.configuredPricing) }}</div>
-                      <div class="text-xs text-500">{{ sourceLabel(row) }}</div>
-                    </div>
-                    @if (row.dealId && row.configuredPricing) {
-                      @if (isConfiguredPriceConfirmed(row)) {
-                        <i class="pi pi-check-circle text-green-500 mt-1" title="Confirmed as the deal's price"></i>
-                      } @else {
-                        <p-button icon="pi pi-check" [outlined]="true" size="small"
-                          title="Confirm these conditions as the deal's price of the configuration"
-                          (onClick)="confirmConfiguredPrice(row)"></p-button>
-                      }
-                    }
-                  </div>
+                @for (config of row.configurations; track config.configCode) {
+                  <div class="text-sm">{{ config.description ?? config.configCode }}
+                    <span class="text-xs text-500">{{ config.modelType }}</span></div>
+                } @empty {
+                  <span class="text-500 text-sm">no configuration</span>
                 }
               </td>
-              @if (row.dealId && !row.stale) {
+              <td class="text-sm">{{ formatPricing(row.providerApiPricing) }}</td>
+              @if (row.dealId) {
                 <td><input pInputText type="text" class="gebo-provider-deals__currency" maxlength="3"
                     [(ngModel)]="priceEdits[rowKey(row)].currencyCode" /></td>
                 <td><p-inputNumber [(ngModel)]="priceEdits[rowKey(row)].inputMtokenPrice" mode="decimal"
@@ -204,24 +195,18 @@
                     (onClick)="savePrice(row)"></p-button>
                   @if (row.dealPricing) {
                     <p-button icon="pi pi-undo" severity="secondary" [outlined]="true"
-                      title="Remove the deal price, going back to the configuration's own"
+                      title="Remove the deal price, going back to the provider API's one, if any"
                       (onClick)="removePrice(row)"></p-button>
                   }
                 </td>
-              } @else if (row.stale) {
-                <td colspan="4" class="text-sm">{{ formatPricing(row.dealPricing) }}</td>
-                <td>
-                  <p-button icon="pi pi-trash" severity="danger" [outlined]="true" title="Remove this deal price"
-                    (onClick)="removePrice(row)"></p-button>
-                </td>
               } @else {
-                <td colspan="5" class="text-500 text-sm">Move the configuration's API key into a deal to price it here</td>
+                <td colspan="5" class="text-500 text-sm">Move the API key into a deal to price the model here</td>
               }
             </tr>
           </ng-template>
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="8" id="NoModelsLabel" gebo-ai-text class="text-500">No model configured for this provider</td>
+              <td colspan="9" id="NoModelsLabel" gebo-ai-text class="text-500">No model configured for this provider</td>
             </tr>
           </ng-template>
         </p-table>

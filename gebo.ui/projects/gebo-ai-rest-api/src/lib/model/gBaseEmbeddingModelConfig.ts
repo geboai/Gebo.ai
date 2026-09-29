@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 import { GBaseEmbeddingModelChoice } from './gBaseEmbeddingModelChoice';
-import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GBaseEmbeddingModelConfig { 
     code?: string;
@@ -25,6 +24,5 @@ export interface GBaseEmbeddingModelConfig {
     choosedModel?: GBaseEmbeddingModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    pricingConditions?: GModelPricingConditions;
     tokenizationThreshold?: number;
 }

@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GModelPricingConditions } from './gModelPricingConditions';
 import { GOllamaChatModelChoice } from './gOllamaChatModelChoice';
 
 export interface GOllamaChatModelConfig { 
@@ -25,7 +24,6 @@ export interface GOllamaChatModelConfig {
     choosedModel?: GOllamaChatModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    pricingConditions?: GModelPricingConditions;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;

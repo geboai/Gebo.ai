@@ -12,6 +12,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.ObjectProvider;
 
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
@@ -37,16 +38,10 @@ class GProviderModelPricesServiceImplTest {
 		return pricing;
 	}
 
+	/** A chat model whose chosen model carries the pricing of the provider's API, if any. */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static IGConfigurableChatModel chat(String providerId, String configCode, String secretCode,
-			String modelCode, GModelPricingConditions configured) {
-		return chat(providerId, configCode, secretCode, modelCode, configured, null);
-	}
-
-	/** A chat model whose chosen model carries the pricing retrieved from the provider's API. */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static IGConfigurableChatModel chat(String providerId, String configCode, String secretCode,
-			String modelCode, GModelPricingConditions configured, GModelPricingConditions fromProvider) {
+			String modelCode, GModelPricingConditions fromProviderApi) {
 		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
 		GChatModelType type = new GChatModelType();
 		type.setProviderId(providerId);
@@ -54,17 +49,14 @@ class GProviderModelPricesServiceImplTest {
 		config.setCode(configCode);
 		config.setDescription("config " + configCode);
 		config.setApiSecretCode(secretCode);
-		config.setPricingConditions(configured);
-		if (fromProvider != null) {
-			ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice choice = new ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice();
-			choice.setCode(modelCode);
-			choice.setPricingConditions(fromProvider);
-			config.setChoosedModel(choice);
-		}
+		GBaseChatModelChoice choice = new GBaseChatModelChoice();
+		choice.setCode(modelCode);
+		choice.setPricingConditions(fromProviderApi);
+		config.setChoosedModel(choice);
 		when(model.getType()).thenReturn(type);
 		when(model.getConfig()).thenReturn(config);
 		when(model.safeGetModelCode()).thenReturn(modelCode);
-		when(model.getConfiguredPricingConditions()).thenReturn(configured);
+		when(model.getProviderApiPricingConditions()).thenReturn(fromProviderApi);
 		return model;
 	}
 
@@ -96,61 +88,58 @@ class GProviderModelPricesServiceImplTest {
 	}
 
 	@Test
-	void theProviderConfigurationsAreListedUnderTheirDealWithBothPrices() {
+	void theProviderModelsAreListedPerDealWithTheirConfigurationsAndPrices() {
 		GProviderDeal deal = new GProviderDeal();
 		deal.setId("openai-1");
 		deal.setProviderId("openai");
-		deal.setSecretCodes(new java.util.ArrayList<>(List.of("k1")));
-		deal.getModelPrices().add(new GProviderModelPrice("chat-a", "gpt-4.1", pricing(9d), null));
-		deal.getModelPrices().add(new GProviderModelPrice("chat-deleted", "retired-model", pricing(7d), null));
+		deal.setSecretCodes(new java.util.ArrayList<>(List.of("k1", GProviderDeal.NO_API_KEY)));
+		deal.getModelPrices().add(new GProviderModelPrice("gpt-4.1", pricing(9d), null, Boolean.TRUE));
+		deal.getModelPrices().add(new GProviderModelPrice("priced-ahead", pricing(7d), null, Boolean.FALSE));
 		IGProviderDealService deals = mock(IGProviderDealService.class);
 		when(deals.findDeals("openai")).thenReturn(List.of(deal));
 
 		List<GProviderModelPriceInfo> rows = new GProviderModelPricesServiceImpl(daos(
 				List.of(chat("openai", "chat-a", "k1", "gpt-4.1", pricing(2d)),
-						chat("openai", "chat-b", "k1", "gpt-4.1", null, pricing(4d)),
+						chat("openai", "chat-b", "k1", "gpt-4.1", null),
+						chat("openai", "chat-local", null, "gpt-4.1", null),
 						chat("openai", "chat-c", "k-uncovered", "gpt-4.1", null),
 						chat("mistralai", "chat-m", "k1", "mistral-large", null)),
 				List.of(embedding("openai", "emb-a", "k1", "text-embedding-3-small"))), deals)
 				.getProviderModelPrices("openai");
 
-		// The deal's configurations, then its stale prices, then the uncovered ones.
-		assertEquals(List.of("chat-a", "chat-b", "emb-a", "chat-deleted", "chat-c"),
-				rows.stream().map(GProviderModelPriceInfo::getConfigCode).toList());
-		GProviderModelPriceInfo setByUser = rows.get(0);
-		assertEquals("openai-1", setByUser.getDealId());
-		assertEquals("gpt-4.1", setByUser.getModelCode());
-		assertEquals(ModelType.CHAT, setByUser.getModelType());
-		assertEquals("config chat-a", setByUser.getConfigDescription());
-		assertEquals(2d, setByUser.getConfiguredPricing().getInputMtokenPrice());
-		assertEquals(GProviderModelPriceInfo.PricingSource.CONFIGURATION, setByUser.getConfiguredPricingSource());
-		assertEquals(9d, setByUser.getDealPricing().getInputMtokenPrice());
-		GProviderModelPriceInfo fromApi = rows.get(1);
-		assertEquals(4d, fromApi.getConfiguredPricing().getInputMtokenPrice());
-		assertEquals(GProviderModelPriceInfo.PricingSource.PROVIDER_API, fromApi.getConfiguredPricingSource());
-		assertNull(fromApi.getDealPricing());
-		assertEquals(ModelType.EMBEDDING, rows.get(2).getModelType());
-		assertNull(rows.get(2).getConfiguredPricingSource());
-		// A deal price of a configuration no longer running, for the admin to drop.
-		GProviderModelPriceInfo stale = rows.get(3);
-		assertEquals(true, stale.isStale());
-		assertEquals("retired-model", stale.getModelCode());
-		assertEquals(7d, stale.getDealPricing().getInputMtokenPrice());
+		// One row per deal and model, then the models whose key no deal covers.
+		assertEquals(List.of("gpt-4.1", "priced-ahead", "text-embedding-3-small", "gpt-4.1"),
+				rows.stream().map(GProviderModelPriceInfo::getModelCode).toList());
+		GProviderModelPriceInfo gpt = rows.get(0);
+		assertEquals("openai-1", gpt.getDealId());
+		// The configurations running it with the deal's keys, the keyless one included.
+		assertEquals(List.of("chat-a", "chat-b", "chat-local"),
+				gpt.getConfigurations().stream().map(x -> x.getConfigCode()).toList());
+		assertEquals(ModelType.CHAT, gpt.getConfigurations().get(0).getModelType());
+		assertEquals("config chat-a", gpt.getConfigurations().get(0).getDescription());
+		assertEquals(2d, gpt.getProviderApiPricing().getInputMtokenPrice());
+		assertEquals(9d, gpt.getDealPricing().getInputMtokenPrice());
+		assertEquals(Boolean.TRUE, gpt.getDealPricingAutoImported());
+		// A model priced ahead, no configuration runs it yet.
+		assertEquals(List.of(), rows.get(1).getConfigurations());
+		assertEquals(Boolean.FALSE, rows.get(1).getDealPricingAutoImported());
+		assertEquals(ModelType.EMBEDDING, rows.get(2).getConfigurations().get(0).getModelType());
+		assertNull(rows.get(2).getDealPricing());
 		// A key no deal covers: listed, with no deal to price it.
-		GProviderModelPriceInfo uncovered = rows.get(4);
-		assertNull(uncovered.getDealId());
-		assertEquals("k-uncovered", uncovered.getSecretCode());
+		assertNull(rows.get(3).getDealId());
+		assertEquals("k-uncovered", rows.get(3).getConfigurations().get(0).getSecretCode());
 	}
 
 	@Test
-	void aModelIsPricedByItsDealElseByItsConfiguration() {
+	void aModelIsPricedByItsDealElseByTheProviderApi() {
 		IGConfigurableChatModel model = chat("openai", "chat-a", "k1", "gpt-4.1", pricing(2d));
 		IGProviderDealService deals = mock(IGProviderDealService.class);
 		GModelPricingConditions dealPricing = pricing(9d);
-		when(deals.findModelPricing((IGConfigurableModel<?, ?>) model)).thenReturn(dealPricing, (GModelPricingConditions) null);
+		when(deals.findModelPricing((IGConfigurableModel<?, ?>) model)).thenReturn(dealPricing,
+				(GModelPricingConditions) null);
 
-		assertSame(dealPricing, IGProviderDealPricedModel.dealOrConfiguredPricing(deals, model));
-		assertEquals(2d, IGProviderDealPricedModel.dealOrConfiguredPricing(deals, model).getInputMtokenPrice());
-		assertEquals(2d, IGProviderDealPricedModel.dealOrConfiguredPricing(null, model).getInputMtokenPrice());
+		assertSame(dealPricing, IGProviderDealPricedModel.dealOrProviderApiPricing(deals, model));
+		assertEquals(2d, IGProviderDealPricedModel.dealOrProviderApiPricing(deals, model).getInputMtokenPrice());
+		assertEquals(2d, IGProviderDealPricedModel.dealOrProviderApiPricing(null, model).getInputMtokenPrice());
 	}
 }

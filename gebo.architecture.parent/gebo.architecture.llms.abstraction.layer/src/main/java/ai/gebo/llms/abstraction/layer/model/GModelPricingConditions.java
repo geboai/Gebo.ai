@@ -3,8 +3,10 @@ package ai.gebo.llms.abstraction.layer.model;
 import lombok.Data;
 
 /**
- * The price of using a model, set on its configuration or on the model choice it
- * uses (the configuration wins, see {@code IGConfigurableModel.getPricingConditions()}).
+ * The price of using a model: set by the admin on the provider deal covering the
+ * API key the model runs with ({@code GProviderDeal}), or retrieved from the
+ * provider's API on the model choice (see
+ * {@code IGConfigurableModel.getPricingConditions()}).
  * All amounts are in {@link #currencyCode}.
  * <p>
  * Two pricing models are supported:

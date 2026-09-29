@@ -86,8 +86,8 @@ public class UsageRecordingRankerModel<ModelConfig extends GBaseRankerModelConfi
 	}
 
 	@Override
-	public GModelPricingConditions getConfiguredPricingConditions() {
-		return delegate.getConfiguredPricingConditions();
+	public GModelPricingConditions getProviderApiPricingConditions() {
+		return delegate.getProviderApiPricingConditions();
 	}
 
 	@Override

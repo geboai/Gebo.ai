@@ -38,7 +38,6 @@ export class GeboAIBedrockRankerAdminComponent extends BaseEntityEditingComponen
         modelTypeCode: new FormControl(),
         defaultModel: new FormControl(),
         choosedModel: new FormControl(),
-        pricingConditions: new FormControl(),
         apiSecretCode: new FormControl(),
         contextLength: new FormControl(),
         maxDocumentsPerRequest: new FormControl(),

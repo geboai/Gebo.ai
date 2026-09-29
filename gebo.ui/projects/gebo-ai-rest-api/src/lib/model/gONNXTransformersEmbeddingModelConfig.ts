@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GModelPricingConditions } from './gModelPricingConditions';
 import { GONNXTransformersEmbeddingModelChoice } from './gONNXTransformersEmbeddingModelChoice';
 
 export interface GONNXTransformersEmbeddingModelConfig { 
@@ -25,6 +24,5 @@ export interface GONNXTransformersEmbeddingModelConfig {
     choosedModel?: GONNXTransformersEmbeddingModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    pricingConditions?: GModelPricingConditions;
     tokenizationThreshold?: number;
 }

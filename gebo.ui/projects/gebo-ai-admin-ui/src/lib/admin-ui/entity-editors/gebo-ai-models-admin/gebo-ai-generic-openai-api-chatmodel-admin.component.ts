@@ -60,7 +60,6 @@ export class GeboAIGenericOpenAIAPIChatModelAdminComponent extends BaseEntityEdi
         modelTypeCode: new FormControl(),
         defaultModel:new FormControl(),
         choosedModel: new FormControl(),
-        pricingConditions: new FormControl(),
         apiSecretCode: new FormControl(),
         contextLength: new FormControl(),
         temperature: new FormControl(),

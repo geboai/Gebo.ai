@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 import { GAnthropicChatModelChoice } from './gAnthropicChatModelChoice';
-import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GAnthropicChatModelConfig { 
     code?: string;
@@ -25,7 +24,6 @@ export interface GAnthropicChatModelConfig {
     choosedModel?: GAnthropicChatModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    pricingConditions?: GModelPricingConditions;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;

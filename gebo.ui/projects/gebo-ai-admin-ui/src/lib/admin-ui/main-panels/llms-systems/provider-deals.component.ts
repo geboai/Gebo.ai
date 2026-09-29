@@ -15,6 +15,9 @@ import {
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { forkJoin, Observable } from "rxjs";
 
+/** The pseudo API key standing for the configurations running without one (GProviderDeal.NO_API_KEY). */
+const NO_API_KEY = "__no-api-key__";
+
 /** The price editor of one (deal, model) row. */
 interface PriceEdit {
     currencyCode?: string;
@@ -103,7 +106,8 @@ export class ProviderDealsComponent implements OnInit {
                 this.deals.forEach(x => { if (x.id) this.descriptionEdits[x.id] = x.description ?? ""; });
                 this.apiKeys = keys.result ?? [];
                 this.keyOptions = this.apiKeys.map(x => ({
-                    label: (x.description ? x.description + " (" + x.secretCode + ")" : x.secretCode ?? "")
+                    label: x.secretCode === NO_API_KEY ? "No API key (configurations running without one)"
+                        : (x.description ? x.description + " (" + x.secretCode + ")" : x.secretCode ?? "")
                         + (x.dealId ? " - " + this.dealDescription(x.dealId) : ""),
                     value: x.secretCode ?? ""
                 }));
@@ -118,18 +122,32 @@ export class ProviderDealsComponent implements OnInit {
     }
 
     protected rowKey(row: GProviderModelPriceInfo): string {
-        return (row.dealId ?? "") + "|" + (row.configCode ?? "");
+        return (row.dealId ?? "") + "|" + (row.modelCode ?? "");
     }
 
-    /** The editor starts from the deal's price, else from the configured one to complete. */
+    /** The editor starts from the deal's price, else from the provider API's one to complete. */
     private editOf(row: GProviderModelPriceInfo): PriceEdit {
-        const source = row.dealPricing ?? row.configuredPricing;
+        const source = row.dealPricing ?? row.providerApiPricing;
         return {
             currencyCode: source?.currencyCode ?? "USD",
             inputMtokenPrice: source?.inputMtokenPrice,
             outputMtokenPrice: source?.outputMtokenPrice,
             requestPrice: source?.requestPrice
         };
+    }
+
+    /** How an API key code is shown: the pseudo key of the keyless configurations by name. */
+    protected keyLabel(secretCode?: string): string {
+        return secretCode === NO_API_KEY ? "No API key" : (secretCode ?? "");
+    }
+
+    /** Where the price the configurations pay comes from. */
+    protected priceSource(row: GProviderModelPriceInfo): string {
+        if (row.dealPricing) {
+            return row.dealPricingAutoImported ? "imported from the provider's API" : "set by the admin";
+        }
+        return row.providerApiPricing ? "no deal price: the provider API's price applies"
+            : "no price: the calls of this model are not priced";
     }
 
     protected formatPricing(pricing?: GModelPricingConditions): string {
@@ -214,9 +232,9 @@ export class ProviderDealsComponent implements OnInit {
     }
 
     protected savePrice(row: GProviderModelPriceInfo): void {
-        if (!row.dealId || !row.configCode) return;
+        if (!row.dealId || !row.modelCode) return;
         const edit = this.priceEdits[this.rowKey(row)];
-        const source = row.dealPricing ?? row.configuredPricing;
+        const source = row.dealPricing ?? row.providerApiPricing;
         const pricing: GModelPricingConditions = {
             ...source,
             pricingType: source?.pricingType ?? GModelPricingConditions.PricingTypeEnum.MTOKEN,
@@ -226,41 +244,13 @@ export class ProviderDealsComponent implements OnInit {
             requestPrice: edit.requestPrice ?? undefined
         };
         this.run(this.dealsService.updateModelPricing({
-            dealId: row.dealId, configCode: row.configCode, pricingConditions: pricing
+            dealId: row.dealId, modelCode: row.modelCode, pricingConditions: pricing
         }));
     }
 
-    /** Confirms the configuration's own pricing as the deal's price of the configuration. */
-    protected confirmConfiguredPrice(row: GProviderModelPriceInfo): void {
-        if (!row.dealId || !row.configCode || !row.configuredPricing) return;
-        this.run(this.dealsService.updateModelPricing({
-            dealId: row.dealId, configCode: row.configCode, pricingConditions: row.configuredPricing
-        }));
-    }
-
-    /** Whether the deal already gives the configuration its configured pricing. */
-    protected isConfiguredPriceConfirmed(row: GProviderModelPriceInfo): boolean {
-        return this.samePricing(row.dealPricing, row.configuredPricing);
-    }
-
-    private samePricing(a?: GModelPricingConditions, b?: GModelPricingConditions): boolean {
-        if (!a || !b) return false;
-        const fields: (keyof GModelPricingConditions)[] = ["pricingType", "currencyCode", "inputMtokenPrice",
-            "outputMtokenPrice", "requestPrice", "monthlyFlatCost", "monthlyTrafficLimits", "dailyTrafficLimits"];
-        return fields.every(f => (a[f] ?? null) === (b[f] ?? null));
-    }
-
-    protected sourceLabel(row: GProviderModelPriceInfo): string {
-        switch (row.configuredPricingSource) {
-            case GProviderModelPriceInfo.ConfiguredPricingSourceEnum.CONFIGURATION: return "set in the configuration";
-            case GProviderModelPriceInfo.ConfiguredPricingSourceEnum.PROVIDERAPI: return "retrieved from the provider's API";
-            default: return "no conditions";
-        }
-    }
-
-    /** Removes the deal's price: the configuration goes back to its own pricing. */
+    /** Removes the deal's price: the model goes back to the provider API's price, if any. */
     protected removePrice(row: GProviderModelPriceInfo): void {
-        if (!row.dealId || !row.configCode) return;
-        this.run(this.dealsService.updateModelPricing({ dealId: row.dealId, configCode: row.configCode }));
+        if (!row.dealId || !row.modelCode) return;
+        this.run(this.dealsService.updateModelPricing({ dealId: row.dealId, modelCode: row.modelCode }));
     }
 }

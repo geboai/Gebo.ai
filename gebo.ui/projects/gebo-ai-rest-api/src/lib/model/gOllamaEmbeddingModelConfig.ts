@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GModelPricingConditions } from './gModelPricingConditions';
 import { GOllamaEmbeddingModelChoice } from './gOllamaEmbeddingModelChoice';
 
 export interface GOllamaEmbeddingModelConfig { 
@@ -25,6 +24,5 @@ export interface GOllamaEmbeddingModelConfig {
     choosedModel?: GOllamaEmbeddingModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    pricingConditions?: GModelPricingConditions;
     tokenizationThreshold?: number;
 }

@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GModelPricingConditions } from './gModelPricingConditions';
 import { GOpenAIChatModelChoice } from './gOpenAIChatModelChoice';
 
 export interface GOpenAIChatModelConfig { 
@@ -25,7 +24,6 @@ export interface GOpenAIChatModelConfig {
     choosedModel?: GOpenAIChatModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    pricingConditions?: GModelPricingConditions;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;

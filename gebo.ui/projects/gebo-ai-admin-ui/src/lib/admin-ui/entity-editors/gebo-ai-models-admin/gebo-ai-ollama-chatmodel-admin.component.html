@@ -41,7 +41,6 @@
               <p-tab [value]="0">General infos</p-tab>
               <p-tab [value]="1">Advanced settings</p-tab>
               <p-tab [value]="2">Model access settings</p-tab>
-              <p-tab [value]="3" gebo-ai-text [disabled]="!formGroup.controls['choosedModel'].value?.code">Model price</p-tab>
             </p-tablist>
             <p-tabpanels>
         <p-tabpanel [value]="0">
@@ -99,9 +98,6 @@
           </p-tabpanel>
           <p-tabpanel [value]="2">
             <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
-          </p-tabpanel>
-          <p-tabpanel [value]="3">
-            <gebo-ai-model-pricing [formGroup]="formGroup"></gebo-ai-model-pricing>
           </p-tabpanel>
         </p-tabpanels>
           </p-tabs>
