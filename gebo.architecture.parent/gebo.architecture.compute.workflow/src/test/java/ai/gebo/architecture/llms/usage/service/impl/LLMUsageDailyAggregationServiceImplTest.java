@@ -58,8 +58,8 @@ class LLMUsageDailyAggregationServiceImplTest {
 				.thenAnswer(invocation -> new ArrayList<>(rows).stream());
 		// A one document store: what the last save wrote is what the next lookup finds.
 		AtomicReference<LLMDailyUsageDetail> stored = new AtomicReference<>();
-		when(dailyRepo.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndYearAndMonthAndDay(
-				any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), anyInt()))
+		when(dailyRepo.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndApiSecretCodeAndYearAndMonthAndDay(
+				any(), any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), anyInt()))
 				.thenAnswer(invocation -> Optional.ofNullable(stored.get()));
 		when(dailyRepo.save(any())).thenAnswer(invocation -> {
 			stored.set(invocation.getArgument(0));
@@ -94,8 +94,8 @@ class LLMUsageDailyAggregationServiceImplTest {
 		List<LLMUsageDetail> rows = List.of(chat, legacy, embedding);
 		when(usageRepo.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(anyLong(), anyLong()))
 				.thenAnswer(invocation -> new ArrayList<>(rows).stream());
-		when(dailyRepo.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndYearAndMonthAndDay(
-				any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), anyInt())).thenReturn(Optional.empty());
+		when(dailyRepo.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndApiSecretCodeAndYearAndMonthAndDay(
+				any(), any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), anyInt())).thenReturn(Optional.empty());
 		List<LLMDailyUsageDetail> saved = new ArrayList<>();
 		when(dailyRepo.save(any())).thenAnswer(invocation -> {
 			saved.add(invocation.getArgument(0));
@@ -130,8 +130,8 @@ class LLMUsageDailyAggregationServiceImplTest {
 		when(usageRepo.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(anyLong(), anyLong()))
 				.thenAnswer(invocation -> new ArrayList<>(rows).stream());
 		AtomicReference<LLMDailyUsageDetail> stored = new AtomicReference<>();
-		when(dailyRepo.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndYearAndMonthAndDay(
-				any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), anyInt()))
+		when(dailyRepo.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndApiSecretCodeAndYearAndMonthAndDay(
+				any(), any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), anyInt()))
 				.thenAnswer(invocation -> Optional.ofNullable(stored.get()));
 		when(dailyRepo.save(any())).thenAnswer(invocation -> {
 			stored.set(invocation.getArgument(0));
@@ -156,8 +156,8 @@ class LLMUsageDailyAggregationServiceImplTest {
 		LLMDailyUsageDetailRepository dailyRepo = mock(LLMDailyUsageDetailRepository.class);
 		when(usageRepo.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(anyLong(), anyLong()))
 				.thenAnswer(invocation -> new ArrayList<>(rows).stream());
-		when(dailyRepo.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndYearAndMonthAndDay(
-				any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), anyInt())).thenReturn(Optional.empty());
+		when(dailyRepo.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndApiSecretCodeAndYearAndMonthAndDay(
+				any(), any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), anyInt())).thenReturn(Optional.empty());
 		AtomicReference<LLMDailyUsageDetail> stored = new AtomicReference<>();
 		when(dailyRepo.save(any())).thenAnswer(invocation -> {
 			stored.set(invocation.getArgument(0));
@@ -211,8 +211,8 @@ class LLMUsageDailyAggregationServiceImplTest {
 		when(usageRepo.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(anyLong(), anyLong()))
 				.thenAnswer(invocation -> List.of(raw(now, 10, 1000)).stream());
 		AtomicReference<LLMDailyUsageDetail> stored = new AtomicReference<>();
-		when(dailyRepo.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndYearAndMonthAndDay(
-				any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), anyInt())).thenReturn(Optional.empty());
+		when(dailyRepo.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndApiSecretCodeAndYearAndMonthAndDay(
+				any(), any(), any(), any(), any(), any(), any(), anyInt(), anyInt(), anyInt())).thenReturn(Optional.empty());
 		when(dailyRepo.save(any())).thenAnswer(invocation -> {
 			stored.set(invocation.getArgument(0));
 			return invocation.getArgument(0);

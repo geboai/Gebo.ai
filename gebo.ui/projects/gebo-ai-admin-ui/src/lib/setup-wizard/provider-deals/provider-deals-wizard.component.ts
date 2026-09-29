@@ -26,6 +26,18 @@ interface PriceEdit {
     requestPrice?: number;
 }
 
+/** The flat conditions editor of one deal. */
+interface FlatEdit {
+    /** Whether the deal has flat conditions: a monthly fee, with or without traffic limits. */
+    enabled: boolean;
+    currencyCode?: string;
+    monthlyFlatCost?: number;
+    /** Millions of tokens a month the fee covers. */
+    monthlyTrafficLimits?: number;
+    /** Millions of tokens a day the fee covers, when the provider caps the daily traffic. */
+    dailyTrafficLimits?: number;
+}
+
 /** What every provider deals operation answers: a result, or messages explaining why not. */
 interface DealsOperationStatus<T> {
     result?: T;
@@ -74,6 +86,7 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
     protected configuredProviders: { label: string, value: string }[] = [];
     protected priceEdits: { [rowKey: string]: PriceEdit } = {};
     protected descriptionEdits: { [dealId: string]: string } = {};
+    protected flatEdits: { [dealId: string]: FlatEdit } = {};
     /** The API key chosen to add to each deal. */
     protected keyToAdd: { [dealId: string]: string | undefined } = {};
 
@@ -110,8 +123,13 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
                             this.groups = groups;
                             this.priceEdits = {};
                             this.descriptionEdits = {};
+                            this.flatEdits = {};
                             groups.forEach(group => {
-                                group.deals.forEach(deal => { if (deal.id) this.descriptionEdits[deal.id] = deal.description ?? ""; });
+                                group.deals.forEach(deal => {
+                                    if (!deal.id) return;
+                                    this.descriptionEdits[deal.id] = deal.description ?? "";
+                                    this.flatEdits[deal.id] = this.flatEditOf(deal, group);
+                                });
                                 group.modelPrices.forEach(row => this.priceEdits[this.rowKey(row)] = this.editOf(row, group));
                             });
                             this.loading = false;
@@ -155,6 +173,33 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
             outputMtokenPrice: source?.outputMtokenPrice,
             requestPrice: source?.requestPrice
         };
+    }
+
+    /** The flat conditions editor starts from the deal's, the currency from the provider's default. */
+    private flatEditOf(deal: GProviderDeal, group: ProviderGroup): FlatEdit {
+        const flat = deal.flatConditions;
+        return {
+            enabled: !!flat,
+            currencyCode: flat?.currencyCode ?? group.currency?.currencyCode ?? "USD",
+            monthlyFlatCost: flat?.monthlyFlatCost,
+            monthlyTrafficLimits: flat?.monthlyTrafficLimits,
+            dailyTrafficLimits: flat?.dailyTrafficLimits
+        };
+    }
+
+    /** Sets the deal's flat conditions, or clears them when disabled: the deal is then pay per use. */
+    protected saveFlatConditions(deal: GProviderDeal): void {
+        const edit = deal.id ? this.flatEdits[deal.id] : undefined;
+        if (!deal.id || !edit) return;
+        this.run(this.dealsService.updateFlatConditions({
+            dealId: deal.id,
+            flatConditions: edit.enabled ? {
+                currencyCode: edit.currencyCode,
+                monthlyFlatCost: edit.monthlyFlatCost ?? undefined,
+                monthlyTrafficLimits: edit.monthlyTrafficLimits ?? undefined,
+                dailyTrafficLimits: edit.dailyTrafficLimits ?? undefined
+            } : undefined
+        }));
     }
 
     /** The model price rows of a deal. */

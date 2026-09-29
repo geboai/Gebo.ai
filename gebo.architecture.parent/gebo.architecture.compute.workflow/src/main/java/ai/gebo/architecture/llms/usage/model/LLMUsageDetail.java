@@ -46,6 +46,12 @@ public class LLMUsageDetail {
 	private long totalToken;
 	/** How the call ended; null on records written before this field existed. */
 	private LLMCallOutcome outcome;
+	/**
+	 * The API secret code the call went through, the pseudo key "__no-api-key__" for a
+	 * model without one: it attributes the traffic to the provider deal covering the
+	 * key. Null in the records written before it existed.
+	 */
+	private String apiSecretCode;
 	@HashIndexed
 	private long timestamp = System.currentTimeMillis();
 }

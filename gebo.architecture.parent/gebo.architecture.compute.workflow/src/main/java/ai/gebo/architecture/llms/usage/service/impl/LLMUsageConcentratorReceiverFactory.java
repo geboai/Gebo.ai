@@ -77,6 +77,7 @@ public class LLMUsageConcentratorReceiverFactory extends GAbstractMessageReceive
 			detail.setOutputToken(payload.getOutputToken());
 			detail.setTotalToken(payload.getTotalToken());
 			detail.setOutcome(payload.getOutcome());
+			detail.setApiSecretCode(payload.getApiSecretCode());
 			detail.setTimestamp(payload.getUsageTimestamp());
 			return detail;
 		}

@@ -51,6 +51,12 @@ public class LLMUsageDetailPayload extends GBaseMessagePayload {
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;
+	/**
+	 * The API secret code the call went through, the pseudo key "__no-api-key__" for a
+	 * model without one: it attributes the traffic to the provider deal covering the
+	 * key. Null in the records written before it existed.
+	 */
+	private String apiSecretCode;
 	private long usageTimestamp;
 	private LLMCallOutcome outcome;
 }

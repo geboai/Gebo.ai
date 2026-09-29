@@ -89,7 +89,7 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 		}
 
 		// Aggregate the raw values grouping by
-		// providerId, username, model, callerStack, modelType, outcome, year, month, day.
+		// providerId, username, model, callerStack, modelType, outcome, apiSecretCode, year, month, day.
 		Map<ConsolidationKey, DailyAccumulator> grouped = new HashMap<>();
 		long rawRows = 0;
 		try (Stream<LLMUsageDetail> stream = usageRepo.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(
@@ -99,7 +99,7 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 				LLMCallOutcome outcome = resolveOutcome(detail);
 				ModelType modelType = resolveModelType(detail);
 				ConsolidationKey key = new ConsolidationKey(detail.getProviderId(), detail.getUsername(),
-						detail.getModel(), detail.getCallerStack(), modelType, outcome,
+						detail.getModel(), detail.getCallerStack(), modelType, outcome, detail.getApiSecretCode(),
 						date.getYear(), date.getMonthValue(), date.getDayOfMonth());
 				grouped.computeIfAbsent(key, k -> new DailyAccumulator()).add(detail);
 				return 1;
@@ -114,9 +114,9 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 		for (Map.Entry<ConsolidationKey, DailyAccumulator> entry : grouped.entrySet()) {
 			ConsolidationKey key = entry.getKey();
 			LLMDailyUsageDetail target = consolidatedRepo
-					.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndYearAndMonthAndDay(
+					.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndApiSecretCodeAndYearAndMonthAndDay(
 							key.providerId(), key.username(), key.model(), key.callerStack(), key.modelType(),
-							key.outcome(), key.year(), key.month(), key.day())
+							key.outcome(), key.apiSecretCode(), key.year(), key.month(), key.day())
 					.orElseGet(() -> newDailyUsageDetail(key));
 			entry.getValue().writeInto(target);
 			if (LOGGER.isTraceEnabled()) {
@@ -154,6 +154,7 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 		daily.setCallerStack(key.callerStack());
 		daily.setModelType(key.modelType());
 		daily.setOutcome(key.outcome());
+		daily.setApiSecretCode(key.apiSecretCode());
 		daily.setYear(key.year());
 		daily.setMonth(key.month());
 		daily.setDay(key.day());
@@ -161,7 +162,7 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 	}
 
 	private record ConsolidationKey(String providerId, String username, String model, String callerStack,
-			ModelType modelType, LLMCallOutcome outcome, int year, int month, int day) {
+			ModelType modelType, LLMCallOutcome outcome, String apiSecretCode, int year, int month, int day) {
 	}
 
 	static final class DailyAccumulator {

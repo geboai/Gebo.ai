@@ -8,6 +8,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GProviderDeal;
 import ai.gebo.model.ModelType;
 import lombok.Data;
 
@@ -41,6 +42,12 @@ public class LLMUsageDetailDto {
 	private long outputToken;
 	private long totalToken;
 	private LLMCallOutcome outcome;
+	/**
+	 * The API secret code the call went through, the pseudo key "__no-api-key__" for a
+	 * model without one: it attributes the traffic to the provider deal covering the
+	 * key. Null in the records written before it existed.
+	 */
+	private String apiSecretCode;
 
 	public static LLMUsageDetailDto of(GBaseModelConfig config) {
 		LLMUsageDetailDto detail = new LLMUsageDetailDto();
@@ -52,6 +59,9 @@ public class LLMUsageDetailDto {
 			detail.setModel(config.getChoosedModel().getCode());
 		} else
 			detail.setModel(UNKNOWN);
+		if (config != null) {
+			detail.setApiSecretCode(GProviderDeal.coveredKey(config.getApiSecretCode()));
+		}
 		if (config instanceof GBaseChatModelConfig) {
 			detail.setModelType(ModelType.CHAT);
 		} else if (config instanceof GBaseEmbeddingModelConfig) {

@@ -74,6 +74,44 @@
                       </div>
                     </div>
                     <div class="col-12">
+                      <label id="DealFlatLabel" gebo-ai-text class="font-semibold block mb-2">Flat conditions</label>
+                      <div class="flex gap-2 align-items-center mb-2">
+                        <p-checkbox [(ngModel)]="flatEdits[deal.id!].enabled" [binary]="true" inputId="flat-{{deal.id}}"></p-checkbox>
+                        <label for="flat-{{deal.id}}" id="DealFlatEnabledLabel" gebo-ai-text>This deal has a monthly flat fee</label>
+                      </div>
+                      @if (flatEdits[deal.id!].enabled) {
+                        <div class="flex flex-wrap gap-3 align-items-end">
+                          <div>
+                            <label id="DealFlatCostLabel" gebo-ai-text class="block text-sm mb-1">Monthly price</label>
+                            <p-inputNumber [(ngModel)]="flatEdits[deal.id!].monthlyFlatCost" [min]="0"
+                              [minFractionDigits]="0" [maxFractionDigits]="4"></p-inputNumber>
+                          </div>
+                          <div>
+                            <label id="DealFlatCurrencyLabel" gebo-ai-text class="block text-sm mb-1">Currency</label>
+                            <p-select [options]="currencyOptions" [(ngModel)]="flatEdits[deal.id!].currencyCode"
+                              optionLabel="label" optionValue="value" [filter]="true" appendTo="body"
+                              styleClass="w-15rem"></p-select>
+                          </div>
+                          <div>
+                            <label id="DealFlatMonthlyLimitLabel" gebo-ai-text class="block text-sm mb-1">Monthly traffic limit (millions of tokens)</label>
+                            <p-inputNumber [(ngModel)]="flatEdits[deal.id!].monthlyTrafficLimits" [min]="0"
+                              [minFractionDigits]="0" [maxFractionDigits]="3" placeholder="unlimited"></p-inputNumber>
+                          </div>
+                          <div>
+                            <label id="DealFlatDailyLimitLabel" gebo-ai-text class="block text-sm mb-1">Daily traffic limit (millions of tokens)</label>
+                            <p-inputNumber [(ngModel)]="flatEdits[deal.id!].dailyTrafficLimits" [min]="0"
+                              [minFractionDigits]="0" [maxFractionDigits]="3" placeholder="unlimited"></p-inputNumber>
+                          </div>
+                        </div>
+                      }
+                      <div class="flex gap-2 align-items-center mt-2">
+                        <p-button id="SaveFlatBtn" gebo-ai-label label="Save flat conditions" icon="pi pi-save" [outlined]="true"
+                          [disabled]="flatEdits[deal.id!].enabled && (flatEdits[deal.id!].monthlyFlatCost == null || !flatEdits[deal.id!].currencyCode)"
+                          (onClick)="saveFlatConditions(deal)"></p-button>
+                        <span id="DealFlatHint" gebo-ai-text class="text-xs text-500">When a traffic limit is reached a warning is posted among the system messages, once a day</span>
+                      </div>
+                    </div>
+                    <div class="col-12">
                       <label id="DealKeysLabel" gebo-ai-text class="font-semibold block mb-2">API keys</label>
                       @for (code of deal.secretCodes; track code) {
                         <p-chip [label]="keyLabel(group, code)" [removable]="true" (onRemove)="removeKey(deal, code)"

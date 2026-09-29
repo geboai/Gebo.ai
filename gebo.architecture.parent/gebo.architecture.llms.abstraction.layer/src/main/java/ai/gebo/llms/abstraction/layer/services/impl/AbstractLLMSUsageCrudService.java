@@ -65,6 +65,7 @@ public abstract class AbstractLLMSUsageCrudService implements ILLMSUsageCrudServ
 		payload.setOutputToken(usage.getOutputToken());
 		payload.setTotalToken(usage.getTotalToken());
 		payload.setOutcome(usage.getOutcome());
+		payload.setApiSecretCode(usage.getApiSecretCode());
 		payload.setUsageTimestamp(System.currentTimeMillis());
 
 		GMessageEnvelope<LLMUsageDetailPayload> envelope = envelopeFactory.newMessageFrom(this, payload);
