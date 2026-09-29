@@ -45,7 +45,11 @@ public class GCurrenciesServiceImpl implements IGCurrenciesService {
 	@Override
 	public boolean isKnown(String currencyCode) {
 		load();
-		return currencyCode != null && codes.contains(currencyCode.trim().toUpperCase());
+		if (currencyCode == null) {
+			return false;
+		}
+		// Without the list, managing prices goes on unchecked rather than blocked.
+		return codes.isEmpty() || codes.contains(currencyCode.trim().toUpperCase());
 	}
 
 	private void load() {
@@ -65,8 +69,12 @@ public class GCurrenciesServiceImpl implements IGCurrenciesService {
 				currencies = list;
 				LOGGER.info("Loaded " + list.size() + " currencies from " + RESOURCE + " (ISO 4217 published "
 						+ file.getPublished() + ")");
-			} catch (Exception e) {
-				throw new IllegalStateException("Cannot read the currencies list " + RESOURCE, e);
+			} catch (Throwable e) {
+				// Best effort: without the list the currencies are offered and checked no more,
+				// prices can still be managed.
+				LOGGER.error("Cannot read the currencies list " + RESOURCE + ", currencies are not checked", e);
+				codes = Set.of();
+				currencies = List.of();
 			}
 		}
 	}

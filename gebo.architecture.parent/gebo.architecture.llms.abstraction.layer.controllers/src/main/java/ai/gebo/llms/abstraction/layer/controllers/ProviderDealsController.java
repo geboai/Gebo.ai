@@ -229,6 +229,11 @@ public class ProviderDealsController {
 		} catch (IllegalArgumentException | IllegalStateException e) {
 			LOGGER.warn(operation + " refused: " + e.getMessage());
 			return OperationStatus.ofError("Provider deal", e.getMessage());
+		} catch (RuntimeException e) {
+			// Price management is best effort: an unexpected failure is reported to the
+			// admin, never propagated.
+			LOGGER.error(operation + " failed", e);
+			return OperationStatus.ofError("Provider deal", "The operation failed: " + e.getMessage());
 		}
 	}
 }

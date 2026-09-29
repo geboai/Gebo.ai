@@ -120,6 +120,20 @@ public class LLMUsageRecorder {
 	public void record(GBaseModelConfig config, ModelType modelType, Supplier<GModelPricingConditions> pricing,
 			String username, String callerStack, long startNanos, Long firstTokenNanos, long inputToken,
 			long outputToken, long totalToken, LLMCallOutcome outcome) {
+		// Accounting is best effort: it runs once the model has answered, so a failure
+		// here must never turn a successful call into a failed one.
+		try {
+			recordUnguarded(config, modelType, pricing, username, callerStack, startNanos, firstTokenNanos, inputToken,
+					outputToken, totalToken, outcome);
+		} catch (Throwable e) {
+			LOGGER.error("Cannot record the usage of model code=" + (config != null ? config.getCode() : null)
+					+ " outcome=" + outcome + ", the call goes on unrecorded", e);
+		}
+	}
+
+	private void recordUnguarded(GBaseModelConfig config, ModelType modelType,
+			Supplier<GModelPricingConditions> pricing, String username, String callerStack, long startNanos,
+			Long firstTokenNanos, long inputToken, long outputToken, long totalToken, LLMCallOutcome outcome) {
 		long responseTimeMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNanos);
 		Long timeToFirstTokenMs = firstTokenNanos != null
 				? TimeUnit.NANOSECONDS.toMillis(firstTokenNanos.longValue() - startNanos)
@@ -200,7 +214,41 @@ public class LLMUsageRecorder {
 	 *                read when the call ends; null for an unpriced model
 	 */
 	public Call begin(GBaseModelConfig config, ModelType modelType, Supplier<GModelPricingConditions> pricing) {
-		return new Call(config, modelType, pricing, currentUsername(), sampleCaller(), System.nanoTime());
+		long startNanos = System.nanoTime();
+		// Captured best effort: the call to the model must never depend on its accounting.
+		return new Call(config, modelType, pricing, safeCurrentUsername(), safeSampleCaller(), startNanos);
+	}
+
+	/** {@link #currentUsername()}, never failing: null when it cannot be read. */
+	public static String safeCurrentUsername() {
+		try {
+			return currentUsername();
+		} catch (Throwable e) {
+			LOGGER.error("Cannot read the user of a model call, the call is accounted without it", e);
+			return null;
+		}
+	}
+
+	/** {@link #sampleCaller()}, never failing: null when it cannot be sampled. */
+	public static String safeSampleCaller() {
+		try {
+			return sampleCaller();
+		} catch (Throwable e) {
+			LOGGER.error("Cannot sample the caller of a model call, the call is accounted without it", e);
+			return null;
+		}
+	}
+
+	/**
+	 * Runs an accounting step best effort: a failure is logged and never reaches the
+	 * model call it accounts.
+	 */
+	public static void bestEffort(String what, Runnable accounting) {
+		try {
+			accounting.run();
+		} catch (Throwable e) {
+			LOGGER.error("Cannot " + what + ", the model call goes on unaffected", e);
+		}
 	}
 
 	/**
@@ -222,6 +270,21 @@ public class LLMUsageRecorder {
 
 		public void success() {
 			success(0, 0, 0);
+		}
+
+		/**
+		 * Ends the call with the usage read from its response, best effort: a response
+		 * whose usage cannot be read is recorded without tokens.
+		 */
+		public void successReading(Supplier<Usage> usage) {
+			Usage read = null;
+			try {
+				read = usage != null ? usage.get() : null;
+			} catch (Throwable e) {
+				LOGGER.error("Cannot read the usage of a call to model code=" + (config != null ? config.getCode() : null)
+						+ ", it is recorded without tokens", e);
+			}
+			success(read);
 		}
 
 		/** Ends the call with the token counts of a provider {@link Usage}, when present. */

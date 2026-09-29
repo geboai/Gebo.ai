@@ -153,4 +153,15 @@ class GProviderModelPricesServiceImplTest {
 		assertEquals(2d, IGProviderDealPricedModel.dealOrProviderApiPricing(deals, model).getInputMtokenPrice());
 		assertEquals(2d, IGProviderDealPricedModel.dealOrProviderApiPricing(null, model).getInputMtokenPrice());
 	}
+
+	@Test
+	void aFailingDealLookupFallsBackToTheProviderApiPrice() {
+		IGConfigurableChatModel model = chat("openai", "chat-a", "k1", "gpt-4.1", pricing(2d));
+		IGProviderDealService deals = mock(IGProviderDealService.class);
+		when(deals.findModelPricing((IGConfigurableModel<?, ?>) model)).thenThrow(new IllegalStateException("down"));
+
+		assertEquals(2d, IGProviderDealPricedModel.dealOrProviderApiPricing(deals, model).getInputMtokenPrice());
+		when(model.getProviderApiPricingConditions()).thenThrow(new IllegalStateException("broken"));
+		assertNull(IGProviderDealPricedModel.dealOrProviderApiPricing(deals, model));
+	}
 }

@@ -1,5 +1,7 @@
 package ai.gebo.llms.abstraction.layer.services;
 
+import org.slf4j.LoggerFactory;
+
 import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 
 /**
@@ -22,9 +24,34 @@ public interface IGProviderDealPricedModel {
 	 */
 	public static GModelPricingConditions dealOrProviderApiPricing(IGProviderDealService providerDealService,
 			IGConfigurableModel<?, ?> model) {
-		GModelPricingConditions dealPricing = providerDealService != null
-				? providerDealService.findModelPricing(model)
-				: null;
-		return dealPricing != null ? dealPricing : model.getProviderApiPricingConditions();
+		// Pricing is best effort: a failure prices the call with what is left, else not at
+		// all, and never reaches the model call being priced.
+		GModelPricingConditions dealPricing = null;
+		try {
+			dealPricing = providerDealService != null ? providerDealService.findModelPricing(model) : null;
+		} catch (Throwable e) {
+			LoggerFactory.getLogger(IGProviderDealPricedModel.class)
+					.error("Cannot read the deal pricing of model code=" + safeCode(model)
+							+ ", the provider API's one applies", e);
+		}
+		if (dealPricing != null) {
+			return dealPricing;
+		}
+		try {
+			return model.getProviderApiPricingConditions();
+		} catch (Throwable e) {
+			LoggerFactory.getLogger(IGProviderDealPricedModel.class)
+					.error("Cannot read the provider API pricing of model code=" + safeCode(model)
+							+ ", the call is left unpriced", e);
+			return null;
+		}
+	}
+
+	private static String safeCode(IGConfigurableModel<?, ?> model) {
+		try {
+			return model != null ? model.getCode() : null;
+		} catch (Throwable e) {
+			return null;
+		}
 	}
 }

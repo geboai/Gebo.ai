@@ -48,35 +48,40 @@ public class UsageRecordingChatModel implements ChatModel {
 
 	@Override
 	public ChatResponse call(Prompt prompt) {
-		final String username = LLMUsageRecorder.currentUsername();
-		final String stack = LLMUsageRecorder.sampleCaller();
+		final String username = LLMUsageRecorder.safeCurrentUsername();
+		final String stack = LLMUsageRecorder.safeSampleCaller();
 		final long start = System.nanoTime();
+		final ChatResponse response;
 		try {
-			ChatResponse response = delegate.call(prompt);
-			TokenCounters counters = TokenCounters.of(usageOf(response));
-			// No time to first token: a blocking call gives no signal before it is complete.
-			recorder.record(config, ModelType.CHAT, pricing, username, stack, start, null, counters.input(),
-					counters.output(), counters.total(), LLMCallOutcome.SUCCESS);
-			return response;
+			response = delegate.call(prompt);
 		} catch (RuntimeException e) {
 			recorder.record(config, ModelType.CHAT, pricing, username, stack, start, null, 0, 0, 0,
 					LLMCallOutcome.ERROR);
 			throw e;
 		}
+		// Accounted best effort, outside the call: it must never fail a successful call.
+		// No time to first token: a blocking call gives no signal before it is complete.
+		LLMUsageRecorder.bestEffort("account a chat call", () -> {
+			TokenCounters counters = TokenCounters.of(usageOf(response));
+			recorder.record(config, ModelType.CHAT, pricing, username, stack, start, null, counters.input(),
+					counters.output(), counters.total(), LLMCallOutcome.SUCCESS);
+		});
+		return response;
 	}
 
 	@Override
 	public Flux<ChatResponse> stream(Prompt prompt) {
 		// Captured on the calling thread: the stream completes on a Reactor thread.
-		final String username = LLMUsageRecorder.currentUsername();
-		final String stack = LLMUsageRecorder.sampleCaller();
+		final String username = LLMUsageRecorder.safeCurrentUsername();
+		final String stack = LLMUsageRecorder.safeSampleCaller();
 		final long start = System.nanoTime();
 		final TokenCounters counters = new TokenCounters();
 		final FirstTokenTimer firstToken = new FirstTokenTimer();
-		return delegate.stream(prompt).doOnNext(response -> {
+		// Per chunk accounting is best effort: a throw here would error the whole stream.
+		return delegate.stream(prompt).doOnNext(response -> LLMUsageRecorder.bestEffort("account a chat chunk", () -> {
 			firstToken.onChunk(response);
 			counters.max(usageOf(response));
-		}).doFinally(signal -> recorder.record(config, ModelType.CHAT, pricing, username, stack, start,
+		})).doFinally(signal -> recorder.record(config, ModelType.CHAT, pricing, username, stack, start,
 				firstToken.firstTokenNanos(), counters.input(), counters.output(), counters.total(),
 				outcomeOf(signal)));
 	}

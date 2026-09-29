@@ -729,8 +729,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			}
 			IGConfigurableChatModel handler = cloneMeWithInjection();
 			if (handler instanceof IGProviderDealPricedModel priced) {
-				// The clone is priced like this model, by its provider deal.
-				priced.setProviderDealService(this.providerDealService);
+				// The clone is priced like this model, by its provider deal; best effort.
+				try {
+					priced.setProviderDealService(this.providerDealService);
+				} catch (Throwable e) {
+					LOGGER.error("Cannot attach the provider deals to a clone of chat model code=" + getCode(), e);
+				}
 			}
 			if (configOptions.getToolCallingManager() == null) {
 				handler.initialize(modelConfigClone, type);

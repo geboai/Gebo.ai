@@ -120,11 +120,20 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 	 * provider's API, and startup must not wait on the network. Best effort, as the
 	 * association itself.
 	 */
-	@SuppressWarnings("unchecked")
 	protected void ensureProviderDealsOfRunningModels() {
 		if (providerDealService == null) {
 			return;
 		}
+		try {
+			ensureProviderDealsOfRunningModelsUnguarded();
+		} catch (Throwable e) {
+			LOGGER_DEALS.error("Cannot check the provider deals of the " + getClusterCategory()
+					+ " models running at startup, the models run all the same", e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void ensureProviderDealsOfRunningModelsUnguarded() {
 		List<IFacetype> models = new ArrayList<>(getConfigurations());
 		if (models.isEmpty()) {
 			return;
@@ -216,6 +225,15 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 	 * configuration.
 	 */
 	protected void attachProviderDealPricing(IGConfigurableModel model) {
+		// Best effort: registering the model must never depend on its pricing.
+		try {
+			attachProviderDealPricingUnguarded(model);
+		} catch (Throwable e) {
+			LOGGER_DEALS.error("Cannot attach the provider deals to a model, it is priced by the provider API only", e);
+		}
+	}
+
+	private void attachProviderDealPricingUnguarded(IGConfigurableModel model) {
 		if (model instanceof IGProviderDealPricedModel priced) {
 			priced.setProviderDealService(providerDealService);
 			if (LOGGER_DEALS.isDebugEnabled()) {

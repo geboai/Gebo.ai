@@ -75,6 +75,48 @@ class UsageRecordingModelsTest {
 	}
 
 	@Test
+	void aFailingUsageStoreNeverFailsASuccessfulCall() {
+		ILLMSUsageCrudService crud = mock(ILLMSUsageCrudService.class);
+		org.mockito.Mockito.doThrow(new IllegalStateException("usage store down")).when(crud).enqueueUsage(any());
+		LLMUsageRecorder recorder = new LLMUsageRecorder(crud);
+		EmbeddingModel embeddings = mock(EmbeddingModel.class);
+		when(embeddings.call(any())).thenReturn(embeddingResponse(12));
+		UsageRecordingEmbeddingModel embeddingModel = new UsageRecordingEmbeddingModel(embeddings,
+				() -> mock(GBaseEmbeddingModelConfig.class), () -> recorder, null);
+		ChatModel chat = mock(ChatModel.class);
+		ChatResponse response = new ChatResponse(List.of(new Generation(new AssistantMessage("ok"))),
+				ChatResponseMetadata.builder().usage(new DefaultUsage(50, 5, 55)).build());
+		when(chat.call(any(Prompt.class))).thenReturn(response);
+		when(chat.stream(any(Prompt.class))).thenReturn(reactor.core.publisher.Flux.just(response));
+		ChatModel chatModel = new UsageRecordingChatModel(chat, mock(GBaseChatModelConfig.class), recorder, null);
+
+		// The calls succeed although their accounting fails.
+		assertEquals(1, embeddingModel.embed(List.of("a")).size());
+		assertEquals("ok", chatModel.call("hello"));
+		assertEquals(1, chatModel.stream(new Prompt("hello")).collectList().block().size());
+		// One attempt per call: the accounting failure is not recorded as a failed call.
+		verify(crud, times(3)).enqueueUsage(any());
+	}
+
+	@Test
+	void aResponseWhoseUsageCannotBeReadIsRecordedWithoutTokens() {
+		ILLMSUsageCrudService crud = mock(ILLMSUsageCrudService.class);
+		LLMUsageRecorder recorder = new LLMUsageRecorder(crud);
+		EmbeddingModel provider = mock(EmbeddingModel.class);
+		EmbeddingResponse broken = mock(EmbeddingResponse.class);
+		when(broken.getMetadata()).thenThrow(new IllegalStateException("no metadata"));
+		when(provider.call(any())).thenReturn(broken);
+		UsageRecordingEmbeddingModel model = new UsageRecordingEmbeddingModel(provider,
+				() -> mock(GBaseEmbeddingModelConfig.class), () -> recorder, null);
+
+		assertEquals(broken, model.call(new org.springframework.ai.embedding.EmbeddingRequest(List.of("a"), null)));
+		ArgumentCaptor<LLMUsageDetailDto> captor = ArgumentCaptor.forClass(LLMUsageDetailDto.class);
+		verify(crud, times(1)).enqueueUsage(captor.capture());
+		assertEquals(LLMCallOutcome.SUCCESS, captor.getValue().getOutcome());
+		assertEquals(0, captor.getValue().getTotalToken());
+	}
+
+	@Test
 	void embeddingWithoutRecorderIsNotRecorded() {
 		EmbeddingModel provider = mock(EmbeddingModel.class);
 		when(provider.call(any())).thenReturn(embeddingResponse(12));

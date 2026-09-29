@@ -63,15 +63,18 @@ public class UsageRecordingEmbeddingModel implements EmbeddingModel {
 			return delegate.call(request);
 		}
 		LLMUsageRecorder.Call call = usageRecorder.begin(config.get(), ModelType.EMBEDDING, pricing);
+		final EmbeddingResponse response;
 		try {
-			EmbeddingResponse response = delegate.call(request);
-			call.success(response != null && response.getMetadata() != null ? response.getMetadata().getUsage()
-					: null);
-			return response;
+			response = delegate.call(request);
 		} catch (RuntimeException e) {
 			call.failure();
 			throw e;
 		}
+		// Accounted best effort, outside the call: it never fails a successful call.
+		call.successReading(() -> response != null && response.getMetadata() != null
+				? response.getMetadata().getUsage()
+				: null);
+		return response;
 	}
 
 	@Override
