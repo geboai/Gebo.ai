@@ -1,6 +1,7 @@
 package ai.gebo.llms.abstraction.layer.services.impl;
 
 import ai.gebo.model.ModelType;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GRankerModelType;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
@@ -37,7 +38,7 @@ public class UsageRecordingRankerModel<ModelConfig extends GBaseRankerModelConfi
 			return null;
 		}
 		return input -> {
-			LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), ModelType.RANKER);
+			LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), ModelType.RANKER, delegate::getPricingConditions);
 			try {
 				RankingOutput output = model.call(input);
 				call.success();
@@ -77,6 +78,16 @@ public class UsageRecordingRankerModel<ModelConfig extends GBaseRankerModelConfi
 	@Override
 	public ModelConfig getConfig() {
 		return delegate.getConfig();
+	}
+
+	@Override
+	public GModelPricingConditions getPricingConditions() {
+		return delegate.getPricingConditions();
+	}
+
+	@Override
+	public GModelPricingConditions getProviderApiPricingConditions() {
+		return delegate.getProviderApiPricingConditions();
 	}
 
 	@Override

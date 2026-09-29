@@ -9,9 +9,12 @@
 
 package ai.gebo.llms.openai_compat.services;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
@@ -22,6 +25,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelChice;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.abstraction.layer.services.IGModelsListProvider;
@@ -30,6 +34,7 @@ import ai.gebo.model.OperationStatus;
 import ai.gebo.openrouter.client.OpenRouterAiClient;
 import ai.gebo.openrouter.client.OpenRouterAiClient.OutputModality;
 import ai.gebo.openrouter.client.OpenRouterClientException;
+import ai.gebo.openrouter.client.model.ModelPricing;
 import ai.gebo.openrouter.client.model.OpenRouterModel;
 import lombok.AllArgsConstructor;
 
@@ -64,6 +69,9 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class OpenRouterModelsListProviderService implements IGModelsListProvider {
+	private static final Logger LOGGER = LoggerFactory.getLogger(OpenRouterModelsListProviderService.class);
+	/** OpenRouter publishes every price in USD. */
+	private static final String OPENROUTER_CURRENCY = "USD";
 
 	private static final String OPENROUTER_AI_MODELS_LIST = "openrouter-ai-models-list";
 
@@ -157,6 +165,50 @@ public class OpenRouterModelsListProviderService implements IGModelsListProvider
 		entry.setDescription(model.getName() != null && !model.getName().isBlank() ? model.getName() : model.getId());
 		entry.setContextLength(toInteger(model.getContextLength()));
 		entry.setNativeModelMetaInfos(model);
+		entry.setPricingConditions(getPricingConditions(model));
+	}
+
+	/**
+	 * The pay per use prices OpenRouter publishes with the model: USD per single
+	 * prompt and completion token, and per request, as decimal strings. A negative
+	 * value marks a dynamically priced model (e.g. {@code openrouter/auto}) and is
+	 * treated as unknown.
+	 * <p>
+	 * Best effort: the prices only pre-fill what the user can set in the model
+	 * configuration, so a failure here is logged and leaves the pricing unset, it
+	 * never keeps the model from being listed.
+	 */
+	private GModelPricingConditions getPricingConditions(OpenRouterModel model) {
+		try {
+			ModelPricing prices = model.getPricing();
+			if (prices == null) {
+				return null;
+			}
+			GModelPricingConditions pricing = GModelPricingConditions.fromPerTokenPrices(
+					parsePrice(model, prices.getPrompt()), parsePrice(model, prices.getCompletion()),
+					parsePrice(model, prices.getRequest()), OPENROUTER_CURRENCY);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("OpenRouter model=" + model.getId() + " pricing=" + pricing);
+			}
+			return pricing;
+		} catch (Throwable e) {
+			LOGGER.error("Cannot read the pricing of OpenRouter model=" + model.getId()
+					+ ", it is listed without pricing", e);
+			return null;
+		}
+	}
+
+	private static Double parsePrice(OpenRouterModel model, String value) {
+		if (value == null || value.isBlank()) {
+			return null;
+		}
+		try {
+			return Double.valueOf(new BigDecimal(value.trim()).doubleValue());
+		} catch (NumberFormatException e) {
+			LOGGER.error("Unparsable price=" + value + " for OpenRouter model=" + model.getId()
+					+ ", treated as unknown");
+			return null;
+		}
 	}
 
 	private static Integer toInteger(Long value) {

@@ -54,6 +54,5 @@ public class GBaseModelConfig<ModelChoiceType extends GBaseModelChoice> extends 
 	 */
 	protected Integer contextLength = null;
 
-	protected GModelPricingConditions pricingConditions = null;
 
 }

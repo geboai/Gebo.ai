@@ -63,6 +63,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 		type.setCode("chatmodel-google-vertex");
 		type.setDescription("Google vertex (Gemini models)");
 		type.setModelConfigurationClass(GGoogleVertexChatModelConfig.class.getName());
+		type.setProviderId("google-vertex");
 	}
 
 	/**

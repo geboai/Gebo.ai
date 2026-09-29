@@ -68,6 +68,7 @@ public class OllamaChatModelConfigurationSupportService
 		type.setCode("chat-ollama");
 		type.setDescription("Chat models hosted on local Ollama server");
 		type.setModelConfigurationClass(GOllamaChatModelConfig.class.getName());
+		type.setProviderId("ollama");
 	}
 
 	/**

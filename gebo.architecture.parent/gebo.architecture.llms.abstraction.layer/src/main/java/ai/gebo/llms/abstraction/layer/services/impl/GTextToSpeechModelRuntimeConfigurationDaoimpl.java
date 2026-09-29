@@ -98,6 +98,7 @@ public class GTextToSpeechModelRuntimeConfigurationDaoimpl
 	 * this DAO through add() or addRuntimeByConfig(), both of which wrap.
 	 */
 	private IGConfigurableTextToSpeechModel withUsageRecording(IGConfigurableTextToSpeechModel model) {
+		attachProviderDealPricing(model);
 		if (model == null || usageRecorder == null || model instanceof UsageRecordingTextToSpeechModel) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Text to speech model code=" + (model != null ? model.getCode() : null)

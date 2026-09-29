@@ -28,6 +28,8 @@ import ai.gebo.openrouter.client.model.ModelArchitecture;
 import ai.gebo.openrouter.client.model.OpenRouterModel;
 import ai.gebo.openrouter.client.model.OpenRouterModelsFilter;
 import ai.gebo.openrouter.client.model.OpenRouterModelsResponse;
+import ai.gebo.openrouter.client.model.OpenRouterKeyInfo;
+import ai.gebo.openrouter.client.model.OpenRouterKeyResponse;
 
 /**
  * Plain, instantiable client for the OpenRouter AI HTTP API, built on
@@ -63,6 +65,7 @@ public class OpenRouterAiClient {
 
 	/** Path of the "list models" endpoint, relative to the base URL. */
 	private static final String MODELS_PATH = "/models";
+	private static final String KEY_PATH = "/key";
 
 	/**
 	 * Coarse model "type", expressed as an output modality. OpenRouter has no
@@ -241,6 +244,26 @@ public class OpenRouterAiClient {
 			}
 		}
 		return filtered;
+	}
+
+	/**
+	 * Calls {@code GET /key}: the spending limit and usage of the API key this client
+	 * is authenticated with.
+	 *
+	 * @return the key information, or {@code null} when the body is empty
+	 * @throws OpenRouterClientException if the request fails or the response cannot
+	 *                                   be parsed
+	 */
+	public OpenRouterKeyInfo getCurrentKey() {
+		URI uri = UriComponentsBuilder.fromUriString(baseUrl + KEY_PATH).build().toUri();
+		HttpEntity<Void> request = new HttpEntity<>(authHeaders());
+		try {
+			ResponseEntity<OpenRouterKeyResponse> response = restTemplate.exchange(uri, HttpMethod.GET, request,
+					OpenRouterKeyResponse.class);
+			return response.getBody() != null ? response.getBody().getData() : null;
+		} catch (RestClientException ex) {
+			throw new OpenRouterClientException("Failed to read the OpenRouter API key from " + uri, ex);
+		}
 	}
 
 	private static boolean hasOutputModality(OpenRouterModel model, String architectureValue) {

@@ -41,9 +41,22 @@ public class LLMUsageDetailPayload extends GBaseMessagePayload {
 	 * otherwise.
 	 */
 	private Long timeToFirstToken;
+	/**
+	 * Cost of the call in {@link #currencyCode}, from the model's pricing conditions;
+	 * null when the model has no pay per use price.
+	 */
+	private Double cost;
+	/** ISO 4217 currency of {@link #cost}. */
+	private String currencyCode;
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;
+	/**
+	 * The API secret code the call went through, the pseudo key "__no-api-key__" for a
+	 * model without one: it attributes the traffic to the provider deal covering the
+	 * key. Null in the records written before it existed.
+	 */
+	private String apiSecretCode;
 	private long usageTimestamp;
 	private LLMCallOutcome outcome;
 }

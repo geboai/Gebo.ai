@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
+
 import org.springframework.ai.audio.tts.TextToSpeechModel;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
@@ -25,7 +27,28 @@ import ai.gebo.llms.abstraction.layer.model.GTextToSpeechModelType;
  *                          instantiated and used.
  */
 public abstract class GAbstractConfigurableTextToSpeechModel<ModelConfig extends GBaseTextToSpeachModelConfig, ModelObjectType extends TextToSpeechModel>
-		implements IGConfigurableTextToSpeechModel<ModelConfig> {
+		implements IGConfigurableTextToSpeechModel<ModelConfig>, IGProviderDealPricedModel {
+
+	/**
+	 * Prices this model by its provider deal; attached by the runtime DAO, null
+	 * leaving it priced by the provider API only.
+	 */
+	private volatile IGProviderDealService providerDealService = null;
+
+	@Override
+	public void setProviderDealService(IGProviderDealService providerDealService) {
+		this.providerDealService = providerDealService;
+	}
+
+	/**
+	 * The price the provider deal covering this model's API key gives to its
+	 * model code, else the provider API's one; read from an in-memory snapshot.
+	 */
+	@Override
+	public GModelPricingConditions getPricingConditions() {
+		return IGProviderDealPricedModel.dealOrProviderApiPricing(providerDealService, this);
+	}
+
 
 	// Configuration specific to the text-to-speech model.
 	protected ModelConfig config = null;

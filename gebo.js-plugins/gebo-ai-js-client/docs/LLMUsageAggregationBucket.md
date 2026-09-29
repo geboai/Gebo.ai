@@ -22,6 +22,9 @@ Name | Type | Description | Notes
 **timeToFirstTokenMax** | **Number** |  | [optional] 
 **timeToFirstTokenAvg** | **Number** |  | [optional] 
 **timeToFirstTokenSamples** | **Number** |  | [optional] 
+**cost** | **Number** |  | [optional] 
+**currencyCode** | **String** |  | [optional] 
+**costSamples** | **Number** |  | [optional] 
 
 <a name="ModelTypeEnum"></a>
 ## Enum: ModelTypeEnum

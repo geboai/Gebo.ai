@@ -70,6 +70,7 @@ public class AnthropicChatModelConfigurationSupportService
 		type.setCode("chat-anthropic");
 		type.setDescription("Chat models hosted on Anthropic");
 		type.setModelConfigurationClass(GAnthropicChatModelConfig.class.getName());
+		type.setProviderId("anthropic");
 	}
 
 	/**

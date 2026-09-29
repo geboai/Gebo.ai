@@ -15,7 +15,9 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Service;
 
+import java.util.function.Supplier;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisor;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.model.ModelType;
@@ -33,35 +35,43 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 
 		private final GBaseChatModelConfig config;
 		private final LLMUsageRecorder usageRecorder;
+		/**
+		 * The chat model's {@code IGConfigurableModel.getPricingConditions()}, read when
+		 * a call ends; null for an unpriced model.
+		 */
+		private final Supplier<GModelPricingConditions> pricing;
 
 		@Override
 		public ChatClientResponse adviseCall(ChatClientRequest request, CallAdvisorChain chain) {
 			// Captured per invocation: this advisor instance is installed once per
 			// ChatClient and shared by every request through it, so instance state would race.
-			final String username = LLMUsageRecorder.currentUsername();
-			final String stack = LLMUsageRecorder.sampleCaller();
+			final String username = LLMUsageRecorder.safeCurrentUsername();
+			final String stack = LLMUsageRecorder.safeSampleCaller();
 			final long start = System.nanoTime();
+			final ChatClientResponse response;
 			try {
-				ChatClientResponse response = chain.nextCall(request);
-				// A blocking call returns the final response only, whose usage already covers
-				// every tool calling round trip the model made (see adviseStream).
-				// No time to first token: a blocking call gives no signal before it is complete.
-				recordUsage(username, stack, start, null, TokenCounters.of(usageOf(response)),
-						LLMCallOutcome.SUCCESS);
-				return response;
+				response = chain.nextCall(request);
 			} catch (RuntimeException e) {
 				// A failed call still consumed time and is the interesting part of the tail.
-				recordUsage(username, stack, start, null, new TokenCounters(), LLMCallOutcome.ERROR);
+				LLMUsageRecorder.bestEffort("account a failed chat call",
+						() -> recordUsage(username, stack, start, null, new TokenCounters(), LLMCallOutcome.ERROR));
 				throw e;
 			}
+			// Accounted best effort, outside the call: it must never fail a successful call.
+			// A blocking call returns the final response only, whose usage already covers
+			// every tool calling round trip the model made (see adviseStream).
+			// No time to first token: a blocking call gives no signal before it is complete.
+			LLMUsageRecorder.bestEffort("account a chat call", () -> recordUsage(username, stack, start, null,
+					TokenCounters.of(usageOf(response)), LLMCallOutcome.SUCCESS));
+			return response;
 		}
 
 		@Override
 		public Flux<ChatClientResponse> adviseStream(ChatClientRequest request, StreamAdvisorChain chain) {
 			// The user is read here, on the subscribing thread: the stream completes on a
 			// Reactor thread whose security context is usually empty.
-			final String username = LLMUsageRecorder.currentUsername();
-			final String stack = LLMUsageRecorder.sampleCaller();
+			final String username = LLMUsageRecorder.safeCurrentUsername();
+			final String stack = LLMUsageRecorder.safeSampleCaller();
 			final long start = System.nanoTime();
 			// The provider emits a Usage object on EVERY streamed chunk, carrying zero counts
 			// until the last one, so a null check cannot tell a chunk from the completion.
@@ -76,14 +86,17 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 			// counted those once per chunk; the maximum is the total of all the rounds.
 			final TokenCounters counters = new TokenCounters();
 			final FirstTokenTimer firstToken = new FirstTokenTimer();
-			return chain.nextStream(request).doOnNext(response -> {
-				firstToken.onChunk(response != null ? response.chatResponse() : null);
-				Usage usage = usageOf(response);
-				if (isMeaningful(usage)) {
-					counters.max(usage);
-				}
-			}).doFinally(signal -> recordUsage(username, stack, start, firstToken.firstTokenNanos(), counters,
-					outcomeOf(signal)));
+			// Per chunk accounting is best effort: a throw here would error the whole stream.
+			return chain.nextStream(request)
+					.doOnNext(response -> LLMUsageRecorder.bestEffort("account a chat chunk", () -> {
+						firstToken.onChunk(response != null ? response.chatResponse() : null);
+						Usage usage = usageOf(response);
+						if (isMeaningful(usage)) {
+							counters.max(usage);
+						}
+					})).doFinally(signal -> LLMUsageRecorder.bestEffort("account a chat stream",
+							() -> recordUsage(username, stack, start, firstToken.firstTokenNanos(), counters,
+									outcomeOf(signal))));
 		}
 
 		@Override
@@ -188,23 +201,33 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 						+ counters.input() + "/" + counters.output() + "/" + counters.total() + " firstToken="
 						+ (firstTokenNanos != null ? "timed" : "n/a"));
 			}
-			usageRecorder.record(config, ModelType.CHAT, username, callerStack, startNanos, firstTokenNanos,
+			usageRecorder.record(config, ModelType.CHAT, pricing, username, callerStack, startNanos, firstTokenNanos,
 					counters.input(), counters.output(), counters.total(), outcome);
 		}
 	}
 
 	@Override
 	public IChatModelUsageAdvisor create(GBaseChatModelConfig config) {
+		return create(config, null);
+	}
 
-		return new GeboChatModelUsageAdvisor(config, usageRecorder);
+	@Override
+	public IChatModelUsageAdvisor create(GBaseChatModelConfig config, Supplier<GModelPricingConditions> pricing) {
+		return new GeboChatModelUsageAdvisor(config, usageRecorder, pricing);
 	}
 
 	@Override
 	public ChatModel recording(ChatModel model, GBaseChatModelConfig config) {
+		return recording(model, config, null);
+	}
+
+	@Override
+	public ChatModel recording(ChatModel model, GBaseChatModelConfig config,
+			Supplier<GModelPricingConditions> pricing) {
 		if (model == null || model instanceof UsageRecordingChatModel) {
 			return model;
 		}
-		return new UsageRecordingChatModel(model, config, usageRecorder);
+		return new UsageRecordingChatModel(model, config, usageRecorder, pricing);
 	}
 
 }

@@ -12,6 +12,7 @@ ai.gebo.llms.generic.config:
 
     - code: chatmodel-regolo.ai
       providerId: regolo.ai
+      defaultCurrencyCode: EUR
       description: Regolo.ai chat models
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
@@ -87,6 +88,7 @@ ai.gebo.llms.generic.config:
 
     - code: embedding-regolo.ai
       providerId: regolo.ai
+      defaultCurrencyCode: EUR
       description: Regolo.ai embedding model
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
@@ -122,6 +124,7 @@ ai.gebo.llms.generic.config:
   imageModelProviders:
     - code: images-regolo.ai
       providerId: regolo.ai
+      defaultCurrencyCode: EUR
       description: Regolo.ai image generation model
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
@@ -138,6 +141,7 @@ ai.gebo.llms.generic.config:
   textToSpeechModelProviders:
     - code: tts-regolo.ai
       providerId: regolo.ai
+      defaultCurrencyCode: EUR
       description: Regolo.ai text to speech model
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
@@ -153,6 +157,7 @@ ai.gebo.llms.generic.config:
   transcriptModelProviders:
     - code: transcript-regolo.ai
       providerId: regolo.ai
+      defaultCurrencyCode: EUR
       description: Regolo.ai transcript model
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
@@ -179,6 +184,7 @@ ai.gebo.llms.generic.config:
   rankerModelProviders:
     - code: ranker-regolo.ai
       providerId: regolo.ai
+      defaultCurrencyCode: EUR
       description: Regolo.ai ranker model
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list

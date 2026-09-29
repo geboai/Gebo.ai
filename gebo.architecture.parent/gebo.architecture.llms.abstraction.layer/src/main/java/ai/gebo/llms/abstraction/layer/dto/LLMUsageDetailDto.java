@@ -8,6 +8,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GProviderDeal;
 import ai.gebo.model.ModelType;
 import lombok.Data;
 
@@ -30,10 +31,23 @@ public class LLMUsageDetailDto {
 	private long responseTime;
 	/** Time to first token in ms, for streamed chat calls only; null otherwise. */
 	private Long timeToFirstToken;
+	/**
+	 * Cost of the call in {@link #currencyCode}, from the model's pricing conditions;
+	 * null when the model has no pay per use price.
+	 */
+	private Double cost;
+	/** ISO 4217 currency of {@link #cost}. */
+	private String currencyCode;
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;
 	private LLMCallOutcome outcome;
+	/**
+	 * The API secret code the call went through, the pseudo key "__no-api-key__" for a
+	 * model without one: it attributes the traffic to the provider deal covering the
+	 * key. Null in the records written before it existed.
+	 */
+	private String apiSecretCode;
 
 	public static LLMUsageDetailDto of(GBaseModelConfig config) {
 		LLMUsageDetailDto detail = new LLMUsageDetailDto();
@@ -45,6 +59,9 @@ public class LLMUsageDetailDto {
 			detail.setModel(config.getChoosedModel().getCode());
 		} else
 			detail.setModel(UNKNOWN);
+		if (config != null) {
+			detail.setApiSecretCode(GProviderDeal.coveredKey(config.getApiSecretCode()));
+		}
 		if (config instanceof GBaseChatModelConfig) {
 			detail.setModelType(ModelType.CHAT);
 		} else if (config instanceof GBaseEmbeddingModelConfig) {

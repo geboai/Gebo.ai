@@ -13,7 +13,6 @@
     <p-tab [value]="0" gebo-ai-text>Dashboard</p-tab>
     <p-tab [value]="1" gebo-ai-text>LLMs configurations</p-tab>
     <p-tab [value]="2" gebo-ai-text>Users and groups</p-tab>
-    <p-tab [value]="3" gebo-ai-text>Gebo.ai modules config</p-tab>
     @if (false) {
       <p-tab [value]="4" gebo-ai-text>Build/packaging systems</p-tab>
     }
@@ -34,9 +33,6 @@
   </p-tabpanel>
   <p-tabpanel [value]="2">
     <users-management-component id="childs" #child2></users-management-component>
-  </p-tabpanel>
-  <p-tabpanel [value]="3">
-    <systems-component id="childs" #child3></systems-component>
   </p-tabpanel>
   @if (false) {
     <p-tabpanel [value]="4">

@@ -5,6 +5,7 @@ import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.image.ImageResponse;
 
 import ai.gebo.model.ModelType;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GImageModelType;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableImageModel;
@@ -50,16 +51,19 @@ public class UsageRecordingImageModel<ModelConfig extends GBaseImageModelConfig>
 	}
 
 	private ImageResponse recorded(java.util.function.Supplier<ImageResponse> generation) {
-		LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), ModelType.IMAGE);
+		LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), ModelType.IMAGE, delegate::getPricingConditions);
+		final ImageResponse response;
 		try {
-			ImageResponse response = generation.get();
-			call.success(response != null && response.getMetadata() != null ? response.getMetadata().getUsage()
-					: null);
-			return response;
+			response = generation.get();
 		} catch (RuntimeException e) {
 			call.failure();
 			throw e;
 		}
+		// Accounted best effort, outside the call: it never fails a successful call.
+		call.successReading(() -> response != null && response.getMetadata() != null
+				? response.getMetadata().getUsage()
+				: null);
+		return response;
 	}
 
 	@Override
@@ -90,6 +94,16 @@ public class UsageRecordingImageModel<ModelConfig extends GBaseImageModelConfig>
 	@Override
 	public ModelConfig getConfig() {
 		return delegate.getConfig();
+	}
+
+	@Override
+	public GModelPricingConditions getPricingConditions() {
+		return delegate.getPricingConditions();
+	}
+
+	@Override
+	public GModelPricingConditions getProviderApiPricingConditions() {
+		return delegate.getProviderApiPricingConditions();
 	}
 
 	@Override

@@ -36,4 +36,14 @@ public class LLMUsageAggregationBucket {
 	private Long timeToFirstTokenAvg;
 	/** How many of the bucket's calls measured a time to first token. */
 	private long timeToFirstTokenSamples;
+	/**
+	 * Total cost of the bucket's priced calls, in {@link #currencyCode}; null when
+	 * none was priced, or when the bucket spans several currencies, which cannot be
+	 * summed (narrow the drill down to a provider or model to see them).
+	 */
+	private Double cost;
+	/** ISO 4217 currency of {@link #cost}. */
+	private String currencyCode;
+	/** How many of the bucket's calls had a cost. */
+	private long costSamples;
 }

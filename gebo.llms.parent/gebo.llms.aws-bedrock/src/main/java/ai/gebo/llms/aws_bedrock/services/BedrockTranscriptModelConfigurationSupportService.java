@@ -61,6 +61,7 @@ public class BedrockTranscriptModelConfigurationSupportService implements
 		type.setCode("aws-transcribe");
 		type.setDescription("Amazon Transcribe speech to text service");
 		type.setModelConfigurationClass(GBedrockTranscriptModelConfig.class.getName());
+		type.setProviderId("aws-bedrock");
 	}
 
 	static final int DEFAULT_SAMPLE_RATE = 16000;

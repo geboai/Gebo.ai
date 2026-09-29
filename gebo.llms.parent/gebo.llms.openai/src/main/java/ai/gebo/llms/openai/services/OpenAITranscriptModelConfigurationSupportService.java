@@ -66,6 +66,7 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 		type.setCode("openai-transcript");
 		type.setDescription("OpenAI transcript service");
 		type.setModelConfigurationClass(GOpenAITranscriptModelConfig.class.getName());
+		type.setProviderId("openai");
 	}
 
 	/**

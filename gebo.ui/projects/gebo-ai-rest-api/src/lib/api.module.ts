@@ -117,6 +117,7 @@ import { OpenAiTextToSpeechModelsConfigurationControllerService } from './api/op
 import { OpenAiTranscriptModelsConfigurationControllerService } from './api/openAiTranscriptModelsConfigurationController.service';
 import { ProjectsControllerService } from './api/projectsController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
+import { ProviderDealsControllerService } from './api/providerDealsController.service';
 import { RankerModelsControllerService } from './api/rankerModelsController.service';
 import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
 import { SearxngSearchConfigurationControllerService } from './api/searxngSearchConfigurationController.service';
@@ -263,6 +264,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     OpenAiTranscriptModelsConfigurationControllerService,
     ProjectsControllerService,
     PromptTemplatesControllerService,
+    ProviderDealsControllerService,
     RankerModelsControllerService,
     ReindexingFrequencyOptionsControllerService,
     SearxngSearchConfigurationControllerService,

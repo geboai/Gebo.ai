@@ -69,6 +69,7 @@ public class OpenAIChatModelConfigurationSupportService
 		type.setCode("chatgpt-OpenAI");
 		type.setDescription("chatgpt service hosted on OpenAI");
 		type.setModelConfigurationClass(GOpenAIChatModelConfig.class.getName());
+		type.setProviderId("openai");
 	}
 
 	final IGeboSecretsAccessService secretService;

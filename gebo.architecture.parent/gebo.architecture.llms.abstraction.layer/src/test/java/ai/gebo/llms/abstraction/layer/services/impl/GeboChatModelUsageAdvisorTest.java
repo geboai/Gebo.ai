@@ -57,13 +57,13 @@ class GeboChatModelUsageAdvisorTest {
 	void streamWithoutContentLeavesTheTimeToFirstTokenUnmeasured() {
 		LLMUsageRecorder recorder = mock(LLMUsageRecorder.class);
 		GBaseChatModelConfig config = mock(GBaseChatModelConfig.class);
-		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder);
+		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder, null);
 		StreamAdvisorChain chain = mock(StreamAdvisorChain.class);
 		when(chain.nextStream(any())).thenReturn(Flux.just(emptyChunk(0, 0, 0), emptyChunk(12, 0, 12)));
 
 		advisor.adviseStream(mock(ChatClientRequest.class), chain).blockLast();
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(),
+		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(),
 				isNull(), eq(12L), eq(0L), eq(12L), eq(LLMCallOutcome.SUCCESS));
 	}
 
@@ -86,7 +86,7 @@ class GeboChatModelUsageAdvisorTest {
 	void streamedToolLoopRecordsTheRunningTotalOnce() {
 		LLMUsageRecorder recorder = mock(LLMUsageRecorder.class);
 		GBaseChatModelConfig config = mock(GBaseChatModelConfig.class);
-		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder);
+		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder, null);
 		StreamAdvisorChain chain = mock(StreamAdvisorChain.class);
 		// Round 1: empty chunks, then its usage. Round 2: every chunk repeats round 1's
 		// total, then the running total of both rounds.
@@ -95,7 +95,7 @@ class GeboChatModelUsageAdvisorTest {
 
 		advisor.adviseStream(mock(ChatClientRequest.class), chain).blockLast();
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(), notNull(), eq(250L), eq(30L),
+		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(), notNull(), eq(250L), eq(30L),
 				eq(280L), eq(LLMCallOutcome.SUCCESS));
 	}
 
@@ -103,13 +103,13 @@ class GeboChatModelUsageAdvisorTest {
 	void streamWithoutUsageStillRecordsTheCall() {
 		LLMUsageRecorder recorder = mock(LLMUsageRecorder.class);
 		GBaseChatModelConfig config = mock(GBaseChatModelConfig.class);
-		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder);
+		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder, null);
 		StreamAdvisorChain chain = mock(StreamAdvisorChain.class);
 		when(chain.nextStream(any())).thenReturn(Flux.just(chunk(0, 0, 0), chunk(0, 0, 0)));
 
 		advisor.adviseStream(mock(ChatClientRequest.class), chain).blockLast();
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(), notNull(), eq(0L), eq(0L), eq(0L),
+		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(), notNull(), eq(0L), eq(0L), eq(0L),
 				eq(LLMCallOutcome.SUCCESS));
 	}
 
@@ -117,7 +117,7 @@ class GeboChatModelUsageAdvisorTest {
 	void failedStreamIsRecordedAsError() {
 		LLMUsageRecorder recorder = mock(LLMUsageRecorder.class);
 		GBaseChatModelConfig config = mock(GBaseChatModelConfig.class);
-		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder);
+		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder, null);
 		StreamAdvisorChain chain = mock(StreamAdvisorChain.class);
 		when(chain.nextStream(any()))
 				.thenReturn(Flux.concat(Flux.just(chunk(40, 0, 40)), Flux.error(new IllegalStateException("down"))));
@@ -128,7 +128,7 @@ class GeboChatModelUsageAdvisorTest {
 			// the failure is propagated to the caller
 		}
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(), notNull(), eq(40L), eq(0L), eq(40L),
+		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(), notNull(), eq(40L), eq(0L), eq(40L),
 				eq(LLMCallOutcome.ERROR));
 	}
 
@@ -136,13 +136,13 @@ class GeboChatModelUsageAdvisorTest {
 	void blockingCallRecordsTheFinalUsage() {
 		LLMUsageRecorder recorder = mock(LLMUsageRecorder.class);
 		GBaseChatModelConfig config = mock(GBaseChatModelConfig.class);
-		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder);
+		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder, null);
 		CallAdvisorChain chain = mock(CallAdvisorChain.class);
 		when(chain.nextCall(any())).thenReturn(chunk(250, 30, 280));
 
 		advisor.adviseCall(mock(ChatClientRequest.class), chain);
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), anyString(), anyString(), anyLong(), isNull(), eq(250L), eq(30L),
+		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(), isNull(), eq(250L), eq(30L),
 				eq(280L), eq(LLMCallOutcome.SUCCESS));
 	}
 }
