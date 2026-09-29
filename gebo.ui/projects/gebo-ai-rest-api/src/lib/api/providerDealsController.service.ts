@@ -209,42 +209,6 @@ export class ProviderDealsControllerService {
     /**
      * 
      * 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getDealProviders(observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
-    public getDealProviders(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
-    public getDealProviders(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
-    public getDealProviders(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Array<string>>('get',`${this.basePath}/api/admin/ProviderDealsController/getDealProviders`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
      * @param providerId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -328,6 +292,42 @@ export class ProviderDealsControllerService {
         return this.httpClient.request<GProviderDeal>('get',`${this.basePath}/api/admin/ProviderDealsController/getProviderDeal`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getProviderDealProviderIds(observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public getProviderDealProviderIds(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public getProviderDealProviderIds(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
+    public getProviderDealProviderIds(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<string>>('get',`${this.basePath}/api/admin/ProviderDealsController/getProviderDealProviderIds`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

@@ -67,7 +67,7 @@ export class ProviderDealsComponent implements OnInit {
 
     ngOnInit(): void {
         this.loading = true;
-        this.dealsService.getDealProviders().subscribe({
+        this.dealsService.getProviderDealProviderIds().subscribe({
             next: (providers) => {
                 this.providers = (providers ?? []).map(x => ({ label: x, value: x }));
                 this.loading = false;

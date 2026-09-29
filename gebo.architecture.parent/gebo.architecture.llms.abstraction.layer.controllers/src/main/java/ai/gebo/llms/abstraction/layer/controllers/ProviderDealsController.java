@@ -61,8 +61,8 @@ public class ProviderDealsController {
 
 	/** The real providers of the model types this installation offers, sorted. */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@GetMapping(value = "getDealProviders", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getDealProviders() {
+	@GetMapping(value = "getProviderDealProviderIds", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getProviderDealProviderIds() {
 		TreeSet<String> providers = new TreeSet<>();
 		Stream.of(chatTypes.map(x -> x.getType()), embeddingTypes.map(x -> x.getType()),
 				imageTypes.map(x -> x.getType()), rankerTypes.map(x -> x.getType()),
@@ -70,7 +70,7 @@ public class ProviderDealsController {
 				.flatMap(x -> ((List) x).stream()).map(x -> ((GModelType) x).getProviderId())
 				.filter(Objects::nonNull).forEach(x -> providers.add((String) x));
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("getDealProviders() found " + providers);
+			LOGGER.debug("getProviderDealProviderIds() found " + providers);
 		}
 		return List.copyOf(providers);
 	}
