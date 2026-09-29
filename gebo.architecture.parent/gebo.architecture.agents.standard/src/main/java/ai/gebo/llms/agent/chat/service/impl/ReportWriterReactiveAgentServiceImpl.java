@@ -288,7 +288,7 @@ public class ReportWriterReactiveAgentServiceImpl
 					+ (contextAgentPersona != null ? contextAgentPersona.getNetworkAgentName() : null));
 		}
 		final GeboChatResponse response = new GeboChatResponse();
-		final int tokenBudget = (agentModel.getContextLength() - agentPrompt.getTokensSize()) * 2 / 3;
+		final int tokenBudget = agentTokenBudget(agentModel, agentPrompt, chatRequestContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Report writer agent id:" + getId() + " contextLength:" + agentModel.getContextLength()
 					+ " promptSize:" + agentPrompt.getTokensSize() + " (tok) tokenBudget:" + tokenBudget + " (tok)");
@@ -456,7 +456,7 @@ public class ReportWriterReactiveAgentServiceImpl
 			int tokenBudget, ReactiveIdentityUtil runAs, INotificationSink notificationSink) throws AgentException {
 		final GPromptTemplateConfig extractorPrompt = resolvePrompt(null,
 				StandardAgentsPromptsLibraryConfig.REPORT_EVIDENCE_EXTRACTOR_PROMPT, false);
-		final int extractorBudget = (agentModel.getContextLength() - extractorPrompt.getTokensSize()) * 2 / 3;
+		final int extractorBudget = agentTokenBudget(agentModel, extractorPrompt, chatRequestContext);
 		final List<Map<String, Object>> windows = createAgentTemplateParams(extractorPrompt, network, agentRole,
 				contextAgentPersona, session, mySessionContext, request, null, 0, extractorBudget, true);
 		// A copy: the windows' own maps must keep their shared context.

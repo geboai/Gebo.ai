@@ -83,7 +83,7 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		ToolCallsListener listener = new ToolCallsListener();
 		IGConfigurableChatModel agentModel = getAgentModel(config, listener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
-		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
+		int tokenBudget = agentTokenBudget(agentModel, prompt, chatRequestContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Documents search agent id:" + getId() + " agentRole:"
 					+ (agentRole != null ? agentRole.getCode() : null) + " contextLength:"

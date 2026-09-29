@@ -213,7 +213,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 			LOGGER.debug("Routing agent can coordinate " + toCoordinate.size() + " peer(s): " + toCoordinate);
 		}
 		List<RuntimeAgentInfos> peers = new ArrayList<>();
-		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
+		int tokenBudget = agentTokenBudget(agentModel, prompt, chatRequestContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Routing agent id:" + getId() + " agentRole:" + (agentRole != null ? agentRole.getCode() : null)
 					+ " contextLength:" + agentModel.getContextLength() + " promptSize:" + prompt.getTokensSize()

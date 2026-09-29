@@ -179,6 +179,26 @@ class RoutingContextBudgetTest {
 	}
 
 	@Test
+	void theChatHistoryCountsOnlyWhenThePromptRequiresIt() {
+		ai.gebo.llms.abstraction.layer.model.IChatRequestContext context = org.mockito.Mockito
+				.mock(ai.gebo.llms.abstraction.layer.model.IChatRequestContext.class);
+		org.mockito.Mockito.when(context.getConsolidatedHistory()).thenReturn(words(200, "summary"));
+		org.mockito.Mockito.when(context.getInteractions()).thenReturn(List.of(
+				ai.gebo.llms.abstraction.layer.model.IChatSessionEntry.builder().user(words(100, "q"))
+						.assistant(words(300, "a")).build()));
+		ai.gebo.architecture.ai.model.GPromptTemplateConfig prompt = new ai.gebo.architecture.ai.model.GPromptTemplateConfig();
+
+		prompt.setChatHistory(ai.gebo.architecture.ai.model.ContextContentRequired.REQUIRED);
+		int expected = tokens(words(200, "summary")) + tokens(words(100, "q")) + tokens(words(300, "a"));
+		int counted = GAbstractGenericalAgentService.chatHistoryTokens(prompt, context);
+		assertTrue(Math.abs(counted - expected) <= 5, "counted " + counted + " expected " + expected);
+
+		prompt.setChatHistory(ai.gebo.architecture.ai.model.ContextContentRequired.NOT_REQUIRED);
+		assertEquals(0, GAbstractGenericalAgentService.chatHistoryTokens(prompt, context));
+		assertEquals(0, GAbstractGenericalAgentService.chatHistoryTokens(prompt, null));
+	}
+
+	@Test
 	void aTextIsSplitIntoConsecutiveChunksWithoutLosingAnything() {
 		String text = words(5000, "w");
 		List<String> chunks = GAbstractGenericalAgentService.splitToTokens(text, 800);

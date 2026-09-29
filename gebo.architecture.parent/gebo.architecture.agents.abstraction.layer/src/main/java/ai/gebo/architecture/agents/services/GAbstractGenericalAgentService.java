@@ -57,6 +57,7 @@ import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -1472,6 +1473,44 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	}
 
 	/**
+	 * The token budget of an agent's placeholders: two thirds of what the model's
+	 * context leaves after the prompt template and, when the prompt asks for it, the
+	 * chat history the model call adds as messages of its own.
+	 */
+	protected int agentTokenBudget(IGConfigurableChatModel agentModel, GPromptTemplateConfig prompt,
+			IChatRequestContext chatRequestContext) {
+		final int history = chatHistoryTokens(prompt, chatRequestContext);
+		final int budget = (agentModel.getContextLength() - prompt.getTokensSize() - history) * 2 / 3;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("agentTokenBudget(...) agent:" + getId() + " contextLength:" + agentModel.getContextLength()
+					+ " prompt:" + prompt.getTokensSize() + " (tok) chat history:" + history + " (tok) budget:"
+					+ budget + " (tok)");
+		}
+		return budget;
+	}
+
+	/**
+	 * The tokens of the chat history a model call adds for the prompt: the
+	 * consolidated history and the interactions, when the prompt requires the history.
+	 */
+	public static int chatHistoryTokens(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext) {
+		if (prompt == null || chatRequestContext == null || (prompt.getChatHistory() != null
+				&& prompt.getChatHistory() != ai.gebo.architecture.ai.model.ContextContentRequired.REQUIRED)) {
+			return 0;
+		}
+		int tokens = 0;
+		if (chatRequestContext.getConsolidatedHistory() != null) {
+			tokens += ITokensCountable.stringsTokensSize(chatRequestContext.getConsolidatedHistory());
+		}
+		if (chatRequestContext.getInteractions() != null) {
+			for (ai.gebo.llms.abstraction.layer.model.IChatSessionEntry entry : chatRequestContext.getInteractions()) {
+				tokens += ITokensCountable.stringsTokensSize(entry.getUser(), entry.getAssistant());
+			}
+		}
+		return tokens;
+	}
+
+	/**
 	 * Fits the pieces in the budget sharing it equally ("water filling"): the pieces
 	 * are visited from the smallest, each gets an equal share of the budget left, a
 	 * piece smaller than its share keeps its whole size and leaves the difference to
@@ -1482,7 +1521,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	 * @param budget the tokens all the pieces may take
 	 * @return the fitted pieces, in the same order
 	 */
-	protected static List<String> fitEqually(List<String> pieces, int budget) {
+	public static List<String> fitEqually(List<String> pieces, int budget) {
 		int n = pieces.size();
 		int[] sizes = new int[n];
 		long total = 0;

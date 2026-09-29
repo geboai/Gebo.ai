@@ -14,7 +14,7 @@ ai.gebo.agents.prompts.library:
     userReference: /agents-prompt-library/en/report-answer-writer-agent-user-prompt.txt
     agentPrompt: true
     agentId: ChatAgentService
-    chatHistory: NOT_REQUIRED
+    chatHistory: REQUIRED
     contextDocuments: NOT_REQUIRED
     toolsCalling: NOT_REQUIRED
   - promptUse: tool-calling-agent-prompt
