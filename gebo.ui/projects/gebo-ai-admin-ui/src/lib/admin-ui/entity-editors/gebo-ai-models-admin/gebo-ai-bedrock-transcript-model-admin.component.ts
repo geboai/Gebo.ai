@@ -46,6 +46,7 @@ export class GeboAIBedrockTranscriptModelAdminComponent extends BaseEntityEditin
         mediaEncoding: new FormControl(),
         defaultModel: new FormControl(),
         choosedModel: new FormControl(),
+        pricingConditions: new FormControl(),
         apiSecretCode: new FormControl()
     });
 

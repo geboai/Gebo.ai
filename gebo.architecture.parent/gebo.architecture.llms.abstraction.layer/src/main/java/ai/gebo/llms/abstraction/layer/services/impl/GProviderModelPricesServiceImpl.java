@@ -3,9 +3,10 @@ package ai.gebo.llms.abstraction.layer.services.impl;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +54,9 @@ public class GProviderModelPricesServiceImpl implements IGProviderModelPricesSer
 				dealOfKey.put(code, deal);
 			}
 		}
-		Map<String, GProviderModelPriceInfo> rows = new LinkedHashMap<>();
+		List<GProviderModelPriceInfo> rows = new ArrayList<>();
+		// The deal prices applied: "dealId|configCode".
+		Set<String> applied = new HashSet<>();
 		runtimeDaos.orderedStream().forEach(dao -> {
 			for (IGConfigurableModel<?, ?> model : dao.getConfigurations()) {
 				GModelType type = model.getType();
@@ -61,58 +64,68 @@ public class GProviderModelPricesServiceImpl implements IGProviderModelPricesSer
 					continue;
 				}
 				GBaseModelConfig<?> config = model.getConfig();
+				String configCode = config != null && config.getCode() != null ? config.getCode() : model.getCode();
 				String secretCode = config != null ? config.getApiSecretCode() : null;
 				GProviderDeal deal = secretCode != null ? dealOfKey.get(secretCode) : null;
-				GProviderModelPriceInfo row = row(rows, providerId, deal, model.safeGetModelCode());
-				ModelType family = familyOf(model);
-				if (family != null && !row.getModelTypes().contains(family)) {
-					row.getModelTypes().add(family);
+				GProviderModelPriceInfo row = row(providerId, deal, configCode);
+				row.setConfigDescription(config != null ? config.getDescription() : model.getDescription());
+				row.setModelCode(model.safeGetModelCode());
+				row.setModelType(familyOf(model));
+				row.setSecretCode(secretCode);
+				if (config != null && config.getPricingConditions() != null) {
+					row.setConfiguredPricing(config.getPricingConditions());
+					row.setConfiguredPricingSource(GProviderModelPriceInfo.PricingSource.CONFIGURATION);
+				} else if (config != null && config.getChoosedModel() != null
+						&& config.getChoosedModel().getPricingConditions() != null) {
+					row.setConfiguredPricing(config.getChoosedModel().getPricingConditions());
+					row.setConfiguredPricingSource(GProviderModelPriceInfo.PricingSource.PROVIDER_API);
 				}
-				if (config != null && config.getCode() != null) {
-					row.getModelConfigCodes().add(config.getCode());
+				if (deal != null) {
+					applied.add(deal.getId() + "|" + configCode);
 				}
-				if (secretCode != null && !row.getSecretCodes().contains(secretCode)) {
-					row.getSecretCodes().add(secretCode);
-				}
-				if (row.getConfiguredPricing() == null) {
-					row.setConfiguredPricing(model.getConfiguredPricingConditions());
-				}
+				rows.add(row);
 			}
 		});
-		// The deal prices of models no longer configured, for the admin to see and drop.
+		// The deal prices no longer applied, for the admin to see and drop.
 		for (GProviderDeal deal : deals) {
-			if (deal.getModelPrices() != null) {
-				for (GProviderModelPrice price : deal.getModelPrices()) {
-					row(rows, providerId, deal, price.getModelCode());
+			if (deal.getModelPrices() == null) {
+				continue;
+			}
+			for (GProviderModelPrice price : deal.getModelPrices()) {
+				if (price.getConfigCode() != null && !applied.contains(deal.getId() + "|" + price.getConfigCode())) {
+					GProviderModelPriceInfo row = row(providerId, deal, price.getConfigCode());
+					row.setModelCode(price.getModelCode());
+					row.setStale(true);
+					rows.add(row);
 				}
 			}
 		}
-		List<GProviderModelPriceInfo> result = new ArrayList<>(rows.values());
-		result.sort(Comparator.comparing(GProviderModelPriceInfo::getModelCode, Comparator.nullsLast(String::compareTo))
-				.thenComparing(GProviderModelPriceInfo::getDealId, Comparator.nullsLast(String::compareTo)));
+		rows.sort(Comparator.comparing(GProviderModelPriceInfo::getDealId, Comparator.nullsLast(String::compareTo))
+				.thenComparing(GProviderModelPriceInfo::isStale)
+				.thenComparing(GProviderModelPriceInfo::getConfigCode, Comparator.nullsLast(String::compareTo)));
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("getProviderModelPrices(providerId=" + providerId + ") found " + result.size()
-					+ " models over " + deals.size() + " deals, "
-					+ result.stream().filter(x -> x.getDealPricing() != null).count() + " priced by their deal");
+			LOGGER.debug("getProviderModelPrices(providerId=" + providerId + ") found " + rows.size()
+					+ " configurations over " + deals.size() + " deals, "
+					+ rows.stream().filter(x -> x.getDealPricing() != null && !x.isStale()).count()
+					+ " priced by their deal, " + rows.stream().filter(GProviderModelPriceInfo::isStale).count()
+					+ " stale deal prices");
 		}
 		if (LOGGER.isTraceEnabled()) {
-			LOGGER.trace("<PROVIDER_MODEL_PRICES>" + result + "</PROVIDER_MODEL_PRICES>");
+			LOGGER.trace("<PROVIDER_MODEL_PRICES>" + rows + "</PROVIDER_MODEL_PRICES>");
 		}
-		return result;
+		return rows;
 	}
 
-	private static GProviderModelPriceInfo row(Map<String, GProviderModelPriceInfo> rows, String providerId,
-			GProviderDeal deal, String modelCode) {
-		String dealId = deal != null ? deal.getId() : null;
-		return rows.computeIfAbsent(dealId + "|" + modelCode, x -> {
-			GProviderModelPriceInfo row = new GProviderModelPriceInfo();
-			row.setProviderId(providerId);
-			row.setDealId(dealId);
-			row.setDealDescription(deal != null ? deal.getDescription() : null);
-			row.setModelCode(modelCode);
-			row.setDealPricing(deal != null ? deal.modelPricing(modelCode) : null);
-			return row;
-		});
+	private static GProviderModelPriceInfo row(String providerId, GProviderDeal deal, String configCode) {
+		GProviderModelPriceInfo row = new GProviderModelPriceInfo();
+		row.setProviderId(providerId);
+		row.setConfigCode(configCode);
+		if (deal != null) {
+			row.setDealId(deal.getId());
+			row.setDealDescription(deal.getDescription());
+			row.setDealPricing(deal.configPricing(configCode));
+		}
+		return row;
 	}
 
 	private static ModelType familyOf(IGConfigurableModel<?, ?> model) {

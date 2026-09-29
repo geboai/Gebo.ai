@@ -58,25 +58,32 @@ public class GProviderDeal {
 	 */
 	private GProviderSpendingLimits spendingLimits = null;
 	/**
-	 * The prices of the provider's models under this deal, one entry per model code,
-	 * set by the admin. They win over the prices configured with the models (see
+	 * The prices this deal gives to the model configurations running with its API
+	 * keys, one entry per configuration code, confirmed by the admin. They win over
+	 * the pricing saved in the configurations (see
 	 * {@code IGConfigurableModel.getPricingConditions()}).
 	 */
 	private List<GProviderModelPrice> modelPrices = new ArrayList<>();
 	private Date dateCreated = null;
 	private Date dateModified = null;
 
-	/** The price this deal gives to a model, or null. */
-	public GModelPricingConditions modelPricing(String modelCode) {
-		if (modelPrices == null || modelCode == null) {
+	/** The price entry this deal gives to a model configuration, or null. */
+	public GProviderModelPrice configPrice(String configCode) {
+		if (modelPrices == null || configCode == null) {
 			return null;
 		}
 		for (GProviderModelPrice price : modelPrices) {
-			if (modelCode.equals(price.getModelCode())) {
-				return price.getPricingConditions();
+			if (configCode.equals(price.getConfigCode())) {
+				return price;
 			}
 		}
 		return null;
+	}
+
+	/** The price this deal gives to a model configuration, or null. */
+	public GModelPricingConditions configPricing(String configCode) {
+		GProviderModelPrice price = configPrice(configCode);
+		return price != null ? price.getPricingConditions() : null;
 	}
 
 	/**

@@ -6,15 +6,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.client.result.UpdateResult;
@@ -39,7 +43,7 @@ import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Mongo backed {@link IGProviderDealService}. The repository and template are
@@ -47,11 +51,9 @@ import lombok.AllArgsConstructor;
  * starts, its deals simply not being maintained.
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GProviderDealServiceImpl implements IGProviderDealService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GProviderDealServiceImpl.class);
-	/** What {@code IGConfigurableModel.safeGetModelCode()} returns for a model without code. */
-	private static final String UNKNOWN_MODEL_CODE = "unknown";
 	private final ObjectProvider<GProviderDealRepository> repositoryProvider;
 	private final ObjectProvider<MongoTemplate> mongoTemplateProvider;
 	private final ObjectProvider<IGeboSecretsAccessService> secretsProvider;
@@ -63,19 +65,18 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 	/** The per provider readers of the API keys' spending limits. */
 	private final ObjectProvider<IGProviderKeyLimitsReader> limitsReaders;
 
-	/**
-	 * How long the deal covering an API key is served from {@link #dealsByKey}: the
-	 * model prices are read on every model call. A change made on this instance
-	 * empties the cache at once; one made on another cluster instance shows here
-	 * within this delay.
-	 */
-	private static final long DEALS_CACHE_TTL_MILLIS = 60_000L;
-
-	private record CachedDeal(GProviderDeal deal, long expiresAt) {
+	/** A deal price of a configuration, with the coordinates it applies at. */
+	private record PricedConfig(String dealId, String providerId, Set<String> secretCodes,
+			GModelPricingConditions pricing) {
 	}
 
-	/** The deal covering each "providerId|secretCode", null when none does. */
-	private final Map<String, CachedDeal> dealsByKey = new ConcurrentHashMap<>();
+	/**
+	 * The deals' prices by configuration code, read on every model call without
+	 * touching the store: rebuilt after each change made here and every
+	 * {@code ai.gebo.llms.providerDeals.pricesRefreshMillis} for the changes made by
+	 * other cluster instances. Null until first built.
+	 */
+	private volatile Map<String, List<PricedConfig>> pricesByConfig = null;
 
 	@Override
 	public GProviderDeal ensureDeal(String providerId, String secretCode) {
@@ -190,12 +191,16 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 		deal.setDateModified(now);
 		List<String> sources = new ArrayList<>();
 		for (String code : codes) {
-			sources.addAll(pullFromOtherDeals(providerId, deal.getId(), code));
+			KeyMove move = pullFromOtherDeals(providerId, deal.getId(), code);
+			sources.addAll(move.sourceDealIds());
+			deal.setModelPrices(mergePrices(deal.getModelPrices(), move.prices()));
 			deal.getSecretCodes().add(code);
 		}
 		deal = requireRepository().insert(deal);
 		dealsChanged();
-		LOGGER.info("Created the deal id=" + deal.getId() + " of provider=" + providerId + " covering " + codes);
+		LOGGER.info("Created the deal id=" + deal.getId() + " of provider=" + providerId + " covering " + codes
+				+ " with the prices of the configurations " + deal.getModelPrices().stream()
+						.map(GProviderModelPrice::getConfigCode).toList());
 		refreshSourcesQuietly(sources);
 		return refreshQuietly(deal);
 	}
@@ -207,14 +212,19 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin assignApiKey(dealId=" + dealId + ", secretCode=" + secretCode + ")");
 		}
-		List<String> sources = pullFromOtherDeals(deal.getProviderId(), dealId, secretCode);
-		requireTemplate().updateFirst(new Query(Criteria.where("_id").is(dealId)),
-				new Update().addToSet("secretCodes", secretCode).set("dateModified", new Date()),
-				GProviderDeal.class);
+		KeyMove move = pullFromOtherDeals(deal.getProviderId(), dealId, secretCode);
+		List<String> sources = move.sourceDealIds();
+		Update assignment = new Update().addToSet("secretCodes", secretCode).set("dateModified", new Date());
+		if (!move.prices().isEmpty()) {
+			assignment.set("modelPrices", mergePrices(deal.getModelPrices(), move.prices()));
+		}
+		requireTemplate().updateFirst(new Query(Criteria.where("_id").is(dealId)), assignment, GProviderDeal.class);
 		dealsChanged();
 		LOGGER.info((sources.isEmpty() ? "Assigned" : "Transferred") + " secretCode=" + secretCode
 				+ " to the deal id=" + dealId + " of provider=" + deal.getProviderId()
-				+ (sources.isEmpty() ? "" : " from " + sources));
+				+ (sources.isEmpty() ? "" : " from " + sources) + (move.prices().isEmpty() ? ""
+						: " with the prices of the configurations "
+								+ move.prices().stream().map(GProviderModelPrice::getConfigCode).toList()));
 		refreshSourcesQuietly(sources);
 		return refreshQuietly(requireDeal(dealId));
 	}
@@ -283,25 +293,41 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 	}
 
 	@Override
-	public GProviderDeal updateModelPricing(String dealId, String modelCode, GModelPricingConditions pricing) {
-		requireText(modelCode, "modelCode");
+	public GProviderDeal updateModelPricing(String dealId, String configCode, GModelPricingConditions pricing) {
+		requireText(configCode, "configCode");
 		GProviderDeal deal = requireDeal(dealId);
+		IGConfigurableModel<?, ?> runtime = findRuntime(configCode);
+		String modelCode = runtime != null ? runtime.safeGetModelCode() : null;
 		if (pricing != null) {
+			if (runtime == null) {
+				throw new IllegalArgumentException("No model configuration with code=" + configCode + " is running");
+			}
+			GModelType type = runtime.getType();
+			if (type == null || !deal.getProviderId().equals(type.getProviderId())) {
+				throw new IllegalArgumentException("The model configuration " + configCode
+						+ " does not run a model of provider=" + deal.getProviderId());
+			}
+			String secretCode = runtime.getConfig() != null ? runtime.getConfig().getApiSecretCode() : null;
+			if (secretCode == null || !deal.getSecretCodes().contains(secretCode)) {
+				throw new IllegalArgumentException("The model configuration " + configCode + " runs with the API key "
+						+ secretCode + ", which the deal " + dealId + " does not cover: move the key into the deal first");
+			}
 			requireValidPricing(pricing);
 		}
 		Date now = new Date();
 		List<GProviderModelPrice> prices = new ArrayList<>();
 		if (deal.getModelPrices() != null) {
-			deal.getModelPrices().stream().filter(x -> !modelCode.equals(x.getModelCode())).forEach(prices::add);
+			deal.getModelPrices().stream().filter(x -> !configCode.equals(x.getConfigCode())).forEach(prices::add);
 		}
 		if (pricing != null) {
-			prices.add(new GProviderModelPrice(modelCode, pricing, now));
+			prices.add(new GProviderModelPrice(configCode, modelCode, pricing, now));
 		}
 		requireTemplate().updateFirst(new Query(Criteria.where("_id").is(dealId)),
 				new Update().set("modelPrices", prices).set("dateModified", now), GProviderDeal.class);
 		dealsChanged();
-		LOGGER.info((pricing != null ? "Set the price " + pricing + " of" : "Removed the price of") + " model="
-				+ modelCode + " in the deal id=" + dealId + " of provider=" + deal.getProviderId());
+		LOGGER.info((pricing != null ? "Set the price " + pricing + " of" : "Removed the price of")
+				+ " configuration=" + configCode + " (model=" + modelCode + ") in the deal id=" + dealId
+				+ " of provider=" + deal.getProviderId());
 		return requireDeal(dealId);
 	}
 
@@ -334,8 +360,9 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 		try {
 			GModelType type = model.getType();
 			GBaseModelConfig<?> config = model.getConfig();
-			return findModelPricing(type != null ? type.getProviderId() : null,
-					config != null ? config.getApiSecretCode() : null, model.safeGetModelCode());
+			return findConfigPricing(type != null ? type.getProviderId() : null,
+					config != null ? config.getApiSecretCode() : null,
+					config != null && config.getCode() != null ? config.getCode() : model.getCode());
 		} catch (Throwable e) {
 			LOGGER.error("Cannot read the deal pricing of model code=" + model.getCode(), e);
 			return null;
@@ -343,45 +370,125 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 	}
 
 	@Override
-	public GModelPricingConditions findModelPricing(String providerId, String secretCode, String modelCode) {
-		if (providerId == null || providerId.isBlank() || secretCode == null || secretCode.isBlank()
-				|| modelCode == null || modelCode.isBlank() || UNKNOWN_MODEL_CODE.equals(modelCode)) {
+	public GModelPricingConditions findConfigPricing(String providerId, String secretCode, String configCode) {
+		if (providerId == null || secretCode == null || configCode == null) {
 			return null;
 		}
 		try {
-			GProviderDeal deal = coveringDeal(providerId, secretCode);
-			GModelPricingConditions pricing = deal != null ? deal.modelPricing(modelCode) : null;
+			Map<String, List<PricedConfig>> snapshot = pricesByConfig;
+			if (snapshot == null) {
+				// Only before the first build, normally done at startup.
+				refreshPricesSnapshotQuietly();
+				snapshot = pricesByConfig;
+			}
+			List<PricedConfig> prices = snapshot != null ? snapshot.get(configCode) : null;
+			PricedConfig found = null;
+			if (prices != null) {
+				for (PricedConfig price : prices) {
+					if (providerId.equals(price.providerId()) && price.secretCodes().contains(secretCode)) {
+						found = price;
+						break;
+					}
+				}
+			}
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Deal pricing of provider=" + providerId + " secretCode=" + secretCode + " model="
-						+ modelCode + ": " + (deal == null ? "no deal covers the key"
-								: pricing == null ? "none in the deal id=" + deal.getId()
-										: "found in the deal id=" + deal.getId()));
+				LOGGER.debug("Deal pricing of configuration=" + configCode + " provider=" + providerId + " secretCode="
+						+ secretCode + ": " + (found != null ? "found in the deal id=" + found.dealId()
+								: "none, the configured pricing applies"));
 			}
-			if (pricing != null && LOGGER.isTraceEnabled()) {
-				LOGGER.trace("<DEAL_MODEL_PRICING>" + pricing + "</DEAL_MODEL_PRICING>");
+			if (found != null && LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<DEAL_CONFIG_PRICING>" + found.pricing() + "</DEAL_CONFIG_PRICING>");
 			}
-			return pricing;
+			return found != null ? found.pricing() : null;
 		} catch (Throwable e) {
-			LOGGER.error("Cannot read the deal pricing of provider=" + providerId + " secretCode=" + secretCode
-					+ " model=" + modelCode + ", the configured pricing applies", e);
+			LOGGER.error("Cannot read the deal pricing of configuration=" + configCode + ", the configured pricing applies",
+					e);
 			return null;
 		}
 	}
 
-	/** The deal covering an API key, through {@link #dealsByKey}; null when none. */
-	private GProviderDeal coveringDeal(String providerId, String secretCode) {
-		String key = providerId + "|" + secretCode;
-		long now = System.currentTimeMillis();
-		CachedDeal cached = dealsByKey.get(key);
-		if (cached != null && cached.expiresAt() > now) {
-			return cached.deal();
-		}
+	@Override
+	public void refreshPricesSnapshot() {
 		GProviderDealRepository repository = repositoryProvider.getIfAvailable();
-		GProviderDeal deal = repository != null
-				? repository.findByProviderIdAndSecretCode(providerId, secretCode).orElse(null)
-				: null;
-		dealsByKey.put(key, new CachedDeal(deal, now + DEALS_CACHE_TTL_MILLIS));
-		return deal;
+		Map<String, List<PricedConfig>> snapshot = new HashMap<>();
+		if (repository != null) {
+			for (GProviderDeal deal : repository.findAll()) {
+				if (deal.getModelPrices() == null) {
+					continue;
+				}
+				Set<String> keys = deal.getSecretCodes() != null ? Set.copyOf(deal.getSecretCodes()) : Set.of();
+				for (GProviderModelPrice price : deal.getModelPrices()) {
+					if (price.getConfigCode() != null && price.getPricingConditions() != null) {
+						snapshot.computeIfAbsent(price.getConfigCode(), x -> new ArrayList<>()).add(
+								new PricedConfig(deal.getId(), deal.getProviderId(), keys, price.getPricingConditions()));
+					}
+				}
+			}
+		}
+		Map<String, List<PricedConfig>> frozen = new HashMap<>();
+		snapshot.forEach((code, prices) -> frozen.put(code, List.copyOf(prices)));
+		pricesByConfig = Map.copyOf(frozen);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Rebuilt the deal prices snapshot: " + frozen.size() + " priced configurations");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<DEAL_PRICES_SNAPSHOT>" + frozen + "</DEAL_PRICES_SNAPSHOT>");
+		}
+	}
+
+	/** {@link #refreshPricesSnapshot()}, never failing the operation it follows. */
+	private void refreshPricesSnapshotQuietly() {
+		try {
+			refreshPricesSnapshot();
+		} catch (Throwable e) {
+			LOGGER.error("Cannot rebuild the deal prices snapshot, the previous one is kept", e);
+		}
+	}
+
+	/** Builds the snapshot as soon as the application is up, before the first call. */
+	@EventListener(ApplicationReadyEvent.class)
+	public void buildPricesSnapshotAtStartup() {
+		refreshPricesSnapshotQuietly();
+	}
+
+	/** Picks up the deal changes made by other cluster instances. */
+	@Scheduled(initialDelayString = "${ai.gebo.llms.providerDeals.pricesRefreshMillis:60000}", fixedDelayString = "${ai.gebo.llms.providerDeals.pricesRefreshMillis:60000}")
+	public void refreshPricesSnapshotPeriodically() {
+		refreshPricesSnapshotQuietly();
+	}
+
+	/** The running model whose configuration has the given code, or null. */
+	private IGConfigurableModel<?, ?> findRuntime(String configCode) {
+		return runtimeDaos.orderedStream().flatMap(dao -> dao.getConfigurations().stream())
+				.filter(x -> configCode.equals(x.getConfig() != null ? x.getConfig().getCode() : x.getCode()))
+				.findFirst().orElse(null);
+	}
+
+	/** Codes of the model configurations of the provider running with the given API key. */
+	private Set<String> configsRunningWith(String providerId, String secretCode) {
+		Set<String> codes = new HashSet<>();
+		runtimeDaos.orderedStream().flatMap(dao -> dao.getConfigurations().stream()).forEach(model -> {
+			GModelType type = model.getType();
+			GBaseModelConfig<?> config = model.getConfig();
+			if (type != null && providerId.equals(type.getProviderId()) && config != null
+					&& secretCode.equals(config.getApiSecretCode())) {
+				codes.add(config.getCode() != null ? config.getCode() : model.getCode());
+			}
+		});
+		return codes;
+	}
+
+	/** The prices of a deal with the moved ones added, replacing those of the same configurations. */
+	private static List<GProviderModelPrice> mergePrices(List<GProviderModelPrice> current,
+			List<GProviderModelPrice> moved) {
+		Set<String> movedCodes = new HashSet<>();
+		moved.forEach(x -> movedCodes.add(x.getConfigCode()));
+		List<GProviderModelPrice> merged = new ArrayList<>();
+		if (current != null) {
+			current.stream().filter(x -> !movedCodes.contains(x.getConfigCode())).forEach(merged::add);
+		}
+		merged.addAll(moved);
+		return merged;
 	}
 
 	/** Codes of the model configurations running a model of the provider. */
@@ -401,9 +508,9 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 		return codes;
 	}
 
-	/** Forgets the cached deals after a change of the deals' keys or prices. */
+	/** Rebuilds the prices snapshot after a change of the deals' keys or prices. */
 	private void dealsChanged() {
-		dealsByKey.clear();
+		refreshPricesSnapshotQuietly();
 	}
 
 	private static void requirePositiveOrUnset(Double value, String name) {
@@ -412,22 +519,41 @@ public class GProviderDealServiceImpl implements IGProviderDealService {
 		}
 	}
 
-	/** Removes a key from every other deal of the provider; returns the ids of those that held it. */
-	private List<String> pullFromOtherDeals(String providerId, String dealId, String secretCode) {
+	/** An API key moved away from other deals, with the prices of its configurations. */
+	private record KeyMove(List<String> sourceDealIds, List<GProviderModelPrice> prices) {
+	}
+
+	/**
+	 * Removes a key from every other deal of the provider, together with the prices
+	 * those deals give to the model configurations running with it.
+	 */
+	private KeyMove pullFromOtherDeals(String providerId, String dealId, String secretCode) {
 		Query holders = new Query(Criteria.where("providerId").is(providerId).and("_id").ne(dealId)
 				.and("secretCodes").is(secretCode));
-		List<String> ids = requireTemplate().find(holders, GProviderDeal.class).stream().map(GProviderDeal::getId)
-				.toList();
-		if (!ids.isEmpty()) {
-			requireTemplate().updateMulti(holders,
-					new Update().pull("secretCodes", secretCode).set("dateModified", new Date()),
-					GProviderDeal.class);
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("secretCode=" + secretCode + " moved away from the deals " + ids + " of provider="
-						+ providerId);
-			}
+		List<GProviderDeal> sources = requireTemplate().find(holders, GProviderDeal.class);
+		if (sources.isEmpty()) {
+			return new KeyMove(List.of(), List.of());
 		}
-		return ids;
+		Set<String> configs = configsRunningWith(providerId, secretCode);
+		List<String> ids = new ArrayList<>();
+		List<GProviderModelPrice> moved = new ArrayList<>();
+		for (GProviderDeal source : sources) {
+			ids.add(source.getId());
+			List<GProviderModelPrice> kept = new ArrayList<>();
+			if (source.getModelPrices() != null) {
+				for (GProviderModelPrice price : source.getModelPrices()) {
+					(configs.contains(price.getConfigCode()) ? moved : kept).add(price);
+				}
+			}
+			requireTemplate().updateFirst(new Query(Criteria.where("_id").is(source.getId())),
+					new Update().pull("secretCodes", secretCode).set("modelPrices", kept).set("dateModified", new Date()),
+					GProviderDeal.class);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("secretCode=" + secretCode + " moved away from the deals " + ids + " of provider=" + providerId
+					+ " with the prices of the configurations " + moved.stream().map(GProviderModelPrice::getConfigCode).toList());
+		}
+		return new KeyMove(ids, moved);
 	}
 
 	@Override

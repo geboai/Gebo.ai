@@ -1,0 +1,94 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+<div class="grid">
+  <div class="col-12">
+    @if (ownPricing) {
+      <p-message id="OwnPricingMessage" severity="info" styleClass="w-full">
+        <div class="flex align-items-center justify-content-between gap-3 w-full">
+          <span gebo-ai-text id="OwnPricingText">Conditions set for this configuration: saving the configuration stores them.</span>
+          @if (providerPricing) {
+            <p-button id="RestoreProviderPricingBtn" gebo-ai-label label="Restore the conditions retrieved from the provider's API"
+              icon="pi pi-undo" [outlined]="true" size="small" (onClick)="restoreProviderConditions()"></p-button>
+          }
+        </div>
+      </p-message>
+    } @else if (providerPricing) {
+      <p-message id="ProviderPricingMessage" severity="success" styleClass="w-full">
+        <span gebo-ai-text id="ProviderPricingText">Conditions retrieved from the provider's API: edit them to set this configuration's own conditions.</span>
+      </p-message>
+    } @else {
+      <p-message id="NoPricingMessage" severity="warn" styleClass="w-full">
+        <span gebo-ai-text id="NoPricingText">No conditions were retrieved from the provider's API: enter them to price the usage of this model.</span>
+      </p-message>
+    }
+  </div>
+  <div class="col-6">
+    <gebo-ai-field id="pricingType" label="Pricing type" help="How the provider charges this model">
+      <p-select id="pricingType" styleClass="w-full" [options]="pricingTypes" [ngModel]="edit.pricingType"
+        [ngModelOptions]="{standalone: true}" (ngModelChange)="set('pricingType', $event)" gebo-ai-field-element></p-select>
+    </gebo-ai-field>
+  </div>
+  <div class="col-6">
+    <gebo-ai-field id="currencyCode" label="Currency" help="ISO 4217 code of the currency of the prices, e.g. USD or EUR">
+      <input pInputText id="currencyCode" maxlength="3" [ngModel]="edit.currencyCode" [ngModelOptions]="{standalone: true}"
+        (ngModelChange)="set('currencyCode', $event)" gebo-ai-field-element />
+    </gebo-ai-field>
+  </div>
+  <div class="col-4">
+    <gebo-ai-field id="inputMtokenPrice" label="Input price per million tokens" help="Price of one million input (prompt) tokens">
+      <p-inputNumber id="inputMtokenPrice" mode="decimal" [minFractionDigits]="0" [maxFractionDigits]="6" [min]="0"
+        styleClass="w-full" [ngModel]="edit.inputMtokenPrice" [ngModelOptions]="{standalone: true}"
+        (ngModelChange)="set('inputMtokenPrice', $event)" gebo-ai-field-element></p-inputNumber>
+    </gebo-ai-field>
+  </div>
+  <div class="col-4">
+    <gebo-ai-field id="outputMtokenPrice" label="Output price per million tokens" help="Price of one million output (completion) tokens; when not set the input price applies">
+      <p-inputNumber id="outputMtokenPrice" mode="decimal" [minFractionDigits]="0" [maxFractionDigits]="6" [min]="0"
+        styleClass="w-full" [ngModel]="edit.outputMtokenPrice" [ngModelOptions]="{standalone: true}"
+        (ngModelChange)="set('outputMtokenPrice', $event)" gebo-ai-field-element></p-inputNumber>
+    </gebo-ai-field>
+  </div>
+  <div class="col-4">
+    <gebo-ai-field id="requestPrice" label="Price per request" help="Fixed price of each successful request, added to the tokens' price">
+      <p-inputNumber id="requestPrice" mode="decimal" [minFractionDigits]="0" [maxFractionDigits]="6" [min]="0"
+        styleClass="w-full" [ngModel]="edit.requestPrice" [ngModelOptions]="{standalone: true}"
+        (ngModelChange)="set('requestPrice', $event)" gebo-ai-field-element></p-inputNumber>
+    </gebo-ai-field>
+  </div>
+  @if (isFlat) {
+    <div class="col-4">
+      <gebo-ai-field id="monthlyFlatCost" label="Monthly flat cost" help="The monthly fee of the flat conditions">
+        <p-inputNumber id="monthlyFlatCost" mode="decimal" [minFractionDigits]="0" [maxFractionDigits]="2" [min]="0"
+          styleClass="w-full" [ngModel]="edit.monthlyFlatCost" [ngModelOptions]="{standalone: true}"
+          (ngModelChange)="set('monthlyFlatCost', $event)" gebo-ai-field-element></p-inputNumber>
+      </gebo-ai-field>
+    </div>
+    <div class="col-4">
+      <gebo-ai-field id="monthlyTrafficLimits" label="Monthly traffic limit (millions of tokens)" help="Tokens the monthly fee covers each month">
+        <p-inputNumber id="monthlyTrafficLimits" mode="decimal" [minFractionDigits]="0" [maxFractionDigits]="3" [min]="0"
+          styleClass="w-full" [ngModel]="edit.monthlyTrafficLimits" [ngModelOptions]="{standalone: true}"
+          (ngModelChange)="set('monthlyTrafficLimits', $event)" gebo-ai-field-element></p-inputNumber>
+      </gebo-ai-field>
+    </div>
+    <div class="col-4">
+      <gebo-ai-field id="dailyTrafficLimits" label="Daily traffic limit (millions of tokens)" help="Tokens the fee covers each day, when the provider caps the daily traffic">
+        <p-inputNumber id="dailyTrafficLimits" mode="decimal" [minFractionDigits]="0" [maxFractionDigits]="3" [min]="0"
+          styleClass="w-full" [ngModel]="edit.dailyTrafficLimits" [ngModelOptions]="{standalone: true}"
+          (ngModelChange)="set('dailyTrafficLimits', $event)" gebo-ai-field-element></p-inputNumber>
+      </gebo-ai-field>
+    </div>
+  }
+  <div class="col-12 text-sm text-600" gebo-ai-text id="ModelPricingHint">
+    These conditions are presented in LLMs configurations, where they can be confirmed as the price of this configuration in its
+    provider deal: a price confirmed there wins over them. Usage costs computed from them are an evaluation and may
+    differ from the actual costs billed by the supplier.
+  </div>
+</div>

@@ -249,88 +249,176 @@ class GProviderDealServiceImplTest {
 		return pricing;
 	}
 
+	/** A running chat model configuration of a provider, with its API key and model. */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel runtime(String providerId,
+			String configCode, String secretCode, String modelCode) {
+		ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel model = mock(
+				ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.class);
+		ai.gebo.llms.abstraction.layer.model.GChatModelType type = new ai.gebo.llms.abstraction.layer.model.GChatModelType();
+		type.setProviderId(providerId);
+		ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig config = new ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig();
+		config.setCode(configCode);
+		config.setApiSecretCode(secretCode);
+		when(model.getType()).thenReturn(type);
+		when(model.getConfig()).thenReturn(config);
+		when(model.getCode()).thenReturn(configCode);
+		when(model.safeGetModelCode()).thenReturn(modelCode);
+		return model;
+	}
+
+	/** Runtime DAOs running the given models. */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static ObjectProvider<ai.gebo.llms.abstraction.layer.services.IGRuntimeModelConfigurationDao<?, ?>> running(
+			ai.gebo.llms.abstraction.layer.services.IGConfigurableModel... models) {
+		ai.gebo.llms.abstraction.layer.services.IGRuntimeModelConfigurationDao dao = mock(
+				ai.gebo.llms.abstraction.layer.services.IGRuntimeModelConfigurationDao.class);
+		when(dao.getConfigurations()).thenReturn(java.util.List.of(models));
+		ObjectProvider provider = mock(ObjectProvider.class);
+		when(provider.orderedStream()).thenAnswer(x -> java.util.stream.Stream.of(dao));
+		return provider;
+	}
+
+	private static ai.gebo.llms.abstraction.layer.model.GProviderModelPrice price(String configCode, double in) {
+		return new ai.gebo.llms.abstraction.layer.model.GProviderModelPrice(configCode, "model-of-" + configCode,
+				pricing("USD", in, in), null);
+	}
+
 	@SuppressWarnings("unchecked")
+	private static java.util.List<ai.gebo.llms.abstraction.layer.model.GProviderModelPrice> setPrices(Update update) {
+		return (java.util.List<ai.gebo.llms.abstraction.layer.model.GProviderModelPrice>) ((org.bson.Document) update
+				.getUpdateObject().get("$set")).get("modelPrices");
+	}
+
 	@Test
-	void aModelPriceReplacesTheDealsPreviousOneAndNullRemovesIt() throws Exception {
+	void aConfigurationPriceReplacesTheDealsPreviousOneAndNullRemovesIt() throws Exception {
 		GProviderDeal deal = deal("openai", "k1");
 		deal.setId("openai-1");
-		deal.getModelPrices().add(new ai.gebo.llms.abstraction.layer.model.GProviderModelPrice("gpt-4.1",
-				pricing("USD", 1d, 2d), null));
-		deal.getModelPrices().add(new ai.gebo.llms.abstraction.layer.model.GProviderModelPrice("gpt-4o",
-				pricing("USD", 3d, 4d), null));
+		deal.getModelPrices().add(price("chat-a", 1d));
+		deal.getModelPrices().add(price("chat-b", 3d));
 		MongoTemplate mongo = mock(MongoTemplate.class);
 		GProviderDealServiceImpl service = new GProviderDealServiceImpl(provider(repositoryWith(deal)),
-				provider(mongo), provider(null), daos(), readers());
+				provider(mongo), provider(null),
+				running(runtime("openai", "chat-a", "k1", "gpt-4.1"), runtime("openai", "chat-b", "k1", "gpt-4o")),
+				readers());
 
-		service.updateModelPricing("openai-1", "gpt-4.1", pricing("USD", 5d, 6d));
-		service.updateModelPricing("openai-1", "gpt-4o", null);
+		service.updateModelPricing("openai-1", "chat-a", pricing("USD", 5d, 6d));
+		service.updateModelPricing("openai-1", "chat-b", null);
 
 		ArgumentCaptor<Update> updates = ArgumentCaptor.forClass(Update.class);
 		verify(mongo, org.mockito.Mockito.times(2)).updateFirst(any(Query.class), updates.capture(),
 				eq(GProviderDeal.class));
-		java.util.List<ai.gebo.llms.abstraction.layer.model.GProviderModelPrice> replaced = (java.util.List<ai.gebo.llms.abstraction.layer.model.GProviderModelPrice>) ((org.bson.Document) updates
-				.getAllValues().get(0).getUpdateObject().get("$set")).get("modelPrices");
-		org.junit.jupiter.api.Assertions.assertEquals(java.util.List.of("gpt-4o", "gpt-4.1"),
-				replaced.stream().map(x -> x.getModelCode()).toList());
+		java.util.List<ai.gebo.llms.abstraction.layer.model.GProviderModelPrice> replaced = setPrices(
+				updates.getAllValues().get(0));
+		org.junit.jupiter.api.Assertions.assertEquals(java.util.List.of("chat-b", "chat-a"),
+				replaced.stream().map(x -> x.getConfigCode()).toList());
 		org.junit.jupiter.api.Assertions.assertEquals(5d, replaced.get(1).getPricingConditions().getInputMtokenPrice());
-		java.util.List<ai.gebo.llms.abstraction.layer.model.GProviderModelPrice> removed = (java.util.List<ai.gebo.llms.abstraction.layer.model.GProviderModelPrice>) ((org.bson.Document) updates
-				.getAllValues().get(1).getUpdateObject().get("$set")).get("modelPrices");
-		org.junit.jupiter.api.Assertions.assertEquals(java.util.List.of("gpt-4.1"),
-				removed.stream().map(x -> x.getModelCode()).toList());
+		// The model code is taken from the running configuration.
+		org.junit.jupiter.api.Assertions.assertEquals("gpt-4.1", replaced.get(1).getModelCode());
+		org.junit.jupiter.api.Assertions.assertEquals(java.util.List.of("chat-a"),
+				setPrices(updates.getAllValues().get(1)).stream().map(x -> x.getConfigCode()).toList());
 	}
 
 	@Test
-	void invalidModelPricesAreRejected() {
+	void invalidConfigurationPricesAreRejected() {
 		GProviderDeal deal = deal("openai", "k1");
 		deal.setId("openai-1");
 		MongoTemplate mongo = mock(MongoTemplate.class);
 		GProviderDealServiceImpl service = new GProviderDealServiceImpl(provider(repositoryWith(deal)),
-				provider(mongo), provider(null), daos(), readers());
+				provider(mongo), provider(null),
+				running(runtime("openai", "chat-a", "k1", "gpt-4.1"), runtime("openai", "chat-other-key", "k9", "gpt-4.1"),
+						runtime("mistralai", "chat-mistral", "k1", "mistral-large")),
+				readers());
 
 		assertThrows(IllegalArgumentException.class,
-				() -> service.updateModelPricing("openai-1", "gpt-4.1", pricing(null, 1d, 2d)));
+				() -> service.updateModelPricing("openai-1", "chat-a", pricing(null, 1d, 2d)));
 		assertThrows(IllegalArgumentException.class,
-				() -> service.updateModelPricing("openai-1", "gpt-4.1", pricing("USD", -1d, 2d)));
+				() -> service.updateModelPricing("openai-1", "chat-a", pricing("USD", -1d, 2d)));
 		assertThrows(IllegalArgumentException.class,
-				() -> service.updateModelPricing("openai-1", "gpt-4.1", pricing("USD", null, null)));
+				() -> service.updateModelPricing("openai-1", "chat-a", pricing("USD", null, null)));
+		assertThrows(IllegalArgumentException.class, () -> service.updateModelPricing("openai-1", " ", pricing("USD", 1d, 2d)));
+		// Not running, running with a key the deal does not cover, or of another provider.
 		assertThrows(IllegalArgumentException.class,
-				() -> service.updateModelPricing("openai-1", " ", pricing("USD", 1d, 2d)));
+				() -> service.updateModelPricing("openai-1", "chat-deleted", pricing("USD", 1d, 2d)));
+		assertThrows(IllegalArgumentException.class,
+				() -> service.updateModelPricing("openai-1", "chat-other-key", pricing("USD", 1d, 2d)));
+		assertThrows(IllegalArgumentException.class,
+				() -> service.updateModelPricing("openai-1", "chat-mistral", pricing("USD", 1d, 2d)));
 		verify(mongo, never()).updateFirst(any(Query.class), any(Update.class), eq(GProviderDeal.class));
 	}
 
 	@Test
-	void theModelPriceIsFoundAtTheKeyProviderAndModelCoordinatesAndCached() {
+	void theConfigurationPriceIsServedFromTheSnapshotWithoutReadingTheStore() {
 		GProviderDeal deal = deal("openai", "k1");
 		deal.setId("openai-1");
-		deal.getModelPrices().add(new ai.gebo.llms.abstraction.layer.model.GProviderModelPrice("gpt-4.1",
-				pricing("USD", 1d, 2d), null));
+		deal.getModelPrices().add(price("chat-a", 1d));
 		GProviderDealRepository repository = repositoryWith(deal);
-		when(repository.findByProviderIdAndSecretCode("openai", "k1")).thenReturn(Optional.of(deal));
+		when(repository.findAll()).thenReturn(java.util.List.of(deal));
 		GProviderDealServiceImpl service = new GProviderDealServiceImpl(provider(repository),
-				provider(mock(MongoTemplate.class)), provider(null), daos(), readers());
+				provider(mock(MongoTemplate.class)), provider(null),
+				running(runtime("openai", "chat-a", "k1", "gpt-4.1"), runtime("openai", "chat-b", "k1", "gpt-4o")),
+				readers());
+		service.buildPricesSnapshotAtStartup();
 
 		org.junit.jupiter.api.Assertions.assertEquals(1d,
-				service.findModelPricing("openai", "k1", "gpt-4.1").getInputMtokenPrice());
-		assertNull(service.findModelPricing("openai", "k1", "gpt-4o"));
-		assertNull(service.findModelPricing("openai", "k1", "unknown"));
-		assertNull(service.findModelPricing("openai", null, "gpt-4.1"));
-		// Read on every model call: one repository read serves the following ones.
-		verify(repository, org.mockito.Mockito.times(1)).findByProviderIdAndSecretCode("openai", "k1");
+				service.findConfigPricing("openai", "k1", "chat-a").getInputMtokenPrice());
+		org.junit.jupiter.api.Assertions.assertEquals(1d, service
+				.findModelPricing(runtime("openai", "chat-a", "k1", "gpt-4.1")).getInputMtokenPrice());
+		assertNull(service.findConfigPricing("openai", "k1", "chat-b"));
+		// The deal covering the key the configuration runs with prices it, no other.
+		assertNull(service.findConfigPricing("openai", "k2", "chat-a"));
+		assertNull(service.findConfigPricing("mistralai", "k1", "chat-a"));
+		assertNull(service.findConfigPricing("openai", null, "chat-a"));
+		// Built once: the lookups on every model call never read the store.
+		verify(repository, org.mockito.Mockito.times(1)).findAll();
+		verify(repository, never()).findByProviderIdAndSecretCode(any(), any());
 
-		// A change on this instance is seen at once.
-		service.updateModelPricing("openai-1", "gpt-4o", pricing("USD", 3d, 4d));
-		service.findModelPricing("openai", "k1", "gpt-4o");
-		verify(repository, org.mockito.Mockito.times(2)).findByProviderIdAndSecretCode("openai", "k1");
+		// A change on this instance rebuilds it at once.
+		deal.getModelPrices().add(price("chat-b", 3d));
+		service.updateModelPricing("openai-1", "chat-b", pricing("USD", 3d, 3d));
+		org.junit.jupiter.api.Assertions.assertEquals(3d,
+				service.findConfigPricing("openai", "k1", "chat-b").getInputMtokenPrice());
+		verify(repository, org.mockito.Mockito.times(2)).findAll();
 	}
 
 	@Test
-	void aFailingDealsStoreNeverFailsTheModelPricing() {
+	void aFailingDealsStoreNeverFailsThePricing() {
 		GProviderDealRepository repository = mock(GProviderDealRepository.class);
-		when(repository.findByProviderIdAndSecretCode(any(), any())).thenThrow(new IllegalStateException("down"));
+		when(repository.findAll()).thenThrow(new IllegalStateException("down"));
 		GProviderDealServiceImpl service = new GProviderDealServiceImpl(provider(repository),
 				provider(mock(MongoTemplate.class)), provider(null), daos(), readers());
 
-		assertNull(service.findModelPricing("openai", "k1", "gpt-4.1"));
+		service.buildPricesSnapshotAtStartup();
+		assertNull(service.findConfigPricing("openai", "k1", "chat-a"));
+	}
+
+	@Test
+	void creatingADealWithAKeyMovesThePricesOfTheConfigurationsRunningWithIt() throws Exception {
+		GProviderDealRepository repository = mock(GProviderDealRepository.class);
+		MongoTemplate mongo = mock(MongoTemplate.class);
+		GProviderDeal source = deal("openai", "k1", "k2");
+		source.setId("openai-source");
+		source.getModelPrices().add(price("chat-a", 1d));
+		source.getModelPrices().add(price("chat-k2", 2d));
+		when(mongo.find(any(Query.class), eq(GProviderDeal.class))).thenReturn(java.util.List.of(source));
+		when(repository.insert(any(GProviderDeal.class))).thenAnswer(x -> x.getArgument(0));
+		GProviderDealServiceImpl service = new GProviderDealServiceImpl(provider(repository), provider(mongo),
+				provider(secrets("openai", "k1", "k2")),
+				running(runtime("openai", "chat-a", "k1", "gpt-4.1"), runtime("openai", "chat-k2", "k2", "gpt-4o")),
+				readers());
+
+		service.createDeal("openai", java.util.List.of("k1"), "the new deal");
+
+		ArgumentCaptor<GProviderDeal> created = ArgumentCaptor.forClass(GProviderDeal.class);
+		verify(repository).insert(created.capture());
+		org.junit.jupiter.api.Assertions.assertEquals(java.util.List.of("k1"), created.getValue().getSecretCodes());
+		org.junit.jupiter.api.Assertions.assertEquals(java.util.List.of("chat-a"),
+				created.getValue().getModelPrices().stream().map(x -> x.getConfigCode()).toList());
+		// The source deal keeps the prices of the configurations running with its other keys.
+		ArgumentCaptor<Update> pull = ArgumentCaptor.forClass(Update.class);
+		verify(mongo).updateFirst(any(Query.class), pull.capture(), eq(GProviderDeal.class));
+		org.junit.jupiter.api.Assertions.assertEquals(java.util.List.of("chat-k2"),
+				setPrices(pull.getValue()).stream().map(x -> x.getConfigCode()).toList());
 	}
 
 	private static GProviderDeal deal(String providerId, String... secretCodes) {
@@ -415,27 +503,39 @@ class GProviderDealServiceImplTest {
 	}
 
 	@Test
-	void assigningAKeyHeldByAnotherDealOfTheProviderTransfersIt() throws Exception {
+	void assigningAKeyHeldByAnotherDealOfTheProviderTransfersItWithItsPrices() throws Exception {
 		GProviderDealRepository repository = mock(GProviderDealRepository.class);
 		MongoTemplate mongo = mock(MongoTemplate.class);
 		GProviderDeal target = deal("openai", "key-2");
 		target.setId("openai-target");
+		target.getModelPrices().add(price("chat-b", 4d));
 		when(repository.findById("openai-target")).thenReturn(Optional.of(target));
-		GProviderDeal source = deal("openai", "key-1");
+		GProviderDeal source = deal("openai", "key-1", "key-3");
 		source.setId("openai-source");
+		source.getModelPrices().add(price("chat-a", 1d));
+		source.getModelPrices().add(price("chat-c", 3d));
 		when(mongo.find(any(Query.class), eq(GProviderDeal.class))).thenReturn(java.util.List.of(source));
-		when(mongo.updateMulti(any(Query.class), any(Update.class), eq(GProviderDeal.class)))
-				.thenReturn(UpdateResult.acknowledged(1, 1L, null));
 		GProviderDealServiceImpl service = new GProviderDealServiceImpl(provider(repository), provider(mongo),
-				provider(secrets("openai", "key-1", "key-2")), daos(), readers());
+				provider(secrets("openai", "key-1", "key-2", "key-3")),
+				running(runtime("openai", "chat-a", "key-1", "gpt-4.1"), runtime("openai", "chat-c", "key-3", "gpt-4o")),
+				readers());
 
 		service.assignApiKey("openai-target", "key-1");
 
-		// Pulled from the provider's other deals, then added to the target one.
-		ArgumentCaptor<Query> pull = ArgumentCaptor.forClass(Query.class);
-		verify(mongo).updateMulti(pull.capture(), any(Update.class), eq(GProviderDeal.class));
-		org.junit.jupiter.api.Assertions.assertEquals("openai", pull.getValue().getQueryObject().get("providerId"));
-		verify(mongo).updateFirst(any(Query.class), any(Update.class), eq(GProviderDeal.class));
+		// Pulled from the provider's other deal with its configurations' prices, then
+		// added to the target one.
+		ArgumentCaptor<Query> queries = ArgumentCaptor.forClass(Query.class);
+		ArgumentCaptor<Update> updates = ArgumentCaptor.forClass(Update.class);
+		verify(mongo, org.mockito.Mockito.times(2)).updateFirst(queries.capture(), updates.capture(),
+				eq(GProviderDeal.class));
+		org.junit.jupiter.api.Assertions.assertEquals("openai-source",
+				queries.getAllValues().get(0).getQueryObject().get("_id"));
+		org.junit.jupiter.api.Assertions.assertEquals(java.util.List.of("chat-c"),
+				setPrices(updates.getAllValues().get(0)).stream().map(x -> x.getConfigCode()).toList());
+		org.junit.jupiter.api.Assertions.assertEquals("openai-target",
+				queries.getAllValues().get(1).getQueryObject().get("_id"));
+		org.junit.jupiter.api.Assertions.assertEquals(java.util.List.of("chat-b", "chat-a"),
+				setPrices(updates.getAllValues().get(1)).stream().map(x -> x.getConfigCode()).toList());
 	}
 
 	@Test

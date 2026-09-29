@@ -15,21 +15,29 @@ export interface GProviderModelPriceInfo {
     providerId?: string;
     dealId?: string;
     dealDescription?: string;
+    configCode?: string;
+    configDescription?: string;
     modelCode?: string;
-    modelTypes?: Array<GProviderModelPriceInfo.ModelTypesEnum>;
-    modelConfigCodes?: Array<string>;
-    secretCodes?: Array<string>;
+    modelType?: GProviderModelPriceInfo.ModelTypeEnum;
+    secretCode?: string;
     configuredPricing?: GModelPricingConditions;
+    configuredPricingSource?: GProviderModelPriceInfo.ConfiguredPricingSourceEnum;
     dealPricing?: GModelPricingConditions;
+    stale?: boolean;
 }
 export namespace GProviderModelPriceInfo {
-    export type ModelTypesEnum = 'CHAT' | 'EMBEDDING' | 'IMAGE' | 'RANKER' | 'TTS' | 'TRANSCRIPT';
-    export const ModelTypesEnum = {
-        CHAT: 'CHAT' as ModelTypesEnum,
-        EMBEDDING: 'EMBEDDING' as ModelTypesEnum,
-        IMAGE: 'IMAGE' as ModelTypesEnum,
-        RANKER: 'RANKER' as ModelTypesEnum,
-        TTS: 'TTS' as ModelTypesEnum,
-        TRANSCRIPT: 'TRANSCRIPT' as ModelTypesEnum
+    export type ModelTypeEnum = 'CHAT' | 'EMBEDDING' | 'IMAGE' | 'RANKER' | 'TTS' | 'TRANSCRIPT';
+    export const ModelTypeEnum = {
+        CHAT: 'CHAT' as ModelTypeEnum,
+        EMBEDDING: 'EMBEDDING' as ModelTypeEnum,
+        IMAGE: 'IMAGE' as ModelTypeEnum,
+        RANKER: 'RANKER' as ModelTypeEnum,
+        TTS: 'TTS' as ModelTypeEnum,
+        TRANSCRIPT: 'TRANSCRIPT' as ModelTypeEnum
+    };
+    export type ConfiguredPricingSourceEnum = 'CONFIGURATION' | 'PROVIDER_API';
+    export const ConfiguredPricingSourceEnum = {
+        CONFIGURATION: 'CONFIGURATION' as ConfiguredPricingSourceEnum,
+        PROVIDERAPI: 'PROVIDER_API' as ConfiguredPricingSourceEnum
     };
 }

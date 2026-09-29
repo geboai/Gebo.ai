@@ -12,6 +12,7 @@
 import { GModelPricingConditions } from './gModelPricingConditions';
 
 export interface GProviderModelPrice { 
+    configCode?: string;
     modelCode?: string;
     pricingConditions?: GModelPricingConditions;
     dateModified?: Date;

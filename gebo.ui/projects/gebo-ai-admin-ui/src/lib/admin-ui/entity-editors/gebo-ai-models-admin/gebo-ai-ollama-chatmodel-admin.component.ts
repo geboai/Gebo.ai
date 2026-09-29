@@ -63,6 +63,7 @@ export class GeboAIOllamaChatModelAdminComponent extends BaseEntityEditingCompon
         description: new FormControl(),
         modelTypeCode: new FormControl(),
         choosedModel: new FormControl(),
+        pricingConditions: new FormControl(),
         defaultModel:new FormControl(),
         apiSecretCode: new FormControl(),
         temperature: new FormControl(),

@@ -55,6 +55,13 @@
 
     <div class="geboDialogContent">
       <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+      <p-tabs [value]="0">
+        <p-tablist>
+          <p-tab [value]="0" gebo-ai-text>General infos</p-tab>
+          <p-tab [value]="1" gebo-ai-text [disabled]="!formGroup.controls['choosedModel'].value?.code">Model price</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+          <p-tabpanel [value]="0">
 
       <div class="grid standardTabDialogueHeight">
         <div class="col-6">
@@ -85,7 +92,13 @@
           </gebo-ai-field>
         </div>
       </div>
-    </div>
+          </p-tabpanel>
+          <p-tabpanel [value]="1">
+            <gebo-ai-model-pricing [formGroup]="formGroup"></gebo-ai-model-pricing>
+          </p-tabpanel>
+        </p-tabpanels>
+      </p-tabs>
+      </div>
 
   </p-panel>
   <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

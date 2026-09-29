@@ -60,6 +60,9 @@ export class ProviderDealsComponent implements OnInit {
     protected priceEdits: { [rowKey: string]: PriceEdit } = {};
     protected descriptionEdits: { [dealId: string]: string } = {};
     protected newDealDescription: string = "";
+    /** The API keys to move into the new deal. */
+    protected newDealKeys: string[] = [];
+    protected keyOptions: { label: string, value: string }[] = [];
     protected messages: GUserMessage[] = [];
 
     constructor(private dealsService: ProviderDealsControllerService) {
@@ -99,6 +102,11 @@ export class ProviderDealsComponent implements OnInit {
                 this.descriptionEdits = {};
                 this.deals.forEach(x => { if (x.id) this.descriptionEdits[x.id] = x.description ?? ""; });
                 this.apiKeys = keys.result ?? [];
+                this.keyOptions = this.apiKeys.map(x => ({
+                    label: (x.description ? x.description + " (" + x.secretCode + ")" : x.secretCode ?? "")
+                        + (x.dealId ? " - " + this.dealDescription(x.dealId) : ""),
+                    value: x.secretCode ?? ""
+                }));
                 this.modelPrices = prices.result ?? [];
                 this.priceEdits = {};
                 this.modelPrices.forEach(row => this.priceEdits[this.rowKey(row)] = this.editOf(row));
@@ -110,7 +118,7 @@ export class ProviderDealsComponent implements OnInit {
     }
 
     protected rowKey(row: GProviderModelPriceInfo): string {
-        return (row.dealId ?? "") + "|" + (row.modelCode ?? "");
+        return (row.dealId ?? "") + "|" + (row.configCode ?? "");
     }
 
     /** The editor starts from the deal's price, else from the configured one to complete. */
@@ -167,12 +175,17 @@ export class ProviderDealsComponent implements OnInit {
         });
     }
 
+    /**
+     * Creates a deal, moving into it the chosen API keys together with the prices
+     * their deals give to the configurations running with them.
+     */
     protected createDeal(): void {
         if (!this.providerId) return;
         this.run(this.dealsService.createProviderDeal({
-            providerId: this.providerId, description: this.newDealDescription, secretCodes: []
+            providerId: this.providerId, description: this.newDealDescription, secretCodes: this.newDealKeys
         }));
         this.newDealDescription = "";
+        this.newDealKeys = [];
     }
 
     protected saveDescription(deal: GProviderDeal): void {
@@ -201,7 +214,7 @@ export class ProviderDealsComponent implements OnInit {
     }
 
     protected savePrice(row: GProviderModelPriceInfo): void {
-        if (!row.dealId || !row.modelCode) return;
+        if (!row.dealId || !row.configCode) return;
         const edit = this.priceEdits[this.rowKey(row)];
         const source = row.dealPricing ?? row.configuredPricing;
         const pricing: GModelPricingConditions = {
@@ -213,13 +226,41 @@ export class ProviderDealsComponent implements OnInit {
             requestPrice: edit.requestPrice ?? undefined
         };
         this.run(this.dealsService.updateModelPricing({
-            dealId: row.dealId, modelCode: row.modelCode, pricingConditions: pricing
+            dealId: row.dealId, configCode: row.configCode, pricingConditions: pricing
         }));
     }
 
-    /** Removes the deal's price: the model goes back to its configured price. */
+    /** Confirms the configuration's own pricing as the deal's price of the configuration. */
+    protected confirmConfiguredPrice(row: GProviderModelPriceInfo): void {
+        if (!row.dealId || !row.configCode || !row.configuredPricing) return;
+        this.run(this.dealsService.updateModelPricing({
+            dealId: row.dealId, configCode: row.configCode, pricingConditions: row.configuredPricing
+        }));
+    }
+
+    /** Whether the deal already gives the configuration its configured pricing. */
+    protected isConfiguredPriceConfirmed(row: GProviderModelPriceInfo): boolean {
+        return this.samePricing(row.dealPricing, row.configuredPricing);
+    }
+
+    private samePricing(a?: GModelPricingConditions, b?: GModelPricingConditions): boolean {
+        if (!a || !b) return false;
+        const fields: (keyof GModelPricingConditions)[] = ["pricingType", "currencyCode", "inputMtokenPrice",
+            "outputMtokenPrice", "requestPrice", "monthlyFlatCost", "monthlyTrafficLimits", "dailyTrafficLimits"];
+        return fields.every(f => (a[f] ?? null) === (b[f] ?? null));
+    }
+
+    protected sourceLabel(row: GProviderModelPriceInfo): string {
+        switch (row.configuredPricingSource) {
+            case GProviderModelPriceInfo.ConfiguredPricingSourceEnum.CONFIGURATION: return "set in the configuration";
+            case GProviderModelPriceInfo.ConfiguredPricingSourceEnum.PROVIDERAPI: return "retrieved from the provider's API";
+            default: return "no conditions";
+        }
+    }
+
+    /** Removes the deal's price: the configuration goes back to its own pricing. */
     protected removePrice(row: GProviderModelPriceInfo): void {
-        if (!row.dealId || !row.modelCode) return;
-        this.run(this.dealsService.updateModelPricing({ dealId: row.dealId, modelCode: row.modelCode }));
+        if (!row.dealId || !row.configCode) return;
+        this.run(this.dealsService.updateModelPricing({ dealId: row.dealId, configCode: row.configCode }));
     }
 }

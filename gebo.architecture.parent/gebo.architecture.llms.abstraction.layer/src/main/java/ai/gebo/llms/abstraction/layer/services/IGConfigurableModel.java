@@ -91,7 +91,7 @@ public interface IGConfigurableModel<ModelConfig extends GBaseModelConfig, Model
 	 * The model's pricing: by default the configured one
 	 * ({@link #getConfiguredPricingConditions()}). The abstract base implementations
 	 * first look for the price the provider deal covering the model's API key gives
-	 * to {@link #safeGetModelCode()}, see {@link IGProviderDealPricedModel}.
+	 * to its configuration code, see {@link IGProviderDealPricedModel}.
 	 */
 	public default GModelPricingConditions getPricingConditions() {
 		return getConfiguredPricingConditions();

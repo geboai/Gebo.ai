@@ -29,6 +29,7 @@ export class GeboAIGenericOpenaAIAPiRankerAdminComponent extends BaseEntityEditi
         defaultModel: new FormControl(),
         apiSecretCode: new FormControl(),
         choosedModel: new FormControl(),
+        pricingConditions: new FormControl(),
         baseUrl: new FormControl(),
         contextLength: new FormControl(),
         maxDocumentsPerRequest: new FormControl(),

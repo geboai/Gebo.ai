@@ -60,6 +60,7 @@ export class GeboAIGenericOpenAIAPITranscriptModelAdminComponent extends BaseEnt
         modelTypeCode: new FormControl(),
         defaultModel: new FormControl(),
         choosedModel: new FormControl(),
+        pricingConditions: new FormControl(),
         apiSecretCode: new FormControl(),
         baseUrl: new FormControl()
     });

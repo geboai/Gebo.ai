@@ -167,8 +167,8 @@ public class ProviderDealsController {
 	}
 
 	/**
-	 * The models of a provider, per deal and model code, as the runtime models run
-	 * them: the price configured with each model and the one its deal gives it.
+	 * The model configurations of a provider, as they run, under the deal covering
+	 * their API key: the pricing saved in each and the one its deal gives it.
 	 */
 	@GetMapping(value = "getProviderModelPrices", produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<GProviderModelPriceInfo>> getProviderModelPrices(
@@ -177,13 +177,13 @@ public class ProviderDealsController {
 	}
 
 	/**
-	 * Sets the price a deal gives to a model, overriding or completing the
-	 * configured one, or removes it (null pricing) to go back to the configured one.
+	 * Sets the price a deal gives to a model configuration, overriding or completing
+	 * the configured one, or removes it (null pricing) to go back to the configured one.
 	 */
 	@PostMapping(value = "updateModelPricing", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<GProviderDeal> updateModelPricing(@RequestBody ProviderDealModelPricingRequest request) {
 		return run("updateModelPricing", () -> dealService.updateModelPricing(request.getDealId(),
-				request.getModelCode(), request.getPricingConditions()));
+				request.getConfigCode(), request.getPricingConditions()));
 	}
 
 	/**

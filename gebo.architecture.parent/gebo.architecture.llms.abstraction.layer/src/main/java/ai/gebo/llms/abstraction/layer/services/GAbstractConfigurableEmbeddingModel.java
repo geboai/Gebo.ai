@@ -47,8 +47,8 @@ public abstract class GAbstractConfigurableEmbeddingModel<ModelConfig extends GB
 	}
 
 	/**
-	 * The price the provider deal covering this model's API key gives to its model
-	 * code, else the configured one.
+	 * The price the provider deal covering this model's API key gives to its
+	 * configuration, else the configured one; read from an in-memory snapshot.
 	 */
 	@Override
 	public GModelPricingConditions getPricingConditions() {
