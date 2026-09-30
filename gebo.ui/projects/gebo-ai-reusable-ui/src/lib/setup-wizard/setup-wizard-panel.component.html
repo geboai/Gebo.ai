@@ -22,32 +22,43 @@
     <!--
     <p-messages [value]="userMessages" [enableService]="false"></p-messages>
     -->
-    <div class="gebo-setup-section-list">
-      @for (entry of wizardsEntries; track entry) {
-        <div class="gebo-setup-section-row">
-          <div class="gebo-setup-section-status">@if (entry.alreadyCompleted===true) {
-              <p-button [text]="true"
-                [disabled]="entry.enabled===false" icon="pi pi-check"
-              [style]="{color: 'green'}" (onClick)="openWizard(entry)"></p-button>
+    @switch (grouping) {
+      @case ("Tab") {
+        <p-tabs [(value)]="selectedGroupTab" [scrollable]="true">
+          <p-tablist>
+            @for (group of wizardGroups; track group.groupId) {
+              <p-tab [value]="group.groupId">
+                <ng-container *ngTemplateOutlet="groupHeader; context: { $implicit: group }"></ng-container>
+              </p-tab>
             }
-            @if (entry.alreadyCompleted===false && entry.mandatory===true) {
-              <p-button [text]="true"
-                [disabled]="entry.enabled===false" icon="pi pi-pen-to-square" [style]="{color: 'red'}"
-              (onClick)="openWizard(entry)"></p-button>
+          </p-tablist>
+          <p-tabpanels>
+            @for (group of wizardGroups; track group.groupId) {
+              <p-tabpanel [value]="group.groupId">
+                <ng-container *ngTemplateOutlet="groupContent; context: { $implicit: group }"></ng-container>
+              </p-tabpanel>
             }
-            @if (entry.alreadyCompleted===false && entry.mandatory!==true) {
-              <p-button [text]="true"
-                [disabled]="entry.enabled===false" icon="pi pi-pen-to-square" [style]="{color: 'orange'}"
-              (onClick)="openWizard(entry)"></p-button>
-            }
-          </div>
-          <div class="gebo-setup-section-label">{{entry.label}}</div>
-          <div class="gebo-setup-section-description">{{entry.description}} @if (entry.experimental===true) {
-            <span class="gebo-setup-section-preview">(Preview feature)</span>
-          }</div>
-        </div>
+          </p-tabpanels>
+        </p-tabs>
       }
-    </div>
+      @case ("Accordion") {
+        <p-accordion [multiple]="true" [(value)]="openedGroupPanels">
+          @for (group of wizardGroups; track group.groupId) {
+            <p-accordion-panel [value]="group.groupId">
+              <p-accordion-header>
+                <ng-container *ngTemplateOutlet="groupHeader; context: { $implicit: group }"></ng-container>
+              </p-accordion-header>
+              <p-accordion-content>
+                <ng-container *ngTemplateOutlet="groupContent; context: { $implicit: group }"></ng-container>
+              </p-accordion-content>
+            </p-accordion-panel>
+          }
+        </p-accordion>
+      }
+      @default {
+        <ng-container *ngTemplateOutlet="sectionRows; context: { $implicit: wizardsEntries }"></ng-container>
+      }
+    }
 </p-panel>
 }
 @if (wizardComponent) {
@@ -88,3 +99,54 @@
     </p-tabs>
   }
 </p-dialog>
+<ng-template #groupHeader let-group>
+  <span class="gebo-setup-group-header">
+    @switch (group.status) {
+      @case ("full") {
+        <i class="pi pi-check-circle gebo-setup-group-status gebo-setup-group-status-full"></i>
+      }
+      @case ("complete") {
+        <i class="pi pi-circle gebo-setup-group-status gebo-setup-group-status-complete"></i>
+      }
+      @case ("incomplete") {
+        <i class="pi pi-exclamation-circle gebo-setup-group-status gebo-setup-group-status-incomplete"></i>
+      }
+    }
+    <span class="gebo-setup-group-label">{{group.label}}</span>
+    <span class="gebo-setup-group-counter">{{group.completedCount}}/{{group.enabledCount}}</span>
+  </span>
+</ng-template>
+<ng-template #groupContent let-group>
+  @if (group.description) {
+    <div class="gebo-setup-group-description">{{group.description}}</div>
+  }
+  <ng-container *ngTemplateOutlet="sectionRows; context: { $implicit: group.items }"></ng-container>
+</ng-template>
+<ng-template #sectionRows let-entries>
+  <div class="gebo-setup-section-list">
+    @for (entry of entries; track entry.wizardSectionId) {
+      <div class="gebo-setup-section-row">
+        <div class="gebo-setup-section-status">@if (entry.alreadyCompleted===true) {
+            <p-button [text]="true"
+              [disabled]="entry.enabled===false" icon="pi pi-check"
+            [style]="{color: 'green'}" (onClick)="openWizard(entry)"></p-button>
+          }
+          @if (entry.alreadyCompleted===false && entry.mandatory===true) {
+            <p-button [text]="true"
+              [disabled]="entry.enabled===false" icon="pi pi-pen-to-square" [style]="{color: 'red'}"
+            (onClick)="openWizard(entry)"></p-button>
+          }
+          @if (entry.alreadyCompleted===false && entry.mandatory!==true) {
+            <p-button [text]="true"
+              [disabled]="entry.enabled===false" icon="pi pi-pen-to-square" [style]="{color: 'orange'}"
+            (onClick)="openWizard(entry)"></p-button>
+          }
+        </div>
+        <div class="gebo-setup-section-label">{{entry.label}}</div>
+        <div class="gebo-setup-section-description">{{entry.description}} @if (entry.experimental===true) {
+          <span class="gebo-setup-section-preview">(Preview feature)</span>
+        }</div>
+      </div>
+    }
+  </div>
+</ng-template>

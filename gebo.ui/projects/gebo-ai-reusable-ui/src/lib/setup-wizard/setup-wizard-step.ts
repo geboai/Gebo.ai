@@ -109,6 +109,8 @@ export interface SetupWizardsSection {
     installedModule?: Type<AbstractInstalledModuleService>;
     /** Instance of installed module service after initialization */
     installedModuleInstance?:AbstractInstalledModuleService;
+    /** Id of the WIZARD_SECTION_GROUP this section is displayed in, sections without a known group go in the "other" group */
+    groupId?: string;
     /** Whether this section must be completed to finish the wizard */
 
     experimental?:boolean;
@@ -136,6 +138,8 @@ export interface SetupWizardItem {
     alreadyCompleted: boolean;
     /** Component to render for this wizard item */
     wizardComponent: Type<BaseWizardSectionComponent>;
+    /** Id of the group this item is displayed in */
+    groupId?: string;
     experimental?:boolean;
     /** Whether this item must be completed to finish the wizard */
     mandatory?: boolean;
@@ -146,3 +150,37 @@ export interface SetupWizardItem {
  * that need to render or process the wizard.
  */
 export const WIZARD_SECTION = new InjectionToken<SetupWizardsSection[]>('WIZARD_SECTION');
+
+/**
+ * Interface defining a group of wizard sections, used by the setup wizard panel
+ * to display sections grouped in tabs or accordion panels.
+ * Sections join a group by setting their groupId.
+ */
+export interface SetupWizardsSectionGroup {
+    /** Unique identifier of the group, referenced by SetupWizardsSection.groupId */
+    groupId: string;
+    /** Determines the display order of this group in the wizard */
+    orderEntry: number;
+    /** Display name for the group */
+    label: string;
+    /** Longer text explaining the purpose of this group */
+    description?: string;
+}
+
+/**
+ * Id of the built-in group collecting sections with no groupId or an unknown groupId
+ */
+export const UNGROUPED_SETUP_SECTIONS_GROUP_ID: string = "ungroupedSetupSectionsGroup";
+
+/**
+ * How the setup wizard panel groups its sections:
+ * - 'none': flat list, groups are ignored
+ * - 'Tab': one tab per group
+ * - 'Accordion': one accordion panel per group
+ */
+export type SetupWizardGrouping = "none" | "Tab" | "Accordion";
+
+/**
+ * Injection token for providing the wizard section groups, provided multi like WIZARD_SECTION.
+ */
+export const WIZARD_SECTION_GROUP = new InjectionToken<SetupWizardsSectionGroup[]>('WIZARD_SECTION_GROUP');

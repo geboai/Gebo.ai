@@ -29,6 +29,7 @@ export * from "./lib/setup-wizard/gebo-setup-wizards.service";
 
 // Export the setup wizards module containing all components related to the setup process
 export * from "./lib/setup-wizard/setup-wizards.module";
+export * from "./lib/setup-wizard/setup-wizard-groups";
 
 // Export the setup wizards routing module for navigation within the setup wizard flow
 export * from "./lib/setup-wizard/setup-wizards-routing.module";

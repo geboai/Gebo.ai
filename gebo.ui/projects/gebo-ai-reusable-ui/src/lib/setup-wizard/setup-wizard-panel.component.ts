@@ -11,15 +11,15 @@
 
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, Type } from "@angular/core";
-import { SetupWizardItem } from "./setup-wizard-step";
-import { SetupStatus, SetupWizardService } from "./setup-wizard.service";
+import { SetupWizardGrouping, SetupWizardItem } from "./setup-wizard-step";
+import { SetupStatus, SetupWizardGroupItem, SetupWizardService } from "./setup-wizard.service";
 import { BaseWizardSectionComponent } from "./base-wizard-section.component";
 import { SetupWizardComunicationService } from "./setup-wizard-comunication.service";
 import { MenuItem, ToastMessageOptions } from "primeng/api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../controls/field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "../controls/field-translation-container/gebo-translation.service";
 import { map, Observable, Subscription } from "rxjs";
-import { findMatchingTranlations, UIExistingText } from "../controls/field-translation-container/text-language-resources";
+import { findMatchingTranlations, UIExistingText, UILanguageResources } from "../controls/field-translation-container/text-language-resources";
 /**
  * AI generated comments
  * This module provides a setup wizard panel component for guiding users through a multi-step setup process
@@ -38,6 +38,39 @@ function filterNotContained<T>(v1: T[], v2: T[]): T[] {
 const moduleId: string = "SetupWizardPanelModule";
 const fieldHostId: string = "SetupWizardPanelComponent";
 interface MandatoryUIEntry { config: SetupWizardItem, wizardComponent: Type<BaseWizardSectionComponent> };
+/**
+ * Builds the translatable texts (label and description) of wizard items or groups,
+ * using the entry id as componentId under the SetupWizardPanelComponent entity.
+ */
+function labelTexts<T extends { label: string, description?: string }>(entries: T[], idOf: (entry: T) => string): UIExistingText[] {
+    const texts: UIExistingText[] = [];
+    entries.forEach(entry => {
+        const id = idOf(entry);
+        if (id) {
+            texts.push({ moduleId: moduleId, componentId: id, entityId: fieldHostId, fieldId: "label", key: "label", text: entry.label });
+            if (entry.description) {
+                texts.push({ moduleId: moduleId, componentId: id, entityId: fieldHostId, fieldId: "description", key: "description", text: entry.description });
+            }
+        }
+    });
+    return texts;
+}
+/**
+ * Returns copies of the entries with the matching translations applied
+ */
+function applyTranslations<T>(entries: T[], idOf: (entry: T) => string, found?: UIExistingText[]): T[] {
+    const outVector: T[] = entries.map(x => ({ ...x }));
+    if (found && found.length) {
+        outVector.forEach(entry => {
+            found.filter(item => item.componentId === idOf(entry))?.forEach(item => {
+                if (item.translation) {
+                    (entry as any)[item.fieldId] = item.translation;
+                }
+            });
+        });
+    }
+    return outVector;
+}
 /**
  * Component that renders a wizard panel to guide users through a sequence of setup steps.
  * This component manages the navigation, state, and validation of a multi-step setup process.
@@ -62,6 +95,14 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
     public userMessages: ToastMessageOptions[] = [];
     /** List of all wizard steps available to the user */
     public wizardsEntries: SetupWizardItem[] = [];
+    /** Wizard steps distributed in their groups, used when grouping is not "none" */
+    public wizardGroups: SetupWizardGroupItem[] = [];
+    /** How the sections are grouped: flat list, tabs or accordion */
+    @Input() public grouping: SetupWizardGrouping = "none";
+    /** groupId of the selected tab when grouping is "Tab" */
+    public selectedGroupTab?: string;
+    /** groupIds of the opened panels when grouping is "Accordion" */
+    public openedGroupPanels?: string[];
     /** List of mandatory unsatisfied wizard steps to display in a popup */
     public mandatoryUnsatisfiedEntries: MandatoryUIEntry[] = [];
     public mandatoryUnsatisfiedEntriesWindowOpened: boolean = false;
@@ -100,46 +141,34 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
         private setupWizardComunicationService: SetupWizardComunicationService,
         private geboLanguageService: GeboAITranslationService) {
     }
-    private actualLanguage(items: SetupWizardItem[]): Observable<SetupWizardItem[] | undefined> {
-        const texts: UIExistingText[] = [];
-        items.forEach(item => {
-            if (item.wizardSectionId)
-                texts.push({
-                    moduleId: "SetupWizardPanelModule",
-                    componentId: item.wizardSectionId,
-                    entityId: "SetupWizardPanelComponent",
-                    fieldId: "label",
-                    key: "label",
-                    text: item.label
-                });
-            texts.push({
-                moduleId: "SetupWizardPanelModule",
-                componentId: item.wizardSectionId,
-                entityId: "SetupWizardPanelComponent",
-                fieldId: "description",
-                key: "description",
-                text: item.description
-            });
-        });
-        return this.geboLanguageService.translateOnActualLanguage(texts).pipe(map(resources => {
-            const outVector: SetupWizardItem[] = [];
-            items.forEach(x => {
-                outVector.push({ ...x });
-            });
-            if (resources) {
-                const found = findMatchingTranlations(texts, resources);
-                if (found && found.length) {
-                    outVector.forEach(setupItem => {
-                        found.filter(entry => entry.componentId === setupItem.wizardSectionId)?.forEach(item => {
-                            if (item.translation) {
-                                (setupItem as any)[item.fieldId] = item.translation;
-                            }
-                        });
-                    });
-                }
-            }
-            return outVector;
+    /**
+     * Translates items and group labels on the actual language, emitting again on language changes
+     */
+    private actualLanguage(items: SetupWizardItem[]): Observable<{ items: SetupWizardItem[], groups: SetupWizardGroupItem[] }> {
+        const texts: UIExistingText[] = [
+            ...labelTexts(items, x => x.wizardSectionId),
+            ...labelTexts(this.setupWizardService.groupItems(items), x => x.groupId)
+        ];
+        return this.geboLanguageService.translateOnActualLanguage(texts).pipe(map((resources: UILanguageResources | undefined) => {
+            const found = resources ? findMatchingTranlations(texts, resources) : undefined;
+            const translatedItems = applyTranslations(items, x => x.wizardSectionId, found);
+            const translatedGroups = applyTranslations(this.setupWizardService.groupItems(translatedItems), x => x.groupId, found);
+            return { items: translatedItems, groups: translatedGroups };
         }));
+    }
+    /**
+     * Keeps the user tab/panels choice across reloads, otherwise selects the groups
+     * with missing mandatory setups, or the first group if none.
+     */
+    private initGroupsSelection(): void {
+        const ids = this.wizardGroups.map(g => g.groupId);
+        const incompleteIds = this.wizardGroups.filter(g => g.status === "incomplete").map(g => g.groupId);
+        if (!this.selectedGroupTab || !ids.includes(this.selectedGroupTab)) {
+            this.selectedGroupTab = incompleteIds.length ? incompleteIds[0] : ids[0];
+        }
+        if (!this.openedGroupPanels) {
+            this.openedGroupPanels = incompleteIds.length ? incompleteIds : ids.slice(0, 1);
+        }
     }
     private subscription?: Subscription;
     /**
@@ -155,13 +184,14 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
         this.setupWizardService.getActualStatus().subscribe({
             next: (values) => {
                 this.wizardsEntries = values;
-                this.subscription = this.actualLanguage(this.wizardsEntries).subscribe({
-                    next: (entries) => {
-                        if (entries) {
-                            this.wizardsEntries = entries;
-                        }
+                this.wizardGroups = this.setupWizardService.groupItems(values);
+                this.subscription = this.actualLanguage(values).subscribe({
+                    next: (translated) => {
+                        this.wizardsEntries = translated.items;
+                        this.wizardGroups = translated.groups;
                     }
                 });
+                this.initGroupsSelection();
                 this.actualSetupStatus = this.setupWizardService.calculateSetupStatus(this.wizardsEntries);
                 this.mandatoryUnsatisfiedEntries = this.wizardsEntries.filter(x => x.mandatory === true && x.alreadyCompleted !== true)?.map(y => {
                     const m: MandatoryUIEntry = {
@@ -258,7 +288,7 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
                     if (entry.enabled === true && entry.alreadyCompleted !== true) {
                         ok = false;
                         nrKo++;
-                        toBeSetList = toBeSetList + (nrKo > 0 ? "," : "") + entry.label;
+                        toBeSetList = toBeSetList + (nrKo > 1 ? ", " : "") + entry.label;
                     }
 
 
@@ -268,7 +298,7 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
             });
         }
         if (ok !== true) {
-            result.messages = [{ severity: "warn", summary: "Missing setups before:" + item.label, detail: "Before setting the " + item.label + toBeSetList + " must be configured." }];
+            result.messages = [{ severity: "warn", summary: "Missing setups before:" + item.label, detail: "Before setting the " + item.label + " the following must be configured: " + toBeSetList }];
         }
 
         result.preconditionsOk = ok;
@@ -288,8 +318,24 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
             }];
             this.actualItem = item;
             this.wizardComponent = this.actualItem.wizardComponent;
+            this.selectGroupOf(item);
         } else {
             //this.messagesService.addAll(check.messages);
+        }
+    }
+
+    /**
+     * Selects the tab and opens the accordion panel of the group containing the item,
+     * so that going back from the section shows it where it is.
+     * @param item The wizard step item being opened
+     */
+    private selectGroupOf(item: SetupWizardItem): void {
+        const group = this.wizardGroups.find(g => g.items.some(x => x.wizardSectionId === item.wizardSectionId));
+        if (group) {
+            this.selectedGroupTab = group.groupId;
+            if (!this.openedGroupPanels?.includes(group.groupId)) {
+                this.openedGroupPanels = [...(this.openedGroupPanels || []), group.groupId];
+            }
         }
     }
 
