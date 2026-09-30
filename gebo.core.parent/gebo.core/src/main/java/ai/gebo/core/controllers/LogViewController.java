@@ -94,7 +94,7 @@ public class LogViewController {
 	 * @return a page of job status items
 	 */
 	@PostMapping(value = "getJobsEntriesForProjectEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Page<GJobStatusItem> getJobsEntriesForProjectEndpoint(
+	public Page<GJobStatusItem> getJobsEntriesForProjectEndpointLogView(
 			@RequestBody JobsEntriesForProjectEndpointFilter filter) {
 		Pageable pageable = filter.page != null ? filter.page.toPageable() : Pageable.ofSize(20);
 

@@ -91,7 +91,7 @@ public class FileUploadController {
 	 * @throws IOException If an error occurs during file processing
 	 */
 	@PostMapping(value = "upload/{handShakeCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public void upload(@PathVariable("handShakeCode") String handShakeCode,
+	public void uploadUploadsEndpoint(@PathVariable("handShakeCode") String handShakeCode,
 			@RequestParam("files[]") List<MultipartFile> files) throws IOException {
 		fileUploadService.manageUpload(handShakeCode, files);
 	}
