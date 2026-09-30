@@ -12,7 +12,7 @@ import {
     GCurrency, GModelPricingConditions, GProviderApiKey, GProviderCurrency, GProviderDeal, GProviderModelPriceInfo,
     GUserMessage, ProviderDealsControllerService
 } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
+import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { forkJoin, Observable, of } from "rxjs";
 
 /** The pseudo API key standing for the configurations running without one (GProviderDeal.NO_API_KEY). */
@@ -97,7 +97,7 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
     protected newDealKeyOptions: { label: string, value: string }[] = [];
 
     constructor(setupWizardComunicationService: SetupWizardComunicationService,
-        private dealsService: ProviderDealsControllerService) {
+        private dealsService: ProviderDealsControllerService, private translationService: GeboAITranslationService) {
         super(setupWizardComunicationService);
     }
 
@@ -146,8 +146,8 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
             forkJoin([this.dealsService.getProviderApiKeys(providerId), this.dealsService.getProviderModelPrices(providerId),
             this.dealsService.getProviderCurrency(providerId)]).subscribe({
                 next: ([keys, prices, currency]) => {
-                    this.messages = [...this.messages, ...(keys.messages ?? []), ...(prices.messages ?? []),
-                    ...(currency.messages ?? [])].filter(x => x.severity !== "success");
+                    this.showMessages([...this.messages, ...(keys.messages ?? []), ...(prices.messages ?? []),
+                    ...(currency.messages ?? [])].filter(x => x.severity !== "success"));
                     subscriber.next({
                         providerId, deals: deals.sort((a, b) => (a.description ?? "").localeCompare(b.description ?? "")),
                         apiKeys: keys.result ?? [], modelPrices: prices.result ?? [], currency: currency.result,
@@ -288,11 +288,23 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
         this.loading = true;
         operation.subscribe({
             next: (status) => {
-                this.messages = status.messages ?? [];
+                this.showMessages(status.messages ?? []);
                 this.reloadData();
             },
             error: () => this.loading = false
         });
+    }
+
+    /** Shows the backend messages in the current language, the original ones while not translated. */
+    private showMessages(messages: GUserMessage[]): void {
+        this.messages = messages;
+        if (messages.length) {
+            this.translationService.translateBackendMessages(messages).subscribe({
+                next: (translated) => {
+                    if (translated) this.messages = translated;
+                }
+            });
+        }
     }
 
     /** Loads the API keys the new deal can take, when its provider is chosen. */

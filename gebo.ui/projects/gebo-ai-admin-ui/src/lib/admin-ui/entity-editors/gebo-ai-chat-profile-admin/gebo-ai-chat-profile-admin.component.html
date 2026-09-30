@@ -160,6 +160,13 @@
                   </gebo-ai-field>
                 </div>
                 <div class="col-6">
+                  <gebo-ai-field id="defaultChatNetworkOfAgents" label="Network of agents" help="The network of agents the agentic chats of this profile are handed to; leave it empty for the system default">
+                    <p-select id="ChatNetworkOfAgentsSelect" gebo-ai-label formControlName="defaultChatNetworkOfAgents"
+                      [options]="chatNetworksOfAgents" optionLabel="label" optionValue="value" [showClear]="true"
+                      placeholder="System default" styleClass="w-full" appendTo="body" gebo-ai-field-element></p-select>
+                  </gebo-ai-field>
+                </div>
+                <div class="col-6">
                   <gebo-ai-field id="topK" label="Considered document fragments (TopK)" help="In the retrieval-augmented generation, Top N found considered document fragments in semantic search">
                     <p-inputNumber id="TopKInputNumber" gebo-ai-label formControlName="topK"
                       class="col-6" inputId="integeronly" [min]="4" [max]="100" gebo-ai-field-element/>

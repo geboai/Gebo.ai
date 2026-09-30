@@ -42,8 +42,8 @@
           <p-panel [header]="deal.description ?? deal.id ?? ''">
             <p-tabs [value]="0">
               <p-tablist>
-                <p-tab [value]="0" gebo-ai-text>Provider deal</p-tab>
-                <p-tab [value]="1" gebo-ai-text>Model prices</p-tab>
+                <p-tab [value]="0" id="ProviderDealTab" gebo-ai-text>Provider deal</p-tab>
+                <p-tab [value]="1" id="ModelPricesTab" gebo-ai-text>Model prices</p-tab>
               </p-tablist>
               <p-tabpanels>
                 <p-tabpanel [value]="0">
@@ -52,7 +52,7 @@
                       <label id="DealDescriptionLabel" gebo-ai-text class="font-semibold block mb-2">Description</label>
                       <div class="flex gap-2 align-items-center">
                         <input pInputText type="text" class="w-full" [(ngModel)]="descriptionEdits[deal.id!]" />
-                        <p-button icon="pi pi-save" [outlined]="true" title="Save the description"
+                        <p-button id="SaveDealDescriptionBtn" gebo-ai-label icon="pi pi-save" [outlined]="true" title="Save the description"
                           [disabled]="!descriptionEdits[deal.id!] || descriptionEdits[deal.id!] === deal.description"
                           (onClick)="saveDescription(deal)"></p-button>
                       </div>
@@ -69,7 +69,7 @@
                             }
                           </span>
                         }
-                        <p-button icon="pi pi-refresh" [outlined]="true" size="small"
+                        <p-button id="RefreshLimitsBtn" gebo-ai-label icon="pi pi-refresh" [outlined]="true" size="small"
                           title="Import the spending limits from the provider" (onClick)="refreshLimits(deal)"></p-button>
                       </div>
                     </div>
@@ -94,13 +94,13 @@
                           </div>
                           <div>
                             <label id="DealFlatMonthlyLimitLabel" gebo-ai-text class="block text-sm mb-1">Monthly traffic limit (millions of tokens)</label>
-                            <p-inputNumber [(ngModel)]="flatEdits[deal.id!].monthlyTrafficLimits" [min]="0"
-                              [minFractionDigits]="0" [maxFractionDigits]="3" placeholder="unlimited"></p-inputNumber>
+                            <p-inputnumber id="MonthlyTrafficLimitInput" gebo-ai-label [(ngModel)]="flatEdits[deal.id!].monthlyTrafficLimits" [min]="0"
+                              [minFractionDigits]="0" [maxFractionDigits]="3" placeholder="unlimited"></p-inputnumber>
                           </div>
                           <div>
                             <label id="DealFlatDailyLimitLabel" gebo-ai-text class="block text-sm mb-1">Daily traffic limit (millions of tokens)</label>
-                            <p-inputNumber [(ngModel)]="flatEdits[deal.id!].dailyTrafficLimits" [min]="0"
-                              [minFractionDigits]="0" [maxFractionDigits]="3" placeholder="unlimited"></p-inputNumber>
+                            <p-inputnumber id="DailyTrafficLimitInput" gebo-ai-label [(ngModel)]="flatEdits[deal.id!].dailyTrafficLimits" [min]="0"
+                              [minFractionDigits]="0" [maxFractionDigits]="3" placeholder="unlimited"></p-inputnumber>
                           </div>
                         </div>
                       }
@@ -121,7 +121,7 @@
                       }
                       @if (keyOptions(group, deal).length) {
                         <div class="flex gap-2 align-items-center mt-2">
-                          <p-select [options]="keyOptions(group, deal)" [(ngModel)]="keyToAdd[deal.id!]"
+                          <p-select id="KeyToAddSelect" gebo-ai-label [options]="keyOptions(group, deal)" [(ngModel)]="keyToAdd[deal.id!]"
                             placeholder="API key to move into this deal" styleClass="w-30rem" appendTo="body"></p-select>
                           <p-button id="AddKeyBtn" gebo-ai-label label="Add" icon="pi pi-plus" [outlined]="true"
                             [disabled]="!keyToAdd[deal.id!]" (onClick)="addKey(deal)"></p-button>
@@ -169,7 +169,7 @@
                             <div class="text-sm">{{ config.description ?? config.configCode }}
                               <span class="text-xs text-500">{{ config.modelType }}</span></div>
                           } @empty {
-                            <span class="text-500 text-sm">no configuration</span>
+                            <span id="NoPriceConfigurationLabel" gebo-ai-text class="text-500 text-sm">no configuration</span>
                           }
                         </td>
                         <td class="text-sm">{{ formatPricing(row.providerApiPricing) }}</td>
@@ -190,7 +190,7 @@
                             [title]="row.dealPricing ? 'Save the deal price' : 'Set this price in the deal'"
                             (onClick)="savePrice(row)"></p-button>
                           @if (row.dealPricing) {
-                            <p-button icon="pi pi-undo" severity="secondary" [outlined]="true"
+                            <p-button id="RemoveDealPriceBtn" gebo-ai-label icon="pi pi-undo" severity="secondary" [outlined]="true"
                               title="Remove the deal price, going back to the provider API's one, if any"
                               (onClick)="removePrice(row)"></p-button>
                           }
@@ -224,14 +224,14 @@
 
   <p-panel id="NewDealZone" gebo-ai-label header="Add a provider deal">
     <div class="flex flex-wrap gap-2 align-items-center">
-      <p-select id="NewDealProvider" [options]="configuredProviders" [(ngModel)]="newDealProvider"
+      <p-select id="NewDealProvider" gebo-ai-label [options]="configuredProviders" [(ngModel)]="newDealProvider"
         (onChange)="onNewDealProviderChange()" placeholder="Provider used by a model configuration" [filter]="true"
         styleClass="w-20rem" appendTo="body"></p-select>
-      <input pInputText type="text" class="w-20rem" [(ngModel)]="newDealDescription"
+      <input id="NewDealDescriptionInput" gebo-ai-label pInputText type="text" class="w-20rem" [(ngModel)]="newDealDescription"
         placeholder="Description of the new deal" [disabled]="!newDealProvider" />
-      <p-multiSelect id="NewDealKeys" [options]="newDealKeyOptions" [(ngModel)]="newDealKeys" display="chip"
+      <p-multiselect id="NewDealKeys" gebo-ai-label [options]="newDealKeyOptions" [(ngModel)]="newDealKeys" display="chip"
         placeholder="API keys to move into the new deal" styleClass="w-30rem" [disabled]="!newDealProvider"
-        appendTo="body"></p-multiSelect>
+        appendTo="body"></p-multiselect>
       <p-button id="NewDealBtn" gebo-ai-label label="Add the deal" icon="pi pi-plus" [outlined]="true"
         [disabled]="!newDealProvider" (onClick)="createDeal()"></p-button>
     </div>

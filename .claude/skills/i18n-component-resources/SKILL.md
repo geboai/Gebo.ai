@@ -147,8 +147,9 @@ Path: `gebo.ui/projects/gebo-ai-reusable-ui/src/assets/i18n/en.json`
 (shipped to the backend as `/static/assets/i18n/en.json`, loaded by
 `gebo.ui/src/main/java/ai/gebo/ui/ExistingBundledTextResourcesDaoImpl.java`).
 
-Its own formatting: **4-space indent, LF, no trailing newline**, top-level keys in
-insertion order. Other `<lang>.json` files use a *different* style — Jackson's
+Its own formatting: **2-space indent, `": "` separators, LF, one trailing newline**, top-level
+keys in insertion order: `json.dumps(d, indent=2, ensure_ascii=False) + '\n'` round-trips the
+committed file byte for byte. Other `<lang>.json` files use a *different* style — Jackson's
 `"key" : value` with 2-space indent — because they come out of the translation tool.
 **Match whatever the file you are editing already uses.**
 
@@ -166,7 +167,7 @@ d.setdefault('GeboAIFooModule', collections.OrderedDict())['GeboAIFooComponent']
         ('SaveHint', collections.OrderedDict([('label', 'Nothing to save yet')])),
     ])
 with io.open(p, 'w', encoding='utf-8', newline='\n') as f:
-    json.dump(d, f, indent=4, ensure_ascii=False); f.write('\n')
+    json.dump(d, f, indent=2, ensure_ascii=False); f.write('\n')
 PY
 ```
 
