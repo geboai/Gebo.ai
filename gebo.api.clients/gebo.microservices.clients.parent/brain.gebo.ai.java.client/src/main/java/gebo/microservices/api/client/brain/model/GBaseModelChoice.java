@@ -17,6 +17,7 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GModelPricingConditions;
 import gebo.microservices.api.client.brain.model.ModelMetaInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Date;
@@ -24,7 +25,7 @@ import java.util.Date;
  * GBaseModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:23.233601555+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:41.059309405+02:00[Europe/Rome]")
 
 public class GBaseModelChoice {
   @JsonProperty("code")
@@ -65,6 +66,9 @@ public class GBaseModelChoice {
 
   @JsonProperty("nativeModelMetaInfos")
   private Object nativeModelMetaInfos = null;
+
+  @JsonProperty("pricingConditions")
+  private GModelPricingConditions pricingConditions = null;
 
   public GBaseModelChoice code(String code) {
     this.code = code;
@@ -300,6 +304,24 @@ public class GBaseModelChoice {
     this.nativeModelMetaInfos = nativeModelMetaInfos;
   }
 
+  public GBaseModelChoice pricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+    return this;
+  }
+
+   /**
+   * Get pricingConditions
+   * @return pricingConditions
+  **/
+  @Schema(description = "")
+  public GModelPricingConditions getPricingConditions() {
+    return pricingConditions;
+  }
+
+  public void setPricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -322,12 +344,13 @@ public class GBaseModelChoice {
         Objects.equals(this.metaInfos, gbaseModelChoice.metaInfos) &&
         Objects.equals(this.informativeUrl, gbaseModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, gbaseModelChoice.contextLength) &&
-        Objects.equals(this.nativeModelMetaInfos, gbaseModelChoice.nativeModelMetaInfos);
+        Objects.equals(this.nativeModelMetaInfos, gbaseModelChoice.nativeModelMetaInfos) &&
+        Objects.equals(this.pricingConditions, gbaseModelChoice.pricingConditions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, pricingConditions);
   }
 
 
@@ -349,6 +372,7 @@ public class GBaseModelChoice {
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
+    sb.append("    pricingConditions: ").append(toIndentedString(pricingConditions)).append("\n");
     sb.append("}");
     return sb.toString();
   }

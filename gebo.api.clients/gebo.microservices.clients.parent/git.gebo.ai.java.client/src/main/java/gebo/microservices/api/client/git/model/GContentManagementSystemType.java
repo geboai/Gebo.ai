@@ -25,7 +25,7 @@ import java.util.List;
  * GContentManagementSystemType
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:39.572734637+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:57.447510692+02:00[Europe/Rome]")
 
 public class GContentManagementSystemType {
   @JsonProperty("code")

@@ -68,13 +68,13 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restAggregate(body: AggregateRequestBodyGoogleDriveResultsExtractionData, observe?: 'body', reportProgress?: boolean): Observable<GoogleDriveResultsExtractionData>;
-    public restAggregate(body: AggregateRequestBodyGoogleDriveResultsExtractionData, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GoogleDriveResultsExtractionData>>;
-    public restAggregate(body: AggregateRequestBodyGoogleDriveResultsExtractionData, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GoogleDriveResultsExtractionData>>;
-    public restAggregate(body: AggregateRequestBodyGoogleDriveResultsExtractionData, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restAggregateGoogleDrive(body: AggregateRequestBodyGoogleDriveResultsExtractionData, observe?: 'body', reportProgress?: boolean): Observable<GoogleDriveResultsExtractionData>;
+    public restAggregateGoogleDrive(body: AggregateRequestBodyGoogleDriveResultsExtractionData, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GoogleDriveResultsExtractionData>>;
+    public restAggregateGoogleDrive(body: AggregateRequestBodyGoogleDriveResultsExtractionData, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GoogleDriveResultsExtractionData>>;
+    public restAggregateGoogleDrive(body: AggregateRequestBodyGoogleDriveResultsExtractionData, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restAggregate.');
+            throw new Error('Required parameter body was null or undefined when calling restAggregateGoogleDrive.');
         }
 
         let headers = this.defaultHeaders;
@@ -116,17 +116,17 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restExtractRelatedAnalisysReferences(body: GoogleDriveResultsExtractionData, systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchResultAnalisysOutcome>;
-    public restExtractRelatedAnalisysReferences(body: GoogleDriveResultsExtractionData, systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchResultAnalisysOutcome>>;
-    public restExtractRelatedAnalisysReferences(body: GoogleDriveResultsExtractionData, systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchResultAnalisysOutcome>>;
-    public restExtractRelatedAnalisysReferences(body: GoogleDriveResultsExtractionData, systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restExtractRelatedAnalisysReferencesGoogleDrive(body: GoogleDriveResultsExtractionData, systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchResultAnalisysOutcome>;
+    public restExtractRelatedAnalisysReferencesGoogleDrive(body: GoogleDriveResultsExtractionData, systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchResultAnalisysOutcome>>;
+    public restExtractRelatedAnalisysReferencesGoogleDrive(body: GoogleDriveResultsExtractionData, systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchResultAnalisysOutcome>>;
+    public restExtractRelatedAnalisysReferencesGoogleDrive(body: GoogleDriveResultsExtractionData, systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restExtractRelatedAnalisysReferences.');
+            throw new Error('Required parameter body was null or undefined when calling restExtractRelatedAnalisysReferencesGoogleDrive.');
         }
 
         if (systemId === null || systemId === undefined) {
-            throw new Error('Required parameter systemId was null or undefined when calling restExtractRelatedAnalisysReferences.');
+            throw new Error('Required parameter systemId was null or undefined when calling restExtractRelatedAnalisysReferencesGoogleDrive.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -173,13 +173,13 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restFindSystemById(systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
-    public restFindSystemById(systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
-    public restFindSystemById(systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
-    public restFindSystemById(systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restFindSystemByIdGoogleDrive(systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
+    public restFindSystemByIdGoogleDrive(systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
+    public restFindSystemByIdGoogleDrive(systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
+    public restFindSystemByIdGoogleDrive(systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (systemId === null || systemId === undefined) {
-            throw new Error('Required parameter systemId was null or undefined when calling restFindSystemById.');
+            throw new Error('Required parameter systemId was null or undefined when calling restFindSystemByIdGoogleDrive.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -220,13 +220,13 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restFindSystemBySearchResult(body: SearchResult, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
-    public restFindSystemBySearchResult(body: SearchResult, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
-    public restFindSystemBySearchResult(body: SearchResult, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
-    public restFindSystemBySearchResult(body: SearchResult, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restFindSystemBySearchResultGoogleDrive(body: SearchResult, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
+    public restFindSystemBySearchResultGoogleDrive(body: SearchResult, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
+    public restFindSystemBySearchResultGoogleDrive(body: SearchResult, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
+    public restFindSystemBySearchResultGoogleDrive(body: SearchResult, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restFindSystemBySearchResult.');
+            throw new Error('Required parameter body was null or undefined when calling restFindSystemBySearchResultGoogleDrive.');
         }
 
         let headers = this.defaultHeaders;
@@ -267,10 +267,10 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetCachedCatalogues(systemConfigurationCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
-    public restGetCachedCatalogues(systemConfigurationCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
-    public restGetCachedCatalogues(systemConfigurationCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
-    public restGetCachedCatalogues(systemConfigurationCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetCachedCataloguesGoogleDrive(systemConfigurationCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
+    public restGetCachedCataloguesGoogleDrive(systemConfigurationCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
+    public restGetCachedCataloguesGoogleDrive(systemConfigurationCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
+    public restGetCachedCataloguesGoogleDrive(systemConfigurationCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -311,13 +311,13 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetCataloguesListSample(configurationCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
-    public restGetCataloguesListSample(configurationCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
-    public restGetCataloguesListSample(configurationCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
-    public restGetCataloguesListSample(configurationCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetCataloguesListSampleGoogleDrive(configurationCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
+    public restGetCataloguesListSampleGoogleDrive(configurationCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
+    public restGetCataloguesListSampleGoogleDrive(configurationCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
+    public restGetCataloguesListSampleGoogleDrive(configurationCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (configurationCode === null || configurationCode === undefined) {
-            throw new Error('Required parameter configurationCode was null or undefined when calling restGetCataloguesListSample.');
+            throw new Error('Required parameter configurationCode was null or undefined when calling restGetCataloguesListSampleGoogleDrive.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -357,10 +357,10 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetDescription(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetDescription(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetDescription(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetDescription(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetDescriptionGoogleDrive(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetDescriptionGoogleDrive(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetDescriptionGoogleDrive(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetDescriptionGoogleDrive(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -393,10 +393,10 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetId(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetId(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetIdGoogleDrive(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetIdGoogleDrive(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetIdGoogleDrive(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetIdGoogleDrive(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -429,10 +429,10 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetMessagingModuleId(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetMessagingModuleId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetMessagingModuleId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetMessagingModuleId(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetMessagingModuleIdGoogleDrive(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetMessagingModuleIdGoogleDrive(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetMessagingModuleIdGoogleDrive(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetMessagingModuleIdGoogleDrive(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -465,10 +465,10 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetProductId(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetProductId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetProductId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetProductId(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetProductIdGoogleDrive(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetProductIdGoogleDrive(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetProductIdGoogleDrive(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetProductIdGoogleDrive(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -501,10 +501,10 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetQueriesGenerationPromptUseCode(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetQueriesGenerationPromptUseCode(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetQueriesGenerationPromptUseCode(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetQueriesGenerationPromptUseCode(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetQueriesGenerationPromptUseCodeGoogleDrive(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetQueriesGenerationPromptUseCodeGoogleDrive(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetQueriesGenerationPromptUseCodeGoogleDrive(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetQueriesGenerationPromptUseCodeGoogleDrive(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -537,10 +537,10 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetSearchableSystems(observe?: 'body', reportProgress?: boolean): Observable<Array<SearchableSystemMetaData>>;
-    public restGetSearchableSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchableSystemMetaData>>>;
-    public restGetSearchableSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchableSystemMetaData>>>;
-    public restGetSearchableSystems(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetSearchableSystemsGoogleDrive(observe?: 'body', reportProgress?: boolean): Observable<Array<SearchableSystemMetaData>>;
+    public restGetSearchableSystemsGoogleDrive(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchableSystemMetaData>>>;
+    public restGetSearchableSystemsGoogleDrive(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchableSystemMetaData>>>;
+    public restGetSearchableSystemsGoogleDrive(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -573,10 +573,10 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restIsEnabled(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
-    public restIsEnabled(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
-    public restIsEnabled(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
-    public restIsEnabled(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restIsEnabledGoogleDrive(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public restIsEnabledGoogleDrive(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public restIsEnabledGoogleDrive(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
+    public restIsEnabledGoogleDrive(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -612,21 +612,21 @@ export class GoogleDriveSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restSearch(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
-    public restSearch(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
-    public restSearch(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
-    public restSearch(body: SearchQuery, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restSearchGoogleDrive(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
+    public restSearchGoogleDrive(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
+    public restSearchGoogleDrive(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
+    public restSearchGoogleDrive(body: SearchQuery, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restSearch.');
+            throw new Error('Required parameter body was null or undefined when calling restSearchGoogleDrive.');
         }
 
         if (systemId === null || systemId === undefined) {
-            throw new Error('Required parameter systemId was null or undefined when calling restSearch.');
+            throw new Error('Required parameter systemId was null or undefined when calling restSearchGoogleDrive.');
         }
 
         if (nEntryLimit === null || nEntryLimit === undefined) {
-            throw new Error('Required parameter nEntryLimit was null or undefined when calling restSearch.');
+            throw new Error('Required parameter nEntryLimit was null or undefined when calling restSearchGoogleDrive.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});

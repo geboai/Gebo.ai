@@ -27,23 +27,20 @@ import java.util.List;
  * PageA2ARemoteAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:23.233601555+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:41.059309405+02:00[Europe/Rome]")
 
 public class PageA2ARemoteAgentConfig {
-  @JsonProperty("totalPages")
-  private Integer totalPages = null;
-
   @JsonProperty("totalElements")
   private Long totalElements = null;
 
-  @JsonProperty("first")
-  private Boolean first = null;
-
-  @JsonProperty("last")
-  private Boolean last = null;
+  @JsonProperty("totalPages")
+  private Integer totalPages = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
+
+  @JsonProperty("numberOfElements")
+  private Integer numberOfElements = null;
 
   @JsonProperty("size")
   private Integer size = null;
@@ -57,29 +54,14 @@ public class PageA2ARemoteAgentConfig {
   @JsonProperty("sort")
   private SortObject sort = null;
 
-  @JsonProperty("numberOfElements")
-  private Integer numberOfElements = null;
+  @JsonProperty("first")
+  private Boolean first = null;
+
+  @JsonProperty("last")
+  private Boolean last = null;
 
   @JsonProperty("empty")
   private Boolean empty = null;
-
-  public PageA2ARemoteAgentConfig totalPages(Integer totalPages) {
-    this.totalPages = totalPages;
-    return this;
-  }
-
-   /**
-   * Get totalPages
-   * @return totalPages
-  **/
-  @Schema(description = "")
-  public Integer getTotalPages() {
-    return totalPages;
-  }
-
-  public void setTotalPages(Integer totalPages) {
-    this.totalPages = totalPages;
-  }
 
   public PageA2ARemoteAgentConfig totalElements(Long totalElements) {
     this.totalElements = totalElements;
@@ -99,40 +81,22 @@ public class PageA2ARemoteAgentConfig {
     this.totalElements = totalElements;
   }
 
-  public PageA2ARemoteAgentConfig first(Boolean first) {
-    this.first = first;
+  public PageA2ARemoteAgentConfig totalPages(Integer totalPages) {
+    this.totalPages = totalPages;
     return this;
   }
 
    /**
-   * Get first
-   * @return first
+   * Get totalPages
+   * @return totalPages
   **/
   @Schema(description = "")
-  public Boolean isFirst() {
-    return first;
+  public Integer getTotalPages() {
+    return totalPages;
   }
 
-  public void setFirst(Boolean first) {
-    this.first = first;
-  }
-
-  public PageA2ARemoteAgentConfig last(Boolean last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Boolean isLast() {
-    return last;
-  }
-
-  public void setLast(Boolean last) {
-    this.last = last;
+  public void setTotalPages(Integer totalPages) {
+    this.totalPages = totalPages;
   }
 
   public PageA2ARemoteAgentConfig pageable(PageableObject pageable) {
@@ -151,6 +115,24 @@ public class PageA2ARemoteAgentConfig {
 
   public void setPageable(PageableObject pageable) {
     this.pageable = pageable;
+  }
+
+  public PageA2ARemoteAgentConfig numberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
+    return this;
+  }
+
+   /**
+   * Get numberOfElements
+   * @return numberOfElements
+  **/
+  @Schema(description = "")
+  public Integer getNumberOfElements() {
+    return numberOfElements;
+  }
+
+  public void setNumberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
   }
 
   public PageA2ARemoteAgentConfig size(Integer size) {
@@ -233,22 +215,40 @@ public class PageA2ARemoteAgentConfig {
     this.sort = sort;
   }
 
-  public PageA2ARemoteAgentConfig numberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
+  public PageA2ARemoteAgentConfig first(Boolean first) {
+    this.first = first;
     return this;
   }
 
    /**
-   * Get numberOfElements
-   * @return numberOfElements
+   * Get first
+   * @return first
   **/
   @Schema(description = "")
-  public Integer getNumberOfElements() {
-    return numberOfElements;
+  public Boolean isFirst() {
+    return first;
   }
 
-  public void setNumberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
+  public void setFirst(Boolean first) {
+    this.first = first;
+  }
+
+  public PageA2ARemoteAgentConfig last(Boolean last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Boolean isLast() {
+    return last;
+  }
+
+  public void setLast(Boolean last) {
+    this.last = last;
   }
 
   public PageA2ARemoteAgentConfig empty(Boolean empty) {
@@ -279,22 +279,22 @@ public class PageA2ARemoteAgentConfig {
       return false;
     }
     PageA2ARemoteAgentConfig pageA2ARemoteAgentConfig = (PageA2ARemoteAgentConfig) o;
-    return Objects.equals(this.totalPages, pageA2ARemoteAgentConfig.totalPages) &&
-        Objects.equals(this.totalElements, pageA2ARemoteAgentConfig.totalElements) &&
-        Objects.equals(this.first, pageA2ARemoteAgentConfig.first) &&
-        Objects.equals(this.last, pageA2ARemoteAgentConfig.last) &&
+    return Objects.equals(this.totalElements, pageA2ARemoteAgentConfig.totalElements) &&
+        Objects.equals(this.totalPages, pageA2ARemoteAgentConfig.totalPages) &&
         Objects.equals(this.pageable, pageA2ARemoteAgentConfig.pageable) &&
+        Objects.equals(this.numberOfElements, pageA2ARemoteAgentConfig.numberOfElements) &&
         Objects.equals(this.size, pageA2ARemoteAgentConfig.size) &&
         Objects.equals(this.content, pageA2ARemoteAgentConfig.content) &&
         Objects.equals(this.number, pageA2ARemoteAgentConfig.number) &&
         Objects.equals(this.sort, pageA2ARemoteAgentConfig.sort) &&
-        Objects.equals(this.numberOfElements, pageA2ARemoteAgentConfig.numberOfElements) &&
+        Objects.equals(this.first, pageA2ARemoteAgentConfig.first) &&
+        Objects.equals(this.last, pageA2ARemoteAgentConfig.last) &&
         Objects.equals(this.empty, pageA2ARemoteAgentConfig.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, first, last, pageable, size, content, number, sort, numberOfElements, empty);
+    return Objects.hash(totalElements, totalPages, pageable, numberOfElements, size, content, number, sort, first, last, empty);
   }
 
 
@@ -303,16 +303,16 @@ public class PageA2ARemoteAgentConfig {
     StringBuilder sb = new StringBuilder();
     sb.append("class PageA2ARemoteAgentConfig {\n");
     
-    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
-    sb.append("    first: ").append(toIndentedString(first)).append("\n");
-    sb.append("    last: ").append(toIndentedString(last)).append("\n");
+    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
+    sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
-    sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
+    sb.append("    first: ").append(toIndentedString(first)).append("\n");
+    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

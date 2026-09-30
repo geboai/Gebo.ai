@@ -15,6 +15,6 @@ import { GenericOpenAIAPIRankerModelChoice } from './genericOpenAIAPIRankerModel
 export interface OperationStatusListGenericOpenAIAPIRankerModelChoice { 
     result?: Array<GenericOpenAIAPIRankerModelChoice>;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

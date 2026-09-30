@@ -18,9 +18,10 @@ export interface GenericOpenAIRankerModelTypeConfig {
     dateModified?: Date;
     dateCreated?: Date;
     modelConfigurationClass?: string;
+    providerId?: string;
+    defaultCurrencyCode?: string;
     baseUrl?: string;
     modelsListProvider?: string;
-    providerId?: string;
     optionalAuthentication?: boolean;
     defaultModel?: string;
 }

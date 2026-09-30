@@ -16,5 +16,6 @@ Name | Type | Description | Notes
 **informativeUrl** | **String** |  |  [optional]
 **contextLength** | **Integer** |  |  [optional]
 **nativeModelMetaInfos** | **Object** |  |  [optional]
+**pricingConditions** | [**GModelPricingConditions**](GModelPricingConditions.md) |  |  [optional]
 **supportsStructuredOutput** | **Boolean** |  |  [optional]
 **supportsFunctionCalls** | **Boolean** |  |  [optional]

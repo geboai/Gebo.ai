@@ -17,6 +17,7 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GModelPricingConditions;
 import gebo.microservices.api.client.brain.model.ModelMetaInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Date;
@@ -27,7 +28,7 @@ import java.util.Map;
  * GAnthropicChatModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:23.233601555+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:41.059309405+02:00[Europe/Rome]")
 
 public class GAnthropicChatModelChoice {
   @JsonProperty("code")
@@ -68,6 +69,9 @@ public class GAnthropicChatModelChoice {
 
   @JsonProperty("nativeModelMetaInfos")
   private Object nativeModelMetaInfos = null;
+
+  @JsonProperty("pricingConditions")
+  private GModelPricingConditions pricingConditions = null;
 
   @JsonProperty("supportsStructuredOutput")
   private Boolean supportsStructuredOutput = null;
@@ -312,6 +316,24 @@ public class GAnthropicChatModelChoice {
     this.nativeModelMetaInfos = nativeModelMetaInfos;
   }
 
+  public GAnthropicChatModelChoice pricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+    return this;
+  }
+
+   /**
+   * Get pricingConditions
+   * @return pricingConditions
+  **/
+  @Schema(description = "")
+  public GModelPricingConditions getPricingConditions() {
+    return pricingConditions;
+  }
+
+  public void setPricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+  }
+
   public GAnthropicChatModelChoice supportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
     return this;
@@ -397,6 +419,7 @@ public class GAnthropicChatModelChoice {
         Objects.equals(this.informativeUrl, ganthropicChatModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, ganthropicChatModelChoice.contextLength) &&
         Objects.equals(this.nativeModelMetaInfos, ganthropicChatModelChoice.nativeModelMetaInfos) &&
+        Objects.equals(this.pricingConditions, ganthropicChatModelChoice.pricingConditions) &&
         Objects.equals(this.supportsStructuredOutput, ganthropicChatModelChoice.supportsStructuredOutput) &&
         Objects.equals(this.supportsFunctionCalls, ganthropicChatModelChoice.supportsFunctionCalls) &&
         Objects.equals(this.modelDetails, ganthropicChatModelChoice.modelDetails);
@@ -404,7 +427,7 @@ public class GAnthropicChatModelChoice {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, supportsStructuredOutput, supportsFunctionCalls, modelDetails);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, pricingConditions, supportsStructuredOutput, supportsFunctionCalls, modelDetails);
   }
 
 
@@ -426,6 +449,7 @@ public class GAnthropicChatModelChoice {
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
+    sb.append("    pricingConditions: ").append(toIndentedString(pricingConditions)).append("\n");
     sb.append("    supportsStructuredOutput: ").append(toIndentedString(supportsStructuredOutput)).append("\n");
     sb.append("    supportsFunctionCalls: ").append(toIndentedString(supportsFunctionCalls)).append("\n");
     sb.append("    modelDetails: ").append(toIndentedString(modelDetails)).append("\n");

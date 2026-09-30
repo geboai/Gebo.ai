@@ -38,8 +38,8 @@ public class GeboTranscriptControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void isEnabledTest() {
-        Boolean response = api.isEnabled();
+    public void isEnabledTranscriptTest() {
+        Boolean response = api.isEnabledTranscript();
 
         // TODO: test validations
     }

@@ -39,8 +39,8 @@ public class GeboTextToSpeechControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void isEnabled1Test() {
-        Boolean response = api.isEnabled1();
+    public void isEnabledTextToSpeechTest() {
+        Boolean response = api.isEnabledTextToSpeech();
 
         // TODO: test validations
     }

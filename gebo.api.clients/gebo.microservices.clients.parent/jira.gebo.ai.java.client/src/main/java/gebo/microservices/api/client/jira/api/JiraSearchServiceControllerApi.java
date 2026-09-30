@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:50.820004298+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:25:08.785239517+02:00[Europe/Rome]")
 
 public class JiraSearchServiceControllerApi {
     private ApiClient apiClient;
@@ -58,8 +58,8 @@ public class JiraSearchServiceControllerApi {
      * @return JiraResultsExtractionData
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public JiraResultsExtractionData restAggregate(AggregateRequestBodyJiraResultsExtractionData body) throws RestClientException {
-        return restAggregateWithHttpInfo(body).getBody();
+    public JiraResultsExtractionData restAggregateJira(AggregateRequestBodyJiraResultsExtractionData body) throws RestClientException {
+        return restAggregateJiraWithHttpInfo(body).getBody();
     }
 
     /**
@@ -70,11 +70,11 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;JiraResultsExtractionData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<JiraResultsExtractionData> restAggregateWithHttpInfo(AggregateRequestBodyJiraResultsExtractionData body) throws RestClientException {
+    public ResponseEntity<JiraResultsExtractionData> restAggregateJiraWithHttpInfo(AggregateRequestBodyJiraResultsExtractionData body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restAggregate");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restAggregateJira");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/aggregate").build().toUriString();
         
@@ -104,8 +104,8 @@ public class JiraSearchServiceControllerApi {
      * @return Map&lt;String, Object&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Map<String, Object> restCreateCustomTemplateParamsMap(CustomTemplateParamsRequestBody body) throws RestClientException {
-        return restCreateCustomTemplateParamsMapWithHttpInfo(body).getBody();
+    public Map<String, Object> restCreateCustomTemplateParamsMapJira(CustomTemplateParamsRequestBody body) throws RestClientException {
+        return restCreateCustomTemplateParamsMapJiraWithHttpInfo(body).getBody();
     }
 
     /**
@@ -116,11 +116,11 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;Map&lt;String, Object&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Map<String, Object>> restCreateCustomTemplateParamsMapWithHttpInfo(CustomTemplateParamsRequestBody body) throws RestClientException {
+    public ResponseEntity<Map<String, Object>> restCreateCustomTemplateParamsMapJiraWithHttpInfo(CustomTemplateParamsRequestBody body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restCreateCustomTemplateParamsMap");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restCreateCustomTemplateParamsMapJira");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/createCustomTemplateParamsMap").build().toUriString();
         
@@ -151,8 +151,8 @@ public class JiraSearchServiceControllerApi {
      * @return SearchResultAnalisysOutcome
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferences(JiraResultsExtractionData body, String systemId) throws RestClientException {
-        return restExtractRelatedAnalisysReferencesWithHttpInfo(body, systemId).getBody();
+    public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferencesJira(JiraResultsExtractionData body, String systemId) throws RestClientException {
+        return restExtractRelatedAnalisysReferencesJiraWithHttpInfo(body, systemId).getBody();
     }
 
     /**
@@ -164,15 +164,15 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;SearchResultAnalisysOutcome&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SearchResultAnalisysOutcome> restExtractRelatedAnalisysReferencesWithHttpInfo(JiraResultsExtractionData body, String systemId) throws RestClientException {
+    public ResponseEntity<SearchResultAnalisysOutcome> restExtractRelatedAnalisysReferencesJiraWithHttpInfo(JiraResultsExtractionData body, String systemId) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restExtractRelatedAnalisysReferences");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restExtractRelatedAnalisysReferencesJira");
         }
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restExtractRelatedAnalisysReferences");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restExtractRelatedAnalisysReferencesJira");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/extractRelatedAnalisysReferences").build().toUriString();
         
@@ -203,8 +203,8 @@ public class JiraSearchServiceControllerApi {
      * @return SearchableSystemMetaData
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SearchableSystemMetaData restFindSystemById(String systemId) throws RestClientException {
-        return restFindSystemByIdWithHttpInfo(systemId).getBody();
+    public SearchableSystemMetaData restFindSystemByIdJira(String systemId) throws RestClientException {
+        return restFindSystemByIdJiraWithHttpInfo(systemId).getBody();
     }
 
     /**
@@ -215,11 +215,11 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;SearchableSystemMetaData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SearchableSystemMetaData> restFindSystemByIdWithHttpInfo(String systemId) throws RestClientException {
+    public ResponseEntity<SearchableSystemMetaData> restFindSystemByIdJiraWithHttpInfo(String systemId) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restFindSystemById");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restFindSystemByIdJira");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/findSystemById").build().toUriString();
         
@@ -248,8 +248,8 @@ public class JiraSearchServiceControllerApi {
      * @return SearchableSystemMetaData
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SearchableSystemMetaData restFindSystemBySearchResult(SearchResult body) throws RestClientException {
-        return restFindSystemBySearchResultWithHttpInfo(body).getBody();
+    public SearchableSystemMetaData restFindSystemBySearchResultJira(SearchResult body) throws RestClientException {
+        return restFindSystemBySearchResultJiraWithHttpInfo(body).getBody();
     }
 
     /**
@@ -260,11 +260,11 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;SearchableSystemMetaData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SearchableSystemMetaData> restFindSystemBySearchResultWithHttpInfo(SearchResult body) throws RestClientException {
+    public ResponseEntity<SearchableSystemMetaData> restFindSystemBySearchResultJiraWithHttpInfo(SearchResult body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restFindSystemBySearchResult");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restFindSystemBySearchResultJira");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/findSystemBySearchResult").build().toUriString();
         
@@ -294,8 +294,8 @@ public class JiraSearchServiceControllerApi {
      * @return List&lt;CatalogueSample&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<CatalogueSample> restGetCachedCatalogues(String systemConfigurationCode) throws RestClientException {
-        return restGetCachedCataloguesWithHttpInfo(systemConfigurationCode).getBody();
+    public List<CatalogueSample> restGetCachedCataloguesJira(String systemConfigurationCode) throws RestClientException {
+        return restGetCachedCataloguesJiraWithHttpInfo(systemConfigurationCode).getBody();
     }
 
     /**
@@ -306,7 +306,7 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;CatalogueSample&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<CatalogueSample>> restGetCachedCataloguesWithHttpInfo(String systemConfigurationCode) throws RestClientException {
+    public ResponseEntity<List<CatalogueSample>> restGetCachedCataloguesJiraWithHttpInfo(String systemConfigurationCode) throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getCachedCatalogues").build().toUriString();
         
@@ -335,8 +335,8 @@ public class JiraSearchServiceControllerApi {
      * @return List&lt;CatalogueSample&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<CatalogueSample> restGetCataloguesListSample(String configurationCode) throws RestClientException {
-        return restGetCataloguesListSampleWithHttpInfo(configurationCode).getBody();
+    public List<CatalogueSample> restGetCataloguesListSampleJira(String configurationCode) throws RestClientException {
+        return restGetCataloguesListSampleJiraWithHttpInfo(configurationCode).getBody();
     }
 
     /**
@@ -347,11 +347,11 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;CatalogueSample&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<CatalogueSample>> restGetCataloguesListSampleWithHttpInfo(String configurationCode) throws RestClientException {
+    public ResponseEntity<List<CatalogueSample>> restGetCataloguesListSampleJiraWithHttpInfo(String configurationCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'configurationCode' is set
         if (configurationCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'configurationCode' when calling restGetCataloguesListSample");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'configurationCode' when calling restGetCataloguesListSampleJira");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getCataloguesListSample").build().toUriString();
         
@@ -379,8 +379,8 @@ public class JiraSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetDescription() throws RestClientException {
-        return restGetDescriptionWithHttpInfo().getBody();
+    public String restGetDescriptionJira() throws RestClientException {
+        return restGetDescriptionJiraWithHttpInfo().getBody();
     }
 
     /**
@@ -390,7 +390,7 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetDescriptionWithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetDescriptionJiraWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getDescription").build().toUriString();
         
@@ -417,8 +417,8 @@ public class JiraSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetId() throws RestClientException {
-        return restGetIdWithHttpInfo().getBody();
+    public String restGetIdJira() throws RestClientException {
+        return restGetIdJiraWithHttpInfo().getBody();
     }
 
     /**
@@ -428,7 +428,7 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetIdWithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetIdJiraWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getId").build().toUriString();
         
@@ -455,8 +455,8 @@ public class JiraSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetMessagingModuleId() throws RestClientException {
-        return restGetMessagingModuleIdWithHttpInfo().getBody();
+    public String restGetMessagingModuleIdJira() throws RestClientException {
+        return restGetMessagingModuleIdJiraWithHttpInfo().getBody();
     }
 
     /**
@@ -466,7 +466,7 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetMessagingModuleIdWithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetMessagingModuleIdJiraWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getMessagingModuleId").build().toUriString();
         
@@ -493,8 +493,8 @@ public class JiraSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetNativePromptTemplateUseCode() throws RestClientException {
-        return restGetNativePromptTemplateUseCodeWithHttpInfo().getBody();
+    public String restGetNativePromptTemplateUseCodeJira() throws RestClientException {
+        return restGetNativePromptTemplateUseCodeJiraWithHttpInfo().getBody();
     }
 
     /**
@@ -504,7 +504,7 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetNativePromptTemplateUseCodeWithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetNativePromptTemplateUseCodeJiraWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getNativePromptTemplateUseCode").build().toUriString();
         
@@ -531,8 +531,8 @@ public class JiraSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetProductId() throws RestClientException {
-        return restGetProductIdWithHttpInfo().getBody();
+    public String restGetProductIdJira() throws RestClientException {
+        return restGetProductIdJiraWithHttpInfo().getBody();
     }
 
     /**
@@ -542,7 +542,7 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetProductIdWithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetProductIdJiraWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getProductId").build().toUriString();
         
@@ -569,8 +569,8 @@ public class JiraSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetQueriesGenerationPromptUseCode() throws RestClientException {
-        return restGetQueriesGenerationPromptUseCodeWithHttpInfo().getBody();
+    public String restGetQueriesGenerationPromptUseCodeJira() throws RestClientException {
+        return restGetQueriesGenerationPromptUseCodeJiraWithHttpInfo().getBody();
     }
 
     /**
@@ -580,7 +580,7 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetQueriesGenerationPromptUseCodeWithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetQueriesGenerationPromptUseCodeJiraWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getQueriesGenerationPromptUseCode").build().toUriString();
         
@@ -607,8 +607,8 @@ public class JiraSearchServiceControllerApi {
      * @return List&lt;SearchableSystemMetaData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchableSystemMetaData> restGetSearchableSystems() throws RestClientException {
-        return restGetSearchableSystemsWithHttpInfo().getBody();
+    public List<SearchableSystemMetaData> restGetSearchableSystemsJira() throws RestClientException {
+        return restGetSearchableSystemsJiraWithHttpInfo().getBody();
     }
 
     /**
@@ -618,7 +618,7 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;SearchableSystemMetaData&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchableSystemMetaData>> restGetSearchableSystemsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<SearchableSystemMetaData>> restGetSearchableSystemsJiraWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getSearchableSystems").build().toUriString();
         
@@ -645,8 +645,8 @@ public class JiraSearchServiceControllerApi {
      * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Boolean restIsEnabled() throws RestClientException {
-        return restIsEnabledWithHttpInfo().getBody();
+    public Boolean restIsEnabledJira() throws RestClientException {
+        return restIsEnabledJiraWithHttpInfo().getBody();
     }
 
     /**
@@ -656,7 +656,7 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;Boolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Boolean> restIsEnabledWithHttpInfo() throws RestClientException {
+    public ResponseEntity<Boolean> restIsEnabledJiraWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/isEnabled").build().toUriString();
         
@@ -686,8 +686,8 @@ public class JiraSearchServiceControllerApi {
      * @return List&lt;SearchResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchResult> restNativeSearch(JiraIssuesSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
-        return restNativeSearchWithHttpInfo(body, systemId, nEntryLimit).getBody();
+    public List<SearchResult> restNativeSearchJira(JiraIssuesSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
+        return restNativeSearchJiraWithHttpInfo(body, systemId, nEntryLimit).getBody();
     }
 
     /**
@@ -700,19 +700,19 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;SearchResult&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchResult>> restNativeSearchWithHttpInfo(JiraIssuesSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
+    public ResponseEntity<List<SearchResult>> restNativeSearchJiraWithHttpInfo(JiraIssuesSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restNativeSearch");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restNativeSearchJira");
         }
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restNativeSearch");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restNativeSearchJira");
         }
         // verify the required parameter 'nEntryLimit' is set
         if (nEntryLimit == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restNativeSearch");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restNativeSearchJira");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/nativeSearch").build().toUriString();
         
@@ -746,8 +746,8 @@ public class JiraSearchServiceControllerApi {
      * @return List&lt;SearchResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchResult> restSearch(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
-        return restSearchWithHttpInfo(body, systemId, nEntryLimit).getBody();
+    public List<SearchResult> restSearchJira(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
+        return restSearchJiraWithHttpInfo(body, systemId, nEntryLimit).getBody();
     }
 
     /**
@@ -760,19 +760,19 @@ public class JiraSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;SearchResult&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchResult>> restSearchWithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
+    public ResponseEntity<List<SearchResult>> restSearchJiraWithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restSearch");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restSearchJira");
         }
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restSearch");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restSearchJira");
         }
         // verify the required parameter 'nEntryLimit' is set
         if (nEntryLimit == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restSearch");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restSearchJira");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/search").build().toUriString();
         

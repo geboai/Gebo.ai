@@ -15,6 +15,6 @@ import { VirtualFilesystemNavigationTreeStatus } from './virtualFilesystemNaviga
 export interface OperationStatusListVirtualFilesystemNavigationTreeStatus { 
     result?: Array<VirtualFilesystemNavigationTreeStatus>;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

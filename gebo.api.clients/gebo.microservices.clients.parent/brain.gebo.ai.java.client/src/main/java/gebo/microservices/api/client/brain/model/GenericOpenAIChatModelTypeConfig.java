@@ -23,7 +23,7 @@ import java.util.Date;
  * GenericOpenAIChatModelTypeConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:23.233601555+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:41.059309405+02:00[Europe/Rome]")
 
 public class GenericOpenAIChatModelTypeConfig {
   @JsonProperty("code")
@@ -47,14 +47,17 @@ public class GenericOpenAIChatModelTypeConfig {
   @JsonProperty("modelConfigurationClass")
   private String modelConfigurationClass = null;
 
+  @JsonProperty("providerId")
+  private String providerId = null;
+
+  @JsonProperty("defaultCurrencyCode")
+  private String defaultCurrencyCode = null;
+
   @JsonProperty("baseUrl")
   private String baseUrl = null;
 
   @JsonProperty("modelsListProvider")
   private String modelsListProvider = null;
-
-  @JsonProperty("providerId")
-  private String providerId = null;
 
   @JsonProperty("optionalAuthentication")
   private Boolean optionalAuthentication = null;
@@ -188,6 +191,42 @@ public class GenericOpenAIChatModelTypeConfig {
     this.modelConfigurationClass = modelConfigurationClass;
   }
 
+  public GenericOpenAIChatModelTypeConfig providerId(String providerId) {
+    this.providerId = providerId;
+    return this;
+  }
+
+   /**
+   * Get providerId
+   * @return providerId
+  **/
+  @Schema(description = "")
+  public String getProviderId() {
+    return providerId;
+  }
+
+  public void setProviderId(String providerId) {
+    this.providerId = providerId;
+  }
+
+  public GenericOpenAIChatModelTypeConfig defaultCurrencyCode(String defaultCurrencyCode) {
+    this.defaultCurrencyCode = defaultCurrencyCode;
+    return this;
+  }
+
+   /**
+   * Get defaultCurrencyCode
+   * @return defaultCurrencyCode
+  **/
+  @Schema(description = "")
+  public String getDefaultCurrencyCode() {
+    return defaultCurrencyCode;
+  }
+
+  public void setDefaultCurrencyCode(String defaultCurrencyCode) {
+    this.defaultCurrencyCode = defaultCurrencyCode;
+  }
+
   public GenericOpenAIChatModelTypeConfig baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
@@ -222,24 +261,6 @@ public class GenericOpenAIChatModelTypeConfig {
 
   public void setModelsListProvider(String modelsListProvider) {
     this.modelsListProvider = modelsListProvider;
-  }
-
-  public GenericOpenAIChatModelTypeConfig providerId(String providerId) {
-    this.providerId = providerId;
-    return this;
-  }
-
-   /**
-   * Get providerId
-   * @return providerId
-  **/
-  @Schema(description = "")
-  public String getProviderId() {
-    return providerId;
-  }
-
-  public void setProviderId(String providerId) {
-    this.providerId = providerId;
   }
 
   public GenericOpenAIChatModelTypeConfig optionalAuthentication(Boolean optionalAuthentication) {
@@ -295,16 +316,17 @@ public class GenericOpenAIChatModelTypeConfig {
         Objects.equals(this.dateModified, genericOpenAIChatModelTypeConfig.dateModified) &&
         Objects.equals(this.dateCreated, genericOpenAIChatModelTypeConfig.dateCreated) &&
         Objects.equals(this.modelConfigurationClass, genericOpenAIChatModelTypeConfig.modelConfigurationClass) &&
+        Objects.equals(this.providerId, genericOpenAIChatModelTypeConfig.providerId) &&
+        Objects.equals(this.defaultCurrencyCode, genericOpenAIChatModelTypeConfig.defaultCurrencyCode) &&
         Objects.equals(this.baseUrl, genericOpenAIChatModelTypeConfig.baseUrl) &&
         Objects.equals(this.modelsListProvider, genericOpenAIChatModelTypeConfig.modelsListProvider) &&
-        Objects.equals(this.providerId, genericOpenAIChatModelTypeConfig.providerId) &&
         Objects.equals(this.optionalAuthentication, genericOpenAIChatModelTypeConfig.optionalAuthentication) &&
         Objects.equals(this.applyThinkingMarkupHandling, genericOpenAIChatModelTypeConfig.applyThinkingMarkupHandling);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass, baseUrl, modelsListProvider, providerId, optionalAuthentication, applyThinkingMarkupHandling);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass, providerId, defaultCurrencyCode, baseUrl, modelsListProvider, optionalAuthentication, applyThinkingMarkupHandling);
   }
 
 
@@ -320,9 +342,10 @@ public class GenericOpenAIChatModelTypeConfig {
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    modelConfigurationClass: ").append(toIndentedString(modelConfigurationClass)).append("\n");
+    sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
+    sb.append("    defaultCurrencyCode: ").append(toIndentedString(defaultCurrencyCode)).append("\n");
     sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");
     sb.append("    modelsListProvider: ").append(toIndentedString(modelsListProvider)).append("\n");
-    sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
     sb.append("    optionalAuthentication: ").append(toIndentedString(optionalAuthentication)).append("\n");
     sb.append("    applyThinkingMarkupHandling: ").append(toIndentedString(applyThinkingMarkupHandling)).append("\n");
     sb.append("}");

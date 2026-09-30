@@ -71,9 +71,9 @@ public class JobStatusControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void getJobsEntriesForProjectEndpointTest() {
+    public void getJobsEntriesForProjectEndpointJobStatusTest() {
         JobsEntriesForProjectEndpointFilter body = null;
-        PageGJobStatusItem response = api.getJobsEntriesForProjectEndpoint(body);
+        PageGJobStatusItem response = api.getJobsEntriesForProjectEndpointJobStatus(body);
 
         // TODO: test validations
     }

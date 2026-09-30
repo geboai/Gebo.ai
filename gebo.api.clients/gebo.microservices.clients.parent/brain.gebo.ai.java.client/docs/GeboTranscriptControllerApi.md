@@ -4,12 +4,12 @@ All URIs are relative to *http://localhost:13001/brain*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**isEnabled**](GeboTranscriptControllerApi.md#isEnabled) | **GET** /api/users/GeboTranscriptController/isEnabled | 
+[**isEnabledTranscript**](GeboTranscriptControllerApi.md#isEnabledTranscript) | **GET** /api/users/GeboTranscriptController/isEnabled | 
 [**transcriptText**](GeboTranscriptControllerApi.md#transcriptText) | **POST** /api/users/GeboTranscriptController/transcriptText | 
 
-<a name="isEnabled"></a>
-# **isEnabled**
-> Boolean isEnabled()
+<a name="isEnabledTranscript"></a>
+# **isEnabledTranscript**
+> Boolean isEnabledTranscript()
 
 
 
@@ -22,10 +22,10 @@ Method | HTTP request | Description
 
 GeboTranscriptControllerApi apiInstance = new GeboTranscriptControllerApi();
 try {
-    Boolean result = apiInstance.isEnabled();
+    Boolean result = apiInstance.isEnabledTranscript();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GeboTranscriptControllerApi#isEnabled");
+    System.err.println("Exception when calling GeboTranscriptControllerApi#isEnabledTranscript");
     e.printStackTrace();
 }
 ```

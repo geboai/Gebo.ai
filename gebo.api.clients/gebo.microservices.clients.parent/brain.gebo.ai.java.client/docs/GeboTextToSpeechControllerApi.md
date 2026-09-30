@@ -4,12 +4,12 @@ All URIs are relative to *http://localhost:13001/brain*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**isEnabled1**](GeboTextToSpeechControllerApi.md#isEnabled1) | **GET** /api/users/GeboTextToSpeechController/isEnabled | 
+[**isEnabledTextToSpeech**](GeboTextToSpeechControllerApi.md#isEnabledTextToSpeech) | **GET** /api/users/GeboTextToSpeechController/isEnabled | 
 [**speechText**](GeboTextToSpeechControllerApi.md#speechText) | **POST** /api/users/GeboTextToSpeechController/speechText | 
 
-<a name="isEnabled1"></a>
-# **isEnabled1**
-> Boolean isEnabled1()
+<a name="isEnabledTextToSpeech"></a>
+# **isEnabledTextToSpeech**
+> Boolean isEnabledTextToSpeech()
 
 
 
@@ -22,10 +22,10 @@ Method | HTTP request | Description
 
 GeboTextToSpeechControllerApi apiInstance = new GeboTextToSpeechControllerApi();
 try {
-    Boolean result = apiInstance.isEnabled1();
+    Boolean result = apiInstance.isEnabledTextToSpeech();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GeboTextToSpeechControllerApi#isEnabled1");
+    System.err.println("Exception when calling GeboTextToSpeechControllerApi#isEnabledTextToSpeech");
     e.printStackTrace();
 }
 ```
