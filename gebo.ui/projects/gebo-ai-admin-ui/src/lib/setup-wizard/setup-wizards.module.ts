@@ -86,7 +86,7 @@ import { LLMSEasyModelsStepComponent } from "./llms-easy-wizard/step-models.comp
 import { LLMSEasySummaryStepComponent } from "./llms-easy-wizard/step-summary.component";
 import { LLMSEasyClassStatusComponent } from "./llms-easy-wizard/class-status.component";
 import { DatePickerModule } from 'primeng/datepicker';
-import { AGENTS_INTEGRATIONS_SETUP_GROUP_ID, agentsIntegrationsSetupGroup, AI_MODELS_SETUP_GROUP_ID, aiModelsSetupGroup, DATA_SOURCES_SETUP_GROUP_ID, dataSourcesSetupGroup, KNOWLEDGE_CHAT_SETUP_GROUP_ID, knowledgeChatSetupGroup, PLATFORM_SETUP_GROUP_ID, platformSetupGroup, SEARCH_SETUP_GROUP_ID, searchSetupGroup } from "./setup-wizard-groups";
+import { AI_MODELS_AGENTS_SETUP_GROUP_ID, aiModelsAgentsSetupGroup, ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID, enterpriseIntegrationsSetupGroup, EXTERNAL_SEARCH_SETUP_GROUP_ID, externalSearchSetupGroup, KNOWLEDGE_CHAT_SETUP_GROUP_ID, knowledgeChatSetupGroup, PLATFORM_SETUP_GROUP_ID, platformSetupGroup, SECURITY_SETUP_GROUP_ID, securitySetupGroup } from "./setup-wizard-groups";
 /**
  * Setup section for administrator user account configuration.
  * This is a mandatory section that appears first in the setup sequence.
@@ -94,13 +94,13 @@ import { AGENTS_INTEGRATIONS_SETUP_GROUP_ID, agentsIntegrationsSetupGroup, AI_MO
  */
 const adminUserSetupSection: SetupWizardsSection = {
     orderEntry: 1,
-    label: "Administrator & others account setup",
+    label: "Users & Groups",
     description: "At least an administration account is required to ensure that this gebo.ai installation is properly managed, add other users if necessary",
     enabledService: AlwaysTrueStatusService,
     setupCompletedService: AlwaysTrueStatusService,
     wizardComponent: UsersWizardComponent,
     wizardSectionId: "adminUserSetupSection",
-    groupId: PLATFORM_SETUP_GROUP_ID,
+    groupId: SECURITY_SETUP_GROUP_ID,
     mandatory: true
 };
 
@@ -133,7 +133,7 @@ const oauth2SetupSection: SetupWizardsSection = {
     setupCompletedService: Oauth2SetupWizardService,
     wizardComponent: Oauth2WizardComponent,
     wizardSectionId: "oauth2SetupSection",
-    groupId: PLATFORM_SETUP_GROUP_ID
+    groupId: SECURITY_SETUP_GROUP_ID
 }
 /**
  * Setup section for configuring Large Language Models.
@@ -152,7 +152,7 @@ const adminLLMSSetupSection: SetupWizardsSection = {
     // (LLMSetupWizardComponent) is left in place, declared but no longer wired to a section.
     wizardComponent: LLMSEasySetupWizardComponent,
     wizardSectionId: "adminLLMSSetupSection",
-    groupId: AI_MODELS_SETUP_GROUP_ID,
+    groupId: AI_MODELS_AGENTS_SETUP_GROUP_ID,
     mandatory: true
 };
 /**
@@ -169,7 +169,7 @@ const providerDealsSetupSection: SetupWizardsSection = {
     setupCompletedService: AlwaysTrueStatusService,
     wizardComponent: ProviderDealsWizardComponent,
     wizardSectionId: "providerDealsSetupSection",
-    groupId: AI_MODELS_SETUP_GROUP_ID,
+    groupId: AI_MODELS_AGENTS_SETUP_GROUP_ID,
     mandatory: false
 };
 const graphRagBaseSetupSection: SetupWizardsSection = {
@@ -199,7 +199,7 @@ const sharedFileSystemSetupSection: SetupWizardsSection = {
     setupCompletedService: SharedFilesystemAlreadySetupService,
     wizardComponent: SharedFilesystemWizardComponent,
     wizardSectionId: "sharedFileSystemSetupSection",
-    groupId: DATA_SOURCES_SETUP_GROUP_ID,
+    groupId: ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -217,7 +217,7 @@ const atlassianConfluenceSystemSetupSection: SetupWizardsSection = {
     setupCompletedService: ConfuenceStatusService,
     wizardComponent: ConfluenceWizardComponent,
     wizardSectionId: "atlassianConfluenceSystemSetupSection",
-    groupId: DATA_SOURCES_SETUP_GROUP_ID,
+    groupId: ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -234,7 +234,7 @@ const jiraConfluenceSystemSetupSection: SetupWizardsSection = {
     setupCompletedService: JiraStatusService,
     wizardComponent: JiraWizardComponent,
     wizardSectionId: "atlassianJiraSystemSetupSection",
-    groupId: DATA_SOURCES_SETUP_GROUP_ID,
+    groupId: ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -252,7 +252,7 @@ const microsoftSharepointSystemSetupSection: SetupWizardsSection = {
     setupCompletedService: SharepointStatusService,
     wizardComponent: SharepointWizardComponent,
     wizardSectionId: "microsoftSharepointSystemSetupSection",
-    groupId: DATA_SOURCES_SETUP_GROUP_ID,
+    groupId: ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -270,7 +270,7 @@ const awsS3SystemSetupSection: SetupWizardsSection = {
     setupCompletedService: AwsS3StatusService,
     wizardComponent: AwsS3WizardComponent,
     wizardSectionId: "awsS3SystemSetupSection",
-    groupId: DATA_SOURCES_SETUP_GROUP_ID,
+    groupId: ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -288,7 +288,7 @@ const googleDriveWorkspacesSystemSetupSection: SetupWizardsSection = {
     setupCompletedService: GoogleWorkspacesStatusService,
     wizardComponent: GoogleWorkspacesWizardComponent,
     wizardSectionId: "googleDriveWorkspacesSystemSetupSection",
-    groupId: DATA_SOURCES_SETUP_GROUP_ID,
+    groupId: ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -301,7 +301,7 @@ const webdavSystemSetupSection: SetupWizardsSection = {
     setupCompletedService: WebdavStatusService,
     wizardComponent: WebdavWizardComponent,
     wizardSectionId: "webdavSystemSetupSection",
-    groupId: DATA_SOURCES_SETUP_GROUP_ID,
+    groupId: ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -363,7 +363,7 @@ const webSearchApiSetupSection: SetupWizardsSection = {
     description: "Choose and configure one web search provider (Google, Tavily, Brave or SearXNG) for AI web searches",
     wizardComponent: GeboAIWebSearchWizardComponent,
     wizardSectionId: "webSearchApiSetupSection",
-    groupId: SEARCH_SETUP_GROUP_ID,
+    groupId: EXTERNAL_SEARCH_SETUP_GROUP_ID,
     mandatory: false
 };
 const deepSearchApiSetupSection: SetupWizardsSection = {
@@ -375,7 +375,7 @@ const deepSearchApiSetupSection: SetupWizardsSection = {
     description: "Configure Deep search parameters",
     wizardComponent: GeboAIDeepSearchWizardComponent,
     wizardSectionId: "deepSearchApiSetupSection",
-    groupId: SEARCH_SETUP_GROUP_ID,
+    groupId: EXTERNAL_SEARCH_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -388,7 +388,7 @@ const agentSetupSection: SetupWizardsSection = {
     description: "Configure Agent Services and their available tools",
     wizardComponent: GeboAIAgentSetupWizardComponent,
     wizardSectionId: "agentSetupSection",
-    groupId: AGENTS_INTEGRATIONS_SETUP_GROUP_ID,
+    groupId: AI_MODELS_AGENTS_SETUP_GROUP_ID,
     mandatory: false
 
 };
@@ -406,6 +406,7 @@ const agenticChatNetworksSetupSection: SetupWizardsSection = {
     description: "Choose the network of agents the chats with knowledge bases and the free chats are handed to.",
     wizardComponent: AgenticChatNetworksWizardComponent,
     wizardSectionId: "agenticChatNetworksSetupSection",
+    groupId: AI_MODELS_AGENTS_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -418,7 +419,7 @@ const mcpServerSetupSection: SetupWizardsSection = {
     description: "Configure Model Context Protocol (MCP) servers to extend the AI's tools, resources, and prompts.",
     wizardComponent: McpServerWizardComponent,
     wizardSectionId: "mcpServerSetupSection",
-    groupId: AGENTS_INTEGRATIONS_SETUP_GROUP_ID,
+    groupId: AI_MODELS_AGENTS_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -431,7 +432,7 @@ const geboMcpServerSetupSection: SetupWizardsSection = {
     description: "Configure local MCP servers to expose tools, resources, and prompts from your Gebo installation.",
     wizardComponent: GeboAIMCPServerWizardComponent,
     wizardSectionId: "geboMcpServerSetupSection",
-    groupId: AGENTS_INTEGRATIONS_SETUP_GROUP_ID,
+    groupId: AI_MODELS_AGENTS_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -444,7 +445,7 @@ const a2aImportSetupSection: SetupWizardsSection = {
     description: "Register external Agent2Agent (A2A) agents so they can be used as participants in your networks of agents.",
     wizardComponent: A2AImportWizardComponent,
     wizardSectionId: "a2aImportSetupSection",
-    groupId: AGENTS_INTEGRATIONS_SETUP_GROUP_ID,
+    groupId: AI_MODELS_AGENTS_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -457,7 +458,7 @@ const a2aExportSetupSection: SetupWizardsSection = {
     description: "Publish your Gebo agents and networks of agents as opaque Agent2Agent (A2A) agents callable by external clients.",
     wizardComponent: A2AExportWizardComponent,
     wizardSectionId: "a2aExportSetupSection",
-    groupId: AGENTS_INTEGRATIONS_SETUP_GROUP_ID,
+    groupId: AI_MODELS_AGENTS_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -470,7 +471,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
     description: "Generate and manage API keys for system automation or MCP integrations.",
     wizardComponent: GeneratedAdminApiKeyWizardComponent,
     wizardSectionId: "generatedAdminApiKeySetupSection",
-    groupId: AGENTS_INTEGRATIONS_SETUP_GROUP_ID,
+    groupId: SECURITY_SETUP_GROUP_ID,
     mandatory: false
 };
 
@@ -546,11 +547,11 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: a2aExportSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: generatedAdminApiKeySetupSection, multi: true },
         { provide: WIZARD_SECTION_GROUP, useValue: platformSetupGroup, multi: true },
-        { provide: WIZARD_SECTION_GROUP, useValue: aiModelsSetupGroup, multi: true },
-        { provide: WIZARD_SECTION_GROUP, useValue: dataSourcesSetupGroup, multi: true },
+        { provide: WIZARD_SECTION_GROUP, useValue: aiModelsAgentsSetupGroup, multi: true },
+        { provide: WIZARD_SECTION_GROUP, useValue: securitySetupGroup, multi: true },
+        { provide: WIZARD_SECTION_GROUP, useValue: enterpriseIntegrationsSetupGroup, multi: true },
         { provide: WIZARD_SECTION_GROUP, useValue: knowledgeChatSetupGroup, multi: true },
-        { provide: WIZARD_SECTION_GROUP, useValue: searchSetupGroup, multi: true },
-        { provide: WIZARD_SECTION_GROUP, useValue: agentsIntegrationsSetupGroup, multi: true },
+        { provide: WIZARD_SECTION_GROUP, useValue: externalSearchSetupGroup, multi: true },
         { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false }]
 
 

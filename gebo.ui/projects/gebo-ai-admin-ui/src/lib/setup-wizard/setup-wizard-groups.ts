@@ -14,45 +14,45 @@
 import { SetupWizardsSectionGroup } from "@Gebo.ai/reusable-ui";
 
 export const PLATFORM_SETUP_GROUP_ID: string = "platformSetupGroup";
-export const AI_MODELS_SETUP_GROUP_ID: string = "aiModelsSetupGroup";
-export const DATA_SOURCES_SETUP_GROUP_ID: string = "dataSourcesSetupGroup";
+export const AI_MODELS_AGENTS_SETUP_GROUP_ID: string = "aiModelsAgentsSetupGroup";
+export const SECURITY_SETUP_GROUP_ID: string = "securitySetupGroup";
+export const ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID: string = "enterpriseIntegrationsSetupGroup";
 export const KNOWLEDGE_CHAT_SETUP_GROUP_ID: string = "knowledgeChatSetupGroup";
-export const SEARCH_SETUP_GROUP_ID: string = "searchSetupGroup";
-export const AGENTS_INTEGRATIONS_SETUP_GROUP_ID: string = "agentsIntegrationsSetupGroup";
+export const EXTERNAL_SEARCH_SETUP_GROUP_ID: string = "externalSearchSetupGroup";
 
 export const platformSetupGroup: SetupWizardsSectionGroup = {
     groupId: PLATFORM_SETUP_GROUP_ID,
     orderEntry: 1,
     label: "Platform",
-    description: "Accounts, work directory and authentication of this Gebo.ai installation"
+    description: "Work directory of this Gebo.ai installation"
 };
-export const aiModelsSetupGroup: SetupWizardsSectionGroup = {
-    groupId: AI_MODELS_SETUP_GROUP_ID,
+export const aiModelsAgentsSetupGroup: SetupWizardsSectionGroup = {
+    groupId: AI_MODELS_AGENTS_SETUP_GROUP_ID,
     orderEntry: 2,
-    label: "AI models",
-    description: "Large language models and provider deals"
+    label: "AI Models, agents & interoperability",
+    description: "Large language models, provider deals, agents, MCP servers and A2A interoperability"
 };
-export const dataSourcesSetupGroup: SetupWizardsSectionGroup = {
-    groupId: DATA_SOURCES_SETUP_GROUP_ID,
+export const securitySetupGroup: SetupWizardsSectionGroup = {
+    groupId: SECURITY_SETUP_GROUP_ID,
     orderEntry: 3,
-    label: "Data sources",
-    description: "Filesystems and external systems whose contents can be indexed"
+    label: "Security",
+    description: "Users & groups, single sign-on and administrative API keys"
+};
+export const enterpriseIntegrationsSetupGroup: SetupWizardsSectionGroup = {
+    groupId: ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID,
+    orderEntry: 4,
+    label: "Enterprise integrations",
+    description: "Filesystems and enterprise systems whose contents can be indexed"
 };
 export const knowledgeChatSetupGroup: SetupWizardsSectionGroup = {
     groupId: KNOWLEDGE_CHAT_SETUP_GROUP_ID,
-    orderEntry: 4,
+    orderEntry: 5,
     label: "Knowledge & chat",
     description: "Knowledge bases, graph R.A.G. knowledge extraction, R.A.G. chat profiles and their tuning"
 };
-export const searchSetupGroup: SetupWizardsSectionGroup = {
-    groupId: SEARCH_SETUP_GROUP_ID,
-    orderEntry: 5,
-    label: "Search",
-    description: "Web search and deep search services"
-};
-export const agentsIntegrationsSetupGroup: SetupWizardsSectionGroup = {
-    groupId: AGENTS_INTEGRATIONS_SETUP_GROUP_ID,
+export const externalSearchSetupGroup: SetupWizardsSectionGroup = {
+    groupId: EXTERNAL_SEARCH_SETUP_GROUP_ID,
     orderEntry: 6,
-    label: "Agents & integrations",
-    description: "Agents, MCP servers, A2A and administrative API keys"
+    label: "External search",
+    description: "Web search and deep search services"
 };

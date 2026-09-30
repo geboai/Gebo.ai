@@ -19,7 +19,7 @@
 
 import { Inject, Injectable, Injector, Optional } from "@angular/core";
 import { SetupWizardItem, SetupWizardsSection, SetupWizardsSectionGroup, UNGROUPED_SETUP_SECTIONS_GROUP_ID, WIZARD_SECTION, WIZARD_SECTION_GROUP } from "./setup-wizard-step";
-import { forkJoin, map, mergeMap, Observable, of } from "rxjs";
+import { catchError, forkJoin, map, mergeMap, Observable, of, throwIfEmpty } from "rxjs";
 
 /**
  * Helper function that filters elements from the first array that are not present in the second array.
@@ -275,7 +275,30 @@ export class SetupWizardService {
                         return data;
                     }));
                 }))
-                setupItemObservables.push(installedcheckObservable);
+                // a failing status check must not empty the whole setup list:
+                // the section is shown as not enabled. Http errors are turned into
+                // empty completions by the auth interceptor, so an empty status fails too
+                const resilientObservable: Observable<InstalledSetupWizardItem> = installedcheckObservable.pipe(throwIfEmpty(() => new Error("status check completed without a value")), catchError(error => {
+                    console.error("Setup wizard status check failed for section:" + c.wizardSectionId, error);
+                    const data: InstalledSetupWizardItem = {
+                        installed: true,
+                        wizardItem: {
+                            orderEntry: c.orderEntry,
+                            alreadyCompleted: false,
+                            enabled: false,
+                            description: c.description,
+                            label: c.label,
+                            wizardComponent: c.wizardComponent,
+                            wizardSectionId: c.wizardSectionId,
+                            groupId: c.groupId,
+                            mandatory: c.mandatory === true,
+                            experimental: c.experimental === true,
+                            requredStepsIds: c.requredStepsIds
+                        }
+                    };
+                    return of(data);
+                }));
+                setupItemObservables.push(resilientObservable);
             }
         });
         if (setupItemObservables.length === 0) {

@@ -127,30 +127,30 @@
       },
       "platformSetupGroup": {
         "label": "Platform",
-        "description": "Accounts, work directory and authentication of this Gebo.ai installation"
+        "description": "Work directory of this Gebo.ai installation"
       },
-      "aiModelsSetupGroup": {
-        "label": "AI models",
-        "description": "Large language models and provider deals"
+      "aiModelsAgentsSetupGroup": {
+        "label": "AI Models, agents & interoperability",
+        "description": "Large language models, provider deals, agents, MCP servers and A2A interoperability"
       },
-      "dataSourcesSetupGroup": {
-        "label": "Data sources",
-        "description": "Filesystems and external systems whose contents can be indexed"
+      "securitySetupGroup": {
+        "label": "Security",
+        "description": "Users & groups, single sign-on and administrative API keys"
+      },
+      "enterpriseIntegrationsSetupGroup": {
+        "label": "Enterprise integrations",
+        "description": "Filesystems and enterprise systems whose contents can be indexed"
       },
       "knowledgeChatSetupGroup": {
         "label": "Knowledge & chat",
         "description": "Knowledge bases, graph R.A.G. knowledge extraction, R.A.G. chat profiles and their tuning"
       },
-      "searchSetupGroup": {
-        "label": "Search",
+      "externalSearchSetupGroup": {
+        "label": "External search",
         "description": "Web search and deep search services"
       },
-      "agentsIntegrationsSetupGroup": {
-        "label": "Agents & integrations",
-        "description": "Agents, MCP servers, A2A and administrative API keys"
-      },
       "adminUserSetupSection": {
-        "label": "Administrator & others account setup",
+        "label": "Users & Groups",
         "description": "At least an administration account is required to ensure that this gebo.ai installation is properly managed, add other users if necessary"
       },
       "geboWorkDirectorySetupSection": {
