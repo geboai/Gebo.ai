@@ -79,11 +79,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		implements IRoutingChatPipelineStepService {
 
 	public static final String PIPELINE_EXECUTOR_SUGGESTION = "pipelineExecutorSuggestion";
-	/**
-	 * The output step of the single agent with tools working in a loop, registered by
-	 * the standard agents when they are enabled.
-	 */
-	public static final String AGENTIC_LOOP_STREAMING_STEP = "agentic-loop-network-streaming";
 	private static final String SCANNING_HUGE_FILE_WITH_LLMS = "Scanning huge file with llms";
 	private static final String RUNNING_HEAVY_CHAT_WITH_DOCUMENTS = "RUNNING_HEAVY_CHAT_WITH_DOCUMENTS";
 	private static final String ANSWERING_FROM_YOUR_DOCUMENTS = "Answering from your selected documents";
@@ -534,10 +529,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		TreeMap<Integer, RespondingWith> ordered = new TreeMap<Integer, RespondingWith>();
 		String tolower = decision.toLowerCase();
 		for (RespondingWith rw : RespondingWith.values()) {
-			if (rw == RespondingWith.AGENTIC_LOOP_RESPONSE) {
-				// Chosen by the user from the chat menu only, never by the router.
-				continue;
-			}
 			int index = tolower.indexOf(rw.name().toLowerCase());
 			if (index >= 0) {
 				ordered.put(index, rw);
@@ -724,9 +715,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		}
 		case IMAGE_GENERATION_RESPONSE: {
 			return List.of(DefaultImageGenerationStreamingOutputChatPipelineServiceImpl.IMAGE_GENERATION_STREAMING_SERVICE);
-		}
-		case AGENTIC_LOOP_RESPONSE: {
-			return List.of(AGENTIC_LOOP_STREAMING_STEP);
 		}
 		case PURE_LLM_RESPONSE:
 		default:

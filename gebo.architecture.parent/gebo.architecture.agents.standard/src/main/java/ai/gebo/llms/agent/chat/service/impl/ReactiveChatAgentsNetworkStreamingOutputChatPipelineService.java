@@ -1,5 +1,8 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
+import ai.gebo.architecture.agents.model.PipelineType;
+import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService;
+import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import java.util.concurrent.atomic.AtomicReference;
 import java.io.IOException;
 import java.util.HashMap;
@@ -39,7 +42,7 @@ import reactor.core.scheduler.Schedulers;
 
 public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		implements IStreamingOutputChatPipelineService {
-	private static final String SERVICE_ID = "ReactiveChatAgentsNetworkStreamingOutputChatPipelineService";
+	public static final String SERVICE_ID = "ReactiveChatAgentsNetworkStreamingOutputChatPipelineService";
 	private static final String EXCEPTION_CREATING_NETWORK_OF_AGENTS = "Exception creating network of agents";
 	private static final String EXCEPTION_RUNNING_NETWORK_OF_AGENTS = "Exception running network of agents";
 	protected final IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory;
@@ -53,6 +56,14 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	 * default-network step.
 	 */
 	private final String stepId;
+	/**
+	 * The pipeline type the chats of this step belong to: when set, the network is
+	 * resolved at each request (chat profile, system default, configuration) and the
+	 * data source is only the fallback; when null, the data source's first network
+	 * is used.
+	 */
+	protected final PipelineType pipelineType;
+	protected final IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService;
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.class);
 
@@ -66,10 +77,23 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
 			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
 			String stepId) {
+		this(factory, agentsNetworkDataSource, lifeCycleService, stepId, null, null);
+	}
+
+	/**
+	 * A step handing the chats of the pipeline type to the network resolved at each
+	 * request, the data source's first network being the fallback.
+	 */
+	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
+			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
+			String stepId, PipelineType pipelineType, IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService) {
 		this.factory = factory;
 		this.agentsNetworkDataSource = agentsNetworkDataSource;
 		this.lifeCycleService = lifeCycleService;
 		this.stepId = stepId;
+		this.pipelineType = pipelineType;
+		this.defaultNetworksService = defaultNetworksService;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Registered reactive chat agents network pipeline step id:" + stepId + " over network factory:"
 					+ (factory != null ? factory.getId() : null));
@@ -121,6 +145,38 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		return environment;
 	}
 
+	/**
+	 * The network the chat is handed to: the one resolved for the pipeline type and
+	 * the chat profile when the step has a pipeline type, otherwise, or when nothing
+	 * resolves, the data source's first one.
+	 */
+	protected GAgentsNetwork chooseNetwork(ChatPipelineExecutionRuntimeData runtimeData)
+			throws ChatPipelineException, GeboChatSessionLifecycleException {
+		if (pipelineType != null && defaultNetworksService != null) {
+			GChatProfileConfiguration profile = lifeCycleService
+					.getSessionChatProfile(runtimeData.getRequestResources().getCurrentRequest());
+			String profileNetwork = profile != null ? profile.getDefaultChatNetworkOfAgents() : null;
+			GAgentsNetwork resolved = defaultNetworksService.resolveChatNetwork(pipelineType, profileNetwork);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Pipeline step:" + getStepId() + " type:" + pipelineType + " chat profile:"
+						+ (profile != null ? profile.getCode() : null) + " profile network:" + profileNetwork
+						+ " resolved network:" + (resolved != null ? resolved.getCode() : null));
+			}
+			if (resolved != null) {
+				return resolved;
+			}
+		}
+		List<GAgentsNetwork> ds = this.agentsNetworkDataSource != null ? this.agentsNetworkDataSource.getConfigurations()
+				: List.of();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("The agents network data source offers " + ds.size()
+					+ " network(s); the first one is used as the agentic chat network");
+		}
+		if (ds.isEmpty())
+			throw new ChatPipelineException("No agentic chat network set");
+		return ds.get(0);
+	}
+
 	@Override
 	public List<StepEnvironmentParameter> getRequiredParameters() {
 
@@ -139,15 +195,8 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 			INotificationSink notificationSink = sinkUIEmitter;
 			final GeboChatResponse responseReference = runtimeData.getChatResponse();
-			List<GAgentsNetwork> ds = this.agentsNetworkDataSource.getConfigurations();
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("The agents network data source offers " + ds.size()
-						+ " network(s); the first one is used as the agentic chat network");
-			}
-			if (ds.isEmpty())
-				throw new ChatPipelineException("No agentic chat network set");
+			final GAgentsNetwork network = chooseNetwork(runtimeData);
 			final Map<String, Object> environment = buildNetworkEnvironment(runtimeData);
-			GAgentsNetwork network = ds.get(0);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Creating runtime network of agents from config code:" + network.getCode());
 			}

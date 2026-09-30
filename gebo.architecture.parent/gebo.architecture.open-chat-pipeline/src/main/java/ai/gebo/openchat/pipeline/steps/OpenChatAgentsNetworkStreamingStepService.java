@@ -9,6 +9,8 @@
 
 package ai.gebo.openchat.pipeline.steps;
 
+import ai.gebo.architecture.agents.model.PipelineType;
+import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService;
 import java.io.IOException;
 
 import org.slf4j.Logger;
@@ -50,8 +52,10 @@ public class OpenChatAgentsNetworkStreamingStepService
 
 	public OpenChatAgentsNetworkStreamingStepService(
 			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
-			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService) {
-		super(factory, agentsNetworkDataSource, lifeCycleService, OpenChatConstants.OPEN_CHAT_NETWORK_STREAMING_STEP);
+			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
+			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService) {
+		super(factory, agentsNetworkDataSource, lifeCycleService, OpenChatConstants.OPEN_CHAT_NETWORK_STREAMING_STEP,
+				PipelineType.PURE_CHAT_PIPELINE, defaultNetworksService);
 	}
 
 	@Override

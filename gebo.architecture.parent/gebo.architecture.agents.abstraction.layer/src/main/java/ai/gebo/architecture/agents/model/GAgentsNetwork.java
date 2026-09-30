@@ -74,6 +74,16 @@ public class GAgentsNetwork extends GBaseObject
 	@NotEmpty
 	private List<AgentNetworkParticipant> agents = null;
 	private Boolean readOnly = null;
-	private Boolean defaultUserInteractionNetwork = null;
+	/**
+	 * When this network is the right choice, in words the administrator can act on
+	 * (the kind of LLMs and provider conditions it fits), shown where the network is
+	 * chosen.
+	 */
+	private String suggestedPurpose = null;
+	/**
+	 * The chat pipeline types this network can be chosen for as the chat network of
+	 * agents; not choosable when empty.
+	 */
+	private List<PipelineType> choosableForPipelineTypes = null;
 
 }

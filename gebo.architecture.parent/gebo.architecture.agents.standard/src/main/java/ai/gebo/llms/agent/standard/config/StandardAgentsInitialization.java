@@ -20,6 +20,8 @@ import ai.gebo.architecture.agents.config.AgentsToolsAutoMountingConfig;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.PipelineType;
+import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IDynamicAgentsNetworkDataSource;
@@ -83,7 +85,8 @@ public class StandardAgentsInitialization {
 	private static final String TOOL_AGENT = "TOOL_AGENT";
 	private static final String TOOL_CALLING_AGENT_DESCRIPTION = "Tool-calling agent that operates the available tools (APIs, connectors, databases, services) to fulfill the coordinator's commands and returns the tool results as evidence";
 	private static final String DEFAULT_NETWORK_SCENARIO_DESCRIPTION = "The network of agent is meant to try to delivery the best answer and interaction to user's questions with a leader controller node controlling if the quality of the network output is ok.\r\n The controller agent is comunicating with one or more searching agents to supply evidences on an evidence analyzer node that responds.\r\n";
-	private static final String DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES = "Default agents network for chat purposes";
+	private static final String DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES = "Full network of agents: a coordinator hands the question to specialized agents searching the knowledge bases, the web and the external systems or calling the tools, checks the evidence they gather and has a writer agent compose the answer";
+	public static final String FULL_NETWORK_SUGGESTED_PURPOSE = "Fits most scenarios where cheap LLMs, in the order of 10-100B parameters, are used and the AI provider has flat conditions: every question takes many small, focused LLM calls.";
 	private static final String DEFAULT_AGENTS_NETWORK = "DEFAULT_AGENTS_NETWORK";
 	private final static Logger LOGGER = LoggerFactory.getLogger(StandardAgentsInitialization.class);
 	private final ISearchServiceRepositoryPattern searchServicesRepositoryPattern;
@@ -160,7 +163,8 @@ public class StandardAgentsInitialization {
 	public IStreamingOutputChatPipelineService defaultStreamingOutputPipelineService(
 			@Autowired @Qualifier(IDynamicAgentsNetworkDataSource.DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER) IDynamicAgentsNetworkDataSource networkDataSource,
 			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory,
-			IGChatSessionLifeCycleService lifeCycleService) {
+			IGChatSessionLifeCycleService lifeCycleService,
+			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService) {
 		IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
 				.getFactory(IGReactiveChatAgentsNetworkService.class);
 		if (LOGGER.isDebugEnabled()) {
@@ -168,8 +172,11 @@ public class StandardAgentsInitialization {
 					+ (factory != null ? factory.getId() : null));
 		}
 
+		// The chats with a chat profile are handed to the network resolved for the RAG
+		// pipeline; the default network is the fallback.
 		return new ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(factory, networkDataSource,
-				lifeCycleService);
+				lifeCycleService, ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.SERVICE_ID,
+				PipelineType.RAG_PIPELINE, defaultNetworksService);
 	}
 
 	@Bean
@@ -247,10 +254,11 @@ public class StandardAgentsInitialization {
 		GAgentsNetwork network = createChatAgentsNetwork(DEFAULT_AGENTS_NETWORK, DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES,
 				inputAdapter.getCode(), controller.getCode(), reportWriter.getCode(),
 				internalKnowledgebaseAgentConfigDataSource);
-		network.setDefaultUserInteractionNetwork(true);
+		network.setChoosableForPipelineTypes(List.of(PipelineType.RAG_PIPELINE));
+		network.setSuggestedPurpose(FULL_NETWORK_SUGGESTED_PURPOSE);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End createDefaultAgentsNetwork(...) code:" + network.getCode()
-					+ " marked as the default user interaction network");
+					+ " choosable for the RAG pipeline");
 		}
 		return network;
 	}
@@ -281,7 +289,6 @@ public class StandardAgentsInitialization {
 		network.setCode(networkCode);
 		network.setDescription(networkDescription);
 		network.setReadOnly(true);
-		network.setDefaultUserInteractionNetwork(false);
 		network.setAgentsNetworkServiceFactoryId(
 				GReactiveChatAgentsNetworkServiceFactoryImpl.REACTIVE_CHAT_AGENTS_NETWORK);
 		// Global safety backstop on TOTAL agent invocations (the controller's own cycle
