@@ -49,6 +49,39 @@
   font-weight: var(--gebo-font-weight-medium, 500);
 }
 
+.gebo-setup-group-header {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gebo-space-2, 0.5rem);
+}
+
+.gebo-setup-group-status-full {
+  color: green;
+}
+
+.gebo-setup-group-status-complete {
+  color: orange;
+}
+
+.gebo-setup-group-status-incomplete {
+  color: red;
+}
+
+.gebo-setup-group-label {
+  font-weight: var(--gebo-font-weight-semibold, 600);
+}
+
+.gebo-setup-group-counter {
+  color: var(--gebo-text-muted, #4b5563);
+  font-size: var(--gebo-font-size-xs, 0.75rem);
+}
+
+.gebo-setup-group-description {
+  padding-bottom: var(--gebo-space-2, 0.5rem);
+  color: var(--gebo-text-muted, #4b5563);
+  font-size: var(--gebo-font-size-sm, 0.8125rem);
+}
+
 @media (max-width: 48rem) {
   .gebo-setup-section-row {
     grid-template-columns: 2.5rem minmax(0, 1fr);

@@ -17,8 +17,8 @@
  * are completed, and organize wizard sections in priority order.
  */
 
-import { Inject, Injectable, Injector } from "@angular/core";
-import { SetupWizardItem, SetupWizardsSection, WIZARD_SECTION } from "./setup-wizard-step";
+import { Inject, Injectable, Injector, Optional } from "@angular/core";
+import { SetupWizardItem, SetupWizardsSection, SetupWizardsSectionGroup, UNGROUPED_SETUP_SECTIONS_GROUP_ID, WIZARD_SECTION, WIZARD_SECTION_GROUP } from "./setup-wizard-step";
 import { forkJoin, map, mergeMap, Observable, of } from "rxjs";
 
 /**
@@ -51,6 +51,25 @@ interface InstalledSetupWizardItem {
 }
 
 /**
+ * Interface representing a group of setup wizard items ready for display in the UI,
+ * with the setup status and completion counters of its own items.
+ */
+export interface SetupWizardGroupItem {
+    groupId: string;
+    orderEntry: number;
+    label: string;
+    description?: string;
+    /** Items of the group, in orderEntry order */
+    items: SetupWizardItem[];
+    /** Setup status calculated on the group items only */
+    status: SetupStatus;
+    /** Number of enabled items already completed */
+    completedCount: number;
+    /** Number of enabled items */
+    enabledCount: number;
+}
+
+/**
  * Injectable service that manages setup wizard configurations and their statuses.
  * This service is responsible for:
  * - Ordering wizard sections by priority
@@ -61,6 +80,7 @@ interface InstalledSetupWizardItem {
 @Injectable({ providedIn: "root" })
 export class SetupWizardService {
     private _configurations: SetupWizardsSection[] = [];
+    private _groups: SetupWizardsSectionGroup[] = [];
 
     /**
      * Initializes the SetupWizardService by organizing configurations in priority order
@@ -68,8 +88,9 @@ export class SetupWizardService {
      * 
      * @param injector Angular injector to resolve service instances
      * @param configs Optional array of wizard section configurations
+     * @param groups Optional array of wizard section groups
      */
-    constructor(private injector: Injector, @Inject(WIZARD_SECTION) configs?: SetupWizardsSection[]) {
+    constructor(private injector: Injector, @Inject(WIZARD_SECTION) configs?: SetupWizardsSection[], @Optional() @Inject(WIZARD_SECTION_GROUP) groups?: SetupWizardsSectionGroup[]) {
 
         if (configs && configs.length) {
             const cfgs: SetupWizardsSection[] = [];
@@ -104,6 +125,17 @@ export class SetupWizardService {
                 }
             });
         }
+        if (groups && groups.length) {
+            const uniqueGroups: SetupWizardsSectionGroup[] = [];
+            groups.forEach(g => {
+                if (uniqueGroups.find(x => x.groupId === g.groupId)) {
+                    console.error("Duplicated setup wizard group:" + g.groupId);
+                } else {
+                    uniqueGroups.push(g);
+                }
+            });
+            this._groups = uniqueGroups.sort((a, b) => a.orderEntry - b.orderEntry);
+        }
     }
 
     /**
@@ -113,6 +145,47 @@ export class SetupWizardService {
      */
     public get configurations(): SetupWizardsSection[] {
         return this._configurations;
+    }
+
+    /**
+     * Gets the ordered list of section groups.
+     *
+     * @returns Array of setup wizard section groups in priority order
+     */
+    public get groups(): SetupWizardsSectionGroup[] {
+        return this._groups;
+    }
+
+    /**
+     * Distributes the items in the registered groups, keeping their order.
+     * Items with no groupId or an unknown groupId are collected in a trailing "other" group,
+     * groups without items are omitted.
+     *
+     * @param items Array of setup wizard items, as returned by getActualStatus
+     * @returns Array of groups in priority order, each with its own setup status
+     */
+    public groupItems(items: SetupWizardItem[]): SetupWizardGroupItem[] {
+        const newGroup = (group: SetupWizardsSectionGroup): SetupWizardGroupItem => {
+            return { groupId: group.groupId, orderEntry: group.orderEntry, label: group.label, description: group.description, items: [], status: "full", completedCount: 0, enabledCount: 0 };
+        };
+        const outGroups: SetupWizardGroupItem[] = this._groups.map(g => newGroup(g));
+        const ungrouped: SetupWizardGroupItem = newGroup({ groupId: UNGROUPED_SETUP_SECTIONS_GROUP_ID, orderEntry: Number.MAX_SAFE_INTEGER, label: "Other setups" });
+        outGroups.push(ungrouped);
+        items?.forEach(item => {
+            const group = item.groupId ? outGroups.find(g => g.groupId === item.groupId) : undefined;
+            if (item.groupId && !group) {
+                console.error("Unknown setup wizard group:" + item.groupId + " for section:" + item.wizardSectionId);
+            }
+            (group ? group : ungrouped).items.push(item);
+        });
+        const visibleGroups = outGroups.filter(g => g.items.length > 0);
+        visibleGroups.forEach(g => {
+            const enabledItems = g.items.filter(x => x.enabled === true);
+            g.status = this.calculateSetupStatus(g.items);
+            g.enabledCount = enabledItems.length;
+            g.completedCount = enabledItems.filter(x => x.alreadyCompleted === true).length;
+        });
+        return visibleGroups;
     }
 
     /**
@@ -176,6 +249,7 @@ export class SetupWizardService {
                         label: c.label,
                         wizardComponent: c.wizardComponent,
                         wizardSectionId: c.wizardSectionId,
+                        groupId: c.groupId,
                         mandatory: c.mandatory === true,
                         experimental: c.experimental===true,
                         requredStepsIds: c.requredStepsIds
@@ -204,6 +278,10 @@ export class SetupWizardService {
                 setupItemObservables.push(installedcheckObservable);
             }
         });
+        if (setupItemObservables.length === 0) {
+            // forkJoin of an empty array completes without emitting
+            return of([]);
+        }
         return forkJoin(setupItemObservables).pipe(map((modulesList:InstalledSetupWizardItem[])=>{
             const outModules:SetupWizardItem[]=[];
             modulesList?.forEach(x=>{
