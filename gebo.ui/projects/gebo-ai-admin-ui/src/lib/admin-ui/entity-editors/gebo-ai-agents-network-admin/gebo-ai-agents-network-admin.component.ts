@@ -1,7 +1,7 @@
 import { afterNextRender, Component, DestroyRef, ElementRef, forwardRef, Injector, OnInit, runInInjectionContext, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GBaseObject, GAgentConfig } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType } from "@Gebo.ai/reusable-ui";
+import { AgenticChatDefaultNetworksAdminControllerService, GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GBaseObject, GAgentConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { initializeModel, NgDiagramNodeTemplateMap, NgDiagramConfig, provideNgDiagram, NgDiagramViewportService } from "ng-diagram";
@@ -32,9 +32,10 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         dateCreated: new FormControl(),
         maxLoopIteration: new FormControl(),
         scenarioDescription: new FormControl(),
+        suggestedPurpose: new FormControl(),
         agents: new FormControl(),
         readOnly: new FormControl(),
-        defaultUserInteractionNetwork: new FormControl(),
+        choosableForPipelineTypes: new FormControl(),
         accessibleToAll: new FormControl(),
         accessibleUsers: new FormControl(),
         accessibleGroups: new FormControl(),
@@ -80,6 +81,16 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         { label: "Deny List", value: "DENY_LIST" }
     ];
 
+    /** The kinds of chat a network can be chosen for. */
+    /** Whether the agents are enabled: the chat choice fields exist only then. */
+    protected agenticChatNetworksEnabled: boolean = false;
+
+    /** The kinds of chat a network can be chosen for; the labels are translated on init. */
+    protected pipelineTypeOptions: { id: string, label: string, value: string }[] = [
+        { id: "RagPipelineOption", label: "Agentic chat with knowledge bases", value: "RAG_PIPELINE" },
+        { id: "PureChatPipelineOption", label: "Free chat", value: "PURE_CHAT_PIPELINE" }
+    ];
+
     protected participantFormGroup = new FormGroup({
         networkAgentName: new FormControl("", Validators.required),
         agentConfigCode: new FormControl("", Validators.required),
@@ -103,6 +114,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         private service: GeboAgentsNetworkAdminControllerService,
         private agentsService: GeboAgentAdminControllerService,
         private viewportService: NgDiagramViewportService,
+        private chatNetworksService: AgenticChatDefaultNetworksAdminControllerService,
         destroyRef: DestroyRef
     ) {
         super(injector, geboFormGroupsService, myConfirmationService, actionsRouter, outputForwardingService);
@@ -115,11 +127,11 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
                 if (this.readonly) {
                     this.participantFormGroup.disable();
                     this.formGroup.get("maxLoopIteration")?.disable({ emitEvent: false });
-                    this.formGroup.get("defaultUserInteractionNetwork")?.disable({ emitEvent: false });
+                    this.formGroup.get("choosableForPipelineTypes")?.disable({ emitEvent: false });
                 } else {
                     this.participantFormGroup.enable();
                     this.formGroup.get("maxLoopIteration")?.enable({ emitEvent: false });
-                    this.formGroup.get("defaultUserInteractionNetwork")?.enable({ emitEvent: false });
+                    this.formGroup.get("choosableForPipelineTypes")?.enable({ emitEvent: false });
                 }
                 this.rebuildChart();
             }
@@ -134,6 +146,10 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
 
     override ngOnInit(): void {
         super.ngOnInit();
+        this.chatNetworksService.isAgenticChatNetworksEnabled()
+            .subscribe(enabled => this.agenticChatNetworksEnabled = enabled === true);
+        this.myInjector.get(GeboAITranslationService).translateMenuItems("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork",
+            this.pipelineTypeOptions).subscribe(items => this.pipelineTypeOptions = [...items] as { id: string, label: string, value: string }[]);
         this.loadAvailableAgents();
     }
 
@@ -158,11 +174,11 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         if (this.readonly) {
             this.participantFormGroup.disable();
             this.formGroup.get("maxLoopIteration")?.disable({ emitEvent: false });
-            this.formGroup.get("defaultUserInteractionNetwork")?.disable({ emitEvent: false });
+            this.formGroup.get("choosableForPipelineTypes")?.disable({ emitEvent: false });
         } else {
             this.participantFormGroup.enable();
             this.formGroup.get("maxLoopIteration")?.enable({ emitEvent: false });
-            this.formGroup.get("defaultUserInteractionNetwork")?.enable({ emitEvent: false });
+            this.formGroup.get("choosableForPipelineTypes")?.enable({ emitEvent: false });
         }
         this.rebuildChart();
     }
@@ -173,11 +189,11 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         if (this.readonly) {
             this.participantFormGroup.disable();
             this.formGroup.get("maxLoopIteration")?.disable({ emitEvent: false });
-            this.formGroup.get("defaultUserInteractionNetwork")?.disable({ emitEvent: false });
+            this.formGroup.get("choosableForPipelineTypes")?.disable({ emitEvent: false });
         } else {
             this.participantFormGroup.enable();
             this.formGroup.get("maxLoopIteration")?.enable({ emitEvent: false });
-            this.formGroup.get("defaultUserInteractionNetwork")?.enable({ emitEvent: false });
+            this.formGroup.get("choosableForPipelineTypes")?.enable({ emitEvent: false });
         }
         this.rebuildChart();
     }

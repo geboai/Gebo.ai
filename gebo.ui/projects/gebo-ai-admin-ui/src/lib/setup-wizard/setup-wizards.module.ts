@@ -64,6 +64,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ChipModule } from 'primeng/chip';
 import { MessageModule } from 'primeng/message';
 import { ProviderDealsWizardComponent } from "./provider-deals/provider-deals-wizard.component";
+import { AgenticChatNetworksEnabledService, AgenticChatNetworksWizardComponent } from "./agentic-chat-networks/agentic-chat-networks-wizard.component";
 
 import { GeboAIGoogleSearchWizardComponent, GoogleSearcStatusService } from "./google-search-wizard.component";
 import { GeboAIWebSearchWizardComponent, WebSearchStatusService } from "./web-search-wizard.component";
@@ -372,6 +373,22 @@ const agentSetupSection: SetupWizardsSection = {
 
 };
 
+/**
+ * The networks of agents the chats are handed to, per chat pipeline type, as a system
+ * default overriding the application configuration.
+ */
+const agenticChatNetworksSetupSection: SetupWizardsSection = {
+    orderEntry: 18.5,
+    requredStepsIds: [adminLLMSSetupSection.wizardSectionId],
+    enabledService: AgenticChatNetworksEnabledService,
+    setupCompletedService: AlwaysTrueStatusService,
+    label: "Agentic chat networks",
+    description: "Choose the network of agents the chats with knowledge bases and the free chats are handed to.",
+    wizardComponent: AgenticChatNetworksWizardComponent,
+    wizardSectionId: "agenticChatNetworksSetupSection",
+    mandatory: false
+};
+
 const mcpServerSetupSection: SetupWizardsSection = {
     orderEntry: 19,
     requredStepsIds: [],
@@ -441,13 +458,14 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
  */
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabsModule, GeboAIApiKeyModule, GeboAINotificationsModule, SelectModule, DatePickerModule, StepsModule, MultiSelectModule, InputNumberModule, ChipModule, MessageModule],
-    declarations: [LLMSetupWizardComponent, LLMSEasySetupWizardComponent, LLMSEasyIntroStepComponent, LLMSEasyProviderStepComponent, LLMSEasyModelsStepComponent, LLMSEasySummaryStepComponent, LLMSEasyClassStatusComponent, SetupWizardsComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, A2AImportWizardComponent, A2AExportWizardComponent, GeneratedAdminApiKeyWizardComponent, ProviderDealsWizardComponent],
+    declarations: [LLMSetupWizardComponent, LLMSEasySetupWizardComponent, LLMSEasyIntroStepComponent, LLMSEasyProviderStepComponent, LLMSEasyModelsStepComponent, LLMSEasySummaryStepComponent, LLMSEasyClassStatusComponent, SetupWizardsComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, A2AImportWizardComponent, A2AExportWizardComponent, GeneratedAdminApiKeyWizardComponent, ProviderDealsWizardComponent, AgenticChatNetworksWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
         Oauth2SetupEnabledService,
         LLMSetupWizardService,
         WorkFolderWizardEnabledService,
+        AgenticChatNetworksEnabledService,
         WorkFolderWizardStatusService,
         SharedFilesystemEnabledService,
         SharedFilesystemAlreadySetupService,
@@ -496,6 +514,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: webSearchApiSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: deepSearchApiSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: agentSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: agenticChatNetworksSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: mcpServerSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: geboMcpServerSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: a2aImportSetupSection, multi: true },

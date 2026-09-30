@@ -51,65 +51,65 @@ public class ConfluenceSearchServiceController
 	}
 
 	@GetMapping("isEnabled")
-	public boolean restIsEnabled() throws SearchServiceException {
+	public boolean restIsEnabledConfluence() throws SearchServiceException {
 		return isEnabled();
 	}
 
 	@GetMapping("getId")
-	public String restGetId() {
+	public String restGetIdConfluence() {
 		return getId();
 	}
 
 	@GetMapping("getDescription")
-	public String restGetDescription() {
+	public String restGetDescriptionConfluence() {
 		return getDescription();
 	}
 
 	@GetMapping("getProductId")
-	public String restGetProductId() {
+	public String restGetProductIdConfluence() {
 		return getProductId();
 	}
 
 	@GetMapping("getMessagingModuleId")
-	public String restGetMessagingModuleId() {
+	public String restGetMessagingModuleIdConfluence() {
 		return getMessagingModuleId();
 	}
 
 	@GetMapping("getQueriesGenerationPromptUseCode")
-	public String restGetQueriesGenerationPromptUseCode() {
+	public String restGetQueriesGenerationPromptUseCodeConfluence() {
 		return getQueriesGenerationPromptUseCode();
 	}
 
 	@GetMapping("getNativePromptTemplateUseCode")
-	public String restGetNativePromptTemplateUseCode() {
+	public String restGetNativePromptTemplateUseCodeConfluence() {
 		return getNativePromptTemplateUseCode();
 	}
 
 	@GetMapping(value = "getSearchableSystems", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<SearchableSystemMetaData> restGetSearchableSystems() throws SearchServiceException {
+	public List<SearchableSystemMetaData> restGetSearchableSystemsConfluence() throws SearchServiceException {
 		return getSearchableSystems();
 	}
 
 	@GetMapping(value = "findSystemById", produces = MediaType.APPLICATION_JSON_VALUE)
-	public SearchableSystemMetaData restFindSystemById(@RequestParam("systemId") String systemId)
+	public SearchableSystemMetaData restFindSystemByIdConfluence(@RequestParam("systemId") String systemId)
 			throws SearchServiceException {
 		return findSystemById(systemId);
 	}
 
 	@PostMapping(value = "findSystemBySearchResult", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public SearchableSystemMetaData restFindSystemBySearchResult(@RequestBody SearchResult result)
+	public SearchableSystemMetaData restFindSystemBySearchResultConfluence(@RequestBody SearchResult result)
 			throws SearchServiceException {
 		return findSystemBySearchResult(result);
 	}
 
 	@PostMapping(value = "search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<SearchResult> restSearch(@RequestBody SearchQuery query, @RequestParam("systemId") String systemId,
+	public List<SearchResult> restSearchConfluence(@RequestBody SearchQuery query, @RequestParam("systemId") String systemId,
 			@RequestParam("nEntryLimit") int nEntryLimit) throws IOException, SearchServiceException {
 		return search(query, systemId, nEntryLimit);
 	}
 
 	@PostMapping(value = "nativeSearch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<SearchResult> restNativeSearch(@RequestBody ConfluenceContentSearchFilter query,
+	public List<SearchResult> restNativeSearchConfluence(@RequestBody ConfluenceContentSearchFilter query,
 			@RequestParam("systemId") String systemId, @RequestParam("nEntryLimit") int nEntryLimit)
 			throws IOException, SearchServiceException {
 		SearchableSystemMetaData system = findSystemById(systemId);
@@ -117,32 +117,32 @@ public class ConfluenceSearchServiceController
 	}
 
 	@GetMapping(value = "getCataloguesListSample", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<CatalogueSample> restGetCataloguesListSample(@RequestParam("configurationCode") String configurationCode)
+	public List<CatalogueSample> restGetCataloguesListSampleConfluence(@RequestParam("configurationCode") String configurationCode)
 			throws SearchServiceException {
 		return getCataloguesListSample(configurationCode);
 	}
 
 	@GetMapping(value = "getCachedCatalogues", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<CatalogueSample> restGetCachedCatalogues(
+	public List<CatalogueSample> restGetCachedCataloguesConfluence(
 			@RequestParam(value = "systemConfigurationCode", required = false) String systemConfigurationCode)
 			throws SearchServiceException {
 		return systemConfigurationCode != null ? getCachedCatalogues(systemConfigurationCode) : getCachedCatalogues();
 	}
 
 	@PostMapping(value = "extractRelatedAnalisysReferences", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferences(@RequestParam("systemId") String systemId,
+	public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferencesConfluence(@RequestParam("systemId") String systemId,
 			@RequestBody ConfluenceResultsExtractionData extractedData) throws IOException, SearchServiceException {
 		return extractRelatedAnalisysReferences(systemId, extractedData);
 	}
 
 	@PostMapping(value = "aggregate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ConfluenceResultsExtractionData restAggregate(
+	public ConfluenceResultsExtractionData restAggregateConfluence(
 			@RequestBody AggregateRequestBody<ConfluenceResultsExtractionData> body) {
 		return aggregate(body.getOldConsolidated(), body.getConsolidated());
 	}
 
 	@PostMapping(value = "createCustomTemplateParamsMap", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Map<String, Object> restCreateCustomTemplateParamsMap(@RequestBody CustomTemplateParamsRequestBody body) {
+	public Map<String, Object> restCreateCustomTemplateParamsMapConfluence(@RequestBody CustomTemplateParamsRequestBody body) {
 		return createCustomTemplateParamsMap(body.getSearchableSystemMetaData(), body.getCataloguesSample());
 	}
 }

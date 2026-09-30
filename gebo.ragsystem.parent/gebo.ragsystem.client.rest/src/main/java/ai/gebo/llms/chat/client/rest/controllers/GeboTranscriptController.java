@@ -48,7 +48,7 @@ public class GeboTranscriptController {
 	 * @return true if the transcript functionality is enabled, false otherwise
 	 */
 	@GetMapping(value = "isEnabled", produces = MediaType.APPLICATION_JSON_VALUE)
-	public boolean isEnabled() {
+	public boolean isEnabledTranscript() {
 		return transcriptService.isEnabled();
 	}
 

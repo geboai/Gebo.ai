@@ -10,3 +10,5 @@ Name | Type | Description | Notes
 **dateModified** | [**Date**](Date.md) |  |  [optional]
 **dateCreated** | [**Date**](Date.md) |  |  [optional]
 **modelConfigurationClass** | **String** |  |  [optional]
+**providerId** | **String** |  |  [optional]
+**defaultCurrencyCode** | **String** |  |  [optional]

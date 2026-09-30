@@ -57,6 +57,7 @@ import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -631,6 +632,13 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	private static final String TOOLS_LABEL = "tools it can call:";
 	private static final String TRUNCATED_CONTENT_SUFFIX = "...(truncated content)";
 	private static final int INPUT_SAMPLE_TOKEN_SIZE = 512;
+	/**
+	 * Tokens the shared context always keeps, even when the constant placeholders
+	 * already spent the budget: the budget is 2/3 of what the prompt leaves of the
+	 * context, so the remaining third absorbs them, and a window without evidence
+	 * would be a wasted call.
+	 */
+	protected static final int MIN_SHARED_CONTEXT_TOKENS = 256;
 	protected static final ObjectMapper objectMapper = new ObjectMapper();
 
 	protected String buildRootJsonSchema(Map<String, Class<?>> typesMap) {
@@ -748,48 +756,52 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		if (placeholders.containsKey(AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM)) {
 			String privateContext = nullToEmpty(render(mySessionContext, actualContributionNr, remainingBudget));
 			constantParams.put(AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM, privateContext);
+			// The private context travels with every window: what it takes is not left to
+			// the shared context.
+			remainingBudget -= ITokensCountable.stringsTokensSize(privateContext);
 			tracePlaceholder(AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM, privateContext, remainingBudget);
 		}
 		final int fixedBudget = remainingBudget;
 		if (placeholders.containsKey(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM)) {
-			RenderedRange iterationValue = null;
+			// Only the contributions after this agent's last turn: what came before is
+			// already absorbed in its previous output.
 			int startedContribution = mySessionContext.getLastContributionTurn() == null ? 0
 					: mySessionContext.getLastContributionTurn();
-			// One memo for the whole pass: every window re-reads the contributions it did
-			// not consume, and rendering plus tokenising them again on each window makes
-			// the paging cost O(contributions x windows) instead of O(contributions).
-			final Map<Integer, RenderedContribution> renderedCache = new HashMap<Integer, RenderedContribution>();
-			do {
+			if (splitByBudget) {
 				// Each shared-context window must still carry the constant agent placeholders
 				// (identity, scenario, communication, input, private context); otherwise the
 				// system/user templates that declare them render with missing variables.
-				Map<String, Object> params = new HashMap<String, Object>(constantParams);
-				iterationValue = render(session, startedContribution, actualContributionNr, fixedBudget, splitByBudget,
-						renderedCache);
-				String sharedContext = nullToEmpty(iterationValue.getContext());
-				params.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext);
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Shared context window " + (vectorized.size() + 1) + " covers contributions ["
-							+ iterationValue.getStartContribution() + ".." + iterationValue.getLastContribution()
-							+ "] finished:" + iterationValue.isFinishedContributions() + " size:"
-							+ ITokensCountable.stringsTokensSize(sharedContext) + " (tok)");
-				}
-				tracePlaceholder(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext, fixedBudget);
-				// Past the last rendered contribution, not onto it: getSampledContributionsAfter
-				// filters on >= , so reusing lastContribution as-is makes every window repeat
-				// the previous window's final contribution and waste that much budget.
-				startedContribution = iterationValue.getLastContribution() + 1;
-				vectorized.add(params);
-				if (splitByBudget && sharedContext.isBlank()) {
+				final List<String> windows = windowSharedContext(session, startedContribution, fixedBudget);
+				for (String sharedContext : windows) {
+					Map<String, Object> params = new HashMap<String, Object>(constantParams);
+					params.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext);
 					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Shared context windowing stopped: an empty window cannot advance the cursor");
+						LOGGER.debug("Shared context window " + (vectorized.size() + 1) + " of " + windows.size()
+								+ " after contribution:" + startedContribution + " size:"
+								+ ITokensCountable.stringsTokensSize(sharedContext) + " (tok) budget:" + fixedBudget
+								+ " (tok)");
 					}
-					// Defensive: a window carrying no contribution cannot advance the cursor,
-					// so continuing would loop. renderBatchedContributions(...) always inserts
-					// at least one contribution, so this is only reachable if that changes.
-					break;
+					tracePlaceholder(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext, fixedBudget);
+					vectorized.add(params);
 				}
-			} while (iterationValue != null && (splitByBudget && !iterationValue.isFinishedContributions()));
+				if (vectorized.isEmpty()) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Shared context windowing found no contribution after:" + startedContribution
+								+ ", a single window with an empty shared context");
+					}
+					Map<String, Object> params = new HashMap<String, Object>(constantParams);
+					params.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, "");
+					vectorized.add(params);
+				}
+			} else {
+				Map<String, Object> params = new HashMap<String, Object>(constantParams);
+				RenderedRange single = render(session, startedContribution, actualContributionNr, fixedBudget, false,
+						new HashMap<Integer, RenderedContribution>());
+				String sharedContext = nullToEmpty(single.getContext());
+				params.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext);
+				tracePlaceholder(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext, fixedBudget);
+				vectorized.add(params);
+			}
 		} else {
 			vectorized.add(constantParams);
 		}
@@ -1223,14 +1235,29 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		if (split) {
 			return renderBatchedContributions(remainingContributions, remainingBudget, renderedCache);
 		} else {
-			return renderAllContributions(remainingContributions);
+			return renderAllContributions(remainingContributions, remainingBudget);
 		}
 
 	}
 
 	protected String renderContribution(AgentProducedSessionContribution agentProducedSessionContribution) {
+		return wrapContribution(agentProducedSessionContribution,
+				renderSharedContributionData(agentProducedSessionContribution.getData()));
+	}
+
+	/**
+	 * Renders the data of a contribution for the shared context. Subclasses may
+	 * render it differently, e.g. as a digest, when the agent needs less than the
+	 * whole of it.
+	 */
+	protected String renderSharedContributionData(Object data) {
+		return renderContributionData(data);
+	}
+
+	/** Frames the rendered data of a contribution with its agent's markers. */
+	private String wrapContribution(AgentProducedSessionContribution agentProducedSessionContribution,
+			String contributionAsString) {
 		StringBuffer inner = new StringBuffer();
-		String contributionAsString = renderContributionData(agentProducedSessionContribution.getData());
 		if (contributionAsString != null && !contributionAsString.isBlank() && !contributionAsString.isEmpty()) {
 			inner.append(BEGIN_CONTEXT_CONTRIBUTION_FROM_AGENT);
 			inner.append(agentProducedSessionContribution.getAgentName());
@@ -1253,6 +1280,15 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		return inner.toString();
 	}
 
+	/**
+	 * Renders all the contributions in one block, whatever their size.
+	 *
+	 * @deprecated unbounded: {@link #render(AgentsCollaborationSessionContext, Integer, int, int, boolean, Map)}
+	 *             renders the single block through
+	 *             {@link #renderAllContributions(List, int)}, which fits it in the
+	 *             token budget
+	 */
+	@Deprecated
 	protected RenderedRange renderAllContributions(List<AgentProducedSessionContribution> remainingContributions) {
 		StringBuffer inner = new StringBuffer();
 		int minContribution = Integer.MAX_VALUE;
@@ -1276,6 +1312,280 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 					+ ITokensCountable.stringsTokensSize(buffer.toString()) + " (tok)");
 		}
 		return new RenderedRange(minContribution, maxContribution, buffer.toString(), true);
+	}
+
+	/**
+	 * Renders all the contributions in one block fitted in the token budget. When
+	 * they do not fit, the budget is shared equally among them: a contribution
+	 * smaller than its share goes in whole and leaves the rest of its share to the
+	 * larger ones, which are cut to their share and marked as truncated. Within the
+	 * budget the block is the same as the unbounded one.
+	 *
+	 * @param remainingContributions the contributions to render
+	 * @param remainingBudget        the tokens the block may take
+	 */
+	protected RenderedRange renderAllContributions(List<AgentProducedSessionContribution> remainingContributions,
+			int remainingBudget) {
+		int minContribution = Integer.MAX_VALUE;
+		int maxContribution = 0;
+		List<AgentProducedSessionContribution> rendered = new ArrayList<>();
+		List<String> data = new ArrayList<>();
+		int framingTokens = ITokensCountable.stringsTokensSize(BEGIN_SHARED_CONTEXT_DELTA + NEWLINE + END_SHARED_CONTEXT_DELTA + NEWLINE);
+		for (AgentProducedSessionContribution contribution : remainingContributions) {
+			String contributionData = renderSharedContributionData(contribution.getData());
+			if (contributionData == null || contributionData.isBlank()) {
+				continue;
+			}
+			minContribution = Math.min(contribution.getContributionUniqueNr(), minContribution);
+			maxContribution = Math.max(contribution.getContributionUniqueNr(), maxContribution);
+			rendered.add(contribution);
+			data.add(contributionData);
+			framingTokens += ITokensCountable.stringsTokensSize(wrapContribution(contribution, "-"));
+		}
+		List<String> fitted = fitEqually(data, Math.max(remainingBudget - framingTokens, MIN_SHARED_CONTEXT_TOKENS));
+		StringBuffer inner = new StringBuffer();
+		for (int i = 0; i < rendered.size(); i++) {
+			inner.append(wrapContribution(rendered.get(i), fitted.get(i)));
+		}
+		StringBuffer buffer = new StringBuffer();
+		if (!inner.isEmpty()) {
+			buffer.append(BEGIN_SHARED_CONTEXT_DELTA);
+			buffer.append(NEWLINE);
+			buffer.append(inner.toString());
+			buffer.append(END_SHARED_CONTEXT_DELTA);
+			buffer.append(NEWLINE);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("renderAllContributions(...) rendered " + rendered.size() + " contribution(s) in range ["
+					+ minContribution + ".." + maxContribution + "] size:"
+					+ ITokensCountable.stringsTokensSize(buffer.toString()) + " (tok) budget:" + remainingBudget
+					+ " (tok)");
+		}
+		return new RenderedRange(rendered.isEmpty() ? 0 : minContribution, maxContribution, buffer.toString(), true);
+	}
+
+	/**
+	 * Pages the contributions after the given one into shared-context windows of at
+	 * most the budget each, in order and without losing any content: the
+	 * contributions are packed together while they fit, and a contribution larger
+	 * than a window is split into consecutive parts, each in a window of its own.
+	 *
+	 * @param session             the collaboration session
+	 * @param startedContribution the first contribution to render
+	 * @param budget              the tokens a window may take
+	 * @return the windows' shared context, empty when there is no contribution
+	 */
+	protected List<String> windowSharedContext(AgentsCollaborationSessionContext session, int startedContribution,
+			int budget) {
+		List<AgentProducedSessionContribution> contributions = session.getSampledContributionsAfter(startedContribution);
+		int windowFraming = ITokensCountable
+				.stringsTokensSize(BEGIN_SHARED_CONTEXT_DELTA + NEWLINE + END_SHARED_CONTEXT_DELTA + NEWLINE);
+		int windowBudget = Math.max(budget - windowFraming, MIN_SHARED_CONTEXT_TOKENS);
+		List<String> pieces = new ArrayList<>();
+		List<Integer> sizes = new ArrayList<>();
+		for (AgentProducedSessionContribution contribution : contributions) {
+			String data = renderSharedContributionData(contribution.getData());
+			if (data == null || data.isBlank()) {
+				continue;
+			}
+			String whole = wrapContribution(contribution, data);
+			int wholeTokens = ITokensCountable.stringsTokensSize(whole);
+			if (wholeTokens <= windowBudget) {
+				pieces.add(whole);
+				sizes.add(wholeTokens);
+				continue;
+			}
+			int partFraming = ITokensCountable.stringsTokensSize(wrapContribution(contribution, "(part 99 of 99)" + NEWLINE));
+			List<String> parts = splitToTokens(data, Math.max(windowBudget - partFraming, MIN_SHARED_CONTEXT_TOKENS));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Contribution:" + contribution.getContributionUniqueNr() + " of " + wholeTokens
+						+ " (tok) over the window budget:" + windowBudget + " (tok) split into " + parts.size()
+						+ " part(s)");
+			}
+			for (int i = 0; i < parts.size(); i++) {
+				String part = wrapContribution(contribution,
+						"(part " + (i + 1) + " of " + parts.size() + ")" + NEWLINE + parts.get(i));
+				pieces.add(part);
+				sizes.add(ITokensCountable.stringsTokensSize(part));
+			}
+		}
+		List<String> windows = new ArrayList<>();
+		StringBuilder current = new StringBuilder();
+		int used = 0;
+		for (int i = 0; i < pieces.size(); i++) {
+			if (current.length() > 0 && used + sizes.get(i) > windowBudget) {
+				windows.add(BEGIN_SHARED_CONTEXT_DELTA + NEWLINE + current + END_SHARED_CONTEXT_DELTA + NEWLINE);
+				current.setLength(0);
+				used = 0;
+			}
+			current.append(pieces.get(i));
+			used += sizes.get(i);
+		}
+		if (current.length() > 0) {
+			windows.add(BEGIN_SHARED_CONTEXT_DELTA + NEWLINE + current + END_SHARED_CONTEXT_DELTA + NEWLINE);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("windowSharedContext(...) paged " + contributions.size() + " contribution(s) after:"
+					+ startedContribution + " as " + pieces.size() + " piece(s) into " + windows.size()
+					+ " window(s) of at most " + windowBudget + " (tok)");
+		}
+		return windows;
+	}
+
+	/**
+	 * Splits the text into consecutive chunks of about the given tokens each, cutting
+	 * at a line end or else at a blank where one is close to the limit.
+	 */
+	protected static List<String> splitToTokens(String text, int maxTokens) {
+		int total = ITokensCountable.stringsTokensSize(text);
+		if (text == null || text.isEmpty() || total <= maxTokens) {
+			return List.of(text != null ? text : "");
+		}
+		double charsPerToken = ((double) text.length()) / total;
+		int chunkChars = Math.max(1, (int) (Math.max(maxTokens, 1) * charsPerToken));
+		List<String> chunks = new ArrayList<>();
+		int start = 0;
+		while (start < text.length()) {
+			int size = chunkChars;
+			int end = chunkEnd(text, start, size);
+			// The average characters per token of the whole text is only an estimate for
+			// a chunk: measure it, and shrink it until it fits.
+			for (int attempt = 0; attempt < 8 && end - start > 1; attempt++) {
+				int tokens = ITokensCountable.stringsTokensSize(text.substring(start, end));
+				if (tokens <= maxTokens) {
+					break;
+				}
+				size = Math.max(1, (int) (((double) (end - start)) * maxTokens / tokens * 0.95));
+				end = chunkEnd(text, start, size);
+			}
+			chunks.add(text.substring(start, end));
+			start = end;
+		}
+		if (STATIC_LOGGER.isDebugEnabled()) {
+			STATIC_LOGGER.debug("splitToTokens(...) split " + total + " (tok) into " + chunks.size()
+					+ " chunk(s) of at most " + maxTokens + " (tok)");
+		}
+		return chunks;
+	}
+
+	/**
+	 * The end of the chunk of about the given characters from start, moved back to a
+	 * line end or else to a blank when one is in its second half.
+	 */
+	private static int chunkEnd(String text, int start, int chars) {
+		int end = Math.min(text.length(), start + chars);
+		if (end < text.length()) {
+			int lowest = start + chars / 2;
+			int newline = text.lastIndexOf('\n', end - 1);
+			int blank = text.lastIndexOf(' ', end - 1);
+			if (newline >= lowest) {
+				end = newline + 1;
+			} else if (blank >= lowest) {
+				end = blank + 1;
+			}
+		}
+		return Math.max(end, start + 1);
+	}
+
+	/**
+	 * The token budget of an agent's placeholders: two thirds of what the model's
+	 * context leaves after the prompt template and, when the prompt asks for it, the
+	 * chat history the model call adds as messages of its own.
+	 */
+	protected int agentTokenBudget(IGConfigurableChatModel agentModel, GPromptTemplateConfig prompt,
+			IChatRequestContext chatRequestContext) {
+		final int history = chatHistoryTokens(prompt, chatRequestContext);
+		final int budget = (agentModel.getContextLength() - prompt.getTokensSize() - history) * 2 / 3;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("agentTokenBudget(...) agent:" + getId() + " contextLength:" + agentModel.getContextLength()
+					+ " prompt:" + prompt.getTokensSize() + " (tok) chat history:" + history + " (tok) budget:"
+					+ budget + " (tok)");
+		}
+		return budget;
+	}
+
+	/**
+	 * The tokens of the chat history a model call adds for the prompt: the
+	 * consolidated history and the interactions, when the prompt requires the history.
+	 */
+	public static int chatHistoryTokens(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext) {
+		if (prompt == null || chatRequestContext == null || (prompt.getChatHistory() != null
+				&& prompt.getChatHistory() != ai.gebo.architecture.ai.model.ContextContentRequired.REQUIRED)) {
+			return 0;
+		}
+		int tokens = 0;
+		if (chatRequestContext.getConsolidatedHistory() != null) {
+			tokens += ITokensCountable.stringsTokensSize(chatRequestContext.getConsolidatedHistory());
+		}
+		if (chatRequestContext.getInteractions() != null) {
+			for (ai.gebo.llms.abstraction.layer.model.IChatSessionEntry entry : chatRequestContext.getInteractions()) {
+				tokens += ITokensCountable.stringsTokensSize(entry.getUser(), entry.getAssistant());
+			}
+		}
+		return tokens;
+	}
+
+	/**
+	 * Fits the pieces in the budget sharing it equally ("water filling"): the pieces
+	 * are visited from the smallest, each gets an equal share of the budget left, a
+	 * piece smaller than its share keeps its whole size and leaves the difference to
+	 * the following, larger, ones. The pieces over their share are cut to it and
+	 * marked with their original size.
+	 *
+	 * @param pieces the rendered pieces, null for empty
+	 * @param budget the tokens all the pieces may take
+	 * @return the fitted pieces, in the same order
+	 */
+	public static List<String> fitEqually(List<String> pieces, int budget) {
+		int n = pieces.size();
+		int[] sizes = new int[n];
+		long total = 0;
+		for (int i = 0; i < n; i++) {
+			sizes[i] = pieces.get(i) == null ? 0 : ITokensCountable.stringsTokensSize(pieces.get(i));
+			total += sizes[i];
+		}
+		if (total <= budget) {
+			return new ArrayList<>(pieces);
+		}
+		Integer[] bySize = new Integer[n];
+		for (int i = 0; i < n; i++) {
+			bySize[i] = i;
+		}
+		java.util.Arrays.sort(bySize, (a, b) -> Integer.compare(sizes[a], sizes[b]));
+		int[] allowances = new int[n];
+		long left = Math.max(budget, 0);
+		for (int k = 0; k < n; k++) {
+			int index = bySize[k];
+			long share = left / (n - k);
+			allowances[index] = (int) Math.min(sizes[index], share);
+			left -= allowances[index];
+		}
+		List<String> out = new ArrayList<>(n);
+		for (int i = 0; i < n; i++) {
+			out.add(sizes[i] <= allowances[i] ? pieces.get(i) : truncateMarkingSize(pieces.get(i), allowances[i], sizes[i]));
+		}
+		if (STATIC_LOGGER.isDebugEnabled()) {
+			STATIC_LOGGER.debug("fitEqually(...) fitted " + n + " piece(s) of " + total + " (tok) in a budget of "
+					+ budget + " (tok)");
+		}
+		return out;
+	}
+
+	/**
+	 * Cuts the text to about the allowance, marking that it was truncated and how
+	 * large it was.
+	 */
+	protected static String truncateMarkingSize(String text, int allowanceTokens, int originalTokens) {
+		String marker = "...(truncated content: about " + Math.max(allowanceTokens, 0) + " of " + originalTokens
+				+ " tokens shown)";
+		if (text == null || text.isEmpty() || allowanceTokens <= 0) {
+			return marker;
+		}
+		// The characters per token of this text, so the cut lands near the allowance
+		// whatever the estimator.
+		double charsPerToken = originalTokens > 0 ? ((double) text.length()) / originalTokens : 4.2;
+		int cut = Math.min(text.length(), (int) (allowanceTokens * charsPerToken));
+		return text.substring(0, cut) + marker;
 	}
 
 	/**
@@ -1468,7 +1778,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	/**
 	 * Truncates the given text to (approximately) the supplied token allowance.
 	 */
-	private static String truncateToTokens(String text, int allowanceTokens) {
+	protected static String truncateToTokens(String text, int allowanceTokens) {
 		if (text == null || text.isEmpty()) {
 			return "";
 		}

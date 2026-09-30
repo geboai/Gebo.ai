@@ -273,6 +273,14 @@
       "generatedAdminApiKeySetupSection": {
         "label": "Configure Administrative API Keys",
         "description": "Generate and manage API keys for system automation or MCP integrations."
+      },
+      "providerDealsSetupSection": {
+        "label": "Provider deals and model prices",
+        "description": "Group the API keys of each large language models provider into deals and set the prices of their models: they evaluate the cost of the models usage."
+      },
+      "agenticChatNetworksSetupSection": {
+        "label": "Agentic chat networks",
+        "description": "Choose the network of agents the chats with knowledge bases and the free chats are handed to."
       }
     },
     "ConfluenceWizardComponent": {
@@ -3960,6 +3968,18 @@
       "useAlsoKeywordSearch": {
         "label": "Use keyword search when available",
         "help": "Run keyword searches additional to semantic searches if they are configured in this installation"
+      },
+      "NetworkOfAgentsTab": {
+        "label": "Network of agents"
+      },
+      "NetworkOfAgentsHint": {
+        "label": "The network of agents the agentic chats of this profile are handed to."
+      },
+      "SystemDefaultNetworkOption": {
+        "label": "System default"
+      },
+      "SystemDefaultNetworkHint": {
+        "label": "The network chosen in the setup for the chats with knowledge bases."
       }
     }
   },
@@ -6112,9 +6132,22 @@
         "label": "Scenario Description",
         "help": "Provide a detailed scenario description."
       },
-      "defaultUserInteractionNetwork": {
-        "label": "Default User Interaction Network",
-        "help": "Check this to set this network as default for user interactions."
+      "suggestedPurpose": {
+        "label": "Suggested purpose",
+        "help": "When this network is the right choice: the kind of LLMs and AI provider conditions it fits. It is shown where the network is chosen."
+      },
+      "choosableForPipelineTypes": {
+        "label": "Choosable for chats",
+        "help": "The kinds of chat this network can be chosen for, as their network of agents."
+      },
+      "ChoosableForPipelineTypesSelect": {
+        "placeholder": "Not choosable"
+      },
+      "RagPipelineOption": {
+        "label": "Agentic chat with knowledge bases"
+      },
+      "PureChatPipelineOption": {
+        "label": "Free chat"
       }
     }
   },
@@ -6314,6 +6347,497 @@
       },
       "ConfigureBtn": {
         "label": "configure"
+      }
+    }
+  },
+  "AgenticChatNetworksWizardModule": {
+    "AgenticChatNetworksWizardComponent": {
+      "AgenticChatNetworksHint": {
+        "label": "Choose the network of agents each kind of chat is handed to. The choice overrides the default of the application configuration; a chat profile can still choose its own network for its chats."
+      },
+      "RagPipelineTitle": {
+        "label": "Agentic chat with knowledge bases"
+      },
+      "PureChatPipelineTitle": {
+        "label": "Free chat"
+      },
+      "RagPipelineDescription": {
+        "label": "The chats with a chat profile and its knowledge bases, unless the chat profile chooses its own network."
+      },
+      "PureChatPipelineDescription": {
+        "label": "The free chats, without chat profile nor internal knowledge base."
+      },
+      "NoChoosableChatNetworks": {
+        "label": "No network of agents can be chosen for this kind of chat."
+      },
+      "SaveChatNetworkBtn": {
+        "label": "Save"
+      },
+      "ResetChatNetworkBtn": {
+        "label": "Use the configured default"
+      },
+      "ConfiguredChatNetworkLabel": {
+        "label": "Default of the application configuration:"
+      },
+      "EffectiveChatNetworkLabel": {
+        "label": "Now in use:"
+      },
+      "ChosenChatNetworkLabel": {
+        "label": "(chosen here)"
+      }
+    }
+  },
+  "ProviderDealsWizardModule": {
+    "ProviderDealsWizardComponent": {
+      "ProviderDealsHint": {
+        "label": "Each provider deal groups the API keys sharing the same economic conditions. The model configurations running with a deal's API keys pay the deal's price of their model, else the price the provider's API gives, if any; the usage costs computed from them remain an evaluation that may differ from the actual costs billed by the suppliers."
+      },
+      "ProviderCurrencyLabel": {
+        "label": "Default currency"
+      },
+      "ProviderDealTab": {
+        "label": "Provider deal"
+      },
+      "ModelPricesTab": {
+        "label": "Model prices"
+      },
+      "DealDescriptionLabel": {
+        "label": "Description"
+      },
+      "SaveDealDescriptionBtn": {
+        "help": "Save the description"
+      },
+      "DealLimitsLabel": {
+        "label": "Spending limits"
+      },
+      "RefreshLimitsBtn": {
+        "help": "Import the spending limits from the provider"
+      },
+      "DealFlatLabel": {
+        "label": "Flat conditions"
+      },
+      "DealFlatEnabledLabel": {
+        "label": "This deal has a monthly flat fee"
+      },
+      "DealFlatCostLabel": {
+        "label": "Monthly price"
+      },
+      "DealFlatCurrencyLabel": {
+        "label": "Currency"
+      },
+      "DealFlatMonthlyLimitLabel": {
+        "label": "Monthly traffic limit (millions of tokens)"
+      },
+      "MonthlyTrafficLimitInput": {
+        "placeholder": "unlimited"
+      },
+      "DealFlatDailyLimitLabel": {
+        "label": "Daily traffic limit (millions of tokens)"
+      },
+      "DailyTrafficLimitInput": {
+        "placeholder": "unlimited"
+      },
+      "SaveFlatBtn": {
+        "label": "Save flat conditions"
+      },
+      "DealFlatHint": {
+        "label": "When a traffic limit is reached a warning is posted among the system messages, once a day"
+      },
+      "DealKeysLabel": {
+        "label": "API keys"
+      },
+      "NoDealKeysLabel": {
+        "label": "No API key: this deal can be deleted"
+      },
+      "KeyToAddSelect": {
+        "placeholder": "API key to move into this deal"
+      },
+      "AddKeyBtn": {
+        "label": "Add"
+      },
+      "DeleteDealBtn": {
+        "label": "Delete this deal"
+      },
+      "ModelPricesHint": {
+        "label": "One price per model, paid by every configuration running it with this deal's API keys. Prices the provider's API exposes are imported automatically, unless set here."
+      },
+      "PriceModelHeader": {
+        "label": "Model"
+      },
+      "PriceUsedByHeader": {
+        "label": "Used by"
+      },
+      "PriceProviderApiHeader": {
+        "label": "Provider API price"
+      },
+      "PriceCurrencyHeader": {
+        "label": "Currency"
+      },
+      "PriceInputHeader": {
+        "label": "Input per Mtok"
+      },
+      "PriceOutputHeader": {
+        "label": "Output per Mtok"
+      },
+      "PriceRequestHeader": {
+        "label": "Per request"
+      },
+      "NoPriceConfigurationLabel": {
+        "label": "no configuration"
+      },
+      "RemoveDealPriceBtn": {
+        "help": "Remove the deal price, going back to the provider API's one, if any"
+      },
+      "NoModelsLabel": {
+        "label": "No model runs with this deal's API keys"
+      },
+      "UncoveredModelsText": {
+        "label": "Configurations running with API keys no deal covers, not priced by a deal:"
+      },
+      "NoDealsLabel": {
+        "label": "No deal yet: configuring a model with an API key creates one"
+      },
+      "NewDealZone": {
+        "label": "Add a provider deal"
+      },
+      "NewDealProvider": {
+        "placeholder": "Provider used by a model configuration"
+      },
+      "NewDealDescriptionInput": {
+        "placeholder": "Description of the new deal"
+      },
+      "NewDealKeys": {
+        "placeholder": "API keys to move into the new deal"
+      },
+      "NewDealBtn": {
+        "label": "Add the deal"
+      },
+      "NewDealHint": {
+        "label": "The configurations running with the API keys moved into the new deal pay its model prices from then on."
+      }
+    }
+  },
+  "GeboAILLMSUsageDashboardModule": {
+    "GeboAILLMSUsageAdminDashboardComponent": {
+      "noLLMStatsLabel": {
+        "label": "no llms traffic generated yet"
+      },
+      "dlabel": {
+        "label": "Monthly llms usage"
+      },
+      "mlabel": {
+        "label": "This month llms usage"
+      },
+      "FilterDrillDownLabel": {
+        "label": "Filter Drill Down"
+      },
+      "ProviderIdFilterLabel": {
+        "label": "Provider ID"
+      },
+      "ProviderIdFilterSelect": {
+        "placeholder": "All"
+      },
+      "ModelTypeFilterLabel": {
+        "label": "Model Type"
+      },
+      "llmUsageMonthlyModelType": {
+        "placeholder": "All"
+      },
+      "ModelFilterLabel": {
+        "label": "Model"
+      },
+      "ModelFilterSelect": {
+        "placeholder": "All"
+      },
+      "YearFilterLabel": {
+        "label": "Year"
+      },
+      "YearFilterSelect": {
+        "placeholder": "All"
+      },
+      "MonthFilterLabel": {
+        "label": "Month"
+      },
+      "MonthFilterSelect": {
+        "placeholder": "All"
+      },
+      "UsernameFilterLabel": {
+        "label": "Username"
+      },
+      "UsernameFilterSelect": {
+        "placeholder": "All"
+      },
+      "CallerStackFilterLabel": {
+        "label": "Caller Stack"
+      },
+      "CallerStackFilterSelect": {
+        "placeholder": "All"
+      },
+      "ApplyFilterBtn": {
+        "label": "Filter"
+      },
+      "ResetFilterBtn": {
+        "label": "Reset"
+      },
+      "TokensConsumedTitle": {
+        "label": "Tokens Consumed"
+      },
+      "TokensConsumedUnit": {
+        "label": "in k tokens"
+      },
+      "NoMonthlyUsageLabel": {
+        "label": "No monthly usage data recorded"
+      },
+      "CostTitle": {
+        "label": "Cost"
+      },
+      "CostUnit": {
+        "label": "priced calls only, per currency"
+      },
+      "CostEvaluationWarning": {
+        "label": "These costs are an evaluation based on the configured model prices: they may differ from the actual costs billed by the suppliers."
+      },
+      "NoPricedCallsLabel": {
+        "label": "No priced calls recorded"
+      },
+      "CostMixedCurrenciesLabel": {
+        "label": "Some periods are priced in several currencies and cannot be summed: filter by provider or model to see them."
+      },
+      "ResponseTimeTitle": {
+        "label": "Response Time"
+      },
+      "ResponseTimeUnit": {
+        "label": "request to complete response, in seconds"
+      },
+      "TimeToFirstTokenTitle": {
+        "label": "Time to First Token"
+      },
+      "TimeToFirstTokenUnit": {
+        "label": "streamed chat calls only, in seconds"
+      },
+      "NoStreamedCallsLabel": {
+        "label": "No streamed chat calls recorded"
+      },
+      "llmUsageDailyModelType": {
+        "placeholder": "All"
+      },
+      "NoThisMonthUsageLabel": {
+        "label": "No usage data recorded for this month"
+      },
+      "NoThisMonthPricedCallsLabel": {
+        "label": "No priced calls recorded this month"
+      },
+      "NoThisMonthStreamedCallsLabel": {
+        "label": "No streamed chat calls recorded this month"
+      },
+      "AllOption": {
+        "label": "All"
+      },
+      "ChatModelTypeOption": {
+        "label": "Chat"
+      },
+      "EmbeddingModelTypeOption": {
+        "label": "Embedding"
+      },
+      "RankingModelTypeOption": {
+        "label": "Ranking"
+      },
+      "ImageModelTypeOption": {
+        "label": "Image generation"
+      },
+      "TextToSpeechModelTypeOption": {
+        "label": "Text to speech"
+      },
+      "TranscriptionModelTypeOption": {
+        "label": "Transcription"
+      },
+      "InputTokensSeries": {
+        "label": "Input Tokens (k)"
+      },
+      "OutputTokensSeries": {
+        "label": "Output Tokens (k)"
+      },
+      "MinResponseTimeSeries": {
+        "label": "Min Response Time (s)"
+      },
+      "AvgResponseTimeSeries": {
+        "label": "Avg Response Time (s)"
+      },
+      "MaxResponseTimeSeries": {
+        "label": "Max Response Time (s)"
+      },
+      "CostSeries": {
+        "label": "Cost"
+      },
+      "MinTimeToFirstTokenSeries": {
+        "label": "Min Time to First Token (s)"
+      },
+      "AvgTimeToFirstTokenSeries": {
+        "label": "Avg Time to First Token (s)"
+      },
+      "MaxTimeToFirstTokenSeries": {
+        "label": "Max Time to First Token (s)"
+      }
+    },
+    "GeboAILLMSUsageUserDashboardComponent": {
+      "noLLMStatsLabel": {
+        "label": "no llms traffic generated yet"
+      },
+      "dlabel": {
+        "label": "Monthly llms usage"
+      },
+      "mlabel": {
+        "label": "This month llms usage"
+      },
+      "FilterDrillDownLabel": {
+        "label": "Filter Drill Down"
+      },
+      "ProviderIdFilterLabel": {
+        "label": "Provider ID"
+      },
+      "ProviderIdFilterSelect": {
+        "placeholder": "All"
+      },
+      "ModelTypeFilterLabel": {
+        "label": "Model Type"
+      },
+      "llmUsageMonthlyModelType": {
+        "placeholder": "All"
+      },
+      "ModelFilterLabel": {
+        "label": "Model"
+      },
+      "ModelFilterSelect": {
+        "placeholder": "All"
+      },
+      "YearFilterLabel": {
+        "label": "Year"
+      },
+      "YearFilterSelect": {
+        "placeholder": "All"
+      },
+      "MonthFilterLabel": {
+        "label": "Month"
+      },
+      "MonthFilterSelect": {
+        "placeholder": "All"
+      },
+      "UsernameFilterLabel": {
+        "label": "Username"
+      },
+      "UsernameFilterSelect": {
+        "placeholder": "All"
+      },
+      "CallerStackFilterLabel": {
+        "label": "Caller Stack"
+      },
+      "CallerStackFilterSelect": {
+        "placeholder": "All"
+      },
+      "ApplyFilterBtn": {
+        "label": "Filter"
+      },
+      "ResetFilterBtn": {
+        "label": "Reset"
+      },
+      "TokensConsumedTitle": {
+        "label": "Tokens Consumed"
+      },
+      "TokensConsumedUnit": {
+        "label": "in k tokens"
+      },
+      "NoMonthlyUsageLabel": {
+        "label": "No monthly usage data recorded"
+      },
+      "CostTitle": {
+        "label": "Cost"
+      },
+      "CostUnit": {
+        "label": "priced calls only, per currency"
+      },
+      "CostEvaluationWarning": {
+        "label": "These costs are an evaluation based on the configured model prices: they may differ from the actual costs billed by the suppliers."
+      },
+      "NoPricedCallsLabel": {
+        "label": "No priced calls recorded"
+      },
+      "CostMixedCurrenciesLabel": {
+        "label": "Some periods are priced in several currencies and cannot be summed: filter by provider or model to see them."
+      },
+      "ResponseTimeTitle": {
+        "label": "Response Time"
+      },
+      "ResponseTimeUnit": {
+        "label": "request to complete response, in seconds"
+      },
+      "TimeToFirstTokenTitle": {
+        "label": "Time to First Token"
+      },
+      "TimeToFirstTokenUnit": {
+        "label": "streamed chat calls only, in seconds"
+      },
+      "NoStreamedCallsLabel": {
+        "label": "No streamed chat calls recorded"
+      },
+      "llmUsageDailyModelType": {
+        "placeholder": "All"
+      },
+      "NoThisMonthUsageLabel": {
+        "label": "No usage data recorded for this month"
+      },
+      "NoThisMonthPricedCallsLabel": {
+        "label": "No priced calls recorded this month"
+      },
+      "NoThisMonthStreamedCallsLabel": {
+        "label": "No streamed chat calls recorded this month"
+      },
+      "AllOption": {
+        "label": "All"
+      },
+      "ChatModelTypeOption": {
+        "label": "Chat"
+      },
+      "EmbeddingModelTypeOption": {
+        "label": "Embedding"
+      },
+      "RankingModelTypeOption": {
+        "label": "Ranking"
+      },
+      "ImageModelTypeOption": {
+        "label": "Image generation"
+      },
+      "TextToSpeechModelTypeOption": {
+        "label": "Text to speech"
+      },
+      "TranscriptionModelTypeOption": {
+        "label": "Transcription"
+      },
+      "InputTokensSeries": {
+        "label": "Input Tokens (k)"
+      },
+      "OutputTokensSeries": {
+        "label": "Output Tokens (k)"
+      },
+      "MinResponseTimeSeries": {
+        "label": "Min Response Time (s)"
+      },
+      "AvgResponseTimeSeries": {
+        "label": "Avg Response Time (s)"
+      },
+      "MaxResponseTimeSeries": {
+        "label": "Max Response Time (s)"
+      },
+      "CostSeries": {
+        "label": "Cost"
+      },
+      "MinTimeToFirstTokenSeries": {
+        "label": "Min Time to First Token (s)"
+      },
+      "AvgTimeToFirstTokenSeries": {
+        "label": "Avg Time to First Token (s)"
+      },
+      "MaxTimeToFirstTokenSeries": {
+        "label": "Max Time to First Token (s)"
       }
     }
   }

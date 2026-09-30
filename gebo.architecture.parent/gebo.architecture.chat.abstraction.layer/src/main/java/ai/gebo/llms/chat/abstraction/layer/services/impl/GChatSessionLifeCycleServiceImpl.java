@@ -777,6 +777,20 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
+	public GChatProfileConfiguration getSessionChatProfile(GeboChatRequest request)
+			throws GeboChatSessionLifecycleException {
+		GUserChatSession session = get(request.getUserChatContextCode());
+		GChatProfileConfiguration profile = session != null && session.getChatProfileCode() != null
+				? this.chatProfilesRepository.findById(session.getChatProfileCode()).orElse(null)
+				: null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("getSessionChatProfile(...) session:" + request.getUserChatContextCode() + " profile:"
+					+ (profile != null ? profile.getCode() : null));
+		}
+		return profile;
+	}
+
+	@Override
 	public List<GKnowledgeBase> getSessionAvailableKnowledgeBases(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException {
 		List<GKnowledgeBase> out = new ArrayList<GKnowledgeBase>();

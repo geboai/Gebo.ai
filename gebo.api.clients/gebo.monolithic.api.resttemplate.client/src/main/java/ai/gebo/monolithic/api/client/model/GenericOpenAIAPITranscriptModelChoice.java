@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.GModelPricingConditions;
 import ai.gebo.monolithic.api.client.model.ModelMetaInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -24,7 +25,7 @@ import java.util.Date;
  * GenericOpenAIAPITranscriptModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class GenericOpenAIAPITranscriptModelChoice {
   @JsonProperty("code")
@@ -65,6 +66,9 @@ public class GenericOpenAIAPITranscriptModelChoice {
 
   @JsonProperty("nativeModelMetaInfos")
   private Object nativeModelMetaInfos = null;
+
+  @JsonProperty("pricingConditions")
+  private GModelPricingConditions pricingConditions = null;
 
   public GenericOpenAIAPITranscriptModelChoice code(String code) {
     this.code = code;
@@ -300,6 +304,24 @@ public class GenericOpenAIAPITranscriptModelChoice {
     this.nativeModelMetaInfos = nativeModelMetaInfos;
   }
 
+  public GenericOpenAIAPITranscriptModelChoice pricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+    return this;
+  }
+
+   /**
+   * Get pricingConditions
+   * @return pricingConditions
+  **/
+  @Schema(description = "")
+  public GModelPricingConditions getPricingConditions() {
+    return pricingConditions;
+  }
+
+  public void setPricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -322,12 +344,13 @@ public class GenericOpenAIAPITranscriptModelChoice {
         Objects.equals(this.metaInfos, genericOpenAIAPITranscriptModelChoice.metaInfos) &&
         Objects.equals(this.informativeUrl, genericOpenAIAPITranscriptModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, genericOpenAIAPITranscriptModelChoice.contextLength) &&
-        Objects.equals(this.nativeModelMetaInfos, genericOpenAIAPITranscriptModelChoice.nativeModelMetaInfos);
+        Objects.equals(this.nativeModelMetaInfos, genericOpenAIAPITranscriptModelChoice.nativeModelMetaInfos) &&
+        Objects.equals(this.pricingConditions, genericOpenAIAPITranscriptModelChoice.pricingConditions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, pricingConditions);
   }
 
 
@@ -349,6 +372,7 @@ public class GenericOpenAIAPITranscriptModelChoice {
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
+    sb.append("    pricingConditions: ").append(toIndentedString(pricingConditions)).append("\n");
     sb.append("}");
     return sb.toString();
   }

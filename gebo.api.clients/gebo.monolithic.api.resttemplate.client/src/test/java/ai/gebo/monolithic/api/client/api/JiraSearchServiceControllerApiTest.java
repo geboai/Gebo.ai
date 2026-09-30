@@ -46,9 +46,9 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restAggregate1Test() {
+    public void restAggregateJiraTest() {
         AggregateRequestBodyJiraResultsExtractionData body = null;
-        JiraResultsExtractionData response = api.restAggregate1(body);
+        JiraResultsExtractionData response = api.restAggregateJira(body);
 
         // TODO: test validations
     }
@@ -61,9 +61,9 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restCreateCustomTemplateParamsMap1Test() {
+    public void restCreateCustomTemplateParamsMapJiraTest() {
         CustomTemplateParamsRequestBody body = null;
-        Map<String, Object> response = api.restCreateCustomTemplateParamsMap1(body);
+        Map<String, Object> response = api.restCreateCustomTemplateParamsMapJira(body);
 
         // TODO: test validations
     }
@@ -76,10 +76,10 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restExtractRelatedAnalisysReferences1Test() {
+    public void restExtractRelatedAnalisysReferencesJiraTest() {
         JiraResultsExtractionData body = null;
         String systemId = null;
-        SearchResultAnalisysOutcome response = api.restExtractRelatedAnalisysReferences1(body, systemId);
+        SearchResultAnalisysOutcome response = api.restExtractRelatedAnalisysReferencesJira(body, systemId);
 
         // TODO: test validations
     }
@@ -92,9 +92,9 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restFindSystemById1Test() {
+    public void restFindSystemByIdJiraTest() {
         String systemId = null;
-        SearchableSystemMetaData response = api.restFindSystemById1(systemId);
+        SearchableSystemMetaData response = api.restFindSystemByIdJira(systemId);
 
         // TODO: test validations
     }
@@ -107,9 +107,9 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restFindSystemBySearchResult1Test() {
+    public void restFindSystemBySearchResultJiraTest() {
         SearchResult body = null;
-        SearchableSystemMetaData response = api.restFindSystemBySearchResult1(body);
+        SearchableSystemMetaData response = api.restFindSystemBySearchResultJira(body);
 
         // TODO: test validations
     }
@@ -122,9 +122,9 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetCachedCatalogues1Test() {
+    public void restGetCachedCataloguesJiraTest() {
         String systemConfigurationCode = null;
-        List<CatalogueSample> response = api.restGetCachedCatalogues1(systemConfigurationCode);
+        List<CatalogueSample> response = api.restGetCachedCataloguesJira(systemConfigurationCode);
 
         // TODO: test validations
     }
@@ -137,9 +137,9 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetCataloguesListSample1Test() {
+    public void restGetCataloguesListSampleJiraTest() {
         String configurationCode = null;
-        List<CatalogueSample> response = api.restGetCataloguesListSample1(configurationCode);
+        List<CatalogueSample> response = api.restGetCataloguesListSampleJira(configurationCode);
 
         // TODO: test validations
     }
@@ -152,8 +152,8 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetDescription1Test() {
-        String response = api.restGetDescription1();
+    public void restGetDescriptionJiraTest() {
+        String response = api.restGetDescriptionJira();
 
         // TODO: test validations
     }
@@ -166,8 +166,8 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetId1Test() {
-        String response = api.restGetId1();
+    public void restGetIdJiraTest() {
+        String response = api.restGetIdJira();
 
         // TODO: test validations
     }
@@ -180,8 +180,8 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetMessagingModuleId1Test() {
-        String response = api.restGetMessagingModuleId1();
+    public void restGetMessagingModuleIdJiraTest() {
+        String response = api.restGetMessagingModuleIdJira();
 
         // TODO: test validations
     }
@@ -194,8 +194,8 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetNativePromptTemplateUseCode1Test() {
-        String response = api.restGetNativePromptTemplateUseCode1();
+    public void restGetNativePromptTemplateUseCodeJiraTest() {
+        String response = api.restGetNativePromptTemplateUseCodeJira();
 
         // TODO: test validations
     }
@@ -208,8 +208,8 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetProductId1Test() {
-        String response = api.restGetProductId1();
+    public void restGetProductIdJiraTest() {
+        String response = api.restGetProductIdJira();
 
         // TODO: test validations
     }
@@ -222,8 +222,8 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetQueriesGenerationPromptUseCode1Test() {
-        String response = api.restGetQueriesGenerationPromptUseCode1();
+    public void restGetQueriesGenerationPromptUseCodeJiraTest() {
+        String response = api.restGetQueriesGenerationPromptUseCodeJira();
 
         // TODO: test validations
     }
@@ -236,8 +236,8 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetSearchableSystems1Test() {
-        List<SearchableSystemMetaData> response = api.restGetSearchableSystems1();
+    public void restGetSearchableSystemsJiraTest() {
+        List<SearchableSystemMetaData> response = api.restGetSearchableSystemsJira();
 
         // TODO: test validations
     }
@@ -250,8 +250,8 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restIsEnabled1Test() {
-        Boolean response = api.restIsEnabled1();
+    public void restIsEnabledJiraTest() {
+        Boolean response = api.restIsEnabledJira();
 
         // TODO: test validations
     }
@@ -264,11 +264,11 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restNativeSearch1Test() {
+    public void restNativeSearchJiraTest() {
         JiraIssuesSearchFilter body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restNativeSearch1(body, systemId, nEntryLimit);
+        List<SearchResult> response = api.restNativeSearchJira(body, systemId, nEntryLimit);
 
         // TODO: test validations
     }
@@ -281,11 +281,11 @@ public class JiraSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restSearch1Test() {
+    public void restSearchJiraTest() {
         SearchQuery body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restSearch1(body, systemId, nEntryLimit);
+        List<SearchResult> response = api.restSearchJira(body, systemId, nEntryLimit);
 
         // TODO: test validations
     }

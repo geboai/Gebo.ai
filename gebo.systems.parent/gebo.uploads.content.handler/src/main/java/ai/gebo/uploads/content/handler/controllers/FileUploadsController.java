@@ -126,7 +126,7 @@ public class FileUploadsController
 	 * @return list of content management system types
 	 */
 	@GetMapping(value = "getFileSystemSystemTypes", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<GContentManagementSystemType> getFileSystemSystemTypes() {
+	public List<GContentManagementSystemType> getUploadsSystemTypes() {
 		List<GContentManagementSystemType> list = new ArrayList<GContentManagementSystemType>();
 		if (handlers != null) {
 			for (IGUploadsContentManagementSystemHandler handler : handlers) {

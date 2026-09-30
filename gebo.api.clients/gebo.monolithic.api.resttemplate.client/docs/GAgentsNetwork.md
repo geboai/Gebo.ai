@@ -18,4 +18,12 @@ Name | Type | Description | Notes
 **scenarioDescription** | **String** |  | 
 **agents** | [**List&lt;AgentNetworkParticipant&gt;**](AgentNetworkParticipant.md) |  | 
 **readOnly** | **Boolean** |  |  [optional]
-**defaultUserInteractionNetwork** | **Boolean** |  |  [optional]
+**suggestedPurpose** | **String** |  |  [optional]
+**choosableForPipelineTypes** | [**List&lt;ChoosableForPipelineTypesEnum&gt;**](#List&lt;ChoosableForPipelineTypesEnum&gt;) |  |  [optional]
+
+<a name="List<ChoosableForPipelineTypesEnum>"></a>
+## Enum: List&lt;ChoosableForPipelineTypesEnum&gt;
+Name | Value
+---- | -----
+RAG_PIPELINE | &quot;RAG_PIPELINE&quot;
+PURE_CHAT_PIPELINE | &quot;PURE_CHAT_PIPELINE&quot;

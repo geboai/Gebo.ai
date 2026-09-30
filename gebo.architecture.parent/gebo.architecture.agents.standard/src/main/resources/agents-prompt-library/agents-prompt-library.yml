@@ -14,7 +14,7 @@ ai.gebo.agents.prompts.library:
     userReference: /agents-prompt-library/en/report-answer-writer-agent-user-prompt.txt
     agentPrompt: true
     agentId: ChatAgentService
-    chatHistory: NOT_REQUIRED
+    chatHistory: REQUIRED
     contextDocuments: NOT_REQUIRED
     toolsCalling: NOT_REQUIRED
   - promptUse: tool-calling-agent-prompt
@@ -26,6 +26,13 @@ ai.gebo.agents.prompts.library:
     chatHistory: NOT_REQUIRED
     contextDocuments: NOT_REQUIRED
     toolsCalling: REQUIRED
+  - promptUse: report-evidence-extractor-prompt
+    langCode: en
+    systemReference: /agents-prompt-library/en/report-evidence-extractor-system-prompt.txt
+    userReference: /agents-prompt-library/en/report-evidence-extractor-user-prompt.txt
+    chatHistory: NOT_REQUIRED
+    contextDocuments: NOT_REQUIRED
+    toolsCalling: NOT_REQUIRED
 ai.gebo.agents.prompts.uses:
   - code: controller-coordinator-agent-prompt
     description: Main loop prompt for the network's coordinator/controller agent, which turns the user's request into a routing plan dispatching the other agents in the network.
@@ -93,3 +100,15 @@ ai.gebo.agents.prompts.uses:
         description: This agent's own private working context/memory, not shared with other agents.
       - placeholder: SHARED_CONTEXT
         description: The context/evidence shared across all agents in the network so far.
+  - code: report-evidence-extractor-prompt
+    description: Prompt of the report writer's evidence extraction calls, used when the evidence of a cycle does not fit one writing call - each part of the evidence, and then each group of extractions, is reduced to a flat list of the relevant facts and concepts with their sources, from which the writer then writes the answer.
+    module: agents-standard
+    placeholders:
+      - placeholder: question
+        description: The user's original question or request driving the network.
+      - placeholder: INPUT
+        description: The writing instruction the report writer received for this turn.
+      - placeholder: REQUIRED_AGENT_COMPLETENESS
+        description: The completeness level required for the deliverable (e.g. QA, HOWTO, ANALISYS), driving how many facts to extract.
+      - placeholder: SHARED_CONTEXT
+        description: The part of the evidence to extract from, or the facts already extracted from earlier parts to merge.

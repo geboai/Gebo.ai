@@ -51,65 +51,65 @@ public class SharePointSearchServiceController
 	}
 
 	@GetMapping("isEnabled")
-	public boolean restIsEnabled() throws SearchServiceException {
+	public boolean restIsEnabledSharePoint() throws SearchServiceException {
 		return isEnabled();
 	}
 
 	@GetMapping("getId")
-	public String restGetId() {
+	public String restGetIdSharePoint() {
 		return getId();
 	}
 
 	@GetMapping("getDescription")
-	public String restGetDescription() {
+	public String restGetDescriptionSharePoint() {
 		return getDescription();
 	}
 
 	@GetMapping("getProductId")
-	public String restGetProductId() {
+	public String restGetProductIdSharePoint() {
 		return getProductId();
 	}
 
 	@GetMapping("getMessagingModuleId")
-	public String restGetMessagingModuleId() {
+	public String restGetMessagingModuleIdSharePoint() {
 		return getMessagingModuleId();
 	}
 
 	@GetMapping("getQueriesGenerationPromptUseCode")
-	public String restGetQueriesGenerationPromptUseCode() {
+	public String restGetQueriesGenerationPromptUseCodeSharePoint() {
 		return getQueriesGenerationPromptUseCode();
 	}
 
 	@GetMapping("getNativePromptTemplateUseCode")
-	public String restGetNativePromptTemplateUseCode() {
+	public String restGetNativePromptTemplateUseCodeSharePoint() {
 		return getNativePromptTemplateUseCode();
 	}
 
 	@GetMapping(value = "getSearchableSystems", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<SearchableSystemMetaData> restGetSearchableSystems() throws SearchServiceException {
+	public List<SearchableSystemMetaData> restGetSearchableSystemsSharePoint() throws SearchServiceException {
 		return getSearchableSystems();
 	}
 
 	@GetMapping(value = "findSystemById", produces = MediaType.APPLICATION_JSON_VALUE)
-	public SearchableSystemMetaData restFindSystemById(@RequestParam("systemId") String systemId)
+	public SearchableSystemMetaData restFindSystemByIdSharePoint(@RequestParam("systemId") String systemId)
 			throws SearchServiceException {
 		return findSystemById(systemId);
 	}
 
 	@PostMapping(value = "findSystemBySearchResult", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public SearchableSystemMetaData restFindSystemBySearchResult(@RequestBody SearchResult result)
+	public SearchableSystemMetaData restFindSystemBySearchResultSharePoint(@RequestBody SearchResult result)
 			throws SearchServiceException {
 		return findSystemBySearchResult(result);
 	}
 
 	@PostMapping(value = "search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<SearchResult> restSearch(@RequestBody SearchQuery query, @RequestParam("systemId") String systemId,
+	public List<SearchResult> restSearchSharePoint(@RequestBody SearchQuery query, @RequestParam("systemId") String systemId,
 			@RequestParam("nEntryLimit") int nEntryLimit) throws IOException, SearchServiceException {
 		return search(query, systemId, nEntryLimit);
 	}
 
 	@PostMapping(value = "nativeSearch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<SearchResult> restNativeSearch(@RequestBody SharePointSearchFilter query,
+	public List<SearchResult> restNativeSearchSharePoint(@RequestBody SharePointSearchFilter query,
 			@RequestParam("systemId") String systemId, @RequestParam("nEntryLimit") int nEntryLimit)
 			throws IOException, SearchServiceException {
 		SearchableSystemMetaData system = findSystemById(systemId);
@@ -117,32 +117,32 @@ public class SharePointSearchServiceController
 	}
 
 	@GetMapping(value = "getCataloguesListSample", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<CatalogueSample> restGetCataloguesListSample(@RequestParam("configurationCode") String configurationCode)
+	public List<CatalogueSample> restGetCataloguesListSampleSharePoint(@RequestParam("configurationCode") String configurationCode)
 			throws SearchServiceException {
 		return getCataloguesListSample(configurationCode);
 	}
 
 	@GetMapping(value = "getCachedCatalogues", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<CatalogueSample> restGetCachedCatalogues(
+	public List<CatalogueSample> restGetCachedCataloguesSharePoint(
 			@RequestParam(value = "systemConfigurationCode", required = false) String systemConfigurationCode)
 			throws SearchServiceException {
 		return systemConfigurationCode != null ? getCachedCatalogues(systemConfigurationCode) : getCachedCatalogues();
 	}
 
 	@PostMapping(value = "extractRelatedAnalisysReferences", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferences(@RequestParam("systemId") String systemId,
+	public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferencesSharePoint(@RequestParam("systemId") String systemId,
 			@RequestBody MicrosoftResultsExtractionData extractedData) throws IOException, SearchServiceException {
 		return extractRelatedAnalisysReferences(systemId, extractedData);
 	}
 
 	@PostMapping(value = "aggregate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public MicrosoftResultsExtractionData restAggregate(
+	public MicrosoftResultsExtractionData restAggregateSharePoint(
 			@RequestBody AggregateRequestBody<MicrosoftResultsExtractionData> body) {
 		return aggregate(body.getOldConsolidated(), body.getConsolidated());
 	}
 
 	@PostMapping(value = "createCustomTemplateParamsMap", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Map<String, Object> restCreateCustomTemplateParamsMap(@RequestBody CustomTemplateParamsRequestBody body) {
+	public Map<String, Object> restCreateCustomTemplateParamsMapSharePoint(@RequestBody CustomTemplateParamsRequestBody body) {
 		return createCustomTemplateParamsMap(body.getSearchableSystemMetaData(), body.getCataloguesSample());
 	}
 }

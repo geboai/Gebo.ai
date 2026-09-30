@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.GModelPricingConditions;
 import ai.gebo.monolithic.api.client.model.ModelMetaInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -27,7 +28,7 @@ import java.util.Map;
  * GDeepseekChatModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class GDeepseekChatModelChoice {
   @JsonProperty("code")
@@ -68,6 +69,9 @@ public class GDeepseekChatModelChoice {
 
   @JsonProperty("nativeModelMetaInfos")
   private Object nativeModelMetaInfos = null;
+
+  @JsonProperty("pricingConditions")
+  private GModelPricingConditions pricingConditions = null;
 
   @JsonProperty("supportsStructuredOutput")
   private Boolean supportsStructuredOutput = null;
@@ -312,6 +316,24 @@ public class GDeepseekChatModelChoice {
     this.nativeModelMetaInfos = nativeModelMetaInfos;
   }
 
+  public GDeepseekChatModelChoice pricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+    return this;
+  }
+
+   /**
+   * Get pricingConditions
+   * @return pricingConditions
+  **/
+  @Schema(description = "")
+  public GModelPricingConditions getPricingConditions() {
+    return pricingConditions;
+  }
+
+  public void setPricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+  }
+
   public GDeepseekChatModelChoice supportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
     return this;
@@ -397,6 +419,7 @@ public class GDeepseekChatModelChoice {
         Objects.equals(this.informativeUrl, gdeepseekChatModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, gdeepseekChatModelChoice.contextLength) &&
         Objects.equals(this.nativeModelMetaInfos, gdeepseekChatModelChoice.nativeModelMetaInfos) &&
+        Objects.equals(this.pricingConditions, gdeepseekChatModelChoice.pricingConditions) &&
         Objects.equals(this.supportsStructuredOutput, gdeepseekChatModelChoice.supportsStructuredOutput) &&
         Objects.equals(this.supportsFunctionCalls, gdeepseekChatModelChoice.supportsFunctionCalls) &&
         Objects.equals(this.modelDetails, gdeepseekChatModelChoice.modelDetails);
@@ -404,7 +427,7 @@ public class GDeepseekChatModelChoice {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, supportsStructuredOutput, supportsFunctionCalls, modelDetails);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, pricingConditions, supportsStructuredOutput, supportsFunctionCalls, modelDetails);
   }
 
 
@@ -426,6 +449,7 @@ public class GDeepseekChatModelChoice {
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
+    sb.append("    pricingConditions: ").append(toIndentedString(pricingConditions)).append("\n");
     sb.append("    supportsStructuredOutput: ").append(toIndentedString(supportsStructuredOutput)).append("\n");
     sb.append("    supportsFunctionCalls: ").append(toIndentedString(supportsFunctionCalls)).append("\n");
     sb.append("    modelDetails: ").append(toIndentedString(modelDetails)).append("\n");

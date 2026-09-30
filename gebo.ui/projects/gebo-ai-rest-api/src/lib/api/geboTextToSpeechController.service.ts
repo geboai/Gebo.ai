@@ -61,10 +61,10 @@ export class GeboTextToSpeechControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public isEnabled1(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
-    public isEnabled1(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
-    public isEnabled1(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
-    public isEnabled1(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public isEnabledTextToSpeech(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public isEnabledTextToSpeech(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public isEnabledTextToSpeech(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
+    public isEnabledTextToSpeech(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 

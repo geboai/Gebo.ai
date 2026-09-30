@@ -38,10 +38,10 @@ public class UserspaceUploadControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void uploadTest() {
+    public void uploadUserspaceTest() {
         String userspaceFolderCode = null;
         List<File> files = null;
-        api.upload(userspaceFolderCode, files);
+        api.uploadUserspace(userspaceFolderCode, files);
 
         // TODO: test validations
     }

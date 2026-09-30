@@ -9,6 +9,8 @@
 
 package ai.gebo.openchat.pipeline.config;
 
+import ai.gebo.architecture.agents.model.PipelineType;
+import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -99,12 +101,14 @@ public class OpenChatAgentsInitialization {
 			@Override
 			public List<GAgentsNetwork> getConfigurations() {
 				GAgentsNetwork network = standardInit.createChatAgentsNetwork(OpenChatConstants.OPEN_CHAT_AGENTS_NETWORK,
-						"Open-chat KB-free agents network (external search + free-response answering)",
+						"Full network of agents for free chats: a coordinator hands the question to specialized agents searching the web and the external systems or calling the tools, and a writer agent answers freely, without the internal knowledge bases",
 						ChatRuntimeDataQueryAdapterAgentService.CHAT_RUNTIME_DATA_QUERY_ADAPTER,
 						OpenChatConstants.OPEN_CHAT_CONTROLLER_AGENT_CONFIG,
 						OpenChatConstants.OPEN_CHAT_ANSWER_WRITER_AGENT_CONFIG,
 						// null internal-KB config => no internal knowledge-base searcher node.
 						null);
+				network.setChoosableForPipelineTypes(List.of(PipelineType.PURE_CHAT_PIPELINE));
+				network.setSuggestedPurpose(StandardAgentsInitialization.FULL_NETWORK_SUGGESTED_PURPOSE);
 				return List.of(network);
 			}
 		};
@@ -114,9 +118,13 @@ public class OpenChatAgentsInitialization {
 	public OpenChatAgentsNetworkStreamingStepService openChatAgentsNetworkStreamingStep(
 			@Qualifier(OpenChatConstants.OPEN_CHAT_AGENTS_NETWORK_QUALIFIER) IDynamicAgentsNetworkDataSource openChatNetworkDataSource,
 			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory,
-			IGChatSessionLifeCycleService lifeCycleService) {
+			IGChatSessionLifeCycleService lifeCycleService,
+			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService) {
 		IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
 				.getFactory(IGReactiveChatAgentsNetworkService.class);
-		return new OpenChatAgentsNetworkStreamingStepService(factory, openChatNetworkDataSource, lifeCycleService);
+		// The free chats are handed to the network resolved for the pure chat pipeline;
+		// the open-chat network is the fallback.
+		return new OpenChatAgentsNetworkStreamingStepService(factory, openChatNetworkDataSource, lifeCycleService,
+				defaultNetworksService);
 	}
 }

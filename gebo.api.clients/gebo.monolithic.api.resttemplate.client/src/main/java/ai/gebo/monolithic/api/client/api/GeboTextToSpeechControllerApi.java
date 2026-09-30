@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class GeboTextToSpeechControllerApi {
     private ApiClient apiClient;
@@ -50,8 +50,8 @@ public class GeboTextToSpeechControllerApi {
      * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Boolean isEnabled1() throws RestClientException {
-        return isEnabled1WithHttpInfo().getBody();
+    public Boolean isEnabledTextToSpeech() throws RestClientException {
+        return isEnabledTextToSpeechWithHttpInfo().getBody();
     }
 
     /**
@@ -61,7 +61,7 @@ public class GeboTextToSpeechControllerApi {
      * @return ResponseEntity&lt;Boolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Boolean> isEnabled1WithHttpInfo() throws RestClientException {
+    public ResponseEntity<Boolean> isEnabledTextToSpeechWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboTextToSpeechController/isEnabled").build().toUriString();
         

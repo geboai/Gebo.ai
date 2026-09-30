@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.services;
 
+import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import java.io.IOException;
 import java.util.List;
 
@@ -91,6 +92,14 @@ public interface IGChatSessionLifeCycleService {
 	 * cannot be addressed by a code, are carried whole by the client instead).
 	 */
 	public List<GResponseDocumentRef> resolveResponseDocumentRefs(List<String> codes);
+
+	/**
+	 * The chat profile of the request's chat session.
+	 *
+	 * @return the profile, null for a chat without one (a free chat)
+	 */
+	public GChatProfileConfiguration getSessionChatProfile(GeboChatRequest request)
+			throws GeboChatSessionLifecycleException;
 
 	public List<GKnowledgeBase> getSessionAvailableKnowledgeBases(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException;

@@ -35,7 +35,7 @@ public class IntegrationInputController {
 	}
 
 	@PostMapping(value = "spoolDocument", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public JobTicket spoolDocument(@NotNull @Valid @RequestParam("endpointCode") String endpointCode,
+	public JobTicket spoolDocumentEnvelope(@NotNull @Valid @RequestParam("endpointCode") String endpointCode,
 			@NotNull @Valid @RequestParam("relativePath") String relativePath,
 			@NotNull @Valid @RequestBody IntegrationDocumentEnvelop envelop) throws GeboContentHandlerSystemException {
 
@@ -43,7 +43,7 @@ public class IntegrationInputController {
 	}
 
 	@PutMapping(value = "spoolDocument", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public JobTicket spoolDocument(@NotNull @Valid @RequestParam("endpointCode") String endpointCode,
+	public JobTicket spoolDocumentFile(@NotNull @Valid @RequestParam("endpointCode") String endpointCode,
 			@NotNull @Valid @RequestParam("relativePath") String relativePath,
 			@NotNull @Valid @RequestParam("file") MultipartFile file) throws GeboContentHandlerSystemException {
 

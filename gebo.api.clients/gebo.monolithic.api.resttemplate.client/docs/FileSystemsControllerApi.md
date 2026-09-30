@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**deleteFilesystemEndpoint**](FileSystemsControllerApi.md#deleteFilesystemEndpoint) | **POST** /api/admin/FileSystemsController/deleteFilesystemEndpoint | 
 [**findFileSystemEndpointsByProject**](FileSystemsControllerApi.md#findFileSystemEndpointsByProject) | **GET** /api/admin/FileSystemsController/findFileSystemEndpointsByProject | 
 [**findFileSystemEndpointsByQbe**](FileSystemsControllerApi.md#findFileSystemEndpointsByQbe) | **POST** /api/admin/FileSystemsController/findFileSystemEndpointsByQbe | 
-[**getFileSystemSystemTypes1**](FileSystemsControllerApi.md#getFileSystemSystemTypes1) | **GET** /api/admin/FileSystemsController/getFileSystemSystemTypes | 
+[**getFileSystemSystemTypes**](FileSystemsControllerApi.md#getFileSystemSystemTypes) | **GET** /api/admin/FileSystemsController/getFileSystemSystemTypes | 
 [**getFileSystemSystems**](FileSystemsControllerApi.md#getFileSystemSystems) | **GET** /api/admin/FileSystemsController/getFileSystemSystems | 
 [**insertFilesystemEndpoint**](FileSystemsControllerApi.md#insertFilesystemEndpoint) | **POST** /api/admin/FileSystemsController/insertFilesystemEndpoint | 
 [**publishFilesystemEndpoint**](FileSystemsControllerApi.md#publishFilesystemEndpoint) | **POST** /api/admin/FileSystemsController/publishFilesystemEndpoint | 
@@ -141,9 +141,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="getFileSystemSystemTypes1"></a>
-# **getFileSystemSystemTypes1**
-> List&lt;GContentManagementSystemType&gt; getFileSystemSystemTypes1()
+<a name="getFileSystemSystemTypes"></a>
+# **getFileSystemSystemTypes**
+> List&lt;GContentManagementSystemType&gt; getFileSystemSystemTypes()
 
 
 
@@ -156,10 +156,10 @@ No authorization required
 
 FileSystemsControllerApi apiInstance = new FileSystemsControllerApi();
 try {
-    List<GContentManagementSystemType> result = apiInstance.getFileSystemSystemTypes1();
+    List<GContentManagementSystemType> result = apiInstance.getFileSystemSystemTypes();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FileSystemsControllerApi#getFileSystemSystemTypes1");
+    System.err.println("Exception when calling FileSystemsControllerApi#getFileSystemSystemTypes");
     e.printStackTrace();
 }
 ```
