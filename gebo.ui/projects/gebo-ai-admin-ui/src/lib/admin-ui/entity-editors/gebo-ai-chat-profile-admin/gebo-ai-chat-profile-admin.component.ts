@@ -120,8 +120,11 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
     /** The default embedding model configuration */
     defaultEmbeddingModel: any = {};
 
+    /** Whether the agents, and so the choice of the network of agents, are enabled */
+    agenticChatNetworksEnabled: boolean = false;
+
     /** The networks of agents the chats of a profile can be handed to (the RAG pipeline ones) */
-    chatNetworksOfAgents: { label: string, value: string }[] = [];
+    chatNetworksOfAgents: { value: string, description?: string, suggestedPurpose?: string }[] = [];
 
     /** All available knowledge bases */
     allKnowledgeBaseData: GKnowledgeBase[] = [];
@@ -259,12 +262,20 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
      */
     override ngOnInit(): void {
         super.ngOnInit();
-        this.chatNetworksService.getChoosableChatNetworksOfAgents("RAG_PIPELINE").subscribe({
-            next: (networks) => {
-                this.chatNetworksOfAgents = (networks ?? []).map(x => ({
-                    label: x.description ? x.description + " (" + x.code + ")" : (x.code ?? ""),
-                    value: x.code ?? ""
-                }));
+        // The network of agents tab exists only while the agents are enabled.
+        this.chatNetworksService.isAgenticChatNetworksEnabled().subscribe({
+            next: (enabled) => {
+                this.agenticChatNetworksEnabled = enabled === true;
+                if (!this.agenticChatNetworksEnabled) return;
+                this.chatNetworksService.getChoosableChatNetworksOfAgents("RAG_PIPELINE").subscribe({
+                    next: (networks) => {
+                        this.chatNetworksOfAgents = (networks ?? []).map(x => ({
+                            value: x.code ?? "",
+                            description: x.description,
+                            suggestedPurpose: x.suggestedPurpose
+                        }));
+                    }
+                });
             }
         });
         this.loadingRelatedBackend = true;

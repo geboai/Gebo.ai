@@ -43,6 +43,9 @@
             <p-tablist>
               <p-tab [value]="0" gebo-ai-text>General infos</p-tab>
               <p-tab [value]="1" gebo-ai-text>Large language model &amp; usable tools settings</p-tab>
+              @if (agenticChatNetworksEnabled) {
+                <p-tab [value]="4" id="NetworkOfAgentsTab" gebo-ai-text>Network of agents</p-tab>
+              }
               <p-tab [value]="2" gebo-ai-text>RAG settings</p-tab>
               <p-tab [value]="3" gebo-ai-text>Security access settings</p-tab>
             </p-tablist>
@@ -160,13 +163,6 @@
                   </gebo-ai-field>
                 </div>
                 <div class="col-6">
-                  <gebo-ai-field id="defaultChatNetworkOfAgents" label="Network of agents" help="The network of agents the agentic chats of this profile are handed to; leave it empty for the system default">
-                    <p-select id="ChatNetworkOfAgentsSelect" gebo-ai-label formControlName="defaultChatNetworkOfAgents"
-                      [options]="chatNetworksOfAgents" optionLabel="label" optionValue="value" [showClear]="true"
-                      placeholder="System default" styleClass="w-full" appendTo="body" gebo-ai-field-element></p-select>
-                  </gebo-ai-field>
-                </div>
-                <div class="col-6">
                   <gebo-ai-field id="topK" label="Considered document fragments (TopK)" help="In the retrieval-augmented generation, Top N found considered document fragments in semantic search">
                     <p-inputNumber id="TopKInputNumber" gebo-ai-label formControlName="topK"
                       class="col-6" inputId="integeronly" [min]="4" [max]="100" gebo-ai-field-element/>
@@ -209,6 +205,36 @@
                       -->
                     </div>
                   </p-tabpanel>
+                  @if (agenticChatNetworksEnabled) {
+                    <p-tabpanel [value]="4">
+                      <div class="flex flex-column gap-2 standardTabDialogueHeight">
+                        <span id="NetworkOfAgentsHint" gebo-ai-text class="text-sm text-600">The network of agents the agentic chats of this profile are handed to.</span>
+                        <div class="flex align-items-start gap-2 p-2 border-1 border-round surface-border"
+                          [class.surface-100]="!formGroup.get('defaultChatNetworkOfAgents')?.value">
+                          <p-radioButton inputId="ChatNetworkOfAgents_default" name="defaultChatNetworkOfAgents" [value]="null"
+                            formControlName="defaultChatNetworkOfAgents" class="mt-1"></p-radioButton>
+                          <label for="ChatNetworkOfAgents_default" class="flex flex-column gap-1 cursor-pointer">
+                            <span id="SystemDefaultNetworkOption" gebo-ai-text class="font-semibold">System default</span>
+                            <span id="SystemDefaultNetworkHint" gebo-ai-text class="text-sm">The network chosen in the setup for the chats with knowledge bases.</span>
+                          </label>
+                        </div>
+                        @for (option of chatNetworksOfAgents; track option.value) {
+                          <div class="flex align-items-start gap-2 p-2 border-1 border-round surface-border"
+                            [class.surface-100]="formGroup.get('defaultChatNetworkOfAgents')?.value === option.value">
+                            <p-radioButton [inputId]="'ChatNetworkOfAgents_' + option.value" name="defaultChatNetworkOfAgents"
+                              [value]="option.value" formControlName="defaultChatNetworkOfAgents" class="mt-1"></p-radioButton>
+                            <label [for]="'ChatNetworkOfAgents_' + option.value" class="flex flex-column gap-1 cursor-pointer">
+                              <span class="font-semibold">{{ option.description ?? option.value }}</span>
+                              @if (option.suggestedPurpose) {
+                                <span class="text-sm">{{ option.suggestedPurpose }}</span>
+                              }
+                              <span class="text-xs text-500">{{ option.value }}</span>
+                            </label>
+                          </div>
+                        }
+                      </div>
+                    </p-tabpanel>
+                  }
                   <p-tabpanel [value]="3">
                     <div class="standardTabDialogueHeight">
                       <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>

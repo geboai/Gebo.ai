@@ -3969,12 +3969,17 @@
         "label": "Use keyword search when available",
         "help": "Run keyword searches additional to semantic searches if they are configured in this installation"
       },
-      "defaultChatNetworkOfAgents": {
-        "label": "Network of agents",
-        "help": "The network of agents the agentic chats of this profile are handed to; leave it empty for the system default"
+      "NetworkOfAgentsTab": {
+        "label": "Network of agents"
       },
-      "ChatNetworkOfAgentsSelect": {
-        "placeholder": "System default"
+      "NetworkOfAgentsHint": {
+        "label": "The network of agents the agentic chats of this profile are handed to."
+      },
+      "SystemDefaultNetworkOption": {
+        "label": "System default"
+      },
+      "SystemDefaultNetworkHint": {
+        "label": "The network chosen in the setup for the chats with knowledge bases."
       }
     }
   },

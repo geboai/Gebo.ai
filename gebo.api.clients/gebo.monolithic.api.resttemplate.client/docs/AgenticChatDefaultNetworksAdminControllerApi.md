@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**getAgenticChatDefaultNetworks**](AgenticChatDefaultNetworksAdminControllerApi.md#getAgenticChatDefaultNetworks) | **GET** /api/admin/AgenticChatDefaultNetworksAdminController/getAgenticChatDefaultNetworks | 
 [**getChoosableChatNetworksOfAgents**](AgenticChatDefaultNetworksAdminControllerApi.md#getChoosableChatNetworksOfAgents) | **GET** /api/admin/AgenticChatDefaultNetworksAdminController/getChoosableChatNetworksOfAgents | 
+[**isAgenticChatNetworksEnabled**](AgenticChatDefaultNetworksAdminControllerApi.md#isAgenticChatNetworksEnabled) | **GET** /api/admin/AgenticChatDefaultNetworksAdminController/isAgenticChatNetworksEnabled | 
 [**resetAgenticChatDefaultNetwork**](AgenticChatDefaultNetworksAdminControllerApi.md#resetAgenticChatDefaultNetwork) | **POST** /api/admin/AgenticChatDefaultNetworksAdminController/resetAgenticChatDefaultNetwork | 
 [**setAgenticChatDefaultNetwork**](AgenticChatDefaultNetworksAdminControllerApi.md#setAgenticChatDefaultNetwork) | **POST** /api/admin/AgenticChatDefaultNetworksAdminController/setAgenticChatDefaultNetwork | 
 
@@ -81,6 +82,45 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**List&lt;GAgentsNetwork&gt;**](GAgentsNetwork.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="isAgenticChatNetworksEnabled"></a>
+# **isAgenticChatNetworksEnabled**
+> Boolean isAgenticChatNetworksEnabled()
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.AgenticChatDefaultNetworksAdminControllerApi;
+
+
+AgenticChatDefaultNetworksAdminControllerApi apiInstance = new AgenticChatDefaultNetworksAdminControllerApi();
+try {
+    Boolean result = apiInstance.isAgenticChatNetworksEnabled();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling AgenticChatDefaultNetworksAdminControllerApi#isAgenticChatNetworksEnabled");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+**Boolean**
 
 ### Authorization
 

@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusListGProviderApiKey
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T13:04:36.158525700+02:00[Europe/Rome]")
 
 public class OperationStatusListGProviderApiKey {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusListGProviderApiKey {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasWarnMessages")
-  private Boolean hasWarnMessages = null;
-
   @JsonProperty("hasErrorMessages")
   private Boolean hasErrorMessages = null;
+
+  @JsonProperty("hasWarnMessages")
+  private Boolean hasWarnMessages = null;
 
   public OperationStatusListGProviderApiKey result(List<GProviderApiKey> result) {
     this.result = result;
@@ -93,24 +93,6 @@ public class OperationStatusListGProviderApiKey {
     this.messages = messages;
   }
 
-  public OperationStatusListGProviderApiKey hasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-    return this;
-  }
-
-   /**
-   * Get hasWarnMessages
-   * @return hasWarnMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasWarnMessages() {
-    return hasWarnMessages;
-  }
-
-  public void setHasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-  }
-
   public OperationStatusListGProviderApiKey hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
@@ -129,6 +111,24 @@ public class OperationStatusListGProviderApiKey {
     this.hasErrorMessages = hasErrorMessages;
   }
 
+  public OperationStatusListGProviderApiKey hasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+    return this;
+  }
+
+   /**
+   * Get hasWarnMessages
+   * @return hasWarnMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasWarnMessages() {
+    return hasWarnMessages;
+  }
+
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -141,13 +141,13 @@ public class OperationStatusListGProviderApiKey {
     OperationStatusListGProviderApiKey operationStatusListGProviderApiKey = (OperationStatusListGProviderApiKey) o;
     return Objects.equals(this.result, operationStatusListGProviderApiKey.result) &&
         Objects.equals(this.messages, operationStatusListGProviderApiKey.messages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusListGProviderApiKey.hasWarnMessages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusListGProviderApiKey.hasErrorMessages);
+        Objects.equals(this.hasErrorMessages, operationStatusListGProviderApiKey.hasErrorMessages) &&
+        Objects.equals(this.hasWarnMessages, operationStatusListGProviderApiKey.hasWarnMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
+    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
   }
 
 
@@ -158,8 +158,8 @@ public class OperationStatusListGProviderApiKey {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
+    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

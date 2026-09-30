@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,7 @@ import lombok.Data;
  * The answer is bounded to {@value #MAX_RESULT_TOKENS} tokens, shared equally among
  * the documents found, so a search never floods the model's context.
  */
+@ConditionalOnProperty(prefix = "ai.gebo.agents.standard", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Service
 public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InternalKnowledgeBaseSearchToolSource.class);

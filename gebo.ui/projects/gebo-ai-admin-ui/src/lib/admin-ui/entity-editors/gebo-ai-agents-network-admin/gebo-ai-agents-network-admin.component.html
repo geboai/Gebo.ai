@@ -57,13 +57,15 @@
                         rows="4" style="width: 100%" [required]="true" gebo-ai-field-element [readonly]="readonly"></textarea>
                       </gebo-ai-field>
                     </div>
-                    <div class="col-12">
-                      <gebo-ai-field id="suggestedPurpose" label="Suggested purpose"
-                        help="When this network is the right choice: the kind of LLMs and AI provider conditions it fits. It is shown where the network is chosen.">
-                        <textarea pTextarea id="suggestedPurpose" formControlName="suggestedPurpose"
-                        rows="2" style="width: 100%" gebo-ai-field-element [readonly]="readonly"></textarea>
-                      </gebo-ai-field>
-                    </div>
+                    @if (agenticChatNetworksEnabled) {
+                      <div class="col-12">
+                        <gebo-ai-field id="suggestedPurpose" label="Suggested purpose"
+                          help="When this network is the right choice: the kind of LLMs and AI provider conditions it fits. It is shown where the network is chosen.">
+                          <textarea pTextarea id="suggestedPurpose" formControlName="suggestedPurpose"
+                          rows="2" style="width: 100%" gebo-ai-field-element [readonly]="readonly"></textarea>
+                        </gebo-ai-field>
+                      </div>
+                    }
                     <div class="col-6">
                       <gebo-ai-field id="maxLoopIteration" label="Max Loop Iterations"
                         help="Set the maximum loop iterations of the network.">
@@ -71,14 +73,16 @@
                         [maxFractionDigits]="0" [min]="1" [max]="50"></p-inputNumber>
                       </gebo-ai-field>
                     </div>
-                    <div class="col-6">
-                      <gebo-ai-field id="choosableForPipelineTypes" label="Choosable for chats"
-                        help="The kinds of chat this network can be chosen for, as their network of agents.">
-                        <p-multiselect id="ChoosableForPipelineTypesSelect" gebo-ai-label formControlName="choosableForPipelineTypes" [options]="pipelineTypeOptions"
-                          optionLabel="label" optionValue="value" placeholder="Not choosable" styleClass="w-full"
-                          appendTo="body" gebo-ai-field-element></p-multiselect>
-                      </gebo-ai-field>
-                    </div>
+                    @if (agenticChatNetworksEnabled) {
+                      <div class="col-6">
+                        <gebo-ai-field id="choosableForPipelineTypes" label="Choosable for chats"
+                          help="The kinds of chat this network can be chosen for, as their network of agents.">
+                          <p-multiselect id="ChoosableForPipelineTypesSelect" gebo-ai-label formControlName="choosableForPipelineTypes" [options]="pipelineTypeOptions"
+                            optionLabel="label" optionValue="value" placeholder="Not choosable" styleClass="w-full"
+                            appendTo="body" gebo-ai-field-element></p-multiselect>
+                        </gebo-ai-field>
+                      </div>
+                    }
                   </div>
                 </p-tabpanel>
 

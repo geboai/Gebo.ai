@@ -64,7 +64,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ChipModule } from 'primeng/chip';
 import { MessageModule } from 'primeng/message';
 import { ProviderDealsWizardComponent } from "./provider-deals/provider-deals-wizard.component";
-import { AgenticChatNetworksWizardComponent } from "./agentic-chat-networks/agentic-chat-networks-wizard.component";
+import { AgenticChatNetworksEnabledService, AgenticChatNetworksWizardComponent } from "./agentic-chat-networks/agentic-chat-networks-wizard.component";
 
 import { GeboAIGoogleSearchWizardComponent, GoogleSearcStatusService } from "./google-search-wizard.component";
 import { GeboAIWebSearchWizardComponent, WebSearchStatusService } from "./web-search-wizard.component";
@@ -380,7 +380,7 @@ const agentSetupSection: SetupWizardsSection = {
 const agenticChatNetworksSetupSection: SetupWizardsSection = {
     orderEntry: 18.5,
     requredStepsIds: [adminLLMSSetupSection.wizardSectionId],
-    enabledService: AlwaysTrueStatusService,
+    enabledService: AgenticChatNetworksEnabledService,
     setupCompletedService: AlwaysTrueStatusService,
     label: "Agentic chat networks",
     description: "Choose the network of agents the chats with knowledge bases and the free chats are handed to.",
@@ -465,6 +465,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         Oauth2SetupEnabledService,
         LLMSetupWizardService,
         WorkFolderWizardEnabledService,
+        AgenticChatNetworksEnabledService,
         WorkFolderWizardStatusService,
         SharedFilesystemEnabledService,
         SharedFilesystemAlreadySetupService,

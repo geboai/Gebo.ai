@@ -6,12 +6,12 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai
  */
-import { Component } from "@angular/core";
+import { Component, Injectable } from "@angular/core";
 import {
     AgenticChatDefaultNetworkInfo, AgenticChatDefaultNetworksAdminControllerService, GAgentsNetwork, GUserMessage
 } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
-import { forkJoin, Observable } from "rxjs";
+import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
+import { forkJoin, map, Observable } from "rxjs";
 
 type PipelineType = AgenticChatDefaultNetworkInfo.PipelineTypeEnum;
 
@@ -36,6 +36,18 @@ interface PipelineDefault {
     options: NetworkOption[];
     /** The network being chosen. */
     chosen?: string;
+}
+
+/** The section is enabled only while the agents are, by the central switch of the application configuration. */
+@Injectable()
+export class AgenticChatNetworksEnabledService extends AbstractStatusService {
+    constructor(private defaultsService: AgenticChatDefaultNetworksAdminControllerService) {
+        super();
+    }
+
+    public override getBooleanStatus(): Observable<boolean> {
+        return this.defaultsService.isAgenticChatNetworksEnabled().pipe(map(x => x === true));
+    }
 }
 
 /**

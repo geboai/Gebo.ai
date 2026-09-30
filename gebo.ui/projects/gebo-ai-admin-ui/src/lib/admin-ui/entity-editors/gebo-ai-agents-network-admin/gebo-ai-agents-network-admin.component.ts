@@ -1,6 +1,6 @@
 import { afterNextRender, Component, DestroyRef, ElementRef, forwardRef, Injector, OnInit, runInInjectionContext, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GBaseObject, GAgentConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { AgenticChatDefaultNetworksAdminControllerService, GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GBaseObject, GAgentConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
@@ -82,6 +82,9 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
     ];
 
     /** The kinds of chat a network can be chosen for. */
+    /** Whether the agents are enabled: the chat choice fields exist only then. */
+    protected agenticChatNetworksEnabled: boolean = false;
+
     /** The kinds of chat a network can be chosen for; the labels are translated on init. */
     protected pipelineTypeOptions: { id: string, label: string, value: string }[] = [
         { id: "RagPipelineOption", label: "Agentic chat with knowledge bases", value: "RAG_PIPELINE" },
@@ -111,6 +114,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         private service: GeboAgentsNetworkAdminControllerService,
         private agentsService: GeboAgentAdminControllerService,
         private viewportService: NgDiagramViewportService,
+        private chatNetworksService: AgenticChatDefaultNetworksAdminControllerService,
         destroyRef: DestroyRef
     ) {
         super(injector, geboFormGroupsService, myConfirmationService, actionsRouter, outputForwardingService);
@@ -142,6 +146,8 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
 
     override ngOnInit(): void {
         super.ngOnInit();
+        this.chatNetworksService.isAgenticChatNetworksEnabled()
+            .subscribe(enabled => this.agenticChatNetworksEnabled = enabled === true);
         this.myInjector.get(GeboAITranslationService).translateMenuItems("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork",
             this.pipelineTypeOptions).subscribe(items => this.pipelineTypeOptions = [...items] as { id: string, label: string, value: string }[]);
         this.loadAvailableAgents();

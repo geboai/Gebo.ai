@@ -24,8 +24,14 @@ import lombok.NoArgsConstructor;
  * the third the default of the application configuration
  * ({@link IGConfiguredDefaultChatNetworksOfAgents}). An option naming a network that
  * does not exist, or that cannot be chosen for the pipeline type, is skipped.
+ * <p>
+ * The whole choice exists only while the agents are enabled by {@value #AGENTS_ENABLED_PROPERTY}
+ * (enabled when missing, like the agents configurations it switches on): when they
+ * are off no network is choosable and the defaults cannot be changed.
  */
 public interface IGAgenticChatDefaultNetworkOfAgentsService {
+	/** The central switch of the agents, of the chat networks of agents with them. */
+	public static final String AGENTS_ENABLED_PROPERTY = "ai.gebo.agents.standard.enabled";
 
 	/** The defaults of a pipeline type, as the setup shows them. */
 	@Data
@@ -41,8 +47,12 @@ public interface IGAgenticChatDefaultNetworkOfAgentsService {
 		private String effectiveChatNetworkOfAgents = null;
 	}
 
+	/** @return whether the agents, and so the chat networks of agents, are enabled */
+	public boolean isAgenticChatNetworksEnabled();
+
 	/**
-	 * @return the networks that can be chosen for the pipeline type
+	 * @return the networks that can be chosen for the pipeline type, none when the
+	 *         agents are disabled
 	 */
 	public List<GAgentsNetwork> getChoosableNetworksOfAgents(PipelineType pipelineType);
 
@@ -58,17 +68,22 @@ public interface IGAgenticChatDefaultNetworkOfAgentsService {
 	 */
 	public GAgentsNetwork resolveChatNetwork(PipelineType pipelineType, String chatProfileNetworkOfAgents);
 
-	/** @return the defaults of every pipeline type */
+	/** @return the defaults of every pipeline type, none when the agents are disabled */
 	public List<AgenticChatDefaultNetworkInfo> getAgenticChatDefaultNetworks();
 
 	/**
 	 * Sets the system default of the pipeline type.
 	 *
-	 * @throws IllegalArgumentException when the network does not exist or cannot be
-	 *                                  chosen for the pipeline type
+	 * @throws IllegalArgumentException when the agents are disabled, or the network
+	 *                                  does not exist or cannot be chosen for the
+	 *                                  pipeline type
 	 */
 	public AgenticChatDefaultNetworkInfo setAgenticChatDefaultNetwork(PipelineType pipelineType, String networkCode);
 
-	/** Removes the system default of the pipeline type: the configured one applies again. */
+	/**
+	 * Removes the system default of the pipeline type: the configured one applies again.
+	 *
+	 * @throws IllegalArgumentException when the agents are disabled
+	 */
 	public AgenticChatDefaultNetworkInfo resetAgenticChatDefaultNetwork(PipelineType pipelineType);
 }

@@ -17,7 +17,8 @@ import lombok.Data;
 public class StandardAgentsConfig implements IGConfiguredDefaultChatNetworksOfAgents {
 	private static final Logger LOGGER = LoggerFactory.getLogger(StandardAgentsConfig.class);
 
-	private boolean enabled = false;
+	// Enabled when missing, like the conditions switching the agents configurations on.
+	private boolean enabled = true;
 
 	/**
 	 * Hard cap on the number of chunks kept per source document by the standard

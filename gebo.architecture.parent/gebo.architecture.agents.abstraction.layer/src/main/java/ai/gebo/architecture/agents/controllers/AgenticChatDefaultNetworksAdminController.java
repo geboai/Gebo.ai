@@ -50,6 +50,11 @@ public class AgenticChatDefaultNetworksAdminController {
 		private String defaultChatNetworkOfAgents = null;
 	}
 
+	@GetMapping(value = "isAgenticChatNetworksEnabled", produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean isAgenticChatNetworksEnabled() {
+		return defaultsService.isAgenticChatNetworksEnabled();
+	}
+
 	@GetMapping(value = "getChoosableChatNetworksOfAgents", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GAgentsNetwork> getChoosableChatNetworksOfAgents(@RequestParam("pipelineType") PipelineType pipelineType) {
 		// The whole network: the choice shows its description and suggested purpose.

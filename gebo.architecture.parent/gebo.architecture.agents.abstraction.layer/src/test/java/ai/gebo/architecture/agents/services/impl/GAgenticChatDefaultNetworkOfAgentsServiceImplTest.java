@@ -10,6 +10,7 @@
 package ai.gebo.architecture.agents.services.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,6 +28,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.mock.env.MockEnvironment;
 
 import ai.gebo.architecture.agents.model.GAgenticChatDefaultNetworkOfAgents;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
@@ -46,6 +48,7 @@ class GAgenticChatDefaultNetworkOfAgentsServiceImplTest {
 	private final Map<String, GAgenticChatDefaultNetworkOfAgents> saved = new HashMap<>();
 	private GAgenticChatDefaultNetworkOfAgentsRepository repository;
 	private GAgenticChatDefaultNetworkOfAgentsServiceImpl service;
+	private final MockEnvironment environment = new MockEnvironment();
 
 	private void network(String code, PipelineType... types) {
 		GAgentsNetwork network = new GAgentsNetwork();
@@ -80,7 +83,8 @@ class GAgenticChatDefaultNetworkOfAgentsServiceImplTest {
 			saved.put(chosen.getId(), chosen);
 			return chosen;
 		});
-		service = new GAgenticChatDefaultNetworkOfAgentsServiceImpl(provider(dao), provider(configured), repository);
+		service = new GAgenticChatDefaultNetworkOfAgentsServiceImpl(provider(dao), provider(configured), repository,
+				environment);
 	}
 
 	@Test
@@ -150,5 +154,25 @@ class GAgenticChatDefaultNetworkOfAgentsServiceImplTest {
 		assertEquals(List.of("LOOP_PURE"), service.getChoosableNetworksOfAgents(PipelineType.PURE_CHAT_PIPELINE)
 				.stream().map(GAgentsNetwork::getCode).toList());
 		assertEquals(2, service.getAgenticChatDefaultNetworks().size());
+	}
+
+	@Test
+	void theAgentsAreEnabledWhenTheSwitchIsMissing() {
+		assertEquals(true, service.isAgenticChatNetworksEnabled());
+	}
+
+	@Test
+	void nothingCanBeChosenWhenTheAgentsAreDisabled() {
+		environment.setProperty("ai.gebo.agents.standard.enabled", "false");
+
+		assertFalse(service.isAgenticChatNetworksEnabled());
+		assertEquals(List.of(), service.getChoosableNetworksOfAgents(PipelineType.RAG_PIPELINE));
+		assertEquals(List.of(), service.getAgenticChatDefaultNetworks());
+		assertThrows(IllegalArgumentException.class,
+				() -> service.setAgenticChatDefaultNetwork(PipelineType.RAG_PIPELINE, "CONTROLLER"));
+		assertThrows(IllegalArgumentException.class,
+				() -> service.resetAgenticChatDefaultNetwork(PipelineType.RAG_PIPELINE));
+		verify(repository, never()).save(any());
+		verify(repository, never()).deleteById(any());
 	}
 }

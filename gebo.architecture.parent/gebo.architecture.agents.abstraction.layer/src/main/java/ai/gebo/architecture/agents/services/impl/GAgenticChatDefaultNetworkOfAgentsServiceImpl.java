@@ -16,6 +16,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.GAgenticChatDefaultNetworkOfAgents;
@@ -36,11 +37,28 @@ public class GAgenticChatDefaultNetworkOfAgentsServiceImpl implements IGAgenticC
 	private final ObjectProvider<IAgentsNetworkDao> networksDao;
 	private final ObjectProvider<IGConfiguredDefaultChatNetworksOfAgents> configuredDefaults;
 	private final GAgenticChatDefaultNetworkOfAgentsRepository repository;
+	private final Environment environment;
+
+	@Override
+	public boolean isAgenticChatNetworksEnabled() {
+		// Same reading as the conditions switching the agents configurations on.
+		boolean enabled = environment.getProperty(AGENTS_ENABLED_PROPERTY, Boolean.class, Boolean.TRUE);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("isAgenticChatNetworksEnabled() " + AGENTS_ENABLED_PROPERTY + ":" + enabled);
+		}
+		return enabled;
+	}
 
 	@Override
 	public List<GAgentsNetwork> getChoosableNetworksOfAgents(PipelineType pipelineType) {
 		List<GAgentsNetwork> choosable = new ArrayList<>();
 		IAgentsNetworkDao dao = networksDao.getIfAvailable();
+		if (!isAgenticChatNetworksEnabled()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("getChoosableNetworksOfAgents(" + pipelineType + ") none: the agents are disabled");
+			}
+			return choosable;
+		}
 		if (dao != null && pipelineType != null) {
 			for (GAgentsNetwork network : dao.getConfigurations()) {
 				if (isChoosable(network, pipelineType)) {
@@ -97,6 +115,12 @@ public class GAgenticChatDefaultNetworkOfAgentsServiceImpl implements IGAgenticC
 	@Override
 	public List<AgenticChatDefaultNetworkInfo> getAgenticChatDefaultNetworks() {
 		List<AgenticChatDefaultNetworkInfo> infos = new ArrayList<>();
+		if (!isAgenticChatNetworksEnabled()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("getAgenticChatDefaultNetworks() none: the agents are disabled");
+			}
+			return infos;
+		}
 		for (PipelineType pipelineType : PipelineType.values()) {
 			infos.add(info(pipelineType));
 		}
@@ -111,6 +135,7 @@ public class GAgenticChatDefaultNetworkOfAgentsServiceImpl implements IGAgenticC
 		if (pipelineType == null) {
 			throw new IllegalArgumentException("The pipeline type is required");
 		}
+		requireEnabled();
 		GAgentsNetwork network = findNetwork(networkCode);
 		if (network == null) {
 			throw new IllegalArgumentException("No network of agents with code '" + networkCode + "'");
@@ -134,10 +159,20 @@ public class GAgenticChatDefaultNetworkOfAgentsServiceImpl implements IGAgenticC
 		if (pipelineType == null) {
 			throw new IllegalArgumentException("The pipeline type is required");
 		}
+		requireEnabled();
 		repository.deleteById(pipelineType.name());
 		LOGGER.info("System default chat network of agents for " + pipelineType
 				+ " removed, the configured one applies");
 		return info(pipelineType);
+	}
+
+	private void requireEnabled() {
+		if (!isAgenticChatNetworksEnabled()) {
+			LOGGER.warn("Chat network of agents default change refused: the agents are disabled by "
+					+ AGENTS_ENABLED_PROPERTY);
+			throw new IllegalArgumentException(
+					"The agents are disabled in this installation: no chat network of agents can be chosen");
+		}
 	}
 
 	private AgenticChatDefaultNetworkInfo info(PipelineType pipelineType) {
