@@ -24,12 +24,9 @@ import java.util.List;
  * UserInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class UserInfos {
-  @JsonProperty("username")
-  private String username = null;
-
   @JsonProperty("name")
   private String name = null;
 
@@ -42,23 +39,8 @@ public class UserInfos {
   @JsonProperty("sourname")
   private String sourname = null;
 
-  public UserInfos username(String username) {
-    this.username = username;
-    return this;
-  }
-
-   /**
-   * Get username
-   * @return username
-  **/
-  @Schema(description = "")
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
+  @JsonProperty("username")
+  private String username = null;
 
   public UserInfos name(String name) {
     this.name = name;
@@ -140,6 +122,24 @@ public class UserInfos {
     this.sourname = sourname;
   }
 
+  public UserInfos username(String username) {
+    this.username = username;
+    return this;
+  }
+
+   /**
+   * Get username
+   * @return username
+  **/
+  @Schema(description = "")
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -150,16 +150,16 @@ public class UserInfos {
       return false;
     }
     UserInfos userInfos = (UserInfos) o;
-    return Objects.equals(this.username, userInfos.username) &&
-        Objects.equals(this.name, userInfos.name) &&
+    return Objects.equals(this.name, userInfos.name) &&
         Objects.equals(this.roles, userInfos.roles) &&
         Objects.equals(this.disabled, userInfos.disabled) &&
-        Objects.equals(this.sourname, userInfos.sourname);
+        Objects.equals(this.sourname, userInfos.sourname) &&
+        Objects.equals(this.username, userInfos.username);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, name, roles, disabled, sourname);
+    return Objects.hash(name, roles, disabled, sourname, username);
   }
 
 
@@ -168,11 +168,11 @@ public class UserInfos {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserInfos {\n");
     
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("    disabled: ").append(toIndentedString(disabled)).append("\n");
     sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
+    sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("}");
     return sb.toString();
   }

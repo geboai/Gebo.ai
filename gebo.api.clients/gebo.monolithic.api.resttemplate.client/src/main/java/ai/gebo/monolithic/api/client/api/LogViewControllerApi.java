@@ -28,7 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class LogViewControllerApi {
     private ApiClient apiClient;
@@ -283,8 +283,8 @@ public class LogViewControllerApi {
      * @return PagedModelGJobStatusItem
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PagedModelGJobStatusItem getJobsEntriesForProjectEndpoint(JobsEntriesForProjectEndpointFilter body) throws RestClientException {
-        return getJobsEntriesForProjectEndpointWithHttpInfo(body).getBody();
+    public PagedModelGJobStatusItem getJobsEntriesForProjectEndpointLogView(JobsEntriesForProjectEndpointFilter body) throws RestClientException {
+        return getJobsEntriesForProjectEndpointLogViewWithHttpInfo(body).getBody();
     }
 
     /**
@@ -295,11 +295,11 @@ public class LogViewControllerApi {
      * @return ResponseEntity&lt;PagedModelGJobStatusItem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PagedModelGJobStatusItem> getJobsEntriesForProjectEndpointWithHttpInfo(JobsEntriesForProjectEndpointFilter body) throws RestClientException {
+    public ResponseEntity<PagedModelGJobStatusItem> getJobsEntriesForProjectEndpointLogViewWithHttpInfo(JobsEntriesForProjectEndpointFilter body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getJobsEntriesForProjectEndpoint");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getJobsEntriesForProjectEndpointLogView");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/LogViewController/getJobsEntriesForProjectEndpoint").build().toUriString();
         

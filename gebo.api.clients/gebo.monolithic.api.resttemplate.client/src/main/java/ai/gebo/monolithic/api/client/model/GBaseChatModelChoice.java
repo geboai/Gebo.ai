@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.GModelPricingConditions;
 import ai.gebo.monolithic.api.client.model.ModelMetaInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -24,7 +25,7 @@ import java.util.Date;
  * GBaseChatModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class GBaseChatModelChoice {
   @JsonProperty("code")
@@ -65,6 +66,9 @@ public class GBaseChatModelChoice {
 
   @JsonProperty("nativeModelMetaInfos")
   private Object nativeModelMetaInfos = null;
+
+  @JsonProperty("pricingConditions")
+  private GModelPricingConditions pricingConditions = null;
 
   @JsonProperty("supportsStructuredOutput")
   private Boolean supportsStructuredOutput = null;
@@ -306,6 +310,24 @@ public class GBaseChatModelChoice {
     this.nativeModelMetaInfos = nativeModelMetaInfos;
   }
 
+  public GBaseChatModelChoice pricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+    return this;
+  }
+
+   /**
+   * Get pricingConditions
+   * @return pricingConditions
+  **/
+  @Schema(description = "")
+  public GModelPricingConditions getPricingConditions() {
+    return pricingConditions;
+  }
+
+  public void setPricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+  }
+
   public GBaseChatModelChoice supportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
     return this;
@@ -365,13 +387,14 @@ public class GBaseChatModelChoice {
         Objects.equals(this.informativeUrl, gbaseChatModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, gbaseChatModelChoice.contextLength) &&
         Objects.equals(this.nativeModelMetaInfos, gbaseChatModelChoice.nativeModelMetaInfos) &&
+        Objects.equals(this.pricingConditions, gbaseChatModelChoice.pricingConditions) &&
         Objects.equals(this.supportsStructuredOutput, gbaseChatModelChoice.supportsStructuredOutput) &&
         Objects.equals(this.supportsFunctionCalls, gbaseChatModelChoice.supportsFunctionCalls);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, supportsStructuredOutput, supportsFunctionCalls);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, pricingConditions, supportsStructuredOutput, supportsFunctionCalls);
   }
 
 
@@ -393,6 +416,7 @@ public class GBaseChatModelChoice {
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
+    sb.append("    pricingConditions: ").append(toIndentedString(pricingConditions)).append("\n");
     sb.append("    supportsStructuredOutput: ").append(toIndentedString(supportsStructuredOutput)).append("\n");
     sb.append("    supportsFunctionCalls: ").append(toIndentedString(supportsFunctionCalls)).append("\n");
     sb.append("}");

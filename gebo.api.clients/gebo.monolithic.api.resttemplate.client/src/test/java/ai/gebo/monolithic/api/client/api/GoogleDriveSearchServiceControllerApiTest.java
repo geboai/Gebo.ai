@@ -44,9 +44,9 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restAggregate2Test() {
+    public void restAggregateGoogleDriveTest() {
         AggregateRequestBodyGoogleDriveResultsExtractionData body = null;
-        GoogleDriveResultsExtractionData response = api.restAggregate2(body);
+        GoogleDriveResultsExtractionData response = api.restAggregateGoogleDrive(body);
 
         // TODO: test validations
     }
@@ -59,10 +59,10 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restExtractRelatedAnalisysReferences2Test() {
+    public void restExtractRelatedAnalisysReferencesGoogleDriveTest() {
         GoogleDriveResultsExtractionData body = null;
         String systemId = null;
-        SearchResultAnalisysOutcome response = api.restExtractRelatedAnalisysReferences2(body, systemId);
+        SearchResultAnalisysOutcome response = api.restExtractRelatedAnalisysReferencesGoogleDrive(body, systemId);
 
         // TODO: test validations
     }
@@ -75,9 +75,9 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restFindSystemById2Test() {
+    public void restFindSystemByIdGoogleDriveTest() {
         String systemId = null;
-        SearchableSystemMetaData response = api.restFindSystemById2(systemId);
+        SearchableSystemMetaData response = api.restFindSystemByIdGoogleDrive(systemId);
 
         // TODO: test validations
     }
@@ -90,9 +90,9 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restFindSystemBySearchResult2Test() {
+    public void restFindSystemBySearchResultGoogleDriveTest() {
         SearchResult body = null;
-        SearchableSystemMetaData response = api.restFindSystemBySearchResult2(body);
+        SearchableSystemMetaData response = api.restFindSystemBySearchResultGoogleDrive(body);
 
         // TODO: test validations
     }
@@ -105,9 +105,9 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetCachedCatalogues2Test() {
+    public void restGetCachedCataloguesGoogleDriveTest() {
         String systemConfigurationCode = null;
-        List<CatalogueSample> response = api.restGetCachedCatalogues2(systemConfigurationCode);
+        List<CatalogueSample> response = api.restGetCachedCataloguesGoogleDrive(systemConfigurationCode);
 
         // TODO: test validations
     }
@@ -120,9 +120,9 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetCataloguesListSample2Test() {
+    public void restGetCataloguesListSampleGoogleDriveTest() {
         String configurationCode = null;
-        List<CatalogueSample> response = api.restGetCataloguesListSample2(configurationCode);
+        List<CatalogueSample> response = api.restGetCataloguesListSampleGoogleDrive(configurationCode);
 
         // TODO: test validations
     }
@@ -135,8 +135,8 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetDescription2Test() {
-        String response = api.restGetDescription2();
+    public void restGetDescriptionGoogleDriveTest() {
+        String response = api.restGetDescriptionGoogleDrive();
 
         // TODO: test validations
     }
@@ -149,8 +149,8 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetId2Test() {
-        String response = api.restGetId2();
+    public void restGetIdGoogleDriveTest() {
+        String response = api.restGetIdGoogleDrive();
 
         // TODO: test validations
     }
@@ -163,8 +163,8 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetMessagingModuleId2Test() {
-        String response = api.restGetMessagingModuleId2();
+    public void restGetMessagingModuleIdGoogleDriveTest() {
+        String response = api.restGetMessagingModuleIdGoogleDrive();
 
         // TODO: test validations
     }
@@ -177,8 +177,8 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetProductId2Test() {
-        String response = api.restGetProductId2();
+    public void restGetProductIdGoogleDriveTest() {
+        String response = api.restGetProductIdGoogleDrive();
 
         // TODO: test validations
     }
@@ -191,8 +191,8 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetQueriesGenerationPromptUseCode2Test() {
-        String response = api.restGetQueriesGenerationPromptUseCode2();
+    public void restGetQueriesGenerationPromptUseCodeGoogleDriveTest() {
+        String response = api.restGetQueriesGenerationPromptUseCodeGoogleDrive();
 
         // TODO: test validations
     }
@@ -205,8 +205,8 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetSearchableSystems2Test() {
-        List<SearchableSystemMetaData> response = api.restGetSearchableSystems2();
+    public void restGetSearchableSystemsGoogleDriveTest() {
+        List<SearchableSystemMetaData> response = api.restGetSearchableSystemsGoogleDrive();
 
         // TODO: test validations
     }
@@ -219,8 +219,8 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restIsEnabled2Test() {
-        Boolean response = api.restIsEnabled2();
+    public void restIsEnabledGoogleDriveTest() {
+        Boolean response = api.restIsEnabledGoogleDrive();
 
         // TODO: test validations
     }
@@ -233,11 +233,11 @@ public class GoogleDriveSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restSearch2Test() {
+    public void restSearchGoogleDriveTest() {
         SearchQuery body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restSearch2(body, systemId, nEntryLimit);
+        List<SearchResult> response = api.restSearchGoogleDrive(body, systemId, nEntryLimit);
 
         // TODO: test validations
     }

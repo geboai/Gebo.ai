@@ -23,7 +23,7 @@ import java.util.Date;
  * GRankerModelType
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class GRankerModelType {
   @JsonProperty("code")
@@ -46,6 +46,12 @@ public class GRankerModelType {
 
   @JsonProperty("modelConfigurationClass")
   private String modelConfigurationClass = null;
+
+  @JsonProperty("providerId")
+  private String providerId = null;
+
+  @JsonProperty("defaultCurrencyCode")
+  private String defaultCurrencyCode = null;
 
   public GRankerModelType code(String code) {
     this.code = code;
@@ -173,6 +179,42 @@ public class GRankerModelType {
     this.modelConfigurationClass = modelConfigurationClass;
   }
 
+  public GRankerModelType providerId(String providerId) {
+    this.providerId = providerId;
+    return this;
+  }
+
+   /**
+   * Get providerId
+   * @return providerId
+  **/
+  @Schema(description = "")
+  public String getProviderId() {
+    return providerId;
+  }
+
+  public void setProviderId(String providerId) {
+    this.providerId = providerId;
+  }
+
+  public GRankerModelType defaultCurrencyCode(String defaultCurrencyCode) {
+    this.defaultCurrencyCode = defaultCurrencyCode;
+    return this;
+  }
+
+   /**
+   * Get defaultCurrencyCode
+   * @return defaultCurrencyCode
+  **/
+  @Schema(description = "")
+  public String getDefaultCurrencyCode() {
+    return defaultCurrencyCode;
+  }
+
+  public void setDefaultCurrencyCode(String defaultCurrencyCode) {
+    this.defaultCurrencyCode = defaultCurrencyCode;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -189,12 +231,14 @@ public class GRankerModelType {
         Objects.equals(this.userCreated, grankerModelType.userCreated) &&
         Objects.equals(this.dateModified, grankerModelType.dateModified) &&
         Objects.equals(this.dateCreated, grankerModelType.dateCreated) &&
-        Objects.equals(this.modelConfigurationClass, grankerModelType.modelConfigurationClass);
+        Objects.equals(this.modelConfigurationClass, grankerModelType.modelConfigurationClass) &&
+        Objects.equals(this.providerId, grankerModelType.providerId) &&
+        Objects.equals(this.defaultCurrencyCode, grankerModelType.defaultCurrencyCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass, providerId, defaultCurrencyCode);
   }
 
 
@@ -210,6 +254,8 @@ public class GRankerModelType {
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    modelConfigurationClass: ").append(toIndentedString(modelConfigurationClass)).append("\n");
+    sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
+    sb.append("    defaultCurrencyCode: ").append(toIndentedString(defaultCurrencyCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

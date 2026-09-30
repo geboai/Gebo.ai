@@ -4,24 +4,24 @@ All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**restAggregate2**](GoogleDriveSearchServiceControllerApi.md#restAggregate2) | **POST** /api/users/GoogleDriveSearchServiceController/aggregate | 
-[**restExtractRelatedAnalisysReferences2**](GoogleDriveSearchServiceControllerApi.md#restExtractRelatedAnalisysReferences2) | **POST** /api/users/GoogleDriveSearchServiceController/extractRelatedAnalisysReferences | 
-[**restFindSystemById2**](GoogleDriveSearchServiceControllerApi.md#restFindSystemById2) | **GET** /api/users/GoogleDriveSearchServiceController/findSystemById | 
-[**restFindSystemBySearchResult2**](GoogleDriveSearchServiceControllerApi.md#restFindSystemBySearchResult2) | **POST** /api/users/GoogleDriveSearchServiceController/findSystemBySearchResult | 
-[**restGetCachedCatalogues2**](GoogleDriveSearchServiceControllerApi.md#restGetCachedCatalogues2) | **GET** /api/users/GoogleDriveSearchServiceController/getCachedCatalogues | 
-[**restGetCataloguesListSample2**](GoogleDriveSearchServiceControllerApi.md#restGetCataloguesListSample2) | **GET** /api/users/GoogleDriveSearchServiceController/getCataloguesListSample | 
-[**restGetDescription2**](GoogleDriveSearchServiceControllerApi.md#restGetDescription2) | **GET** /api/users/GoogleDriveSearchServiceController/getDescription | 
-[**restGetId2**](GoogleDriveSearchServiceControllerApi.md#restGetId2) | **GET** /api/users/GoogleDriveSearchServiceController/getId | 
-[**restGetMessagingModuleId2**](GoogleDriveSearchServiceControllerApi.md#restGetMessagingModuleId2) | **GET** /api/users/GoogleDriveSearchServiceController/getMessagingModuleId | 
-[**restGetProductId2**](GoogleDriveSearchServiceControllerApi.md#restGetProductId2) | **GET** /api/users/GoogleDriveSearchServiceController/getProductId | 
-[**restGetQueriesGenerationPromptUseCode2**](GoogleDriveSearchServiceControllerApi.md#restGetQueriesGenerationPromptUseCode2) | **GET** /api/users/GoogleDriveSearchServiceController/getQueriesGenerationPromptUseCode | 
-[**restGetSearchableSystems2**](GoogleDriveSearchServiceControllerApi.md#restGetSearchableSystems2) | **GET** /api/users/GoogleDriveSearchServiceController/getSearchableSystems | 
-[**restIsEnabled2**](GoogleDriveSearchServiceControllerApi.md#restIsEnabled2) | **GET** /api/users/GoogleDriveSearchServiceController/isEnabled | 
-[**restSearch2**](GoogleDriveSearchServiceControllerApi.md#restSearch2) | **POST** /api/users/GoogleDriveSearchServiceController/search | 
+[**restAggregateGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restAggregateGoogleDrive) | **POST** /api/users/GoogleDriveSearchServiceController/aggregate | 
+[**restExtractRelatedAnalisysReferencesGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restExtractRelatedAnalisysReferencesGoogleDrive) | **POST** /api/users/GoogleDriveSearchServiceController/extractRelatedAnalisysReferences | 
+[**restFindSystemByIdGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restFindSystemByIdGoogleDrive) | **GET** /api/users/GoogleDriveSearchServiceController/findSystemById | 
+[**restFindSystemBySearchResultGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restFindSystemBySearchResultGoogleDrive) | **POST** /api/users/GoogleDriveSearchServiceController/findSystemBySearchResult | 
+[**restGetCachedCataloguesGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restGetCachedCataloguesGoogleDrive) | **GET** /api/users/GoogleDriveSearchServiceController/getCachedCatalogues | 
+[**restGetCataloguesListSampleGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restGetCataloguesListSampleGoogleDrive) | **GET** /api/users/GoogleDriveSearchServiceController/getCataloguesListSample | 
+[**restGetDescriptionGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restGetDescriptionGoogleDrive) | **GET** /api/users/GoogleDriveSearchServiceController/getDescription | 
+[**restGetIdGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restGetIdGoogleDrive) | **GET** /api/users/GoogleDriveSearchServiceController/getId | 
+[**restGetMessagingModuleIdGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restGetMessagingModuleIdGoogleDrive) | **GET** /api/users/GoogleDriveSearchServiceController/getMessagingModuleId | 
+[**restGetProductIdGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restGetProductIdGoogleDrive) | **GET** /api/users/GoogleDriveSearchServiceController/getProductId | 
+[**restGetQueriesGenerationPromptUseCodeGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restGetQueriesGenerationPromptUseCodeGoogleDrive) | **GET** /api/users/GoogleDriveSearchServiceController/getQueriesGenerationPromptUseCode | 
+[**restGetSearchableSystemsGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restGetSearchableSystemsGoogleDrive) | **GET** /api/users/GoogleDriveSearchServiceController/getSearchableSystems | 
+[**restIsEnabledGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restIsEnabledGoogleDrive) | **GET** /api/users/GoogleDriveSearchServiceController/isEnabled | 
+[**restSearchGoogleDrive**](GoogleDriveSearchServiceControllerApi.md#restSearchGoogleDrive) | **POST** /api/users/GoogleDriveSearchServiceController/search | 
 
-<a name="restAggregate2"></a>
-# **restAggregate2**
-> GoogleDriveResultsExtractionData restAggregate2(body)
+<a name="restAggregateGoogleDrive"></a>
+# **restAggregateGoogleDrive**
+> GoogleDriveResultsExtractionData restAggregateGoogleDrive(body)
 
 
 
@@ -35,10 +35,10 @@ Method | HTTP request | Description
 GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchServiceControllerApi();
 AggregateRequestBodyGoogleDriveResultsExtractionData body = new AggregateRequestBodyGoogleDriveResultsExtractionData(); // AggregateRequestBodyGoogleDriveResultsExtractionData | 
 try {
-    GoogleDriveResultsExtractionData result = apiInstance.restAggregate2(body);
+    GoogleDriveResultsExtractionData result = apiInstance.restAggregateGoogleDrive(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restAggregate2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restAggregateGoogleDrive");
     e.printStackTrace();
 }
 ```
@@ -62,9 +62,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restExtractRelatedAnalisysReferences2"></a>
-# **restExtractRelatedAnalisysReferences2**
-> SearchResultAnalisysOutcome restExtractRelatedAnalisysReferences2(body, systemId)
+<a name="restExtractRelatedAnalisysReferencesGoogleDrive"></a>
+# **restExtractRelatedAnalisysReferencesGoogleDrive**
+> SearchResultAnalisysOutcome restExtractRelatedAnalisysReferencesGoogleDrive(body, systemId)
 
 
 
@@ -79,10 +79,10 @@ GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchService
 GoogleDriveResultsExtractionData body = new GoogleDriveResultsExtractionData(); // GoogleDriveResultsExtractionData | 
 String systemId = "systemId_example"; // String | 
 try {
-    SearchResultAnalisysOutcome result = apiInstance.restExtractRelatedAnalisysReferences2(body, systemId);
+    SearchResultAnalisysOutcome result = apiInstance.restExtractRelatedAnalisysReferencesGoogleDrive(body, systemId);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restExtractRelatedAnalisysReferences2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restExtractRelatedAnalisysReferencesGoogleDrive");
     e.printStackTrace();
 }
 ```
@@ -107,9 +107,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restFindSystemById2"></a>
-# **restFindSystemById2**
-> SearchableSystemMetaData restFindSystemById2(systemId)
+<a name="restFindSystemByIdGoogleDrive"></a>
+# **restFindSystemByIdGoogleDrive**
+> SearchableSystemMetaData restFindSystemByIdGoogleDrive(systemId)
 
 
 
@@ -123,10 +123,10 @@ No authorization required
 GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchServiceControllerApi();
 String systemId = "systemId_example"; // String | 
 try {
-    SearchableSystemMetaData result = apiInstance.restFindSystemById2(systemId);
+    SearchableSystemMetaData result = apiInstance.restFindSystemByIdGoogleDrive(systemId);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restFindSystemById2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restFindSystemByIdGoogleDrive");
     e.printStackTrace();
 }
 ```
@@ -150,9 +150,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restFindSystemBySearchResult2"></a>
-# **restFindSystemBySearchResult2**
-> SearchableSystemMetaData restFindSystemBySearchResult2(body)
+<a name="restFindSystemBySearchResultGoogleDrive"></a>
+# **restFindSystemBySearchResultGoogleDrive**
+> SearchableSystemMetaData restFindSystemBySearchResultGoogleDrive(body)
 
 
 
@@ -166,10 +166,10 @@ No authorization required
 GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchServiceControllerApi();
 SearchResult body = new SearchResult(); // SearchResult | 
 try {
-    SearchableSystemMetaData result = apiInstance.restFindSystemBySearchResult2(body);
+    SearchableSystemMetaData result = apiInstance.restFindSystemBySearchResultGoogleDrive(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restFindSystemBySearchResult2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restFindSystemBySearchResultGoogleDrive");
     e.printStackTrace();
 }
 ```
@@ -193,9 +193,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restGetCachedCatalogues2"></a>
-# **restGetCachedCatalogues2**
-> List&lt;CatalogueSample&gt; restGetCachedCatalogues2(systemConfigurationCode)
+<a name="restGetCachedCataloguesGoogleDrive"></a>
+# **restGetCachedCataloguesGoogleDrive**
+> List&lt;CatalogueSample&gt; restGetCachedCataloguesGoogleDrive(systemConfigurationCode)
 
 
 
@@ -209,10 +209,10 @@ No authorization required
 GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchServiceControllerApi();
 String systemConfigurationCode = "systemConfigurationCode_example"; // String | 
 try {
-    List<CatalogueSample> result = apiInstance.restGetCachedCatalogues2(systemConfigurationCode);
+    List<CatalogueSample> result = apiInstance.restGetCachedCataloguesGoogleDrive(systemConfigurationCode);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetCachedCatalogues2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetCachedCataloguesGoogleDrive");
     e.printStackTrace();
 }
 ```
@@ -236,9 +236,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restGetCataloguesListSample2"></a>
-# **restGetCataloguesListSample2**
-> List&lt;CatalogueSample&gt; restGetCataloguesListSample2(configurationCode)
+<a name="restGetCataloguesListSampleGoogleDrive"></a>
+# **restGetCataloguesListSampleGoogleDrive**
+> List&lt;CatalogueSample&gt; restGetCataloguesListSampleGoogleDrive(configurationCode)
 
 
 
@@ -252,10 +252,10 @@ No authorization required
 GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchServiceControllerApi();
 String configurationCode = "configurationCode_example"; // String | 
 try {
-    List<CatalogueSample> result = apiInstance.restGetCataloguesListSample2(configurationCode);
+    List<CatalogueSample> result = apiInstance.restGetCataloguesListSampleGoogleDrive(configurationCode);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetCataloguesListSample2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetCataloguesListSampleGoogleDrive");
     e.printStackTrace();
 }
 ```
@@ -279,9 +279,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restGetDescription2"></a>
-# **restGetDescription2**
-> String restGetDescription2()
+<a name="restGetDescriptionGoogleDrive"></a>
+# **restGetDescriptionGoogleDrive**
+> String restGetDescriptionGoogleDrive()
 
 
 
@@ -294,10 +294,10 @@ No authorization required
 
 GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetDescription2();
+    String result = apiInstance.restGetDescriptionGoogleDrive();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetDescription2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetDescriptionGoogleDrive");
     e.printStackTrace();
 }
 ```
@@ -318,9 +318,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetId2"></a>
-# **restGetId2**
-> String restGetId2()
+<a name="restGetIdGoogleDrive"></a>
+# **restGetIdGoogleDrive**
+> String restGetIdGoogleDrive()
 
 
 
@@ -333,10 +333,10 @@ No authorization required
 
 GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetId2();
+    String result = apiInstance.restGetIdGoogleDrive();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetId2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetIdGoogleDrive");
     e.printStackTrace();
 }
 ```
@@ -357,9 +357,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetMessagingModuleId2"></a>
-# **restGetMessagingModuleId2**
-> String restGetMessagingModuleId2()
+<a name="restGetMessagingModuleIdGoogleDrive"></a>
+# **restGetMessagingModuleIdGoogleDrive**
+> String restGetMessagingModuleIdGoogleDrive()
 
 
 
@@ -372,10 +372,10 @@ No authorization required
 
 GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetMessagingModuleId2();
+    String result = apiInstance.restGetMessagingModuleIdGoogleDrive();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetMessagingModuleId2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetMessagingModuleIdGoogleDrive");
     e.printStackTrace();
 }
 ```
@@ -396,9 +396,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetProductId2"></a>
-# **restGetProductId2**
-> String restGetProductId2()
+<a name="restGetProductIdGoogleDrive"></a>
+# **restGetProductIdGoogleDrive**
+> String restGetProductIdGoogleDrive()
 
 
 
@@ -411,10 +411,10 @@ No authorization required
 
 GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetProductId2();
+    String result = apiInstance.restGetProductIdGoogleDrive();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetProductId2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetProductIdGoogleDrive");
     e.printStackTrace();
 }
 ```
@@ -435,9 +435,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetQueriesGenerationPromptUseCode2"></a>
-# **restGetQueriesGenerationPromptUseCode2**
-> String restGetQueriesGenerationPromptUseCode2()
+<a name="restGetQueriesGenerationPromptUseCodeGoogleDrive"></a>
+# **restGetQueriesGenerationPromptUseCodeGoogleDrive**
+> String restGetQueriesGenerationPromptUseCodeGoogleDrive()
 
 
 
@@ -450,10 +450,10 @@ No authorization required
 
 GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetQueriesGenerationPromptUseCode2();
+    String result = apiInstance.restGetQueriesGenerationPromptUseCodeGoogleDrive();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetQueriesGenerationPromptUseCode2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetQueriesGenerationPromptUseCodeGoogleDrive");
     e.printStackTrace();
 }
 ```
@@ -474,9 +474,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetSearchableSystems2"></a>
-# **restGetSearchableSystems2**
-> List&lt;SearchableSystemMetaData&gt; restGetSearchableSystems2()
+<a name="restGetSearchableSystemsGoogleDrive"></a>
+# **restGetSearchableSystemsGoogleDrive**
+> List&lt;SearchableSystemMetaData&gt; restGetSearchableSystemsGoogleDrive()
 
 
 
@@ -489,10 +489,10 @@ No authorization required
 
 GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchServiceControllerApi();
 try {
-    List<SearchableSystemMetaData> result = apiInstance.restGetSearchableSystems2();
+    List<SearchableSystemMetaData> result = apiInstance.restGetSearchableSystemsGoogleDrive();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetSearchableSystems2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restGetSearchableSystemsGoogleDrive");
     e.printStackTrace();
 }
 ```
@@ -513,9 +513,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restIsEnabled2"></a>
-# **restIsEnabled2**
-> Boolean restIsEnabled2()
+<a name="restIsEnabledGoogleDrive"></a>
+# **restIsEnabledGoogleDrive**
+> Boolean restIsEnabledGoogleDrive()
 
 
 
@@ -528,10 +528,10 @@ No authorization required
 
 GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchServiceControllerApi();
 try {
-    Boolean result = apiInstance.restIsEnabled2();
+    Boolean result = apiInstance.restIsEnabledGoogleDrive();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restIsEnabled2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restIsEnabledGoogleDrive");
     e.printStackTrace();
 }
 ```
@@ -552,9 +552,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restSearch2"></a>
-# **restSearch2**
-> List&lt;SearchResult&gt; restSearch2(body, systemId, nEntryLimit)
+<a name="restSearchGoogleDrive"></a>
+# **restSearchGoogleDrive**
+> List&lt;SearchResult&gt; restSearchGoogleDrive(body, systemId, nEntryLimit)
 
 
 
@@ -570,10 +570,10 @@ SearchQuery body = new SearchQuery(); // SearchQuery |
 String systemId = "systemId_example"; // String | 
 Integer nEntryLimit = 56; // Integer | 
 try {
-    List<SearchResult> result = apiInstance.restSearch2(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restSearchGoogleDrive(body, systemId, nEntryLimit);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restSearch2");
+    System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restSearchGoogleDrive");
     e.printStackTrace();
 }
 ```

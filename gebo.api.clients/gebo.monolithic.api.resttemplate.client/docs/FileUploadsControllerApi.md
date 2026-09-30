@@ -8,8 +8,8 @@ Method | HTTP request | Description
 [**deleteUploadsEndpoint**](FileUploadsControllerApi.md#deleteUploadsEndpoint) | **POST** /api/admin/FileUploadsController/deleteUploadsEndpoint | 
 [**findUploadsEndpointsByProject**](FileUploadsControllerApi.md#findUploadsEndpointsByProject) | **GET** /api/admin/FileUploadsController/findUploadsEndpointsByProject | 
 [**findUploadsEndpointsByQbe**](FileUploadsControllerApi.md#findUploadsEndpointsByQbe) | **POST** /api/admin/FileUploadsController/findUploadsEndpointsByQbe | 
-[**getFileSystemSystemTypes**](FileUploadsControllerApi.md#getFileSystemSystemTypes) | **GET** /api/admin/FileUploadsController/getFileSystemSystemTypes | 
 [**getUploadableFilesExtensions**](FileUploadsControllerApi.md#getUploadableFilesExtensions) | **GET** /api/admin/FileUploadsController/getUploadableFilesExtensions | 
+[**getUploadsSystemTypes**](FileUploadsControllerApi.md#getUploadsSystemTypes) | **GET** /api/admin/FileUploadsController/getFileSystemSystemTypes | 
 [**getUploadsSystems**](FileUploadsControllerApi.md#getUploadsSystems) | **GET** /api/admin/FileUploadsController/getUploadsSystems | 
 [**insertUploadsEndpoint**](FileUploadsControllerApi.md#insertUploadsEndpoint) | **POST** /api/admin/FileUploadsController/insertUploadsEndpoint | 
 [**listUploadedFiles**](FileUploadsControllerApi.md#listUploadedFiles) | **GET** /api/admin/FileUploadsController/listUploadedFiles | 
@@ -189,45 +189,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="getFileSystemSystemTypes"></a>
-# **getFileSystemSystemTypes**
-> List&lt;GContentManagementSystemType&gt; getFileSystemSystemTypes()
-
-
-
-### Example
-```java
-// Import classes:
-//import ai.gebo.monolithic.api.client.invoker.ApiException;
-//import ai.gebo.monolithic.api.client.api.FileUploadsControllerApi;
-
-
-FileUploadsControllerApi apiInstance = new FileUploadsControllerApi();
-try {
-    List<GContentManagementSystemType> result = apiInstance.getFileSystemSystemTypes();
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling FileUploadsControllerApi#getFileSystemSystemTypes");
-    e.printStackTrace();
-}
-```
-
-### Parameters
-This endpoint does not need any parameter.
-
-### Return type
-
-[**List&lt;GContentManagementSystemType&gt;**](GContentManagementSystemType.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
 <a name="getUploadableFilesExtensions"></a>
 # **getUploadableFilesExtensions**
 > List&lt;String&gt; getUploadableFilesExtensions()
@@ -257,6 +218,45 @@ This endpoint does not need any parameter.
 ### Return type
 
 **List&lt;String&gt;**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getUploadsSystemTypes"></a>
+# **getUploadsSystemTypes**
+> List&lt;GContentManagementSystemType&gt; getUploadsSystemTypes()
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.FileUploadsControllerApi;
+
+
+FileUploadsControllerApi apiInstance = new FileUploadsControllerApi();
+try {
+    List<GContentManagementSystemType> result = apiInstance.getUploadsSystemTypes();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FileUploadsControllerApi#getUploadsSystemTypes");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;GContentManagementSystemType&gt;**](GContentManagementSystemType.md)
 
 ### Authorization
 

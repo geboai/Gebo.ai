@@ -46,9 +46,9 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restAggregate3Test() {
+    public void restAggregateConfluenceTest() {
         AggregateRequestBodyConfluenceResultsExtractionData body = null;
-        ConfluenceResultsExtractionData response = api.restAggregate3(body);
+        ConfluenceResultsExtractionData response = api.restAggregateConfluence(body);
 
         // TODO: test validations
     }
@@ -61,9 +61,9 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restCreateCustomTemplateParamsMap2Test() {
+    public void restCreateCustomTemplateParamsMapConfluenceTest() {
         CustomTemplateParamsRequestBody body = null;
-        Map<String, Object> response = api.restCreateCustomTemplateParamsMap2(body);
+        Map<String, Object> response = api.restCreateCustomTemplateParamsMapConfluence(body);
 
         // TODO: test validations
     }
@@ -76,10 +76,10 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restExtractRelatedAnalisysReferences3Test() {
+    public void restExtractRelatedAnalisysReferencesConfluenceTest() {
         ConfluenceResultsExtractionData body = null;
         String systemId = null;
-        SearchResultAnalisysOutcome response = api.restExtractRelatedAnalisysReferences3(body, systemId);
+        SearchResultAnalisysOutcome response = api.restExtractRelatedAnalisysReferencesConfluence(body, systemId);
 
         // TODO: test validations
     }
@@ -92,9 +92,9 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restFindSystemById3Test() {
+    public void restFindSystemByIdConfluenceTest() {
         String systemId = null;
-        SearchableSystemMetaData response = api.restFindSystemById3(systemId);
+        SearchableSystemMetaData response = api.restFindSystemByIdConfluence(systemId);
 
         // TODO: test validations
     }
@@ -107,9 +107,9 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restFindSystemBySearchResult3Test() {
+    public void restFindSystemBySearchResultConfluenceTest() {
         SearchResult body = null;
-        SearchableSystemMetaData response = api.restFindSystemBySearchResult3(body);
+        SearchableSystemMetaData response = api.restFindSystemBySearchResultConfluence(body);
 
         // TODO: test validations
     }
@@ -122,9 +122,9 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetCachedCatalogues3Test() {
+    public void restGetCachedCataloguesConfluenceTest() {
         String systemConfigurationCode = null;
-        List<CatalogueSample> response = api.restGetCachedCatalogues3(systemConfigurationCode);
+        List<CatalogueSample> response = api.restGetCachedCataloguesConfluence(systemConfigurationCode);
 
         // TODO: test validations
     }
@@ -137,9 +137,9 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetCataloguesListSample3Test() {
+    public void restGetCataloguesListSampleConfluenceTest() {
         String configurationCode = null;
-        List<CatalogueSample> response = api.restGetCataloguesListSample3(configurationCode);
+        List<CatalogueSample> response = api.restGetCataloguesListSampleConfluence(configurationCode);
 
         // TODO: test validations
     }
@@ -152,8 +152,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetDescription3Test() {
-        String response = api.restGetDescription3();
+    public void restGetDescriptionConfluenceTest() {
+        String response = api.restGetDescriptionConfluence();
 
         // TODO: test validations
     }
@@ -166,8 +166,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetId3Test() {
-        String response = api.restGetId3();
+    public void restGetIdConfluenceTest() {
+        String response = api.restGetIdConfluence();
 
         // TODO: test validations
     }
@@ -180,8 +180,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetMessagingModuleId3Test() {
-        String response = api.restGetMessagingModuleId3();
+    public void restGetMessagingModuleIdConfluenceTest() {
+        String response = api.restGetMessagingModuleIdConfluence();
 
         // TODO: test validations
     }
@@ -194,8 +194,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetNativePromptTemplateUseCode2Test() {
-        String response = api.restGetNativePromptTemplateUseCode2();
+    public void restGetNativePromptTemplateUseCodeConfluenceTest() {
+        String response = api.restGetNativePromptTemplateUseCodeConfluence();
 
         // TODO: test validations
     }
@@ -208,8 +208,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetProductId3Test() {
-        String response = api.restGetProductId3();
+    public void restGetProductIdConfluenceTest() {
+        String response = api.restGetProductIdConfluence();
 
         // TODO: test validations
     }
@@ -222,8 +222,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetQueriesGenerationPromptUseCode3Test() {
-        String response = api.restGetQueriesGenerationPromptUseCode3();
+    public void restGetQueriesGenerationPromptUseCodeConfluenceTest() {
+        String response = api.restGetQueriesGenerationPromptUseCodeConfluence();
 
         // TODO: test validations
     }
@@ -236,8 +236,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetSearchableSystems3Test() {
-        List<SearchableSystemMetaData> response = api.restGetSearchableSystems3();
+    public void restGetSearchableSystemsConfluenceTest() {
+        List<SearchableSystemMetaData> response = api.restGetSearchableSystemsConfluence();
 
         // TODO: test validations
     }
@@ -250,8 +250,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restIsEnabled3Test() {
-        Boolean response = api.restIsEnabled3();
+    public void restIsEnabledConfluenceTest() {
+        Boolean response = api.restIsEnabledConfluence();
 
         // TODO: test validations
     }
@@ -264,11 +264,11 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restNativeSearch2Test() {
+    public void restNativeSearchConfluenceTest() {
         ConfluenceContentSearchFilter body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restNativeSearch2(body, systemId, nEntryLimit);
+        List<SearchResult> response = api.restNativeSearchConfluence(body, systemId, nEntryLimit);
 
         // TODO: test validations
     }
@@ -281,11 +281,11 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restSearch3Test() {
+    public void restSearchConfluenceTest() {
         SearchQuery body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restSearch3(body, systemId, nEntryLimit);
+        List<SearchResult> response = api.restSearchConfluence(body, systemId, nEntryLimit);
 
         // TODO: test validations
     }
