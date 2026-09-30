@@ -771,13 +771,24 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 				// Each shared-context window must still carry the constant agent placeholders
 				// (identity, scenario, communication, input, private context); otherwise the
 				// system/user templates that declare them render with missing variables.
-				for (String sharedContext : windowSharedContext(session, startedContribution, fixedBudget)) {
+				final List<String> windows = windowSharedContext(session, startedContribution, fixedBudget);
+				for (String sharedContext : windows) {
 					Map<String, Object> params = new HashMap<String, Object>(constantParams);
 					params.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext);
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Shared context window " + (vectorized.size() + 1) + " of " + windows.size()
+								+ " after contribution:" + startedContribution + " size:"
+								+ ITokensCountable.stringsTokensSize(sharedContext) + " (tok) budget:" + fixedBudget
+								+ " (tok)");
+					}
 					tracePlaceholder(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext, fixedBudget);
 					vectorized.add(params);
 				}
 				if (vectorized.isEmpty()) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Shared context windowing found no contribution after:" + startedContribution
+								+ ", a single window with an empty shared context");
+					}
 					Map<String, Object> params = new HashMap<String, Object>(constantParams);
 					params.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, "");
 					vectorized.add(params);
@@ -1449,6 +1460,10 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			}
 			chunks.add(text.substring(start, end));
 			start = end;
+		}
+		if (STATIC_LOGGER.isDebugEnabled()) {
+			STATIC_LOGGER.debug("splitToTokens(...) split " + total + " (tok) into " + chunks.size()
+					+ " chunk(s) of at most " + maxTokens + " (tok)");
 		}
 		return chunks;
 	}

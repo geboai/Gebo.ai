@@ -147,6 +147,11 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + number + " of " + maxIterations);
 			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<AGENTIC_LOOP_STORY iteration=" + number + ">");
+				LOGGER.trace(String.valueOf(params.get(AGENT_SESSION_STORY_PROMPT_PARAM)));
+				LOGGER.trace("</AGENTIC_LOOP_STORY>");
+			}
 			Flux<String> modelText;
 			try {
 				modelText = callLLMReactive(agentModel, agentPrompt, chatRequestContext, params);
@@ -166,6 +171,14 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				List<ToolCallExecuted> calls = callBacksListener.getCalls();
 				history.add(new LoopIteration(number, text.toString(),
 						new ArrayList<>(calls.subList(Math.min(callsBefore, calls.size()), calls.size()))));
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace("<AGENTIC_LOOP_ITERATION number=" + number + ">");
+					for (ToolCallExecuted call : history.get(history.size() - 1).calls()) {
+						LOGGER.trace("tool called: " + call.getName());
+					}
+					LOGGER.trace(text.toString());
+					LOGGER.trace("</AGENTIC_LOOP_ITERATION>");
+				}
 				boolean another = stripper.isContinueRequested() && number < maxIterations;
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + number + " ended, tools called:"

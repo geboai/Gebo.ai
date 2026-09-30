@@ -494,6 +494,11 @@ public class ReportWriterReactiveAgentServiceImpl
 										.append(" part(s) of the evidence could not be analysed because of model errors,"
 												+ " the evidence above is incomplete.");
 							}
+							if (LOGGER.isDebugEnabled()) {
+								LOGGER.debug("Writing the final report from " + reduced.size() + " extraction(s) of "
+										+ ITokensCountable.stringsTokensSize(evidence.toString())
+										+ " (tok), failed extraction call(s):" + failures.get());
+							}
 							Map<String, Object> writing = new HashMap<>(finalParams);
 							writing.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, evidence.toString());
 							if (LOGGER.isTraceEnabled()) {
@@ -516,9 +521,33 @@ public class ReportWriterReactiveAgentServiceImpl
 	protected Mono<List<String>> extractAll(List<Map<String, Object>> windows, IGConfigurableChatModel agentModel,
 			GPromptTemplateConfig extractorPrompt, IChatRequestContext chatRequestContext, ReactiveIdentityUtil runAs,
 			AtomicInteger failures, ISinkUIEmitter emitter) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin extractAll(...) report writer agent id:" + getId() + " over " + windows.size()
+					+ " window(s), parallelism:" + EXTRACTION_PARALLELISM);
+		}
+		final AtomicInteger windowNumber = new AtomicInteger();
 		return Flux.fromIterable(windows).flatMapSequential(window -> Mono
-				.fromCallable(() -> runAs.doRunAsWithReturnAndException(
-						() -> agentModel.textResponse(extractorPrompt, window, chatRequestContext)))
+				.fromCallable(() -> runAs.doRunAsWithReturnAndException(() -> {
+					final int number = windowNumber.incrementAndGet();
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Extracting the evidence of window " + number + " of " + windows.size() + " size:"
+								+ ITokensCountable.stringsTokensSize(String.valueOf(
+										window.get(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM)))
+								+ " (tok)");
+					}
+					String extraction = agentModel.textResponse(extractorPrompt, window, chatRequestContext);
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Extracted the evidence of window " + number + " of " + windows.size()
+								+ " into " + ITokensCountable.stringsTokensSize(extraction) + " (tok), relevant:"
+								+ isRelevantExtraction(extraction));
+					}
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("<EVIDENCE_EXTRACTION window=" + number + ">");
+						LOGGER.trace(extraction);
+						LOGGER.trace("</EVIDENCE_EXTRACTION>");
+					}
+					return extraction;
+				}))
 				.subscribeOn(runAs.wrap(Schedulers.boundedElastic())).onErrorResume(error -> {
 					LOGGER.error("Report writer agent id:" + getId() + " evidence extraction call failed", error);
 					failures.incrementAndGet();
@@ -570,7 +599,14 @@ public class ReportWriterReactiveAgentServiceImpl
 					failures, emitter).block();
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("reduceExtractions(...) round " + round + " reduced " + current.size()
-						+ " extraction(s) to " + (reduced != null ? reduced.size() : 0));
+						+ " extraction(s) to " + (reduced != null ? reduced.size() : 0) + " of "
+						+ (reduced != null ? ITokensCountable.stringsTokensSize(String.join(NEWLINE, reduced)) : 0)
+						+ " (tok), final budget:" + finalBudget + " (tok)");
+			}
+			if (LOGGER.isTraceEnabled() && reduced != null) {
+				LOGGER.trace("<REDUCED_EXTRACTIONS round=" + round + ">");
+				LOGGER.trace(String.join(NEWLINE, reduced));
+				LOGGER.trace("</REDUCED_EXTRACTIONS>");
 			}
 			if (reduced == null || reduced.isEmpty()) {
 				break;
