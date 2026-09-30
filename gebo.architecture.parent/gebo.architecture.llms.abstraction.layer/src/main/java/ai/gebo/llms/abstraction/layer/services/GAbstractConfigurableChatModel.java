@@ -441,7 +441,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	protected final static String COMPRESSED_HISTORY_FIRST_MESSAGE_CHAT_TEMPLATE = "BEGIN_CONSOLIDATED_HISTORY\r\n{"
 			+ IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM
-			+ "}\r\nEND_CONSOLIDATED_HISTORY\\r\\nUSER-QUESTION={" + IChatRequestContext.USER_QUESTION_PROMPT_PARAM
+			+ "}\r\nEND_CONSOLIDATED_HISTORY\r\nUSER-QUESTION={" + IChatRequestContext.USER_QUESTION_PROMPT_PARAM
 			+ "}\r\n";
 
 	protected List<Message> createCompressedHistory(IChatRequestContext chatContext) {
@@ -460,8 +460,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				messages.add(firstUserMessage);
 				messages.add(firstAssistantMessage);
 			} else {
-				String user = interactions.get(0).getUser();
-				String assistant = interactions.get(0).getAssistant();
+				String user = interactions.get(i).getUser();
+				String assistant = interactions.get(i).getAssistant();
 				UserMessage userMessage = new UserMessage(user != null ? user : "");
 				AssistantMessage assistantMessage = new AssistantMessage(assistant != null ? assistant : "");
 				messages.add(userMessage);

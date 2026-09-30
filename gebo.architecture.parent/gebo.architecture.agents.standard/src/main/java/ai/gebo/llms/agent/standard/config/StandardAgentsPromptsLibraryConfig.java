@@ -27,6 +27,11 @@ public class StandardAgentsPromptsLibraryConfig {
 	public static final String COORDINATOR_AGENT_PROMPT = "controller-coordinator-agent-prompt";
 	public static final String REPORT_AND_ANSWER_WRITER_AGENT_PROMPT = "report-answer-writer-agent-prompt";
 	public static final String TOOL_CALLING_AGENT_PROMPT = "tool-calling-agent-prompt";
+	/**
+	 * The report writer's evidence extraction calls, when a cycle's evidence does not
+	 * fit one writing call.
+	 */
+	public static final String REPORT_EVIDENCE_EXTRACTOR_PROMPT = "report-evidence-extractor-prompt";
 	private List<GPromptTemplateLibraryReference> library = null;
 	private List<GPromptUseInfo> uses = null;
 

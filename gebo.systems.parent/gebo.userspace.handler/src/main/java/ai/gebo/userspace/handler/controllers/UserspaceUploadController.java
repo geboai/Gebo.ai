@@ -60,7 +60,7 @@ public class UserspaceUploadController {
 	 * @throws GeboPersistenceException If there is an error persisting the uploaded files
 	 */
 	@PostMapping(value = "upload/{userspaceFolderCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public void upload(@PathVariable("userspaceFolderCode") String userspaceFolderCode,
+	public void uploadUserspace(@PathVariable("userspaceFolderCode") String userspaceFolderCode,
 			@RequestParam("files[]") List<MultipartFile> files)
 			throws IOException, GeboContentHandlerSystemException, GeboPersistenceException {
 		fileUploadService.manageUpload(userspaceFolderCode, files);

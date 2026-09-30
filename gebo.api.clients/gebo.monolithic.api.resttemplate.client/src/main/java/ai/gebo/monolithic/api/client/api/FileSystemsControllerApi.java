@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class FileSystemsControllerApi {
     private ApiClient apiClient;
@@ -186,8 +186,8 @@ public class FileSystemsControllerApi {
      * @return List&lt;GContentManagementSystemType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<GContentManagementSystemType> getFileSystemSystemTypes1() throws RestClientException {
-        return getFileSystemSystemTypes1WithHttpInfo().getBody();
+    public List<GContentManagementSystemType> getFileSystemSystemTypes() throws RestClientException {
+        return getFileSystemSystemTypesWithHttpInfo().getBody();
     }
 
     /**
@@ -197,7 +197,7 @@ public class FileSystemsControllerApi {
      * @return ResponseEntity&lt;List&lt;GContentManagementSystemType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<GContentManagementSystemType>> getFileSystemSystemTypes1WithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GContentManagementSystemType>> getFileSystemSystemTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/getFileSystemSystemTypes").build().toUriString();
         

@@ -4,27 +4,27 @@ All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**restAggregate**](SharePointSearchServiceControllerApi.md#restAggregate) | **POST** /api/users/SharePointSearchServiceController/aggregate | 
-[**restCreateCustomTemplateParamsMap**](SharePointSearchServiceControllerApi.md#restCreateCustomTemplateParamsMap) | **POST** /api/users/SharePointSearchServiceController/createCustomTemplateParamsMap | 
-[**restExtractRelatedAnalisysReferences**](SharePointSearchServiceControllerApi.md#restExtractRelatedAnalisysReferences) | **POST** /api/users/SharePointSearchServiceController/extractRelatedAnalisysReferences | 
-[**restFindSystemById**](SharePointSearchServiceControllerApi.md#restFindSystemById) | **GET** /api/users/SharePointSearchServiceController/findSystemById | 
-[**restFindSystemBySearchResult**](SharePointSearchServiceControllerApi.md#restFindSystemBySearchResult) | **POST** /api/users/SharePointSearchServiceController/findSystemBySearchResult | 
-[**restGetCachedCatalogues**](SharePointSearchServiceControllerApi.md#restGetCachedCatalogues) | **GET** /api/users/SharePointSearchServiceController/getCachedCatalogues | 
-[**restGetCataloguesListSample**](SharePointSearchServiceControllerApi.md#restGetCataloguesListSample) | **GET** /api/users/SharePointSearchServiceController/getCataloguesListSample | 
-[**restGetDescription**](SharePointSearchServiceControllerApi.md#restGetDescription) | **GET** /api/users/SharePointSearchServiceController/getDescription | 
-[**restGetId**](SharePointSearchServiceControllerApi.md#restGetId) | **GET** /api/users/SharePointSearchServiceController/getId | 
-[**restGetMessagingModuleId**](SharePointSearchServiceControllerApi.md#restGetMessagingModuleId) | **GET** /api/users/SharePointSearchServiceController/getMessagingModuleId | 
-[**restGetNativePromptTemplateUseCode**](SharePointSearchServiceControllerApi.md#restGetNativePromptTemplateUseCode) | **GET** /api/users/SharePointSearchServiceController/getNativePromptTemplateUseCode | 
-[**restGetProductId**](SharePointSearchServiceControllerApi.md#restGetProductId) | **GET** /api/users/SharePointSearchServiceController/getProductId | 
-[**restGetQueriesGenerationPromptUseCode**](SharePointSearchServiceControllerApi.md#restGetQueriesGenerationPromptUseCode) | **GET** /api/users/SharePointSearchServiceController/getQueriesGenerationPromptUseCode | 
-[**restGetSearchableSystems**](SharePointSearchServiceControllerApi.md#restGetSearchableSystems) | **GET** /api/users/SharePointSearchServiceController/getSearchableSystems | 
-[**restIsEnabled**](SharePointSearchServiceControllerApi.md#restIsEnabled) | **GET** /api/users/SharePointSearchServiceController/isEnabled | 
-[**restNativeSearch**](SharePointSearchServiceControllerApi.md#restNativeSearch) | **POST** /api/users/SharePointSearchServiceController/nativeSearch | 
-[**restSearch**](SharePointSearchServiceControllerApi.md#restSearch) | **POST** /api/users/SharePointSearchServiceController/search | 
+[**restAggregateSharePoint**](SharePointSearchServiceControllerApi.md#restAggregateSharePoint) | **POST** /api/users/SharePointSearchServiceController/aggregate | 
+[**restCreateCustomTemplateParamsMapSharePoint**](SharePointSearchServiceControllerApi.md#restCreateCustomTemplateParamsMapSharePoint) | **POST** /api/users/SharePointSearchServiceController/createCustomTemplateParamsMap | 
+[**restExtractRelatedAnalisysReferencesSharePoint**](SharePointSearchServiceControllerApi.md#restExtractRelatedAnalisysReferencesSharePoint) | **POST** /api/users/SharePointSearchServiceController/extractRelatedAnalisysReferences | 
+[**restFindSystemByIdSharePoint**](SharePointSearchServiceControllerApi.md#restFindSystemByIdSharePoint) | **GET** /api/users/SharePointSearchServiceController/findSystemById | 
+[**restFindSystemBySearchResultSharePoint**](SharePointSearchServiceControllerApi.md#restFindSystemBySearchResultSharePoint) | **POST** /api/users/SharePointSearchServiceController/findSystemBySearchResult | 
+[**restGetCachedCataloguesSharePoint**](SharePointSearchServiceControllerApi.md#restGetCachedCataloguesSharePoint) | **GET** /api/users/SharePointSearchServiceController/getCachedCatalogues | 
+[**restGetCataloguesListSampleSharePoint**](SharePointSearchServiceControllerApi.md#restGetCataloguesListSampleSharePoint) | **GET** /api/users/SharePointSearchServiceController/getCataloguesListSample | 
+[**restGetDescriptionSharePoint**](SharePointSearchServiceControllerApi.md#restGetDescriptionSharePoint) | **GET** /api/users/SharePointSearchServiceController/getDescription | 
+[**restGetIdSharePoint**](SharePointSearchServiceControllerApi.md#restGetIdSharePoint) | **GET** /api/users/SharePointSearchServiceController/getId | 
+[**restGetMessagingModuleIdSharePoint**](SharePointSearchServiceControllerApi.md#restGetMessagingModuleIdSharePoint) | **GET** /api/users/SharePointSearchServiceController/getMessagingModuleId | 
+[**restGetNativePromptTemplateUseCodeSharePoint**](SharePointSearchServiceControllerApi.md#restGetNativePromptTemplateUseCodeSharePoint) | **GET** /api/users/SharePointSearchServiceController/getNativePromptTemplateUseCode | 
+[**restGetProductIdSharePoint**](SharePointSearchServiceControllerApi.md#restGetProductIdSharePoint) | **GET** /api/users/SharePointSearchServiceController/getProductId | 
+[**restGetQueriesGenerationPromptUseCodeSharePoint**](SharePointSearchServiceControllerApi.md#restGetQueriesGenerationPromptUseCodeSharePoint) | **GET** /api/users/SharePointSearchServiceController/getQueriesGenerationPromptUseCode | 
+[**restGetSearchableSystemsSharePoint**](SharePointSearchServiceControllerApi.md#restGetSearchableSystemsSharePoint) | **GET** /api/users/SharePointSearchServiceController/getSearchableSystems | 
+[**restIsEnabledSharePoint**](SharePointSearchServiceControllerApi.md#restIsEnabledSharePoint) | **GET** /api/users/SharePointSearchServiceController/isEnabled | 
+[**restNativeSearchSharePoint**](SharePointSearchServiceControllerApi.md#restNativeSearchSharePoint) | **POST** /api/users/SharePointSearchServiceController/nativeSearch | 
+[**restSearchSharePoint**](SharePointSearchServiceControllerApi.md#restSearchSharePoint) | **POST** /api/users/SharePointSearchServiceController/search | 
 
-<a name="restAggregate"></a>
-# **restAggregate**
-> MicrosoftResultsExtractionData restAggregate(body)
+<a name="restAggregateSharePoint"></a>
+# **restAggregateSharePoint**
+> MicrosoftResultsExtractionData restAggregateSharePoint(body)
 
 
 
@@ -38,10 +38,10 @@ Method | HTTP request | Description
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 AggregateRequestBodyMicrosoftResultsExtractionData body = new AggregateRequestBodyMicrosoftResultsExtractionData(); // AggregateRequestBodyMicrosoftResultsExtractionData | 
 try {
-    MicrosoftResultsExtractionData result = apiInstance.restAggregate(body);
+    MicrosoftResultsExtractionData result = apiInstance.restAggregateSharePoint(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restAggregate");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restAggregateSharePoint");
     e.printStackTrace();
 }
 ```
@@ -65,9 +65,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restCreateCustomTemplateParamsMap"></a>
-# **restCreateCustomTemplateParamsMap**
-> Map&lt;String, Object&gt; restCreateCustomTemplateParamsMap(body)
+<a name="restCreateCustomTemplateParamsMapSharePoint"></a>
+# **restCreateCustomTemplateParamsMapSharePoint**
+> Map&lt;String, Object&gt; restCreateCustomTemplateParamsMapSharePoint(body)
 
 
 
@@ -81,10 +81,10 @@ No authorization required
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 CustomTemplateParamsRequestBody body = new CustomTemplateParamsRequestBody(); // CustomTemplateParamsRequestBody | 
 try {
-    Map<String, Object> result = apiInstance.restCreateCustomTemplateParamsMap(body);
+    Map<String, Object> result = apiInstance.restCreateCustomTemplateParamsMapSharePoint(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restCreateCustomTemplateParamsMap");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restCreateCustomTemplateParamsMapSharePoint");
     e.printStackTrace();
 }
 ```
@@ -108,9 +108,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restExtractRelatedAnalisysReferences"></a>
-# **restExtractRelatedAnalisysReferences**
-> SearchResultAnalisysOutcome restExtractRelatedAnalisysReferences(body, systemId)
+<a name="restExtractRelatedAnalisysReferencesSharePoint"></a>
+# **restExtractRelatedAnalisysReferencesSharePoint**
+> SearchResultAnalisysOutcome restExtractRelatedAnalisysReferencesSharePoint(body, systemId)
 
 
 
@@ -125,10 +125,10 @@ SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceCo
 MicrosoftResultsExtractionData body = new MicrosoftResultsExtractionData(); // MicrosoftResultsExtractionData | 
 String systemId = "systemId_example"; // String | 
 try {
-    SearchResultAnalisysOutcome result = apiInstance.restExtractRelatedAnalisysReferences(body, systemId);
+    SearchResultAnalisysOutcome result = apiInstance.restExtractRelatedAnalisysReferencesSharePoint(body, systemId);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restExtractRelatedAnalisysReferences");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restExtractRelatedAnalisysReferencesSharePoint");
     e.printStackTrace();
 }
 ```
@@ -153,9 +153,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restFindSystemById"></a>
-# **restFindSystemById**
-> SearchableSystemMetaData restFindSystemById(systemId)
+<a name="restFindSystemByIdSharePoint"></a>
+# **restFindSystemByIdSharePoint**
+> SearchableSystemMetaData restFindSystemByIdSharePoint(systemId)
 
 
 
@@ -169,10 +169,10 @@ No authorization required
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 String systemId = "systemId_example"; // String | 
 try {
-    SearchableSystemMetaData result = apiInstance.restFindSystemById(systemId);
+    SearchableSystemMetaData result = apiInstance.restFindSystemByIdSharePoint(systemId);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restFindSystemById");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restFindSystemByIdSharePoint");
     e.printStackTrace();
 }
 ```
@@ -196,9 +196,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restFindSystemBySearchResult"></a>
-# **restFindSystemBySearchResult**
-> SearchableSystemMetaData restFindSystemBySearchResult(body)
+<a name="restFindSystemBySearchResultSharePoint"></a>
+# **restFindSystemBySearchResultSharePoint**
+> SearchableSystemMetaData restFindSystemBySearchResultSharePoint(body)
 
 
 
@@ -212,10 +212,10 @@ No authorization required
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 SearchResult body = new SearchResult(); // SearchResult | 
 try {
-    SearchableSystemMetaData result = apiInstance.restFindSystemBySearchResult(body);
+    SearchableSystemMetaData result = apiInstance.restFindSystemBySearchResultSharePoint(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restFindSystemBySearchResult");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restFindSystemBySearchResultSharePoint");
     e.printStackTrace();
 }
 ```
@@ -239,9 +239,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restGetCachedCatalogues"></a>
-# **restGetCachedCatalogues**
-> List&lt;CatalogueSample&gt; restGetCachedCatalogues(systemConfigurationCode)
+<a name="restGetCachedCataloguesSharePoint"></a>
+# **restGetCachedCataloguesSharePoint**
+> List&lt;CatalogueSample&gt; restGetCachedCataloguesSharePoint(systemConfigurationCode)
 
 
 
@@ -255,10 +255,10 @@ No authorization required
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 String systemConfigurationCode = "systemConfigurationCode_example"; // String | 
 try {
-    List<CatalogueSample> result = apiInstance.restGetCachedCatalogues(systemConfigurationCode);
+    List<CatalogueSample> result = apiInstance.restGetCachedCataloguesSharePoint(systemConfigurationCode);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetCachedCatalogues");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetCachedCataloguesSharePoint");
     e.printStackTrace();
 }
 ```
@@ -282,9 +282,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restGetCataloguesListSample"></a>
-# **restGetCataloguesListSample**
-> List&lt;CatalogueSample&gt; restGetCataloguesListSample(configurationCode)
+<a name="restGetCataloguesListSampleSharePoint"></a>
+# **restGetCataloguesListSampleSharePoint**
+> List&lt;CatalogueSample&gt; restGetCataloguesListSampleSharePoint(configurationCode)
 
 
 
@@ -298,10 +298,10 @@ No authorization required
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 String configurationCode = "configurationCode_example"; // String | 
 try {
-    List<CatalogueSample> result = apiInstance.restGetCataloguesListSample(configurationCode);
+    List<CatalogueSample> result = apiInstance.restGetCataloguesListSampleSharePoint(configurationCode);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetCataloguesListSample");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetCataloguesListSampleSharePoint");
     e.printStackTrace();
 }
 ```
@@ -325,9 +325,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restGetDescription"></a>
-# **restGetDescription**
-> String restGetDescription()
+<a name="restGetDescriptionSharePoint"></a>
+# **restGetDescriptionSharePoint**
+> String restGetDescriptionSharePoint()
 
 
 
@@ -340,10 +340,10 @@ No authorization required
 
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetDescription();
+    String result = apiInstance.restGetDescriptionSharePoint();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetDescription");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetDescriptionSharePoint");
     e.printStackTrace();
 }
 ```
@@ -364,9 +364,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetId"></a>
-# **restGetId**
-> String restGetId()
+<a name="restGetIdSharePoint"></a>
+# **restGetIdSharePoint**
+> String restGetIdSharePoint()
 
 
 
@@ -379,10 +379,10 @@ No authorization required
 
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetId();
+    String result = apiInstance.restGetIdSharePoint();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetId");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetIdSharePoint");
     e.printStackTrace();
 }
 ```
@@ -403,9 +403,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetMessagingModuleId"></a>
-# **restGetMessagingModuleId**
-> String restGetMessagingModuleId()
+<a name="restGetMessagingModuleIdSharePoint"></a>
+# **restGetMessagingModuleIdSharePoint**
+> String restGetMessagingModuleIdSharePoint()
 
 
 
@@ -418,10 +418,10 @@ No authorization required
 
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetMessagingModuleId();
+    String result = apiInstance.restGetMessagingModuleIdSharePoint();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetMessagingModuleId");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetMessagingModuleIdSharePoint");
     e.printStackTrace();
 }
 ```
@@ -442,9 +442,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetNativePromptTemplateUseCode"></a>
-# **restGetNativePromptTemplateUseCode**
-> String restGetNativePromptTemplateUseCode()
+<a name="restGetNativePromptTemplateUseCodeSharePoint"></a>
+# **restGetNativePromptTemplateUseCodeSharePoint**
+> String restGetNativePromptTemplateUseCodeSharePoint()
 
 
 
@@ -457,10 +457,10 @@ No authorization required
 
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetNativePromptTemplateUseCode();
+    String result = apiInstance.restGetNativePromptTemplateUseCodeSharePoint();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetNativePromptTemplateUseCode");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetNativePromptTemplateUseCodeSharePoint");
     e.printStackTrace();
 }
 ```
@@ -481,9 +481,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetProductId"></a>
-# **restGetProductId**
-> String restGetProductId()
+<a name="restGetProductIdSharePoint"></a>
+# **restGetProductIdSharePoint**
+> String restGetProductIdSharePoint()
 
 
 
@@ -496,10 +496,10 @@ No authorization required
 
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetProductId();
+    String result = apiInstance.restGetProductIdSharePoint();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetProductId");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetProductIdSharePoint");
     e.printStackTrace();
 }
 ```
@@ -520,9 +520,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetQueriesGenerationPromptUseCode"></a>
-# **restGetQueriesGenerationPromptUseCode**
-> String restGetQueriesGenerationPromptUseCode()
+<a name="restGetQueriesGenerationPromptUseCodeSharePoint"></a>
+# **restGetQueriesGenerationPromptUseCodeSharePoint**
+> String restGetQueriesGenerationPromptUseCodeSharePoint()
 
 
 
@@ -535,10 +535,10 @@ No authorization required
 
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetQueriesGenerationPromptUseCode();
+    String result = apiInstance.restGetQueriesGenerationPromptUseCodeSharePoint();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetQueriesGenerationPromptUseCode");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetQueriesGenerationPromptUseCodeSharePoint");
     e.printStackTrace();
 }
 ```
@@ -559,9 +559,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetSearchableSystems"></a>
-# **restGetSearchableSystems**
-> List&lt;SearchableSystemMetaData&gt; restGetSearchableSystems()
+<a name="restGetSearchableSystemsSharePoint"></a>
+# **restGetSearchableSystemsSharePoint**
+> List&lt;SearchableSystemMetaData&gt; restGetSearchableSystemsSharePoint()
 
 
 
@@ -574,10 +574,10 @@ No authorization required
 
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 try {
-    List<SearchableSystemMetaData> result = apiInstance.restGetSearchableSystems();
+    List<SearchableSystemMetaData> result = apiInstance.restGetSearchableSystemsSharePoint();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetSearchableSystems");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restGetSearchableSystemsSharePoint");
     e.printStackTrace();
 }
 ```
@@ -598,9 +598,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restIsEnabled"></a>
-# **restIsEnabled**
-> Boolean restIsEnabled()
+<a name="restIsEnabledSharePoint"></a>
+# **restIsEnabledSharePoint**
+> Boolean restIsEnabledSharePoint()
 
 
 
@@ -613,10 +613,10 @@ No authorization required
 
 SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceControllerApi();
 try {
-    Boolean result = apiInstance.restIsEnabled();
+    Boolean result = apiInstance.restIsEnabledSharePoint();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restIsEnabled");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restIsEnabledSharePoint");
     e.printStackTrace();
 }
 ```
@@ -637,9 +637,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restNativeSearch"></a>
-# **restNativeSearch**
-> List&lt;SearchResult&gt; restNativeSearch(body, systemId, nEntryLimit)
+<a name="restNativeSearchSharePoint"></a>
+# **restNativeSearchSharePoint**
+> List&lt;SearchResult&gt; restNativeSearchSharePoint(body, systemId, nEntryLimit)
 
 
 
@@ -655,10 +655,10 @@ SharePointSearchFilter body = new SharePointSearchFilter(); // SharePointSearchF
 String systemId = "systemId_example"; // String | 
 Integer nEntryLimit = 56; // Integer | 
 try {
-    List<SearchResult> result = apiInstance.restNativeSearch(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restNativeSearchSharePoint(body, systemId, nEntryLimit);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restNativeSearch");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restNativeSearchSharePoint");
     e.printStackTrace();
 }
 ```
@@ -684,9 +684,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restSearch"></a>
-# **restSearch**
-> List&lt;SearchResult&gt; restSearch(body, systemId, nEntryLimit)
+<a name="restSearchSharePoint"></a>
+# **restSearchSharePoint**
+> List&lt;SearchResult&gt; restSearchSharePoint(body, systemId, nEntryLimit)
 
 
 
@@ -702,10 +702,10 @@ SearchQuery body = new SearchQuery(); // SearchQuery |
 String systemId = "systemId_example"; // String | 
 Integer nEntryLimit = 56; // Integer | 
 try {
-    List<SearchResult> result = apiInstance.restSearch(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restSearchSharePoint(body, systemId, nEntryLimit);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restSearch");
+    System.err.println("Exception when calling SharePointSearchServiceControllerApi#restSearchSharePoint");
     e.printStackTrace();
 }
 ```

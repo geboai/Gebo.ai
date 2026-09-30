@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { A2AClientConfigControllerService } from './api/a2AClientConfigController.service';
+import { AgenticChatDefaultNetworksAdminControllerService } from './api/agenticChatDefaultNetworksAdminController.service';
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
 import { AuthControllerService } from './api/authController.service';
 import { AuthProvidersControllerService } from './api/authProvidersController.service';
@@ -151,6 +152,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
   exports:      [],
   providers: [
     A2AClientConfigControllerService,
+    AgenticChatDefaultNetworksAdminControllerService,
     AnthropicChatModelsConfigurationControllerService,
     AuthControllerService,
     AuthProvidersControllerService,

@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class IntegrationInputControllerApi {
     private ApiClient apiClient;
@@ -152,8 +152,8 @@ public class IntegrationInputControllerApi {
      * @return JobTicket
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public JobTicket spoolDocument(IntegrationDocumentEnvelop body, String endpointCode, String relativePath) throws RestClientException {
-        return spoolDocumentWithHttpInfo(body, endpointCode, relativePath).getBody();
+    public JobTicket spoolDocumentEnvelope(IntegrationDocumentEnvelop body, String endpointCode, String relativePath) throws RestClientException {
+        return spoolDocumentEnvelopeWithHttpInfo(body, endpointCode, relativePath).getBody();
     }
 
     /**
@@ -166,19 +166,19 @@ public class IntegrationInputControllerApi {
      * @return ResponseEntity&lt;JobTicket&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<JobTicket> spoolDocumentWithHttpInfo(IntegrationDocumentEnvelop body, String endpointCode, String relativePath) throws RestClientException {
+    public ResponseEntity<JobTicket> spoolDocumentEnvelopeWithHttpInfo(IntegrationDocumentEnvelop body, String endpointCode, String relativePath) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling spoolDocument");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling spoolDocumentEnvelope");
         }
         // verify the required parameter 'endpointCode' is set
         if (endpointCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling spoolDocument");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling spoolDocumentEnvelope");
         }
         // verify the required parameter 'relativePath' is set
         if (relativePath == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'relativePath' when calling spoolDocument");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'relativePath' when calling spoolDocumentEnvelope");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/spoolDocument").build().toUriString();
         
@@ -212,8 +212,8 @@ public class IntegrationInputControllerApi {
      * @return JobTicket
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public JobTicket spoolDocument1(File file, String endpointCode, String relativePath) throws RestClientException {
-        return spoolDocument1WithHttpInfo(file, endpointCode, relativePath).getBody();
+    public JobTicket spoolDocumentFile(File file, String endpointCode, String relativePath) throws RestClientException {
+        return spoolDocumentFileWithHttpInfo(file, endpointCode, relativePath).getBody();
     }
 
     /**
@@ -226,19 +226,19 @@ public class IntegrationInputControllerApi {
      * @return ResponseEntity&lt;JobTicket&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<JobTicket> spoolDocument1WithHttpInfo(File file, String endpointCode, String relativePath) throws RestClientException {
+    public ResponseEntity<JobTicket> spoolDocumentFileWithHttpInfo(File file, String endpointCode, String relativePath) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'file' is set
         if (file == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'file' when calling spoolDocument1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'file' when calling spoolDocumentFile");
         }
         // verify the required parameter 'endpointCode' is set
         if (endpointCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling spoolDocument1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling spoolDocumentFile");
         }
         // verify the required parameter 'relativePath' is set
         if (relativePath == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'relativePath' when calling spoolDocument1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'relativePath' when calling spoolDocumentFile");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/spoolDocument").build().toUriString();
         

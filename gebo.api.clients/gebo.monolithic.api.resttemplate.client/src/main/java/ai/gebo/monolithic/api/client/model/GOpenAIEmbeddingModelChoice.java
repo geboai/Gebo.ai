@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.GModelPricingConditions;
 import ai.gebo.monolithic.api.client.model.ModelMetaInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -24,7 +25,7 @@ import java.util.Date;
  * GOpenAIEmbeddingModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class GOpenAIEmbeddingModelChoice {
   @JsonProperty("code")
@@ -65,6 +66,9 @@ public class GOpenAIEmbeddingModelChoice {
 
   @JsonProperty("nativeModelMetaInfos")
   private Object nativeModelMetaInfos = null;
+
+  @JsonProperty("pricingConditions")
+  private GModelPricingConditions pricingConditions = null;
 
   @JsonProperty("optimalTokenizationParam")
   private Integer optimalTokenizationParam = null;
@@ -303,6 +307,24 @@ public class GOpenAIEmbeddingModelChoice {
     this.nativeModelMetaInfos = nativeModelMetaInfos;
   }
 
+  public GOpenAIEmbeddingModelChoice pricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+    return this;
+  }
+
+   /**
+   * Get pricingConditions
+   * @return pricingConditions
+  **/
+  @Schema(description = "")
+  public GModelPricingConditions getPricingConditions() {
+    return pricingConditions;
+  }
+
+  public void setPricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+  }
+
   public GOpenAIEmbeddingModelChoice optimalTokenizationParam(Integer optimalTokenizationParam) {
     this.optimalTokenizationParam = optimalTokenizationParam;
     return this;
@@ -344,12 +366,13 @@ public class GOpenAIEmbeddingModelChoice {
         Objects.equals(this.informativeUrl, gopenAIEmbeddingModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, gopenAIEmbeddingModelChoice.contextLength) &&
         Objects.equals(this.nativeModelMetaInfos, gopenAIEmbeddingModelChoice.nativeModelMetaInfos) &&
+        Objects.equals(this.pricingConditions, gopenAIEmbeddingModelChoice.pricingConditions) &&
         Objects.equals(this.optimalTokenizationParam, gopenAIEmbeddingModelChoice.optimalTokenizationParam);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, optimalTokenizationParam);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, pricingConditions, optimalTokenizationParam);
   }
 
 
@@ -371,6 +394,7 @@ public class GOpenAIEmbeddingModelChoice {
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
+    sb.append("    pricingConditions: ").append(toIndentedString(pricingConditions)).append("\n");
     sb.append("    optimalTokenizationParam: ").append(toIndentedString(optimalTokenizationParam)).append("\n");
     sb.append("}");
     return sb.toString();

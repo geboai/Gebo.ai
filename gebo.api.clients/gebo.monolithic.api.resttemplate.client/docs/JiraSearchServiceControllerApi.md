@@ -4,27 +4,27 @@ All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**restAggregate1**](JiraSearchServiceControllerApi.md#restAggregate1) | **POST** /api/users/JiraSearchServiceController/aggregate | 
-[**restCreateCustomTemplateParamsMap1**](JiraSearchServiceControllerApi.md#restCreateCustomTemplateParamsMap1) | **POST** /api/users/JiraSearchServiceController/createCustomTemplateParamsMap | 
-[**restExtractRelatedAnalisysReferences1**](JiraSearchServiceControllerApi.md#restExtractRelatedAnalisysReferences1) | **POST** /api/users/JiraSearchServiceController/extractRelatedAnalisysReferences | 
-[**restFindSystemById1**](JiraSearchServiceControllerApi.md#restFindSystemById1) | **GET** /api/users/JiraSearchServiceController/findSystemById | 
-[**restFindSystemBySearchResult1**](JiraSearchServiceControllerApi.md#restFindSystemBySearchResult1) | **POST** /api/users/JiraSearchServiceController/findSystemBySearchResult | 
-[**restGetCachedCatalogues1**](JiraSearchServiceControllerApi.md#restGetCachedCatalogues1) | **GET** /api/users/JiraSearchServiceController/getCachedCatalogues | 
-[**restGetCataloguesListSample1**](JiraSearchServiceControllerApi.md#restGetCataloguesListSample1) | **GET** /api/users/JiraSearchServiceController/getCataloguesListSample | 
-[**restGetDescription1**](JiraSearchServiceControllerApi.md#restGetDescription1) | **GET** /api/users/JiraSearchServiceController/getDescription | 
-[**restGetId1**](JiraSearchServiceControllerApi.md#restGetId1) | **GET** /api/users/JiraSearchServiceController/getId | 
-[**restGetMessagingModuleId1**](JiraSearchServiceControllerApi.md#restGetMessagingModuleId1) | **GET** /api/users/JiraSearchServiceController/getMessagingModuleId | 
-[**restGetNativePromptTemplateUseCode1**](JiraSearchServiceControllerApi.md#restGetNativePromptTemplateUseCode1) | **GET** /api/users/JiraSearchServiceController/getNativePromptTemplateUseCode | 
-[**restGetProductId1**](JiraSearchServiceControllerApi.md#restGetProductId1) | **GET** /api/users/JiraSearchServiceController/getProductId | 
-[**restGetQueriesGenerationPromptUseCode1**](JiraSearchServiceControllerApi.md#restGetQueriesGenerationPromptUseCode1) | **GET** /api/users/JiraSearchServiceController/getQueriesGenerationPromptUseCode | 
-[**restGetSearchableSystems1**](JiraSearchServiceControllerApi.md#restGetSearchableSystems1) | **GET** /api/users/JiraSearchServiceController/getSearchableSystems | 
-[**restIsEnabled1**](JiraSearchServiceControllerApi.md#restIsEnabled1) | **GET** /api/users/JiraSearchServiceController/isEnabled | 
-[**restNativeSearch1**](JiraSearchServiceControllerApi.md#restNativeSearch1) | **POST** /api/users/JiraSearchServiceController/nativeSearch | 
-[**restSearch1**](JiraSearchServiceControllerApi.md#restSearch1) | **POST** /api/users/JiraSearchServiceController/search | 
+[**restAggregateJira**](JiraSearchServiceControllerApi.md#restAggregateJira) | **POST** /api/users/JiraSearchServiceController/aggregate | 
+[**restCreateCustomTemplateParamsMapJira**](JiraSearchServiceControllerApi.md#restCreateCustomTemplateParamsMapJira) | **POST** /api/users/JiraSearchServiceController/createCustomTemplateParamsMap | 
+[**restExtractRelatedAnalisysReferencesJira**](JiraSearchServiceControllerApi.md#restExtractRelatedAnalisysReferencesJira) | **POST** /api/users/JiraSearchServiceController/extractRelatedAnalisysReferences | 
+[**restFindSystemByIdJira**](JiraSearchServiceControllerApi.md#restFindSystemByIdJira) | **GET** /api/users/JiraSearchServiceController/findSystemById | 
+[**restFindSystemBySearchResultJira**](JiraSearchServiceControllerApi.md#restFindSystemBySearchResultJira) | **POST** /api/users/JiraSearchServiceController/findSystemBySearchResult | 
+[**restGetCachedCataloguesJira**](JiraSearchServiceControllerApi.md#restGetCachedCataloguesJira) | **GET** /api/users/JiraSearchServiceController/getCachedCatalogues | 
+[**restGetCataloguesListSampleJira**](JiraSearchServiceControllerApi.md#restGetCataloguesListSampleJira) | **GET** /api/users/JiraSearchServiceController/getCataloguesListSample | 
+[**restGetDescriptionJira**](JiraSearchServiceControllerApi.md#restGetDescriptionJira) | **GET** /api/users/JiraSearchServiceController/getDescription | 
+[**restGetIdJira**](JiraSearchServiceControllerApi.md#restGetIdJira) | **GET** /api/users/JiraSearchServiceController/getId | 
+[**restGetMessagingModuleIdJira**](JiraSearchServiceControllerApi.md#restGetMessagingModuleIdJira) | **GET** /api/users/JiraSearchServiceController/getMessagingModuleId | 
+[**restGetNativePromptTemplateUseCodeJira**](JiraSearchServiceControllerApi.md#restGetNativePromptTemplateUseCodeJira) | **GET** /api/users/JiraSearchServiceController/getNativePromptTemplateUseCode | 
+[**restGetProductIdJira**](JiraSearchServiceControllerApi.md#restGetProductIdJira) | **GET** /api/users/JiraSearchServiceController/getProductId | 
+[**restGetQueriesGenerationPromptUseCodeJira**](JiraSearchServiceControllerApi.md#restGetQueriesGenerationPromptUseCodeJira) | **GET** /api/users/JiraSearchServiceController/getQueriesGenerationPromptUseCode | 
+[**restGetSearchableSystemsJira**](JiraSearchServiceControllerApi.md#restGetSearchableSystemsJira) | **GET** /api/users/JiraSearchServiceController/getSearchableSystems | 
+[**restIsEnabledJira**](JiraSearchServiceControllerApi.md#restIsEnabledJira) | **GET** /api/users/JiraSearchServiceController/isEnabled | 
+[**restNativeSearchJira**](JiraSearchServiceControllerApi.md#restNativeSearchJira) | **POST** /api/users/JiraSearchServiceController/nativeSearch | 
+[**restSearchJira**](JiraSearchServiceControllerApi.md#restSearchJira) | **POST** /api/users/JiraSearchServiceController/search | 
 
-<a name="restAggregate1"></a>
-# **restAggregate1**
-> JiraResultsExtractionData restAggregate1(body)
+<a name="restAggregateJira"></a>
+# **restAggregateJira**
+> JiraResultsExtractionData restAggregateJira(body)
 
 
 
@@ -38,10 +38,10 @@ Method | HTTP request | Description
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 AggregateRequestBodyJiraResultsExtractionData body = new AggregateRequestBodyJiraResultsExtractionData(); // AggregateRequestBodyJiraResultsExtractionData | 
 try {
-    JiraResultsExtractionData result = apiInstance.restAggregate1(body);
+    JiraResultsExtractionData result = apiInstance.restAggregateJira(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restAggregate1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restAggregateJira");
     e.printStackTrace();
 }
 ```
@@ -65,9 +65,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restCreateCustomTemplateParamsMap1"></a>
-# **restCreateCustomTemplateParamsMap1**
-> Map&lt;String, Object&gt; restCreateCustomTemplateParamsMap1(body)
+<a name="restCreateCustomTemplateParamsMapJira"></a>
+# **restCreateCustomTemplateParamsMapJira**
+> Map&lt;String, Object&gt; restCreateCustomTemplateParamsMapJira(body)
 
 
 
@@ -81,10 +81,10 @@ No authorization required
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 CustomTemplateParamsRequestBody body = new CustomTemplateParamsRequestBody(); // CustomTemplateParamsRequestBody | 
 try {
-    Map<String, Object> result = apiInstance.restCreateCustomTemplateParamsMap1(body);
+    Map<String, Object> result = apiInstance.restCreateCustomTemplateParamsMapJira(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restCreateCustomTemplateParamsMap1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restCreateCustomTemplateParamsMapJira");
     e.printStackTrace();
 }
 ```
@@ -108,9 +108,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restExtractRelatedAnalisysReferences1"></a>
-# **restExtractRelatedAnalisysReferences1**
-> SearchResultAnalisysOutcome restExtractRelatedAnalisysReferences1(body, systemId)
+<a name="restExtractRelatedAnalisysReferencesJira"></a>
+# **restExtractRelatedAnalisysReferencesJira**
+> SearchResultAnalisysOutcome restExtractRelatedAnalisysReferencesJira(body, systemId)
 
 
 
@@ -125,10 +125,10 @@ JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi(
 JiraResultsExtractionData body = new JiraResultsExtractionData(); // JiraResultsExtractionData | 
 String systemId = "systemId_example"; // String | 
 try {
-    SearchResultAnalisysOutcome result = apiInstance.restExtractRelatedAnalisysReferences1(body, systemId);
+    SearchResultAnalisysOutcome result = apiInstance.restExtractRelatedAnalisysReferencesJira(body, systemId);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restExtractRelatedAnalisysReferences1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restExtractRelatedAnalisysReferencesJira");
     e.printStackTrace();
 }
 ```
@@ -153,9 +153,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restFindSystemById1"></a>
-# **restFindSystemById1**
-> SearchableSystemMetaData restFindSystemById1(systemId)
+<a name="restFindSystemByIdJira"></a>
+# **restFindSystemByIdJira**
+> SearchableSystemMetaData restFindSystemByIdJira(systemId)
 
 
 
@@ -169,10 +169,10 @@ No authorization required
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 String systemId = "systemId_example"; // String | 
 try {
-    SearchableSystemMetaData result = apiInstance.restFindSystemById1(systemId);
+    SearchableSystemMetaData result = apiInstance.restFindSystemByIdJira(systemId);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restFindSystemById1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restFindSystemByIdJira");
     e.printStackTrace();
 }
 ```
@@ -196,9 +196,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restFindSystemBySearchResult1"></a>
-# **restFindSystemBySearchResult1**
-> SearchableSystemMetaData restFindSystemBySearchResult1(body)
+<a name="restFindSystemBySearchResultJira"></a>
+# **restFindSystemBySearchResultJira**
+> SearchableSystemMetaData restFindSystemBySearchResultJira(body)
 
 
 
@@ -212,10 +212,10 @@ No authorization required
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 SearchResult body = new SearchResult(); // SearchResult | 
 try {
-    SearchableSystemMetaData result = apiInstance.restFindSystemBySearchResult1(body);
+    SearchableSystemMetaData result = apiInstance.restFindSystemBySearchResultJira(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restFindSystemBySearchResult1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restFindSystemBySearchResultJira");
     e.printStackTrace();
 }
 ```
@@ -239,9 +239,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restGetCachedCatalogues1"></a>
-# **restGetCachedCatalogues1**
-> List&lt;CatalogueSample&gt; restGetCachedCatalogues1(systemConfigurationCode)
+<a name="restGetCachedCataloguesJira"></a>
+# **restGetCachedCataloguesJira**
+> List&lt;CatalogueSample&gt; restGetCachedCataloguesJira(systemConfigurationCode)
 
 
 
@@ -255,10 +255,10 @@ No authorization required
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 String systemConfigurationCode = "systemConfigurationCode_example"; // String | 
 try {
-    List<CatalogueSample> result = apiInstance.restGetCachedCatalogues1(systemConfigurationCode);
+    List<CatalogueSample> result = apiInstance.restGetCachedCataloguesJira(systemConfigurationCode);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetCachedCatalogues1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetCachedCataloguesJira");
     e.printStackTrace();
 }
 ```
@@ -282,9 +282,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restGetCataloguesListSample1"></a>
-# **restGetCataloguesListSample1**
-> List&lt;CatalogueSample&gt; restGetCataloguesListSample1(configurationCode)
+<a name="restGetCataloguesListSampleJira"></a>
+# **restGetCataloguesListSampleJira**
+> List&lt;CatalogueSample&gt; restGetCataloguesListSampleJira(configurationCode)
 
 
 
@@ -298,10 +298,10 @@ No authorization required
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 String configurationCode = "configurationCode_example"; // String | 
 try {
-    List<CatalogueSample> result = apiInstance.restGetCataloguesListSample1(configurationCode);
+    List<CatalogueSample> result = apiInstance.restGetCataloguesListSampleJira(configurationCode);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetCataloguesListSample1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetCataloguesListSampleJira");
     e.printStackTrace();
 }
 ```
@@ -325,9 +325,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restGetDescription1"></a>
-# **restGetDescription1**
-> String restGetDescription1()
+<a name="restGetDescriptionJira"></a>
+# **restGetDescriptionJira**
+> String restGetDescriptionJira()
 
 
 
@@ -340,10 +340,10 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetDescription1();
+    String result = apiInstance.restGetDescriptionJira();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetDescription1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetDescriptionJira");
     e.printStackTrace();
 }
 ```
@@ -364,9 +364,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetId1"></a>
-# **restGetId1**
-> String restGetId1()
+<a name="restGetIdJira"></a>
+# **restGetIdJira**
+> String restGetIdJira()
 
 
 
@@ -379,10 +379,10 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetId1();
+    String result = apiInstance.restGetIdJira();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetId1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetIdJira");
     e.printStackTrace();
 }
 ```
@@ -403,9 +403,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetMessagingModuleId1"></a>
-# **restGetMessagingModuleId1**
-> String restGetMessagingModuleId1()
+<a name="restGetMessagingModuleIdJira"></a>
+# **restGetMessagingModuleIdJira**
+> String restGetMessagingModuleIdJira()
 
 
 
@@ -418,10 +418,10 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetMessagingModuleId1();
+    String result = apiInstance.restGetMessagingModuleIdJira();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetMessagingModuleId1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetMessagingModuleIdJira");
     e.printStackTrace();
 }
 ```
@@ -442,9 +442,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetNativePromptTemplateUseCode1"></a>
-# **restGetNativePromptTemplateUseCode1**
-> String restGetNativePromptTemplateUseCode1()
+<a name="restGetNativePromptTemplateUseCodeJira"></a>
+# **restGetNativePromptTemplateUseCodeJira**
+> String restGetNativePromptTemplateUseCodeJira()
 
 
 
@@ -457,10 +457,10 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetNativePromptTemplateUseCode1();
+    String result = apiInstance.restGetNativePromptTemplateUseCodeJira();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetNativePromptTemplateUseCode1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetNativePromptTemplateUseCodeJira");
     e.printStackTrace();
 }
 ```
@@ -481,9 +481,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetProductId1"></a>
-# **restGetProductId1**
-> String restGetProductId1()
+<a name="restGetProductIdJira"></a>
+# **restGetProductIdJira**
+> String restGetProductIdJira()
 
 
 
@@ -496,10 +496,10 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetProductId1();
+    String result = apiInstance.restGetProductIdJira();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetProductId1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetProductIdJira");
     e.printStackTrace();
 }
 ```
@@ -520,9 +520,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetQueriesGenerationPromptUseCode1"></a>
-# **restGetQueriesGenerationPromptUseCode1**
-> String restGetQueriesGenerationPromptUseCode1()
+<a name="restGetQueriesGenerationPromptUseCodeJira"></a>
+# **restGetQueriesGenerationPromptUseCodeJira**
+> String restGetQueriesGenerationPromptUseCodeJira()
 
 
 
@@ -535,10 +535,10 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetQueriesGenerationPromptUseCode1();
+    String result = apiInstance.restGetQueriesGenerationPromptUseCodeJira();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetQueriesGenerationPromptUseCode1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetQueriesGenerationPromptUseCodeJira");
     e.printStackTrace();
 }
 ```
@@ -559,9 +559,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetSearchableSystems1"></a>
-# **restGetSearchableSystems1**
-> List&lt;SearchableSystemMetaData&gt; restGetSearchableSystems1()
+<a name="restGetSearchableSystemsJira"></a>
+# **restGetSearchableSystemsJira**
+> List&lt;SearchableSystemMetaData&gt; restGetSearchableSystemsJira()
 
 
 
@@ -574,10 +574,10 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    List<SearchableSystemMetaData> result = apiInstance.restGetSearchableSystems1();
+    List<SearchableSystemMetaData> result = apiInstance.restGetSearchableSystemsJira();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetSearchableSystems1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetSearchableSystemsJira");
     e.printStackTrace();
 }
 ```
@@ -598,9 +598,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restIsEnabled1"></a>
-# **restIsEnabled1**
-> Boolean restIsEnabled1()
+<a name="restIsEnabledJira"></a>
+# **restIsEnabledJira**
+> Boolean restIsEnabledJira()
 
 
 
@@ -613,10 +613,10 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    Boolean result = apiInstance.restIsEnabled1();
+    Boolean result = apiInstance.restIsEnabledJira();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restIsEnabled1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restIsEnabledJira");
     e.printStackTrace();
 }
 ```
@@ -637,9 +637,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restNativeSearch1"></a>
-# **restNativeSearch1**
-> List&lt;SearchResult&gt; restNativeSearch1(body, systemId, nEntryLimit)
+<a name="restNativeSearchJira"></a>
+# **restNativeSearchJira**
+> List&lt;SearchResult&gt; restNativeSearchJira(body, systemId, nEntryLimit)
 
 
 
@@ -655,10 +655,10 @@ JiraIssuesSearchFilter body = new JiraIssuesSearchFilter(); // JiraIssuesSearchF
 String systemId = "systemId_example"; // String | 
 Integer nEntryLimit = 56; // Integer | 
 try {
-    List<SearchResult> result = apiInstance.restNativeSearch1(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restNativeSearchJira(body, systemId, nEntryLimit);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restNativeSearch1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restNativeSearchJira");
     e.printStackTrace();
 }
 ```
@@ -684,9 +684,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restSearch1"></a>
-# **restSearch1**
-> List&lt;SearchResult&gt; restSearch1(body, systemId, nEntryLimit)
+<a name="restSearchJira"></a>
+# **restSearchJira**
+> List&lt;SearchResult&gt; restSearchJira(body, systemId, nEntryLimit)
 
 
 
@@ -702,10 +702,10 @@ SearchQuery body = new SearchQuery(); // SearchQuery |
 String systemId = "systemId_example"; // String | 
 Integer nEntryLimit = 56; // Integer | 
 try {
-    List<SearchResult> result = apiInstance.restSearch1(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restSearchJira(body, systemId, nEntryLimit);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JiraSearchServiceControllerApi#restSearch1");
+    System.err.println("Exception when calling JiraSearchServiceControllerApi#restSearchJira");
     e.printStackTrace();
 }
 ```

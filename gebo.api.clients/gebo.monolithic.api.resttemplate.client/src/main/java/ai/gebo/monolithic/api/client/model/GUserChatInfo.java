@@ -23,7 +23,7 @@ import java.util.Date;
  * GUserChatInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T13:04:36.158525700+02:00[Europe/Rome]")
 
 public class GUserChatInfo {
   @JsonProperty("username")
@@ -35,23 +35,23 @@ public class GUserChatInfo {
   @JsonProperty("code")
   private String code = null;
 
-  @JsonProperty("contextCode")
-  private String contextCode = null;
-
-  @JsonProperty("chatProfileCode")
-  private String chatProfileCode = null;
-
-  @JsonProperty("chatModelCode")
-  private String chatModelCode = null;
-
-  @JsonProperty("ragChat")
-  private Boolean ragChat = null;
+  @JsonProperty("pipelineCode")
+  private String pipelineCode = null;
 
   @JsonProperty("chatCreationDateTime")
   private Date chatCreationDateTime = null;
 
-  @JsonProperty("pipelineCode")
-  private String pipelineCode = null;
+  @JsonProperty("chatProfileCode")
+  private String chatProfileCode = null;
+
+  @JsonProperty("contextCode")
+  private String contextCode = null;
+
+  @JsonProperty("ragChat")
+  private Boolean ragChat = null;
+
+  @JsonProperty("chatModelCode")
+  private String chatModelCode = null;
 
   public GUserChatInfo username(String username) {
     this.username = username;
@@ -107,76 +107,22 @@ public class GUserChatInfo {
     this.code = code;
   }
 
-  public GUserChatInfo contextCode(String contextCode) {
-    this.contextCode = contextCode;
+  public GUserChatInfo pipelineCode(String pipelineCode) {
+    this.pipelineCode = pipelineCode;
     return this;
   }
 
    /**
-   * Get contextCode
-   * @return contextCode
+   * Get pipelineCode
+   * @return pipelineCode
   **/
   @Schema(description = "")
-  public String getContextCode() {
-    return contextCode;
+  public String getPipelineCode() {
+    return pipelineCode;
   }
 
-  public void setContextCode(String contextCode) {
-    this.contextCode = contextCode;
-  }
-
-  public GUserChatInfo chatProfileCode(String chatProfileCode) {
-    this.chatProfileCode = chatProfileCode;
-    return this;
-  }
-
-   /**
-   * Get chatProfileCode
-   * @return chatProfileCode
-  **/
-  @Schema(description = "")
-  public String getChatProfileCode() {
-    return chatProfileCode;
-  }
-
-  public void setChatProfileCode(String chatProfileCode) {
-    this.chatProfileCode = chatProfileCode;
-  }
-
-  public GUserChatInfo chatModelCode(String chatModelCode) {
-    this.chatModelCode = chatModelCode;
-    return this;
-  }
-
-   /**
-   * Get chatModelCode
-   * @return chatModelCode
-  **/
-  @Schema(description = "")
-  public String getChatModelCode() {
-    return chatModelCode;
-  }
-
-  public void setChatModelCode(String chatModelCode) {
-    this.chatModelCode = chatModelCode;
-  }
-
-  public GUserChatInfo ragChat(Boolean ragChat) {
-    this.ragChat = ragChat;
-    return this;
-  }
-
-   /**
-   * Get ragChat
-   * @return ragChat
-  **/
-  @Schema(description = "")
-  public Boolean isRagChat() {
-    return ragChat;
-  }
-
-  public void setRagChat(Boolean ragChat) {
-    this.ragChat = ragChat;
+  public void setPipelineCode(String pipelineCode) {
+    this.pipelineCode = pipelineCode;
   }
 
   public GUserChatInfo chatCreationDateTime(Date chatCreationDateTime) {
@@ -197,22 +143,76 @@ public class GUserChatInfo {
     this.chatCreationDateTime = chatCreationDateTime;
   }
 
-  public GUserChatInfo pipelineCode(String pipelineCode) {
-    this.pipelineCode = pipelineCode;
+  public GUserChatInfo chatProfileCode(String chatProfileCode) {
+    this.chatProfileCode = chatProfileCode;
     return this;
   }
 
    /**
-   * Get pipelineCode
-   * @return pipelineCode
+   * Get chatProfileCode
+   * @return chatProfileCode
   **/
   @Schema(description = "")
-  public String getPipelineCode() {
-    return pipelineCode;
+  public String getChatProfileCode() {
+    return chatProfileCode;
   }
 
-  public void setPipelineCode(String pipelineCode) {
-    this.pipelineCode = pipelineCode;
+  public void setChatProfileCode(String chatProfileCode) {
+    this.chatProfileCode = chatProfileCode;
+  }
+
+  public GUserChatInfo contextCode(String contextCode) {
+    this.contextCode = contextCode;
+    return this;
+  }
+
+   /**
+   * Get contextCode
+   * @return contextCode
+  **/
+  @Schema(description = "")
+  public String getContextCode() {
+    return contextCode;
+  }
+
+  public void setContextCode(String contextCode) {
+    this.contextCode = contextCode;
+  }
+
+  public GUserChatInfo ragChat(Boolean ragChat) {
+    this.ragChat = ragChat;
+    return this;
+  }
+
+   /**
+   * Get ragChat
+   * @return ragChat
+  **/
+  @Schema(description = "")
+  public Boolean isRagChat() {
+    return ragChat;
+  }
+
+  public void setRagChat(Boolean ragChat) {
+    this.ragChat = ragChat;
+  }
+
+  public GUserChatInfo chatModelCode(String chatModelCode) {
+    this.chatModelCode = chatModelCode;
+    return this;
+  }
+
+   /**
+   * Get chatModelCode
+   * @return chatModelCode
+  **/
+  @Schema(description = "")
+  public String getChatModelCode() {
+    return chatModelCode;
+  }
+
+  public void setChatModelCode(String chatModelCode) {
+    this.chatModelCode = chatModelCode;
   }
 
 
@@ -228,17 +228,17 @@ public class GUserChatInfo {
     return Objects.equals(this.username, guserChatInfo.username) &&
         Objects.equals(this.description, guserChatInfo.description) &&
         Objects.equals(this.code, guserChatInfo.code) &&
-        Objects.equals(this.contextCode, guserChatInfo.contextCode) &&
-        Objects.equals(this.chatProfileCode, guserChatInfo.chatProfileCode) &&
-        Objects.equals(this.chatModelCode, guserChatInfo.chatModelCode) &&
-        Objects.equals(this.ragChat, guserChatInfo.ragChat) &&
+        Objects.equals(this.pipelineCode, guserChatInfo.pipelineCode) &&
         Objects.equals(this.chatCreationDateTime, guserChatInfo.chatCreationDateTime) &&
-        Objects.equals(this.pipelineCode, guserChatInfo.pipelineCode);
+        Objects.equals(this.chatProfileCode, guserChatInfo.chatProfileCode) &&
+        Objects.equals(this.contextCode, guserChatInfo.contextCode) &&
+        Objects.equals(this.ragChat, guserChatInfo.ragChat) &&
+        Objects.equals(this.chatModelCode, guserChatInfo.chatModelCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, description, code, contextCode, chatProfileCode, chatModelCode, ragChat, chatCreationDateTime, pipelineCode);
+    return Objects.hash(username, description, code, pipelineCode, chatCreationDateTime, chatProfileCode, contextCode, ragChat, chatModelCode);
   }
 
 
@@ -250,12 +250,12 @@ public class GUserChatInfo {
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    contextCode: ").append(toIndentedString(contextCode)).append("\n");
-    sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
-    sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
-    sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");
-    sb.append("    chatCreationDateTime: ").append(toIndentedString(chatCreationDateTime)).append("\n");
     sb.append("    pipelineCode: ").append(toIndentedString(pipelineCode)).append("\n");
+    sb.append("    chatCreationDateTime: ").append(toIndentedString(chatCreationDateTime)).append("\n");
+    sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
+    sb.append("    contextCode: ").append(toIndentedString(contextCode)).append("\n");
+    sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");
+    sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

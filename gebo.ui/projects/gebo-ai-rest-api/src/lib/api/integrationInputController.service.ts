@@ -170,21 +170,21 @@ export class IntegrationInputControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
-    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
-    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
-    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public spoolDocumentEnvelope(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
+    public spoolDocumentEnvelope(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
+    public spoolDocumentEnvelope(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
+    public spoolDocumentEnvelope(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling spoolDocument.');
+            throw new Error('Required parameter body was null or undefined when calling spoolDocumentEnvelope.');
         }
 
         if (endpointCode === null || endpointCode === undefined) {
-            throw new Error('Required parameter endpointCode was null or undefined when calling spoolDocument.');
+            throw new Error('Required parameter endpointCode was null or undefined when calling spoolDocumentEnvelope.');
         }
 
         if (relativePath === null || relativePath === undefined) {
-            throw new Error('Required parameter relativePath was null or undefined when calling spoolDocument.');
+            throw new Error('Required parameter relativePath was null or undefined when calling spoolDocumentEnvelope.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -236,21 +236,21 @@ export class IntegrationInputControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public spoolDocument1Form(file: Blob, endpointCode: string, relativePath: string, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
-    public spoolDocument1Form(file: Blob, endpointCode: string, relativePath: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
-    public spoolDocument1Form(file: Blob, endpointCode: string, relativePath: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
-    public spoolDocument1Form(file: Blob, endpointCode: string, relativePath: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public spoolDocumentFileForm(file: Blob, endpointCode: string, relativePath: string, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
+    public spoolDocumentFileForm(file: Blob, endpointCode: string, relativePath: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
+    public spoolDocumentFileForm(file: Blob, endpointCode: string, relativePath: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
+    public spoolDocumentFileForm(file: Blob, endpointCode: string, relativePath: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (file === null || file === undefined) {
-            throw new Error('Required parameter file was null or undefined when calling spoolDocument1.');
+            throw new Error('Required parameter file was null or undefined when calling spoolDocumentFile.');
         }
 
         if (endpointCode === null || endpointCode === undefined) {
-            throw new Error('Required parameter endpointCode was null or undefined when calling spoolDocument1.');
+            throw new Error('Required parameter endpointCode was null or undefined when calling spoolDocumentFile.');
         }
 
         if (relativePath === null || relativePath === undefined) {
-            throw new Error('Required parameter relativePath was null or undefined when calling spoolDocument1.');
+            throw new Error('Required parameter relativePath was null or undefined when calling spoolDocumentFile.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});

@@ -70,13 +70,13 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restAggregate3(body: AggregateRequestBodyConfluenceResultsExtractionData, observe?: 'body', reportProgress?: boolean): Observable<ConfluenceResultsExtractionData>;
-    public restAggregate3(body: AggregateRequestBodyConfluenceResultsExtractionData, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ConfluenceResultsExtractionData>>;
-    public restAggregate3(body: AggregateRequestBodyConfluenceResultsExtractionData, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ConfluenceResultsExtractionData>>;
-    public restAggregate3(body: AggregateRequestBodyConfluenceResultsExtractionData, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restAggregateConfluence(body: AggregateRequestBodyConfluenceResultsExtractionData, observe?: 'body', reportProgress?: boolean): Observable<ConfluenceResultsExtractionData>;
+    public restAggregateConfluence(body: AggregateRequestBodyConfluenceResultsExtractionData, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ConfluenceResultsExtractionData>>;
+    public restAggregateConfluence(body: AggregateRequestBodyConfluenceResultsExtractionData, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ConfluenceResultsExtractionData>>;
+    public restAggregateConfluence(body: AggregateRequestBodyConfluenceResultsExtractionData, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restAggregate3.');
+            throw new Error('Required parameter body was null or undefined when calling restAggregateConfluence.');
         }
 
         let headers = this.defaultHeaders;
@@ -117,13 +117,13 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restCreateCustomTemplateParamsMap2(body: CustomTemplateParamsRequestBody, observe?: 'body', reportProgress?: boolean): Observable<{ [key: string]: any; }>;
-    public restCreateCustomTemplateParamsMap2(body: CustomTemplateParamsRequestBody, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{ [key: string]: any; }>>;
-    public restCreateCustomTemplateParamsMap2(body: CustomTemplateParamsRequestBody, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{ [key: string]: any; }>>;
-    public restCreateCustomTemplateParamsMap2(body: CustomTemplateParamsRequestBody, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restCreateCustomTemplateParamsMapConfluence(body: CustomTemplateParamsRequestBody, observe?: 'body', reportProgress?: boolean): Observable<{ [key: string]: any; }>;
+    public restCreateCustomTemplateParamsMapConfluence(body: CustomTemplateParamsRequestBody, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{ [key: string]: any; }>>;
+    public restCreateCustomTemplateParamsMapConfluence(body: CustomTemplateParamsRequestBody, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{ [key: string]: any; }>>;
+    public restCreateCustomTemplateParamsMapConfluence(body: CustomTemplateParamsRequestBody, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restCreateCustomTemplateParamsMap2.');
+            throw new Error('Required parameter body was null or undefined when calling restCreateCustomTemplateParamsMapConfluence.');
         }
 
         let headers = this.defaultHeaders;
@@ -165,17 +165,17 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restExtractRelatedAnalisysReferences3(body: ConfluenceResultsExtractionData, systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchResultAnalisysOutcome>;
-    public restExtractRelatedAnalisysReferences3(body: ConfluenceResultsExtractionData, systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchResultAnalisysOutcome>>;
-    public restExtractRelatedAnalisysReferences3(body: ConfluenceResultsExtractionData, systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchResultAnalisysOutcome>>;
-    public restExtractRelatedAnalisysReferences3(body: ConfluenceResultsExtractionData, systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restExtractRelatedAnalisysReferencesConfluence(body: ConfluenceResultsExtractionData, systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchResultAnalisysOutcome>;
+    public restExtractRelatedAnalisysReferencesConfluence(body: ConfluenceResultsExtractionData, systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchResultAnalisysOutcome>>;
+    public restExtractRelatedAnalisysReferencesConfluence(body: ConfluenceResultsExtractionData, systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchResultAnalisysOutcome>>;
+    public restExtractRelatedAnalisysReferencesConfluence(body: ConfluenceResultsExtractionData, systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restExtractRelatedAnalisysReferences3.');
+            throw new Error('Required parameter body was null or undefined when calling restExtractRelatedAnalisysReferencesConfluence.');
         }
 
         if (systemId === null || systemId === undefined) {
-            throw new Error('Required parameter systemId was null or undefined when calling restExtractRelatedAnalisysReferences3.');
+            throw new Error('Required parameter systemId was null or undefined when calling restExtractRelatedAnalisysReferencesConfluence.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -222,13 +222,13 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restFindSystemById3(systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
-    public restFindSystemById3(systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
-    public restFindSystemById3(systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
-    public restFindSystemById3(systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restFindSystemByIdConfluence(systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
+    public restFindSystemByIdConfluence(systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
+    public restFindSystemByIdConfluence(systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
+    public restFindSystemByIdConfluence(systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (systemId === null || systemId === undefined) {
-            throw new Error('Required parameter systemId was null or undefined when calling restFindSystemById3.');
+            throw new Error('Required parameter systemId was null or undefined when calling restFindSystemByIdConfluence.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -269,13 +269,13 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restFindSystemBySearchResult3(body: SearchResult, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
-    public restFindSystemBySearchResult3(body: SearchResult, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
-    public restFindSystemBySearchResult3(body: SearchResult, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
-    public restFindSystemBySearchResult3(body: SearchResult, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restFindSystemBySearchResultConfluence(body: SearchResult, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
+    public restFindSystemBySearchResultConfluence(body: SearchResult, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
+    public restFindSystemBySearchResultConfluence(body: SearchResult, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
+    public restFindSystemBySearchResultConfluence(body: SearchResult, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restFindSystemBySearchResult3.');
+            throw new Error('Required parameter body was null or undefined when calling restFindSystemBySearchResultConfluence.');
         }
 
         let headers = this.defaultHeaders;
@@ -316,10 +316,10 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetCachedCatalogues3(systemConfigurationCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
-    public restGetCachedCatalogues3(systemConfigurationCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
-    public restGetCachedCatalogues3(systemConfigurationCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
-    public restGetCachedCatalogues3(systemConfigurationCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetCachedCataloguesConfluence(systemConfigurationCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
+    public restGetCachedCataloguesConfluence(systemConfigurationCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
+    public restGetCachedCataloguesConfluence(systemConfigurationCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
+    public restGetCachedCataloguesConfluence(systemConfigurationCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -360,13 +360,13 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetCataloguesListSample3(configurationCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
-    public restGetCataloguesListSample3(configurationCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
-    public restGetCataloguesListSample3(configurationCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
-    public restGetCataloguesListSample3(configurationCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetCataloguesListSampleConfluence(configurationCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
+    public restGetCataloguesListSampleConfluence(configurationCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
+    public restGetCataloguesListSampleConfluence(configurationCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
+    public restGetCataloguesListSampleConfluence(configurationCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (configurationCode === null || configurationCode === undefined) {
-            throw new Error('Required parameter configurationCode was null or undefined when calling restGetCataloguesListSample3.');
+            throw new Error('Required parameter configurationCode was null or undefined when calling restGetCataloguesListSampleConfluence.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -406,10 +406,10 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetDescription3(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetDescription3(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetDescription3(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetDescription3(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetDescriptionConfluence(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetDescriptionConfluence(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetDescriptionConfluence(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetDescriptionConfluence(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -442,10 +442,10 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetId3(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetId3(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetId3(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetId3(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetIdConfluence(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetIdConfluence(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetIdConfluence(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetIdConfluence(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -478,10 +478,10 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetMessagingModuleId3(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetMessagingModuleId3(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetMessagingModuleId3(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetMessagingModuleId3(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetMessagingModuleIdConfluence(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetMessagingModuleIdConfluence(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetMessagingModuleIdConfluence(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetMessagingModuleIdConfluence(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -514,10 +514,10 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetNativePromptTemplateUseCode2(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetNativePromptTemplateUseCode2(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetNativePromptTemplateUseCode2(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetNativePromptTemplateUseCode2(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetNativePromptTemplateUseCodeConfluence(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetNativePromptTemplateUseCodeConfluence(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetNativePromptTemplateUseCodeConfluence(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetNativePromptTemplateUseCodeConfluence(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -550,10 +550,10 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetProductId3(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetProductId3(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetProductId3(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetProductId3(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetProductIdConfluence(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetProductIdConfluence(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetProductIdConfluence(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetProductIdConfluence(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -586,10 +586,10 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetQueriesGenerationPromptUseCode3(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetQueriesGenerationPromptUseCode3(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetQueriesGenerationPromptUseCode3(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetQueriesGenerationPromptUseCode3(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetQueriesGenerationPromptUseCodeConfluence(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetQueriesGenerationPromptUseCodeConfluence(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetQueriesGenerationPromptUseCodeConfluence(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetQueriesGenerationPromptUseCodeConfluence(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -622,10 +622,10 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetSearchableSystems3(observe?: 'body', reportProgress?: boolean): Observable<Array<SearchableSystemMetaData>>;
-    public restGetSearchableSystems3(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchableSystemMetaData>>>;
-    public restGetSearchableSystems3(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchableSystemMetaData>>>;
-    public restGetSearchableSystems3(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetSearchableSystemsConfluence(observe?: 'body', reportProgress?: boolean): Observable<Array<SearchableSystemMetaData>>;
+    public restGetSearchableSystemsConfluence(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchableSystemMetaData>>>;
+    public restGetSearchableSystemsConfluence(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchableSystemMetaData>>>;
+    public restGetSearchableSystemsConfluence(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -658,10 +658,10 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restIsEnabled3(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
-    public restIsEnabled3(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
-    public restIsEnabled3(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
-    public restIsEnabled3(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restIsEnabledConfluence(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public restIsEnabledConfluence(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public restIsEnabledConfluence(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
+    public restIsEnabledConfluence(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -697,21 +697,21 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restNativeSearch2(body: ConfluenceContentSearchFilter, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
-    public restNativeSearch2(body: ConfluenceContentSearchFilter, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
-    public restNativeSearch2(body: ConfluenceContentSearchFilter, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
-    public restNativeSearch2(body: ConfluenceContentSearchFilter, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restNativeSearchConfluence(body: ConfluenceContentSearchFilter, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
+    public restNativeSearchConfluence(body: ConfluenceContentSearchFilter, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
+    public restNativeSearchConfluence(body: ConfluenceContentSearchFilter, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
+    public restNativeSearchConfluence(body: ConfluenceContentSearchFilter, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restNativeSearch2.');
+            throw new Error('Required parameter body was null or undefined when calling restNativeSearchConfluence.');
         }
 
         if (systemId === null || systemId === undefined) {
-            throw new Error('Required parameter systemId was null or undefined when calling restNativeSearch2.');
+            throw new Error('Required parameter systemId was null or undefined when calling restNativeSearchConfluence.');
         }
 
         if (nEntryLimit === null || nEntryLimit === undefined) {
-            throw new Error('Required parameter nEntryLimit was null or undefined when calling restNativeSearch2.');
+            throw new Error('Required parameter nEntryLimit was null or undefined when calling restNativeSearchConfluence.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -763,21 +763,21 @@ export class ConfluenceSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restSearch3(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
-    public restSearch3(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
-    public restSearch3(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
-    public restSearch3(body: SearchQuery, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restSearchConfluence(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
+    public restSearchConfluence(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
+    public restSearchConfluence(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
+    public restSearchConfluence(body: SearchQuery, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restSearch3.');
+            throw new Error('Required parameter body was null or undefined when calling restSearchConfluence.');
         }
 
         if (systemId === null || systemId === undefined) {
-            throw new Error('Required parameter systemId was null or undefined when calling restSearch3.');
+            throw new Error('Required parameter systemId was null or undefined when calling restSearchConfluence.');
         }
 
         if (nEntryLimit === null || nEntryLimit === undefined) {
-            throw new Error('Required parameter nEntryLimit was null or undefined when calling restSearch3.');
+            throw new Error('Required parameter nEntryLimit was null or undefined when calling restSearchConfluence.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});

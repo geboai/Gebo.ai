@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class GeboTranscriptControllerApi {
     private ApiClient apiClient;
@@ -49,8 +49,8 @@ public class GeboTranscriptControllerApi {
      * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Boolean isEnabled() throws RestClientException {
-        return isEnabledWithHttpInfo().getBody();
+    public Boolean isEnabledTranscript() throws RestClientException {
+        return isEnabledTranscriptWithHttpInfo().getBody();
     }
 
     /**
@@ -60,7 +60,7 @@ public class GeboTranscriptControllerApi {
      * @return ResponseEntity&lt;Boolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Boolean> isEnabledWithHttpInfo() throws RestClientException {
+    public ResponseEntity<Boolean> isEnabledTranscriptWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboTranscriptController/isEnabled").build().toUriString();
         

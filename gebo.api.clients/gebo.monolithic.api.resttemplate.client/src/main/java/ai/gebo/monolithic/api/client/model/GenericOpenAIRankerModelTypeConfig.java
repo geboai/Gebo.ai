@@ -23,7 +23,7 @@ import java.util.Date;
  * GenericOpenAIRankerModelTypeConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class GenericOpenAIRankerModelTypeConfig {
   @JsonProperty("code")
@@ -47,14 +47,17 @@ public class GenericOpenAIRankerModelTypeConfig {
   @JsonProperty("modelConfigurationClass")
   private String modelConfigurationClass = null;
 
+  @JsonProperty("providerId")
+  private String providerId = null;
+
+  @JsonProperty("defaultCurrencyCode")
+  private String defaultCurrencyCode = null;
+
   @JsonProperty("baseUrl")
   private String baseUrl = null;
 
   @JsonProperty("modelsListProvider")
   private String modelsListProvider = null;
-
-  @JsonProperty("providerId")
-  private String providerId = null;
 
   @JsonProperty("optionalAuthentication")
   private Boolean optionalAuthentication = null;
@@ -188,6 +191,42 @@ public class GenericOpenAIRankerModelTypeConfig {
     this.modelConfigurationClass = modelConfigurationClass;
   }
 
+  public GenericOpenAIRankerModelTypeConfig providerId(String providerId) {
+    this.providerId = providerId;
+    return this;
+  }
+
+   /**
+   * Get providerId
+   * @return providerId
+  **/
+  @Schema(description = "")
+  public String getProviderId() {
+    return providerId;
+  }
+
+  public void setProviderId(String providerId) {
+    this.providerId = providerId;
+  }
+
+  public GenericOpenAIRankerModelTypeConfig defaultCurrencyCode(String defaultCurrencyCode) {
+    this.defaultCurrencyCode = defaultCurrencyCode;
+    return this;
+  }
+
+   /**
+   * Get defaultCurrencyCode
+   * @return defaultCurrencyCode
+  **/
+  @Schema(description = "")
+  public String getDefaultCurrencyCode() {
+    return defaultCurrencyCode;
+  }
+
+  public void setDefaultCurrencyCode(String defaultCurrencyCode) {
+    this.defaultCurrencyCode = defaultCurrencyCode;
+  }
+
   public GenericOpenAIRankerModelTypeConfig baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
@@ -222,24 +261,6 @@ public class GenericOpenAIRankerModelTypeConfig {
 
   public void setModelsListProvider(String modelsListProvider) {
     this.modelsListProvider = modelsListProvider;
-  }
-
-  public GenericOpenAIRankerModelTypeConfig providerId(String providerId) {
-    this.providerId = providerId;
-    return this;
-  }
-
-   /**
-   * Get providerId
-   * @return providerId
-  **/
-  @Schema(description = "")
-  public String getProviderId() {
-    return providerId;
-  }
-
-  public void setProviderId(String providerId) {
-    this.providerId = providerId;
   }
 
   public GenericOpenAIRankerModelTypeConfig optionalAuthentication(Boolean optionalAuthentication) {
@@ -295,16 +316,17 @@ public class GenericOpenAIRankerModelTypeConfig {
         Objects.equals(this.dateModified, genericOpenAIRankerModelTypeConfig.dateModified) &&
         Objects.equals(this.dateCreated, genericOpenAIRankerModelTypeConfig.dateCreated) &&
         Objects.equals(this.modelConfigurationClass, genericOpenAIRankerModelTypeConfig.modelConfigurationClass) &&
+        Objects.equals(this.providerId, genericOpenAIRankerModelTypeConfig.providerId) &&
+        Objects.equals(this.defaultCurrencyCode, genericOpenAIRankerModelTypeConfig.defaultCurrencyCode) &&
         Objects.equals(this.baseUrl, genericOpenAIRankerModelTypeConfig.baseUrl) &&
         Objects.equals(this.modelsListProvider, genericOpenAIRankerModelTypeConfig.modelsListProvider) &&
-        Objects.equals(this.providerId, genericOpenAIRankerModelTypeConfig.providerId) &&
         Objects.equals(this.optionalAuthentication, genericOpenAIRankerModelTypeConfig.optionalAuthentication) &&
         Objects.equals(this.defaultModel, genericOpenAIRankerModelTypeConfig.defaultModel);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass, baseUrl, modelsListProvider, providerId, optionalAuthentication, defaultModel);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass, providerId, defaultCurrencyCode, baseUrl, modelsListProvider, optionalAuthentication, defaultModel);
   }
 
 
@@ -320,9 +342,10 @@ public class GenericOpenAIRankerModelTypeConfig {
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    modelConfigurationClass: ").append(toIndentedString(modelConfigurationClass)).append("\n");
+    sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
+    sb.append("    defaultCurrencyCode: ").append(toIndentedString(defaultCurrencyCode)).append("\n");
     sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");
     sb.append("    modelsListProvider: ").append(toIndentedString(modelsListProvider)).append("\n");
-    sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
     sb.append("    optionalAuthentication: ").append(toIndentedString(optionalAuthentication)).append("\n");
     sb.append("    defaultModel: ").append(toIndentedString(defaultModel)).append("\n");
     sb.append("}");

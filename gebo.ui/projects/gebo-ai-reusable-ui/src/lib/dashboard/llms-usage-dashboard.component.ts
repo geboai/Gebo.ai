@@ -7,13 +7,15 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-import { Directive, OnInit } from "@angular/core";
+import { Directive, inject, OnInit } from "@angular/core";
 import { 
   LLMUsageDrillDownLevel, 
   LLMUsageDrillDownResult, 
   LLMUsageAggregationBucket 
 } from "@Gebo.ai/gebo-ai-rest-api";
 import { Observable } from "rxjs";
+import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../controls/field-host-component-iface/field-host-component-iface";
+import { GeboAITranslationService } from "../controls/field-translation-container/gebo-translation.service";
 
 @Directive()
 export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
@@ -24,20 +26,39 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
   filterTab1: LLMUsageDrillDownLevel = {};
   filterTab2: LLMUsageDrillDownLevel = {};
 
+  private translationService = inject(GeboAITranslationService);
+  private moduleId = inject(GEBO_AI_MODULE, { optional: true });
+  private fieldHost = inject(GEBO_AI_FIELD_HOST, { optional: true });
+
+  /**
+   * The texts of the options and chart series built here rather than in the template,
+   * by resource id; translated in the current language on init.
+   */
+  protected texts: { [id: string]: string } = {
+    AllOption: "All",
+    ChatModelTypeOption: "Chat",
+    EmbeddingModelTypeOption: "Embedding",
+    RankingModelTypeOption: "Ranking",
+    ImageModelTypeOption: "Image generation",
+    TextToSpeechModelTypeOption: "Text to speech",
+    TranscriptionModelTypeOption: "Transcription",
+    InputTokensSeries: "Input Tokens (k)",
+    OutputTokensSeries: "Output Tokens (k)",
+    MinResponseTimeSeries: "Min Response Time (s)",
+    AvgResponseTimeSeries: "Avg Response Time (s)",
+    MaxResponseTimeSeries: "Max Response Time (s)",
+    CostSeries: "Cost",
+    MinTimeToFirstTokenSeries: "Min Time to First Token (s)",
+    AvgTimeToFirstTokenSeries: "Avg Time to First Token (s)",
+    MaxTimeToFirstTokenSeries: "Max Time to First Token (s)"
+  };
+
   /**
    * Every model type usage is recorded for, not only the ones found in the current
    * result: the backend stops reporting model type as a sub-dimension once the filter
    * fixes it, so options built from the result would vanish after the first choice.
    */
-  readonly modelTypeOptions: { label: string, value?: LLMUsageDrillDownLevel.ModelTypeEnum }[] = [
-    { label: "All", value: undefined },
-    { label: "Chat", value: LLMUsageDrillDownLevel.ModelTypeEnum.CHAT },
-    { label: "Embedding", value: LLMUsageDrillDownLevel.ModelTypeEnum.EMBEDDING },
-    { label: "Ranking", value: LLMUsageDrillDownLevel.ModelTypeEnum.RANKER },
-    { label: "Image generation", value: LLMUsageDrillDownLevel.ModelTypeEnum.IMAGE },
-    { label: "Text to speech", value: LLMUsageDrillDownLevel.ModelTypeEnum.TTS },
-    { label: "Transcription", value: LLMUsageDrillDownLevel.ModelTypeEnum.TRANSCRIPT }
-  ];
+  modelTypeOptions: { label: string, value?: LLMUsageDrillDownLevel.ModelTypeEnum }[] = this.buildModelTypeOptions();
 
   // Chart data
   tokenChartDataTab1: any;
@@ -88,7 +109,38 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.translateTexts();
     this.loadData({});
+  }
+
+  /** Translates the texts built here, then rebuilds the options and charts showing them. */
+  private translateTexts(): void {
+    const host = Array.isArray(this.fieldHost) ? this.fieldHost[0] : this.fieldHost;
+    const moduleId = Array.isArray(this.moduleId) ? this.moduleId[0] : this.moduleId;
+    const entityId = host?.getEntityName();
+    if (!moduleId || !entityId) return;
+    const items = Object.entries(this.texts).map(([id, label]) => ({ id, label }));
+    this.translationService.translateMenuItems(moduleId, entityId, items).subscribe(translated => {
+      const texts = { ...this.texts };
+      translated.forEach(x => {
+        if (x.id && x.label) texts[x.id] = x.label;
+      });
+      this.texts = texts;
+      this.modelTypeOptions = this.buildModelTypeOptions();
+      this.updateCharts();
+    });
+  }
+
+  private buildModelTypeOptions(): { label: string, value?: LLMUsageDrillDownLevel.ModelTypeEnum }[] {
+    return [
+      { label: this.texts["AllOption"], value: undefined },
+      { label: this.texts["ChatModelTypeOption"], value: LLMUsageDrillDownLevel.ModelTypeEnum.CHAT },
+      { label: this.texts["EmbeddingModelTypeOption"], value: LLMUsageDrillDownLevel.ModelTypeEnum.EMBEDDING },
+      { label: this.texts["RankingModelTypeOption"], value: LLMUsageDrillDownLevel.ModelTypeEnum.RANKER },
+      { label: this.texts["ImageModelTypeOption"], value: LLMUsageDrillDownLevel.ModelTypeEnum.IMAGE },
+      { label: this.texts["TextToSpeechModelTypeOption"], value: LLMUsageDrillDownLevel.ModelTypeEnum.TTS },
+      { label: this.texts["TranscriptionModelTypeOption"], value: LLMUsageDrillDownLevel.ModelTypeEnum.TRANSCRIPT }
+    ];
   }
 
   abstract executeDrillDown(filter: LLMUsageDrillDownLevel): Observable<LLMUsageDrillDownResult>;
@@ -135,7 +187,7 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
   }
 
   getOptions(arr?: Array<any>): { label: string, value: any }[] {
-    const options: { label: string, value: any }[] = [{ label: "All", value: undefined }];
+    const options: { label: string, value: any }[] = [{ label: this.texts["AllOption"], value: undefined }];
     if (arr) {
       arr.forEach(val => {
         options.push({ label: String(val), value: val });
@@ -174,14 +226,14 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
       labels: labels,
       datasets: [
         {
-          label: "Input Tokens (k)",
+          label: this.texts["InputTokensSeries"],
           data: inputData,
           backgroundColor: "rgba(66, 165, 245, 0.75)",
           borderColor: "#1E88E5",
           borderWidth: 1.5
         },
         {
-          label: "Output Tokens (k)",
+          label: this.texts["OutputTokensSeries"],
           data: outputData,
           backgroundColor: "rgba(255, 167, 38, 0.75)",
           borderColor: "#FB8C00",
@@ -205,21 +257,21 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
       labels: labels,
       datasets: [
         {
-          label: "Min Response Time (s)",
+          label: this.texts["MinResponseTimeSeries"],
           data: minData,
           backgroundColor: "rgba(102, 187, 106, 0.75)",
           borderColor: "#43A047",
           borderWidth: 1.5
         },
         {
-          label: "Avg Response Time (s)",
+          label: this.texts["AvgResponseTimeSeries"],
           data: avgData,
           backgroundColor: "rgba(38, 166, 154, 0.75)",
           borderColor: "#00897B",
           borderWidth: 1.5
         },
         {
-          label: "Max Response Time (s)",
+          label: this.texts["MaxResponseTimeSeries"],
           data: maxData,
           backgroundColor: "rgba(239, 83, 80, 0.75)",
           borderColor: "#E53935",
@@ -250,7 +302,7 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
     return {
       labels: buckets.map(b => this.formatTimeLabel(b, isDaily)),
       datasets: currencies.map((currency, i) => ({
-        label: `Cost (${currency})`,
+        label: `${this.texts["CostSeries"]} (${currency})`,
         data: buckets.map(b => b.currencyCode === currency && b.cost !== undefined && b.cost !== null ? b.cost : null),
         backgroundColor: palette[i % palette.length].backgroundColor,
         borderColor: palette[i % palette.length].borderColor,
@@ -281,21 +333,21 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
       labels: labels,
       datasets: [
         {
-          label: "Min Time to First Token (s)",
+          label: this.texts["MinTimeToFirstTokenSeries"],
           data: buckets.map(b => timed(b, b.timeToFirstTokenMin)),
           backgroundColor: "rgba(126, 87, 194, 0.75)",
           borderColor: "#5E35B1",
           borderWidth: 1.5
         },
         {
-          label: "Avg Time to First Token (s)",
+          label: this.texts["AvgTimeToFirstTokenSeries"],
           data: buckets.map(b => timed(b, b.timeToFirstTokenAvg)),
           backgroundColor: "rgba(92, 107, 192, 0.75)",
           borderColor: "#3949AB",
           borderWidth: 1.5
         },
         {
-          label: "Max Time to First Token (s)",
+          label: this.texts["MaxTimeToFirstTokenSeries"],
           data: buckets.map(b => timed(b, b.timeToFirstTokenMax)),
           backgroundColor: "rgba(236, 64, 122, 0.75)",
           borderColor: "#D81B60",

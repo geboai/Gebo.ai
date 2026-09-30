@@ -49,79 +49,79 @@ public class GoogleDriveSearchServiceController extends BaseSearchController<Goo
 	}
 
 	@GetMapping("isEnabled")
-	public boolean restIsEnabled() throws SearchServiceException {
+	public boolean restIsEnabledGoogleDrive() throws SearchServiceException {
 		return isEnabled();
 	}
 
 	@GetMapping("getId")
-	public String restGetId() {
+	public String restGetIdGoogleDrive() {
 		return getId();
 	}
 
 	@GetMapping("getDescription")
-	public String restGetDescription() {
+	public String restGetDescriptionGoogleDrive() {
 		return getDescription();
 	}
 
 	@GetMapping("getProductId")
-	public String restGetProductId() {
+	public String restGetProductIdGoogleDrive() {
 		return getProductId();
 	}
 
 	@GetMapping("getMessagingModuleId")
-	public String restGetMessagingModuleId() {
+	public String restGetMessagingModuleIdGoogleDrive() {
 		return getMessagingModuleId();
 	}
 
 	@GetMapping("getQueriesGenerationPromptUseCode")
-	public String restGetQueriesGenerationPromptUseCode() {
+	public String restGetQueriesGenerationPromptUseCodeGoogleDrive() {
 		return getQueriesGenerationPromptUseCode();
 	}
 
 	@GetMapping(value = "getSearchableSystems", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<SearchableSystemMetaData> restGetSearchableSystems() throws SearchServiceException {
+	public List<SearchableSystemMetaData> restGetSearchableSystemsGoogleDrive() throws SearchServiceException {
 		return getSearchableSystems();
 	}
 
 	@GetMapping(value = "findSystemById", produces = MediaType.APPLICATION_JSON_VALUE)
-	public SearchableSystemMetaData restFindSystemById(@RequestParam("systemId") String systemId)
+	public SearchableSystemMetaData restFindSystemByIdGoogleDrive(@RequestParam("systemId") String systemId)
 			throws SearchServiceException {
 		return findSystemById(systemId);
 	}
 
 	@PostMapping(value = "findSystemBySearchResult", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public SearchableSystemMetaData restFindSystemBySearchResult(@RequestBody SearchResult result)
+	public SearchableSystemMetaData restFindSystemBySearchResultGoogleDrive(@RequestBody SearchResult result)
 			throws SearchServiceException {
 		return findSystemBySearchResult(result);
 	}
 
 	@PostMapping(value = "search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<SearchResult> restSearch(@RequestBody SearchQuery query, @RequestParam("systemId") String systemId,
+	public List<SearchResult> restSearchGoogleDrive(@RequestBody SearchQuery query, @RequestParam("systemId") String systemId,
 			@RequestParam("nEntryLimit") int nEntryLimit) throws IOException, SearchServiceException {
 		return search(query, systemId, nEntryLimit);
 	}
 
 	@GetMapping(value = "getCataloguesListSample", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<CatalogueSample> restGetCataloguesListSample(@RequestParam("configurationCode") String configurationCode)
+	public List<CatalogueSample> restGetCataloguesListSampleGoogleDrive(@RequestParam("configurationCode") String configurationCode)
 			throws SearchServiceException {
 		return getCataloguesListSample(configurationCode);
 	}
 
 	@GetMapping(value = "getCachedCatalogues", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<CatalogueSample> restGetCachedCatalogues(
+	public List<CatalogueSample> restGetCachedCataloguesGoogleDrive(
 			@RequestParam(value = "systemConfigurationCode", required = false) String systemConfigurationCode)
 			throws SearchServiceException {
 		return systemConfigurationCode != null ? getCachedCatalogues(systemConfigurationCode) : getCachedCatalogues();
 	}
 
 	@PostMapping(value = "extractRelatedAnalisysReferences", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferences(@RequestParam("systemId") String systemId,
+	public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferencesGoogleDrive(@RequestParam("systemId") String systemId,
 			@RequestBody GoogleDriveResultsExtractionData extractedData) throws IOException, SearchServiceException {
 		return extractRelatedAnalisysReferences(systemId, extractedData);
 	}
 
 	@PostMapping(value = "aggregate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public GoogleDriveResultsExtractionData restAggregate(
+	public GoogleDriveResultsExtractionData restAggregateGoogleDrive(
 			@RequestBody AggregateRequestBody<GoogleDriveResultsExtractionData> body) {
 		return aggregate(body.getOldConsolidated(), body.getConsolidated());
 	}

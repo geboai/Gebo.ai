@@ -27,7 +27,7 @@ import java.util.List;
  * GChatProfileConfiguration
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class GChatProfileConfiguration {
   @JsonProperty("code")
@@ -95,6 +95,9 @@ public class GChatProfileConfiguration {
 
   @JsonProperty("useAlsoKeywordSearch")
   private Boolean useAlsoKeywordSearch = null;
+
+  @JsonProperty("defaultChatNetworkOfAgents")
+  private String defaultChatNetworkOfAgents = null;
 
   public GChatProfileConfiguration code(String code) {
     this.code = code;
@@ -532,6 +535,24 @@ public class GChatProfileConfiguration {
     this.useAlsoKeywordSearch = useAlsoKeywordSearch;
   }
 
+  public GChatProfileConfiguration defaultChatNetworkOfAgents(String defaultChatNetworkOfAgents) {
+    this.defaultChatNetworkOfAgents = defaultChatNetworkOfAgents;
+    return this;
+  }
+
+   /**
+   * Get defaultChatNetworkOfAgents
+   * @return defaultChatNetworkOfAgents
+  **/
+  @Schema(description = "")
+  public String getDefaultChatNetworkOfAgents() {
+    return defaultChatNetworkOfAgents;
+  }
+
+  public void setDefaultChatNetworkOfAgents(String defaultChatNetworkOfAgents) {
+    this.defaultChatNetworkOfAgents = defaultChatNetworkOfAgents;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -563,12 +584,13 @@ public class GChatProfileConfiguration {
         Objects.equals(this.disableMultiHopRag, gchatProfileConfiguration.disableMultiHopRag) &&
         Objects.equals(this.otherSearchSimilarityThreshold, gchatProfileConfiguration.otherSearchSimilarityThreshold) &&
         Objects.equals(this.manualThreasholdsConfiguration, gchatProfileConfiguration.manualThreasholdsConfiguration) &&
-        Objects.equals(this.useAlsoKeywordSearch, gchatProfileConfiguration.useAlsoKeywordSearch);
+        Objects.equals(this.useAlsoKeywordSearch, gchatProfileConfiguration.useAlsoKeywordSearch) &&
+        Objects.equals(this.defaultChatNetworkOfAgents, gchatProfileConfiguration.defaultChatNetworkOfAgents);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, embeddingModelReference, chatModelReference, enabledFunctions, accessibleGroups, accessibleUsers, accessibleToAll, userChoosesKnowledgeBases, topK, similaritySearchThreshold, knowledgeBaseCodes, forcedRequestDocuments, forcedRequestDocumentsReadonly, disableMultiHopRag, otherSearchSimilarityThreshold, manualThreasholdsConfiguration, useAlsoKeywordSearch);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, embeddingModelReference, chatModelReference, enabledFunctions, accessibleGroups, accessibleUsers, accessibleToAll, userChoosesKnowledgeBases, topK, similaritySearchThreshold, knowledgeBaseCodes, forcedRequestDocuments, forcedRequestDocumentsReadonly, disableMultiHopRag, otherSearchSimilarityThreshold, manualThreasholdsConfiguration, useAlsoKeywordSearch, defaultChatNetworkOfAgents);
   }
 
 
@@ -599,6 +621,7 @@ public class GChatProfileConfiguration {
     sb.append("    otherSearchSimilarityThreshold: ").append(toIndentedString(otherSearchSimilarityThreshold)).append("\n");
     sb.append("    manualThreasholdsConfiguration: ").append(toIndentedString(manualThreasholdsConfiguration)).append("\n");
     sb.append("    useAlsoKeywordSearch: ").append(toIndentedString(useAlsoKeywordSearch)).append("\n");
+    sb.append("    defaultChatNetworkOfAgents: ").append(toIndentedString(defaultChatNetworkOfAgents)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -110,7 +110,7 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);
-		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
+		int tokenBudget = agentTokenBudget(agentModel, prompt, chatRequestContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Tool-calling agent id:" + getId() + " agentRole:"
 					+ (agentRole != null ? agentRole.getCode() : null) + " contextLength:"

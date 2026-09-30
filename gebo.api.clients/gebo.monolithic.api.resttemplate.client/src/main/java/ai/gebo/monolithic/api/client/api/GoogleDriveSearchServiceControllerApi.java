@@ -28,7 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class GoogleDriveSearchServiceControllerApi {
     private ApiClient apiClient;
@@ -56,8 +56,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return GoogleDriveResultsExtractionData
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GoogleDriveResultsExtractionData restAggregate2(AggregateRequestBodyGoogleDriveResultsExtractionData body) throws RestClientException {
-        return restAggregate2WithHttpInfo(body).getBody();
+    public GoogleDriveResultsExtractionData restAggregateGoogleDrive(AggregateRequestBodyGoogleDriveResultsExtractionData body) throws RestClientException {
+        return restAggregateGoogleDriveWithHttpInfo(body).getBody();
     }
 
     /**
@@ -68,11 +68,11 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;GoogleDriveResultsExtractionData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GoogleDriveResultsExtractionData> restAggregate2WithHttpInfo(AggregateRequestBodyGoogleDriveResultsExtractionData body) throws RestClientException {
+    public ResponseEntity<GoogleDriveResultsExtractionData> restAggregateGoogleDriveWithHttpInfo(AggregateRequestBodyGoogleDriveResultsExtractionData body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restAggregate2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restAggregateGoogleDrive");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/aggregate").build().toUriString();
         
@@ -103,8 +103,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return SearchResultAnalisysOutcome
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferences2(GoogleDriveResultsExtractionData body, String systemId) throws RestClientException {
-        return restExtractRelatedAnalisysReferences2WithHttpInfo(body, systemId).getBody();
+    public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferencesGoogleDrive(GoogleDriveResultsExtractionData body, String systemId) throws RestClientException {
+        return restExtractRelatedAnalisysReferencesGoogleDriveWithHttpInfo(body, systemId).getBody();
     }
 
     /**
@@ -116,15 +116,15 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;SearchResultAnalisysOutcome&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SearchResultAnalisysOutcome> restExtractRelatedAnalisysReferences2WithHttpInfo(GoogleDriveResultsExtractionData body, String systemId) throws RestClientException {
+    public ResponseEntity<SearchResultAnalisysOutcome> restExtractRelatedAnalisysReferencesGoogleDriveWithHttpInfo(GoogleDriveResultsExtractionData body, String systemId) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restExtractRelatedAnalisysReferences2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restExtractRelatedAnalisysReferencesGoogleDrive");
         }
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restExtractRelatedAnalisysReferences2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restExtractRelatedAnalisysReferencesGoogleDrive");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/extractRelatedAnalisysReferences").build().toUriString();
         
@@ -155,8 +155,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return SearchableSystemMetaData
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SearchableSystemMetaData restFindSystemById2(String systemId) throws RestClientException {
-        return restFindSystemById2WithHttpInfo(systemId).getBody();
+    public SearchableSystemMetaData restFindSystemByIdGoogleDrive(String systemId) throws RestClientException {
+        return restFindSystemByIdGoogleDriveWithHttpInfo(systemId).getBody();
     }
 
     /**
@@ -167,11 +167,11 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;SearchableSystemMetaData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SearchableSystemMetaData> restFindSystemById2WithHttpInfo(String systemId) throws RestClientException {
+    public ResponseEntity<SearchableSystemMetaData> restFindSystemByIdGoogleDriveWithHttpInfo(String systemId) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restFindSystemById2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restFindSystemByIdGoogleDrive");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/findSystemById").build().toUriString();
         
@@ -200,8 +200,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return SearchableSystemMetaData
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SearchableSystemMetaData restFindSystemBySearchResult2(SearchResult body) throws RestClientException {
-        return restFindSystemBySearchResult2WithHttpInfo(body).getBody();
+    public SearchableSystemMetaData restFindSystemBySearchResultGoogleDrive(SearchResult body) throws RestClientException {
+        return restFindSystemBySearchResultGoogleDriveWithHttpInfo(body).getBody();
     }
 
     /**
@@ -212,11 +212,11 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;SearchableSystemMetaData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SearchableSystemMetaData> restFindSystemBySearchResult2WithHttpInfo(SearchResult body) throws RestClientException {
+    public ResponseEntity<SearchableSystemMetaData> restFindSystemBySearchResultGoogleDriveWithHttpInfo(SearchResult body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restFindSystemBySearchResult2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restFindSystemBySearchResultGoogleDrive");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/findSystemBySearchResult").build().toUriString();
         
@@ -246,8 +246,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return List&lt;CatalogueSample&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<CatalogueSample> restGetCachedCatalogues2(String systemConfigurationCode) throws RestClientException {
-        return restGetCachedCatalogues2WithHttpInfo(systemConfigurationCode).getBody();
+    public List<CatalogueSample> restGetCachedCataloguesGoogleDrive(String systemConfigurationCode) throws RestClientException {
+        return restGetCachedCataloguesGoogleDriveWithHttpInfo(systemConfigurationCode).getBody();
     }
 
     /**
@@ -258,7 +258,7 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;CatalogueSample&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<CatalogueSample>> restGetCachedCatalogues2WithHttpInfo(String systemConfigurationCode) throws RestClientException {
+    public ResponseEntity<List<CatalogueSample>> restGetCachedCataloguesGoogleDriveWithHttpInfo(String systemConfigurationCode) throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getCachedCatalogues").build().toUriString();
         
@@ -287,8 +287,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return List&lt;CatalogueSample&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<CatalogueSample> restGetCataloguesListSample2(String configurationCode) throws RestClientException {
-        return restGetCataloguesListSample2WithHttpInfo(configurationCode).getBody();
+    public List<CatalogueSample> restGetCataloguesListSampleGoogleDrive(String configurationCode) throws RestClientException {
+        return restGetCataloguesListSampleGoogleDriveWithHttpInfo(configurationCode).getBody();
     }
 
     /**
@@ -299,11 +299,11 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;CatalogueSample&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<CatalogueSample>> restGetCataloguesListSample2WithHttpInfo(String configurationCode) throws RestClientException {
+    public ResponseEntity<List<CatalogueSample>> restGetCataloguesListSampleGoogleDriveWithHttpInfo(String configurationCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'configurationCode' is set
         if (configurationCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'configurationCode' when calling restGetCataloguesListSample2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'configurationCode' when calling restGetCataloguesListSampleGoogleDrive");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getCataloguesListSample").build().toUriString();
         
@@ -331,8 +331,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetDescription2() throws RestClientException {
-        return restGetDescription2WithHttpInfo().getBody();
+    public String restGetDescriptionGoogleDrive() throws RestClientException {
+        return restGetDescriptionGoogleDriveWithHttpInfo().getBody();
     }
 
     /**
@@ -342,7 +342,7 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetDescription2WithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetDescriptionGoogleDriveWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getDescription").build().toUriString();
         
@@ -369,8 +369,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetId2() throws RestClientException {
-        return restGetId2WithHttpInfo().getBody();
+    public String restGetIdGoogleDrive() throws RestClientException {
+        return restGetIdGoogleDriveWithHttpInfo().getBody();
     }
 
     /**
@@ -380,7 +380,7 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetId2WithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetIdGoogleDriveWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getId").build().toUriString();
         
@@ -407,8 +407,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetMessagingModuleId2() throws RestClientException {
-        return restGetMessagingModuleId2WithHttpInfo().getBody();
+    public String restGetMessagingModuleIdGoogleDrive() throws RestClientException {
+        return restGetMessagingModuleIdGoogleDriveWithHttpInfo().getBody();
     }
 
     /**
@@ -418,7 +418,7 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetMessagingModuleId2WithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetMessagingModuleIdGoogleDriveWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getMessagingModuleId").build().toUriString();
         
@@ -445,8 +445,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetProductId2() throws RestClientException {
-        return restGetProductId2WithHttpInfo().getBody();
+    public String restGetProductIdGoogleDrive() throws RestClientException {
+        return restGetProductIdGoogleDriveWithHttpInfo().getBody();
     }
 
     /**
@@ -456,7 +456,7 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetProductId2WithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetProductIdGoogleDriveWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getProductId").build().toUriString();
         
@@ -483,8 +483,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetQueriesGenerationPromptUseCode2() throws RestClientException {
-        return restGetQueriesGenerationPromptUseCode2WithHttpInfo().getBody();
+    public String restGetQueriesGenerationPromptUseCodeGoogleDrive() throws RestClientException {
+        return restGetQueriesGenerationPromptUseCodeGoogleDriveWithHttpInfo().getBody();
     }
 
     /**
@@ -494,7 +494,7 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetQueriesGenerationPromptUseCode2WithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetQueriesGenerationPromptUseCodeGoogleDriveWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getQueriesGenerationPromptUseCode").build().toUriString();
         
@@ -521,8 +521,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return List&lt;SearchableSystemMetaData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchableSystemMetaData> restGetSearchableSystems2() throws RestClientException {
-        return restGetSearchableSystems2WithHttpInfo().getBody();
+    public List<SearchableSystemMetaData> restGetSearchableSystemsGoogleDrive() throws RestClientException {
+        return restGetSearchableSystemsGoogleDriveWithHttpInfo().getBody();
     }
 
     /**
@@ -532,7 +532,7 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;SearchableSystemMetaData&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchableSystemMetaData>> restGetSearchableSystems2WithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<SearchableSystemMetaData>> restGetSearchableSystemsGoogleDriveWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getSearchableSystems").build().toUriString();
         
@@ -559,8 +559,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Boolean restIsEnabled2() throws RestClientException {
-        return restIsEnabled2WithHttpInfo().getBody();
+    public Boolean restIsEnabledGoogleDrive() throws RestClientException {
+        return restIsEnabledGoogleDriveWithHttpInfo().getBody();
     }
 
     /**
@@ -570,7 +570,7 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;Boolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Boolean> restIsEnabled2WithHttpInfo() throws RestClientException {
+    public ResponseEntity<Boolean> restIsEnabledGoogleDriveWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/isEnabled").build().toUriString();
         
@@ -600,8 +600,8 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return List&lt;SearchResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchResult> restSearch2(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
-        return restSearch2WithHttpInfo(body, systemId, nEntryLimit).getBody();
+    public List<SearchResult> restSearchGoogleDrive(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
+        return restSearchGoogleDriveWithHttpInfo(body, systemId, nEntryLimit).getBody();
     }
 
     /**
@@ -614,19 +614,19 @@ public class GoogleDriveSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;SearchResult&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchResult>> restSearch2WithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
+    public ResponseEntity<List<SearchResult>> restSearchGoogleDriveWithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restSearch2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restSearchGoogleDrive");
         }
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restSearch2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restSearchGoogleDrive");
         }
         // verify the required parameter 'nEntryLimit' is set
         if (nEntryLimit == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restSearch2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restSearchGoogleDrive");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/search").build().toUriString();
         

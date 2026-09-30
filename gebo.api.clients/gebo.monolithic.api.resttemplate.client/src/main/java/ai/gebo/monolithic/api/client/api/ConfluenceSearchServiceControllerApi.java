@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
 
 public class ConfluenceSearchServiceControllerApi {
     private ApiClient apiClient;
@@ -58,8 +58,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ConfluenceResultsExtractionData
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ConfluenceResultsExtractionData restAggregate3(AggregateRequestBodyConfluenceResultsExtractionData body) throws RestClientException {
-        return restAggregate3WithHttpInfo(body).getBody();
+    public ConfluenceResultsExtractionData restAggregateConfluence(AggregateRequestBodyConfluenceResultsExtractionData body) throws RestClientException {
+        return restAggregateConfluenceWithHttpInfo(body).getBody();
     }
 
     /**
@@ -70,11 +70,11 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;ConfluenceResultsExtractionData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<ConfluenceResultsExtractionData> restAggregate3WithHttpInfo(AggregateRequestBodyConfluenceResultsExtractionData body) throws RestClientException {
+    public ResponseEntity<ConfluenceResultsExtractionData> restAggregateConfluenceWithHttpInfo(AggregateRequestBodyConfluenceResultsExtractionData body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restAggregate3");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restAggregateConfluence");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/aggregate").build().toUriString();
         
@@ -104,8 +104,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return Map&lt;String, Object&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Map<String, Object> restCreateCustomTemplateParamsMap2(CustomTemplateParamsRequestBody body) throws RestClientException {
-        return restCreateCustomTemplateParamsMap2WithHttpInfo(body).getBody();
+    public Map<String, Object> restCreateCustomTemplateParamsMapConfluence(CustomTemplateParamsRequestBody body) throws RestClientException {
+        return restCreateCustomTemplateParamsMapConfluenceWithHttpInfo(body).getBody();
     }
 
     /**
@@ -116,11 +116,11 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;Map&lt;String, Object&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Map<String, Object>> restCreateCustomTemplateParamsMap2WithHttpInfo(CustomTemplateParamsRequestBody body) throws RestClientException {
+    public ResponseEntity<Map<String, Object>> restCreateCustomTemplateParamsMapConfluenceWithHttpInfo(CustomTemplateParamsRequestBody body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restCreateCustomTemplateParamsMap2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restCreateCustomTemplateParamsMapConfluence");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/createCustomTemplateParamsMap").build().toUriString();
         
@@ -151,8 +151,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return SearchResultAnalisysOutcome
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferences3(ConfluenceResultsExtractionData body, String systemId) throws RestClientException {
-        return restExtractRelatedAnalisysReferences3WithHttpInfo(body, systemId).getBody();
+    public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferencesConfluence(ConfluenceResultsExtractionData body, String systemId) throws RestClientException {
+        return restExtractRelatedAnalisysReferencesConfluenceWithHttpInfo(body, systemId).getBody();
     }
 
     /**
@@ -164,15 +164,15 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;SearchResultAnalisysOutcome&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SearchResultAnalisysOutcome> restExtractRelatedAnalisysReferences3WithHttpInfo(ConfluenceResultsExtractionData body, String systemId) throws RestClientException {
+    public ResponseEntity<SearchResultAnalisysOutcome> restExtractRelatedAnalisysReferencesConfluenceWithHttpInfo(ConfluenceResultsExtractionData body, String systemId) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restExtractRelatedAnalisysReferences3");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restExtractRelatedAnalisysReferencesConfluence");
         }
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restExtractRelatedAnalisysReferences3");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restExtractRelatedAnalisysReferencesConfluence");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/extractRelatedAnalisysReferences").build().toUriString();
         
@@ -203,8 +203,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return SearchableSystemMetaData
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SearchableSystemMetaData restFindSystemById3(String systemId) throws RestClientException {
-        return restFindSystemById3WithHttpInfo(systemId).getBody();
+    public SearchableSystemMetaData restFindSystemByIdConfluence(String systemId) throws RestClientException {
+        return restFindSystemByIdConfluenceWithHttpInfo(systemId).getBody();
     }
 
     /**
@@ -215,11 +215,11 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;SearchableSystemMetaData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SearchableSystemMetaData> restFindSystemById3WithHttpInfo(String systemId) throws RestClientException {
+    public ResponseEntity<SearchableSystemMetaData> restFindSystemByIdConfluenceWithHttpInfo(String systemId) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restFindSystemById3");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restFindSystemByIdConfluence");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/findSystemById").build().toUriString();
         
@@ -248,8 +248,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return SearchableSystemMetaData
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SearchableSystemMetaData restFindSystemBySearchResult3(SearchResult body) throws RestClientException {
-        return restFindSystemBySearchResult3WithHttpInfo(body).getBody();
+    public SearchableSystemMetaData restFindSystemBySearchResultConfluence(SearchResult body) throws RestClientException {
+        return restFindSystemBySearchResultConfluenceWithHttpInfo(body).getBody();
     }
 
     /**
@@ -260,11 +260,11 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;SearchableSystemMetaData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SearchableSystemMetaData> restFindSystemBySearchResult3WithHttpInfo(SearchResult body) throws RestClientException {
+    public ResponseEntity<SearchableSystemMetaData> restFindSystemBySearchResultConfluenceWithHttpInfo(SearchResult body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restFindSystemBySearchResult3");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restFindSystemBySearchResultConfluence");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/findSystemBySearchResult").build().toUriString();
         
@@ -294,8 +294,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return List&lt;CatalogueSample&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<CatalogueSample> restGetCachedCatalogues3(String systemConfigurationCode) throws RestClientException {
-        return restGetCachedCatalogues3WithHttpInfo(systemConfigurationCode).getBody();
+    public List<CatalogueSample> restGetCachedCataloguesConfluence(String systemConfigurationCode) throws RestClientException {
+        return restGetCachedCataloguesConfluenceWithHttpInfo(systemConfigurationCode).getBody();
     }
 
     /**
@@ -306,7 +306,7 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;CatalogueSample&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<CatalogueSample>> restGetCachedCatalogues3WithHttpInfo(String systemConfigurationCode) throws RestClientException {
+    public ResponseEntity<List<CatalogueSample>> restGetCachedCataloguesConfluenceWithHttpInfo(String systemConfigurationCode) throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getCachedCatalogues").build().toUriString();
         
@@ -335,8 +335,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return List&lt;CatalogueSample&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<CatalogueSample> restGetCataloguesListSample3(String configurationCode) throws RestClientException {
-        return restGetCataloguesListSample3WithHttpInfo(configurationCode).getBody();
+    public List<CatalogueSample> restGetCataloguesListSampleConfluence(String configurationCode) throws RestClientException {
+        return restGetCataloguesListSampleConfluenceWithHttpInfo(configurationCode).getBody();
     }
 
     /**
@@ -347,11 +347,11 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;CatalogueSample&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<CatalogueSample>> restGetCataloguesListSample3WithHttpInfo(String configurationCode) throws RestClientException {
+    public ResponseEntity<List<CatalogueSample>> restGetCataloguesListSampleConfluenceWithHttpInfo(String configurationCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'configurationCode' is set
         if (configurationCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'configurationCode' when calling restGetCataloguesListSample3");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'configurationCode' when calling restGetCataloguesListSampleConfluence");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getCataloguesListSample").build().toUriString();
         
@@ -379,8 +379,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetDescription3() throws RestClientException {
-        return restGetDescription3WithHttpInfo().getBody();
+    public String restGetDescriptionConfluence() throws RestClientException {
+        return restGetDescriptionConfluenceWithHttpInfo().getBody();
     }
 
     /**
@@ -390,7 +390,7 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetDescription3WithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetDescriptionConfluenceWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getDescription").build().toUriString();
         
@@ -417,8 +417,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetId3() throws RestClientException {
-        return restGetId3WithHttpInfo().getBody();
+    public String restGetIdConfluence() throws RestClientException {
+        return restGetIdConfluenceWithHttpInfo().getBody();
     }
 
     /**
@@ -428,7 +428,7 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetId3WithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetIdConfluenceWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getId").build().toUriString();
         
@@ -455,8 +455,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetMessagingModuleId3() throws RestClientException {
-        return restGetMessagingModuleId3WithHttpInfo().getBody();
+    public String restGetMessagingModuleIdConfluence() throws RestClientException {
+        return restGetMessagingModuleIdConfluenceWithHttpInfo().getBody();
     }
 
     /**
@@ -466,7 +466,7 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetMessagingModuleId3WithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetMessagingModuleIdConfluenceWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getMessagingModuleId").build().toUriString();
         
@@ -493,8 +493,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetNativePromptTemplateUseCode2() throws RestClientException {
-        return restGetNativePromptTemplateUseCode2WithHttpInfo().getBody();
+    public String restGetNativePromptTemplateUseCodeConfluence() throws RestClientException {
+        return restGetNativePromptTemplateUseCodeConfluenceWithHttpInfo().getBody();
     }
 
     /**
@@ -504,7 +504,7 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetNativePromptTemplateUseCode2WithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetNativePromptTemplateUseCodeConfluenceWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getNativePromptTemplateUseCode").build().toUriString();
         
@@ -531,8 +531,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetProductId3() throws RestClientException {
-        return restGetProductId3WithHttpInfo().getBody();
+    public String restGetProductIdConfluence() throws RestClientException {
+        return restGetProductIdConfluenceWithHttpInfo().getBody();
     }
 
     /**
@@ -542,7 +542,7 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetProductId3WithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetProductIdConfluenceWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getProductId").build().toUriString();
         
@@ -569,8 +569,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetQueriesGenerationPromptUseCode3() throws RestClientException {
-        return restGetQueriesGenerationPromptUseCode3WithHttpInfo().getBody();
+    public String restGetQueriesGenerationPromptUseCodeConfluence() throws RestClientException {
+        return restGetQueriesGenerationPromptUseCodeConfluenceWithHttpInfo().getBody();
     }
 
     /**
@@ -580,7 +580,7 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetQueriesGenerationPromptUseCode3WithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetQueriesGenerationPromptUseCodeConfluenceWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getQueriesGenerationPromptUseCode").build().toUriString();
         
@@ -607,8 +607,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return List&lt;SearchableSystemMetaData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchableSystemMetaData> restGetSearchableSystems3() throws RestClientException {
-        return restGetSearchableSystems3WithHttpInfo().getBody();
+    public List<SearchableSystemMetaData> restGetSearchableSystemsConfluence() throws RestClientException {
+        return restGetSearchableSystemsConfluenceWithHttpInfo().getBody();
     }
 
     /**
@@ -618,7 +618,7 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;SearchableSystemMetaData&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchableSystemMetaData>> restGetSearchableSystems3WithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<SearchableSystemMetaData>> restGetSearchableSystemsConfluenceWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getSearchableSystems").build().toUriString();
         
@@ -645,8 +645,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Boolean restIsEnabled3() throws RestClientException {
-        return restIsEnabled3WithHttpInfo().getBody();
+    public Boolean restIsEnabledConfluence() throws RestClientException {
+        return restIsEnabledConfluenceWithHttpInfo().getBody();
     }
 
     /**
@@ -656,7 +656,7 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;Boolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Boolean> restIsEnabled3WithHttpInfo() throws RestClientException {
+    public ResponseEntity<Boolean> restIsEnabledConfluenceWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/isEnabled").build().toUriString();
         
@@ -686,8 +686,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return List&lt;SearchResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchResult> restNativeSearch2(ConfluenceContentSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
-        return restNativeSearch2WithHttpInfo(body, systemId, nEntryLimit).getBody();
+    public List<SearchResult> restNativeSearchConfluence(ConfluenceContentSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
+        return restNativeSearchConfluenceWithHttpInfo(body, systemId, nEntryLimit).getBody();
     }
 
     /**
@@ -700,19 +700,19 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;SearchResult&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchResult>> restNativeSearch2WithHttpInfo(ConfluenceContentSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
+    public ResponseEntity<List<SearchResult>> restNativeSearchConfluenceWithHttpInfo(ConfluenceContentSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restNativeSearch2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restNativeSearchConfluence");
         }
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restNativeSearch2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restNativeSearchConfluence");
         }
         // verify the required parameter 'nEntryLimit' is set
         if (nEntryLimit == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restNativeSearch2");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restNativeSearchConfluence");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/nativeSearch").build().toUriString();
         
@@ -746,8 +746,8 @@ public class ConfluenceSearchServiceControllerApi {
      * @return List&lt;SearchResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchResult> restSearch3(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
-        return restSearch3WithHttpInfo(body, systemId, nEntryLimit).getBody();
+    public List<SearchResult> restSearchConfluence(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
+        return restSearchConfluenceWithHttpInfo(body, systemId, nEntryLimit).getBody();
     }
 
     /**
@@ -760,19 +760,19 @@ public class ConfluenceSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;SearchResult&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchResult>> restSearch3WithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
+    public ResponseEntity<List<SearchResult>> restSearchConfluenceWithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restSearch3");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restSearchConfluence");
         }
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restSearch3");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restSearchConfluence");
         }
         // verify the required parameter 'nEntryLimit' is set
         if (nEntryLimit == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restSearch3");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restSearchConfluence");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/search").build().toUriString();
         
