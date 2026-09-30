@@ -27,5 +27,13 @@ export interface GAgentsNetwork {
     scenarioDescription: string;
     agents: Array<AgentNetworkParticipant>;
     readOnly?: boolean;
-    defaultUserInteractionNetwork?: boolean;
+    suggestedPurpose?: string;
+    choosableForPipelineTypes?: Array<GAgentsNetwork.ChoosableForPipelineTypesEnum>;
+}
+export namespace GAgentsNetwork {
+    export type ChoosableForPipelineTypesEnum = 'RAG_PIPELINE' | 'PURE_CHAT_PIPELINE';
+    export const ChoosableForPipelineTypesEnum = {
+        RAGPIPELINE: 'RAG_PIPELINE' as ChoosableForPipelineTypesEnum,
+        PURECHATPIPELINE: 'PURE_CHAT_PIPELINE' as ChoosableForPipelineTypesEnum
+    };
 }

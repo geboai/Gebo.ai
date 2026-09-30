@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PublishingStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:47:02.226945768+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:25:19.994209445+02:00[Europe/Rome]")
 
 public class PublishingStatus {
   @JsonProperty("underPubishingAlgorithm")

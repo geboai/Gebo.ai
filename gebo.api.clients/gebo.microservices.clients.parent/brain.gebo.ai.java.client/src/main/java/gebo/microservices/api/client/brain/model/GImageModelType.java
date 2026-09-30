@@ -23,7 +23,7 @@ import java.util.Date;
  * GImageModelType
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:23.233601555+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:41.059309405+02:00[Europe/Rome]")
 
 public class GImageModelType {
   @JsonProperty("code")
@@ -46,6 +46,12 @@ public class GImageModelType {
 
   @JsonProperty("modelConfigurationClass")
   private String modelConfigurationClass = null;
+
+  @JsonProperty("providerId")
+  private String providerId = null;
+
+  @JsonProperty("defaultCurrencyCode")
+  private String defaultCurrencyCode = null;
 
   public GImageModelType code(String code) {
     this.code = code;
@@ -173,6 +179,42 @@ public class GImageModelType {
     this.modelConfigurationClass = modelConfigurationClass;
   }
 
+  public GImageModelType providerId(String providerId) {
+    this.providerId = providerId;
+    return this;
+  }
+
+   /**
+   * Get providerId
+   * @return providerId
+  **/
+  @Schema(description = "")
+  public String getProviderId() {
+    return providerId;
+  }
+
+  public void setProviderId(String providerId) {
+    this.providerId = providerId;
+  }
+
+  public GImageModelType defaultCurrencyCode(String defaultCurrencyCode) {
+    this.defaultCurrencyCode = defaultCurrencyCode;
+    return this;
+  }
+
+   /**
+   * Get defaultCurrencyCode
+   * @return defaultCurrencyCode
+  **/
+  @Schema(description = "")
+  public String getDefaultCurrencyCode() {
+    return defaultCurrencyCode;
+  }
+
+  public void setDefaultCurrencyCode(String defaultCurrencyCode) {
+    this.defaultCurrencyCode = defaultCurrencyCode;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -189,12 +231,14 @@ public class GImageModelType {
         Objects.equals(this.userCreated, gimageModelType.userCreated) &&
         Objects.equals(this.dateModified, gimageModelType.dateModified) &&
         Objects.equals(this.dateCreated, gimageModelType.dateCreated) &&
-        Objects.equals(this.modelConfigurationClass, gimageModelType.modelConfigurationClass);
+        Objects.equals(this.modelConfigurationClass, gimageModelType.modelConfigurationClass) &&
+        Objects.equals(this.providerId, gimageModelType.providerId) &&
+        Objects.equals(this.defaultCurrencyCode, gimageModelType.defaultCurrencyCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass, providerId, defaultCurrencyCode);
   }
 
 
@@ -210,6 +254,8 @@ public class GImageModelType {
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    modelConfigurationClass: ").append(toIndentedString(modelConfigurationClass)).append("\n");
+    sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
+    sb.append("    defaultCurrencyCode: ").append(toIndentedString(defaultCurrencyCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

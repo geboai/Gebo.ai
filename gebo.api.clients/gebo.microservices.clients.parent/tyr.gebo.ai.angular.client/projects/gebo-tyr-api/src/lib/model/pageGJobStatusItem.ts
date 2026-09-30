@@ -17,12 +17,12 @@ export interface PageGJobStatusItem {
     totalPages?: number;
     totalElements?: number;
     pageable?: PageableObject;
+    first?: boolean;
+    last?: boolean;
     size?: number;
     content?: Array<GJobStatusItem>;
     number?: number;
     sort?: SortObject;
-    first?: boolean;
-    last?: boolean;
     numberOfElements?: number;
     empty?: boolean;
 }

@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboServiceWebContextInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:38.149077643+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:56.027047405+02:00[Europe/Rome]")
 
 public class GeboServiceWebContextInfo {
   @JsonProperty("serviceId")

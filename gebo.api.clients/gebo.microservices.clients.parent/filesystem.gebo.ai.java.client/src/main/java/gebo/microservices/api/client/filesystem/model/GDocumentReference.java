@@ -30,7 +30,7 @@ import java.util.Map;
  * GDocumentReference
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:34.279660755+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:52.144114408+02:00[Europe/Rome]")
 
 public class GDocumentReference {
   @JsonProperty("code")

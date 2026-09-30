@@ -17,6 +17,7 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GModelPricingConditions;
 import gebo.microservices.api.client.brain.model.MistralBaseModelCard;
 import gebo.microservices.api.client.brain.model.ModelMetaInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,7 +26,7 @@ import java.util.Date;
  * GMistralEmbeddingModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:23.233601555+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:41.059309405+02:00[Europe/Rome]")
 
 public class GMistralEmbeddingModelChoice {
   @JsonProperty("code")
@@ -66,6 +67,9 @@ public class GMistralEmbeddingModelChoice {
 
   @JsonProperty("nativeModelMetaInfos")
   private Object nativeModelMetaInfos = null;
+
+  @JsonProperty("pricingConditions")
+  private GModelPricingConditions pricingConditions = null;
 
   @JsonProperty("optimalTokenizationParam")
   private Integer optimalTokenizationParam = null;
@@ -307,6 +311,24 @@ public class GMistralEmbeddingModelChoice {
     this.nativeModelMetaInfos = nativeModelMetaInfos;
   }
 
+  public GMistralEmbeddingModelChoice pricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+    return this;
+  }
+
+   /**
+   * Get pricingConditions
+   * @return pricingConditions
+  **/
+  @Schema(description = "")
+  public GModelPricingConditions getPricingConditions() {
+    return pricingConditions;
+  }
+
+  public void setPricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+  }
+
   public GMistralEmbeddingModelChoice optimalTokenizationParam(Integer optimalTokenizationParam) {
     this.optimalTokenizationParam = optimalTokenizationParam;
     return this;
@@ -366,13 +388,14 @@ public class GMistralEmbeddingModelChoice {
         Objects.equals(this.informativeUrl, gmistralEmbeddingModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, gmistralEmbeddingModelChoice.contextLength) &&
         Objects.equals(this.nativeModelMetaInfos, gmistralEmbeddingModelChoice.nativeModelMetaInfos) &&
+        Objects.equals(this.pricingConditions, gmistralEmbeddingModelChoice.pricingConditions) &&
         Objects.equals(this.optimalTokenizationParam, gmistralEmbeddingModelChoice.optimalTokenizationParam) &&
         Objects.equals(this.modelCard, gmistralEmbeddingModelChoice.modelCard);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, optimalTokenizationParam, modelCard);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, pricingConditions, optimalTokenizationParam, modelCard);
   }
 
 
@@ -394,6 +417,7 @@ public class GMistralEmbeddingModelChoice {
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
+    sb.append("    pricingConditions: ").append(toIndentedString(pricingConditions)).append("\n");
     sb.append("    optimalTokenizationParam: ").append(toIndentedString(optimalTokenizationParam)).append("\n");
     sb.append("    modelCard: ").append(toIndentedString(modelCard)).append("\n");
     sb.append("}");

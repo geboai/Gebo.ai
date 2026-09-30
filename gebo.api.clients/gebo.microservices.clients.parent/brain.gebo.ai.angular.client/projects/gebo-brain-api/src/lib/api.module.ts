@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { A2AClientConfigControllerService } from './api/a2AClientConfigController.service';
+import { AgenticChatDefaultNetworksAdminControllerService } from './api/agenticChatDefaultNetworksAdminController.service';
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
 import { BedrockChatModelsConfigurationControllerService } from './api/bedrockChatModelsConfigurationController.service';
 import { BedrockEmbeddingModelsConfigurationControllerService } from './api/bedrockEmbeddingModelsConfigurationController.service';
@@ -81,6 +82,7 @@ import { OpenAiTextToSpeechModelsConfigurationControllerService } from './api/op
 import { OpenAiTranscriptModelsConfigurationControllerService } from './api/openAiTranscriptModelsConfigurationController.service';
 import { ProjectsControllerService } from './api/projectsController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
+import { ProviderDealsControllerService } from './api/providerDealsController.service';
 import { RankerModelsControllerService } from './api/rankerModelsController.service';
 import { SearxngSearchConfigurationControllerService } from './api/searxngSearchConfigurationController.service';
 import { SerpapiSearchConfigurationControllerService } from './api/serpapiSearchConfigurationController.service';
@@ -96,6 +98,7 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
   exports:      [],
   providers: [
     A2AClientConfigControllerService,
+    AgenticChatDefaultNetworksAdminControllerService,
     AnthropicChatModelsConfigurationControllerService,
     BedrockChatModelsConfigurationControllerService,
     BedrockEmbeddingModelsConfigurationControllerService,
@@ -173,6 +176,7 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     OpenAiTranscriptModelsConfigurationControllerService,
     ProjectsControllerService,
     PromptTemplatesControllerService,
+    ProviderDealsControllerService,
     RankerModelsControllerService,
     SearxngSearchConfigurationControllerService,
     SerpapiSearchConfigurationControllerService,

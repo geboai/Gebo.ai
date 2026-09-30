@@ -17,6 +17,7 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GModelPricingConditions;
 import gebo.microservices.api.client.brain.model.MistralBaseModelCard;
 import gebo.microservices.api.client.brain.model.ModelMetaInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,7 +26,7 @@ import java.util.Date;
  * GMistralChatModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:23.233601555+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:41.059309405+02:00[Europe/Rome]")
 
 public class GMistralChatModelChoice {
   @JsonProperty("code")
@@ -66,6 +67,9 @@ public class GMistralChatModelChoice {
 
   @JsonProperty("nativeModelMetaInfos")
   private Object nativeModelMetaInfos = null;
+
+  @JsonProperty("pricingConditions")
+  private GModelPricingConditions pricingConditions = null;
 
   @JsonProperty("supportsStructuredOutput")
   private Boolean supportsStructuredOutput = null;
@@ -310,6 +314,24 @@ public class GMistralChatModelChoice {
     this.nativeModelMetaInfos = nativeModelMetaInfos;
   }
 
+  public GMistralChatModelChoice pricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+    return this;
+  }
+
+   /**
+   * Get pricingConditions
+   * @return pricingConditions
+  **/
+  @Schema(description = "")
+  public GModelPricingConditions getPricingConditions() {
+    return pricingConditions;
+  }
+
+  public void setPricingConditions(GModelPricingConditions pricingConditions) {
+    this.pricingConditions = pricingConditions;
+  }
+
   public GMistralChatModelChoice supportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
     return this;
@@ -387,6 +409,7 @@ public class GMistralChatModelChoice {
         Objects.equals(this.informativeUrl, gmistralChatModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, gmistralChatModelChoice.contextLength) &&
         Objects.equals(this.nativeModelMetaInfos, gmistralChatModelChoice.nativeModelMetaInfos) &&
+        Objects.equals(this.pricingConditions, gmistralChatModelChoice.pricingConditions) &&
         Objects.equals(this.supportsStructuredOutput, gmistralChatModelChoice.supportsStructuredOutput) &&
         Objects.equals(this.supportsFunctionCalls, gmistralChatModelChoice.supportsFunctionCalls) &&
         Objects.equals(this.modelCard, gmistralChatModelChoice.modelCard);
@@ -394,7 +417,7 @@ public class GMistralChatModelChoice {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, supportsStructuredOutput, supportsFunctionCalls, modelCard);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, pricingConditions, supportsStructuredOutput, supportsFunctionCalls, modelCard);
   }
 
 
@@ -416,6 +439,7 @@ public class GMistralChatModelChoice {
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
+    sb.append("    pricingConditions: ").append(toIndentedString(pricingConditions)).append("\n");
     sb.append("    supportsStructuredOutput: ").append(toIndentedString(supportsStructuredOutput)).append("\n");
     sb.append("    supportsFunctionCalls: ").append(toIndentedString(supportsFunctionCalls)).append("\n");
     sb.append("    modelCard: ").append(toIndentedString(modelCard)).append("\n");

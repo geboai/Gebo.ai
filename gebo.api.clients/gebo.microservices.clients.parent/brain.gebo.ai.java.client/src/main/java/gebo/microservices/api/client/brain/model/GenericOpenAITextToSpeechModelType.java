@@ -23,7 +23,7 @@ import java.util.Date;
  * GenericOpenAITextToSpeechModelType
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:23.233601555+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:41.059309405+02:00[Europe/Rome]")
 
 public class GenericOpenAITextToSpeechModelType {
   @JsonProperty("code")
@@ -47,14 +47,17 @@ public class GenericOpenAITextToSpeechModelType {
   @JsonProperty("modelConfigurationClass")
   private String modelConfigurationClass = null;
 
+  @JsonProperty("providerId")
+  private String providerId = null;
+
+  @JsonProperty("defaultCurrencyCode")
+  private String defaultCurrencyCode = null;
+
   @JsonProperty("baseUrl")
   private String baseUrl = null;
 
   @JsonProperty("modelsListProvider")
   private String modelsListProvider = null;
-
-  @JsonProperty("providerId")
-  private String providerId = null;
 
   @JsonProperty("optionalAuthentication")
   private Boolean optionalAuthentication = null;
@@ -185,6 +188,42 @@ public class GenericOpenAITextToSpeechModelType {
     this.modelConfigurationClass = modelConfigurationClass;
   }
 
+  public GenericOpenAITextToSpeechModelType providerId(String providerId) {
+    this.providerId = providerId;
+    return this;
+  }
+
+   /**
+   * Get providerId
+   * @return providerId
+  **/
+  @Schema(description = "")
+  public String getProviderId() {
+    return providerId;
+  }
+
+  public void setProviderId(String providerId) {
+    this.providerId = providerId;
+  }
+
+  public GenericOpenAITextToSpeechModelType defaultCurrencyCode(String defaultCurrencyCode) {
+    this.defaultCurrencyCode = defaultCurrencyCode;
+    return this;
+  }
+
+   /**
+   * Get defaultCurrencyCode
+   * @return defaultCurrencyCode
+  **/
+  @Schema(description = "")
+  public String getDefaultCurrencyCode() {
+    return defaultCurrencyCode;
+  }
+
+  public void setDefaultCurrencyCode(String defaultCurrencyCode) {
+    this.defaultCurrencyCode = defaultCurrencyCode;
+  }
+
   public GenericOpenAITextToSpeechModelType baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
@@ -219,24 +258,6 @@ public class GenericOpenAITextToSpeechModelType {
 
   public void setModelsListProvider(String modelsListProvider) {
     this.modelsListProvider = modelsListProvider;
-  }
-
-  public GenericOpenAITextToSpeechModelType providerId(String providerId) {
-    this.providerId = providerId;
-    return this;
-  }
-
-   /**
-   * Get providerId
-   * @return providerId
-  **/
-  @Schema(description = "")
-  public String getProviderId() {
-    return providerId;
-  }
-
-  public void setProviderId(String providerId) {
-    this.providerId = providerId;
   }
 
   public GenericOpenAITextToSpeechModelType optionalAuthentication(Boolean optionalAuthentication) {
@@ -274,15 +295,16 @@ public class GenericOpenAITextToSpeechModelType {
         Objects.equals(this.dateModified, genericOpenAITextToSpeechModelType.dateModified) &&
         Objects.equals(this.dateCreated, genericOpenAITextToSpeechModelType.dateCreated) &&
         Objects.equals(this.modelConfigurationClass, genericOpenAITextToSpeechModelType.modelConfigurationClass) &&
+        Objects.equals(this.providerId, genericOpenAITextToSpeechModelType.providerId) &&
+        Objects.equals(this.defaultCurrencyCode, genericOpenAITextToSpeechModelType.defaultCurrencyCode) &&
         Objects.equals(this.baseUrl, genericOpenAITextToSpeechModelType.baseUrl) &&
         Objects.equals(this.modelsListProvider, genericOpenAITextToSpeechModelType.modelsListProvider) &&
-        Objects.equals(this.providerId, genericOpenAITextToSpeechModelType.providerId) &&
         Objects.equals(this.optionalAuthentication, genericOpenAITextToSpeechModelType.optionalAuthentication);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass, baseUrl, modelsListProvider, providerId, optionalAuthentication);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass, providerId, defaultCurrencyCode, baseUrl, modelsListProvider, optionalAuthentication);
   }
 
 
@@ -298,9 +320,10 @@ public class GenericOpenAITextToSpeechModelType {
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    modelConfigurationClass: ").append(toIndentedString(modelConfigurationClass)).append("\n");
+    sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
+    sb.append("    defaultCurrencyCode: ").append(toIndentedString(defaultCurrencyCode)).append("\n");
     sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");
     sb.append("    modelsListProvider: ").append(toIndentedString(modelsListProvider)).append("\n");
-    sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
     sb.append("    optionalAuthentication: ").append(toIndentedString(optionalAuthentication)).append("\n");
     sb.append("}");
     return sb.toString();

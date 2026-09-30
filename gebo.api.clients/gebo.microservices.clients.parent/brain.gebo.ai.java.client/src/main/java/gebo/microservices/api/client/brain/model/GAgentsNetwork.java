@@ -26,7 +26,7 @@ import java.util.List;
  * GAgentsNetwork
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:23.233601555+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:41.059309405+02:00[Europe/Rome]")
 
 public class GAgentsNetwork {
   @JsonProperty("code")
@@ -74,8 +74,42 @@ public class GAgentsNetwork {
   @JsonProperty("readOnly")
   private Boolean readOnly = null;
 
-  @JsonProperty("defaultUserInteractionNetwork")
-  private Boolean defaultUserInteractionNetwork = null;
+  @JsonProperty("suggestedPurpose")
+  private String suggestedPurpose = null;
+
+  /**
+   * Gets or Sets choosableForPipelineTypes
+   */
+  public enum ChoosableForPipelineTypesEnum {
+    RAG_PIPELINE("RAG_PIPELINE"),
+    PURE_CHAT_PIPELINE("PURE_CHAT_PIPELINE");
+
+    private String value;
+
+    ChoosableForPipelineTypesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ChoosableForPipelineTypesEnum fromValue(String input) {
+      for (ChoosableForPipelineTypesEnum b : ChoosableForPipelineTypesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("choosableForPipelineTypes")
+  private List<ChoosableForPipelineTypesEnum> choosableForPipelineTypes = null;
 
   public GAgentsNetwork code(String code) {
     this.code = code;
@@ -376,22 +410,48 @@ public class GAgentsNetwork {
     this.readOnly = readOnly;
   }
 
-  public GAgentsNetwork defaultUserInteractionNetwork(Boolean defaultUserInteractionNetwork) {
-    this.defaultUserInteractionNetwork = defaultUserInteractionNetwork;
+  public GAgentsNetwork suggestedPurpose(String suggestedPurpose) {
+    this.suggestedPurpose = suggestedPurpose;
     return this;
   }
 
    /**
-   * Get defaultUserInteractionNetwork
-   * @return defaultUserInteractionNetwork
+   * Get suggestedPurpose
+   * @return suggestedPurpose
   **/
   @Schema(description = "")
-  public Boolean isDefaultUserInteractionNetwork() {
-    return defaultUserInteractionNetwork;
+  public String getSuggestedPurpose() {
+    return suggestedPurpose;
   }
 
-  public void setDefaultUserInteractionNetwork(Boolean defaultUserInteractionNetwork) {
-    this.defaultUserInteractionNetwork = defaultUserInteractionNetwork;
+  public void setSuggestedPurpose(String suggestedPurpose) {
+    this.suggestedPurpose = suggestedPurpose;
+  }
+
+  public GAgentsNetwork choosableForPipelineTypes(List<ChoosableForPipelineTypesEnum> choosableForPipelineTypes) {
+    this.choosableForPipelineTypes = choosableForPipelineTypes;
+    return this;
+  }
+
+  public GAgentsNetwork addChoosableForPipelineTypesItem(ChoosableForPipelineTypesEnum choosableForPipelineTypesItem) {
+    if (this.choosableForPipelineTypes == null) {
+      this.choosableForPipelineTypes = new ArrayList<>();
+    }
+    this.choosableForPipelineTypes.add(choosableForPipelineTypesItem);
+    return this;
+  }
+
+   /**
+   * Get choosableForPipelineTypes
+   * @return choosableForPipelineTypes
+  **/
+  @Schema(description = "")
+  public List<ChoosableForPipelineTypesEnum> getChoosableForPipelineTypes() {
+    return choosableForPipelineTypes;
+  }
+
+  public void setChoosableForPipelineTypes(List<ChoosableForPipelineTypesEnum> choosableForPipelineTypes) {
+    this.choosableForPipelineTypes = choosableForPipelineTypes;
   }
 
 
@@ -419,12 +479,13 @@ public class GAgentsNetwork {
         Objects.equals(this.scenarioDescription, gagentsNetwork.scenarioDescription) &&
         Objects.equals(this.agents, gagentsNetwork.agents) &&
         Objects.equals(this.readOnly, gagentsNetwork.readOnly) &&
-        Objects.equals(this.defaultUserInteractionNetwork, gagentsNetwork.defaultUserInteractionNetwork);
+        Objects.equals(this.suggestedPurpose, gagentsNetwork.suggestedPurpose) &&
+        Objects.equals(this.choosableForPipelineTypes, gagentsNetwork.choosableForPipelineTypes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, maxLoopIteration, accessibleToAll, accessibleUsers, accessibleGroups, aclAliases, agentsNetworkServiceFactoryId, scenarioDescription, agents, readOnly, defaultUserInteractionNetwork);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, maxLoopIteration, accessibleToAll, accessibleUsers, accessibleGroups, aclAliases, agentsNetworkServiceFactoryId, scenarioDescription, agents, readOnly, suggestedPurpose, choosableForPipelineTypes);
   }
 
 
@@ -448,7 +509,8 @@ public class GAgentsNetwork {
     sb.append("    scenarioDescription: ").append(toIndentedString(scenarioDescription)).append("\n");
     sb.append("    agents: ").append(toIndentedString(agents)).append("\n");
     sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
-    sb.append("    defaultUserInteractionNetwork: ").append(toIndentedString(defaultUserInteractionNetwork)).append("\n");
+    sb.append("    suggestedPurpose: ").append(toIndentedString(suggestedPurpose)).append("\n");
+    sb.append("    choosableForPipelineTypes: ").append(toIndentedString(choosableForPipelineTypes)).append("\n");
     sb.append("}");
     return sb.toString();
   }

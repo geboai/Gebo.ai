@@ -18,6 +18,8 @@ import { SecretsClusterControllerService } from './api/secretsClusterController.
 import { SecretsControllerService } from './api/secretsController.service';
 import { SecurityDirectoryClusterControllerService } from './api/securityDirectoryClusterController.service';
 import { SecurityHeaderDataCompletionControllerService } from './api/securityHeaderDataCompletionController.service';
+import { SystemMessagesAdminControllerService } from './api/systemMessagesAdminController.service';
+import { SystemMessagesControllerService } from './api/systemMessagesController.service';
 import { TokenRenewControllerService } from './api/tokenRenewController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserWorkflowsControllerService } from './api/userWorkflowsController.service';
@@ -44,6 +46,8 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
     SecretsControllerService,
     SecurityDirectoryClusterControllerService,
     SecurityHeaderDataCompletionControllerService,
+    SystemMessagesAdminControllerService,
+    SystemMessagesControllerService,
     TokenRenewControllerService,
     UserControllerService,
     UserWorkflowsControllerService,

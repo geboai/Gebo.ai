@@ -15,6 +15,6 @@ import { GUserMessage } from './gUserMessage';
 export interface OperationStatusGOpenAITextToSpeechModelConfig { 
     result?: GOpenAITextToSpeechModelConfig;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

@@ -4,27 +4,27 @@ All URIs are relative to *http://localhost:13010/confluence*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**restAggregate**](ConfluenceSearchServiceControllerApi.md#restAggregate) | **POST** /api/users/ConfluenceSearchServiceController/aggregate | 
-[**restCreateCustomTemplateParamsMap**](ConfluenceSearchServiceControllerApi.md#restCreateCustomTemplateParamsMap) | **POST** /api/users/ConfluenceSearchServiceController/createCustomTemplateParamsMap | 
-[**restExtractRelatedAnalisysReferences**](ConfluenceSearchServiceControllerApi.md#restExtractRelatedAnalisysReferences) | **POST** /api/users/ConfluenceSearchServiceController/extractRelatedAnalisysReferences | 
-[**restFindSystemById**](ConfluenceSearchServiceControllerApi.md#restFindSystemById) | **GET** /api/users/ConfluenceSearchServiceController/findSystemById | 
-[**restFindSystemBySearchResult**](ConfluenceSearchServiceControllerApi.md#restFindSystemBySearchResult) | **POST** /api/users/ConfluenceSearchServiceController/findSystemBySearchResult | 
-[**restGetCachedCatalogues**](ConfluenceSearchServiceControllerApi.md#restGetCachedCatalogues) | **GET** /api/users/ConfluenceSearchServiceController/getCachedCatalogues | 
-[**restGetCataloguesListSample**](ConfluenceSearchServiceControllerApi.md#restGetCataloguesListSample) | **GET** /api/users/ConfluenceSearchServiceController/getCataloguesListSample | 
-[**restGetDescription**](ConfluenceSearchServiceControllerApi.md#restGetDescription) | **GET** /api/users/ConfluenceSearchServiceController/getDescription | 
-[**restGetId**](ConfluenceSearchServiceControllerApi.md#restGetId) | **GET** /api/users/ConfluenceSearchServiceController/getId | 
-[**restGetMessagingModuleId**](ConfluenceSearchServiceControllerApi.md#restGetMessagingModuleId) | **GET** /api/users/ConfluenceSearchServiceController/getMessagingModuleId | 
-[**restGetNativePromptTemplateUseCode**](ConfluenceSearchServiceControllerApi.md#restGetNativePromptTemplateUseCode) | **GET** /api/users/ConfluenceSearchServiceController/getNativePromptTemplateUseCode | 
-[**restGetProductId**](ConfluenceSearchServiceControllerApi.md#restGetProductId) | **GET** /api/users/ConfluenceSearchServiceController/getProductId | 
-[**restGetQueriesGenerationPromptUseCode**](ConfluenceSearchServiceControllerApi.md#restGetQueriesGenerationPromptUseCode) | **GET** /api/users/ConfluenceSearchServiceController/getQueriesGenerationPromptUseCode | 
-[**restGetSearchableSystems**](ConfluenceSearchServiceControllerApi.md#restGetSearchableSystems) | **GET** /api/users/ConfluenceSearchServiceController/getSearchableSystems | 
-[**restIsEnabled**](ConfluenceSearchServiceControllerApi.md#restIsEnabled) | **GET** /api/users/ConfluenceSearchServiceController/isEnabled | 
-[**restNativeSearch**](ConfluenceSearchServiceControllerApi.md#restNativeSearch) | **POST** /api/users/ConfluenceSearchServiceController/nativeSearch | 
-[**restSearch**](ConfluenceSearchServiceControllerApi.md#restSearch) | **POST** /api/users/ConfluenceSearchServiceController/search | 
+[**restAggregateConfluence**](ConfluenceSearchServiceControllerApi.md#restAggregateConfluence) | **POST** /api/users/ConfluenceSearchServiceController/aggregate | 
+[**restCreateCustomTemplateParamsMapConfluence**](ConfluenceSearchServiceControllerApi.md#restCreateCustomTemplateParamsMapConfluence) | **POST** /api/users/ConfluenceSearchServiceController/createCustomTemplateParamsMap | 
+[**restExtractRelatedAnalisysReferencesConfluence**](ConfluenceSearchServiceControllerApi.md#restExtractRelatedAnalisysReferencesConfluence) | **POST** /api/users/ConfluenceSearchServiceController/extractRelatedAnalisysReferences | 
+[**restFindSystemByIdConfluence**](ConfluenceSearchServiceControllerApi.md#restFindSystemByIdConfluence) | **GET** /api/users/ConfluenceSearchServiceController/findSystemById | 
+[**restFindSystemBySearchResultConfluence**](ConfluenceSearchServiceControllerApi.md#restFindSystemBySearchResultConfluence) | **POST** /api/users/ConfluenceSearchServiceController/findSystemBySearchResult | 
+[**restGetCachedCataloguesConfluence**](ConfluenceSearchServiceControllerApi.md#restGetCachedCataloguesConfluence) | **GET** /api/users/ConfluenceSearchServiceController/getCachedCatalogues | 
+[**restGetCataloguesListSampleConfluence**](ConfluenceSearchServiceControllerApi.md#restGetCataloguesListSampleConfluence) | **GET** /api/users/ConfluenceSearchServiceController/getCataloguesListSample | 
+[**restGetDescriptionConfluence**](ConfluenceSearchServiceControllerApi.md#restGetDescriptionConfluence) | **GET** /api/users/ConfluenceSearchServiceController/getDescription | 
+[**restGetIdConfluence**](ConfluenceSearchServiceControllerApi.md#restGetIdConfluence) | **GET** /api/users/ConfluenceSearchServiceController/getId | 
+[**restGetMessagingModuleIdConfluence**](ConfluenceSearchServiceControllerApi.md#restGetMessagingModuleIdConfluence) | **GET** /api/users/ConfluenceSearchServiceController/getMessagingModuleId | 
+[**restGetNativePromptTemplateUseCodeConfluence**](ConfluenceSearchServiceControllerApi.md#restGetNativePromptTemplateUseCodeConfluence) | **GET** /api/users/ConfluenceSearchServiceController/getNativePromptTemplateUseCode | 
+[**restGetProductIdConfluence**](ConfluenceSearchServiceControllerApi.md#restGetProductIdConfluence) | **GET** /api/users/ConfluenceSearchServiceController/getProductId | 
+[**restGetQueriesGenerationPromptUseCodeConfluence**](ConfluenceSearchServiceControllerApi.md#restGetQueriesGenerationPromptUseCodeConfluence) | **GET** /api/users/ConfluenceSearchServiceController/getQueriesGenerationPromptUseCode | 
+[**restGetSearchableSystemsConfluence**](ConfluenceSearchServiceControllerApi.md#restGetSearchableSystemsConfluence) | **GET** /api/users/ConfluenceSearchServiceController/getSearchableSystems | 
+[**restIsEnabledConfluence**](ConfluenceSearchServiceControllerApi.md#restIsEnabledConfluence) | **GET** /api/users/ConfluenceSearchServiceController/isEnabled | 
+[**restNativeSearchConfluence**](ConfluenceSearchServiceControllerApi.md#restNativeSearchConfluence) | **POST** /api/users/ConfluenceSearchServiceController/nativeSearch | 
+[**restSearchConfluence**](ConfluenceSearchServiceControllerApi.md#restSearchConfluence) | **POST** /api/users/ConfluenceSearchServiceController/search | 
 
-<a name="restAggregate"></a>
-# **restAggregate**
-> ConfluenceResultsExtractionData restAggregate(body)
+<a name="restAggregateConfluence"></a>
+# **restAggregateConfluence**
+> ConfluenceResultsExtractionData restAggregateConfluence(body)
 
 
 
@@ -38,10 +38,10 @@ Method | HTTP request | Description
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 AggregateRequestBodyConfluenceResultsExtractionData body = new AggregateRequestBodyConfluenceResultsExtractionData(); // AggregateRequestBodyConfluenceResultsExtractionData | 
 try {
-    ConfluenceResultsExtractionData result = apiInstance.restAggregate(body);
+    ConfluenceResultsExtractionData result = apiInstance.restAggregateConfluence(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restAggregate");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restAggregateConfluence");
     e.printStackTrace();
 }
 ```
@@ -65,9 +65,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restCreateCustomTemplateParamsMap"></a>
-# **restCreateCustomTemplateParamsMap**
-> Map&lt;String, Object&gt; restCreateCustomTemplateParamsMap(body)
+<a name="restCreateCustomTemplateParamsMapConfluence"></a>
+# **restCreateCustomTemplateParamsMapConfluence**
+> Map&lt;String, Object&gt; restCreateCustomTemplateParamsMapConfluence(body)
 
 
 
@@ -81,10 +81,10 @@ No authorization required
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 CustomTemplateParamsRequestBody body = new CustomTemplateParamsRequestBody(); // CustomTemplateParamsRequestBody | 
 try {
-    Map<String, Object> result = apiInstance.restCreateCustomTemplateParamsMap(body);
+    Map<String, Object> result = apiInstance.restCreateCustomTemplateParamsMapConfluence(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restCreateCustomTemplateParamsMap");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restCreateCustomTemplateParamsMapConfluence");
     e.printStackTrace();
 }
 ```
@@ -108,9 +108,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restExtractRelatedAnalisysReferences"></a>
-# **restExtractRelatedAnalisysReferences**
-> SearchResultAnalisysOutcome restExtractRelatedAnalisysReferences(body, systemId)
+<a name="restExtractRelatedAnalisysReferencesConfluence"></a>
+# **restExtractRelatedAnalisysReferencesConfluence**
+> SearchResultAnalisysOutcome restExtractRelatedAnalisysReferencesConfluence(body, systemId)
 
 
 
@@ -125,10 +125,10 @@ ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceCo
 ConfluenceResultsExtractionData body = new ConfluenceResultsExtractionData(); // ConfluenceResultsExtractionData | 
 String systemId = "systemId_example"; // String | 
 try {
-    SearchResultAnalisysOutcome result = apiInstance.restExtractRelatedAnalisysReferences(body, systemId);
+    SearchResultAnalisysOutcome result = apiInstance.restExtractRelatedAnalisysReferencesConfluence(body, systemId);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restExtractRelatedAnalisysReferences");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restExtractRelatedAnalisysReferencesConfluence");
     e.printStackTrace();
 }
 ```
@@ -153,9 +153,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restFindSystemById"></a>
-# **restFindSystemById**
-> SearchableSystemMetaData restFindSystemById(systemId)
+<a name="restFindSystemByIdConfluence"></a>
+# **restFindSystemByIdConfluence**
+> SearchableSystemMetaData restFindSystemByIdConfluence(systemId)
 
 
 
@@ -169,10 +169,10 @@ No authorization required
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 String systemId = "systemId_example"; // String | 
 try {
-    SearchableSystemMetaData result = apiInstance.restFindSystemById(systemId);
+    SearchableSystemMetaData result = apiInstance.restFindSystemByIdConfluence(systemId);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restFindSystemById");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restFindSystemByIdConfluence");
     e.printStackTrace();
 }
 ```
@@ -196,9 +196,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restFindSystemBySearchResult"></a>
-# **restFindSystemBySearchResult**
-> SearchableSystemMetaData restFindSystemBySearchResult(body)
+<a name="restFindSystemBySearchResultConfluence"></a>
+# **restFindSystemBySearchResultConfluence**
+> SearchableSystemMetaData restFindSystemBySearchResultConfluence(body)
 
 
 
@@ -212,10 +212,10 @@ No authorization required
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 SearchResult body = new SearchResult(); // SearchResult | 
 try {
-    SearchableSystemMetaData result = apiInstance.restFindSystemBySearchResult(body);
+    SearchableSystemMetaData result = apiInstance.restFindSystemBySearchResultConfluence(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restFindSystemBySearchResult");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restFindSystemBySearchResultConfluence");
     e.printStackTrace();
 }
 ```
@@ -239,9 +239,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restGetCachedCatalogues"></a>
-# **restGetCachedCatalogues**
-> List&lt;CatalogueSample&gt; restGetCachedCatalogues(systemConfigurationCode)
+<a name="restGetCachedCataloguesConfluence"></a>
+# **restGetCachedCataloguesConfluence**
+> List&lt;CatalogueSample&gt; restGetCachedCataloguesConfluence(systemConfigurationCode)
 
 
 
@@ -255,10 +255,10 @@ No authorization required
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 String systemConfigurationCode = "systemConfigurationCode_example"; // String | 
 try {
-    List<CatalogueSample> result = apiInstance.restGetCachedCatalogues(systemConfigurationCode);
+    List<CatalogueSample> result = apiInstance.restGetCachedCataloguesConfluence(systemConfigurationCode);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetCachedCatalogues");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetCachedCataloguesConfluence");
     e.printStackTrace();
 }
 ```
@@ -282,9 +282,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restGetCataloguesListSample"></a>
-# **restGetCataloguesListSample**
-> List&lt;CatalogueSample&gt; restGetCataloguesListSample(configurationCode)
+<a name="restGetCataloguesListSampleConfluence"></a>
+# **restGetCataloguesListSampleConfluence**
+> List&lt;CatalogueSample&gt; restGetCataloguesListSampleConfluence(configurationCode)
 
 
 
@@ -298,10 +298,10 @@ No authorization required
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 String configurationCode = "configurationCode_example"; // String | 
 try {
-    List<CatalogueSample> result = apiInstance.restGetCataloguesListSample(configurationCode);
+    List<CatalogueSample> result = apiInstance.restGetCataloguesListSampleConfluence(configurationCode);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetCataloguesListSample");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetCataloguesListSampleConfluence");
     e.printStackTrace();
 }
 ```
@@ -325,9 +325,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restGetDescription"></a>
-# **restGetDescription**
-> String restGetDescription()
+<a name="restGetDescriptionConfluence"></a>
+# **restGetDescriptionConfluence**
+> String restGetDescriptionConfluence()
 
 
 
@@ -340,10 +340,10 @@ No authorization required
 
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetDescription();
+    String result = apiInstance.restGetDescriptionConfluence();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetDescription");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetDescriptionConfluence");
     e.printStackTrace();
 }
 ```
@@ -364,9 +364,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetId"></a>
-# **restGetId**
-> String restGetId()
+<a name="restGetIdConfluence"></a>
+# **restGetIdConfluence**
+> String restGetIdConfluence()
 
 
 
@@ -379,10 +379,10 @@ No authorization required
 
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetId();
+    String result = apiInstance.restGetIdConfluence();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetId");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetIdConfluence");
     e.printStackTrace();
 }
 ```
@@ -403,9 +403,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetMessagingModuleId"></a>
-# **restGetMessagingModuleId**
-> String restGetMessagingModuleId()
+<a name="restGetMessagingModuleIdConfluence"></a>
+# **restGetMessagingModuleIdConfluence**
+> String restGetMessagingModuleIdConfluence()
 
 
 
@@ -418,10 +418,10 @@ No authorization required
 
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetMessagingModuleId();
+    String result = apiInstance.restGetMessagingModuleIdConfluence();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetMessagingModuleId");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetMessagingModuleIdConfluence");
     e.printStackTrace();
 }
 ```
@@ -442,9 +442,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetNativePromptTemplateUseCode"></a>
-# **restGetNativePromptTemplateUseCode**
-> String restGetNativePromptTemplateUseCode()
+<a name="restGetNativePromptTemplateUseCodeConfluence"></a>
+# **restGetNativePromptTemplateUseCodeConfluence**
+> String restGetNativePromptTemplateUseCodeConfluence()
 
 
 
@@ -457,10 +457,10 @@ No authorization required
 
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetNativePromptTemplateUseCode();
+    String result = apiInstance.restGetNativePromptTemplateUseCodeConfluence();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetNativePromptTemplateUseCode");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetNativePromptTemplateUseCodeConfluence");
     e.printStackTrace();
 }
 ```
@@ -481,9 +481,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetProductId"></a>
-# **restGetProductId**
-> String restGetProductId()
+<a name="restGetProductIdConfluence"></a>
+# **restGetProductIdConfluence**
+> String restGetProductIdConfluence()
 
 
 
@@ -496,10 +496,10 @@ No authorization required
 
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetProductId();
+    String result = apiInstance.restGetProductIdConfluence();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetProductId");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetProductIdConfluence");
     e.printStackTrace();
 }
 ```
@@ -520,9 +520,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetQueriesGenerationPromptUseCode"></a>
-# **restGetQueriesGenerationPromptUseCode**
-> String restGetQueriesGenerationPromptUseCode()
+<a name="restGetQueriesGenerationPromptUseCodeConfluence"></a>
+# **restGetQueriesGenerationPromptUseCodeConfluence**
+> String restGetQueriesGenerationPromptUseCodeConfluence()
 
 
 
@@ -535,10 +535,10 @@ No authorization required
 
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 try {
-    String result = apiInstance.restGetQueriesGenerationPromptUseCode();
+    String result = apiInstance.restGetQueriesGenerationPromptUseCodeConfluence();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetQueriesGenerationPromptUseCode");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetQueriesGenerationPromptUseCodeConfluence");
     e.printStackTrace();
 }
 ```
@@ -559,9 +559,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restGetSearchableSystems"></a>
-# **restGetSearchableSystems**
-> List&lt;SearchableSystemMetaData&gt; restGetSearchableSystems()
+<a name="restGetSearchableSystemsConfluence"></a>
+# **restGetSearchableSystemsConfluence**
+> List&lt;SearchableSystemMetaData&gt; restGetSearchableSystemsConfluence()
 
 
 
@@ -574,10 +574,10 @@ No authorization required
 
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 try {
-    List<SearchableSystemMetaData> result = apiInstance.restGetSearchableSystems();
+    List<SearchableSystemMetaData> result = apiInstance.restGetSearchableSystemsConfluence();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetSearchableSystems");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restGetSearchableSystemsConfluence");
     e.printStackTrace();
 }
 ```
@@ -598,9 +598,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="restIsEnabled"></a>
-# **restIsEnabled**
-> Boolean restIsEnabled()
+<a name="restIsEnabledConfluence"></a>
+# **restIsEnabledConfluence**
+> Boolean restIsEnabledConfluence()
 
 
 
@@ -613,10 +613,10 @@ No authorization required
 
 ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceControllerApi();
 try {
-    Boolean result = apiInstance.restIsEnabled();
+    Boolean result = apiInstance.restIsEnabledConfluence();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restIsEnabled");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restIsEnabledConfluence");
     e.printStackTrace();
 }
 ```
@@ -637,9 +637,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: */*
 
-<a name="restNativeSearch"></a>
-# **restNativeSearch**
-> List&lt;SearchResult&gt; restNativeSearch(body, systemId, nEntryLimit)
+<a name="restNativeSearchConfluence"></a>
+# **restNativeSearchConfluence**
+> List&lt;SearchResult&gt; restNativeSearchConfluence(body, systemId, nEntryLimit)
 
 
 
@@ -655,10 +655,10 @@ ConfluenceContentSearchFilter body = new ConfluenceContentSearchFilter(); // Con
 String systemId = "systemId_example"; // String | 
 Integer nEntryLimit = 56; // Integer | 
 try {
-    List<SearchResult> result = apiInstance.restNativeSearch(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restNativeSearchConfluence(body, systemId, nEntryLimit);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restNativeSearch");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restNativeSearchConfluence");
     e.printStackTrace();
 }
 ```
@@ -684,9 +684,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="restSearch"></a>
-# **restSearch**
-> List&lt;SearchResult&gt; restSearch(body, systemId, nEntryLimit)
+<a name="restSearchConfluence"></a>
+# **restSearchConfluence**
+> List&lt;SearchResult&gt; restSearchConfluence(body, systemId, nEntryLimit)
 
 
 
@@ -702,10 +702,10 @@ SearchQuery body = new SearchQuery(); // SearchQuery |
 String systemId = "systemId_example"; // String | 
 Integer nEntryLimit = 56; // Integer | 
 try {
-    List<SearchResult> result = apiInstance.restSearch(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restSearchConfluence(body, systemId, nEntryLimit);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restSearch");
+    System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restSearchConfluence");
     e.printStackTrace();
 }
 ```

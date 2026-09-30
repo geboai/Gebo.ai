@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**getJobsEntries**](LogViewControllerApi.md#getJobsEntries) | **POST** /api/admin/LogViewController/getJobsEntries | 
 [**getJobsEntriesForClassName**](LogViewControllerApi.md#getJobsEntriesForClassName) | **POST** /api/admin/LogViewController/getJobsEntriesForClassName | 
 [**getJobsEntriesForJobType**](LogViewControllerApi.md#getJobsEntriesForJobType) | **POST** /api/admin/LogViewController/getJobsEntriesForJobType | 
-[**getJobsEntriesForProjectEndpoint**](LogViewControllerApi.md#getJobsEntriesForProjectEndpoint) | **POST** /api/admin/LogViewController/getJobsEntriesForProjectEndpoint | 
+[**getJobsEntriesForProjectEndpointLogView**](LogViewControllerApi.md#getJobsEntriesForProjectEndpointLogView) | **POST** /api/admin/LogViewController/getJobsEntriesForProjectEndpoint | 
 
 <a name="deleteJobStatus"></a>
 # **deleteJobStatus**
@@ -225,9 +225,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="getJobsEntriesForProjectEndpoint"></a>
-# **getJobsEntriesForProjectEndpoint**
-> PageGJobStatusItem getJobsEntriesForProjectEndpoint(body)
+<a name="getJobsEntriesForProjectEndpointLogView"></a>
+# **getJobsEntriesForProjectEndpointLogView**
+> PageGJobStatusItem getJobsEntriesForProjectEndpointLogView(body)
 
 
 
@@ -241,10 +241,10 @@ No authorization required
 LogViewControllerApi apiInstance = new LogViewControllerApi();
 JobsEntriesForProjectEndpointFilter body = new JobsEntriesForProjectEndpointFilter(); // JobsEntriesForProjectEndpointFilter | 
 try {
-    PageGJobStatusItem result = apiInstance.getJobsEntriesForProjectEndpoint(body);
+    PageGJobStatusItem result = apiInstance.getJobsEntriesForProjectEndpointLogView(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling LogViewControllerApi#getJobsEntriesForProjectEndpoint");
+    System.err.println("Exception when calling LogViewControllerApi#getJobsEntriesForProjectEndpointLogView");
     e.printStackTrace();
 }
 ```

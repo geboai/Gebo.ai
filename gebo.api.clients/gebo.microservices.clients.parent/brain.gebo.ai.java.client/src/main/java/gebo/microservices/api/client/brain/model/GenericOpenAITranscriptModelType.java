@@ -23,7 +23,7 @@ import java.util.Date;
  * GenericOpenAITranscriptModelType
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:23.233601555+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:41.059309405+02:00[Europe/Rome]")
 
 public class GenericOpenAITranscriptModelType {
   @JsonProperty("code")
@@ -47,14 +47,17 @@ public class GenericOpenAITranscriptModelType {
   @JsonProperty("modelConfigurationClass")
   private String modelConfigurationClass = null;
 
+  @JsonProperty("providerId")
+  private String providerId = null;
+
+  @JsonProperty("defaultCurrencyCode")
+  private String defaultCurrencyCode = null;
+
   @JsonProperty("baseUrl")
   private String baseUrl = null;
 
   @JsonProperty("modelsListProvider")
   private String modelsListProvider = null;
-
-  @JsonProperty("providerId")
-  private String providerId = null;
 
   @JsonProperty("optionalAuthentication")
   private Boolean optionalAuthentication = null;
@@ -185,6 +188,42 @@ public class GenericOpenAITranscriptModelType {
     this.modelConfigurationClass = modelConfigurationClass;
   }
 
+  public GenericOpenAITranscriptModelType providerId(String providerId) {
+    this.providerId = providerId;
+    return this;
+  }
+
+   /**
+   * Get providerId
+   * @return providerId
+  **/
+  @Schema(description = "")
+  public String getProviderId() {
+    return providerId;
+  }
+
+  public void setProviderId(String providerId) {
+    this.providerId = providerId;
+  }
+
+  public GenericOpenAITranscriptModelType defaultCurrencyCode(String defaultCurrencyCode) {
+    this.defaultCurrencyCode = defaultCurrencyCode;
+    return this;
+  }
+
+   /**
+   * Get defaultCurrencyCode
+   * @return defaultCurrencyCode
+  **/
+  @Schema(description = "")
+  public String getDefaultCurrencyCode() {
+    return defaultCurrencyCode;
+  }
+
+  public void setDefaultCurrencyCode(String defaultCurrencyCode) {
+    this.defaultCurrencyCode = defaultCurrencyCode;
+  }
+
   public GenericOpenAITranscriptModelType baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
@@ -219,24 +258,6 @@ public class GenericOpenAITranscriptModelType {
 
   public void setModelsListProvider(String modelsListProvider) {
     this.modelsListProvider = modelsListProvider;
-  }
-
-  public GenericOpenAITranscriptModelType providerId(String providerId) {
-    this.providerId = providerId;
-    return this;
-  }
-
-   /**
-   * Get providerId
-   * @return providerId
-  **/
-  @Schema(description = "")
-  public String getProviderId() {
-    return providerId;
-  }
-
-  public void setProviderId(String providerId) {
-    this.providerId = providerId;
   }
 
   public GenericOpenAITranscriptModelType optionalAuthentication(Boolean optionalAuthentication) {
@@ -274,15 +295,16 @@ public class GenericOpenAITranscriptModelType {
         Objects.equals(this.dateModified, genericOpenAITranscriptModelType.dateModified) &&
         Objects.equals(this.dateCreated, genericOpenAITranscriptModelType.dateCreated) &&
         Objects.equals(this.modelConfigurationClass, genericOpenAITranscriptModelType.modelConfigurationClass) &&
+        Objects.equals(this.providerId, genericOpenAITranscriptModelType.providerId) &&
+        Objects.equals(this.defaultCurrencyCode, genericOpenAITranscriptModelType.defaultCurrencyCode) &&
         Objects.equals(this.baseUrl, genericOpenAITranscriptModelType.baseUrl) &&
         Objects.equals(this.modelsListProvider, genericOpenAITranscriptModelType.modelsListProvider) &&
-        Objects.equals(this.providerId, genericOpenAITranscriptModelType.providerId) &&
         Objects.equals(this.optionalAuthentication, genericOpenAITranscriptModelType.optionalAuthentication);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass, baseUrl, modelsListProvider, providerId, optionalAuthentication);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass, providerId, defaultCurrencyCode, baseUrl, modelsListProvider, optionalAuthentication);
   }
 
 
@@ -298,9 +320,10 @@ public class GenericOpenAITranscriptModelType {
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    modelConfigurationClass: ").append(toIndentedString(modelConfigurationClass)).append("\n");
+    sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
+    sb.append("    defaultCurrencyCode: ").append(toIndentedString(defaultCurrencyCode)).append("\n");
     sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");
     sb.append("    modelsListProvider: ").append(toIndentedString(modelsListProvider)).append("\n");
-    sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
     sb.append("    optionalAuthentication: ").append(toIndentedString(optionalAuthentication)).append("\n");
     sb.append("}");
     return sb.toString();

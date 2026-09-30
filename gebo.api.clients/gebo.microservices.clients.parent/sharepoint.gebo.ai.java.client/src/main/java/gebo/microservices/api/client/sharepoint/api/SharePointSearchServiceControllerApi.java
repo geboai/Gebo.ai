@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:46:55.281836446+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:25:13.217048818+02:00[Europe/Rome]")
 
 public class SharePointSearchServiceControllerApi {
     private ApiClient apiClient;
@@ -58,8 +58,8 @@ public class SharePointSearchServiceControllerApi {
      * @return MicrosoftResultsExtractionData
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public MicrosoftResultsExtractionData restAggregate(AggregateRequestBodyMicrosoftResultsExtractionData body) throws RestClientException {
-        return restAggregateWithHttpInfo(body).getBody();
+    public MicrosoftResultsExtractionData restAggregateSharePoint(AggregateRequestBodyMicrosoftResultsExtractionData body) throws RestClientException {
+        return restAggregateSharePointWithHttpInfo(body).getBody();
     }
 
     /**
@@ -70,11 +70,11 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;MicrosoftResultsExtractionData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<MicrosoftResultsExtractionData> restAggregateWithHttpInfo(AggregateRequestBodyMicrosoftResultsExtractionData body) throws RestClientException {
+    public ResponseEntity<MicrosoftResultsExtractionData> restAggregateSharePointWithHttpInfo(AggregateRequestBodyMicrosoftResultsExtractionData body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restAggregate");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restAggregateSharePoint");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/aggregate").build().toUriString();
         
@@ -104,8 +104,8 @@ public class SharePointSearchServiceControllerApi {
      * @return Map&lt;String, Object&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Map<String, Object> restCreateCustomTemplateParamsMap(CustomTemplateParamsRequestBody body) throws RestClientException {
-        return restCreateCustomTemplateParamsMapWithHttpInfo(body).getBody();
+    public Map<String, Object> restCreateCustomTemplateParamsMapSharePoint(CustomTemplateParamsRequestBody body) throws RestClientException {
+        return restCreateCustomTemplateParamsMapSharePointWithHttpInfo(body).getBody();
     }
 
     /**
@@ -116,11 +116,11 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;Map&lt;String, Object&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Map<String, Object>> restCreateCustomTemplateParamsMapWithHttpInfo(CustomTemplateParamsRequestBody body) throws RestClientException {
+    public ResponseEntity<Map<String, Object>> restCreateCustomTemplateParamsMapSharePointWithHttpInfo(CustomTemplateParamsRequestBody body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restCreateCustomTemplateParamsMap");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restCreateCustomTemplateParamsMapSharePoint");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/createCustomTemplateParamsMap").build().toUriString();
         
@@ -151,8 +151,8 @@ public class SharePointSearchServiceControllerApi {
      * @return SearchResultAnalisysOutcome
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferences(MicrosoftResultsExtractionData body, String systemId) throws RestClientException {
-        return restExtractRelatedAnalisysReferencesWithHttpInfo(body, systemId).getBody();
+    public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferencesSharePoint(MicrosoftResultsExtractionData body, String systemId) throws RestClientException {
+        return restExtractRelatedAnalisysReferencesSharePointWithHttpInfo(body, systemId).getBody();
     }
 
     /**
@@ -164,15 +164,15 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;SearchResultAnalisysOutcome&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SearchResultAnalisysOutcome> restExtractRelatedAnalisysReferencesWithHttpInfo(MicrosoftResultsExtractionData body, String systemId) throws RestClientException {
+    public ResponseEntity<SearchResultAnalisysOutcome> restExtractRelatedAnalisysReferencesSharePointWithHttpInfo(MicrosoftResultsExtractionData body, String systemId) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restExtractRelatedAnalisysReferences");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restExtractRelatedAnalisysReferencesSharePoint");
         }
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restExtractRelatedAnalisysReferences");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restExtractRelatedAnalisysReferencesSharePoint");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/extractRelatedAnalisysReferences").build().toUriString();
         
@@ -203,8 +203,8 @@ public class SharePointSearchServiceControllerApi {
      * @return SearchableSystemMetaData
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SearchableSystemMetaData restFindSystemById(String systemId) throws RestClientException {
-        return restFindSystemByIdWithHttpInfo(systemId).getBody();
+    public SearchableSystemMetaData restFindSystemByIdSharePoint(String systemId) throws RestClientException {
+        return restFindSystemByIdSharePointWithHttpInfo(systemId).getBody();
     }
 
     /**
@@ -215,11 +215,11 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;SearchableSystemMetaData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SearchableSystemMetaData> restFindSystemByIdWithHttpInfo(String systemId) throws RestClientException {
+    public ResponseEntity<SearchableSystemMetaData> restFindSystemByIdSharePointWithHttpInfo(String systemId) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restFindSystemById");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restFindSystemByIdSharePoint");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/findSystemById").build().toUriString();
         
@@ -248,8 +248,8 @@ public class SharePointSearchServiceControllerApi {
      * @return SearchableSystemMetaData
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public SearchableSystemMetaData restFindSystemBySearchResult(SearchResult body) throws RestClientException {
-        return restFindSystemBySearchResultWithHttpInfo(body).getBody();
+    public SearchableSystemMetaData restFindSystemBySearchResultSharePoint(SearchResult body) throws RestClientException {
+        return restFindSystemBySearchResultSharePointWithHttpInfo(body).getBody();
     }
 
     /**
@@ -260,11 +260,11 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;SearchableSystemMetaData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<SearchableSystemMetaData> restFindSystemBySearchResultWithHttpInfo(SearchResult body) throws RestClientException {
+    public ResponseEntity<SearchableSystemMetaData> restFindSystemBySearchResultSharePointWithHttpInfo(SearchResult body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restFindSystemBySearchResult");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restFindSystemBySearchResultSharePoint");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/findSystemBySearchResult").build().toUriString();
         
@@ -294,8 +294,8 @@ public class SharePointSearchServiceControllerApi {
      * @return List&lt;CatalogueSample&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<CatalogueSample> restGetCachedCatalogues(String systemConfigurationCode) throws RestClientException {
-        return restGetCachedCataloguesWithHttpInfo(systemConfigurationCode).getBody();
+    public List<CatalogueSample> restGetCachedCataloguesSharePoint(String systemConfigurationCode) throws RestClientException {
+        return restGetCachedCataloguesSharePointWithHttpInfo(systemConfigurationCode).getBody();
     }
 
     /**
@@ -306,7 +306,7 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;CatalogueSample&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<CatalogueSample>> restGetCachedCataloguesWithHttpInfo(String systemConfigurationCode) throws RestClientException {
+    public ResponseEntity<List<CatalogueSample>> restGetCachedCataloguesSharePointWithHttpInfo(String systemConfigurationCode) throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getCachedCatalogues").build().toUriString();
         
@@ -335,8 +335,8 @@ public class SharePointSearchServiceControllerApi {
      * @return List&lt;CatalogueSample&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<CatalogueSample> restGetCataloguesListSample(String configurationCode) throws RestClientException {
-        return restGetCataloguesListSampleWithHttpInfo(configurationCode).getBody();
+    public List<CatalogueSample> restGetCataloguesListSampleSharePoint(String configurationCode) throws RestClientException {
+        return restGetCataloguesListSampleSharePointWithHttpInfo(configurationCode).getBody();
     }
 
     /**
@@ -347,11 +347,11 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;CatalogueSample&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<CatalogueSample>> restGetCataloguesListSampleWithHttpInfo(String configurationCode) throws RestClientException {
+    public ResponseEntity<List<CatalogueSample>> restGetCataloguesListSampleSharePointWithHttpInfo(String configurationCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'configurationCode' is set
         if (configurationCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'configurationCode' when calling restGetCataloguesListSample");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'configurationCode' when calling restGetCataloguesListSampleSharePoint");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getCataloguesListSample").build().toUriString();
         
@@ -379,8 +379,8 @@ public class SharePointSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetDescription() throws RestClientException {
-        return restGetDescriptionWithHttpInfo().getBody();
+    public String restGetDescriptionSharePoint() throws RestClientException {
+        return restGetDescriptionSharePointWithHttpInfo().getBody();
     }
 
     /**
@@ -390,7 +390,7 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetDescriptionWithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetDescriptionSharePointWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getDescription").build().toUriString();
         
@@ -417,8 +417,8 @@ public class SharePointSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetId() throws RestClientException {
-        return restGetIdWithHttpInfo().getBody();
+    public String restGetIdSharePoint() throws RestClientException {
+        return restGetIdSharePointWithHttpInfo().getBody();
     }
 
     /**
@@ -428,7 +428,7 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetIdWithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetIdSharePointWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getId").build().toUriString();
         
@@ -455,8 +455,8 @@ public class SharePointSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetMessagingModuleId() throws RestClientException {
-        return restGetMessagingModuleIdWithHttpInfo().getBody();
+    public String restGetMessagingModuleIdSharePoint() throws RestClientException {
+        return restGetMessagingModuleIdSharePointWithHttpInfo().getBody();
     }
 
     /**
@@ -466,7 +466,7 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetMessagingModuleIdWithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetMessagingModuleIdSharePointWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getMessagingModuleId").build().toUriString();
         
@@ -493,8 +493,8 @@ public class SharePointSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetNativePromptTemplateUseCode() throws RestClientException {
-        return restGetNativePromptTemplateUseCodeWithHttpInfo().getBody();
+    public String restGetNativePromptTemplateUseCodeSharePoint() throws RestClientException {
+        return restGetNativePromptTemplateUseCodeSharePointWithHttpInfo().getBody();
     }
 
     /**
@@ -504,7 +504,7 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetNativePromptTemplateUseCodeWithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetNativePromptTemplateUseCodeSharePointWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getNativePromptTemplateUseCode").build().toUriString();
         
@@ -531,8 +531,8 @@ public class SharePointSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetProductId() throws RestClientException {
-        return restGetProductIdWithHttpInfo().getBody();
+    public String restGetProductIdSharePoint() throws RestClientException {
+        return restGetProductIdSharePointWithHttpInfo().getBody();
     }
 
     /**
@@ -542,7 +542,7 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetProductIdWithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetProductIdSharePointWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getProductId").build().toUriString();
         
@@ -569,8 +569,8 @@ public class SharePointSearchServiceControllerApi {
      * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String restGetQueriesGenerationPromptUseCode() throws RestClientException {
-        return restGetQueriesGenerationPromptUseCodeWithHttpInfo().getBody();
+    public String restGetQueriesGenerationPromptUseCodeSharePoint() throws RestClientException {
+        return restGetQueriesGenerationPromptUseCodeSharePointWithHttpInfo().getBody();
     }
 
     /**
@@ -580,7 +580,7 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<String> restGetQueriesGenerationPromptUseCodeWithHttpInfo() throws RestClientException {
+    public ResponseEntity<String> restGetQueriesGenerationPromptUseCodeSharePointWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getQueriesGenerationPromptUseCode").build().toUriString();
         
@@ -607,8 +607,8 @@ public class SharePointSearchServiceControllerApi {
      * @return List&lt;SearchableSystemMetaData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchableSystemMetaData> restGetSearchableSystems() throws RestClientException {
-        return restGetSearchableSystemsWithHttpInfo().getBody();
+    public List<SearchableSystemMetaData> restGetSearchableSystemsSharePoint() throws RestClientException {
+        return restGetSearchableSystemsSharePointWithHttpInfo().getBody();
     }
 
     /**
@@ -618,7 +618,7 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;SearchableSystemMetaData&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchableSystemMetaData>> restGetSearchableSystemsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<SearchableSystemMetaData>> restGetSearchableSystemsSharePointWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getSearchableSystems").build().toUriString();
         
@@ -645,8 +645,8 @@ public class SharePointSearchServiceControllerApi {
      * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Boolean restIsEnabled() throws RestClientException {
-        return restIsEnabledWithHttpInfo().getBody();
+    public Boolean restIsEnabledSharePoint() throws RestClientException {
+        return restIsEnabledSharePointWithHttpInfo().getBody();
     }
 
     /**
@@ -656,7 +656,7 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;Boolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Boolean> restIsEnabledWithHttpInfo() throws RestClientException {
+    public ResponseEntity<Boolean> restIsEnabledSharePointWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/isEnabled").build().toUriString();
         
@@ -686,8 +686,8 @@ public class SharePointSearchServiceControllerApi {
      * @return List&lt;SearchResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchResult> restNativeSearch(SharePointSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
-        return restNativeSearchWithHttpInfo(body, systemId, nEntryLimit).getBody();
+    public List<SearchResult> restNativeSearchSharePoint(SharePointSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
+        return restNativeSearchSharePointWithHttpInfo(body, systemId, nEntryLimit).getBody();
     }
 
     /**
@@ -700,19 +700,19 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;SearchResult&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchResult>> restNativeSearchWithHttpInfo(SharePointSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
+    public ResponseEntity<List<SearchResult>> restNativeSearchSharePointWithHttpInfo(SharePointSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restNativeSearch");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restNativeSearchSharePoint");
         }
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restNativeSearch");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restNativeSearchSharePoint");
         }
         // verify the required parameter 'nEntryLimit' is set
         if (nEntryLimit == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restNativeSearch");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restNativeSearchSharePoint");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/nativeSearch").build().toUriString();
         
@@ -746,8 +746,8 @@ public class SharePointSearchServiceControllerApi {
      * @return List&lt;SearchResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchResult> restSearch(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
-        return restSearchWithHttpInfo(body, systemId, nEntryLimit).getBody();
+    public List<SearchResult> restSearchSharePoint(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
+        return restSearchSharePointWithHttpInfo(body, systemId, nEntryLimit).getBody();
     }
 
     /**
@@ -760,19 +760,19 @@ public class SharePointSearchServiceControllerApi {
      * @return ResponseEntity&lt;List&lt;SearchResult&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchResult>> restSearchWithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
+    public ResponseEntity<List<SearchResult>> restSearchSharePointWithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restSearch");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restSearchSharePoint");
         }
         // verify the required parameter 'systemId' is set
         if (systemId == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restSearch");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restSearchSharePoint");
         }
         // verify the required parameter 'nEntryLimit' is set
         if (nEntryLimit == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restSearch");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restSearchSharePoint");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/search").build().toUriString();
         

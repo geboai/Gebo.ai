@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-24T08:47:02.226945768+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:25:19.994209445+02:00[Europe/Rome]")
 
 public class UserspaceUploadControllerApi {
     private ApiClient apiClient;
@@ -50,8 +50,8 @@ public class UserspaceUploadControllerApi {
      * @param files  (optional)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void upload(String userspaceFolderCode, List<File> files) throws RestClientException {
-        uploadWithHttpInfo(userspaceFolderCode, files);
+    public void uploadUserspace(String userspaceFolderCode, List<File> files) throws RestClientException {
+        uploadUserspaceWithHttpInfo(userspaceFolderCode, files);
     }
 
     /**
@@ -63,11 +63,11 @@ public class UserspaceUploadControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> uploadWithHttpInfo(String userspaceFolderCode, List<File> files) throws RestClientException {
+    public ResponseEntity<Void> uploadUserspaceWithHttpInfo(String userspaceFolderCode, List<File> files) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'userspaceFolderCode' is set
         if (userspaceFolderCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'userspaceFolderCode' when calling upload");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'userspaceFolderCode' when calling uploadUserspace");
         }
         // create path and map variables
         final Map<String, Object> uriVariables = new HashMap<String, Object>();
