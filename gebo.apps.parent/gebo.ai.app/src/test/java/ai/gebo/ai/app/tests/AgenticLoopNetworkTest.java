@@ -26,7 +26,6 @@ import org.springframework.test.context.TestPropertySource;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.tests.TestChatModel;
 import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService;
-import ai.gebo.llms.agent.chat.service.impl.ReportWriterReactiveAgentServiceImpl;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -43,37 +42,30 @@ import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import reactor.core.publisher.Flux;
 
 /**
- * Integration test for the standard default agents network (controller +
- * searchers + report writer) wired as the default streaming chat pipeline.
+ * Integration test for the agentic-loop agents network (a single autonomous agent
+ * that runs iteratively to answer user questions).
  * <p>
  * The whole infrastructure runs against testcontainers; only the LLM is mocked
- * via {@link TestChatModel}. The single default chat model serves every agent,
- * so a test-global response function branches on recognizable markers in each
- * agent's rendered prompt:
- * <ul>
- * <li>the coordinator-controller prompt -&gt; a structured routing plan that
- * activates only the report writer (so the search path, which needs ingested
- * content, is not exercised here);</li>
- * <li>the writer/reporter prompt -&gt; the final answer text.</li>
- * </ul>
+ * via {@link TestChatModel}. The single default chat model serves the agentic-loop
+ * agent, so the test-global response function returns a direct answer when the
+ * agent's prompt is detected.
+ * <p>
  * Unlike a bare unit invocation, the network is driven under a coherent runtime:
  * an authenticated Spring security context for the default all-roles user
  * (impersonated for every test by {@link AbstractBaseIntegrationTest}) and a
  * real {@link GUserChatSession} created through the chat session lifecycle
- * service, with the request bound to that session's context code. This is what
- * the pipeline relies on to resolve the session-available knowledge bases and to
- * propagate the caller identity into the reactive network execution.
+ * service, with the request bound to that session's context code.
  * <p>
- * The network is pinned to {@code DEFAULT_AGENTS_NETWORK}: the RAG pipeline's
- * configured default is the agentic loop network, covered by
- * {@link AgenticLoopNetworkTest}.
+ * This test pins {@code default-chat-network-of-agents} to {@code AGENTIC_LOOP_AGENTS_NETWORK}
+ * to exercise the single-loop agent network.
  */
-@TestPropertySource(properties = { "ai.gebo.agents.standard.enabled=true",
-		"ai.gebo.agents.standard.default-chat-network-of-agents=DEFAULT_AGENTS_NETWORK" })
-public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTests {
+@TestPropertySource(properties = {
+		"ai.gebo.agents.standard.enabled=true",
+		"ai.gebo.agents.standard.default-chat-network-of-agents=AGENTIC_LOOP_AGENTS_NETWORK"
+})
+public class AgenticLoopNetworkTest extends AbstractBaseTestLLmsIntegrationTests {
 
-	private static final String ANSWER_MARKER = "GEBO_TEST_ANSWER_42";
-	private static final String WRITING_INSTRUCTION = "Write a concise direct answer to the user question.";
+	private static final String ANSWER_MARKER = "AGENTIC_LOOP_TEST_ANSWER";
 	private static final String USER_QUESTION = "What is the capital of France?";
 
 	@Autowired
@@ -85,27 +77,13 @@ public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTes
 
 	@Override
 	protected void beforeEachCallback() throws Exception {
-		// Program the (shared) fake model. Set as a static hook so it survives the
-		// per-agent cloneWithOptions(...) that JSON round-trips the configuration.
 		TestChatModel.setGlobalResponseLogic(prompt -> {
 			if (prompt == null) {
 				return "";
 			}
-			// Coordinator-controller turn: emit a routing plan that activates only the
-			// report writer. The schema marks every reachable agent as required, but the
-			// routing engine skips any envelope whose commandData is null, so a partial
-			// map is enough.
-			if (prompt.contains("coordinator-controller")) {
-				return "{\n" //
-						+ "  \"" + ReportWriterReactiveAgentServiceImpl.REPORT_WRITER_NETWORK_AGENT_SERVICE + "\": {\n" //
-						+ "    \"deliveryOrder\": 1,\n" //
-						+ "    \"concurrency\": \"SERIAL\",\n" //
-						+ "    \"commandData\": \"" + WRITING_INSTRUCTION + "\"\n" //
-						+ "  }\n" //
-						+ "}";
-			}
-			// Writer/reporter turn: produce the final user-facing answer.
-			if (prompt.contains("Writer/Reporter")) {
+			// The loop agent is the network's only LLM caller: answer its turn directly,
+			// with no tool call, so the loop ends after one iteration.
+			if (prompt.contains(USER_QUESTION)) {
 				return ANSWER_MARKER + ": the capital of France is Paris.";
 			}
 			return "";
@@ -118,24 +96,12 @@ public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTes
 	}
 
 	@Test
-	public void testDefaultNetworkRoutesToReportWriter() throws Exception {
-		// Locate the agents-network pipeline (registered only when
-		// ai.gebo.agents.standard.enabled=true).
+	public void testAgenticLoopNetworkProducesAnswer() throws Exception {
 		IStreamingOutputChatPipelineService agentsPipeline = pipelineServices.stream()
 				.filter(s -> s instanceof ReactiveChatAgentsNetworkStreamingOutputChatPipelineService).findFirst()
 				.orElseThrow(() -> new IllegalStateException(
 						"Agents-network pipeline service not present; is ai.gebo.agents.standard.enabled=true?"));
 
-		// Coherent runtime identity: the default all-roles user is created in
-		// prepareEnvironment() and impersonated for every test in
-		// AbstractBaseIntegrationTest, so the synchronous session / knowledge-base
-		// resolution and the reactive network execution (which samples the identity
-		// through ReactiveIdentityUtil) both run authenticated.
-
-		// Initialize a real chat session for the current user and bind the request to
-		// it: the agents pipeline resolves the session-available knowledge bases from
-		// this context code. Leaving the code null lets the lifecycle service create
-		// and assign a valid session.
 		GeboChatRequest request = new GeboChatRequest();
 		request.setQuery(USER_QUESTION);
 		lifeCycleService.createChatSession(request);
@@ -173,7 +139,7 @@ public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTes
 
 			@Override
 			public void error(Throwable error) {
-				LOGGER.error("Error emitted by agents network", error);
+				LOGGER.error("Error emitted by agentic loop network", error);
 			}
 
 			@Override
@@ -184,15 +150,12 @@ public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTes
 		Flux<GeboChatMessageEnvelope> flux = agentsPipeline.execute(runtimeData, emitter, model, model);
 		List<GeboChatMessageEnvelope> streamed = flux.collectList().block(Duration.ofSeconds(90));
 
-		assertNotNull(streamed, "The agents network must produce a non-null output stream");
+		assertNotNull(streamed, "The agentic loop network must produce a non-null output stream");
 
 		List<GeboChatMessageEnvelope> all = new ArrayList<>(streamed);
 		all.addAll(notified);
-		assertFalse(all.isEmpty(), "The agents network must emit at least one message envelope");
+		assertFalse(all.isEmpty(), "The agentic loop network must emit at least one message envelope");
 
-		// The report writer streams the answer in small fragments and a final
-		// GeboChatResponse carrying the full text, so accumulate fragments and also
-		// inspect the consolidated response.
 		StringBuilder accumulatedText = new StringBuilder();
 		boolean foundInResponse = false;
 		for (GeboChatMessageEnvelope envelope : all) {
@@ -206,6 +169,6 @@ public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTes
 		}
 
 		assertTrue(foundInResponse || accumulatedText.toString().contains(ANSWER_MARKER),
-				"The report writer's answer (" + ANSWER_MARKER + ") must appear in the streamed network output");
+				"The agentic loop agent's answer (" + ANSWER_MARKER + ") must appear in the streamed network output");
 	}
 }
