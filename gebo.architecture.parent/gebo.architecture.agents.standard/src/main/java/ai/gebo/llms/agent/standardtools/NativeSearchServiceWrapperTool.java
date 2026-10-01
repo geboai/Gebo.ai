@@ -10,6 +10,7 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.core.ResolvableType;
 
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
@@ -18,10 +19,14 @@ import ai.gebo.llms.agent.standardtools.model.SearchToolResult;
 
 /**
  * A search service searched with its own native query structure (e.g. a JQL or
- * CQL based filter). The tool parameter is {@code NativeSearchParam<N>}, N being
- * the service's native query type: the parameterized type is handed to the tool
- * declaration as it is, so the input schema and the parsing of the model arguments
- * both resolve N without generating any class.
+ * CQL based filter, a web search provider's query). The tool parameter is
+ * {@code NativeSearchParam<N>}, N being the service's native query type: the
+ * parameterized type is handed to the tool declaration as it is, so the input
+ * schema and the parsing of the model arguments both resolve N without generating
+ * any class.
+ * <p>
+ * When the native search fails on a system, the system is searched with the query's
+ * text instead, so a native query the system rejects does not lose the search.
  */
 public class NativeSearchServiceWrapperTool<N extends INativeQueryObject> extends AbstractSearchServiceWrapperTool {
 	private final INativeSearchService<?, N> wrapped;
@@ -53,8 +58,27 @@ public class NativeSearchServiceWrapperTool<N extends INativeQueryObject> extend
 				keywords.addAll(SearchResultsChunker.keywordsFromText(keyword));
 			}
 		}
-		return pipeline.run(wrapped, toolName, toolDescription, param, keywords,
-				(system, nEntryLimit) -> wrapped.nativeSearch(query, system, nEntryLimit), toolContext);
+		final String queryText = param != null ? param.queryText() : null;
+		return pipeline.run(wrapped, toolName, toolDescription, param, keywords, (system, nEntryLimit) -> {
+			if (query != null) {
+				try {
+					return wrapped.nativeSearch(query, system, nEntryLimit);
+				} catch (Exception e) {
+					LOGGER.warn("Native search tool:" + toolName + " failed on system:" + system.getCode()
+							+ ", searching it with the query text instead", e);
+				}
+			}
+			return wrapped.search(textQuery(queryText, keywords), system, nEntryLimit);
+		}, toolContext);
+	}
+
+	/** The plain text search equivalent to a native query. */
+	static SearchQuery textQuery(String queryText, List<String> keywords) {
+		final SearchQuery searchQuery = new SearchQuery();
+		searchQuery.setQueryText(queryText);
+		searchQuery.setRelevantKeywords(
+				keywords != null && !keywords.isEmpty() ? keywords : SearchResultsChunker.keywordsFromText(queryText));
+		return searchQuery;
 	}
 
 	@Override

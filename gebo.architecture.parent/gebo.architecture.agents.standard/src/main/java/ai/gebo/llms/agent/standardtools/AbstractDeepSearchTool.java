@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.agent.standardtools;
 
+import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,10 +24,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.core.ResolvableType;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -54,7 +57,7 @@ import reactor.core.publisher.Flux;
  * <p>
  * The subclasses only say whether their source can be searched and search it.
  */
-public abstract class AbstractDeepSearchTool {
+public abstract class AbstractDeepSearchTool<Q> {
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	/** Deep searches a single user request can make, whatever the sources. */
 	public static final int MAX_DEEP_SEARCHES_PER_REQUEST = 2;
@@ -77,8 +80,13 @@ public abstract class AbstractDeepSearchTool {
 	protected final String toolName;
 	protected final String toolDescription;
 
-	protected AbstractDeepSearchTool(DeepSearchToolsSupport support, String toolName, String toolDescription) {
+	/** The type of a search: String for plain text, else the source's native query type. */
+	protected final Class<Q> queryType;
+
+	protected AbstractDeepSearchTool(DeepSearchToolsSupport support, Class<Q> queryType, String toolName,
+			String toolDescription) {
 		this.support = support;
+		this.queryType = queryType;
 		this.toolName = toolName;
 		this.toolDescription = toolDescription;
 	}
@@ -96,18 +104,21 @@ public abstract class AbstractDeepSearchTool {
 	/**
 	 * Runs the searches on the source and returns the fragments of at most
 	 * {@code maxDocuments} documents found, registering the document each fragment
-	 * comes from by the fragment id. Runs in the tool call.
+	 * comes from by the fragment id. Runs in the tool call. The searches are never
+	 * empty for plain text ones (the question is searched when the agent gave none);
+	 * native ones can be, the source then searches the question as text.
 	 */
-	protected abstract List<Document> searchDocuments(List<String> queries, String question, int maxDocuments,
+	protected abstract List<Document> searchDocuments(List<Q> queries, String question, int maxDocuments,
 			Map<String, FoundDocument> foundByFragmentId) throws Exception;
 
 	public ToolCallback toTool() {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Declaring deep search tool:" + toolName + " over " + sourceDescription());
 		}
-		final BiFunction<DeepSearchToolParam, ToolContext, DeepSearchToolResult> toolCall = this::deepSearch;
-		return ToolCallbackDeclarationUtil.declare(toolCall, toolName, toolDescription, DeepSearchToolParam.class,
-				DeepSearchToolResult.class);
+		// the parameterized type resolves the searches' schema and parsing to Q
+		final Type paramType = ResolvableType.forClassWithGenerics(DeepSearchToolParam.class, queryType).getType();
+		final BiFunction<DeepSearchToolParam<Q>, ToolContext, DeepSearchToolResult> toolCall = this::deepSearch;
+		return ToolCallbackDeclarationUtil.declare(toolCall, toolName, toolDescription, paramType);
 	}
 
 	public ToolReference toToolReference() {
@@ -118,12 +129,12 @@ public abstract class AbstractDeepSearchTool {
 	 * Runs the deep search and returns its analysis. Never throws: a failure is
 	 * answered with a {@link Status#FAILED} result the model can read.
 	 */
-	DeepSearchToolResult deepSearch(DeepSearchToolParam param, ToolContext toolContext) {
+	DeepSearchToolResult deepSearch(DeepSearchToolParam<Q> param, ToolContext toolContext) {
 		if (param == null || param.getQuestion() == null || param.getQuestion().isBlank()) {
 			return DeepSearchToolResult.of(Status.NO_RESULTS, "No deep search done: the question is empty.");
 		}
 		final String requestId = ToolCallbackDeclarationUtil.requestId(toolContext);
-		final List<String> queries = queries(param);
+		final List<Q> queries = queries(param, queryType);
 		final String question = question(param);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin deepSearch(...) tool:" + toolName + " over " + sourceDescription() + " with "
@@ -235,21 +246,39 @@ public abstract class AbstractDeepSearchTool {
 				.pipelineInfos(new HashMap<>()).build();
 	}
 
-	/** The searches to run: the agent's ones, the question when it gave none. */
-	static List<String> queries(DeepSearchToolParam param) {
-		final List<String> queries = new ArrayList<>();
+	/**
+	 * The searches to run: the agent's ones, at most {@value #MAX_QUERIES}, blank and
+	 * repeated text ones dropped; for plain text searches, the question when the agent
+	 * gave none.
+	 */
+	@SuppressWarnings("unchecked")
+	static <Q> List<Q> queries(DeepSearchToolParam<Q> param, Class<Q> queryType) {
+		final List<Q> queries = new ArrayList<>();
 		if (param.getQueries() != null) {
-			param.getQueries().stream().filter(query -> query != null && !query.isBlank()).map(String::trim)
-					.distinct().limit(MAX_QUERIES).forEach(queries::add);
+			param.getQueries().stream().filter(query -> query != null)
+					.map(query -> query instanceof String text ? (Q) text.trim() : query)
+					.filter(query -> !(query instanceof String text) || !text.isEmpty()).distinct().limit(MAX_QUERIES)
+					.forEach(queries::add);
 		}
-		if (queries.isEmpty()) {
-			queries.add(param.getQuestion().trim());
+		if (queries.isEmpty() && queryType == String.class) {
+			queries.add((Q) param.getQuestion().trim());
 		}
 		return queries;
 	}
 
+	/** A search as text, for the logs and when it is run as a text search. */
+	static String queryText(Object query) {
+		if (query instanceof INativeQueryObject nativeQuery) {
+			final List<String> keywords = nativeQuery.relevantKeywords();
+			if (keywords != null && !keywords.isEmpty()) {
+				return String.join(" ", keywords);
+			}
+		}
+		return String.valueOf(query);
+	}
+
 	/** The question, completed with what the analysis is for when the model said it. */
-	static String question(DeepSearchToolParam param) {
+	static String question(DeepSearchToolParam<?> param) {
 		final String question = param.getQuestion().trim();
 		final String objective = param.getSearchObjective();
 		return objective != null && !objective.isBlank() ? question + "\n" + objective.trim() : question;

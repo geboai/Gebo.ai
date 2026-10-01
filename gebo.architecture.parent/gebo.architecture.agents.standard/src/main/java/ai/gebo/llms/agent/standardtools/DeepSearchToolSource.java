@@ -88,7 +88,7 @@ public class DeepSearchToolSource implements IGToolCallbackSource {
 
 	@Override
 	public List<ToolReference> getFullToolReferences() {
-		return tools().stream().map(AbstractDeepSearchTool::toToolReference).toList();
+		return tools().stream().map(tool -> tool.toToolReference()).toList();
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class DeepSearchToolSource implements IGToolCallbackSource {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getToolCallbacks() for tool source:" + getId());
 		}
-		List<ToolCallback> callbacks = tools().stream().map(AbstractDeepSearchTool::toTool).toList();
+		List<ToolCallback> callbacks = tools().stream().map(tool -> tool.toTool()).toList();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End getToolCallbacks() tool source:" + getId() + " exposes " + callbacks.size()
 					+ " deep search tool(s)");
@@ -109,8 +109,8 @@ public class DeepSearchToolSource implements IGToolCallbackSource {
 	 * single one for the web.
 	 */
 	@SuppressWarnings("rawtypes")
-	List<AbstractDeepSearchTool> tools() {
-		final List<AbstractDeepSearchTool> tools = new ArrayList<>();
+	List<AbstractDeepSearchTool<?>> tools() {
+		final List<AbstractDeepSearchTool<?>> tools = new ArrayList<>();
 		final IGDocumentsSearchService documentsSearch = documentsSearchService.getIfAvailable();
 		final IGKnowledgebaseVisibilityService visibility = knowledgeBaseVisibilityService.getIfAvailable();
 		if (documentsSearch != null && visibility != null) {
@@ -144,7 +144,7 @@ public class DeepSearchToolSource implements IGToolCallbackSource {
 				}
 				continue;
 			}
-			tools.add(new SearchServiceDeepSearchTool(support, service, toolName, web ? "the web" : describe(service)));
+			tools.add(SearchServiceDeepSearchTool.of(support, service, toolName, web ? "the web" : describe(service)));
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Deep search tool:" + toolName + " served by search service:" + service.getId());
 			}

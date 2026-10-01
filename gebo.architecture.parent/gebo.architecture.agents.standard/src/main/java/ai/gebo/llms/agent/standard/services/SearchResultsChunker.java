@@ -9,12 +9,14 @@
 
 package ai.gebo.llms.agent.standard.services;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,7 @@ import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.model.DocumentMetaInfos;
+import reactor.core.publisher.Flux;
 
 /**
  * Turns external {@link SearchResult}s - handles to contents living in the
@@ -48,6 +51,11 @@ public final class SearchResultsChunker {
 	public static final int MIN_KEYWORD_LENGTH = 3;
 	/** Documents chunked in parallel. */
 	private static final int DOCUMENTS_CONCURRENCY = 4;
+	/**
+	 * Longest time a single document is loaded and chunked for: a site that does not
+	 * answer only loses its own document.
+	 */
+	public static final Duration DOCUMENT_TIMEOUT = Duration.ofSeconds(60);
 
 	private SearchResultsChunker() {
 	}
@@ -97,6 +105,19 @@ public final class SearchResultsChunker {
 	 */
 	public static List<Document> chunkToDocuments(IDocumentsChunkService chunkingService, List<SearchResult> results,
 			ChunkingParams params, int maxChunksPerDocument, String callerId) {
+		return chunkToDocuments(chunkingService, results, params, maxChunksPerDocument, callerId, DOCUMENT_TIMEOUT);
+	}
+
+	/**
+	 * Chunks the given search results into documents, best effort: each document is
+	 * loaded on its own, and one that fails or takes longer than
+	 * {@code documentTimeout} (a site that refuses the connection or does not answer)
+	 * is skipped, the others are kept.
+	 *
+	 * @see #chunkToDocuments(IDocumentsChunkService, List, ChunkingParams, int, String)
+	 */
+	public static List<Document> chunkToDocuments(IDocumentsChunkService chunkingService, List<SearchResult> results,
+			ChunkingParams params, int maxChunksPerDocument, String callerId, Duration documentTimeout) {
 		if (results == null || results.isEmpty()) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("chunkToDocuments(...) caller:" + callerId + " has no search result to chunk");
@@ -109,9 +130,22 @@ public final class SearchResultsChunker {
 		}
 		final String chunkingSession = chunkingService.createChunkingSession("search-chunks:" + UUID.randomUUID());
 		try {
-			List<IDocumentChunkWithRef> chunks = chunkingService
-					.streamChunks(results, params, chunkingSession, DOCUMENTS_CONCURRENCY).sequential().collectList()
-					.block();
+			final AtomicInteger skippedDocuments = new AtomicInteger(0);
+			List<IDocumentChunkWithRef> chunks = Flux.fromIterable(results).flatMap(result -> Flux
+					.defer(() -> chunkingService.streamChunks(result, params, chunkingSession)).timeout(documentTimeout)
+					.onErrorResume(th -> {
+						skippedDocuments.incrementAndGet();
+						LOGGER.warn("chunkToDocuments(...) caller:" + callerId + " skipped the document:"
+								+ result.getCode() + " that could not be loaded: " + th);
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Loading failure of document:" + result.getCode(), th);
+						}
+						return Flux.empty();
+					}), DOCUMENTS_CONCURRENCY).collectList().block();
+			if (skippedDocuments.get() > 0) {
+				LOGGER.warn("chunkToDocuments(...) caller:" + callerId + " skipped " + skippedDocuments.get() + " of "
+						+ results.size() + " document(s) that could not be loaded");
+			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("chunkToDocuments(...) produced " + (chunks != null ? chunks.size() : 0)
 						+ " raw chunk(s) in session:" + chunkingSession);

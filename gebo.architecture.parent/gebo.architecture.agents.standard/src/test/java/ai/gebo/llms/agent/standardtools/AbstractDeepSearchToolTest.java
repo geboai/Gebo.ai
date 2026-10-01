@@ -39,6 +39,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.ai.tool.ToolCallback;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
@@ -49,6 +50,7 @@ import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
@@ -65,6 +67,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.model.base.IGComponentOriginatedDocument;
 import reactor.core.publisher.Flux;
 
 /**
@@ -91,13 +94,13 @@ class AbstractDeepSearchToolTest {
 	}
 
 	/** A source returning the given fragments, each from the document of its code. */
-	static class TestDeepSearchTool extends AbstractDeepSearchTool {
+	static class TestDeepSearchTool extends AbstractDeepSearchTool<String> {
 		final List<Document> fragments;
 		boolean available = true;
 		final AtomicReference<List<String>> searched = new AtomicReference<>();
 
 		TestDeepSearchTool(DeepSearchToolsSupport support, List<Document> fragments) {
-			super(support, "deepSearchTest", "test deep search");
+			super(support, String.class, "deepSearchTest", "test deep search");
 			this.fragments = fragments;
 		}
 
@@ -130,8 +133,8 @@ class AbstractDeepSearchToolTest {
 		return Document.builder().id(id).text("content of " + id).metadata(metaData).build();
 	}
 
-	private static DeepSearchToolParam param(String question, String... queries) {
-		DeepSearchToolParam param = new DeepSearchToolParam();
+	private static DeepSearchToolParam<String> param(String question, String... queries) {
+		DeepSearchToolParam<String> param = new DeepSearchToolParam<>();
 		param.setQuestion(question);
 		param.setQueries(List.of(queries));
 		return param;
@@ -150,6 +153,7 @@ class AbstractDeepSearchToolTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
+		SearchAttempts.retryPauseMillis = 0L;
 		analysis = mock(DeepSearchToolAnalysis.class);
 		chunkingService = mock(IDocumentsChunkService.class);
 		chatModelsDao = mock(IGChatModelRuntimeConfigurationDao.class);
@@ -337,7 +341,7 @@ class AbstractDeepSearchToolTest {
 
 	@Test
 	void atMostFiveSearchesRun() {
-		List<String> queries = AbstractDeepSearchTool.queries(param("q", "1", "2", "3", "4", "5", "6"));
+		List<String> queries = AbstractDeepSearchTool.queries(param("q", "1", "2", "3", "4", "5", "6"), String.class);
 		assertEquals(AbstractDeepSearchTool.MAX_QUERIES, queries.size());
 	}
 
@@ -362,17 +366,14 @@ class AbstractDeepSearchToolTest {
 	void anExternalSourceIsSearchedWithEverySearchAndItsDocumentsRead() throws Exception {
 		when(chunkingService.createChunkingSession(anyString())).thenReturn("session");
 		// every search result becomes one chunk carrying its text
-		when(chunkingService.streamChunks(anyList(), any(), anyString(), anyInt())).thenAnswer(invocation -> {
-			List<SearchResult> results = invocation.getArgument(0);
-			List<IDocumentChunkWithRef> chunks = new ArrayList<>();
-			for (SearchResult result : results) {
-				DocumentChunk chunk = DocumentChunk.ofText(result.getCode(), "content of " + result.getCode(),
-						Map.of());
-				chunk.setChunkPosition(1l);
-				chunks.add(IDocumentChunkWithRef.of(chunk, result));
-			}
-			return Flux.fromIterable(chunks).parallel();
-		});
+		when(chunkingService.streamChunks(any(IGComponentOriginatedDocument.class), any(), anyString()))
+				.thenAnswer(invocation -> {
+					SearchResult result = invocation.getArgument(0);
+					DocumentChunk chunk = DocumentChunk.ofText(result.getCode(), "content of " + result.getCode(),
+							Map.of());
+					chunk.setChunkPosition(1l);
+					return Flux.just(IDocumentChunkWithRef.of(chunk, result));
+				});
 		ISearchService service = mock(ISearchService.class);
 		when(service.getId()).thenReturn("web-service");
 		SearchableSystemMetaData working = new SearchableSystemMetaData();
@@ -387,8 +388,8 @@ class AbstractDeepSearchToolTest {
 			SearchQuery query = invocation.getArgument(0);
 			return query.getQueryText().equals("first") ? List.of(a, b) : List.of(b);
 		});
-		SearchServiceDeepSearchTool tool = new SearchServiceDeepSearchTool(support, service, "deepSearchWeb",
-				"the web");
+		SearchServiceDeepSearchTool<String> tool = new SearchServiceDeepSearchTool<>(support, service, String.class,
+				"deepSearchWeb", "the web");
 		ToolsFoundDocuments collector = new ToolsFoundDocuments();
 
 		DeepSearchToolResult result = tool.deepSearch(param("question", "first", "second"), request("r1", collector));
@@ -411,5 +412,88 @@ class AbstractDeepSearchToolTest {
 		assertEquals(Status.FAILED, tool.deepSearch(param("question", "first"), request("r2")).getStatus());
 		when(security.isEnabledForCurrentUser(service)).thenReturn(false);
 		assertEquals(Status.NOT_ALLOWED, tool.deepSearch(param("question", "first"), request("r3")).getStatus());
+	}
+
+	/** Every search result loads as one chunk carrying its text. */
+	@SuppressWarnings("unchecked")
+	private void everyResultIsOneChunk() {
+		when(chunkingService.createChunkingSession(anyString())).thenReturn("session");
+		when(chunkingService.streamChunks(any(IGComponentOriginatedDocument.class), any(), anyString()))
+				.thenAnswer(invocation -> {
+					SearchResult result = invocation.getArgument(0);
+					DocumentChunk chunk = DocumentChunk.ofText(result.getCode(), "content of " + result.getCode(),
+							Map.of());
+					chunk.setChunkPosition(1l);
+					return Flux.just(IDocumentChunkWithRef.of(chunk, result));
+				});
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private INativeSearchService jiraService(SearchableSystemMetaData system) throws Exception {
+		INativeSearchService service = mock(INativeSearchService.class);
+		when(service.getId()).thenReturn("jira-service");
+		when(service.getNativeSearchDataStructureType()).thenReturn(SearchToolContentPipelineTest.JqlQuery.class);
+		when(service.getSearchableSystems()).thenReturn(List.of(system));
+		return service;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	void aNativeServiceIsDeepSearchedWithItsOwnQueries() throws Exception {
+		everyResultIsOneChunk();
+		SearchableSystemMetaData system = new SearchableSystemMetaData();
+		INativeSearchService service = jiraService(system);
+		List<String> received = new ArrayList<>();
+		when(service.nativeSearch(any(), any(), anyInt())).thenAnswer(invocation -> {
+			received.add(((SearchToolContentPipelineTest.JqlQuery) invocation.getArgument(0)).getJql());
+			return List.of(result("https://jira.example/ISSUE-1", "ISSUE-1"));
+		});
+		ToolCallback tool = SearchServiceDeepSearchTool.of(support, service, "deepSearchJira", "Jira").toTool();
+
+		String schema = tool.getToolDefinition().inputSchema();
+		assertTrue(schema.contains("\"jql\""), schema);
+		assertTrue(schema.contains("\"queries\""), schema);
+		assertTrue(schema.contains("\"depth\""), schema);
+
+		String answer = tool.call("{\"queries\":[{\"jql\":\"project = GEBO\"},{\"jql\":\"type = Bug\"}],"
+				+ "\"question\":\"which bugs are open?\"}", request("r1"));
+
+		assertEquals(List.of("project = GEBO", "type = Bug"), received);
+		assertTrue(answer.contains("\"status\":\"OK\""), answer);
+		assertTrue(answer.contains("ISSUE-1"), answer);
+		verify(service, never()).search(any(SearchQuery.class), any(SearchableSystemMetaData.class), anyInt());
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	void aRejectedNativeQueryIsSearchedAsText() throws Exception {
+		everyResultIsOneChunk();
+		SearchableSystemMetaData system = new SearchableSystemMetaData();
+		INativeSearchService service = jiraService(system);
+		when(service.nativeSearch(any(), any(), anyInt())).thenThrow(new IllegalArgumentException("bad jql"));
+		List<String> texts = new ArrayList<>();
+		when(service.search(any(SearchQuery.class), any(SearchableSystemMetaData.class), anyInt()))
+				.thenAnswer(invocation -> {
+					texts.add(((SearchQuery) invocation.getArgument(0)).getQueryText());
+					return List.of(result("https://jira.example/ISSUE-2", "ISSUE-2"));
+				});
+		SearchServiceDeepSearchTool<SearchToolContentPipelineTest.JqlQuery> tool = (SearchServiceDeepSearchTool) SearchServiceDeepSearchTool
+				.of(support, service, "deepSearchJira", "Jira");
+		SearchToolContentPipelineTest.JqlQuery query = new SearchToolContentPipelineTest.JqlQuery();
+		query.setJql("project = GEBO");
+		DeepSearchToolParam<SearchToolContentPipelineTest.JqlQuery> param = new DeepSearchToolParam<>();
+		param.setQuestion("which bugs are open?");
+		param.setQueries(List.of(query));
+
+		DeepSearchToolResult result = tool.deepSearch(param, request("r1"));
+
+		assertEquals(Status.OK, result.getStatus());
+		assertEquals(List.of("project = GEBO"), texts);
+
+		// no native search given: the question is searched as text
+		texts.clear();
+		param.setQueries(List.of());
+		assertEquals(Status.OK, tool.deepSearch(param, request("r2")).getStatus());
+		assertEquals(List.of("which bugs are open?"), texts);
 	}
 }

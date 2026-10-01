@@ -146,7 +146,8 @@ public class SearchToolContentPipeline {
 					}
 					searchedSystems++;
 					try {
-						List<SearchResult> results = systemSearch.search(system, nEntryLimit);
+						List<SearchResult> results = SearchAttempts.run(() -> systemSearch.search(system, nEntryLimit),
+								toolName, system.getCode());
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("Tool:" + toolName + " system:" + system.getCode() + " returned "
 									+ (results != null ? results.size() : 0) + " result(s)");

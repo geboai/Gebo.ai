@@ -20,6 +20,7 @@ import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
+import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 
@@ -68,18 +69,23 @@ public class WebSearchToolSource implements IGToolCallbackSource {
 
 	@Override
 	public List<ToolReference> getFullToolReferences() {
-		SearchServiceWrapperTool tool = webSearchTool();
+		AbstractSearchServiceWrapperTool tool = webSearchTool();
 		return tool != null ? List.of(tool.toToolReference()) : List.of();
 	}
 
 	@Override
 	public List<ToolCallback> getToolCallbacks() {
-		SearchServiceWrapperTool tool = webSearchTool();
+		AbstractSearchServiceWrapperTool tool = webSearchTool();
 		return tool != null ? List.of(tool.toTool()) : List.of();
 	}
 
-	/** The web search tool over the first enabled web search provider, null when none is. */
-	private SearchServiceWrapperTool webSearchTool() {
+	/**
+	 * The web search tool over the first enabled web search provider, null when none
+	 * is: searched with the provider's own query structure when it has one (site,
+	 * freshness, language...), with plain text otherwise.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	AbstractSearchServiceWrapperTool webSearchTool() {
 		@SuppressWarnings("rawtypes")
 		List<ISearchService> implementations = searchServicesRepoPattern.getImplementations();
 		if (implementations != null) {
@@ -95,6 +101,14 @@ public class WebSearchToolSource implements IGToolCallbackSource {
 					LOGGER.warn("Cannot tell whether web search provider {} is enabled, skipping it", service.getId(),
 							th);
 					continue;
+				}
+				if (service instanceof INativeSearchService nativeService) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Web search tool served by the provider:" + service.getId()
+								+ " with its native query:" + nativeService.getNativeSearchDataStructureType().getName());
+					}
+					return new NativeSearchServiceWrapperTool(pipeline, nativeService,
+							AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_NAME, WEB_SEARCH_TOOL_DESCRIPTION);
 				}
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Web search tool served by the provider:" + service.getId());

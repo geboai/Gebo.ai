@@ -35,7 +35,7 @@ import ai.gebo.security.services.IGSecurityService;
  * the user's ACL filter when the platform access policy is ACL based. The agent's
  * searches run both as semantic and as full text searches.
  */
-public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool {
+public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> {
 	public static final String DEEP_SEARCH_KNOWLEDGE_BASE_TOOL = "deepSearchKnowledgeBase";
 	static final String DESCRIPTION = "Deep search of the company's internal knowledge base: runs your searches, "
 			+ "reads every document fragment found and returns an analysis of them against your question, with the "
@@ -51,7 +51,7 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool {
 
 	public KnowledgeBaseDeepSearchTool(DeepSearchToolsSupport support, IGDocumentsSearchService documentsSearchService,
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService, IGSecurityService securityService) {
-		super(support, DEEP_SEARCH_KNOWLEDGE_BASE_TOOL, DESCRIPTION);
+		super(support, String.class, DEEP_SEARCH_KNOWLEDGE_BASE_TOOL, DESCRIPTION);
 		this.documentsSearchService = documentsSearchService;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
 		this.securityService = securityService;

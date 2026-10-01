@@ -52,6 +52,7 @@ import ai.gebo.llms.agent.standardtools.model.SearchToolResult.Status;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.model.base.IGComponentOriginatedDocument;
 import reactor.core.publisher.Flux;
 
 /**
@@ -107,20 +108,18 @@ class SearchToolContentPipelineTest {
 	@SuppressWarnings("unchecked")
 	@BeforeEach
 	void setUp() throws Exception {
+		SearchAttempts.retryPauseMillis = 0L;
 		chunkingService = mock(IDocumentsChunkService.class);
 		when(chunkingService.createChunkingSession(anyString())).thenReturn("session");
 		// every search result becomes one chunk carrying its text
-		when(chunkingService.streamChunks(anyList(), any(), anyString(), anyInt())).thenAnswer(invocation -> {
-			List<SearchResult> results = invocation.getArgument(0);
-			List<IDocumentChunkWithRef> chunks = new ArrayList<>();
-			for (SearchResult result : results) {
-				DocumentChunk chunk = DocumentChunk.ofText(result.getCode(), "content of " + result.getCode(),
-						Map.of());
-				chunk.setChunkPosition(1l);
-				chunks.add(IDocumentChunkWithRef.of(chunk, result));
-			}
-			return Flux.fromIterable(chunks).parallel();
-		});
+		when(chunkingService.streamChunks(any(IGComponentOriginatedDocument.class), any(), anyString()))
+				.thenAnswer(invocation -> {
+					SearchResult result = invocation.getArgument(0);
+					DocumentChunk chunk = DocumentChunk.ofText(result.getCode(), "content of " + result.getCode(),
+							Map.of());
+					chunk.setChunkPosition(1l);
+					return Flux.just(IDocumentChunkWithRef.of(chunk, result));
+				});
 		ranker = mock(IGRankerService.class);
 		when(ranker.isRankerConfigured()).thenReturn(true);
 		when(ranker.call(anyList(), anyString(), anyInt())).thenAnswer(invocation -> invocation.getArgument(0));
@@ -250,7 +249,7 @@ class SearchToolContentPipelineTest {
 
 		assertEquals(Status.NOT_ALLOWED, result.getStatus());
 		assertTrue(searched.isEmpty());
-		verify(chunkingService, never()).streamChunks(anyList(), any(), anyString(), anyInt());
+		verify(chunkingService, never()).streamChunks(any(IGComponentOriginatedDocument.class), any(), anyString());
 	}
 
 	@Test
@@ -315,6 +314,31 @@ class SearchToolContentPipelineTest {
 		public List<String> relevantKeywords() {
 			return jql != null ? List.of(jql) : List.of();
 		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	void aRejectedNativeQueryIsSearchedAsText() throws Exception {
+		INativeSearchService nativeService = mock(INativeSearchService.class);
+		when(nativeService.getId()).thenReturn("jira-service");
+		when(nativeService.getNativeSearchDataStructureType()).thenReturn(JqlQuery.class);
+		when(nativeService.getSearchableSystems()).thenReturn(List.of(system));
+		when(security.isEnabledForCurrentUser(any())).thenReturn(true);
+		when(nativeService.nativeSearch(any(), any(), anyInt())).thenThrow(new IllegalArgumentException("bad jql"));
+		List<String> texts = new ArrayList<>();
+		when(nativeService.search(any(SearchQuery.class), any(SearchableSystemMetaData.class), anyInt()))
+				.thenAnswer(invocation -> {
+					texts.add(((SearchQuery) invocation.getArgument(0)).getQueryText());
+					return List.of(result("https://jira.example/ISSUE-3", "ISSUE-3"));
+				});
+		ToolCallback tool = new NativeSearchServiceWrapperTool(pipeline, nativeService, "jiraNativeSearch",
+				"Search Jira").toTool();
+
+		String answer = tool.call("{\"query\":{\"jql\":\"project = GEBO\"},\"searchObjective\":\"open bugs\"}",
+				request("r1"));
+
+		assertEquals(List.of("project = GEBO"), texts);
+		assertTrue(answer.contains("ISSUE-3"), answer);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
