@@ -110,6 +110,14 @@
                               [falseValue]="false"></p-checkbox>
                             </gebo-ai-field>
                           </div>
+                          <div class="col-6">
+                            <gebo-ai-field id="externalSourceSearchEnabledByDefault"
+                              label="External sources searchable by everyone by default"
+                              help="The configured external search sources (the internal knowledge base excluded) can be searched by every user, except where a users/groups access is configured below">
+                              <p-checkbox formControlName="externalSourceSearchEnabledByDefault" binary="true"
+                              [trueValue]="true" [falseValue]="false"></p-checkbox>
+                            </gebo-ai-field>
+                          </div>
                           <div class="col-12">
                             <p-fieldset id="SIMPLEMODE" legend="Simple per user/group access" gebo-ai-label>
                               <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>

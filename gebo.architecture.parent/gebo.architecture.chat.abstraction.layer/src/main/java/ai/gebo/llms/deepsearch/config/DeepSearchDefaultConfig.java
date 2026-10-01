@@ -70,6 +70,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 		this.deepSearchUserIntentThreasholds.add(highLevelsThreashold);
 		this.setAccessibleToAll(true);
 		this.setPerDataSourceConfigured(false);
+		this.setExternalSourceSearchEnabledByDefault(true);
 	}
 
 	public int getSatisfactorySubAnalisysThreashold(DeliverableIntent intent) {

@@ -5376,6 +5376,10 @@
       },
       "PERDATASOURCEMODE": {
         "label": "Per data source user/group access"
+      },
+      "externalSourceSearchEnabledByDefault": {
+        "label": "External sources searchable by everyone by default",
+        "help": "The configured external search sources (the internal knowledge base excluded) can be searched by every user, except where a users/groups access is configured below"
       }
     }
   },
