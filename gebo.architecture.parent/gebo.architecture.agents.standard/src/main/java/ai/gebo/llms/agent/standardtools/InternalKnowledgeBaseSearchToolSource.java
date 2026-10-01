@@ -41,6 +41,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.Data;
@@ -121,7 +122,7 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 		// the call is recorded for the request by the tool wrapper (RunAsToolCallback)
 		BiFunction<KnowledgeBaseSearchParam, ToolContext, String> search = (param, toolContext) -> {
 			KBContext interaction = LLMtInteractionContextThreadLocal.Context.get();
-			return search(param, interaction);
+			return search(param, interaction, ToolsFoundDocuments.from(toolContext));
 		};
 		return List.of(ToolCallbackDeclarationUtil.declare(search, SEARCH_KNOWLEDGE_BASE_TOOL,
 				SEARCH_KNOWLEDGE_BASE_DESCRIPTION, KnowledgeBaseSearchParam.class, String.class));
@@ -133,6 +134,14 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	 * can go on without this search.
 	 */
 	String search(KnowledgeBaseSearchParam param, KBContext interaction) {
+		return search(param, interaction, null);
+	}
+
+	/**
+	 * Runs the search, sharing the documents found with the calling agent when it
+	 * collects them (see {@link ToolsFoundDocuments}).
+	 */
+	String search(KnowledgeBaseSearchParam param, KBContext interaction, ToolsFoundDocuments collector) {
 		if (param == null || param.getQuery() == null || param.getQuery().isBlank()) {
 			return "No search done: the query is empty.";
 		}
@@ -168,6 +177,20 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			List<Document> documents = found != null ? found.aiDocumentsList() : List.of();
 			if (documents.isEmpty()) {
 				return "No document found in the internal knowledge base for: " + param.getQuery();
+			}
+			if (collector != null) {
+				// the documents found become the calling agent's answer documents; sharing
+				// them never fails the search
+				try {
+					List<GResponseDocumentRef> refs = GResponseDocumentRef.from(found);
+					collector.add(refs);
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Knowledge base tool shared " + refs.size()
+								+ " document(s) with the calling agent's answer");
+					}
+				} catch (Throwable th) {
+					LOGGER.warn("Knowledge base tool could not share its documents with the calling agent", th);
+				}
 			}
 			List<String> rendered = new ArrayList<>();
 			for (Document document : documents) {

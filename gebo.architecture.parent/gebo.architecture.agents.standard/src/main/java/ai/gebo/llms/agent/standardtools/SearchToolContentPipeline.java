@@ -37,6 +37,7 @@ import ai.gebo.llms.agent.standardtools.model.AbstractSearchToolParam;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult.Fragment;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult.Status;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
 import ai.gebo.model.DocumentMetaInfos;
@@ -224,6 +225,7 @@ public class SearchToolContentPipeline {
 				}
 			}
 			requestRegistry.markReturned(requestId, returnedCodes);
+			shareFoundDocuments(toolContext, fresh, returnedCodes, toolName);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End run(...) tool:" + toolName + " status:" + result.getStatus() + " returns "
 						+ result.getFragments().size() + " fragment(s) from " + returnedCodes.size()
@@ -233,6 +235,29 @@ public class SearchToolContentPipeline {
 		} catch (Throwable th) {
 			LOGGER.error("Tool:" + toolName + " failed for query:" + queryText, th);
 			return SearchToolResult.of(Status.FAILED, "The search failed, go on without it.");
+		}
+	}
+
+	/**
+	 * Shares the documents the returned fragments come from with the calling agent,
+	 * when it collects them (see {@link ToolsFoundDocuments}): they become its answer's
+	 * documents. The refs keep the search results, so the user can chat with them.
+	 */
+	static void shareFoundDocuments(ToolContext toolContext, List<SearchResult> sources, Set<String> returnedCodes,
+			String toolName) {
+		final ToolsFoundDocuments collector = ToolsFoundDocuments.from(toolContext);
+		if (collector == null || returnedCodes.isEmpty()) {
+			return;
+		}
+		final List<GResponseDocumentRef> refs = new ArrayList<>();
+		for (SearchResult source : sources) {
+			if (returnedCodes.contains(source.getCode())) {
+				refs.add(new GResponseDocumentRef(source));
+			}
+		}
+		collector.add(refs);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Tool:" + toolName + " shared " + refs.size() + " document(s) with the calling agent's answer");
 		}
 	}
 

@@ -61,8 +61,8 @@ Deep searches (the deepSearch... tools, when available):
   tool finds.
 - Give it 1 to 5 searches covering different angles, a complete, self-contained question, a
   searchObjective saying what the analysis must cover, and a depth matching the deliverable
-  (EXHAUSTIVE for a report, an analysis, a decision or a comparison); ask one deep search per
-  source, not several on the same source.
+  (EXHAUSTIVE for a report, an analysis, a decision or a comparison; the depth also sets how long
+  the returned analysis is); ask one deep search per source, not several on the same source.
 - A request can make at most 2 deep searches: when a deep search tool says they are used up,
   answer with what you have.
 

@@ -39,7 +39,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
-import ai.gebo.llms.agent.standardtools.DeepSearchToolDocuments;
+import ai.gebo.llms.agent.standardtools.ToolsFoundDocuments;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -129,10 +129,10 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					+ userIntent.name());
 		}
 		final List<LoopIteration> history = new ArrayList<>();
-		// The deep search tools called by the loop add the documents they relied on to
-		// this collector, shared through the tools context of the loop's model calls:
-		// they become the answer's documents.
-		final DeepSearchToolDocuments toolDocuments = new DeepSearchToolDocuments();
+		// The search and deep search tools called by the loop add their documents to this
+		// collector, shared through the tools context of the loop's model calls: they
+		// become the answer's documents.
+		final ToolsFoundDocuments toolDocuments = new ToolsFoundDocuments();
 		Flux<String> text = iteration(1, maxIterations, budget, history, agentModel, agentPrompt,
 				toolDocuments.sharedThrough(chatRequestContext), contextAgentPersona, notificationSink,
 				callBacksListener, deliverableParams);
@@ -146,7 +146,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("Agentic loop agent id:" + getId() + " answer documents: " + before
 									+ " from the session, " + response.getDocumentsRef().size()
-									+ " with the deep search tools' ones");
+									+ " with the search tools' ones");
 						}
 					}
 				});

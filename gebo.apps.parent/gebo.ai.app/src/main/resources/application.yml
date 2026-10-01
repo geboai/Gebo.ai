@@ -460,6 +460,10 @@ ai.gebo.ragsearch.config:
   # weakest neighbours.
   default-similarity-threshold: 0.57
 ai.gebo.agents.standard.enabled: true
+# Deep search tools (deepSearchKnowledgeBase, deepSearchWeb, deepSearch<Product>) of the
+# agents operating their own tools: the length of the analysis they return is asked to
+# the model by the depth the agent chooses; this caps a runaway one, in tokens.
+ai.gebo.agents.standard.deep-search-tools.max-analysis-tokens: 16000
 # Open-chat pipeline (pipelineCode=open-chat): a "pure chat" experience that never
 # RAGs the internal knowledge base. It answers freely via a KB-free network of agents,
 # can search external systems, and can chat over uploaded/picked files. Its agents

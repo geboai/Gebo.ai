@@ -142,7 +142,7 @@ class AbstractDeepSearchToolTest {
 	}
 
 	/** The tool context of a model call made through a context sharing the collector. */
-	private static ToolContext request(String requestId, DeepSearchToolDocuments collector) {
+	private static ToolContext request(String requestId, ToolsFoundDocuments collector) {
 		IChatRequestContext context = collector.sharedThrough(IChatRequestContext.builder().requestID(requestId)
 				.toolsContext(Map.of(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, requestId)).build());
 		return new ToolContext(context.getToolsContext());
@@ -174,7 +174,7 @@ class AbstractDeepSearchToolTest {
 		GeboRagSearchConfig ragSearchConfig = mock(GeboRagSearchConfig.class);
 		when(ragSearchConfig.getDeepSearchGlobalTopK()).thenReturn(30);
 		support = new DeepSearchToolsSupport(provider(analysis), provider(chunkingService), provider(chatModelsDao),
-				provider(ragSearchConfig), provider(security));
+				provider(ragSearchConfig), provider(security), DeepSearchToolsSupport.DEFAULT_MAX_ANALYSIS_TOKENS);
 	}
 
 	@Test
@@ -202,7 +202,7 @@ class AbstractDeepSearchToolTest {
 	void theDocumentsReliedOnAreSharedWithTheCallingAgent() {
 		TestDeepSearchTool tool = new TestDeepSearchTool(support,
 				List.of(fragment("f1", "doc-a"), fragment("f2", "doc-b"), fragment("f3", "doc-c")));
-		DeepSearchToolDocuments collector = new DeepSearchToolDocuments();
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
 
 		tool.deepSearch(param("question"), request("r1", collector));
 
@@ -215,7 +215,7 @@ class AbstractDeepSearchToolTest {
 
 	@Test
 	void theCollectorIsSharedWithoutChangingTheRestOfTheContext() {
-		DeepSearchToolDocuments collector = new DeepSearchToolDocuments();
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
 		IChatRequestContext original = IChatRequestContext.builder().requestID("r1").actualUserRequest("question")
 				.toolsContext(Map.of(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, "r1")).build();
 
@@ -223,13 +223,13 @@ class AbstractDeepSearchToolTest {
 
 		assertEquals("question", shared.getActualUserRequest());
 		assertEquals("r1", shared.getToolsContext().get(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY));
-		assertSame(collector, DeepSearchToolDocuments.from(new ToolContext(shared.getToolsContext())));
-		assertEquals(null, original.getToolsContext().get(DeepSearchToolDocuments.TOOLS_CONTEXT_KEY));
+		assertSame(collector, ToolsFoundDocuments.from(new ToolContext(shared.getToolsContext())));
+		assertEquals(null, original.getToolsContext().get(ToolsFoundDocuments.TOOLS_CONTEXT_KEY));
 	}
 
 	@Test
 	void theAnswerDocumentsComeFirstThenTheToolsOnes() {
-		DeepSearchToolDocuments collector = new DeepSearchToolDocuments();
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
 		collector.add(List.of(new GResponseDocumentRef(fragment("f1", "doc-a")),
 				new GResponseDocumentRef(fragment("f2", "doc-b"))));
 		List<GResponseDocumentRef> answer = List.of(new GResponseDocumentRef(fragment("f3", "doc-b")));
@@ -238,7 +238,7 @@ class AbstractDeepSearchToolTest {
 
 		assertEquals(List.of("doc-b", "doc-a"), merged.stream().map(GResponseDocumentRef::getDocumentCode).toList());
 		assertSame(answer.get(0), merged.get(0));
-		assertSame(answer, new DeepSearchToolDocuments().mergeInto(answer));
+		assertSame(answer, new ToolsFoundDocuments().mergeInto(answer));
 	}
 
 	@Test
@@ -329,6 +329,13 @@ class AbstractDeepSearchToolTest {
 	}
 
 	@Test
+	void theDepthAsksTheLengthOfTheAnalysis() {
+		assertTrue(AbstractDeepSearchTool.lengthTarget(Depth.FOCUSED).contains("400 words"));
+		assertTrue(AbstractDeepSearchTool.lengthTarget(null).contains("1000 words"));
+		assertTrue(AbstractDeepSearchTool.lengthTarget(Depth.EXHAUSTIVE).contains("2500 words"));
+	}
+
+	@Test
 	void atMostFiveSearchesRun() {
 		List<String> queries = AbstractDeepSearchTool.queries(param("q", "1", "2", "3", "4", "5", "6"));
 		assertEquals(AbstractDeepSearchTool.MAX_QUERIES, queries.size());
@@ -382,7 +389,7 @@ class AbstractDeepSearchToolTest {
 		});
 		SearchServiceDeepSearchTool tool = new SearchServiceDeepSearchTool(support, service, "deepSearchWeb",
 				"the web");
-		DeepSearchToolDocuments collector = new DeepSearchToolDocuments();
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
 
 		DeepSearchToolResult result = tool.deepSearch(param("question", "first", "second"), request("r1", collector));
 

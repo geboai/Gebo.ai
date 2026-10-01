@@ -25,18 +25,18 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 
 /**
- * Collects the documents the deep search tools relied on, for the agent that called
- * them: the agent shares the collector through the tools context of its model calls
- * ({@link #sharedThrough(IChatRequestContext)}), the tools add the documents their
- * analysis relies on, and the agent gives them as its answer's documents, so the
- * user sees them among the documents found.
+ * Collects the documents the search tools returned and the deep search tools relied
+ * on, for the agent that called them: the agent shares the collector through the
+ * tools context of its model calls ({@link #sharedThrough(IChatRequestContext)}), the
+ * tools add their documents, and the agent gives them as its answer's documents, so
+ * the user sees them among the documents found.
  * <p>
  * Without a collector in the tools context (an agent that does not share one) the
- * tools still answer, their documents being only cited in the analysis.
+ * tools still answer, their documents being only cited in the answer.
  */
-public final class DeepSearchToolDocuments {
+public final class ToolsFoundDocuments {
 	/** Tools context key carrying the collector. */
-	public static final String TOOLS_CONTEXT_KEY = "geboDeepSearchToolDocuments";
+	public static final String TOOLS_CONTEXT_KEY = "geboToolsFoundDocuments";
 	private final Map<String, GResponseDocumentRef> byCode = new LinkedHashMap<>();
 
 	/** Records the documents, once per document code. */
@@ -88,11 +88,11 @@ public final class DeepSearchToolDocuments {
 	}
 
 	/** The collector a tool context carries, or null. */
-	public static DeepSearchToolDocuments from(ToolContext toolContext) {
+	public static ToolsFoundDocuments from(ToolContext toolContext) {
 		if (toolContext == null || toolContext.getContext() == null) {
 			return null;
 		}
-		return toolContext.getContext().get(TOOLS_CONTEXT_KEY) instanceof DeepSearchToolDocuments collector
+		return toolContext.getContext().get(TOOLS_CONTEXT_KEY) instanceof ToolsFoundDocuments collector
 				? collector
 				: null;
 	}
@@ -102,7 +102,7 @@ public final class DeepSearchToolDocuments {
 	 * every other value is still read from the given context.
 	 */
 	public IChatRequestContext sharedThrough(IChatRequestContext context) {
-		final DeepSearchToolDocuments collector = this;
+		final ToolsFoundDocuments collector = this;
 		return new IChatRequestContext() {
 			@Override
 			public String getRequestID() {

@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
@@ -38,11 +39,15 @@ public class DeepSearchToolsSupport {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchToolsSupport.class);
 	/** A request is long over after an hour without deep searches. */
 	static final long IDLE_TTL_MILLIS = 60L * 60L * 1000L;
+	/** Property capping the returned analysis, in tokens. */
+	public static final String MAX_ANALYSIS_TOKENS_PROPERTY = "ai.gebo.agents.standard.deep-search-tools.max-analysis-tokens";
+	public static final int DEFAULT_MAX_ANALYSIS_TOKENS = 16000;
 	private final ObjectProvider<DeepSearchToolAnalysis> analysis;
 	private final ObjectProvider<IDocumentsChunkService> chunkingService;
 	private final ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModelsDao;
 	private final ObjectProvider<GeboRagSearchConfig> ragSearchConfig;
 	private final ObjectProvider<IGExternalSearchSecurityService> externalSearchSecurityService;
+	private final int maxAnalysisTokens;
 
 	private static final class RequestCount {
 		final AtomicInteger deepSearches = new AtomicInteger(0);
@@ -55,12 +60,17 @@ public class DeepSearchToolsSupport {
 			ObjectProvider<IDocumentsChunkService> chunkingService,
 			ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModelsDao,
 			ObjectProvider<GeboRagSearchConfig> ragSearchConfig,
-			ObjectProvider<IGExternalSearchSecurityService> externalSearchSecurityService) {
+			ObjectProvider<IGExternalSearchSecurityService> externalSearchSecurityService,
+			@Value("${" + MAX_ANALYSIS_TOKENS_PROPERTY + ":" + DEFAULT_MAX_ANALYSIS_TOKENS + "}") int maxAnalysisTokens) {
 		this.analysis = analysis;
 		this.chunkingService = chunkingService;
 		this.chatModelsDao = chatModelsDao;
 		this.ragSearchConfig = ragSearchConfig;
 		this.externalSearchSecurityService = externalSearchSecurityService;
+		this.maxAnalysisTokens = maxAnalysisTokens > 0 ? maxAnalysisTokens : DEFAULT_MAX_ANALYSIS_TOKENS;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Deep search tools analysis capped at " + this.maxAnalysisTokens + " token(s)");
+		}
 	}
 
 	public DeepSearchToolAnalysis analysis() {
@@ -78,6 +88,15 @@ public class DeepSearchToolsSupport {
 	/** The access check every external search shares (search tools, agents, deep search). */
 	public IGExternalSearchSecurityService externalSearchSecurityService() {
 		return externalSearchSecurityService.getObject();
+	}
+
+	/**
+	 * Safety cap of the returned analysis, in tokens: its length is asked to the model
+	 * by the depth, this only stops a runaway one ({@value #MAX_ANALYSIS_TOKENS_PROPERTY},
+	 * {@value #DEFAULT_MAX_ANALYSIS_TOKENS} by default).
+	 */
+	public int maxAnalysisTokens() {
+		return maxAnalysisTokens;
 	}
 
 	/** Most documents a deep search reads, as the deep search pipelines do. */

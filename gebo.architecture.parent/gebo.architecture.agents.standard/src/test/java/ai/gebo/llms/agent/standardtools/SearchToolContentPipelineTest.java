@@ -45,6 +45,7 @@ import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.agent.standardtools.model.SearchQueryParam;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult.Status;
@@ -151,6 +152,27 @@ class SearchToolContentPipelineTest {
 		assertEquals("Kept", result.getFragments().get(0).getTitle());
 		assertEquals("https://a.example/kept", result.getFragments().get(0).getSource());
 		assertEquals(kept.getCode(), result.getFragments().get(0).getDocumentCode());
+	}
+
+	@Test
+	void theReturnedDocumentsAreSharedWithTheCallingAgent() throws Exception {
+		SearchResult kept = result("https://a.example/kept", "Kept");
+		SearchResult discarded = result("https://a.example/noise", "Noise");
+		when(ranker.call(anyList(), anyString(), anyInt()))
+				.thenAnswer(invocation -> List.of(((List<Document>) invocation.getArgument(0)).get(0)));
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
+		ToolContext shared = new ToolContext(collector
+				.sharedThrough(IChatRequestContext.builder().requestID("r1")
+						.toolsContext(Map.of(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, "r1")).build())
+				.getToolsContext());
+
+		pipeline.run(service, "searchWeb", "d", param("release notes", "what changed"), List.of(),
+				(s, n) -> List.of(kept, discarded), shared);
+
+		// only the document whose content was returned, with its search result
+		assertEquals(1, collector.getDocuments().size());
+		assertEquals(kept.getCode(), collector.getDocuments().get(0).getDocumentCode());
+		assertTrue(collector.getDocuments().get(0).getNestedSearchResult() != null);
 	}
 
 	@Test

@@ -60,9 +60,6 @@ public abstract class AbstractDeepSearchTool {
 	public static final int MAX_DEEP_SEARCHES_PER_REQUEST = 2;
 	/** Most searches run by a deep search. */
 	static final int MAX_QUERIES = 5;
-	static final int DEFAULT_MAX_TOKENS = 6000;
-	static final int MIN_MAX_TOKENS = 1000;
-	static final int MAX_MAX_TOKENS = 16000;
 	/** Longest time a deep search analysis is waited for. */
 	static final Duration DEEP_SEARCH_TIMEOUT = Duration.ofMinutes(10);
 	private static final String TRUNCATION_MARK = " [...]";
@@ -126,13 +123,11 @@ public abstract class AbstractDeepSearchTool {
 			return DeepSearchToolResult.of(Status.NO_RESULTS, "No deep search done: the question is empty.");
 		}
 		final String requestId = ToolCallbackDeclarationUtil.requestId(toolContext);
-		final int maxTokens = maxTokens(param);
 		final List<String> queries = queries(param);
 		final String question = question(param);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin deepSearch(...) tool:" + toolName + " over " + sourceDescription() + " with "
-					+ queries.size() + " search(es) depth:" + param.getDepth() + " maxTokens:" + maxTokens
-					+ " request:" + requestId);
+					+ queries.size() + " search(es) depth:" + param.getDepth() + " request:" + requestId);
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("<DEEP_SEARCH_TOOL_PARAM tool=" + toolName + ">");
@@ -183,7 +178,8 @@ public abstract class AbstractDeepSearchTool {
 			}
 			final String analysis = support.analysis()
 					.analyze(Flux.fromIterable(fragments), analysisContext(question, requestId),
-							ReactiveIdentityUtil.create(), deliverable, TOOL_COMPLETENESS_NOTE, chatModel, serviceModel,
+							ReactiveIdentityUtil.create(), deliverable,
+							TOOL_COMPLETENESS_NOTE + lengthTarget(param.getDepth()), chatModel, serviceModel,
 							discardedFragmentIds)
 					.reduce(new StringBuilder(), StringBuilder::append).map(StringBuilder::toString)
 					.block(DEEP_SEARCH_TIMEOUT);
@@ -193,12 +189,13 @@ public abstract class AbstractDeepSearchTool {
 			final List<FoundDocument> reliedOn = distinctByDocument(foundByFragmentId.values());
 			final DeepSearchToolResult result = new DeepSearchToolResult();
 			result.setFragmentsAnalysed(fragments.size());
-			fit(result, analysis, maxTokens);
+			// the length is asked by the depth (lengthTarget): this only stops a runaway analysis
+			fit(result, analysis, support.maxAnalysisTokens());
 			for (FoundDocument found : reliedOn) {
 				result.getSources().add(found.source());
 			}
 			// the agent sharing a collector gives these documents as its answer's ones
-			final DeepSearchToolDocuments collector = DeepSearchToolDocuments.from(toolContext);
+			final ToolsFoundDocuments collector = ToolsFoundDocuments.from(toolContext);
 			if (collector != null) {
 				collector.add(reliedOn.stream().map(FoundDocument::ref).filter(ref -> ref != null).toList());
 				if (LOGGER.isDebugEnabled()) {
@@ -273,9 +270,20 @@ public abstract class AbstractDeepSearchTool {
 		}
 	}
 
-	static int maxTokens(DeepSearchToolParam param) {
-		return param.getMaxTokens() != null ? Math.max(MIN_MAX_TOKENS, Math.min(MAX_MAX_TOKENS, param.getMaxTokens()))
-				: DEFAULT_MAX_TOKENS;
+	/**
+	 * The length the final analysis is asked to keep, from the depth: the model writes
+	 * to size, instead of the analysis being cut and losing its conclusions.
+	 */
+	static String lengthTarget(Depth depth) {
+		final int words;
+		if (depth == Depth.FOCUSED) {
+			words = 400;
+		} else if (depth == Depth.EXHAUSTIVE) {
+			words = 2500;
+		} else {
+			words = 1000;
+		}
+		return " Keep the final analysis within about " + words + " words.";
 	}
 
 	/** Puts the analysis in the result, cut to {@code maxTokens} when longer. */

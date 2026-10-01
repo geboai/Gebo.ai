@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
@@ -28,10 +29,13 @@ import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource.KnowledgeBaseSearchParam;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.services.IGSecurityService;
 
 /**
@@ -112,6 +116,35 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		assertTrue(ITokensCountable.stringsTokensSize(answer) <= InternalKnowledgeBaseSearchToolSource.MAX_RESULT_TOKENS
 				+ 300, "answer of " + ITokensCountable.stringsTokensSize(answer));
 		assertTrue(answer.contains("fragment9"), "every document keeps its share");
+	}
+
+	@Test
+	void theDocumentsFoundAreSharedWithTheCallingAgent() throws Exception {
+		IGDocumentsSearchService search = mock(IGDocumentsSearchService.class);
+		Document fragment = Document.builder().id("f1").text("content")
+				.metadata(Map.of(DocumentMetaInfos.CONTENT_CODE, "doc-a")).build();
+		AIDocumentFragment aiFragment = mock(AIDocumentFragment.class);
+		when(aiFragment.toAIDocument()).thenReturn(fragment);
+		AIDocumentReferenceItem item = mock(AIDocumentReferenceItem.class);
+		when(item.getFragments()).thenReturn(List.of(aiFragment));
+		AIDocumentsSet set = mock(AIDocumentsSet.class);
+		when(set.aiDocumentsList()).thenReturn(List.of(fragment));
+		when(set.getDocumentItems()).thenReturn(List.of(item));
+		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
+				.thenReturn(set);
+		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(provider(search),
+				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER);
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
+
+		String answer = tool.search(query("topic"), chatWithKnowledgeBases("kb1"), collector);
+
+		assertTrue(answer.startsWith("1 fragment(s) found:"));
+		assertEquals(List.of("doc-a"), collector.getDocuments().stream().map(x -> x.getDocumentCode()).toList());
+
+		// sharing never fails the search
+		when(set.getDocumentItems()).thenReturn(null);
+		assertTrue(tool.search(query("topic"), chatWithKnowledgeBases("kb1"), new ToolsFoundDocuments())
+				.startsWith("1 fragment(s) found:"));
 	}
 
 	@Test

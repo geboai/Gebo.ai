@@ -37,8 +37,6 @@ public class DeepSearchToolParam {
 			+ "must cover (aspects, comparisons, figures, time span), so that nothing needed is left out.";
 	public static final String DEPTH_DESCRIPTION = "How thorough the analysis must be: FOCUSED for a precise answer, "
 			+ "BROAD (when not given) for a synthesis, EXHAUSTIVE for a detailed report, a decision or a comparison.";
-	public static final String MAX_TOKENS_DESCRIPTION = "Maximum size of the returned analysis, in tokens, 6000 when "
-			+ "not given.";
 
 	@ToolParam(required = true, description = QUERIES_DESCRIPTION)
 	private List<String> queries = null;
@@ -48,6 +46,4 @@ public class DeepSearchToolParam {
 	private String searchObjective = null;
 	@ToolParam(required = false, description = DEPTH_DESCRIPTION)
 	private Depth depth = null;
-	@ToolParam(required = false, description = MAX_TOKENS_DESCRIPTION)
-	private Integer maxTokens = null;
 }
