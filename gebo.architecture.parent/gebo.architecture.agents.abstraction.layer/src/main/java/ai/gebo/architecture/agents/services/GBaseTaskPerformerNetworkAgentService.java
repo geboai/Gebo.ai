@@ -62,7 +62,10 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null)
 					+ " contributionNr:" + actualContributionNr + " outputType:" + getOutputType().getName());
 		}
-		final ToolCallsListener callBacksListener = notifyingToolCallsListener(contextAgentPersona, notificationSink);
+		// this agent's own tool calls, forwarded to the user request's recorder
+		final ToolCallsListener callBacksListener = notifyingToolCallsListener(contextAgentPersona, notificationSink,
+				chatRequestContext != null ? chatRequestContext.getToolCallListener() : null);
+		final IChatRequestContext agentContext = IChatRequestContext.forAgent(chatRequestContext, callBacksListener);
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -88,7 +91,7 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Requesting textResponse from agent model id:" + getId());
 			}
-			output = (OutputType) agentModel.textResponse(prompt, params, chatRequestContext);
+			output = (OutputType) agentModel.textResponse(prompt, params, agentContext);
 		} else {
 			if (isPlaceholderDeclared(prompt, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM)) {
 				BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
@@ -98,7 +101,7 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 				LOGGER.debug("Requesting structuredResponse from agent model id:" + getId() + " targetType:"
 						+ outputType.getName());
 			}
-			output = (OutputType) agentModel.structuredResponse(prompt, params, chatRequestContext, outputType);
+			output = (OutputType) agentModel.structuredResponse(prompt, params, agentContext, outputType);
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug(

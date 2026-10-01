@@ -74,7 +74,8 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 			if (copiedModel == null)
 				throw new LLMConfigException("Default chat model not set in the system");
 		}
-		final ToolCallsListener callBacksListener = new ToolCallsListener();
+		// this agent's own tool calls, forwarded to the user request's recorder
+		final ToolCallsListener callBacksListener = agentToolCallsListener(chatRequestContext);
 		List<String> allFunctions = agentConfig.getEnabledFunctions();
 		if (agentConfig.getSubscribeAllTools() != null && agentConfig.getSubscribeAllTools()) {
 			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
@@ -112,9 +113,11 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 			LOGGER.debug("End execute(...) building reactive response flux for agent id:" + getId() + " agentRole:"
 					+ (agentRole != null ? agentRole.getCode() : null));
 		}
-		Flux<IGPartialOperation<ResponseType>> iteration = createResponse(chatRequestContext, agentConfig, request,
-				network, contextAgentPersona, notificationSink, session, privateMemory, agentModel, agentRole,
-				agentPrompt, runAs, callBacksListener);
+		// the model wraps the tools with the listener of the context it is called with
+		Flux<IGPartialOperation<ResponseType>> iteration = createResponse(
+				IChatRequestContext.forAgent(chatRequestContext, callBacksListener), agentConfig, request, network,
+				contextAgentPersona, notificationSink, session, privateMemory, agentModel, agentRole, agentPrompt, runAs,
+				callBacksListener);
 		return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic()))
 				.doOnSubscribe(s -> LOGGER.debug("Begin reactive agentic iteration subscription {} ", getId()))
 				.doOnNext(partial -> {

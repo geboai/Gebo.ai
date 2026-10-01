@@ -25,9 +25,6 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
@@ -111,7 +108,6 @@ public class SearchToolContentPipeline {
 			AbstractSearchToolParam param, List<String> keywords, SystemSearch systemSearch,
 			ToolContext toolContext) {
 		final String queryText = param != null ? param.queryText() : null;
-		recordCall(toolName, toolDescription, queryText, param, toolContext);
 		if (param == null || queryText == null || queryText.isBlank()) {
 			return SearchToolResult.of(Status.NO_RESULTS, "No search done: the query is empty.");
 		}
@@ -405,22 +401,4 @@ public class SearchToolContentPipeline {
 		return value != null && !value.isBlank();
 	}
 
-	/** Reports the call among the functions called while answering. */
-	private static void recordCall(String toolName, String toolDescription, String queryText,
-			AbstractSearchToolParam param, ToolContext toolContext) {
-		CalledFunction function = new CalledFunction();
-		function.setFunctionName(toolName);
-		function.setFunctionDescription(toolDescription);
-		List<String> params = new ArrayList<>();
-		params.add("query: " + queryText);
-		if (param != null && param.getSearchObjective() != null) {
-			params.add("searchObjective: " + param.getSearchObjective());
-		}
-		function.setParamsDescription(params);
-		KBContext interaction = LLMtInteractionContextThreadLocal.Context.get();
-		if (interaction != null) {
-			interaction.getCalledFunctions().add(function);
-		}
-		ToolCallbackDeclarationUtil.addCallToContext(toolContext, function);
-	}
 }

@@ -29,7 +29,6 @@ import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.ContentAccessPolicy;
 import ai.gebo.architecture.agents.services.GAbstractGenericalAgentService;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
@@ -119,18 +118,9 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 
 	@Override
 	public List<ToolCallback> getToolCallbacks() {
+		// the call is recorded for the request by the tool wrapper (RunAsToolCallback)
 		BiFunction<KnowledgeBaseSearchParam, ToolContext, String> search = (param, toolContext) -> {
-			CalledFunction function = new CalledFunction();
-			function.setFunctionName(SEARCH_KNOWLEDGE_BASE_TOOL);
-			function.setFunctionDescription(SEARCH_KNOWLEDGE_BASE_DESCRIPTION);
-			function.setParamsDescription(List.of("query: " + (param != null ? param.getQuery() : null)));
 			KBContext interaction = LLMtInteractionContextThreadLocal.Context.get();
-			if (interaction != null) {
-				interaction.getCalledFunctions().add(function);
-			}
-			if (toolContext != null) {
-				ToolCallbackDeclarationUtil.addCallToContext(toolContext, function);
-			}
 			return search(param, interaction);
 		};
 		return List.of(ToolCallbackDeclarationUtil.declare(search, SEARCH_KNOWLEDGE_BASE_TOOL,

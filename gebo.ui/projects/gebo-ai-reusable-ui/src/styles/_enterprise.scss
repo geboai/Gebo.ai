@@ -934,6 +934,32 @@ body:has(.p-dialog-mask, .p-drawer-mask) :is(
   border-bottom: 1px solid var(--gebo-border-subtle);
 }
 
+/* The functions the AI called while answering: one per line under the title. */
+.gebo-ai-reusable-chat__called-functions {
+  margin: var(--gebo-space-2) 0 0;
+  padding-left: var(--gebo-space-4);
+  list-style: none;
+}
+
+.gebo-ai-reusable-chat__called-function {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--gebo-space-2);
+  padding: var(--gebo-space-1) 0;
+}
+
+.gebo-ai-reusable-chat__called-function-name { font-weight: 600; }
+
+/* The arguments are JSON the model wrote: kept readable but allowed to wrap on
+   narrow screens instead of widening the page. */
+.gebo-ai-reusable-chat__called-function-params {
+  font-size: var(--gebo-font-size-sm);
+  color: var(--gebo-text-muted);
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
 /* Login
 
    The form used to be a 3/6/3 PrimeFlex row, which is not a responsive grid:

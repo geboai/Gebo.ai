@@ -133,11 +133,20 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	 */
 	protected ToolCallsListener notifyingToolCallsListener(AgentNetworkParticipant contextAgentPersona,
 			INotificationSink notificationSink) {
+		return notifyingToolCallsListener(contextAgentPersona, notificationSink, null);
+	}
+
+	/**
+	 * The same notifying listener, forwarding every call it records to the given
+	 * request level listener (see {@link #agentToolCallsListener(IChatRequestContext)}).
+	 */
+	protected ToolCallsListener notifyingToolCallsListener(AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink, ToolCallsListener requestListener) {
 		if (notificationSink == null || contextAgentPersona == null || !contextAgentPersona.isAllowedToNotifyUser()) {
-			return new ToolCallsListener();
+			return ToolCallsListener.childOf(requestListener, null);
 		}
 		final String agentName = contextAgentPersona.getNetworkAgentName();
-		return new ToolCallsListener(executed -> {
+		return ToolCallsListener.childOf(requestListener, executed -> {
 			if (executed == null || GAbstractGenericalAgentService.NOTIFY_USER_TOOL.equals(executed.getName())) {
 				return;
 			}
@@ -152,6 +161,24 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			notificationSink.next("Agent: " + agentName + " used tool: " + executed.getName(),
 					INotificationSink.NotificationObject.NotificationType.INFO);
 		});
+	}
+
+	/**
+	 * The listener of this agent's own tool calls (its loop history, its notifications),
+	 * forwarding each call to the listener of the user request the context carries, so
+	 * the request collects the calls of every agent of the network. The agent must call
+	 * its model with {@code IChatRequestContext.forAgent(context, listener)}: the model
+	 * wraps the tools with the listener of the context it is called with.
+	 */
+	protected ToolCallsListener agentToolCallsListener(IChatRequestContext chatRequestContext) {
+		final ToolCallsListener requestListener = chatRequestContext != null
+				? chatRequestContext.getToolCallListener()
+				: null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agent service id:" + getId() + " records its tool calls"
+					+ (requestListener != null ? " for the user request" : " without a request level recorder"));
+		}
+		return ToolCallsListener.childOf(requestListener, null);
 	}
 
 	@Override

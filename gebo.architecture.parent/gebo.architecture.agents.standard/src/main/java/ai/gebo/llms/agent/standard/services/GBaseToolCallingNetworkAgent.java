@@ -103,7 +103,10 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 		// framework-controlled tool-execution loop; the model is cloned with the tool
 		// catalog enabled by the configuration (and the notifyUser tool when the
 		// persona may notify the user).
-		final ToolCallsListener callBacksListener = notifyingToolCallsListener(contextAgentPersona, notificationSink);
+		// this agent's own tool calls, forwarded to the user request's recorder
+		final ToolCallsListener callBacksListener = notifyingToolCallsListener(contextAgentPersona, notificationSink,
+				chatRequestContext != null ? chatRequestContext.getToolCallListener() : null);
+		final IChatRequestContext agentContext = IChatRequestContext.forAgent(chatRequestContext, callBacksListener);
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 
@@ -130,7 +133,7 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Requesting textResponse from tool-calling agent model id:" + getId());
 			}
-			output = (OutputType) agentModel.textResponse(prompt, params, chatRequestContext);
+			output = (OutputType) agentModel.textResponse(prompt, params, agentContext);
 		} else {
 			if (isPlaceholderDeclared(prompt, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM)) {
 				BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
@@ -140,7 +143,7 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 				LOGGER.debug("Requesting structuredResponse from tool-calling agent model id:" + getId()
 						+ " targetType:" + outputType.getName());
 			}
-			output = (OutputType) agentModel.structuredResponse(prompt, params, chatRequestContext, outputType);
+			output = (OutputType) agentModel.structuredResponse(prompt, params, agentContext, outputType);
 		}
 
 		if (LOGGER.isDebugEnabled()) {

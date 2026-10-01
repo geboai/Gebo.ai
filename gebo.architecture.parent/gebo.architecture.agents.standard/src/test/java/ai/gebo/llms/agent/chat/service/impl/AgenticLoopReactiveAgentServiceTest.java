@@ -11,6 +11,7 @@ package ai.gebo.llms.agent.chat.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -35,7 +36,12 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.ControlMarkerStripper;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.LoopIteration;
 import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import reactor.core.publisher.Flux;
 
 /**
@@ -64,12 +70,19 @@ class AgenticLoopReactiveAgentServiceTest {
 			this.answers = answers;
 		}
 
+		final List<IChatRequestContext> receivedContexts = new ArrayList<>();
+
 		@Override
 		protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
 				IChatRequestContext context, Map<String, Object> params) {
 			receivedParams.add(params);
+			receivedContexts.add(context);
 			int index = Math.min(receivedParams.size() - 1, answers.size() - 1);
 			return Flux.fromIterable(answers.get(index));
+		}
+
+		ToolCallsListener listenerFor(IChatRequestContext context) {
+			return agentToolCallsListener(context);
 		}
 	}
 
@@ -177,6 +190,56 @@ class AgenticLoopReactiveAgentServiceTest {
 			assertTrue(String.valueOf(
 					params.get(ReportWriterReactiveAgentServiceImpl.DELIVERABLE_FORMATTING_RULES_TEMPLATE_PARAM))
 					.startsWith("Answer the question first"), "the QA formatting rules");
+		}
+	}
+
+	@Test
+	void theToolsOfAnIterationReachTheNextOneAndTheUserRequest() {
+		ToolCallsListener request = new ToolCallsListener();
+		IChatRequestContext requestContext = IChatRequestContext.builder().requestID("r1").toolCallListener(request)
+				.build();
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("Searching. " + MORE), List.of("4. " + STOP))) {
+			@Override
+			protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+					IChatRequestContext context, Map<String, Object> params) {
+				if (receivedParams.isEmpty()) {
+					// what the model's tool wrapper does: record into the context's listener
+					context.getToolCallListener().addCall("searchWeb", "Search the web", "{\"query\":\"q\"}", "x");
+				}
+				return super.callLLMReactive(chatModel, prompt, context, params);
+			}
+		};
+		ToolCallsListener agentListener = agent.listenerFor(requestContext);
+		AgentNetworkParticipant persona = mock(AgentNetworkParticipant.class);
+		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
+
+		agent.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(),
+				IChatRequestContext.forAgent(requestContext, agentListener), persona, mock(INotificationSink.class),
+				agentListener).collectList().block();
+
+		assertEquals(2, agent.receivedParams.size());
+		assertTrue(String.valueOf(agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM))
+				.contains("searchWeb"), "the second iteration knows the tool the first one called");
+		assertEquals(1, agentListener.getCalls().size());
+		assertEquals(1, request.getCalls().size(), "the user request collects the agent's call");
+	}
+
+	@Test
+	void bothRequestContextsCarryTheRecorderAndTheRequestId() {
+		GeboChatRequest chatRequest = new GeboChatRequest();
+		chatRequest.setQuery("question");
+		ToolCallsListener request = new ToolCallsListener();
+		LLMChatRequestResources resources = new LLMChatRequestResources(null, null, null, null,
+				new CSSConsolidatedChatHistory(), chatRequest, null);
+		resources.setToolCallsListener(request);
+		MinimalChatContext minimal = new MinimalChatContext();
+		minimal.setCurrentRequest(chatRequest);
+		minimal.setToolCallsListener(request);
+
+		for (IChatRequestContext context : List.of(resources.createChatRequestContext(),
+				minimal.createChatRequestContext())) {
+			assertSame(request, context.getToolCallListener());
+			assertEquals(chatRequest.getId(), context.getToolsContext().get(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY));
 		}
 	}
 

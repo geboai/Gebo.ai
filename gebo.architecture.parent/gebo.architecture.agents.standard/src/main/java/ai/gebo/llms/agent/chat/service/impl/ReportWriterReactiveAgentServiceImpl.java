@@ -385,13 +385,15 @@ public class ReportWriterReactiveAgentServiceImpl
 					ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
 			response.setQueryResponse(queryResponse);
 			response.setDocumentsRef(extractDocumentsList(session));
+			// This network response carries the writer's own calls, for its cycle history;
+			// the calls of the whole request (every agent) are recorded on the pipeline
+			// response by the request's recorder.
 			response.setCalledFunctions(renderFunctions(callBacksListener.getCalls()));
 			GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
 			envelope.setLastMessage(lastMessage);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End createResponse(...) report writer agent id:" + getId() + " final response length:"
-						+ queryResponse.length() + " calledFunctions:"
-						+ (response.getCalledFunctions() != null ? response.getCalledFunctions().size() : 0));
+						+ queryResponse.length() + " own tool calls:" + callBacksListener.getCalls().size());
 			}
 			if (LOGGER.isTraceEnabled()) {
 				LOGGER.trace("<REPORT_WRITER_FINAL_TEXT>");
@@ -750,7 +752,8 @@ public class ReportWriterReactiveAgentServiceImpl
 				int tcIndex = 0;
 				for (CalledFunction callF : geboChatResponse.getCalledFunctions()) {
 					buffer.append(
-							TOOL_CALLED + tcIndex + ": " + callF.getFunctionName() + " params:" + callF.getParams());
+							TOOL_CALLED + tcIndex + ": " + callF.getFunctionName() + " params:"
+									+ callF.getParamsDescription());
 					buffer.append(NEWLINE);
 					tcIndex++;
 				}
@@ -784,8 +787,8 @@ public class ReportWriterReactiveAgentServiceImpl
 				LOGGER.trace("</EXECUTED_TOOL_CALL>");
 			}
 		}
-		return calls != null ? calls.stream().map(x -> new CalledFunction(x.getName(), x.getToolDescription(),
-				List.of(), x.getToolInput() != null ? List.of(x.getToolInput()) : List.of())).toList() : List.of();
+		// the input goes to paramsDescription: params is not serialized, the user never saw it
+		return calls != null ? calls.stream().map(ToolCallsListener::toCalledFunction).toList() : List.of();
 	}
 
 }

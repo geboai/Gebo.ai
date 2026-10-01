@@ -254,7 +254,8 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 						LOGGER.trace("</NETWORK_CHAT_RESPONSE>");
 					}
 					responseReference.setQueryResponse(response.getQueryResponse());
-					responseReference.setCalledFunctions(response.getCalledFunctions());
+					// The called functions are not copied: the request's recorder already fills
+					// them on this response with the calls of every agent of the network.
 					responseReference.setDocumentsRef(response.getDocumentsRef());
 					// Carry any additional content the writer produced (e.g. the office
 					// assistant's document part) onto the emitted response. Null for the

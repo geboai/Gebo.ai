@@ -10,9 +10,6 @@
 package ai.gebo.architecture.ai.service;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -24,15 +21,12 @@ import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.ai.tool.metadata.ToolMetadata;
 import org.springframework.ai.util.json.schema.JsonSchemaGenerator;
 
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 
 /**
  * Utility class for declaring tool callbacks for AI applications. AI generated
  * comments
  */
 public class ToolCallbackDeclarationUtil {
-	private static final String UNIQUE_CONTEXT_ID = "uniqueContextId";
 	/**
 	 * Tools context key carrying the id of the user request the tools are called
 	 * for: every model call of the same request (agents iterations included) shares
@@ -137,51 +131,6 @@ public class ToolCallbackDeclarationUtil {
 				.inputSchema(inputSchema).build();
 		ToolMetadata toolMetaData = ToolMetadata.builder().build();
 		return new FunctionToolCallback<T, R>(toolDefinition, toolMetaData, paramType, function, null);
-	}
-
-	private final static String FUNCTIONS_CALLED = "GEBO-FUNCTIONS-CALLED";
-
-	/**
-	 * Creates a new tool context environment with a unique context ID.
-	 *
-	 * @return a map representing the tool context environment
-	 */
-	public static Map<String, Object> newToolContextEnvironment() {
-		Map<String, Object> context = new HashMap<>();
-		context.put(UNIQUE_CONTEXT_ID, UUID.randomUUID().toString());
-		return context;
-	}
-
-	/**
-	 * Adds a function call to the tool context.
-	 *
-	 * @param c        the tool context
-	 * @param function the called function to add
-	 */
-	public static void addCallToContext(ToolContext c, CalledFunction function) {
-
-		if (c != null && c.getContext() != null) {
-			if (c.getContext().containsKey("CONTEXT")) {
-				// Retrieves and updates the context with the called function
-				KBContext ctx = (KBContext) c.getContext().get("CONTEXT");
-				ctx.getCalledFunctions().add(function);
-			}
-			String id = (String) c.getContext().get(UNIQUE_CONTEXT_ID);
-
-		}
-
-	}
-
-	/**
-	 * Creates a new tool context environment with existing KBContext.
-	 *
-	 * @param context the existing KBContext to be included
-	 * @return a map representing the tool context environment
-	 */
-	public static Map<String, Object> newToolContextEnvironment(KBContext context) {
-		Map<String, Object> map = newToolContextEnvironment();
-		map.put("CONTEXT", context);
-		return map;
 	}
 
 }

@@ -79,16 +79,6 @@ public class UsersFunctions implements IGToolCallbackSource {
 	private ToolCallback currentUserFunction() {
 
 		BiFunction<VoidObject, ToolContext, RestrictedUserInfos> thisFunction = (t, c) -> {
-			KBContext contextVisibility = LLMtInteractionContextThreadLocal.Context.get();
-			CalledFunction function = new CalledFunction();
-			function.setFunctionName("getActualUser");
-			function.setFunctionDescription("Get actual user informations");
-			function.setParamsDescription(List.of("No parameters"));
-			if (contextVisibility != null) {
-
-				contextVisibility.getCalledFunctions().add(function);
-			}
-			ToolCallbackDeclarationUtil.addCallToContext(c, function);
 			return RestrictedUserInfos.of(securityService.getCurrentUser());
 		};
 		return ToolCallbackDeclarationUtil.declare(thisFunction, "getActualUser", "Get actual user informations",
@@ -126,7 +116,6 @@ public class UsersFunctions implements IGToolCallbackSource {
 	private UsersList searchCurrentUsersTeamsColleague(CurrentUserTeamsMembersGroupsFilter filter, ToolContext c) {
 		UsersList out = new UsersList();
 		UserInfos currentUser = securityService.getCurrentUser();
-		KBContext contextVisibility = LLMtInteractionContextThreadLocal.Context.get();
 		List<String> params = new ArrayList<String>();
 		UsersGroup groupFilter = new UsersGroup();
 		if (filter.getGroupCode() != null && filter.getGroupCode().trim().length() > 0) {
@@ -161,15 +150,6 @@ public class UsersFunctions implements IGToolCallbackSource {
 			return RestrictedUserInfos.of(x);
 		}).toList();
 		out.addAll(list);
-		CalledFunction function = new CalledFunction();
-		function.setFunctionName("searchCurrentUsersTeamsColleagues");
-		function.setFunctionDescription("Get actual user's and colleagues list");
-		function.setParamsDescription(params);
-		if (contextVisibility != null) {
-
-			contextVisibility.getCalledFunctions().add(function);
-		}
-		ToolCallbackDeclarationUtil.addCallToContext(c, function);
 		return out;
 	}
 

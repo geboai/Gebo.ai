@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -91,6 +92,15 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 				LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
 		MinimalChatContext minimalChatContext = this.chatSessionLifecycleService.getMinimalChatContext(request,
 				serviceModel.getContextLength() / 3);
+		// One recorder for every tool called while answering this request, by any step
+		// or agent: it fills the response's called functions as the calls happen, so the
+		// response carries them whenever and wherever it is saved or streamed.
+		final ToolCallsListener requestToolCalls = ToolCallsListener.appendingTo(response.getCalledFunctions());
+		resources.setToolCallsListener(requestToolCalls);
+		minimalChatContext.setToolCallsListener(requestToolCalls);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Recording the tool calls of request:" + request.getId() + " into its response");
+		}
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(config,
 				chatModel.getContextLength(), resources, response, minimalChatContext, streaming);
 		if (environment != null) {

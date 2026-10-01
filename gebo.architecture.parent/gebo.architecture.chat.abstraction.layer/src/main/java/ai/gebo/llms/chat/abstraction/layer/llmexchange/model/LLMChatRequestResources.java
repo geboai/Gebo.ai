@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.springframework.ai.document.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
@@ -21,7 +23,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class LLMChatRequestResources implements ITokensCountable {
@@ -37,6 +38,25 @@ public class LLMChatRequestResources implements ITokensCountable {
 	private CSSConsolidatedChatHistory chathistory = null;
 	private GeboChatRequest currentRequest = null;
 	private LLMRequestGenerationPolicy generationPolicy;
+	/**
+	 * The recorder of every tool called while answering the current request, handed to
+	 * the model calls through the request contexts; set by the owner of the response
+	 * (the pipeline executor), never persisted.
+	 */
+	@JsonIgnore
+	private transient ToolCallsListener toolCallsListener = null;
+
+	public LLMChatRequestResources(AIDocumentsSet chatWithDocuments, AIDocumentsSet retrievedDocuments,
+			AIDocumentsSet uploadedDocuments, AIDocumentsSet llmGeneratedDocuments, CSSConsolidatedChatHistory chathistory,
+			GeboChatRequest currentRequest, LLMRequestGenerationPolicy generationPolicy) {
+		this.chatWithDocuments = chatWithDocuments;
+		this.retrievedDocuments = retrievedDocuments;
+		this.uploadedDocuments = uploadedDocuments;
+		this.llmGeneratedDocuments = llmGeneratedDocuments;
+		this.chathistory = chathistory;
+		this.currentRequest = currentRequest;
+		this.generationPolicy = generationPolicy;
+	}
 
 	@AllArgsConstructor
 	static final class InteractionWrapper implements IChatSessionEntry {
@@ -86,8 +106,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 		}
 		@Override
 		public ToolCallsListener getToolCallListener() {
-			
-			return null;
+			return toolCallsListener;
 		}
 
 		@Override
