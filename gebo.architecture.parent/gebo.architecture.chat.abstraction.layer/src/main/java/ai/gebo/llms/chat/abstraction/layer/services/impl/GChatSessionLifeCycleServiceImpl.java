@@ -114,6 +114,19 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	static Hashtable<String, CacheEntry> cache = new Hashtable<String, GChatSessionLifeCycleServiceImpl.CacheEntry>();
+	/**
+	 * Notified each time a request ends with its interaction saved (see
+	 * {@link #endRequest(GeboChatRequest, GeboChatResponse)}): a chat title asked for
+	 * before the interaction is saved waits on it.
+	 */
+	private static final Object INTERACTION_SAVED = new Object();
+	/** Longest wait of a chat title for the chat's first interaction to be saved. */
+	static final long TITLE_INTERACTION_WAIT_MILLIS = 20000L;
+	/**
+	 * Interval of the re-reads of the session while waiting: the request may be served
+	 * by another node of a cluster, whose saves are not notified here.
+	 */
+	static final long TITLE_INTERACTION_POLL_MILLIS = 500L;
 
 	@Override
 	public void createChatSession(GeboChatRequest request)
@@ -672,6 +685,10 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			context.getInteractions().add(interaction);
 		sessionRepository.save(context);
 		this.cache.remove(request.getId());
+		// a chat title asked for while this request was answered can now be written
+		synchronized (INTERACTION_SAVED) {
+			INTERACTION_SAVED.notifyAll();
+		}
 	}
 
 	@Override
@@ -934,7 +951,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	@Override
 	public GUserChatInfo suggestChatDescription(String id) throws GeboChatSessionLifecycleException {
 		GUserChatInfoData data = null;
-		GUserChatSession context = get(id);
+		GUserChatSession context = waitForFirstInteraction(id);
 
 		data = new GUserChatInfoData(context);
 		GPromptTemplateConfig prompt = this.promptsDao.findByPromptUse(GeboPromptsLibrary.SUMMARIZE_CHAT_DESCRIPTION);
@@ -953,7 +970,45 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			LOGGER.error("Exception in suggestChatDescription", th);
 			return data;
 		}
+		if (context.getInteractions() == null || context.getInteractions().isEmpty()) {
+			LOGGER.warn("No chat title suggested for chat:" + id + ": it has no saved interaction");
+		}
 		return data;
+	}
+
+	/**
+	 * The chat session once it has a saved interaction to name the chat after. The
+	 * user interface asks for the title as soon as the first answer is streamed, which
+	 * can be before the handler that streamed it ends the request and saves the
+	 * interaction: the session is re-read, when a request ends here or every
+	 * {@value #TITLE_INTERACTION_POLL_MILLIS} ms, for at most
+	 * {@value #TITLE_INTERACTION_WAIT_MILLIS} ms.
+	 */
+	private GUserChatSession waitForFirstInteraction(String id) throws GeboChatSessionLifecycleException {
+		GUserChatSession context = get(id);
+		final long deadline = System.currentTimeMillis() + TITLE_INTERACTION_WAIT_MILLIS;
+		long remaining = TITLE_INTERACTION_WAIT_MILLIS;
+		if (LOGGER.isDebugEnabled() && (context.getInteractions() == null || context.getInteractions().isEmpty())) {
+			LOGGER.debug("Chat title of chat:" + id + " waits for its first interaction to be saved");
+		}
+		while ((context.getInteractions() == null || context.getInteractions().isEmpty()) && remaining > 0) {
+			try {
+				synchronized (INTERACTION_SAVED) {
+					INTERACTION_SAVED.wait(Math.min(remaining, TITLE_INTERACTION_POLL_MILLIS));
+				}
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				break;
+			}
+			context = get(id);
+			remaining = deadline - System.currentTimeMillis();
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Chat title of chat:" + id + " waited "
+					+ (TITLE_INTERACTION_WAIT_MILLIS - Math.max(0, remaining)) + " ms, interactions:"
+					+ (context.getInteractions() != null ? context.getInteractions().size() : 0));
+		}
+		return context;
 	}
 
 	@Override
