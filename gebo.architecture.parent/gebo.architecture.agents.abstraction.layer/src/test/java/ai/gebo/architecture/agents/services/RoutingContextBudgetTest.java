@@ -179,6 +179,29 @@ class RoutingContextBudgetTest {
 	}
 
 	@Test
+	void theContextDocumentsCountOnlyWhenThePromptRendersThem() {
+		ai.gebo.llms.abstraction.layer.model.IChatRequestContext context = org.mockito.Mockito
+				.mock(ai.gebo.llms.abstraction.layer.model.IChatRequestContext.class);
+		org.mockito.Mockito.when(context.getDocuments())
+				.thenReturn(List.of(new org.springframework.ai.document.Document(words(400, "doc"))));
+		ai.gebo.architecture.ai.model.GPromptTemplateConfig prompt = new ai.gebo.architecture.ai.model.GPromptTemplateConfig();
+		prompt.setContextDocuments(ai.gebo.architecture.ai.model.ContextContentRequired.REQUIRED);
+		prompt.setSystemPromptTemplate("You are an agent.");
+
+		// required but not rendered: no placeholder in the templates
+		prompt.setUserPromptTemplate("Question: {question}");
+		assertEquals(0, GAbstractGenericalAgentService.contextDocumentsTokens(prompt, context));
+
+		prompt.setUserPromptTemplate("Question: {question} {documents}");
+		int counted = GAbstractGenericalAgentService.contextDocumentsTokens(prompt, context);
+		assertTrue(Math.abs(counted - tokens(words(400, "doc"))) <= 5, "counted " + counted);
+
+		prompt.setContextDocuments(ai.gebo.architecture.ai.model.ContextContentRequired.NOT_REQUIRED);
+		assertEquals(0, GAbstractGenericalAgentService.contextDocumentsTokens(prompt, context));
+		assertEquals(0, GAbstractGenericalAgentService.contextDocumentsTokens(prompt, null));
+	}
+
+	@Test
 	void theChatHistoryCountsOnlyWhenThePromptRequiresIt() {
 		ai.gebo.llms.abstraction.layer.model.IChatRequestContext context = org.mockito.Mockito
 				.mock(ai.gebo.llms.abstraction.layer.model.IChatRequestContext.class);
