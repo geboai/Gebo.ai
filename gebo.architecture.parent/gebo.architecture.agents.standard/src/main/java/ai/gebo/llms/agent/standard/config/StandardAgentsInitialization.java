@@ -59,6 +59,7 @@ import ai.gebo.llms.agent.standard.services.InternalKnowledgeBaseSearchNetworkAg
 import ai.gebo.llms.agent.standard.services.NativeDocumentsSearchNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.SearchAgentPromptPatcher;
 import ai.gebo.llms.agent.standard.services.StringToStringToolCallingNetworkAgent;
+import ai.gebo.llms.agent.standardtools.DeepSearchToolSource;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
 import ai.gebo.llms.agent.standardtools.WebSearchToolSource;
@@ -164,6 +165,14 @@ public class StandardAgentsInitialization {
 			autoMountingConfig.setExcludedToolSources(excludedSources);
 			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
 					WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE);
+		}
+		// The default network deep searches with the deep search pipelines: the deep
+		// search tools are for the agents that operate their own tools.
+		if (!excludedSources.contains(DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE)) {
+			excludedSources.add(DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE);
+			autoMountingConfig.setExcludedToolSources(excludedSources);
+			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
+					DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE);
 		}
 	}
 

@@ -39,6 +39,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
+import ai.gebo.llms.agent.standardtools.DeepSearchToolDocuments;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -128,10 +129,27 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					+ userIntent.name());
 		}
 		final List<LoopIteration> history = new ArrayList<>();
-		Flux<String> text = iteration(1, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-				contextAgentPersona, notificationSink, callBacksListener, deliverableParams);
-		return renderOutputStream(text, new GeboChatResponse(), session, contextAgentPersona, notificationSink,
-				callBacksListener);
+		// The deep search tools called by the loop add the documents they relied on to
+		// this collector, shared through the tools context of the loop's model calls:
+		// they become the answer's documents.
+		final DeepSearchToolDocuments toolDocuments = new DeepSearchToolDocuments();
+		Flux<String> text = iteration(1, maxIterations, budget, history, agentModel, agentPrompt,
+				toolDocuments.sharedThrough(chatRequestContext), contextAgentPersona, notificationSink,
+				callBacksListener, deliverableParams);
+		final GeboChatResponse response = new GeboChatResponse();
+		return renderOutputStream(text, response, session, contextAgentPersona, notificationSink, callBacksListener)
+				.doOnNext(operation -> {
+					if (operation != null && operation.getData() != null
+							&& operation.getData().getContent() == response) {
+						final int before = response.getDocumentsRef() != null ? response.getDocumentsRef().size() : 0;
+						response.setDocumentsRef(toolDocuments.mergeInto(response.getDocumentsRef()));
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Agentic loop agent id:" + getId() + " answer documents: " + before
+									+ " from the session, " + response.getDocumentsRef().size()
+									+ " with the deep search tools' ones");
+						}
+					}
+				});
 	}
 
 	/**

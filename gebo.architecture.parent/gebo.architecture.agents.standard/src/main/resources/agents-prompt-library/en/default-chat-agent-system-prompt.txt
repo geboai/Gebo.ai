@@ -54,6 +54,18 @@ Searches for this deliverable:
 - A search tool never returns again the documents it already returned for this request: use those
   contents, or search something else.
 
+Deep searches (the deepSearch... tools, when available):
+- A deep search searches a source widely, reads every document found and returns an analysis of
+  them: use it when the deliverable needs many documents (an analysis, a report, a decision, a
+  multi-source comparison, an exhaustive answer), not for a fact or a direct answer that a search
+  tool finds.
+- Give it 1 to 5 searches covering different angles, a complete, self-contained question, a
+  searchObjective saying what the analysis must cover, and a depth matching the deliverable
+  (EXHAUSTIVE for a report, an analysis, a decision or a comparison); ask one deep search per
+  source, not several on the same source.
+- A request can make at most 2 deep searches: when a deep search tool says they are used up,
+  answer with what you have.
+
 Answer shape for this deliverable:
 {DELIVERABLE_FORMATTING_RULES}
 

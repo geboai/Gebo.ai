@@ -171,16 +171,6 @@ ai.gebo.prompts:
       chatHistory: REQUIRED
       contextDocuments: NOT_REQUIRED
       toolsCalling: NOT_REQUIRED
-    - promptUse: default-chat-agent-prompt
-      langCode: en
-      agentId: ChatAgentService
-      agentPrompt: true
-      systemReference: /prompts-library/en/default-chat-agent-system-prompt.txt
-      userReference: /prompts-library/en/default-chat-agent-user-prompt.txt
-      chatHistory: REQUIRED
-      contextDocuments: REQUIRED
-      toolsCalling: REQUIRED
-      description: Default Chat Agent prompt
       #prompt used by the ranker service to drop the ranked fragments that are
       #completely useless for the query: no chat session is involved, the query is
       #carried by a session-less chat request context
@@ -411,26 +401,6 @@ ai.gebo.prompts:
           description: The results consolidated so far by the "pure search" pipeline step.
         - placeholder: documents
           description: Rendered block of the documents/fragments gathered by the "pure search" pipeline step.
-        - placeholder: question
-          description: The user's current question or request text.
-    - code: default-chat-agent-prompt
-      description: Main loop prompt for the default single-agent chat agent (ChatAgentService), driving its iterate-until-done control loop.
-      module: chat
-      placeholders:
-        - placeholder: AGENT_CONTROL_CONTINUE_PROMPT_PARAM
-          description: The control token the agent must emit to signal it needs another loop iteration.
-        - placeholder: AGENT_CONTROL_FINISHED_PROMPT_PARAM
-          description: The control token the agent must emit to signal its work is complete.
-        - placeholder: CURRENT_ITERATION
-          description: The current iteration number of the agent's control loop.
-        - placeholder: MAX_ITERATIONS
-          description: The maximum number of iterations allowed for the agent's control loop.
-        - placeholder: AGENT_SESSION_STORY
-          description: Narrative reconstruction of the agent session's turns so far.
-        - placeholder: REQUIRED_AGENT_COMPLETENESS
-          description: The kind of deliverable the user asked for (e.g. QA, HOWTO, ANALISYS), driving the depth of the agent's searches and of its answer.
-        - placeholder: DELIVERABLE_FORMATTING_RULES
-          description: Formatting rules the answer must follow for that kind of deliverable.
         - placeholder: question
           description: The user's current question or request text.
     - code: ranker-irrelevant-fragments-filter-prompt
