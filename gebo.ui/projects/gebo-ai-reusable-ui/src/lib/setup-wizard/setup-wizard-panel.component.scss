@@ -42,6 +42,15 @@
   line-height: var(--gebo-line-height-ui, 1.45);
 }
 
+.gebo-setup-section-clickable {
+  cursor: pointer;
+}
+
+.gebo-setup-section-row:hover .gebo-setup-section-label.gebo-setup-section-clickable {
+  color: var(--gebo-primary-700, #124f6d);
+  text-decoration: underline;
+}
+
 .gebo-setup-section-preview {
   margin-left: var(--gebo-space-2, 0.5rem);
   color: var(--gebo-warning, #9a6700);
