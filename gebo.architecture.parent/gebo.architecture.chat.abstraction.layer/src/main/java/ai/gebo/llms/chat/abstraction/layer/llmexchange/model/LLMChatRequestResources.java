@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
@@ -114,8 +115,13 @@ public class LLMChatRequestResources implements ITokensCountable {
 
 		@Override
 		public Map<String, Object> getToolsContext() {
-
-			return new HashMap<String, Object>();
+			// The request id lets the tools keep request-scoped state across their calls
+			// (e.g. the search tools not returning twice the same content in one answer).
+			Map<String, Object> toolsContext = new HashMap<String, Object>();
+			if (currentRequest != null && currentRequest.getId() != null) {
+				toolsContext.put(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, currentRequest.getId());
+			}
+			return toolsContext;
 		}
 
 		@Override

@@ -9,6 +9,7 @@
 
 package ai.gebo.architecture.ai.service;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -32,6 +33,24 @@ import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext
  */
 public class ToolCallbackDeclarationUtil {
 	private static final String UNIQUE_CONTEXT_ID = "uniqueContextId";
+	/**
+	 * Tools context key carrying the id of the user request the tools are called
+	 * for: every model call of the same request (agents iterations included) shares
+	 * it, so a tool can keep request-scoped state across its invocations.
+	 */
+	public static final String REQUEST_ID_CONTEXT_KEY = "geboRequestId";
+
+	/**
+	 * The id of the user request a tool is called for, or null when the caller did
+	 * not provide one in the tools context.
+	 */
+	public static String requestId(ToolContext toolContext) {
+		if (toolContext == null || toolContext.getContext() == null) {
+			return null;
+		}
+		Object value = toolContext.getContext().get(REQUEST_ID_CONTEXT_KEY);
+		return value instanceof String id && !id.isBlank() ? id : null;
+	}
 
 	/**
 	 * A non-functional class used as a return type placeholder for void functions.
@@ -100,6 +119,24 @@ public class ToolCallbackDeclarationUtil {
 				null);
 
 		return f;
+	}
+
+	/**
+	 * Declares a ToolCallback whose parameter is a generic type, e.g.
+	 * {@code Param<SomeQuery>} built with
+	 * {@code ResolvableType.forClassWithGenerics(Param.class, SomeQuery.class).getType()}:
+	 * both the input schema and the deserialization of the model arguments resolve
+	 * the type arguments, so no concrete subclass has to be generated.
+	 *
+	 * @param paramType the (possibly parameterized) type of the function's parameter
+	 */
+	public static <T, R> ToolCallback declare(BiFunction<T, ToolContext, R> function, String functionName,
+			String description, Type paramType) {
+		String inputSchema = JsonSchemaGenerator.generateForType(paramType);
+		ToolDefinition toolDefinition = ToolDefinition.builder().name(functionName).description(description)
+				.inputSchema(inputSchema).build();
+		ToolMetadata toolMetaData = ToolMetadata.builder().build();
+		return new FunctionToolCallback<T, R>(toolDefinition, toolMetaData, paramType, function, null);
 	}
 
 	private final static String FUNCTIONS_CALLED = "GEBO-FUNCTIONS-CALLED";

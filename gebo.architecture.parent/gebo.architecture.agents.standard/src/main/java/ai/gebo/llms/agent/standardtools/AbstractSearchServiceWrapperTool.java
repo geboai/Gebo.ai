@@ -1,63 +1,43 @@
 package ai.gebo.llms.agent.standardtools;
 
-import java.util.List;
-import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.ToolCallback;
 
 import ai.gebo.architecture.ai.model.ToolReference;
-import ai.gebo.architecture.documents.cache.model.ChunkingParams;
-import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
-import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
-import ai.gebo.architecture.search.model.SearchResult;
-import ai.gebo.llms.agent.standardtools.model.SearchResultSample;
-import ai.gebo.llms.agent.standardtools.model.SearchResultSample.SearchResultSampleList;
-import lombok.AllArgsConstructor;
-import reactor.core.publisher.ParallelFlux;
+import ai.gebo.architecture.search.service.ISearchService;
 
-@AllArgsConstructor
+/**
+ * A search service exposed to the model as a tool that answers with well formed
+ * contents: the work common to every search tool is done by the
+ * {@link SearchToolContentPipeline}, the subclasses only declare the tool and
+ * turn its query into searches of the wrapped service.
+ */
 public abstract class AbstractSearchServiceWrapperTool {
-	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractSearchServiceWrapperTool.class);
-	private final IDocumentsChunkService chunkingService;
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+	protected final SearchToolContentPipeline pipeline;
+	protected final String toolName;
+	protected final String toolDescription;
+
+	protected AbstractSearchServiceWrapperTool(SearchToolContentPipeline pipeline, String toolName,
+			String toolDescription) {
+		this.pipeline = pipeline;
+		this.toolName = toolName;
+		this.toolDescription = toolDescription;
+	}
+
+	public abstract ISearchService<?> getWrapped();
 
 	public abstract ToolCallback toTool();
 
-	public abstract ToolReference toToolReference();
-
-	protected SearchResultSampleList loadSamples(List<SearchResult> results, int textSampleTokens) {
+	public ToolReference toToolReference() {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin loadSamples(...) results:" + (results != null ? results.size() : 0)
-					+ " textSampleTokens:" + textSampleTokens);
+			LOGGER.debug("Building the tool reference of the search tool:" + toolName);
 		}
-		final String session = chunkingService.createChunkingSession("search:" + UUID.randomUUID().toString());
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Created chunking session:" + session);
-		}
-		ChunkingParams params = new ChunkingParams();
-		ParallelFlux<IDocumentChunkWithRef> stream = chunkingService.streamChunks(results, params, session, 4)
-				.doOnComplete(() -> {
-					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Disposing chunking session:" + session);
-					}
-					chunkingService.disposeChunkingSession(session);
-				});
-		ParallelFlux<SearchResultSample> out = stream.map(AbstractSearchServiceWrapperTool::toSample);
-		SearchResultSampleList sampleList = new SearchResultSampleList(out.sequential().buffer().blockLast());
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End loadSamples(...) for session:" + session + " produced "
-					+ sampleList.size() + " sample(s)");
-		}
-		if (LOGGER.isTraceEnabled()) {
-			LOGGER.trace("<SEARCH_RESULT_SAMPLES session=" + session + ">");
-			LOGGER.trace(String.valueOf(sampleList));
-			LOGGER.trace("</SEARCH_RESULT_SAMPLES>");
-		}
-		return sampleList;
+		return new ToolReference(toTool());
 	}
 
-	static SearchResultSample toSample(IDocumentChunkWithRef object) {
-		return null;
+	public String getToolName() {
+		return toolName;
 	}
 }
