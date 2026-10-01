@@ -164,6 +164,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Map tracking which interactions have their full document list expanded
      */
     public expandedInteractionsDocs: Map<string, boolean> = new Map();
+    /** The called functions whose parameters are shown, as "<request id>#<function index>". */
+    public expandedCalledFunctions: Set<string> = new Set();
+    /** The parameters of each called function, parsed once. */
+    private calledFunctionParamsCache: WeakMap<CalledFunction, { name: string, value: string }[]> = new WeakMap();
 
     /**
      * Flag indicating if a chat response is currently streaming
@@ -874,6 +878,67 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     public isInteractionDocsExpanded(interactionId?: string): boolean {
         if (!interactionId) return false;
         return this.expandedInteractionsDocs.get(interactionId) || false;
+    }
+
+    /**
+     * Shows or hides the parameters of a function called while answering an interaction
+     * @param interactionId The ID of the interaction request
+     * @param index The position of the called function in the response
+     */
+    public toggleCalledFunctionParams(interactionId: string | undefined, index: number): void {
+        if (!interactionId) return;
+        const key = interactionId + "#" + index;
+        if (this.expandedCalledFunctions.has(key)) {
+            this.expandedCalledFunctions.delete(key);
+        } else {
+            this.expandedCalledFunctions.add(key);
+        }
+    }
+
+    /**
+     * Checks if the parameters of a called function are shown
+     * @param interactionId The ID of the interaction request
+     * @param index The position of the called function in the response
+     */
+    public isCalledFunctionParamsExpanded(interactionId: string | undefined, index: number): boolean {
+        return !!interactionId && this.expandedCalledFunctions.has(interactionId + "#" + index);
+    }
+
+    /**
+     * The parameters a function was called with, attribute by attribute: the call input
+     * is the JSON object the model wrote; anything else is shown as it is.
+     */
+    public calledFunctionParams(calledFunction: CalledFunction): { name: string, value: string }[] {
+        const cached = this.calledFunctionParamsCache.get(calledFunction);
+        if (cached) return cached;
+        const params: { name: string, value: string }[] = [];
+        for (const raw of calledFunction?.paramsDescription || []) {
+            let parsed: any = undefined;
+            try {
+                parsed = JSON.parse(raw);
+            } catch {
+                parsed = undefined;
+            }
+            if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+                for (const [name, value] of Object.entries(parsed)) {
+                    params.push({ name: name, value: this.calledFunctionParamText(value) });
+                }
+            } else {
+                params.push({ name: "", value: raw });
+            }
+        }
+        this.calledFunctionParamsCache.set(calledFunction, params);
+        return params;
+    }
+
+    private calledFunctionParamText(value: any): string {
+        if (value === null || value === undefined) return "";
+        if (typeof value === "string") return value;
+        if (Array.isArray(value) && value.every(item => item === null || typeof item !== "object")) {
+            return value.join(", ");
+        }
+        if (typeof value === "object") return JSON.stringify(value, null, 2);
+        return String(value);
     }
 
     /**

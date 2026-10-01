@@ -3167,6 +3167,9 @@
       },
       "AiActInteractionDisclaimer": {
         "label": "You are interacting with an AI system. Responses are AI-generated and may be inaccurate or incomplete — always verify important information before relying on it."
+      },
+      "CalledFunctionParamsBtn": {
+        "help": "Show the parameters"
       }
     },
     "ChangeDescriptionComponent": {

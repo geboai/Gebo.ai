@@ -942,22 +942,42 @@ body:has(.p-dialog-mask, .p-drawer-mask) :is(
 }
 
 .gebo-ai-reusable-chat__called-function {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--gebo-space-2);
   padding: var(--gebo-space-1) 0;
+}
+
+.gebo-ai-reusable-chat__called-function-header {
+  display: flex;
+  align-items: center;
+  gap: var(--gebo-space-2);
 }
 
 .gebo-ai-reusable-chat__called-function-name { font-weight: 600; }
 
-/* The arguments are JSON the model wrote: kept readable but allowed to wrap on
-   narrow screens instead of widening the page. */
+.gebo-ai-reusable-chat__called-function-toggle.p-button {
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+}
+
+/* The parameters, one per row: the name, then the value the model gave, kept
+   readable but allowed to wrap on narrow screens instead of widening the page. */
 .gebo-ai-reusable-chat__called-function-params {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--gebo-space-1) var(--gebo-space-3);
+  margin: var(--gebo-space-1) 0 var(--gebo-space-2) var(--gebo-space-6);
   font-size: var(--gebo-font-size-sm);
-  color: var(--gebo-text-muted);
-  overflow-wrap: anywhere;
-  white-space: normal;
+
+  dt {
+    font-weight: 600;
+    color: var(--gebo-text-muted);
+  }
+
+  dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
 }
 
 /* Login
