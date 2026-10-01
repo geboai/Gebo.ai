@@ -29,6 +29,7 @@ import ai.gebo.llms.chat.pipelines.model.RoutingDecision;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
 import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
+import ai.gebo.llms.chat.pipelines.service.IGUserRequestIntentClassifier;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl;
@@ -42,7 +43,9 @@ import lombok.AllArgsConstructor;
 /**
  * Router of the open-chat pipeline. Unlike the default router it never selects the
  * internal knowledge base: there is no RAG route and no {@code IKB_SYSTEM} deep
- * search. It makes a three-way, purely programmatic decision (no LLM call):
+ * search. Like the default router it first rewrites the request and classifies the
+ * deliverable the user expects ({@link IGUserRequestIntentClassifier}, one service
+ * model call), then makes a three-way, programmatic routing decision:
  * <ol>
  * <li><b>forced heavy documents</b> - when the attached/uploaded documents exceed
  * the size threshold, answer over the files ({@code CHAT_WITH_FILES}), exactly like
@@ -94,12 +97,10 @@ public class OpenChatRoutingStepService implements IRoutingChatPipelineStepServi
 	public RoutingDecision execute(ChatPipelineExecutionRuntimeData runtimeData, ISinkUIEmitter emitter,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 		try {
-			// The open-chat router does no LLM rewrite, so no deliverable intent is inferred.
-			// Downstream (the network writer) expects one; default it to QA (a direct answer),
-			// which keeps the assistant free-form rather than driving any report structure.
-			if (runtimeData.getRequestResources().getCurrentRequest().getUserIntent() == null) {
-				runtimeData.getRequestResources().getCurrentRequest().setUserIntent(DeliverableIntent.QA);
-			}
+			// Every request is rewritten and its deliverable classified, exactly like in the
+			// default router: the deliverable shapes the answer downstream (the agentic loop,
+			// the network writer, deep search).
+			classifyUserIntent(runtimeData, emitter, chatModel, serviceModel);
 			// 1) Resource guard first (mirrors the default router): oversized attachments
 			// are answered over the files, never routed elsewhere.
 			int forcedDocumentsTotal = runtimeData.getRequestResources().getChatWithDocuments().getTokensSize()
@@ -120,6 +121,34 @@ public class OpenChatRoutingStepService implements IRoutingChatPipelineStepServi
 			LOGGER.error("Exception in open-chat pipeline routing, falling back to PURE_LLM_RESPONSE", th);
 			return fixedRoute(DefaultStreamingOutputChatPipelineServiceImpl.DEFAULT_STREAMING_OUTPUT,
 					RespondingWith.PURE_LLM_RESPONSE.name(), Map.of());
+		}
+	}
+
+	/**
+	 * Rewrites the request and classifies the deliverable the user expects. When no
+	 * classifier is available or it fails, the request is a direct answer (QA): the
+	 * lightest deliverable, which keeps the assistant free-form.
+	 */
+	private void classifyUserIntent(ChatPipelineExecutionRuntimeData runtimeData, ISinkUIEmitter emitter,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
+		DeliverableIntent intent = null;
+		try {
+			IGUserRequestIntentClassifier classifier = runtimeBinder
+					.getImplementationOf(IGUserRequestIntentClassifier.class);
+			if (classifier != null) {
+				intent = classifier.classifyUserRequest(runtimeData, emitter, chatModel, serviceModel);
+			} else if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No user request intent classifier available, the open-chat request is a QA");
+			}
+		} catch (Throwable th) {
+			LOGGER.warn("Cannot classify the open-chat user request, it is answered as a QA", th);
+		}
+		if (intent == null) {
+			intent = DeliverableIntent.QA;
+			runtimeData.getRequestResources().getCurrentRequest().setUserIntent(intent);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Open-chat user intent:" + intent.name());
 		}
 	}
 

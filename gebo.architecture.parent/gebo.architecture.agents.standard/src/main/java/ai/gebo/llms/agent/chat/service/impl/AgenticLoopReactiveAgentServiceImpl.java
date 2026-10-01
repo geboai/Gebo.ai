@@ -39,6 +39,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.security.services.IGSecurityService;
@@ -118,9 +119,17 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			LOGGER.debug("Begin createResponse(...) agentic loop agent id:" + getId() + " maxIterations:"
 					+ maxIterations + " budget:" + budget + " (tok)");
 		}
+		// The kind of deliverable the user asked for (a direct answer, an analysis...)
+		// shapes every iteration, as it shapes the report writer's answer.
+		final DeliverableIntent userIntent = sessionUserIntent(session);
+		final Map<String, Object> deliverableParams = deliverableTemplateParams(userIntent);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agentic loop agent id:" + getId() + " shapes its answer for the deliverable:"
+					+ userIntent.name());
+		}
 		final List<LoopIteration> history = new ArrayList<>();
 		Flux<String> text = iteration(1, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-				contextAgentPersona, notificationSink, callBacksListener);
+				contextAgentPersona, notificationSink, callBacksListener, deliverableParams);
 		return renderOutputStream(text, new GeboChatResponse(), session, contextAgentPersona, notificationSink,
 				callBacksListener);
 	}
@@ -134,8 +143,23 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
 			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
 			INotificationSink notificationSink, ToolCallsListener callBacksListener) {
+		return iteration(number, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
+				contextAgentPersona, notificationSink, callBacksListener,
+				deliverableTemplateParams(DeliverableIntent.SUMMARY));
+	}
+
+	/**
+	 * The iterations of the loop, from the given one, with the prompt parameters
+	 * shaping the deliverable the user asked for (see
+	 * {@link #deliverableTemplateParams(DeliverableIntent)}).
+	 */
+	protected Flux<String> iteration(int number, int maxIterations, int budget, List<LoopIteration> history,
+			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
+			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink, ToolCallsListener callBacksListener,
+			Map<String, Object> deliverableParams) {
 		return Flux.defer(() -> {
-			final Map<String, Object> params = new HashMap<>();
+			final Map<String, Object> params = new HashMap<>(deliverableParams);
 			params.put(CURRENT_ITERATION_PROMPT_PARAM, number);
 			params.put(MAX_ITERATIONS_PARAM, maxIterations);
 			params.put(AGENT_CONTROL_FINISHED_PROMPT_PARAM, AGENT_CONTROL_FINISHED);
@@ -195,7 +219,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
 				return Flux.just(NEWLINE + NEWLINE).concatWith(iteration(number + 1, maxIterations, budget, history,
 						agentModel, agentPrompt, chatRequestContext, contextAgentPersona, notificationSink,
-						callBacksListener));
+						callBacksListener, deliverableParams));
 			});
 			return visible.concatWith(next);
 		});

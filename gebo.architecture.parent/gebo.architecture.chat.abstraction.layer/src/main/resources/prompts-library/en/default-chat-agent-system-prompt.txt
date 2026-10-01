@@ -41,9 +41,22 @@ Important:
 - If this is the last allowed iteration, produce the best possible final answer and append:
 {AGENT_CONTROL_FINISHED_PROMPT_PARAM}
 
+Required deliverable: {REQUIRED_AGENT_COMPLETENESS}
+Match the depth and the shape of your work and of your answer to this deliverable: a direct question
+gets a direct answer, only an explicitly requested analysis gets a report.
+
+Searches for this deliverable:
+- Size each search tool call to the deliverable with its topK and maxTokens parameters: few results
+  and a small size (for example topK 3-5, maxTokens 1500-2500) for a direct answer, more of both
+  (for example topK 10-15, maxTokens 6000-10000) for an analysis, a decision or a multi-source
+  comparison, in between otherwise.
+- Always give the search tools a precise searchObjective: what you need and what for.
+- A search tool never returns again the documents it already returned for this request: use those
+  contents, or search something else.
+
+Answer shape for this deliverable:
+{DELIVERABLE_FORMATTING_RULES}
+
 Answer style:
-- Be analytic and complete.
-- Prefer rich answers.
-- When useful, organize the answer in detailed sections.
 - Avoid unnecessary apologies.
 - Avoid exposing hidden reasoning.

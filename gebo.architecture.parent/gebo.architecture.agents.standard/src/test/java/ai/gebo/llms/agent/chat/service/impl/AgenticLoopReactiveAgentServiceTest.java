@@ -16,11 +16,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -32,6 +34,8 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.ControlMarkerStripper;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.LoopIteration;
+import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import reactor.core.publisher.Flux;
 
 /**
@@ -150,5 +154,38 @@ class AgenticLoopReactiveAgentServiceTest {
 				+ ITokensCountable.stringsTokensSize(story));
 		assertTrue(story.contains("BEGIN_AGENT-LOOP-2") && story.contains("short"));
 		assertEquals("No previous iteration: this is the first one.", agent.loopStory(List.of(), 4000));
+	}
+
+	@Test
+	void everyIterationIsShapedForTheDeliverableTheUserAskedFor() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("Searching. " + MORE), List.of("4. " + STOP)));
+		AgentsCollaborationSessionContext session = mock(AgentsCollaborationSessionContext.class);
+		Map<String, Object> environment = new HashMap<>();
+		environment.put(StandardAgentsNetworkEnvironmentEntries.USER_INTENT, DeliverableIntent.QA);
+		when(session.getEnvironment()).thenReturn(environment);
+		AgentNetworkParticipant persona = mock(AgentNetworkParticipant.class);
+		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
+
+		Map<String, Object> deliverable = agent.deliverableTemplateParams(agent.sessionUserIntent(session));
+		agent.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), null, persona,
+				mock(INotificationSink.class), new ToolCallsListener(), deliverable).collectList().block();
+
+		assertEquals(2, agent.receivedParams.size());
+		for (Map<String, Object> params : agent.receivedParams) {
+			assertEquals("QA: direct short answer",
+					params.get(ReportWriterReactiveAgentServiceImpl.REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM));
+			assertTrue(String.valueOf(
+					params.get(ReportWriterReactiveAgentServiceImpl.DELIVERABLE_FORMATTING_RULES_TEMPLATE_PARAM))
+					.startsWith("Answer the question first"), "the QA formatting rules");
+		}
+	}
+
+	@Test
+	void withoutAClassifiedIntentTheLoopAsksForASummary() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
+		AgentsCollaborationSessionContext session = mock(AgentsCollaborationSessionContext.class);
+		when(session.getEnvironment()).thenReturn(new HashMap<>());
+
+		assertEquals(DeliverableIntent.SUMMARY, agent.sessionUserIntent(session));
 	}
 }
