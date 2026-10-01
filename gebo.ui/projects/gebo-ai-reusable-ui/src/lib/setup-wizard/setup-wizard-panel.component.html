@@ -142,8 +142,10 @@
             (onClick)="openWizard(entry)"></p-button>
           }
         </div>
-        <div class="gebo-setup-section-label">{{entry.label}}</div>
-        <div class="gebo-setup-section-description">{{entry.description}} @if (entry.experimental===true) {
+        <div class="gebo-setup-section-label" [class.gebo-setup-section-clickable]="entry.enabled!==false"
+          (click)="entry.enabled!==false && openWizard(entry)">{{entry.label}}</div>
+        <div class="gebo-setup-section-description" [class.gebo-setup-section-clickable]="entry.enabled!==false"
+          (click)="entry.enabled!==false && openWizard(entry)">{{entry.description}} @if (entry.experimental===true) {
           <span class="gebo-setup-section-preview">(Preview feature)</span>
         }</div>
       </div>
