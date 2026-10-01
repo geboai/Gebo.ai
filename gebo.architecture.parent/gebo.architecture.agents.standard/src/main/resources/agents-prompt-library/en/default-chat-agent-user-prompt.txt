@@ -1,5 +1,8 @@
 - Current user question: {question}
 
+- Documents of the chat (chosen or uploaded by the user, or found for this request), if any:
+{documents}
+
 
 - Previous loop history (from first to last): 
 {AGENT_SESSION_STORY}

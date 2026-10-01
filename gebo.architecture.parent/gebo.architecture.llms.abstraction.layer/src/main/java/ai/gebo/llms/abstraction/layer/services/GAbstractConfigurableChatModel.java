@@ -439,6 +439,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	}
 
+	protected final static String COMPRESSED_HISTORY_ONLY_MESSAGE_CHAT_TEMPLATE = "BEGIN_CONSOLIDATED_HISTORY\r\n{"
+			+ IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM + "}\r\nEND_CONSOLIDATED_HISTORY\r\n";
+
 	protected final static String COMPRESSED_HISTORY_FIRST_MESSAGE_CHAT_TEMPLATE = "BEGIN_CONSOLIDATED_HISTORY\r\n{"
 			+ IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM
 			+ "}\r\nEND_CONSOLIDATED_HISTORY\r\nUSER-QUESTION={" + IChatRequestContext.USER_QUESTION_PROMPT_PARAM
@@ -447,7 +450,18 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	protected List<Message> createCompressedHistory(IChatRequestContext chatContext) {
 		List<Message> messages = new ArrayList<>();
 		String consolidated = chatContext.getConsolidatedHistory();
-		List<IChatSessionEntry> interactions = chatContext.getInteractions();
+		List<IChatSessionEntry> interactions = chatContext.getInteractions() != null ? chatContext.getInteractions()
+				: List.of();
+		if (interactions.isEmpty()) {
+			// only the summary of the older turns is left: it is the whole history
+			PromptTemplate template = new PromptTemplate(COMPRESSED_HISTORY_ONLY_MESSAGE_CHAT_TEMPLATE);
+			template.add(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM, consolidated);
+			messages.add(new UserMessage(template.render()));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("createCompressedHistory(...) chat history is the consolidated summary only");
+			}
+			return messages;
+		}
 		for (int i = 0; i < interactions.size(); i++) {
 			if (i == 0) {
 				String user = interactions.get(0).getUser();
