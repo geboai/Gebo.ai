@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { OperationStatusListUserUploadedContent } from '../model/operationStatusListUserUploadedContent';
+import { UserUploadedContent } from '../model/userUploadedContent';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -123,13 +124,23 @@ export class GeboUserChatUploadsControllerService {
     /**
      * 
      * 
+     * @param body 
+     * @param userSessionCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteSessionUploads(observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListUserUploadedContent>;
-    public deleteSessionUploads(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListUserUploadedContent>>;
-    public deleteSessionUploads(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListUserUploadedContent>>;
-    public deleteSessionUploads(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteSessionUploads(body: Array<UserUploadedContent>, userSessionCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListUserUploadedContent>;
+    public deleteSessionUploads(body: Array<UserUploadedContent>, userSessionCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListUserUploadedContent>>;
+    public deleteSessionUploads(body: Array<UserUploadedContent>, userSessionCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListUserUploadedContent>>;
+    public deleteSessionUploads(body: Array<UserUploadedContent>, userSessionCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling deleteSessionUploads.');
+        }
+
+        if (userSessionCode === null || userSessionCode === undefined) {
+            throw new Error('Required parameter userSessionCode was null or undefined when calling deleteSessionUploads.');
+        }
 
         let headers = this.defaultHeaders;
 
@@ -144,11 +155,16 @@ export class GeboUserChatUploadsControllerService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'multipart/form-data'
+            'application/json'
         ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
 
-        return this.httpClient.request<OperationStatusListUserUploadedContent>('delete',`${this.basePath}/api/users/GeboUserChatUploadsController/deleteSessionUploads`,
+        return this.httpClient.request<OperationStatusListUserUploadedContent>('delete',`${this.basePath}/api/users/GeboUserChatUploadsController/deleteSessionUploads/${encodeURIComponent(String(userSessionCode))}`,
             {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
