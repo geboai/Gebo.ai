@@ -432,6 +432,23 @@ class AgenticLoopReactiveAgentServiceTest {
 	}
 
 	@Test
+	void theChatRulesAreGivenNextToTheQuestion() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("Risposta. " + STOP)));
+		AgentNetworkParticipant persona = mock(AgentNetworkParticipant.class);
+		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
+		IChatRequestContext context = IChatRequestContext.builder().requestID("r1")
+				.rulesToFollow(List.of("Always answer in Italian")).build();
+
+		agent.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), context, persona,
+				mock(INotificationSink.class), new ToolCallsListener()).collectList().block();
+
+		assertTrue(String.valueOf(agent.receivedParams.get(0).get(AgenticLoopReactiveAgentServiceImpl.RULES_TO_FOLLOW_PARAM))
+				.contains("- Always answer in Italian"));
+		assertEquals("none", AgenticLoopReactiveAgentServiceImpl
+				.rulesToFollow(IChatRequestContext.builder().requestID("r2").build()));
+	}
+
+	@Test
 	void onlyAnalysesAndSearchesNeedTheSourcesEvidence() {
 		assertTrue(AgenticLoopReactiveAgentServiceImpl.needsEvidence(DeliverableIntent.ANALISYS));
 		assertTrue(AgenticLoopReactiveAgentServiceImpl.needsEvidence(DeliverableIntent.PURE_SEARCH));

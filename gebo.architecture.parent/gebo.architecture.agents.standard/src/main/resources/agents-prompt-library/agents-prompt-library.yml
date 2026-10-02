@@ -64,6 +64,8 @@ ai.gebo.agents.prompts.uses:
         description: Formatting rules the answer must follow for that kind of deliverable.
       - placeholder: question
         description: The user's current question or request text.
+      - placeholder: RULES_TO_FOLLOW
+        description: The rules the user or the administrators set for the answers of this chat, one per line, or none.
       - placeholder: documents
         description: The documents of the chat request (chosen or uploaded by the user, or found for it), between BEGIN_CONTEXT and END_CONTEXT; empty when there are none.
   - code: controller-coordinator-agent-prompt

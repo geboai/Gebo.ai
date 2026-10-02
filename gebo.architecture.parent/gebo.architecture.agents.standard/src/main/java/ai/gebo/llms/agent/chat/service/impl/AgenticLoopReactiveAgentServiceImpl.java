@@ -84,6 +84,11 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	/** Iterations of the loop when the network does not set them. */
 	static final int DEFAULT_MAX_ITERATIONS = 5;
 	static final String MAX_ITERATIONS_PARAM = "MAX_ITERATIONS";
+	/**
+	 * The rules of the chat, also given next to the user's question: appended at the end
+	 * of the long system prompt only, the model kept the prompt's defaults over them.
+	 */
+	static final String RULES_TO_FOLLOW_PARAM = "RULES_TO_FOLLOW";
 	private static final String NEWLINE = "\r\n";
 
 	public AgenticLoopReactiveAgentServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsDao,
@@ -408,6 +413,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			params.put(AGENT_CONTROL_FINISHED_PROMPT_PARAM, AGENT_CONTROL_FINISHED);
 			params.put(AGENT_CONTROL_CONTINUE_PROMPT_PARAM, AGENT_CONTROL_MORE_TOOLS);
 			params.put(AGENT_SESSION_STORY_PROMPT_PARAM, loopStory(history, budget));
+			params.put(RULES_TO_FOLLOW_PARAM, rulesToFollow(chatRequestContext));
 			final int callsBefore = callBacksListener.getCalls().size();
 			final ControlMarkerStripper stripper = new ControlMarkerStripper();
 			final StringBuilder text = new StringBuilder();
@@ -522,6 +528,21 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				? DISCARDED_WITHOUT_EVIDENCE
 				: DISCARDED_WITHOUT_EVIDENCE + " The answer must rest on the results of: " + String.join(", ", evidenceTools)
 						+ ".";
+	}
+
+	/** The rules of the chat, one per line, or "none". */
+	static String rulesToFollow(IChatRequestContext chatRequestContext) {
+		final List<String> rules = chatRequestContext != null ? chatRequestContext.getRulesToFollow() : null;
+		if (rules == null || rules.isEmpty()) {
+			return "none";
+		}
+		final StringBuilder text = new StringBuilder();
+		for (String rule : rules) {
+			if (rule != null && !rule.isBlank()) {
+				text.append("- ").append(rule.trim()).append(NEWLINE);
+			}
+		}
+		return text.length() > 0 ? text.toString() : "none";
 	}
 
 	/** The iteration subscribed as the user, when the identity is known. */

@@ -1,5 +1,9 @@
 - Current user question: {question}
 
+- Rules to follow, set by the user or by the administrators for this chat: they take precedence over
+  the defaults of the instructions (the language, the length, the style of the answer):
+{RULES_TO_FOLLOW}
+
 - Documents of the chat (chosen or uploaded by the user, or found for this request), if any:
 {documents}
 

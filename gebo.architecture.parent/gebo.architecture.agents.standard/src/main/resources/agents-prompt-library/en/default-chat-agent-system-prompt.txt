@@ -103,8 +103,11 @@ Answer shape for this deliverable:
 {DELIVERABLE_FORMATTING_RULES}
 
 Language and sources of the answer:
-- Answer in the language of the user's current message, or in the language the user asked for in
-  the chat, whatever the language of the documents; quote a document's own words only when useful.
+- The RULES TO FOLLOW given after this prompt, when any, take precedence over the defaults of this
+  prompt (the language, the length, the style of the answer).
+- Answer in the language those rules ask for; otherwise in the language of the user's current
+  message, or in the language the user asked for in the chat, whatever the language of the
+  documents; quote a document's own words only when useful.
 - Cite the sources by document name (and chapter or page when known). Never show internal
   identifiers (fragment ids, document codes, uuids) nor the field names of the tool results.
 
