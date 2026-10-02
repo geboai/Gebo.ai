@@ -1034,4 +1034,22 @@ public class BaseLLMSInvokingService {
 		return chatModel.streamStringResponse(prompt, params, context);
 	}
 
+	/**
+	 * The same, the model's first round having to call one of its tools when
+	 * {@code toolCallRequired} (see
+	 * {@link IGConfigurableChatModel#streamStringResponse(GPromptTemplateConfig, Map, IChatRequestContext, boolean)}).
+	 */
+	protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+			IChatRequestContext context, Map<String, Object> params, boolean toolCallRequired)
+			throws LLMConfigException {
+		if (!toolCallRequired) {
+			return callLLMReactive(chatModel, prompt, context, params);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("callLLMReactive(...) prompt:" + (prompt != null ? prompt.getPromptUse() : null)
+					+ " requires a tool call on the model's first round");
+		}
+		return chatModel.streamStringResponse(prompt, params, context, true);
+	}
+
 }

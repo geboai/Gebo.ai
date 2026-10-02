@@ -474,7 +474,10 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			}
 			Flux<String> modelText;
 			try {
-				modelText = callLLMReactive(agentModel, agentPrompt, chatRequestContext, params);
+				// an answer that must rest on the tools' results starts by calling one, where the
+				// model's vendor can be asked to: the gate below still holds an answer without it
+				modelText = callLLMReactive(agentModel, agentPrompt, chatRequestContext, params,
+						gate != null && gate.evidenceRequired());
 			} catch (LLMConfigException e) {
 				return Flux.error(e);
 			}

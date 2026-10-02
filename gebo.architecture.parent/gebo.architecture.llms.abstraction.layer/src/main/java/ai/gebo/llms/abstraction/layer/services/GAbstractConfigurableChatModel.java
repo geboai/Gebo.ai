@@ -37,6 +37,7 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.model.tool.ToolCallingChatOptions;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 
@@ -616,6 +617,21 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
+		return streamStringResponse(promptTemplate, params, chatContext, false);
+	}
+
+	/**
+	 * The options of a call asking this model's vendor to call a tool, null when the
+	 * vendor or this model's configuration cannot be asked (the default): the call then
+	 * goes as it is. Built from the given options, which are left unchanged.
+	 */
+	protected ToolCallingChatOptions requireToolCall(ToolCallingChatOptions options) {
+		return null;
+	}
+
+	@Override
+	public Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, boolean toolCallRequired) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		return runAs.doRunAsWithReturnAndException(() -> {
 			long timestamp = 0l;
@@ -623,10 +639,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				timestamp = System.currentTimeMillis();
 				LOGGER.debug("Begin streamStringResponse(" + promptTemplate.getPromptUse() + ", ...,...) " + "[session:"
 						+ chatContext.getSessionID() + " request: " + chatContext.getRequestID() + " pipelineInfos: "
-						+ chatContext.getPipelineInfos() + "]");
+						+ chatContext.getPipelineInfos() + "] tool call required:" + toolCallRequired);
 			}
 
 			RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs);
+			if (toolCallRequired) {
+				// the first model round must call a tool, the next ones read its results
+				reqObject.getRequestSpec().advisors(new FirstRoundToolChoiceAdvisor(this::requireToolCall, getCode()));
+			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End streamStringResponse(" + promptTemplate.getPromptUse() + ", ...,...) " + "[session:"
 						+ chatContext.getSessionID() + " request: " + chatContext.getRequestID() + " pipelineInfos: "

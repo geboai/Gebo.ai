@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.mistralai.services;
 
+import org.springframework.ai.model.tool.ToolCallingChatOptions;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -225,6 +226,17 @@ public class MistralChatModelConfigurationSupportService
 		@Override
 		public boolean isSupportsFunctionsCall() {
 			return true;
+		}
+
+		/** Mistral's "any" tool choice: the model calls at least one of its tools. */
+		@Override
+		protected ToolCallingChatOptions requireToolCall(ToolCallingChatOptions options) {
+			if (options instanceof MistralAiChatOptions mistralOptions) {
+				return mistralOptions.mutate().toolChoice(MistralAiApi.ChatCompletionRequest.ToolChoice.ANY).build();
+			}
+			LOGGER.warn("Chat model {} got options of type {}, no tool call can be required", getCode(),
+					options != null ? options.getClass().getName() : null);
+			return null;
 		}
 
 		@Override

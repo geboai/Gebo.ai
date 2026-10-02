@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.deepseek.services;
 
+import org.springframework.ai.model.tool.ToolCallingChatOptions;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -224,6 +225,30 @@ public class DeepseekChatModelConfigurationSupportService
 			DeepSeekChatModel model = new DeepSeekChatModel(deepseekApi, deepseekChatOptions, toolCallingManager,
 					retryTemplate, observationRegistry);
 			return model;
+		}
+
+		/**
+		 * DeepSeek's "required" tool choice, only out of the thinking mode: the reasoner
+		 * thinks by itself, and a forced choice is not part of what its thinking mode
+		 * documents.
+		 */
+		@Override
+		protected ToolCallingChatOptions requireToolCall(ToolCallingChatOptions options) {
+			if (!(options instanceof DeepSeekChatOptions deepSeekOptions)) {
+				LOGGER.warn("Chat model {} got options of type {}, no tool call can be required", getCode(),
+						options != null ? options.getClass().getName() : null);
+				return null;
+			}
+			final DeepSeekApi.ChatCompletionRequest.Thinking thinking = deepSeekOptions.getThinking();
+			final boolean thinks = thinking != null ? !DeepSeekApi.ChatCompletionRequest.Thinking.DISABLED.equals(thinking)
+					: deepSeekOptions.getModel() != null && deepSeekOptions.getModel().contains("reasoner");
+			if (thinks) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model {} thinks, its tool choice is left to it", getCode());
+				}
+				return null;
+			}
+			return deepSeekOptions.mutate().toolChoice("required").build();
 		}
 
 		@Override
