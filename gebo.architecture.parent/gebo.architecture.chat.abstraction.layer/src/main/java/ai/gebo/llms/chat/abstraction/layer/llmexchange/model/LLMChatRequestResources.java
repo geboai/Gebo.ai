@@ -37,6 +37,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 	private LLMRequestGenerationPolicy generationPolicy;
 	// Request id -> note appended to that answer in the history shown to the model.
 	private Map<String, String> answerFeedbackNotes = new HashMap<String, String>();
+	private List<String> rulesToFollow = new ArrayList<String>();
 
 	public LLMChatRequestResources(AIDocumentsSet chatWithDocuments, AIDocumentsSet retrievedDocuments,
 			AIDocumentsSet uploadedDocuments, AIDocumentsSet llmGeneratedDocuments,
@@ -103,6 +104,11 @@ public class LLMChatRequestResources implements ITokensCountable {
 		public ToolCallsListener getToolCallListener() {
 			
 			return null;
+		}
+
+		@Override
+		public List<String> getRulesToFollow() {
+			return rulesToFollow != null ? rulesToFollow : List.of();
 		}
 
 		@Override

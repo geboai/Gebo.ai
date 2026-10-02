@@ -14,7 +14,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +26,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import ai.gebo.architecture.ai.model.ContextContentRequired;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.tests.TestChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatRuleScope;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatRule;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateRepository;
@@ -58,6 +69,11 @@ public class ChatRulesTest extends AbstractBaseTestLLmsIntegrationTests {
 	private ChatFullSessionStateRepository fullRepository;
 	@Autowired
 	private MinimalChatContextCacheItemRepository minimalContextCache;
+
+	@Override
+	protected void afterEachCallback() throws Exception {
+		TestChatModel.clearGlobalResponseLogic();
+	}
 
 	@Override
 	protected void beforeEachCallback() throws Exception {
@@ -168,6 +184,62 @@ public class ChatRulesTest extends AbstractBaseTestLLmsIntegrationTests {
 				rulesService.getApplicableRules(chat, "default-profile", null).stream().map(GChatRule::getId)
 						.toList());
 		assertEquals(4, rulesService.getApplicableRules(chat, "legal-profile", null).size());
+	}
+
+	@Test
+	public void testApplicableRulesReachTheModelPrompt() throws Exception {
+		GChatRule shared = draft(null, null, "Never disclose prices");
+		shared.setAccessibleUsers(List.of(DEFAULT_ALL_ROLES_USER));
+		adminRulesController.createSharedRule(shared);
+		String chat = newSession();
+		rulesController.createRule(draft(ChatRuleScope.USER, null, "Cite the sources"));
+		rulesController.createRule(draft(ChatRuleScope.SESSION, chat, "Answer in Italian"));
+		GChatRule disabled = draft(ChatRuleScope.USER, null, "Be verbose");
+		disabled.setEnabled(false);
+		rulesController.createRule(disabled);
+
+		IGConfigurableChatModel model = chatModelRuntimeDao.findByCode(DEFAULT_TEST_CHAT_MODEL_CODE);
+		GeboChatRequest request = new GeboChatRequest();
+		request.setId(UUID.randomUUID().toString());
+		request.setUserChatContextCode(chat);
+		request.setQuery("What is the capital of France?");
+		LLMChatRequestResources resources = lifeCycleService.startRequest(request, model,
+				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+		IChatRequestContext context = resources.createChatRequestContext();
+		assertEquals(List.of("Never disclose prices", "Cite the sources", "Answer in Italian"),
+				context.getRulesToFollow());
+
+		List<String> prompts = new ArrayList<>();
+		TestChatModel.setGlobalResponseLogic(prompt -> {
+			prompts.add(prompt);
+			return "Parigi.";
+		});
+		model.textResponse(testPrompt(), Map.of(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, request.getQuery()),
+				context);
+		model.textResponse(testPrompt(), Map.of(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, "hello"),
+				IChatRequestContext.of("hello"));
+		assertEquals(2, prompts.size());
+		assertTrue(prompts.get(0).contains("RULES TO FOLLOW"), prompts.get(0));
+		for (String rule : List.of("Never disclose prices", "Cite the sources", "Answer in Italian")) {
+			assertTrue(prompts.get(0).contains("- " + rule), rule);
+		}
+		assertFalse(prompts.get(0).contains("Be verbose"));
+		assertFalse(prompts.get(1).contains("RULES TO FOLLOW"), "A context without rules adds no rules section");
+
+		GeboChatResponse response = lifeCycleService.createEmptyResponse(request);
+		response.setQueryResponse("Parigi.");
+		lifeCycleService.endRequest(request, response);
+	}
+
+	private static GPromptTemplateConfig testPrompt() {
+		GPromptTemplateConfig prompt = new GPromptTemplateConfig();
+		prompt.setPromptUse("chat-rules-test");
+		prompt.setSystemPromptTemplate("You are the assistant of a test.");
+		prompt.setUserPromptTemplate("{" + IChatRequestContext.USER_QUESTION_PROMPT_PARAM + "}");
+		prompt.setChatHistory(ContextContentRequired.NOT_REQUIRED);
+		prompt.setContextDocuments(ContextContentRequired.NOT_REQUIRED);
+		prompt.setToolsCalling(ContextContentRequired.NOT_REQUIRED);
+		return prompt;
 	}
 
 	@Test

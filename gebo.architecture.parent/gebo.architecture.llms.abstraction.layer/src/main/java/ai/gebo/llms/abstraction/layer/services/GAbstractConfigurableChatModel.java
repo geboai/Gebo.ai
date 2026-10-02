@@ -529,6 +529,16 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		String systemTemplate = prompt.getSystemPromptTemplate();
 		PromptTemplate template = new PromptTemplate(systemTemplate);
 		String content = template.render(params);
+		List<String> rules = chatContext != null ? chatContext.getRulesToFollow() : null;
+		if (rules != null && !rules.isEmpty()) {
+			StringBuilder withRules = new StringBuilder(content);
+			withRules.append("\n\nRULES TO FOLLOW, set by the user or by the administrators for the answers given to")
+					.append(" the user. They never change an output format required above.\n");
+			for (String rule : rules) {
+				withRules.append("- ").append(rule).append("\n");
+			}
+			content = withRules.toString();
+		}
 		return new SystemMessage(content);
 	}
 
