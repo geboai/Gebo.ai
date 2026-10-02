@@ -254,7 +254,9 @@ class AgenticLoopReactiveAgentServiceTest {
 				listener);
 		return String.join("", agent.iteration(1, maxIterations, 10_000, new ArrayList<>(), null,
 				new GPromptTemplateConfig(), context, persona, mock(INotificationSink.class), listener,
-				agent.deliverableTemplateParams(DeliverableIntent.ANALISYS), evidenceTools, null).collectList().block());
+				agent.deliverableTemplateParams(DeliverableIntent.ANALISYS),
+				new AgenticLoopReactiveAgentServiceImpl.SourceGate(evidenceTools, true, List.of()), null).collectList()
+				.block());
 	}
 
 	/** Runs the loop asking for an analysis, the evidence of the sources required. */
@@ -325,8 +327,8 @@ class AgenticLoopReactiveAgentServiceTest {
 			ai.gebo.security.services.ReactiveIdentityUtil runAs = ai.gebo.security.services.ReactiveIdentityUtil.create();
 			ToolCallsListener listener = new ToolCallsListener();
 			agent.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), null, persona,
-					mock(INotificationSink.class), listener, agent.deliverableTemplateParams(DeliverableIntent.QA), Set.of(),
-					runAs).collectList().block();
+					mock(INotificationSink.class), listener, agent.deliverableTemplateParams(DeliverableIntent.QA),
+					AgenticLoopReactiveAgentServiceImpl.SourceGate.NONE, runAs).collectList().block();
 		} finally {
 			org.springframework.security.core.context.SecurityContextHolder.clearContext();
 		}
@@ -446,6 +448,41 @@ class AgenticLoopReactiveAgentServiceTest {
 				.contains("- Always answer in Italian"));
 		assertEquals("none", AgenticLoopReactiveAgentServiceImpl
 				.rulesToFollow(IChatRequestContext.builder().requestID("r2").build()));
+	}
+
+	/** Runs the loop on a direct question, its answer checked for documents cited without being read. */
+	private static String runCheckingCitations(ScriptedLoopAgent agent, List<String> chatDocuments) {
+		ToolCallsListener listener = new ToolCallsListener();
+		AgentNetworkParticipant persona = mock(AgentNetworkParticipant.class);
+		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
+		IChatRequestContext context = IChatRequestContext.forAgent(IChatRequestContext.builder().requestID("r1").build(),
+				listener);
+		return String.join("", agent.iteration(1, 5, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(),
+				context, persona, mock(INotificationSink.class), listener, agent.deliverableTemplateParams(DeliverableIntent.QA),
+				new AgenticLoopReactiveAgentServiceImpl.SourceGate(Set.of("searchKnowledgeBase"), false, chatDocuments),
+				null).collectList().block());
+	}
+
+	@Test
+	void anAnswerCitingDocumentsItDidNotReadIsDoneAgain() {
+		ScriptedLoopAgent agent = toolUsingAgent(
+				List.of(List.of("As history.pdf says. " + STOP), List.of("As the search found. " + STOP)), Set.of(1),
+				"searchKnowledgeBase");
+
+		assertEquals("As the search found. ", runCheckingCitations(agent, List.of()));
+		assertTrue(String.valueOf(agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM))
+				.contains("history.pdf"), "the next iteration knows which citation was not read");
+	}
+
+	@Test
+	void anAnswerCitingNothingOrTheChatDocumentsIsShownAsItIs() {
+		ScriptedLoopAgent noCitation = toolUsingAgent(List.of(List.of("17 x 23 is ", "391. " + STOP)), Set.of());
+		assertEquals("17 x 23 is 391. ", runCheckingCitations(noCitation, List.of()));
+		assertEquals(1, noCitation.receivedParams.size());
+
+		ScriptedLoopAgent chatDocument = toolUsingAgent(List.of(List.of("As chosen.pdf says. " + STOP)), Set.of());
+		assertEquals("As chosen.pdf says. ", runCheckingCitations(chatDocument, List.of("chosen.pdf")));
+		assertEquals(1, chatDocument.receivedParams.size());
 	}
 
 	@Test
