@@ -41,7 +41,7 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 			+ "reads every document fragment found and returns an analysis of them against your question, with the "
 			+ "documents it relies on. Slow and expensive: use it only when the answer needs many documents (a "
 			+ "report, an analysis, a comparison, a decision), not for a fact a plain search finds.";
-	/** Fragments retrieved for each document a deep search reads. */
+	/** Fragments retrieved, on average, for each document a deep search reads. */
 	static final int FRAGMENTS_PER_DOCUMENT = 3;
 	/** Most tokens of fragments a knowledge base deep search reads. */
 	static final int MAX_RETRIEVED_TOKENS = 120000;
@@ -70,7 +70,7 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 
 	@Override
 	protected List<Document> searchDocuments(List<String> queries, String question, int maxDocuments,
-			Map<String, FoundDocument> foundByFragmentId) throws Exception {
+			int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception {
 		final List<String> kbCodes = knowledgeBaseCodes(LLMtInteractionContextThreadLocal.Context.get());
 		if (kbCodes.isEmpty()) {
 			if (LOGGER.isDebugEnabled()) {
@@ -82,6 +82,9 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 		semanticFilter.setKnowledgeBasesCodes(kbCodes);
 		final FullTextSearchMetaDataFilter fullTextFilter = new FullTextSearchMetaDataFilter();
 		fullTextFilter.setKnowledgebaseCodes(kbCodes);
+		// the full text search keeps the best chunks of each document (3 by default): a
+		// knowledge base of a few documents would give a deep search a handful of fragments
+		fullTextFilter.setPerDocumentInnerHits(fragmentsPerDocument);
 		if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
 				&& !securityService.isCurrentUserAdmin()) {
 			final List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
@@ -92,7 +95,7 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 		final int topK = maxDocuments * FRAGMENTS_PER_DOCUMENT;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Tool:" + toolName + " searching " + kbCodes.size() + " knowledge base(s) with "
-					+ queries.size() + " search(es) topK:" + topK);
+					+ queries.size() + " search(es) topK:" + topK + " fragmentsPerDocument:" + fragmentsPerDocument);
 		}
 		final AIDocumentsSet found = documentsSearchService.search(question, queries, semanticFilter, queries,
 				fullTextFilter, question, topK, MAX_RETRIEVED_TOKENS);

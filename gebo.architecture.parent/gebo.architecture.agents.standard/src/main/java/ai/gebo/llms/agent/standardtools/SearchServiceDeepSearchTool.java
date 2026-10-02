@@ -101,7 +101,9 @@ public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 
 	@Override
 	protected List<Document> searchDocuments(List<Q> queries, String question, int maxDocuments,
-			Map<String, FoundDocument> foundByFragmentId) throws Exception {
+			int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception {
+		// each document found is read whole (see SearchResultsChunker): fragmentsPerDocument
+		// does not apply
 		// no native search given: the question is searched as text
 		final List<Object> searches = queries.isEmpty() ? List.of(question) : new ArrayList<>(queries);
 		final int perSearch = Math.max(MIN_RESULTS_PER_SEARCH,

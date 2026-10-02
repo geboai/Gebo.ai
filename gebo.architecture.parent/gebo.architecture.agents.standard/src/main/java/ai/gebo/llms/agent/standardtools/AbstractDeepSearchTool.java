@@ -103,13 +103,14 @@ public abstract class AbstractDeepSearchTool<Q> {
 
 	/**
 	 * Runs the searches on the source and returns the fragments of at most
-	 * {@code maxDocuments} documents found, registering the document each fragment
-	 * comes from by the fragment id. Runs in the tool call. The searches are never
-	 * empty for plain text ones (the question is searched when the agent gave none);
-	 * native ones can be, the source then searches the question as text.
+	 * {@code maxDocuments} documents found, up to {@code fragmentsPerDocument} of each
+	 * where the source can tell, registering the document each fragment comes from by
+	 * the fragment id. Runs in the tool call. The searches are never empty for plain
+	 * text ones (the question is searched when the agent gave none); native ones can
+	 * be, the source then searches the question as text.
 	 */
 	protected abstract List<Document> searchDocuments(List<Q> queries, String question, int maxDocuments,
-			Map<String, FoundDocument> foundByFragmentId) throws Exception;
+			int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception;
 
 	public ToolCallback toTool() {
 		if (LOGGER.isDebugEnabled()) {
@@ -174,7 +175,7 @@ public abstract class AbstractDeepSearchTool<Q> {
 					"Deep search in " + sourceDescription() + ": " + ToolsProgress.shown(question));
 			final Map<String, FoundDocument> foundByFragmentId = new LinkedHashMap<>();
 			final List<Document> fragments = searchDocuments(queries, question, support.searchTopK(),
-					foundByFragmentId);
+					fragmentsPerDocument(param.getDepth()), foundByFragmentId);
 			if (fragments == null || fragments.isEmpty()) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("End deepSearch(...) tool:" + toolName + " found no document");
@@ -310,6 +311,20 @@ public abstract class AbstractDeepSearchTool<Q> {
 		default:
 			return DeliverableIntent.SUMMARY;
 		}
+	}
+
+	/**
+	 * The fragments read of each document found, from the depth: a few for a precise
+	 * answer, many for a detailed report, which needs more than the passages that
+	 * matched best.
+	 */
+	static int fragmentsPerDocument(Depth depth) {
+		if (depth == Depth.FOCUSED) {
+			return 3;
+		} else if (depth == Depth.EXHAUSTIVE) {
+			return 10;
+		}
+		return 6;
 	}
 
 	/**

@@ -10,7 +10,9 @@
 package ai.gebo.llms.agent.standardtools;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 import org.slf4j.Logger;
@@ -43,6 +45,7 @@ import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.Data;
 
@@ -204,6 +207,8 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			List<String> fitted = GAbstractGenericalAgentService.fitEqually(rendered, MAX_RESULT_TOKENS);
 			StringBuilder answer = new StringBuilder();
 			answer.append(documents.size()).append(" fragment(s) found:").append(NEWLINE);
+			// the documents these fragments come from, the only evidence of this search
+			answer.append(documentsLine(documents)).append(NEWLINE);
 			for (String fragment : fitted) {
 				answer.append(fragment).append(NEWLINE);
 			}
@@ -221,6 +226,32 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			LOGGER.error("Knowledge base search tool failed for query:" + param.getQuery(), e);
 			return "The internal knowledge base search failed, go on without it.";
 		}
+	}
+
+	/**
+	 * The documents the fragments come from, with their fragments: what this search
+	 * found is evidence of these documents only.
+	 */
+	static String documentsLine(List<Document> documents) {
+		final Map<String, Integer> fragmentsByDocument = new LinkedHashMap<>();
+		for (Document document : documents) {
+			final Map<String, Object> metaData = document.getMetadata();
+			Object name = metaData != null ? metaData.get(DocumentMetaInfos.GEBO_FILE_NAME) : null;
+			if (name == null && metaData != null) {
+				name = metaData.get(DocumentMetaInfos.CONTENT_CODE);
+			}
+			fragmentsByDocument.merge(name != null ? String.valueOf(name) : "unnamed document", 1, Integer::sum);
+		}
+		final StringBuilder line = new StringBuilder("Documents of these fragments (the only ones this search found): ");
+		boolean first = true;
+		for (Map.Entry<String, Integer> entry : fragmentsByDocument.entrySet()) {
+			if (!first) {
+				line.append(", ");
+			}
+			line.append(entry.getKey()).append(" (").append(entry.getValue()).append(")");
+			first = false;
+		}
+		return line.append(".").toString();
 	}
 
 	/** The knowledge bases of the chat when known, otherwise all the visible ones. */

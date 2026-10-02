@@ -117,7 +117,7 @@ class AbstractDeepSearchToolTest {
 
 		@Override
 		protected List<Document> searchDocuments(List<String> queries, String question, int maxDocuments,
-				Map<String, FoundDocument> foundByFragmentId) {
+				int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) {
 			searched.set(queries);
 			for (Document fragment : fragments) {
 				String code = (String) fragment.getMetadata().get(DocumentMetaInfos.CONTENT_CODE);

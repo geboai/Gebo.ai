@@ -96,6 +96,18 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 	}
 
 	@Test
+	void theAnswerNamesTheDocumentsItsFragmentsComeFrom() {
+		List<Document> fragments = List.of(
+				Document.builder().id("f1").text("one").metadata(Map.of(DocumentMetaInfos.GEBO_FILE_NAME, "a.pdf")).build(),
+				Document.builder().id("f2").text("two").metadata(Map.of(DocumentMetaInfos.GEBO_FILE_NAME, "b.pdf")).build(),
+				Document.builder().id("f3").text("three").metadata(Map.of(DocumentMetaInfos.GEBO_FILE_NAME, "a.pdf")).build(),
+				Document.builder().id("f4").text("four").metadata(Map.of(DocumentMetaInfos.CONTENT_CODE, "kb/c.txt")).build());
+
+		assertEquals("Documents of these fragments (the only ones this search found): a.pdf (2), b.pdf (1), kb/c.txt (1).",
+				InternalKnowledgeBaseSearchToolSource.documentsLine(fragments));
+	}
+
+	@Test
 	void theAnswerIsBoundedWhateverTheDocumentsFound() throws Exception {
 		IGDocumentsSearchService search = mock(IGDocumentsSearchService.class);
 		List<Document> found = new ArrayList<>();
