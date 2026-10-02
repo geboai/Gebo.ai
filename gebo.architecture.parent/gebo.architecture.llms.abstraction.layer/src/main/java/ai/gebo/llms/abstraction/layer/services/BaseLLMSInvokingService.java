@@ -148,6 +148,27 @@ public class BaseLLMSInvokingService {
 		} catch (IOException e) {
 			LOGGER.warn("Exception while doing a in-memory readLine()", e);
 		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<FIELD_ENTRY_OUTPUT prompt=" + (prompt != null ? prompt.getPromptUse() : null) + ">");
+			LOGGER.trace(toBeParsed);
+			LOGGER.trace("</FIELD_ENTRY_OUTPUT>");
+		}
+		// a field the model did not write leaves its caller on a default: say which ones
+		final List<String> missingFields = new ArrayList<String>();
+		for (String fieldName : validFields) {
+			if (!outValue.containsKey(fieldName.trim())) {
+				missingFields.add(fieldName.trim());
+			}
+		}
+		if (!missingFields.isEmpty()) {
+			LOGGER.warn("callLLMRepeatableFieldEntryOutput(...) prompt:" + (prompt != null ? prompt.getPromptUse() : null)
+					+ " output of " + (toBeParsed != null ? toBeParsed.length() : 0)
+					+ " character(s) without the field(s):" + missingFields);
+			if (LOGGER.isDebugEnabled() && toBeParsed != null) {
+				LOGGER.debug("Output without the field(s) " + missingFields + " begins with: "
+						+ toBeParsed.substring(0, Math.min(400, toBeParsed.length())));
+			}
+		}
 		return outValue;
 
 	}
