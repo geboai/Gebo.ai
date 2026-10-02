@@ -3192,6 +3192,10 @@
       },
       "saveBadAnswerBtn": {
         "label": "Send feedback"
+      },
+      "CHAT_BRANCHED": {
+        "summary": "Chat branched",
+        "detail": "The conversation continues in a new chat, starting from the chosen answer"
       }
     },
     "ChangeDescriptionComponent": {
