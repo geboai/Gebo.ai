@@ -791,7 +791,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         this.userChatControllerService.branchChat(chatCode, requestId).subscribe({
             next: (branch) => {
                 if (branch?.code) {
-                    this.lastInteractionMessages = [chat_branched];
+                    // straight to the root service: the host navigates to the branch and may
+                    // destroy this component before its notifications input is processed
+                    this.messageService.addMessage("GeboAIChatControlModule", entityId, chat_branched);
                     this.branchedChatAction.emit(branch);
                 }
             },
