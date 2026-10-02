@@ -29,6 +29,13 @@ ai.gebo.prompts:
       chatHistory: REQUIRED
       contextDocuments: NOT_REQUIRED
       toolsCalling: NOT_REQUIRED
+    - promptUse: chat-rule-conflict-prompt
+      langCode: en
+      systemReference: /prompts-library/en/chat-rule-conflict-prompt-system-prompt.txt
+      userReference: /prompts-library/en/chat-rule-conflict-prompt-user-prompt.txt
+      chatHistory: NOT_REQUIRED
+      contextDocuments: NOT_REQUIRED
+      toolsCalling: NOT_REQUIRED
     - promptUse: history-consolidation-prompt
       langCode: en
       systemReference: /prompts-library/en/history-consolidation-prompt-system-prompt.txt
@@ -230,6 +237,14 @@ ai.gebo.prompts:
           description: The answer the chatbot gave.
         - placeholder: feedback
           description: The user's rating and comment on that answer.
+    - code: chat-rule-conflict-prompt
+      description: Lists the existing chat rules that a new or edited rule contradicts, as advice before it is saved.
+      module: chat
+      placeholders:
+        - placeholder: question
+          description: The new or edited rule.
+        - placeholder: documents
+          description: The numbered rules it would apply together with.
     - code: history-consolidation-prompt
       description: Compresses the chat history (and any prior consolidated summary) down to a target size while preserving the relevant context.
       module: chat

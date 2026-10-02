@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatAnswerFeedbackRating;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatRuleConflict;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatRuleScope;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatRule;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateRepository;
@@ -297,6 +300,47 @@ public class ChatRulesTest extends AbstractBaseTestLLmsIntegrationTests {
 				() -> rulesController.proposeRules(chat, "not-a-request-of-this-chat"));
 		impersonate(OTHER_USER, GeboAISecurityConfig.USER_ROLE);
 		assertThrows(SecurityException.class, () -> rulesController.proposeRules(chat, rated.getId()));
+	}
+
+	@Test
+	public void testConflictCheckFlagsTheContradictedRules() throws Exception {
+		GChatRule italian = rulesController.createRule(draft(ChatRuleScope.USER, null, "Answer in Italian"));
+		rulesController.createRule(draft(ChatRuleScope.USER, null, "Cite the sources"));
+		GChatRule disabled = draft(ChatRuleScope.USER, null, "Be verbose");
+		disabled.setEnabled(false);
+		rulesController.createRule(disabled);
+		List<String> prompts = new ArrayList<>();
+		TestChatModel.setGlobalResponseLogic(prompt -> {
+			prompts.add(prompt);
+			Matcher matcher = Pattern.compile("(\\d+): Answer in Italian").matcher(prompt);
+			String number = matcher.find() ? matcher.group(1) : "0";
+			return number + ": Italian versus English\nnot a rule line\n42: out of range\n" + number + ": again";
+		});
+
+		List<ChatRuleConflict> conflicts = rulesController
+				.checkRuleConflicts(draft(ChatRuleScope.USER, null, "Always answer in English"));
+		assertEquals(1, conflicts.size());
+		assertEquals(italian.getId(), conflicts.get(0).ruleId());
+		assertEquals("Italian versus English", conflicts.get(0).reason());
+		assertTrue(prompts.get(0).contains("Always answer in English"));
+		assertTrue(prompts.get(0).contains(": Cite the sources"));
+		assertFalse(prompts.get(0).contains("Be verbose"), "Disabled rules are not checked");
+
+		italian.setText("Answer in English");
+		rulesController.checkRuleConflicts(italian);
+		assertFalse(prompts.get(prompts.size() - 1).contains(": Answer in Italian"),
+				"An edited rule is not compared with its own previous text");
+		TestChatModel.setGlobalResponseLogic(any -> "NONE");
+		assertTrue(rulesController.checkRuleConflicts(draft(ChatRuleScope.USER, null, "Use short paragraphs"))
+				.isEmpty());
+
+		String chat = newSession();
+		impersonate(THIRD_USER, GeboAISecurityConfig.USER_ROLE);
+		int calls = prompts.size();
+		assertTrue(rulesController.checkRuleConflicts(draft(ChatRuleScope.USER, null, "Answer in French")).isEmpty());
+		assertEquals(calls, prompts.size(), "Nothing to compare with: no model call");
+		assertThrows(SecurityException.class,
+				() -> rulesController.checkRuleConflicts(draft(ChatRuleScope.SESSION, chat, "Answer in French")));
 	}
 
 	private GeboChatRequest exchange(String chat, String question, String answer) throws Exception {

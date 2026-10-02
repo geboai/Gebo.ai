@@ -12,10 +12,16 @@ package ai.gebo.llms.chat.abstraction.layer.services;
 import java.util.List;
 
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatRuleConflict;
+import ai.gebo.llms.chat.abstraction.layer.model.GChatRule;
 
 public interface IGChatRuleProposalService {
 
 	// Candidate rule texts drawn from that answer, its feedback and the recent history; nothing is saved.
 	public List<String> proposeRules(String userChatContextCode, String requestId)
+			throws GeboChatSessionLifecycleException, LLMConfigException;
+
+	// Advice before saving: the enabled rules the given new or edited rule would contradict.
+	public List<ChatRuleConflict> checkRuleConflicts(GChatRule candidate)
 			throws GeboChatSessionLifecycleException, LLMConfigException;
 }

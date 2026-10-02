@@ -12,6 +12,8 @@ package ai.gebo.llms.chat.abstraction.layer.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 
@@ -26,11 +28,15 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatAnswerFeedbackRating;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatRuleConflict;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatRuleScope;
+import ai.gebo.llms.chat.abstraction.layer.model.GChatRule;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatAnswerFeedback;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatAnswerFeedbackRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRuleProposalService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatRulesService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.security.services.IGSecurityService;
@@ -47,6 +53,65 @@ public class GChatRuleProposalServiceImpl implements IGChatRuleProposalService {
 	private final IGSecurityService securityService;
 	private final IGPromptConfigDao promptsDao;
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
+	private final IGChatRulesService rulesService;
+	private static final Pattern CONFLICT_LINE = Pattern.compile("^\\s*(\\d+)\\s*[:.)-]\\s*(.*)$");
+
+	@Override
+	public List<ChatRuleConflict> checkRuleConflicts(GChatRule candidate)
+			throws GeboChatSessionLifecycleException, LLMConfigException {
+		if (candidate == null || candidate.getScope() == null || candidate.getText() == null
+				|| candidate.getText().isBlank()) {
+			throw new GeboChatSessionLifecycleException("The rule to check needs a scope and a text");
+		}
+		List<GChatRule> others = new ArrayList<GChatRule>();
+		switch (candidate.getScope()) {
+		case SHARED -> others.addAll(rulesService.getSharedRules());
+		case USER -> {
+			others.addAll(rulesService.getSharedRulesAppliedToMe());
+			others.addAll(rulesService.getMyRules().stream().filter(x -> x.getScope() == ChatRuleScope.USER).toList());
+		}
+		case SESSION -> {
+			others.addAll(rulesService.getSharedRulesAppliedToMe());
+			others.addAll(rulesService.getMyRules().stream().filter(x -> x.getScope() == ChatRuleScope.USER).toList());
+			others.addAll(rulesService.getChatRules(candidate.getUserChatContextCode()));
+		}
+		}
+		others = others.stream().filter(GChatRule::isEnabled)
+				.filter(x -> candidate.getId() == null || !candidate.getId().equals(x.getId())).toList();
+		if (others.isEmpty()) {
+			return List.of();
+		}
+		StringBuilder numbered = new StringBuilder();
+		for (int i = 0; i < others.size(); i++) {
+			numbered.append(i + 1).append(": ").append(others.get(i).getText()).append("\n");
+		}
+		IGConfigurableChatModel model = chatModelsDao.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
+		if (model == null) {
+			throw new LLMConfigException("No internal services or default chat model present");
+		}
+		GPromptTemplateConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.CHAT_RULE_CONFLICT_PROMPT);
+		String reply = ClientChatCallUtil.removeThinking(model.textResponse(prompt,
+				Map.of(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, candidate.getText().trim(),
+						IChatRequestContext.DOCUMENTS_PROMPT_PARAM, numbered.toString()),
+				IChatRequestContext.of(candidate.getText().trim())));
+		List<ChatRuleConflict> conflicts = new ArrayList<ChatRuleConflict>();
+		if (reply != null) {
+			for (String line : reply.split("\\R")) {
+				Matcher matcher = CONFLICT_LINE.matcher(line);
+				if (matcher.matches()) {
+					int number = Integer.parseInt(matcher.group(1));
+					if (number >= 1 && number <= others.size()) {
+						GChatRule other = others.get(number - 1);
+						if (conflicts.stream().noneMatch(x -> x.ruleId().equals(other.getId()))) {
+							conflicts.add(new ChatRuleConflict(other.getId(), other.getScope(), other.getText(),
+									matcher.group(2).trim()));
+						}
+					}
+				}
+			}
+		}
+		return conflicts;
+	}
 
 	@Override
 	public List<String> proposeRules(String userChatContextCode, String requestId)
