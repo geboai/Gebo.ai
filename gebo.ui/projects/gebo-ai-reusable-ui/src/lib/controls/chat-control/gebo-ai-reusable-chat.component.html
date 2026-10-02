@@ -112,9 +112,20 @@
                   [disabled]="chatStreaming || savingFeedback" (onClick)="rateAnswer(interaction, 'NEGATIVE')"
                 title="Bad answer"></p-button>
               </span>
-              <p-button id="branchChatBtn" gebo-ai-label icon="pi pi-sitemap" [rounded]="true" [text]="true"
+              <p-button id="branchChatBtn" gebo-ai-label [rounded]="true" [text]="true"
                 [disabled]="chatStreaming || branching" [loading]="branching" (onClick)="branchFrom(interaction)"
-              title="Continue in a new chat from this answer" class="custom-blue-btn"></p-button>
+                title="Continue in a new chat from this answer" class="custom-blue-btn">
+                <ng-template #icon let-iconClass="class">
+                  <svg [class]="iconClass" class="gebo-ai-reusable-chat__branch-icon" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="6" cy="5" r="2.5"></circle>
+                    <circle cx="6" cy="19" r="2.5"></circle>
+                    <circle cx="18" cy="7" r="2.5"></circle>
+                    <path d="M6 7.5v9"></path>
+                    <path d="M18 9.5c0 4-3 5.5-7 6.2-2 .35-3.5 1-4.4 1.9"></path>
+                  </svg>
+                </ng-template>
+              </p-button>
             </div>
           }
         </div>
