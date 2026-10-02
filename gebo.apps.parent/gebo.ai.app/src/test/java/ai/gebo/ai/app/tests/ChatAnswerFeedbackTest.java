@@ -22,9 +22,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatAnswerFeedbackRating;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatAnswerFeedback;
@@ -123,6 +125,35 @@ public class ChatAnswerFeedbackTest extends AbstractBaseTestLLmsIntegrationTests
 
 		lifeCycleService.removeChatSession(chat);
 		assertEquals(1, feedbackRepository.findByUserChatContextCode(chat).size());
+	}
+
+	@Test
+	public void testNextRequestShowsTheFeedbackNextToTheRatedAnswers() throws Exception {
+		String chat = newSession();
+		GeboChatRequest wrong = exchange(chat, "What is the capital of France?");
+		GeboChatRequest fine = exchange(chat, "And the capital of Italy?");
+		controller.setAnswerFeedback(new AnswerFeedbackRequest(chat, wrong.getId(),
+				ChatAnswerFeedbackRating.NEGATIVE, "Always cite the source"));
+		controller.setAnswerFeedback(
+				new AnswerFeedbackRequest(chat, fine.getId(), ChatAnswerFeedbackRating.POSITIVE, null));
+
+		IGConfigurableChatModel model = chatModelRuntimeDao.findByCode(DEFAULT_TEST_CHAT_MODEL_CODE);
+		GeboChatRequest next = new GeboChatRequest();
+		next.setId(UUID.randomUUID().toString());
+		next.setUserChatContextCode(chat);
+		next.setQuery("And the capital of Spain?");
+		LLMChatRequestResources resources = lifeCycleService.startRequest(next, model,
+				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+		List<IChatSessionEntry> history = resources.createChatRequestContext().getInteractions();
+		assertEquals(2, history.size());
+		assertTrue(history.get(0).getAssistant().endsWith(
+				"[The user rated this answer as not satisfying, commenting: \"Always cite the source\"]"),
+				history.get(0).getAssistant());
+		assertEquals("An answer to: And the capital of Italy?", history.get(1).getAssistant(),
+				"A positive rating without a comment adds nothing to the history");
+		GeboChatResponse response = lifeCycleService.createEmptyResponse(next);
+		response.setQueryResponse("Madrid.");
+		lifeCycleService.endRequest(next, response);
 	}
 
 	private String newSession() throws Exception {

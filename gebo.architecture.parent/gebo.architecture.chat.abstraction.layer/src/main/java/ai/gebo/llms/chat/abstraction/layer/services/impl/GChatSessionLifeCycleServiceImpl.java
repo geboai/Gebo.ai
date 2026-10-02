@@ -3,6 +3,11 @@ package ai.gebo.llms.chat.abstraction.layer.services.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import ai.gebo.llms.chat.abstraction.layer.repository.ChatAnswerFeedbackRepository;
+import ai.gebo.llms.chat.abstraction.layer.model.GChatAnswerFeedback;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatAnswerFeedbackRating;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Optional;
@@ -104,6 +109,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao;
 	private final IMessageEnvelopeFactory envelopeFactory;
 	private final GeboChatUIServerConfig uiServerConfig;
+	private final ChatAnswerFeedbackRepository answerFeedbackRepository;
 
 	@NoArgsConstructor
 
@@ -285,13 +291,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		}
 		CacheEntry cacheEntry = new CacheEntry(context, state, shrinked);
 		this.cache.put(request.getId(), cacheEntry);
-		if (state.getTokensSize() < budget) {
-			return state.createChatRequestResources(policy);
-		}
-		if (shrinked.getTokensSize() < budget) {
-			return shrinked.createChatRequestResources(policy);
-		}
-		return applyGenerationPolicy(shrinked, budget, policy);
+		return budgetedResources(request, state, shrinked, budget, policy);
 	}
 
 	@Override
@@ -350,6 +350,34 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			shrinkResize = lifeCycleConfig.getMinimumShrinkResizeTargetTokens().doubleValue();
 		}
 		return (int) shrinkResize;
+	}
+
+	private LLMChatRequestResources budgetedResources(GeboChatRequest request, ChatFullSessionState state,
+			ShrinkedChatSessionState shrinked, int budget, LLMRequestGenerationPolicy policy) {
+		LLMChatRequestResources resources;
+		if (state.getTokensSize() < budget) {
+			resources = state.createChatRequestResources(policy);
+		} else if (shrinked.getTokensSize() < budget) {
+			resources = shrinked.createChatRequestResources(policy);
+		} else {
+			resources = applyGenerationPolicy(shrinked, budget, policy);
+		}
+		resources.setAnswerFeedbackNotes(answerFeedbackNotes(request.getUserChatContextCode()));
+		return resources;
+	}
+
+	private Map<String, String> answerFeedbackNotes(String userChatContextCode) {
+		Map<String, String> notes = new HashMap<String, String>();
+		for (GChatAnswerFeedback feedback : answerFeedbackRepository.findByUserChatContextCode(userChatContextCode)) {
+			boolean negative = feedback.getRating() == ChatAnswerFeedbackRating.NEGATIVE;
+			if (negative || feedback.getComment() != null) {
+				notes.put(feedback.getRequestId(), "\n\n[The user rated this answer as "
+						+ (negative ? "not satisfying" : "good")
+						+ (feedback.getComment() != null ? ", commenting: \"" + feedback.getComment() + "\"" : "")
+						+ "]");
+			}
+		}
+		return notes;
 	}
 
 	private LLMChatRequestResources applyGenerationPolicy(ShrinkedChatSessionState shrinked, int budget,
@@ -423,13 +451,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			shrinked.setTargetTokenBudget(targetTokenBudget);
 		}
 
-		if (state.getTokensSize() < budget) {
-			return state.createChatRequestResources(policy);
-		}
-		if (shrinked.getTokensSize() < budget) {
-			return shrinked.createChatRequestResources(policy);
-		}
-		return applyGenerationPolicy(shrinked, budget, policy);
+		return budgetedResources(request, state, shrinked, budget, policy);
 
 	}
 
@@ -449,13 +471,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			shrinked.setTargetTokenBudget(targetTokenBudget);
 		}
 
-		if (state.getTokensSize() < budget) {
-			return state.createChatRequestResources(policy);
-		}
-		if (shrinked.getTokensSize() < budget) {
-			return shrinked.createChatRequestResources(policy);
-		}
-		return applyGenerationPolicy(shrinked, budget, policy);
+		return budgetedResources(request, state, shrinked, budget, policy);
 	}
 
 	@Override
@@ -483,13 +499,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			shrinked.setTargetTokenBudget(targetTokenBudget);
 		}
 
-		if (state.getTokensSize() < budget) {
-			return state.createChatRequestResources(policy);
-		}
-		if (shrinked.getTokensSize() < budget) {
-			return shrinked.createChatRequestResources(policy);
-		}
-		return applyGenerationPolicy(shrinked, budget, policy);
+		return budgetedResources(request, state, shrinked, budget, policy);
 	}
 
 	@Override
@@ -508,13 +518,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			shrinked.setTargetTokenBudget(targetTokenBudget);
 		}
 
-		if (state.getTokensSize() < budget) {
-			return state.createChatRequestResources(policy);
-		}
-		if (shrinked.getTokensSize() < budget) {
-			return shrinked.createChatRequestResources(policy);
-		}
-		return applyGenerationPolicy(shrinked, budget, policy);
+		return budgetedResources(request, state, shrinked, budget, policy);
 	}
 
 	@Override
@@ -536,13 +540,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			shrinked.setTargetTokenBudget(targetTokenBudget);
 		}
 
-		if (state.getTokensSize() < budget) {
-			return state.createChatRequestResources(policy);
-		}
-		if (shrinked.getTokensSize() < budget) {
-			return shrinked.createChatRequestResources(policy);
-		}
-		return applyGenerationPolicy(shrinked, budget, policy);
+		return budgetedResources(request, state, shrinked, budget, policy);
 	}
 
 	@Override
@@ -561,13 +559,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			shrinked.setTargetTokenBudget(targetTokenBudget);
 		}
 
-		if (state.getTokensSize() < budget) {
-			return state.createChatRequestResources(policy);
-		}
-		if (shrinked.getTokensSize() < budget) {
-			return shrinked.createChatRequestResources(policy);
-		}
-		return applyGenerationPolicy(shrinked, budget, policy);
+		return budgetedResources(request, state, shrinked, budget, policy);
 	}
 
 	@Override
@@ -595,13 +587,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 				shrinked.setTargetTokenBudget(targetTokenBudget);
 			}
 
-			if (state.getTokensSize() < budget) {
-				return state.createChatRequestResources(policy);
-			}
-			if (shrinked.getTokensSize() < budget) {
-				return shrinked.createChatRequestResources(policy);
-			}
-			return applyGenerationPolicy(shrinked, budget, policy);
+			return budgetedResources(request, state, shrinked, budget, policy);
 		} catch (IOException | GeboContentHandlerSystemException | GeboIngestionException e) {
 			throw new GeboChatSessionLifecycleException("Exception ingesting a generated resource", e);
 		}

@@ -20,7 +20,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class LLMChatRequestResources implements ITokensCountable {
@@ -36,10 +35,26 @@ public class LLMChatRequestResources implements ITokensCountable {
 	private CSSConsolidatedChatHistory chathistory = null;
 	private GeboChatRequest currentRequest = null;
 	private LLMRequestGenerationPolicy generationPolicy;
+	// Request id -> note appended to that answer in the history shown to the model.
+	private Map<String, String> answerFeedbackNotes = new HashMap<String, String>();
+
+	public LLMChatRequestResources(AIDocumentsSet chatWithDocuments, AIDocumentsSet retrievedDocuments,
+			AIDocumentsSet uploadedDocuments, AIDocumentsSet llmGeneratedDocuments,
+			CSSConsolidatedChatHistory chathistory, GeboChatRequest currentRequest,
+			LLMRequestGenerationPolicy generationPolicy) {
+		this.chatWithDocuments = chatWithDocuments;
+		this.retrievedDocuments = retrievedDocuments;
+		this.uploadedDocuments = uploadedDocuments;
+		this.llmGeneratedDocuments = llmGeneratedDocuments;
+		this.chathistory = chathistory;
+		this.currentRequest = currentRequest;
+		this.generationPolicy = generationPolicy;
+	}
 
 	@AllArgsConstructor
 	static final class InteractionWrapper implements IChatSessionEntry {
 		CSSSimplefiedInteraction interaction = null;
+		String feedbackNote = null;
 
 		@Override
 		public String getUser() {
@@ -50,7 +65,8 @@ public class LLMChatRequestResources implements ITokensCountable {
 		@Override
 		public String getAssistant() {
 
-			return interaction.getAssistant() != null ? interaction.getAssistant() : "";
+			String assistant = interaction.getAssistant() != null ? interaction.getAssistant() : "";
+			return feedbackNote != null ? assistant + feedbackNote : assistant;
 		}
 	}
 
@@ -94,7 +110,10 @@ public class LLMChatRequestResources implements ITokensCountable {
 			List<IChatSessionEntry> entries = new ArrayList<IChatSessionEntry>();
 			if (chathistory.getLatestEntries() != null) {
 				for (CSSSimplefiedInteraction i : chathistory.getLatestEntries().getInteractions()) {
-					entries.add(new InteractionWrapper(i));
+					String note = answerFeedbackNotes != null && i.getRequestId() != null
+							? answerFeedbackNotes.get(i.getRequestId())
+							: null;
+					entries.add(new InteractionWrapper(i, note));
 				}
 			}
 			return entries;
