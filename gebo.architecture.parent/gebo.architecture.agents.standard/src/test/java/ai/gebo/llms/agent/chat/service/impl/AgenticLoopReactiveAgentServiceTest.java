@@ -41,6 +41,10 @@ import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.LoopIteration;
 import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
+import ai.gebo.llms.agent.standardtools.DeepSearchToolSource;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
@@ -218,6 +222,12 @@ class AgenticLoopReactiveAgentServiceTest {
 	 * based), uses a tool first, as the model's tool wrapper records it.
 	 */
 	private static ScriptedLoopAgent toolUsingAgent(List<List<String>> answers, Set<Integer> callsUsingATool) {
+		return toolUsingAgent(answers, callsUsingATool, "deepSearchKnowledgeBase");
+	}
+
+	/** The same, the model using the given tool. */
+	private static ScriptedLoopAgent toolUsingAgent(List<List<String>> answers, Set<Integer> callsUsingATool,
+			String toolName) {
 		return new ScriptedLoopAgent(answers) {
 			@Override
 			protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
@@ -228,11 +238,23 @@ class AgenticLoopReactiveAgentServiceTest {
 					return text;
 				}
 				return Flux.defer(() -> {
-					context.getToolCallListener().addCall("deepSearchKnowledgeBase", "Deep search", "{}", "found");
+					context.getToolCallListener().addCall(toolName, "A tool", "{}", "found");
 					return text;
 				});
 			}
 		};
+	}
+
+	/** Runs the loop asking for an analysis, only the given tools counting as evidence. */
+	private static String runNeedingEvidence(ScriptedLoopAgent agent, int maxIterations, Set<String> evidenceTools) {
+		ToolCallsListener listener = new ToolCallsListener();
+		AgentNetworkParticipant persona = mock(AgentNetworkParticipant.class);
+		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
+		IChatRequestContext context = IChatRequestContext.forAgent(IChatRequestContext.builder().requestID("r1").build(),
+				listener);
+		return String.join("", agent.iteration(1, maxIterations, 10_000, new ArrayList<>(), null,
+				new GPromptTemplateConfig(), context, persona, mock(INotificationSink.class), listener,
+				agent.deliverableTemplateParams(DeliverableIntent.ANALISYS), evidenceTools, null).collectList().block());
 	}
 
 	/** Runs the loop asking for an analysis, the evidence of the sources required. */
@@ -303,13 +325,107 @@ class AgenticLoopReactiveAgentServiceTest {
 			ai.gebo.security.services.ReactiveIdentityUtil runAs = ai.gebo.security.services.ReactiveIdentityUtil.create();
 			ToolCallsListener listener = new ToolCallsListener();
 			agent.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), null, persona,
-					mock(INotificationSink.class), listener, agent.deliverableTemplateParams(DeliverableIntent.QA), false,
+					mock(INotificationSink.class), listener, agent.deliverableTemplateParams(DeliverableIntent.QA), Set.of(),
 					runAs).collectList().block();
 		} finally {
 			org.springframework.security.core.context.SecurityContextHolder.clearContext();
 		}
 
 		assertEquals(List.of("user", "user"), calledAs, "the second iteration's model call runs as the user");
+	}
+
+	@Test
+	void notifyingTheUserIsNoEvidence() {
+		ScriptedLoopAgent agent = toolUsingAgent(List.of(List.of("From memory. " + STOP), List.of("Searched. " + STOP)),
+				Set.of(0), "notifyUser");
+
+		assertEquals("Searched. ", runNeedingEvidence(agent, 5), "a notification is not a search");
+		assertEquals(2, agent.receivedParams.size());
+	}
+
+	@Test
+	void anAnalysisNeedsTheDeepSearchWhenTheAgentHasOne() {
+		ScriptedLoopAgent agent = toolUsingAgent(
+				List.of(List.of("From five fragments. " + STOP), List.of("From the deep search. " + STOP)), Set.of(0),
+				"searchKnowledgeBase");
+
+		assertEquals("From the deep search. ",
+				runNeedingEvidence(agent, 5, Set.of("deepSearchKnowledgeBase", "deepSearchWeb")));
+		assertTrue(String.valueOf(agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM))
+				.contains("deepSearchKnowledgeBase, deepSearchWeb"), "the next iteration knows which tools count");
+	}
+
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	void theEvidenceToolsComeFromTheSearchSourcesTheAgentMounts() throws Exception {
+		IGToolCallbackSourceRepositoryPattern repository = mock(IGToolCallbackSourceRepositoryPattern.class);
+		IGToolCallbackSource knowledgeBase = source(InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE,
+				"searchKnowledgeBase");
+		IGToolCallbackSource deep = source(DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE, "deepSearchKnowledgeBase",
+				"deepSearchWeb");
+		IGToolCallbackSource date = source("ai.gebo.llms.abstraction.layer.functions.ActualDateFunctions", "getDate");
+		when(repository.getImplementations()).thenReturn(List.of(knowledgeBase, deep, date));
+		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, repository, null,
+				null, null, null, NO_RENDERER);
+		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
+		ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig config = mock(
+				ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.class);
+		// deepSearchWeb is not mounted by this agent
+		when(config.getEnabledFunctions()).thenReturn(List.of("searchKnowledgeBase", "deepSearchKnowledgeBase",
+				"getDate", GAbstractGenericalAgentService.NOTIFY_USER_TOOL));
+		when(model.getConfig()).thenReturn(config);
+
+		assertEquals(Set.of("deepSearchKnowledgeBase"), agent.evidenceTools(DeliverableIntent.ANALISYS, model));
+		assertEquals(Set.of("searchKnowledgeBase", "deepSearchKnowledgeBase"),
+				agent.evidenceTools(DeliverableIntent.PURE_SEARCH, model));
+		assertEquals(Set.of(), agent.evidenceTools(DeliverableIntent.QA, model));
+	}
+
+	private static IGToolCallbackSource source(String id, String... toolNames) {
+		IGToolCallbackSource source = mock(IGToolCallbackSource.class);
+		when(source.getId()).thenReturn(id);
+		List<org.springframework.ai.tool.ToolCallback> tools = new ArrayList<>();
+		for (String name : toolNames) {
+			org.springframework.ai.tool.ToolCallback tool = mock(org.springframework.ai.tool.ToolCallback.class);
+			when(tool.getToolDefinition()).thenReturn(
+					org.springframework.ai.tool.definition.ToolDefinition.builder().name(name).description(name)
+							.inputSchema("{}").build());
+			tools.add(tool);
+		}
+		when(source.getToolCallbacks()).thenReturn(tools);
+		return source;
+	}
+
+	@Test
+	void theCitationsOfDocumentsNotReadForTheAnswerAreFound() {
+		String answer = "As pistis_sophia_svelato.pdf says (cap. 3), and as Vangeli-non-canonici.pdf and "
+				+ "The-Secret-Doctrine-1-of-4.PDF confirm; see also www.gnosis.org and Vangeli-non-canonici.pdf.";
+
+		assertEquals(List.of("Vangeli-non-canonici.pdf", "The-Secret-Doctrine-1-of-4.PDF"),
+				AgenticLoopReactiveAgentServiceImpl.unreadCitations(answer, List.of("pistis_sophia_svelato.pdf")));
+		assertEquals(List.of(), AgenticLoopReactiveAgentServiceImpl.unreadCitations(answer,
+				List.of("Pistis_Sophia_Svelato.pdf", "vangeli-non-canonici.pdf", "The-Secret-Doctrine-1-of-4.pdf")));
+		assertEquals(List.of(), AgenticLoopReactiveAgentServiceImpl.unreadCitations("No document cited.", List.of()));
+		assertEquals(List.of(), AgenticLoopReactiveAgentServiceImpl.unreadCitations("(see Report.pdf)",
+				List.of("My Report.pdf")), "a name with spaces, cited by its last part");
+	}
+
+	@Test
+	void theUserIsWarnedOfTheCitationsNotReadAndTheAnswerIsLeftAsItIs() {
+		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, null, null, null,
+				null, null, NO_RENDERER);
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse response = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse();
+		response.setQueryResponse("From a.pdf and b.pdf.");
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef found = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef();
+		found.setName("a.pdf");
+		response.setDocumentsRef(new ArrayList<>(List.of(found)));
+
+		agent.warnAboutUnreadCitations(response, IChatRequestContext.builder().requestID("r1").build());
+
+		assertEquals("From a.pdf and b.pdf.", response.getQueryResponse());
+		assertEquals(1, response.getBackendMessages().size());
+		assertTrue(response.getBackendMessages().get(0).getDetail().contains("b.pdf"));
+		assertFalse(response.getBackendMessages().get(0).getDetail().contains("a.pdf"));
 	}
 
 	@Test

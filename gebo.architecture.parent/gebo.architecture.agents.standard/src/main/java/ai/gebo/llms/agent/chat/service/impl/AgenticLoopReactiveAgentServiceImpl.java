@@ -10,10 +10,17 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +39,7 @@ import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
@@ -40,11 +48,18 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
+import ai.gebo.llms.agent.standardtools.DeepSearchToolSource;
+import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
+import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
 import ai.gebo.llms.agent.standardtools.ToolsFoundDocuments;
 import ai.gebo.llms.agent.standardtools.ToolsProgress;
+import ai.gebo.llms.agent.standardtools.WebSearchToolSource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
@@ -130,9 +145,10 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 
 	/**
 	 * What the next iteration is told of an iteration whose answer was discarded
-	 * because it used no tool (see {@link #needsEvidence(DeliverableIntent)}).
+	 * because it used no tool giving the sources' evidence (see
+	 * {@link #needsEvidence(DeliverableIntent)}).
 	 */
-	static final String DISCARDED_WITHOUT_EVIDENCE = "This answer was discarded, the user never saw it: it used no tool, "
+	static final String DISCARDED_WITHOUT_EVIDENCE = "This answer was discarded, the user never saw it: it used no search tool, "
 			+ "while the user asked for a deliverable that must rest on what the sources contain now (the chat history "
 			+ "is not a source). Search the sources with the tools first, then answer from what they return.";
 
@@ -145,12 +161,56 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		return intent == DeliverableIntent.ANALISYS || intent == DeliverableIntent.PURE_SEARCH;
 	}
 
-	/** Whether the agent model mounts a tool other than notifyUser, i.e. something to search. */
-	static boolean hasSearchTools(IGConfigurableChatModel<?> agentModel) {
-		final List<String> functions = agentModel != null && agentModel.getConfig() != null
+	/**
+	 * The tool sources whose tools return what the sources contain: a call to one of
+	 * their tools is the evidence an answer rests on. The other tools (the date, the
+	 * users, notifyUser...) are not.
+	 */
+	static final Set<String> EVIDENCE_TOOL_SOURCES = Set.of(
+			InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE,
+			WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE, StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE,
+			DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE, "GArtifactInformationsSearchFunctionsFactory");
+
+	/**
+	 * The tools whose call is the evidence the answer must rest on, among the ones the
+	 * agent model mounts; none when the deliverable does not need the sources'
+	 * evidence. An analysis needs a deep search when the agent has one (a plain search
+	 * returns a few fragments), any other deliverable any search.
+	 */
+	protected Set<String> evidenceTools(DeliverableIntent intent, IGConfigurableChatModel<?> agentModel) {
+		final List<String> enabled = agentModel != null && agentModel.getConfig() != null
 				? agentModel.getConfig().getEnabledFunctions()
 				: null;
-		return functions != null && functions.stream().anyMatch(name -> !NOTIFY_USER_TOOL.equals(name));
+		if (!needsEvidence(intent) || enabled == null || enabled.isEmpty() || toolsRepositoryPattern == null) {
+			return Set.of();
+		}
+		final Set<String> searches = new LinkedHashSet<>();
+		final Set<String> deepSearches = new LinkedHashSet<>();
+		for (IGToolCallbackSource source : toolsRepositoryPattern.getImplementations()) {
+			if (source == null || !EVIDENCE_TOOL_SOURCES.contains(source.getId())) {
+				continue;
+			}
+			try {
+				for (ToolCallback tool : source.getToolCallbacks()) {
+					final String name = tool.getToolDefinition().name();
+					if (enabled.contains(name)) {
+						searches.add(name);
+						if (DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE.equals(source.getId())) {
+							deepSearches.add(name);
+						}
+					}
+				}
+			} catch (RuntimeException e) {
+				LOGGER.warn("Agentic loop agent id:" + getId() + " could not read the tools of source:"
+						+ source.getId() + ": " + e);
+			}
+		}
+		final Set<String> evidence = intent == DeliverableIntent.ANALISYS && !deepSearches.isEmpty() ? deepSearches
+				: searches;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agentic loop agent id:" + getId() + " deliverable:" + intent + " evidence tools:" + evidence);
+		}
+		return evidence;
 	}
 
 	@Override
@@ -192,12 +252,12 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 		// an answer to a request for an analysis or a search must rest on the tools' results:
 		// the first iteration is held back until it uses a tool (see iteration(...))
-		final boolean evidenceRequired = needsEvidence(userIntent) && hasSearchTools(agentModel);
+		final Set<String> evidenceTools = evidenceTools(userIntent, agentModel);
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Agentic loop agent id:" + getId() + " evidence required:" + evidenceRequired);
+			LOGGER.debug("Agentic loop agent id:" + getId() + " evidence required:" + !evidenceTools.isEmpty());
 		}
 		Flux<String> text = iteration(1, maxIterations, budget, history, agentModel, agentPrompt, loopContext,
-				contextAgentPersona, notificationSink, callBacksListener, deliverableParams, evidenceRequired, runAs);
+				contextAgentPersona, notificationSink, callBacksListener, deliverableParams, evidenceTools, runAs);
 		final GeboChatResponse response = new GeboChatResponse();
 		return renderOutputStream(text, response, session, contextAgentPersona, notificationSink, callBacksListener)
 				.doOnNext(operation -> {
@@ -210,8 +270,79 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 									+ " from the session, " + response.getDocumentsRef().size()
 									+ " with the search tools' ones");
 						}
+						warnAboutUnreadCitations(response, chatRequestContext);
 					}
 				});
+	}
+
+	/** A document file name as an answer cites it. */
+	static final Pattern CITED_DOCUMENT = Pattern.compile(
+			"[\\p{L}\\p{N}_.\\-]+\\.(?:pdf|docx?|xlsx?|pptx?|odt|ods|odp|rtf|txt|md|csv|html?|xml|json|epub)\\b",
+			Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
+
+	/**
+	 * The document file names the answer cites that this request did not read: not
+	 * among the documents found by its tools nor among the documents of the chat. Their
+	 * content can only come from earlier answers of the chat or the model's memory.
+	 */
+	static List<String> unreadCitations(String answer, Collection<String> readDocumentNames) {
+		if (answer == null || answer.isBlank()) {
+			return List.of();
+		}
+		final Set<String> read = new HashSet<>();
+		for (String name : readDocumentNames) {
+			if (name != null) {
+				read.add(name.trim().toLowerCase());
+			}
+		}
+		final Set<String> unread = new LinkedHashSet<>();
+		final Matcher matcher = CITED_DOCUMENT.matcher(answer);
+		while (matcher.find()) {
+			final String cited = matcher.group();
+			final String lowerCited = cited.toLowerCase();
+			// a name with spaces is cited by its last part
+			if (read.stream().noneMatch(name -> name.equals(lowerCited) || name.endsWith(" " + lowerCited)
+					|| name.endsWith("/" + lowerCited))) {
+				unread.add(cited);
+			}
+		}
+		return new ArrayList<>(unread);
+	}
+
+	/**
+	 * Tells the user, with a warning on the answer, which cited documents the answer
+	 * did not read in this request: the answer text is left as it is.
+	 */
+	protected void warnAboutUnreadCitations(GeboChatResponse response, IChatRequestContext chatRequestContext) {
+		final List<String> readNames = new ArrayList<>();
+		if (response.getDocumentsRef() != null) {
+			for (GResponseDocumentRef ref : response.getDocumentsRef()) {
+				if (ref != null) {
+					readNames.add(ref.getName());
+				}
+			}
+		}
+		if (chatRequestContext != null && chatRequestContext.getDocuments() != null) {
+			for (Document document : chatRequestContext.getDocuments()) {
+				if (document != null && document.getMetadata() != null) {
+					final Object name = document.getMetadata().get(DocumentMetaInfos.GEBO_FILE_NAME);
+					if (name != null) {
+						readNames.add(String.valueOf(name));
+					}
+				}
+			}
+		}
+		final List<String> unread = unreadCitations(response.getQueryResponse(), readNames);
+		if (unread.isEmpty()) {
+			return;
+		}
+		LOGGER.warn("Agentic loop agent id:" + getId() + " answer cites " + unread.size()
+				+ " document(s) not read for this request: " + unread);
+		if (response.getBackendMessages() != null) {
+			response.getBackendMessages().add(GUserMessage.warnMessage("Sources not read for this answer",
+					"The answer cites " + String.join(", ", unread)
+							+ ", not read for this request: what it says of them may come from earlier answers."));
+		}
 	}
 
 	/**
@@ -255,7 +386,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			INotificationSink notificationSink, ToolCallsListener callBacksListener,
 			Map<String, Object> deliverableParams, boolean evidenceRequired) {
 		return iteration(number, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-				contextAgentPersona, notificationSink, callBacksListener, deliverableParams, evidenceRequired, null);
+				contextAgentPersona, notificationSink, callBacksListener, deliverableParams,
+				evidenceRequired ? ANY_SEARCH : Set.of(), null);
 	}
 
 	/**
@@ -268,7 +400,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
 			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
 			INotificationSink notificationSink, ToolCallsListener callBacksListener,
-			Map<String, Object> deliverableParams, boolean evidenceRequired, ReactiveIdentityUtil runAs) {
+			Map<String, Object> deliverableParams, Set<String> evidenceTools, ReactiveIdentityUtil runAs) {
 		return Flux.defer(() -> {
 			final Map<String, Object> params = new HashMap<>(deliverableParams);
 			params.put(CURRENT_ITERATION_PROMPT_PARAM, number);
@@ -295,15 +427,15 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			}
 			// the text held back while the iteration has not used a tool yet
 			final StringBuilder held = new StringBuilder();
-			final boolean[] open = { !evidenceRequired };
+			final boolean[] open = { evidenceTools == null || evidenceTools.isEmpty() };
 			Flux<String> visible = modelText.map(chunk -> {
 				String out = stripper.accept(chunk);
 				text.append(out);
-				return passed(out, held, open, callBacksListener, callsBefore);
+				return passed(out, held, open, callBacksListener, callsBefore, evidenceTools);
 			}).concatWith(Flux.defer(() -> {
 				String tail = stripper.complete();
 				text.append(tail);
-				return Flux.just(passed(tail, held, open, callBacksListener, callsBefore));
+				return Flux.just(passed(tail, held, open, callBacksListener, callsBefore, evidenceTools));
 			})).filter(chunk -> !chunk.isEmpty());
 			Flux<String> next = Flux.defer(() -> {
 				List<ToolCallExecuted> calls = callBacksListener.getCalls();
@@ -312,7 +444,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				if (!open[0]) {
 					// no tool used: the answer has not been shown
 					if (number < maxIterations) {
-						history.add(new LoopIteration(number, DISCARDED_WITHOUT_EVIDENCE, iterationCalls));
+						history.add(new LoopIteration(number, discardedNote(evidenceTools), iterationCalls));
 						LOGGER.info("Agentic loop agent id:" + getId() + " iteration " + number
 								+ " answered without using any tool a request needing the sources' evidence:"
 								+ " discarded, searching the sources in the next iteration");
@@ -327,7 +459,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 								ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
 						return asUser(runAs, iteration(number + 1, maxIterations, budget, history, agentModel,
 								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
-								deliverableParams, false, runAs));
+								deliverableParams, Set.of(), runAs));
 					}
 					// no iteration left: the answer is shown as it is
 					LOGGER.warn("Agentic loop agent id:" + getId() + " last iteration " + number
@@ -360,10 +492,36 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
 				return Flux.just(NEWLINE + NEWLINE).concatWith(asUser(runAs, iteration(number + 1, maxIterations, budget,
 						history, agentModel, agentPrompt, chatRequestContext, contextAgentPersona, notificationSink,
-						callBacksListener, deliverableParams, false, runAs)));
+						callBacksListener, deliverableParams, Set.of(), runAs)));
 			});
 			return visible.concatWith(next);
 		});
+	}
+
+	/**
+	 * Stands for "any search tool" when the tools are not known: every tool but
+	 * notifyUser counts (see {@link #usedEvidenceTool}).
+	 */
+	static final Set<String> ANY_SEARCH = Set.of("*");
+
+	/** Whether a tool counting as evidence was called since {@code callsBefore}. */
+	static boolean usedEvidenceTool(ToolCallsListener callBacksListener, int callsBefore, Set<String> evidenceTools) {
+		final List<ToolCallExecuted> calls = callBacksListener.getCalls();
+		for (ToolCallExecuted call : calls.subList(Math.min(callsBefore, calls.size()), calls.size())) {
+			final String name = call.getName();
+			if (evidenceTools == ANY_SEARCH ? !NOTIFY_USER_TOOL.equals(name) : evidenceTools.contains(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/** What the next iteration is told of the discarded one, with the tools that count. */
+	static String discardedNote(Set<String> evidenceTools) {
+		return evidenceTools == null || evidenceTools.isEmpty() || evidenceTools == ANY_SEARCH
+				? DISCARDED_WITHOUT_EVIDENCE
+				: DISCARDED_WITHOUT_EVIDENCE + " The answer must rest on the results of: " + String.join(", ", evidenceTools)
+						+ ".";
 	}
 
 	/** The iteration subscribed as the user, when the identity is known. */
@@ -377,12 +535,12 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * stays false and the text is kept in {@code held}).
 	 */
 	private static String passed(String out, StringBuilder held, boolean[] open, ToolCallsListener callBacksListener,
-			int callsBefore) {
+			int callsBefore, Set<String> evidenceTools) {
 		if (open[0]) {
 			return out;
 		}
 		held.append(out);
-		if (callBacksListener.getCalls().size() > callsBefore) {
+		if (usedEvidenceTool(callBacksListener, callsBefore, evidenceTools)) {
 			open[0] = true;
 			final String released = held.toString();
 			held.setLength(0);
