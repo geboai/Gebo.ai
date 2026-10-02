@@ -35,6 +35,9 @@ import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatAnswerFeedbackRating;
+import ai.gebo.llms.chat.abstraction.layer.model.GChatAnswerFeedback;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatAnswerFeedbackService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGResponseToFileService;
@@ -75,6 +78,7 @@ public class GeboUserChatsController {
 	final IGEmbeddingModelRuntimeConfigurationDao embeddingModelRuntimeDao;
 	final ChatPipelinesConfiguration chatPipelinesConfiguration;
 	final IChatPipelineStepServiceRepositoryPattern pipelineStepsRepository;
+	final IGChatAnswerFeedbackService answerFeedbackService;
 
 	/** Pipeline code of the open-chat pipeline (mirrors OpenChatConstants.OPEN_CHAT_PIPELINE). */
 	private static final String OPEN_CHAT_PIPELINE = "open-chat";
@@ -262,6 +266,29 @@ public class GeboUserChatsController {
 			@RequestParam("requestId") String requestId)
 			throws GeboChatSessionLifecycleException, GeboPersistenceException {
 		return this.sessionLifeCycleService.branchChatSession(userChatContextCode, requestId);
+	}
+
+	public static record AnswerFeedbackRequest(String userChatContextCode, String requestId,
+			ChatAnswerFeedbackRating rating, String comment) {
+	}
+
+	@PostMapping(value = "setAnswerFeedback", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public GChatAnswerFeedback setAnswerFeedback(@RequestBody AnswerFeedbackRequest feedback)
+			throws GeboChatSessionLifecycleException {
+		return this.answerFeedbackService.setFeedback(feedback.userChatContextCode(), feedback.requestId(),
+				feedback.rating(), feedback.comment());
+	}
+
+	@DeleteMapping("removeAnswerFeedback")
+	public void removeAnswerFeedback(@RequestParam("userChatContextCode") String userChatContextCode,
+			@RequestParam("requestId") String requestId) throws GeboChatSessionLifecycleException {
+		this.answerFeedbackService.removeFeedback(userChatContextCode, requestId);
+	}
+
+	@GetMapping(value = "getAnswerFeedbacks", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GChatAnswerFeedback> getAnswerFeedbacks(@RequestParam("userChatContextCode") String userChatContextCode)
+			throws GeboChatSessionLifecycleException {
+		return this.answerFeedbackService.getChatFeedbacks(userChatContextCode);
 	}
 
 	@GetMapping(value = "suggestChatDescription", produces = MediaType.APPLICATION_JSON_VALUE)
