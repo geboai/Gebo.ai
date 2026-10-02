@@ -27,8 +27,11 @@ import ai.gebo.monolithic.api.client.model.GeboChatResponse;
 import ai.gebo.monolithic.api.client.model.PageGLookupEntry;
 import ai.gebo.monolithic.api.client.model.PipelineRequestBody;
 import ai.gebo.monolithic.app.Main;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresConfig;
 
 @SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@RequiresConfig(value = AbstractVendorSetupAndUseTest.FULL_SETUP_ENVIRONMENT_JSON_STRING,
+		description = "JSON with the admin account, the LLM vendor and its API key")
 public class ChatPipelineTests extends AbstractVendorSetupAndUseTest {
 	@Autowired
 	IGRuntimeBinder runtimeBinder;

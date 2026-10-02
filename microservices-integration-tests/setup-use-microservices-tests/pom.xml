@@ -90,6 +90,12 @@
 			<version>${gebo.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.integration.tests.preconditions</artifactId>
+			<version>${gebo.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- Lombok for the registered-interaction model classes (mirrors the
 		     monolith test module's usage). -->
 		<dependency>

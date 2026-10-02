@@ -88,6 +88,12 @@
 			<version>${gebo.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.integration.tests.preconditions</artifactId>
+			<version>${gebo.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- vectorizator is a required CONTAINER in the compose subset (it does the
 		     real embedding work the test observes indirectly via tyr's job status),
 		     but nothing in the test calls its REST API directly - no client stub

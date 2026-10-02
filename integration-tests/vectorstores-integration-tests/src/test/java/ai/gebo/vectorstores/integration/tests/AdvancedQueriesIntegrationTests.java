@@ -48,8 +48,13 @@ import ai.gebo.monolithic.app.Main;
 import ai.gebo.ragsystem.vectorstores.model.GeboMongoVectorStoreConfig;
 import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.services.GeboVectorStoreConfigurationService;
+import ai.gebo.architecture.integration.tests.preconditions.IntegrationTestConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresDocker;
 
 @SpringBootTest(classes = Main.class)
+@RequiresDocker
+@RequiresConfig(value = { "OPENAI_API_KEY", "OPENAI_USER" }, description = "OpenAI credentials for the embedding model")
 public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicIntegrationTestsWithFakeLLMS {
 	static QdrantContainer qdrantContainer = new QdrantContainer("qdrant/qdrant:v1.13.2");
 	static boolean qdrantStartedUp = false;
@@ -83,8 +88,8 @@ public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicInteg
 		IGConfigurableEmbeddingModel defaultHandler = embeddingModelRuntimeDao.defaultHandler();
 		embeddingModelRuntimeDao.deleteByCode(defaultHandler.getCode());
 
-		String OPENAI_API_KEY = System.getenv("OPENAI_API_KEY");
-		String OPENAI_USER_NAME = System.getenv("OPENAI_USER");
+		String OPENAI_API_KEY = IntegrationTestConfig.get("OPENAI_API_KEY");
+		String OPENAI_USER_NAME = IntegrationTestConfig.get("OPENAI_USER");
 		if (OPENAI_API_KEY == null || OPENAI_USER_NAME == null)
 			throw new IllegalStateException("OPENAI_API_KEY and OPENAI_USER must be set");
 		GOpenAIEmbeddingModelConfig openaiEmbeddingModelConfig = new GOpenAIEmbeddingModelConfig();

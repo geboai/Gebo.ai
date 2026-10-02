@@ -40,6 +40,7 @@
   	<module>gebo.architecture.environment</module>
   	<module>gebo.architecture.telemetry</module>
   	<module>gebo.architecture.testing</module>
+  	<module>gebo.architecture.integration.tests.preconditions</module>
   	<module>gebo.architecture.integration.tests</module>
 
   	<module>gebo.architecture.swagger</module>

@@ -43,6 +43,7 @@ import ai.gebo.monolithic.api.client.model.PipelineEnvironment;
 import ai.gebo.monolithic.api.client.model.PipelineRequestBody;
 import ai.gebo.monolithic.api.client.model.VFilesystemReference;
 import lombok.Data;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresConfig;
 
 /**
  * Shared driver for the full setup-and-use integration tests: it performs the
@@ -81,6 +82,8 @@ import lombok.Data;
  * {@code AI_GEBO_TESTS_CHATPIPELINE_STRICTROUTINGDECISIONS=true}) to turn them
  * back into failures when the point of the run <em>is</em> to pin the router.
  */
+@RequiresConfig(value = AbstractVendorSetupAndUseTest.FULL_SETUP_ENVIRONMENT_JSON_STRING,
+		description = "JSON with the admin account, the LLM vendor and its API key")
 public abstract class AbstractFullSetupUseChatTest extends AbstractVendorSetupAndUseTest {
 	private static final String filesIndex = "/test_files/index.json";
 	@Autowired

@@ -16,6 +16,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.integration.tests.preconditions</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>ai.gebo.apps</groupId>
 			<artifactId>gebo.ai.app</artifactId>
 			<version>${project.version}</version>

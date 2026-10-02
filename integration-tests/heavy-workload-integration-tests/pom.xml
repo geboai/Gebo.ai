@@ -14,6 +14,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.integration.tests.preconditions</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>ai.gebo.ragsystem</groupId>
 			<artifactId>gebo.ragsystem.vectorstores.test.services</artifactId>
 			<version>${project.version}</version>

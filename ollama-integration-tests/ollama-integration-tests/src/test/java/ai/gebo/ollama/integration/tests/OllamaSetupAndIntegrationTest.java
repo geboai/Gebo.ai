@@ -86,8 +86,15 @@ import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresCustom;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresDocker;
+import org.junit.jupiter.api.Disabled;
 
 @SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.DEFINED_PORT)
+@RequiresDocker
+@RequiresCustom(OllamaModelsAvailable.class)
+@Disabled("No Ollama environment available to run this suite: it needs a current Ollama server with the chat "
+		+ "and embedding models pulled (see ollama-integration-tests/README.md). Remove to run it.")
 public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegrationTests {
 
 	static QdrantContainer qdrantContainer = new QdrantContainer("qdrant/qdrant:latest");
