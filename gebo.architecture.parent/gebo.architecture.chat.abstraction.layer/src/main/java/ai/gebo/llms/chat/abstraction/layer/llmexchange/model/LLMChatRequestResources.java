@@ -134,7 +134,8 @@ public class LLMChatRequestResources implements ITokensCountable {
 		@Override
 		public String getActualUserRequest() {
 
-			return GeboChatRequest.actualQuery(currentRequest);
+			// No current request outside of a request, e.g. when the history is summarized in background.
+			return currentRequest != null ? GeboChatRequest.actualQuery(currentRequest) : "";
 		}
 
 		@Override
