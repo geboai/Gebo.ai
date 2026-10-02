@@ -27,7 +27,7 @@ import java.util.List;
  * GIntegrationProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:25:06.598816563+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:47.306679445+02:00[Europe/Rome]")
 
 public class GIntegrationProjectEndpoint {
   @JsonProperty("code")

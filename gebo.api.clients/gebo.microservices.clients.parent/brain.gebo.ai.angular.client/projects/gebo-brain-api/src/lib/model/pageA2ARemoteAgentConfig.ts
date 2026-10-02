@@ -14,15 +14,15 @@ import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
 export interface PageA2ARemoteAgentConfig { 
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     pageable?: PageableObject;
-    numberOfElements?: number;
+    first?: boolean;
+    last?: boolean;
     size?: number;
     content?: Array<A2ARemoteAgentConfig>;
     number?: number;
     sort?: SortObject;
-    first?: boolean;
-    last?: boolean;
+    numberOfElements?: number;
     empty?: boolean;
 }
