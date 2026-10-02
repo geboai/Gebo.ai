@@ -9,9 +9,6 @@
 
 package ai.gebo.llms.anthropic.services;
 
-import com.anthropic.models.messages.ToolChoiceAny;
-import com.anthropic.models.messages.ToolChoice;
-import org.springframework.ai.model.tool.ToolCallingChatOptions;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -248,26 +245,6 @@ public class AnthropicChatModelConfigurationSupportService
 					.httpClientBuilderCustomizer(AnthropicClientCustomizer.from(clientsProvider))
 					.build();
 			return model;
-		}
-
-		/**
-		 * Claude's "any" tool choice, only without thinking: Anthropic refuses a forced
-		 * tool choice together with extended or adaptive thinking.
-		 */
-		@Override
-		protected ToolCallingChatOptions requireToolCall(ToolCallingChatOptions options) {
-			if (!(options instanceof AnthropicChatOptions anthropicOptions)) {
-				LOGGER.warn("Chat model {} got options of type {}, no tool call can be required", getCode(),
-						options != null ? options.getClass().getName() : null);
-				return null;
-			}
-			if (anthropicOptions.getThinking() != null && !anthropicOptions.getThinking().isDisabled()) {
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Chat model {} thinks, its tool choice is left to it", getCode());
-				}
-				return null;
-			}
-			return anthropicOptions.mutate().toolChoice(ToolChoice.ofAny(ToolChoiceAny.builder().build())).build();
 		}
 
 		@Override

@@ -79,15 +79,6 @@ class AgenticLoopReactiveAgentServiceTest {
 		}
 
 		final List<IChatRequestContext> receivedContexts = new ArrayList<>();
-		/** Whether each call required the model to call a tool first. */
-		final List<Boolean> toolCallRequired = new ArrayList<>();
-
-		@Override
-		protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
-				IChatRequestContext context, Map<String, Object> params, boolean toolCallRequired) {
-			this.toolCallRequired.add(toolCallRequired);
-			return callLLMReactive(chatModel, prompt, context, params);
-		}
 
 		@Override
 		protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
@@ -289,8 +280,6 @@ class AgenticLoopReactiveAgentServiceTest {
 
 		assertEquals("From the documents. ", shown, "the answer without evidence never reaches the user");
 		assertEquals(2, agent.receivedParams.size());
-		assertEquals(List.of(true, false), agent.toolCallRequired,
-				"the gated iteration asks for a tool call, the retry is free to answer");
 		assertTrue(String.valueOf(agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM))
 				.contains(AgenticLoopReactiveAgentServiceImpl.DISCARDED_WITHOUT_EVIDENCE),
 				"the next iteration knows why the answer was discarded");
@@ -302,14 +291,6 @@ class AgenticLoopReactiveAgentServiceTest {
 
 		assertEquals("From the documents. ", runNeedingEvidence(agent, 5));
 		assertEquals(1, agent.receivedParams.size());
-	}
-
-	@Test
-	void aDirectQuestionIsNeverAskedToCallATool() {
-		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("Searching. " + MORE), List.of("391. " + STOP)));
-
-		assertEquals("Searching. \r\n\r\n391. ", run(agent, 5));
-		assertEquals(List.of(false, false), agent.toolCallRequired);
 	}
 
 	@Test

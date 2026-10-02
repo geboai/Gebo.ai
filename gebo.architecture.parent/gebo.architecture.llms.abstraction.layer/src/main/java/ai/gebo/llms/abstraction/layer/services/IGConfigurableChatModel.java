@@ -85,18 +85,6 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 	public Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException;
 
-	/**
-	 * The same, the model's first round having to call one of its tools when
-	 * {@code toolCallRequired} and its vendor can be asked to: the next rounds, reading
-	 * the tools' results, are free to answer. A model that cannot be asked streams as
-	 * the call above.
-	 */
-	public default Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate,
-			Map<String, Object> params, IChatRequestContext chatContext, boolean toolCallRequired)
-			throws LLMConfigException {
-		return streamStringResponse(promptTemplate, params, chatContext);
-	}
-
 	/***********************************************************************************************
 	 * Adaptes response to specific infrastructure element calling requirement
 	 * 

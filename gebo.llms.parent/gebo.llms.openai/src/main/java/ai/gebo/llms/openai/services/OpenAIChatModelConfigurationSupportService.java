@@ -15,7 +15,6 @@
  */
 package ai.gebo.llms.openai.services;
 
-import org.springframework.ai.model.tool.ToolCallingChatOptions;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -216,17 +215,6 @@ public class OpenAIChatModelConfigurationSupportService
 		@Override
 		public boolean isSupportsFunctionsCall() {
 			return true;
-		}
-
-		/** OpenAI's "required" tool choice: the model calls at least one of its tools. */
-		@Override
-		protected ToolCallingChatOptions requireToolCall(ToolCallingChatOptions options) {
-			if (options instanceof OpenAiChatOptions openAiOptions) {
-				return openAiOptions.mutate().toolChoice("required").build();
-			}
-			LOGGER.warn("Chat model {} got options of type {}, no tool call can be required", getCode(),
-					options != null ? options.getClass().getName() : null);
-			return null;
 		}
 
 		@Override
