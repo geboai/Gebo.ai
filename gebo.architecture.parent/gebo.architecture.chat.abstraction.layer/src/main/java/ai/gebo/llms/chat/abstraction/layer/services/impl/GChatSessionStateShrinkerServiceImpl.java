@@ -1,5 +1,8 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +62,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 	final IGPromptConfigDao promptsDao;
 	final ShrinkedChatSessionStateRepository shrinkedStateRepository;
 	final ChatFullSessionStateRepository fullStateRepository;
+	final MongoOperations mongo;
 	private final static JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
 	public static final String ASSISTANT_MSG = "assistant:";
 	public static final String USER_MSG = "user:";
@@ -69,8 +73,9 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, GeboChatConfigs chatConfig,
 			IGPromptConfigDao promptsDao, ShrinkedChatSessionStateRepository shrinkedStateRepository,
 			ChatFullSessionStateRepository fullStateRepository,
-			MinimalChatContextCacheItemRepository minimalChatContextCacheItemRepository) {
+			MinimalChatContextCacheItemRepository minimalChatContextCacheItemRepository, MongoOperations mongo) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
+		this.mongo = mongo;
 
 		this.chatConfig = chatConfig;
 		this.promptsDao = promptsDao;
@@ -246,7 +251,19 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 							out.getLatestRequestsUploadedDocuments().getData().size());
 				}
 				LOGGER.info("Shrinked to:" + afterSize + " tokens");
-				shrinkedStateRepository.save(out);
+				// A request ending meanwhile saved a newer state: keep it, it stays flagged for a later shrink.
+				long startedFrom = oldVersion.getRevision();
+				out.setRevision(startedFrom + 1);
+				Criteria sameRevision = startedFrom == 0
+						? new Criteria().orOperator(Criteria.where("revision").is(0L),
+								Criteria.where("revision").exists(false))
+						: Criteria.where("revision").is(startedFrom);
+				ShrinkedChatSessionState replaced = mongo.findAndReplace(
+						Query.query(Criteria.where("_id").is(sessionCode)).addCriteria(sameRevision), out);
+				if (replaced == null) {
+					LOGGER.info("Chat " + sessionCode + " changed while it was being shrunk (revision " + startedFrom
+							+ "): this shrink is discarded, the next completed request queues a new one");
+				}
 			}
 		}
 		if (LOGGER.isDebugEnabled()) {

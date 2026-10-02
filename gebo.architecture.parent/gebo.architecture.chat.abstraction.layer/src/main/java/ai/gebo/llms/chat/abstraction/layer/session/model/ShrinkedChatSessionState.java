@@ -35,6 +35,8 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 	private GeboChatRequest currentRequest = null;
 	private int targetTokenBudget = 0;
 	private boolean toBeShrinked = false;
+	// Incremented by every save: the background shrinker only replaces the revision it started from.
+	private long revision = 0;
 
 	@Override
 	public int getTokensSize() {
@@ -68,6 +70,8 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 		copy.setCurrentRequest(currentRequest);
 		copy.setTargetTokenBudget(targetTokenBudget);
 		copy.setToBeShrinked(toBeShrinked);
+		copy.setRevision(revision);
+		copy.setRevision(revision);
 		copy.setLatestRequestsUploadedDocuments(new CSSReferredContentList<>(latestRequestsUploadedDocuments));
 		copy.setLatestRequestsChatWithDocuments(new CSSReferredContentList<>(latestRequestsChatWithDocuments));
 		copy.setLatestRequestsRetrievedDocuments(new CSSReferredContentList<>(latestRequestsRetrievedDocuments));

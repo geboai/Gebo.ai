@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +94,43 @@ public class ChatHistoryShrinkTest extends AbstractBaseTestLLmsIntegrationTests 
 		}
 		assertTrue(second.contains(firstSummary), "The previous summary is carried forward");
 		assertEquals(7, shrinkedRepository.findById(chat).orElseThrow().getChatHistory().getLastInteractionPointer());
+	}
+
+	@Test
+	public void testAShrinkDoesNotOverwriteAnExchangeSavedMeanwhile() throws Exception {
+		String chat = newSession();
+		chat(chat, 0, 12);
+		IGConfigurableChatModel model = chatModelRuntimeDao.findByCode(DEFAULT_TEST_CHAT_MODEL_CODE);
+		GeboChatRequest pending = new GeboChatRequest();
+		pending.setId(UUID.randomUUID().toString());
+		pending.setUserChatContextCode(chat);
+		pending.setQuery("QUESTION-12");
+		lifeCycleService.startRequest(pending, model, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+		long revisionBefore = shrinkedRepository.findById(chat).orElseThrow().getRevision();
+		AtomicBoolean ended = new AtomicBoolean();
+		TestChatModel.setGlobalResponseLogic(prompt -> {
+			if (ended.compareAndSet(false, true)) {
+				try {
+					GeboChatResponse response = lifeCycleService.createEmptyResponse(pending);
+					response.setQueryResponse("Answer number 12");
+					lifeCycleService.endRequest(pending, response);
+				} catch (Exception e) {
+					throw new IllegalStateException(e);
+				}
+			}
+			return "SUMMARY";
+		});
+
+		shrinker.shrink(chat, 10);
+
+		ShrinkedChatSessionState after = shrinkedRepository.findById(chat).orElseThrow();
+		assertTrue(ended.get());
+		assertEquals(revisionBefore + 1, after.getRevision(), "Only the request's save went through");
+		assertEquals(null, after.getChatHistory().getConsolidationText(), "The concurrent shrink is discarded");
+		List<String> latest = after.getChatHistory().getLatestEntries().getInteractions().stream()
+				.map(x -> x.getUser()).toList();
+		assertEquals(13, latest.size());
+		assertEquals("QUESTION-12", latest.get(12));
 	}
 
 	private void chat(String chat, int from, int to) throws Exception {
