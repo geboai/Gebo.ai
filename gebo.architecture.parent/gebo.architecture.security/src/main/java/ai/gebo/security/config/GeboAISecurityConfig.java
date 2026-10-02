@@ -169,6 +169,10 @@ public class GeboAISecurityConfig {
 	// User-specific URLs
 	private static final String[] usersUrls = new String[] { "/api/users/**" };
 
+	// Admin URLs the services call each other through with their application identity
+	private static final String[] applicationAdminUrls = new String[] {
+			"/api/admin/InternalMessagingTopologyController/**", "/api/admin/GlobalInternalTopologyController/**" };
+
 	// Erogated MCP server endpoints (served at /mcp/<exportedUniqueRelativeUrl>)
 	private static final String[] mcpUrls = new String[] { "/mcp/**" };
 
@@ -377,6 +381,9 @@ public class GeboAISecurityConfig {
 					}
 					authorizeRequests.requestMatchers(mcpUrls).hasAnyAuthority(USER_ROLE, ADMIN_ROLE, APPLICATION_ROLE)
 							.requestMatchers(a2aUrls).hasAnyAuthority(USER_ROLE, ADMIN_ROLE, APPLICATION_ROLE)
+							.requestMatchers(applicationAdminUrls).hasAnyAuthority(ADMIN_ROLE, APPLICATION_ROLE)
+							.requestMatchers(adminUrls).hasAuthority(ADMIN_ROLE)
+							.requestMatchers(usersUrls).hasAnyAuthority(USER_ROLE, ADMIN_ROLE, APPLICATION_ROLE)
 							.anyRequest().authenticated();
 				});
 		if (oauth2LoginEnabled) {

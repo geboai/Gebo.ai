@@ -3,6 +3,7 @@ package ai.gebo.llms.chat.client.rest.controllers;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,27 +12,34 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.client.rest.model.PipelineRequestBody;
 import ai.gebo.llms.chat.client.rest.model.PipelineRequestBody.PipelineEnvironment;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineService;
+import ai.gebo.security.services.IGSecurityService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
+@PreAuthorize("hasAnyRole('USER','ADMIN','APPLICATION')")
 @RestController
 @RequestMapping(path = "api/users/GeboChatPipelinesController")
 @AllArgsConstructor
 public class GeboChatPipelinesController {
 	protected final IChatPipelineService chatPipelineService;
+	protected final GUserChatSessionRepository sessionRepository;
+	protected final IGSecurityService securityService;
 
 	@PostMapping(value = "streamDefaultChatPipeline", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<GeboChatMessageEnvelope> streamDefaultChatPipeline(
@@ -53,6 +61,11 @@ public class GeboChatPipelinesController {
 
 	@GetMapping(value = "stopChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE)
 	public void stopChatPipeline(@RequestParam(name = "userChatContextCode", required = true) String userChatContextCode) throws ChatPipelineException {
+		Optional<GUserChatSession> session = sessionRepository.findById(userChatContextCode);
+		if (session.isEmpty()) {
+			return;
+		}
+		securityService.checkBeingCreator(session.get());
 		chatPipelineService.stopPipeline(userChatContextCode);
 	}
 

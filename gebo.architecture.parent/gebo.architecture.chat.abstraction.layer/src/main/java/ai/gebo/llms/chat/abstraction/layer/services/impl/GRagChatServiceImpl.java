@@ -126,6 +126,15 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	@Override
 	public GeboChatResponse chat(GeboChatRequest request)
 			throws GeboChatException, LLMConfigException, GeboPersistenceException, IOException, FullTextException {
+		try {
+			return doChat(request);
+		} finally {
+			this.chatSessionLifecycleService.releaseRequest(request);
+		}
+	}
+
+	private GeboChatResponse doChat(GeboChatRequest request)
+			throws GeboChatException, LLMConfigException, GeboPersistenceException, IOException, FullTextException {
 
 		UserInfos user = securityService.getCurrentUser();
 		KBContext kbcontext = new KBContext();

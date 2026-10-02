@@ -1,0 +1,5 @@
+The user question was: {question}
+
+The chatbot answered: {answer}
+
+The user feedback on that answer: {feedback}
