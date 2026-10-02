@@ -25,7 +25,7 @@ import java.util.List;
  * FormGroupMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:38.785285294+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:17.123615038+02:00[Europe/Rome]")
 
 public class FormGroupMetaInfo {
   @JsonProperty("description")

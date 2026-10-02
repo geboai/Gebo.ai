@@ -26,7 +26,7 @@ import java.util.List;
  * VirtualFilesystemNavigationTreeStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:48.401575560+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:29.135776457+02:00[Europe/Rome]")
 
 public class VirtualFilesystemNavigationTreeStatus {
   @JsonProperty("root")

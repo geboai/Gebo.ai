@@ -13,10 +13,9 @@
 export interface DocumentReferenceView { 
     name?: string;
     extension?: string;
-    contentType?: string;
     description?: string;
-    code?: string;
     messagingModuleId?: string;
+    code?: string;
     rootKnowledgebaseCode?: string;
     parentProjectCode?: string;
     modificationDate?: Date;
@@ -24,4 +23,5 @@ export interface DocumentReferenceView {
     deleted?: boolean;
     parentVirtualFolderCode?: string;
     creationDate?: Date;
+    contentType?: string;
 }
