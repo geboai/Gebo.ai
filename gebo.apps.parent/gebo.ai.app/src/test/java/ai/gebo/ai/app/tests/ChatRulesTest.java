@@ -35,6 +35,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatAnswerFeedbackRating;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatRuleScope;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatRule;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateRepository;
@@ -46,6 +47,8 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatRulesService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.client.rest.controllers.GeboAdminChatRulesController;
 import ai.gebo.llms.chat.client.rest.controllers.GeboChatRulesController;
+import ai.gebo.llms.chat.client.rest.controllers.GeboUserChatsController;
+import ai.gebo.llms.chat.client.rest.controllers.GeboUserChatsController.AnswerFeedbackRequest;
 import ai.gebo.security.config.GeboAISecurityConfig;
 
 public class ChatRulesTest extends AbstractBaseTestLLmsIntegrationTests {
@@ -59,6 +62,8 @@ public class ChatRulesTest extends AbstractBaseTestLLmsIntegrationTests {
 	private GeboAdminChatRulesController adminRulesController;
 	@Autowired
 	private IGChatRulesService rulesService;
+	@Autowired
+	private GeboUserChatsController answerFeedbackController;
 	@Autowired
 	private IGChatSessionLifeCycleService lifeCycleService;
 	@Autowired
@@ -229,6 +234,58 @@ public class ChatRulesTest extends AbstractBaseTestLLmsIntegrationTests {
 		GeboChatResponse response = lifeCycleService.createEmptyResponse(request);
 		response.setQueryResponse("Parigi.");
 		lifeCycleService.endRequest(request, response);
+	}
+
+	@Test
+	public void testProposalsComeFromTheRatedExchangeAndBecomeRulesOnlyWhenChosen() throws Exception {
+		String chat = newSession();
+		exchange(chat, "What is the capital of France?", "Paris.");
+		GeboChatRequest rated = exchange(chat, "And the capital of Italy?", "Rome is the capital of Italy.");
+		answerFeedbackController.setAnswerFeedback(new AnswerFeedbackRequest(chat, rated.getId(),
+				ChatAnswerFeedbackRating.NEGATIVE, "Answer in Italian and cite a source"));
+		List<String> prompts = new ArrayList<>();
+		TestChatModel.setGlobalResponseLogic(prompt -> {
+			prompts.add(prompt);
+			return "1. Always cite a source\n- Answer in Italian\nNONE\n\n* Always cite a source\nUse short paragraphs\nA fourth rule";
+		});
+
+		List<String> proposals = rulesController.proposeRules(chat, rated.getId());
+		assertEquals(List.of("Always cite a source", "Answer in Italian", "Use short paragraphs"), proposals);
+		assertEquals(1, prompts.size());
+		String prompt = prompts.get(0);
+		for (String expected : List.of("And the capital of Italy?", "Rome is the capital of Italy.",
+				"not satisfying, commenting: Answer in Italian and cite a source", "What is the capital of France?")) {
+			assertTrue(prompt.contains(expected), expected);
+		}
+		assertTrue(ruleRepository.findAll().isEmpty(), "Proposing saves nothing");
+
+		GChatRule chosen = draft(ChatRuleScope.USER, null, proposals.get(1) + ", please");
+		chosen.setSourceUserChatContextCode(chat);
+		chosen.setSourceRequestId(rated.getId());
+		GChatRule saved = rulesController.createRule(chosen);
+		assertEquals("Answer in Italian, please", saved.getText());
+		assertEquals(chat, saved.getSourceUserChatContextCode());
+		assertEquals(rated.getId(), saved.getSourceRequestId());
+
+		TestChatModel.setGlobalResponseLogic(any -> "NONE");
+		assertTrue(rulesController.proposeRules(chat, rated.getId()).isEmpty());
+		assertThrows(GeboChatSessionLifecycleException.class,
+				() -> rulesController.proposeRules(chat, "not-a-request-of-this-chat"));
+		impersonate(OTHER_USER, GeboAISecurityConfig.USER_ROLE);
+		assertThrows(SecurityException.class, () -> rulesController.proposeRules(chat, rated.getId()));
+	}
+
+	private GeboChatRequest exchange(String chat, String question, String answer) throws Exception {
+		IGConfigurableChatModel model = chatModelRuntimeDao.findByCode(DEFAULT_TEST_CHAT_MODEL_CODE);
+		GeboChatRequest request = new GeboChatRequest();
+		request.setId(UUID.randomUUID().toString());
+		request.setUserChatContextCode(chat);
+		request.setQuery(question);
+		lifeCycleService.startRequest(request, model, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+		GeboChatResponse response = lifeCycleService.createEmptyResponse(request);
+		response.setQueryResponse(answer);
+		lifeCycleService.endRequest(request, response);
+		return request;
 	}
 
 	private static GPromptTemplateConfig testPrompt() {

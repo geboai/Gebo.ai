@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatRuleScope;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatRule;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatRuleProposalService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRulesService;
 import lombok.AllArgsConstructor;
 
@@ -33,6 +35,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GeboChatRulesController {
 	final IGChatRulesService rulesService;
+	final IGChatRuleProposalService proposalService;
+
+	@GetMapping(value = "proposeRules", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> proposeRules(@RequestParam("userChatContextCode") String userChatContextCode,
+			@RequestParam("requestId") String requestId) throws GeboChatSessionLifecycleException, LLMConfigException {
+		return proposalService.proposeRules(userChatContextCode, requestId);
+	}
 
 	@PostMapping(value = "createRule", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GChatRule createRule(@RequestBody GChatRule rule) throws GeboChatSessionLifecycleException {
