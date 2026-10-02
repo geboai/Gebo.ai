@@ -86,8 +86,15 @@ import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresCustom;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresDocker;
+import org.junit.jupiter.api.Disabled;
 
 @SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.DEFINED_PORT)
+@RequiresDocker
+@RequiresCustom(OllamaModelsAvailable.class)
+@Disabled("No Ollama environment available to run this suite: it needs a current Ollama server with the chat "
+		+ "and embedding models pulled (see ollama-integration-tests/README.md). Remove to run it.")
 public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegrationTests {
 
 	static QdrantContainer qdrantContainer = new QdrantContainer("qdrant/qdrant:latest");
@@ -203,7 +210,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		assertFalse(models.isEmpty(), "At least a default chat model must be configured");
 		GLookupEntryRefGBaseChatModelConfig defaultModel = models.get(0);
 		GeboUserChatsControllerApi userChatsAi = new GeboUserChatsControllerApi(authApiClient);
-		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode());
+		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode(), null);
 		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
 		// load the created user context
 		GUserChatSession data = persistentObjectManager.findById(GUserChatSession.class, cleanChat.getCode());
@@ -353,7 +360,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		GLookupEntryRefGBaseChatModelConfig defaultModel = models.get(0);
 		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
 		GeboUserChatsControllerApi userChatsAi = new GeboUserChatsControllerApi(authApiClient);
-		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode());
+		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode(), null);
 		// load the created user context
 		GUserChatSession data = persistentObjectManager.findById(GUserChatSession.class, cleanChat.getCode());
 		// inject the false history

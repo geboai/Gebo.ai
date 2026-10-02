@@ -26,6 +26,7 @@ import { EmbeddingModelsControllersService } from './api/embeddingModelsControll
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
 import { GeboA2AServerAdminControllerService } from './api/geboA2AServerAdminController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
+import { GeboAdminChatRulesControllerService } from './api/geboAdminChatRulesController.service';
 import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
 import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsController.service';
 import { GeboAdminRagAutotuneControllerService } from './api/geboAdminRagAutotuneController.service';
@@ -35,6 +36,7 @@ import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngular
 import { GeboChatControllerService } from './api/geboChatController.service';
 import { GeboChatPipelinesControllerService } from './api/geboChatPipelinesController.service';
 import { GeboChatProfileLookupControllerService } from './api/geboChatProfileLookupController.service';
+import { GeboChatRulesControllerService } from './api/geboChatRulesController.service';
 import { GeboDeepSearchAdminControllerService } from './api/geboDeepSearchAdminController.service';
 import { GeboDeepSearchControllerService } from './api/geboDeepSearchController.service';
 import { GeboFastChatProfileStatusControllerService } from './api/geboFastChatProfileStatusController.service';
@@ -120,6 +122,7 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     FunctionsLookupControllerService,
     GeboA2AServerAdminControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
+    GeboAdminChatRulesControllerService,
     GeboAdminPromptUseInfoControllerService,
     GeboAdminPromptsControllerService,
     GeboAdminRagAutotuneControllerService,
@@ -129,6 +132,7 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     GeboChatControllerService,
     GeboChatPipelinesControllerService,
     GeboChatProfileLookupControllerService,
+    GeboChatRulesControllerService,
     GeboDeepSearchAdminControllerService,
     GeboDeepSearchControllerService,
     GeboFastChatProfileStatusControllerService,

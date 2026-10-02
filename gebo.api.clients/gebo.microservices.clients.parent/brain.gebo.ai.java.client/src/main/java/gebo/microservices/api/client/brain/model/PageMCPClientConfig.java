@@ -27,20 +27,23 @@ import java.util.List;
  * PageMCPClientConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:24:41.059309405+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:20.194305186+02:00[Europe/Rome]")
 
 public class PageMCPClientConfig {
-  @JsonProperty("totalElements")
-  private Long totalElements = null;
-
   @JsonProperty("totalPages")
   private Integer totalPages = null;
+
+  @JsonProperty("totalElements")
+  private Long totalElements = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
 
-  @JsonProperty("numberOfElements")
-  private Integer numberOfElements = null;
+  @JsonProperty("first")
+  private Boolean first = null;
+
+  @JsonProperty("last")
+  private Boolean last = null;
 
   @JsonProperty("size")
   private Integer size = null;
@@ -54,32 +57,11 @@ public class PageMCPClientConfig {
   @JsonProperty("sort")
   private SortObject sort = null;
 
-  @JsonProperty("first")
-  private Boolean first = null;
-
-  @JsonProperty("last")
-  private Boolean last = null;
+  @JsonProperty("numberOfElements")
+  private Integer numberOfElements = null;
 
   @JsonProperty("empty")
   private Boolean empty = null;
-
-  public PageMCPClientConfig totalElements(Long totalElements) {
-    this.totalElements = totalElements;
-    return this;
-  }
-
-   /**
-   * Get totalElements
-   * @return totalElements
-  **/
-  @Schema(description = "")
-  public Long getTotalElements() {
-    return totalElements;
-  }
-
-  public void setTotalElements(Long totalElements) {
-    this.totalElements = totalElements;
-  }
 
   public PageMCPClientConfig totalPages(Integer totalPages) {
     this.totalPages = totalPages;
@@ -97,6 +79,24 @@ public class PageMCPClientConfig {
 
   public void setTotalPages(Integer totalPages) {
     this.totalPages = totalPages;
+  }
+
+  public PageMCPClientConfig totalElements(Long totalElements) {
+    this.totalElements = totalElements;
+    return this;
+  }
+
+   /**
+   * Get totalElements
+   * @return totalElements
+  **/
+  @Schema(description = "")
+  public Long getTotalElements() {
+    return totalElements;
+  }
+
+  public void setTotalElements(Long totalElements) {
+    this.totalElements = totalElements;
   }
 
   public PageMCPClientConfig pageable(PageableObject pageable) {
@@ -117,22 +117,40 @@ public class PageMCPClientConfig {
     this.pageable = pageable;
   }
 
-  public PageMCPClientConfig numberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
+  public PageMCPClientConfig first(Boolean first) {
+    this.first = first;
     return this;
   }
 
    /**
-   * Get numberOfElements
-   * @return numberOfElements
+   * Get first
+   * @return first
   **/
   @Schema(description = "")
-  public Integer getNumberOfElements() {
-    return numberOfElements;
+  public Boolean isFirst() {
+    return first;
   }
 
-  public void setNumberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
+  public void setFirst(Boolean first) {
+    this.first = first;
+  }
+
+  public PageMCPClientConfig last(Boolean last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Boolean isLast() {
+    return last;
+  }
+
+  public void setLast(Boolean last) {
+    this.last = last;
   }
 
   public PageMCPClientConfig size(Integer size) {
@@ -215,40 +233,22 @@ public class PageMCPClientConfig {
     this.sort = sort;
   }
 
-  public PageMCPClientConfig first(Boolean first) {
-    this.first = first;
+  public PageMCPClientConfig numberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
     return this;
   }
 
    /**
-   * Get first
-   * @return first
+   * Get numberOfElements
+   * @return numberOfElements
   **/
   @Schema(description = "")
-  public Boolean isFirst() {
-    return first;
+  public Integer getNumberOfElements() {
+    return numberOfElements;
   }
 
-  public void setFirst(Boolean first) {
-    this.first = first;
-  }
-
-  public PageMCPClientConfig last(Boolean last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Boolean isLast() {
-    return last;
-  }
-
-  public void setLast(Boolean last) {
-    this.last = last;
+  public void setNumberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
   }
 
   public PageMCPClientConfig empty(Boolean empty) {
@@ -279,22 +279,22 @@ public class PageMCPClientConfig {
       return false;
     }
     PageMCPClientConfig pageMCPClientConfig = (PageMCPClientConfig) o;
-    return Objects.equals(this.totalElements, pageMCPClientConfig.totalElements) &&
-        Objects.equals(this.totalPages, pageMCPClientConfig.totalPages) &&
+    return Objects.equals(this.totalPages, pageMCPClientConfig.totalPages) &&
+        Objects.equals(this.totalElements, pageMCPClientConfig.totalElements) &&
         Objects.equals(this.pageable, pageMCPClientConfig.pageable) &&
-        Objects.equals(this.numberOfElements, pageMCPClientConfig.numberOfElements) &&
+        Objects.equals(this.first, pageMCPClientConfig.first) &&
+        Objects.equals(this.last, pageMCPClientConfig.last) &&
         Objects.equals(this.size, pageMCPClientConfig.size) &&
         Objects.equals(this.content, pageMCPClientConfig.content) &&
         Objects.equals(this.number, pageMCPClientConfig.number) &&
         Objects.equals(this.sort, pageMCPClientConfig.sort) &&
-        Objects.equals(this.first, pageMCPClientConfig.first) &&
-        Objects.equals(this.last, pageMCPClientConfig.last) &&
+        Objects.equals(this.numberOfElements, pageMCPClientConfig.numberOfElements) &&
         Objects.equals(this.empty, pageMCPClientConfig.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalElements, totalPages, pageable, numberOfElements, size, content, number, sort, first, last, empty);
+    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
   }
 
 
@@ -303,16 +303,16 @@ public class PageMCPClientConfig {
     StringBuilder sb = new StringBuilder();
     sb.append("class PageMCPClientConfig {\n");
     
-    sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
+    sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
-    sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
+    sb.append("    first: ").append(toIndentedString(first)).append("\n");
+    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
-    sb.append("    first: ").append(toIndentedString(first)).append("\n");
-    sb.append("    last: ").append(toIndentedString(last)).append("\n");
+    sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

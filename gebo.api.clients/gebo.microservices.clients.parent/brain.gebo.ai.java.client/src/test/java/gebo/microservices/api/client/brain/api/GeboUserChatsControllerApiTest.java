@@ -12,8 +12,10 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.AnswerFeedbackRequest;
 import gebo.microservices.api.client.brain.model.ChatInfosByQbeParam;
 import gebo.microservices.api.client.brain.model.ChatUIOptions;
+import gebo.microservices.api.client.brain.model.GChatAnswerFeedback;
 import gebo.microservices.api.client.brain.model.GLookupEntry;
 import gebo.microservices.api.client.brain.model.GUserChatInfo;
 import gebo.microservices.api.client.brain.model.PageGUserChatInfo;
@@ -34,6 +36,22 @@ public class GeboUserChatsControllerApiTest {
 
     private final GeboUserChatsControllerApi api = new GeboUserChatsControllerApi();
 
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void branchChatTest() {
+        String userChatContextCode = null;
+        String requestId = null;
+        GUserChatInfo response = api.branchChat(userChatContextCode, requestId);
+
+        // TODO: test validations
+    }
     /**
      * 
      *
@@ -126,6 +144,21 @@ public class GeboUserChatsControllerApiTest {
         String responseId = null;
         String format = null;
         api.exportResponse2file(userContextCode, responseId, format);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getAnswerFeedbacksTest() {
+        String userChatContextCode = null;
+        List<GChatAnswerFeedback> response = api.getAnswerFeedbacks(userChatContextCode);
 
         // TODO: test validations
     }
@@ -244,6 +277,37 @@ public class GeboUserChatsControllerApiTest {
     @Test
     public void isMinimalLLMSSetupDoneTest() {
         Boolean response = api.isMinimalLLMSSetupDone();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void removeAnswerFeedbackTest() {
+        String userChatContextCode = null;
+        String requestId = null;
+        api.removeAnswerFeedback(userChatContextCode, requestId);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void setAnswerFeedbackTest() {
+        AnswerFeedbackRequest body = null;
+        GChatAnswerFeedback response = api.setAnswerFeedback(body);
 
         // TODO: test validations
     }

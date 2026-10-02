@@ -45,12 +45,18 @@ import ai.gebo.model.virtualfs.PathInfo;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.monolithic.app.Main;
 import ai.gebo.systems.abstraction.layer.VirtualFilesystemBrowsingException;
+import ai.gebo.architecture.integration.tests.preconditions.IntegrationTestConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresDocker;
 
 @SpringBootTest(classes = Main.class)
+@RequiresDocker
+@RequiresConfig(value = { "JIRA_CLOUD_SPACE_URL", "JIRA_CLOUD_API_KEY", "JIRA_CLOUD_USER" },
+		description = "Jira Cloud site and credentials")
 public class AtlassianJiraIntegrationTests extends AbstractGeboMonolithicIntegrationTestsWithFakeLLMS {
-	public static String JIRA_CLOUD_SPACE_URL = System.getenv("JIRA_CLOUD_SPACE_URL");
-	public static String JIRA_CLOUD_API_KEY = System.getenv("JIRA_CLOUD_API_KEY");
-	public static String JIRA_CLOUD_USER = System.getenv("JIRA_CLOUD_USER");
+	public static String JIRA_CLOUD_SPACE_URL = IntegrationTestConfig.get("JIRA_CLOUD_SPACE_URL");
+	public static String JIRA_CLOUD_API_KEY = IntegrationTestConfig.get("JIRA_CLOUD_API_KEY");
+	public static String JIRA_CLOUD_USER = IntegrationTestConfig.get("JIRA_CLOUD_USER");
 	@Autowired
 	JiraBrowsingService jiraBrowsingService;
 	@Autowired

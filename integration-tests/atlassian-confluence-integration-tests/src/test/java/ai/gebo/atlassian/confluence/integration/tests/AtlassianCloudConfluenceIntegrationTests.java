@@ -41,12 +41,18 @@ import ai.gebo.model.virtualfs.PathInfo;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.monolithic.app.Main;
 import ai.gebo.systems.abstraction.layer.VirtualFilesystemBrowsingException;
+import ai.gebo.architecture.integration.tests.preconditions.IntegrationTestConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresDocker;
 
 @SpringBootTest(classes = Main.class)
+@RequiresDocker
+@RequiresConfig(value = { "CONFLUENCE_CLOUD_SPACE_URL", "CONFLUENCE_CLOUD_API_KEY", "CONFLUENCE_CLOUD_USER" },
+		description = "Confluence Cloud space and credentials")
 public class AtlassianCloudConfluenceIntegrationTests extends AbstractGeboMonolithicIntegrationTestsWithFakeLLMS {
-	public static String CONFLUENCE_CLOUD_SPACE_URL = System.getenv("CONFLUENCE_CLOUD_SPACE_URL");
-	public static String CONFLUENCE_CLOUD_API_KEY = System.getenv("CONFLUENCE_CLOUD_API_KEY");
-	public static String CONFLUENCE_CLOUD_USER = System.getenv("CONFLUENCE_CLOUD_USER");
+	public static String CONFLUENCE_CLOUD_SPACE_URL = IntegrationTestConfig.get("CONFLUENCE_CLOUD_SPACE_URL");
+	public static String CONFLUENCE_CLOUD_API_KEY = IntegrationTestConfig.get("CONFLUENCE_CLOUD_API_KEY");
+	public static String CONFLUENCE_CLOUD_USER = IntegrationTestConfig.get("CONFLUENCE_CLOUD_USER");
 	@Autowired
 	ConfluenceBrowsingService confluenceBrowsingService;
 	@Autowired

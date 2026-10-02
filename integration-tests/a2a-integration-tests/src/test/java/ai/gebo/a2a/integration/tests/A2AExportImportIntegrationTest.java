@@ -78,7 +78,7 @@ public class A2AExportImportIntegrationTest extends AbstractVendorSetupAndUseTes
 				.networkCode(DEFAULT_AGENTS_NETWORK).skillName("default");
 		A2AServerConfig serverConfig = new A2AServerConfig().exportedRelativeUrl("itest-" + shortId()).enabled(true)
 				.accessibleToAll(true).exportedAgents(List.of(exported));
-		OperationStatusA2AServerConfig serverStatus = serverAdmin.insert(serverConfig);
+		OperationStatusA2AServerConfig serverStatus = serverAdmin.insertA2AServer(serverConfig);
 		assertNotNull(serverStatus, "insert must return a status");
 		assertFalse(Boolean.TRUE.equals(serverStatus.isHasErrorMessages()),
 				"exporting the default network must not error: " + serverStatus.getMessages());
@@ -93,7 +93,7 @@ public class A2AExportImportIntegrationTest extends AbstractVendorSetupAndUseTes
 					.agentCardUrl(peerBaseUrl + "/.well-known/agent-card.json")
 					.transportType(A2ARemoteAgentConfig.TransportTypeEnum.JSONRPC)
 					.authMode(A2ARemoteAgentConfig.AuthModeEnum.NONE).exportingPrefix("itest-peer");
-			OperationStatusA2ARemoteAgentConfig discovery = clientAdmin.testAndDiscovery1(remote);
+			OperationStatusA2ARemoteAgentConfig discovery = clientAdmin.testAndDiscoveryA2AClientConfig(remote);
 			assertNotNull(discovery, "testAndDiscovery must return a status");
 			assertFalse(Boolean.TRUE.equals(discovery.isHasErrorMessages()),
 					"discovery of the mock peer must not error: " + discovery.getMessages());

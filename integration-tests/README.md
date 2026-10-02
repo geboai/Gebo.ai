@@ -30,6 +30,50 @@ mvn -f integration-tests/pom.xml test  # then this suite
 | `atlassian-jira-integration-tests` | Jira cloud ingestion | `JIRA_CLOUD_SPACE_URL`, `JIRA_CLOUD_USER`, `JIRA_CLOUD_API_KEY` |
 | `sharepoint-integration-tests` | Sharepoint online ingestion | `SHAREPOINT_CLIENT_ID`, `SHAREPOINT_TENANT_ID`, `SHAREPOINT_SECRET_KEY`, `SHAREPOINT_BASE_URL` |
 | `heavy-workload-integration-tests` | Ingestion throughput with fake LLMs — no external provider at all | `GEBO_VECTORIZABLE_FOLDERS` |
+| `a2a-integration-tests` | A2A export (agent card + JSON-RPC endpoint) and import of a mock remote agent | docker only |
+
+Every module also needs the docker daemon.
+
+## Missing configuration: skipped, or failed on request
+
+Each test class declares what it needs with the `@Requires*` annotations of
+`gebo.architecture.integration.tests.preconditions`, and those are checked
+**before** anything starts — no Spring context, no container. When something is
+missing:
+
+* **by default** the class is **skipped**: a warning lists every missing item and
+  how to provide it, the build stays green, and the skip is counted in the
+  surefire report (`Skipped: N`), so an unconfigured suite never passes as if it
+  had run;
+* with **`-DtestWhatIsConfigured=false`** the class **fails** with the same list
+  instead. Use it on every CI job dedicated to a suite — those are supposed to be
+  fully configured, and a dropped secret must turn them red, not green-and-skipped.
+
+At the end of the run one summary repeats every class that did not run and why:
+
+```
+Integration tests not run because of unmet preconditions: 1 skipped, 0 failed
+[SKIPPED] Integration test preconditions not met for ai.gebo.full_setup_use.tests.ChatPipelineTests:
+  - configuration FullSetupSecret is not set (JSON with the admin account, the LLM vendor and its API key): set the environment variable FullSetupSecret (or FULLSETUPSECRET) or pass -DFullSetupSecret=...
+```
+
+Every value can be given as an environment variable **or** as a `-D` JVM
+property (`mvn ... -DOPENAI_API_KEY=...`); environment names are matched like
+Spring does (`gebo.cluster.heimdall.url` → `GEBO_CLUSTER_HEIMDALL_URL`). Tests
+read their values through `IntegrationTestConfig`, so the check and the test
+always agree on where a value comes from.
+
+| Annotation | Checks |
+| --- | --- |
+| `@RequiresDocker` | a docker daemon Testcontainers can reach — no port: the containers bind random ones |
+| `@RequiresConfig({"A", "B"}, description = ...)` | the configuration values are set (blank counts as missing) |
+| `@RequiresEndpoint(name, url = "${prop:default}")` | an **externally managed** service accepts connections at the resolved URL |
+| `@RequiresLocalDockerImage({...}, hint = ...)` | images that are built locally, not pulled, are present |
+| `@RequiresDirectories("NAME")` | the value lists existing directories (`:`-separated, `;` on Windows) |
+| `@RequiresCustom(MyCheck.class)` | anything else, through a `PreconditionCheck` |
+
+Requirements add up along the class hierarchy and through composed annotations,
+and may also be put on a single test method.
 
 ## `FullSetupSecret`
 

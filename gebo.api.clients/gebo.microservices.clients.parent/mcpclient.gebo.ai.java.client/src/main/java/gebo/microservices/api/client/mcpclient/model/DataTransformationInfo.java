@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * DataTransformationInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:25:11.040762904+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:51.718351904+02:00[Europe/Rome]")
 
 public class DataTransformationInfo {
   @JsonProperty("id")

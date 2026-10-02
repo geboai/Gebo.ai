@@ -26,7 +26,7 @@ import java.util.Map;
  * SharePointContentAttributeFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T15:25:13.217048818+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:53.845611079+02:00[Europe/Rome]")
 
 public class SharePointContentAttributeFilter {
   /**

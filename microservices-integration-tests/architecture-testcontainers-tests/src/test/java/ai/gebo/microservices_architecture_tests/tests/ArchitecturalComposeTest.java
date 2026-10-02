@@ -69,6 +69,10 @@ import gebo.microservices.api.client.tyr.model.DataPage;
 import gebo.microservices.api.client.tyr.model.JobSummary;
 import gebo.microservices.api.client.tyr.model.JobsEntriesForProjectEndpointFilter;
 import gebo.microservices.api.client.tyr.model.PageGJobStatusItem;
+import ai.gebo.architecture.integration.tests.preconditions.IntegrationTestConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresDocker;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresLocalDockerImage;
 
 /**
  * Testcontainers-managed architectural test: a deliberately narrow 5-service
@@ -108,17 +112,34 @@ import gebo.microservices.api.client.tyr.model.PageGJobStatusItem;
  * </p>
  */
 @Testcontainers
+@RequiresDocker
+@RequiresLocalDockerImage(value = { ArchitecturalComposeTest.GEBO_IMAGE + "eureka" + ArchitecturalComposeTest.GEBO_TAG,
+		ArchitecturalComposeTest.GEBO_IMAGE + "heimdall" + ArchitecturalComposeTest.GEBO_TAG,
+		ArchitecturalComposeTest.GEBO_IMAGE + "brain" + ArchitecturalComposeTest.GEBO_TAG,
+		ArchitecturalComposeTest.GEBO_IMAGE + "vectorizator" + ArchitecturalComposeTest.GEBO_TAG,
+		ArchitecturalComposeTest.GEBO_IMAGE + "tyr" + ArchitecturalComposeTest.GEBO_TAG,
+		ArchitecturalComposeTest.GEBO_IMAGE + "filesystem" + ArchitecturalComposeTest.GEBO_TAG },
+		hint = "build the service images with -P docker,swagger-on (and docker load them), or pass -D"
+				+ ArchitecturalComposeTest.GEBO_IMAGE_VERSION_PROPERTY + "=<a tag that is present>")
+@RequiresConfig(value = ArchitecturalComposeTest.FULL_SETUP_ENVIRONMENT_JSON_STRING,
+		description = "JSON with the admin account, the LLM vendor and its API key")
 public class ArchitecturalComposeTest {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArchitecturalComposeTest.class);
 	private static final ObjectMapper objectMapper = new ObjectMapper();
-	private static final String FULL_SETUP_ENVIRONMENT_JSON_STRING = "FullSetupSecret";
+	static final String FULL_SETUP_ENVIRONMENT_JSON_STRING = "FullSetupSecret";
 
 	/**
 	 * Matches {@code dockers/gebo.microservices/.env}'s GEBO_VERSION - overridable
 	 * with {@code -Dgebo.image.version=...} if a different tag was built/loaded.
 	 */
-	private static final String GEBO_IMAGE_VERSION = System.getProperty("gebo.image.version", "1.0.2.2-SNAPSHOT");
+	static final String GEBO_IMAGE_VERSION_PROPERTY = "gebo.image.version";
+	static final String DEFAULT_GEBO_IMAGE_VERSION = "1.0.2.2-SNAPSHOT";
+	private static final String GEBO_IMAGE_VERSION = IntegrationTestConfig.get(GEBO_IMAGE_VERSION_PROPERTY,
+			DEFAULT_GEBO_IMAGE_VERSION);
+	// Image name parts as docker-compose.yml spells them, for the preconditions above.
+	static final String GEBO_IMAGE = "geboai/";
+	static final String GEBO_TAG = ".gebo.ai:${" + GEBO_IMAGE_VERSION_PROPERTY + ":" + DEFAULT_GEBO_IMAGE_VERSION + "}";
 
 	private static final File COMPOSE_FILE = resolveComposeFile();
 	private static final File DEBUG_LOGGING_OVERRIDE_FILE = resolveDebugLoggingOverrideFile();
@@ -286,7 +307,7 @@ public class ArchitecturalComposeTest {
 	 * the latter being what vectorizator needs to actually process the job below.
 	 */
 	private SecurityHeaderData executeSystemSetupBySecret() throws IOException {
-		String jsonSetup = System.getProperty(FULL_SETUP_ENVIRONMENT_JSON_STRING);
+		String jsonSetup = IntegrationTestConfig.get(FULL_SETUP_ENVIRONMENT_JSON_STRING);
 		assertFalse(jsonSetup == null || jsonSetup.trim().isEmpty(), "The system property "
 				+ FULL_SETUP_ENVIRONMENT_JSON_STRING + " must contain a valid json setup configuration");
 		Map<String, Object> setup = objectMapper.readValue(jsonSetup, Map.class);
@@ -484,7 +505,7 @@ public class ArchitecturalComposeTest {
 				page.setSort(List.of());
 				filter.setPage(page);
 				JobStatusControllerApi jobStatusApi = new JobStatusControllerApi(tyrClient(header));
-				PageGJobStatusItem result = jobStatusApi.getJobsEntriesForProjectEndpoint(filter);
+				PageGJobStatusItem result = jobStatusApi.getJobsEntriesForProjectEndpointJobStatus(filter);
 				List<Map<String, Object>> content = objectMapper.convertValue(result.getContent(),
 						objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class));
 				LOGGER.info("On cycle=>{} jobs found for endpoint so far: {}", nCycles,
