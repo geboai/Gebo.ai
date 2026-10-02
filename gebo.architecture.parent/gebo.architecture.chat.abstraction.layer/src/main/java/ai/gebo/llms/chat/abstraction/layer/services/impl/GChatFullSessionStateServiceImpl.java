@@ -1,5 +1,10 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import org.bson.RawBsonDocument;
+import org.springframework.data.mongodb.core.MongoOperations;
+
+import ai.gebo.llms.chat.abstraction.layer.config.GeboChatSessionLifeCycleConfig;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSReferredContentList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +46,8 @@ public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateS
 	private final ChatFullSessionStateRepository sessionRepo;
 	private final DocumentReferenceRepository docRepo;
 	private final GeboChatConfigs chatConfig;
+	private final GeboChatSessionLifeCycleConfig lifeCycleConfig;
+	private final MongoOperations mongo;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GChatFullSessionStateServiceImpl.class);
 
 	@Override
@@ -89,7 +96,63 @@ public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateS
 
 	@Override
 	public ChatFullSessionState save(ChatFullSessionState data) {
+		int size = encodedSize(data);
+		if (size > lifeCycleConfig.getMaximumFullStateBytes()) {
+			int original = size;
+			int dropped = 0;
+			while (size > lifeCycleConfig.getMaximumFullStateBytes()) {
+				int oldest = oldestDocumentsInteraction(data);
+				if (oldest < 0) {
+					break;
+				}
+				dropped += dropDocumentsOf(data, oldest);
+				size = encodedSize(data);
+			}
+			LOGGER.warn("Full state of chat " + data.getUserChatContextCode() + " was " + original
+					+ " bytes: dropped the " + dropped + " documents of its oldest interactions, now " + size
+					+ " bytes");
+		} else if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Full state of chat " + data.getUserChatContextCode() + ": " + size + " bytes");
+		}
 		return this.sessionRepo.save(data);
+	}
+
+	private int encodedSize(ChatFullSessionState data) {
+		org.bson.Document document = new org.bson.Document();
+		mongo.getConverter().write(data, document);
+		return new RawBsonDocument(document, mongo.getConverter().getCodecRegistry().get(org.bson.Document.class))
+				.getByteBuffer().remaining();
+	}
+
+	private static List<CSSReferredContentList<?>> documentLists(ChatFullSessionState data) {
+		return List.of(data.getChatWithDocuments().getValue(), data.getRetrievedDocuments().getValue(),
+				data.getUploadedDocuments().getValue(), data.getLlmGeneratedDocuments().getValue());
+	}
+
+	private static int oldestDocumentsInteraction(ChatFullSessionState data) {
+		int oldest = -1;
+		for (CSSReferredContentList<?> list : documentLists(data)) {
+			for (int i = 0; i < list.getData().size(); i++) {
+				int index = list.getData().get(i).getInteractionIndex();
+				if (oldest < 0 || index < oldest) {
+					oldest = index;
+				}
+			}
+		}
+		return oldest;
+	}
+
+	private static int dropDocumentsOf(ChatFullSessionState data, int interactionIndex) {
+		int dropped = 0;
+		for (CSSReferredContentList<?> list : documentLists(data)) {
+			for (int i = list.getData().size() - 1; i >= 0; i--) {
+				if (list.getData().get(i).getInteractionIndex() == interactionIndex) {
+					list.getData().remove(i);
+					dropped++;
+				}
+			}
+		}
+		return dropped;
 	}
 
 	@Override
