@@ -1,0 +1,37 @@
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
+
+package ai.gebo.llms.chat.abstraction.layer.services;
+
+import java.util.List;
+
+import ai.gebo.llms.chat.abstraction.layer.model.GChatRule;
+
+public interface IGChatRulesService {
+
+	public GChatRule createRule(GChatRule draft) throws GeboChatSessionLifecycleException;
+
+	// Text, enabled flag, profile / pipeline restrictions and, for shared rules, the audience.
+	public GChatRule updateRule(GChatRule changed) throws GeboChatSessionLifecycleException;
+
+	public void deleteRule(String id) throws GeboChatSessionLifecycleException;
+
+	// Session and user rules owned by the current user.
+	public List<GChatRule> getMyRules();
+
+	public List<GChatRule> getChatRules(String userChatContextCode) throws GeboChatSessionLifecycleException;
+
+	// Shared rules an administrator applied to the current user.
+	public List<GChatRule> getSharedRulesAppliedToMe();
+
+	public List<GChatRule> getSharedRules();
+
+	// Enabled rules for a request of that chat: shared first, then user, then session ones.
+	public List<GChatRule> getApplicableRules(String userChatContextCode, String chatProfileCode, String pipelineCode);
+}
