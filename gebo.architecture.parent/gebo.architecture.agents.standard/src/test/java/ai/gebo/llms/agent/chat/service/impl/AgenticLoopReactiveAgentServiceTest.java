@@ -351,8 +351,11 @@ class AgenticLoopReactiveAgentServiceTest {
 
 		assertEquals("From the deep search. ",
 				runNeedingEvidence(agent, 5, Set.of("deepSearchKnowledgeBase", "deepSearchWeb")));
-		assertTrue(String.valueOf(agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM))
-				.contains("deepSearchKnowledgeBase, deepSearchWeb"), "the next iteration knows which tools count");
+		// Set.of has no iteration order: each name is looked for on its own
+		String story = String.valueOf(
+				agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM));
+		assertTrue(story.contains("deepSearchKnowledgeBase") && story.contains("deepSearchWeb"),
+				"the next iteration knows which tools count");
 	}
 
 	@Test
