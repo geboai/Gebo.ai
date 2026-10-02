@@ -20,6 +20,7 @@ import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
 import org.springframework.ai.chat.client.advisor.api.StreamAdvisorChain;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.ToolResponseMessage;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.model.tool.ToolCallingChatOptions;
 import org.springframework.ai.model.tool.ToolCallingManager;
@@ -35,6 +36,11 @@ import io.micrometer.observation.ObservationRegistry;
  * It replaces the loop the chat client registers by itself (one tool loop only is
  * allowed) and is built as that one is: the same tool calling manager, order and
  * conversation history.
+ * <p>
+ * The loop carries the options a round was sent with to the next round (streaming)
+ * or reads them back after the round (call): the call's own options are kept from the
+ * loop's start and given back to every round after the first. One instance serves
+ * one call.
  */
 class FirstRoundToolChoiceAdvisor extends ToolCallingAdvisor {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FirstRoundToolChoiceAdvisor.class);
@@ -42,12 +48,27 @@ class FirstRoundToolChoiceAdvisor extends ToolCallingAdvisor {
 	/** The options asking the vendor to call a tool, null when it cannot be asked. */
 	private final UnaryOperator<ToolCallingChatOptions> requiringToolCall;
 	private final String modelCode;
+	/** The call's own options, as the loop started. */
+	private volatile ChatOptions callOptions;
 
 	FirstRoundToolChoiceAdvisor(UnaryOperator<ToolCallingChatOptions> requiringToolCall, String modelCode) {
 		super(ToolCallingManager.builder().observationRegistry(ObservationRegistry.NOOP).build(),
 				DEFAULT_TOOL_EXECUTION_ELIGIBILITY_CHECKER, DEFAULT_ORDER, true);
 		this.requiringToolCall = requiringToolCall;
 		this.modelCode = modelCode;
+	}
+
+	@Override
+	protected ChatClientRequest doInitializeLoop(ChatClientRequest chatClientRequest, CallAdvisorChain callAdvisorChain) {
+		callOptions = chatClientRequest.prompt().getOptions();
+		return chatClientRequest;
+	}
+
+	@Override
+	protected ChatClientRequest doInitializeLoopStream(ChatClientRequest chatClientRequest,
+			StreamAdvisorChain streamAdvisorChain) {
+		callOptions = chatClientRequest.prompt().getOptions();
+		return chatClientRequest;
 	}
 
 	@Override
@@ -72,7 +93,9 @@ class FirstRoundToolChoiceAdvisor extends ToolCallingAdvisor {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Model:" + modelCode + " reads the tools' results, free to answer");
 			}
-			return request;
+			final ChatOptions own = callOptions;
+			return own == null || own == request.prompt().getOptions() ? request
+					: request.mutate().prompt(new Prompt(instructions, own)).build();
 		}
 		if (!(request.prompt().getOptions() instanceof ToolCallingChatOptions options)
 				|| options.getToolCallbacks() == null || options.getToolCallbacks().isEmpty()) {
