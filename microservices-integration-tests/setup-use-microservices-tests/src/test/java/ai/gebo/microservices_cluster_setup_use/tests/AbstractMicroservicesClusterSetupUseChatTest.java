@@ -223,14 +223,14 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 		setupData.setPassword(password);
 		setupData.setPasswordC(password);
 		OperationStatusBoolean setupResult = fastSetup.createSetup(setupData);
-		assertFalse(Boolean.TRUE.equals(setupResult.getHasErrorMessages()), "The setup cannot return errors");
+		assertFalse(Boolean.TRUE.equals(setupResult.isHasErrorMessages()), "The setup cannot return errors");
 
 		AuthControllerApi authController = new AuthControllerApi(heimdall);
 		LoginRequest login = new LoginRequest();
 		login.setUsername(username);
 		login.setPassword(password);
 		OperationStatusAuthResponse authResult = authController.authenticateUser(login);
-		assertFalse(Boolean.TRUE.equals(authResult.getHasErrorMessages()), "The login cannot return errors");
+		assertFalse(Boolean.TRUE.equals(authResult.isHasErrorMessages()), "The login cannot return errors");
 		AuthResponse currentAuth = authResult.getResult();
 		SecurityHeaderData header = currentAuth.getSecurityHeaderData();
 		assertNotNull(header.getToken(), "The security header token cannot be null");
@@ -274,7 +274,7 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 		List<LLMModelPresetChoice> chatChoices = objectMapper.convertValue(chatPresets.getChoices(),
 				objectMapper.getTypeFactory().constructCollectionType(List.class, LLMModelPresetChoice.class));
 		for (LLMModelPresetChoice chatChoice : chatChoices) {
-			if (Boolean.TRUE.equals(chatChoice.getDefaultChoice())) {
+			if (Boolean.TRUE.equals(chatChoice.isDefaultChoice())) {
 				autoConfigureData.setDefaultChatModel(chatChoice.getCode());
 			}
 			String usesStr = chatChoice.getUses() == null ? "" : String.valueOf(chatChoice.getUses());
@@ -285,7 +285,7 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 		List<LLMModelPresetChoice> embeddingChoices = objectMapper.convertValue(embeddingPresets.getChoices(),
 				objectMapper.getTypeFactory().constructCollectionType(List.class, LLMModelPresetChoice.class));
 		for (LLMModelPresetChoice embedChoice : embeddingChoices) {
-			if (Boolean.TRUE.equals(embedChoice.getDefaultChoice())) {
+			if (Boolean.TRUE.equals(embedChoice.isDefaultChoice())) {
 				autoConfigureData.setEmbeddingModel(embedChoice.getCode());
 			}
 		}
@@ -294,7 +294,7 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 		assertNotNull(autoConfigureData.getInternalServicesModel(), "internalServicesModel must be set");
 
 		OperationStatusListGBaseModelConfig llmCreation = llmSetupApi.createLLMByAutoconfigure(autoConfigureData);
-		assertFalse(Boolean.TRUE.equals(llmCreation.getHasErrorMessages()),
+		assertFalse(Boolean.TRUE.equals(llmCreation.isHasErrorMessages()),
 				"The vendor " + vendorId + " cannot be setup correctly");
 		renew(header);
 		LOGGER.info("End system setup against heimdall@{}", heimdallUrl);
@@ -367,7 +367,7 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 			reference.setRoot(new gebo.microservices.api.client.filesystem.model.GVirtualFilesystemRoot());
 			reference.getRoot().setAbsolutePath(folder.toAbsolutePath().toString());
 			reference.getPath().setAbsolutePath(folder.toAbsolutePath().toString());
-			reference.getPath().setMetaType("FOLDER");
+			reference.getPath().setMetaType(PathInfo.MetaTypeEnum.FOLDER);
 			reference.getPath().setName(folder.getFileName().toString());
 			reference.getPath().setFolder(true);
 			shareReference.setReference(reference);
@@ -397,7 +397,7 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 			// different class in a different package/module) - the two only share a name.
 			ref.setClassName("ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint");
 			OperationStatusGJobStatus launchedJob = jobLauncherApi.createJob(ref);
-			assertFalse(Boolean.TRUE.equals(launchedJob.getHasErrorMessages()),
+			assertFalse(Boolean.TRUE.equals(launchedJob.isHasErrorMessages()),
 					"The job launch cannot return errors");
 			renew(header);
 
@@ -419,13 +419,13 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 				assertNotNull(summary, "Job summary cannot be null");
 				assertNotNull(summary.getWorkflowStatus(), "Job workflow status cannot be null");
 				workflowStatus = summary.getWorkflowStatus();
-				LOGGER.info("Job {} finished={} hasErrors={}", summary.getCode(), workflowStatus.getFinished(),
-						workflowStatus.getHasErrors());
+				LOGGER.info("Job {} finished={} hasErrors={}", summary.getCode(), workflowStatus.isFinished(),
+						workflowStatus.isHasErrors());
 				renew(header);
 				currentTime = System.currentTimeMillis();
-			} while (!Boolean.TRUE.equals(workflowStatus.getFinished())
+			} while (!Boolean.TRUE.equals(workflowStatus.isFinished())
 					&& ((currentTime - initialTime) <= maxIterationTime));
-			assertTrue(Boolean.TRUE.equals(workflowStatus.getFinished()),
+			assertTrue(Boolean.TRUE.equals(workflowStatus.isFinished()),
 					"The publication job has to be finished within the timeout");
 
 			RegisteredInteractionTestSession registeredTestSession = loadJsonDataModel(registeredSessionResource,

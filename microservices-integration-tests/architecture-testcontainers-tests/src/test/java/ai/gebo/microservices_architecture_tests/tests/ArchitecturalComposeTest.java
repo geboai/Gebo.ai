@@ -484,7 +484,7 @@ public class ArchitecturalComposeTest {
 				page.setSort(List.of());
 				filter.setPage(page);
 				JobStatusControllerApi jobStatusApi = new JobStatusControllerApi(tyrClient(header));
-				PageGJobStatusItem result = jobStatusApi.getJobsEntriesForProjectEndpoint(filter);
+				PageGJobStatusItem result = jobStatusApi.getJobsEntriesForProjectEndpointJobStatus(filter);
 				List<Map<String, Object>> content = objectMapper.convertValue(result.getContent(),
 						objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class));
 				LOGGER.info("On cycle=>{} jobs found for endpoint so far: {}", nCycles,

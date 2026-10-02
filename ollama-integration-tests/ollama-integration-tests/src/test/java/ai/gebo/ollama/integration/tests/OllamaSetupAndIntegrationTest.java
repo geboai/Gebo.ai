@@ -203,7 +203,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		assertFalse(models.isEmpty(), "At least a default chat model must be configured");
 		GLookupEntryRefGBaseChatModelConfig defaultModel = models.get(0);
 		GeboUserChatsControllerApi userChatsAi = new GeboUserChatsControllerApi(authApiClient);
-		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode());
+		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode(), null);
 		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
 		// load the created user context
 		GUserChatSession data = persistentObjectManager.findById(GUserChatSession.class, cleanChat.getCode());
@@ -353,7 +353,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		GLookupEntryRefGBaseChatModelConfig defaultModel = models.get(0);
 		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
 		GeboUserChatsControllerApi userChatsAi = new GeboUserChatsControllerApi(authApiClient);
-		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode());
+		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode(), null);
 		// load the created user context
 		GUserChatSession data = persistentObjectManager.findById(GUserChatSession.class, cleanChat.getCode());
 		// inject the false history

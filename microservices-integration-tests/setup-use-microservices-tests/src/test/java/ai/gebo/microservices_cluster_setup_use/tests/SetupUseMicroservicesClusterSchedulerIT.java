@@ -71,7 +71,7 @@ public class SetupUseMicroservicesClusterSchedulerIT extends AbstractMicroservic
 			reference.setRoot(new GVirtualFilesystemRoot());
 			reference.getRoot().setAbsolutePath(folder.toAbsolutePath().toString());
 			reference.getPath().setAbsolutePath(folder.toAbsolutePath().toString());
-			reference.getPath().setMetaType("FOLDER");
+			reference.getPath().setMetaType(PathInfo.MetaTypeEnum.FOLDER);
 			reference.getPath().setName(folder.getFileName().toString());
 			reference.getPath().setFolder(true);
 			shareReference.setReference(reference);
@@ -96,7 +96,7 @@ public class SetupUseMicroservicesClusterSchedulerIT extends AbstractMicroservic
 			time.setCreatedTime(System.currentTimeMillis());
 			time.setTimeComponent(List.of(scheduledAt));
 			ReindexingProgrammedTable table = new ReindexingProgrammedTable();
-			table.setFrequency("DATES");
+			table.setFrequency(ReindexingProgrammedTable.FrequencyEnum.DATES);
 			table.setTimes(List.of(time));
 			inserted.setProgrammedTables(List.of(table));
 			inserted.setSynchPeriodically(true);
@@ -129,7 +129,7 @@ public class SetupUseMicroservicesClusterSchedulerIT extends AbstractMicroservic
 				// The repository's derived query treats a null jobType as "match
 				// documents where jobType is null", not "any type" - so it must be set
 				// explicitly to the type the ingestion job-launch manager actually uses.
-				filter.setJobType("CONTENTS_READING_VECTORIZING");
+				filter.setJobType(JobsEntriesForProjectEndpointFilter.JobTypeEnum.CONTENTS_READING_VECTORIZING);
 				DataPage page = new DataPage();
 				page.setPage(0);
 				page.setPageSize(10);
@@ -141,7 +141,7 @@ public class SetupUseMicroservicesClusterSchedulerIT extends AbstractMicroservic
 				// Rebuilt every iteration - see the identical note in the chat pipeline
 				// driver: an already-built ApiClient never picks up a later renew(header).
 				JobStatusControllerApi jobStatusApi = new JobStatusControllerApi(tyrClient(header));
-				PageGJobStatusItem result = jobStatusApi.getJobsEntriesForProjectEndpoint(filter);
+				PageGJobStatusItem result = jobStatusApi.getJobsEntriesForProjectEndpointJobStatus(filter);
 				List<Map<String, Object>> content = objectMapper.convertValue(result.getContent(),
 						objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class));
 				LOGGER.info("On cycle=>" + nCycles + " jobs launched for endpoint so far:"
