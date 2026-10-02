@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.tool.ToolCallback;
@@ -210,6 +211,113 @@ class AgenticLoopReactiveAgentServiceTest {
 					params.get(ReportWriterReactiveAgentServiceImpl.DELIVERABLE_FORMATTING_RULES_TEMPLATE_PARAM))
 					.startsWith("Answer the question first"), "the QA formatting rules");
 		}
+	}
+
+	/**
+	 * A loop agent whose model streams scripted answers and, at the given calls (0
+	 * based), uses a tool first, as the model's tool wrapper records it.
+	 */
+	private static ScriptedLoopAgent toolUsingAgent(List<List<String>> answers, Set<Integer> callsUsingATool) {
+		return new ScriptedLoopAgent(answers) {
+			@Override
+			protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+					IChatRequestContext context, Map<String, Object> params) {
+				final int call = receivedParams.size();
+				final Flux<String> text = super.callLLMReactive(chatModel, prompt, context, params);
+				if (!callsUsingATool.contains(call)) {
+					return text;
+				}
+				return Flux.defer(() -> {
+					context.getToolCallListener().addCall("deepSearchKnowledgeBase", "Deep search", "{}", "found");
+					return text;
+				});
+			}
+		};
+	}
+
+	/** Runs the loop asking for an analysis, the evidence of the sources required. */
+	private static String runNeedingEvidence(ScriptedLoopAgent agent, int maxIterations) {
+		ToolCallsListener listener = new ToolCallsListener();
+		AgentNetworkParticipant persona = mock(AgentNetworkParticipant.class);
+		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
+		IChatRequestContext context = IChatRequestContext.forAgent(IChatRequestContext.builder().requestID("r1").build(),
+				listener);
+		return String.join("", agent.iteration(1, maxIterations, 10_000, new ArrayList<>(), null,
+				new GPromptTemplateConfig(), context, persona, mock(INotificationSink.class), listener,
+				agent.deliverableTemplateParams(DeliverableIntent.ANALISYS), true).collectList().block());
+	}
+
+	@Test
+	void anAnalysisWrittenWithoutToolsIsDiscardedAndTheSourcesAreSearched() {
+		ScriptedLoopAgent agent = toolUsingAgent(
+				List.of(List.of("From ", "memory. " + STOP), List.of("From ", "the documents. " + STOP)), Set.of(1));
+
+		String shown = runNeedingEvidence(agent, 5);
+
+		assertEquals("From the documents. ", shown, "the answer without evidence never reaches the user");
+		assertEquals(2, agent.receivedParams.size());
+		assertTrue(String.valueOf(agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM))
+				.contains(AgenticLoopReactiveAgentServiceImpl.DISCARDED_WITHOUT_EVIDENCE),
+				"the next iteration knows why the answer was discarded");
+	}
+
+	@Test
+	void anAnalysisUsingAToolStreamsAsUsual() {
+		ScriptedLoopAgent agent = toolUsingAgent(List.of(List.of("From ", "the documents. " + STOP)), Set.of(0));
+
+		assertEquals("From the documents. ", runNeedingEvidence(agent, 5));
+		assertEquals(1, agent.receivedParams.size());
+	}
+
+	@Test
+	void theRetryIsMadeOnceAndTheLastIterationAnswersAnyway() {
+		ScriptedLoopAgent once = toolUsingAgent(
+				List.of(List.of("First. " + STOP), List.of("Second, still without tools. " + STOP)), Set.of());
+		assertEquals("Second, still without tools. ", runNeedingEvidence(once, 5));
+		assertEquals(2, once.receivedParams.size(), "one retry only");
+
+		ScriptedLoopAgent last = toolUsingAgent(List.of(List.of("Only answer. " + STOP)), Set.of());
+		assertEquals("Only answer. ", runNeedingEvidence(last, 1), "no iteration left: the answer is shown");
+	}
+
+	@Test
+	void everyIterationRunsAsTheUser() {
+		List<String> calledAs = new java.util.concurrent.CopyOnWriteArrayList<>();
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("Searching. " + MORE), List.of("Done. " + STOP))) {
+			@Override
+			protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+					IChatRequestContext context, Map<String, Object> params) {
+				org.springframework.security.core.Authentication current = org.springframework.security.core.context.SecurityContextHolder
+						.getContext().getAuthentication();
+				calledAs.add(current != null ? current.getName() : "nobody");
+				// the model streams on its own thread, as a provider client does
+				return super.callLLMReactive(chatModel, prompt, context, params)
+						.publishOn(reactor.core.scheduler.Schedulers.parallel());
+			}
+		};
+		AgentNetworkParticipant persona = mock(AgentNetworkParticipant.class);
+		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
+		org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(
+				new org.springframework.security.authentication.UsernamePasswordAuthenticationToken("user", "", List.of()));
+		try {
+			ai.gebo.security.services.ReactiveIdentityUtil runAs = ai.gebo.security.services.ReactiveIdentityUtil.create();
+			ToolCallsListener listener = new ToolCallsListener();
+			agent.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), null, persona,
+					mock(INotificationSink.class), listener, agent.deliverableTemplateParams(DeliverableIntent.QA), false,
+					runAs).collectList().block();
+		} finally {
+			org.springframework.security.core.context.SecurityContextHolder.clearContext();
+		}
+
+		assertEquals(List.of("user", "user"), calledAs, "the second iteration's model call runs as the user");
+	}
+
+	@Test
+	void onlyAnalysesAndSearchesNeedTheSourcesEvidence() {
+		assertTrue(AgenticLoopReactiveAgentServiceImpl.needsEvidence(DeliverableIntent.ANALISYS));
+		assertTrue(AgenticLoopReactiveAgentServiceImpl.needsEvidence(DeliverableIntent.PURE_SEARCH));
+		assertFalse(AgenticLoopReactiveAgentServiceImpl.needsEvidence(DeliverableIntent.QA));
+		assertFalse(AgenticLoopReactiveAgentServiceImpl.needsEvidence(DeliverableIntent.SUMMARY));
 	}
 
 	@Test

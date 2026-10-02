@@ -48,6 +48,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 /**
  * A single agent with tools, working in the classic agentic loop over the network
@@ -127,6 +128,31 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	record LoopIteration(int number, String text, List<ToolCallExecuted> calls) {
 	}
 
+	/**
+	 * What the next iteration is told of an iteration whose answer was discarded
+	 * because it used no tool (see {@link #needsEvidence(DeliverableIntent)}).
+	 */
+	static final String DISCARDED_WITHOUT_EVIDENCE = "This answer was discarded, the user never saw it: it used no tool, "
+			+ "while the user asked for a deliverable that must rest on what the sources contain now (the chat history "
+			+ "is not a source). Search the sources with the tools first, then answer from what they return.";
+
+	/**
+	 * The deliverables built on the sources' evidence: an analysis or report, a pure
+	 * search. An answer to them that used no tool rests on the model's memory or on
+	 * the chat history only.
+	 */
+	static boolean needsEvidence(DeliverableIntent intent) {
+		return intent == DeliverableIntent.ANALISYS || intent == DeliverableIntent.PURE_SEARCH;
+	}
+
+	/** Whether the agent model mounts a tool other than notifyUser, i.e. something to search. */
+	static boolean hasSearchTools(IGConfigurableChatModel<?> agentModel) {
+		final List<String> functions = agentModel != null && agentModel.getConfig() != null
+				? agentModel.getConfig().getEnabledFunctions()
+				: null;
+		return functions != null && functions.stream().anyMatch(name -> !NOTIFY_USER_TOOL.equals(name));
+	}
+
 	@Override
 	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> createResponse(IChatRequestContext chatRequestContext,
 			GAgentConfig agentConfig, String request, GAgentsNetwork network,
@@ -164,8 +190,14 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				LOGGER.debug("Agentic loop agent id:" + getId() + " notifies the user of its tools' work");
 			}
 		}
+		// an answer to a request for an analysis or a search must rest on the tools' results:
+		// the first iteration is held back until it uses a tool (see iteration(...))
+		final boolean evidenceRequired = needsEvidence(userIntent) && hasSearchTools(agentModel);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agentic loop agent id:" + getId() + " evidence required:" + evidenceRequired);
+		}
 		Flux<String> text = iteration(1, maxIterations, budget, history, agentModel, agentPrompt, loopContext,
-				contextAgentPersona, notificationSink, callBacksListener, deliverableParams);
+				contextAgentPersona, notificationSink, callBacksListener, deliverableParams, evidenceRequired, runAs);
 		final GeboChatResponse response = new GeboChatResponse();
 		return renderOutputStream(text, response, session, contextAgentPersona, notificationSink, callBacksListener)
 				.doOnNext(operation -> {
@@ -206,6 +238,37 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
 			INotificationSink notificationSink, ToolCallsListener callBacksListener,
 			Map<String, Object> deliverableParams) {
+		return iteration(number, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
+				contextAgentPersona, notificationSink, callBacksListener, deliverableParams, false);
+	}
+
+	/**
+	 * The iterations of the loop, from the given one. When {@code evidenceRequired},
+	 * the iteration's text is held back until it uses a tool (models call their tools
+	 * before writing, so it then streams as usual); an iteration that ends without
+	 * using any tool is discarded unseen and the next one is told why, once: the
+	 * iteration after a discarded one streams whatever it does.
+	 */
+	protected Flux<String> iteration(int number, int maxIterations, int budget, List<LoopIteration> history,
+			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
+			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink, ToolCallsListener callBacksListener,
+			Map<String, Object> deliverableParams, boolean evidenceRequired) {
+		return iteration(number, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
+				contextAgentPersona, notificationSink, callBacksListener, deliverableParams, evidenceRequired, null);
+	}
+
+	/**
+	 * The iterations of the loop, from the given one, each further iteration running
+	 * as the user ({@code runAs}): it starts on the thread the previous one's model
+	 * stream ended on, which carries no identity, and its model call samples the
+	 * identity its tools run with.
+	 */
+	protected Flux<String> iteration(int number, int maxIterations, int budget, List<LoopIteration> history,
+			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
+			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink, ToolCallsListener callBacksListener,
+			Map<String, Object> deliverableParams, boolean evidenceRequired, ReactiveIdentityUtil runAs) {
 		return Flux.defer(() -> {
 			final Map<String, Object> params = new HashMap<>(deliverableParams);
 			params.put(CURRENT_ITERATION_PROMPT_PARAM, number);
@@ -230,19 +293,49 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			} catch (LLMConfigException e) {
 				return Flux.error(e);
 			}
+			// the text held back while the iteration has not used a tool yet
+			final StringBuilder held = new StringBuilder();
+			final boolean[] open = { !evidenceRequired };
 			Flux<String> visible = modelText.map(chunk -> {
 				String out = stripper.accept(chunk);
 				text.append(out);
-				return out;
+				return passed(out, held, open, callBacksListener, callsBefore);
 			}).concatWith(Flux.defer(() -> {
 				String tail = stripper.complete();
 				text.append(tail);
-				return Flux.just(tail);
+				return Flux.just(passed(tail, held, open, callBacksListener, callsBefore));
 			})).filter(chunk -> !chunk.isEmpty());
 			Flux<String> next = Flux.defer(() -> {
 				List<ToolCallExecuted> calls = callBacksListener.getCalls();
-				history.add(new LoopIteration(number, text.toString(),
-						new ArrayList<>(calls.subList(Math.min(callsBefore, calls.size()), calls.size()))));
+				final List<ToolCallExecuted> iterationCalls = new ArrayList<>(
+						calls.subList(Math.min(callsBefore, calls.size()), calls.size()));
+				if (!open[0]) {
+					// no tool used: the answer has not been shown
+					if (number < maxIterations) {
+						history.add(new LoopIteration(number, DISCARDED_WITHOUT_EVIDENCE, iterationCalls));
+						LOGGER.info("Agentic loop agent id:" + getId() + " iteration " + number
+								+ " answered without using any tool a request needing the sources' evidence:"
+								+ " discarded, searching the sources in the next iteration");
+						if (LOGGER.isTraceEnabled()) {
+							LOGGER.trace("<AGENTIC_LOOP_DISCARDED_ITERATION number=" + number + ">");
+							LOGGER.trace(text.toString());
+							LOGGER.trace("</AGENTIC_LOOP_DISCARDED_ITERATION>");
+						}
+						notificationSink.next(
+								"Agent: " + contextAgentPersona.getNetworkAgentName()
+										+ " searches the sources before answering..",
+								ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
+						return asUser(runAs, iteration(number + 1, maxIterations, budget, history, agentModel,
+								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
+								deliverableParams, false, runAs));
+					}
+					// no iteration left: the answer is shown as it is
+					LOGGER.warn("Agentic loop agent id:" + getId() + " last iteration " + number
+							+ " used no tool for a request needing the sources' evidence: answering anyway");
+					history.add(new LoopIteration(number, text.toString(), iterationCalls));
+					return Flux.just(held.toString()).filter(chunk -> !chunk.isEmpty());
+				}
+				history.add(new LoopIteration(number, text.toString(), iterationCalls));
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<AGENTIC_LOOP_ITERATION number=" + number + ">");
 					for (ToolCallExecuted call : history.get(history.size() - 1).calls()) {
@@ -265,12 +358,37 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						"Agent: " + contextAgentPersona.getNetworkAgentName() + " goes on working (step " + (number + 1)
 								+ " of " + maxIterations + ")..",
 						ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
-				return Flux.just(NEWLINE + NEWLINE).concatWith(iteration(number + 1, maxIterations, budget, history,
-						agentModel, agentPrompt, chatRequestContext, contextAgentPersona, notificationSink,
-						callBacksListener, deliverableParams));
+				return Flux.just(NEWLINE + NEWLINE).concatWith(asUser(runAs, iteration(number + 1, maxIterations, budget,
+						history, agentModel, agentPrompt, chatRequestContext, contextAgentPersona, notificationSink,
+						callBacksListener, deliverableParams, false, runAs)));
 			});
 			return visible.concatWith(next);
 		});
+	}
+
+	/** The iteration subscribed as the user, when the identity is known. */
+	private static Flux<String> asUser(ReactiveIdentityUtil runAs, Flux<String> iteration) {
+		return runAs != null ? iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic())) : iteration;
+	}
+
+	/**
+	 * The part of the text that can be shown now: all of it once the iteration used a
+	 * tool (with what was held back before), nothing while it has not ({@code open}
+	 * stays false and the text is kept in {@code held}).
+	 */
+	private static String passed(String out, StringBuilder held, boolean[] open, ToolCallsListener callBacksListener,
+			int callsBefore) {
+		if (open[0]) {
+			return out;
+		}
+		held.append(out);
+		if (callBacksListener.getCalls().size() > callsBefore) {
+			open[0] = true;
+			final String released = held.toString();
+			held.setLength(0);
+			return released;
+		}
+		return "";
 	}
 
 	/**
