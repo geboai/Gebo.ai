@@ -25,7 +25,6 @@ import ai.gebo.model.OperationStatus;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 
@@ -45,11 +44,12 @@ public class GeboUserChatUploadsController {
 		return uploadsHandler.chatSessionUpload(userSessionCode, files);
 	}
 
-	@DeleteMapping(value = "deleteSessionUploads", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "deleteSessionUploads/{userSessionCode}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<UserUploadedContent>> deleteSessionUploads(
 			@PathVariable("userSessionCode") String userSessionCode,
-			@NotNull @Valid @RequestBody List<UserUploadedContent> contents) {
-		return uploadsHandler.deleteSessionUploads(userSessionCode, null);
+			@NotNull @RequestBody List<UserUploadedContent> contents) {
+		return uploadsHandler.deleteSessionUploads(userSessionCode,
+				contents.stream().map(UserUploadedContent::getCode).toList());
 	}
 
 	@GetMapping(value = "serveContent/{userSessionCode}/{uploadedContentId}")
