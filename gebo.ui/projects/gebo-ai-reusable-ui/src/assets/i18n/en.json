@@ -3170,6 +3170,28 @@
       },
       "CalledFunctionParamsBtn": {
         "help": "Show the parameters"
+      },
+      "goodAnswerBtn": {
+        "help": "Good answer"
+      },
+      "badAnswerBtn": {
+        "help": "Bad answer: tell what was wrong"
+      },
+      "branchChatBtn": {
+        "help": "Continue in a new chat from this answer"
+      },
+      "badAnswerDialogTitle": {
+        "label": "What was wrong with this answer?"
+      },
+      "badAnswerComment": {
+        "placeholder": "Optional: tell what you expected",
+        "help": "Your comment is shown to the assistant on the next questions of this chat"
+      },
+      "cancelBadAnswerBtn": {
+        "label": "Cancel"
+      },
+      "saveBadAnswerBtn": {
+        "label": "Send feedback"
       }
     },
     "ChangeDescriptionComponent": {
