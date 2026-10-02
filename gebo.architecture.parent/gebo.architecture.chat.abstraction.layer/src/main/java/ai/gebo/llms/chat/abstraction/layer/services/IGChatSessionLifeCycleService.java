@@ -84,6 +84,10 @@ public interface IGChatSessionLifeCycleService {
 
 	public void endRequest(GeboChatRequest request, GeboChatResponse response) throws GeboChatSessionLifecycleException;
 
+	// Called when a request's processing is over, however it ended: it no longer blocks new requests
+	// of its chat, and is forgotten shortly after unless endRequest saves it first.
+	public void releaseRequest(GeboChatRequest request);
+
 	/**
 	 * Resolves knowledge-base document codes into the rich {@link GResponseDocumentRef}
 	 * incarnation used by the chat request's {@code forcedDocumentsRef}. This lets the

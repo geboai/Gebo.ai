@@ -3,6 +3,7 @@ package ai.gebo.llms.chat.abstraction.layer.services.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRulesService;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatRule;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatAnswerFeedbackRepository;
@@ -10,7 +11,6 @@ import ai.gebo.llms.chat.abstraction.layer.model.GChatAnswerFeedback;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatAnswerFeedbackRating;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -123,9 +123,17 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		GUserChatSession session = null;
 		ChatFullSessionState full = null;
 		ShrinkedChatSessionState shrinked = null;
+		String sessionCode = null;
+		long startedAt = 0;
+		volatile long releasedAt = 0;
 	}
 
-	static Hashtable<String, CacheEntry> cache = new Hashtable<String, GChatSessionLifeCycleServiceImpl.CacheEntry>();
+	// Requests between startRequest and endRequest / releaseRequest, by request id.
+	static final ConcurrentHashMap<String, CacheEntry> cache = new ConcurrentHashMap<String, CacheEntry>();
+	// A request still unfinished after this long was abandoned without being released.
+	static final long ABANDONED_REQUEST_AGE_MS = 30 * 60 * 1000L;
+	// Released requests stay reachable this long: a step may end its request after the stream terminated.
+	static final long RELEASED_REQUEST_GRACE_MS = 5 * 60 * 1000L;
 
 	@Override
 	public void createChatSession(GeboChatRequest request)
@@ -196,6 +204,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	public LLMChatRequestResources startRequest(GeboChatRequest request, IGConfigurableChatModel targetChatModel,
 			LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException, IOException {
 		GUserChatSession context = get(request.getUserChatContextCode());
+		refuseConcurrentRequest(request);
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);
 		ShrinkedChatSessionState shrinked = this.shrinkedSessionStateService.retrieveState(context);
 		boolean addInteraction = false;
@@ -294,7 +303,8 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			shrinked.setToBeShrinked(true);
 			shrinked.setTargetTokenBudget(targetTokenBudget);
 		}
-		CacheEntry cacheEntry = new CacheEntry(context, state, shrinked);
+		CacheEntry cacheEntry = new CacheEntry(context, state, shrinked, context.getCode(),
+				System.currentTimeMillis(), 0);
 		this.cache.put(request.getId(), cacheEntry);
 		return budgetedResources(request, context, state, shrinked, budget, policy);
 	}
@@ -326,6 +336,28 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		reference.setRootKnowledgebaseCode(ref.getKnowledgeBaseCode());
 		reference.setParentProjectCode(ref.getProjectCode());
 		return reference;
+	}
+
+	private void refuseConcurrentRequest(GeboChatRequest request) throws GeboChatSessionLifecycleException {
+		long now = System.currentTimeMillis();
+		cache.entrySet().removeIf(x -> now - x.getValue().startedAt > ABANDONED_REQUEST_AGE_MS
+				|| (x.getValue().releasedAt > 0 && now - x.getValue().releasedAt > RELEASED_REQUEST_GRACE_MS));
+		for (Map.Entry<String, CacheEntry> running : cache.entrySet()) {
+			if (running.getValue().releasedAt == 0
+					&& running.getValue().sessionCode.equals(request.getUserChatContextCode())
+					&& !running.getKey().equals(request.getId())) {
+				throw new GeboChatSessionLifecycleException(
+						"Another request is still running in the chat " + request.getUserChatContextCode());
+			}
+		}
+	}
+
+	@Override
+	public void releaseRequest(GeboChatRequest request) {
+		CacheEntry entry = request != null && request.getId() != null ? cache.get(request.getId()) : null;
+		if (entry != null) {
+			entry.releasedAt = System.currentTimeMillis();
+		}
 	}
 
 	private CacheEntry getCache(GeboChatRequest r) throws GeboChatSessionLifecycleException {

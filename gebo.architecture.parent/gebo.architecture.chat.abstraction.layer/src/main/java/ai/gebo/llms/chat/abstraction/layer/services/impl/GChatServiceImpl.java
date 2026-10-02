@@ -89,6 +89,15 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	@Override
 	public GeboChatResponse chat(GeboChatRequest request)
 			throws GeboChatException, GeboPersistenceException, IOException, LLMConfigException {
+		try {
+			return doChat(request);
+		} finally {
+			this.chatSessionLifecycleService.releaseRequest(request);
+		}
+	}
+
+	private GeboChatResponse doChat(GeboChatRequest request)
+			throws GeboChatException, GeboPersistenceException, IOException, LLMConfigException {
 		UserInfos user = securityService.getCurrentUser();
 		KBContext kbcontext = new KBContext();
 		kbcontext.setActualUser(user.getUsername());
