@@ -11,6 +11,7 @@ package ai.gebo.llms.agent.chat.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -22,9 +23,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.tool.ToolCallback;
 
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.services.GAbstractGenericalAgentService;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ITokensCountable;
@@ -92,6 +95,22 @@ class AgenticLoopReactiveAgentServiceTest {
 		List<LoopIteration> history = new ArrayList<>();
 		return String.join("", agent.iteration(1, maxIterations, 10_000, history, null, new GPromptTemplateConfig(), null,
 				persona, mock(INotificationSink.class), new ToolCallsListener()).collectList().block());
+	}
+
+	@Test
+	void theModelMayNotifyTheUserWhenThePersonaIsAllowedTo() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of(STOP)));
+		AgentNetworkParticipant allowed = mock(AgentNetworkParticipant.class);
+		when(allowed.isAllowedToNotifyUser()).thenReturn(true);
+		AgentNetworkParticipant notAllowed = mock(AgentNetworkParticipant.class);
+		INotificationSink sink = mock(INotificationSink.class);
+
+		List<ToolCallback> tools = agent.additionalTools(allowed, sink);
+
+		assertEquals(List.of(GAbstractGenericalAgentService.NOTIFY_USER_TOOL),
+				tools.stream().map(tool -> tool.getToolDefinition().name()).toList());
+		assertNull(agent.additionalTools(notAllowed, sink));
+		assertNull(agent.additionalTools(allowed, null));
 	}
 
 	@Test

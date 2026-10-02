@@ -122,6 +122,10 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 		// the call is recorded for the request by the tool wrapper (RunAsToolCallback)
 		BiFunction<KnowledgeBaseSearchParam, ToolContext, String> search = (param, toolContext) -> {
 			KBContext interaction = LLMtInteractionContextThreadLocal.Context.get();
+			if (param != null && param.getQuery() != null && !param.getQuery().isBlank()) {
+				ToolsProgress.notify(toolContext,
+						"Searching the knowledge base: " + ToolsProgress.shown(param.getQuery()));
+			}
 			return search(param, interaction, ToolsFoundDocuments.from(toolContext));
 		};
 		return List.of(ToolCallbackDeclarationUtil.declare(search, SEARCH_KNOWLEDGE_BASE_TOOL,

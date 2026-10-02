@@ -170,6 +170,8 @@ public abstract class AbstractDeepSearchTool<Q> {
 				LOGGER.warn("Tool:" + toolName + " has no chat model to analyse with");
 				return DeepSearchToolResult.of(Status.FAILED, "The deep search is not available, go on without it.");
 			}
+			ToolsProgress.notify(toolContext,
+					"Deep search in " + sourceDescription() + ": " + ToolsProgress.shown(question));
 			final Map<String, FoundDocument> foundByFragmentId = new LinkedHashMap<>();
 			final List<Document> fragments = searchDocuments(queries, question, support.searchTopK(),
 					foundByFragmentId);
@@ -182,6 +184,9 @@ public abstract class AbstractDeepSearchTool<Q> {
 			}
 			final DeliverableIntent deliverable = deliverable(param.getDepth());
 			final Vector<String> discardedFragmentIds = new Vector<>();
+			ToolsProgress.notify(toolContext, "Deep search in " + sourceDescription() + ": analysing "
+					+ fragments.size() + " fragment(s) of " + distinctByDocument(foundByFragmentId.values()).size()
+					+ " document(s)");
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Tool:" + toolName + " analysing " + fragments.size() + " fragment(s) for deliverable:"
 						+ deliverable + " with chatModel:" + chatModel.getCode() + " serviceModel:"
@@ -191,11 +196,19 @@ public abstract class AbstractDeepSearchTool<Q> {
 					.analyze(Flux.fromIterable(fragments), analysisContext(question, requestId),
 							ReactiveIdentityUtil.create(), deliverable,
 							TOOL_COMPLETENESS_NOTE + lengthTarget(param.getDepth()), chatModel, serviceModel,
-							discardedFragmentIds)
+							discardedFragmentIds, ToolsProgress.from(toolContext))
 					.reduce(new StringBuilder(), StringBuilder::append).map(StringBuilder::toString)
 					.block(DEEP_SEARCH_TIMEOUT);
-			for (String fragmentId : discardedFragmentIds) {
-				foundByFragmentId.remove(fragmentId);
+			if (analysis != null && !analysis.isBlank()
+					&& discardedFragmentIds.containsAll(foundByFragmentId.keySet())) {
+				// every fragment judged irrelevant, yet analysed: the judgement contradicts the
+				// analysis, the documents found stay its sources
+				LOGGER.warn("Tool:" + toolName + " analysis judged all the " + foundByFragmentId.size()
+						+ " fragment(s) irrelevant while analysing them: keeping their documents as sources");
+			} else {
+				for (String fragmentId : discardedFragmentIds) {
+					foundByFragmentId.remove(fragmentId);
+				}
 			}
 			final List<FoundDocument> reliedOn = distinctByDocument(foundByFragmentId.values());
 			final DeepSearchToolResult result = new DeepSearchToolResult();

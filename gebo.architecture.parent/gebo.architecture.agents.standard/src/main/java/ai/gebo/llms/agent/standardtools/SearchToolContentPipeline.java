@@ -133,6 +133,7 @@ public class SearchToolContentPipeline {
 				return SearchToolResult.of(Status.NOT_ALLOWED,
 						"The user is not allowed to search this source, go on without it.");
 			}
+			ToolsProgress.notify(toolContext, "Searching (" + toolName + "): " + ToolsProgress.shown(queryText));
 			// search every system, a failing one does not stop the others
 			final List<SearchableSystemMetaData> systems = service.getSearchableSystems();
 			final int nEntryLimit = Math.min(MAX_RETRIEVAL, topK * RETRIEVAL_FACTOR);
@@ -200,6 +201,7 @@ public class SearchToolContentPipeline {
 					.max(1, (int) Math.ceil((perDocumentBudget * 2.0) / SearchResultsChunker.LLM_CHUNK_TOKENS)));
 			final ChunkingParams chunkingParams = SearchResultsChunker.buildChunkingParams(perDocumentBudget,
 					maxNumChunks, keywords);
+			ToolsProgress.notify(toolContext, "Reading " + fresh.size() + " document(s) found (" + toolName + ")");
 			final List<Document> chunks = SearchResultsChunker.chunkToDocuments(chunkingService.getObject(), fresh,
 					chunkingParams, maxNumChunks, toolName);
 			final RankingOutcome ranking = rank(chunks, objective, topK, toolName);

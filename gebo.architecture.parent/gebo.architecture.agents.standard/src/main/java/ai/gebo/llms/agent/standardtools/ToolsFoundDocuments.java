@@ -11,17 +11,13 @@ package ai.gebo.llms.agent.standardtools;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.ai.chat.model.ToolContext;
-import org.springframework.ai.document.Document;
 
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
-import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
-import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 
 /**
@@ -102,56 +98,6 @@ public final class ToolsFoundDocuments {
 	 * every other value is still read from the given context.
 	 */
 	public IChatRequestContext sharedThrough(IChatRequestContext context) {
-		final ToolsFoundDocuments collector = this;
-		return new IChatRequestContext() {
-			@Override
-			public String getRequestID() {
-				return context.getRequestID();
-			}
-
-			@Override
-			public String getSessionID() {
-				return context.getSessionID();
-			}
-
-			@Override
-			public String getConsolidatedHistory() {
-				return context.getConsolidatedHistory();
-			}
-
-			@Override
-			public List<IChatSessionEntry> getInteractions() {
-				return context.getInteractions();
-			}
-
-			@Override
-			public List<Document> getDocuments() {
-				return context.getDocuments();
-			}
-
-			@Override
-			public String getActualUserRequest() {
-				return context.getActualUserRequest();
-			}
-
-			@Override
-			public Map<String, Object> getToolsContext() {
-				final Map<String, Object> toolsContext = context.getToolsContext() != null
-						? new HashMap<>(context.getToolsContext())
-						: new HashMap<>();
-				toolsContext.put(TOOLS_CONTEXT_KEY, collector);
-				return toolsContext;
-			}
-
-			@Override
-			public Map<String, Object> getPipelineInfos() {
-				return context.getPipelineInfos();
-			}
-
-			@Override
-			public ToolCallsListener getToolCallListener() {
-				return context.getToolCallListener();
-			}
-		};
+		return ToolsContextSharing.with(context, TOOLS_CONTEXT_KEY, this);
 	}
 }

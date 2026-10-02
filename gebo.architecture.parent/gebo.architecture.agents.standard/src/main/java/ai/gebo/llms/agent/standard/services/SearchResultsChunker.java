@@ -30,6 +30,7 @@ import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 
 /**
@@ -131,8 +132,13 @@ public final class SearchResultsChunker {
 		final String chunkingSession = chunkingService.createChunkingSession("search-chunks:" + UUID.randomUUID());
 		try {
 			final AtomicInteger skippedDocuments = new AtomicInteger(0);
+			// the user's identity, sampled here: the documents after the first ones start on
+			// the chunking threads, which have none
+			final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 			List<IDocumentChunkWithRef> chunks = Flux.fromIterable(results).flatMap(result -> Flux
-					.defer(() -> chunkingService.streamChunks(result, params, chunkingSession)).timeout(documentTimeout)
+					.defer(() -> runAs
+							.doRunAsWithReturn(() -> chunkingService.streamChunks(result, params, chunkingSession)))
+					.timeout(documentTimeout)
 					.onErrorResume(th -> {
 						skippedDocuments.incrementAndGet();
 						LOGGER.warn("chunkToDocuments(...) caller:" + callerId + " skipped the document:"

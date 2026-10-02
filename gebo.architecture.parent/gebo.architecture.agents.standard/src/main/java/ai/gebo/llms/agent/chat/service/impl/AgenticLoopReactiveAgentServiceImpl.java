@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.AgentCapabilities;
@@ -40,6 +41,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
 import ai.gebo.llms.agent.standardtools.ToolsFoundDocuments;
+import ai.gebo.llms.agent.standardtools.ToolsProgress;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -102,6 +104,25 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		return toolNames;
 	}
 
+	/**
+	 * When the persona may notify the user, the model of the loop can tell the user
+	 * what it is doing with the {@code notifyUser} tool, as the other tool-calling
+	 * agents of the network do.
+	 */
+	@Override
+	protected List<ToolCallback> additionalTools(AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink) {
+		if (!mayNotifyUser(contextAgentPersona, notificationSink)) {
+			return null;
+		}
+		return List.of(createUserMessageTool(notificationSink));
+	}
+
+	private static boolean mayNotifyUser(AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink) {
+		return notificationSink != null && contextAgentPersona != null && contextAgentPersona.isAllowedToNotifyUser();
+	}
+
 	/** One iteration of the loop: what the model wrote and the tools it called. */
 	record LoopIteration(int number, String text, List<ToolCallExecuted> calls) {
 	}
@@ -133,9 +154,18 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		// collector, shared through the tools context of the loop's model calls: they
 		// become the answer's documents.
 		final ToolsFoundDocuments toolDocuments = new ToolsFoundDocuments();
-		Flux<String> text = iteration(1, maxIterations, budget, history, agentModel, agentPrompt,
-				toolDocuments.sharedThrough(chatRequestContext), contextAgentPersona, notificationSink,
-				callBacksListener, deliverableParams);
+		IChatRequestContext loopContext = toolDocuments.sharedThrough(chatRequestContext);
+		if (mayNotifyUser(contextAgentPersona, notificationSink)) {
+			// as the other tool-calling agents of the network, each tool used is told to the
+			// user; the search tools also tell what they are doing while they work
+			loopContext = IChatRequestContext.forAgent(ToolsProgress.sharedThrough(loopContext, notificationSink),
+					notifyingToolCallsListener(contextAgentPersona, notificationSink, callBacksListener));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agentic loop agent id:" + getId() + " notifies the user of its tools' work");
+			}
+		}
+		Flux<String> text = iteration(1, maxIterations, budget, history, agentModel, agentPrompt, loopContext,
+				contextAgentPersona, notificationSink, callBacksListener, deliverableParams);
 		final GeboChatResponse response = new GeboChatResponse();
 		return renderOutputStream(text, response, session, contextAgentPersona, notificationSink, callBacksListener)
 				.doOnNext(operation -> {

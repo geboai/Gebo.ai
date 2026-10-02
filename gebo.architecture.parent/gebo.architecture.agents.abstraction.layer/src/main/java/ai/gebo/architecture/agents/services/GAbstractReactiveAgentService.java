@@ -45,6 +45,17 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 
 	}
 
+	/**
+	 * The tools made for one execution of this agent, bound to it, added to the ones
+	 * of its configuration: none by default. An agent that lets the model talk to the
+	 * user returns the {@code notifyUser} tool (see
+	 * {@link #createUserMessageTool(INotificationSink)}).
+	 */
+	protected List<ToolCallback> additionalTools(AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink) {
+		return null;
+	}
+
 	@Override
 	public Flux<IGPartialOperation<ResponseType>> execute(IChatRequestContext chatRequestContext,
 			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
@@ -101,9 +112,23 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 					+ " enabled function(s); cloning model with temperature:" + agentConfig.getTemperature() + " topP:"
 					+ agentConfig.getTopP() + " thinking:" + agentConfig.getThinking());
 		}
+		// tools made for this execution, bound to it (e.g. notifyUser, bound to the
+		// notification sink)
+		final List<ToolCallback> additionalTools = additionalTools(contextAgentPersona, notificationSink);
+		if (additionalTools != null && !additionalTools.isEmpty()) {
+			allFunctions = allFunctions != null ? new ArrayList<String>(allFunctions) : new ArrayList<String>();
+			for (ToolCallback tool : additionalTools) {
+				allFunctions.add(tool.getToolDefinition().name());
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Reactive agent id:" + getId() + " adds " + additionalTools.size()
+						+ " execution tool(s): " + additionalTools.stream().map(x -> x.getToolDefinition().name())
+								.toList());
+			}
+		}
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
 				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
-				createToolCallingManager(callBacksListener, allFunctions, null, runAs));
+				createToolCallingManager(callBacksListener, allFunctions, additionalTools, runAs));
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 
 		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),

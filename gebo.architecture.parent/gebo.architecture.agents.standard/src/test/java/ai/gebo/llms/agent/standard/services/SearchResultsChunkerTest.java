@@ -23,6 +23,10 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
@@ -31,6 +35,7 @@ import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.IGComponentOriginatedDocument;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 /**
  * Pins the best effort loading of the search results: a document that cannot be
@@ -51,6 +56,38 @@ class SearchResultsChunkerTest {
 		DocumentChunk chunk = DocumentChunk.ofText(result.getCode(), "content of " + result.getCode(), Map.of());
 		chunk.setChunkPosition(1l);
 		return Flux.just(IDocumentChunkWithRef.of(chunk, result));
+	}
+
+	@Test
+	void everyDocumentIsLoadedAsTheUser() {
+		List<SearchResult> results = new java.util.ArrayList<>();
+		for (int i = 0; i < 10; i++) {
+			results.add(result("https://a.example/" + i));
+		}
+		IDocumentsChunkService chunkingService = mock(IDocumentsChunkService.class);
+		when(chunkingService.createChunkingSession(anyString())).thenReturn("session");
+		List<String> loadedAs = java.util.Collections.synchronizedList(new java.util.ArrayList<>());
+		when(chunkingService.streamChunks(any(IGComponentOriginatedDocument.class), any(), anyString()))
+				.thenAnswer(invocation -> {
+					Authentication current = SecurityContextHolder.getContext().getAuthentication();
+					loadedAs.add(current != null ? current.getName() : "nobody");
+					// the document completes on another thread, as the chunking scheduler does
+					return oneChunk(invocation.getArgument(0)).delayElements(Duration.ofMillis(20),
+							Schedulers.boundedElastic());
+				});
+		ai.gebo.architecture.documents.cache.model.ChunkingParams params = SearchResultsChunker
+				.buildChunkingParams(4096, 4, List.of());
+		SecurityContextHolder.getContext()
+				.setAuthentication(new UsernamePasswordAuthenticationToken("user", "", List.of()));
+		try {
+			List<Document> documents = SearchResultsChunker.chunkToDocuments(chunkingService, results, params, 4,
+					"test");
+
+			assertEquals(10, documents.size());
+			assertEquals(java.util.Collections.nCopies(10, "user"), loadedAs);
+		} finally {
+			SecurityContextHolder.clearContext();
+		}
 	}
 
 	@Test

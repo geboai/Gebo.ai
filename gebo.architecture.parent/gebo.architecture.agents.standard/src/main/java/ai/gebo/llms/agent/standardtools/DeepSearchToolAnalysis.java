@@ -88,11 +88,13 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 	 * @param serviceModel         writes the partial analyses
 	 * @param discardedFragmentIds receives the fragments judged irrelevant or left
 	 *                             unprocessed
+	 * @param notifier             tells the user the progress of the analysis
+	 *                             ({@link IGProgressNotifier#NONE} for none)
 	 * @return the final analysis, streamed
 	 */
 	public Flux<String> analyze(Flux<Document> fragments, IChatRequestContext context, ReactiveIdentityUtil runAs,
 			DeliverableIntent deliverable, String completenessNote, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, Vector<String> discardedFragmentIds) {
+			IGConfigurableChatModel serviceModel, Vector<String> discardedFragmentIds, IGProgressNotifier notifier) {
 		final GPromptTemplateConfig cumulativeAnalisysPrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT);
 		final GPromptTemplateConfig finalAnalisysPrompt = promptsDao
@@ -171,7 +173,8 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 			}
 			discardedFragmentIds.add(document.getId());
 		};
-		Flux<String> resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(fragments, IGProgressNotifier.NONE,
+		Flux<String> resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(fragments,
+				notifier != null ? notifier : IGProgressNotifier.NONE,
 				isValidDocument, tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS,
 				outOfBandString, ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputCleaningFunction,
 				STRING_STREAMER, tokensBudget, runAs, analysisParallelism, unprocessedCumulator);
@@ -221,9 +224,17 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 						cleanedFragmentId.append(ch);
 					}
 				}
-				discardedFragmentIds.add(cleanedFragmentId.toString());
+				// a model can repeat the same id over and over: each id counts once
+				final String fragmentId = cleanedFragmentId.toString();
+				synchronized (discardedFragmentIds) {
+					// the partial analyses run in parallel
+					if (fragmentId.isEmpty() || discardedFragmentIds.contains(fragmentId)) {
+						continue;
+					}
+					discardedFragmentIds.add(fragmentId);
+				}
 				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Deep search tool analysis discarded fragment:" + cleanedFragmentId);
+					LOGGER.debug("Deep search tool analysis discarded fragment:" + fragmentId);
 				}
 			}
 		}

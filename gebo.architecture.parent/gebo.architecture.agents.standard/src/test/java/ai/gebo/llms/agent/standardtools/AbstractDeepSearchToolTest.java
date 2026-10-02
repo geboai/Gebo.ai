@@ -56,6 +56,7 @@ import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGProgressNotifier;
 import ai.gebo.llms.agent.standardtools.AbstractDeepSearchTool.FoundDocument;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam.Depth;
@@ -174,7 +175,7 @@ class AbstractDeepSearchToolTest {
 				discarded.add("f2");
 			}
 			return Flux.just("The ", "analysis.");
-		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any());
+		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any());
 		GeboRagSearchConfig ragSearchConfig = mock(GeboRagSearchConfig.class);
 		when(ragSearchConfig.getDeepSearchGlobalTopK()).thenReturn(30);
 		support = new DeepSearchToolsSupport(provider(analysis), provider(chunkingService), provider(chatModelsDao),
@@ -199,7 +200,61 @@ class AbstractDeepSearchToolTest {
 		// the irrelevant fragment's document is not a source
 		assertEquals(List.of("doc-a"), result.getSources().stream().map(Source::getDocumentCode).toList());
 		verify(analysis).analyze(any(), any(), any(), eq(DeliverableIntent.ANALISYS), anyString(), eq(chatModel),
-				eq(serviceModel), any());
+				eq(serviceModel), any(), any());
+	}
+
+	@Test
+	void anAnalysisJudgingEveryFragmentIrrelevantKeepsTheDocumentsFound() {
+		doAnswer(invocation -> {
+			Flux<Document> documents = invocation.getArgument(0);
+			Vector<String> discarded = invocation.getArgument(7);
+			documents.collectList().block().forEach(x -> discarded.add(x.getId()));
+			return Flux.just("An analysis citing the documents.");
+		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any());
+		TestDeepSearchTool tool = new TestDeepSearchTool(support,
+				List.of(fragment("f1", "doc-a"), fragment("f2", "doc-b")));
+
+		DeepSearchToolResult result = tool.deepSearch(param("agent question"), request("r1"));
+
+		assertEquals(Status.OK, result.getStatus());
+		assertEquals(List.of("doc-a", "doc-b"), result.getSources().stream().map(Source::getDocumentCode).toList());
+	}
+
+	@Test
+	void tellsTheUserWhatItIsDoingThroughTheSharedNotifier() {
+		TestDeepSearchTool tool = new TestDeepSearchTool(support,
+				List.of(fragment("f1", "doc-a"), fragment("f2", "doc-b"), fragment("f3", "doc-a")));
+		List<String> notified = new ArrayList<>();
+		IGProgressNotifier notifier = new IGProgressNotifier() {
+			@Override
+			public void notifyProgress(String code, String message) {
+				notified.add(message);
+			}
+
+			@Override
+			public void notifyLLMProblems() {
+			}
+		};
+		IChatRequestContext context = ToolsProgress.sharedThrough(IChatRequestContext.builder().requestID("r1")
+				.toolsContext(Map.of(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, "r1")).build(), notifier);
+
+		tool.deepSearch(param("agent question", "first search"), new ToolContext(context.getToolsContext()));
+
+		assertEquals(List.of("Deep search in the test source: agent question",
+				"Deep search in the test source: analysing 3 fragment(s) of 2 document(s)"), notified);
+		// the analysis reports its progress to the same notifier
+		verify(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), eq(notifier));
+	}
+
+	@Test
+	void worksSilentlyWithoutANotifier() {
+		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a")));
+
+		DeepSearchToolResult result = tool.deepSearch(param("agent question"), request("r1"));
+
+		assertEquals(Status.OK, result.getStatus());
+		verify(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(),
+				eq(IGProgressNotifier.NONE));
 	}
 
 	@Test
@@ -252,7 +307,7 @@ class AbstractDeepSearchToolTest {
 		doAnswer(invocation -> {
 			analysed.set(invocation.getArgument(1));
 			return Flux.just("ok");
-		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any());
+		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any());
 		DeepSearchToolParam param = param("agent question");
 		param.setSearchObjective("what for");
 
@@ -275,7 +330,7 @@ class AbstractDeepSearchToolTest {
 		// another request has its own deep searches
 		assertEquals(Status.OK, tool.deepSearch(param("question"), request("r2")).getStatus());
 		verify(analysis, times(AbstractDeepSearchTool.MAX_DEEP_SEARCHES_PER_REQUEST + 1)).analyze(any(), any(), any(),
-				any(), anyString(), any(), any(), any());
+				any(), anyString(), any(), any(), any(), any());
 	}
 
 	@Test
@@ -288,13 +343,13 @@ class AbstractDeepSearchToolTest {
 		assertEquals(Status.NOT_ALLOWED, denied.deepSearch(param("question"), null).getStatus());
 
 		assertEquals(Status.NO_RESULTS, empty.deepSearch(param(" "), null).getStatus());
-		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any());
+		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any());
 	}
 
 	@Test
 	void aFailingAnalysisIsAnswered() {
 		doReturn(Flux.error(new IllegalStateException("provider down"))).when(analysis).analyze(any(), any(), any(),
-				any(), anyString(), any(), any(), any());
+				any(), anyString(), any(), any(), any(), any());
 		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a")));
 
 		assertEquals(Status.FAILED, tool.deepSearch(param("question"), null).getStatus());
