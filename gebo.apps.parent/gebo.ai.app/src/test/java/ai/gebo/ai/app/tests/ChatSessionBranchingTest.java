@@ -27,7 +27,11 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatRuleScope;
+import ai.gebo.llms.chat.abstraction.layer.model.GChatRule;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
+import ai.gebo.llms.chat.abstraction.layer.repository.ChatRuleRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatRulesService;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.MinimalChatContextCacheItemRepository;
@@ -54,6 +58,10 @@ public class ChatSessionBranchingTest extends AbstractBaseTestLLmsIntegrationTes
 	private ChatFullSessionStateRepository fullRepository;
 	@Autowired
 	private MinimalChatContextCacheItemRepository minimalContextCache;
+	@Autowired
+	private IGChatRulesService rulesService;
+	@Autowired
+	private ChatRuleRepository ruleRepository;
 
 	@Override
 	protected void beforeEachCallback() throws Exception {
@@ -61,6 +69,7 @@ public class ChatSessionBranchingTest extends AbstractBaseTestLLmsIntegrationTes
 		fullRepository.deleteAll();
 		shrinkedRepository.deleteAll();
 		minimalContextCache.deleteAll();
+		ruleRepository.deleteAll();
 	}
 
 	@Test
@@ -109,6 +118,32 @@ public class ChatSessionBranchingTest extends AbstractBaseTestLLmsIntegrationTes
 				"Branching must leave the source chat untouched");
 		assertEquals(3, fullRepository.findById(source).orElseThrow().getRetrievedDocuments().getValue().getData()
 				.size());
+	}
+
+	@Test
+	public void testBranchGetsItsOwnCopyOfTheChatRules() throws Exception {
+		IGConfigurableChatModel model = chatModelRuntimeDao.findByCode(DEFAULT_TEST_CHAT_MODEL_CODE);
+		String source = newSession();
+		GeboChatRequest exchange = request(source, "What is the capital of France?");
+		lifeCycleService.startRequest(exchange, model, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+		end(exchange);
+		GChatRule rule = new GChatRule();
+		rule.setScope(ChatRuleScope.SESSION);
+		rule.setUserChatContextCode(source);
+		rule.setText("Answer in Italian");
+		GChatRule sourceRule = rulesService.createRule(rule);
+
+		String branch = lifeCycleService.branchChatSession(source, exchange.getId()).getCode();
+		List<GChatRule> branchRules = rulesService.getChatRules(branch);
+		assertEquals(1, branchRules.size());
+		assertEquals("Answer in Italian", branchRules.get(0).getText());
+		assertNotEquals(sourceRule.getId(), branchRules.get(0).getId());
+
+		GChatRule edited = branchRules.get(0);
+		edited.setText("Answer in French");
+		rulesService.updateRule(edited);
+		assertEquals("Answer in Italian", rulesService.getChatRules(source).get(0).getText(),
+				"Editing the branch's rule leaves the source chat's rule as it was");
 	}
 
 	@Test

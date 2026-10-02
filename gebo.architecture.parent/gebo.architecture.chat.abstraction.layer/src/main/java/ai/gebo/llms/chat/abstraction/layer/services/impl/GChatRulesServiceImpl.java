@@ -102,6 +102,34 @@ public class GChatRulesServiceImpl implements IGChatRulesService {
 	}
 
 	@Override
+	public List<GChatRule> copyChatRules(String sourceUserChatContextCode, String targetUserChatContextCode)
+			throws GeboChatSessionLifecycleException {
+		ownedSession(sourceUserChatContextCode);
+		ownedSession(targetUserChatContextCode);
+		List<GChatRule> copies = new ArrayList<GChatRule>();
+		Date now = new Date();
+		for (GChatRule source : repository.findByScopeAndUserChatContextCode(ChatRuleScope.SESSION,
+				sourceUserChatContextCode)) {
+			GChatRule copy = new GChatRule();
+			copy.setId(UUID.randomUUID().toString());
+			copy.setScope(ChatRuleScope.SESSION);
+			copy.setUserChatContextCode(targetUserChatContextCode);
+			copy.setOwnerUsername(source.getOwnerUsername());
+			copy.setText(source.getText());
+			copy.setEnabled(source.isEnabled());
+			copy.setChatProfileCode(source.getChatProfileCode());
+			copy.setPipelineCode(source.getPipelineCode());
+			copy.setSourceUserChatContextCode(source.getSourceUserChatContextCode());
+			copy.setSourceRequestId(source.getSourceRequestId());
+			copy.setCreatedAt(now);
+			copy.setModifiedAt(now);
+			copy.setModifiedBy(currentUsername());
+			copies.add(copy);
+		}
+		return repository.saveAll(copies);
+	}
+
+	@Override
 	public List<GChatRule> getMyRules() {
 		return repository.findByOwnerUsernameAndScopeIn(currentUsername(),
 				List.of(ChatRuleScope.SESSION, ChatRuleScope.USER));

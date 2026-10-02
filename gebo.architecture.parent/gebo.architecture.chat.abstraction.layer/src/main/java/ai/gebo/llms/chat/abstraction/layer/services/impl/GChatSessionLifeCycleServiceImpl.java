@@ -760,6 +760,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		if (shrinked.isToBeShrinked()) {
 			requestShrink(branchCode, shrinked.getTargetTokenBudget());
 		}
+		rulesService.copyChatRules(sessionCode, branchCode);
 		return new GUserChatInfoData(branch);
 	}
 

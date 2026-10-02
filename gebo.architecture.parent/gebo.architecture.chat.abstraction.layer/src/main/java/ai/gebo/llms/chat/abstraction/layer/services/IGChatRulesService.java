@@ -22,6 +22,10 @@ public interface IGChatRulesService {
 
 	public void deleteRule(String id) throws GeboChatSessionLifecycleException;
 
+	// Gives the target chat its own copy of the source chat's rules; both chats must be the user's.
+	public List<GChatRule> copyChatRules(String sourceUserChatContextCode, String targetUserChatContextCode)
+			throws GeboChatSessionLifecycleException;
+
 	// Session and user rules owned by the current user.
 	public List<GChatRule> getMyRules();
 

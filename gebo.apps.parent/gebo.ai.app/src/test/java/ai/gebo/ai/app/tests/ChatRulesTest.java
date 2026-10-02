@@ -50,11 +50,14 @@ import ai.gebo.llms.chat.client.rest.controllers.GeboChatRulesController;
 import ai.gebo.llms.chat.client.rest.controllers.GeboUserChatsController;
 import ai.gebo.llms.chat.client.rest.controllers.GeboUserChatsController.AnswerFeedbackRequest;
 import ai.gebo.security.config.GeboAISecurityConfig;
+import ai.gebo.security.model.UsersGroup;
+import ai.gebo.security.repository.UsersGroupRepository;
 
 public class ChatRulesTest extends AbstractBaseTestLLmsIntegrationTests {
 
 	private static final String OTHER_USER = "rules-other-user@gebo.ai";
 	private static final String THIRD_USER = "rules-third-user@gebo.ai";
+	private static final String RULES_GROUP = "chat-rules-test-group";
 
 	@Autowired
 	private GeboChatRulesController rulesController;
@@ -68,6 +71,8 @@ public class ChatRulesTest extends AbstractBaseTestLLmsIntegrationTests {
 	private IGChatSessionLifeCycleService lifeCycleService;
 	@Autowired
 	private ChatRuleRepository ruleRepository;
+	@Autowired
+	private UsersGroupRepository groupRepository;
 	@Autowired
 	private ShrinkedChatSessionStateRepository shrinkedRepository;
 	@Autowired
@@ -87,6 +92,7 @@ public class ChatRulesTest extends AbstractBaseTestLLmsIntegrationTests {
 		shrinkedRepository.deleteAll();
 		minimalContextCache.deleteAll();
 		ruleRepository.deleteAll();
+		groupRepository.deleteById(RULES_GROUP);
 		for (String user : List.of(OTHER_USER, THIRD_USER)) {
 			if (getUser(user) == null) {
 				createUser(user, List.of(GeboAISecurityConfig.USER_ROLE));
@@ -165,6 +171,24 @@ public class ChatRulesTest extends AbstractBaseTestLLmsIntegrationTests {
 		assertThrows(SecurityException.class, () -> rulesService.updateRule(tampered));
 
 		impersonate(THIRD_USER, GeboAISecurityConfig.USER_ROLE);
+		assertTrue(rulesController.getSharedRulesAppliedToMe().isEmpty());
+	}
+
+	@Test
+	public void testSharedRulesReachTheMembersOfTheirGroups() throws Exception {
+		UsersGroup group = new UsersGroup();
+		group.setCode(RULES_GROUP);
+		group.setDescription("Chat rules test group");
+		group.setUserIds(List.of(THIRD_USER));
+		groupRepository.save(group);
+		GChatRule shared = draft(null, null, "Answer formally");
+		shared.setAccessibleGroups(List.of(RULES_GROUP));
+		shared = adminRulesController.createSharedRule(shared);
+
+		impersonate(THIRD_USER, GeboAISecurityConfig.USER_ROLE);
+		assertEquals(List.of(shared.getId()),
+				rulesController.getSharedRulesAppliedToMe().stream().map(GChatRule::getId).toList());
+		impersonate(OTHER_USER, GeboAISecurityConfig.USER_ROLE);
 		assertTrue(rulesController.getSharedRulesAppliedToMe().isEmpty());
 	}
 
