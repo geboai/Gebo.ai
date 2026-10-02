@@ -180,6 +180,10 @@ public interface IGChatSessionLifeCycleService {
 	public List<IGConfigurableEmbeddingModel> getSessionEmbeddingModels(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException;
 
+	// New chat holding the history of sessionCode up to and including the exchange of requestId.
+	public GUserChatInfo branchChatSession(String sessionCode, String requestId)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException;
+
 	
 
 }

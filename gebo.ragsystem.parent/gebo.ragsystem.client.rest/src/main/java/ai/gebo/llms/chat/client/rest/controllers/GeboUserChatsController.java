@@ -57,6 +57,7 @@ import lombok.AllArgsConstructor;
  * and deleting chat contexts. Provides endpoints for listing, searching, and
  * managing user chat histories.
  */
+@PreAuthorize("hasAnyRole('USER','ADMIN','APPLICATION')")
 @RestController
 @RequestMapping(path = "api/users/GeboUserChatsController")
 @AllArgsConstructor
@@ -218,6 +219,7 @@ public class GeboUserChatsController {
 		Optional<GUserChatSession> data = repository.findById(entry.getCode());
 		if (data.isPresent()) {
 			GUserChatSession uc = data.get();
+			securityService.checkBeingCreator(uc);
 			uc.setDescription(entry.getDescription());
 			repository.save(uc);
 			return GLookupEntry.of(uc);
@@ -253,6 +255,13 @@ public class GeboUserChatsController {
 	public void deleteChat(@RequestParam("userChatContextCode") String userChatContextCode)
 			throws GeboChatSessionLifecycleException {
 		this.sessionLifeCycleService.removeChatSession(userChatContextCode);
+	}
+
+	@PostMapping(value = "branchChat", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo branchChat(@RequestParam("userChatContextCode") String userChatContextCode,
+			@RequestParam("requestId") String requestId)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException {
+		return this.sessionLifeCycleService.branchChatSession(userChatContextCode, requestId);
 	}
 
 	@GetMapping(value = "suggestChatDescription", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -296,7 +305,6 @@ public class GeboUserChatsController {
 	 *         configured, false otherwise
 	 */
 	@GetMapping(value = "isMinimalLLMSSetupDone", produces = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasAnyRole('USER','ADMIN')")
 	public boolean isMinimalLLMSSetupDone() {
 		return !chatModelRuntimeDao.getConfigurations().isEmpty()
 				&& !embeddingModelRuntimeDao.getConfigurations().isEmpty();

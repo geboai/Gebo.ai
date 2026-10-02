@@ -60,6 +60,25 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 				llmGeneratedDocuments, chatHistory, currentRequest, pol);
 	}
 
+	// New document lists, shared entries: trimming the copy leaves this state intact.
+	public ShrinkedChatSessionState copyForTrimming() {
+		ShrinkedChatSessionState copy = new ShrinkedChatSessionState();
+		copy.setUserChatContextCode(userChatContextCode);
+		copy.setChatHistory(chatHistory);
+		copy.setCurrentRequest(currentRequest);
+		copy.setTargetTokenBudget(targetTokenBudget);
+		copy.setToBeShrinked(toBeShrinked);
+		copy.setLatestRequestsUploadedDocuments(new CSSReferredContentList<>(latestRequestsUploadedDocuments));
+		copy.setLatestRequestsChatWithDocuments(new CSSReferredContentList<>(latestRequestsChatWithDocuments));
+		copy.setLatestRequestsRetrievedDocuments(new CSSReferredContentList<>(latestRequestsRetrievedDocuments));
+		copy.setLatestRequestsLlmGeneratedDocuments(new CSSReferredContentList<>(latestRequestsLlmGeneratedDocuments));
+		copy.setRelevantChatWithDocuments(new CSSfRelevantShrinkedDocumentList(relevantChatWithDocuments));
+		copy.setRelevantUploadedDocuments(new CSSfRelevantShrinkedDocumentList(relevantUploadedDocuments));
+		copy.setRelevantRetrievedDocuments(new CSSfRelevantShrinkedDocumentList(relevantRetrievedDocuments));
+		copy.setRelevantLlmGeneratedDocuments(new CSSfRelevantShrinkedDocumentList(relevantLlmGeneratedDocuments));
+		return copy;
+	}
+
 	private AIDocumentsSet toDocsSet(CSSfRelevantShrinkedDocumentList relevantUploadedDocuments2) {
 		AIDocumentsSet set = new AIDocumentsSet();
 		for (CSSRelevantShrinkedDocument item : relevantUploadedDocuments2) {

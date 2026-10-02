@@ -36,7 +36,7 @@ import jakarta.validation.constraints.NotNull;
  * speech model.
  */
 @RestController
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@PreAuthorize("hasAnyRole('USER','ADMIN','APPLICATION')")
 @RequestMapping(path = "api/users/GeboTextToSpeechController")
 public class GeboTextToSpeechController {
 

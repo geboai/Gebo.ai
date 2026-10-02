@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
@@ -43,6 +44,7 @@ import jakarta.validation.constraints.NotNull;
  * This controller handles queries to search across multiple knowledge bases using semantic
  * vector similarity search capabilities.
  */
+@PreAuthorize("hasAnyRole('USER','ADMIN','APPLICATION')")
 @RestController
 @RequestMapping(path = "api/users/GeboUserKnowledgeBaseSemanticSearchController")
 public class GeboUserKnowledgeBaseSemanticSearchController {

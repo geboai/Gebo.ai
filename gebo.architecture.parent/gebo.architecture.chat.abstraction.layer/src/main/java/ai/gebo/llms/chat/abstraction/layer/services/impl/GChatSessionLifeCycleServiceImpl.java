@@ -64,6 +64,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerSe
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGShrinkedChatSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSReferredContentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSfRelevantShrinkedDocumentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatFullSessionState;
@@ -186,7 +187,6 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		GUserChatSession context = get(request.getUserChatContextCode());
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);
 		ShrinkedChatSessionState shrinked = this.shrinkedSessionStateService.retrieveState(context);
-		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
 		boolean addInteraction = false;
 		Optional<ChatInteractions> alredyInInteraction = context.getInteractions().stream()
 				.filter(x -> x.getRequest().getId().equals(request.getId())).findFirst();
@@ -196,7 +196,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		interaction.setRequestNTokens(ITokensCountable.stringsTokensSize(request.getQuery()));
 		if (addInteraction)
 			context.getInteractions().add(interaction);
-
+		int index = currentInteractionIndex(context, request);
 		List<GResponseDocumentRef> forcedDocumentsRef = request.getForcedDocumentsRef();
 		List<String> documentsList = request.getForcedRequestDocuments();
 		List<UserUploadedContent> uploadedContents = request.getUserUploadedContents();
@@ -354,55 +354,40 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 
 	private LLMChatRequestResources applyGenerationPolicy(ShrinkedChatSessionState shrinked, int budget,
 			LLMRequestGenerationPolicy policy) {
-		switch (policy) {
-		case ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET: {
+		if (policy == LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET) {
 			return shrinked.createChatRequestResources(policy);
 		}
-
-		default: {
-
-			LLMChatRequestResources data = shrinked.createChatRequestResources(policy);
-			if (removeRelevantPastContentsProgressively(shrinked, shrinked.getRelevantChatWithDocuments(), budget))
-				return shrinked.createChatRequestResources(policy);
-			if (removeRelevantPastContentsProgressively(shrinked, shrinked.getRelevantRetrievedDocuments(), budget))
-				return shrinked.createChatRequestResources(policy);
-			if (removeRelevantPastContentsProgressively(shrinked, shrinked.getRelevantUploadedDocuments(), budget))
-				return shrinked.createChatRequestResources(policy);
-			if (removeRelevantPastContentsProgressively(shrinked, shrinked.getRelevantLlmGeneratedDocuments(), budget))
-				return shrinked.createChatRequestResources(policy);
-			if (removeLatestDocumentsProgressively(shrinked, shrinked.getLatestRequestsRetrievedDocuments(), budget))
-				return shrinked.createChatRequestResources(policy);
-			if (removeLatestDocumentsProgressively(shrinked, shrinked.getLatestRequestsChatWithDocuments(), budget))
-				return shrinked.createChatRequestResources(policy);
-			if (removeLatestDocumentsProgressively(shrinked, shrinked.getLatestRequestsUploadedDocuments(), budget))
-				return shrinked.createChatRequestResources(policy);
-			if (removeLatestDocumentsProgressively(shrinked, shrinked.getLatestRequestsLlmGeneratedDocuments(), budget))
-				return shrinked.createChatRequestResources(policy);
-			return shrinked.createChatRequestResources(policy);
+		// What does not fit is left out of this request only: the session state keeps it.
+		ShrinkedChatSessionState trimmed = shrinked.copyForTrimming();
+		for (CSSfRelevantShrinkedDocumentList relevant : List.of(trimmed.getRelevantChatWithDocuments(),
+				trimmed.getRelevantRetrievedDocuments(), trimmed.getRelevantUploadedDocuments(),
+				trimmed.getRelevantLlmGeneratedDocuments())) {
+			while (!relevant.isEmpty() && trimmed.getTokensSize() >= budget) {
+				relevant.remove(0);
+			}
 		}
-
+		for (CSSReferredContentList<?> latest : List.of(trimmed.getLatestRequestsRetrievedDocuments(),
+				trimmed.getLatestRequestsChatWithDocuments(), trimmed.getLatestRequestsUploadedDocuments(),
+				trimmed.getLatestRequestsLlmGeneratedDocuments())) {
+			while (!latest.getData().isEmpty() && trimmed.getTokensSize() >= budget) {
+				latest.getData().remove(0);
+			}
 		}
-
+		return trimmed.createChatRequestResources(policy);
 	}
 
-	private boolean removeLatestDocumentsProgressively(ShrinkedChatSessionState shrinked,
-			CSSReferredContentList<?> cssReferredContentList, int budget) {
-		cssReferredContentList = new CSSReferredContentList(cssReferredContentList);
-		do {
-			if (!cssReferredContentList.getData().isEmpty())
-				cssReferredContentList.getData().remove(0);
-		} while (!cssReferredContentList.getData().isEmpty() && budget > shrinked.getTokensSize());
-		return budget > shrinked.getTokensSize();
-	}
-
-	private boolean removeRelevantPastContentsProgressively(ShrinkedChatSessionState shrinked,
-			CSSfRelevantShrinkedDocumentList relevantRetrievedDocuments, int budget) {
-		relevantRetrievedDocuments = new CSSfRelevantShrinkedDocumentList(relevantRetrievedDocuments);
-		do {
-			if (!relevantRetrievedDocuments.isEmpty())
-				relevantRetrievedDocuments.remove(0);
-		} while (!relevantRetrievedDocuments.isEmpty() && budget > shrinked.getTokensSize());
-		return budget > shrinked.getTokensSize();
+	private static int currentInteractionIndex(GUserChatSession context, GeboChatRequest request) {
+		List<ChatInteractions> interactions = context.getInteractions();
+		if (interactions == null || interactions.isEmpty()) {
+			return 0;
+		}
+		for (int i = interactions.size() - 1; i >= 0; i--) {
+			GeboChatRequest r = interactions.get(i).getRequest();
+			if (r != null && r.getId() != null && r.getId().equals(request.getId())) {
+				return i;
+			}
+		}
+		return interactions.size() - 1;
 	}
 
 	private int getTokensBudget(IGConfigurableChatModel targetChatModel) {
@@ -422,8 +407,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		GUserChatSession context = session(request);
 		ChatFullSessionState state = full(request);
 		ShrinkedChatSessionState shrinked = shrink(request);
-		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
-		index = index > 0 ? index - 1 : 0;
+		int index = currentInteractionIndex(context, request);
 
 		List<Document> ingested = this.chatAreaStorageSession.getIngestedContentsOf(content);
 		AIDocumentsSet docset = AIDocumentsSet.from(ingested);
@@ -482,7 +466,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		ChatFullSessionState state = full(request);
 		ShrinkedChatSessionState shrinked = shrink(request);
 		AIDocumentReferenceItem data = null;
-		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
+		int index = currentInteractionIndex(context, request);
 
 		try {
 			data = this.documentsCacheService.retrieve(reference);
@@ -540,8 +524,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		GUserChatSession context = session(request);
 		ChatFullSessionState state = full(request);
 		ShrinkedChatSessionState shrinked = shrink(request);
-		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
-		index = index > 0 ? index - 1 : 0;
+		int index = currentInteractionIndex(context, request);
 
 		state = this.fullSessionStateService.addRetrievedDocumentsToState(state, retrieved, index);
 
@@ -594,8 +577,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		GUserChatSession context = session(request);
 		ChatFullSessionState state = full(request);
 		ShrinkedChatSessionState shrinked = shrink(request);
-		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
-		index = index > 0 ? index - 1 : 0;
+		int index = currentInteractionIndex(context, request);
 
 		try {
 			List<Document> docs = this.chatAreaStorageSession.getIngestedContentsOf(resource);
@@ -632,7 +614,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		GUserChatSession context = session(request);
 		ChatFullSessionState state = full(request);
 		ShrinkedChatSessionState shrinked = shrink(request);
-		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
+		int index = currentInteractionIndex(context, request);
 
 		List<LLMGeneratedResource> generated = response.getGeneratedResources();
 		if (generated != null) {
@@ -681,16 +663,120 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		ShrinkedChatSessionState shrinked = this.shrinkedSessionStateService
 				.retrieveState(request.getUserChatContextCode());
 		if (shrinked != null && shrinked.isToBeShrinked()) {
-			String code = request.getUserChatContextCode();
-			int budgetSize = getTargetShrinkResize(targetChatModel);
-			SessionShrinkRequestPayload checkPayload = new SessionShrinkRequestPayload();
-			checkPayload.setTokensBudget(budgetSize);
-			checkPayload.setUserChatSessionCode(code);
-			GMessageEnvelope<SessionShrinkRequestPayload> envelope = envelopeFactory.newMessageFrom(this,
-					checkPayload);
-			envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
-			envelope.setTargetComponent(SessionShrinkMessagesReceiver.SESSION_SHRINKER);
-			this.broker.accept(envelope);
+			requestShrink(request.getUserChatContextCode(), getTargetShrinkResize(targetChatModel));
+		}
+	}
+
+	private void requestShrink(String sessionCode, int tokensBudget) {
+		SessionShrinkRequestPayload checkPayload = new SessionShrinkRequestPayload();
+		checkPayload.setTokensBudget(tokensBudget);
+		checkPayload.setUserChatSessionCode(sessionCode);
+		GMessageEnvelope<SessionShrinkRequestPayload> envelope = envelopeFactory.newMessageFrom(this, checkPayload);
+		envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+		envelope.setTargetComponent(SessionShrinkMessagesReceiver.SESSION_SHRINKER);
+		this.broker.accept(envelope);
+	}
+
+	@Override
+	public GUserChatInfo branchChatSession(String sessionCode, String requestId)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException {
+		GUserChatSession source = get(sessionCode);
+		List<ChatInteractions> interactions = source.getInteractions() != null ? source.getInteractions()
+				: List.of();
+		int branchIndex = -1;
+		for (int i = 0; i < interactions.size() && branchIndex < 0; i++) {
+			GeboChatRequest r = interactions.get(i).getRequest();
+			if (r != null && requestId != null && requestId.equals(r.getId())) {
+				branchIndex = i;
+			}
+		}
+		if (branchIndex < 0) {
+			throw new GeboChatSessionLifecycleException(
+					"Request " + requestId + " is not part of the chat " + sessionCode);
+		}
+		ChatFullSessionState sourceFull = retrieveAndCheck(sessionCode);
+
+		GUserChatSession branch = new GUserChatSession();
+		branch.setUsername(securityService.getCurrentUser().getUsername());
+		branch.setDescription((source.getDescription() != null ? source.getDescription() : "Chat") + " (branch)");
+		branch.setChatCreationDateTime(new Date());
+		branch.setContextCode(source.getContextCode());
+		branch.setChatProfileCode(source.getChatProfileCode());
+		branch.setModelReference(source.getModelReference());
+		branch.setRagChat(source.getRagChat());
+		branch.setPipelineCode(source.getPipelineCode());
+		branch.setChatModelCode(source.getChatModelCode());
+		branch.setChoosedKnowledgeBases(source.getChoosedKnowledgeBases());
+		branch.setInteractions(new ArrayList<>(interactions.subList(0, branchIndex + 1)));
+		branch = persistenceManager.insert(branch);
+		String branchCode = branch.getCode();
+		for (ChatInteractions interaction : branch.getInteractions()) {
+			if (interaction.getRequest() != null) {
+				interaction.getRequest().setUserChatContextCode(branchCode);
+			}
+			if (interaction.getResponse() != null) {
+				interaction.getResponse().setUserChatContextCode(branchCode);
+			}
+		}
+		sessionRepository.save(branch);
+
+		ChatFullSessionState full = new ChatFullSessionState();
+		full.setUserChatContextCode(branchCode);
+		full.getChatHistory().getValue().getInteractions()
+				.addAll(historyUpTo(sourceFull.getChatHistory().getValue().getInteractions(), requestId, branchIndex));
+		copyUpTo(sourceFull.getChatWithDocuments().getValue(), full.getChatWithDocuments().getValue(), branchIndex);
+		copyUpTo(sourceFull.getRetrievedDocuments().getValue(), full.getRetrievedDocuments().getValue(), branchIndex);
+		copyUpTo(sourceFull.getUploadedDocuments().getValue(), full.getUploadedDocuments().getValue(), branchIndex);
+		copyUpTo(sourceFull.getLlmGeneratedDocuments().getValue(), full.getLlmGeneratedDocuments().getValue(),
+				branchIndex);
+		this.fullSessionStateService.save(full);
+
+		// The source summaries may cover exchanges after the branch point: start unsummarized.
+		ShrinkedChatSessionState shrinked = new ShrinkedChatSessionState();
+		shrinked.setUserChatContextCode(branchCode);
+		for (CSSSimplefiedInteraction entry : full.getChatHistory().getValue().getInteractions()) {
+			shrinked.getChatHistory().getLatestEntries().getInteractions().add((CSSSimplefiedInteraction) entry.clone());
+		}
+		shrinked.setLatestRequestsChatWithDocuments(new CSSReferredContentList<>(full.getChatWithDocuments().getValue()));
+		shrinked.setLatestRequestsRetrievedDocuments(new CSSReferredContentList<>(full.getRetrievedDocuments().getValue()));
+		shrinked.setLatestRequestsUploadedDocuments(new CSSReferredContentList<>(full.getUploadedDocuments().getValue()));
+		shrinked.setLatestRequestsLlmGeneratedDocuments(
+				new CSSReferredContentList<>(full.getLlmGeneratedDocuments().getValue()));
+		GeboChatRequest branchRequest = new GeboChatRequest();
+		branchRequest.setUserChatContextCode(branchCode);
+		IGConfigurableChatModel model = getSessionChatModel(branchRequest);
+		if (model != null && shrinked.getTokensSize() >= getTokensBudget(model)) {
+			shrinked.setToBeShrinked(true);
+			shrinked.setTargetTokenBudget(getTargetShrinkResize(model));
+		}
+		this.shrinkedSessionStateService.save(shrinked);
+		if (shrinked.isToBeShrinked()) {
+			requestShrink(branchCode, shrinked.getTargetTokenBudget());
+		}
+		return new GUserChatInfoData(branch);
+	}
+
+	private static List<CSSSimplefiedInteraction> historyUpTo(List<CSSSimplefiedInteraction> history,
+			String requestId, int branchIndex) {
+		int last = -1;
+		for (int i = 0; i < history.size(); i++) {
+			if (requestId.equals(history.get(i).getRequestId())) {
+				last = i;
+			}
+		}
+		if (last < 0) {
+			last = Math.min(branchIndex, history.size() - 1);
+		}
+		List<CSSSimplefiedInteraction> out = new ArrayList<>();
+		for (int i = 0; i <= last; i++) {
+			out.add((CSSSimplefiedInteraction) history.get(i).clone());
+		}
+		return out;
+	}
+
+	private static <T> void copyUpTo(CSSReferredContentList<T> from, CSSReferredContentList<T> to, int branchIndex) {
+		if (from != null) {
+			from.getData().stream().filter(x -> x.getInteractionIndex() <= branchIndex).forEach(x -> to.getData().add(x));
 		}
 	}
 
