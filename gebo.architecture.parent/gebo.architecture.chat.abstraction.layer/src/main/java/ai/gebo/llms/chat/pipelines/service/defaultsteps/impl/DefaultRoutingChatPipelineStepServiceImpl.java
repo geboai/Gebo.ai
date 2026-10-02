@@ -185,6 +185,13 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
 		Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
 				List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD));
+		if (data == null || (data.get(DELIVERABLE_FIELD) == null && data.get(REWRITTEN_QUERY_FIELD) == null)) {
+			// an output without any of the fields would leave the request on the QA default
+			// whatever it asks (a report included): the rewriting is asked once more
+			LOGGER.warn("Request rewriting gave neither the deliverable nor the rewritten query: asking once more");
+			data = callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
+					List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD));
+		}
 		List<String> rewrittenQuery = data.get(REWRITTEN_QUERY_FIELD);
 		List<String> deliverable = data.get(DELIVERABLE_FIELD);
 		String rewrited_query = rewrittenQuery != null && !rewrittenQuery.isEmpty() ? rewrittenQuery.get(0) : null;
