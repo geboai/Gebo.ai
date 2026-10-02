@@ -84,6 +84,11 @@ final class ToolsContextSharing {
 			public ToolCallsListener getToolCallListener() {
 				return context.getToolCallListener();
 			}
+
+			@Override
+			public List<String> getRulesToFollow() {
+				return context.getRulesToFollow();
+			}
 		};
 	}
 }

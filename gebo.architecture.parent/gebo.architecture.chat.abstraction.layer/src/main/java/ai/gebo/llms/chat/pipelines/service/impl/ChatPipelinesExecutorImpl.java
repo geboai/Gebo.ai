@@ -243,6 +243,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 			}
 		}).doFinally(signalType -> {
 			emitter.complete();
+			this.chatSessionLifecycleService.releaseRequest(request);
 		}).subscribeOn(runAs.wrap(threadManager.getBoundedElastic()));
 
 		return Flux.defer(() -> Flux.merge(sideChannelFlux, mainFlux))
@@ -284,14 +285,18 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
 			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
 		GeboChatResponse response = this.chatSessionLifecycleService.createEmptyResponse(request);
-		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, response, null, environment,
-				chatModel, serviceModel, pipelineCode, false);
-		IChatPipelineStepService nextStep = getNextStep(runtimeData);
-		if (nextStep instanceof IOutputChatPipelineService outputService) {
-			return outputService.execute(runtimeData, chatModel, serviceModel);
+		try {
+			ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, response, null, environment,
+					chatModel, serviceModel, pipelineCode, false);
+			IChatPipelineStepService nextStep = getNextStep(runtimeData);
+			if (nextStep instanceof IOutputChatPipelineService outputService) {
+				return outputService.execute(runtimeData, chatModel, serviceModel);
+			}
+			throw new ChatPipelineException(
+					"The step service " + nextStep.getStepId() + " is not an IOutputChatPipelineService");
+		} finally {
+			this.chatSessionLifecycleService.releaseRequest(request);
 		}
-		throw new ChatPipelineException(
-				"The step service " + nextStep.getStepId() + " is not an IOutputChatPipelineService");
 	}
 
 	private IChatPipelineStepService getStep(String id) throws ChatPipelineException {

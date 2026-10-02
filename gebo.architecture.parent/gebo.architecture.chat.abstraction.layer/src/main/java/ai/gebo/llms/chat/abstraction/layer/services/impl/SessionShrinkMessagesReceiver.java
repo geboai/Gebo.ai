@@ -52,9 +52,16 @@ public class SessionShrinkMessagesReceiver extends GAbstractTimedOutMessageRecei
 				}
 			}
 
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Shrink batch of {} requests for {} chats", messages.getPayload() instanceof GMessagesBatchPayload b ? b.size() : 0,
+						uniqueMap.size());
+			}
 			for (SessionShrinkRequestPayload entry : uniqueMap.values()) {
 				try {
+					long start = System.currentTimeMillis();
 					shrinker.shrink(entry.getUserChatSessionCode(), entry.getTokensBudget());
+					LOGGER.debug("Shrunk chat {} to a {} tokens target in {} ms", entry.getUserChatSessionCode(),
+							entry.getTokensBudget(), System.currentTimeMillis() - start);
 				} catch (Throwable e) {
 					LOGGER.error("Error shrinking " + entry.getUserChatSessionCode(), e);
 				}

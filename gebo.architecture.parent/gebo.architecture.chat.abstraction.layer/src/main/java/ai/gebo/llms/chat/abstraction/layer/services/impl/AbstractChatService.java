@@ -363,13 +363,13 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		});
 		Flux<GeboChatMessageEnvelope> responseFlux = startFlux.concatWith(bodyFlux).concatWith(trailingFlux)
 				.concatWithValues(GeboChatMessageEnvelope.FINAL_MESSAGE);
-		responseFlux.doOnComplete(() -> {
+		responseFlux = responseFlux.doOnComplete(() -> {
 			try {
 				this.chatSessionLifecycleService.chatRequestCompleted(request, configurableChatModel);
 			} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException e) {
 				LOGGER.error("Error closing response flux with chatSessionLifecycle code", e);
 			}
-		});
+		}).doFinally(signal -> this.chatSessionLifecycleService.releaseRequest(request));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End composeFlux(....)");
 		}

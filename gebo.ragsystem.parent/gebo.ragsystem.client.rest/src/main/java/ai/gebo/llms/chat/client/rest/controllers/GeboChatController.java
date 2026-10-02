@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import tools.jackson.databind.ObjectMapper;
 
@@ -47,6 +48,7 @@ import reactor.core.publisher.Flux;
  * text-to-speech conversions have been moved to dedicated
  * {@link GeboTextToSpeechController} and {@link GeboTranscriptController}.
  */
+@PreAuthorize("hasAnyRole('USER','ADMIN','APPLICATION')")
 @RestController
 
 @RequestMapping(path = "api/users/GeboDirectModelChatController")

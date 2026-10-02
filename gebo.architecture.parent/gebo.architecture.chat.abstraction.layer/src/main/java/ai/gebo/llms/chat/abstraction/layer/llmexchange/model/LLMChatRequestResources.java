@@ -46,9 +46,14 @@ public class LLMChatRequestResources implements ITokensCountable {
 	@JsonIgnore
 	private transient ToolCallsListener toolCallsListener = null;
 
+	// Request id -> note appended to that answer in the history shown to the model.
+	private Map<String, String> answerFeedbackNotes = new HashMap<String, String>();
+	private List<String> rulesToFollow = new ArrayList<String>();
+
 	public LLMChatRequestResources(AIDocumentsSet chatWithDocuments, AIDocumentsSet retrievedDocuments,
-			AIDocumentsSet uploadedDocuments, AIDocumentsSet llmGeneratedDocuments, CSSConsolidatedChatHistory chathistory,
-			GeboChatRequest currentRequest, LLMRequestGenerationPolicy generationPolicy) {
+			AIDocumentsSet uploadedDocuments, AIDocumentsSet llmGeneratedDocuments,
+			CSSConsolidatedChatHistory chathistory, GeboChatRequest currentRequest,
+			LLMRequestGenerationPolicy generationPolicy) {
 		this.chatWithDocuments = chatWithDocuments;
 		this.retrievedDocuments = retrievedDocuments;
 		this.uploadedDocuments = uploadedDocuments;
@@ -61,6 +66,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 	@AllArgsConstructor
 	static final class InteractionWrapper implements IChatSessionEntry {
 		CSSSimplefiedInteraction interaction = null;
+		String feedbackNote = null;
 
 		@Override
 		public String getUser() {
@@ -71,7 +77,8 @@ public class LLMChatRequestResources implements ITokensCountable {
 		@Override
 		public String getAssistant() {
 
-			return interaction.getAssistant() != null ? interaction.getAssistant() : "";
+			String assistant = interaction.getAssistant() != null ? interaction.getAssistant() : "";
+			return feedbackNote != null ? assistant + feedbackNote : assistant;
 		}
 	}
 
@@ -110,11 +117,19 @@ public class LLMChatRequestResources implements ITokensCountable {
 		}
 
 		@Override
+		public List<String> getRulesToFollow() {
+			return rulesToFollow != null ? rulesToFollow : List.of();
+		}
+
+		@Override
 		public List<IChatSessionEntry> getInteractions() {
 			List<IChatSessionEntry> entries = new ArrayList<IChatSessionEntry>();
 			if (chathistory.getLatestEntries() != null) {
 				for (CSSSimplefiedInteraction i : chathistory.getLatestEntries().getInteractions()) {
-					entries.add(new InteractionWrapper(i));
+					String note = answerFeedbackNotes != null && i.getRequestId() != null
+							? answerFeedbackNotes.get(i.getRequestId())
+							: null;
+					entries.add(new InteractionWrapper(i, note));
 				}
 			}
 			return entries;
@@ -129,7 +144,8 @@ public class LLMChatRequestResources implements ITokensCountable {
 		@Override
 		public String getActualUserRequest() {
 
-			return GeboChatRequest.actualQuery(currentRequest);
+			// No current request outside of a request, e.g. when the history is summarized in background.
+			return currentRequest != null ? GeboChatRequest.actualQuery(currentRequest) : "";
 		}
 
 		@Override

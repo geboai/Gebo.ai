@@ -57,6 +57,11 @@ public interface IChatRequestContext {
 
 	public ToolCallsListener getToolCallListener();
 
+	// Rules the user or the administrators set for the answers of this chat.
+	public default List<String> getRulesToFollow() {
+		return List.of();
+	}
+
 	public default IChatRequestContext integrateWithDocuments(Object documents) {
 		if (documents == null) {
 			return this;
@@ -169,6 +174,11 @@ public interface IChatRequestContext {
 			public ToolCallsListener getToolCallListener() {
 				return IChatRequestContext.this.getToolCallListener();
 			}
+
+			@Override
+			public List<String> getRulesToFollow() {
+				return IChatRequestContext.this.getRulesToFollow();
+			}
 		};
 	}
 
@@ -189,6 +199,7 @@ public interface IChatRequestContext {
 		private final Map<String, Object> toolsContext;
 		private final Map<String, Object> pipelineInfos;
 		private final ToolCallsListener toolCallListener;
+		private final List<String> rulesToFollow;
 	}
 
 	public static ChatRequestContextImplBuilder builder() {
@@ -244,6 +255,11 @@ public interface IChatRequestContext {
 			@Override
 			public ToolCallsListener getToolCallListener() {
 				return listener;
+			}
+
+			@Override
+			public List<String> getRulesToFollow() {
+				return IChatRequestContext.this.getRulesToFollow();
 			}
 		};
 	}

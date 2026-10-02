@@ -71,7 +71,7 @@ public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessi
 
 	@Override
 	public ShrinkedChatSessionState save(ShrinkedChatSessionState data) {
-
+		data.setRevision(data.getRevision() + 1);
 		return repo.save(data);
 	}
 

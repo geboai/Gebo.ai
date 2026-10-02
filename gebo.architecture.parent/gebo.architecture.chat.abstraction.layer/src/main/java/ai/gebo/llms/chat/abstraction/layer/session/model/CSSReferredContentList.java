@@ -74,7 +74,7 @@ public class CSSReferredContentList<T> implements ITokensCountable {
 		
 	}
 	public CSSReferredContentList(CSSReferredContentList<T> cssReferredContentList) {
-		this.data = new NestedArrayList<T>(cssReferredContentList.data.container);
+		this.data = new NestedArrayList<T>(new ArrayList<>(cssReferredContentList.data.container));
 	}
 
 };

@@ -39,6 +39,8 @@ public class GeboPromptsLibrary {
 	public static final String HISTORY_CONSOLIDATION_PROMPT = "history-consolidation-prompt";
 	public static final String PROMPT_TEMPLATE_WIZARD_DEFAULT = "prompt-template-wizard-default";
 	public static final String SUMMARIZE_CHAT_DESCRIPTION = "summarize-chat-description";
+	public static final String CHAT_RULE_PROPOSAL_PROMPT = "chat-rule-proposal-prompt";
+	public static final String CHAT_RULE_CONFLICT_PROMPT = "chat-rule-conflict-prompt";
 	public static final String DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT = "deep-search-search-query-extraction-prompt";
 	public static final String DEEP_SEARCH_KEYWORD_GENERATION_PROMPT = "deep-search-keyword-generation-prompt";
 	public static final String DEEP_SEARCH_CONTENT_RATING_PROMPT = "deep-search-content-rating-prompt";
@@ -51,6 +53,7 @@ public class GeboPromptsLibrary {
 			DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT, DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT,
 			DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT, CHAT_HISTORY_DOCUMENTS_CONSOLIDATION,
 			HISTORY_CONSOLIDATION_PROMPT, PROMPT_TEMPLATE_WIZARD_DEFAULT, SUMMARIZE_CHAT_DESCRIPTION,
+			CHAT_RULE_PROPOSAL_PROMPT, CHAT_RULE_CONFLICT_PROMPT,
 			DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT, DEEP_SEARCH_KEYWORD_GENERATION_PROMPT,
 			DEEP_SEARCH_CONTENT_RATING_PROMPT, DEEP_SEARCH_CONSOLIDATION_PROMPT, DEEP_SEARCH_FILE_ANALISYS_PROMPT,
 			DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT, PROMPT_USE_STANDARD_CHAT_PROMPT, PROMPT_USE_STANDARD_RAG_PROMPT,
