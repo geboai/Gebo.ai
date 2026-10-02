@@ -273,37 +273,46 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 			// disabled does it fall back to its historical role of filling the gap left
 			// by an under delivering semantic leg.
 			if (lexicalLegAvailable && (hybrid || !endSearch)) {
-				FullTextSearchMetaDataFilter metaDataFilter = new FullTextSearchMetaDataFilter();
-				metaDataFilter.setKnowledgebaseCodes(knowledgeBases);
 				boolean filterWithAcl = !securityService.isCurrentUserAdmin()
 						&& securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;
-				metaDataFilter.setAclAliases(filterWithAcl ? aclAliases : null);
-				// With hybrid retrieval the lexical leg keeps its reserved quota even when
-				// the semantic leg already returned globalTopK fragments, otherwise the
-				// remainder would be zero or negative and the call would be pointless.
-				final int fullTextTopK = hybrid ? Math.max(fullTextQuota, globalTopK - out.countFragments())
-						: globalTopK - out.countFragments();
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Running the lexical leg with topK:" + fullTextTopK + " over "
-							+ fullTextSearchedQuery.size() + " quer(ies), semantic leg contributed "
-							+ out.countFragments() + " fragment(s)");
-				}
-				try {
-					AIDocumentsSet fullTextDocSet = fullTextSearch.search(fullTextSearchedQuery, fullTextTopK,
-							metaDataFilter);
-					if (fullTextDocSet != null) {
-						if (LOGGER.isDebugEnabled()) {
-							LOGGER.debug("Lexical leg contributed " + fullTextDocSet.countFragments() + " fragment(s)");
-						}
-						out = AIDocumentsSet.join(fullTextDocSet, out);
+				// the caller's filter (its knowledge bases, how many chunks of each document...),
+				// within the knowledge bases of this search and with the user's ACL
+				final FullTextSearchMetaDataFilter metaDataFilter = lexicalFilter(fullTextSearchMetaDataFilter,
+						knowledgeBases, filterWithAcl ? aclAliases : null);
+				if (metaDataFilter == null) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Lexical leg skipped: the caller's knowledge bases "
+								+ fullTextSearchMetaDataFilter.getKnowledgebaseCodes() + " are none of the searched ones "
+								+ knowledgeBases);
 					}
-				} catch (FullTextException | RuntimeException e) {
-					// A configured but unreachable or empty lexical index must not fail the
-					// whole retrieval: the semantic leg already produced usable evidence and
-					// the back fill below recovers the reserved quota.
-					LOGGER.warn("Lexical search leg failed, continuing with the other legs", e);
+				} else {
+					// With hybrid retrieval the lexical leg keeps its reserved quota even when
+					// the semantic leg already returned globalTopK fragments, otherwise the
+					// remainder would be zero or negative and the call would be pointless.
+					final int fullTextTopK = hybrid ? Math.max(fullTextQuota, globalTopK - out.countFragments())
+							: globalTopK - out.countFragments();
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Running the lexical leg with topK:" + fullTextTopK + " over "
+								+ fullTextSearchedQuery.size() + " quer(ies), semantic leg contributed "
+								+ out.countFragments() + " fragment(s)");
+					}
+					try {
+						AIDocumentsSet fullTextDocSet = fullTextSearch.search(fullTextSearchedQuery, fullTextTopK,
+								metaDataFilter);
+						if (fullTextDocSet != null) {
+							if (LOGGER.isDebugEnabled()) {
+								LOGGER.debug("Lexical leg contributed " + fullTextDocSet.countFragments() + " fragment(s)");
+							}
+							out = AIDocumentsSet.join(fullTextDocSet, out);
+						}
+					} catch (FullTextException | RuntimeException e) {
+						// A configured but unreachable or empty lexical index must not fail the
+						// whole retrieval: the semantic leg already produced usable evidence and
+						// the back fill below recovers the reserved quota.
+						LOGGER.warn("Lexical search leg failed, continuing with the other legs", e);
+					}
+					endSearch = out.countFragments() >= globalTopK || out.getTokensSize() >= tokensBudget;
 				}
-				endSearch = out.countFragments() >= globalTopK || out.getTokensSize() >= tokensBudget;
 			}
 			if (knowledgeGraphSearchService != null && !endSearch) {
 				try {
@@ -349,6 +358,45 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 		}
 		return out;
 
+	}
+
+	/**
+	 * The filter of the lexical leg: a copy of the caller's one (its knowledge bases,
+	 * documents, chunks per document...) whose knowledge bases are kept within the
+	 * searched ones (all of them when the caller names none), with the user's ACL
+	 * aliases ({@code null} when no ACL filter applies). {@code null} when the caller
+	 * names only knowledge bases outside the searched ones: an empty list would filter
+	 * nothing.
+	 */
+	static FullTextSearchMetaDataFilter lexicalFilter(FullTextSearchMetaDataFilter callerFilter,
+			List<String> searchedKnowledgeBases, List<Integer> aclAliases) {
+		final FullTextSearchMetaDataFilter filter = new FullTextSearchMetaDataFilter();
+		List<String> knowledgeBases = searchedKnowledgeBases;
+		if (callerFilter != null) {
+			filter.setProjectCode(callerFilter.getProjectCode());
+			filter.setProjectEndpointCode(callerFilter.getProjectEndpointCode());
+			filter.setContentCode(callerFilter.getContentCode());
+			filter.setContentExtension(callerFilter.getContentExtension());
+			filter.setContentType(callerFilter.getContentType());
+			filter.setContentPage(callerFilter.getContentPage());
+			filter.setLanguage(callerFilter.getLanguage());
+			filter.setFileTreatAs(callerFilter.getFileTreatAs());
+			filter.setReferenceType(callerFilter.getReferenceType());
+			filter.setFileRelativePathPrefix(callerFilter.getFileRelativePathPrefix());
+			filter.setDocumentCodes(callerFilter.getDocumentCodes());
+			filter.setCollapseByDocument(callerFilter.isCollapseByDocument());
+			filter.setPerDocumentInnerHits(callerFilter.getPerDocumentInnerHits());
+			if (callerFilter.getKnowledgebaseCodes() != null && !callerFilter.getKnowledgebaseCodes().isEmpty()) {
+				knowledgeBases = callerFilter.getKnowledgebaseCodes().stream()
+						.filter(code -> searchedKnowledgeBases != null && searchedKnowledgeBases.contains(code)).toList();
+				if (knowledgeBases.isEmpty()) {
+					return null;
+				}
+			}
+		}
+		filter.setKnowledgebaseCodes(knowledgeBases);
+		filter.setAclAliases(aclAliases);
+		return filter;
 	}
 
 	/**
