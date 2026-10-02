@@ -81,6 +81,12 @@ const wheelLineHeight: number = 40;
  */
 const scrollHostCacheMillis: number = 250;
 /**
+ * The streamed text of an answer is added to it at most once in this time: every
+ * addition re-renders the whole markdown answer (highlighting, diagrams) and scrolls,
+ * which done for every chunk freezes the page on long answers
+ */
+const streamedTextBatchMillis: number = 100;
+/**
  * Component that provides a reusable chat interface for Gebo.ai models.
  * Supports both standard chat and RAG-enabled conversations, with features like
  * streaming responses, speech recognition, and voice output. Manages chat history
@@ -1076,11 +1082,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                         }
                         this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
 
+                        // the query is not reset here: sendMessage cleared it, and what the user
+                        // typed while waiting is the next message
                         const dataUpdate: any = {
                             chatProfileCode: r.chatProfileCode,
                             chatModelCode: r.chatModelCode,
-                            userChatContextCode: response.userChatContextCode,
-                            query: null
+                            userChatContextCode: response.userChatContextCode
                         };
                         this.formGroup.patchValue(dataUpdate);
                         this.scrollToBottom();
@@ -1165,11 +1172,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 // when present, or an empty array when nothing was produced, so the host can
                 // react to both cases (show/hide a suggestion).
                 this.outputAdditionalContents.emit(response.additionalContents ?? []);
+                // the query is not reset here: sendMessage cleared it, and what the user
+                // typed while the answer streamed is the next message
                 const dataUpdate: any = {
                     chatProfileCode: r.chatProfileCode,
                     chatModelCode: r.chatModelCode,
                     userChatContextCode: response.userChatContextCode,
-                    query: null,
                     chatPipelineProcessId: null,
                     forcedRequestDocuments: []
                 };
@@ -1198,6 +1206,27 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             pipelineRouterDecisionCode: this.currentPipelineRouterDecisionCode
         };
         this.interactions.push(interaction);
+        // the streamed text waiting to be added to the answer (see streamedTextBatchMillis)
+        let pendingText: string = "";
+        let flushTimer: ReturnType<typeof setTimeout> | undefined = undefined;
+        const flushText = () => {
+            if (flushTimer !== undefined) {
+                clearTimeout(flushTimer);
+                flushTimer = undefined;
+            }
+            if (!pendingText) return;
+            if (interaction.response) {
+                interaction.response.queryResponse = (interaction.response.queryResponse || "") + pendingText;
+            }
+            pendingText = "";
+            this.scrollToBottom();
+        };
+        const appendText = (text: string) => {
+            pendingText += text;
+            if (flushTimer === undefined) {
+                flushTimer = setTimeout(flushText, streamedTextBatchMillis);
+            }
+        };
         const messageCallback = (msg: IGeboChatMessage | string) => {
             if (!msg) return;
             this.loadingChatResponse = false;
@@ -1256,6 +1285,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                                     try {
                                         const parsed = JSON.parse(recvd.content);
                                         if (parsed && (parsed.queryResponse !== undefined || parsed.userChatContextCode !== undefined || parsed.usedChatModelCode !== undefined)) {
+                                            flushText();
                                             this.handleGeboChatResponse(interaction, parsed, r, suggestChatDescription, doSpeach, recvd.lastMessage);
                                             isJson = true;
                                         }
@@ -1265,26 +1295,27 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                                 }
 
                                 if (!isJson) {
-                                    interaction.response.queryResponse += recvd.content;
-                                    setTimeout(() => this.scrollToBottom(), 10);
+                                    appendText(recvd.content);
                                 }
                             }
                         } break;
                         case "GeboChatResponse": {
+                            flushText();
                             this.handleGeboChatResponse(interaction, recvd.content, r, suggestChatDescription, doSpeach, recvd.lastMessage);
                         } break;
                     }
                 }
                 if (recvd.lastMessage === true) {
+                    flushText();
                     interaction.loading = false;
                     this.chatStreaming = false;
                 }
             } catch (e) {
                 console.error("Exception :", e);
             }
-            console.log("Received chat word: " + msg);
         };
         const errorCallBack = (error: any) => {
+            flushText();
             this.chatStreaming = false;
             this.chatStreamingErrorOccurred = true;
             console.error("Exception in receiving data", error);
@@ -1296,6 +1327,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         this.chatStreamingErrorOccurred = false;
 
         const onCompleteCallback = () => {
+            flushText();
             this.chatStreaming = false;
             this.loadingChatResponse = false;
             if (interaction) {

@@ -3320,6 +3320,11 @@
       "imageGeneration": {
         "label": "Image generation"
       }
+    },
+    "GeboAIChatInputShellComponent": {
+      "PendingSendHint": {
+        "label": "The message will be sent as soon as the chat is ready…"
+      }
     }
   },
   "GeboAIAudioControlModule": {

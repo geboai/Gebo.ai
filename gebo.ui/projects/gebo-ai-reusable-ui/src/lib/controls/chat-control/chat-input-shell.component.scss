@@ -60,4 +60,13 @@
       }
     }
   }
+
+  &__pending {
+    display: flex;
+    align-items: center;
+    gap: var(--gebo-space-1, 0.25rem);
+    margin-top: var(--gebo-space-1, 0.25rem);
+    font-size: var(--gebo-font-size-sm, 13px);
+    color: var(--gebo-text-muted, #6b7280);
+  }
 }
