@@ -104,7 +104,8 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 			int oldShrinkedSize = oldVersion.getTokensSize();
 			doShrink = oldShrinkedSize > tokensBudget;
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Full session size=" + size + " shrinked=" + oldShrinkedSize + " tokens");
+				LOGGER.debug("Chat " + sessionCode + ": full state " + size + " tokens, compact state " + oldShrinkedSize
+						+ " tokens, target " + tokensBudget + " tokens: shrink " + (oldShrinkedSize > tokensBudget));
 			}
 			if (doShrink) {
 				LOGGER.info("Shrinked session size = " + oldShrinkedSize + ", so running shrinker");
@@ -121,6 +122,12 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 						this.chatConfig.getLeaveLastInteractionsOnHistoryConsolidation(),
 						oldVersion != null ? oldVersion.getChatHistory() : null, shrinkRequestContext, usedChatModel,
 						true));
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat {}: history summary of {} tokens covers interactions up to {}, {} kept verbatim",
+							sessionCode, out.getChatHistory().getConsolidationTextTokenSize(),
+							out.getChatHistory().getLastInteractionPointer(),
+							out.getChatHistory().getLatestEntries().getInteractions().size());
+				}
 				this.minimalChatContextCacheItemRepository.deleteByUserChatContextCode(out.getUserChatContextCode());
 				MinimalChatContext minimalChatContext = new MinimalChatContext();
 				minimalChatContext.setChatHistory(out.getChatHistory());
@@ -171,6 +178,13 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 				out.setRelevantUploadedDocuments(shrinkDocumentList(untillLatest(full, full.getUploadedDocuments()),
 						out.getChatHistory(), oldVersion.getRelevantUploadedDocuments(), tokensBudget, usedChatModel,
 						ShrinkedDocumentOrigin.UPLOADED));
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug(
+							"Chat {}: summarized documents of older interactions chat-with:{} retrieved:{} generated:{} uploaded:{}",
+							sessionCode, out.getRelevantChatWithDocuments().size(),
+							out.getRelevantRetrievedDocuments().size(), out.getRelevantLlmGeneratedDocuments().size(),
+							out.getRelevantUploadedDocuments().size());
+				}
 				int tokensSize = out.getTokensSize();
 				CSSReferredContentList latestRequestsChatWithDocuments = afterLatest(full, full.getChatWithDocuments());
 				if (tokensBudget < (tokensSize + latestRequestsChatWithDocuments.getTokensSize())) {
@@ -223,6 +237,14 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 				}
 
 				int afterSize = out.getTokensSize();
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug(
+							"Chat {}: latest interactions' documents kept whole chat-with:{} retrieved:{} generated:{} uploaded:{}",
+							sessionCode, out.getLatestRequestsChatWithDocuments().getData().size(),
+							out.getLatestRequestsRetrievedDocuments().getData().size(),
+							out.getLatestRequestsLlmGeneratedDocuments().getData().size(),
+							out.getLatestRequestsUploadedDocuments().getData().size());
+				}
 				LOGGER.info("Shrinked to:" + afterSize + " tokens");
 				shrinkedStateRepository.save(out);
 			}
@@ -329,6 +351,10 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 				}).findFirst();
 				if (matching.isPresent()) {
 					outList.add(matching.get());
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("{} document {} of interaction {}: reusing its summary", origin,
+								content.getAiDocument().getCode(), content.getInteractionIndex());
+					}
 				} else {
 					List<LLMInputDocument> toBeConsolidated = new ArrayList<LLMInputDocument>();
 					if (content.getAiDocument().getFragments().isEmpty())
@@ -362,6 +388,11 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 							if (text != null && text.trim().length() > 0) {
 								out.setSummarizedContent(text);
 								outList.add(out);
+							}
+							if (LOGGER.isTraceEnabled()) {
+								LOGGER.trace("{} document {} of interaction {}: summarized {} characters into {}", origin,
+										content.getAiDocument().getCode(), content.getInteractionIndex(),
+										buffer.length(), text != null ? text.length() : 0);
 							}
 
 						}
@@ -415,6 +446,13 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 			}
 		}
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug(
+					"Consolidating history of {} interactions: summarizing {} to {} ({}), previous summary {} tokens, keeping {} verbatim, target {} tokens",
+					value.getInteractions().size(), firstIndex, lastIndex - 1,
+					incremental ? "incremental" : "whole", existingSummary.isEmpty() ? 0 : tokensEstimator.estimate(existingSummary),
+					leaveLastInteractionsOnHistoryConsolidation, historySizeTarget);
+		}
 		CSSConsolidatedChatHistory newConsolidation = new CSSConsolidatedChatHistory();
 		newConsolidation.setLatestEntries(copyLatest(value, leaveLastInteractionsOnHistoryConsolidation));
 		if (lastIndex > firstIndex) {
@@ -447,7 +485,11 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 			newConsolidation.setLastInteractionPointer(lastIndex);
 			int tokens = (tokensEstimator.estimate(newConsolidation.getConsolidationText()));
 			newConsolidation.setConsolidationTextTokenSize(tokens);
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("New history summary ({} tokens): {}", tokens, consolidated);
+			}
 		} else if (!existingSummary.isEmpty()) {
+			LOGGER.debug("Nothing new to summarize: the previous summary is kept");
 			newConsolidation.setConsolidationText(oldVersion.getConsolidationText());
 			newConsolidation.setConsolidationTextTokenSize(oldVersion.getConsolidationTextTokenSize());
 			newConsolidation.setLastInteractionPointer(oldVersion.getLastInteractionPointer());
@@ -464,6 +506,8 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 			List<MinimalChatContextCacheItem> items = this.minimalChatContextCacheItemRepository
 					.findByUserChatContextCodeAndLastRequestIdAndTokensBudgetLessThanEqual(sessionCode,
 							lastInteractionId, (Integer) tokensBudget);
+			LOGGER.debug("Minimal context of chat {} for {} tokens: {} cached", sessionCode, tokensBudget,
+					items.isEmpty() ? "not" : "found");
 			if (!items.isEmpty()) {
 				MinimalChatContextCacheItem item = items.get(0);
 				MinimalChatContext entry = item.getItem();
