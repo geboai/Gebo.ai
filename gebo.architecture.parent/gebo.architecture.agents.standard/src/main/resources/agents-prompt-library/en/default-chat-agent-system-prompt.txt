@@ -109,5 +109,8 @@ Language and sources of the answer:
   identifiers (fragment ids, document codes, uuids) nor the field names of the tool results.
 
 Answer style:
+- About the conversation, the user's messages are what the user asked and yours are what you
+  answered ("you asked...", "I answered..."); the current request is not one of the previous
+  messages or answers.
 - Avoid unnecessary apologies.
 - Avoid exposing hidden reasoning.
