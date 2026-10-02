@@ -161,9 +161,17 @@ public class BaseLLMSInvokingService {
 			}
 		}
 		if (!missingFields.isEmpty()) {
-			LOGGER.warn("callLLMRepeatableFieldEntryOutput(...) prompt:" + (prompt != null ? prompt.getPromptUse() : null)
-					+ " output of " + (toBeParsed != null ? toBeParsed.length() : 0)
-					+ " character(s) without the field(s):" + missingFields);
+			// some fields are optional for some callers (e.g. the systems of a routing decision):
+			// an output with none of them is the failure worth a warning
+			final String message = "callLLMRepeatableFieldEntryOutput(...) prompt:"
+					+ (prompt != null ? prompt.getPromptUse() : null) + " output of "
+					+ (toBeParsed != null ? toBeParsed.length() : 0) + " character(s) without the field(s):"
+					+ missingFields;
+			if (outValue.isEmpty() && !validFields.isEmpty()) {
+				LOGGER.warn(message);
+			} else if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug(message);
+			}
 			if (LOGGER.isDebugEnabled() && toBeParsed != null) {
 				LOGGER.debug("Output without the field(s) " + missingFields + " begins with: "
 						+ toBeParsed.substring(0, Math.min(400, toBeParsed.length())));
