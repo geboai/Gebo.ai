@@ -408,7 +408,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
 				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
-				createToolCallingManager(callBacksListener, allFunctions, additionalFunctions, runAs));
+				createToolCallingManager(callBacksListener, allFunctions, additionalFunctions, runAs),
+				additionalFunctions);
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End getAgentModel(...) for agent service id:" + getId());

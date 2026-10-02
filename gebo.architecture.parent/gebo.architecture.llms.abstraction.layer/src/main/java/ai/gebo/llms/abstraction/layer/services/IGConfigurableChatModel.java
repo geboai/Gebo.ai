@@ -149,6 +149,17 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 		private final ChatModelThinkingOption thinking;
 		private final List<String> toolsName;
 		private final ToolCallingManager toolCallingManager;
+		/**
+		 * Tools made for one use of the model, not in the tools repository (e.g. an agent's
+		 * notifyUser, bound to its notification sink): the model declares them with the
+		 * repository ones, which are the only ones its configuration names resolve to.
+		 */
+		private final List<ToolCallback> additionalTools;
+
+		public ChatModelConfigOptions(Double temperature, Double topP, ChatModelThinkingOption thinking,
+				List<String> toolsName, ToolCallingManager toolCallingManager) {
+			this(temperature, topP, thinking, toolsName, toolCallingManager, null);
+		}
 	}
 
 	public IGConfigurableChatModel<ModelConfig> cloneWithOptions(String codePrefix,
