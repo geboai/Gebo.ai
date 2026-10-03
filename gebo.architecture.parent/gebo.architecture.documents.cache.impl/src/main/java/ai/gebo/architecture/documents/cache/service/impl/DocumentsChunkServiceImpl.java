@@ -70,6 +70,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGAIDocumentMetaDataEnricher;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
+import ai.gebo.system.ingestion.IGLanguageDetector;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
 import ai.gebo.system.ingestion.model.MetaDataHeaderInfos;
 import jakarta.el.MethodNotFoundException;
@@ -102,6 +103,11 @@ public class DocumentsChunkServiceImpl
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final IGeboThreadManager geboThreadManager;
 	private final IKeywordMatcherService keywordMatcherService;
+	private final IGLanguageDetector languageDetector;
+	/** Shorter texts are not detected: the detector says so itself, it often gives nothing. */
+	static final int MIN_LANGUAGE_DETECTION_CHARS = 30;
+	/** A detected language below this probability is not trusted. */
+	static final double MIN_LANGUAGE_CONFIDENCE = 0.5;
 	private final ChunkingSessionRepository chunkingSessionRepo;
 	private final static JTokkitTokenCountEstimator estimator = new JTokkitTokenCountEstimator();
 	private final static ObjectMapper objectMapper = new ObjectMapper();
@@ -115,7 +121,7 @@ public class DocumentsChunkServiceImpl
 			IGeboThreadManager geboThreadManager, IGPersistentObjectManager persistentObjectManager,
 			GeboDocumentsCacheConfig cacheConfig, ChunkingSessionRepository chunkingSessionRepo,
 			DocumentChunkOperationRepository documentChunkOperationRepository,
-			IKeywordMatcherService keywordMatcherService) {
+			IKeywordMatcherService keywordMatcherService, IGLanguageDetector languageDetector) {
 		super(chunkOperationRepository, ttlCacheIt);
 		this.cacheService = cacheService;
 		this.configService = configService;
@@ -129,6 +135,67 @@ public class DocumentsChunkServiceImpl
 		this.chunkingSessionRepo = chunkingSessionRepo;
 		this.documentChunkOperationRepository = documentChunkOperationRepository;
 		this.keywordMatcherService = keywordMatcherService;
+		this.languageDetector = languageDetector;
+	}
+
+	/**
+	 * The language of the matching keywords (most often written by a model, in any
+	 * language), detected once for the whole document; null when they are too short or
+	 * the detection is not trusted.
+	 */
+	String keywordsLanguage(List<String> keywords) {
+		if (keywords == null || keywords.isEmpty() || languageDetector == null) {
+			return null;
+		}
+		final String text = String.join(" ", keywords);
+		if (text.length() < MIN_LANGUAGE_DETECTION_CHARS) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("keywordsLanguage(...) " + text.length() + " character(s) of keywords, too short to detect");
+			}
+			return null;
+		}
+		try {
+			final IGLanguageDetector.DetectedLanguage detected = languageDetector.detect(text);
+			final String language = detected != null && detected.getConfidence() >= MIN_LANGUAGE_CONFIDENCE
+					&& detected.getLanguage() != null && !detected.getLanguage().isBlank() ? detected.getLanguage()
+							: null;
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("keywordsLanguage(...) detected:" + detected + " used:" + language);
+			}
+			return language;
+		} catch (IOException | RuntimeException e) {
+			LOGGER.warn("Cannot detect the language of the matching keywords, their stop words fall back: " + e);
+			return null;
+		}
+	}
+
+	/**
+	 * The languages whose stop words a chunk is matched with: the keywords' and the
+	 * chunk's own, as the ingestion detected it, when trusted.
+	 */
+	static List<String> matchingLanguages(String keywordsLanguage, Map<String, Object> chunkMetadata) {
+		final List<String> languages = new ArrayList<String>(2);
+		if (keywordsLanguage != null) {
+			languages.add(keywordsLanguage);
+		}
+		final Object language = chunkMetadata != null ? chunkMetadata.get(DocumentMetaInfos.LANGUAGE) : null;
+		final Object confidence = chunkMetadata != null ? chunkMetadata.get(DocumentMetaInfos.LANGUAGE_CONFIDENCE)
+				: null;
+		double trust = 0;
+		if (confidence instanceof Number number) {
+			trust = number.doubleValue();
+		} else if (confidence != null) {
+			try {
+				trust = Double.parseDouble(confidence.toString());
+			} catch (NumberFormatException e) {
+				trust = 0;
+			}
+		}
+		if (language != null && !language.toString().isBlank() && trust >= MIN_LANGUAGE_CONFIDENCE
+				&& !languages.contains(language.toString())) {
+			languages.add(language.toString());
+		}
+		return languages;
 	}
 
 	@Override
@@ -254,6 +321,9 @@ public class DocumentsChunkServiceImpl
 					}
 					final boolean chunkAll = params.getChunkingPolicy() == null
 							|| params.getChunkingPolicy() == ChunkingPolicy.SPLIT_CHUNKS;
+					// the stop words ignored in the matching keywords are the ones of their
+					// language and of each chunk's (see matchingLanguages)
+					final String keywordsLanguage = chunkAll ? null : keywordsLanguage(params.getMatchingKeywords());
 					final AtomicLong atomicLong = new AtomicLong(0l);
 					final AtomicBoolean samplingBudgetReached = new AtomicBoolean(false);
 					docsStream.forEach(doc -> {
@@ -331,7 +401,8 @@ public class DocumentsChunkServiceImpl
 											if (currentTokensLength >= params.getTokensThreashold().longValue()) {
 
 												considerChunk = this.keywordMatcherService.isMatching(
-														params.getMatchingKeywords(), _document.getText(), nhits);
+														params.getMatchingKeywords(), _document.getText(), nhits,
+														matchingLanguages(keywordsLanguage, _document.getMetadata()));
 											} else {
 												considerChunk = true;
 											}
@@ -339,7 +410,8 @@ public class DocumentsChunkServiceImpl
 											break;
 										case ONLY_MATCHING_CHUNKS: {
 											considerChunk = this.keywordMatcherService.isMatching(
-													params.getMatchingKeywords(), _document.getText(), nhits);
+													params.getMatchingKeywords(), _document.getText(), nhits,
+													matchingLanguages(keywordsLanguage, _document.getMetadata()));
 										}
 											break;
 										}

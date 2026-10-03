@@ -72,4 +72,30 @@ class KeywordMatcherServiceImplTest {
 		assertFalse(matcher.isMatching(List.of("contract", "renewal", "penalty", "term"), "The renewal is automatic.", 2));
 		assertTrue(matcher.isMatching(List.of("contract", "renewal", "penalty", "term"), "The contract renewal.", 2));
 	}
+
+	@Test
+	void theStopWordsAreTheOnesOfTheLanguagesNamed() {
+		// French keywords: with French named, "les" and "du" say nothing
+		List<String> french = List.of("les pénalités du contrat");
+		assertFalse(matcher.isMatching(List.of("les", "contrat"), "La société paie les frais.", 1, List.of("fr")));
+		assertTrue(matcher.isMatching(french, "Les pénalités du contrat sont dues.", 1, List.of("fr")));
+		// without a language the fallback (it, en) does not know "les": it lets the chunk through
+		assertTrue(matcher.isMatching(List.of("les", "contrat"), "La société paie les frais.", 1));
+	}
+
+	@Test
+	void aWordThatIsAStopWordInTheChunkLanguageTellsNothingOfIt() {
+		// "die" is an English word, and the German article: in a German chunk it says nothing
+		assertFalse(matcher.isMatching(List.of("die", "renewal"), "Die Firma zahlt die Kosten.", 1, List.of("en", "de")));
+		assertTrue(matcher.isMatching(List.of("die", "renewal"), "Die Firma zahlt die Kosten.", 1, List.of("en")));
+	}
+
+	@Test
+	void unknownLanguagesFallBackToTheConfiguredOnes() {
+		assertFalse(matcher.isMatching(List.of("the", "renewal"), "The weather of the region.", 1, List.of("xx", "")));
+		KeywordMatcherServiceImpl frenchFallback = new KeywordMatcherServiceImpl(List.of("fr"));
+		assertFalse(frenchFallback.isMatching(List.of("les", "contrat"), "La société paie les frais.", 1));
+		assertTrue(matcher.isMatching(List.of("penali"), "Le penali.", 1, List.of("zh-CN", "IT")),
+				"region and case of the detected codes are understood");
+	}
 }
