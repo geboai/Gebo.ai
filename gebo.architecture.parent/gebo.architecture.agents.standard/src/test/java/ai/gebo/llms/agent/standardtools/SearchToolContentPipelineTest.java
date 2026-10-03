@@ -54,6 +54,8 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.IGComponentOriginatedDocument;
+import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
+import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
 import reactor.core.publisher.Flux;
 
 /**
@@ -66,6 +68,7 @@ class SearchToolContentPipelineTest {
 	private IGRankerService ranker;
 	private IGExternalSearchSecurityService security;
 	private SearchToolContentPipeline pipeline;
+	private StandardAgentsConfig agentsConfig;
 	@SuppressWarnings("rawtypes")
 	private ISearchService service;
 	private SearchableSystemMetaData system;
@@ -126,8 +129,9 @@ class SearchToolContentPipelineTest {
 		when(ranker.call(anyList(), anyString(), anyInt())).thenAnswer(invocation -> invocation.getArgument(0));
 		security = mock(IGExternalSearchSecurityService.class);
 		when(security.isEnabledForCurrentUser(any())).thenReturn(true);
+		agentsConfig = new StandardAgentsConfig();
 		pipeline = new SearchToolContentPipeline(provider(chunkingService), provider(ranker), provider(security),
-				new SearchToolsRequestRegistry());
+				new SearchToolsRequestRegistry(), provider(agentsConfig));
 		service = mock(ISearchService.class);
 		when(service.getId()).thenReturn("web-service");
 		system = new SearchableSystemMetaData();
@@ -435,5 +439,42 @@ class SearchToolContentPipelineTest {
 
 		assertEquals(Status.NO_RESULTS, result.getStatus());
 		assertTrue(searched.isEmpty(), "no search is run for contents that could not be returned");
+	}
+
+	/** Six documents whose loading takes a while: the most loaded at the same time. */
+	private int mostDocumentsLoadedAtOnce() throws Exception {
+		java.util.concurrent.atomic.AtomicInteger loading = new java.util.concurrent.atomic.AtomicInteger();
+		java.util.concurrent.atomic.AtomicInteger most = new java.util.concurrent.atomic.AtomicInteger();
+		when(chunkingService.streamChunks(any(IGComponentOriginatedDocument.class), any(), anyString()))
+				.thenAnswer(invocation -> {
+					SearchResult result = invocation.getArgument(0);
+					DocumentChunk chunk = DocumentChunk.ofText(result.getCode(), "content of " + result.getCode(),
+							Map.of());
+					chunk.setChunkPosition(1l);
+					return Flux.defer(() -> {
+						most.accumulateAndGet(loading.incrementAndGet(), Math::max);
+						return Flux.just(IDocumentChunkWithRef.of(chunk, result))
+								.delayElements(java.time.Duration.ofMillis(100))
+								.doOnTerminate(loading::decrementAndGet).doOnCancel(loading::decrementAndGet);
+					});
+				});
+		List<SearchResult> six = new ArrayList<>();
+		for (int i = 0; i < 6; i++) {
+			six.add(result("https://a.example/" + i, "Doc " + i));
+		}
+		pipeline.run(service, "searchWeb", "d", param("q", "o"), List.of(), (s, n) -> six, request("r1"));
+		return most.get();
+	}
+
+	@Test
+	void twoDocumentsAreLoadedAtOnceByDefault() throws Exception {
+		assertEquals(SearchResultsChunker.DEFAULT_DOCUMENTS_PARALLELISM, 2);
+		assertEquals(2, mostDocumentsLoadedAtOnce());
+	}
+
+	@Test
+	void theConfiguredParallelismIsTheOneUsed() throws Exception {
+		agentsConfig.setSearchDocumentsParallelism(3);
+		assertEquals(3, mostDocumentsLoadedAtOnce());
 	}
 }

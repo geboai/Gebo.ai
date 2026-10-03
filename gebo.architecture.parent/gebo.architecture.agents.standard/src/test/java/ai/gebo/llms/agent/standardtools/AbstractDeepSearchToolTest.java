@@ -69,6 +69,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRe
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.IGComponentOriginatedDocument;
+import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import reactor.core.publisher.Flux;
 
 /**
@@ -179,7 +180,8 @@ class AbstractDeepSearchToolTest {
 		GeboRagSearchConfig ragSearchConfig = mock(GeboRagSearchConfig.class);
 		when(ragSearchConfig.getDeepSearchGlobalTopK()).thenReturn(30);
 		support = new DeepSearchToolsSupport(provider(analysis), provider(chunkingService), provider(chatModelsDao),
-				provider(ragSearchConfig), provider(security), DeepSearchToolsSupport.DEFAULT_MAX_ANALYSIS_TOKENS);
+				provider(ragSearchConfig), provider(security), provider(new StandardAgentsConfig()),
+				DeepSearchToolsSupport.DEFAULT_MAX_ANALYSIS_TOKENS);
 	}
 
 	@Test

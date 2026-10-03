@@ -24,6 +24,8 @@ import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
+import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
+import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
 
 /**
  * What every deep search tool shares: its collaborators, resolved on use (the tool
@@ -47,6 +49,7 @@ public class DeepSearchToolsSupport {
 	private final ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModelsDao;
 	private final ObjectProvider<GeboRagSearchConfig> ragSearchConfig;
 	private final ObjectProvider<IGExternalSearchSecurityService> externalSearchSecurityService;
+	private final ObjectProvider<StandardAgentsConfig> agentsConfig;
 	private final int maxAnalysisTokens;
 
 	private static final class RequestCount {
@@ -61,12 +64,14 @@ public class DeepSearchToolsSupport {
 			ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModelsDao,
 			ObjectProvider<GeboRagSearchConfig> ragSearchConfig,
 			ObjectProvider<IGExternalSearchSecurityService> externalSearchSecurityService,
+			ObjectProvider<StandardAgentsConfig> agentsConfig,
 			@Value("${" + MAX_ANALYSIS_TOKENS_PROPERTY + ":" + DEFAULT_MAX_ANALYSIS_TOKENS + "}") int maxAnalysisTokens) {
 		this.analysis = analysis;
 		this.chunkingService = chunkingService;
 		this.chatModelsDao = chatModelsDao;
 		this.ragSearchConfig = ragSearchConfig;
 		this.externalSearchSecurityService = externalSearchSecurityService;
+		this.agentsConfig = agentsConfig;
 		this.maxAnalysisTokens = maxAnalysisTokens > 0 ? maxAnalysisTokens : DEFAULT_MAX_ANALYSIS_TOKENS;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Deep search tools analysis capped at " + this.maxAnalysisTokens + " token(s)");
@@ -95,6 +100,13 @@ public class DeepSearchToolsSupport {
 	 * by the depth, this only stops a runaway one ({@value #MAX_ANALYSIS_TOKENS_PROPERTY},
 	 * {@value #DEFAULT_MAX_ANALYSIS_TOKENS} by default).
 	 */
+	/** The documents found loaded and chunked at the same time. */
+	public int documentsParallelism() {
+		final StandardAgentsConfig config = agentsConfig.getIfAvailable();
+		return config != null ? config.getSearchDocumentsParallelism()
+				: SearchResultsChunker.DEFAULT_DOCUMENTS_PARALLELISM;
+	}
+
 	public int maxAnalysisTokens() {
 		return maxAnalysisTokens;
 	}

@@ -33,6 +33,7 @@ import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
+import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
 import ai.gebo.llms.agent.standardtools.model.AbstractSearchToolParam;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult;
@@ -94,15 +95,24 @@ public class SearchToolContentPipeline {
 	private final ObjectProvider<IGRankerService> rankerService;
 	private final ObjectProvider<IGExternalSearchSecurityService> externalSearchSecurityService;
 	private final SearchToolsRequestRegistry requestRegistry;
+	private final ObjectProvider<StandardAgentsConfig> agentsConfig;
 
 	public SearchToolContentPipeline(ObjectProvider<IDocumentsChunkService> chunkingService,
 			ObjectProvider<IGRankerService> rankerService,
 			ObjectProvider<IGExternalSearchSecurityService> externalSearchSecurityService,
-			SearchToolsRequestRegistry requestRegistry) {
+			SearchToolsRequestRegistry requestRegistry, ObjectProvider<StandardAgentsConfig> agentsConfig) {
 		this.chunkingService = chunkingService;
 		this.rankerService = rankerService;
 		this.externalSearchSecurityService = externalSearchSecurityService;
 		this.requestRegistry = requestRegistry;
+		this.agentsConfig = agentsConfig;
+	}
+
+	/** The documents found loaded and chunked at the same time. */
+	int documentsParallelism() {
+		final StandardAgentsConfig config = agentsConfig.getIfAvailable();
+		return config != null ? config.getSearchDocumentsParallelism()
+				: SearchResultsChunker.DEFAULT_DOCUMENTS_PARALLELISM;
 	}
 
 	/**
@@ -214,7 +224,7 @@ public class SearchToolContentPipeline {
 					maxNumChunks, keywords);
 			ToolsProgress.notify(toolContext, "Reading " + fresh.size() + " document(s) found (" + toolName + ")");
 			final List<Document> chunks = SearchResultsChunker.chunkToDocuments(chunkingService.getObject(), fresh,
-					chunkingParams, maxNumChunks, toolName);
+					chunkingParams, maxNumChunks, toolName, documentsParallelism());
 			final RankingOutcome ranking = rank(chunks, objective, topK, toolName);
 			final SearchToolResult result = fit(ranking.documents(), fresh, maxTokens, toolName);
 			result.setRanked(ranking.ranked());

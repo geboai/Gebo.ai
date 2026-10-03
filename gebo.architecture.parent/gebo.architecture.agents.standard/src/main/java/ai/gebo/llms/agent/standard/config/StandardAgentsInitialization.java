@@ -620,7 +620,8 @@ public class StandardAgentsInitialization {
 							NativeDocumentsSearchNetworkAgentService nativeWrapper = new NativeDocumentsSearchNetworkAgentService(
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
 									runtimeBinder, rendererFactory, chunkingService, rankerService,
-									standardAgentsConfig.getMaxChunksPerDocument(), nativeSearch);
+									standardAgentsConfig.getMaxChunksPerDocument(),
+									standardAgentsConfig.getSearchDocumentsParallelism(), nativeSearch);
 							outServices.add(nativeWrapper);
 							if (LOGGER.isDebugEnabled()) {
 								LOGGER.debug("Registered native search agent service id:" + nativeWrapper.getId());
@@ -629,7 +630,8 @@ public class StandardAgentsInitialization {
 							DocumentsSearchNetworkAgentServiceWrapper wrapper = new DocumentsSearchNetworkAgentServiceWrapper(
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
 									runtimeBinder, rendererFactory, chunkingService, rankerService,
-									standardAgentsConfig.getMaxChunksPerDocument(), search);
+									standardAgentsConfig.getMaxChunksPerDocument(),
+									standardAgentsConfig.getSearchDocumentsParallelism(), search);
 							outServices.add(wrapper);
 							if (LOGGER.isDebugEnabled()) {
 								LOGGER.debug("Registered search agent service id:" + wrapper.getId());

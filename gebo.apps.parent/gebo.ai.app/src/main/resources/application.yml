@@ -460,6 +460,9 @@ ai.gebo.ragsearch.config:
   # weakest neighbours.
   default-similarity-threshold: 0.57
 ai.gebo.agents.standard.enabled: true
+# Found documents the search tools and the document-search agents load and chunk
+# at the same time (2 when not set)
+ai.gebo.agents.standard.search-documents-parallelism: 2
 # Deep search tools (deepSearchKnowledgeBase, deepSearchWeb, deepSearch<Product>) of the
 # agents operating their own tools: the length of the analysis they return is asked to
 # the model by the depth the agent chooses; this caps a runaway one, in tokens.

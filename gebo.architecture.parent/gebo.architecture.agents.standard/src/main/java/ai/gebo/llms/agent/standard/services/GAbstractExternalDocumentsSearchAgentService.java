@@ -49,16 +49,20 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 	protected final IDocumentsChunkService chunkingService;
 	/** Hard cap on the number of chunks kept per source document (bounds the ranker candidate pool). */
 	protected final int maxChunksPerDocument;
+	/** The documents found loaded and chunked at the same time. */
+	protected final int documentsParallelism;
 
 	public GAbstractExternalDocumentsSearchAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGDocumentContentRendererProvider rendererFactory, IDocumentsChunkService chunkingService,
-			IGRankerService rankerService, int maxChunksPerDocument) {
+			IGRankerService rankerService, int maxChunksPerDocument, int documentsParallelism) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
 				rendererFactory, rankerService);
 		this.chunkingService = chunkingService;
 		this.maxChunksPerDocument = maxChunksPerDocument > 0 ? maxChunksPerDocument : DEFAULT_MAX_CHUNKS_PER_DOCUMENT;
+		this.documentsParallelism = documentsParallelism > 0 ? documentsParallelism
+				: SearchResultsChunker.DEFAULT_DOCUMENTS_PARALLELISM;
 	}
 
 	/**
@@ -89,7 +93,7 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 		// The chunking itself (session lifecycle, per-document cap, error chunks) is shared
 		// with the search tools, see SearchResultsChunker.
 		final List<Document> documents = SearchResultsChunker.chunkToDocuments(chunkingService, results, params,
-				maxChunksPerDocument, getId());
+				maxChunksPerDocument, getId(), documentsParallelism);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End chunkToDocuments(...) agent id:" + getId() + " kept " + documents.size()
 					+ " content document(s)");

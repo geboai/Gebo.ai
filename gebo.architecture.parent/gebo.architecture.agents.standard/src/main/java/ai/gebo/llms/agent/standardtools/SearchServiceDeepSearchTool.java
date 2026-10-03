@@ -164,7 +164,8 @@ public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 				MAX_FRAGMENTS_PER_DOCUMENT * SearchResultsChunker.LLM_CHUNK_TOKENS, MAX_FRAGMENTS_PER_DOCUMENT,
 				new ArrayList<>(keywords));
 		final List<Document> fragments = SearchResultsChunker.chunkToDocuments(support.chunkingService(),
-				new ArrayList<>(found.values()), params, MAX_FRAGMENTS_PER_DOCUMENT, toolName);
+				new ArrayList<>(found.values()), params, MAX_FRAGMENTS_PER_DOCUMENT, toolName,
+				support.documentsParallelism());
 		for (Document fragment : fragments) {
 			final Object code = fragment.getMetadata().get(DocumentMetaInfos.CONTENT_CODE);
 			final SearchResult result = code != null ? found.get(code.toString()) : null;
