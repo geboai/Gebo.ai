@@ -22,6 +22,7 @@ Name | Type | Description | Notes
 **accessibleToAll** | **Boolean** |  |  [optional]
 **dataSourcesAccesses** | [**List&lt;DeepSearchDataSourceAccess&gt;**](DeepSearchDataSourceAccess.md) |  |  [optional]
 **perDataSourceConfigured** | **Boolean** |  |  [optional]
+**externalSourceSearchEnabledByDefault** | **Boolean** |  |  [optional]
 
 <a name="SearchTypeEnum"></a>
 ## Enum: SearchTypeEnum

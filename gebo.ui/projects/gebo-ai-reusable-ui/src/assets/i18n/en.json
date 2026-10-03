@@ -6597,7 +6597,7 @@
         "label": "Filter Drill Down"
       },
       "ProviderIdFilterLabel": {
-        "label": "Provider ID"
+        "label": "Provider"
       },
       "ProviderIdFilterSelect": {
         "placeholder": "All"
@@ -6742,6 +6742,12 @@
       },
       "MaxTimeToFirstTokenSeries": {
         "label": "Max Time to First Token (s)"
+      },
+      "ModelTypeCodeFilterLabel": {
+        "label": "Provider service"
+      },
+      "ModelTypeCodeFilterSelect": {
+        "placeholder": "All"
       }
     },
     "GeboAILLMSUsageUserDashboardComponent": {
@@ -6758,7 +6764,7 @@
         "label": "Filter Drill Down"
       },
       "ProviderIdFilterLabel": {
-        "label": "Provider ID"
+        "label": "Provider"
       },
       "ProviderIdFilterSelect": {
         "placeholder": "All"
@@ -6903,6 +6909,12 @@
       },
       "MaxTimeToFirstTokenSeries": {
         "label": "Max Time to First Token (s)"
+      },
+      "ModelTypeCodeFilterLabel": {
+        "label": "Provider service"
+      },
+      "ModelTypeCodeFilterSelect": {
+        "placeholder": "All"
       }
     }
   }

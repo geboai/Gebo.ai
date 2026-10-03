@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost:12999*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**chatSessionUpload**](GeboUserChatUploadsControllerApi.md#chatSessionUpload) | **POST** /api/users/GeboUserChatUploadsController/chatSessionUpload/{userSessionCode} | 
-[**deleteSessionUploads**](GeboUserChatUploadsControllerApi.md#deleteSessionUploads) | **DELETE** /api/users/GeboUserChatUploadsController/deleteSessionUploads | 
+[**deleteSessionUploads**](GeboUserChatUploadsControllerApi.md#deleteSessionUploads) | **DELETE** /api/users/GeboUserChatUploadsController/deleteSessionUploads/{userSessionCode} | 
 [**serveContent**](GeboUserChatUploadsControllerApi.md#serveContent) | **GET** /api/users/GeboUserChatUploadsController/serveContent/{userSessionCode}/{uploadedContentId} | 
 
 <a name="chatSessionUpload"></a>
@@ -55,7 +55,7 @@ No authorization required
 
 <a name="deleteSessionUploads"></a>
 # **deleteSessionUploads**
-> OperationStatusListUserUploadedContent deleteSessionUploads()
+> OperationStatusListUserUploadedContent deleteSessionUploads(body, userSessionCode)
 
 
 
@@ -67,8 +67,10 @@ No authorization required
 
 
 GeboUserChatUploadsControllerApi apiInstance = new GeboUserChatUploadsControllerApi();
+List<UserUploadedContent> body = Arrays.asList(new UserUploadedContent()); // List<UserUploadedContent> | 
+String userSessionCode = "userSessionCode_example"; // String | 
 try {
-    OperationStatusListUserUploadedContent result = apiInstance.deleteSessionUploads();
+    OperationStatusListUserUploadedContent result = apiInstance.deleteSessionUploads(body, userSessionCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboUserChatUploadsControllerApi#deleteSessionUploads");
@@ -77,7 +79,11 @@ try {
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;UserUploadedContent&gt;**](UserUploadedContent.md)|  |
+ **userSessionCode** | **String**|  |
 
 ### Return type
 
@@ -89,7 +95,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: multipart/form-data
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 <a name="serveContent"></a>

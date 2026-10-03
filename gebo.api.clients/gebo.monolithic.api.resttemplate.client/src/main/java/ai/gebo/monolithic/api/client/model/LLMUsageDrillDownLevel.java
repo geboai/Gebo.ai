@@ -22,11 +22,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMUsageDrillDownLevel
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-03T11:31:06.696503642+02:00[Europe/Rome]")
 
 public class LLMUsageDrillDownLevel {
   @JsonProperty("providerId")
   private String providerId = null;
+
+  @JsonProperty("modelTypeCode")
+  private String modelTypeCode = null;
 
   @JsonProperty("username")
   private String username = null;
@@ -97,6 +100,24 @@ public class LLMUsageDrillDownLevel {
 
   public void setProviderId(String providerId) {
     this.providerId = providerId;
+  }
+
+  public LLMUsageDrillDownLevel modelTypeCode(String modelTypeCode) {
+    this.modelTypeCode = modelTypeCode;
+    return this;
+  }
+
+   /**
+   * Get modelTypeCode
+   * @return modelTypeCode
+  **/
+  @Schema(description = "")
+  public String getModelTypeCode() {
+    return modelTypeCode;
+  }
+
+  public void setModelTypeCode(String modelTypeCode) {
+    this.modelTypeCode = modelTypeCode;
   }
 
   public LLMUsageDrillDownLevel username(String username) {
@@ -218,6 +239,7 @@ public class LLMUsageDrillDownLevel {
     }
     LLMUsageDrillDownLevel llMUsageDrillDownLevel = (LLMUsageDrillDownLevel) o;
     return Objects.equals(this.providerId, llMUsageDrillDownLevel.providerId) &&
+        Objects.equals(this.modelTypeCode, llMUsageDrillDownLevel.modelTypeCode) &&
         Objects.equals(this.username, llMUsageDrillDownLevel.username) &&
         Objects.equals(this.model, llMUsageDrillDownLevel.model) &&
         Objects.equals(this.callerStack, llMUsageDrillDownLevel.callerStack) &&
@@ -228,7 +250,7 @@ public class LLMUsageDrillDownLevel {
 
   @Override
   public int hashCode() {
-    return Objects.hash(providerId, username, model, callerStack, modelType, year, month);
+    return Objects.hash(providerId, modelTypeCode, username, model, callerStack, modelType, year, month);
   }
 
 
@@ -238,6 +260,7 @@ public class LLMUsageDrillDownLevel {
     sb.append("class LLMUsageDrillDownLevel {\n");
     
     sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
+    sb.append("    modelTypeCode: ").append(toIndentedString(modelTypeCode)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    model: ").append(toIndentedString(model)).append("\n");
     sb.append("    callerStack: ").append(toIndentedString(callerStack)).append("\n");
