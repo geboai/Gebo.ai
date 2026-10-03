@@ -33,7 +33,8 @@ public class UsageRecordingTextToSpeechModel<ModelConfig extends GBaseTextToSpea
 
 	@Override
 	public InputStream call(String text) {
-		LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), ModelType.TTS, delegate::getPricingConditions);
+		LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), LLMUsageRecorder.safeProviderId(delegate::getProviderId), ModelType.TTS,
+				delegate::getPricingConditions);
 		try {
 			InputStream audio = delegate.call(text);
 			call.success();

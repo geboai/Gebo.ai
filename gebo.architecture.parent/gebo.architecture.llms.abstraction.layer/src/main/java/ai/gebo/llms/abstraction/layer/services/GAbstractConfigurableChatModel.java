@@ -206,7 +206,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		this.model = configureModel(config, type, null);
 		Builder builder = ChatClient.builder(configureModel(config, type, null));
 		// Priced through this model's getPricingConditions(), read when each call ends.
-		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions))
+		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions,
+				this::getProviderId))
 				.build();
 	}
 
@@ -750,7 +751,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("doWithChatModel() handing out the usage recording raw model of code=" + getCode());
 		}
-		return chatModelCalling.call(usageAdvisorFactory.recording(model, config, this::getPricingConditions));
+		return chatModelCalling.call(usageAdvisorFactory.recording(model, config, this::getPricingConditions,
+				this::getProviderId));
 	}
 
 	@Override
@@ -794,7 +796,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 						.builder(configurableChatModel.configureModel(modelConfigClone, type,
 								configOptions.getToolCallingManager()))
 						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone,
-								configurableChatModel::getPricingConditions))
+								configurableChatModel::getPricingConditions, configurableChatModel::getProviderId))
 						.build();
 			} else
 				throw new IllegalStateException(

@@ -38,7 +38,8 @@ public class UsageRecordingRankerModel<ModelConfig extends GBaseRankerModelConfi
 			return null;
 		}
 		return input -> {
-			LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), ModelType.RANKER, delegate::getPricingConditions);
+			LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), LLMUsageRecorder.safeProviderId(delegate::getProviderId), ModelType.RANKER,
+				delegate::getPricingConditions);
 			try {
 				RankingOutput output = model.call(input);
 				call.success();

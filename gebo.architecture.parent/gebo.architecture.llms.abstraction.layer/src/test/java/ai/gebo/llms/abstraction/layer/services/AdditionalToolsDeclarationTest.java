@@ -79,7 +79,7 @@ class AdditionalToolsDeclarationTest {
 		// the repository only knows its own tools
 		when(repository.getTools(anyList())).thenReturn(List.of(search));
 		IChatModelUsageAdvisorFactory usage = mock(IChatModelUsageAdvisorFactory.class);
-		when(usage.create(any(), any())).thenReturn(mock(IChatModelUsageAdvisor.class));
+		when(usage.create(any(), any(), any())).thenReturn(mock(IChatModelUsageAdvisor.class));
 		DeclaringModel model = new DeclaringModel(repository, usage);
 		model.config = new GBaseChatModelConfig();
 

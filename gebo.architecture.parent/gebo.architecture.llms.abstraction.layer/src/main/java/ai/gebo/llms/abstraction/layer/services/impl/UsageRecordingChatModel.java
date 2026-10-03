@@ -32,13 +32,21 @@ public class UsageRecordingChatModel implements ChatModel {
 	private final LLMUsageRecorder recorder;
 	/** The chat model's pricing conditions, read when a call ends; null if unpriced. */
 	private final Supplier<GModelPricingConditions> pricing;
+	/** The chat model's real provider, read when a call ends; null if unknown. */
+	private final Supplier<String> providerId;
 
 	public UsageRecordingChatModel(ChatModel delegate, GBaseChatModelConfig config, LLMUsageRecorder recorder,
 			Supplier<GModelPricingConditions> pricing) {
+		this(delegate, config, recorder, pricing, null);
+	}
+
+	public UsageRecordingChatModel(ChatModel delegate, GBaseChatModelConfig config, LLMUsageRecorder recorder,
+			Supplier<GModelPricingConditions> pricing, Supplier<String> providerId) {
 		this.delegate = delegate;
 		this.config = config;
 		this.recorder = recorder;
 		this.pricing = pricing;
+		this.providerId = providerId;
 	}
 
 	/** The provider model this wrapper forwards to. */
@@ -55,7 +63,7 @@ public class UsageRecordingChatModel implements ChatModel {
 		try {
 			response = delegate.call(prompt);
 		} catch (RuntimeException e) {
-			recorder.record(config, ModelType.CHAT, pricing, username, stack, start, null, 0, 0, 0,
+			recorder.record(config, LLMUsageRecorder.safeProviderId(providerId), ModelType.CHAT, pricing, username, stack, start, null, 0, 0, 0,
 					LLMCallOutcome.ERROR);
 			throw e;
 		}
@@ -63,7 +71,7 @@ public class UsageRecordingChatModel implements ChatModel {
 		// No time to first token: a blocking call gives no signal before it is complete.
 		LLMUsageRecorder.bestEffort("account a chat call", () -> {
 			TokenCounters counters = TokenCounters.of(usageOf(response));
-			recorder.record(config, ModelType.CHAT, pricing, username, stack, start, null, counters.input(),
+			recorder.record(config, LLMUsageRecorder.safeProviderId(providerId), ModelType.CHAT, pricing, username, stack, start, null, counters.input(),
 					counters.output(), counters.total(), LLMCallOutcome.SUCCESS);
 		});
 		return response;
@@ -81,7 +89,7 @@ public class UsageRecordingChatModel implements ChatModel {
 		return delegate.stream(prompt).doOnNext(response -> LLMUsageRecorder.bestEffort("account a chat chunk", () -> {
 			firstToken.onChunk(response);
 			counters.max(usageOf(response));
-		})).doFinally(signal -> recorder.record(config, ModelType.CHAT, pricing, username, stack, start,
+		})).doFinally(signal -> recorder.record(config, LLMUsageRecorder.safeProviderId(providerId), ModelType.CHAT, pricing, username, stack, start,
 				firstToken.firstTokenNanos(), counters.input(), counters.output(), counters.total(),
 				outcomeOf(signal)));
 	}

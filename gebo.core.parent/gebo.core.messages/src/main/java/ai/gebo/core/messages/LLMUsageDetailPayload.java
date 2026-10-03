@@ -24,7 +24,16 @@ import lombok.Data;
  */
 @Data
 public class LLMUsageDetailPayload extends GBaseMessagePayload {
+	/**
+	 * The real provider of the model called, e.g. "openai". A payload sent before
+	 * {@link #modelTypeCode} existed carries the model type code here instead.
+	 */
 	private String providerId;
+	/**
+	 * The code of the model type called, e.g. "chatgpt-OpenAI"; null in a payload sent
+	 * before it existed.
+	 */
+	private String modelTypeCode;
 	private String username;
 	private String model;
 	private String callerStack;
