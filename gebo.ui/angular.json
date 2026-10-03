@@ -39,6 +39,7 @@
               {
                 "glob": "**/*",
                 "input": "node_modules/monaco-editor",
+                "ignore": ["node_modules/**"],
                 "output": "/assets/monaco/"
               },
               {
