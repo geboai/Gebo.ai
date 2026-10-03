@@ -309,6 +309,10 @@ public class DocumentsChunkServiceImpl
 								response.setEmpty(outContents.isEmpty());
 
 								for (Document _document : outContents) {
+									// the position in the document, counted on every split chunk: a chunk left
+									// out by a matching policy keeps its place, so consecutive positions are
+									// contiguous text
+									final long position = atomicLong.incrementAndGet();
 									boolean considerChunk = chunkAll;
 									int bytesSize = _document.getText() != null ? _document.getText().length() * 2 : 0;
 									int tokensSize = _document.getText() != null && _document.isText()
@@ -350,7 +354,7 @@ public class DocumentsChunkServiceImpl
 										response.setEmpty(false);
 										DocumentChunk chunk = DocumentChunk.ofText(document.getCode(),
 												_document.getText(), _document.getMetadata());
-										chunk.setChunkPosition(atomicLong.incrementAndGet());
+										chunk.setChunkPosition(position);
 
 										chunk.setBytesSize((long) bytesSize);
 										chunk.setTokensSize((long) tokensSize);
@@ -405,6 +409,19 @@ public class DocumentsChunkServiceImpl
 					if (!exceptions.isEmpty()) {
 						throw new DocumentCacheAccessException("Cannot split in chunk because of an exception",
 								exceptions);
+					}
+					// the count the positions refer to, on the chunks returned now: the chunk sets
+					// read later get it from the operation (see getNextChunkSet)
+					chunkOperation.setDocumentChunks(atomicLong.get());
+					if (response.getCurrentChunkSet() != null && response.getCurrentChunkSet().getChunks() != null) {
+						for (DocumentChunk chunk : response.getCurrentChunkSet().getChunks()) {
+							chunk.setChunksCount(atomicLong.get());
+						}
+					}
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("document " + document.getCode() + " split into " + atomicLong.get()
+								+ " chunk(s), " + chunkOperation.getTotalChunks() + " kept by policy:"
+								+ params.getChunkingPolicy());
 					}
 					if (!chunkSets.isEmpty()) {
 						DocumentChunksSet currentChunkSet = chunkSets.get(0);
@@ -580,8 +597,12 @@ public class DocumentsChunkServiceImpl
 			Path fileToRead = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME, chunkId);
 			DocumentChunksSet chunkSet = objectMapper.readValue(fileToRead.toFile(), DocumentChunksSet.class);
 			if (chunkSet.getChunks() != null) {
+				// the count the positions refer to; an operation written before it was recorded
+				// only knows the kept chunks
+				final long documentChunks = operation.getDocumentChunks() > 0 ? operation.getDocumentChunks()
+						: operation.getTotalChunks();
 				for (DocumentChunk chunk : chunkSet.getChunks()) {
-					chunk.setChunksCount((long) operation.getTotalChunks());
+					chunk.setChunksCount(documentChunks);
 				}
 			}
 			response.setCurrentChunkSet(chunkSet);
