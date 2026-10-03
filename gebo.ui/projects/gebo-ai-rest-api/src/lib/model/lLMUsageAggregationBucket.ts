@@ -12,6 +12,7 @@
 
 export interface LLMUsageAggregationBucket { 
     providerId?: string;
+    modelTypeCode?: string;
     username?: string;
     model?: string;
     callerStack?: string;

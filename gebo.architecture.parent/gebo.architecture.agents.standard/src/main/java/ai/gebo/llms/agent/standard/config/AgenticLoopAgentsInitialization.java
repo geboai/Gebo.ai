@@ -28,7 +28,6 @@ import ai.gebo.llms.agent.chat.service.impl.AgenticLoopPureChatReactiveAgentServ
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.chat.service.impl.GReactiveChatAgentsNetworkServiceFactoryImpl;
 import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
-import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 
 /**
  * The single agent with tools working in a loop, as two networks the chats can be
@@ -72,7 +71,7 @@ public class AgenticLoopAgentsInitialization {
 		GAgentConfig config = new GAgentConfig();
 		config.setCode(code);
 		config.setAgentServiceId(serviceId);
-		config.setMainLoopPromptUseCode(GeboPromptsLibrary.DEFAULT_CHAT_AGENT_PROMPT);
+		config.setMainLoopPromptUseCode(StandardAgentsPromptsLibraryConfig.DEFAULT_CHAT_AGENT_PROMPT);
 		config.setDescription(description);
 		config.setAgentRoleCode(REPORT_WRITER_AGENT_ROLE);
 		config.setAccessibleToAll(true);

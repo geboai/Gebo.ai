@@ -80,7 +80,9 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);
 		GAgentRole agentRole = agentRoleDao.findByCode(config.getAgentRoleCode());
-		ToolCallsListener listener = new ToolCallsListener();
+		// this agent's own tool calls, forwarded to the user request's recorder
+		ToolCallsListener listener = agentToolCallsListener(chatRequestContext);
+		final IChatRequestContext agentContext = IChatRequestContext.forAgent(chatRequestContext, listener);
 		IGConfigurableChatModel agentModel = getAgentModel(config, listener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 		int tokenBudget = agentTokenBudget(agentModel, prompt, chatRequestContext);
@@ -99,7 +101,7 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
 		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " is searching...",
 				NotificationType.INFO);
-		List<Document> documents = retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
+		List<Document> documents = retrieveDocuments(prompt, agentContext, agentModel, params, network, agentRole,
 				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink);
 		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " has found: "
 				+ documents.size() + " evidences", NotificationType.INFO);

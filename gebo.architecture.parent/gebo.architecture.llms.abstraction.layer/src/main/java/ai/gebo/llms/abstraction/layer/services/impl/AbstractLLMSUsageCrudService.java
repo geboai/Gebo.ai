@@ -53,6 +53,7 @@ public abstract class AbstractLLMSUsageCrudService implements ILLMSUsageCrudServ
 	public void enqueueUsage(LLMUsageDetailDto usage) {
 		LLMUsageDetailPayload payload = new LLMUsageDetailPayload();
 		payload.setProviderId(usage.getProviderId());
+		payload.setModelTypeCode(usage.getModelTypeCode());
 		payload.setUsername(usage.getUsername());
 		payload.setModel(usage.getModel());
 		payload.setCallerStack(usage.getCallerStack());

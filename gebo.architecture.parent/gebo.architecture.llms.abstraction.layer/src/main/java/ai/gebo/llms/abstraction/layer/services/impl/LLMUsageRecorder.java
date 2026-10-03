@@ -120,10 +120,24 @@ public class LLMUsageRecorder {
 	public void record(GBaseModelConfig config, ModelType modelType, Supplier<GModelPricingConditions> pricing,
 			String username, String callerStack, long startNanos, Long firstTokenNanos, long inputToken,
 			long outputToken, long totalToken, LLMCallOutcome outcome) {
+		record(config, null, modelType, pricing, username, callerStack, startNanos, firstTokenNanos, inputToken,
+				outputToken, totalToken, outcome);
+	}
+
+	/**
+	 * As {@link #record(GBaseModelConfig, ModelType, Supplier, String, String, long, Long, long, long, long, LLMCallOutcome)},
+	 * attributing the call to the real provider of the model.
+	 *
+	 * @param providerId the model's {@code IGConfigurableModel.getProviderId()}, e.g.
+	 *                   "openai"; null records the provider as unknown
+	 */
+	public void record(GBaseModelConfig config, String providerId, ModelType modelType,
+			Supplier<GModelPricingConditions> pricing, String username, String callerStack, long startNanos,
+			Long firstTokenNanos, long inputToken, long outputToken, long totalToken, LLMCallOutcome outcome) {
 		// Accounting is best effort: it runs once the model has answered, so a failure
 		// here must never turn a successful call into a failed one.
 		try {
-			recordUnguarded(config, modelType, pricing, username, callerStack, startNanos, firstTokenNanos, inputToken,
+			recordUnguarded(config, providerId, modelType, pricing, username, callerStack, startNanos, firstTokenNanos, inputToken,
 					outputToken, totalToken, outcome);
 		} catch (Throwable e) {
 			LOGGER.error("Cannot record the usage of model code=" + (config != null ? config.getCode() : null)
@@ -131,14 +145,14 @@ public class LLMUsageRecorder {
 		}
 	}
 
-	private void recordUnguarded(GBaseModelConfig config, ModelType modelType,
+	private void recordUnguarded(GBaseModelConfig config, String providerId, ModelType modelType,
 			Supplier<GModelPricingConditions> pricing, String username, String callerStack, long startNanos,
 			Long firstTokenNanos, long inputToken, long outputToken, long totalToken, LLMCallOutcome outcome) {
 		long responseTimeMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNanos);
 		Long timeToFirstTokenMs = firstTokenNanos != null
 				? TimeUnit.NANOSECONDS.toMillis(firstTokenNanos.longValue() - startNanos)
 				: null;
-		LLMUsageDetailDto detail = LLMUsageDetailDto.of(config);
+		LLMUsageDetailDto detail = LLMUsageDetailDto.of(config, providerId);
 		if (modelType != null) {
 			if (detail.getModelType() != null && detail.getModelType() != modelType && LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Usage model type stated by the caller=" + modelType
@@ -158,7 +172,7 @@ public class LLMUsageRecorder {
 		priceCall(detail, pricing, inputToken, outputToken, outcome);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Recording usage modelType=" + detail.getModelType() + " provider=" + detail.getProviderId()
-					+ " model=" + detail.getModel() + " user=" + username + " outcome=" + outcome
+					+ " modelTypeCode=" + detail.getModelTypeCode() + " model=" + detail.getModel() + " user=" + username + " outcome=" + outcome
 					+ " responseTime=" + responseTimeMs + "ms timeToFirstToken="
 					+ (timeToFirstTokenMs != null ? timeToFirstTokenMs + "ms" : "n/a") + " tokens=" + inputToken
 					+ "/" + outputToken + "/" + totalToken + " cost="
@@ -214,9 +228,32 @@ public class LLMUsageRecorder {
 	 *                read when the call ends; null for an unpriced model
 	 */
 	public Call begin(GBaseModelConfig config, ModelType modelType, Supplier<GModelPricingConditions> pricing) {
+		return begin(config, null, modelType, pricing);
+	}
+
+	/**
+	 * As {@link #begin(GBaseModelConfig, ModelType, Supplier)}, attributing the call to
+	 * the real provider of the model, its {@code IGConfigurableModel.getProviderId()}.
+	 */
+	public Call begin(GBaseModelConfig config, String providerId, ModelType modelType,
+			Supplier<GModelPricingConditions> pricing) {
 		long startNanos = System.nanoTime();
 		// Captured best effort: the call to the model must never depend on its accounting.
-		return new Call(config, modelType, pricing, safeCurrentUsername(), safeSampleCaller(), startNanos);
+		return new Call(config, providerId, modelType, pricing, safeCurrentUsername(), safeSampleCaller(),
+				startNanos);
+	}
+
+	/**
+	 * Reads the provider of a model, best effort: null when it cannot be read, which
+	 * records the provider as unknown.
+	 */
+	public static String safeProviderId(Supplier<String> providerId) {
+		try {
+			return providerId != null ? providerId.get() : null;
+		} catch (Throwable e) {
+			LOGGER.error("Cannot read the provider of a model call, the call is accounted without it", e);
+			return null;
+		}
 	}
 
 	/** {@link #currentUsername()}, never failing: null when it cannot be read. */
@@ -257,6 +294,7 @@ public class LLMUsageRecorder {
 	@AllArgsConstructor
 	public final class Call {
 		private final GBaseModelConfig config;
+		private final String providerId;
 		private final ModelType modelType;
 		private final Supplier<GModelPricingConditions> pricing;
 		private final String username;
@@ -264,8 +302,8 @@ public class LLMUsageRecorder {
 		private final long startNanos;
 
 		public void success(long inputToken, long outputToken, long totalToken) {
-			record(config, modelType, pricing, username, callerStack, startNanos, null, inputToken, outputToken,
-					totalToken, LLMCallOutcome.SUCCESS);
+			record(config, providerId, modelType, pricing, username, callerStack, startNanos, null, inputToken,
+					outputToken, totalToken, LLMCallOutcome.SUCCESS);
 		}
 
 		public void success() {
@@ -298,7 +336,7 @@ public class LLMUsageRecorder {
 		}
 
 		public void failure() {
-			record(config, modelType, pricing, username, callerStack, startNanos, null, 0, 0, 0,
+			record(config, providerId, modelType, pricing, username, callerStack, startNanos, null, 0, 0, 0,
 					LLMCallOutcome.ERROR);
 		}
 	}

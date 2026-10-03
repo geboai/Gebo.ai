@@ -3167,6 +3167,35 @@
       },
       "AiActInteractionDisclaimer": {
         "label": "You are interacting with an AI system. Responses are AI-generated and may be inaccurate or incomplete — always verify important information before relying on it."
+      },
+      "CalledFunctionParamsBtn": {
+        "help": "Show the parameters"
+      },
+      "goodAnswerBtn": {
+        "help": "Good answer"
+      },
+      "badAnswerBtn": {
+        "help": "Bad answer: tell what was wrong"
+      },
+      "branchChatBtn": {
+        "help": "Continue in a new chat from this answer"
+      },
+      "badAnswerDialogTitle": {
+        "label": "What was wrong with this answer?"
+      },
+      "badAnswerComment": {
+        "placeholder": "Optional: tell what you expected",
+        "help": "Your comment is shown to the assistant on the next questions of this chat"
+      },
+      "cancelBadAnswerBtn": {
+        "label": "Cancel"
+      },
+      "saveBadAnswerBtn": {
+        "label": "Send feedback"
+      },
+      "CHAT_BRANCHED": {
+        "summary": "Chat branched",
+        "detail": "The conversation continues in a new chat, starting from the chosen answer"
       }
     },
     "ChangeDescriptionComponent": {
@@ -3316,6 +3345,11 @@
       },
       "imageGeneration": {
         "label": "Image generation"
+      }
+    },
+    "GeboAIChatInputShellComponent": {
+      "PendingSendHint": {
+        "label": "The message will be sent as soon as the chat is ready…"
       }
     }
   },
@@ -5376,6 +5410,10 @@
       },
       "PERDATASOURCEMODE": {
         "label": "Per data source user/group access"
+      },
+      "externalSourceSearchEnabledByDefault": {
+        "label": "External sources searchable by everyone by default",
+        "help": "The configured external search sources (the internal knowledge base excluded) can be searched by every user, except where a users/groups access is configured below"
       }
     }
   },
@@ -6559,7 +6597,7 @@
         "label": "Filter Drill Down"
       },
       "ProviderIdFilterLabel": {
-        "label": "Provider ID"
+        "label": "Provider"
       },
       "ProviderIdFilterSelect": {
         "placeholder": "All"
@@ -6704,6 +6742,49 @@
       },
       "MaxTimeToFirstTokenSeries": {
         "label": "Max Time to First Token (s)"
+      },
+      "ModelTypeCodeFilterLabel": {
+        "label": "Provider service"
+      },
+      "ModelTypeCodeFilterSelect": {
+        "placeholder": "All"
+      },
+      "ShowingLabel": {
+        "label": "Showing"
+      },
+      "AllUsageLabel": {
+        "label": "All LLM usage, no filter applied"
+      },
+      "ClearFiltersBtn": {
+        "label": "Clear all",
+        "help": "Remove every filter and show all the LLM usage"
+      },
+      "PendingFiltersLabel": {
+        "label": "Filter changes not applied yet: press Filter"
+      },
+      "ProviderIdFilterChip": {
+        "label": "Provider"
+      },
+      "ModelTypeCodeFilterChip": {
+        "label": "Provider service"
+      },
+      "ModelTypeFilterChip": {
+        "label": "Model type"
+      },
+      "ModelFilterChip": {
+        "label": "Model"
+      },
+      "UsernameFilterChip": {
+        "label": "User"
+      },
+      "CallerStackFilterChip": {
+        "label": "Caller stack"
+      },
+      "YearFilterChip": {
+        "label": "Year"
+      },
+      "MonthFilterChip": {
+        "label": "Month"
       }
     },
     "GeboAILLMSUsageUserDashboardComponent": {
@@ -6720,7 +6801,7 @@
         "label": "Filter Drill Down"
       },
       "ProviderIdFilterLabel": {
-        "label": "Provider ID"
+        "label": "Provider"
       },
       "ProviderIdFilterSelect": {
         "placeholder": "All"
@@ -6865,6 +6946,49 @@
       },
       "MaxTimeToFirstTokenSeries": {
         "label": "Max Time to First Token (s)"
+      },
+      "ModelTypeCodeFilterLabel": {
+        "label": "Provider service"
+      },
+      "ModelTypeCodeFilterSelect": {
+        "placeholder": "All"
+      },
+      "ShowingLabel": {
+        "label": "Showing"
+      },
+      "AllUsageLabel": {
+        "label": "All LLM usage, no filter applied"
+      },
+      "ClearFiltersBtn": {
+        "label": "Clear all",
+        "help": "Remove every filter and show all the LLM usage"
+      },
+      "PendingFiltersLabel": {
+        "label": "Filter changes not applied yet: press Filter"
+      },
+      "ProviderIdFilterChip": {
+        "label": "Provider"
+      },
+      "ModelTypeCodeFilterChip": {
+        "label": "Provider service"
+      },
+      "ModelTypeFilterChip": {
+        "label": "Model type"
+      },
+      "ModelFilterChip": {
+        "label": "Model"
+      },
+      "UsernameFilterChip": {
+        "label": "User"
+      },
+      "CallerStackFilterChip": {
+        "label": "Caller stack"
+      },
+      "YearFilterChip": {
+        "label": "Year"
+      },
+      "MonthFilterChip": {
+        "label": "Month"
       }
     }
   }

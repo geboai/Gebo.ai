@@ -49,9 +49,9 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGDocumentContentRendererProvider rendererFactory, IDocumentsChunkService chunkingService,
-			IGRankerService rankerService, int maxChunksPerDocument, ISearchService<?> wrappedSearchService) {
+			IGRankerService rankerService, int maxChunksPerDocument, int documentsParallelism, ISearchService<?> wrappedSearchService) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
-				rendererFactory, chunkingService, rankerService, maxChunksPerDocument);
+				rendererFactory, chunkingService, rankerService, maxChunksPerDocument, documentsParallelism);
 		this.wrappedSearchService = wrappedSearchService;
 	}
 

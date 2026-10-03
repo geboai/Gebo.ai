@@ -49,6 +49,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -184,7 +185,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			AssistantMessage callResponseObject = chatresponse.getResult().getOutput();
 			String responseText = callResponseObject.getText();
 			response.setQueryResponse(responseText);
-			response.setCalledFunctions(context.getCalledFunctions());
+			// the called functions are recorded into the response as the tools run (see
+			// recordToolCalls(...))
 
 			response.setDocumentsRef(showedDocuments != null ? GResponseDocumentRef.from(showedDocuments) : List.of());
 			logChatInvocationEvent(event, configurableChatModel, startMillis, SecurityAuditTaxonomy.Outcome.SUCCESS);
@@ -266,7 +268,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		}
 		final List<GResponseDocumentRef> docrefs = showedDocuments != null ? GResponseDocumentRef.from(showedDocuments)
 				: List.of();
-		final Map<String, ToolCall> toolCalls = new HashMap<>();
 		final StringBuffer buffer = new StringBuffer();
 		final boolean skipThinkingMarkup = configurableChatModel.isApplyThinkingMarkupHandling();
 
@@ -274,7 +275,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Sending a GeboChatResponse opening content");
 			}
-			response.setCalledFunctions(context.getCalledFunctions());
 			response.setDocumentsRef(docrefs);
 
 			GeboChatMessageEnvelope<GeboChatResponse> startEnvelope = new GeboChatMessageEnvelope<GeboChatResponse>();
@@ -291,10 +291,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 				for (Generation rs : x.getResults()) {
 					if (rs.getOutput() != null) {
 						MessageType type = rs.getOutput().getMessageType();
-
-						rs.getOutput().getToolCalls().forEach(tc -> {
-							toolCalls.put(tc.id(), tc);
-						});
 
 						String text = rs.getOutput().getText();
 						if (text != null) {
@@ -347,11 +343,10 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			String responseText = buffer.toString();
 			response.setThinkingOutputs(ClientChatCallUtil.extractThinking(responseText));
 			response.setQueryResponse(ClientChatCallUtil.removeThinking(responseText));
-			List<CalledFunction> calls = context.getCalledFunctions();
-			if (calls == null || calls.isEmpty()) {
-				calls = new ArrayList<>(toCalledFunctions(toolCalls.values()));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Streamed response carries " + response.getCalledFunctions().size()
+						+ " recorded called function(s)");
 			}
-			response.setCalledFunctions(calls);
 			response.setDocumentsRef(docrefs);
 			GeboChatMessageEnvelope<GeboChatResponse> finalEnvelope = new GeboChatMessageEnvelope<GeboChatResponse>();
 			finalEnvelope.setContent(response); // Use the accumulated text
@@ -382,21 +377,19 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	}
 
 	/**
-	 * Converts a collection of ToolCall objects to a list of CalledFunction
-	 * objects.
-	 *
-	 * @param values Collection of ToolCall objects
-	 * @return List of CalledFunction objects
+	 * Makes the tools called while answering the request recorded into the response
+	 * (its called functions, filled as the tools run). Within a chat pipeline the
+	 * executor already owns the request recorder; a direct model chat has none, so the
+	 * response being built here gets its own.
 	 */
-	protected List<CalledFunction> toCalledFunctions(Collection<ToolCall> values) {
-		List<CalledFunction> out = new ArrayList<>();
-		for (ToolCall toolCall : values) {
-			CalledFunction cf = new CalledFunction();
-			cf.setFunctionName(toolCall.name());
-			cf.setParamsDescription(List.of(toolCall.arguments()));
-			out.add(cf);
+	protected void recordToolCalls(LLMChatRequestResources requestResources, GeboChatResponse response) {
+		if (requestResources == null || response == null || requestResources.getToolCallsListener() != null) {
+			return;
 		}
-		return out;
+		requestResources.setToolCallsListener(ToolCallsListener.appendingTo(response.getCalledFunctions()));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Recording the tool calls of a direct chat request into its response");
+		}
 	}
 
 	public List<GKnowledgeBase> getVisibleKnowledgeBases() {
@@ -409,6 +402,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
+		recordToolCalls(requestResources, response);
 
 		return callChatClient(chatModel, overriddenPrompt, kbcontext, requestResources.getCurrentRequest(), response,
 				requestResources.createChatRequestContext(), null);
@@ -420,6 +414,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
+		recordToolCalls(requestResources, response);
 		int tokensLength = requestResources.getTokensSize();
 		final int contextWindow = chatModel.getContextLength();
 		boolean shrink = tokensLength > contextWindow / 2;

@@ -17,8 +17,10 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { AnswerFeedbackRequest } from '../model/answerFeedbackRequest';
 import { ChatInfosByQbeParam } from '../model/chatInfosByQbeParam';
 import { ChatUIOptions } from '../model/chatUIOptions';
+import { GChatAnswerFeedback } from '../model/gChatAnswerFeedback';
 import { GLookupEntry } from '../model/gLookupEntry';
 import { GUserChatInfo } from '../model/gUserChatInfo';
 import { PagedModelGUserChatInfo } from '../model/pagedModelGUserChatInfo';
@@ -59,6 +61,61 @@ export class GeboUserChatsControllerService {
         return false;
     }
 
+
+    /**
+     * 
+     * 
+     * @param userChatContextCode 
+     * @param requestId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public branchChat(userChatContextCode: string, requestId: string, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
+    public branchChat(userChatContextCode: string, requestId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
+    public branchChat(userChatContextCode: string, requestId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
+    public branchChat(userChatContextCode: string, requestId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (userChatContextCode === null || userChatContextCode === undefined) {
+            throw new Error('Required parameter userChatContextCode was null or undefined when calling branchChat.');
+        }
+
+        if (requestId === null || requestId === undefined) {
+            throw new Error('Required parameter requestId was null or undefined when calling branchChat.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (userChatContextCode !== undefined && userChatContextCode !== null) {
+            queryParameters = queryParameters.set('userChatContextCode', <any>userChatContextCode);
+        }
+        if (requestId !== undefined && requestId !== null) {
+            queryParameters = queryParameters.set('requestId', <any>requestId);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GUserChatInfo>('post',`${this.basePath}/api/users/GeboUserChatsController/branchChat`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * 
@@ -358,6 +415,53 @@ export class GeboUserChatsControllerService {
         ];
 
         return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeboUserChatsController/exportResponse2file`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param userChatContextCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAnswerFeedbacks(userChatContextCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GChatAnswerFeedback>>;
+    public getAnswerFeedbacks(userChatContextCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GChatAnswerFeedback>>>;
+    public getAnswerFeedbacks(userChatContextCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GChatAnswerFeedback>>>;
+    public getAnswerFeedbacks(userChatContextCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (userChatContextCode === null || userChatContextCode === undefined) {
+            throw new Error('Required parameter userChatContextCode was null or undefined when calling getAnswerFeedbacks.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (userChatContextCode !== undefined && userChatContextCode !== null) {
+            queryParameters = queryParameters.set('userChatContextCode', <any>userChatContextCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<GChatAnswerFeedback>>('get',`${this.basePath}/api/users/GeboUserChatsController/getAnswerFeedbacks`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -711,6 +815,107 @@ export class GeboUserChatsControllerService {
 
         return this.httpClient.request<boolean>('get',`${this.basePath}/api/users/GeboUserChatsController/isMinimalLLMSSetupDone`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param userChatContextCode 
+     * @param requestId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public removeAnswerFeedback(userChatContextCode: string, requestId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public removeAnswerFeedback(userChatContextCode: string, requestId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public removeAnswerFeedback(userChatContextCode: string, requestId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public removeAnswerFeedback(userChatContextCode: string, requestId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (userChatContextCode === null || userChatContextCode === undefined) {
+            throw new Error('Required parameter userChatContextCode was null or undefined when calling removeAnswerFeedback.');
+        }
+
+        if (requestId === null || requestId === undefined) {
+            throw new Error('Required parameter requestId was null or undefined when calling removeAnswerFeedback.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (userChatContextCode !== undefined && userChatContextCode !== null) {
+            queryParameters = queryParameters.set('userChatContextCode', <any>userChatContextCode);
+        }
+        if (requestId !== undefined && requestId !== null) {
+            queryParameters = queryParameters.set('requestId', <any>requestId);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<any>('delete',`${this.basePath}/api/users/GeboUserChatsController/removeAnswerFeedback`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public setAnswerFeedback(body: AnswerFeedbackRequest, observe?: 'body', reportProgress?: boolean): Observable<GChatAnswerFeedback>;
+    public setAnswerFeedback(body: AnswerFeedbackRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GChatAnswerFeedback>>;
+    public setAnswerFeedback(body: AnswerFeedbackRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GChatAnswerFeedback>>;
+    public setAnswerFeedback(body: AnswerFeedbackRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling setAnswerFeedback.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GChatAnswerFeedback>('post',`${this.basePath}/api/users/GeboUserChatsController/setAnswerFeedback`,
+            {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

@@ -49,7 +49,8 @@ export class GeboAIDeepSearchConfigAdminComponent extends BaseEntityEditingCompo
         accessibleUsers: new FormControl(),
         accessibleToAll: new FormControl(),
         dataSourcesAccesses: new FormArray([]),
-        perDataSourceConfigured: new FormControl()
+        perDataSourceConfigured: new FormControl(),
+        externalSourceSearchEnabledByDefault: new FormControl(true)
 
     });
     protected defaultConfiguration?: DeepSearchConfig;
@@ -114,15 +115,25 @@ export class GeboAIDeepSearchConfigAdminComponent extends BaseEntityEditingCompo
         return this.formGroup.controls[frm] as FormGroup;
     }
     protected override onLoadedPersistentData(actualValue: DeepSearchConfig): void {
+        this.defaultExternalSourceSearch(actualValue);
         this.buildDsAccessRows(actualValue.dataSourcesAccesses);
         this.toggleAccessModes(actualValue.perDataSourceConfigured === true);
     }
     protected override onNewData(actualValue: DeepSearchConfig): void {
+        this.defaultExternalSourceSearch(actualValue);
         this.buildDsAccessRows(actualValue.dataSourcesAccesses);
         this.toggleAccessModes(actualValue.perDataSourceConfigured === true);
     }
     override findByCode(code: string): Observable<DeepSearchConfig | null> {
         return this.deepSearchConfigService.getDeepSearchDefaultConfig();
+    }
+
+    /** A configuration saved before the flag existed has it unset, which means enabled. */
+    private defaultExternalSourceSearch(actualValue: DeepSearchConfig) {
+        if (actualValue?.externalSourceSearchEnabledByDefault === undefined
+            || actualValue?.externalSourceSearchEnabledByDefault === null) {
+            this.formGroup.controls["externalSourceSearchEnabledByDefault"].setValue(true);
+        }
     }
 
     private toggleAccessModes(perDataSource: boolean) {

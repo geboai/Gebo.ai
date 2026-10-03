@@ -117,6 +117,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 */
 	protected final ObservationRegistry observationRegistry;
 	protected static final ObjectMapper mapper = new ObjectMapper();
+	/**
+	 * The tools made for this use of the model (see
+	 * {@link ChatModelConfigOptions#getAdditionalTools()}), declared with the repository
+	 * ones when the configuration enables them.
+	 */
+	protected List<ToolCallback> additionalTools = List.of();
 
 	protected abstract IGConfigurableChatModel cloneMeWithInjection();
 
@@ -200,7 +206,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		this.model = configureModel(config, type, null);
 		Builder builder = ChatClient.builder(configureModel(config, type, null));
 		// Priced through this model's getPricingConditions(), read when each call ends.
-		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions))
+		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions,
+				this::getProviderId))
 				.build();
 	}
 
@@ -214,6 +221,20 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		List<ToolCallback> wrapped = new ArrayList<>();
 		for (ToolCallback toolCallback : tools) {
 			wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener));
+		}
+		// the tools made for this use of the model are not in the repository: without this
+		// they would be executable but never declared to the model
+		int additional = 0;
+		for (ToolCallback toolCallback : additionalTools != null ? additionalTools : List.<ToolCallback>of()) {
+			final String name = toolCallback.getToolDefinition().name();
+			if (toolNames.contains(name) && wrapped.stream().noneMatch(x -> name.equals(x.getToolDefinition().name()))) {
+				wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener));
+				additional++;
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("wrapTools(...) model:" + getCode() + " declares " + wrapped.size() + " tool(s), " + additional
+					+ " of them made for this use of the model");
 		}
 		return wrapped;
 	}
@@ -439,6 +460,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	}
 
+	protected final static String COMPRESSED_HISTORY_ONLY_MESSAGE_CHAT_TEMPLATE = "BEGIN_CONSOLIDATED_HISTORY\r\n{"
+			+ IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM + "}\r\nEND_CONSOLIDATED_HISTORY\r\n";
+
 	protected final static String COMPRESSED_HISTORY_FIRST_MESSAGE_CHAT_TEMPLATE = "BEGIN_CONSOLIDATED_HISTORY\r\n{"
 			+ IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM
 			+ "}\r\nEND_CONSOLIDATED_HISTORY\r\nUSER-QUESTION={" + IChatRequestContext.USER_QUESTION_PROMPT_PARAM
@@ -447,7 +471,18 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	protected List<Message> createCompressedHistory(IChatRequestContext chatContext) {
 		List<Message> messages = new ArrayList<>();
 		String consolidated = chatContext.getConsolidatedHistory();
-		List<IChatSessionEntry> interactions = chatContext.getInteractions();
+		List<IChatSessionEntry> interactions = chatContext.getInteractions() != null ? chatContext.getInteractions()
+				: List.of();
+		if (interactions.isEmpty()) {
+			// only the summary of the older turns is left: it is the whole history
+			PromptTemplate template = new PromptTemplate(COMPRESSED_HISTORY_ONLY_MESSAGE_CHAT_TEMPLATE);
+			template.add(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM, consolidated);
+			messages.add(new UserMessage(template.render()));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("createCompressedHistory(...) chat history is the consolidated summary only");
+			}
+			return messages;
+		}
 		for (int i = 0; i < interactions.size(); i++) {
 			if (i == 0) {
 				String user = interactions.get(0).getUser();
@@ -716,7 +751,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("doWithChatModel() handing out the usage recording raw model of code=" + getCode());
 		}
-		return chatModelCalling.call(usageAdvisorFactory.recording(model, config, this::getPricingConditions));
+		return chatModelCalling.call(usageAdvisorFactory.recording(model, config, this::getPricingConditions,
+				this::getProviderId));
 	}
 
 	@Override
@@ -738,6 +774,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				modelConfigClone.setTopP(configOptions.getTopP());
 			}
 			IGConfigurableChatModel handler = cloneMeWithInjection();
+			if (handler instanceof GAbstractConfigurableChatModel clone && configOptions.getAdditionalTools() != null) {
+				clone.additionalTools = List.copyOf(configOptions.getAdditionalTools());
+			}
 			if (handler instanceof IGProviderDealPricedModel priced) {
 				// The clone is priced like this model, by its provider deal; best effort.
 				try {
@@ -757,7 +796,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 						.builder(configurableChatModel.configureModel(modelConfigClone, type,
 								configOptions.getToolCallingManager()))
 						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone,
-								configurableChatModel::getPricingConditions))
+								configurableChatModel::getPricingConditions, configurableChatModel::getProviderId))
 						.build();
 			} else
 				throw new IllegalStateException(

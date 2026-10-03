@@ -88,6 +88,16 @@ public interface IGConfigurableModel<ModelConfig extends GBaseModelConfig, Model
 	}
 
 	/**
+	 * The real provider behind this model, e.g. "openai" or "regolo.ai", the same for
+	 * every model type of that provider, see {@link GModelType#getProviderId()};
+	 * null when the model has no type or its type declares no provider.
+	 */
+	public default String getProviderId() {
+		ModelType type = getType();
+		return type != null ? type.getProviderId() : null;
+	}
+
+	/**
 	 * The model's pricing: by default the one the provider's API gave
 	 * ({@link #getProviderApiPricingConditions()}). The abstract base implementations
 	 * first look for the price the provider deal covering the model's API key gives

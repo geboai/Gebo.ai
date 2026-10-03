@@ -278,6 +278,13 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         });
 
     }
+    /**
+     * Opens the chat just branched from one of the current chat's answers
+     */
+    protected onBranchedChat(chatInfo: GUserChatInfo) {
+        this.loadChatList();
+        this.routeToChat(chatInfo);
+    }
     protected onUpdatedChat(chatInfo: GUserChatInfo) {
         if (this.chatsTree && this.chatsTree.length !== undefined) {
             const childs = this.chatsTree[0].children as TreeNode<GUserChatInfo>[];

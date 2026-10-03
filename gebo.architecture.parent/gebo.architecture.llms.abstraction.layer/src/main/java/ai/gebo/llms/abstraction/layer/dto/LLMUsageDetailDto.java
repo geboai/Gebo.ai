@@ -22,7 +22,16 @@ import lombok.Data;
 public class LLMUsageDetailDto {
 	private static final String UNKNOWN = "unknown";
 
+	/**
+	 * The real provider of the model called, e.g. "openai" or "regolo.ai": the same for
+	 * every model type of the provider.
+	 */
 	private String providerId;
+	/**
+	 * The code of the model type called, e.g. "chatgpt-OpenAI": specific to the type
+	 * (chat, embedding, ...) of the provider.
+	 */
+	private String modelTypeCode;
 	private String username;
 	private String model;
 	private String callerStack;
@@ -50,11 +59,21 @@ public class LLMUsageDetailDto {
 	private String apiSecretCode;
 
 	public static LLMUsageDetailDto of(GBaseModelConfig config) {
+		return of(config, null);
+	}
+
+	/**
+	 * @param providerId the real provider of the model, its
+	 *                   {@code IGConfigurableModel.getProviderId()}; null or blank
+	 *                   records it as unknown
+	 */
+	public static LLMUsageDetailDto of(GBaseModelConfig config, String providerId) {
 		LLMUsageDetailDto detail = new LLMUsageDetailDto();
+		detail.setProviderId(providerId != null && !providerId.isBlank() ? providerId : UNKNOWN);
 		if (config != null && config.getModelTypeCode() != null) {
-			detail.setProviderId(config.getModelTypeCode());
+			detail.setModelTypeCode(config.getModelTypeCode());
 		} else
-			detail.setProviderId(UNKNOWN);
+			detail.setModelTypeCode(UNKNOWN);
 		if (config != null && config.getChoosedModel() != null && config.getChoosedModel().getCode() != null) {
 			detail.setModel(config.getChoosedModel().getCode());
 		} else

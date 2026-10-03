@@ -44,7 +44,8 @@ export class GeboAIDeepSearchWizardComponent extends BaseWizardSectionComponent 
             searchType: "MULTI_HOP",
             defaultConfig: true,
             accessibleToAll: true,
-            perDataSourceConfigured: false
+            perDataSourceConfigured: false,
+            externalSourceSearchEnabledByDefault: true
         };
         this.actionRouter.routeEvent({
             actionType: GeboActionType.NEW,

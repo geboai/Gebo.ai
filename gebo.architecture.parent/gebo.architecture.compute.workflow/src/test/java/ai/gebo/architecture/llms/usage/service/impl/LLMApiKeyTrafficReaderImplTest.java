@@ -28,7 +28,7 @@ class LLMApiKeyTrafficReaderImplTest {
 
 	private static LLMDailyUsageDetail day(String type, String key, long tokens) {
 		LLMDailyUsageDetail detail = new LLMDailyUsageDetail();
-		detail.setProviderId(type);
+		detail.setModelTypeCode(type);
 		detail.setApiSecretCode(key);
 		detail.setTotalToken(tokens);
 		return detail;

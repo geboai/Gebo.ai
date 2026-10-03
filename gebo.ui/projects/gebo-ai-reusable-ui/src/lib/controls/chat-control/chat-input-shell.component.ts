@@ -10,6 +10,7 @@ import { GeboAIChatStreamEventsDisplayComponent } from './chat-stream-events-dis
 import { PipelineRoutingOption } from './pipeline-routing-option';
 import { Chip } from 'primeng/chip';
 import { timer } from 'rxjs';
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from '../field-host-component-iface/field-host-component-iface';
 function sameStringsIgnoreOrder(a: string[], b: string[]): boolean {
   if (a.length !== b.length) {
     return false;
@@ -67,7 +68,11 @@ const chatWithFilesPipelineOption: PipelineRoutingOption = {
   selector: 'gebo-ai-chat-input-shell',
   templateUrl: './chat-input-shell.component.html',
   styleUrls: ['./chat-input-shell.component.scss'],
-  standalone: false
+  standalone: false,
+  providers: [
+    { provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },
+    { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIChatInputShellComponent"), multi: false }
+  ]
 })
 export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
 
@@ -121,6 +126,11 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   @Output() stopReactiveChat: EventEmitter<string | undefined> = new EventEmitter();
   @ViewChild(GeboAIChatStreamEventsDisplayComponent) streamNotificationsComponent!: GeboAIChatStreamEventsDisplayComponent;
   @ViewChild("actualRoutingChoiceChip") chip!: Chip;
+  /**
+   * A message the user sent while the chat was busy (loading, or still answering):
+   * it is kept and sent as soon as the chat is ready, instead of being dropped.
+   */
+  protected pendingSend: boolean = false;
   private staticBehaviorsMenuItems: MenuItem[] = [{
     id: "UploadFileMenuItem",
     icon: "pi pi-cloud-upload",
@@ -299,6 +309,14 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
 
   }
   ngOnChanges(changes: SimpleChanges): void {
+    if ((changes["loading"] || changes["streaming"]) && this.pendingSend && !this.loading && !this.streaming) {
+      // after the change detection that ended the busy state, with the text the input holds then
+      timer(0).subscribe(() => {
+        if (this.pendingSend && !this.loading && !this.streaming) {
+          this.onSendClick();
+        }
+      });
+    }
     if (this.formGroup && changes["formGroup"]) {
       this.formGroup.valueChanges.subscribe({
         next: (req: GeboChatRequest) => {
@@ -404,10 +422,28 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
     this.onSendClick();
   }
 
-  onSendClick() {
-    if (this.formGroup?.invalid || this.loading) {
+  /** Enter sends the message, Shift+Enter writes a new line. */
+  onEnterKey(event: Event) {
+    const keyboardEvent = event as KeyboardEvent;
+    if (keyboardEvent.shiftKey || keyboardEvent.isComposing) {
       return;
     }
+    // the new line of the key must not land in the input the sending clears
+    event.preventDefault();
+    this.onSubmit();
+  }
+
+  onSendClick() {
+    if (this.formGroup?.invalid) {
+      this.pendingSend = false;
+      return;
+    }
+    if (this.loading || this.streaming) {
+      // sent as soon as the chat is ready (see ngOnChanges)
+      this.pendingSend = true;
+      return;
+    }
+    this.pendingSend = false;
     //set the pipeline route visualizzation that will be runned
     this.runningPipelineRouting = this.choosedPipelineRoutingChip;
     this.streamNotificationsComponent.clearUI();

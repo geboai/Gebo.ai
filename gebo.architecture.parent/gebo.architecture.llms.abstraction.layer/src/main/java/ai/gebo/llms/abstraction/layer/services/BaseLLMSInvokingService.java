@@ -113,7 +113,35 @@ public class BaseLLMSInvokingService {
 		return chatModel.textResponse(prompt, params, context);
 	}
 
+	/**
+	 * The fields of the model's output, each one with the values written for it. An
+	 * output with none of the fields leaves every caller on its fallback (the QA
+	 * default of a routing, the raw command of a search...): the model is then asked
+	 * once more.
+	 */
 	protected Map<String, List<String>> callLLMRepeatableFieldEntryOutput(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params,
+			List<String> validFields) throws LLMConfigException {
+		Map<String, List<String>> outValue = parseFieldEntryOutput(chatModel, prompt, context, params, validFields);
+		if (outValue.isEmpty() && !validFields.isEmpty()) {
+			LOGGER.warn("callLLMRepeatableFieldEntryOutput(...) prompt:" + (prompt != null ? prompt.getPromptUse() : null)
+					+ " gave none of the field(s):" + validFields + ", asking once more");
+			outValue = parseFieldEntryOutput(chatModel, prompt, context, params, validFields);
+			if (outValue.isEmpty()) {
+				LOGGER.warn("callLLMRepeatableFieldEntryOutput(...) prompt:"
+						+ (prompt != null ? prompt.getPromptUse() : null)
+						+ " gave none of the field(s) again, its caller falls back");
+			} else if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("callLLMRepeatableFieldEntryOutput(...) prompt:"
+						+ (prompt != null ? prompt.getPromptUse() : null) + " second output gave the field(s):"
+						+ outValue.keySet());
+			}
+		}
+		return outValue;
+	}
+
+	/** One call of the model, its output parsed into the given fields. */
+	private Map<String, List<String>> parseFieldEntryOutput(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params,
 			List<String> validFields) throws LLMConfigException {
 
@@ -123,6 +151,9 @@ public class BaseLLMSInvokingService {
 		}
 		Map<String, List<String>> outValue = new HashMap<String, List<String>>();
 		String toBeParsed = callLLM(chatModel, prompt, context, params);
+		if (toBeParsed == null) {
+			toBeParsed = "";
+		}
 		ByteArrayInputStream bis = new ByteArrayInputStream(toBeParsed.getBytes());
 		DataInputStream dis = new DataInputStream(bis);
 		String line = null;
@@ -147,6 +178,31 @@ public class BaseLLMSInvokingService {
 			}
 		} catch (IOException e) {
 			LOGGER.warn("Exception while doing a in-memory readLine()", e);
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<FIELD_ENTRY_OUTPUT prompt=" + (prompt != null ? prompt.getPromptUse() : null) + ">");
+			LOGGER.trace(toBeParsed);
+			LOGGER.trace("</FIELD_ENTRY_OUTPUT>");
+		}
+		// a field the model did not write leaves its caller on a default: say which ones
+		final List<String> missingFields = new ArrayList<String>();
+		for (String fieldName : validFields) {
+			if (!outValue.containsKey(fieldName.trim())) {
+				missingFields.add(fieldName.trim());
+			}
+		}
+		if (!missingFields.isEmpty()) {
+			// some fields are optional for some callers (e.g. the systems of a routing decision):
+			// an output with none of them is warned of by callLLMRepeatableFieldEntryOutput
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("parseFieldEntryOutput(...) prompt:" + (prompt != null ? prompt.getPromptUse() : null)
+						+ " output of " + toBeParsed.length() + " character(s) without the field(s):"
+						+ missingFields);
+			}
+			if (LOGGER.isDebugEnabled() && toBeParsed != null) {
+				LOGGER.debug("Output without the field(s) " + missingFields + " begins with: "
+						+ toBeParsed.substring(0, Math.min(400, toBeParsed.length())));
+			}
 		}
 		return outValue;
 

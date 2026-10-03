@@ -19,10 +19,10 @@
  * text-to-speech, and chat history management.
  */
 
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Component, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { AdditionalContent, BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
+import { AdditionalContent, AnswerFeedbackRequest, BASE_PATH, CalledFunction, GBaseChatModelChoice, GChatAnswerFeedback, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
@@ -40,6 +40,7 @@ const loading_vocal_answer_received: ToastMessageOptions = { id: "LOADING_VOCAL_
 const your_speech_is_uploading: ToastMessageOptions = { id: "YOUR_SPEECH_IS_UPLOADING", severity: "info", summary: "Your speech is uploading" };
 const chat_history_loaded: ToastMessageOptions = { id: "CHAT_HISTORY_LOADED", summary: "Chat history loaded", detail: "Chat history loaded successfully", severity: "success" };
 const clean_chat_loaded: ToastMessageOptions = { id: "NEW_CHAT_LOADED", summary: "New chat loaded", detail: "New chat loaded successfully", severity: "success" };
+const chat_branched: ToastMessageOptions = { id: "CHAT_BRANCHED", summary: "Chat branched", detail: "The conversation continues in a new chat, starting from the chosen answer", severity: "success" };
 const fileExportLoaded: ToastMessageOptions = { id: "fileExportLoaded", summary: "File exported", detail: "Go to browser downloads section", severity: "succcess" };
 /**
  * Interface representing a single chat interaction between the user and the AI,
@@ -80,6 +81,12 @@ const wheelLineHeight: number = 40;
  * How long the resolved scrolling container stays valid before being looked up again
  */
 const scrollHostCacheMillis: number = 250;
+/**
+ * The streamed text of an answer is added to it at most once in this time: every
+ * addition re-renders the whole markdown answer (highlighting, diagrams) and scrolls,
+ * which done for every chunk freezes the page on long answers
+ */
+const streamedTextBatchMillis: number = 100;
 /**
  * Component that provides a reusable chat interface for Gebo.ai models.
  * Supports both standard chat and RAG-enabled conversations, with features like
@@ -164,6 +171,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Map tracking which interactions have their full document list expanded
      */
     public expandedInteractionsDocs: Map<string, boolean> = new Map();
+    /** The called functions whose parameters are shown, as "<request id>#<function index>". */
+    public expandedCalledFunctions: Set<string> = new Set();
+    /** The parameters of each called function, parsed once. */
+    private calledFunctionParamsCache: WeakMap<CalledFunction, { name: string, value: string }[]> = new WeakMap();
 
     /**
      * Flag indicating if a chat response is currently streaming
@@ -286,6 +297,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     @Output() addedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
     @Output() updatedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
+    /**
+     * Emitted with the new chat created by branching this one from one of its answers
+     */
+    @Output() branchedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
     @ViewChild(GeboAIChatInputShellComponent) chatInputShell!: GeboAIChatInputShellComponent;
     /**
      * Configuration options for Mermaid diagrams
@@ -380,6 +395,13 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Flag to control visibility of the description change dialog
      */
     protected changeDescriptionDialogOpened: boolean = false;
+    // The user's rating of each answer, by request id
+    protected answerFeedbacks: Map<string, GChatAnswerFeedback> = new Map<string, GChatAnswerFeedback>();
+    protected feedbackDialogOpened: boolean = false;
+    protected feedbackRequestId?: string;
+    protected feedbackFormGroup: FormGroup = new FormGroup({ comment: new FormControl<string | null>(null) });
+    protected savingFeedback: boolean = false;
+    protected branching: boolean = false;
 
     /**
      * Constructor - injects all required services
@@ -676,6 +698,110 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.chatInputShell.switchToChatWithDocuments();
         }
     }
+    private loadAnswerFeedbacks(userChatContextCode: string): void {
+        this.userChatControllerService.getAnswerFeedbacks(userChatContextCode).subscribe({
+            next: (feedbacks) => {
+                // The auth interceptor turns http errors into values: only arrays are feedbacks
+                this.answerFeedbacks.clear();
+                if (Array.isArray(feedbacks)) {
+                    feedbacks.forEach(f => this.answerFeedbacks.set(f.requestId, f));
+                }
+            }
+        });
+    }
+
+    /**
+     * The rating the user gave to the answer of this interaction, if any
+     */
+    public ratingOf(interaction: GeboChatInteraction): GChatAnswerFeedback.RatingEnum | undefined {
+        const requestId = interaction?.request?.id;
+        return requestId ? this.answerFeedbacks.get(requestId)?.rating : undefined;
+    }
+
+    /**
+     * Thumbs up / down: clicking the current rating again removes it; a negative
+     * rating asks for an optional comment first.
+     */
+    public rateAnswer(interaction: GeboChatInteraction, rating: GChatAnswerFeedback.RatingEnum): void {
+        const requestId = interaction?.request?.id;
+        const chatCode = this.userChatContextCode;
+        if (!requestId || !chatCode || this.savingFeedback) {
+            return;
+        }
+        if (this.ratingOf(interaction) === rating) {
+            this.savingFeedback = true;
+            this.userChatControllerService.removeAnswerFeedback(chatCode, requestId).subscribe({
+                next: (result: any) => {
+                    if (!(result instanceof HttpErrorResponse)) {
+                        this.answerFeedbacks.delete(requestId);
+                    }
+                },
+                complete: () => this.savingFeedback = false,
+                error: () => this.savingFeedback = false
+            });
+            return;
+        }
+        if (rating === GChatAnswerFeedback.RatingEnum.NEGATIVE) {
+            this.feedbackRequestId = requestId;
+            this.feedbackFormGroup.controls["comment"].setValue(this.answerFeedbacks.get(requestId)?.comment ?? null);
+            this.feedbackDialogOpened = true;
+            return;
+        }
+        this.saveFeedback(chatCode, requestId, rating, undefined);
+    }
+
+    public saveNegativeFeedback(): void {
+        if (this.userChatContextCode && this.feedbackRequestId) {
+            const comment: string | null = this.feedbackFormGroup.controls["comment"].value;
+            this.saveFeedback(this.userChatContextCode, this.feedbackRequestId, GChatAnswerFeedback.RatingEnum.NEGATIVE,
+                comment && comment.trim().length > 0 ? comment.trim() : undefined);
+        }
+        this.closeFeedbackDialog();
+    }
+
+    public closeFeedbackDialog(): void {
+        this.feedbackDialogOpened = false;
+        this.feedbackRequestId = undefined;
+    }
+
+    private saveFeedback(chatCode: string, requestId: string, rating: GChatAnswerFeedback.RatingEnum, comment: string | undefined): void {
+        const request: AnswerFeedbackRequest = { userChatContextCode: chatCode, requestId: requestId, rating: rating, comment: comment };
+        this.savingFeedback = true;
+        this.userChatControllerService.setAnswerFeedback(request).subscribe({
+            next: (saved) => {
+                if (saved?.requestId) {
+                    this.answerFeedbacks.set(saved.requestId, saved);
+                }
+            },
+            complete: () => this.savingFeedback = false,
+            error: () => this.savingFeedback = false
+        });
+    }
+
+    /**
+     * Creates a new chat holding this chat up to and including this answer, and hands it to the host
+     */
+    public branchFrom(interaction: GeboChatInteraction): void {
+        const requestId = interaction?.request?.id;
+        const chatCode = this.userChatContextCode;
+        if (!requestId || !chatCode || this.branching) {
+            return;
+        }
+        this.branching = true;
+        this.userChatControllerService.branchChat(chatCode, requestId).subscribe({
+            next: (branch) => {
+                if (branch?.code) {
+                    // straight to the root service: the host navigates to the branch and may
+                    // destroy this component before its notifications input is processed
+                    this.messageService.addMessage("GeboAIChatControlModule", entityId, chat_branched);
+                    this.branchedChatAction.emit(branch);
+                }
+            },
+            complete: () => this.branching = false,
+            error: () => this.branching = false
+        });
+    }
+
     public exportResponse(userContextCode: string | undefined, responseId: string | undefined, format: string) {
         if (!userContextCode || !responseId) {
             console.error("Cannot export response: userContextCode or responseId is missing", { userContextCode, responseId });
@@ -817,6 +943,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     this.chatInfoFormGroup.patchValue({ code: value.code, description: value.description });
                     this.lastInteractionMessages = this.interactions && this.interactions?.length > 0 ? [chat_history_loaded] : [clean_chat_loaded];
                     this.scrollToBottom();
+                    if (value?.code && this.interactions.length > 0) {
+                        this.loadAnswerFeedbacks(value.code);
+                    } else {
+                        this.answerFeedbacks.clear();
+                    }
 
                 },
                 complete: () => {
@@ -874,6 +1005,67 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     public isInteractionDocsExpanded(interactionId?: string): boolean {
         if (!interactionId) return false;
         return this.expandedInteractionsDocs.get(interactionId) || false;
+    }
+
+    /**
+     * Shows or hides the parameters of a function called while answering an interaction
+     * @param interactionId The ID of the interaction request
+     * @param index The position of the called function in the response
+     */
+    public toggleCalledFunctionParams(interactionId: string | undefined, index: number): void {
+        if (!interactionId) return;
+        const key = interactionId + "#" + index;
+        if (this.expandedCalledFunctions.has(key)) {
+            this.expandedCalledFunctions.delete(key);
+        } else {
+            this.expandedCalledFunctions.add(key);
+        }
+    }
+
+    /**
+     * Checks if the parameters of a called function are shown
+     * @param interactionId The ID of the interaction request
+     * @param index The position of the called function in the response
+     */
+    public isCalledFunctionParamsExpanded(interactionId: string | undefined, index: number): boolean {
+        return !!interactionId && this.expandedCalledFunctions.has(interactionId + "#" + index);
+    }
+
+    /**
+     * The parameters a function was called with, attribute by attribute: the call input
+     * is the JSON object the model wrote; anything else is shown as it is.
+     */
+    public calledFunctionParams(calledFunction: CalledFunction): { name: string, value: string }[] {
+        const cached = this.calledFunctionParamsCache.get(calledFunction);
+        if (cached) return cached;
+        const params: { name: string, value: string }[] = [];
+        for (const raw of calledFunction?.paramsDescription || []) {
+            let parsed: any = undefined;
+            try {
+                parsed = JSON.parse(raw);
+            } catch {
+                parsed = undefined;
+            }
+            if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+                for (const [name, value] of Object.entries(parsed)) {
+                    params.push({ name: name, value: this.calledFunctionParamText(value) });
+                }
+            } else {
+                params.push({ name: "", value: raw });
+            }
+        }
+        this.calledFunctionParamsCache.set(calledFunction, params);
+        return params;
+    }
+
+    private calledFunctionParamText(value: any): string {
+        if (value === null || value === undefined) return "";
+        if (typeof value === "string") return value;
+        if (Array.isArray(value) && value.every(item => item === null || typeof item !== "object")) {
+            return value.join(", ");
+        }
+        if (typeof value === "object") return JSON.stringify(value, null, 2);
+        return String(value);
     }
 
     /**
@@ -1011,11 +1203,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                         }
                         this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
 
+                        // the query is not reset here: sendMessage cleared it, and what the user
+                        // typed while waiting is the next message
                         const dataUpdate: any = {
                             chatProfileCode: r.chatProfileCode,
                             chatModelCode: r.chatModelCode,
-                            userChatContextCode: response.userChatContextCode,
-                            query: null
+                            userChatContextCode: response.userChatContextCode
                         };
                         this.formGroup.patchValue(dataUpdate);
                         this.scrollToBottom();
@@ -1100,11 +1293,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 // when present, or an empty array when nothing was produced, so the host can
                 // react to both cases (show/hide a suggestion).
                 this.outputAdditionalContents.emit(response.additionalContents ?? []);
+                // the query is not reset here: sendMessage cleared it, and what the user
+                // typed while the answer streamed is the next message
                 const dataUpdate: any = {
                     chatProfileCode: r.chatProfileCode,
                     chatModelCode: r.chatModelCode,
                     userChatContextCode: response.userChatContextCode,
-                    query: null,
                     chatPipelineProcessId: null,
                     forcedRequestDocuments: []
                 };
@@ -1133,6 +1327,27 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             pipelineRouterDecisionCode: this.currentPipelineRouterDecisionCode
         };
         this.interactions.push(interaction);
+        // the streamed text waiting to be added to the answer (see streamedTextBatchMillis)
+        let pendingText: string = "";
+        let flushTimer: ReturnType<typeof setTimeout> | undefined = undefined;
+        const flushText = () => {
+            if (flushTimer !== undefined) {
+                clearTimeout(flushTimer);
+                flushTimer = undefined;
+            }
+            if (!pendingText) return;
+            if (interaction.response) {
+                interaction.response.queryResponse = (interaction.response.queryResponse || "") + pendingText;
+            }
+            pendingText = "";
+            this.scrollToBottom();
+        };
+        const appendText = (text: string) => {
+            pendingText += text;
+            if (flushTimer === undefined) {
+                flushTimer = setTimeout(flushText, streamedTextBatchMillis);
+            }
+        };
         const messageCallback = (msg: IGeboChatMessage | string) => {
             if (!msg) return;
             this.loadingChatResponse = false;
@@ -1191,6 +1406,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                                     try {
                                         const parsed = JSON.parse(recvd.content);
                                         if (parsed && (parsed.queryResponse !== undefined || parsed.userChatContextCode !== undefined || parsed.usedChatModelCode !== undefined)) {
+                                            flushText();
                                             this.handleGeboChatResponse(interaction, parsed, r, suggestChatDescription, doSpeach, recvd.lastMessage);
                                             isJson = true;
                                         }
@@ -1200,26 +1416,27 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                                 }
 
                                 if (!isJson) {
-                                    interaction.response.queryResponse += recvd.content;
-                                    setTimeout(() => this.scrollToBottom(), 10);
+                                    appendText(recvd.content);
                                 }
                             }
                         } break;
                         case "GeboChatResponse": {
+                            flushText();
                             this.handleGeboChatResponse(interaction, recvd.content, r, suggestChatDescription, doSpeach, recvd.lastMessage);
                         } break;
                     }
                 }
                 if (recvd.lastMessage === true) {
+                    flushText();
                     interaction.loading = false;
                     this.chatStreaming = false;
                 }
             } catch (e) {
                 console.error("Exception :", e);
             }
-            console.log("Received chat word: " + msg);
         };
         const errorCallBack = (error: any) => {
+            flushText();
             this.chatStreaming = false;
             this.chatStreamingErrorOccurred = true;
             console.error("Exception in receiving data", error);
@@ -1231,6 +1448,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         this.chatStreamingErrorOccurred = false;
 
         const onCompleteCallback = () => {
+            flushText();
             this.chatStreaming = false;
             this.loadingChatResponse = false;
             if (interaction) {

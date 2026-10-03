@@ -18,7 +18,7 @@ import ai.gebo.architecture.llms.usage.repository.LLMDailyUsageDetailRepository;
 import ai.gebo.architecture.llms.usage.repository.LLMUsageDetailRepository;
 import ai.gebo.architecture.llms.usage.service.ILLMUsageDailyAggregationService;
 import ai.gebo.model.ModelType;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * The default {@link ILLMUsageDailyAggregationService}: folds raw
@@ -40,7 +40,6 @@ import lombok.AllArgsConstructor;
  * tick of a day and midnight are consolidated by the first tick of the next day.
  */
 @Component
-@AllArgsConstructor
 public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggregationService {
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	/**
@@ -51,6 +50,21 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 	public static final ModelType LEGACY_MODEL_TYPE = ModelType.CHAT;
 	protected final LLMUsageDetailRepository usageRepo;
 	protected final LLMDailyUsageDetailRepository consolidatedRepo;
+	/** Null when the records need no conversion, as in the tests. */
+	protected final LLMUsageProviderIdConversion conversion;
+
+	public LLMUsageDailyAggregationServiceImpl(LLMUsageDetailRepository usageRepo,
+			LLMDailyUsageDetailRepository consolidatedRepo) {
+		this(usageRepo, consolidatedRepo, null);
+	}
+
+	@Autowired
+	public LLMUsageDailyAggregationServiceImpl(LLMUsageDetailRepository usageRepo,
+			LLMDailyUsageDetailRepository consolidatedRepo, LLMUsageProviderIdConversion conversion) {
+		this.usageRepo = usageRepo;
+		this.consolidatedRepo = consolidatedRepo;
+		this.conversion = conversion;
+	}
 
 	/**
 	 * The time zone the calendar days of the aggregates are cut in. Defaults to the
@@ -88,8 +102,13 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 					+ today + " window=[" + yesterdayFirstMillisecond + "," + todayLastMillisecond + "]");
 		}
 
+		if (conversion != null && !conversion.convertOnce()) {
+			LOGGER.warn("Usage not consolidated: the records written before the model type code are not converted yet");
+			return;
+		}
+
 		// Aggregate the raw values grouping by
-		// providerId, username, model, callerStack, modelType, outcome, apiSecretCode, year, month, day.
+		// modelTypeCode (which gives the providerId), username, model, callerStack, modelType, outcome, apiSecretCode, year, month, day.
 		Map<ConsolidationKey, DailyAccumulator> grouped = new HashMap<>();
 		long rawRows = 0;
 		try (Stream<LLMUsageDetail> stream = usageRepo.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(
@@ -98,7 +117,7 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 				LocalDate date = Instant.ofEpochMilli(detail.getTimestamp()).atZone(zone).toLocalDate();
 				LLMCallOutcome outcome = resolveOutcome(detail);
 				ModelType modelType = resolveModelType(detail);
-				ConsolidationKey key = new ConsolidationKey(detail.getProviderId(), detail.getUsername(),
+				ConsolidationKey key = new ConsolidationKey(detail.getModelTypeCode(), detail.getUsername(),
 						detail.getModel(), detail.getCallerStack(), modelType, outcome, detail.getApiSecretCode(),
 						date.getYear(), date.getMonthValue(), date.getDayOfMonth());
 				grouped.computeIfAbsent(key, k -> new DailyAccumulator()).add(detail);
@@ -114,8 +133,8 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 		for (Map.Entry<ConsolidationKey, DailyAccumulator> entry : grouped.entrySet()) {
 			ConsolidationKey key = entry.getKey();
 			LLMDailyUsageDetail target = consolidatedRepo
-					.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndApiSecretCodeAndYearAndMonthAndDay(
-							key.providerId(), key.username(), key.model(), key.callerStack(), key.modelType(),
+					.findByModelTypeCodeAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndApiSecretCodeAndYearAndMonthAndDay(
+							key.modelTypeCode(), key.username(), key.model(), key.callerStack(), key.modelType(),
 							key.outcome(), key.apiSecretCode(), key.year(), key.month(), key.day())
 					.orElseGet(() -> newDailyUsageDetail(key));
 			entry.getValue().writeInto(target);
@@ -148,7 +167,7 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 
 	private static LLMDailyUsageDetail newDailyUsageDetail(ConsolidationKey key) {
 		LLMDailyUsageDetail daily = new LLMDailyUsageDetail();
-		daily.setProviderId(key.providerId());
+		daily.setModelTypeCode(key.modelTypeCode());
 		daily.setUsername(key.username());
 		daily.setModel(key.model());
 		daily.setCallerStack(key.callerStack());
@@ -161,7 +180,7 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 		return daily;
 	}
 
-	private record ConsolidationKey(String providerId, String username, String model, String callerStack,
+	private record ConsolidationKey(String modelTypeCode, String username, String model, String callerStack,
 			ModelType modelType, LLMCallOutcome outcome, String apiSecretCode, int year, int month, int day) {
 	}
 
@@ -185,8 +204,13 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 		private long costSamples;
 		private double costSum;
 		private final java.util.Set<String> currencies = new java.util.LinkedHashSet<>();
+		/** The provider of the key's model type, from its raw rows; null if none has one. */
+		private String providerId;
 
 		void add(LLMUsageDetail detail) {
+			if (detail.getProviderId() != null) {
+				providerId = detail.getProviderId();
+			}
 			if (detail.getCost() != null) {
 				costSamples++;
 				costSum += detail.getCost();
@@ -213,6 +237,9 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 		 * complete for the target's day.
 		 */
 		void writeInto(LLMDailyUsageDetail target) {
+			if (providerId != null) {
+				target.setProviderId(providerId);
+			}
 			target.setInputToken(inputToken);
 			target.setOutputToken(outputToken);
 			target.setTotalToken(totalToken);

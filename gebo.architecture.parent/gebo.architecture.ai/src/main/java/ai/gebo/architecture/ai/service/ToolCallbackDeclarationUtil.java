@@ -9,9 +9,7 @@
 
 package ai.gebo.architecture.ai.service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -23,15 +21,30 @@ import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.ai.tool.metadata.ToolMetadata;
 import org.springframework.ai.util.json.schema.JsonSchemaGenerator;
 
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 
 /**
  * Utility class for declaring tool callbacks for AI applications. AI generated
  * comments
  */
 public class ToolCallbackDeclarationUtil {
-	private static final String UNIQUE_CONTEXT_ID = "uniqueContextId";
+	/**
+	 * Tools context key carrying the id of the user request the tools are called
+	 * for: every model call of the same request (agents iterations included) shares
+	 * it, so a tool can keep request-scoped state across its invocations.
+	 */
+	public static final String REQUEST_ID_CONTEXT_KEY = "geboRequestId";
+
+	/**
+	 * The id of the user request a tool is called for, or null when the caller did
+	 * not provide one in the tools context.
+	 */
+	public static String requestId(ToolContext toolContext) {
+		if (toolContext == null || toolContext.getContext() == null) {
+			return null;
+		}
+		Object value = toolContext.getContext().get(REQUEST_ID_CONTEXT_KEY);
+		return value instanceof String id && !id.isBlank() ? id : null;
+	}
 
 	/**
 	 * A non-functional class used as a return type placeholder for void functions.
@@ -102,49 +115,22 @@ public class ToolCallbackDeclarationUtil {
 		return f;
 	}
 
-	private final static String FUNCTIONS_CALLED = "GEBO-FUNCTIONS-CALLED";
-
 	/**
-	 * Creates a new tool context environment with a unique context ID.
+	 * Declares a ToolCallback whose parameter is a generic type, e.g.
+	 * {@code Param<SomeQuery>} built with
+	 * {@code ResolvableType.forClassWithGenerics(Param.class, SomeQuery.class).getType()}:
+	 * both the input schema and the deserialization of the model arguments resolve
+	 * the type arguments, so no concrete subclass has to be generated.
 	 *
-	 * @return a map representing the tool context environment
+	 * @param paramType the (possibly parameterized) type of the function's parameter
 	 */
-	public static Map<String, Object> newToolContextEnvironment() {
-		Map<String, Object> context = new HashMap<>();
-		context.put(UNIQUE_CONTEXT_ID, UUID.randomUUID().toString());
-		return context;
-	}
-
-	/**
-	 * Adds a function call to the tool context.
-	 *
-	 * @param c        the tool context
-	 * @param function the called function to add
-	 */
-	public static void addCallToContext(ToolContext c, CalledFunction function) {
-
-		if (c != null && c.getContext() != null) {
-			if (c.getContext().containsKey("CONTEXT")) {
-				// Retrieves and updates the context with the called function
-				KBContext ctx = (KBContext) c.getContext().get("CONTEXT");
-				ctx.getCalledFunctions().add(function);
-			}
-			String id = (String) c.getContext().get(UNIQUE_CONTEXT_ID);
-
-		}
-
-	}
-
-	/**
-	 * Creates a new tool context environment with existing KBContext.
-	 *
-	 * @param context the existing KBContext to be included
-	 * @return a map representing the tool context environment
-	 */
-	public static Map<String, Object> newToolContextEnvironment(KBContext context) {
-		Map<String, Object> map = newToolContextEnvironment();
-		map.put("CONTEXT", context);
-		return map;
+	public static <T, R> ToolCallback declare(BiFunction<T, ToolContext, R> function, String functionName,
+			String description, Type paramType) {
+		String inputSchema = JsonSchemaGenerator.generateForType(paramType);
+		ToolDefinition toolDefinition = ToolDefinition.builder().name(functionName).description(description)
+				.inputSchema(inputSchema).build();
+		ToolMetadata toolMetaData = ToolMetadata.builder().build();
+		return new FunctionToolCallback<T, R>(toolDefinition, toolMetaData, paramType, function, null);
 	}
 
 }

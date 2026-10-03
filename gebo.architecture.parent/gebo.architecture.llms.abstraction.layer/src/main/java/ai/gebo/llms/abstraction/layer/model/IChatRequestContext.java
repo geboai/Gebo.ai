@@ -206,9 +206,69 @@ public interface IChatRequestContext {
 		return ChatRequestContextImpl.builder();
 	}
 
+	/**
+	 * This same context, whose tool calls are recorded by the given listener: every other
+	 * value is still read from this context, so nothing it carries is frozen.
+	 */
 	public default IChatRequestContext withToolCallListener(ToolCallsListener listener) {
-		return new ChatRequestContextImpl(getRequestID(), getActualUserRequest(), getConsolidatedHistory(),
-				getSessionID(), getInteractions(), getDocuments(), getToolsContext(), getPipelineInfos(), listener,
-				getRulesToFollow());
+		return new IChatRequestContext() {
+			@Override
+			public String getRequestID() {
+				return IChatRequestContext.this.getRequestID();
+			}
+
+			@Override
+			public String getSessionID() {
+				return IChatRequestContext.this.getSessionID();
+			}
+
+			@Override
+			public String getConsolidatedHistory() {
+				return IChatRequestContext.this.getConsolidatedHistory();
+			}
+
+			@Override
+			public List<IChatSessionEntry> getInteractions() {
+				return IChatRequestContext.this.getInteractions();
+			}
+
+			@Override
+			public List<Document> getDocuments() {
+				return IChatRequestContext.this.getDocuments();
+			}
+
+			@Override
+			public String getActualUserRequest() {
+				return IChatRequestContext.this.getActualUserRequest();
+			}
+
+			@Override
+			public Map<String, Object> getToolsContext() {
+				return IChatRequestContext.this.getToolsContext();
+			}
+
+			@Override
+			public Map<String, Object> getPipelineInfos() {
+				return IChatRequestContext.this.getPipelineInfos();
+			}
+
+			@Override
+			public ToolCallsListener getToolCallListener() {
+				return listener;
+			}
+
+			@Override
+			public List<String> getRulesToFollow() {
+				return IChatRequestContext.this.getRulesToFollow();
+			}
+		};
+	}
+
+	/**
+	 * This context for an agent: the agent's tool calls are recorded by its own listener,
+	 * which forwards them to the listener of this context (the user request's one).
+	 */
+	public static IChatRequestContext forAgent(IChatRequestContext context, ToolCallsListener agentListener) {
+		return context != null ? context.withToolCallListener(agentListener) : null;
 	}
 }

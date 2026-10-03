@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.abstraction.layer.services;
+package ai.gebo.llms.abstraction.layer.services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +12,18 @@ import java.util.function.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
-import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+/**
+ * Token budgeted map/reduce over a stream of documents: the documents are grouped in
+ * batches fitting a tokens budget, each batch is analysed in parallel (map), the
+ * analyses are then reduced into the final result. Progress goes to an
+ * {@link IGProgressNotifier}, so the same coordination serves the chat pipelines,
+ * the agents and the tools.
+ */
 public class TokensBudgetFluxCoordinator {
 	private static final String EXCEPTION_IN_FLAT_MAP = "Exception in flatMap(...)";
 	private static final String EXCEPTION_IN_MAP_PROCESS = "Exception in map(..) process";
@@ -26,12 +31,12 @@ public class TokensBudgetFluxCoordinator {
 
 	@FunctionalInterface
 	public static interface LastWork<X, Y> {
-		Flux<Y> iterateCumulation(List<X> finalFunction, ISinkUIEmitter emitter) throws Exception;
+		Flux<Y> iterateCumulation(List<X> finalFunction, IGProgressNotifier emitter) throws Exception;
 	}
 
 	@FunctionalInterface
 	public static interface GenerativeFunction<D, X> {
-		X iterateCumulation(X x, ISinkUIEmitter emitter, List<D> documents) throws Exception;
+		X iterateCumulation(X x, IGProgressNotifier emitter, List<D> documents) throws Exception;
 	}
 
 	@FunctionalInterface
@@ -39,7 +44,7 @@ public class TokensBudgetFluxCoordinator {
 		boolean higherThanBudgetTokens(List<D> d, long budget);
 	}
 
-	public static <D, T, Y> Flux<Y> tokenBudgetCoordinateAlreadySplitted(Flux<D> source, ISinkUIEmitter emitter,
+	public static <D, T, Y> Flux<Y> tokenBudgetCoordinateAlreadySplitted(Flux<D> source, IGProgressNotifier emitter,
 			Predicate<D> validDocumentCheck, GenerativeFunction<D, T> generative, LastWork<T, Y> finalWork,
 			T initialValue, T outOfBandValue, Predicate<T> isOutOfBandValue, Y finalOutOFBoundValue,
 			Predicate<Y> isFinalOutOFBoundValue, Predicate<T> isEndOfProcessingCondition,
@@ -65,8 +70,7 @@ public class TokensBudgetFluxCoordinator {
 				}
 				try {
 					try {
-						emitter.notifyUser(UUID.randomUUID().toString(), "Analyzing 1 batch of documents", null, 3000l,
-								NotificationType.INFO);
+						emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzing 1 batch of documents");
 					} catch (Throwable th) {
 						LOGGER.error("Error notifying user about documents analysis start", th);
 					}
@@ -75,8 +79,7 @@ public class TokensBudgetFluxCoordinator {
 						LOGGER.debug("End map(...) code with 1 batch of documents returning:" + result);
 					}
 					try {
-						emitter.notifyUser(UUID.randomUUID().toString(), "Analyzing 1 batch of documents!", null, 3000l,
-								NotificationType.INFO);
+						emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzing 1 batch of documents!");
 					} catch (Throwable th) {
 						LOGGER.error("Error notifying user about documents analysis completion", th);
 					}
@@ -106,17 +109,13 @@ public class TokensBudgetFluxCoordinator {
 						finalResult = streamingFunction.apply(IntermediateResult.get(0));
 					} else {
 						try {
-							emitter.notifyUser(UUID.randomUUID().toString(),
-									"Aggregating " + IntermediateResult.size() + " analisys", null, 3000l,
-									NotificationType.INFO);
+							emitter.notifyProgress(UUID.randomUUID().toString(), "Aggregating " + IntermediateResult.size() + " analisys");
 						} catch (Throwable th) {
 							LOGGER.error("Error notifying user about analisys aggregation start", th);
 						}
 						finalResult = finalWork.iterateCumulation(IntermediateResult, emitter);
 						try {
-							emitter.notifyUser(UUID.randomUUID().toString(),
-									"Aggregated " + IntermediateResult.size() + " analisys!", null, 3000l,
-									NotificationType.INFO);
+							emitter.notifyProgress(UUID.randomUUID().toString(), "Aggregated " + IntermediateResult.size() + " analisys!");
 						} catch (Throwable th) {
 							LOGGER.error("Error notifying user about analisys aggregation completion", th);
 						}
@@ -138,7 +137,7 @@ public class TokensBudgetFluxCoordinator {
 		return finalFlux;
 	}
 
-	public static <D, T, Y> Flux<Y> tokenBudgetCoordinate(Flux<D> source, ISinkUIEmitter emitter,
+	public static <D, T, Y> Flux<Y> tokenBudgetCoordinate(Flux<D> source, IGProgressNotifier emitter,
 			Predicate<D> validDocumentCheck, TokensLimitCompute<D> tokensCompute, GenerativeFunction<D, T> generative,
 			LastWork<T, Y> finalWork, T initialValue, T outOfBandValue, Predicate<T> isOutOfBandValue,
 			Y finalOutOFBoundValue, Predicate<Y> isFinalOutOFBoundValue, Predicate<T> isEndOfProcessingCondition,
@@ -169,8 +168,7 @@ public class TokensBudgetFluxCoordinator {
 						}
 						try {
 							try {
-								emitter.notifyUser(UUID.randomUUID().toString(),
-										"Analyzing " + input.size() + " documents", null, 3000l, NotificationType.INFO);
+								emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzing " + input.size() + " documents");
 							} catch (Throwable th) {
 								LOGGER.error("Error notifying user about documents analysis start", th);
 							}
@@ -179,8 +177,7 @@ public class TokensBudgetFluxCoordinator {
 								LOGGER.debug("End map(...) code with " + input.size() + " returning:" + result);
 							}
 							try {
-								emitter.notifyUser(UUID.randomUUID().toString(),
-										"Analyzed " + input.size() + " documents!", null, 3000l, NotificationType.INFO);
+								emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzed " + input.size() + " documents!");
 							} catch (Throwable th) {
 								LOGGER.error("Error notifying user about documents analysis completion", th);
 							}
@@ -210,17 +207,13 @@ public class TokensBudgetFluxCoordinator {
 						finalResult = streamingFunction.apply(IntermediateResult.get(0));
 					} else {
 						try {
-							emitter.notifyUser(UUID.randomUUID().toString(),
-									"Aggregating " + IntermediateResult.size() + " analisys", null, 3000l,
-									NotificationType.INFO);
+							emitter.notifyProgress(UUID.randomUUID().toString(), "Aggregating " + IntermediateResult.size() + " analisys");
 						} catch (Throwable th) {
 							LOGGER.error("Error notifying user about analisys aggregation start", th);
 						}
 						finalResult = finalWork.iterateCumulation(IntermediateResult, emitter);
 						try {
-							emitter.notifyUser(UUID.randomUUID().toString(),
-									"Aggregated " + IntermediateResult.size() + " analisys!", null, 3000l,
-									NotificationType.INFO);
+							emitter.notifyProgress(UUID.randomUUID().toString(), "Aggregated " + IntermediateResult.size() + " analisys!");
 						} catch (Throwable th) {
 							LOGGER.error("Error notifying user about analisys aggregation completion", th);
 						}

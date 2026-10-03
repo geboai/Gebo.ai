@@ -25,6 +25,12 @@ public class DocumentChunkOperation extends AbstractCachedEntry {
 	private ChunkingPolicy chunkingPolicy = null;
 	private long totalBytesSize = 0l, totalTokensSize = 0l;
 	private int totalChunks = 0;
+	/**
+	 * The chunks the whole document was split into, the ones a matching policy left out
+	 * included: the count the chunk positions refer to. 0 for an operation written before
+	 * it was recorded.
+	 */
+	private long documentChunks = 0l;
 	@HashIndexed
 	private String chunkingSessionId = null;
 

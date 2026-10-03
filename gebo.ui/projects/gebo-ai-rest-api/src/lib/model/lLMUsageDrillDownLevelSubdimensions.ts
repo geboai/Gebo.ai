@@ -12,6 +12,7 @@
 
 export interface LLMUsageDrillDownLevelSubdimensions { 
     providerId?: Array<string>;
+    modelTypeCode?: Array<string>;
     username?: Array<string>;
     model?: Array<string>;
     callerStack?: Array<string>;

@@ -93,23 +93,14 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
             KBContext contextVisibility = LLMtInteractionContextThreadLocal.Context.get();
             
             try {
-                CalledFunction cf = new CalledFunction();
-                cf.setFunctionName(GET_ARTIFACTS_INFORMATION);
-                cf.setFunctionDescription(GET_ARTIFACTS_INFORMATION_DESCRIPTION);
-                cf.setParamsDescription(x.toParametersList());
                 
-                // Add called function to context visibility if the context is not null or empty
+                // the chat knowledge bases scope the search
                 if (contextVisibility != null && contextVisibility.getKnowledgeBasesCodes() != null
                         && !contextVisibility.getKnowledgeBasesCodes().isEmpty()) {
 
-                    contextVisibility.getCalledFunctions().add(cf);
                     alist.addAll(searcherService.findSoftwareArtifacts(x, contextVisibility.getKnowledgeBasesCodes()));
                 }
                 
-                // Add function call to context
-                if (c != null) {
-                    ToolCallbackDeclarationUtil.addCallToContext(c, cf);
-                }
             } catch (Throwable th) {
                 LOGGER.error("Error in " + GET_ARTIFACTS_INFORMATION, th);
             }
@@ -130,19 +121,13 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
             KBContext contextVisibility = LLMtInteractionContextThreadLocal.Context.get();
             
             try {
-                CalledFunction cf = new CalledFunction();
-                cf.setFunctionName(GET_ALL_SOFTWARE_ARTIFACTS_LIST);
-                cf.setFunctionDescription(GET_ALL_SOFTWARE_ARTIFACTS_LIST_DESCRIPTION);
-                cf.setParamsDescription(x.toParametersList());
                 
-                // Add called function to context visibility if the context is not null or empty
+                // the chat knowledge bases scope the search
                 if (contextVisibility != null && contextVisibility.getKnowledgeBasesCodes() != null
                         && !contextVisibility.getKnowledgeBasesCodes().isEmpty()) {
 
-                    contextVisibility.getCalledFunctions().add(cf);
                     out.addAll(searcherService.findAllArtifacts(x, contextVisibility.getKnowledgeBasesCodes()));
                 }
-                ToolCallbackDeclarationUtil.addCallToContext(c, cf);
             } catch (Throwable th) {
                 LOGGER.error("Error in " + GET_ALL_SOFTWARE_ARTIFACTS_LIST, th);
             }
@@ -163,20 +148,14 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
             KBContext contextVisibility = LLMtInteractionContextThreadLocal.Context.get();
             
             try {
-                CalledFunction cf = new CalledFunction();
-                cf.setFunctionName(GET_ARTIFACTS_DEPENDING_FROM);
-                cf.setFunctionDescription(GET_ARTIFACTS_DEPENDING_FROM_DESCRIPTION);
-                cf.setParamsDescription(x.toParametersList());
                 
-                // Add called function to context visibility if the context is not null or empty
+                // the chat knowledge bases scope the search
                 if (contextVisibility != null && contextVisibility.getKnowledgeBasesCodes() != null
                         && !contextVisibility.getKnowledgeBasesCodes().isEmpty()) {
 
-                    contextVisibility.getCalledFunctions().add(cf);
                     out.addAll(searcherService.findAllArtifactsDependingFrom(x,
                             contextVisibility.getKnowledgeBasesCodes()));
                 }
-                ToolCallbackDeclarationUtil.addCallToContext(c, cf);
             } catch (Throwable th) {
                 LOGGER.error("Error in " + GET_ARTIFACTS_DEPENDING_FROM, th);
             }
@@ -195,19 +174,13 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
 
             KBContext contextVisibility = LLMtInteractionContextThreadLocal.Context.get();
             try {
-                CalledFunction cf = new CalledFunction();
-                cf.setFunctionName(GET_FULL_ARTIFACT_DEPENDENCIES_INFOS);
-                cf.setFunctionDescription(GET_FULL_ARTIFACT_DEPENDENCIES_DESCRIPTION);
-                cf.setParamsDescription(x.toParametersList());
                 
-                // Add called function to context visibility if the context is not null or empty
+                // the chat knowledge bases scope the search
                 if (contextVisibility != null && contextVisibility.getKnowledgeBasesCodes() != null
                         && !contextVisibility.getKnowledgeBasesCodes().isEmpty()) {
 
-                    contextVisibility.getCalledFunctions().add(cf);
                     return searcherService.findFullDependenciesTree(x, contextVisibility.getKnowledgeBasesCodes());
                 }
-                ToolCallbackDeclarationUtil.addCallToContext(c, cf);
             } catch (Throwable th) {
                 LOGGER.error("Error in " + GET_FULL_ARTIFACT_DEPENDENCIES_INFOS, th);
             }

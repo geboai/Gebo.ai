@@ -46,6 +46,7 @@ import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
 import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
+import ai.gebo.llms.chat.pipelines.service.IGUserRequestIntentClassifier;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
@@ -76,7 +77,7 @@ import lombok.ToString;
 @Component
 @AllArgsConstructor
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingService
-		implements IRoutingChatPipelineStepService {
+		implements IRoutingChatPipelineStepService, IGUserRequestIntentClassifier {
 
 	public static final String PIPELINE_EXECUTOR_SUGGESTION = "pipelineExecutorSuggestion";
 	private static final String SCANNING_HUGE_FILE_WITH_LLMS = "Scanning huge file with llms";
@@ -152,6 +153,24 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		private final DeliverableIntent userIntent;
 	}
 
+	/**
+	 * The same rewrite and deliverable classification this router runs first, for the
+	 * routers that do not decide the route with the model (e.g. the open-chat one).
+	 */
+	@Override
+	public DeliverableIntent classifyUserRequest(ChatPipelineExecutionRuntimeData runtimeData,
+			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			throws ChatPipelineException {
+		try {
+			String latestInteractions = RoutingPromptUtil.latestInteractionsPromptPart(
+					runtimeData.getRequestResources().getChathistory().getLatestEntries().getInteractions());
+			return doRequestRewriteAndUserIntent(runtimeData, emitter, chatModel, serviceModel, latestInteractions)
+					.getUserIntent();
+		} catch (GeboChatSessionLifecycleException | IOException | LLMConfigException e) {
+			throw new ChatPipelineException("Cannot classify the user request", e);
+		}
+	}
+
 	private RewriteAndUserIntent doRequestRewriteAndUserIntent(ChatPipelineExecutionRuntimeData runtimeData,
 			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
 			String latestInteractions) throws GeboChatSessionLifecycleException, IOException, LLMConfigException {
@@ -166,6 +185,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
 		Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
 				List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD));
+		// an output with neither field is asked once more by callLLMRepeatableFieldEntryOutput
 		List<String> rewrittenQuery = data.get(REWRITTEN_QUERY_FIELD);
 		List<String> deliverable = data.get(DELIVERABLE_FIELD);
 		String rewrited_query = rewrittenQuery != null && !rewrittenQuery.isEmpty() ? rewrittenQuery.get(0) : null;

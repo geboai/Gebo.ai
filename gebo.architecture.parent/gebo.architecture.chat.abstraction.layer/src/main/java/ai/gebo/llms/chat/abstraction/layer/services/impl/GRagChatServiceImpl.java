@@ -177,6 +177,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			fullRequest = chatSessionLifecycleService.addRetrievedDocuments(request, retrieved, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
+			recordToolCalls(fullRequest, chatResponse);
 			IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 
 			chatResponse = callChatClient(handler, gprompt, kbcontext, request, chatResponse, chatRequestContext,
@@ -184,7 +185,6 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		}
 
 		// Set response details
-		chatResponse.setCalledFunctions(kbcontext.getCalledFunctions());
 		if (handler.getConfig() != null && handler.getConfig().getChoosedModel() != null) {
 			chatResponse.setUsedChatModelCode(handler.getConfig().getChoosedModel().getCode());
 		}
@@ -329,6 +329,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 						: null;
 		GPromptTemplateConfig prompt = this.promptsDao.defaultChatPrompt(modelCode, true);
 		// Returns the chat stream for the request, profile and context
+		recordToolCalls(fullRequest, response);
 		return this.streamChatClient(handler, prompt, Map.of(), kbcontext, request,
 				response, fullRequest.createChatRequestContext(), false, 0, extractedDocuments);
 

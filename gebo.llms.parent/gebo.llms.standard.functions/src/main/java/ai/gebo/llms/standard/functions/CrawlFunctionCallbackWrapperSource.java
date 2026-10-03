@@ -149,18 +149,6 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 				LOGGER.info("End llm reading content:" + url);
 				UrlCrawlResponse crespone = new UrlCrawlResponse();
 				crespone.setContent(content);
-				KBContext context = LLMtInteractionContextThreadLocal.Context.get();
-				LLMtInteractionContextThreadLocal.CalledFunction calledFunction = new LLMtInteractionContextThreadLocal.CalledFunction();
-				calledFunction.setFunctionName("readUrl");
-				calledFunction.setFunctionDescription("Read web content from its url");
-				if (request.getUrl() != null) {
-					calledFunction.setParamsDescription(List.of(request.getUrl()));
-				}
-				if (context != null) {
-
-					context.getCalledFunctions().add(calledFunction);
-				}
-				ToolCallbackDeclarationUtil.addCallToContext(toolContext, calledFunction);
 				return crespone;
 			} catch (Throwable th) {
 				LOGGER.info("Error reading content:" + url, th);

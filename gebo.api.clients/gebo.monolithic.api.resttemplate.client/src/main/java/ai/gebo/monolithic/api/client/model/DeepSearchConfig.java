@@ -27,7 +27,7 @@ import java.util.List;
  * DeepSearchConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-03T11:31:06.696503642+02:00[Europe/Rome]")
 
 public class DeepSearchConfig {
   @JsonProperty("code")
@@ -117,6 +117,9 @@ public class DeepSearchConfig {
 
   @JsonProperty("perDataSourceConfigured")
   private Boolean perDataSourceConfigured = null;
+
+  @JsonProperty("externalSourceSearchEnabledByDefault")
+  private Boolean externalSourceSearchEnabledByDefault = null;
 
   public DeepSearchConfig code(String code) {
     this.code = code;
@@ -484,6 +487,24 @@ public class DeepSearchConfig {
     this.perDataSourceConfigured = perDataSourceConfigured;
   }
 
+  public DeepSearchConfig externalSourceSearchEnabledByDefault(Boolean externalSourceSearchEnabledByDefault) {
+    this.externalSourceSearchEnabledByDefault = externalSourceSearchEnabledByDefault;
+    return this;
+  }
+
+   /**
+   * Get externalSourceSearchEnabledByDefault
+   * @return externalSourceSearchEnabledByDefault
+  **/
+  @Schema(description = "")
+  public Boolean isExternalSourceSearchEnabledByDefault() {
+    return externalSourceSearchEnabledByDefault;
+  }
+
+  public void setExternalSourceSearchEnabledByDefault(Boolean externalSourceSearchEnabledByDefault) {
+    this.externalSourceSearchEnabledByDefault = externalSourceSearchEnabledByDefault;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -512,12 +533,13 @@ public class DeepSearchConfig {
         Objects.equals(this.accessibleUsers, deepSearchConfig.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, deepSearchConfig.accessibleToAll) &&
         Objects.equals(this.dataSourcesAccesses, deepSearchConfig.dataSourcesAccesses) &&
-        Objects.equals(this.perDataSourceConfigured, deepSearchConfig.perDataSourceConfigured);
+        Objects.equals(this.perDataSourceConfigured, deepSearchConfig.perDataSourceConfigured) &&
+        Objects.equals(this.externalSourceSearchEnabledByDefault, deepSearchConfig.externalSourceSearchEnabledByDefault);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, searchType, ragQueryOptions, firstHopSimilarityThreashold, secondHopSimilarityThreashold, graphRagTopN, tokensLimit, manualThreasholdsConfiguration, defaultConfig, accessibleGroups, accessibleUsers, accessibleToAll, dataSourcesAccesses, perDataSourceConfigured);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, searchType, ragQueryOptions, firstHopSimilarityThreashold, secondHopSimilarityThreashold, graphRagTopN, tokensLimit, manualThreasholdsConfiguration, defaultConfig, accessibleGroups, accessibleUsers, accessibleToAll, dataSourcesAccesses, perDataSourceConfigured, externalSourceSearchEnabledByDefault);
   }
 
 
@@ -545,6 +567,7 @@ public class DeepSearchConfig {
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
     sb.append("    dataSourcesAccesses: ").append(toIndentedString(dataSourcesAccesses)).append("\n");
     sb.append("    perDataSourceConfigured: ").append(toIndentedString(perDataSourceConfigured)).append("\n");
+    sb.append("    externalSourceSearchEnabledByDefault: ").append(toIndentedString(externalSourceSearchEnabledByDefault)).append("\n");
     sb.append("}");
     return sb.toString();
   }

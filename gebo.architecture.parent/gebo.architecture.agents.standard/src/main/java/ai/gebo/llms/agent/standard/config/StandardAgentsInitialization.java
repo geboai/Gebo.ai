@@ -59,8 +59,10 @@ import ai.gebo.llms.agent.standard.services.InternalKnowledgeBaseSearchNetworkAg
 import ai.gebo.llms.agent.standard.services.NativeDocumentsSearchNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.SearchAgentPromptPatcher;
 import ai.gebo.llms.agent.standard.services.StringToStringToolCallingNetworkAgent;
+import ai.gebo.llms.agent.standardtools.DeepSearchToolSource;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
+import ai.gebo.llms.agent.standardtools.WebSearchToolSource;
 import jakarta.annotation.PostConstruct;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
@@ -155,6 +157,22 @@ public class StandardAgentsInitialization {
 			autoMountingConfig.setExcludedToolSources(excludedSources);
 			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
 					StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE);
+		}
+		// The default network searches the web with its web search agents: the web
+		// search tool on the tool-calling agent would duplicate them.
+		if (!excludedSources.contains(WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE)) {
+			excludedSources.add(WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE);
+			autoMountingConfig.setExcludedToolSources(excludedSources);
+			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
+					WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE);
+		}
+		// The default network deep searches with the deep search pipelines: the deep
+		// search tools are for the agents that operate their own tools.
+		if (!excludedSources.contains(DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE)) {
+			excludedSources.add(DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE);
+			autoMountingConfig.setExcludedToolSources(excludedSources);
+			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
+					DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE);
 		}
 	}
 
@@ -602,7 +620,8 @@ public class StandardAgentsInitialization {
 							NativeDocumentsSearchNetworkAgentService nativeWrapper = new NativeDocumentsSearchNetworkAgentService(
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
 									runtimeBinder, rendererFactory, chunkingService, rankerService,
-									standardAgentsConfig.getMaxChunksPerDocument(), nativeSearch);
+									standardAgentsConfig.getMaxChunksPerDocument(),
+									standardAgentsConfig.getSearchDocumentsParallelism(), nativeSearch);
 							outServices.add(nativeWrapper);
 							if (LOGGER.isDebugEnabled()) {
 								LOGGER.debug("Registered native search agent service id:" + nativeWrapper.getId());
@@ -611,7 +630,8 @@ public class StandardAgentsInitialization {
 							DocumentsSearchNetworkAgentServiceWrapper wrapper = new DocumentsSearchNetworkAgentServiceWrapper(
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
 									runtimeBinder, rendererFactory, chunkingService, rankerService,
-									standardAgentsConfig.getMaxChunksPerDocument(), search);
+									standardAgentsConfig.getMaxChunksPerDocument(),
+									standardAgentsConfig.getSearchDocumentsParallelism(), search);
 							outServices.add(wrapper);
 							if (LOGGER.isDebugEnabled()) {
 								LOGGER.debug("Registered search agent service id:" + wrapper.getId());

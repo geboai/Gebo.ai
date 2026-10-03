@@ -13,6 +13,11 @@ import org.opensearch.client.opensearch._types.query_dsl.TextQueryType;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.FieldAndFormat;
 import org.opensearch.client.json.JsonData;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonNumber;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonString;
+import jakarta.json.JsonValue;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -323,9 +328,10 @@ public class OpenSearchFullTextChunkSearchService {
 			return null;
 		}
 
-		// JsonData -> Map (uses the client JSON mapper internally)
+		// JsonData -> Map: the map holds jakarta.json values (a JsonString prints with its
+		// quotes, a JsonNumber is no Number), turned into plain Java values
 		@SuppressWarnings("unchecked")
-		Map<String, Object> src = (Map<String, Object>) srcData.to(Map.class);
+		Map<String, Object> src = (Map<String, Object>) plain(srcData.to(Map.class));
 
 		FullTextChunk chunk = fromSource(src);
 
@@ -447,6 +453,46 @@ public class OpenSearchFullTextChunkSearchService {
 			return object.toString();
 		}
 
+	}
+
+	/**
+	 * The given value with every jakarta.json value in it turned into the plain Java
+	 * one (String, Integer/Long/Double, Boolean, null, Map, List), as the source of a
+	 * main hit is read.
+	 */
+	static Object plain(Object value) {
+		if (value instanceof JsonString s) {
+			return s.getString();
+		}
+		if (value instanceof JsonNumber n) {
+			if (!n.isIntegral()) {
+				return n.doubleValue();
+			}
+			return n.bigIntegerValue().bitLength() < 32 ? (Object) n.intValue() : (Object) n.longValue();
+		}
+		if (value instanceof JsonObject o) {
+			Map<String, Object> out = new LinkedHashMap<>();
+			o.forEach((k, v) -> out.put(k, plain(v)));
+			return out;
+		}
+		if (value instanceof JsonArray a) {
+			List<Object> out = new ArrayList<>();
+			a.forEach(v -> out.add(plain(v)));
+			return out;
+		}
+		if (value instanceof JsonValue v) {
+			return switch (v.getValueType()) {
+			case TRUE -> Boolean.TRUE;
+			case FALSE -> Boolean.FALSE;
+			default -> null;
+			};
+		}
+		if (value instanceof Map<?, ?> m) {
+			Map<Object, Object> out = new LinkedHashMap<>();
+			m.forEach((k, v) -> out.put(k, plain(v)));
+			return out;
+		}
+		return value;
 	}
 
 	private static void putBack(Map<String, Object> meta, String key, Object value) {

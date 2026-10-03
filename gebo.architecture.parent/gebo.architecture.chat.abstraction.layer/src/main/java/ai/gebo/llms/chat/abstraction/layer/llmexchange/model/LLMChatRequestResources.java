@@ -7,7 +7,10 @@ import java.util.Map;
 
 import org.springframework.ai.document.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ai.gebo.architecture.ai.model.ITokensCountable;
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
@@ -35,6 +38,14 @@ public class LLMChatRequestResources implements ITokensCountable {
 	private CSSConsolidatedChatHistory chathistory = null;
 	private GeboChatRequest currentRequest = null;
 	private LLMRequestGenerationPolicy generationPolicy;
+	/**
+	 * The recorder of every tool called while answering the current request, handed to
+	 * the model calls through the request contexts; set by the owner of the response
+	 * (the pipeline executor), never persisted.
+	 */
+	@JsonIgnore
+	private transient ToolCallsListener toolCallsListener = null;
+
 	// Request id -> note appended to that answer in the history shown to the model.
 	private Map<String, String> answerFeedbackNotes = new HashMap<String, String>();
 	private List<String> rulesToFollow = new ArrayList<String>();
@@ -102,8 +113,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 		}
 		@Override
 		public ToolCallsListener getToolCallListener() {
-			
-			return null;
+			return toolCallsListener;
 		}
 
 		@Override
@@ -140,8 +150,13 @@ public class LLMChatRequestResources implements ITokensCountable {
 
 		@Override
 		public Map<String, Object> getToolsContext() {
-
-			return new HashMap<String, Object>();
+			// The request id lets the tools keep request-scoped state across their calls
+			// (e.g. the search tools not returning twice the same content in one answer).
+			Map<String, Object> toolsContext = new HashMap<String, Object>();
+			if (currentRequest != null && currentRequest.getId() != null) {
+				toolsContext.put(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, currentRequest.getId());
+			}
+			return toolsContext;
 		}
 
 		@Override

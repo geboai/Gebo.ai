@@ -52,10 +52,10 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGDocumentContentRendererProvider rendererFactory, IDocumentsChunkService chunkingService,
-			IGRankerService rankerService, int maxChunksPerDocument,
+			IGRankerService rankerService, int maxChunksPerDocument, int documentsParallelism,
 			INativeSearchService<CustomSearchResultExtractionDataType, NativeSearchDataStructure> nativeSearchWrapper) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
-				rendererFactory, chunkingService, rankerService, maxChunksPerDocument);
+				rendererFactory, chunkingService, rankerService, maxChunksPerDocument, documentsParallelism);
 		this.nativeSearchWrapper = nativeSearchWrapper;
 	}
 

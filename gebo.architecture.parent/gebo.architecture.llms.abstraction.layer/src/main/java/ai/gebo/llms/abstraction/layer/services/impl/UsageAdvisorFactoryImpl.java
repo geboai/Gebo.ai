@@ -40,6 +40,16 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 		 * a call ends; null for an unpriced model.
 		 */
 		private final Supplier<GModelPricingConditions> pricing;
+		/**
+		 * The chat model's {@code IGConfigurableModel.getProviderId()}, read when a call
+		 * ends; null records the provider as unknown.
+		 */
+		private final Supplier<String> providerId;
+
+		public GeboChatModelUsageAdvisor(GBaseChatModelConfig config, LLMUsageRecorder usageRecorder,
+				Supplier<GModelPricingConditions> pricing) {
+			this(config, usageRecorder, pricing, null);
+		}
 
 		@Override
 		public ChatClientResponse adviseCall(ChatClientRequest request, CallAdvisorChain chain) {
@@ -201,8 +211,9 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 						+ counters.input() + "/" + counters.output() + "/" + counters.total() + " firstToken="
 						+ (firstTokenNanos != null ? "timed" : "n/a"));
 			}
-			usageRecorder.record(config, ModelType.CHAT, pricing, username, callerStack, startNanos, firstTokenNanos,
-					counters.input(), counters.output(), counters.total(), outcome);
+			usageRecorder.record(config, LLMUsageRecorder.safeProviderId(providerId), ModelType.CHAT, pricing,
+					username, callerStack, startNanos, firstTokenNanos, counters.input(), counters.output(),
+					counters.total(), outcome);
 		}
 	}
 
@@ -213,7 +224,13 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 
 	@Override
 	public IChatModelUsageAdvisor create(GBaseChatModelConfig config, Supplier<GModelPricingConditions> pricing) {
-		return new GeboChatModelUsageAdvisor(config, usageRecorder, pricing);
+		return create(config, pricing, null);
+	}
+
+	@Override
+	public IChatModelUsageAdvisor create(GBaseChatModelConfig config, Supplier<GModelPricingConditions> pricing,
+			Supplier<String> providerId) {
+		return new GeboChatModelUsageAdvisor(config, usageRecorder, pricing, providerId);
 	}
 
 	@Override
@@ -224,10 +241,16 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 	@Override
 	public ChatModel recording(ChatModel model, GBaseChatModelConfig config,
 			Supplier<GModelPricingConditions> pricing) {
+		return recording(model, config, pricing, null);
+	}
+
+	@Override
+	public ChatModel recording(ChatModel model, GBaseChatModelConfig config,
+			Supplier<GModelPricingConditions> pricing, Supplier<String> providerId) {
 		if (model == null || model instanceof UsageRecordingChatModel) {
 			return model;
 		}
-		return new UsageRecordingChatModel(model, config, usageRecorder, pricing);
+		return new UsageRecordingChatModel(model, config, usageRecorder, pricing, providerId);
 	}
 
 }

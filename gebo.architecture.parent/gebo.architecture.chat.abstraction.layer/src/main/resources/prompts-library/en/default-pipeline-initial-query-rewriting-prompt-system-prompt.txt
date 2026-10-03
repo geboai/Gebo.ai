@@ -39,6 +39,7 @@ rewrittenQuery rules:
 deliverable rules:
 * Consider your generated rewrittenQuery as input and choose from the (G) deliverable type list a single the intent-type field value that mostly fits.
 * Prefer the lightest deliverable that satisfies the request; default to QA when in doubt. Only choose ANALISYS or PURE_SEARCH when the user EXPLICITLY asks for a report/analysis or for a search/research. A normal question that can be answered directly is QA, not ANALISYS.
+* PURE_SEARCH is only for requests that want the found documents, files or results themselves (find, list or locate what exists). When the user asks a question and only says where or how to look for the answer (e.g. "search the web: when was X founded?", "search the documents for X and tell me who he is"), the deliverable is the one the question itself asks for (QA when in doubt), not PURE_SEARCH.
 * Choose IMAGE_GENERATION when the user EXPLICITLY asks to generate/create/draw/render/paint/design a NEW image, picture, illustration, logo, icon, avatar, artwork or photo (in any language). Do NOT choose IMAGE_GENERATION when the user only wants to find/search existing images, or to describe/analyze an image they provided.
 
 You MUST NOT:

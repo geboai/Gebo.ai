@@ -22,11 +22,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMUsageAggregationBucket
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-28T19:15:37.397358600+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-03T11:31:06.696503642+02:00[Europe/Rome]")
 
 public class LLMUsageAggregationBucket {
   @JsonProperty("providerId")
   private String providerId = null;
+
+  @JsonProperty("modelTypeCode")
+  private String modelTypeCode = null;
 
   @JsonProperty("username")
   private String username = null;
@@ -142,6 +145,24 @@ public class LLMUsageAggregationBucket {
 
   public void setProviderId(String providerId) {
     this.providerId = providerId;
+  }
+
+  public LLMUsageAggregationBucket modelTypeCode(String modelTypeCode) {
+    this.modelTypeCode = modelTypeCode;
+    return this;
+  }
+
+   /**
+   * Get modelTypeCode
+   * @return modelTypeCode
+  **/
+  @Schema(description = "")
+  public String getModelTypeCode() {
+    return modelTypeCode;
+  }
+
+  public void setModelTypeCode(String modelTypeCode) {
+    this.modelTypeCode = modelTypeCode;
   }
 
   public LLMUsageAggregationBucket username(String username) {
@@ -533,6 +554,7 @@ public class LLMUsageAggregationBucket {
     }
     LLMUsageAggregationBucket llMUsageAggregationBucket = (LLMUsageAggregationBucket) o;
     return Objects.equals(this.providerId, llMUsageAggregationBucket.providerId) &&
+        Objects.equals(this.modelTypeCode, llMUsageAggregationBucket.modelTypeCode) &&
         Objects.equals(this.username, llMUsageAggregationBucket.username) &&
         Objects.equals(this.model, llMUsageAggregationBucket.model) &&
         Objects.equals(this.callerStack, llMUsageAggregationBucket.callerStack) &&
@@ -558,7 +580,7 @@ public class LLMUsageAggregationBucket {
 
   @Override
   public int hashCode() {
-    return Objects.hash(providerId, username, model, callerStack, modelType, year, month, day, inputToken, outputToken, totalToken, nrRequests, responseTimeMin, responseTimeMax, responseTimeAvg, timeToFirstTokenMin, timeToFirstTokenMax, timeToFirstTokenAvg, timeToFirstTokenSamples, cost, currencyCode, costSamples);
+    return Objects.hash(providerId, modelTypeCode, username, model, callerStack, modelType, year, month, day, inputToken, outputToken, totalToken, nrRequests, responseTimeMin, responseTimeMax, responseTimeAvg, timeToFirstTokenMin, timeToFirstTokenMax, timeToFirstTokenAvg, timeToFirstTokenSamples, cost, currencyCode, costSamples);
   }
 
 
@@ -568,6 +590,7 @@ public class LLMUsageAggregationBucket {
     sb.append("class LLMUsageAggregationBucket {\n");
     
     sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
+    sb.append("    modelTypeCode: ").append(toIndentedString(modelTypeCode)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    model: ").append(toIndentedString(model)).append("\n");
     sb.append("    callerStack: ").append(toIndentedString(callerStack)).append("\n");

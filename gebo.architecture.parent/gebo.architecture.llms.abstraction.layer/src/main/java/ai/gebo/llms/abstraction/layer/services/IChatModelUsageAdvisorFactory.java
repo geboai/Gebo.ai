@@ -22,6 +22,16 @@ public interface IChatModelUsageAdvisorFactory extends ILLMModelUsageHandlerFact
 	}
 
 	/**
+	 * As {@link #create(GBaseChatModelConfig, Supplier)}, attributing the calls to the
+	 * real provider of the model, its {@code IGConfigurableModel.getProviderId()}. The
+	 * default ignores the provider.
+	 */
+	public default IChatModelUsageAdvisor create(GBaseChatModelConfig config,
+			Supplier<GModelPricingConditions> pricing, Supplier<String> providerId) {
+		return create(config, pricing);
+	}
+
+	/**
 	 * Wraps a raw chat model so that calls made on it directly, bypassing the
 	 * ChatClient and so the advisor from {@link #create(GBaseChatModelConfig)}, are
 	 * recorded as usage too. The default records nothing.
@@ -37,5 +47,14 @@ public interface IChatModelUsageAdvisorFactory extends ILLMModelUsageHandlerFact
 	public default ChatModel recording(ChatModel model, GBaseChatModelConfig config,
 			Supplier<GModelPricingConditions> pricing) {
 		return recording(model, config);
+	}
+
+	/**
+	 * As {@link #recording(ChatModel, GBaseChatModelConfig, Supplier)}, attributing the
+	 * calls to the real provider of the model. The default ignores the provider.
+	 */
+	public default ChatModel recording(ChatModel model, GBaseChatModelConfig config,
+			Supplier<GModelPricingConditions> pricing, Supplier<String> providerId) {
+		return recording(model, config, pricing);
 	}
 }

@@ -20,6 +20,7 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
+import ai.gebo.llms.agent.standardtools.KnowledgeBaseDeepSearchTool;
 import ai.gebo.security.services.IGSecurityService;
 
 /**
@@ -29,7 +30,7 @@ import ai.gebo.security.services.IGSecurityService;
 @Service
 public class AgenticLoopPureChatReactiveAgentServiceImpl extends AgenticLoopReactiveAgentServiceImpl {
 	public static final String AGENTIC_LOOP_PURE_CHAT_NETWORK_AGENT_SERVICE = "AgenticLoopPureChatNetworkAgentService";
-	private static final String DESCRIPTION = "Single agent that operates every available tool but the internal knowledge base search in a loop, for the free chats";
+	private static final String DESCRIPTION = "Single agent that operates every available tool but the internal knowledge base searches in a loop, for the free chats";
 
 	public AgenticLoopPureChatReactiveAgentServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
@@ -55,10 +56,12 @@ public class AgenticLoopPureChatReactiveAgentServiceImpl extends AgenticLoopReac
 			return null;
 		}
 		List<String> filtered = toolNames.stream()
-				.filter(x -> !InternalKnowledgeBaseSearchToolSource.SEARCH_KNOWLEDGE_BASE_TOOL.equals(x)).toList();
+				.filter(x -> !InternalKnowledgeBaseSearchToolSource.SEARCH_KNOWLEDGE_BASE_TOOL.equals(x)
+						&& !KnowledgeBaseDeepSearchTool.DEEP_SEARCH_KNOWLEDGE_BASE_TOOL.equals(x))
+				.toList();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Agentic loop pure chat agent id:" + getId() + " mounts " + filtered.size() + " of "
-					+ toolNames.size() + " tool(s), without the internal knowledge base search");
+					+ toolNames.size() + " tool(s), without the internal knowledge base search and deep search");
 		}
 		return filtered;
 	}
