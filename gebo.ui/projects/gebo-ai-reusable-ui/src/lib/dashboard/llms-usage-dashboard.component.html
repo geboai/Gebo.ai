@@ -42,18 +42,18 @@
               <i class="pi pi-filter mr-2 text-primary"></i><span id="FilterDrillDownLabel" gebo-ai-text>Filter Drill Down</span>
             </div>
             <div class="grid p-fluid align-items-end">
-              @if (result?.monthlySubdimensions?.providerId?.length) {
+              @if (result?.monthlySubdimensions?.providerId?.length || filterTab2.providerId != null) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="ProviderIdFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Provider</label>
-                  <p-select gebo-ai-label id="ProviderIdFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.providerId)"
+                  <p-select gebo-ai-label id="ProviderIdFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.providerId, filterTab2.providerId)"
                   [(ngModel)]="filterTab2.providerId" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.monthlySubdimensions?.modelTypeCode?.length) {
+              @if (result?.monthlySubdimensions?.modelTypeCode?.length || filterTab2.modelTypeCode != null) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2">
                   <label id="ModelTypeCodeFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Provider service</label>
-                  <p-select gebo-ai-label id="ModelTypeCodeFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.modelTypeCode)"
+                  <p-select gebo-ai-label id="ModelTypeCodeFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.modelTypeCode, filterTab2.modelTypeCode)"
                   [(ngModel)]="filterTab2.modelTypeCode" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -62,43 +62,43 @@
                 <p-select gebo-ai-label id="llmUsageMonthlyModelType" [options]="modelTypeOptions" optionLabel="label" optionValue="value"
                 [(ngModel)]="filterTab2.modelType" placeholder="All" styleClass="w-full"></p-select>
               </div>
-              @if (result?.monthlySubdimensions?.model?.length) {
+              @if (result?.monthlySubdimensions?.model?.length || filterTab2.model != null) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="ModelFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Model</label>
-                  <p-select gebo-ai-label id="ModelFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.model)"
+                  <p-select gebo-ai-label id="ModelFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.model, filterTab2.model)"
                   [(ngModel)]="filterTab2.model" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.monthlySubdimensions?.year?.length) {
+              @if (result?.monthlySubdimensions?.year?.length || filterTab2.year != null) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="YearFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Year</label>
-                  <p-select gebo-ai-label id="YearFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.year)"
+                  <p-select gebo-ai-label id="YearFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.year, filterTab2.year)"
                   [(ngModel)]="filterTab2.year" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.monthlySubdimensions?.month?.length) {
+              @if (result?.monthlySubdimensions?.month?.length || filterTab2.month != null) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="MonthFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Month</label>
-                  <p-select gebo-ai-label id="MonthFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.month)"
+                  <p-select gebo-ai-label id="MonthFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.month, filterTab2.month)"
                   [(ngModel)]="filterTab2.month" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.monthlySubdimensions?.username?.length) {
+              @if (result?.monthlySubdimensions?.username?.length || filterTab2.username != null) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="UsernameFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Username</label>
-                  <p-select gebo-ai-label id="UsernameFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.username)"
+                  <p-select gebo-ai-label id="UsernameFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.username, filterTab2.username)"
                   [(ngModel)]="filterTab2.username" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.monthlySubdimensions?.callerStack?.length) {
+              @if (result?.monthlySubdimensions?.callerStack?.length || filterTab2.callerStack != null) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="CallerStackFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Caller Stack</label>
-                  <p-select gebo-ai-label id="CallerStackFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.callerStack)"
+                  <p-select gebo-ai-label id="CallerStackFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.callerStack, filterTab2.callerStack)"
                   [(ngModel)]="filterTab2.callerStack" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -109,6 +109,27 @@
                 class="flex-grow-1"></p-button>
               </div>
             </div>
+          </div>
+          <!-- Active filters: what the charts below show -->
+          <div class="active-filters" role="status" aria-live="polite">
+            <span class="active-filters__title"><i class="pi pi-eye"></i><span id="ShowingLabel" gebo-ai-text>Showing</span></span>
+            @if (activeFiltersTab2.length) {
+              @for (f of activeFiltersTab2; track f.key) {
+                <span class="active-filters__chip">
+                  <span class="active-filters__chip-label">{{ f.label }}</span>
+                  <span class="active-filters__chip-value">{{ f.value }}</span>
+                  <button type="button" class="active-filters__chip-remove" (click)="removeFilter(f.key)"
+                    [attr.aria-label]="f.label + ' ' + f.value" [disabled]="loading"><i class="pi pi-times"></i></button>
+                </span>
+              }
+              <p-button id="ClearFiltersBtn" gebo-ai-label label="Clear all" [text]="true" size="small"
+              icon="pi pi-filter-slash" (onClick)="resetFilter(2)" [disabled]="loading"></p-button>
+            } @else {
+              <span id="AllUsageLabel" gebo-ai-text class="active-filters__all">All LLM usage, no filter applied</span>
+            }
+            @if (hasPendingChanges(2)) {
+              <span class="active-filters__pending"><i class="pi pi-info-circle"></i><span id="PendingFiltersLabel" gebo-ai-text>Filter changes not applied yet: press Filter</span></span>
+            }
           </div>
           <!-- Histograms grid -->
           <div class="grid">
@@ -211,18 +232,18 @@
               <i class="pi pi-filter mr-2 text-primary"></i><span id="FilterDrillDownLabel" gebo-ai-text>Filter Drill Down</span>
             </div>
             <div class="grid p-fluid align-items-end">
-              @if (result?.currentMonthDailySubdimensions?.providerId?.length) {
+              @if (result?.currentMonthDailySubdimensions?.providerId?.length || filterTab1.providerId != null) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="ProviderIdFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Provider</label>
-                  <p-select gebo-ai-label id="ProviderIdFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.providerId)"
+                  <p-select gebo-ai-label id="ProviderIdFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.providerId, filterTab1.providerId)"
                   [(ngModel)]="filterTab1.providerId" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.currentMonthDailySubdimensions?.modelTypeCode?.length) {
+              @if (result?.currentMonthDailySubdimensions?.modelTypeCode?.length || filterTab1.modelTypeCode != null) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2">
                   <label id="ModelTypeCodeFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Provider service</label>
-                  <p-select gebo-ai-label id="ModelTypeCodeFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.modelTypeCode)"
+                  <p-select gebo-ai-label id="ModelTypeCodeFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.modelTypeCode, filterTab1.modelTypeCode)"
                   [(ngModel)]="filterTab1.modelTypeCode" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -231,11 +252,11 @@
                 <p-select gebo-ai-label id="llmUsageDailyModelType" [options]="modelTypeOptions" optionLabel="label" optionValue="value"
                 [(ngModel)]="filterTab1.modelType" placeholder="All" styleClass="w-full"></p-select>
               </div>
-              @if (result?.currentMonthDailySubdimensions?.model?.length) {
+              @if (result?.currentMonthDailySubdimensions?.model?.length || filterTab1.model != null) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="ModelFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Model</label>
-                  <p-select gebo-ai-label id="ModelFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.model)"
+                  <p-select gebo-ai-label id="ModelFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.model, filterTab1.model)"
                   [(ngModel)]="filterTab1.model" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -243,7 +264,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="YearFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Year</label>
-                  <p-select gebo-ai-label id="YearFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.year)"
+                  <p-select gebo-ai-label id="YearFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.year, filterTab1.year)"
                   [(ngModel)]="filterTab1.year" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -251,23 +272,23 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="MonthFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Month</label>
-                  <p-select gebo-ai-label id="MonthFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.month)"
+                  <p-select gebo-ai-label id="MonthFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.month, filterTab1.month)"
                   [(ngModel)]="filterTab1.month" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.currentMonthDailySubdimensions?.username?.length) {
+              @if (result?.currentMonthDailySubdimensions?.username?.length || filterTab1.username != null) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="UsernameFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Username</label>
-                  <p-select gebo-ai-label id="UsernameFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.username)"
+                  <p-select gebo-ai-label id="UsernameFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.username, filterTab1.username)"
                   [(ngModel)]="filterTab1.username" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
-              @if (result?.currentMonthDailySubdimensions?.callerStack?.length) {
+              @if (result?.currentMonthDailySubdimensions?.callerStack?.length || filterTab1.callerStack != null) {
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="CallerStackFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Caller Stack</label>
-                  <p-select gebo-ai-label id="CallerStackFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.callerStack)"
+                  <p-select gebo-ai-label id="CallerStackFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.callerStack, filterTab1.callerStack)"
                   [(ngModel)]="filterTab1.callerStack" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -278,6 +299,27 @@
                 class="flex-grow-1"></p-button>
               </div>
             </div>
+          </div>
+          <!-- Active filters: what the charts below show -->
+          <div class="active-filters" role="status" aria-live="polite">
+            <span class="active-filters__title"><i class="pi pi-eye"></i><span id="ShowingLabel" gebo-ai-text>Showing</span></span>
+            @if (activeFiltersTab1.length) {
+              @for (f of activeFiltersTab1; track f.key) {
+                <span class="active-filters__chip">
+                  <span class="active-filters__chip-label">{{ f.label }}</span>
+                  <span class="active-filters__chip-value">{{ f.value }}</span>
+                  <button type="button" class="active-filters__chip-remove" (click)="removeFilter(f.key)"
+                    [attr.aria-label]="f.label + ' ' + f.value" [disabled]="loading"><i class="pi pi-times"></i></button>
+                </span>
+              }
+              <p-button id="ClearFiltersBtn" gebo-ai-label label="Clear all" [text]="true" size="small"
+              icon="pi pi-filter-slash" (onClick)="resetFilter(1)" [disabled]="loading"></p-button>
+            } @else {
+              <span id="AllUsageLabel" gebo-ai-text class="active-filters__all">All LLM usage, no filter applied</span>
+            }
+            @if (hasPendingChanges(1)) {
+              <span class="active-filters__pending"><i class="pi pi-info-circle"></i><span id="PendingFiltersLabel" gebo-ai-text>Filter changes not applied yet: press Filter</span></span>
+            }
           </div>
           <!-- Histograms grid -->
           <div class="grid">

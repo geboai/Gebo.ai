@@ -6748,6 +6748,43 @@
       },
       "ModelTypeCodeFilterSelect": {
         "placeholder": "All"
+      },
+      "ShowingLabel": {
+        "label": "Showing"
+      },
+      "AllUsageLabel": {
+        "label": "All LLM usage, no filter applied"
+      },
+      "ClearFiltersBtn": {
+        "label": "Clear all",
+        "help": "Remove every filter and show all the LLM usage"
+      },
+      "PendingFiltersLabel": {
+        "label": "Filter changes not applied yet: press Filter"
+      },
+      "ProviderIdFilterChip": {
+        "label": "Provider"
+      },
+      "ModelTypeCodeFilterChip": {
+        "label": "Provider service"
+      },
+      "ModelTypeFilterChip": {
+        "label": "Model type"
+      },
+      "ModelFilterChip": {
+        "label": "Model"
+      },
+      "UsernameFilterChip": {
+        "label": "User"
+      },
+      "CallerStackFilterChip": {
+        "label": "Caller stack"
+      },
+      "YearFilterChip": {
+        "label": "Year"
+      },
+      "MonthFilterChip": {
+        "label": "Month"
       }
     },
     "GeboAILLMSUsageUserDashboardComponent": {
@@ -6915,6 +6952,43 @@
       },
       "ModelTypeCodeFilterSelect": {
         "placeholder": "All"
+      },
+      "ShowingLabel": {
+        "label": "Showing"
+      },
+      "AllUsageLabel": {
+        "label": "All LLM usage, no filter applied"
+      },
+      "ClearFiltersBtn": {
+        "label": "Clear all",
+        "help": "Remove every filter and show all the LLM usage"
+      },
+      "PendingFiltersLabel": {
+        "label": "Filter changes not applied yet: press Filter"
+      },
+      "ProviderIdFilterChip": {
+        "label": "Provider"
+      },
+      "ModelTypeCodeFilterChip": {
+        "label": "Provider service"
+      },
+      "ModelTypeFilterChip": {
+        "label": "Model type"
+      },
+      "ModelFilterChip": {
+        "label": "Model"
+      },
+      "UsernameFilterChip": {
+        "label": "User"
+      },
+      "CallerStackFilterChip": {
+        "label": "Caller stack"
+      },
+      "YearFilterChip": {
+        "label": "Year"
+      },
+      "MonthFilterChip": {
+        "label": "Month"
       }
     }
   }

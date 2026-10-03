@@ -17,6 +17,19 @@ import { Observable } from "rxjs";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../controls/field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "../controls/field-translation-container/gebo-translation.service";
 
+/** One filter of the data shown, as the active filters bar presents it. */
+export interface LLMUsageActiveFilter {
+  key: keyof LLMUsageDrillDownLevel;
+  label: string;
+  value: string;
+}
+
+/** The order the active filters are presented in, from the widest to the narrowest. */
+const FILTER_KEYS: (keyof LLMUsageDrillDownLevel)[] = ["providerId", "modelTypeCode", "modelType", "model", "username",
+  "callerStack", "year", "month"];
+/** The filters the daily tab ignores: it always shows the current month. */
+const PERIOD_KEYS: (keyof LLMUsageDrillDownLevel)[] = ["year", "month"];
+
 @Directive()
 export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
   loading: boolean = false;
@@ -25,6 +38,14 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
 
   filterTab1: LLMUsageDrillDownLevel = {};
   filterTab2: LLMUsageDrillDownLevel = {};
+  /**
+   * The filter of the data shown. The two tabs share one result, so it is the filter
+   * of both, and both filter panels are brought back to it after every load.
+   */
+  appliedFilter: LLMUsageDrillDownLevel = {};
+  /** The applied filters as the bar above the charts shows them, per tab. */
+  activeFiltersTab1: LLMUsageActiveFilter[] = [];
+  activeFiltersTab2: LLMUsageActiveFilter[] = [];
 
   private translationService = inject(GeboAITranslationService);
   private moduleId = inject(GEBO_AI_MODULE, { optional: true });
@@ -50,7 +71,15 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
     CostSeries: "Cost",
     MinTimeToFirstTokenSeries: "Min Time to First Token (s)",
     AvgTimeToFirstTokenSeries: "Avg Time to First Token (s)",
-    MaxTimeToFirstTokenSeries: "Max Time to First Token (s)"
+    MaxTimeToFirstTokenSeries: "Max Time to First Token (s)",
+    ProviderIdFilterChip: "Provider",
+    ModelTypeCodeFilterChip: "Provider service",
+    ModelTypeFilterChip: "Model type",
+    ModelFilterChip: "Model",
+    UsernameFilterChip: "User",
+    CallerStackFilterChip: "Caller stack",
+    YearFilterChip: "Year",
+    MonthFilterChip: "Month"
   };
 
   /**
@@ -127,6 +156,7 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
       });
       this.texts = texts;
       this.modelTypeOptions = this.buildModelTypeOptions();
+      this.refreshActiveFilters();
       this.updateCharts();
     });
   }
@@ -146,16 +176,21 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
   abstract executeDrillDown(filter: LLMUsageDrillDownLevel): Observable<LLMUsageDrillDownResult>;
 
   loadData(filter: LLMUsageDrillDownLevel): void {
+    const applied = BaseLLMSUsageDashboardComponent.normalized(filter);
     this.loading = true;
-    this.executeDrillDown(filter).subscribe({
+    this.executeDrillDown(applied).subscribe({
       next: (res) => {
         this.result = res;
+        this.appliedFilter = applied;
+        this.filterTab1 = { ...applied };
+        this.filterTab2 = { ...applied };
+        this.refreshActiveFilters();
         this.updateCharts();
         
         const dailyEmpty = !res.currentMonthDaily || res.currentMonthDaily.length === 0;
         const monthlyEmpty = !res.monthly || res.monthly.length === 0;
         
-        if (Object.keys(filter).length === 0) {
+        if (Object.keys(applied).length === 0) {
           this.hasNoStats = dailyEmpty && monthlyEmpty;
         }
         
@@ -177,23 +212,70 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
   }
 
   resetFilter(tabIndex: number): void {
-    if (tabIndex === 1) {
-      this.filterTab1 = {};
-      this.loadData({});
-    } else {
-      this.filterTab2 = {};
-      this.loadData({});
-    }
+    this.loadData({});
   }
 
-  getOptions(arr?: Array<any>): { label: string, value: any }[] {
-    const options: { label: string, value: any }[] = [{ label: this.texts["AllOption"], value: undefined }];
-    if (arr) {
-      arr.forEach(val => {
-        options.push({ label: String(val), value: val });
-      });
+  /** Drops one applied filter, from its chip in the active filters bar. */
+  removeFilter(key: keyof LLMUsageDrillDownLevel): void {
+    const next: LLMUsageDrillDownLevel = { ...this.appliedFilter };
+    delete next[key];
+    this.loadData(next);
+  }
+
+  /** True when the tab's filter panel was changed and not applied yet. */
+  hasPendingChanges(tabIndex: number): boolean {
+    const panel = BaseLLMSUsageDashboardComponent.normalized(tabIndex === 1 ? this.filterTab1 : this.filterTab2);
+    const applied = this.appliedFilter;
+    const keys = new Set([...Object.keys(panel), ...Object.keys(applied)]) as Set<keyof LLMUsageDrillDownLevel>;
+    if (tabIndex === 1) {
+      PERIOD_KEYS.forEach(key => keys.delete(key));
     }
+    return [...keys].some(key => panel[key] !== applied[key]);
+  }
+
+  /**
+   * The options of a filter: "All" and the values the result still offers, plus the
+   * selected one, which the result stops offering once the filter fixes it.
+   */
+  getOptions(arr?: Array<any>, selected?: any): { label: string, value: any }[] {
+    const options: { label: string, value: any }[] = [{ label: this.texts["AllOption"], value: undefined }];
+    const values = arr ? [...arr] : [];
+    if (selected !== undefined && selected !== null && !values.includes(selected)) {
+      values.unshift(selected);
+    }
+    values.forEach(val => {
+      options.push({ label: String(val), value: val });
+    });
     return options;
+  }
+
+  private refreshActiveFilters(): void {
+    const all = FILTER_KEYS.filter(key => this.appliedFilter[key] !== undefined)
+      .map(key => ({ key, label: this.texts[key.charAt(0).toUpperCase() + key.slice(1) + "FilterChip"], value: this.filterValueLabel(key) }));
+    this.activeFiltersTab2 = all;
+    this.activeFiltersTab1 = all.filter(x => !PERIOD_KEYS.includes(x.key));
+  }
+
+  private filterValueLabel(key: keyof LLMUsageDrillDownLevel): string {
+    const value: any = this.appliedFilter[key];
+    if (key === "modelType") {
+      return this.modelTypeOptions.find(x => x.value === value)?.label ?? String(value);
+    }
+    if (key === "month" && typeof value === "number") {
+      return new Date(2000, value - 1, 1).toLocaleString(undefined, { month: "long" });
+    }
+    return String(value);
+  }
+
+  /** The filter without its unset fields: what the drill down actually applies. */
+  private static normalized(filter: LLMUsageDrillDownLevel): LLMUsageDrillDownLevel {
+    const result: any = {};
+    Object.entries(filter || {}).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        result[key] = value;
+      }
+    });
+    return result;
   }
 
   private updateCharts(): void {
