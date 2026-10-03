@@ -1,10 +1,15 @@
 package ai.gebo.architecture.search.service.impl;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.core.WhitespaceTokenizer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.icu.ICUFoldingFilter;
+import org.apache.lucene.analysis.it.ItalianAnalyzer;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.search.service.IKeywordMatcherService;
@@ -22,20 +27,27 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 public class KeywordMatcherServiceImpl implements IKeywordMatcherService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(KeywordMatcherServiceImpl.class);
 
 	/**
-	 * Analyzer minimale: tokenizzazione su whitespace + ICU folding. Nota: se vuoi
-	 * tokenizzare anche su punteggiatura, puoi usare StandardTokenizer al posto di
-	 * WhitespaceTokenizer.
+	 * Words split on punctuation too ("contract," is the word "contract"), then case
+	 * and accent folded (ICU).
 	 */
 	private final Analyzer analyzer = new Analyzer() {
 		@Override
 		protected TokenStreamComponents createComponents(String fieldName) {
-			WhitespaceTokenizer tokenizer = new WhitespaceTokenizer();
+			StandardTokenizer tokenizer = new StandardTokenizer();
 			TokenStream ts = new ICUFoldingFilter(tokenizer);
 			return new TokenStreamComponents(tokenizer, ts);
 		}
 	};
+
+	/**
+	 * Words that tell nothing of a text (articles, prepositions...), folded as the text
+	 * is: a keyword made of them alone would match nearly every chunk. Italian and
+	 * English, the languages of the knowledge bases and of the models' queries.
+	 */
+	private final Set<String> stopWords = foldedStopWords();
 
 	/**
 	 * Cache per non rianalizzare sempre le stesse keyword (utile se le keyword si
@@ -64,6 +76,7 @@ public class KeywordMatcherServiceImpl implements IKeywordMatcherService {
 			return false;
 
 		int hits = 0;
+		int informativeKeywords = 0;
 
 		// 2) per ogni keyword/frase: normalizza in token e matcha
 		for (String kw : generatedKeywords) {
@@ -73,10 +86,11 @@ public class KeywordMatcherServiceImpl implements IKeywordMatcherService {
 			if (trimmed.isEmpty())
 				continue;
 
-			List<String> kwTokens = keywordTokenCache.computeIfAbsent(trimmed, k -> analyzeToTokenList(k));
+			List<String> kwTokens = keywordTokenCache.computeIfAbsent(trimmed, k -> informativeTokens(k));
 
 			if (kwTokens.isEmpty())
 				continue;
+			informativeKeywords++;
 
 			// keyword singola: match diretto
 			if (kwTokens.size() == 1) {
@@ -99,8 +113,37 @@ public class KeywordMatcherServiceImpl implements IKeywordMatcherService {
 			if (hits >= minHits)
 				return true; // early exit
 		}
-
+		if (informativeKeywords == 0) {
+			// only words that tell nothing: no keyword to filter by, as with no keyword at all
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("isMatching(...) keywords " + generatedKeywords + " are all stop words, the chunk is kept");
+			}
+			return true;
+		}
 		return false;
+	}
+
+	/** The tokens of a keyword that tell something of a text. */
+	private List<String> informativeTokens(String keyword) {
+		final List<String> tokens = new ArrayList<>(analyzeToTokenList(keyword));
+		tokens.removeIf(stopWords::contains);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("informativeTokens(...) keyword '" + keyword + "' matches on " + tokens);
+		}
+		return tokens;
+	}
+
+	private Set<String> foldedStopWords() {
+		final Set<String> folded = new HashSet<>();
+		for (CharArraySet set : List.of(ItalianAnalyzer.getDefaultStopSet(), EnglishAnalyzer.ENGLISH_STOP_WORDS_SET)) {
+			for (Object word : set) {
+				folded.addAll(analyzeToTokenList(word instanceof char[] chars ? new String(chars) : String.valueOf(word)));
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Keyword matcher ignores " + folded.size() + " stop word(s)");
+		}
+		return folded;
 	}
 
 	private Set<String> analyzeToTokenSet(String text) {
