@@ -48,6 +48,7 @@ import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.agent.standardtools.model.SearchQueryParam;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult;
+import ai.gebo.llms.agent.standardtools.model.SearchToolResult.Fragment;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult.Status;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
@@ -368,5 +369,71 @@ class SearchToolContentPipelineTest {
 		assertTrue(received.get(0) instanceof JqlQuery);
 		assertEquals("project = GEBO", ((JqlQuery) received.get(0)).getJql());
 		assertTrue(answer.contains("ISSUE-1"), answer);
+	}
+
+	private static Document chunk(String document, long position, long count, String text) {
+		return new Document(text, Map.of(DocumentMetaInfos.CONTENT_CODE, document,
+				DocumentMetaInfos.GEBO_CHUNK_POSITION, position, DocumentMetaInfos.GEBO_CHUNKS_COUNT, count));
+	}
+
+	@Test
+	void theRankingChoosesTheDocumentsAndEachOneIsReadInOrder() {
+		// the ranker put a chunk of b first, then chunks of a out of their order
+		List<Document> ranked = List.of(chunk("b", 3, 9, "b three"), chunk("a", 2, 4, "a two"),
+				chunk("a", 1, 4, "a one"), chunk("b", 5, 9, "b five"), chunk("a", 4, 4, "a four"));
+
+		SearchToolResult result = pipeline.fit(ranked, List.of(), 4000, "searchWeb");
+
+		List<String> contents = result.getFragments().stream().map(Fragment::getContent).toList();
+		assertEquals(List.of("b three", "b five", "a one\na two", "a four"), contents,
+				"b first as it has the best chunk; a's first two chunks are contiguous text");
+		List<String> chunks = result.getFragments().stream().map(Fragment::getChunk).toList();
+		assertEquals(List.of("3/9", "5/9", "1-2/4", "4/4"), chunks);
+	}
+
+	@Test
+	void chunksWithoutPositionKeepTheRankingOrder() {
+		List<Document> ranked = List.of(new Document("second", Map.of(DocumentMetaInfos.CONTENT_CODE, "a")),
+				new Document("first", Map.of(DocumentMetaInfos.CONTENT_CODE, "a")));
+
+		SearchToolResult result = pipeline.fit(ranked, List.of(), 4000, "searchWeb");
+
+		assertEquals(List.of("second", "first"), result.getFragments().stream().map(Fragment::getContent).toList());
+	}
+
+	@Test
+	void theContentsNeverTakeMoreThanTheModelCallLeaves() throws Exception {
+		ToolsTokenBudget budget = new ToolsTokenBudget(600);
+		ToolContext context = new ToolContext(Map.of(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, "r1",
+				ToolsTokenBudget.TOOLS_CONTEXT_KEY, budget));
+		when(chunkingService.streamChunks(any(IGComponentOriginatedDocument.class), any(), anyString()))
+				.thenAnswer(invocation -> {
+					SearchResult result = invocation.getArgument(0);
+					DocumentChunk chunk = DocumentChunk.ofText(result.getCode(), words(900, "w"), Map.of());
+					chunk.setChunkPosition(1l);
+					return Flux.just(IDocumentChunkWithRef.of(chunk, result));
+				});
+
+		SearchToolResult result = pipeline.run(service, "searchWeb", "d", param("q", "o"), List.of(),
+				(s, n) -> List.of(result("https://a.example/1", "One")), context);
+
+		assertTrue(result.getTokens() <= 600,
+				"returned " + result.getTokens() + " tokens");
+		assertTrue(budget.left() < 600, "what was returned is taken out of the model call's room");
+	}
+
+	@Test
+	void withNoRoomLeftNothingIsSearched() throws Exception {
+		ToolContext context = new ToolContext(Map.of(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, "r1",
+				ToolsTokenBudget.TOOLS_CONTEXT_KEY, new ToolsTokenBudget(100)));
+		List<String> searched = new ArrayList<>();
+
+		SearchToolResult result = pipeline.run(service, "searchWeb", "d", param("q", "o"), List.of(), (s, n) -> {
+			searched.add(s.getCode());
+			return List.of(result("https://a.example/1", "One"));
+		}, context);
+
+		assertEquals(Status.NO_RESULTS, result.getStatus());
+		assertTrue(searched.isEmpty(), "no search is run for contents that could not be returned");
 	}
 }

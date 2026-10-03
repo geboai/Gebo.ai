@@ -53,6 +53,7 @@ import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
 import ai.gebo.llms.agent.standardtools.ToolsFoundDocuments;
 import ai.gebo.llms.agent.standardtools.ToolsProgress;
+import ai.gebo.llms.agent.standardtools.ToolsTokenBudget;
 import ai.gebo.llms.agent.standardtools.WebSearchToolSource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
@@ -474,7 +475,11 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			}
 			Flux<String> modelText;
 			try {
-				modelText = callLLMReactive(agentModel, agentPrompt, chatRequestContext, params);
+				// the tools' results of this iteration pile up in its model call: they may take
+				// what the loop's budget leaves after this iteration's own placeholders
+				modelText = callLLMReactive(agentModel, agentPrompt,
+						ToolsTokenBudget.sharedThrough(chatRequestContext, ToolsTokenBudget.leftForTools(budget, params)),
+						params);
 			} catch (LLMConfigException e) {
 				return Flux.error(e);
 			}

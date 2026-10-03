@@ -11,6 +11,7 @@ package ai.gebo.llms.agent.standardtools;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -78,6 +79,9 @@ public class SearchToolContentPipeline {
 	/** A fragment is cut to fit the size left only when at least this many tokens are left. */
 	private static final int MIN_TRUNCATED_FRAGMENT_TOKENS = 100;
 	private static final String TRUNCATION_MARK = " [...]";
+	private static final String PASSAGE_SEPARATOR = "\n";
+	/** The last chunk position of a passage re-joined from contiguous chunks. */
+	static final String PASSAGE_LAST_POSITION = "geboPassageLastPosition";
 
 	/** Runs the search of a tool on one of the systems of its search service. */
 	@FunctionalInterface
@@ -113,12 +117,19 @@ public class SearchToolContentPipeline {
 			return SearchToolResult.of(Status.NO_RESULTS, "No search done: the query is empty.");
 		}
 		final int topK = topK(param);
-		final int maxTokens = maxTokens(param);
+		// never more than what the calling model call has left for its tools' results
+		final ToolsTokenBudget callBudget = ToolsTokenBudget.from(toolContext);
+		final int maxTokens = callBudget != null ? callBudget.grant(maxTokens(param)) : maxTokens(param);
 		final String objective = objective(param, queryText);
 		final String requestId = ToolCallbackDeclarationUtil.requestId(toolContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin run(...) tool:" + toolName + " service:" + service.getId() + " topK:" + topK
-					+ " maxTokens:" + maxTokens + " request:" + requestId);
+					+ " maxTokens:" + maxTokens + " (model call budget:"
+					+ (callBudget != null ? callBudget.left() + " left" : "none") + ") request:" + requestId);
+		}
+		if (callBudget != null && maxTokens < MIN_MAX_TOKENS) {
+			return SearchToolResult.of(Status.NO_RESULTS,
+					"No room is left in the context for more contents: answer with the contents already found.");
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("<SEARCH_TOOL_OBJECTIVE tool=" + toolName + ">");
@@ -229,6 +240,9 @@ public class SearchToolContentPipeline {
 			}
 			requestRegistry.markReturned(requestId, returnedCodes);
 			shareFoundDocuments(toolContext, fresh, returnedCodes, toolName);
+			if (callBudget != null) {
+				callBudget.consume(returnedTokens(result));
+			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End run(...) tool:" + toolName + " status:" + result.getStatus() + " returns "
 						+ result.getFragments().size() + " fragment(s) from " + returnedCodes.size()
@@ -302,15 +316,100 @@ public class SearchToolContentPipeline {
 		}
 	}
 
+	/** The tokens a result takes in the model call: its contents and what describes them. */
+	static int returnedTokens(SearchToolResult result) {
+		int tokens = result.getTokens();
+		for (Fragment fragment : result.getFragments()) {
+			tokens += ITokensCountable.stringsTokensSize(fragment.getTitle(), fragment.getSource(), fragment.getChunk());
+		}
+		return tokens;
+	}
+
 	/**
-	 * Takes the documents in order while they fit in {@code maxTokens}, cutting the
-	 * last one to the size left when that is still worth reading.
+	 * The ranked chunks as the documents they come from: the documents in the order of
+	 * their best chunk (the ranking chooses the documents), each one's chunks in
+	 * reading order, the contiguous ones re-joined into a single passage so the model
+	 * reads the text as it is written rather than in pieces.
 	 */
-	SearchToolResult fit(List<Document> documents, List<SearchResult> sources, int maxTokens, String toolName) {
+	static List<Document> passagesByDocument(List<Document> ranked, String toolName) {
+		final Map<String, List<Document>> byDocument = new LinkedHashMap<>();
+		for (Document chunk : ranked) {
+			final String code = stringOf(chunk.getMetadata().get(DocumentMetaInfos.CONTENT_CODE));
+			byDocument.computeIfAbsent(code != null ? code : chunk.getId(), key -> new ArrayList<>()).add(chunk);
+		}
+		final List<Document> passages = new ArrayList<>();
+		int joined = 0;
+		for (List<Document> chunks : byDocument.values()) {
+			final boolean positioned = chunks.stream().allMatch(chunk -> positionOf(chunk) != null);
+			if (!positioned) {
+				// without positions the reading order is unknown: the ranking order is kept
+				passages.addAll(chunks);
+				continue;
+			}
+			final List<Document> inReadingOrder = new ArrayList<>(chunks);
+			inReadingOrder.sort((a, b) -> Long.compare(positionOf(a), positionOf(b)));
+			Document passage = null;
+			long last = -1;
+			StringBuilder text = null;
+			for (Document chunk : inReadingOrder) {
+				final long position = positionOf(chunk);
+				if (passage != null && position == last + 1) {
+					text.append(PASSAGE_SEPARATOR).append(chunk.getText());
+					last = position;
+					joined++;
+					continue;
+				}
+				if (passage != null) {
+					passages.add(passageOf(passage, text, last));
+				}
+				passage = chunk;
+				text = new StringBuilder(chunk.getText() != null ? chunk.getText() : "");
+				last = position;
+			}
+			if (passage != null) {
+				passages.add(passageOf(passage, text, last));
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("passagesByDocument(...) tool:" + toolName + " " + ranked.size() + " chunk(s) of "
+					+ byDocument.size() + " document(s) into " + passages.size() + " passage(s), " + joined
+					+ " chunk(s) joined to the one before");
+		}
+		return passages;
+	}
+
+	private static Document passageOf(Document first, StringBuilder text, long lastPosition) {
+		final Map<String, Object> metaData = new HashMap<>(first.getMetadata());
+		final Long firstPosition = positionOf(first);
+		if (firstPosition != null && lastPosition != firstPosition) {
+			metaData.put(PASSAGE_LAST_POSITION, lastPosition);
+		}
+		return new Document(text.toString(), metaData);
+	}
+
+	private static Long positionOf(Document chunk) {
+		final Object position = chunk.getMetadata().get(DocumentMetaInfos.GEBO_CHUNK_POSITION);
+		if (position instanceof Number number) {
+			return number.longValue();
+		}
+		try {
+			return position != null ? Long.valueOf(position.toString()) : null;
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Takes the documents' passages (see {@link #passagesByDocument(List, String)}) in
+	 * order while they fit in {@code maxTokens}, cutting the last one to the size left
+	 * when that is still worth reading.
+	 */
+	SearchToolResult fit(List<Document> ranked, List<SearchResult> sources, int maxTokens, String toolName) {
 		final Map<String, SearchResult> byCode = new LinkedHashMap<>();
 		for (SearchResult source : sources) {
 			byCode.put(source.getCode(), source);
 		}
+		final List<Document> documents = passagesByDocument(ranked, toolName);
 		final SearchToolResult result = new SearchToolResult();
 		int used = 0;
 		int ref = 1;
@@ -327,9 +426,16 @@ public class SearchToolContentPipeline {
 				if (left < MIN_TRUNCATED_FRAGMENT_TOKENS) {
 					break;
 				}
-				final int chars = (int) Math.max(1, ((long) text.length() * left) / Math.max(1, tokens));
+				// cut by the ratio of characters to tokens, then shrink until the cut, its mark
+				// included, really fits: the ratio is not the same along the whole text
+				int chars = (int) Math.max(1, ((long) text.length() * left) / Math.max(1, tokens));
 				content = text.substring(0, Math.min(text.length(), chars)) + TRUNCATION_MARK;
 				contentTokens = ITokensCountable.stringsTokensSize(content);
+				while (contentTokens > left && chars > 1) {
+					chars = (int) Math.max(1, Math.min(chars - 1, ((long) chars * left) / Math.max(1, contentTokens)));
+					content = text.substring(0, Math.min(text.length(), chars)) + TRUNCATION_MARK;
+					contentTokens = ITokensCountable.stringsTokensSize(content);
+				}
 			}
 			final Map<String, Object> metaData = document.getMetadata();
 			final String code = stringOf(metaData.get(DocumentMetaInfos.CONTENT_CODE));
@@ -413,10 +519,14 @@ public class SearchToolContentPipeline {
 	}
 
 	private static String chunkOf(Map<String, Object> metaData) {
-		final String position = stringOf(metaData.get(DocumentMetaInfos.GEBO_CHUNK_POSITION));
+		String position = stringOf(metaData.get(DocumentMetaInfos.GEBO_CHUNK_POSITION));
 		final String count = stringOf(metaData.get(DocumentMetaInfos.GEBO_CHUNKS_COUNT));
 		if (position == null) {
 			return null;
+		}
+		final String lastPosition = stringOf(metaData.get(PASSAGE_LAST_POSITION));
+		if (lastPosition != null) {
+			position = position + "-" + lastPosition;
 		}
 		return count != null ? position + "/" + count : position;
 	}

@@ -32,6 +32,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
+import ai.gebo.llms.agent.standardtools.ToolsTokenBudget;
 import lombok.Getter;
 
 /**
@@ -128,12 +129,16 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
 				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
 
+		// the tools' results pile up in this model call: they may take what the agent's
+		// budget leaves after its placeholders
+		final IChatRequestContext callContext = ToolsTokenBudget.sharedThrough(agentContext,
+				ToolsTokenBudget.leftForTools(tokenBudget, params));
 		OutputType output = null;
 		if (String.class.isAssignableFrom(getOutputType())) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Requesting textResponse from tool-calling agent model id:" + getId());
 			}
-			output = (OutputType) agentModel.textResponse(prompt, params, agentContext);
+			output = (OutputType) agentModel.textResponse(prompt, params, callContext);
 		} else {
 			if (isPlaceholderDeclared(prompt, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM)) {
 				BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
@@ -143,7 +148,7 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 				LOGGER.debug("Requesting structuredResponse from tool-calling agent model id:" + getId()
 						+ " targetType:" + outputType.getName());
 			}
-			output = (OutputType) agentModel.structuredResponse(prompt, params, agentContext, outputType);
+			output = (OutputType) agentModel.structuredResponse(prompt, params, callContext, outputType);
 		}
 
 		if (LOGGER.isDebugEnabled()) {

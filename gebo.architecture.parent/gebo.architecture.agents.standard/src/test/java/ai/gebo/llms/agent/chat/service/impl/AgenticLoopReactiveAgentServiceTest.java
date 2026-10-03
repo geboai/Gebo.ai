@@ -37,6 +37,8 @@ import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
+import ai.gebo.llms.agent.standardtools.ToolsFoundDocuments;
+import ai.gebo.llms.agent.standardtools.ToolsTokenBudget;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.ControlMarkerStripper;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.LoopIteration;
 import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;
@@ -551,4 +553,27 @@ class AgenticLoopReactiveAgentServiceTest {
 
 		assertEquals(DeliverableIntent.SUMMARY, agent.sessionUserIntent(session));
 	}
+
+	@Test
+	void theToolsOfAnIterationMayTakeWhatTheLoopBudgetLeaves() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("Done. " + STOP)));
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
+		IChatRequestContext context = collector.sharedThrough(IChatRequestContext.builder().requestID("r1").build());
+		AgentNetworkParticipant persona = mock(AgentNetworkParticipant.class);
+		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
+
+		agent.iteration(1, 5, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), context, persona,
+				mock(INotificationSink.class), new ToolCallsListener(),
+				agent.deliverableTemplateParams(DeliverableIntent.QA),
+				AgenticLoopReactiveAgentServiceImpl.SourceGate.NONE, null).collectList().block();
+
+		Object shared = agent.receivedContexts.get(0).getToolsContext().get(ToolsTokenBudget.TOOLS_CONTEXT_KEY);
+		assertTrue(shared instanceof ToolsTokenBudget, "the model call carries the tools' room");
+		int left = ((ToolsTokenBudget) shared).left();
+		assertEquals(ToolsTokenBudget.leftForTools(10_000, agent.receivedParams.get(0)), left);
+		assertTrue(left > 0 && left < 10_000, "the loop budget less the iteration's own placeholders: " + left);
+		assertTrue(agent.receivedContexts.get(0).getToolsContext().get(ToolsFoundDocuments.TOOLS_CONTEXT_KEY) != null,
+				"what the context already shared with the tools is kept");
+	}
+
 }
