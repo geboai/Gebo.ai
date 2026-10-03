@@ -41,16 +41,40 @@
 		<!-- Security fixes are normally taken by bumping spring-boot-starter-parent
 		     (and spring.ai.version), NOT by pinning single libraries: an override
 		     drifts out of date and starts pinning its library DOWN once the parent
-		     moves past it, which is what happened to the netty pin that used to sit
-		     here (Boot 4.1.0 managed 4.2.15.Final, the pin lifted it to 4.2.16.Final,
-		     and Boot 4.1.1 now manages 4.2.17.Final on its own).
+		     moves past it, which is what happened to an earlier netty pin here (Boot
+		     4.1.0 managed 4.2.15.Final, the pin lifted it to 4.2.16.Final, and Boot
+		     4.1.1 then managed 4.2.17.Final on its own). The pins below are the
+		     exceptions, each with the condition under which it must go.
 
-		     tomcat is the one exception right now. Boot 4.1.1 manages 11.0.24, which
+		     tomcat: Boot 4.1.1 manages 11.0.24, which
 		     closes CVE-2026-53434/-55276/-59083/-59084 (9.1) and CVE-2026-53404, but
 		     not CVE-2026-66299, whose range is >=11.0.1,<11.0.25. 11.0.25 is GA and a
 		     patch of the very minor the parent already ships, so lifting it is safe.
 		     DROP this property as soon as the parent manages 11.0.25 or later. -->
 		<tomcat.version>11.0.25</tomcat.version>
+		<!-- Jackson: Boot 4.1.1 manages 3.1.5 (tools.jackson, what
+		     Boot 4 runs on) and 2.21.5 (com.fasterxml, still pulled in by libraries), and
+		     both lines are affected by the advisories published 2026-09-28..10-01:
+		     jackson-core CVE-2026-89425 and CVE-2026-89407, jackson-databind
+		     CVE-2026-91777, -91776, -83557, -68497 and -19032. 3.1.7 and 2.21.7 fix all
+		     of them and are patches of the minors the parent already ships.
+		     DROP both properties as soon as the parent manages 3.1.7 / 2.21.7 or later. -->
+		<jackson-bom.version>3.1.7</jackson-bom.version>
+		<jackson-2-bom.version>2.21.7</jackson-2-bom.version>
+		<!-- netty: Boot 4.1.1 manages 4.2.17.Final, inside the range of CVE-2026-89044
+		     (4.2.13.Final through 4.2.17.Final do not properly validate the final
+		     transfer coding of Transfer-Encoding). 4.2.18.Final is the fix, a patch of
+		     the same minor, and the version Boot 4.2 manages.
+		     DROP this property as soon as the parent manages 4.2.18.Final or later. -->
+		<netty.version>4.2.18.Final</netty.version>
+		<!-- MongoDB Java driver: Boot 4.1.1 manages 5.8.1, affected by CVE-2026-18710
+		     (a credential could be written to log output, fixed in 5.9.2) and by
+		     CVE-2026-88032 / CVE-2026-88033 (use-after-free in reactive client-side
+		     encryption, GridFS query injection), fixed only from 5.11.1 - there is no
+		     backport to an older minor. 5.11.1 is the driver Boot 4.2 pairs with its
+		     Spring Data.
+		     DROP this property as soon as the parent manages 5.11.1 or later. -->
+		<mongodb.version>5.11.1</mongodb.version>
 		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
 		<version.swagger.codegen>2.4.44</version.swagger.codegen>
@@ -224,13 +248,23 @@
 			     the same major. Importing the BOM keeps every tika-* artifact on one
 			     version instead of pinning them one by one, and it also lifts junrar:
 			     tika-parent 3.3.2 sets junrar.version=7.6.0, above the 7.5.10 that fixes
-			     CVE-2026-41245, so the RAR parser is covered without a pin of its own. -->
+			     CVE-2026-41245 (for the later CVE-2026-86071 see the junrar pin below). -->
 			<dependency>
 				<groupId>org.apache.tika</groupId>
 				<artifactId>tika-bom</artifactId>
 				<version>3.3.2</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			<!-- junrar 7.6.0, the version tika 3.3.2 brings, is affected by CVE-2026-86071
+			     (LocalFolderExtractor mkdir escape, low); 7.6.1 is the fix, and no tika 3.3.x
+			     newer than 3.3.2 exists to bring it (the next line is 4.0.0). A version
+			     declared here wins over the imported tika-bom. DROP this once tika-bom
+			     manages 7.6.1 or later. -->
+			<dependency>
+				<groupId>com.github.junrar</groupId>
+				<artifactId>junrar</artifactId>
+				<version>7.6.1</version>
 			</dependency>
 			<!-- opentelemetry-semconv is pulled transitively at 1.41.1, which is inside the
 			     range of CVE-2026-39883 (>=1.15.0,<1.43.0). Spring Boot manages the
