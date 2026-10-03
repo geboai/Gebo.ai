@@ -46,7 +46,7 @@ public class LLMUsageConcentratorReceiverFactory extends GAbstractMessageReceive
 				LLMUsageDetail detail = toEntity(payload);
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Storing usage detail modelType=" + detail.getModelType() + " provider="
-							+ detail.getProviderId() + " model=" + detail.getModel() + " user=" + detail.getUsername()
+							+ detail.getProviderId() + " modelTypeCode=" + detail.getModelTypeCode() + " model=" + detail.getModel() + " user=" + detail.getUsername()
 							+ " outcome=" + detail.getOutcome() + " responseTime=" + detail.getResponseTime()
 							+ "ms timeToFirstToken=" + detail.getTimeToFirstToken() + " tokens="
 							+ detail.getInputToken() + "/" + detail.getOutputToken() + "/" + detail.getTotalToken());
@@ -64,7 +64,13 @@ public class LLMUsageConcentratorReceiverFactory extends GAbstractMessageReceive
 
 		private LLMUsageDetail toEntity(LLMUsageDetailPayload payload) {
 			LLMUsageDetail detail = new LLMUsageDetail();
-			detail.setProviderId(payload.getProviderId());
+			if (payload.getModelTypeCode() != null) {
+				detail.setProviderId(payload.getProviderId());
+				detail.setModelTypeCode(payload.getModelTypeCode());
+			} else {
+				// Sent by an emitter older than the provider id: its providerId is the type code.
+				detail.setModelTypeCode(payload.getProviderId());
+			}
 			detail.setUsername(payload.getUsername());
 			detail.setModel(payload.getModel());
 			detail.setCallerStack(payload.getCallerStack());

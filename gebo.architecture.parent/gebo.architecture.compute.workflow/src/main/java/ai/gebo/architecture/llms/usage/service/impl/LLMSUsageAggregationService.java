@@ -158,6 +158,8 @@ public class LLMSUsageAggregationService {
 		GroupOperation group = Aggregation.group();
 		if (c == null || c.getProviderId() == null)
 			group = group.addToSet("providerId").as("providerId");
+		if (c == null || c.getModelTypeCode() == null)
+			group = group.addToSet("modelTypeCode").as("modelTypeCode");
 		if (effectiveUsername == null)
 			group = group.addToSet("username").as("username");
 		if (c == null || c.getModel() == null)
@@ -180,6 +182,8 @@ public class LLMSUsageAggregationService {
 		if (c != null) {
 			if (c.getProviderId() != null)
 				parts.add(Criteria.where("providerId").is(c.getProviderId()));
+			if (c.getModelTypeCode() != null)
+				parts.add(Criteria.where("modelTypeCode").is(c.getModelTypeCode()));
 			if (c.getModel() != null)
 				parts.add(Criteria.where("model").is(c.getModel()));
 			if (c.getCallerStack() != null)
@@ -219,6 +223,7 @@ public class LLMSUsageAggregationService {
 			// Dimension values coherent with the criteria (only the filtered ones).
 			if (c != null) {
 				b.setProviderId(c.getProviderId());
+				b.setModelTypeCode(c.getModelTypeCode());
 				b.setModel(c.getModel());
 				b.setCallerStack(c.getCallerStack());
 				b.setModelType(c.getModelType());

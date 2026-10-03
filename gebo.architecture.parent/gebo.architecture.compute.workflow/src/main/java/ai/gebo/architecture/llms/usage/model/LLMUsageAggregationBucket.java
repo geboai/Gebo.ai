@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class LLMUsageAggregationBucket {
 	private String providerId;
+	private String modelTypeCode;
 	private String username;
 	private String model;
 	private String callerStack;
