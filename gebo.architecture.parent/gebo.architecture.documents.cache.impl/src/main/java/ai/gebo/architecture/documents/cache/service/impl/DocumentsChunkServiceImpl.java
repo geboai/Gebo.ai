@@ -411,8 +411,9 @@ public class DocumentsChunkServiceImpl
 								exceptions);
 					}
 					// the count the positions refer to, on the chunks returned now: the chunk sets
-					// read later get it from the operation (see getNextChunkSet)
-					chunkOperation.setDocumentChunks(atomicLong.get());
+					// read later get it from the operation (see getNextChunkSet). A sample is
+					// merged below into a single chunk, 1 of 1, whatever it was read from
+					chunkOperation.setDocumentChunks(samplingMode ? 1l : atomicLong.get());
 					if (response.getCurrentChunkSet() != null && response.getCurrentChunkSet().getChunks() != null) {
 						for (DocumentChunk chunk : response.getCurrentChunkSet().getChunks()) {
 							chunk.setChunksCount(atomicLong.get());
