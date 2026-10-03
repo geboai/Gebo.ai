@@ -61,4 +61,15 @@ class KeywordMatcherServiceImplTest {
 		assertTrue(matcher.isMatching(List.of("penali del contratto"), "Contratto: penali applicate.", 1));
 		assertFalse(matcher.isMatching(List.of("penali del contratto"), "Penali applicate.", 1));
 	}
+
+	@Test
+	void theHitsAskedNeverExceedTheInformativeKeywords() {
+		// the deep search pure search asks two hits of more than three keywords: here only
+		// one of them tells something, so one hit is enough
+		assertTrue(matcher.isMatching(List.of("the", "of", "and", "renewal"), "The renewal is automatic.", 2));
+		assertFalse(matcher.isMatching(List.of("the", "of", "and", "renewal"), "The weather of the region.", 2));
+		// with enough informative keywords two hits are still asked
+		assertFalse(matcher.isMatching(List.of("contract", "renewal", "penalty", "term"), "The renewal is automatic.", 2));
+		assertTrue(matcher.isMatching(List.of("contract", "renewal", "penalty", "term"), "The contract renewal.", 2));
+	}
 }

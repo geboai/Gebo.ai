@@ -75,50 +75,43 @@ public class KeywordMatcherServiceImpl implements IKeywordMatcherService {
 		if (chunkTokens.isEmpty())
 			return false;
 
-		int hits = 0;
-		int informativeKeywords = 0;
-
-		// 2) per ogni keyword/frase: normalizza in token e matcha
+		// 2) the keywords that tell something of a text, as tokens
+		final List<List<String>> informative = new ArrayList<>(generatedKeywords.size());
 		for (String kw : generatedKeywords) {
 			if (kw == null)
 				continue;
 			String trimmed = kw.trim();
 			if (trimmed.isEmpty())
 				continue;
-
 			List<String> kwTokens = keywordTokenCache.computeIfAbsent(trimmed, k -> informativeTokens(k));
-
-			if (kwTokens.isEmpty())
-				continue;
-			informativeKeywords++;
-
-			// keyword singola: match diretto
-			if (kwTokens.size() == 1) {
-				if (chunkTokens.contains(kwTokens.get(0))) {
-					hits++;
-				}
-			} else {
-				// frase: match se tutti i token sono presenti (approccio robusto, veloce)
-				boolean allPresent = true;
-				for (String t : kwTokens) {
-					if (!chunkTokens.contains(t)) {
-						allPresent = false;
-						break;
-					}
-				}
-				if (allPresent)
-					hits++;
-			}
-
-			if (hits >= minHits)
-				return true; // early exit
+			if (!kwTokens.isEmpty())
+				informative.add(kwTokens);
 		}
-		if (informativeKeywords == 0) {
+		if (informative.isEmpty()) {
 			// only words that tell nothing: no keyword to filter by, as with no keyword at all
 			if (LOGGER.isTraceEnabled()) {
 				LOGGER.trace("isMatching(...) keywords " + generatedKeywords + " are all stop words, the chunk is kept");
 			}
 			return true;
+		}
+		// hits asked counting every keyword (e.g. two of more than three): never more than
+		// the informative ones, or no chunk could ever match
+		final int requiredHits = Math.max(1, Math.min(minHits, informative.size()));
+
+		// 3) a single keyword matches its token, a phrase all of its tokens
+		int hits = 0;
+		for (List<String> kwTokens : informative) {
+			boolean allPresent = true;
+			for (String t : kwTokens) {
+				if (!chunkTokens.contains(t)) {
+					allPresent = false;
+					break;
+				}
+			}
+			if (allPresent)
+				hits++;
+			if (hits >= requiredHits)
+				return true; // early exit
 		}
 		return false;
 	}
