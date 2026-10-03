@@ -24,7 +24,8 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 	// Number of documents processed in parallel during chunking.
 	private int documentsParallelism = 2;
 	// Number of in-flight LLM sub-analysis calls per data source (rails of the token-budget coordinator).
-	private int analysisParallelism = 4;
+	// Set via ai.gebo.deepsearch.analysis-parallelism in application.yml.
+	private int analysisParallelism = 2;
 	// Max number of data sources analyzed concurrently. Caps total concurrent LLM calls at
 	// maxConcurrentSources * analysisParallelism. These parallelism knobs are intentionally NOT on the
 	// UI-editable DeepSearchConfig; they are sysadmin-only, set statically via application.yml
@@ -53,7 +54,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 		this.secondHopSimilarityThreashold = 0.5;
 		this.searchType = SearchType.MULTI_HOP;
 		this.documentsParallelism = 2;
-		this.analysisParallelism = 4;
+		this.analysisParallelism = 2;
 		this.maxConcurrentSources = 2;
 		this.ragQueryOptions = new RagQueryOptions(1000000, CompletenessLevel.STRICT_QUERY_RELATED);
 		this.ragQueryOptions.setTopK(100);
