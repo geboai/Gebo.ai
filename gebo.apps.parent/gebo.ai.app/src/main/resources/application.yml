@@ -463,6 +463,9 @@ ai.gebo.agents.standard.enabled: true
 # Found documents the search tools and the document-search agents load and chunk
 # at the same time (2 when not set)
 ai.gebo.agents.standard.search-documents-parallelism: 2
+# The knowledge base search tool's answer takes at most the room its model call leaves
+# to the tools' results divided by this (3 when not set; no room shared, topK only)
+ai.gebo.agents.standard.knowledge-base-search-room-divisor: 3
 # In-flight LLM sub-analysis calls of a deep search per data source (2 when not set);
 # with ai.gebo.deepsearch.max-concurrent-sources it caps the concurrent LLM calls
 ai.gebo.deepsearch.analysis-parallelism: 2

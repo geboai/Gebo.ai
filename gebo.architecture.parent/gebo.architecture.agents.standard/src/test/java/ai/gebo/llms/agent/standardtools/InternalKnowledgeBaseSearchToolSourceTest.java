@@ -15,7 +15,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -33,6 +36,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
+import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource.KnowledgeBaseSearchParam;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.model.DocumentMetaInfos;
@@ -40,7 +44,7 @@ import ai.gebo.security.services.IGSecurityService;
 
 /**
  * Pins the knowledge base search tool: scoped to the chat's knowledge bases, its
- * answer bounded, and a failure answered as text so the model can go on.
+ * answer sized on the room its model call leaves to the tools, and a failure answered as text so the model can go on.
  */
 class InternalKnowledgeBaseSearchToolSourceTest {
 
@@ -107,27 +111,92 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 				InternalKnowledgeBaseSearchToolSource.documentsLine(fragments));
 	}
 
-	@Test
-	void theAnswerIsBoundedWhateverTheDocumentsFound() throws Exception {
+	private static IGDocumentsSearchService searchFinding(int documents, int wordsEach) throws Exception {
 		IGDocumentsSearchService search = mock(IGDocumentsSearchService.class);
 		List<Document> found = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
-			found.add(Document.builder().id("d" + i).text(words(3000, "fragment" + i)).build());
+		for (int i = 0; i < documents; i++) {
+			found.add(Document.builder().id("d" + i).text(words(wordsEach, "fragment" + i)).build());
 		}
 		AIDocumentsSet set = mock(AIDocumentsSet.class);
 		when(set.aiDocumentsList()).thenReturn(found);
 		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
 				.thenReturn(set);
-		IGSecurityService security = mock(IGSecurityService.class);
-		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(provider(search),
-				provider(mock(IGKnowledgebaseVisibilityService.class)), security, TEXT_RENDERER);
+		return search;
+	}
 
-		String answer = tool.search(query("anthroposophy"), chatWithKnowledgeBases("kb1"));
+	@SuppressWarnings("unchecked")
+	private static org.springframework.beans.factory.ObjectProvider<StandardAgentsConfig> configured(double divisor) {
+		StandardAgentsConfig config = new StandardAgentsConfig();
+		config.setKnowledgeBaseSearchRoomDivisor(divisor);
+		org.springframework.beans.factory.ObjectProvider<StandardAgentsConfig> provider = mock(
+				org.springframework.beans.factory.ObjectProvider.class);
+		when(provider.getIfAvailable()).thenReturn(config);
+		return provider;
+	}
 
+	private static InternalKnowledgeBaseSearchToolSource tool(IGDocumentsSearchService search,
+			org.springframework.beans.factory.ObjectProvider<StandardAgentsConfig> config) {
+		return new InternalKnowledgeBaseSearchToolSource(provider(search),
+				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER,
+				config);
+	}
+
+	@Test
+	void theAnswerTakesAThirdOfTheRoomLeftByDefaultAndConsumesIt() throws Exception {
+		IGDocumentsSearchService search = searchFinding(10, 3000);
+		ToolsTokenBudget room = new ToolsTokenBudget(30000);
+
+		String answer = tool(search, null).search(query("anthroposophy"), chatWithKnowledgeBases("kb1"), null, room);
+
+		int answerTokens = ITokensCountable.stringsTokensSize(answer);
 		assertTrue(answer.startsWith("10 fragment(s) found:"), answer.substring(0, 40));
-		assertTrue(ITokensCountable.stringsTokensSize(answer) <= InternalKnowledgeBaseSearchToolSource.MAX_RESULT_TOKENS
-				+ 300, "answer of " + ITokensCountable.stringsTokensSize(answer));
+		assertTrue(answerTokens <= 10000, "answer of " + answerTokens);
+		assertTrue(answerTokens > 9000, "the room is used, answer of " + answerTokens);
 		assertTrue(answer.contains("fragment9"), "every document keeps its share");
+		assertEquals(30000 - answerTokens, room.left(), "what it returned is taken out of the room");
+		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(10), eq(20000));
+	}
+
+	@Test
+	void theConfiguredDivisorSizesTheAnswer() throws Exception {
+		IGDocumentsSearchService search = searchFinding(10, 3000);
+
+		String answer = tool(search, configured(6.0d)).search(query("anthroposophy"), chatWithKnowledgeBases("kb1"),
+				null, new ToolsTokenBudget(30000));
+
+		assertTrue(ITokensCountable.stringsTokensSize(answer) <= 5000,
+				"answer of " + ITokensCountable.stringsTokensSize(answer));
+		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(10), eq(10000));
+		assertEquals(InternalKnowledgeBaseSearchToolSource.DEFAULT_ROOM_DIVISOR,
+				tool(search, configured(0d)).roomDivisor(), "a divisor not positive is not used");
+		assertEquals(InternalKnowledgeBaseSearchToolSource.DEFAULT_ROOM_DIVISOR,
+				tool(search, configured(Double.NaN)).roomDivisor());
+		assertEquals(1000, tool(search, configured(0.5d)).maxResultTokens(new ToolsTokenBudget(1000)),
+				"never more than the room");
+	}
+
+	@Test
+	void noRoomSharedBoundsTheAnswerByTheFragmentsAskedOnly() throws Exception {
+		IGDocumentsSearchService search = searchFinding(10, 3000);
+
+		String answer = tool(search, null).search(query("anthroposophy"), chatWithKnowledgeBases("kb1"));
+
+		assertTrue(ITokensCountable.stringsTokensSize(answer) > 10 * ITokensCountable.stringsTokensSize(words(2990, "fragment0")),
+				"the fragments are returned whole");
+		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(10),
+				eq(Integer.MAX_VALUE));
+	}
+
+	@Test
+	void tooLittleRoomRunsNoSearch() throws Exception {
+		IGDocumentsSearchService search = searchFinding(10, 3000);
+		ToolsTokenBudget room = new ToolsTokenBudget(1200);
+
+		assertEquals("No room is left in the context for more contents: answer with the contents already found.",
+				tool(search, null).search(query("anthroposophy"), chatWithKnowledgeBases("kb1"), null, room));
+		verify(search, never()).search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(),
+				anyInt());
+		assertEquals(1200, room.left());
 	}
 
 	@Test
@@ -145,17 +214,17 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
 				.thenReturn(set);
 		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(provider(search),
-				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER);
+				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER, null);
 		ToolsFoundDocuments collector = new ToolsFoundDocuments();
 
-		String answer = tool.search(query("topic"), chatWithKnowledgeBases("kb1"), collector);
+		String answer = tool.search(query("topic"), chatWithKnowledgeBases("kb1"), collector, null);
 
 		assertTrue(answer.startsWith("1 fragment(s) found:"));
 		assertEquals(List.of("doc-a"), collector.getDocuments().stream().map(x -> x.getDocumentCode()).toList());
 
 		// sharing never fails the search
 		when(set.getDocumentItems()).thenReturn(null);
-		assertTrue(tool.search(query("topic"), chatWithKnowledgeBases("kb1"), new ToolsFoundDocuments())
+		assertTrue(tool.search(query("topic"), chatWithKnowledgeBases("kb1"), new ToolsFoundDocuments(), null)
 				.startsWith("1 fragment(s) found:"));
 	}
 
@@ -164,7 +233,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		IGKnowledgebaseVisibilityService visibility = mock(IGKnowledgebaseVisibilityService.class);
 		when(visibility.allVisibleKnowledgebases()).thenReturn(List.of());
 		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(
-				provider(mock(IGDocumentsSearchService.class)), provider(visibility), mock(IGSecurityService.class), TEXT_RENDERER);
+				provider(mock(IGDocumentsSearchService.class)), provider(visibility), mock(IGSecurityService.class), TEXT_RENDERER, null);
 
 		assertEquals("No search done: the query is empty.", tool.search(query(" "), null));
 		assertEquals("No internal knowledge base is available to the user.", tool.search(query("topic"), null));
@@ -176,7 +245,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
 				.thenThrow(new IllegalStateException("vector store down"));
 		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(provider(search),
-				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER);
+				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER, null);
 
 		assertEquals("The internal knowledge base search failed, go on without it.",
 				tool.search(query("topic"), chatWithKnowledgeBases("kb1")));
@@ -186,7 +255,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 	void theToolIsDeclaredForTheModels() {
 		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(
 				provider(mock(IGDocumentsSearchService.class)), provider(mock(IGKnowledgebaseVisibilityService.class)),
-				mock(IGSecurityService.class), TEXT_RENDERER);
+				mock(IGSecurityService.class), TEXT_RENDERER, null);
 
 		assertEquals(1, tool.getToolCallbacks().size());
 		assertEquals(InternalKnowledgeBaseSearchToolSource.SEARCH_KNOWLEDGE_BASE_TOOL,
