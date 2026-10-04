@@ -21,11 +21,13 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
+import org.springframework.ai.util.json.JsonParser;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
@@ -67,7 +69,9 @@ public class SearchToolContentPipeline {
 	static final int DEFAULT_TOP_K = 8;
 	static final int MAX_TOP_K = 30;
 	static final int DEFAULT_MAX_TOKENS = 4000;
-	static final int MIN_MAX_TOKENS = 500;
+	static final int MIN_MAX_TOKENS = ToolsTokenBudget.MIN_USEFUL_TOKENS;
+	/** The fittings tried to bring a whole result in its room. */
+	static final int MAX_ROOM_FIT_ATTEMPTS = 3;
 	static final int MAX_MAX_TOKENS = 16000;
 	/** Longest search objective handed to the ranker, in tokens. */
 	static final int MAX_OBJECTIVE_TOKENS = 300;
@@ -226,7 +230,24 @@ public class SearchToolContentPipeline {
 			final List<Document> chunks = SearchResultsChunker.chunkToDocuments(chunkingService.getObject(), fresh,
 					chunkingParams, maxNumChunks, toolName, documentsParallelism());
 			final RankingOutcome ranking = rank(chunks, objective, topK, toolName);
-			final SearchToolResult result = fit(ranking.documents(), fresh, maxTokens, toolName);
+			SearchToolResult result = fit(ranking.documents(), fresh, maxTokens, toolName);
+			if (callBudget != null) {
+				// the room holds the result as the model reads it (its JSON): the contents are
+				// fitted again by what their titles, sources and the JSON framing add
+				int contentsTokens = maxTokens;
+				for (int attempt = 0; attempt < MAX_ROOM_FIT_ATTEMPTS; attempt++) {
+					final int overshoot = ITokensCountable.stringsTokensSize(JsonParser.toJson(result)) - maxTokens;
+					if (overshoot <= 0 || contentsTokens - overshoot <= 0) {
+						break;
+					}
+					contentsTokens -= overshoot;
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Tool:" + toolName + " result over its room by " + overshoot
+								+ " (tok), contents fitted again in " + contentsTokens + " (tok)");
+					}
+					result = fit(ranking.documents(), fresh, contentsTokens, toolName);
+				}
+			}
 			result.setRanked(ranking.ranked());
 			result.setDocumentsFound(found.size());
 			result.setDocumentsAlreadyReturned(skipped);
@@ -250,9 +271,6 @@ public class SearchToolContentPipeline {
 			}
 			requestRegistry.markReturned(requestId, returnedCodes);
 			shareFoundDocuments(toolContext, fresh, returnedCodes, toolName);
-			if (callBudget != null) {
-				callBudget.consume(returnedTokens(result));
-			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End run(...) tool:" + toolName + " status:" + result.getStatus() + " returns "
 						+ result.getFragments().size() + " fragment(s) from " + returnedCodes.size()
@@ -324,15 +342,6 @@ public class SearchToolContentPipeline {
 			return new RankingOutcome(limit(chunks, topK), false,
 					"Ranking failed: the contents are in search order, not ranked.");
 		}
-	}
-
-	/** The tokens a result takes in the model call: its contents and what describes them. */
-	static int returnedTokens(SearchToolResult result) {
-		int tokens = result.getTokens();
-		for (Fragment fragment : result.getFragments()) {
-			tokens += ITokensCountable.stringsTokensSize(fragment.getTitle(), fragment.getSource(), fragment.getChunk());
-		}
-		return tokens;
 	}
 
 	/**

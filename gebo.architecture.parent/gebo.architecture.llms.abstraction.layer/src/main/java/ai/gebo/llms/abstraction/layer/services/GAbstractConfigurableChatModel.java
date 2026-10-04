@@ -50,6 +50,7 @@ import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -123,6 +124,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 * ones when the configuration enables them.
 	 */
 	protected List<ToolCallback> additionalTools = List.of();
+	/**
+	 * The share of what a model call's messages and tools' definitions leave of the
+	 * context that its tools' results may take.
+	 */
+	public static final double TOOLS_ROOM_SHARE = 2.0d / 3.0d;
+	/** The models already warned of having no known context length, warned once. */
+	private static final java.util.Set<String> UNKNOWN_CONTEXT_LENGTH_WARNED = java.util.concurrent.ConcurrentHashMap
+			.newKeySet();
 
 	protected abstract IGConfigurableChatModel cloneMeWithInjection();
 
@@ -332,6 +341,15 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 */
 	@Override
 	public int getContextLength() {
+		final Integer contextLength = knownContextLength();
+		return contextLength != null ? contextLength : 8192;
+	}
+
+	/**
+	 * The context length the configuration or the model metadata give (less the
+	 * configured maximum generated tokens), null when neither gives one.
+	 */
+	protected Integer knownContextLength() {
 		Integer contextLength = null;
 		if (getConfig() != null) {
 			contextLength = getConfig().getContextLength();
@@ -361,9 +379,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				contextLength = realContextWindow;
 			}
 		}
-		if (contextLength == null || contextLength.intValue() == 0)
-			contextLength = 8192;
-		return contextLength;
+		return contextLength == null || contextLength.intValue() <= 0 ? null : contextLength;
 	}
 
 	/**
@@ -411,15 +427,18 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 		ChatClientRequestSpec reqObject = client.prompt();
 
-		if (prompt.getToolsCalling() == null || prompt.getToolsCalling() == ContextContentRequired.REQUIRED) {
-			reqObject = reqObject.toolCallbacks(wrapTools(runAs, chatContext.getToolCallListener()));
-		} else {
-			reqObject = reqObject.toolCallbacks(List.of());
-		}
+		final List<ToolCallback> tools = prompt.getToolsCalling() == null
+				|| prompt.getToolsCalling() == ContextContentRequired.REQUIRED
+						? wrapTools(runAs, chatContext.getToolCallListener())
+						: List.of();
+		reqObject = reqObject.toolCallbacks(tools);
 		// chat histroy in user, assistant format
 		reqObject = reqObject.messages(messages);
 		// tools call environment
 		Map<String, Object> toolContext = chatContext.getToolsContext();
+		if (!tools.isEmpty()) {
+			toolContext = withToolsRoom(toolContext, messages, tools, LOGGER.isDebugEnabled() ? tokens : -1);
+		}
 		if (toolContext != null) {
 			reqObject = reqObject.toolContext(toolContext);
 		}
@@ -427,6 +446,58 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			LOGGER.debug("End prepareCall(" + prompt.getPromptUse() + ", ...,...)");
 		}
 		return new RequestSpec(reqObject, tokens, config != null ? config.getCode() : "<<empty model>>");
+	}
+
+	/**
+	 * The tools context of a model call with tools, carrying the room its context leaves
+	 * to the tools' results (see {@link ToolsTokenBudget}): two thirds ({@link #TOOLS_ROOM_SHARE})
+	 * of what the messages and the tools' definitions leave of the context length, the
+	 * rest left to the answer, the tool calls' arguments and the model's messages
+	 * between the tool rounds. A budget an agent shares through the request context is
+	 * capped to it, never replaced, so the smaller of the two applies. Without a known
+	 * context length no room is set (the 8192 of {@link #getContextLength()} is a guess):
+	 * the tools are left to their own sizes, as before.
+	 *
+	 * @param messagesTokens the tokens of the messages when already counted, -1 when not
+	 * @return a copy of the given tools context (never the caller's map)
+	 */
+	protected Map<String, Object> withToolsRoom(Map<String, Object> toolsContext, List<Message> messages,
+			List<ToolCallback> tools, long messagesTokens) {
+		if (knownContextLength() == null) {
+			if (UNKNOWN_CONTEXT_LENGTH_WARNED.add(String.valueOf(getCode()))) {
+				LOGGER.warn("Chat model " + getCode() + " has no known context length: its tools' results are not "
+						+ "bounded by the room left in its context");
+			}
+			return toolsContext;
+		}
+		final int contextLength = getContextLength();
+		long used = messagesTokens;
+		if (used < 0) {
+			used = 0;
+			for (Message message : messages) {
+				used += ITokensCountable.stringsTokensSize(message.getText());
+			}
+		}
+		long definitions = 0;
+		for (ToolCallback tool : tools) {
+			definitions += ITokensCountable.stringsTokensSize(tool.getToolDefinition().name(),
+					tool.getToolDefinition().description(), tool.getToolDefinition().inputSchema());
+		}
+		final int room = (int) Math.max(0,
+				Math.min(Integer.MAX_VALUE, (long) ((contextLength - used - definitions) * TOOLS_ROOM_SHARE)));
+		final Map<String, Object> withRoom = toolsContext != null ? new HashMap<>(toolsContext) : new HashMap<>();
+		final ToolsTokenBudget shared = ToolsTokenBudget.from(withRoom);
+		if (shared != null) {
+			shared.capTo(room);
+		} else {
+			withRoom.put(ToolsTokenBudget.TOOLS_CONTEXT_KEY, new ToolsTokenBudget(room));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("withToolsRoom(...) model:" + getCode() + " context:" + contextLength + " messages:" + used
+					+ " tools definitions:" + definitions + " (tok) room for " + tools.size() + " tool(s) results:"
+					+ room + " (tok)" + (shared != null ? " capping the shared budget, now " + shared.left() : ""));
+		}
+		return withRoom;
 	}
 
 	protected List<Message> createCompleteHistory(IChatRequestContext chatContext) {

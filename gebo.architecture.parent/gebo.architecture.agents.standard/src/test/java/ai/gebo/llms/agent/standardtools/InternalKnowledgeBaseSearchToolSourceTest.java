@@ -36,6 +36,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource.KnowledgeBaseSearchParam;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
@@ -233,7 +234,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		assertTrue(answerTokens <= 10000, "answer of " + answerTokens);
 		assertTrue(answerTokens > 9000, "the room is used, answer of " + answerTokens);
 		assertTrue(answer.contains("fragment9"), "every document keeps its share");
-		assertEquals(30000 - answerTokens, room.left(), "what it returned is taken out of the room");
+		assertEquals(30000, room.left(), "the tool wrapper takes the answer out of the room, not the tool");
 		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(10), eq(20000));
 	}
 

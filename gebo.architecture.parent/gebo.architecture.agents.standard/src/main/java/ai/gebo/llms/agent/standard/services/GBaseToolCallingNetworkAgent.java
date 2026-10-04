@@ -32,7 +32,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
-import ai.gebo.llms.agent.standardtools.ToolsTokenBudget;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import lombok.Getter;
 
 /**
@@ -131,8 +131,9 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 
 		// the tools' results pile up in this model call: they may take what the agent's
 		// budget leaves after its placeholders
-		final IChatRequestContext callContext = ToolsTokenBudget.sharedThrough(agentContext,
-				ToolsTokenBudget.leftForTools(tokenBudget, params));
+		final IChatRequestContext callContext = agentContext != null
+				? agentContext.withToolsRoom(ToolsTokenBudget.leftForTools(tokenBudget, params))
+				: null;
 		OutputType output = null;
 		if (String.class.isAssignableFrom(getOutputType())) {
 			if (LOGGER.isDebugEnabled()) {

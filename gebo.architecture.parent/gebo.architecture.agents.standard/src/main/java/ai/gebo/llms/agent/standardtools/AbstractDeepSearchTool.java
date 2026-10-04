@@ -24,11 +24,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.util.json.JsonParser;
 import org.springframework.core.ResolvableType;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
@@ -63,6 +65,8 @@ public abstract class AbstractDeepSearchTool<Q> {
 	public static final int MAX_DEEP_SEARCHES_PER_REQUEST = 2;
 	/** Most searches run by a deep search. */
 	static final int MAX_QUERIES = 5;
+	/** The shortest final analysis asked for, whatever the room. */
+	static final int MIN_ANALYSIS_WORDS = 100;
 	/** Longest time a deep search analysis is waited for. */
 	static final Duration DEEP_SEARCH_TIMEOUT = Duration.ofMinutes(10);
 	private static final String TRUNCATION_MARK = " [...]";
@@ -146,6 +150,16 @@ public abstract class AbstractDeepSearchTool<Q> {
 			LOGGER.trace(String.valueOf(param));
 			LOGGER.trace("</DEEP_SEARCH_TOOL_PARAM>");
 		}
+		// an analysis takes minutes: none is run when its model call has no room for it,
+		// and it does not count as one of the request's deep searches
+		if (ToolsTokenBudget.noUsefulRoom(toolContext)) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Tool:" + toolName + " not run: " + ToolsTokenBudget.from(toolContext).left()
+						+ " (tok) left in its model call's context");
+			}
+			return DeepSearchToolResult.of(Status.NO_RESULTS,
+					"No room is left in the context for more contents: answer with the contents already found.");
+		}
 		final int calls = support.countDeepSearch(requestId);
 		if (calls > MAX_DEEP_SEARCHES_PER_REQUEST) {
 			if (LOGGER.isDebugEnabled()) {
@@ -193,10 +207,13 @@ public abstract class AbstractDeepSearchTool<Q> {
 						+ deliverable + " with chatModel:" + chatModel.getCode() + " serviceModel:"
 						+ serviceModel.getCode());
 			}
+			// the analysis is asked to fit the room its model call leaves (see lengthTarget)
+			final int roomForAnalysis = ToolsTokenBudget.grantFor(toolContext, support.maxAnalysisTokens());
 			final String analysis = support.analysis()
 					.analyze(Flux.fromIterable(fragments), analysisContext(question, requestId),
 							ReactiveIdentityUtil.create(), deliverable,
-							TOOL_COMPLETENESS_NOTE + lengthTarget(param.getDepth()), chatModel, serviceModel,
+							TOOL_COMPLETENESS_NOTE + lengthTarget(param.getDepth(), roomForAnalysis), chatModel,
+							serviceModel,
 							discardedFragmentIds, ToolsProgress.from(toolContext))
 					.reduce(new StringBuilder(), StringBuilder::append).map(StringBuilder::toString)
 					.block(DEEP_SEARCH_TIMEOUT);
@@ -214,11 +231,14 @@ public abstract class AbstractDeepSearchTool<Q> {
 			final List<FoundDocument> reliedOn = distinctByDocument(foundByFragmentId.values());
 			final DeepSearchToolResult result = new DeepSearchToolResult();
 			result.setFragmentsAnalysed(fragments.size());
-			// the length is asked by the depth (lengthTarget): this only stops a runaway analysis
-			fit(result, analysis, support.maxAnalysisTokens());
 			for (FoundDocument found : reliedOn) {
 				result.getSources().add(found.source());
 			}
+			// the length is asked by the depth and the room (lengthTarget): this only stops a
+			// runaway analysis, the sources listed with it taking their part of the room left
+			final int sourcesTokens = ITokensCountable.stringsTokensSize(JsonParser.toJson(result.getSources()));
+			fit(result, analysis,
+					Math.max(0, ToolsTokenBudget.grantFor(toolContext, support.maxAnalysisTokens()) - sourcesTokens));
 			// the agent sharing a collector gives these documents as its answer's ones
 			final ToolsFoundDocuments collector = ToolsFoundDocuments.from(toolContext);
 			if (collector != null) {
@@ -332,6 +352,20 @@ public abstract class AbstractDeepSearchTool<Q> {
 	 * to size, instead of the analysis being cut and losing its conclusions.
 	 */
 	static String lengthTarget(Depth depth) {
+		return lengthTarget(depth, Integer.MAX_VALUE);
+	}
+
+	/**
+	 * The same, never longer than what {@code maxTokens} can hold (about three words in
+	 * four tokens), so an analysis written for a small room is not cut afterwards.
+	 */
+	static String lengthTarget(Depth depth, int maxTokens) {
+		final int words = Math.min(depthWords(depth), Math.max(MIN_ANALYSIS_WORDS, (int) (maxTokens * 3l / 4)));
+		return " Keep the final analysis within about " + words + " words.";
+	}
+
+	/** The final analysis length a depth asks for, in words. */
+	static int depthWords(Depth depth) {
 		final int words;
 		if (depth == Depth.FOCUSED) {
 			words = 400;
@@ -340,7 +374,7 @@ public abstract class AbstractDeepSearchTool<Q> {
 		} else {
 			words = 1000;
 		}
-		return " Keep the final analysis within about " + words + " words.";
+		return words;
 	}
 
 	/** Puts the analysis in the result, cut to {@code maxTokens} when longer. */

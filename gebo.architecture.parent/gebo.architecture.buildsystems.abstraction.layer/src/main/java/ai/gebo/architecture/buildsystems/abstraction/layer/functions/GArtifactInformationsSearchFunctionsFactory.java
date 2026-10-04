@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.util.json.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
@@ -27,6 +28,7 @@ import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFun
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.knlowledgebase.model.contents.GDependencyTree;
@@ -104,7 +106,7 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
             } catch (Throwable th) {
                 LOGGER.error("Error in " + GET_ARTIFACTS_INFORMATION, th);
             }
-            return alist;
+            return inRoom(alist, c, GET_ARTIFACTS_INFORMATION);
         };
         return ToolCallbackDeclarationUtil.declare(thisFunction, GET_ARTIFACTS_INFORMATION,
                 GET_ARTIFACTS_INFORMATION_DESCRIPTION, GSoftwareArtifactSearchParameters.class, ArtifactsList.class);
@@ -131,7 +133,7 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
             } catch (Throwable th) {
                 LOGGER.error("Error in " + GET_ALL_SOFTWARE_ARTIFACTS_LIST, th);
             }
-            return out;
+            return inRoom(out, c, GET_ALL_SOFTWARE_ARTIFACTS_LIST);
         };
         return ToolCallbackDeclarationUtil.declare(thisFunction, GET_ALL_SOFTWARE_ARTIFACTS_LIST,
                 GET_ALL_SOFTWARE_ARTIFACTS_LIST_DESCRIPTION, GSoftwareArtifactSearchParameters.class,
@@ -159,7 +161,7 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
             } catch (Throwable th) {
                 LOGGER.error("Error in " + GET_ARTIFACTS_DEPENDING_FROM, th);
             }
-            return out;
+            return inRoom(out, c, GET_ARTIFACTS_DEPENDING_FROM);
         };
         return ToolCallbackDeclarationUtil.declare(thisFunction, GET_ARTIFACTS_DEPENDING_FROM,
                 GET_ARTIFACTS_DEPENDING_FROM_DESCRIPTION, GSoftwareArtifactSearchParameters.class, ArtifactsList.class);
@@ -196,6 +198,25 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
      * Retrieves all tool callbacks provided by this factory.
      * @return a list of tool callbacks.
      */
+    /**
+     * The artifacts found that fit the room the model call has left to its tools'
+     * results (see {@link ToolsTokenBudget}), whole and in order; all of them when the
+     * model call has no room set.
+     */
+    static ArtifactsList inRoom(ArtifactsList found, ToolContext context, String toolName) {
+        final ToolsTokenBudget budget = ToolsTokenBudget.from(context);
+        if (budget == null || found.isEmpty()) {
+            return found;
+        }
+        final ArtifactsList kept = new ArtifactsList();
+        kept.addAll(ToolsTokenBudget.fitItems(found, budget.left(), JsonParser::toJson));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(toolName + " returns " + kept.size() + " of " + found.size() + " artifact(s) in a room of "
+                    + budget.left() + " (tok)");
+        }
+        return kept;
+    }
+
     @Override
     public List<ToolCallback> getToolCallbacks() {
         List<ToolCallback> functions = new ArrayList<ToolCallback>();

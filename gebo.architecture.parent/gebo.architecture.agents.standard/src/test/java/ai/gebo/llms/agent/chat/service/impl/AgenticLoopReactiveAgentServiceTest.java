@@ -38,7 +38,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.agent.standardtools.ToolsFoundDocuments;
-import ai.gebo.llms.agent.standardtools.ToolsTokenBudget;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.ControlMarkerStripper;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.LoopIteration;
 import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;

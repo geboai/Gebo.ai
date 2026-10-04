@@ -20,6 +20,7 @@ import java.util.function.BiFunction;
 
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.util.json.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.abstraction.layer.functions.model.CurrentUserTeamsMembersGroupsFilter;
 import ai.gebo.llms.abstraction.layer.functions.model.RestrictedUserInfos;
 import ai.gebo.llms.abstraction.layer.functions.model.VoidObject;
@@ -150,7 +152,15 @@ public class UsersFunctions implements IGToolCallbackSource {
 			return RestrictedUserInfos.of(x);
 		}).toList();
 		out.addAll(list);
-		return out;
+		// the colleagues that fit the room the model call has left to its tools' results,
+		// whole and in order (see ToolsTokenBudget); all of them without a room
+		final ToolsTokenBudget budget = ToolsTokenBudget.from(c);
+		if (budget == null || out.isEmpty()) {
+			return out;
+		}
+		final UsersList kept = new UsersList();
+		kept.addAll(ToolsTokenBudget.fitItems(out, budget.left(), JsonParser::toJson));
+		return kept;
 	}
 
 	/**

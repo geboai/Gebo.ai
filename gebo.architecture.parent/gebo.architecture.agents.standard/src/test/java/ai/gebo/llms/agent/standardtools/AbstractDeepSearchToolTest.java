@@ -43,6 +43,7 @@ import org.springframework.ai.tool.ToolCallback;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
@@ -387,6 +388,38 @@ class AbstractDeepSearchToolTest {
 		assertEquals(DeliverableIntent.SUMMARY, AbstractDeepSearchTool.deliverable(Depth.BROAD));
 		assertEquals(DeliverableIntent.SUMMARY, AbstractDeepSearchTool.deliverable(null));
 		assertEquals(DeliverableIntent.ANALISYS, AbstractDeepSearchTool.deliverable(Depth.EXHAUSTIVE));
+	}
+
+	@Test
+	void noAnalysisRunsWhenItsModelCallHasNoUsefulRoom() {
+		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a")));
+		ToolContext full = new ToolContext(Map.of(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, "r1",
+				ToolsTokenBudget.TOOLS_CONTEXT_KEY, new ToolsTokenBudget(ToolsTokenBudget.MIN_USEFUL_TOKENS - 1)));
+
+		DeepSearchToolResult result = tool.deepSearch(param("question"), full);
+
+		assertEquals(Status.NO_RESULTS, result.getStatus());
+		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any());
+		// not run, it is not one of the request's deep searches
+		for (int i = 0; i < AbstractDeepSearchTool.MAX_DEEP_SEARCHES_PER_REQUEST; i++) {
+			assertEquals(Status.OK, tool.deepSearch(param("question " + i), request("r1")).getStatus());
+		}
+	}
+
+	@Test
+	void theAnalysisIsAskedToFitItsRoomAndItsSourcesTakeTheirPart() {
+		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a")));
+		ToolContext roomy = new ToolContext(Map.of(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, "r1",
+				ToolsTokenBudget.TOOLS_CONTEXT_KEY, new ToolsTokenBudget(800)));
+
+		tool.deepSearch(param("question"), roomy);
+
+		// 800 tokens hold about 600 words, less than the 1000 a BROAD depth asks
+		verify(analysis).analyze(any(), any(), any(), any(), argThat(note -> note.contains("600 words")), any(),
+				any(), any(), any());
+		assertTrue(AbstractDeepSearchTool.lengthTarget(Depth.FOCUSED, 100_000).contains("400 words"));
+		assertTrue(AbstractDeepSearchTool.lengthTarget(Depth.EXHAUSTIVE, 10).contains(
+				AbstractDeepSearchTool.MIN_ANALYSIS_WORDS + " words"), "never shorter than the minimum");
 	}
 
 	@Test

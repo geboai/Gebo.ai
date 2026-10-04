@@ -35,6 +35,7 @@ import org.springframework.beans.factory.ObjectProvider;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
@@ -423,7 +424,9 @@ class SearchToolContentPipelineTest {
 
 		assertTrue(result.getTokens() <= 600,
 				"returned " + result.getTokens() + " tokens");
-		assertTrue(budget.left() < 600, "what was returned is taken out of the model call's room");
+		final int asRead = ITokensCountable.stringsTokensSize(org.springframework.ai.util.json.JsonParser.toJson(result));
+		assertTrue(asRead <= 600, "the whole result as the model reads it fits the room: " + asRead);
+		assertEquals(600, budget.left(), "the tool wrapper takes what was returned out of the room, not the pipeline");
 	}
 
 	@Test

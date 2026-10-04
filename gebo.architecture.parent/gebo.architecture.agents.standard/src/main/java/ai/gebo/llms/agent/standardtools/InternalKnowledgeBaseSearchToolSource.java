@@ -44,6 +44,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
@@ -63,7 +64,7 @@ import lombok.Data;
  * {@link ToolsTokenBudget}), the answer takes at most that room divided by
  * {@code ai.gebo.agents.standard.knowledge-base-search-room-divisor}
  * ({@value #DEFAULT_ROOM_DIVISOR} by default), shared equally among the documents
- * found, and what it returns is taken out of the room. A model call sharing no room
+ * found; the tool wrapper takes what it returns out of the room. A model call sharing no room
  * leaves the answer bounded by the fragments asked only (topK).
  * <p>
  * With a ranker configured ({@link IGRankerService#isRankerConfigured()}), twice the
@@ -214,7 +215,7 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			return "No search done: the query is empty.";
 		}
 		final int maxTokens = maxResultTokens(callBudget);
-		if (callBudget != null && maxTokens < SearchToolContentPipeline.MIN_MAX_TOKENS) {
+		if (callBudget != null && maxTokens < ToolsTokenBudget.MIN_USEFUL_TOKENS) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("search(...) knowledge base tool not run: " + maxTokens + " (tok) of room for its answer");
 			}
@@ -309,10 +310,8 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 					fragmentsRoom -= Math.max(overshoot, 0);
 				}
 			}
+			// the answer is taken out of the room by the tool wrapper (RunAsToolCallback)
 			final int answerTokens = ITokensCountable.stringsTokensSize(answer);
-			if (callBudget != null) {
-				callBudget.consume(answerTokens);
-			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End search(...) knowledge base tool found " + documents.size() + " fragment(s), answer of "
 						+ answer.length() + " character(s) " + answerTokens + " (tok)");
