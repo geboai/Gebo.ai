@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -716,6 +717,44 @@ public class BaseLLMSInvokingService {
 		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 
 		String result = chatModel.textResponse(prompt, params, context);
+		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
+		if (result != null && skipThinkingMarkup) {
+			result = ClientChatCallUtil.removeThinking(result);
+		}
+		return result;
+	}
+
+	/**
+	 * The same call as
+	 * {@link #callLLMWithDocumentsAndConsolidation(IGConfigurableChatModel, GPromptTemplateConfig, IChatRequestContext, Object, String, Map)},
+	 * the answer streamed and joined: its text arrives while the model writes it, so a
+	 * long answer is not cut by the read timeout of a call that waits for the whole
+	 * answer before receiving anything (and then retried from the start). Blocks the
+	 * calling thread until the answer is complete: call it from a thread that may block.
+	 */
+	protected String streamLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
+			Map<String, Object> additionalParams) throws LLMConfigException {
+		Map<String, Object> params = new HashMap<>(additionalParams);
+		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+		final long start = System.currentTimeMillis();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin streamLLMWithDocumentsAndConsolidation(...) prompt:" + prompt.getPromptUse() + " model:"
+					+ chatModel.getCode());
+		}
+		final AtomicInteger pieces = new AtomicInteger(0);
+		@SuppressWarnings("unchecked")
+		final Flux<String> stream = chatModel.streamStringResponse(prompt, params, context);
+		String result = stream.filter(piece -> piece != null).doOnNext(piece -> pieces.incrementAndGet())
+				.reduce(new StringBuilder(), (text, piece) -> text.append(piece)).map(StringBuilder::toString)
+				.block();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End streamLLMWithDocumentsAndConsolidation(...) prompt:" + prompt.getPromptUse() + " model:"
+					+ chatModel.getCode() + " " + pieces.get() + " streamed piece(s), "
+					+ (result != null ? result.length() : 0) + " character(s) in "
+					+ (System.currentTimeMillis() - start) + " ms");
+		}
 		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
 		if (result != null && skipThinkingMarkup) {
 			result = ClientChatCallUtil.removeThinking(result);

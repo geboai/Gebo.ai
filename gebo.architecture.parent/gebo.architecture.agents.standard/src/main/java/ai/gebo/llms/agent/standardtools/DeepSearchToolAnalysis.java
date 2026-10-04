@@ -145,7 +145,8 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 							+ DeepSearchBatchTrace.fragmentSources(documentsList));
 				}
 				final long start = System.currentTimeMillis();
-				final String intermediateAnalisys = callLLMWithDocumentsAndConsolidation(serviceModel,
+				// streamed: a long analysis keeps arriving instead of tripping the read timeout
+				final String intermediateAnalisys = streamLLMWithDocumentsAndConsolidation(serviceModel,
 						cumulativeAnalisysPrompt, context, documentsList, initialValue, params);
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<DEEP_SEARCH_TOOL_PARTIAL_ANALYSIS>");

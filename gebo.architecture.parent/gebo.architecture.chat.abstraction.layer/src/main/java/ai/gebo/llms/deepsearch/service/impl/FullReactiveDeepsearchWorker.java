@@ -671,7 +671,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					LOGGER.trace("Partial analysis fragments: " + DeepSearchBatchTrace.fragmentSources(documentsList));
 				}
 				final long start = System.currentTimeMillis();
-				final String intermediateAnalisys = callLLMWithDocumentsAndConsolidation(serviceModel,
+				// streamed: a long analysis keeps arriving instead of tripping the read timeout
+				final String intermediateAnalisys = streamLLMWithDocumentsAndConsolidation(serviceModel,
 						cumulativeAnalisysPrompt, context, documentsList, initialValue, params);
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<DEEP_SEARCH_PARTIAL_ANALYSIS>");

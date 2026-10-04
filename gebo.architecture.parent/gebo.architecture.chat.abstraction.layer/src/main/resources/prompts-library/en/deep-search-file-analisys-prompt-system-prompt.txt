@@ -97,14 +97,21 @@ TASK:
 
 OUTPUT THE IRRELEVANT FRAGMENTS LIST:
 
-Cumulate the fragmentId of each IRRILEVANT document fragment, output them in a separate line with initial IRRILEVANT= followed with a 
-comma (,) separated list of each irrelevant fragmentId.
-IMPORTANT: use the field name IRRILEVANT exactly as is,  in uppercase, followed by the fragmentId comma separated list at the beginning of the  last line without any additional informations or translations or comment.
+Each document fragment of the batch begins with a line "fragmentId: <its id>".
+After the extracted content, output on its own line the field IRRILEVANT= followed by the comma (,) separated
+list of the fragmentId of the irrelevant fragments of this batch, in this form:
+
+IRRILEVANT=<comma separated list of the fragmentId of the irrelevant fragments>
+
+- Use the field name IRRILEVANT exactly as is, in uppercase, followed by the equal sign, without any additional informations or translations or comment.
+- Write only the id value that follows "fragmentId: " in the line of its fragment, copied exactly, without the "fragmentId:" label.
+- Report only fragmentId values present in this batch. Never number, generate or invent identifiers.
+- List each fragmentId at most once.
+- If no fragment of this batch is irrelevant, output the field with an empty list:
+
+IRRILEVANT=
+
 That row will be used to remove irrilevant document fragments from the user interface.
-
-Example:
-
-IRRILEVANT=fragmentId1,fragmentId2 
 
 
 SATISFACTION EVALUATION:
