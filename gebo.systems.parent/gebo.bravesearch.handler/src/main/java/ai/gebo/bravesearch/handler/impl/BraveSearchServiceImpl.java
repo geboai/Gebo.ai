@@ -140,7 +140,7 @@ public class BraveSearchServiceImpl extends AbstractWebSearchServiceImpl<BraveNa
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing brave searches", e);
 		}
-		return resultsList;
+		return withSizes(resultsList);
 	}
 
 	/** Native path: LLM chose the queries AND the Brave options. */
@@ -163,7 +163,7 @@ public class BraveSearchServiceImpl extends AbstractWebSearchServiceImpl<BraveNa
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing brave searches", e);
 		}
-		return resultsList;
+		return withSizes(resultsList);
 	}
 
 	@Override

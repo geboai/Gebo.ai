@@ -22,7 +22,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import ai.gebo.architecture.search.config.WebResultSizeProbeConfig;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -69,6 +71,30 @@ public abstract class AbstractWebSearchServiceImpl<N extends INativeQueryObject>
 
 	protected int SocketTimeout = 20000;
 	protected int ConnectTimeout = 10000;
+
+	/** The size probe settings; the defaults when none is configured. */
+	private WebResultSizeProbeConfig sizeProbeConfig = null;
+
+	@Autowired(required = false)
+	public void setSizeProbeConfig(WebResultSizeProbeConfig sizeProbeConfig) {
+		this.sizeProbeConfig = sizeProbeConfig;
+	}
+
+	/**
+	 * The results of a search, their size filled where their server declares it (see
+	 * {@link WebResultSizeProbe}): best effort, the results are returned whatever the
+	 * probe gives. Every web searcher returns its results through it.
+	 */
+	protected List<SearchResult> withSizes(List<SearchResult> results) {
+		try {
+			new WebResultSizeProbe(sizeProbeConfig).fillSizes(results);
+		} catch (Throwable th) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("withSizes(...) search:" + getId() + " results returned without sizes: " + th);
+			}
+		}
+		return results;
+	}
 
 	@Override
 	public String getDescription() {

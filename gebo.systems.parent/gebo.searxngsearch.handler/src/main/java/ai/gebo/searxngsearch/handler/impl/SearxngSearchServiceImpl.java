@@ -150,7 +150,7 @@ public class SearxngSearchServiceImpl extends AbstractWebSearchServiceImpl<Searx
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing searxng searches", e);
 		}
-		return resultsList;
+		return withSizes(resultsList);
 	}
 
 	/** Native path: LLM chose the queries AND the SearXNG options. */
@@ -174,7 +174,7 @@ public class SearxngSearchServiceImpl extends AbstractWebSearchServiceImpl<Searx
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing searxng searches", e);
 		}
-		return resultsList;
+		return withSizes(resultsList);
 	}
 
 	@Override

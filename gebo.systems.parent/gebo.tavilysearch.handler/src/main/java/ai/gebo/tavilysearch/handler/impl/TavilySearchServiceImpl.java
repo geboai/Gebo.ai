@@ -140,7 +140,7 @@ public class TavilySearchServiceImpl extends AbstractWebSearchServiceImpl<Tavily
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing tavily searches", e);
 		}
-		return resultsList;
+		return withSizes(resultsList);
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class TavilySearchServiceImpl extends AbstractWebSearchServiceImpl<Tavily
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing tavily searches", e);
 		}
-		return resultsList;
+		return withSizes(resultsList);
 	}
 
 	@Override

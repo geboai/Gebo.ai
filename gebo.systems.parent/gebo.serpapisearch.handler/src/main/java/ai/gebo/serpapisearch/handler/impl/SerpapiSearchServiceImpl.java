@@ -140,7 +140,7 @@ public class SerpapiSearchServiceImpl extends AbstractWebSearchServiceImpl<Serpa
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing serpapi searches", e);
 		}
-		return resultsList;
+		return withSizes(resultsList);
 	}
 
 	/** Native path: LLM chose the queries AND the SerpApi options. */
@@ -163,7 +163,7 @@ public class SerpapiSearchServiceImpl extends AbstractWebSearchServiceImpl<Serpa
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing serpapi searches", e);
 		}
-		return resultsList;
+		return withSizes(resultsList);
 	}
 
 	@Override

@@ -153,7 +153,7 @@ public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl<WebSea
 						+ result.getResultReference().getTitle());
 			}
 		}
-		return out;
+		return withSizes(out);
 
 	}
 
