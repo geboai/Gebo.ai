@@ -38,6 +38,7 @@ import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.FoldOutcome;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.RollingFold;
 import ai.gebo.llms.deepsearch.service.DeepSearchVerdict;
+import ai.gebo.llms.deepsearch.service.impl.DeepSearchBatchTrace;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.GenerativeFunction;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LastWork;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.TokensLimitCompute;
@@ -136,7 +137,12 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 				Map<String, Object> params = new HashMap<>(sharedParams);
 				params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
 				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Deep search tool partial analysis of " + documentsList.size() + " fragment(s)");
+					LOGGER.debug("Deep search tool partial analysis of " + documentsList.size() + " fragment(s) batch: "
+							+ DeepSearchBatchTrace.composition(documentsList));
+				}
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace("Deep search tool partial analysis fragments: "
+							+ DeepSearchBatchTrace.fragmentSources(documentsList));
 				}
 				final long start = System.currentTimeMillis();
 				final String intermediateAnalisys = callLLMWithDocumentsAndConsolidation(serviceModel,
@@ -149,6 +155,13 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 				final int discardedBefore = discardedFragmentIds.size();
 				final String cleaned = cumulateDiscardedFragmentsAndCleanOutput(intermediateAnalisys,
 						discardedFragmentIds);
+				final String runaway = DeepSearchBatchTrace.runawayReport(intermediateAnalisys,
+						IRRELEVANT_FRAGMENT_MARKER, documentsList);
+				if (runaway != null) {
+					LOGGER.warn("Deep search tool partial analysis ran away in " + (System.currentTimeMillis() - start)
+							+ " ms, " + (intermediateAnalisys != null ? intermediateAnalisys.length() : 0)
+							+ " character(s): " + runaway + "on batch: " + DeepSearchBatchTrace.composition(documentsList));
+				}
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Deep search tool partial analysis of " + documentsList.size() + " fragment(s) done in "
 							+ (System.currentTimeMillis() - start) + " ms: "

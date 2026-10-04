@@ -494,7 +494,8 @@ public class DocumentsChunkServiceImpl
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("document " + document.getCode() + " split into " + atomicLong.get()
 								+ " chunk(s), " + chunkOperation.getTotalChunks() + " kept by policy:"
-								+ params.getChunkingPolicy());
+								+ params.getChunkingPolicy() + ", " + chunkOperation.getTotalTokensSize() + " (tok) "
+								+ chunkOperation.getTotalBytesSize() + " byte(s)");
 					}
 					if (!chunkSets.isEmpty()) {
 						DocumentChunksSet currentChunkSet = chunkSets.get(0);

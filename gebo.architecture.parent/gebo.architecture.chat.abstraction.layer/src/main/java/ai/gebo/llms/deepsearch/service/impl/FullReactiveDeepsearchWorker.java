@@ -665,7 +665,10 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Begin partial analysis of " + documentsList.size() + " fragment(s) with model:"
-							+ serviceModel.getCode());
+							+ serviceModel.getCode() + " batch: " + DeepSearchBatchTrace.composition(documentsList));
+				}
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace("Partial analysis fragments: " + DeepSearchBatchTrace.fragmentSources(documentsList));
 				}
 				final long start = System.currentTimeMillis();
 				final String intermediateAnalisys = callLLMWithDocumentsAndConsolidation(serviceModel,
@@ -678,6 +681,13 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				final int discardedBefore = discardedFragmentIds.size();
 				final String cleaned = cumulateDiscardedFragmentsAndCleanOutput(intermediateAnalisys,
 						discardedFragmentIds);
+				final String runaway = DeepSearchBatchTrace.runawayReport(intermediateAnalisys,
+						IRRELEVANT_FRAGMENT_MARKER, documentsList);
+				if (runaway != null) {
+					LOGGER.warn("Partial analysis ran away in " + (System.currentTimeMillis() - start) + " ms, "
+							+ (intermediateAnalisys != null ? intermediateAnalisys.length() : 0) + " character(s): "
+							+ runaway + "on batch: " + DeepSearchBatchTrace.composition(documentsList));
+				}
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("End partial analysis of " + documentsList.size() + " fragment(s) in "
 							+ (System.currentTimeMillis() - start) + " ms: "
