@@ -313,7 +313,7 @@ public class SearchToolContentPipeline {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Tool:" + toolName + " ranking " + chunks.size() + " chunk(s) topK:" + topK);
 			}
-			final List<Document> ranked = ranker.call(chunks, objective, topK);
+			final List<Document> ranked = ranker.rankAndRemoveIrrelevant(chunks, objective, topK);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Tool:" + toolName + " ranking kept " + (ranked != null ? ranked.size() : 0) + " of "
 						+ chunks.size() + " chunk(s)");

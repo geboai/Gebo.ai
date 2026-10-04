@@ -126,7 +126,7 @@ class SearchToolContentPipelineTest {
 				});
 		ranker = mock(IGRankerService.class);
 		when(ranker.isRankerConfigured()).thenReturn(true);
-		when(ranker.call(anyList(), anyString(), anyInt())).thenAnswer(invocation -> invocation.getArgument(0));
+		when(ranker.rankAndRemoveIrrelevant(anyList(), anyString(), anyInt())).thenAnswer(invocation -> invocation.getArgument(0));
 		security = mock(IGExternalSearchSecurityService.class);
 		when(security.isEnabledForCurrentUser(any())).thenReturn(true);
 		agentsConfig = new StandardAgentsConfig();
@@ -144,7 +144,7 @@ class SearchToolContentPipelineTest {
 		SearchResult kept = result("https://a.example/kept", "Kept");
 		SearchResult discarded = result("https://a.example/noise", "Noise");
 		// the ranker keeps only the first document: the other one does not serve the objective
-		when(ranker.call(anyList(), eq("what the release changed"), eq(8)))
+		when(ranker.rankAndRemoveIrrelevant(anyList(), eq("what the release changed"), eq(8)))
 				.thenAnswer(invocation -> List.of(((List<Document>) invocation.getArgument(0)).get(0)));
 
 		SearchToolResult result = pipeline.run(service, "searchWeb", "d", param("release notes", "what the release changed"),
@@ -162,7 +162,7 @@ class SearchToolContentPipelineTest {
 	void theReturnedDocumentsAreSharedWithTheCallingAgent() throws Exception {
 		SearchResult kept = result("https://a.example/kept", "Kept");
 		SearchResult discarded = result("https://a.example/noise", "Noise");
-		when(ranker.call(anyList(), anyString(), anyInt()))
+		when(ranker.rankAndRemoveIrrelevant(anyList(), anyString(), anyInt()))
 				.thenAnswer(invocation -> List.of(((List<Document>) invocation.getArgument(0)).get(0)));
 		ToolsFoundDocuments collector = new ToolsFoundDocuments();
 		ToolContext shared = new ToolContext(collector
@@ -184,7 +184,7 @@ class SearchToolContentPipelineTest {
 		pipeline.run(service, "searchWeb", "d", param("release notes", null), List.of(),
 				(s, n) -> List.of(result("https://a.example/1", "One")), request("r1"));
 
-		verify(ranker).call(anyList(), eq("release notes"), anyInt());
+		verify(ranker).rankAndRemoveIrrelevant(anyList(), eq("release notes"), anyInt());
 	}
 
 	@Test
@@ -285,7 +285,7 @@ class SearchToolContentPipelineTest {
 
 		assertFalse(result.isRanked());
 		assertEquals("One", result.getFragments().get(0).getTitle());
-		verify(ranker, never()).call(anyList(), anyString(), anyInt());
+		verify(ranker, never()).rankAndRemoveIrrelevant(anyList(), anyString(), anyInt());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -300,7 +300,7 @@ class SearchToolContentPipelineTest {
 
 		assertTrue(answer.contains("\"status\":\"OK\""), answer);
 		assertTrue(answer.contains("https://a.example/1"), answer);
-		verify(ranker).call(anyList(), eq("what changed"), eq(3));
+		verify(ranker).rankAndRemoveIrrelevant(anyList(), eq("what changed"), eq(3));
 	}
 
 	/** A native query structure, as a native search service declares one. */

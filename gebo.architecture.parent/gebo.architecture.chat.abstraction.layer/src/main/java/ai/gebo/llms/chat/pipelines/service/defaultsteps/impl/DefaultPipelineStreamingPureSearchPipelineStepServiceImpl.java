@@ -206,7 +206,7 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 							documents.add(document);
 						}
 
-						List<Document> ranked = this.rankerService.call(documents, query, globalK);
+						List<Document> ranked = this.rankerService.rankAndRemoveIrrelevant(documents, query, globalK);
 						for (Document rank : ranked) {
 							AbstractPureSearchDocumentResultEntry entry = mappedByDocumentId.get(rank.getId());
 							if (entry != null) {

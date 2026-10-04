@@ -123,7 +123,7 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 		out = AIDocumentsSet.join(out, searchResult);
 
 		return userRanker
-				? this.rankerService.call(out, GeboChatRequest.actualQuery(minimalChatContext.getCurrentRequest()),
+				? this.rankerService.rankAndRemoveIrrelevant(out, GeboChatRequest.actualQuery(minimalChatContext.getCurrentRequest()),
 						topK)
 				: out;
 	}

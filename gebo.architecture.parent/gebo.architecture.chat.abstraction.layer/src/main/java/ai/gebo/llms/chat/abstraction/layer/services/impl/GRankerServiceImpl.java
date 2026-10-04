@@ -66,7 +66,7 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 
 	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
 	// itself) so newSecurityEvent()'s caller-stack capture points at the two
-	// call(...) overloads - the real invocation entry points - not at this
+	// rankAndRemoveIrrelevant(...) overloads - the real invocation entry points - not at this
 	// shared helper. Metadata-only: model/provider/outcome/latency, never the
 	// documents or query text being ranked.
 	private void logRankerEvent(SecurityEvent event, IGConfigurableRankerModel rankerModel, long startMillis,
@@ -104,7 +104,7 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 	}
 
 	@Override
-	public AIDocumentsSet call(AIDocumentsSet input, String query, int topK) throws LLMConfigException {
+	public AIDocumentsSet rankAndRemoveIrrelevant(AIDocumentsSet input, String query, int topK) throws LLMConfigException {
 		final int nFragments = input.countFragments();
 		if (nFragments <= 0)
 			return input;
@@ -134,7 +134,7 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 	}
 
 	@Override
-	public List<Document> call(List<Document> input, String query, int topK) throws LLMConfigException {
+	public List<Document> rankAndRemoveIrrelevant(List<Document> input, String query, int topK) throws LLMConfigException {
 		final int nFragments = input.size();
 		if (nFragments <= 0)
 			return input;
