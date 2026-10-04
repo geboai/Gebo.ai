@@ -39,6 +39,7 @@ import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource.KnowledgeBaseSearchParam;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.services.IGSecurityService;
 
@@ -138,7 +139,86 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 			org.springframework.beans.factory.ObjectProvider<StandardAgentsConfig> config) {
 		return new InternalKnowledgeBaseSearchToolSource(provider(search),
 				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER,
-				config);
+				config, null);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static InternalKnowledgeBaseSearchToolSource rankingTool(IGDocumentsSearchService search,
+			IGRankerService ranker) {
+		org.springframework.beans.factory.ObjectProvider<IGRankerService> rankers = mock(
+				org.springframework.beans.factory.ObjectProvider.class);
+		when(rankers.getIfAvailable()).thenReturn(ranker);
+		return new InternalKnowledgeBaseSearchToolSource(provider(search),
+				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER, null,
+				rankers);
+	}
+
+	/** Each fragment its own document, as the search returns them. */
+	private static IGDocumentsSearchService searchFindingDocuments(int documents) throws Exception {
+		IGDocumentsSearchService search = mock(IGDocumentsSearchService.class);
+		List<Document> found = new ArrayList<>();
+		for (int i = 0; i < documents; i++) {
+			found.add(Document.builder().id("d" + i).text("fragment" + i)
+					.metadata(Map.of(DocumentMetaInfos.CONTENT_CODE, "doc-" + i)).build());
+		}
+		AIDocumentsSet set = mock(AIDocumentsSet.class);
+		when(set.aiDocumentsList()).thenReturn(found);
+		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
+				.thenReturn(set);
+		return search;
+	}
+
+	@Test
+	void aConfiguredRankerKeepsTheBestTopKOfTwiceTheFragmentsRetrieved() throws Exception {
+		IGDocumentsSearchService search = searchFindingDocuments(20);
+		IGRankerService ranker = mock(IGRankerService.class);
+		when(ranker.isRankerConfigured()).thenReturn(true);
+		// the ranker puts the last retrieved first
+		when(ranker.rank(anyList(), anyString(), anyInt())).thenAnswer(invocation -> {
+			List<Document> ranked = new ArrayList<>(invocation.<List<Document>>getArgument(0));
+			java.util.Collections.reverse(ranked);
+			return ranked.subList(0, invocation.<Integer>getArgument(2));
+		});
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
+
+		String answer = rankingTool(search, ranker).search(query("anthroposophy"), chatWithKnowledgeBases("kb1"),
+				collector, new ToolsTokenBudget(30000));
+
+		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(20), eq(40000));
+		verify(ranker).rank(anyList(), eq("anthroposophy"), eq(10));
+		verify(ranker, never()).rankAndRemoveIrrelevant(anyList(), anyString(), anyInt());
+		assertTrue(answer.startsWith("10 fragment(s) found:"), answer.substring(0, 40));
+		assertTrue(answer.indexOf("fragment19") < answer.indexOf("fragment18"), "best ranked first");
+		assertTrue(answer.contains("doc-10 (1)") && !answer.contains("doc-9 ("),
+				"the fragments the ranker left out are not returned");
+		assertEquals(10, collector.getDocuments().size(), "only the ranked documents are the answer's");
+	}
+
+	@Test
+	void noRankerConfiguredRetrievesTheFragmentsAskedOnly() throws Exception {
+		IGDocumentsSearchService search = searchFindingDocuments(10);
+		IGRankerService ranker = mock(IGRankerService.class);
+		when(ranker.isRankerConfigured()).thenReturn(false);
+
+		String answer = rankingTool(search, ranker).search(query("anthroposophy"), chatWithKnowledgeBases("kb1"));
+
+		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(10),
+				eq(Integer.MAX_VALUE));
+		verify(ranker, never()).rank(anyList(), anyString(), anyInt());
+		assertTrue(answer.startsWith("10 fragment(s) found:"));
+	}
+
+	@Test
+	void aFailingRankerKeepsTheFirstTopKInRetrievalOrder() throws Exception {
+		IGDocumentsSearchService search = searchFindingDocuments(20);
+		IGRankerService ranker = mock(IGRankerService.class);
+		when(ranker.isRankerConfigured()).thenReturn(true);
+		when(ranker.rank(anyList(), anyString(), anyInt())).thenThrow(new IllegalStateException("ranker down"));
+
+		String answer = rankingTool(search, ranker).search(query("anthroposophy"), chatWithKnowledgeBases("kb1"));
+
+		assertTrue(answer.startsWith("10 fragment(s) found:"), answer.substring(0, 40));
+		assertTrue(answer.contains("fragment9") && !answer.contains("fragment10"), "the first 10 retrieved");
 	}
 
 	@Test
@@ -214,7 +294,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
 				.thenReturn(set);
 		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(provider(search),
-				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER, null);
+				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER, null, null);
 		ToolsFoundDocuments collector = new ToolsFoundDocuments();
 
 		String answer = tool.search(query("topic"), chatWithKnowledgeBases("kb1"), collector, null);
@@ -233,7 +313,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		IGKnowledgebaseVisibilityService visibility = mock(IGKnowledgebaseVisibilityService.class);
 		when(visibility.allVisibleKnowledgebases()).thenReturn(List.of());
 		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(
-				provider(mock(IGDocumentsSearchService.class)), provider(visibility), mock(IGSecurityService.class), TEXT_RENDERER, null);
+				provider(mock(IGDocumentsSearchService.class)), provider(visibility), mock(IGSecurityService.class), TEXT_RENDERER, null, null);
 
 		assertEquals("No search done: the query is empty.", tool.search(query(" "), null));
 		assertEquals("No internal knowledge base is available to the user.", tool.search(query("topic"), null));
@@ -245,7 +325,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
 				.thenThrow(new IllegalStateException("vector store down"));
 		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(provider(search),
-				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER, null);
+				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER, null, null);
 
 		assertEquals("The internal knowledge base search failed, go on without it.",
 				tool.search(query("topic"), chatWithKnowledgeBases("kb1")));
@@ -255,7 +335,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 	void theToolIsDeclaredForTheModels() {
 		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(
 				provider(mock(IGDocumentsSearchService.class)), provider(mock(IGKnowledgebaseVisibilityService.class)),
-				mock(IGSecurityService.class), TEXT_RENDERER, null);
+				mock(IGSecurityService.class), TEXT_RENDERER, null, null);
 
 		assertEquals(1, tool.getToolCallbacks().size());
 		assertEquals(InternalKnowledgeBaseSearchToolSource.SEARCH_KNOWLEDGE_BASE_TOOL,

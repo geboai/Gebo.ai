@@ -47,6 +47,7 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.Data;
@@ -64,6 +65,10 @@ import lombok.Data;
  * ({@value #DEFAULT_ROOM_DIVISOR} by default), shared equally among the documents
  * found, and what it returns is taken out of the room. A model call sharing no room
  * leaves the answer bounded by the fragments asked only (topK).
+ * <p>
+ * With a ranker configured ({@link IGRankerService#isRankerConfigured()}), twice the
+ * fragments asked are retrieved and {@link IGRankerService#rank(List, String, int)}
+ * keeps the best topK of them, best first, without the irrelevance filter.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.agents.standard", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Service
@@ -81,6 +86,8 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	static final int MAX_FIT_ATTEMPTS = 4;
 	static final int DEFAULT_TOP_K = 10;
 	static final int MAX_TOP_K = 30;
+	/** With a ranker configured, the fragments retrieved for it to keep the best topK of. */
+	static final int RANKING_RETRIEVAL_FACTOR = 2;
 	private static final String NEWLINE = "\r\n";
 
 	// Resolved on use: the tool sources are collected while the chat models are built,
@@ -91,16 +98,19 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	private final IGSecurityService securityService;
 	private final IGDocumentContentRendererProvider rendererFactory;
 	private final ObjectProvider<StandardAgentsConfig> agentsConfig;
+	// resolved on use as well: the ranker service reaches back to the chat models
+	private final ObjectProvider<IGRankerService> rankerService;
 
 	public InternalKnowledgeBaseSearchToolSource(ObjectProvider<IGDocumentsSearchService> documentsSearchService,
 			ObjectProvider<IGKnowledgebaseVisibilityService> knowledgeBaseVisibilityService,
 			IGSecurityService securityService, IGDocumentContentRendererProvider rendererFactory,
-			ObjectProvider<StandardAgentsConfig> agentsConfig) {
+			ObjectProvider<StandardAgentsConfig> agentsConfig, ObjectProvider<IGRankerService> rankerService) {
 		this.documentsSearchService = documentsSearchService;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
 		this.securityService = securityService;
 		this.rendererFactory = rendererFactory;
 		this.agentsConfig = agentsConfig;
+		this.rankerService = rankerService;
 	}
 
 	/**
@@ -233,26 +243,37 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 						.forEach(semanticQueries::add);
 			}
 			int topK = param.getTopK() != null ? Math.max(1, Math.min(MAX_TOP_K, param.getTopK())) : DEFAULT_TOP_K;
+			// with a ranker, twice the fragments asked are retrieved and the ranker keeps
+			// the best topK of them
+			final IGRankerService ranker = rankerService != null ? rankerService.getIfAvailable() : null;
+			final boolean ranking = ranker != null && ranker.isRankerConfigured();
+			final int retrievalTopK = ranking ? topK * RANKING_RETRIEVAL_FACTOR : topK;
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Begin search(...) knowledge base tool over " + kbCodes.size() + " knowledge base(s) with "
-						+ semanticQueries.size() + " quer(ies) topK:" + topK + " maxTokens:"
+						+ semanticQueries.size() + " quer(ies) topK:" + topK + " retrieved:" + retrievalTopK
+						+ " ranking:" + ranking + " maxTokens:"
 						+ (callBudget != null ? String.valueOf(maxTokens) : "none (no room shared, topK only)"));
 			}
-			// twice the answer's room retrieved, so that fitting it keeps every document;
-			// no room shared, the fragments asked only bound the retrieval
-			final int retrievalTokens = callBudget != null ? (int) Math.min(Integer.MAX_VALUE, maxTokens * 2l)
+			// twice the answer's room retrieved, so that fitting it keeps every document,
+			// as many times more as the fragments retrieved for the ranker; no room shared,
+			// the fragments asked only bound the retrieval
+			final int retrievalTokens = callBudget != null
+					? (int) Math.min(Integer.MAX_VALUE, maxTokens * 2l * (retrievalTopK / topK))
 					: Integer.MAX_VALUE;
 			AIDocumentsSet found = documentsSearchService.getObject().search(param.getQuery(), semanticQueries, semanticFilter,
-					List.of(param.getQuery()), fullTextFilter, param.getQuery(), topK, retrievalTokens);
+					List.of(param.getQuery()), fullTextFilter, param.getQuery(), retrievalTopK, retrievalTokens);
 			List<Document> documents = found != null ? found.aiDocumentsList() : List.of();
 			if (documents.isEmpty()) {
 				return "No document found in the internal knowledge base for: " + param.getQuery();
 			}
+			final List<Document> retrieved = documents;
+			documents = ranking ? rank(ranker, documents, param.getQuery(), topK) : documents;
 			if (collector != null) {
-				// the documents found become the calling agent's answer documents; sharing
-				// them never fails the search
+				// the documents found become the calling agent's answer documents, only the
+				// ones the ranker kept when it ranked them; sharing them never fails the search
 				try {
-					List<GResponseDocumentRef> refs = GResponseDocumentRef.from(found);
+					List<GResponseDocumentRef> refs = GResponseDocumentRef
+							.from(documents == retrieved ? found : AIDocumentsSet.from(documents));
 					collector.add(refs);
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Knowledge base tool shared " + refs.size()
@@ -306,6 +327,31 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			LOGGER.error("Knowledge base search tool failed for query:" + param.getQuery(), e);
 			return "The internal knowledge base search failed, go on without it.";
 		}
+	}
+
+	/**
+	 * The best {@code topK} of the retrieved fragments, best first, ranked against the
+	 * query by the ranker model only (no irrelevance filter). When ranking fails, the
+	 * first {@code topK} in retrieval order.
+	 */
+	List<Document> rank(IGRankerService ranker, List<Document> retrieved, String query, int topK) {
+		try {
+			final List<Document> ranked = ranker.rank(retrieved, query, topK);
+			final List<Document> kept = ranked != null ? limit(ranked, topK) : List.of();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("rank(...) knowledge base tool kept " + kept.size() + " of " + retrieved.size()
+						+ " retrieved fragment(s) topK:" + topK);
+			}
+			return kept;
+		} catch (Throwable th) {
+			LOGGER.warn("Knowledge base tool ranking failed, the first " + topK + " of " + retrieved.size()
+					+ " fragment(s) are kept in retrieval order", th);
+			return limit(retrieved, topK);
+		}
+	}
+
+	private static List<Document> limit(List<Document> documents, int topK) {
+		return documents.size() > topK ? new ArrayList<>(documents.subList(0, topK)) : documents;
 	}
 
 	/** The fragments, one after the other. */
