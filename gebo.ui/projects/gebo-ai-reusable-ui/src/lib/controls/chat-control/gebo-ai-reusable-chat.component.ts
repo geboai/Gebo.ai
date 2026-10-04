@@ -173,6 +173,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     public expandedInteractionsDocs: Map<string, boolean> = new Map();
     /** The called functions whose parameters are shown, as "<request id>#<function index>". */
     public expandedCalledFunctions: Set<string> = new Set();
+    /** The interactions whose list of called functions is open, by request id: closed at first. */
+    public expandedCalledFunctionLists: Set<string> = new Set();
     /** The parameters of each called function, parsed once. */
     private calledFunctionParamsCache: WeakMap<CalledFunction, { name: string, value: string }[]> = new WeakMap();
 
@@ -1005,6 +1007,27 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     public isInteractionDocsExpanded(interactionId?: string): boolean {
         if (!interactionId) return false;
         return this.expandedInteractionsDocs.get(interactionId) || false;
+    }
+
+    /**
+     * Opens or closes the list of the functions called while answering an interaction
+     * @param interactionId The ID of the interaction request
+     */
+    public toggleCalledFunctionsList(interactionId: string | undefined): void {
+        if (!interactionId) return;
+        if (this.expandedCalledFunctionLists.has(interactionId)) {
+            this.expandedCalledFunctionLists.delete(interactionId);
+        } else {
+            this.expandedCalledFunctionLists.add(interactionId);
+        }
+    }
+
+    /**
+     * Checks if the list of the functions called while answering an interaction is open
+     * @param interactionId The ID of the interaction request
+     */
+    public isCalledFunctionsListExpanded(interactionId: string | undefined): boolean {
+        return !!interactionId && this.expandedCalledFunctionLists.has(interactionId);
     }
 
     /**

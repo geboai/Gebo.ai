@@ -159,31 +159,39 @@
               <i class="pi pi-microchip" id="CalledFunction"></i>
             </span>
             <span class="gebo-ai-reusable-chat__interaction-item-title" id="CalledFunctionsCtl" gebo-ai-text>AI Called functions</span>
-            <ul class="gebo-ai-reusable-chat__called-functions">
-              @for (calledFunction of interaction.response?.calledFunctions; track $index; let fi = $index) {
-                <li class="gebo-ai-reusable-chat__called-function">
-                  <div class="gebo-ai-reusable-chat__called-function-header">
-                    <i class="pi pi-bolt"></i>
-                    <span class="gebo-ai-reusable-chat__called-function-name">{{calledFunction.functionName}}</span>
-                    @if (calledFunction.paramsDescription?.length) {
-                      <p-button id="CalledFunctionParamsBtn" gebo-ai-label title="Show the parameters"
-                        [text]="true" [rounded]="true" size="small"
-                        styleClass="gebo-ai-reusable-chat__called-function-toggle"
-                        [icon]="isCalledFunctionParamsExpanded(interaction.request?.id, fi) ? 'pi pi-minus' : 'pi pi-plus'"
-                        (onClick)="toggleCalledFunctionParams(interaction.request?.id, fi)"></p-button>
-                    }
-                  </div>
-                  @if (isCalledFunctionParamsExpanded(interaction.request?.id, fi)) {
-                    <dl class="gebo-ai-reusable-chat__called-function-params">
-                      @for (param of calledFunctionParams(calledFunction); track $index) {
-                        <dt>{{param.name}}</dt>
-                        <dd>{{param.value}}</dd>
+            <span class="gebo-ai-reusable-chat__called-functions-count">({{interaction.response?.calledFunctions?.length}})</span>
+            <p-button id="CalledFunctionsListBtn" gebo-ai-label title="Show the functions called"
+              [text]="true" [rounded]="true" size="small"
+              styleClass="gebo-ai-reusable-chat__called-function-toggle"
+              [icon]="isCalledFunctionsListExpanded(interaction.request?.id) ? 'pi pi-minus' : 'pi pi-plus'"
+              (onClick)="toggleCalledFunctionsList(interaction.request?.id)"></p-button>
+            @if (isCalledFunctionsListExpanded(interaction.request?.id)) {
+              <ul class="gebo-ai-reusable-chat__called-functions">
+                @for (calledFunction of interaction.response?.calledFunctions; track $index; let fi = $index) {
+                  <li class="gebo-ai-reusable-chat__called-function">
+                    <div class="gebo-ai-reusable-chat__called-function-header">
+                      <i class="pi pi-bolt"></i>
+                      <span class="gebo-ai-reusable-chat__called-function-name">{{calledFunction.functionName}}</span>
+                      @if (calledFunction.paramsDescription?.length) {
+                        <p-button id="CalledFunctionParamsBtn" gebo-ai-label title="Show the parameters"
+                          [text]="true" [rounded]="true" size="small"
+                          styleClass="gebo-ai-reusable-chat__called-function-toggle"
+                          [icon]="isCalledFunctionParamsExpanded(interaction.request?.id, fi) ? 'pi pi-minus' : 'pi pi-plus'"
+                          (onClick)="toggleCalledFunctionParams(interaction.request?.id, fi)"></p-button>
                       }
-                    </dl>
-                  }
-                </li>
-              }
-            </ul>
+                    </div>
+                    @if (isCalledFunctionParamsExpanded(interaction.request?.id, fi)) {
+                      <dl class="gebo-ai-reusable-chat__called-function-params">
+                        @for (param of calledFunctionParams(calledFunction); track $index) {
+                          <dt>{{param.name}}</dt>
+                          <dd>{{param.value}}</dd>
+                        }
+                      </dl>
+                    }
+                  </li>
+                }
+              </ul>
+            }
           </div>
         }
         @if(interaction?.response?.generatedResources?.length) {

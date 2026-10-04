@@ -953,6 +953,13 @@ body:has(.p-dialog-mask, .p-drawer-mask) :is(
 
 .gebo-ai-reusable-chat__called-function-name { font-weight: 600; }
 
+/* How many functions were called, next to the title of the closed list. */
+.gebo-ai-reusable-chat__called-functions-count {
+  margin-left: var(--gebo-space-1);
+  color: var(--gebo-text-muted);
+  font-size: var(--gebo-font-size-sm);
+}
+
 .gebo-ai-reusable-chat__called-function-toggle.p-button {
   width: 1.75rem;
   height: 1.75rem;

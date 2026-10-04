@@ -3196,6 +3196,9 @@
       "CHAT_BRANCHED": {
         "summary": "Chat branched",
         "detail": "The conversation continues in a new chat, starting from the chosen answer"
+      },
+      "CalledFunctionsListBtn": {
+        "help": "Show or hide the functions the AI called"
       }
     },
     "ChangeDescriptionComponent": {
