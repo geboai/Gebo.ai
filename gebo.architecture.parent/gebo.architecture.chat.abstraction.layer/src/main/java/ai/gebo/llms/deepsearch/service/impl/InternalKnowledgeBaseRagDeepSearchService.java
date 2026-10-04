@@ -61,8 +61,9 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 			String chunkingSessionId, int topK, int sampleTextTokensSize)
 			throws LLMConfigException, GeboChatSessionLifecycleException {
 
+		// ranked only: the deep search analysis judges the fragments itself
 		Flux<AIDocumentsSet> retrievedFlux = this.llmAssistedRetriveService.doDocumentsRetrieve(minimalChatContext,
-				serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK);
+				serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK, false);
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		Flux<AbstractPureSearchDocumentResultEntry> outFlux = retrievedFlux.concatMap(documentSet -> {
 			return runAs.doRunAsWithReturn(() -> {
@@ -97,8 +98,9 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 				? Flux.fromIterable(runtimeData.getRequestResources().getChatWithDocuments().aiDocumentsList())
 				: Flux.empty();
 		Map<String, GResponseDocumentRef> docrefs = new Hashtable<>();
+		// ranked only: the deep search analysis judges the fragments itself
 		Flux<Document> searchFlux = llmAssistedRetriveService.doDocumentsRetrieve(runtimeData.getMinimalChatContext(),
-				serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK).flatMap(x -> {
+				serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK, false).flatMap(x -> {
 					List<Document> docsList = x.aiDocumentsList();
 					docsList.forEach(doc -> {
 						String code = doc.getMetadata() != null
