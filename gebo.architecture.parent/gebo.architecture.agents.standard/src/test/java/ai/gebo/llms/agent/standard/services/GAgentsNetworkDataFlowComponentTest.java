@@ -194,8 +194,8 @@ class GAgentsNetworkDataFlowComponentTest {
 		DataTransformationInfo kbLink = flow.getTransformations().stream()
 				.filter(x -> DataFlowEndpoints.vectorStoreRef().equals(x.getDataDestinationId())).findFirst()
 				.orElseThrow();
-		assertTrue(kbLink.getDescription().contains(InternalKnowledgeBaseSearchToolSource.SEARCH_KNOWLEDGE_BASE_TOOL),
-				kbLink.getDescription());
+		assertEquals("Semantic search of the knowledge bases (tools: "
+				+ InternalKnowledgeBaseSearchToolSource.SEARCH_KNOWLEDGE_BASE_TOOL + ")", kbLink.getDescription());
 	}
 
 	@Test

@@ -264,7 +264,13 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 					continue;
 				}
 				types.putIfAbsent(resolved.qualifiedId(), resolved.type());
-				descriptions.putIfAbsent(resolved.qualifiedId(), target.description());
+				// what is done there, the same for every tool reaching it (each tool's own
+				// wording is its source's, shown at TRACE)
+				descriptions.putIfAbsent(resolved.qualifiedId(), whatIsDoneAt(target.kind()));
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace("Network:" + code + " tool:" + tool.getKey() + " -> " + resolved.qualifiedId() + " : "
+							+ target.description());
+				}
 				final List<String> tools = reachingTools.computeIfAbsent(resolved.qualifiedId(), k -> new ArrayList<>());
 				if (!tools.contains(tool.getKey())) {
 					tools.add(tool.getKey());
@@ -275,14 +281,41 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		for (Map.Entry<String, List<String>> reached : reachingTools.entrySet()) {
 			final String description = descriptions.get(reached.getKey());
 			link(flow, "tool", code + "-" + (index++),
-					"Tool(s) " + String.join(", ", reached.getValue())
-							+ (DataFlowEndpoints.notEmpty(description) ? ": " + description : ""),
+					description + " (tools: " + String.join(", ", reached.getValue()) + ")",
 					MetaEndpointType.CHAT_SESSION, types.get(reached.getKey()), queryId, reached.getKey());
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Reported single agent network:" + code + " towards its chat model:"
 					+ (agentModel != null ? agentModel.getId() : null) + " and " + reachingTools.size()
 					+ " endpoint(s) reached by its tools");
+		}
+	}
+
+	/** What the tools do at a target of the kind, as the register describes the link. */
+	static String whatIsDoneAt(ToolDataFlowTarget.Kind kind) {
+		switch (kind) {
+		case KNOWLEDGE_BASE_VECTOR_STORE:
+			return "Semantic search of the knowledge bases";
+		case KNOWLEDGE_BASE_FULLTEXT_INDEX:
+			return "Full-text search of the knowledge bases";
+		case KNOWLEDGE_BASE_GRAPH_STORE:
+			return "Knowledge graph search";
+		case EMBEDDING_MODEL:
+			return "Search queries embedded";
+		case RANKER_MODEL:
+			return "Contents found ranked against the query";
+		case SERVICE_MODEL:
+			return "Contents found analysed";
+		case SEARCH_SERVICE:
+			return "Search queries sent, results read";
+		case INTERNET:
+			return "Pages read from their URL";
+		case MCP_SERVER:
+			return "Tool arguments sent, results read";
+		case PLATFORM_DATA:
+			return "Platform data read";
+		default:
+			return "Data exchanged";
 		}
 	}
 
