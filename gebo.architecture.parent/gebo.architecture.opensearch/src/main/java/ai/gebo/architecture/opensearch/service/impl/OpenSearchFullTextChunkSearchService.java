@@ -13,11 +13,15 @@ import org.opensearch.client.opensearch._types.query_dsl.TextQueryType;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.FieldAndFormat;
 import org.opensearch.client.json.JsonData;
+import org.opensearch.client.json.JsonpMapper;
+import jakarta.json.stream.JsonGenerator;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonNumber;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonString;
 import jakarta.json.JsonValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +32,14 @@ import ai.gebo.architecture.fulltext.model.FullTextDocument;
 import ai.gebo.model.DocumentMetaInfos;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @ConditionalOnProperty(prefix = "ai.gebo.opensearch", name = "enabled", havingValue = "true")
 @Service
 public class OpenSearchFullTextChunkSearchService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(OpenSearchFullTextChunkSearchService.class);
 
 	private final OpenSearchClient client;
 	private final String indexName = "kb_chunks";
@@ -112,8 +118,7 @@ public class OpenSearchFullTextChunkSearchService {
 			sb.size(topK);
 		}
 
-		SearchResponse<Map> resp = client.search(sb.build(), Map.class);
-		return flattenHits(resp, filter);
+		return runSearch(sb, finalQuery, filter, qs.size() + " quer(ies) OR-ed", topK);
 	}
 
 	/**
@@ -171,10 +176,58 @@ public class OpenSearchFullTextChunkSearchService {
 			sb.size(topK);
 		}
 
-		SearchResponse<Map> resp = client.search(sb.build(), Map.class);
-
 		// Convert hits (also include inner_hits if collapse is enabled)
-		return flattenHits(resp, filter);
+		return runSearch(sb, finalQuery, filter, "1 query", topK);
+	}
+
+	/**
+	 * Runs the search, logging the call at DEBUG and the query sent and the hits at
+	 * TRACE: every term of a query must match (operator AND, see buildMainQuery), so a
+	 * query with no hit is told apart from an index with nothing for these filters.
+	 */
+	private List<FullTextChunkSearchHit> runSearch(SearchRequest.Builder sb, Query finalQuery,
+			FullTextSearchMetaDataFilter filter, String what, int topK) throws OpenSearchException, IOException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin search(...) index:" + indexName + " " + what + " topK:" + topK + " knowledge bases:"
+					+ (filter != null ? filter.getKnowledgebaseCodes() : null) + " collapseByDocument:"
+					+ (filter != null && filter.isCollapseByDocument()));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<FULLTEXT_QUERY index=" + indexName + ">");
+			LOGGER.trace(toJson(finalQuery));
+			LOGGER.trace("</FULLTEXT_QUERY>");
+		}
+		final long start = System.currentTimeMillis();
+		final SearchResponse<Map> resp = client.search(sb.build(), Map.class);
+		final List<FullTextChunkSearchHit> hits = flattenHits(resp, filter);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End search(...) index:" + indexName + " " + what + " returned " + hits.size() + " chunk(s) in "
+					+ (System.currentTimeMillis() - start) + " ms");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			for (FullTextChunkSearchHit hit : hits) {
+				LOGGER.trace("Full-text hit score:" + hit.getScore() + " chunk:"
+						+ (hit.getChunk() != null ? hit.getChunk().getId() + " "
+								+ (hit.getChunk().getDocument() != null ? hit.getChunk().getDocument().getTitle() : null)
+								: null)
+						+ " highlight:" + hit.getHighlight());
+			}
+		}
+		return hits;
+	}
+
+	/** The query as OpenSearch receives it, for the TRACE log. */
+	private String toJson(Query query) {
+		try {
+			final JsonpMapper mapper = client._transport().jsonpMapper();
+			final StringWriter writer = new StringWriter();
+			try (JsonGenerator generator = mapper.jsonProvider().createGenerator(writer)) {
+				query.serialize(generator, mapper);
+			}
+			return writer.toString();
+		} catch (RuntimeException e) {
+			return String.valueOf(query);
+		}
 	}
 
 	private Query buildMainQuery(String q) {

@@ -663,10 +663,28 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			return runAs.doRunAsWithReturnAndException(() -> {
 				Map<String, Object> params = new HashMap<>(sharedParams);
 				params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Begin partial analysis of " + documentsList.size() + " fragment(s) with model:"
+							+ serviceModel.getCode());
+				}
+				final long start = System.currentTimeMillis();
 				final String intermediateAnalisys = callLLMWithDocumentsAndConsolidation(serviceModel,
 						cumulativeAnalisysPrompt, context, documentsList, initialValue, params);
-
-				return cumulateDiscardedFragmentsAndCleanOutput(intermediateAnalisys, discardedFragmentIds);
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace("<DEEP_SEARCH_PARTIAL_ANALYSIS>");
+					LOGGER.trace(intermediateAnalisys);
+					LOGGER.trace("</DEEP_SEARCH_PARTIAL_ANALYSIS>");
+				}
+				final int discardedBefore = discardedFragmentIds.size();
+				final String cleaned = cumulateDiscardedFragmentsAndCleanOutput(intermediateAnalisys,
+						discardedFragmentIds);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("End partial analysis of " + documentsList.size() + " fragment(s) in "
+							+ (System.currentTimeMillis() - start) + " ms: "
+							+ (intermediateAnalisys != null ? intermediateAnalisys.length() : 0) + " character(s), "
+							+ (discardedFragmentIds.size() - discardedBefore) + " fragment id(s) discarded");
+				}
+				return cleaned;
 			});
 
 		};

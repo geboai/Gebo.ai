@@ -138,6 +138,7 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Deep search tool partial analysis of " + documentsList.size() + " fragment(s)");
 				}
+				final long start = System.currentTimeMillis();
 				final String intermediateAnalisys = callLLMWithDocumentsAndConsolidation(serviceModel,
 						cumulativeAnalisysPrompt, context, documentsList, initialValue, params);
 				if (LOGGER.isTraceEnabled()) {
@@ -145,7 +146,16 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 					LOGGER.trace(intermediateAnalisys);
 					LOGGER.trace("</DEEP_SEARCH_TOOL_PARTIAL_ANALYSIS>");
 				}
-				return cumulateDiscardedFragmentsAndCleanOutput(intermediateAnalisys, discardedFragmentIds);
+				final int discardedBefore = discardedFragmentIds.size();
+				final String cleaned = cumulateDiscardedFragmentsAndCleanOutput(intermediateAnalisys,
+						discardedFragmentIds);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Deep search tool partial analysis of " + documentsList.size() + " fragment(s) done in "
+							+ (System.currentTimeMillis() - start) + " ms: "
+							+ (intermediateAnalisys != null ? intermediateAnalisys.length() : 0) + " character(s), "
+							+ (discardedFragmentIds.size() - discardedBefore) + " fragment id(s) discarded");
+				}
+				return cleaned;
 			});
 		};
 		LastWork<String, String> finalAnalisysWork = (list, _emitter) -> {
