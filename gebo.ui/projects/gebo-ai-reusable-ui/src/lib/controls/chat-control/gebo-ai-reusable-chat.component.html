@@ -163,7 +163,7 @@
             <p-button id="CalledFunctionsListBtn" gebo-ai-label title="Show the functions called"
               [text]="true" [rounded]="true" size="small"
               styleClass="gebo-ai-reusable-chat__called-function-toggle"
-              [icon]="isCalledFunctionsListExpanded(interaction.request?.id) ? 'pi pi-minus' : 'pi pi-plus'"
+              [icon]="isCalledFunctionsListExpanded(interaction.request?.id) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
               (onClick)="toggleCalledFunctionsList(interaction.request?.id)"></p-button>
             @if (isCalledFunctionsListExpanded(interaction.request?.id)) {
               <ul class="gebo-ai-reusable-chat__called-functions">
@@ -176,7 +176,7 @@
                         <p-button id="CalledFunctionParamsBtn" gebo-ai-label title="Show the parameters"
                           [text]="true" [rounded]="true" size="small"
                           styleClass="gebo-ai-reusable-chat__called-function-toggle"
-                          [icon]="isCalledFunctionParamsExpanded(interaction.request?.id, fi) ? 'pi pi-minus' : 'pi pi-plus'"
+                          [icon]="isCalledFunctionParamsExpanded(interaction.request?.id, fi) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
                           (onClick)="toggleCalledFunctionParams(interaction.request?.id, fi)"></p-button>
                       }
                     </div>
