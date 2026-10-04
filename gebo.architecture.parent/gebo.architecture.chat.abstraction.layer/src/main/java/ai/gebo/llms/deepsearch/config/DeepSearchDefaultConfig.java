@@ -38,6 +38,13 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 	private int perDataSourceMaxInputTokens = 5000000;
 	private int perDataSourceMaxOutputTokens = 1000000;
 	private List<DeepSearchUserIntentThreashold> deepSearchUserIntentThreasholds = new ArrayList<DeepSearchUserIntentThreashold>();
+	// The partial analyses are folded into a running report as they come, and the analysis stops once
+	// the consolidation model judges the report enough (the verdict line of its prompt). false brings back
+	// the stop on the count of batches the analysis model declared satisfactory
+	// (deepSearchUserIntentThreasholds). Set via ai.gebo.deepsearch.sufficiency-check-enabled.
+	private boolean sufficiencyCheckEnabled = true;
+	// The batches analysed, by deliverable, before a report judged enough may stop the analysis.
+	private List<DeepSearchSufficiencyMinimum> sufficiencyMinimumAnalysedBatches = new ArrayList<DeepSearchSufficiencyMinimum>();
 
 	@Data
 	@NoArgsConstructor
@@ -45,6 +52,14 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 	public static class DeepSearchUserIntentThreashold {
 		List<DeliverableIntent> intents = new ArrayList<DeliverableIntent>();
 		int maxInTopicSatisfactoryDocuments;
+	}
+
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class DeepSearchSufficiencyMinimum {
+		List<DeliverableIntent> intents = new ArrayList<DeliverableIntent>();
+		int minimumAnalysedBatches;
 	}
 
 	public DeepSearchDefaultConfig() {
@@ -69,9 +84,31 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 		this.deepSearchUserIntentThreasholds.add(lowerLevelsThreashold);
 		this.deepSearchUserIntentThreasholds.add(midLevelsThreashold);
 		this.deepSearchUserIntentThreasholds.add(highLevelsThreashold);
+		this.sufficiencyMinimumAnalysedBatches.add(new DeepSearchSufficiencyMinimum(
+				new ArrayList<>(List.of(DeliverableIntent.QA, DeliverableIntent.UNKNOWN)), 1));
+		this.sufficiencyMinimumAnalysedBatches.add(new DeepSearchSufficiencyMinimum(
+				new ArrayList<>(List.of(DeliverableIntent.HOWTO, DeliverableIntent.SUMMARY)), 2));
+		this.sufficiencyMinimumAnalysedBatches.add(new DeepSearchSufficiencyMinimum(
+				new ArrayList<>(List.of(DeliverableIntent.DECISION, DeliverableIntent.ANALISYS)), 3));
 		this.setAccessibleToAll(true);
 		this.setPerDataSourceConfigured(false);
 		this.setExternalSourceSearchEnabledByDefault(true);
+	}
+
+	/**
+	 * The batches to analyse, for a deliverable, before a report judged enough may stop
+	 * the analysis: the first configured entry when the deliverable is in none, 1 when
+	 * nothing is configured.
+	 */
+	public int minimumAnalysedBatchesBeforeStop(DeliverableIntent intent) {
+		final DeliverableIntent finalIntent = intent != null ? intent : DeliverableIntent.QA;
+		if (this.sufficiencyMinimumAnalysedBatches == null || this.sufficiencyMinimumAnalysedBatches.isEmpty()) {
+			return 1;
+		}
+		return Math.max(1,
+				this.sufficiencyMinimumAnalysedBatches.stream()
+						.filter(x -> x.intents != null && x.intents.contains(finalIntent)).findFirst()
+						.orElse(this.sufficiencyMinimumAnalysedBatches.get(0)).getMinimumAnalysedBatches());
 	}
 
 	public int getSatisfactorySubAnalisysThreashold(DeliverableIntent intent) {

@@ -103,3 +103,16 @@ TASK:
 4. The report must directly answer the user question as best as possible with the available information.
 5. organize the extracted information into:
    - a list of text blocks splitted by topics coherent with the question, each of them has a title, paragraphs with detailed informations, and includes references with hypertext links (if provided) that support the information at the bottom
+
+VERDICT:
+After the report, evaluate whether the report you wrote is enough to answer the user question completely and correctly,
+at the level of detail of the user required outcome, without needing any further document.
+Then write, as the very last line of your output and alone on its line, EXACTLY ONE of:
+
+<DEEP-SEARCH-VERDICT complete="true"/>
+
+<DEEP-SEARCH-VERDICT complete="false" missing="short description of each missing aspect, separated by semicolons"/>
+
+Use complete="true" ONLY when every part of the question is answered with evidence from the documents or the consolidated report.
+If anything is partial, uncertain or missing, use complete="false" and name what is missing.
+The verdict line is removed before the report is shown: never mention it in the report.

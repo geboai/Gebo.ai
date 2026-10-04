@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
@@ -34,6 +35,9 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGProgressNotifier;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator;
+import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.FoldOutcome;
+import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.RollingFold;
+import ai.gebo.llms.deepsearch.service.DeepSearchVerdict;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.GenerativeFunction;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LastWork;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.TokensLimitCompute;
@@ -107,7 +111,8 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 		final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin analyze(...) deliverable:" + deliverable + " tokensBudget:" + tokensBudget
-					+ " parallelism:" + analysisParallelism + " satisfactoryThreshold:" + satisfactoryThreshold);
+					+ " parallelism:" + analysisParallelism + " satisfactoryThreshold:" + satisfactoryThreshold
+					+ " sufficiencyCheck:" + defaultDeepsearchConfig.isSufficiencyCheckEnabled());
 		}
 		final Map<String, Object> sharedParams = new HashMap<>();
 		sharedParams.put(AGENT_DELIVERABLE_COMPLETENESS,
@@ -152,7 +157,8 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 					Map<String, Object> params = new HashMap<>(sharedParams);
 					params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, list);
 					params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
-					return callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
+					return DeepSearchVerdict
+							.withoutVerdict(callLLMReactive(chatModel, finalAnalisysPrompt, context, params));
 				} else {
 					return backupNotFoundDocuments;
 				}
@@ -173,11 +179,42 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 			}
 			discardedFragmentIds.add(document.getId());
 		};
-		Flux<String> resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(fragments,
-				notifier != null ? notifier : IGProgressNotifier.NONE,
-				isValidDocument, tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS,
-				outOfBandString, ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputCleaningFunction,
-				STRING_STREAMER, tokensBudget, runAs, analysisParallelism, unprocessedCumulator);
+		final IGProgressNotifier progress = notifier != null ? notifier : IGProgressNotifier.NONE;
+		final Flux<String> resultFlux;
+		if (defaultDeepsearchConfig.isSufficiencyCheckEnabled()) {
+			// the partial analyses folded into a running report, the analysis stopping once the
+			// consolidation model judges it enough (its verdict line)
+			final int minimumAnalysedBatches = defaultDeepsearchConfig.minimumAnalysedBatchesBeforeStop(deliverable);
+			// a fold holds the report and the analyses in 2/3 of the chat model context, beside its prompt
+			final long foldTokensBudget = Math.max(1, chatModel.getContextLength() * 2l / 3 - finalAnalisysPrompt.getTokensSize());
+			final RollingFold<String> rollingFold = (report, partials, _emitter) -> {
+				return runAs.doRunAsWithReturnAndException(() -> {
+					final Map<String, Object> params = new HashMap<>(sharedParams);
+					final DeepSearchVerdict verdict = DeepSearchVerdict.of(callLLMWithDocumentsAndConsolidation(
+							chatModel, finalAnalisysPrompt, context, partials, report, params));
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Deep search tool fold of " + partials.size() + " partial analyses: complete:"
+								+ verdict.complete() + (verdict.missing() != null ? " missing:" + verdict.missing() : ""));
+					}
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("<DEEP_SEARCH_TOOL_RUNNING_REPORT>");
+						LOGGER.trace(verdict.report());
+						LOGGER.trace("</DEEP_SEARCH_TOOL_RUNNING_REPORT>");
+					}
+					return new FoldOutcome<String>(verdict.report(), verdict.complete());
+				});
+			};
+			resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinateWithRollingFold(fragments, progress,
+					isValidDocument, tokensLimitCompute, intermediateProcess, rollingFold,
+					reports -> String.join("\n\n", reports), ITokensCountable::stringsTokensSize, foldTokensBudget, "",
+					ERROR_IN_PROCESS, outOfBandString, outputCleaningFunction, STRING_STREAMER, backupNotFoundDocuments,
+					tokensBudget, runAs, analysisParallelism, minimumAnalysedBatches, unprocessedCumulator);
+		} else {
+			resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(fragments, progress, isValidDocument,
+					tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS, outOfBandString,
+					ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputCleaningFunction,
+					STRING_STREAMER, tokensBudget, runAs, analysisParallelism, unprocessedCumulator);
+		}
 		return resultFlux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 	}
 

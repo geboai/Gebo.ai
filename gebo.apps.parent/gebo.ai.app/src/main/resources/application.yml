@@ -469,6 +469,9 @@ ai.gebo.agents.standard.knowledge-base-search-room-divisor: 3
 # In-flight LLM sub-analysis calls of a deep search per data source (2 when not set);
 # with ai.gebo.deepsearch.max-concurrent-sources it caps the concurrent LLM calls
 ai.gebo.deepsearch.analysis-parallelism: 2
+# Deep search analyses folded into a running report, stopping once the consolidation model
+# judges it enough (true when not set; false: stop on the satisfactory batches count)
+ai.gebo.deepsearch.sufficiency-check-enabled: true
 # Languages whose stop words the chunks' keyword filter ignores when neither the
 # keywords' nor the chunk's language is detected with confidence (it,en when not set)
 ai.gebo.search.keyword-stop-words.fallback-languages: it,en

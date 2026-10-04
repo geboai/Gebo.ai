@@ -45,6 +45,9 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResou
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetCalculator;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator;
+import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.FoldOutcome;
+import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.RollingFold;
+import ai.gebo.llms.deepsearch.service.DeepSearchVerdict;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.GenerativeFunction;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LastWork;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.TokensLimitCompute;
@@ -375,7 +378,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 							Map<String, Object> params = new HashMap<>(commonParams);
 							params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, documents);
 							params.put(IChatRequestContext.CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
-							resultFlux = callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
+							resultFlux = DeepSearchVerdict
+									.withoutVerdict(callLLMReactive(chatModel, finalAnalisysPrompt, context, params));
 						} catch (Throwable th) {
 							LOGGER.error("Exception on last summary", th);
 							resultFlux = Flux.just(SORRY_SOMETHING_GONE_WRONG);
@@ -440,7 +444,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 						Map<String, Object> params = new HashMap<>(commonParams);
 						params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, documents);
 						params.put(IChatRequestContext.CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
-						out = callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
+						out = DeepSearchVerdict
+								.withoutVerdict(callLLMReactive(chatModel, finalAnalisysPrompt, context, params));
 					} catch (Throwable th) {
 						LOGGER.error("Exception on last summary", th);
 						out = Flux.just(SORRY_SOMETHING_GONE_WRONG);
@@ -673,7 +678,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, list);
 					params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
 
-					return callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
+					return DeepSearchVerdict
+							.withoutVerdict(callLLMReactive(chatModel, finalAnalisysPrompt, context, params));
 
 				} else {
 					return backupNotFoundDocuments;
@@ -697,10 +703,41 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			}
 			discardedFragmentIds.add(document.getId());
 		};
-		resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(docsFlux, sinkUIEmitter, isValidDocument,
-				tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS, outOfBandString,
-				ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputCleaningFunction, stringStreamer,
-				tokensBudget, runAs, analysisParallelism, unprocessedCumulator);
+		if (this.defaultDeepsearchConfig.isSufficiencyCheckEnabled()) {
+			// the partial analyses folded into a running report, the analysis stopping once the
+			// consolidation model judges it enough (its verdict line)
+			final int minimumAnalysedBatches = this.defaultDeepsearchConfig
+					.minimumAnalysedBatchesBeforeStop(request.getUserIntent());
+			// a fold holds the report and the analyses in 2/3 of the chat model context, beside its prompt
+			final long foldTokensBudget = Math.max(1, chatModel.getContextLength() * 2l / 3 - finalAnalisysPrompt.getTokensSize());
+			final RollingFold<String> rollingFold = (report, partials, _emitter) -> {
+				return runAs.doRunAsWithReturnAndException(() -> {
+					final Map<String, Object> params = new HashMap<>(sharedParams);
+					final DeepSearchVerdict verdict = DeepSearchVerdict.of(callLLMWithDocumentsAndConsolidation(
+							chatModel, finalAnalisysPrompt, context, partials, report, params));
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Deep search fold of " + partials.size() + " partial analyses: complete:"
+								+ verdict.complete() + (verdict.missing() != null ? " missing:" + verdict.missing() : ""));
+					}
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("<DEEP_SEARCH_RUNNING_REPORT>");
+						LOGGER.trace(verdict.report());
+						LOGGER.trace("</DEEP_SEARCH_RUNNING_REPORT>");
+					}
+					return new FoldOutcome<String>(verdict.report(), verdict.complete());
+				});
+			};
+			resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinateWithRollingFold(docsFlux, sinkUIEmitter,
+					isValidDocument, tokensLimitCompute, intermediateProcess, rollingFold,
+					reports -> String.join("\n\n", reports), ITokensCountable::stringsTokensSize, foldTokensBudget, "",
+					ERROR_IN_PROCESS, outOfBandString, outputCleaningFunction, stringStreamer, backupNotFoundDocuments,
+					tokensBudget, runAs, analysisParallelism, minimumAnalysedBatches, unprocessedCumulator);
+		} else {
+			resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(docsFlux, sinkUIEmitter, isValidDocument,
+					tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS, outOfBandString,
+					ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputCleaningFunction,
+					stringStreamer, tokensBudget, runAs, analysisParallelism, unprocessedCumulator);
+		}
 		return resultFlux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 	}
 
