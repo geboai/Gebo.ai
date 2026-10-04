@@ -17,6 +17,7 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
@@ -77,6 +78,17 @@ public class WebSearchToolSource implements IGToolCallbackSource {
 	public List<ToolCallback> getToolCallbacks() {
 		AbstractSearchServiceWrapperTool tool = webSearchTool();
 		return tool != null ? List.of(tool.toTool()) : List.of();
+	}
+
+	/** The web search sends the query to its provider and has the ranker score the pages read. */
+	@Override
+	public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
+		final AbstractSearchServiceWrapperTool tool = webSearchTool();
+		if (tool == null || !tool.getToolName().equals(toolName)) {
+			return List.of();
+		}
+		return List.of(ToolDataFlowTarget.searchService(tool.getWrapped().getId(), "Web search: query sent to the provider"),
+				ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.RANKER_MODEL, "Web search: ranking of the pages read"));
 	}
 
 	/**

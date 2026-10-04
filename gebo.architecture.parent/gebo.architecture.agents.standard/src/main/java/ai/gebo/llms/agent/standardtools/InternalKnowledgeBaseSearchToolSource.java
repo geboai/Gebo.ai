@@ -34,6 +34,7 @@ import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -177,6 +178,25 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 		reference.setName(SEARCH_KNOWLEDGE_BASE_TOOL);
 		reference.setDescription(SEARCH_KNOWLEDGE_BASE_DESCRIPTION);
 		return List.of(reference);
+	}
+
+	/**
+	 * The knowledge base search reads the knowledge bases' stores with the embedded
+	 * query, and has the ranker score what it found.
+	 */
+	@Override
+	public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
+		return SEARCH_KNOWLEDGE_BASE_TOOL.equals(toolName) ? knowledgeBaseSearchTargets("Knowledge base search")
+				: List.of();
+	}
+
+	/** What a search of the knowledge bases reaches, for the data-flow register. */
+	static List<ToolDataFlowTarget> knowledgeBaseSearchTargets(String what) {
+		return List.of(ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.EMBEDDING_MODEL, what + ": query embedding"),
+				ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.KNOWLEDGE_BASE_VECTOR_STORE, what + ": semantic retrieval"),
+				ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.KNOWLEDGE_BASE_FULLTEXT_INDEX, what + ": full-text retrieval"),
+				ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.KNOWLEDGE_BASE_GRAPH_STORE, what + ": graph retrieval"),
+				ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.RANKER_MODEL, what + ": ranking of the fragments found"));
 	}
 
 	@Override

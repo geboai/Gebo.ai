@@ -33,6 +33,7 @@ import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 
 /**
@@ -201,6 +202,14 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 			LOGGER.debug("fitInRoom(...) " + content.length() + " character(s) of content in a room of " + room
 					+ " (tok), " + response.getContent().length() + " kept");
 		}
+	}
+
+	/** readUrl fetches any page of the internet the model asks for. */
+	@Override
+	public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
+		return "readUrl".equals(toolName)
+				? List.of(ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.INTERNET, "readUrl: page read from its URL"))
+				: List.of();
 	}
 
 	/**

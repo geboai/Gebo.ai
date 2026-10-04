@@ -10,6 +10,7 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -50,15 +51,17 @@ public class AgenticLoopPureChatReactiveAgentServiceImpl extends AgenticLoopReac
 		return DESCRIPTION;
 	}
 
+	/** The tools a free chat does not mount: the internal knowledge bases are not its scope. */
+	public static final Set<String> KNOWLEDGE_BASE_TOOLS = Set.of(
+			InternalKnowledgeBaseSearchToolSource.SEARCH_KNOWLEDGE_BASE_TOOL,
+			KnowledgeBaseDeepSearchTool.DEEP_SEARCH_KNOWLEDGE_BASE_TOOL);
+
 	@Override
 	protected List<String> filterAutoMountedTools(List<String> toolNames) {
 		if (toolNames == null) {
 			return null;
 		}
-		List<String> filtered = toolNames.stream()
-				.filter(x -> !InternalKnowledgeBaseSearchToolSource.SEARCH_KNOWLEDGE_BASE_TOOL.equals(x)
-						&& !KnowledgeBaseDeepSearchTool.DEEP_SEARCH_KNOWLEDGE_BASE_TOOL.equals(x))
-				.toList();
+		List<String> filtered = toolNames.stream().filter(x -> !KNOWLEDGE_BASE_TOOLS.contains(x)).toList();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Agentic loop pure chat agent id:" + getId() + " mounts " + filtered.size() + " of "
 					+ toolNames.size() + " tool(s), without the internal knowledge base search and deep search");

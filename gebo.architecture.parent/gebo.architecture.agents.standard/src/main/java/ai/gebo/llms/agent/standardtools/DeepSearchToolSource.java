@@ -22,6 +22,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
@@ -102,6 +103,30 @@ public class DeepSearchToolSource implements IGToolCallbackSource {
 					+ " deep search tool(s)");
 		}
 		return callbacks;
+	}
+
+	/**
+	 * A deep search reaches its source (the knowledge bases' stores, or its search
+	 * service) and has the internal services model analyse what it found.
+	 */
+	@Override
+	public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
+		for (AbstractDeepSearchTool<?> tool : tools()) {
+			if (!tool.getToolName().equals(toolName)) {
+				continue;
+			}
+			final List<ToolDataFlowTarget> targets = new ArrayList<>();
+			if (tool instanceof SearchServiceDeepSearchTool<?> serviceTool) {
+				targets.add(ToolDataFlowTarget.searchService(serviceTool.getService().getId(),
+						"Deep search: queries sent to " + serviceTool.getService().getId()));
+			} else {
+				targets.addAll(InternalKnowledgeBaseSearchToolSource.knowledgeBaseSearchTargets("Deep search"));
+			}
+			targets.add(ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.SERVICE_MODEL,
+					"Deep search: analysis of the documents found"));
+			return targets;
+		}
+		return List.of();
 	}
 
 	/**

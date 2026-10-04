@@ -29,6 +29,7 @@ import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
@@ -161,6 +162,15 @@ public class UsersFunctions implements IGToolCallbackSource {
 		final UsersList kept = new UsersList();
 		kept.addAll(ToolsTokenBudget.fitItems(out, budget.left(), JsonParser::toJson));
 		return kept;
+	}
+
+	/** The users tools read the platform's users and groups: personal data. */
+	@Override
+	public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
+		return "getActualUser".equals(toolName) || "searchCurrentUsersTeamsColleagues".equals(toolName)
+				? List.of(ToolDataFlowTarget.platformData("Platform users and groups",
+						toolName + ": users' identities and groups read", true))
+				: List.of();
 	}
 
 	/**

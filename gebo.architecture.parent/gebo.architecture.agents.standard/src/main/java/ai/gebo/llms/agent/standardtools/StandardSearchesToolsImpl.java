@@ -9,6 +9,7 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
@@ -87,6 +88,21 @@ public class StandardSearchesToolsImpl implements IGToolCallbackSource {
 			}
 		}
 		return callbacks;
+	}
+
+	/** A search tool sends the query to its search service and has the ranker score the contents read. */
+	@Override
+	public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
+		for (AbstractSearchServiceWrapperTool wrapper : wrappers()) {
+			if (wrapper.getToolName().equals(toolName)) {
+				return List.of(
+						ToolDataFlowTarget.searchService(wrapper.getWrapped().getId(),
+								"Search: query sent to " + wrapper.getWrapped().getId()),
+						ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.RANKER_MODEL,
+								"Search: ranking of the contents read"));
+			}
+		}
+		return List.of();
 	}
 
 	/**

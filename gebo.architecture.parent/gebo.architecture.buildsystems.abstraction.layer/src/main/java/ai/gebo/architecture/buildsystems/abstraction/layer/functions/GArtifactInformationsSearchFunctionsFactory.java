@@ -30,6 +30,7 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.knlowledgebase.model.contents.GDependencyTree;
 import ai.gebo.knlowledgebase.model.contents.GSoftwareArtifact;
@@ -231,6 +232,16 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
      * Gets the category of tools that this factory provides.
      * @return the tools category.
      */
+    /** The software artifacts tools read the artifacts catalogue of the knowledge bases. */
+    @Override
+    public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
+        return GET_ARTIFACTS_INFORMATION.equals(toolName) || GET_ALL_SOFTWARE_ARTIFACTS_LIST.equals(toolName)
+                || GET_ARTIFACTS_DEPENDING_FROM.equals(toolName) || GET_FULL_ARTIFACT_DEPENDENCIES_INFOS.equals(toolName)
+                        ? List.of(ToolDataFlowTarget.platformData("Software artifacts catalogue",
+                                toolName + ": software artifacts and dependencies read", false))
+                        : List.of();
+    }
+
     @Override
     public ToolsCategory getToolCategory() {
         return ToolsCategory.SOFTWARE_ARTIFACTS_SEARCHES;
