@@ -49,6 +49,8 @@ public class DocumentMetaInfos {
 	public static final String GEBO_CHUNK_POSITION = "GEBO_CHUNK_POSITION";
 	public static final String GEBO_CHUNKS_COUNT = "GEBO_CHUNKS_COUNT";
 	public static final String GEBO_ACL_ALIASES = "GEBO_ACL_ALIASES";
+	/** The uniqueId of the document reference a content comes from. */
+	public static final String GEBO_UNIQUE_ID = "GEBO_UNIQUE_ID";
 	public static final String CATEGORIES = "CATEGORIES";
 	public static final String GEBO_EXTERNAL_SEARCH_RESULT_JSON = "GEBO_SEARCH_RESULT_JSON";
 	/**

@@ -30,6 +30,8 @@ public class ExtractedDocumentMetaData {
 			metaInfoHeader, referenceType, title, language;
 	final Integer tokenLength, bytesLength;
 	final Integer chunkPosition, chunksTotal;
+	/** The uniqueId of the document reference the content comes from, null when not ingested with it. */
+	final Long uniqueId;
 
 	/**
 	 * Constructs an instance of {@code ExtractedDocumentMetaData} with the
@@ -50,7 +52,7 @@ public class ExtractedDocumentMetaData {
 	private ExtractedDocumentMetaData(String code, String extension, String originalUrl, String parentProjectCode,
 			String rootKnowledgebaseCode, String contentType, String name, String title, Integer tokenLength,
 			Integer bytesLength, String metaInfoHeader, String referenceType, Integer chunkPosition,
-			Integer chunksTotal, String language) {
+			Integer chunksTotal, String language, Long uniqueId) {
 		this.code = code;
 		this.contentType = contentType;
 		this.extension = extension;
@@ -66,6 +68,7 @@ public class ExtractedDocumentMetaData {
 		this.chunkPosition = chunkPosition;
 		this.chunksTotal = chunksTotal;
 		this.language = language;
+		this.uniqueId = uniqueId;
 	}
 
 	/**
@@ -106,6 +109,25 @@ public class ExtractedDocumentMetaData {
 	 * @return an instance of {@code ExtractedDocumentMetaData} or null if the
 	 *         metadata is null
 	 */
+	/**
+	 * A whole number of the metadata, null when absent or not a number: the vector
+	 * stores may give back a number as a Long, an Integer, a Double or a String.
+	 */
+	private static Long getLongValue(String constant, Map<String, Object> metadata) {
+		final Object value = metadata != null ? metadata.get(constant) : null;
+		if (value instanceof Number number) {
+			return number.longValue();
+		}
+		if (value instanceof String text && !text.isBlank()) {
+			try {
+				return (long) Double.parseDouble(text.trim());
+			} catch (NumberFormatException e) {
+				return null;
+			}
+		}
+		return null;
+	}
+
 	public static ExtractedDocumentMetaData of(Map<String, Object> metadata) {
 		if (metadata == null)
 			return null;
@@ -123,7 +145,8 @@ public class ExtractedDocumentMetaData {
 				getValue(DocumentMetaInfos.GEBO_REFERENCE_TYPE, metadata),
 				getNumericValue(DocumentMetaInfos.GEBO_CHUNK_POSITION, metadata),
 				getNumericValue(DocumentMetaInfos.GEBO_CHUNKS_COUNT, metadata),
-				getValue(DocumentMetaInfos.LANGUAGE, metadata));
+				getValue(DocumentMetaInfos.LANGUAGE, metadata),
+				getLongValue(DocumentMetaInfos.GEBO_UNIQUE_ID, metadata));
 	}
 	
 

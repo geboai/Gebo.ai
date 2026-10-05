@@ -23,11 +23,14 @@ public class MetaDocumentRenderer {
 	public static final String NAME = "name";
 	public static final String TITLE = "title";
 	public static final String DOCUMENT_CODE = "documentCode";
+	public static final String DOCUMENT_UNIQUE_ID = "documentUniqueId";
 	public static final String FRAGMENT_ID = "fragmentId";
 	public static final String END_DOCUMENT = "</document>";
 	public static final String BEGIN_DOCUMENT = "<document>\n";
 	private final String id;
 	private final String documentCode;
+	/** The uniqueId of the document the content comes from: the tools fetch a whole document by it. */
+	private final Long documentUniqueId;
 	private final String title;
 	private final String name;
 	private final String url;
@@ -50,6 +53,7 @@ public class MetaDocumentRenderer {
 
 		appendField(buffer, FRAGMENT_ID, id);
 		appendField(buffer, DOCUMENT_CODE, documentCode);
+		appendField(buffer, DOCUMENT_UNIQUE_ID, documentUniqueId != null ? documentUniqueId.toString() : null);
 		appendField(buffer, TITLE, title);
 		appendField(buffer, NAME, name);
 		appendField(buffer, URL, url);
