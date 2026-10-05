@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
@@ -41,6 +42,7 @@ import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
+import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
@@ -162,6 +164,27 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 		private Integer topK;
 	}
 
+	/**
+	 * The search with its keywords for the full-text leg: the parameter of the tool
+	 * when that leg exists (see {@link KnowledgeBaseKeywords}).
+	 */
+	@Data
+	@lombok.EqualsAndHashCode(callSuper = true)
+	@lombok.ToString(callSuper = true)
+	@JsonClassDescription("An internal knowledge base search")
+	public static class KnowledgeBaseKeywordsSearchParam extends KnowledgeBaseSearchParam {
+		@JsonPropertyDescription(KnowledgeBaseKeywords.KEYWORDS_DESCRIPTION)
+		private List<String> keywords;
+	}
+
+	/** The full-text search, when configured: its presence gives the tool its keywords. */
+	private ObjectProvider<IGFullTextSearchService> fullTextSearchService = null;
+
+	@Autowired(required = false)
+	public void setFullTextSearchService(ObjectProvider<IGFullTextSearchService> fullTextSearchService) {
+		this.fullTextSearchService = fullTextSearchService;
+	}
+
 	@Override
 	public String getId() {
 		return INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE;
@@ -210,6 +233,14 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			}
 			return search(param, interaction, ToolsFoundDocuments.from(toolContext), ToolsTokenBudget.from(toolContext));
 		};
+		if (KnowledgeBaseKeywords.enabled(fullTextSearchService)) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Declaring tool:" + SEARCH_KNOWLEDGE_BASE_TOOL + " with keywords for the full-text search");
+			}
+			final BiFunction<KnowledgeBaseKeywordsSearchParam, ToolContext, String> searchWithKeywords = search::apply;
+			return List.of(ToolCallbackDeclarationUtil.declare(searchWithKeywords, SEARCH_KNOWLEDGE_BASE_TOOL,
+					SEARCH_KNOWLEDGE_BASE_DESCRIPTION, KnowledgeBaseKeywordsSearchParam.class, String.class));
+		}
 		return List.of(ToolCallbackDeclarationUtil.declare(search, SEARCH_KNOWLEDGE_BASE_TOOL,
 				SEARCH_KNOWLEDGE_BASE_DESCRIPTION, KnowledgeBaseSearchParam.class, String.class));
 	}
@@ -281,8 +312,15 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			final int retrievalTokens = callBudget != null
 					? (int) Math.min(Integer.MAX_VALUE, maxTokens * 2l * (retrievalTopK / topK))
 					: Integer.MAX_VALUE;
+			// the full-text leg searches the keywords when given, else the queries
+			final List<String> fullTextQueries = KnowledgeBaseKeywords.fullTextQueries(
+					param instanceof KnowledgeBaseKeywordsSearchParam withKeywords ? withKeywords.getKeywords() : null,
+					semanticQueries);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("search(...) knowledge base tool full-text queries:" + fullTextQueries);
+			}
 			AIDocumentsSet found = documentsSearchService.getObject().search(param.getQuery(), semanticQueries, semanticFilter,
-					List.of(param.getQuery()), fullTextFilter, param.getQuery(), retrievalTopK, retrievalTokens);
+					fullTextQueries, fullTextFilter, param.getQuery(), retrievalTopK, retrievalTokens);
 			List<Document> documents = found != null ? found.aiDocumentsList() : List.of();
 			if (documents.isEmpty()) {
 				return "No document found in the internal knowledge base for: " + param.getQuery();

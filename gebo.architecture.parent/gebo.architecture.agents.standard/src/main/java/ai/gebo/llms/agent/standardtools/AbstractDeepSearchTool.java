@@ -116,12 +116,28 @@ public abstract class AbstractDeepSearchTool<Q> {
 	protected abstract List<Document> searchDocuments(List<Q> queries, String question, int maxDocuments,
 			int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception;
 
+	/**
+	 * The type of the tool's parameter: the parameterized one, which resolves the
+	 * searches' schema and parsing to Q; a source may declare a subclass of it.
+	 */
+	protected Type paramType() {
+		return ResolvableType.forClassWithGenerics(DeepSearchToolParam.class, queryType).getType();
+	}
+
+	/**
+	 * Runs the searches of the call: what {@link #searchDocuments(List, String, int, int, Map)}
+	 * does by default; a source reading more of its parameter overrides it.
+	 */
+	protected List<Document> searchDocuments(DeepSearchToolParam<Q> param, List<Q> queries, String question,
+			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception {
+		return searchDocuments(queries, question, maxDocuments, fragmentsPerDocument, foundByFragmentId);
+	}
+
 	public ToolCallback toTool() {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Declaring deep search tool:" + toolName + " over " + sourceDescription());
 		}
-		// the parameterized type resolves the searches' schema and parsing to Q
-		final Type paramType = ResolvableType.forClassWithGenerics(DeepSearchToolParam.class, queryType).getType();
+		final Type paramType = paramType();
 		final BiFunction<DeepSearchToolParam<Q>, ToolContext, DeepSearchToolResult> toolCall = this::deepSearch;
 		return ToolCallbackDeclarationUtil.declare(toolCall, toolName, toolDescription, paramType);
 	}
@@ -188,7 +204,7 @@ public abstract class AbstractDeepSearchTool<Q> {
 			ToolsProgress.notify(toolContext,
 					"Deep search in " + sourceDescription() + ": " + ToolsProgress.shown(question));
 			final Map<String, FoundDocument> foundByFragmentId = new LinkedHashMap<>();
-			final List<Document> fragments = searchDocuments(queries, question, support.searchTopK(),
+			final List<Document> fragments = searchDocuments(param, queries, question, support.searchTopK(),
 					fragmentsPerDocument(param.getDepth()), foundByFragmentId);
 			if (fragments == null || fragments.isEmpty()) {
 				if (LOGGER.isDebugEnabled()) {

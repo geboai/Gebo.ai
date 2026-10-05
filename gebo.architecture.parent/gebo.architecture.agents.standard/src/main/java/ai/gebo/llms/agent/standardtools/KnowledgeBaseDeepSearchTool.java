@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.agent.standardtools;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,9 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
+import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolResult.Source;
+import ai.gebo.llms.agent.standardtools.model.KnowledgeBaseDeepSearchToolParam;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.model.DocumentMetaInfos;
@@ -68,9 +71,35 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 		return "the internal knowledge base";
 	}
 
+	/** The parameter with keywords when the knowledge base searches have a full-text leg. */
+	@Override
+	protected Type paramType() {
+		if (support.knowledgeBaseKeywordsEnabled()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Declaring tool:" + toolName + " with keywords for the full-text search");
+			}
+			return KnowledgeBaseDeepSearchToolParam.class;
+		}
+		return super.paramType();
+	}
+
+	/** The full-text leg searches the keywords of the call when it gives some, else its queries. */
+	@Override
+	protected List<Document> searchDocuments(DeepSearchToolParam<String> param, List<String> queries, String question,
+			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception {
+		final List<String> fullTextQueries = KnowledgeBaseKeywords.fullTextQueries(
+				param instanceof KnowledgeBaseDeepSearchToolParam withKeywords ? withKeywords.getKeywords() : null, queries);
+		return searchDocuments(queries, fullTextQueries, question, maxDocuments, fragmentsPerDocument, foundByFragmentId);
+	}
+
 	@Override
 	protected List<Document> searchDocuments(List<String> queries, String question, int maxDocuments,
 			int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception {
+		return searchDocuments(queries, queries, question, maxDocuments, fragmentsPerDocument, foundByFragmentId);
+	}
+
+	List<Document> searchDocuments(List<String> queries, List<String> fullTextQueries, String question,
+			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception {
 		final List<String> kbCodes = knowledgeBaseCodes(LLMtInteractionContextThreadLocal.Context.get());
 		if (kbCodes.isEmpty()) {
 			if (LOGGER.isDebugEnabled()) {
@@ -95,9 +124,10 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 		final int topK = maxDocuments * FRAGMENTS_PER_DOCUMENT;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Tool:" + toolName + " searching " + kbCodes.size() + " knowledge base(s) with "
-					+ queries.size() + " search(es) topK:" + topK + " fragmentsPerDocument:" + fragmentsPerDocument);
+					+ queries.size() + " search(es) topK:" + topK + " fragmentsPerDocument:" + fragmentsPerDocument
+					+ " full-text queries:" + fullTextQueries);
 		}
-		final AIDocumentsSet found = documentsSearchService.search(question, queries, semanticFilter, queries,
+		final AIDocumentsSet found = documentsSearchService.search(question, queries, semanticFilter, fullTextQueries,
 				fullTextFilter, question, topK, MAX_RETRIEVED_TOKENS);
 		final List<Document> fragments = found != null ? found.aiDocumentsList() : List.of();
 		for (Document fragment : fragments) {

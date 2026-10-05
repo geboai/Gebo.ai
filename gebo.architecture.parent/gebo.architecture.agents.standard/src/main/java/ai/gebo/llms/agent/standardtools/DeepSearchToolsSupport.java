@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
+import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
 import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
 
 /**
@@ -76,6 +78,19 @@ public class DeepSearchToolsSupport {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Deep search tools analysis capped at " + this.maxAnalysisTokens + " token(s)");
 		}
+	}
+
+	/** The full-text search, when configured: its presence gives the knowledge base deep search its keywords. */
+	private ObjectProvider<IGFullTextSearchService> fullTextSearchService = null;
+
+	@Autowired(required = false)
+	public void setFullTextSearchService(ObjectProvider<IGFullTextSearchService> fullTextSearchService) {
+		this.fullTextSearchService = fullTextSearchService;
+	}
+
+	/** Whether the knowledge base searches have a full-text leg, so they take keywords. */
+	public boolean knowledgeBaseKeywordsEnabled() {
+		return KnowledgeBaseKeywords.enabled(fullTextSearchService);
 	}
 
 	public DeepSearchToolAnalysis analysis() {

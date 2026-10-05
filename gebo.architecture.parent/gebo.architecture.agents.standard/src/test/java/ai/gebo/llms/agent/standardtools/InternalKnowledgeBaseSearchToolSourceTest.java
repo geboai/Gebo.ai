@@ -10,6 +10,7 @@
 package ai.gebo.llms.agent.standardtools;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -35,6 +36,7 @@ import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
@@ -86,6 +88,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 	private static <T> org.springframework.beans.factory.ObjectProvider<T> provider(T value) {
 		org.springframework.beans.factory.ObjectProvider<T> provider = mock(org.springframework.beans.factory.ObjectProvider.class);
 		when(provider.getObject()).thenReturn(value);
+		when(provider.getIfAvailable()).thenReturn(value);
 		return provider;
 	}
 
@@ -342,5 +345,45 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		assertEquals(InternalKnowledgeBaseSearchToolSource.SEARCH_KNOWLEDGE_BASE_TOOL,
 				tool.getToolCallbacks().get(0).getToolDefinition().name());
 		assertTrue(tool.getToolCallbacks().get(0).getToolDefinition().inputSchema().contains("query"));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	void theKeywordsAreDeclaredOnlyWithAFullTextLeg() {
+		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(
+				provider(mock(IGDocumentsSearchService.class)), provider(mock(IGKnowledgebaseVisibilityService.class)),
+				mock(IGSecurityService.class), TEXT_RENDERER, null, null);
+		assertFalse(tool.getToolCallbacks().get(0).getToolDefinition().inputSchema().contains("keywords"));
+
+		org.springframework.beans.factory.ObjectProvider<IGFullTextSearchService> noFullText = mock(
+				org.springframework.beans.factory.ObjectProvider.class);
+		tool.setFullTextSearchService(noFullText);
+		assertFalse(tool.getToolCallbacks().get(0).getToolDefinition().inputSchema().contains("keywords"));
+
+		tool.setFullTextSearchService(provider(mock(IGFullTextSearchService.class)));
+		String schema = tool.getToolCallbacks().get(0).getToolDefinition().inputSchema();
+		assertTrue(schema.contains("\"keywords\""), schema);
+		assertTrue(schema.contains("\"query\""), schema);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	void theFullTextLegSearchesTheKeywordsElseTheQueries() throws Exception {
+		IGDocumentsSearchService search = searchFindingDocuments(3);
+		InternalKnowledgeBaseSearchToolSource tool = tool(search, null);
+		InternalKnowledgeBaseSearchToolSource.KnowledgeBaseKeywordsSearchParam withKeywords = new InternalKnowledgeBaseSearchToolSource.KnowledgeBaseKeywordsSearchParam();
+		withKeywords.setQuery("what is the cosmic substance");
+		withKeywords.setKeywords(List.of("Svâbhâvat", " ", "Dhyân Chohans", "Svâbhâvat"));
+		KnowledgeBaseSearchParam plain = query("topic");
+		plain.setAlternativeQueries(List.of("other phrasing"));
+
+		tool.search(withKeywords, chatWithKnowledgeBases("kb1"));
+		tool.search(plain, chatWithKnowledgeBases("kb1"));
+
+		org.mockito.ArgumentCaptor<List<String>> fullText = org.mockito.ArgumentCaptor.forClass(List.class);
+		verify(search, org.mockito.Mockito.times(2)).search(anyString(), anyList(), any(), fullText.capture(), any(),
+				anyString(), anyInt(), anyInt());
+		assertEquals(List.of("Svâbhâvat", "Dhyân Chohans"), fullText.getAllValues().get(0));
+		assertEquals(List.of("topic", "other phrasing"), fullText.getAllValues().get(1));
 	}
 }

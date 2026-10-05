@@ -10,6 +10,8 @@
 package ai.gebo.llms.agent.standardtools;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -24,6 +26,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
+import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam;
+import ai.gebo.llms.agent.standardtools.model.KnowledgeBaseDeepSearchToolParam;
 import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
@@ -69,5 +73,51 @@ class KnowledgeBaseDeepSearchToolTest {
 		assertEquals(6, chunksPerDocumentSearchedFor(Depth.BROAD));
 		assertEquals(6, chunksPerDocumentSearchedFor(null));
 		assertEquals(10, chunksPerDocumentSearchedFor(Depth.EXHAUSTIVE));
+	}
+
+	private static KnowledgeBaseDeepSearchTool toolOn(IGDocumentsSearchService search, DeepSearchToolsSupport support) {
+		IGKnowledgebaseVisibilityService visibility = mock(IGKnowledgebaseVisibilityService.class);
+		GKnowledgeBase knowledgeBase = new GKnowledgeBase();
+		knowledgeBase.setCode("kb");
+		when(visibility.allVisibleKnowledgebases()).thenReturn(List.of(knowledgeBase));
+		return new KnowledgeBaseDeepSearchTool(support, search, visibility, mock(IGSecurityService.class));
+	}
+
+	@Test
+	void theKeywordsAreDeclaredOnlyWithAFullTextLeg() {
+		DeepSearchToolsSupport support = mock(DeepSearchToolsSupport.class);
+		KnowledgeBaseDeepSearchTool tool = toolOn(mock(IGDocumentsSearchService.class), support);
+		when(support.knowledgeBaseKeywordsEnabled()).thenReturn(false);
+		assertFalse(tool.toTool().getToolDefinition().inputSchema().contains("keywords"));
+
+		when(support.knowledgeBaseKeywordsEnabled()).thenReturn(true);
+		String schema = tool.toTool().getToolDefinition().inputSchema();
+		assertTrue(schema.contains("\"keywords\""), schema);
+		assertTrue(schema.contains("\"queries\""), schema);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	void theFullTextLegSearchesTheKeywordsElseTheQueries() throws Exception {
+		IGDocumentsSearchService search = mock(IGDocumentsSearchService.class);
+		AIDocumentsSet found = mock(AIDocumentsSet.class);
+		when(found.aiDocumentsList()).thenReturn(List.of());
+		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
+				.thenReturn(found);
+		KnowledgeBaseDeepSearchTool tool = toolOn(search, mock(DeepSearchToolsSupport.class));
+		KnowledgeBaseDeepSearchToolParam withKeywords = new KnowledgeBaseDeepSearchToolParam();
+		withKeywords.setKeywords(List.of("Fohat"));
+		DeepSearchToolParam<String> plain = new DeepSearchToolParam<>();
+
+		tool.searchDocuments(withKeywords, List.of("cosmic electricity"), "question", 10, 3, new HashMap<>());
+		tool.searchDocuments(plain, List.of("cosmic electricity"), "question", 10, 3, new HashMap<>());
+
+		ArgumentCaptor<List<String>> semantic = ArgumentCaptor.forClass(List.class);
+		ArgumentCaptor<List<String>> fullText = ArgumentCaptor.forClass(List.class);
+		verify(search, org.mockito.Mockito.times(2)).search(anyString(), semantic.capture(), any(), fullText.capture(),
+				any(), anyString(), anyInt(), anyInt());
+		assertEquals(List.of("cosmic electricity"), semantic.getAllValues().get(0));
+		assertEquals(List.of("Fohat"), fullText.getAllValues().get(0));
+		assertEquals(List.of("cosmic electricity"), fullText.getAllValues().get(1));
 	}
 }
