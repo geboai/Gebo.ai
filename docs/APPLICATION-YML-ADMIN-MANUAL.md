@@ -588,6 +588,7 @@ large-scale ingestion tuning.
 | `ai.gebo.agents.standard.enabled` | boolean | `true` | Enables the built-in standard document-search agents, i.e. the default network of agents. On unless explicitly set to `false`. |
 | `ai.gebo.agents.standard.deep-search-tools.enabled` | boolean | `true` | Exposes the deep search tools (`deepSearchKnowledgeBase`, `deepSearchWeb`, `deepSearch<Product>`) to the agents operating their own tools, such as the agentic chat. |
 | `ai.gebo.agents.standard.deep-search-tools.max-analysis-tokens` | int | `16000` | Safety cap, in tokens, of the analysis a deep search tool returns. Its length is asked to the model through the depth the agent chooses; this only cuts a runaway analysis. |
+| `ai.gebo.agents.standard.deep-search-tools.max-deep-searches-per-request` | int | `8` | Deep searches a single user request can make, whatever the sources (a value that is not positive means the default). One more is refused, and the agent is told to answer with what it already has. |
 | `ai.gebo.chatpipes.defaultPipelineStepIsChatAgent` | boolean | `true` | **Currently has no effect** - the value is read and never used. The behaviour it describes (agentic flow vs. the LLM routing/decision step) is governed by `ai.gebo.agents.standard.enabled` instead. See [`CHAT-PIPELINE-ROUTING-ARCHITECTURE.md`](./CHAT-PIPELINE-ROUTING-ARCHITECTURE.md) §8. |
 
 ## 19. Web search tool (Google Custom Search)

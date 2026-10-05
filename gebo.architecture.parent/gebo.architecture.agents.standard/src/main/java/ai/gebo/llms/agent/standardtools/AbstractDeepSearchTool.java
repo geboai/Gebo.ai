@@ -55,14 +55,12 @@ import reactor.core.publisher.Flux;
  * <p>
  * Everything runs in the tool call: no model plans the searches, they are the
  * agent's ones. A deep search is expensive: a request can make at most
- * {@value #MAX_DEEP_SEARCHES_PER_REQUEST} of them.
+ * {@link DeepSearchToolsSupport#maxDeepSearchesPerRequest()} of them.
  * <p>
  * The subclasses only say whether their source can be searched and search it.
  */
 public abstract class AbstractDeepSearchTool<Q> {
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
-	/** Deep searches a single user request can make, whatever the sources. */
-	public static final int MAX_DEEP_SEARCHES_PER_REQUEST = 2;
 	/** Most searches run by a deep search. */
 	static final int MAX_QUERIES = 5;
 	/** The shortest final analysis asked for, whatever the room. */
@@ -180,13 +178,14 @@ public abstract class AbstractDeepSearchTool<Q> {
 					"No room is left in the context for more contents: answer with the contents already found.");
 		}
 		final int calls = support.countDeepSearch(requestId);
-		if (calls > MAX_DEEP_SEARCHES_PER_REQUEST) {
+		final int maxDeepSearches = support.maxDeepSearchesPerRequest();
+		if (calls > maxDeepSearches) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Tool:" + toolName + " denied: deep search " + calls + " of request:" + requestId
-						+ " beyond the limit of " + MAX_DEEP_SEARCHES_PER_REQUEST);
+						+ " beyond the limit of " + maxDeepSearches);
 			}
 			return DeepSearchToolResult.of(Status.NOT_ALLOWED, "The deep searches allowed for this request ("
-					+ MAX_DEEP_SEARCHES_PER_REQUEST
+					+ maxDeepSearches
 					+ ") are used up: answer with the contents you already have, or use the search tools.");
 		}
 		try {

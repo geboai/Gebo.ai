@@ -324,15 +324,32 @@ class AbstractDeepSearchToolTest {
 	@Test
 	void capsTheDeepSearchesOfARequest() {
 		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a")));
-		for (int i = 0; i < AbstractDeepSearchTool.MAX_DEEP_SEARCHES_PER_REQUEST; i++) {
+		for (int i = 0; i < support.maxDeepSearchesPerRequest(); i++) {
 			assertEquals(Status.OK, tool.deepSearch(param("question " + i), request("r1")).getStatus());
 		}
 
 		assertEquals(Status.NOT_ALLOWED, tool.deepSearch(param("one more"), request("r1")).getStatus());
 		// another request has its own deep searches
 		assertEquals(Status.OK, tool.deepSearch(param("question"), request("r2")).getStatus());
-		verify(analysis, times(AbstractDeepSearchTool.MAX_DEEP_SEARCHES_PER_REQUEST + 1)).analyze(any(), any(), any(),
+		verify(analysis, times(support.maxDeepSearchesPerRequest() + 1)).analyze(any(), any(), any(),
 				any(), anyString(), any(), any(), any(), any());
+	}
+
+	@Test
+	void theDeepSearchesOfARequestAreConfigurableEightByDefault() {
+		assertEquals(DeepSearchToolsSupport.DEFAULT_MAX_DEEP_SEARCHES_PER_REQUEST, support.maxDeepSearchesPerRequest());
+		assertEquals(8, DeepSearchToolsSupport.DEFAULT_MAX_DEEP_SEARCHES_PER_REQUEST);
+		support.setMaxDeepSearchesPerRequest(0);
+		assertEquals(8, support.maxDeepSearchesPerRequest());
+
+		support.setMaxDeepSearchesPerRequest(3);
+		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a")));
+		for (int i = 0; i < 3; i++) {
+			assertEquals(Status.OK, tool.deepSearch(param("question " + i), request("r1")).getStatus());
+		}
+		DeepSearchToolResult refused = tool.deepSearch(param("one more"), request("r1"));
+		assertEquals(Status.NOT_ALLOWED, refused.getStatus());
+		assertTrue(refused.getMessage().contains("(3)"), refused.getMessage());
 	}
 
 	@Test
@@ -400,7 +417,7 @@ class AbstractDeepSearchToolTest {
 		assertEquals(Status.NO_RESULTS, result.getStatus());
 		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any());
 		// not run, it is not one of the request's deep searches
-		for (int i = 0; i < AbstractDeepSearchTool.MAX_DEEP_SEARCHES_PER_REQUEST; i++) {
+		for (int i = 0; i < support.maxDeepSearchesPerRequest(); i++) {
 			assertEquals(Status.OK, tool.deepSearch(param("question " + i), request("r1")).getStatus());
 		}
 	}

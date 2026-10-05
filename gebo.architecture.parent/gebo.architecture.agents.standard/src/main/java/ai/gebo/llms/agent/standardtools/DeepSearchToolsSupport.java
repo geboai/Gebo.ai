@@ -48,6 +48,9 @@ public class DeepSearchToolsSupport {
 	/** Property capping the returned analysis, in tokens. */
 	public static final String MAX_ANALYSIS_TOKENS_PROPERTY = "ai.gebo.agents.standard.deep-search-tools.max-analysis-tokens";
 	public static final int DEFAULT_MAX_ANALYSIS_TOKENS = 16000;
+	/** Property setting the deep searches a single user request can make, whatever the sources. */
+	public static final String MAX_DEEP_SEARCHES_PER_REQUEST_PROPERTY = "ai.gebo.agents.standard.deep-search-tools.max-deep-searches-per-request";
+	public static final int DEFAULT_MAX_DEEP_SEARCHES_PER_REQUEST = 8;
 	private final ObjectProvider<DeepSearchToolAnalysis> analysis;
 	private final ObjectProvider<IDocumentsChunkService> chunkingService;
 	private final ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModelsDao;
@@ -55,6 +58,7 @@ public class DeepSearchToolsSupport {
 	private final ObjectProvider<IGExternalSearchSecurityService> externalSearchSecurityService;
 	private final ObjectProvider<StandardAgentsConfig> agentsConfig;
 	private final int maxAnalysisTokens;
+	private int maxDeepSearchesPerRequest = DEFAULT_MAX_DEEP_SEARCHES_PER_REQUEST;
 
 	private static final class RequestCount {
 		final AtomicInteger deepSearches = new AtomicInteger(0);
@@ -80,6 +84,27 @@ public class DeepSearchToolsSupport {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Deep search tools analysis capped at " + this.maxAnalysisTokens + " token(s)");
 		}
+	}
+
+	/**
+	 * The deep searches a single user request can make, whatever the sources
+	 * ({@value #MAX_DEEP_SEARCHES_PER_REQUEST_PROPERTY},
+	 * {@value #DEFAULT_MAX_DEEP_SEARCHES_PER_REQUEST} by default, also when not a
+	 * positive number).
+	 */
+	@Value("${" + MAX_DEEP_SEARCHES_PER_REQUEST_PROPERTY + ":" + DEFAULT_MAX_DEEP_SEARCHES_PER_REQUEST + "}")
+	public void setMaxDeepSearchesPerRequest(int maxDeepSearchesPerRequest) {
+		this.maxDeepSearchesPerRequest = maxDeepSearchesPerRequest > 0 ? maxDeepSearchesPerRequest
+				: DEFAULT_MAX_DEEP_SEARCHES_PER_REQUEST;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Deep search tools: at most " + this.maxDeepSearchesPerRequest + " deep search(es) per request"
+					+ (maxDeepSearchesPerRequest > 0 ? "" : " (default, " + maxDeepSearchesPerRequest + " not valid)"));
+		}
+	}
+
+	/** The deep searches a single user request can make, whatever the sources. */
+	public int maxDeepSearchesPerRequest() {
+		return maxDeepSearchesPerRequest;
 	}
 
 	/** The full-text search, when configured: its presence gives the knowledge base deep search its keywords. */
