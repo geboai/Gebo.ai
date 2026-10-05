@@ -31,6 +31,16 @@ public class GFullTextSearchServiceImpl implements IGFullTextSearchService {
 	}
 
 	@Override
+	public List<FullTextChunkSearchHit> documentChunks(String documentCode, int from, int size)
+			throws FullTextException {
+		try {
+			return search.documentChunks(documentCode, from, size);
+		} catch (OpenSearchException | IOException e) {
+			throw new FullTextException("exception reading the chunks of document " + documentCode, e);
+		}
+	}
+
+	@Override
 	public List<FullTextChunkSearchHit> search(String q, int topK, FullTextSearchMetaDataFilter filter) throws FullTextException {
 		try {
 			return search.searchTopKChunks(q, topK, filter);

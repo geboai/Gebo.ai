@@ -21,6 +21,7 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
+import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseDeepSearchTool;
 import ai.gebo.security.services.IGSecurityService;
 
@@ -52,9 +53,14 @@ public class AgenticLoopPureChatReactiveAgentServiceImpl extends AgenticLoopReac
 	}
 
 	/** The tools a free chat does not mount: the internal knowledge bases are not its scope. */
-	public static final Set<String> KNOWLEDGE_BASE_TOOLS = Set.of(
-			InternalKnowledgeBaseSearchToolSource.SEARCH_KNOWLEDGE_BASE_TOOL,
-			KnowledgeBaseDeepSearchTool.DEEP_SEARCH_KNOWLEDGE_BASE_TOOL);
+	public static final Set<String> KNOWLEDGE_BASE_TOOLS = knowledgeBaseTools();
+
+	private static Set<String> knowledgeBaseTools() {
+		final Set<String> tools = new java.util.HashSet<>(KnowledgeBaseBrowsingToolSource.TOOLS);
+		tools.add(InternalKnowledgeBaseSearchToolSource.SEARCH_KNOWLEDGE_BASE_TOOL);
+		tools.add(KnowledgeBaseDeepSearchTool.DEEP_SEARCH_KNOWLEDGE_BASE_TOOL);
+		return Set.copyOf(tools);
+	}
 
 	@Override
 	protected List<String> filterAutoMountedTools(List<String> toolNames) {
@@ -64,7 +70,7 @@ public class AgenticLoopPureChatReactiveAgentServiceImpl extends AgenticLoopReac
 		List<String> filtered = toolNames.stream().filter(x -> !KNOWLEDGE_BASE_TOOLS.contains(x)).toList();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Agentic loop pure chat agent id:" + getId() + " mounts " + filtered.size() + " of "
-					+ toolNames.size() + " tool(s), without the internal knowledge base search and deep search");
+					+ toolNames.size() + " tool(s), without the internal knowledge base tools " + KNOWLEDGE_BASE_TOOLS);
 		}
 		return filtered;
 	}

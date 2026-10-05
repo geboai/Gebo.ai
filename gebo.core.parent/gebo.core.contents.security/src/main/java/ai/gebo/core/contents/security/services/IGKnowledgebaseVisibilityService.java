@@ -11,6 +11,9 @@ package ai.gebo.core.contents.security.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
@@ -78,4 +81,13 @@ public interface IGKnowledgebaseVisibilityService {
 	public List<GVirtualFolder> getVisibleChildVirtualFolders(String parentVirtualFolderCode);
 
 	public List<GDocumentReference> getVisibleChildDocuments(String parentVirtualFolderCode);
+
+	/** A page of the folders the user can see matching the query, by name. */
+	public Page<GVirtualFolder> browseVisibleVirtualFolders(VirtualFilesystemQuery query, Pageable pageable);
+
+	/** A page of the documents the user can see matching the query, by name. */
+	public Page<GDocumentReference> browseVisibleDocuments(VirtualFilesystemQuery query, Pageable pageable);
+
+	/** How many documents the user can see match the query. */
+	public long countVisibleDocuments(VirtualFilesystemQuery query);
 }

@@ -216,6 +216,27 @@ public class OpenSearchFullTextChunkSearchService {
 		return hits;
 	}
 
+	/**
+	 * The chunks of a document in their order in it ({@code position}), {@code size}
+	 * from the {@code from}-th, without any relevance scoring.
+	 */
+	public List<FullTextChunkSearchHit> documentChunks(String documentCode, int from, int size)
+			throws OpenSearchException, IOException {
+		if (documentCode == null || documentCode.isBlank() || size <= 0) {
+			return List.of();
+		}
+		final Query byDocument = Query
+				.of(q -> q.bool(b -> b.filter(f -> f.term(t -> t.field("document_code").value(v -> v.stringValue(documentCode))))));
+		final SearchRequest.Builder sb = new SearchRequest.Builder().index(indexName).query(byDocument)
+				.from(Math.max(0, from)).size(Math.min(size, 500)).trackTotalHits(t -> t.enabled(false))
+				.sort(s -> s.field(fs -> fs.field("position").order(SortOrder.Asc)))
+				.source(s -> s.filter(sf -> sf.includes("chunk_id", "content", "lang", "tokens_length", "position",
+						"document_code", "document_title", "document_size", "document_tokens_total", "document_n_chunks",
+						"knowledgebase_code", "project_code", "project_endpoint_code", "content_code", "file_name",
+						"meta")));
+		return runSearch(sb, byDocument, null, "chunks of document " + documentCode + " from " + from, size);
+	}
+
 	/** The query as OpenSearch receives it, for the TRACE log. */
 	private String toJson(Query query) {
 		try {
