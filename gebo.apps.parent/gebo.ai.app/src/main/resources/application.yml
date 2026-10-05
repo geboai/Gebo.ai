@@ -487,6 +487,10 @@ ai.gebo.websearch.size-probe:
 # The knowledge base search tool's answer takes at most the room its model call leaves
 # to the tools' results divided by this (3 when not set; no room shared, topK only)
 ai.gebo.agents.standard.knowledge-base-search-room-divisor: 3
+# The knowledge base search tool keeps out of its results the fragments with fewer
+# characters of text than this, their META- header lines excluded (titles, page
+# numbers, index entries, footnotes); 0 keeps them all (70 when not set)
+ai.gebo.agents.standard.knowledge-base-search-min-fragment-chars: 70
 # In-flight LLM sub-analysis calls of a deep search per data source (2 when not set);
 # with ai.gebo.deepsearch.max-concurrent-sources it caps the concurrent LLM calls
 ai.gebo.deepsearch.analysis-parallelism: 2

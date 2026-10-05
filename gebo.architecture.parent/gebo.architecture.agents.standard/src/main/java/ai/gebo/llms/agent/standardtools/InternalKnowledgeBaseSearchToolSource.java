@@ -70,6 +70,12 @@ import lombok.Data;
  * With a ranker configured ({@link IGRankerService#isRankerConfigured()}), twice the
  * fragments asked are retrieved and {@link IGRankerService#rank(List, String, int)}
  * keeps the best topK of them, best first, without the irrelevance filter.
+ * <p>
+ * The near-empty fragments retrieved (fewer characters of text than
+ * {@code ai.gebo.agents.standard.knowledge-base-search-min-fragment-chars},
+ * {@value #DEFAULT_MIN_FRAGMENT_CHARS} by default, the META- header lines excluded:
+ * titles, page numbers, index entries, footnotes) are kept out before the ranking;
+ * when every fragment is near-empty the tool says so, for the model to search again.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.agents.standard", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Service
@@ -83,6 +89,13 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			+ "the most relevant document fragments with their titles and sources.";
 	/** The share of the room left to the tools an answer may take: a third by default. */
 	public static final double DEFAULT_ROOM_DIVISOR = 3.0d;
+	/**
+	 * The characters of text, the META- header lines excluded, below which a fragment
+	 * retrieved is near-empty and kept out of the results.
+	 */
+	public static final int DEFAULT_MIN_FRAGMENT_CHARS = 70;
+	/** The header lines ingestion writes into every chunk (its document's title, subtitle). */
+	static final String META_HEADER_PREFIX = "META-";
 	/** The fittings of the fragments tried to bring the whole answer in its room. */
 	static final int MAX_FIT_ATTEMPTS = 4;
 	static final int DEFAULT_TOP_K = 10;
@@ -127,6 +140,43 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			return DEFAULT_ROOM_DIVISOR;
 		}
 		return divisor;
+	}
+
+	/**
+	 * The configured characters of text below which a fragment is near-empty (0: none
+	 * is), the default ones when not configured or negative.
+	 */
+	int minFragmentChars() {
+		final StandardAgentsConfig config = agentsConfig != null ? agentsConfig.getIfAvailable() : null;
+		if (config == null) {
+			return DEFAULT_MIN_FRAGMENT_CHARS;
+		}
+		final int chars = config.getKnowledgeBaseSearchMinFragmentChars();
+		if (chars < 0) {
+			LOGGER.warn("ai.gebo.agents.standard.knowledge-base-search-min-fragment-chars " + chars
+					+ " is negative, " + DEFAULT_MIN_FRAGMENT_CHARS + " is used");
+			return DEFAULT_MIN_FRAGMENT_CHARS;
+		}
+		return chars;
+	}
+
+	/**
+	 * The characters of text of a fragment, its META- header lines excluded and its
+	 * whitespace collapsed.
+	 */
+	static int textChars(Document fragment) {
+		final String text = fragment != null ? fragment.getText() : null;
+		if (text == null) {
+			return 0;
+		}
+		final StringBuilder content = new StringBuilder();
+		for (String line : text.split("\\R")) {
+			final String trimmed = line.strip();
+			if (!trimmed.isEmpty() && !trimmed.startsWith(META_HEADER_PREFIX)) {
+				content.append(trimmed).append(' ');
+			}
+		}
+		return content.toString().replaceAll("\\s+", " ").strip().length();
 	}
 
 	/**
@@ -326,6 +376,26 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			if (documents.isEmpty()) {
 				return "No document found in the internal knowledge base for: " + param.getQuery();
 			}
+			// the near-empty fragments (titles, page numbers, index entries, footnotes) answer
+			// nothing: kept out, so the ranking chooses among the ones with text
+			final int minChars = minFragmentChars();
+			final List<Document> withText = new ArrayList<>();
+			for (Document document : documents) {
+				if (textChars(document) >= minChars) {
+					withText.add(document);
+				}
+			}
+			final boolean keptOut = withText.size() < documents.size();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("search(...) knowledge base tool kept out " + (documents.size() - withText.size()) + " of "
+						+ documents.size() + " retrieved fragment(s) with fewer than " + minChars + " character(s) of text");
+			}
+			if (withText.isEmpty()) {
+				return "Only near-empty fragments (titles, page numbers, index entries, footnotes) were found for: "
+						+ param.getQuery() + ". They do not answer the question: search again with other terms, "
+						+ "synonyms, the names and spellings the documents would use, or read the relevant document whole.";
+			}
+			documents = withText;
 			final List<Document> retrieved = documents;
 			documents = ranking ? rank(ranker, documents, param.getQuery(), topK) : documents;
 			if (collector != null) {
@@ -333,7 +403,7 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 				// ones the ranker kept when it ranked them; sharing them never fails the search
 				try {
 					List<GResponseDocumentRef> refs = GResponseDocumentRef
-							.from(documents == retrieved ? found : AIDocumentsSet.from(documents));
+							.from(documents == retrieved && !keptOut ? found : AIDocumentsSet.from(documents));
 					collector.add(refs);
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Knowledge base tool shared " + refs.size()
