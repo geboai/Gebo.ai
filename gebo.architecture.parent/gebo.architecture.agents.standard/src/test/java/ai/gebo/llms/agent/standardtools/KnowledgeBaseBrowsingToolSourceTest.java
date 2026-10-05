@@ -17,6 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -32,12 +33,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.core.contents.security.services.VirtualFilesystemQuery;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
-import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.BrowseProjectEndpointsParam;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.BrowseVirtualFilesystemParam;
@@ -70,16 +70,9 @@ class KnowledgeBaseBrowsingToolSourceTest {
 		return provider;
 	}
 
-	private static GKnowledgeBase kb(String code) {
-		GKnowledgeBase kb = new GKnowledgeBase();
-		kb.setCode(code);
-		return kb;
-	}
-
-	private static KBContext chat(String... codes) {
-		KBContext context = new KBContext();
-		context.setKnowledgeBasesCodes(List.of(codes));
-		return context;
+	/** The knowledge bases of a chat, as its chat profile gives them (children included). */
+	private static List<String> chat(String... codes) {
+		return List.of(codes);
 	}
 
 	private static GDocumentReference document(long uniqueId, String code, String name) {
@@ -98,9 +91,6 @@ class KnowledgeBaseBrowsingToolSourceTest {
 	void setUp() {
 		visibility = mock(IGKnowledgebaseVisibilityService.class);
 		reader = mock(KnowledgeBaseDocumentChunksReader.class);
-		// the chat's kb1 and its visible child kb1-child
-		when(visibility.visiblesAndChildKnowledgebases(List.of("kb1"))).thenReturn(List.of(kb("kb1"), kb("kb1-child")));
-		when(visibility.allVisibleKnowledgebases()).thenReturn(List.of(kb("kb1"), kb("kb1-child"), kb("other")));
 	}
 
 	private KnowledgeBaseBrowsingToolSource tools() {
@@ -108,13 +98,37 @@ class KnowledgeBaseBrowsingToolSourceTest {
 	}
 
 	@Test
-	void theScopeIsTheChatsVisibleKnowledgeBasesWithTheirChildren() {
+	void theScopeIsTheKnowledgeBasesOfTheChat() {
 		KnowledgeBaseBrowsingToolSource tools = tools();
 
-		assertEquals(List.of("kb1", "kb1-child"), tools.scope(chat("kb1"), null));
-		assertEquals(List.of("kb1-child"), tools.scope(chat("kb1"), "kb1-child"));
-		assertEquals(List.of(), tools.scope(chat("kb1"), "other"));
-		assertEquals(List.of("kb1", "kb1-child", "other"), tools.scope(null, null));
+		assertEquals(List.of("kb1", "kb1-child"), tools.scope(chat("kb1", "kb1-child"), null));
+		assertEquals(List.of("kb1-child"), tools.scope(chat("kb1", "kb1-child"), "kb1-child"));
+		assertEquals(List.of(), tools.scope(chat("kb1", "kb1-child"), "other"));
+		// a chat without knowledge bases reads none, never all the visible ones
+		assertEquals(List.of(), tools.scope(chat(), null));
+		assertEquals(List.of(), tools.scope(null, null));
+		verifyNoInteractions(visibility);
+	}
+
+	@Test
+	void theToolsReadTheKnowledgeBasesOfTheChatTheyAreCalledFor() {
+		when(visibility.countVisibleDocuments(any(VirtualFilesystemQuery.class))).thenReturn(4L);
+		org.springframework.ai.tool.ToolCallback count = tools().getToolCallbacks().stream()
+				.filter(x -> x.getToolDefinition().name().equals(KnowledgeBaseBrowsingToolSource.COUNT_DOCUMENTS_TOOL))
+				.findFirst().orElseThrow();
+
+		String answer = count.call("{}", new org.springframework.ai.chat.model.ToolContext(
+				Map.of(ToolCallbackDeclarationUtil.CHAT_KNOWLEDGE_BASES_CONTEXT_KEY, List.of("kb-of-the-profile"))));
+
+		assertTrue(answer.contains("kb-of-the-profile"), answer);
+		ArgumentCaptor<VirtualFilesystemQuery> query = ArgumentCaptor.forClass(VirtualFilesystemQuery.class);
+		verify(visibility).countVisibleDocuments(query.capture());
+		assertEquals(List.of("kb-of-the-profile"), query.getValue().getKnowledgeBaseCodes());
+
+		// called outside a chat: no knowledge base
+		answer = count.call("{}", new org.springframework.ai.chat.model.ToolContext(Map.of()));
+		assertTrue(answer.contains("This chat has no knowledge base."), answer);
+		verify(visibility, org.mockito.Mockito.times(1)).countVisibleDocuments(any(VirtualFilesystemQuery.class));
 	}
 
 	@Test
@@ -143,7 +157,7 @@ class KnowledgeBaseBrowsingToolSourceTest {
 		param.setNameContains("sens");
 		param.setPage(1);
 
-		ListPage<VirtualFilesystemItem> page = tools().browseDocuments(param, chat("kb1"), null);
+		ListPage<VirtualFilesystemItem> page = tools().browseDocuments(param, chat("kb1", "kb1-child"), null);
 
 		assertEquals(120, page.total());
 		assertTrue(page.hasMorePages());
@@ -170,7 +184,7 @@ class KnowledgeBaseBrowsingToolSourceTest {
 		BrowseVirtualFilesystemParam param = new BrowseVirtualFilesystemParam();
 		param.setKnowledgeBaseCode("other");
 
-		ListPage<VirtualFilesystemItem> page = tools().browseFolders(param, chat("kb1"), null);
+		ListPage<VirtualFilesystemItem> page = tools().browseFolders(param, chat("kb1", "kb1-child"), null);
 
 		assertTrue(page.items().isEmpty());
 		assertTrue(page.message().contains("not among this chat's knowledge bases"), page.message());
@@ -182,7 +196,7 @@ class KnowledgeBaseBrowsingToolSourceTest {
 		when(visibility.countVisibleDocuments(any(VirtualFilesystemQuery.class))).thenReturn(7L, 3L);
 		CountDocumentsParam param = new CountDocumentsParam();
 
-		DocumentsCount count = tools().countDocuments(param, chat("kb1"));
+		DocumentsCount count = tools().countDocuments(param, chat("kb1", "kb1-child"));
 
 		assertEquals(10L, count.total());
 		assertEquals(Map.of("kb1", 7L, "kb1-child", 3L), count.byKnowledgeBase());
@@ -196,7 +210,7 @@ class KnowledgeBaseBrowsingToolSourceTest {
 		BrowseProjectEndpointsParam param = new BrowseProjectEndpointsParam();
 		param.setProjectCode("p-elsewhere");
 
-		ListPage<?> page = tools().browseProjectEndpoints(param, chat("kb1"), null);
+		ListPage<?> page = tools().browseProjectEndpoints(param, chat("kb1", "kb1-child"), null);
 
 		assertTrue(page.items().isEmpty());
 		verify(visibility, never()).getVisibleProjectsEndpointByParentProjectCode(any());
@@ -211,7 +225,7 @@ class KnowledgeBaseBrowsingToolSourceTest {
 		DocumentContentsParam param = new DocumentContentsParam();
 		param.setUniqueIds(List.of(5L, 99L));
 
-		List<DocumentContent> contents = tools().documentContents(param, chat("kb1"), null);
+		List<DocumentContent> contents = tools().documentContents(param, chat("kb1", "kb1-child"), null);
 
 		assertEquals(2, contents.size());
 		assertEquals("first part\nsecond part\n", contents.get(0).content());
@@ -232,7 +246,7 @@ class KnowledgeBaseBrowsingToolSourceTest {
 		DocumentContentsParam param = new DocumentContentsParam();
 		param.setUniqueIds(List.of(5L));
 
-		DocumentContent content = tools().documentContents(param, chat("kb1"), new ToolsTokenBudget(2000)).get(0);
+		DocumentContent content = tools().documentContents(param, chat("kb1", "kb1-child"), new ToolsTokenBudget(2000)).get(0);
 
 		assertFalse(content.complete());
 		assertTrue(content.content().length() < 50 * 700, String.valueOf(content.content().length()));
@@ -247,7 +261,7 @@ class KnowledgeBaseBrowsingToolSourceTest {
 		DocumentContentsParam param = new DocumentContentsParam();
 		param.setUniqueIds(List.of(5L));
 
-		DocumentContent content = tools().documentContents(param, chat("kb1"), null).get(0);
+		DocumentContent content = tools().documentContents(param, chat("kb1", "kb1-child"), null).get(0);
 
 		assertNull(content.content());
 		assertTrue(content.message().contains("not vectorized"), content.message());
@@ -262,7 +276,7 @@ class KnowledgeBaseBrowsingToolSourceTest {
 		DocumentContentsParam param = new DocumentContentsParam();
 		param.setUniqueIds(List.of(5L, 6L));
 
-		List<DocumentContent> contents = tools().documentContents(param, chat("kb1"), null);
+		List<DocumentContent> contents = tools().documentContents(param, chat("kb1", "kb1-child"), null);
 
 		assertTrue(contents.get(0).message().contains("could not be read"), contents.get(0).message());
 		assertEquals("text of b\n", contents.get(1).content());

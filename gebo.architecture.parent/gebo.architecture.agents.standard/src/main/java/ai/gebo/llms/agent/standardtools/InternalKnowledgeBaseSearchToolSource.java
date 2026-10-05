@@ -32,8 +32,6 @@ import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.ContentAccessPolicy;
 import ai.gebo.architecture.agents.services.GAbstractGenericalAgentService;
 import ai.gebo.architecture.ai.model.ITokensCountable;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolsCategory;
@@ -45,8 +43,6 @@ import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
 import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
-import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
-import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
@@ -59,9 +55,10 @@ import lombok.Data;
 /**
  * The internal knowledge base search as a tool, for an agent that operates its own
  * tools, such as the single agent working in a loop. It searches the knowledge
- * bases of the chat when the interaction context carries them, otherwise all the
- * ones the current user can see, with the user's ACL filter when the platform
- * access policy is ACL based.
+ * bases of the chat the tool is called for, as its chat profile gives them (see
+ * {@link ToolCallbackDeclarationUtil#chatKnowledgeBases(ToolContext)}): none when the
+ * chat has none. The user's ACL filter applies when the platform access policy is
+ * ACL based.
  * <p>
  * When the calling model call shares the room it leaves to its tools' results (see
  * {@link ToolsTokenBudget}), the answer takes at most that room divided by
@@ -98,7 +95,6 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	// and the search reaches back to the chat models, so injecting it directly would be
 	// a dependency cycle at startup.
 	private final ObjectProvider<IGDocumentsSearchService> documentsSearchService;
-	private final ObjectProvider<IGKnowledgebaseVisibilityService> knowledgeBaseVisibilityService;
 	private final IGSecurityService securityService;
 	private final IGDocumentContentRendererProvider rendererFactory;
 	private final ObjectProvider<StandardAgentsConfig> agentsConfig;
@@ -106,11 +102,9 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	private final ObjectProvider<IGRankerService> rankerService;
 
 	public InternalKnowledgeBaseSearchToolSource(ObjectProvider<IGDocumentsSearchService> documentsSearchService,
-			ObjectProvider<IGKnowledgebaseVisibilityService> knowledgeBaseVisibilityService,
 			IGSecurityService securityService, IGDocumentContentRendererProvider rendererFactory,
 			ObjectProvider<StandardAgentsConfig> agentsConfig, ObjectProvider<IGRankerService> rankerService) {
 		this.documentsSearchService = documentsSearchService;
-		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
 		this.securityService = securityService;
 		this.rendererFactory = rendererFactory;
 		this.agentsConfig = agentsConfig;
@@ -226,12 +220,13 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	public List<ToolCallback> getToolCallbacks() {
 		// the call is recorded for the request by the tool wrapper (RunAsToolCallback)
 		BiFunction<KnowledgeBaseSearchParam, ToolContext, String> search = (param, toolContext) -> {
-			KBContext interaction = LLMtInteractionContextThreadLocal.Context.get();
+			final List<String> chatKnowledgeBases = ToolCallbackDeclarationUtil.chatKnowledgeBases(toolContext);
 			if (param != null && param.getQuery() != null && !param.getQuery().isBlank()) {
 				ToolsProgress.notify(toolContext,
 						"Searching the knowledge base: " + ToolsProgress.shown(param.getQuery()));
 			}
-			return search(param, interaction, ToolsFoundDocuments.from(toolContext), ToolsTokenBudget.from(toolContext));
+			return search(param, chatKnowledgeBases, ToolsFoundDocuments.from(toolContext),
+					ToolsTokenBudget.from(toolContext));
 		};
 		if (KnowledgeBaseKeywords.enabled(fullTextSearchService)) {
 			if (LOGGER.isDebugEnabled()) {
@@ -250,8 +245,8 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	 * (bounded by topK only). A failure is answered as text, so the model can go on
 	 * without this search.
 	 */
-	String search(KnowledgeBaseSearchParam param, KBContext interaction) {
-		return search(param, interaction, null, null);
+	String search(KnowledgeBaseSearchParam param, List<String> chatKnowledgeBases) {
+		return search(param, chatKnowledgeBases, null, null);
 	}
 
 	/**
@@ -260,7 +255,7 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	 * of the room the model call leaves to its tools when it shares one (see
 	 * {@link #maxResultTokens(ToolsTokenBudget)}).
 	 */
-	String search(KnowledgeBaseSearchParam param, KBContext interaction, ToolsFoundDocuments collector,
+	String search(KnowledgeBaseSearchParam param, List<String> chatKnowledgeBases, ToolsFoundDocuments collector,
 			ToolsTokenBudget callBudget) {
 		if (param == null || param.getQuery() == null || param.getQuery().isBlank()) {
 			return "No search done: the query is empty.";
@@ -273,9 +268,15 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			return "No room is left in the context for more contents: answer with the contents already found.";
 		}
 		try {
-			List<String> kbCodes = knowledgeBaseCodes(interaction);
+			final List<String> kbCodes = chatKnowledgeBases != null ? chatKnowledgeBases : List.of();
 			if (kbCodes.isEmpty()) {
-				return "No internal knowledge base is available to the user.";
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("search(...) knowledge base tool not run: the chat has no knowledge base");
+				}
+				return "This chat has no knowledge base to search.";
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("search(...) knowledge base tool over the chat's knowledge base(s): " + kbCodes);
 			}
 			SemanticSearchMetaDataFilter semanticFilter = new SemanticSearchMetaDataFilter();
 			semanticFilter.setKnowledgeBasesCodes(kbCodes);
@@ -446,13 +447,4 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 		return line.append(".").toString();
 	}
 
-	/** The knowledge bases of the chat when known, otherwise all the visible ones. */
-	private List<String> knowledgeBaseCodes(KBContext interaction) throws Exception {
-		if (interaction != null && interaction.getKnowledgeBasesCodes() != null
-				&& !interaction.getKnowledgeBasesCodes().isEmpty()) {
-			return interaction.getKnowledgeBasesCodes();
-		}
-		List<GKnowledgeBase> visibles = knowledgeBaseVisibilityService.getObject().allVisibleKnowledgebases();
-		return visibles != null ? visibles.stream().map(GKnowledgeBase::getCode).toList() : List.of();
-	}
 }

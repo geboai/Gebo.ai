@@ -13,17 +13,15 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.document.Document;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.ContentAccessPolicy;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
-import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
-import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolResult.Source;
 import ai.gebo.llms.agent.standardtools.model.KnowledgeBaseDeepSearchToolParam;
@@ -33,10 +31,11 @@ import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.services.IGSecurityService;
 
 /**
- * The deep search of the internal knowledge bases: those of the chat when the
- * interaction context carries them, otherwise all the ones the user can see, with
- * the user's ACL filter when the platform access policy is ACL based. The agent's
- * searches run both as semantic and as full text searches.
+ * The deep search of the internal knowledge bases of the chat the tool is called
+ * for, as its chat profile gives them (see
+ * {@link ToolCallbackDeclarationUtil#chatKnowledgeBases(ToolContext)}): none when the
+ * chat has none. The user's ACL filter applies when the platform access policy is
+ * ACL based. The agent's searches run both as semantic and as full text searches.
  */
 public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> {
 	public static final String DEEP_SEARCH_KNOWLEDGE_BASE_TOOL = "deepSearchKnowledgeBase";
@@ -49,14 +48,12 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 	/** Most tokens of fragments a knowledge base deep search reads. */
 	static final int MAX_RETRIEVED_TOKENS = 120000;
 	private final IGDocumentsSearchService documentsSearchService;
-	private final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
 	private final IGSecurityService securityService;
 
 	public KnowledgeBaseDeepSearchTool(DeepSearchToolsSupport support, IGDocumentsSearchService documentsSearchService,
-			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService, IGSecurityService securityService) {
+			IGSecurityService securityService) {
 		super(support, String.class, DEEP_SEARCH_KNOWLEDGE_BASE_TOOL, DESCRIPTION);
 		this.documentsSearchService = documentsSearchService;
-		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
 		this.securityService = securityService;
 	}
 
@@ -83,27 +80,35 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 		return super.paramType();
 	}
 
-	/** The full-text leg searches the keywords of the call when it gives some, else its queries. */
+	/**
+	 * Searches the knowledge bases of the chat the call is for; the full-text leg
+	 * searches the keywords of the call when it gives some, else its queries.
+	 */
 	@Override
 	protected List<Document> searchDocuments(DeepSearchToolParam<String> param, List<String> queries, String question,
-			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception {
+			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId,
+			ToolContext toolContext) throws Exception {
 		final List<String> fullTextQueries = KnowledgeBaseKeywords.fullTextQueries(
 				param instanceof KnowledgeBaseDeepSearchToolParam withKeywords ? withKeywords.getKeywords() : null, queries);
-		return searchDocuments(queries, fullTextQueries, question, maxDocuments, fragmentsPerDocument, foundByFragmentId);
+		return searchDocuments(queries, fullTextQueries, question, maxDocuments, fragmentsPerDocument, foundByFragmentId,
+				ToolCallbackDeclarationUtil.chatKnowledgeBases(toolContext));
 	}
 
+	/** Without the context of a call there is no chat, so no knowledge base: nothing is searched. */
 	@Override
 	protected List<Document> searchDocuments(List<String> queries, String question, int maxDocuments,
 			int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception {
-		return searchDocuments(queries, queries, question, maxDocuments, fragmentsPerDocument, foundByFragmentId);
+		return searchDocuments(queries, queries, question, maxDocuments, fragmentsPerDocument, foundByFragmentId,
+				List.of());
 	}
 
 	List<Document> searchDocuments(List<String> queries, List<String> fullTextQueries, String question,
-			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception {
-		final List<String> kbCodes = knowledgeBaseCodes(LLMtInteractionContextThreadLocal.Context.get());
+			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId,
+			List<String> chatKnowledgeBases) throws Exception {
+		final List<String> kbCodes = chatKnowledgeBases != null ? chatKnowledgeBases : List.of();
 		if (kbCodes.isEmpty()) {
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Tool:" + toolName + " no knowledge base available to the user");
+				LOGGER.debug("Tool:" + toolName + " not run: the chat has no knowledge base");
 			}
 			return List.of();
 		}
@@ -146,16 +151,6 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 					+ distinctByDocument(foundByFragmentId.values()).size() + " document(s)");
 		}
 		return fragments;
-	}
-
-	/** The knowledge bases of the chat when known, otherwise all the visible ones. */
-	private List<String> knowledgeBaseCodes(KBContext interaction) throws Exception {
-		if (interaction != null && interaction.getKnowledgeBasesCodes() != null
-				&& !interaction.getKnowledgeBasesCodes().isEmpty()) {
-			return interaction.getKnowledgeBasesCodes();
-		}
-		final List<GKnowledgeBase> visibles = knowledgeBaseVisibilityService.allVisibleKnowledgebases();
-		return visibles != null ? visibles.stream().map(GKnowledgeBase::getCode).toList() : List.of();
 	}
 
 	private static String stringOf(Object value) {

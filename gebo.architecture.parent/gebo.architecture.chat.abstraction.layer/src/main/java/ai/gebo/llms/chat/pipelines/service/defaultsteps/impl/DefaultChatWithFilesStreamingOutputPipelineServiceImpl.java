@@ -80,6 +80,9 @@ public class DefaultChatWithFilesStreamingOutputPipelineServiceImpl implements I
 					runtimeData.getRequestResources().getChathistory(),
 					runtimeData.getRequestResources().getCurrentRequest(),
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
+			// the tools keep the knowledge bases of the chat
+			resources.setAvailableKnowledgeBaseCodes(
+					runtimeData.getRequestResources().getAvailableKnowledgeBaseCodes());
 			double minimizedContextRequestSize = ITokensCountable.tokensSize(prompt, resources);
 			if (contextWindow > 0.8 * minimizedContextRequestSize) {
 				return chatService.streamChat(prompt, Map.of(), resources, runtimeData.getChatResponse(), chatModel);

@@ -17,24 +17,26 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.ai.chat.model.ToolContext;
 
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam;
 import ai.gebo.llms.agent.standardtools.model.KnowledgeBaseDeepSearchToolParam;
 import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
-import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
-import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam.Depth;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 
 /**
  * Pins how much of each document the knowledge base deep search reads: the full
@@ -50,15 +52,11 @@ class KnowledgeBaseDeepSearchToolTest {
 		when(found.aiDocumentsList()).thenReturn(List.of());
 		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
 				.thenReturn(found);
-		IGKnowledgebaseVisibilityService visibility = mock(IGKnowledgebaseVisibilityService.class);
-		GKnowledgeBase knowledgeBase = new GKnowledgeBase();
-		knowledgeBase.setCode("kb");
-		when(visibility.allVisibleKnowledgebases()).thenReturn(List.of(knowledgeBase));
 		KnowledgeBaseDeepSearchTool tool = new KnowledgeBaseDeepSearchTool(mock(DeepSearchToolsSupport.class), search,
-				visibility, mock(IGSecurityService.class));
+				mock(IGSecurityService.class));
 
-		tool.searchDocuments(List.of("query"), "question", 30, AbstractDeepSearchTool.fragmentsPerDocument(depth),
-				new HashMap<>());
+		tool.searchDocuments(new DeepSearchToolParam<>(), List.of("query"), "question", 30,
+				AbstractDeepSearchTool.fragmentsPerDocument(depth), new HashMap<>(), chat("kb"));
 
 		ArgumentCaptor<FullTextSearchMetaDataFilter> filter = ArgumentCaptor.forClass(FullTextSearchMetaDataFilter.class);
 		verify(search).search(anyString(), anyList(), any(), anyList(), filter.capture(), anyString(), anyInt(),
@@ -75,12 +73,29 @@ class KnowledgeBaseDeepSearchToolTest {
 		assertEquals(10, chunksPerDocumentSearchedFor(Depth.EXHAUSTIVE));
 	}
 
+	/** The context of a call for a chat whose knowledge bases are these. */
+	private static ToolContext chat(String... knowledgeBases) {
+		return new ToolContext(
+				Map.of(ToolCallbackDeclarationUtil.CHAT_KNOWLEDGE_BASES_CONTEXT_KEY, List.of(knowledgeBases)));
+	}
+
 	private static KnowledgeBaseDeepSearchTool toolOn(IGDocumentsSearchService search, DeepSearchToolsSupport support) {
-		IGKnowledgebaseVisibilityService visibility = mock(IGKnowledgebaseVisibilityService.class);
-		GKnowledgeBase knowledgeBase = new GKnowledgeBase();
-		knowledgeBase.setCode("kb");
-		when(visibility.allVisibleKnowledgebases()).thenReturn(List.of(knowledgeBase));
-		return new KnowledgeBaseDeepSearchTool(support, search, visibility, mock(IGSecurityService.class));
+		return new KnowledgeBaseDeepSearchTool(support, search, mock(IGSecurityService.class));
+	}
+
+	@Test
+	void aChatWithoutKnowledgeBasesSearchesNone() throws Exception {
+		IGDocumentsSearchService search = mock(IGDocumentsSearchService.class);
+		KnowledgeBaseDeepSearchTool tool = toolOn(search, mock(DeepSearchToolsSupport.class));
+
+		assertTrue(tool.searchDocuments(new DeepSearchToolParam<>(), List.of("query"), "question", 10, 3,
+				new HashMap<>(), new ToolContext(Map.of())).isEmpty());
+		assertTrue(tool.searchDocuments(new DeepSearchToolParam<>(), List.of("query"), "question", 10, 3,
+				new HashMap<>(), chat()).isEmpty());
+		// without the context of a call there is no chat either
+		assertTrue(tool.searchDocuments(List.of("query"), "question", 10, 3, new HashMap<>()).isEmpty());
+		verify(search, never()).search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(),
+				anyInt());
 	}
 
 	@Test
@@ -109,8 +124,8 @@ class KnowledgeBaseDeepSearchToolTest {
 		withKeywords.setKeywords(List.of("Fohat"));
 		DeepSearchToolParam<String> plain = new DeepSearchToolParam<>();
 
-		tool.searchDocuments(withKeywords, List.of("cosmic electricity"), "question", 10, 3, new HashMap<>());
-		tool.searchDocuments(plain, List.of("cosmic electricity"), "question", 10, 3, new HashMap<>());
+		tool.searchDocuments(withKeywords, List.of("cosmic electricity"), "question", 10, 3, new HashMap<>(), chat("kb"));
+		tool.searchDocuments(plain, List.of("cosmic electricity"), "question", 10, 3, new HashMap<>(), chat("kb"));
 
 		ArgumentCaptor<List<String>> semantic = ArgumentCaptor.forClass(List.class);
 		ArgumentCaptor<List<String>> fullText = ArgumentCaptor.forClass(List.class);

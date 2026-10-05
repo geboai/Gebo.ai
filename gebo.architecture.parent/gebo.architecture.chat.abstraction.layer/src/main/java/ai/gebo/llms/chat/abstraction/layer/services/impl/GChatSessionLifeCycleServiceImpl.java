@@ -449,6 +449,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		}
 		resources.setAnswerFeedbackNotes(answerFeedbackNotes(request.getUserChatContextCode()));
 		resources.setRulesToFollow(rulesToFollow(context));
+		resources.setAvailableKnowledgeBaseCodes(availableKnowledgeBaseCodes(request));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Resources for request {} of chat {} from the {}: {} tokens of budget {}, feedback notes:{} rules:{}",
 					request.getId(), context.getCode(), source, resources.getTokensSize(), budget,
@@ -459,6 +460,31 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			LOGGER.trace("Request {} rules to follow: {}", request.getId(), resources.getRulesToFollow());
 		}
 		return resources;
+	}
+
+	/**
+	 * The codes of the knowledge bases of the chat, as its chat profile gives them (see
+	 * {@link #getSessionAvailableKnowledgeBases(GeboChatRequest)}), for the tools of the
+	 * request: none when the chat has no profile, and when they cannot be read.
+	 */
+	private List<String> availableKnowledgeBaseCodes(GeboChatRequest request) {
+		try {
+			final List<GKnowledgeBase> knowledgeBases = getSessionAvailableKnowledgeBases(request);
+			final List<String> codes = knowledgeBases != null
+					? knowledgeBases.stream().map(GKnowledgeBase::getCode).filter(code -> code != null).distinct()
+							.toList()
+					: List.of();
+			LOGGER.debug("Request {} of chat {}: its tools get {} knowledge base(s)", request.getId(),
+					request.getUserChatContextCode(), codes.size());
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("Request {} knowledge bases for the tools: {}", request.getId(), codes);
+			}
+			return codes;
+		} catch (GeboChatSessionLifecycleException | RuntimeException e) {
+			LOGGER.error("Cannot read the knowledge bases of chat " + request.getUserChatContextCode()
+					+ ": the tools of request " + request.getId() + " get none", e);
+			return List.of();
+		}
 	}
 
 	private List<String> rulesToFollow(GUserChatSession context) {
@@ -1257,6 +1283,8 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		MinimalChatContext mc = new MinimalChatContext();
 		mc.setChatHistory(history);
 		mc.setCurrentRequest(request);
+		final List<String> knowledgeBaseCodes = availableKnowledgeBaseCodes(request);
+		mc.setAvailableKnowledgeBaseCodes(knowledgeBaseCodes);
 		if (tokensBudget >= mc.getTokensSize()) {
 			LOGGER.debug("Minimal context of chat {} fits as is: {} tokens of {}", request.getUserChatContextCode(),
 					mc.getTokensSize(), tokensBudget);
@@ -1268,6 +1296,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		try {
 			mc = this.shrinkerService.shrinkedMinimalContext(request.getUserChatContextCode(), mc, tokensBudget);
 			mc.setCurrentRequest(request);
+			mc.setAvailableKnowledgeBaseCodes(knowledgeBaseCodes);
 			return mc;
 		} catch (LLMConfigException | IOException e) {
 			throw new GeboChatSessionLifecycleException("Error shrinking state", e);

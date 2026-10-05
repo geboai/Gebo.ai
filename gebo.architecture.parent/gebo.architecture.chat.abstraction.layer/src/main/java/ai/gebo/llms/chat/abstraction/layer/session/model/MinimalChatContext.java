@@ -30,6 +30,12 @@ public class MinimalChatContext implements ITokensCountable {
 	 */
 	@JsonIgnore
 	private transient ToolCallsListener toolCallsListener = null;
+	/**
+	 * The codes of the knowledge bases of the chat (its chat profile's), given to the
+	 * tools called through this context; computed per request, never persisted.
+	 */
+	@JsonIgnore
+	private transient List<String> availableKnowledgeBaseCodes = null;
 
 	@Override
 	public int getTokensSize() {
@@ -49,6 +55,11 @@ public class MinimalChatContext implements ITokensCountable {
 			if (currentRequest.getId() != null) {
 				toolsContext.put(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, currentRequest.getId());
 			}
+		}
+		// the knowledge bases the tools may search, browse and read: the chat's
+		if (availableKnowledgeBaseCodes != null) {
+			toolsContext.put(ToolCallbackDeclarationUtil.CHAT_KNOWLEDGE_BASES_CONTEXT_KEY,
+					List.copyOf(availableKnowledgeBaseCodes));
 		}
 		builder = builder.toolsContext(toolsContext);
 		if (this.chatHistory != null) {

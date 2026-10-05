@@ -32,8 +32,6 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
@@ -62,8 +60,8 @@ import lombok.Data;
  * {@link GAbstractVirtualFilesystemObject#getUniqueId()}).
  *
  * <p>
- * Everything is limited to the knowledge bases of the chat (all the visible ones
- * when the chat names none), with their child knowledge bases, and to what the user
+ * Everything is limited to the knowledge bases of the chat the tools are called for,
+ * as its chat profile gives them (none when the chat has none), and to what the user
  * may read: the access rights apply as in the knowledge base search. The lists come
  * a page at a time and are fitted in the room the model call leaves to its tools.
  * </p>
@@ -270,33 +268,33 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 		final List<ToolCallback> callbacks = new ArrayList<>();
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
 				(BiFunction<CountDocumentsParam, ToolContext, DocumentsCount>) (param, context) -> countDocuments(param,
-						LLMtInteractionContextThreadLocal.Context.get()),
+						ToolCallbackDeclarationUtil.chatKnowledgeBases(context)),
 				COUNT_DOCUMENTS_TOOL, COUNT_DOCUMENTS_DESCRIPTION, CountDocumentsParam.class, DocumentsCount.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
 				(BiFunction<BrowseKnowledgeBasesParam, ToolContext, ListPage>) (param, context) -> browseKnowledgeBases(
-						param, LLMtInteractionContextThreadLocal.Context.get(), ToolsTokenBudget.from(context)),
+						param, ToolCallbackDeclarationUtil.chatKnowledgeBases(context), ToolsTokenBudget.from(context)),
 				BROWSE_KNOWLEDGE_BASES_TOOL, BROWSE_KNOWLEDGE_BASES_DESCRIPTION, BrowseKnowledgeBasesParam.class,
 				ListPage.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
 				(BiFunction<BrowseProjectsParam, ToolContext, ListPage>) (param, context) -> browseProjects(param,
-						LLMtInteractionContextThreadLocal.Context.get(), ToolsTokenBudget.from(context)),
+						ToolCallbackDeclarationUtil.chatKnowledgeBases(context), ToolsTokenBudget.from(context)),
 				BROWSE_PROJECTS_TOOL, BROWSE_PROJECTS_DESCRIPTION, BrowseProjectsParam.class, ListPage.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
 				(BiFunction<BrowseProjectEndpointsParam, ToolContext, ListPage>) (param, context) -> browseProjectEndpoints(
-						param, LLMtInteractionContextThreadLocal.Context.get(), ToolsTokenBudget.from(context)),
+						param, ToolCallbackDeclarationUtil.chatKnowledgeBases(context), ToolsTokenBudget.from(context)),
 				BROWSE_PROJECT_ENDPOINTS_TOOL, BROWSE_PROJECT_ENDPOINTS_DESCRIPTION, BrowseProjectEndpointsParam.class,
 				ListPage.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
 				(BiFunction<BrowseVirtualFilesystemParam, ToolContext, ListPage>) (param, context) -> browseFolders(param,
-						LLMtInteractionContextThreadLocal.Context.get(), ToolsTokenBudget.from(context)),
+						ToolCallbackDeclarationUtil.chatKnowledgeBases(context), ToolsTokenBudget.from(context)),
 				BROWSE_FOLDERS_TOOL, BROWSE_FOLDERS_DESCRIPTION, BrowseVirtualFilesystemParam.class, ListPage.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
 				(BiFunction<BrowseVirtualFilesystemParam, ToolContext, ListPage>) (param, context) -> browseDocuments(param,
-						LLMtInteractionContextThreadLocal.Context.get(), ToolsTokenBudget.from(context)),
+						ToolCallbackDeclarationUtil.chatKnowledgeBases(context), ToolsTokenBudget.from(context)),
 				BROWSE_DOCUMENTS_TOOL, BROWSE_DOCUMENTS_DESCRIPTION, BrowseVirtualFilesystemParam.class, ListPage.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
 				(BiFunction<DocumentContentsParam, ToolContext, List>) (param, context) -> documentContents(param,
-						LLMtInteractionContextThreadLocal.Context.get(), ToolsTokenBudget.from(context)),
+						ToolCallbackDeclarationUtil.chatKnowledgeBases(context), ToolsTokenBudget.from(context)),
 				DOCUMENT_CONTENTS_TOOL, DOCUMENT_CONTENTS_DESCRIPTION, DocumentContentsParam.class, List.class));
 		return callbacks;
 	}
@@ -304,21 +302,17 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	// ---------------------------------------------------------------------- scope
 
 	/**
-	 * The codes of the knowledge bases a call may read: those of the chat (all the
-	 * visible ones when the chat names none) with their child knowledge bases, that the
-	 * user can see; only the requested one when the call names one of them.
+	 * The codes of the knowledge bases a call may read: those of the chat the tool is
+	 * called for, as its chat profile gives them (see
+	 * {@link ToolCallbackDeclarationUtil#chatKnowledgeBases(org.springframework.ai.chat.model.ToolContext)}),
+	 * none when the chat has none; only the requested one when the call names one of them.
 	 */
-	List<String> scope(KBContext interaction, String requestedKnowledgeBaseCode) {
-		final IGKnowledgebaseVisibilityService visibility = visibilityService.getObject();
-		final List<GKnowledgeBase> visibles = interaction != null && interaction.getKnowledgeBasesCodes() != null
-				&& !interaction.getKnowledgeBasesCodes().isEmpty()
-						? visibility.visiblesAndChildKnowledgebases(interaction.getKnowledgeBasesCodes())
-						: visibility.allVisibleKnowledgebases();
+	List<String> scope(List<String> chatKnowledgeBases, String requestedKnowledgeBaseCode) {
 		final Set<String> codes = new LinkedHashSet<>();
-		if (visibles != null) {
-			for (GKnowledgeBase kb : visibles) {
-				if (kb != null && kb.getCode() != null) {
-					codes.add(kb.getCode());
+		if (chatKnowledgeBases != null) {
+			for (String code : chatKnowledgeBases) {
+				if (notBlank(code)) {
+					codes.add(code);
 				}
 			}
 		}
@@ -329,8 +323,8 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 			scope = new ArrayList<>(codes);
 		}
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("scope(...) chat knowledge bases:" + (interaction != null ? interaction.getKnowledgeBasesCodes() : null)
-					+ " requested:" + requestedKnowledgeBaseCode + " -> " + scope);
+			LOGGER.debug("scope(...) chat knowledge bases:" + codes + " requested:" + requestedKnowledgeBaseCode + " -> "
+					+ scope);
 		}
 		return scope;
 	}
@@ -349,12 +343,12 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 
 	// ---------------------------------------------------------------------- tools
 
-	DocumentsCount countDocuments(CountDocumentsParam param, KBContext interaction) {
+	DocumentsCount countDocuments(CountDocumentsParam param, List<String> chatKnowledgeBases) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin countDocuments(" + param + ")");
 		}
 		try {
-			final List<String> scope = scope(interaction, param != null ? param.getKnowledgeBaseCode() : null);
+			final List<String> scope = scope(chatKnowledgeBases, param != null ? param.getKnowledgeBaseCode() : null);
 			if (scope.isEmpty()) {
 				return new DocumentsCount(0, Map.of(), noKnowledgeBaseMessage(param != null ? param.getKnowledgeBaseCode() : null));
 			}
@@ -378,13 +372,13 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 		}
 	}
 
-	ListPage<KnowledgeBaseItem> browseKnowledgeBases(BrowseKnowledgeBasesParam param, KBContext interaction,
+	ListPage<KnowledgeBaseItem> browseKnowledgeBases(BrowseKnowledgeBasesParam param, List<String> chatKnowledgeBases,
 			ToolsTokenBudget budget) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin browseKnowledgeBases(" + param + ")");
 		}
 		try {
-			final List<String> scope = scope(interaction, null);
+			final List<String> scope = scope(chatKnowledgeBases, null);
 			if (scope.isEmpty()) {
 				return empty(param, noKnowledgeBaseMessage(null));
 			}
@@ -401,12 +395,12 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 		}
 	}
 
-	ListPage<ProjectItem> browseProjects(BrowseProjectsParam param, KBContext interaction, ToolsTokenBudget budget) {
+	ListPage<ProjectItem> browseProjects(BrowseProjectsParam param, List<String> chatKnowledgeBases, ToolsTokenBudget budget) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin browseProjects(" + param + ")");
 		}
 		try {
-			final List<String> scope = scope(interaction, param != null ? param.getKnowledgeBaseCode() : null);
+			final List<String> scope = scope(chatKnowledgeBases, param != null ? param.getKnowledgeBaseCode() : null);
 			if (scope.isEmpty()) {
 				return empty(param, noKnowledgeBaseMessage(param != null ? param.getKnowledgeBaseCode() : null));
 			}
@@ -433,7 +427,7 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 		}
 	}
 
-	ListPage<ProjectEndpointItem> browseProjectEndpoints(BrowseProjectEndpointsParam param, KBContext interaction,
+	ListPage<ProjectEndpointItem> browseProjectEndpoints(BrowseProjectEndpointsParam param, List<String> chatKnowledgeBases,
 			ToolsTokenBudget budget) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin browseProjectEndpoints(" + param + ")");
@@ -442,7 +436,7 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 			return empty(param, "Give the code of the project whose endpoints to list.");
 		}
 		try {
-			final List<String> scope = scope(interaction, null);
+			final List<String> scope = scope(chatKnowledgeBases, null);
 			// the project must be one of the chat's knowledge bases
 			boolean inScope = false;
 			for (String kbCode : scope) {
@@ -471,24 +465,24 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 		}
 	}
 
-	ListPage<VirtualFilesystemItem> browseFolders(BrowseVirtualFilesystemParam param, KBContext interaction,
+	ListPage<VirtualFilesystemItem> browseFolders(BrowseVirtualFilesystemParam param, List<String> chatKnowledgeBases,
 			ToolsTokenBudget budget) {
-		return browseVirtualFilesystem(param, interaction, budget, true);
+		return browseVirtualFilesystem(param, chatKnowledgeBases, budget, true);
 	}
 
-	ListPage<VirtualFilesystemItem> browseDocuments(BrowseVirtualFilesystemParam param, KBContext interaction,
+	ListPage<VirtualFilesystemItem> browseDocuments(BrowseVirtualFilesystemParam param, List<String> chatKnowledgeBases,
 			ToolsTokenBudget budget) {
-		return browseVirtualFilesystem(param, interaction, budget, false);
+		return browseVirtualFilesystem(param, chatKnowledgeBases, budget, false);
 	}
 
-	ListPage<VirtualFilesystemItem> browseVirtualFilesystem(BrowseVirtualFilesystemParam param, KBContext interaction,
+	ListPage<VirtualFilesystemItem> browseVirtualFilesystem(BrowseVirtualFilesystemParam param, List<String> chatKnowledgeBases,
 			ToolsTokenBudget budget, boolean folders) {
 		final String tool = folders ? BROWSE_FOLDERS_TOOL : BROWSE_DOCUMENTS_TOOL;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin " + tool + "(" + param + ")");
 		}
 		try {
-			final List<String> scope = scope(interaction, param != null ? param.getKnowledgeBaseCode() : null);
+			final List<String> scope = scope(chatKnowledgeBases, param != null ? param.getKnowledgeBaseCode() : null);
 			if (scope.isEmpty()) {
 				return empty(param, noKnowledgeBaseMessage(param != null ? param.getKnowledgeBaseCode() : null));
 			}
@@ -518,7 +512,7 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	 * rebuilt from their chunks in the vector store; each document as much of it as
 	 * the room left allows, the next ones nothing once the room is used up.
 	 */
-	List<DocumentContent> documentContents(DocumentContentsParam param, KBContext interaction, ToolsTokenBudget budget) {
+	List<DocumentContent> documentContents(DocumentContentsParam param, List<String> chatKnowledgeBases, ToolsTokenBudget budget) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin documentContents(" + param + ")");
 		}
@@ -527,7 +521,7 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 		}
 		final List<DocumentContent> contents = new ArrayList<>();
 		try {
-			final List<String> scope = scope(interaction, null);
+			final List<String> scope = scope(chatKnowledgeBases, null);
 			final List<Long> asked = param.getUniqueIds().stream().filter(id -> id != null).distinct().toList();
 			final Map<Long, GDocumentReference> visibles = new LinkedHashMap<>();
 			if (!scope.isEmpty() && !asked.isEmpty()) {
@@ -664,7 +658,7 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	static String noKnowledgeBaseMessage(String requestedKnowledgeBaseCode) {
 		return notBlank(requestedKnowledgeBaseCode)
 				? "The knowledge base " + requestedKnowledgeBaseCode + " is not among this chat's knowledge bases the user can see."
-				: "No knowledge base of this chat is visible to the user.";
+				: "This chat has no knowledge base.";
 	}
 
 	static boolean contains(String part, String... values) {

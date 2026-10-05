@@ -28,7 +28,6 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
-import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.security.services.IGSecurityService;
 
@@ -63,17 +62,13 @@ public class DeepSearchToolSource implements IGToolCallbackSource {
 	private final ISearchServiceRepositoryPattern searchServicesRepoPattern;
 	// resolved on use: the knowledge base search reaches back to the chat models
 	private final ObjectProvider<IGDocumentsSearchService> documentsSearchService;
-	private final ObjectProvider<IGKnowledgebaseVisibilityService> knowledgeBaseVisibilityService;
 	private final IGSecurityService securityService;
 
 	public DeepSearchToolSource(DeepSearchToolsSupport support, ISearchServiceRepositoryPattern searchServicesRepoPattern,
-			ObjectProvider<IGDocumentsSearchService> documentsSearchService,
-			ObjectProvider<IGKnowledgebaseVisibilityService> knowledgeBaseVisibilityService,
-			IGSecurityService securityService) {
+			ObjectProvider<IGDocumentsSearchService> documentsSearchService, IGSecurityService securityService) {
 		this.support = support;
 		this.searchServicesRepoPattern = searchServicesRepoPattern;
 		this.documentsSearchService = documentsSearchService;
-		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
 		this.securityService = securityService;
 	}
 
@@ -137,9 +132,8 @@ public class DeepSearchToolSource implements IGToolCallbackSource {
 	List<AbstractDeepSearchTool<?>> tools() {
 		final List<AbstractDeepSearchTool<?>> tools = new ArrayList<>();
 		final IGDocumentsSearchService documentsSearch = documentsSearchService.getIfAvailable();
-		final IGKnowledgebaseVisibilityService visibility = knowledgeBaseVisibilityService.getIfAvailable();
-		if (documentsSearch != null && visibility != null) {
-			tools.add(new KnowledgeBaseDeepSearchTool(support, documentsSearch, visibility, securityService));
+		if (documentsSearch != null) {
+			tools.add(new KnowledgeBaseDeepSearchTool(support, documentsSearch, securityService));
 		}
 		final Set<String> names = new HashSet<>();
 		names.add(KnowledgeBaseDeepSearchTool.DEEP_SEARCH_KNOWLEDGE_BASE_TOOL);

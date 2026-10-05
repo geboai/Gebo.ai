@@ -27,17 +27,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
-import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource.KnowledgeBaseSearchParam;
@@ -98,10 +99,8 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		return param;
 	}
 
-	private static KBContext chatWithKnowledgeBases(String... codes) {
-		KBContext context = new KBContext();
-		context.getKnowledgeBasesCodes().addAll(List.of(codes));
-		return context;
+	private static List<String> chatWithKnowledgeBases(String... codes) {
+		return List.of(codes);
 	}
 
 	@Test
@@ -142,7 +141,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 	private static InternalKnowledgeBaseSearchToolSource tool(IGDocumentsSearchService search,
 			org.springframework.beans.factory.ObjectProvider<StandardAgentsConfig> config) {
 		return new InternalKnowledgeBaseSearchToolSource(provider(search),
-				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER,
+				mock(IGSecurityService.class), TEXT_RENDERER,
 				config, null);
 	}
 
@@ -153,7 +152,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 				org.springframework.beans.factory.ObjectProvider.class);
 		when(rankers.getIfAvailable()).thenReturn(ranker);
 		return new InternalKnowledgeBaseSearchToolSource(provider(search),
-				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER, null,
+				mock(IGSecurityService.class), TEXT_RENDERER, null,
 				rankers);
 	}
 
@@ -298,7 +297,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
 				.thenReturn(set);
 		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(provider(search),
-				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER, null, null);
+				mock(IGSecurityService.class), TEXT_RENDERER, null, null);
 		ToolsFoundDocuments collector = new ToolsFoundDocuments();
 
 		String answer = tool.search(query("topic"), chatWithKnowledgeBases("kb1"), collector, null);
@@ -313,14 +312,41 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 	}
 
 	@Test
-	void anEmptyQueryOrNoKnowledgeBaseIsAnsweredAsText() throws Exception {
-		IGKnowledgebaseVisibilityService visibility = mock(IGKnowledgebaseVisibilityService.class);
-		when(visibility.allVisibleKnowledgebases()).thenReturn(List.of());
-		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(
-				provider(mock(IGDocumentsSearchService.class)), provider(visibility), mock(IGSecurityService.class), TEXT_RENDERER, null, null);
+	void anEmptyQueryOrAChatWithoutKnowledgeBasesIsAnsweredAsText() throws Exception {
+		IGDocumentsSearchService search = mock(IGDocumentsSearchService.class);
+		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(provider(search),
+				mock(IGSecurityService.class), TEXT_RENDERER, null, null);
 
-		assertEquals("No search done: the query is empty.", tool.search(query(" "), null));
-		assertEquals("No internal knowledge base is available to the user.", tool.search(query("topic"), null));
+		assertEquals("No search done: the query is empty.", tool.search(query(" "), chatWithKnowledgeBases("kb1")));
+		// a chat without knowledge bases searches none, never all the visible ones
+		assertEquals("This chat has no knowledge base to search.", tool.search(query("topic"), List.of()));
+		assertEquals("This chat has no knowledge base to search.", tool.search(query("topic"), null));
+		verify(search, never()).search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt());
+	}
+
+	@Test
+	void theToolSearchesTheKnowledgeBasesOfTheChatItIsCalledFor() throws Exception {
+		IGDocumentsSearchService search = mock(IGDocumentsSearchService.class);
+		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
+				.thenReturn(new AIDocumentsSet());
+		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(provider(search),
+				mock(IGSecurityService.class), TEXT_RENDERER, null, null);
+		org.springframework.ai.tool.ToolCallback callback = tool.getToolCallbacks().get(0);
+
+		callback.call("{\"query\":\"topic\"}", new org.springframework.ai.chat.model.ToolContext(Map.of(
+				ToolCallbackDeclarationUtil.CHAT_KNOWLEDGE_BASES_CONTEXT_KEY, List.of("kb-of-the-profile"))));
+
+		ArgumentCaptor<SemanticSearchMetaDataFilter> semantic = ArgumentCaptor.forClass(SemanticSearchMetaDataFilter.class);
+		verify(search).search(anyString(), anyList(), semantic.capture(), anyList(), any(), anyString(), anyInt(),
+				anyInt());
+		assertEquals(List.of("kb-of-the-profile"), semantic.getValue().getKnowledgeBasesCodes());
+
+		// called outside a chat: no knowledge base, no search
+		final String answer = callback.call("{\"query\":\"topic\"}",
+				new org.springframework.ai.chat.model.ToolContext(Map.of()));
+		assertTrue(answer.contains("no knowledge base"), answer);
+		verify(search, org.mockito.Mockito.times(1)).search(anyString(), anyList(), any(), anyList(), any(),
+				anyString(), anyInt(), anyInt());
 	}
 
 	@Test
@@ -329,7 +355,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
 				.thenThrow(new IllegalStateException("vector store down"));
 		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(provider(search),
-				provider(mock(IGKnowledgebaseVisibilityService.class)), mock(IGSecurityService.class), TEXT_RENDERER, null, null);
+				mock(IGSecurityService.class), TEXT_RENDERER, null, null);
 
 		assertEquals("The internal knowledge base search failed, go on without it.",
 				tool.search(query("topic"), chatWithKnowledgeBases("kb1")));
@@ -338,7 +364,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 	@Test
 	void theToolIsDeclaredForTheModels() {
 		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(
-				provider(mock(IGDocumentsSearchService.class)), provider(mock(IGKnowledgebaseVisibilityService.class)),
+				provider(mock(IGDocumentsSearchService.class)),
 				mock(IGSecurityService.class), TEXT_RENDERER, null, null);
 
 		assertEquals(1, tool.getToolCallbacks().size());
@@ -351,7 +377,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 	@Test
 	void theKeywordsAreDeclaredOnlyWithAFullTextLeg() {
 		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(
-				provider(mock(IGDocumentsSearchService.class)), provider(mock(IGKnowledgebaseVisibilityService.class)),
+				provider(mock(IGDocumentsSearchService.class)),
 				mock(IGSecurityService.class), TEXT_RENDERER, null, null);
 		assertFalse(tool.getToolCallbacks().get(0).getToolDefinition().inputSchema().contains("keywords"));
 

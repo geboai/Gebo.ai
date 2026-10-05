@@ -126,10 +126,12 @@ public abstract class AbstractDeepSearchTool<Q> {
 
 	/**
 	 * Runs the searches of the call: what {@link #searchDocuments(List, String, int, int, Map)}
-	 * does by default; a source reading more of its parameter overrides it.
+	 * does by default; a source reading more of its parameter, or of the context of the
+	 * call (such as the knowledge bases of the chat), overrides it.
 	 */
 	protected List<Document> searchDocuments(DeepSearchToolParam<Q> param, List<Q> queries, String question,
-			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception {
+			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId,
+			ToolContext toolContext) throws Exception {
 		return searchDocuments(queries, question, maxDocuments, fragmentsPerDocument, foundByFragmentId);
 	}
 
@@ -205,7 +207,7 @@ public abstract class AbstractDeepSearchTool<Q> {
 					"Deep search in " + sourceDescription() + ": " + ToolsProgress.shown(question));
 			final Map<String, FoundDocument> foundByFragmentId = new LinkedHashMap<>();
 			final List<Document> fragments = searchDocuments(param, queries, question, support.searchTopK(),
-					fragmentsPerDocument(param.getDepth()), foundByFragmentId);
+					fragmentsPerDocument(param.getDepth()), foundByFragmentId, toolContext);
 			if (fragments == null || fragments.isEmpty()) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("End deepSearch(...) tool:" + toolName + " found no document");

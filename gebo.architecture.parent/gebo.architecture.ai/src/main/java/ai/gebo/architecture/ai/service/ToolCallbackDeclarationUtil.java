@@ -10,6 +10,7 @@
 package ai.gebo.architecture.ai.service;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -44,6 +45,31 @@ public class ToolCallbackDeclarationUtil {
 		}
 		Object value = toolContext.getContext().get(REQUEST_ID_CONTEXT_KEY);
 		return value instanceof String id && !id.isBlank() ? id : null;
+	}
+
+	/**
+	 * Tools context key carrying the codes of the knowledge bases of the chat the
+	 * tools are called for: the ones its session's chat profile gives (see
+	 * {@code IGChatSessionLifeCycleService#getSessionAvailableKnowledgeBases}), set
+	 * once per user request and shared by every model call of it, agents included.
+	 */
+	public static final String CHAT_KNOWLEDGE_BASES_CONTEXT_KEY = "geboChatKnowledgeBases";
+
+	/**
+	 * The codes of the knowledge bases of the chat a tool is called for. Empty when the
+	 * chat has none, and when the tool is not called for a chat session: a call
+	 * outside a chat has no knowledge base.
+	 */
+	public static List<String> chatKnowledgeBases(ToolContext toolContext) {
+		if (toolContext == null || toolContext.getContext() == null) {
+			return List.of();
+		}
+		Object value = toolContext.getContext().get(CHAT_KNOWLEDGE_BASES_CONTEXT_KEY);
+		if (!(value instanceof List<?> codes)) {
+			return List.of();
+		}
+		return codes.stream().filter(code -> code instanceof String text && !text.isBlank()).map(String.class::cast)
+				.distinct().toList();
 	}
 
 	/**
