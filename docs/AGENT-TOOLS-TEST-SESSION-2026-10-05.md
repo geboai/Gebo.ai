@@ -226,3 +226,56 @@ and the external systems.
 - **Native searchers.** Jira, Confluence, SharePoint and Google Drive are not configured locally.
 - **Remote connectors.** The microservice REST search clients were not exercised: there are no connector microservices locally.
 - **Outside the chat.** A2A and the MCP export, which use all the knowledge bases visible to the caller.
+
+---
+
+## 6. Second session: redrafted prompts, full rebuild (15:44 – 15:55)
+
+The two single agent prompts were redrafted (`2d0d9803d`): where the answer comes from (the sources, or the model's own knowledge said to be so), strict citations (never an invented address), a section on searching again, every iteration shown to the user. The whole reactor was rebuilt (`mvn clean install -DskipTests -P angular-ui,bootables`, 189 modules) and only the `gebo.ai` container redeployed. The prompts are model agnostic; this installation runs gpt-4.1, others run Qwen ~100B, gpt-oss-120b or other models.
+
+Every web address cited was checked against the addresses the web searches returned in the logs; quotations against the traced tool answers.
+
+### Chat with knowledge base
+
+| # | Question (abridged) | Tools | Outcome |
+|---|---|---|---|
+| K1 | The documents of the KB, with uniqueId | listing | ✓ 12 documents, one iteration, no warning |
+| K2 | In short, what is Pythagoras' theorem (previous deploy, same prompt but the search section) | none | ✓ "from general knowledge, not from the documents" |
+| K3 | Fohat in *The Secret Doctrine*, a quotation with the page | 1 KB search | ✗ "not found" after one search (see 6.3) |
+| K4 | The Dhyan Chohans, a quotation | KB search | ✓ **verified** (both passages) |
+| K5 | Archiati and Steiner on Ahriman, quotations | KB searches | ✓ both Archiati quotations **verified**; "no Steiner quotation in the fragments", none invented |
+| K6 | Read document 3 whole, 5 points with quotations | read | ✓ honest: the document has no vectorized text, nothing invented; a "not read" warning on its name (6.3) |
+| K7 | Exhaustive deep search: Steiner's evolution vs the Rounds | deep KB | ◐ grounded; one quotation is an Italian rendering of an English passage (6.3) |
+| K8 | Latest stable Spring Boot and its date, citing the pages | web ×2 | ◐ both addresses returned by the search; "3.5.16" and no date (6.3) |
+| K9 | The Great Adamas in the KB, then a modern reading from the web | KB, web | ◐ both addresses returned; general knowledge said to be so; KB "no direct passage" after one search (6.3) |
+| K10 | The proof of Pythagoras' theorem, only from the documents | KB search | ✓ none; the passages it mentions are the returned ones |
+| K11 | Without searching: the first question and the documents listed | none | ✓ |
+
+### Chat without knowledge base
+
+| # | Question (abridged) | Tools | Outcome |
+|---|---|---|---|
+| P1 | The documents of this chat's KB, what they say on Fohat | none | ✓ the chat has no knowledge base; offers the web |
+| P2 | In short, what photosynthesis is | none | ✓ "from my general knowledge, not from external sources" |
+| P3 | Web: when Java 25 was released, what is still in preview, citing the pages | web | ◐ both addresses returned; no release date, JEP numbers wrong (6.3) |
+| P4 | Deep web search: a short report on commercial nuclear fusion, citing the sources | deep web | ✓ 6 of 6 addresses returned by the searches (PDF reports); 89 fragments in two batches, 12 s and 19 s |
+| P5 | Without searching: what we talked about | none | ✓ |
+
+**Totals:** with knowledge base 6 ✓, 4 ◐, 1 ✗; without 4 ✓, 1 ◐. **No invented address: 13 of 13 cited addresses were returned by a tool.** The only errors in the log: the MCP tools export at startup (code on develop, see the audit) and one web page download, handled.
+
+### 6.1 What the redraft changed, seen live
+- Answers from the model's own knowledge are labelled as such and cite nothing (K2, P2, part of K9).
+- Addresses are cited exactly as returned, never made up (K8, K9, P3, P4).
+- The chat without knowledge base says so and does not search (P1).
+- No duplicated conclusion: every turn ran in one iteration.
+
+### 6.2 Web deep search speed
+The batch now fills half of the service model context (`ddc009e4f`): P4's 89 fragments went in two batches (4 and 85), 12 s and 19 s, no runaway. The morning's single batches took 148 s and 164 s.
+
+### 6.3 Remaining findings (diagnosed, not changed)
+- **No second search when the first is poor (K3, K9).** The prompt says to search again before saying a source has nothing; the agent did not. The first search returned the near-empty "hub" fragments of finding 4.1 of 2026-10-04 ("complete explanation of this fact?", "Footnotes", "314. 511 Isis Unveiled, I. 341."), ranked above the passages the full-text leg had found. A prompt rule depends on the model: a model-agnostic remedy would be in the knowledge base tool (the fragments it returns, or a note when they are near-empty).
+- **"Search the web: question? Cite the pages" classified as PURE_SEARCH (P3).** Its format lists pages with a reason each, so the question (the date) was not answered.
+- **Wrong facts from the web (K8, P3, and the morning's turn 9).** JEP numbers paired with the wrong features twice; "3.5.16" as the latest Spring Boot. The pages' text is not traced: whether the model or the page mixed them cannot be told.
+- **A translation shown as a quotation (K7).** The deep search's partial analysis rendered an English passage of *The Secret Doctrine* in Italian, in quotation marks, and the answer kept it.
+- **"Not read" warning on a document named by the reading tool without text (K6).** The tool named it but had no text to read; the answer cited it only to say so.
+- **The analysis judged all the fragments irrelevant while using them (K7).** Handled by the code (the documents stay the sources, WARN logged).
