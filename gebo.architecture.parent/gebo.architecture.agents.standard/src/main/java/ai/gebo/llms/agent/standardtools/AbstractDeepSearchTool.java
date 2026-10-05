@@ -127,11 +127,12 @@ public abstract class AbstractDeepSearchTool<Q> {
 	/**
 	 * Runs the searches of the call: what {@link #searchDocuments(List, String, int, int, Map)}
 	 * does by default; a source reading more of its parameter, or of the context of the
-	 * call (such as the knowledge bases of the chat), overrides it.
+	 * call (such as the knowledge bases of the chat), overrides it, adding to
+	 * {@code unavailableSources} each system it could not search and why.
 	 */
 	protected List<Document> searchDocuments(DeepSearchToolParam<Q> param, List<Q> queries, String question,
 			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId,
-			ToolContext toolContext) throws Exception {
+			ToolContext toolContext, List<String> unavailableSources) throws Exception {
 		return searchDocuments(queries, question, maxDocuments, fragmentsPerDocument, foundByFragmentId);
 	}
 
@@ -206,14 +207,23 @@ public abstract class AbstractDeepSearchTool<Q> {
 			ToolsProgress.notify(toolContext,
 					"Deep search in " + sourceDescription() + ": " + ToolsProgress.shown(question));
 			final Map<String, FoundDocument> foundByFragmentId = new LinkedHashMap<>();
+			// best effort: the systems out of service or not responding are told to the model
+			final List<String> unavailableSources = new ArrayList<>();
 			final List<Document> fragments = searchDocuments(param, queries, question, support.searchTopK(),
-					fragmentsPerDocument(param.getDepth()), foundByFragmentId, toolContext);
+					fragmentsPerDocument(param.getDepth()), foundByFragmentId, toolContext, unavailableSources);
 			if (fragments == null || fragments.isEmpty()) {
 				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("End deepSearch(...) tool:" + toolName + " found no document");
+					LOGGER.debug("End deepSearch(...) tool:" + toolName + " found no document, "
+							+ unavailableSources.size() + " source(s) not searched");
 				}
-				return DeepSearchToolResult.of(Status.NO_RESULTS,
-						"No document found in " + sourceDescription() + " for these searches.");
+				final DeepSearchToolResult none = unavailableSources.isEmpty()
+						? DeepSearchToolResult.of(Status.NO_RESULTS,
+								"No document found in " + sourceDescription() + " for these searches.")
+						: DeepSearchToolResult.of(Status.NO_RESULTS, "No document found in " + sourceDescription()
+								+ ": some sources could not be searched (" + String.join("; ", unavailableSources)
+								+ "). Go on without them.");
+				none.setUnavailableSources(unavailableSources.isEmpty() ? null : unavailableSources);
+				return none;
 			}
 			final DeliverableIntent deliverable = deliverable(param.getDepth());
 			final Vector<String> discardedFragmentIds = new Vector<>();
@@ -249,6 +259,7 @@ public abstract class AbstractDeepSearchTool<Q> {
 			final List<FoundDocument> reliedOn = distinctByDocument(foundByFragmentId.values());
 			final DeepSearchToolResult result = new DeepSearchToolResult();
 			result.setFragmentsAnalysed(fragments.size());
+			result.setUnavailableSources(unavailableSources.isEmpty() ? null : unavailableSources);
 			for (FoundDocument found : reliedOn) {
 				result.getSources().add(found.source());
 			}
@@ -281,9 +292,29 @@ public abstract class AbstractDeepSearchTool<Q> {
 				LOGGER.trace("</DEEP_SEARCH_TOOL_ANALYSIS>");
 			}
 			return result;
+		} catch (NoSourceSearchedException e) {
+			LOGGER.warn("Tool:" + toolName + " could not search any source: " + e.getMessage());
+			final DeepSearchToolResult failed = DeepSearchToolResult.of(Status.FAILED, "No source could be searched ("
+					+ String.join("; ", e.unavailableSources) + "): go on without it.");
+			failed.setUnavailableSources(e.unavailableSources);
+			return failed;
 		} catch (Throwable th) {
 			LOGGER.error("Tool:" + toolName + " failed for question:" + param.getQuestion(), th);
 			return DeepSearchToolResult.of(Status.FAILED, "The deep search failed, go on without it.");
+		}
+	}
+
+	/**
+	 * Raised by a source none of whose systems could be searched (out of service, not
+	 * responding...): the deep search fails, telling the model why.
+	 */
+	protected static final class NoSourceSearchedException extends Exception {
+		private static final long serialVersionUID = 1L;
+		final List<String> unavailableSources;
+
+		protected NoSourceSearchedException(List<String> unavailableSources) {
+			super(String.join("; ", unavailableSources));
+			this.unavailableSources = List.copyOf(unavailableSources);
 		}
 	}
 

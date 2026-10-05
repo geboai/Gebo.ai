@@ -39,10 +39,12 @@ import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.service.BestEffortSearchCalls;
 import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
@@ -70,6 +72,7 @@ class SearchToolContentPipelineTest {
 	private IGExternalSearchSecurityService security;
 	private SearchToolContentPipeline pipeline;
 	private StandardAgentsConfig agentsConfig;
+	private BestEffortSearchCalls searchCalls;
 	@SuppressWarnings("rawtypes")
 	private ISearchService service;
 	private SearchableSystemMetaData system;
@@ -113,7 +116,6 @@ class SearchToolContentPipelineTest {
 	@SuppressWarnings("unchecked")
 	@BeforeEach
 	void setUp() throws Exception {
-		SearchAttempts.retryPauseMillis = 0L;
 		chunkingService = mock(IDocumentsChunkService.class);
 		when(chunkingService.createChunkingSession(anyString())).thenReturn("session");
 		// every search result becomes one chunk carrying its text
@@ -131,8 +133,11 @@ class SearchToolContentPipelineTest {
 		security = mock(IGExternalSearchSecurityService.class);
 		when(security.isEnabledForCurrentUser(any())).thenReturn(true);
 		agentsConfig = new StandardAgentsConfig();
+		SearchCallsConfig callsConfig = new SearchCallsConfig();
+		callsConfig.setRetryPauseMillis(0L);
+		searchCalls = new BestEffortSearchCalls(callsConfig);
 		pipeline = new SearchToolContentPipeline(provider(chunkingService), provider(ranker), provider(security),
-				new SearchToolsRequestRegistry(), provider(agentsConfig));
+				new SearchToolsRequestRegistry(), provider(agentsConfig), provider(searchCalls));
 		service = mock(ISearchService.class);
 		when(service.getId()).thenReturn("web-service");
 		system = new SearchableSystemMetaData();

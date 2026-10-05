@@ -19,18 +19,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import ai.gebo.serpapisearch.handler.model.SerpapiApiResponse;
 import ai.gebo.serpapisearch.handler.model.SerpapiApiResponse.SerpapiOrganicResult;
 import ai.gebo.serpapisearch.handler.model.SerpapiSearchRequest;
 import ai.gebo.serpapisearch.handler.model.SerpapiSearchResultItem;
 import ai.gebo.serpapisearch.handler.model.SerpapiSearchResults;
-import lombok.AllArgsConstructor;
 
 /**
  * Thin REST client for SerpApi (search.json) + the LLM tool factory. SerpApi
@@ -38,7 +39,6 @@ import lombok.AllArgsConstructor;
  * The query is percent-encoded via {@code encode().build()}.
  */
 @Service
-@AllArgsConstructor
 public class SerpapiSearchApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SerpapiSearchApi.class);
 	public static final String SERPAPI_SEARCH_URL = "https://serpapi.com/search.json";
@@ -46,6 +46,20 @@ public class SerpapiSearchApi {
 	private static final String DEFAULT_ENGINE = "google";
 
 	private final RestTemplateWrapperService restTemplateService;
+
+	/**
+	 * The provider is called with an HTTP client of its own, whose connect and read
+	 * timeouts are the search calls' ones (see {@link SearchCallsConfig}): a provider not
+	 * answering on a sloppy network does not hold the search forever.
+	 */
+	@Autowired
+	public SerpapiSearchApi(SearchCallsConfig searchCalls) {
+		this(RestTemplateWrapperService.withTimeouts(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
+	}
+
+	SerpapiSearchApi(RestTemplateWrapperService restTemplateService) {
+		this.restTemplateService = restTemplateService;
+	}
 
 	SerpapiApiResponse callApi(String apiKey, String query, Integer topN, String engine, String gl, String hl,
 			String tbs) throws GeboRestIntegrationException {

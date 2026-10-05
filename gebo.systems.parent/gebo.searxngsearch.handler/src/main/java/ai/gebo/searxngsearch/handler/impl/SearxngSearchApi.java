@@ -19,18 +19,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import ai.gebo.searxngsearch.handler.model.SearxngApiResponse;
 import ai.gebo.searxngsearch.handler.model.SearxngApiResponse.SearxngApiResult;
 import ai.gebo.searxngsearch.handler.model.SearxngSearchRequest;
 import ai.gebo.searxngsearch.handler.model.SearxngSearchResultItem;
 import ai.gebo.searxngsearch.handler.model.SearxngSearchResults;
-import lombok.AllArgsConstructor;
 
 /**
  * Thin REST client for a self-hosted SearXNG instance ({@code format=json}) and
@@ -38,12 +39,25 @@ import lombok.AllArgsConstructor;
  * bearer token. Query is properly percent-encoded.
  */
 @Service
-@AllArgsConstructor
 public class SearxngSearchApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SearxngSearchApi.class);
 	private static final int DEFAULT_LIMIT = 5;
 
 	private final RestTemplateWrapperService restTemplateService;
+
+	/**
+	 * The provider is called with an HTTP client of its own, whose connect and read
+	 * timeouts are the search calls' ones (see {@link SearchCallsConfig}): a provider not
+	 * answering on a sloppy network does not hold the search forever.
+	 */
+	@Autowired
+	public SearxngSearchApi(SearchCallsConfig searchCalls) {
+		this(RestTemplateWrapperService.withTimeouts(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
+	}
+
+	SearxngSearchApi(RestTemplateWrapperService restTemplateService) {
+		this.restTemplateService = restTemplateService;
+	}
 
 	private static String searchEndpoint(String baseUrl) {
 		String base = baseUrl.trim();

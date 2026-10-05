@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -29,8 +30,8 @@ import ai.gebo.bravesearch.handler.model.BraveSearchRequest;
 import ai.gebo.bravesearch.handler.model.BraveSearchResultItem;
 import ai.gebo.bravesearch.handler.model.BraveSearchResults;
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
-import lombok.AllArgsConstructor;
 
 /**
  * Thin REST client for the Brave Web Search API + the LLM tool factory. Auth is
@@ -38,13 +39,26 @@ import lombok.AllArgsConstructor;
  * via {@code encode().build()} so multi-word queries are handled correctly.
  */
 @Service
-@AllArgsConstructor
 public class BraveSearchApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BraveSearchApi.class);
 	public static final String BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search";
 	private static final int DEFAULT_COUNT = 5;
 
 	private final RestTemplateWrapperService restTemplateService;
+
+	/**
+	 * The provider is called with an HTTP client of its own, whose connect and read
+	 * timeouts are the search calls' ones (see {@link SearchCallsConfig}): a provider not
+	 * answering on a sloppy network does not hold the search forever.
+	 */
+	@Autowired
+	public BraveSearchApi(SearchCallsConfig searchCalls) {
+		this(RestTemplateWrapperService.withTimeouts(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
+	}
+
+	BraveSearchApi(RestTemplateWrapperService restTemplateService) {
+		this.restTemplateService = restTemplateService;
+	}
 
 	BraveApiResponse callApi(String apiKey, String query, Integer topN) throws GeboRestIntegrationException {
 		return callApi(apiKey, query, topN, null, null, null);

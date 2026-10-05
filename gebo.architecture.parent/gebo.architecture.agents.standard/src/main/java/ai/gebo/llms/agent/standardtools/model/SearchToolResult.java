@@ -64,6 +64,12 @@ public class SearchToolResult {
 	private int documentsAlreadyReturned = 0;
 	/** Size of the returned contents, in tokens. */
 	private int tokens = 0;
+	/**
+	 * The sources that could not be searched, and why (not responding within the
+	 * timeout, out of service, access refused, failed): what they hold is missing from
+	 * the results. Null when every source was searched.
+	 */
+	private List<String> unavailableSources = null;
 	private List<Fragment> fragments = new ArrayList<>();
 
 	public static SearchToolResult of(Status status, String message) {

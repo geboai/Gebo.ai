@@ -16,16 +16,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.model.SystemSearchOutcome;
 import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
+import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolResult.Source;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.model.DocumentMetaInfos;
@@ -99,9 +102,22 @@ public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 		return sourceDescription;
 	}
 
+	/** Searches as the call asks, telling the systems it could not search. */
+	@Override
+	protected List<Document> searchDocuments(DeepSearchToolParam<Q> param, List<Q> queries, String question,
+			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId,
+			ToolContext toolContext, List<String> unavailableSources) throws Exception {
+		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, unavailableSources);
+	}
+
 	@Override
 	protected List<Document> searchDocuments(List<Q> queries, String question, int maxDocuments,
 			int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception {
+		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, new ArrayList<>());
+	}
+
+	List<Document> searchDocuments(List<Q> queries, String question, int maxDocuments,
+			Map<String, FoundDocument> foundByFragmentId, List<String> unavailableSources) throws Exception {
 		// each document found is read whole (see SearchResultsChunker): fragmentsPerDocument
 		// does not apply
 		// no native search given: the question is searched as text
@@ -121,38 +137,38 @@ public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 					continue;
 				}
 				runs++;
-				try {
-					final List<SearchResult> results = SearchAttempts.run(() -> searchSystem(query, system, perSearch),
-							toolName, system.getCode());
-					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Tool:" + toolName + " search on system:" + system.getCode() + " returned "
-								+ (results != null ? results.size() : 0) + " result(s)");
+				// best effort: a system out of service or not responding is told to the model
+				final SystemSearchOutcome outcome = support.searchCalls().search(system, toolName,
+						() -> searchSystem(query, system, perSearch));
+				if (!outcome.available()) {
+					failed++;
+					if (!unavailableSources.contains(outcome.unavailableNotice())) {
+						unavailableSources.add(outcome.unavailableNotice());
 					}
-					if (results == null) {
-						continue;
-					}
-					service.setOriginOn(results);
-					for (SearchResult result : results) {
-						if (result != null && result.getCode() != null) {
-							found.putIfAbsent(result.getCode(), result);
-							if (found.size() >= maxDocuments) {
-								break search;
-							}
+					continue;
+				}
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Tool:" + toolName + " search on system:" + system.getCode() + " returned "
+							+ outcome.results().size() + " result(s)");
+				}
+				service.setOriginOn(outcome.results());
+				for (SearchResult result : outcome.results()) {
+					if (result != null && result.getCode() != null) {
+						found.putIfAbsent(result.getCode(), result);
+						if (found.size() >= maxDocuments) {
+							break search;
 						}
 					}
-				} catch (Throwable th) {
-					failed++;
-					LOGGER.error("Tool:" + toolName + " failed searching system:" + system.getCode(), th);
 				}
 			}
 		}
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Tool:" + toolName + " ran " + runs + " search(es), " + failed + " failed, found "
+			LOGGER.debug("Tool:" + toolName + " ran " + runs + " search(es), " + failed + " not done, found "
 					+ found.size() + " distinct document(s)");
 		}
 		if (found.isEmpty()) {
 			if (runs > 0 && failed == runs) {
-				throw new IllegalStateException("Every search on " + service.getId() + " failed");
+				throw new NoSourceSearchedException(unavailableSources);
 			}
 			return List.of();
 		}

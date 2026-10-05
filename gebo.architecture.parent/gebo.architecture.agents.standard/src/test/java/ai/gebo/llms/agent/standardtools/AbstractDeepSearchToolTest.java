@@ -156,7 +156,6 @@ class AbstractDeepSearchToolTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		SearchAttempts.retryPauseMillis = 0L;
 		analysis = mock(DeepSearchToolAnalysis.class);
 		chunkingService = mock(IDocumentsChunkService.class);
 		chatModelsDao = mock(IGChatModelRuntimeConfigurationDao.class);
@@ -499,7 +498,10 @@ class AbstractDeepSearchToolTest {
 		// (SearchableSystemMetaData equality ignores the code: the systems are matched by identity)
 		// every search failing is a failed deep search, a denied user gets no search
 		when(service.search(any(SearchQuery.class), argThat((SearchableSystemMetaData x) -> x == working), anyInt())).thenThrow(new RuntimeException("down"));
-		assertEquals(Status.FAILED, tool.deepSearch(param("question", "first"), request("r2")).getStatus());
+		DeepSearchToolResult failed = tool.deepSearch(param("question", "first"), request("r2"));
+		assertEquals(Status.FAILED, failed.getStatus());
+		// the model is told which sources could not be searched, and why
+		assertEquals(List.of("failing: failed", "working: failed"), failed.getUnavailableSources());
 		when(security.isEnabledForCurrentUser(service)).thenReturn(false);
 		assertEquals(Status.NOT_ALLOWED, tool.deepSearch(param("question", "first"), request("r3")).getStatus());
 	}

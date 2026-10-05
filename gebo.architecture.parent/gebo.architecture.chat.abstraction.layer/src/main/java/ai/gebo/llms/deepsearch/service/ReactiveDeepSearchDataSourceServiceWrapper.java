@@ -21,6 +21,9 @@ import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.model.SystemSearchOutcome;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.service.BestEffortSearchCalls;
 import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
@@ -49,6 +52,22 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	protected final IDataSourcesCatalogsService dataSourcesCatalogsService;
 	protected final IGSecurityService securityService;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveDeepSearchDataSourceServiceWrapper.class);
+	private BestEffortSearchCalls searchCalls = null;
+
+	/** The best effort calls of the search services (see {@link BestEffortSearchCalls}). */
+	public void setSearchCalls(BestEffortSearchCalls searchCalls) {
+		this.searchCalls = searchCalls;
+	}
+
+	private synchronized BestEffortSearchCalls searchCalls() {
+		if (searchCalls == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No search calls given to handler:" + getHandlerId() + ", using the default ones");
+			}
+			searchCalls = new BestEffortSearchCalls(new SearchCallsConfig());
+		}
+		return searchCalls;
+	}
 	protected final GeboComponentInfo serviceOriginComponent;
 	protected final IGExternalSearchSecurityService externalSearchSecurityService;
 
@@ -126,7 +145,13 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		List<SearchResult> results = new ArrayList<SearchResult>();
 		List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
 		for (SearchableSystemMetaData searchableSystemMetaData : systems) {
-			List<SearchResult> searches = searchService.search(query, searchableSystemMetaData, topK);
+			// best effort: a system out of service or not responding does not stop the others
+			final SystemSearchOutcome outcome = searchCalls().search(searchableSystemMetaData, getHandlerId(),
+					() -> searchService.search(query, searchableSystemMetaData, topK));
+			if (!outcome.available()) {
+				continue;
+			}
+			List<SearchResult> searches = new ArrayList<SearchResult>(outcome.results());
 			assign(searches, serviceOriginComponent, searchableSystemMetaData.getCode());
 			results.addAll(searches);
 		}
@@ -185,8 +210,13 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 					minimalChatContext.createChatRequestContext(), systemTemplateCallParams,
 					nativeSearchServiceDataType);
 
-			List<SearchResult> data = nativeSearchService.nativeSearch(resultingQueryObject, searchableSystemMetaData,
-					topK);
+			// best effort: a system out of service or not responding does not stop the others
+			final SystemSearchOutcome outcome = searchCalls().search(searchableSystemMetaData, getHandlerId(),
+					() -> nativeSearchService.nativeSearch(resultingQueryObject, searchableSystemMetaData, topK));
+			if (!outcome.available()) {
+				continue;
+			}
+			List<SearchResult> data = outcome.results();
 			SearchWithResults swr = new SearchWithResults();
 			swr.setResults(flattenSearchResults(data));
 			swr.setNativeQueryObject(resultingQueryObject);

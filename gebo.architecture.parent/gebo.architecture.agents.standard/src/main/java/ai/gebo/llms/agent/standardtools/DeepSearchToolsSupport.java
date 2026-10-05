@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.service.BestEffortSearchCalls;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
@@ -89,6 +91,24 @@ public class DeepSearchToolsSupport {
 	}
 
 	/** Whether the knowledge base searches have a full-text leg, so they take keywords. */
+	private BestEffortSearchCalls searchCalls = null;
+
+	@Autowired
+	public void setSearchCalls(BestEffortSearchCalls searchCalls) {
+		this.searchCalls = searchCalls;
+	}
+
+	/** The best effort calls of the search services, the defaults when none was given. */
+	public synchronized BestEffortSearchCalls searchCalls() {
+		if (searchCalls == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No search calls configured, using the default ones");
+			}
+			searchCalls = new BestEffortSearchCalls(new SearchCallsConfig());
+		}
+		return searchCalls;
+	}
+
 	public boolean knowledgeBaseKeywordsEnabled() {
 		return KnowledgeBaseKeywords.enabled(fullTextSearchService);
 	}

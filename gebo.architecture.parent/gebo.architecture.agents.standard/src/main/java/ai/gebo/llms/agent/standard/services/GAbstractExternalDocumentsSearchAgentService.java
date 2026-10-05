@@ -3,6 +3,7 @@ package ai.gebo.llms.agent.standard.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.ai.document.Document;
@@ -18,6 +19,10 @@ import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.model.SystemSearchOutcome;
+import ai.gebo.architecture.search.service.BestEffortSearchCalls;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
@@ -184,5 +189,49 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 			LOGGER.trace("Derived keywords: " + keywords);
 		}
 		return keywords;
+	}
+
+	/**
+	 * Searches one system best effort (see {@link BestEffortSearchCalls}): as the current
+	 * user, within the search calls' timeout, tried again only when configured. A system
+	 * that could not be searched is added to {@code unavailableSources} (the status
+	 * notices the agents reading the search are told) and told to the user; the search
+	 * goes on with the other systems.
+	 */
+	protected SystemSearchOutcome searchSystem(SearchableSystemMetaData<?, ?> system,
+			Callable<List<SearchResult>> search, INotificationSink notificationSink, List<String> unavailableSources) {
+		BestEffortSearchCalls calls = null;
+		try {
+			calls = runtimeBinder != null ? runtimeBinder.getImplementationOf(BestEffortSearchCalls.class) : null;
+		} catch (RuntimeException e) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No search calls registered, agent id:" + getId() + " uses the default ones", e);
+			}
+		}
+		if (calls == null) {
+			calls = defaultSearchCalls();
+		}
+		final SystemSearchOutcome outcome = calls.search(system, getId(), search);
+		if (!outcome.available()) {
+			final String notice = "could not search " + outcome.unavailableNotice();
+			if (!unavailableSources.contains(notice)) {
+				unavailableSources.add(notice);
+			}
+			if (notificationSink != null) {
+				notificationSink.next("Agent: " + getId() + " " + notice,
+						INotificationSink.NotificationObject.NotificationType.INFO);
+			}
+		}
+		return outcome;
+	}
+
+	private static BestEffortSearchCalls defaultCalls = null;
+
+	/** The best effort calls with the default settings, when none is registered. */
+	private static synchronized BestEffortSearchCalls defaultSearchCalls() {
+		if (defaultCalls == null) {
+			defaultCalls = new BestEffortSearchCalls(new SearchCallsConfig());
+		}
+		return defaultCalls;
 	}
 }

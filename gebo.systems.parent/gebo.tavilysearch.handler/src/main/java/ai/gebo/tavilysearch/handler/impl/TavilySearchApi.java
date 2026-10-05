@@ -20,17 +20,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import ai.gebo.tavilysearch.handler.model.TavilyApiResponse;
 import ai.gebo.tavilysearch.handler.model.TavilyApiResponse.TavilyApiResult;
 import ai.gebo.tavilysearch.handler.model.TavilySearchRequest;
 import ai.gebo.tavilysearch.handler.model.TavilySearchResultItem;
 import ai.gebo.tavilysearch.handler.model.TavilySearchResults;
-import lombok.AllArgsConstructor;
 
 /**
  * Thin REST client for the Tavily Search API, and the factory for the LLM
@@ -38,13 +39,26 @@ import lombok.AllArgsConstructor;
  * query (no URL-encoding pitfalls); auth is a bearer token.
  */
 @Service
-@AllArgsConstructor
 public class TavilySearchApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TavilySearchApi.class);
 	public static final String TAVILY_SEARCH_URL = "https://api.tavily.com/search";
 	private static final int DEFAULT_MAX_RESULTS = 5;
 
 	private final RestTemplateWrapperService restTemplateService;
+
+	/**
+	 * The provider is called with an HTTP client of its own, whose connect and read
+	 * timeouts are the search calls' ones (see {@link SearchCallsConfig}): a provider not
+	 * answering on a sloppy network does not hold the search forever.
+	 */
+	@Autowired
+	public TavilySearchApi(SearchCallsConfig searchCalls) {
+		this(RestTemplateWrapperService.withTimeouts(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
+	}
+
+	TavilySearchApi(RestTemplateWrapperService restTemplateService) {
+		this.restTemplateService = restTemplateService;
+	}
 
 	TavilyApiResponse callApi(String apiKey, String query, Integer topN) throws GeboRestIntegrationException {
 		return callApi(apiKey, query, topN, null, null, null);

@@ -32,6 +32,8 @@ import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SystemSearchOutcome;
+import ai.gebo.architecture.search.service.BestEffortSearchCalls;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
@@ -100,16 +102,19 @@ public class SearchToolContentPipeline {
 	private final ObjectProvider<IGExternalSearchSecurityService> externalSearchSecurityService;
 	private final SearchToolsRequestRegistry requestRegistry;
 	private final ObjectProvider<StandardAgentsConfig> agentsConfig;
+	private final ObjectProvider<BestEffortSearchCalls> searchCalls;
 
 	public SearchToolContentPipeline(ObjectProvider<IDocumentsChunkService> chunkingService,
 			ObjectProvider<IGRankerService> rankerService,
 			ObjectProvider<IGExternalSearchSecurityService> externalSearchSecurityService,
-			SearchToolsRequestRegistry requestRegistry, ObjectProvider<StandardAgentsConfig> agentsConfig) {
+			SearchToolsRequestRegistry requestRegistry, ObjectProvider<StandardAgentsConfig> agentsConfig,
+			ObjectProvider<BestEffortSearchCalls> searchCalls) {
 		this.chunkingService = chunkingService;
 		this.rankerService = rankerService;
 		this.externalSearchSecurityService = externalSearchSecurityService;
 		this.requestRegistry = requestRegistry;
 		this.agentsConfig = agentsConfig;
+		this.searchCalls = searchCalls;
 	}
 
 	/** The documents found loaded and chunked at the same time. */
@@ -163,7 +168,9 @@ public class SearchToolContentPipeline {
 			final List<SearchableSystemMetaData> systems = service.getSearchableSystems();
 			final int nEntryLimit = Math.min(MAX_RETRIEVAL, topK * RETRIEVAL_FACTOR);
 			final Map<String, SearchResult> found = new LinkedHashMap<>();
-			int failedSystems = 0;
+			// best effort: a system out of service or not responding within the timeout is told
+			// to the model, the others are searched
+			final List<String> unavailable = new ArrayList<>();
 			int searchedSystems = 0;
 			if (systems != null) {
 				for (SearchableSystemMetaData system : systems) {
@@ -171,29 +178,29 @@ public class SearchToolContentPipeline {
 						continue;
 					}
 					searchedSystems++;
-					try {
-						List<SearchResult> results = SearchAttempts.run(() -> systemSearch.search(system, nEntryLimit),
-								toolName, system.getCode());
-						if (LOGGER.isDebugEnabled()) {
-							LOGGER.debug("Tool:" + toolName + " system:" + system.getCode() + " returned "
-									+ (results != null ? results.size() : 0) + " result(s)");
+					final SystemSearchOutcome outcome = searchCalls.getObject().search(system, toolName,
+							() -> systemSearch.search(system, nEntryLimit));
+					if (!outcome.available()) {
+						unavailable.add(outcome.unavailableNotice());
+						continue;
+					}
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Tool:" + toolName + " system:" + system.getCode() + " returned "
+								+ outcome.results().size() + " result(s)");
+					}
+					service.setOriginOn(outcome.results());
+					for (SearchResult result : outcome.results()) {
+						if (result != null) {
+							found.putIfAbsent(result.getCode(), result);
 						}
-						if (results != null) {
-							service.setOriginOn(results);
-							for (SearchResult result : results) {
-								if (result != null) {
-									found.putIfAbsent(result.getCode(), result);
-								}
-							}
-						}
-					} catch (Throwable th) {
-						failedSystems++;
-						LOGGER.error("Tool:" + toolName + " failed searching system:" + system.getCode(), th);
 					}
 				}
 			}
-			if (searchedSystems > 0 && failedSystems == searchedSystems) {
-				return SearchToolResult.of(Status.FAILED, "The search failed, go on without it.");
+			if (searchedSystems > 0 && unavailable.size() == searchedSystems) {
+				final SearchToolResult result = SearchToolResult.of(Status.FAILED,
+						"No source could be searched (" + String.join("; ", unavailable) + "): go on without it.");
+				result.setUnavailableSources(unavailable);
+				return result;
 			}
 			// drop what the previous calls of the same request already returned
 			final Set<String> alreadyReturned = requestRegistry.returnedCodes(requestId);
@@ -218,6 +225,7 @@ public class SearchToolContentPipeline {
 								: "No document found.");
 				result.setDocumentsFound(found.size());
 				result.setDocumentsAlreadyReturned(skipped);
+				result.setUnavailableSources(unavailable.isEmpty() ? null : unavailable);
 				return result;
 			}
 			// load, rank against the objective, fit
@@ -231,6 +239,8 @@ public class SearchToolContentPipeline {
 					chunkingParams, maxNumChunks, toolName, documentsParallelism());
 			final RankingOutcome ranking = rank(chunks, objective, topK, toolName);
 			SearchToolResult result = fit(ranking.documents(), fresh, maxTokens, toolName);
+			// told before fitting the room: what could not be searched is part of the answer
+			result.setUnavailableSources(unavailable.isEmpty() ? null : unavailable);
 			if (callBudget != null) {
 				// the room holds the result as the model reads it (its JSON): the contents are
 				// fitted again by what their titles, sources and the JSON framing add
@@ -255,10 +265,11 @@ public class SearchToolContentPipeline {
 				result.setStatus(Status.NO_RESULTS);
 				result.setMessage(chunks.isEmpty() ? "The documents found have no readable content."
 						: "None of the contents found serves the search objective.");
-			} else if (failedSystems > 0) {
+			} else if (!unavailable.isEmpty()) {
 				result.setStatus(Status.PARTIAL);
-				result.setMessage(failedSystems + " of the " + searchedSystems
-						+ " searched systems failed, the contents come from the other ones.");
+				result.setMessage(unavailable.size() + " of the " + searchedSystems
+						+ " systems could not be searched (" + String.join("; ", unavailable)
+						+ "), the contents come from the other ones.");
 			}
 			if (!ranking.ranked() && ranking.note() != null && result.getMessage() == null) {
 				result.setMessage(ranking.note());

@@ -25,10 +25,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.googlesearch.handler.model.GoogleSearchRequest;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResults;
 
@@ -40,6 +42,17 @@ class GoogleSearchApi {
 	private static final String googleSearch = "https://www.googleapis.com/customsearch/v1?key=";
 	/** Most results the Custom Search API returns in one call. */
 	static final int MAX_RESULTS_PER_CALL = 10;
+
+	// the Google API is called with an HTTP client of its own, whose connect and read
+	// timeouts are the search calls' ones: it does not hold a search forever
+	private final RestTemplate restTemplate;
+
+	GoogleSearchApi(SearchCallsConfig searchCalls) {
+		final SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+		requestFactory.setConnectTimeout(searchCalls.httpConnectTimeout());
+		requestFactory.setReadTimeout(searchCalls.httpReadTimeout());
+		this.restTemplate = new RestTemplate(requestFactory);
+	}
 
 	/**
 	 * search with google api documentation:
@@ -81,7 +94,6 @@ class GoogleSearchApi {
 			// Never the API key: the logs are read by far more people than the key should be.
 			LOGGER.debug("Google search url:" + url.toString().replace(URLEncoder.encode(apiKey, charset), "***"));
 		}
-		RestTemplate restTemplate = new RestTemplate();
 		URI uri = url.toURI();
 		ResponseEntity<GoogleSearchResults> returned = restTemplate.getForEntity(uri, GoogleSearchResults.class);
 		if (returned.hasBody())

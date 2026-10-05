@@ -637,6 +637,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	private static final String END_SHARED_CONTEXT_DELTA = "END SHARED CONTEXT DELTA";
 	private static final String BEGIN_SHARED_CONTEXT_DELTA = "BEGIN SHARED CONTEXT DELTA";
 	private static final String END_AGENT_CONTEXT_CONTRIBUTION = "END AGENT CONTEXT CONTRIBUTION";
+	private static final String CONTRIBUTION_STATUS = "STATUS: ";
 	private static final String BEGIN_CONTEXT_CONTRIBUTION_FROM_AGENT = "BEGIN CONTEXT CONTRIBUTION FROM AGENT:";
 	private static final String DESCRIPTION_OF_YOUR_ROLE = "Description of your role: ";
 	private static final String NEWLINE = "\r\n";
@@ -1283,15 +1284,33 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		return renderContributionData(data);
 	}
 
-	/** Frames the rendered data of a contribution with its agent's markers. */
+	private static boolean hasStatusNotices(AgentProducedSessionContribution contribution) {
+		return contribution.getStatusNotices() != null && !contribution.getStatusNotices().isEmpty();
+	}
+
+	/**
+	 * Frames the rendered data of a contribution with its agent's markers and its
+	 * status notices, if any (see {@link AgentsExchangeMessage#getStatusNotices()}).
+	 */
 	private String wrapContribution(AgentProducedSessionContribution agentProducedSessionContribution,
 			String contributionAsString) {
 		StringBuffer inner = new StringBuffer();
-		if (contributionAsString != null && !contributionAsString.isBlank() && !contributionAsString.isEmpty()) {
+		final List<String> statusNotices = agentProducedSessionContribution.getStatusNotices();
+		final boolean hasData = contributionAsString != null && !contributionAsString.isBlank();
+		final boolean hasStatus = statusNotices != null && !statusNotices.isEmpty();
+		// a contribution with no data still tells its status (e.g. no source could be searched)
+		if (hasData || hasStatus) {
 			inner.append(BEGIN_CONTEXT_CONTRIBUTION_FROM_AGENT);
 			inner.append(agentProducedSessionContribution.getAgentName());
 			inner.append(NEWLINE);
-			inner.append(contributionAsString);
+			if (hasStatus) {
+				for (String notice : statusNotices) {
+					inner.append(CONTRIBUTION_STATUS).append(notice).append(NEWLINE);
+				}
+			}
+			if (hasData) {
+				inner.append(contributionAsString);
+			}
 			inner.append(END_AGENT_CONTEXT_CONTRIBUTION);
 			inner.append(NEWLINE);
 		}
@@ -1363,7 +1382,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		for (AgentProducedSessionContribution contribution : remainingContributions) {
 			String contributionData = renderSharedContributionData(contribution.getData());
 			if (contributionData == null || contributionData.isBlank()) {
-				continue;
+				if (!hasStatusNotices(contribution)) {
+					continue;
+				}
+				// no data, but how it was produced is still told (e.g. no source could be searched)
+				contributionData = "";
 			}
 			minContribution = Math.min(contribution.getContributionUniqueNr(), minContribution);
 			maxContribution = Math.max(contribution.getContributionUniqueNr(), maxContribution);
@@ -1415,7 +1438,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		for (AgentProducedSessionContribution contribution : contributions) {
 			String data = renderSharedContributionData(contribution.getData());
 			if (data == null || data.isBlank()) {
-				continue;
+				if (!hasStatusNotices(contribution)) {
+					continue;
+				}
+				// no data, but how it was produced is still told (e.g. no source could be searched)
+				data = "";
 			}
 			String whole = wrapContribution(contribution, data);
 			int wholeTokens = ITokensCountable.stringsTokensSize(whole);

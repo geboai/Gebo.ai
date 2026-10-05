@@ -1,5 +1,6 @@
 package ai.gebo.architecture.agents.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -101,8 +102,10 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
 		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " is searching...",
 				NotificationType.INFO);
+		// how the search went (e.g. the sources it could not reach), told to the agents reading it
+		final List<String> statusNotices = new ArrayList<>();
 		List<Document> documents = retrieveDocuments(prompt, agentContext, agentModel, params, network, agentRole,
-				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink);
+				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, statusNotices);
 		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " has found: "
 				+ documents.size() + " evidences", NotificationType.INFO);
 		if (LOGGER.isDebugEnabled()) {
@@ -120,7 +123,31 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		}
 		AgentsExchangeMessage<List<Document>> outMsg = AgentsExchangeMessage.of(session, msg.getFromAgent(), documents,
 				MessageSemantic.RESPONSE);
+		if (!statusNotices.isEmpty()) {
+			outMsg.setStatusNotices(statusNotices);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Documents search agent id:" + getId() + " shares " + statusNotices.size()
+						+ " status notice(s) with its documents");
+			}
+		}
 		return List.of(outMsg);
+	}
+
+	/**
+	 * Retrieves the documents, adding to {@code statusNotices} what the agents reading
+	 * them must know of how the search went (e.g. the sources it could not reach). By
+	 * default {@link #retrieveDocuments(GPromptTemplateConfig, IChatRequestContext, IGConfigurableChatModel, Map, GAgentsNetwork, GAgentRole, AgentNetworkParticipant, AgentsCollaborationSessionContext, AgentPrivateSessionContext, AgentsExchangeMessage, IGAgentsNetworkRuntimeDao, INotificationSink)},
+	 * telling nothing.
+	 */
+	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
+			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
+			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
+			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
+			INotificationSink notificationSink, List<String> statusNotices) throws AgentException {
+		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
+				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink);
 	}
 
 	protected abstract List<Document> retrieveDocuments(GPromptTemplateConfig prompt,

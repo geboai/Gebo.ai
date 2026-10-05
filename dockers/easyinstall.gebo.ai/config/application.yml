@@ -283,6 +283,18 @@ ai.gebo.agents.standard.enabled: true
 # Found documents the search tools and the document-search agents load and chunk
 # at the same time (2 when not set)
 ai.gebo.agents.standard.search-documents-parallelism: 2
+# Search services calls (web, native, every search tool, agent and deep search): best
+# effort, a system out of service or not answering within timeout-seconds is reported
+# (to the model when the caller is a tool) and the others are searched; retries: times
+# a failure that can pass (not responding, out of service) is tried again, none by
+# default. The web search providers' own HTTP clients connect and read within the
+# http-*-timeout-seconds, coherent with a sloppy network.
+ai.gebo.search.calls:
+  retries: 0
+  timeout-seconds: 60
+  retry-pause-millis: 1000
+  http-connect-timeout-seconds: 15
+  http-read-timeout-seconds: 60
 # Web search results: after each search, a best-effort HEAD request per distinct
 # result URL fills the result size from its declared Content-Length (unknown when
 # the server declares none). Low timeouts: the search waits for it, never fails on it.

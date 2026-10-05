@@ -44,6 +44,12 @@ public class DeepSearchToolResult {
 	private int tokens = 0;
 	private String analysis = null;
 	private List<Source> sources = new ArrayList<>();
+	/**
+	 * The sources that could not be searched, and why (not responding within the
+	 * timeout, out of service, access refused, failed): what they hold is missing from
+	 * the analysis. Null when every source was searched.
+	 */
+	private List<String> unavailableSources = null;
 
 	public static DeepSearchToolResult of(Status status, String message) {
 		DeepSearchToolResult result = new DeepSearchToolResult();

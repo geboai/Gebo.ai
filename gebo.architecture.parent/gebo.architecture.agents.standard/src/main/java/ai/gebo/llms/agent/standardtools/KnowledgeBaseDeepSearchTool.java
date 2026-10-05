@@ -87,7 +87,7 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 	@Override
 	protected List<Document> searchDocuments(DeepSearchToolParam<String> param, List<String> queries, String question,
 			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId,
-			ToolContext toolContext) throws Exception {
+			ToolContext toolContext, List<String> unavailableSources) throws Exception {
 		final List<String> fullTextQueries = KnowledgeBaseKeywords.fullTextQueries(
 				param instanceof KnowledgeBaseDeepSearchToolParam withKeywords ? withKeywords.getKeywords() : null, queries);
 		return searchDocuments(queries, fullTextQueries, question, maxDocuments, fragmentsPerDocument, foundByFragmentId,

@@ -21,6 +21,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ class KnowledgeBaseDeepSearchToolTest {
 				mock(IGSecurityService.class));
 
 		tool.searchDocuments(new DeepSearchToolParam<>(), List.of("query"), "question", 30,
-				AbstractDeepSearchTool.fragmentsPerDocument(depth), new HashMap<>(), chat("kb"));
+				AbstractDeepSearchTool.fragmentsPerDocument(depth), new HashMap<>(), chat("kb"), new ArrayList<>());
 
 		ArgumentCaptor<FullTextSearchMetaDataFilter> filter = ArgumentCaptor.forClass(FullTextSearchMetaDataFilter.class);
 		verify(search).search(anyString(), anyList(), any(), anyList(), filter.capture(), anyString(), anyInt(),
@@ -89,9 +90,9 @@ class KnowledgeBaseDeepSearchToolTest {
 		KnowledgeBaseDeepSearchTool tool = toolOn(search, mock(DeepSearchToolsSupport.class));
 
 		assertTrue(tool.searchDocuments(new DeepSearchToolParam<>(), List.of("query"), "question", 10, 3,
-				new HashMap<>(), new ToolContext(Map.of())).isEmpty());
+				new HashMap<>(), new ToolContext(Map.of()), new ArrayList<>()).isEmpty());
 		assertTrue(tool.searchDocuments(new DeepSearchToolParam<>(), List.of("query"), "question", 10, 3,
-				new HashMap<>(), chat()).isEmpty());
+				new HashMap<>(), chat(), new ArrayList<>()).isEmpty());
 		// without the context of a call there is no chat either
 		assertTrue(tool.searchDocuments(List.of("query"), "question", 10, 3, new HashMap<>()).isEmpty());
 		verify(search, never()).search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(),
@@ -124,8 +125,8 @@ class KnowledgeBaseDeepSearchToolTest {
 		withKeywords.setKeywords(List.of("Fohat"));
 		DeepSearchToolParam<String> plain = new DeepSearchToolParam<>();
 
-		tool.searchDocuments(withKeywords, List.of("cosmic electricity"), "question", 10, 3, new HashMap<>(), chat("kb"));
-		tool.searchDocuments(plain, List.of("cosmic electricity"), "question", 10, 3, new HashMap<>(), chat("kb"));
+		tool.searchDocuments(withKeywords, List.of("cosmic electricity"), "question", 10, 3, new HashMap<>(), chat("kb"), new ArrayList<>());
+		tool.searchDocuments(plain, List.of("cosmic electricity"), "question", 10, 3, new HashMap<>(), chat("kb"), new ArrayList<>());
 
 		ArgumentCaptor<List<String>> semantic = ArgumentCaptor.forClass(List.class);
 		ArgumentCaptor<List<String>> fullText = ArgumentCaptor.forClass(List.class);
