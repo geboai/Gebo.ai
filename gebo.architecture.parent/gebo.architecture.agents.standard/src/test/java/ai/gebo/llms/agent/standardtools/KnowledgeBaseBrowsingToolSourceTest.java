@@ -251,10 +251,12 @@ class KnowledgeBaseBrowsingToolSourceTest {
 		assertEquals(List.of("doc-5"), collector.getDocuments().stream().map(x -> x.getDocumentCode()).toList());
 		assertEquals("a.pdf", collector.getDocuments().get(0).getName());
 		assertTrue(collector.getDocuments().get(0).isKnowledgeBaseDocument());
+		// named without its text: citable by name, not a document found
+		assertEquals(List.of("b.pdf"), collector.getListedNames());
 
 		tools().browseDocuments(new BrowseVirtualFilesystemParam(), chat("kb1", "kb1-child"), null, collector);
 
-		assertEquals(List.of("a.pdf", "b.pdf"), collector.getListedNames());
+		assertEquals(List.of("b.pdf", "a.pdf"), collector.getListedNames());
 		// listed, not read: not among the documents found
 		assertEquals(1, collector.getDocuments().size());
 	}

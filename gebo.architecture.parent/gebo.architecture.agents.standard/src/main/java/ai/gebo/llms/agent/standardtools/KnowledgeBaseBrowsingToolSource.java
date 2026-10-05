@@ -567,6 +567,9 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 			final KnowledgeBaseDocumentChunksReader reader = chunksReader.getObject();
 			// the documents whose text was read, for the calling agent's answer
 			final List<GResponseDocumentRef> read = new ArrayList<>();
+			// the documents named without their text (none, not readable, no room): citable
+			// by name in the answer, not documents found
+			final List<String> namedOnly = new ArrayList<>();
 			// the room left to the tools, all of it for these documents
 			int room = budget != null ? budget.grant(budget.left()) : Integer.MAX_VALUE;
 			for (Long uniqueId : asked) {
@@ -579,6 +582,7 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 				if (room < ToolsTokenBudget.MIN_USEFUL_TOKENS) {
 					contents.add(new DocumentContent(uniqueId, document.getName(), document.getCode(), null, false,
 							"Not read: no room is left in the context for it."));
+					namedOnly.add(document.getName());
 					continue;
 				}
 				final DocumentContent content = documentContent(reader, document, room);
@@ -586,6 +590,15 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 				contents.add(content);
 				if (content.content() != null) {
 					read.add(new GResponseDocumentRef(document));
+				} else {
+					namedOnly.add(document.getName());
+				}
+			}
+			if (collector != null && !namedOnly.isEmpty()) {
+				collector.addListed(namedOnly);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug(DOCUMENT_CONTENTS_TOOL + " named " + namedOnly.size()
+							+ " document(s) without their text to the calling agent's answer");
 				}
 			}
 			if (collector != null && !read.isEmpty()) {
