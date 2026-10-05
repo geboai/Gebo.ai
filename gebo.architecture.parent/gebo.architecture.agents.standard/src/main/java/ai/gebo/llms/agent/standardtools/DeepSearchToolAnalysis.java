@@ -65,6 +65,12 @@ import reactor.core.scheduler.Schedulers;
 @Service
 public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService {
 	private final static Logger LOGGER = LoggerFactory.getLogger(DeepSearchToolAnalysis.class);
+	/**
+	 * Share of the service model's context a batch of fragments of a partial analysis
+	 * may fill: half of it, the rest left to the prompt and to the partial analysis it
+	 * writes.
+	 */
+	static final double BATCH_CONTEXT_SHARE = 0.5d;
 	private static final String SORRY_SOMETHING_GONE_WRONG = "Sorry, something gone wrong on last step of the execution";
 	private static final String CONSOLIDATED_SUMMARY_PROMPT_PARAM = "consolidated";
 	static final String AGENT_DELIVERABLE_COMPLETENESS = "agentDeliverableCompleteness";
@@ -109,7 +115,7 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 		final int satisfactoryThreshold = defaultDeepsearchConfig.getSatisfactorySubAnalisysThreashold(deliverable);
 		final int analysisParallelism = Math.max(1, defaultDeepsearchConfig.getAnalysisParallelism());
 		final AtomicInteger satisfactorySubanalisys = new AtomicInteger(0);
-		final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
+		final long tokensBudget = (long) (serviceModel.getContextLength() * BATCH_CONTEXT_SHARE);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin analyze(...) deliverable:" + deliverable + " tokensBudget:" + tokensBudget
 					+ " parallelism:" + analysisParallelism + " satisfactoryThreshold:" + satisfactoryThreshold
