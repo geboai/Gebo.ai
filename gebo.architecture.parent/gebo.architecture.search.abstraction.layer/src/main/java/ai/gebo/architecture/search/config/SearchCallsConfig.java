@@ -39,9 +39,15 @@ public class SearchCallsConfig {
 	private int timeoutSeconds = DEFAULT_TIMEOUT_SECONDS;
 	/** Pause before a search is tried again. */
 	private long retryPauseMillis = DEFAULT_RETRY_PAUSE_MILLIS;
-	/** Time the web search providers' HTTP clients may take to connect. */
+	/**
+	 * Time the clients of the searched systems may take to connect, during searches
+	 * and search result downloads.
+	 */
 	private int httpConnectTimeoutSeconds = DEFAULT_HTTP_CONNECT_TIMEOUT_SECONDS;
-	/** Time the web search providers' HTTP clients may wait for an answer. */
+	/**
+	 * Time the clients of the searched systems may wait for an answer, during searches
+	 * and search result downloads.
+	 */
 	private int httpReadTimeoutSeconds = DEFAULT_HTTP_READ_TIMEOUT_SECONDS;
 
 	/** The timeout of a search on one system, the default one when not a positive number. */

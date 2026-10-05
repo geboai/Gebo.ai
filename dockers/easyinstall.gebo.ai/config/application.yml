@@ -287,8 +287,10 @@ ai.gebo.agents.standard.search-documents-parallelism: 2
 # effort, a system out of service or not answering within timeout-seconds is reported
 # (to the model when the caller is a tool) and the others are searched; retries: times
 # a failure that can pass (not responding, out of service) is tried again, none by
-# default. The web search providers' own HTTP clients connect and read within the
-# http-*-timeout-seconds, coherent with a sloppy network.
+# default. The clients of the searched systems (web providers, Jira, Confluence,
+# SharePoint, the connector microservices) connect and read within the
+# http-*-timeout-seconds during searches and search result downloads, coherent with a
+# sloppy network.
 ai.gebo.search.calls:
   retries: 0
   timeout-seconds: 60
