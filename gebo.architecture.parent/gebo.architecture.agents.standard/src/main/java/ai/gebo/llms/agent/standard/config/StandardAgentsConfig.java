@@ -42,14 +42,6 @@ public class StandardAgentsConfig implements IGConfiguredDefaultChatNetworksOfAg
 	 * application.yml.
 	 */
 	private double knowledgeBaseSearchRoomDivisor = InternalKnowledgeBaseSearchToolSource.DEFAULT_ROOM_DIVISOR;
-	/**
-	 * The knowledge base search tool keeps out of its results the fragments with fewer
-	 * characters of text than this, their documents' META- header lines excluded
-	 * (titles, page numbers, index entries, footnotes); 0 keeps them all. Set via
-	 * {@code ai.gebo.agents.standard.knowledge-base-search-min-fragment-chars} in
-	 * application.yml.
-	 */
-	private int knowledgeBaseSearchMinFragmentChars = InternalKnowledgeBaseSearchToolSource.DEFAULT_MIN_FRAGMENT_CHARS;
 
 	/**
 	 * The network of agents the chats with a chat profile (RAG pipeline) are handed to
@@ -81,7 +73,6 @@ public class StandardAgentsConfig implements IGConfiguredDefaultChatNetworksOfAg
 			LOGGER.debug("Standard agents configuration resolved: enabled:" + enabled + " maxChunksPerDocument:"
 					+ maxChunksPerDocument + " searchDocumentsParallelism:" + searchDocumentsParallelism
 					+ " knowledgeBaseSearchRoomDivisor:" + knowledgeBaseSearchRoomDivisor
-					+ " knowledgeBaseSearchMinFragmentChars:" + knowledgeBaseSearchMinFragmentChars
 					+ " defaultChatNetworkOfAgents:" + defaultChatNetworkOfAgents
 					+ " defaultPureChatNetworkOfAgents:" + defaultPureChatNetworkOfAgents);
 		}

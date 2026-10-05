@@ -157,14 +157,11 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 	}
 
 	/** Each fragment its own document, as the search returns them. */
-	/** A passage with text enough not to be near-empty. */
-	private static final String PASSAGE = "a passage of the document with enough text to answer something about the subject asked";
-
 	private static IGDocumentsSearchService searchFindingDocuments(int documents) throws Exception {
 		IGDocumentsSearchService search = mock(IGDocumentsSearchService.class);
 		List<Document> found = new ArrayList<>();
 		for (int i = 0; i < documents; i++) {
-			found.add(Document.builder().id("d" + i).text("fragment" + i + " " + PASSAGE)
+			found.add(Document.builder().id("d" + i).text("fragment" + i)
 					.metadata(Map.of(DocumentMetaInfos.CONTENT_CODE, "doc-" + i)).build());
 		}
 		AIDocumentsSet set = mock(AIDocumentsSet.class);
@@ -288,7 +285,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 	@Test
 	void theDocumentsFoundAreSharedWithTheCallingAgent() throws Exception {
 		IGDocumentsSearchService search = mock(IGDocumentsSearchService.class);
-		Document fragment = Document.builder().id("f1").text(PASSAGE)
+		Document fragment = Document.builder().id("f1").text("content")
 				.metadata(Map.of(DocumentMetaInfos.CONTENT_CODE, "doc-a")).build();
 		AIDocumentFragment aiFragment = mock(AIDocumentFragment.class);
 		when(aiFragment.toAIDocument()).thenReturn(fragment);
@@ -414,77 +411,5 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 				anyString(), anyInt(), anyInt());
 		assertEquals(List.of("Svâbhâvat", "Dhyân Chohans"), fullText.getAllValues().get(0));
 		assertEquals(List.of("topic", "other phrasing"), fullText.getAllValues().get(1));
-	}
-	@SuppressWarnings("unchecked")
-	private static org.springframework.beans.factory.ObjectProvider<StandardAgentsConfig> minFragmentChars(int chars) {
-		StandardAgentsConfig config = new StandardAgentsConfig();
-		config.setKnowledgeBaseSearchMinFragmentChars(chars);
-		org.springframework.beans.factory.ObjectProvider<StandardAgentsConfig> provider = mock(
-				org.springframework.beans.factory.ObjectProvider.class);
-		when(provider.getIfAvailable()).thenReturn(config);
-		return provider;
-	}
-
-	private static IGDocumentsSearchService searchFindingTexts(String... texts) throws Exception {
-		IGDocumentsSearchService search = mock(IGDocumentsSearchService.class);
-		List<Document> found = new ArrayList<>();
-		for (int i = 0; i < texts.length; i++) {
-			found.add(Document.builder().id("d" + i).text(texts[i])
-					.metadata(Map.of(DocumentMetaInfos.CONTENT_CODE, "doc-" + i)).build());
-		}
-		AIDocumentsSet set = mock(AIDocumentsSet.class);
-		when(set.aiDocumentsList()).thenReturn(found);
-		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
-				.thenReturn(set);
-		return search;
-	}
-
-	private static final String HEADER = "META-TITLE:The Secret Doctrine, Vol. 1 of 4\nMETA-SUBTITLE:by Helena Petrovna Blavatsky\n\n\n";
-
-	@Test
-	void theNearEmptyFragmentsAreKeptOutBeforeTheRanking() throws Exception {
-		assertEquals(34, InternalKnowledgeBaseSearchToolSource.textChars(
-				Document.builder().id("x").text(HEADER + "complete explanation of this fact?").build()),
-				"the META- header lines are not text");
-		IGDocumentsSearchService search = searchFindingTexts(HEADER + "complete explanation of this fact?",
-				HEADER + "314.\n511\nIsis Unveiled, I. 341.", HEADER + "Footnotes",
-				HEADER + "Fohat is thus the dynamic energy of Cosmic Ideation; or, regarded from the other side, "
-						+ "it is the intelligent medium.");
-		IGRankerService ranker = mock(IGRankerService.class);
-		when(ranker.isRankerConfigured()).thenReturn(true);
-		when(ranker.rank(anyList(), anyString(), anyInt())).thenAnswer(invocation -> invocation.getArgument(0));
-		ToolsFoundDocuments collector = new ToolsFoundDocuments();
-		InternalKnowledgeBaseSearchToolSource tool = new InternalKnowledgeBaseSearchToolSource(provider(search),
-				mock(IGSecurityService.class), TEXT_RENDERER, minFragmentChars(70), provider(ranker));
-
-		String answer = tool.search(query("Fohat"), chatWithKnowledgeBases("kb1"), collector, null);
-
-		assertTrue(answer.startsWith("1 fragment(s) found:"), answer.substring(0, 40));
-		assertTrue(answer.contains("dynamic energy of Cosmic Ideation"));
-		assertFalse(answer.contains("Footnotes") || answer.contains("Isis Unveiled"), answer);
-		org.mockito.ArgumentCaptor<List<Document>> ranked = org.mockito.ArgumentCaptor.forClass(List.class);
-		verify(ranker).rank(ranked.capture(), anyString(), anyInt());
-		assertEquals(1, ranked.getValue().size(), "the ranker chooses among the fragments with text only");
-		assertEquals(List.of("doc-3"), collector.getDocuments().stream().map(x -> x.getDocumentCode()).toList());
-	}
-
-	@Test
-	void onlyNearEmptyFragmentsAskTheModelToSearchAgainAndZeroKeepsThemAll() throws Exception {
-		IGDocumentsSearchService search = searchFindingTexts(HEADER + "Footnotes", HEADER + "cit., pp. 366-8.");
-
-		String answer = new InternalKnowledgeBaseSearchToolSource(provider(search), mock(IGSecurityService.class),
-				TEXT_RENDERER, minFragmentChars(70), null).search(query("Svabhavat"), chatWithKnowledgeBases("kb1"));
-
-		assertTrue(answer.startsWith("Only near-empty fragments"), answer);
-		assertTrue(answer.contains("search again"), answer);
-
-		String all = new InternalKnowledgeBaseSearchToolSource(provider(search), mock(IGSecurityService.class),
-				TEXT_RENDERER, minFragmentChars(0), null).search(query("Svabhavat"), chatWithKnowledgeBases("kb1"));
-		assertTrue(all.startsWith("2 fragment(s) found:"), all);
-		assertEquals(InternalKnowledgeBaseSearchToolSource.DEFAULT_MIN_FRAGMENT_CHARS,
-				new InternalKnowledgeBaseSearchToolSource(provider(search), mock(IGSecurityService.class),
-						TEXT_RENDERER, minFragmentChars(-1), null).minFragmentChars(),
-				"a negative value is not used");
-		assertEquals(70, InternalKnowledgeBaseSearchToolSource.DEFAULT_MIN_FRAGMENT_CHARS);
 	}
 }
