@@ -43,9 +43,43 @@ ai.gebo.agents.prompts.library:
     contextDocuments: REQUIRED
     toolsCalling: REQUIRED
     description: Default Chat Agent prompt
+  - promptUse: pure-chat-agent-prompt
+    langCode: en
+    agentId: ChatAgentService
+    agentPrompt: true
+    systemReference: /agents-prompt-library/en/pure-chat-agent-system-prompt.txt
+    userReference: /agents-prompt-library/en/default-chat-agent-user-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: REQUIRED
+    toolsCalling: REQUIRED
+    description: Chat Agent prompt for the chats without knowledge base
 ai.gebo.agents.prompts.uses:
   - code: default-chat-agent-prompt
     description: Main loop prompt for the default single-agent chat agent (ChatAgentService), driving its iterate-until-done control loop.
+    module: agents-standard
+    placeholders:
+      - placeholder: AGENT_CONTROL_CONTINUE_PROMPT_PARAM
+        description: The control token the agent must emit to signal it needs another loop iteration.
+      - placeholder: AGENT_CONTROL_FINISHED_PROMPT_PARAM
+        description: The control token the agent must emit to signal its work is complete.
+      - placeholder: CURRENT_ITERATION
+        description: The current iteration number of the agent's control loop.
+      - placeholder: MAX_ITERATIONS
+        description: The maximum number of iterations allowed for the agent's control loop.
+      - placeholder: AGENT_SESSION_STORY
+        description: Narrative reconstruction of the agent session's turns so far.
+      - placeholder: REQUIRED_AGENT_COMPLETENESS
+        description: The kind of deliverable the user asked for (e.g. QA, HOWTO, ANALISYS), driving the depth of the agent's searches and of its answer.
+      - placeholder: DELIVERABLE_FORMATTING_RULES
+        description: Formatting rules the answer must follow for that kind of deliverable.
+      - placeholder: question
+        description: The user's current question or request text.
+      - placeholder: RULES_TO_FOLLOW
+        description: The rules the user or the administrators set for the answers of this chat, one per line, or none.
+      - placeholder: documents
+        description: The documents of the chat request (chosen or uploaded by the user, or found for it), between BEGIN_CONTEXT and END_CONTEXT; empty when there are none.
+  - code: pure-chat-agent-prompt
+    description: Main loop prompt of the single-agent chat agent of the chats without knowledge base (AgenticLoopPureChatNetworkAgentService), driving its iterate-until-done control loop; like default-chat-agent-prompt, it also tells the agent that the chat has no knowledge base.
     module: agents-standard
     placeholders:
       - placeholder: AGENT_CONTROL_CONTINUE_PROMPT_PARAM

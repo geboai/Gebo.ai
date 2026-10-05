@@ -30,6 +30,11 @@ public class StandardAgentsPromptsLibraryConfig {
 	/** The main loop of the single agent operating the tools (the agentic chat). */
 	public static final String DEFAULT_CHAT_AGENT_PROMPT = "default-chat-agent-prompt";
 	/**
+	 * The main loop of the single agent operating the tools in the chats without
+	 * knowledge base: it is told the chat has none.
+	 */
+	public static final String PURE_CHAT_AGENT_PROMPT = "pure-chat-agent-prompt";
+	/**
 	 * The report writer's evidence extraction calls, when a cycle's evidence does not
 	 * fit one writing call.
 	 */
