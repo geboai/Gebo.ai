@@ -67,6 +67,25 @@ public class LLMChatRequestResources implements ITokensCountable {
 		this.generationPolicy = generationPolicy;
 	}
 
+	/**
+	 * Takes the values the session lifecycle gives each request (the rules to follow,
+	 * the feedback notes of the answers, the tool calls recorder, the knowledge bases of
+	 * the chat) from the resources of the same request: for resources rebuilt from
+	 * another set, which would otherwise lose them.
+	 */
+	public void copyRequestValuesFrom(LLMChatRequestResources request) {
+		if (request == null) {
+			return;
+		}
+		this.rulesToFollow = request.rulesToFollow != null ? new ArrayList<String>(request.rulesToFollow)
+				: new ArrayList<String>();
+		this.answerFeedbackNotes = request.answerFeedbackNotes != null
+				? new HashMap<String, String>(request.answerFeedbackNotes)
+				: new HashMap<String, String>();
+		this.toolCallsListener = request.toolCallsListener;
+		this.availableKnowledgeBaseCodes = request.availableKnowledgeBaseCodes;
+	}
+
 	@AllArgsConstructor
 	static final class InteractionWrapper implements IChatSessionEntry {
 		CSSSimplefiedInteraction interaction = null;

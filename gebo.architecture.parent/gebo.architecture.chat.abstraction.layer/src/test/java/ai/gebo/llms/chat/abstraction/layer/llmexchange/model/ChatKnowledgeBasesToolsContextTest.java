@@ -64,6 +64,28 @@ class ChatKnowledgeBasesToolsContextTest {
 	}
 
 	@Test
+	void resourcesRebuiltForTheSameRequestKeepItsValues() {
+		LLMChatRequestResources request = new LLMChatRequestResources();
+		request.setCurrentRequest(request());
+		request.setRulesToFollow(List.of("Answer in Italian"));
+		request.setAnswerFeedbackNotes(Map.of("request-0", " (the user disliked this answer)"));
+		request.setAvailableKnowledgeBaseCodes(List.of("kb1"));
+		ai.gebo.llms.abstraction.layer.services.ToolCallsListener listener = org.mockito.Mockito
+				.mock(ai.gebo.llms.abstraction.layer.services.ToolCallsListener.class);
+		request.setToolCallsListener(listener);
+		// as the chat with files rebuilds them when the documents do not fit
+		LLMChatRequestResources rebuilt = new LLMChatRequestResources(null, null, null, null, null,
+				request.getCurrentRequest(), LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
+
+		rebuilt.copyRequestValuesFrom(request);
+
+		assertEquals(List.of("Answer in Italian"), rebuilt.getRulesToFollow());
+		assertEquals(Map.of("request-0", " (the user disliked this answer)"), rebuilt.getAnswerFeedbackNotes());
+		assertEquals(listener, rebuilt.getToolCallsListener());
+		assertEquals(List.of("kb1"), knowledgeBasesOf(rebuilt.createChatRequestContext()));
+	}
+
+	@Test
 	void withoutTheChatsKnowledgeBasesTheToolsGetNone() {
 		LLMChatRequestResources resources = new LLMChatRequestResources();
 		resources.setCurrentRequest(request());
