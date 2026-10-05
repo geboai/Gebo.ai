@@ -122,17 +122,43 @@ Turn 7:
 
 Same as finding 4.6 of 2026-10-04.
 
-### 4.3 "Answer cites a document not read" warnings
+### 4.3 "Answer cites a document not read" warnings, and answers redone for nothing
 
-The check fired 6 times, and every flagged name is a web page:
+The check that warns "The answer cites …, not read for this request" fired 6 times
+(the first version of this summary counted only the web pages):
 
-| Turn | Pages flagged |
-|---|---|
-| 10 | `25-relnote-issues.html` |
-| 11 | `preview-list.html` |
-| 18 | `GA010_c09.html`, `GA010b_c06.html` |
+| Turn | Flagged | What had happened |
+|---|---|---|
+| 1 | the 12 KB documents | listed by `browseKnowledgeBaseDocuments` (names, as asked) |
+| 7 | `The-Secret-Doctrine-1-of-4.pdf` | analysed by the deep search, then dropped from its sources (see 4.2) |
+| 8 | `dialoghi-su-ermetismo.pdf` | read whole by `getKnowledgeBaseDocumentContents` |
+| 10 | `25-relnote-issues.html` | a web result of the request |
+| 11 | `preview-list.html` | a web result of the request |
+| 18 | `GA010_c09.html`, `GA010b_c06.html` | pages of the web deep search |
 
-In turn 18 these pages came from the web deep search, whose analysis discarded 13 fragments. Whether the check compares the citations with every page read, or only with the kept sources, has not been verified in the code.
+The same causes discarded answers the user never saw:
+- In turn 1 the first answer, built on the listing, was discarded as "used no search tool" and written again.
+- In turn 8 the answer citing the document it had just read was discarded, and the document was read a second time (10:58:49 and 10:59:12).
+
+**Causes, verified in the code:**
+- The knowledge base browsing tools (`knowledge-base-browsing-tool-source`) were not among the tool sources whose calls are evidence (`AgenticLoopReactiveAgentServiceImpl.EVIDENCE_TOOL_SOURCES`).
+- For an analysis, only the deep searches counted, not a document read whole.
+- The browsing tools did not record the documents they listed or read.
+- A web result is named after its site (`GoogleSearchServiceImpl`: `displayLink`, e.g. `docs.oracle.com`), while the answer cites the page by the file name its address ends with (`preview-list.html`).
+
+**Fixed and re-tested (12:48–12:56):**
+- The browsing tools are evidence. For an analysis, a document read whole counts next to the deep searches.
+- A document read whole is shared with the answer, and shown among the found documents.
+- The names a listing returns count as citable, without becoming documents found.
+- A search result is also citable by its address (without its query, also decoded).
+
+| Retest | Before | After |
+|---|---|---|
+| List the KB documents | 2 iterations, warning on 12 documents | 1 iteration, no warning |
+| Read document 6 whole | (turn 8: 2 iterations, read twice, warning) | 1 iteration, read once, no warning, the document in "Found docs" |
+| Web: Java 25 features, citing the pages | warnings on `25-relnote-issues.html`, `preview-list.html` | the same pages cited, no warning |
+
+Turn 7's warning, on a source dropped by the deep search, is finding 4.2 and remains.
 
 ### 4.4 A wrong date in a web answer
 
