@@ -279,3 +279,23 @@ The batch now fills half of the service model context (`ddc009e4f`): P4's 89 fra
 - **A translation shown as a quotation (K7).** The deep search's partial analysis rendered an English passage of *The Secret Doctrine* in Italian, in quotation marks, and the answer kept it.
 - **"Not read" warning on a document named by the reading tool without text (K6).** The tool named it but had no text to read; the answer cited it only to say so.
 - **The analysis judged all the fragments irrelevant while using them (K7).** Handled by the code (the documents stay the sources, WARN logged).
+
+---
+
+## 7. Third session: analytical requests (18:22 – 18:44)
+
+After the rule on analytical requests (`016af74d1`: plan the searches across the subject's angles and detailed aspects, check the deep search's analysis against them, complete what is missing), the quotation rule (`7a1073b87`) and the platform's link and reference format rules (`10d9f94d4`). Only the `gebo.ai` container redeployed; gpt-4.1.
+
+| # | Chat | Request (abridged) | Tools | Outcome |
+|---|---|---|---|---|
+| A1 | KB | Detailed analysis: Christ in the KB, comparing works and authors | 1 deep KB (5 searches, 23 fragments, 1 source) | ◐ grounded, says the coverage is centred on Steiner's Fifth Gospel; no completing search for the other authors (Archiati's *I grandi segni dei tempi* speaks of Christ); "not read" warning on `Vangeli-non-canonici.pdf` |
+| A2 | KB | Analysis: Archiati's twelve senses vs Blavatsky's seven principles | 1 deep KB (31 fragments, 27 discarded, 3 sources) | ✓ structured, grounded on both authors; no completing search |
+| A3 | KB | Decision: which document to start from for anthroposophy | 1 deep KB (31 fragments, 3 sources) | ✓ recommendation, tradeoffs, what would change it |
+| A4 | KB + web | Report: Steiner's Guardian of the Threshold in the KB vs the web | deep KB (16 fragments, 15 s) + deep web (96 fragments) | ◐ 6 of 6 links returned by the searches; web batch of 73 fragments **ran away** (168 s, 626 repeated entries); some loosely related web sources |
+| A5 | KB | Without searching: the topics so far | none | ✓ |
+| N1 | no KB | Comparative analysis Spring AI vs LangChain4j for enterprise RAG, with sources | 1 deep web (5 searches on distinct angles, 81 fragments, ~35 s) | ✓ 6 of 6 links returned; the searches covered the comparison and each framework's architecture, tool calling, vector stores, observability, maturity |
+| N2 | no KB | An analysis of the KB documents on Steiner | none | ✓ no knowledge base here, offers the web; the evidence gate (ANALISYS) discarded the first, correct, tool-free answer and asked again |
+
+**What the rule changed:** the angles are planned (N1's searches cover each aspect asked). **What it did not:** no turn completed its deep search with further searches; every analytical turn ran one deep search per source and answered (A1 left authors out). A rule in the prompt depends on the model: a model-agnostic way would be in code (for example the deep search result telling the agent which documents or angles it covered).
+
+**Other observations:** a web deep search batch of 73 fragments still ran away at half the service model context (A4); N1's 72-fragment batch did not. The evidence gate retries an analysis answered without tools even when no tool can answer it (N2).
