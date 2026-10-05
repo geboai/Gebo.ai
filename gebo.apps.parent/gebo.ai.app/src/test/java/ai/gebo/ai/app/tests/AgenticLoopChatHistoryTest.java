@@ -58,7 +58,7 @@ public class AgenticLoopChatHistoryTest extends AbstractBaseTestLLmsIntegrationT
 	private static final String OLDER_SUMMARY = "CONSOLIDATED_SUMMARY_MARKER the user asked about Roman history.";
 	private static final String CHOSEN_DOCUMENT_TEXT = "CHOSEN_DOCUMENT_MARKER Londinium was founded around 47 AD.";
 	/** Text of the loop agent's system prompt, to tell its calls apart. */
-	private static final String LOOP_PROMPT_TEXT = "agentic chat assistant";
+	private static final String LOOP_PROMPT_TEXT = "# Where the answer comes from";
 
 	@Autowired
 	private List<IStreamingOutputChatPipelineService> pipelineServices;

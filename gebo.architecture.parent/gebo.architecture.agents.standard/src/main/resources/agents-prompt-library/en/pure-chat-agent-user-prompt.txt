@@ -1,12 +1,13 @@
-- Current user question: {question}
+# Your previous iterations for this request (from first to last)
+{AGENT_SESSION_STORY}
 
-- Rules to follow, set by the user or by the administrators for this chat: they take precedence over
-  the defaults of the instructions (the language, the length, the style of the answer):
-{RULES_TO_FOLLOW}
-
-- Documents of the chat (chosen or uploaded by the user, or found for this request), if any:
+# Documents of the chat (chosen or uploaded by the user, or found for this request), if any
 {documents}
 
+# Rules to follow for this chat, set by the user or by the administrators
+They take precedence over the defaults of the instructions (the language, the length, the style of
+the answer):
+{RULES_TO_FOLLOW}
 
-- Previous loop history (from first to last): 
-{AGENT_SESSION_STORY}
+# The user's current request
+{question}
