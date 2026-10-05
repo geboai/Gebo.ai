@@ -14,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -28,6 +26,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -35,9 +34,6 @@ import org.springframework.data.domain.Pageable;
 
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
-import ai.gebo.architecture.fulltext.model.FullTextChunk;
-import ai.gebo.architecture.fulltext.model.FullTextChunkSearchHit;
-import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.core.contents.security.services.VirtualFilesystemQuery;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
@@ -52,17 +48,19 @@ import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.Document
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.ListPage;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.PageParam;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.VirtualFilesystemItem;
+import ai.gebo.llms.agent.standardtools.KnowledgeBaseDocumentChunksReader.DocumentChunks;
 import ai.gebo.model.DocumentMetaInfos;
 
 /**
  * Pins the knowledge base browsing tools: limited to the chat's visible knowledge
  * bases, paged (50 by default, 200 at most), the folders and documents with their
- * uniqueId, the documents read whole from their indexed chunks within the room.
+ * uniqueId, the documents read whole from their chunks in the vector store within
+ * the room.
  */
 class KnowledgeBaseBrowsingToolSourceTest {
 
 	private IGKnowledgebaseVisibilityService visibility;
-	private IGFullTextSearchService fullText;
+	private KnowledgeBaseDocumentChunksReader reader;
 
 	@SuppressWarnings("unchecked")
 	private static <T> ObjectProvider<T> provider(T value) {
@@ -92,25 +90,21 @@ class KnowledgeBaseBrowsingToolSourceTest {
 		return document;
 	}
 
-	private static FullTextChunkSearchHit chunk(String content) {
-		FullTextChunk chunk = new FullTextChunk();
-		chunk.setContent(content);
-		FullTextChunkSearchHit hit = new FullTextChunkSearchHit();
-		hit.setChunk(chunk);
-		return hit;
+	private static Document chunk(String content) {
+		return new Document(content);
 	}
 
 	@BeforeEach
 	void setUp() {
 		visibility = mock(IGKnowledgebaseVisibilityService.class);
-		fullText = mock(IGFullTextSearchService.class);
+		reader = mock(KnowledgeBaseDocumentChunksReader.class);
 		// the chat's kb1 and its visible child kb1-child
 		when(visibility.visiblesAndChildKnowledgebases(List.of("kb1"))).thenReturn(List.of(kb("kb1"), kb("kb1-child")));
 		when(visibility.allVisibleKnowledgebases()).thenReturn(List.of(kb("kb1"), kb("kb1-child"), kb("other")));
 	}
 
 	private KnowledgeBaseBrowsingToolSource tools() {
-		return new KnowledgeBaseBrowsingToolSource(provider(visibility), provider(fullText));
+		return new KnowledgeBaseBrowsingToolSource(provider(visibility), provider(reader));
 	}
 
 	@Test
@@ -212,8 +206,8 @@ class KnowledgeBaseBrowsingToolSourceTest {
 	void documentsAreReadWholeFromTheirChunksInOrder() throws Exception {
 		when(visibility.browseVisibleDocuments(any(VirtualFilesystemQuery.class), any(Pageable.class)))
 				.thenReturn(new PageImpl<>(List.of(document(5L, "doc-5", "a.pdf"))));
-		when(fullText.documentChunks(eq("doc-5"), eq(0), anyInt()))
-				.thenReturn(List.of(chunk("first part"), chunk("second part")));
+		when(reader.read(any(GDocumentReference.class)))
+				.thenReturn(new DocumentChunks(List.of(chunk("first part"), chunk("second part")), "embedding-1"));
 		DocumentContentsParam param = new DocumentContentsParam();
 		param.setUniqueIds(List.of(5L, 99L));
 
@@ -230,11 +224,11 @@ class KnowledgeBaseBrowsingToolSourceTest {
 	void aDocumentLargerThanTheRoomIsCut() throws Exception {
 		when(visibility.browseVisibleDocuments(any(VirtualFilesystemQuery.class), any(Pageable.class)))
 				.thenReturn(new PageImpl<>(List.of(document(5L, "doc-5", "big.pdf"))));
-		List<FullTextChunkSearchHit> chunks = new ArrayList<>();
+		List<Document> chunks = new ArrayList<>();
 		for (int i = 0; i < 50; i++) {
 			chunks.add(chunk(("word" + i + " ").repeat(100)));
 		}
-		when(fullText.documentChunks(eq("doc-5"), eq(0), anyInt())).thenReturn(chunks);
+		when(reader.read(any(GDocumentReference.class))).thenReturn(new DocumentChunks(chunks, "embedding-1"));
 		DocumentContentsParam param = new DocumentContentsParam();
 		param.setUniqueIds(List.of(5L));
 
@@ -246,17 +240,32 @@ class KnowledgeBaseBrowsingToolSourceTest {
 	}
 
 	@Test
-	void withoutTheFullTextIndexTheContentsCannotBeRead() {
+	void aDocumentNotVectorizedYetHasNoText() {
 		when(visibility.browseVisibleDocuments(any(VirtualFilesystemQuery.class), any(Pageable.class)))
 				.thenReturn(new PageImpl<>(List.of(document(5L, "doc-5", "a.pdf"))));
+		when(reader.read(any(GDocumentReference.class))).thenReturn(new DocumentChunks(List.of(), null));
 		DocumentContentsParam param = new DocumentContentsParam();
 		param.setUniqueIds(List.of(5L));
 
-		DocumentContent content = new KnowledgeBaseBrowsingToolSource(provider(visibility), provider(null))
-				.documentContents(param, chat("kb1"), null).get(0);
+		DocumentContent content = tools().documentContents(param, chat("kb1"), null).get(0);
 
 		assertNull(content.content());
-		assertTrue(content.message().contains("full-text index is not enabled"), content.message());
+		assertTrue(content.message().contains("not vectorized"), content.message());
+	}
+
+	@Test
+	void aFailingReadIsReportedForThatDocumentOnly() {
+		when(visibility.browseVisibleDocuments(any(VirtualFilesystemQuery.class), any(Pageable.class)))
+				.thenReturn(new PageImpl<>(List.of(document(5L, "doc-5", "a.pdf"), document(6L, "doc-6", "b.pdf"))));
+		when(reader.read(any(GDocumentReference.class))).thenThrow(new IllegalStateException("store down"))
+				.thenReturn(new DocumentChunks(List.of(chunk("text of b")), "embedding-1"));
+		DocumentContentsParam param = new DocumentContentsParam();
+		param.setUniqueIds(List.of(5L, 6L));
+
+		List<DocumentContent> contents = tools().documentContents(param, chat("kb1"), null);
+
+		assertTrue(contents.get(0).message().contains("could not be read"), contents.get(0).message());
+		assertEquals("text of b\n", contents.get(1).content());
 	}
 
 	@Test
@@ -269,8 +278,11 @@ class KnowledgeBaseBrowsingToolSourceTest {
 				.filter(x -> x.getToolDefinition().name().equals(KnowledgeBaseBrowsingToolSource.BROWSE_DOCUMENTS_TOOL))
 				.findFirst().orElseThrow().getToolDefinition().inputSchema();
 		assertTrue(schema.contains("\"pageSize\"") && schema.contains("\"parentFolderCode\""), schema);
-		assertEquals(ai.gebo.architecture.ai.model.ToolDataFlowTarget.Kind.KNOWLEDGE_BASE_FULLTEXT_INDEX,
-				tools.getDataFlowTargets(KnowledgeBaseBrowsingToolSource.DOCUMENT_CONTENTS_TOOL).get(0).kind());
+		assertEquals(
+				List.of(ai.gebo.architecture.ai.model.ToolDataFlowTarget.Kind.KNOWLEDGE_BASE_VECTOR_STORE,
+						ai.gebo.architecture.ai.model.ToolDataFlowTarget.Kind.EMBEDDING_MODEL),
+				tools.getDataFlowTargets(KnowledgeBaseBrowsingToolSource.DOCUMENT_CONTENTS_TOOL).stream()
+						.map(x -> x.kind()).toList());
 		assertEquals(ai.gebo.architecture.ai.model.ToolDataFlowTarget.Kind.PLATFORM_DATA,
 				tools.getDataFlowTargets(KnowledgeBaseBrowsingToolSource.COUNT_DOCUMENTS_TOOL).get(0).kind());
 	}

@@ -22,6 +22,7 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.domain.Page;
@@ -39,8 +40,6 @@ import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
-import ai.gebo.architecture.fulltext.model.FullTextChunkSearchHit;
-import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.core.contents.security.services.VirtualFilesystemQuery;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
@@ -49,6 +48,7 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
+import ai.gebo.llms.agent.standardtools.KnowledgeBaseDocumentChunksReader.DocumentChunks;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import org.springframework.ai.util.json.JsonParser;
@@ -89,9 +89,6 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	public static final int DEFAULT_PAGE_SIZE = 50;
 	/** Most items in a page. */
 	public static final int MAX_PAGE_SIZE = 200;
-	/** Chunks of a document read from the full-text index in one request. */
-	static final int CHUNKS_READ_PER_REQUEST = 200;
-
 	static final String COUNT_DOCUMENTS_DESCRIPTION = "Counts the documents of the knowledge bases of this chat, in total and by knowledge base, "
 			+ "optionally only those of a project or of a project endpoint (content source).";
 	static final String BROWSE_KNOWLEDGE_BASES_DESCRIPTION = "Lists the knowledge bases of this chat (code, description, parent), a page at a time.";
@@ -110,12 +107,12 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 			+ "as far as the room left in the context allows.";
 
 	private final ObjectProvider<IGKnowledgebaseVisibilityService> visibilityService;
-	private final ObjectProvider<IGFullTextSearchService> fullTextSearchService;
+	private final ObjectProvider<KnowledgeBaseDocumentChunksReader> chunksReader;
 
 	public KnowledgeBaseBrowsingToolSource(ObjectProvider<IGKnowledgebaseVisibilityService> visibilityService,
-			ObjectProvider<IGFullTextSearchService> fullTextSearchService) {
+			ObjectProvider<KnowledgeBaseDocumentChunksReader> chunksReader) {
 		this.visibilityService = visibilityService;
-		this.fullTextSearchService = fullTextSearchService;
+		this.chunksReader = chunksReader;
 	}
 
 	// ----------------------------------------------------------------- parameters
@@ -251,13 +248,16 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 
 	/**
 	 * The browsing tools read the platform's catalogue of the knowledge bases; the
-	 * contents tool reads the documents' text from the full-text index.
+	 * contents tool reads the documents' chunks from the vector store, the query it
+	 * needs going through the embedding model.
 	 */
 	@Override
 	public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
 		if (DOCUMENT_CONTENTS_TOOL.equals(toolName)) {
-			return List.of(ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.KNOWLEDGE_BASE_FULLTEXT_INDEX,
-					"Knowledge base documents read whole"));
+			return List.of(
+					ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.KNOWLEDGE_BASE_VECTOR_STORE,
+							"Knowledge base documents read whole"),
+					ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.EMBEDDING_MODEL, "Document name embedded to read its chunks"));
 		}
 		return TOOLS.contains(toolName)
 				? List.of(ToolDataFlowTarget.platformData("Knowledge bases catalogue",
@@ -515,7 +515,7 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 
 	/**
 	 * The whole text of the visible documents with the uniqueIds, in the order asked,
-	 * rebuilt from their chunks in the full-text index; each document as much of it as
+	 * rebuilt from their chunks in the vector store; each document as much of it as
 	 * the room left allows, the next ones nothing once the room is used up.
 	 */
 	List<DocumentContent> documentContents(DocumentContentsParam param, KBContext interaction, ToolsTokenBudget budget) {
@@ -538,7 +538,7 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 					visibles.put(document.getUniqueId(), document);
 				}
 			}
-			final IGFullTextSearchService fullText = fullTextSearchService.getIfAvailable();
+			final KnowledgeBaseDocumentChunksReader reader = chunksReader.getObject();
 			// the room left to the tools, all of it for these documents
 			int room = budget != null ? budget.grant(budget.left()) : Integer.MAX_VALUE;
 			for (Long uniqueId : asked) {
@@ -548,17 +548,12 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 							"No document with this uniqueId among the documents of this chat's knowledge bases the user can read."));
 					continue;
 				}
-				if (fullText == null) {
-					contents.add(new DocumentContent(uniqueId, document.getName(), document.getCode(), null, false,
-							"The documents' text cannot be read: the full-text index is not enabled."));
-					continue;
-				}
 				if (room < ToolsTokenBudget.MIN_USEFUL_TOKENS) {
 					contents.add(new DocumentContent(uniqueId, document.getName(), document.getCode(), null, false,
 							"Not read: no room is left in the context for it."));
 					continue;
 				}
-				final DocumentContent content = documentContent(fullText, document, room);
+				final DocumentContent content = documentContent(reader, document, room);
 				room -= content.content() != null ? ITokensCountable.stringsTokensSize(content.content()) : 0;
 				contents.add(content);
 			}
@@ -574,42 +569,35 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 		}
 	}
 
-	/** The text of a document from its indexed chunks, at most {@code room} tokens of it. */
-	DocumentContent documentContent(IGFullTextSearchService fullText, GDocumentReference document, int room) {
-		final StringBuilder text = new StringBuilder();
-		int from = 0;
-		int chunks = 0;
-		boolean complete = true;
+	/** The text of a document from its chunks in the vector store, at most {@code room} tokens of it. */
+	DocumentContent documentContent(KnowledgeBaseDocumentChunksReader reader, GDocumentReference document, int room) {
+		final DocumentChunks read;
 		try {
-			while (true) {
-				final List<FullTextChunkSearchHit> page = fullText.documentChunks(document.getCode(), from,
-						CHUNKS_READ_PER_REQUEST);
-				if (page == null || page.isEmpty()) {
-					break;
-				}
-				for (FullTextChunkSearchHit hit : page) {
-					if (hit != null && hit.getChunk() != null && hit.getChunk().getContent() != null) {
-						text.append(hit.getChunk().getContent()).append('\n');
-						chunks++;
-					}
-				}
-				if (ITokensCountable.stringsTokensSize(text.toString()) > room) {
-					complete = false;
-					break;
-				}
-				if (page.size() < CHUNKS_READ_PER_REQUEST) {
-					break;
-				}
-				from += page.size();
-			}
+			read = reader.read(document);
 		} catch (Exception e) {
 			LOGGER.error("Cannot read the chunks of document " + document.getCode(), e);
 			return new DocumentContent(document.getUniqueId(), document.getName(), document.getCode(), null, false,
 					"The text of this document could not be read.");
 		}
-		if (chunks == 0) {
+		if (read.chunks().isEmpty()) {
 			return new DocumentContent(document.getUniqueId(), document.getName(), document.getCode(), null, false,
-					"No text of this document is in the full-text index.");
+					"No text of this document is in the knowledge base: it is not vectorized (yet).");
+		}
+		final StringBuilder text = new StringBuilder();
+		int chunks = 0;
+		int tokens = 0;
+		boolean complete = true;
+		for (Document chunk : read.chunks()) {
+			if (chunk.getText() == null) {
+				continue;
+			}
+			text.append(chunk.getText()).append('\n');
+			chunks++;
+			tokens += ITokensCountable.stringsTokensSize(chunk.getText());
+			if (tokens > room) {
+				complete = false;
+				break;
+			}
 		}
 		String content = text.toString();
 		if (!complete) {
@@ -617,7 +605,8 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("documentContent(...) uniqueId:" + document.getUniqueId() + " code:" + document.getCode() + " "
-					+ chunks + " chunk(s), " + content.length() + " character(s), complete:" + complete);
+					+ chunks + " chunk(s) of " + read.chunks().size() + " from the vector store of "
+					+ read.embeddingModelCode() + ", " + content.length() + " character(s), complete:" + complete);
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("<KNOWLEDGE_BASE_DOCUMENT_CONTENT uniqueId=" + document.getUniqueId() + ">");
