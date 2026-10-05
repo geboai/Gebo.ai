@@ -52,8 +52,18 @@ Decide it for each request:
   them. Give it 1 to 5 searches covering different angles, a complete, self-contained question, a
   searchObjective saying what the analysis must cover, and a depth matching the deliverable
   (EXHAUSTIVE for a report, an analysis, a decision or a comparison; the depth also sets how long
-  the analysis is). Make one deep search per source, not several on the same source, and none for a
-  fact a plain search finds.
+  the analysis is). Make one deep search per source, and another on the same source only to cover
+  what the first left out (see below); none for a fact a plain search finds.
+- When the user asks for analytical content (an analysis, a report, a comparison, a decision), the
+  answer needs the complete picture, not only the main topic:
+  - plan the searches across the different angles of the subject (its aspects and components, the
+    views or sources that may differ, causes and consequences, history and current state, as the
+    question needs) and across its detailed aspects (definitions, figures, examples, cases, the
+    passages that state them);
+  - after a deep search, check its analysis against the question and the angles you planned: the
+    angles or details still missing, or only touched on, are completed with focused searches, or
+    with another deep search aimed at them, before you write the answer;
+  - when a source has nothing on an angle after those searches, say so in the answer.
 - The documents of a source can be written in languages different from the user's: the results
   already returned in this chat show which ones. Every search on such a source also carries its
   query translated into each of those languages (names, titles and concepts as the documents would

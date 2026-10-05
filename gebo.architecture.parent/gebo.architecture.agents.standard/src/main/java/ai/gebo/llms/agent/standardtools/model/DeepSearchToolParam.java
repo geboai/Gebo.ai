@@ -33,7 +33,8 @@ public class DeepSearchToolParam<Q> {
 	}
 
 	public static final String QUERIES_DESCRIPTION = "1 to 5 searches to run, each covering a different angle of the "
-			+ "question: every document they find is read.";
+			+ "question; for an analysis, a report, a comparison or a decision, together they cover its different "
+			+ "angles and its detailed aspects, not only the main topic: every document they find is read.";
 	public static final String QUESTION_DESCRIPTION = "The question the documents found must answer, complete and "
 			+ "self-contained: every document found is analysed against it.";
 	public static final String SEARCH_OBJECTIVE_DESCRIPTION = "In 1-3 sentences, what the analysis is for and what it "
