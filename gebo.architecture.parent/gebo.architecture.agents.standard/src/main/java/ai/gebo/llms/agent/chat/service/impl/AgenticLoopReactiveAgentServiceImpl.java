@@ -50,6 +50,7 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
 import ai.gebo.llms.agent.standardtools.DeepSearchToolSource;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
+import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource;
 import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
 import ai.gebo.llms.agent.standardtools.ToolsFoundDocuments;
 import ai.gebo.llms.agent.standardtools.ToolsProgress;
@@ -169,11 +170,13 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 
 	/**
 	 * The tool sources whose tools return what the sources contain: a call to one of
-	 * their tools is the evidence an answer rests on. The other tools (the date, the
-	 * users, notifyUser...) are not.
+	 * their tools is the evidence an answer rests on. The knowledge base browsing tools
+	 * are among them: they list the documents of the chat's knowledge bases and read
+	 * them whole. The other tools (the date, the users, notifyUser...) are not.
 	 */
 	static final Set<String> EVIDENCE_TOOL_SOURCES = Set.of(
 			InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE,
+			KnowledgeBaseBrowsingToolSource.KNOWLEDGE_BASE_BROWSING_TOOL_SOURCE,
 			WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE, StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE,
 			DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE, "GArtifactInformationsSearchFunctionsFactory");
 
@@ -181,16 +184,23 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * The tools whose call is the evidence the answer must rest on, among the ones the
 	 * agent model mounts; none when the deliverable does not need the sources'
 	 * evidence. An analysis needs a deep search when the agent has one (a plain search
-	 * returns a few fragments), any other deliverable any search.
+	 * returns a few fragments), or the whole text of the documents (the knowledge base
+	 * documents read whole); any other deliverable any search.
 	 */
 	protected Set<String> evidenceTools(DeliverableIntent intent, IGConfigurableChatModel<?> agentModel) {
 		if (!needsEvidence(intent)) {
 			return Set.of();
 		}
 		final MountedSearchTools mounted = searchTools(agentModel);
-		final Set<String> evidence = intent == DeliverableIntent.ANALISYS && !mounted.deepSearches().isEmpty()
-				? mounted.deepSearches()
-				: mounted.searches();
+		final Set<String> evidence;
+		if (intent == DeliverableIntent.ANALISYS && !mounted.deepSearches().isEmpty()) {
+			evidence = new LinkedHashSet<>(mounted.deepSearches());
+			if (mounted.searches().contains(KnowledgeBaseBrowsingToolSource.DOCUMENT_CONTENTS_TOOL)) {
+				evidence.add(KnowledgeBaseBrowsingToolSource.DOCUMENT_CONTENTS_TOOL);
+			}
+		} else {
+			evidence = mounted.searches();
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Agentic loop agent id:" + getId() + " deliverable:" + intent + " evidence tools:" + evidence);
 		}
@@ -317,7 +327,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 									+ " from the session, " + response.getDocumentsRef().size()
 									+ " with the search tools' ones");
 						}
-						warnAboutUnreadCitations(response, chatRequestContext);
+						warnAboutUnreadCitations(response, chatRequestContext, toolDocuments);
 					}
 				});
 	}
@@ -356,6 +366,68 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		return new ArrayList<>(unread);
 	}
 
+	/**
+	 * The names an answer may cite a document by: its name and, when it comes from a
+	 * search result, the address of the result (without its query) both as it is and
+	 * decoded, a cited file name matching the address's last part.
+	 */
+	static List<String> citableNames(GResponseDocumentRef ref) {
+		final List<String> names = new ArrayList<>();
+		if (ref == null) {
+			return names;
+		}
+		if (ref.getName() != null) {
+			names.add(ref.getName());
+		}
+		final ai.gebo.architecture.search.model.SearchResult result = ref.getNestedSearchResult();
+		if (result != null) {
+			if (result.getResultReference() != null) {
+				addAddress(names, result.getResultReference().getUri());
+				if (result.getResultReference().getName() != null) {
+					names.add(result.getResultReference().getName());
+				}
+			}
+			if (result.getNavigationReference() != null && result.getNavigationReference().path != null) {
+				addAddress(names, result.getNavigationReference().path.absolutePath);
+				if (result.getNavigationReference().path.name != null) {
+					names.add(result.getNavigationReference().path.name);
+				}
+			}
+		}
+		return names;
+	}
+
+	private static void addAddress(List<String> names, String address) {
+		if (address == null || address.isBlank()) {
+			return;
+		}
+		String path = address.trim();
+		final int cut = indexOfAny(path, '?', '#');
+		if (cut >= 0) {
+			path = path.substring(0, cut);
+		}
+		names.add(path);
+		try {
+			final String decoded = java.net.URLDecoder.decode(path, java.nio.charset.StandardCharsets.UTF_8);
+			if (!decoded.equals(path)) {
+				names.add(decoded);
+			}
+		} catch (IllegalArgumentException e) {
+			// not an encoded address: kept as it is
+		}
+	}
+
+	private static int indexOfAny(String text, char... chars) {
+		int first = -1;
+		for (char c : chars) {
+			final int index = text.indexOf(c);
+			if (index >= 0 && (first < 0 || index < first)) {
+				first = index;
+			}
+		}
+		return first;
+	}
+
 	/** The file names of the chat's own documents (chosen or uploaded by the user). */
 	static List<String> chatDocumentNames(IChatRequestContext chatRequestContext) {
 		final List<String> names = new ArrayList<>();
@@ -377,13 +449,30 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * did not read in this request: the answer text is left as it is.
 	 */
 	protected void warnAboutUnreadCitations(GeboChatResponse response, IChatRequestContext chatRequestContext) {
+		warnAboutUnreadCitations(response, chatRequestContext, null);
+	}
+
+	/**
+	 * Tells the user, with a warning on the answer, which cited documents the answer
+	 * did not read in this request: the answer text is left as it is. The documents of
+	 * the answer count by their name and, for a web page or an external system's
+	 * document, by its address (an answer cites a page by the file name its address
+	 * ends with, the page being named after its site); the documents the tools only
+	 * listed ({@code toolDocuments}) count by their name.
+	 */
+	protected void warnAboutUnreadCitations(GeboChatResponse response, IChatRequestContext chatRequestContext,
+			ToolsFoundDocuments toolDocuments) {
 		final List<String> readNames = new ArrayList<>(chatDocumentNames(chatRequestContext));
 		if (response.getDocumentsRef() != null) {
 			for (GResponseDocumentRef ref : response.getDocumentsRef()) {
-				if (ref != null) {
-					readNames.add(ref.getName());
-				}
+				readNames.addAll(citableNames(ref));
 			}
+		}
+		if (toolDocuments != null) {
+			readNames.addAll(toolDocuments.getListedNames());
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Agentic loop agent id:" + getId() + " names the answer may cite: " + readNames);
 		}
 		final List<String> unread = unreadCitations(response.getQueryResponse(), readNames);
 		if (unread.isEmpty()) {

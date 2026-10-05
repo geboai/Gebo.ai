@@ -388,6 +388,31 @@ class AgenticLoopReactiveAgentServiceTest {
 		assertEquals(Set.of(), agent.evidenceTools(DeliverableIntent.QA, model));
 	}
 
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	void aDocumentReadWholeIsTheEvidenceOfAnAnalysisAndTheListingOfASearch() throws Exception {
+		IGToolCallbackSourceRepositoryPattern repository = mock(IGToolCallbackSourceRepositoryPattern.class);
+		IGToolCallbackSource deep = source(DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE, "deepSearchKnowledgeBase");
+		IGToolCallbackSource browsing = source(
+				ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.KNOWLEDGE_BASE_BROWSING_TOOL_SOURCE,
+				ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.BROWSE_DOCUMENTS_TOOL,
+				ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.DOCUMENT_CONTENTS_TOOL);
+		when(repository.getImplementations()).thenReturn(List.of(deep, browsing));
+		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, repository, null,
+				null, null, null, NO_RENDERER);
+		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
+		ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig config = mock(
+				ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.class);
+		when(config.getEnabledFunctions()).thenReturn(List.of("deepSearchKnowledgeBase",
+				"browseKnowledgeBaseDocuments", "getKnowledgeBaseDocumentContents"));
+		when(model.getConfig()).thenReturn(config);
+
+		assertEquals(Set.of("deepSearchKnowledgeBase", "getKnowledgeBaseDocumentContents"),
+				agent.evidenceTools(DeliverableIntent.ANALISYS, model));
+		assertEquals(Set.of("deepSearchKnowledgeBase", "browseKnowledgeBaseDocuments", "getKnowledgeBaseDocumentContents"),
+				agent.evidenceTools(DeliverableIntent.PURE_SEARCH, model));
+	}
+
 	private static IGToolCallbackSource source(String id, String... toolNames) {
 		IGToolCallbackSource source = mock(IGToolCallbackSource.class);
 		when(source.getId()).thenReturn(id);
@@ -433,6 +458,55 @@ class AgenticLoopReactiveAgentServiceTest {
 		assertEquals(1, response.getBackendMessages().size());
 		assertTrue(response.getBackendMessages().get(0).getDetail().contains("b.pdf"));
 		assertFalse(response.getBackendMessages().get(0).getDetail().contains("a.pdf"));
+	}
+
+	/** A web search result as the web search services make it: named after its site. */
+	private static ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef webPage(String site,
+			String uri) {
+		ai.gebo.architecture.search.model.SearchResult result = new ai.gebo.architecture.search.model.SearchResult();
+		result.setResultReference(new ai.gebo.architecture.search.model.SearchResultReference());
+		result.getResultReference().setUri(uri);
+		result.getResultReference().setName(site);
+		result.setId(uri);
+		return new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef(result);
+	}
+
+	@Test
+	void aWebPageReadIsCitableByTheFileNameOfItsAddress() {
+		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, null, null, null,
+				null, null, NO_RENDERER);
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse response = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse();
+		response.setQueryResponse("See preview-list.html, Guida%20utente.html and other-page.html.");
+		response.setDocumentsRef(new ArrayList<>(List.of(
+				webPage("docs.oracle.com", "https://docs.oracle.com/en/java/javase/25/docs/api/preview-list.html?x=1#top"),
+				webPage("example.org", "https://example.org/docs/Guida%20utente.html"))));
+
+		agent.warnAboutUnreadCitations(response, IChatRequestContext.builder().requestID("r1").build(), null);
+
+		assertEquals(1, response.getBackendMessages().size());
+		String detail = response.getBackendMessages().get(0).getDetail();
+		assertTrue(detail.contains("other-page.html"), detail);
+		assertFalse(detail.contains("preview-list.html"), detail);
+		assertFalse(detail.contains("Guida"), detail);
+		assertTrue(AgenticLoopReactiveAgentServiceImpl.citableNames(response.getDocumentsRef().get(1))
+				.contains("https://example.org/docs/Guida utente.html"));
+	}
+
+	@Test
+	void theDocumentsListedByTheToolsAreCitableTooAndTheBrowsingToolsAreEvidence() {
+		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, null, null, null,
+				null, null, NO_RENDERER);
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse response = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse();
+		response.setQueryResponse("The knowledge base holds a.pdf and b.pdf.");
+		ToolsFoundDocuments toolDocuments = new ToolsFoundDocuments();
+		toolDocuments.addListed(List.of("a.pdf", "b.pdf"));
+
+		agent.warnAboutUnreadCitations(response, IChatRequestContext.builder().requestID("r1").build(), toolDocuments);
+
+		assertTrue(response.getBackendMessages() == null || response.getBackendMessages().isEmpty(),
+				String.valueOf(response.getBackendMessages()));
+		assertTrue(AgenticLoopReactiveAgentServiceImpl.EVIDENCE_TOOL_SOURCES.contains(
+				ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.KNOWLEDGE_BASE_BROWSING_TOOL_SOURCE));
 	}
 
 	@Test

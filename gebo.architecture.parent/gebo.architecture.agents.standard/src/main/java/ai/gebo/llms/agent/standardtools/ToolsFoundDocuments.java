@@ -12,8 +12,10 @@ package ai.gebo.llms.agent.standardtools;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.ai.chat.model.ToolContext;
 
@@ -27,6 +29,10 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRe
  * tools add their documents, and the agent gives them as its answer's documents, so
  * the user sees them among the documents found.
  * <p>
+ * It also keeps the names of the documents a tool listed without reading them (the
+ * knowledge base documents listing): an answer naming them rests on what this request
+ * returned, though they are not documents found for it.
+ * <p>
  * Without a collector in the tools context (an agent that does not share one) the
  * tools still answer, their documents being only cited in the answer.
  */
@@ -34,6 +40,7 @@ public final class ToolsFoundDocuments {
 	/** Tools context key carrying the collector. */
 	public static final String TOOLS_CONTEXT_KEY = "geboToolsFoundDocuments";
 	private final Map<String, GResponseDocumentRef> byCode = new LinkedHashMap<>();
+	private final Set<String> listedNames = new LinkedHashSet<>();
 
 	/** Records the documents, once per document code. */
 	public synchronized void add(Collection<GResponseDocumentRef> refs) {
@@ -45,6 +52,23 @@ public final class ToolsFoundDocuments {
 				byCode.putIfAbsent(ref.getDocumentCode(), ref);
 			}
 		}
+	}
+
+	/** Records the names of documents a tool listed without reading them. */
+	public synchronized void addListed(Collection<String> names) {
+		if (names == null) {
+			return;
+		}
+		for (String name : names) {
+			if (name != null && !name.isBlank()) {
+				listedNames.add(name);
+			}
+		}
+	}
+
+	/** The names of the documents listed so far without being read. */
+	public synchronized List<String> getListedNames() {
+		return new ArrayList<>(listedNames);
 	}
 
 	/** The documents collected so far. */

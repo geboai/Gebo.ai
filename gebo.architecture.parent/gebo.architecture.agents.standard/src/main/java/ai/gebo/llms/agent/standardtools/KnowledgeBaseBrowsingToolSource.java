@@ -47,6 +47,7 @@ import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseDocumentChunksReader.DocumentChunks;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import org.springframework.ai.util.json.JsonParser;
@@ -290,11 +291,13 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 				BROWSE_FOLDERS_TOOL, BROWSE_FOLDERS_DESCRIPTION, BrowseVirtualFilesystemParam.class, ListPage.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
 				(BiFunction<BrowseVirtualFilesystemParam, ToolContext, ListPage>) (param, context) -> browseDocuments(param,
-						ToolCallbackDeclarationUtil.chatKnowledgeBases(context), ToolsTokenBudget.from(context)),
+						ToolCallbackDeclarationUtil.chatKnowledgeBases(context), ToolsTokenBudget.from(context),
+						ToolsFoundDocuments.from(context)),
 				BROWSE_DOCUMENTS_TOOL, BROWSE_DOCUMENTS_DESCRIPTION, BrowseVirtualFilesystemParam.class, ListPage.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
 				(BiFunction<DocumentContentsParam, ToolContext, List>) (param, context) -> documentContents(param,
-						ToolCallbackDeclarationUtil.chatKnowledgeBases(context), ToolsTokenBudget.from(context)),
+						ToolCallbackDeclarationUtil.chatKnowledgeBases(context), ToolsTokenBudget.from(context),
+						ToolsFoundDocuments.from(context)),
 				DOCUMENT_CONTENTS_TOOL, DOCUMENT_CONTENTS_DESCRIPTION, DocumentContentsParam.class, List.class));
 		return callbacks;
 	}
@@ -472,7 +475,26 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 
 	ListPage<VirtualFilesystemItem> browseDocuments(BrowseVirtualFilesystemParam param, List<String> chatKnowledgeBases,
 			ToolsTokenBudget budget) {
-		return browseVirtualFilesystem(param, chatKnowledgeBases, budget, false);
+		return browseDocuments(param, chatKnowledgeBases, budget, null);
+	}
+
+	/**
+	 * A page of the documents, their names shared with the calling agent when it
+	 * collects them (see {@link ToolsFoundDocuments#addListed}): an answer listing them
+	 * rests on this request, though they were not read.
+	 */
+	ListPage<VirtualFilesystemItem> browseDocuments(BrowseVirtualFilesystemParam param, List<String> chatKnowledgeBases,
+			ToolsTokenBudget budget, ToolsFoundDocuments collector) {
+		final ListPage<VirtualFilesystemItem> page = browseVirtualFilesystem(param, chatKnowledgeBases, budget, false);
+		if (collector != null && page.items() != null && !page.items().isEmpty()) {
+			final List<String> names = page.items().stream().map(VirtualFilesystemItem::name).toList();
+			collector.addListed(names);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug(BROWSE_DOCUMENTS_TOOL + " shared " + names.size()
+						+ " listed document name(s) with the calling agent's answer");
+			}
+		}
+		return page;
 	}
 
 	ListPage<VirtualFilesystemItem> browseVirtualFilesystem(BrowseVirtualFilesystemParam param, List<String> chatKnowledgeBases,
@@ -513,6 +535,16 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	 * the room left allows, the next ones nothing once the room is used up.
 	 */
 	List<DocumentContent> documentContents(DocumentContentsParam param, List<String> chatKnowledgeBases, ToolsTokenBudget budget) {
+		return documentContents(param, chatKnowledgeBases, budget, null);
+	}
+
+	/**
+	 * The whole text of the documents (see the overload), the documents read shared
+	 * with the calling agent when it collects them: they become its answer's
+	 * documents.
+	 */
+	List<DocumentContent> documentContents(DocumentContentsParam param, List<String> chatKnowledgeBases, ToolsTokenBudget budget,
+			ToolsFoundDocuments collector) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin documentContents(" + param + ")");
 		}
@@ -533,6 +565,8 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 				}
 			}
 			final KnowledgeBaseDocumentChunksReader reader = chunksReader.getObject();
+			// the documents whose text was read, for the calling agent's answer
+			final List<GResponseDocumentRef> read = new ArrayList<>();
 			// the room left to the tools, all of it for these documents
 			int room = budget != null ? budget.grant(budget.left()) : Integer.MAX_VALUE;
 			for (Long uniqueId : asked) {
@@ -550,6 +584,16 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 				final DocumentContent content = documentContent(reader, document, room);
 				room -= content.content() != null ? ITokensCountable.stringsTokensSize(content.content()) : 0;
 				contents.add(content);
+				if (content.content() != null) {
+					read.add(new GResponseDocumentRef(document));
+				}
+			}
+			if (collector != null && !read.isEmpty()) {
+				collector.add(read);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug(DOCUMENT_CONTENTS_TOOL + " shared " + read.size()
+							+ " document(s) read with the calling agent's answer");
+				}
 			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End documentContents(...) " + contents.size() + " document(s), "

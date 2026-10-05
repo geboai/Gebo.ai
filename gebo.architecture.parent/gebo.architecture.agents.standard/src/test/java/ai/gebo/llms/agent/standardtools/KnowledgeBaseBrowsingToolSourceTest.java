@@ -235,6 +235,31 @@ class KnowledgeBaseBrowsingToolSourceTest {
 	}
 
 	@Test
+	void theDocumentsReadAndTheDocumentsListedAreSharedWithTheCallingAgent() throws Exception {
+		when(visibility.browseVisibleDocuments(any(VirtualFilesystemQuery.class), any(Pageable.class)))
+				.thenReturn(new PageImpl<>(List.of(document(5L, "doc-5", "a.pdf"), document(6L, "doc-6", "b.pdf"))));
+		when(reader.read(any(GDocumentReference.class)))
+				.thenReturn(new DocumentChunks(List.of(chunk("text of a")), "embedding-1"))
+				.thenReturn(new DocumentChunks(List.of(), null));
+		DocumentContentsParam param = new DocumentContentsParam();
+		param.setUniqueIds(List.of(5L, 6L));
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
+
+		tools().documentContents(param, chat("kb1", "kb1-child"), null, collector);
+
+		// only the document whose text was read: b.pdf is not vectorized
+		assertEquals(List.of("doc-5"), collector.getDocuments().stream().map(x -> x.getDocumentCode()).toList());
+		assertEquals("a.pdf", collector.getDocuments().get(0).getName());
+		assertTrue(collector.getDocuments().get(0).isKnowledgeBaseDocument());
+
+		tools().browseDocuments(new BrowseVirtualFilesystemParam(), chat("kb1", "kb1-child"), null, collector);
+
+		assertEquals(List.of("a.pdf", "b.pdf"), collector.getListedNames());
+		// listed, not read: not among the documents found
+		assertEquals(1, collector.getDocuments().size());
+	}
+
+	@Test
 	void aDocumentLargerThanTheRoomIsCut() throws Exception {
 		when(visibility.browseVisibleDocuments(any(VirtualFilesystemQuery.class), any(Pageable.class)))
 				.thenReturn(new PageImpl<>(List.of(document(5L, "doc-5", "big.pdf"))));
