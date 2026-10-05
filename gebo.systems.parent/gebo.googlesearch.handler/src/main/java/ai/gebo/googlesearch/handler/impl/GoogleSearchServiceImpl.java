@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
@@ -99,6 +100,14 @@ public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl<WebSea
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException {
+		return search(query, system, nEntryLimit, null);
+	}
+
+	/** Searches with an HTTP client whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException {
+		final GoogleSearchApi api = parameters != null ? googleSearchApi.using(parameters) : googleSearchApi;
 		List<GoogleSearchConfig> configs = googleConfigDao.getConfigurations();
 		if (configs.isEmpty())
 			return List.of();
@@ -115,7 +124,7 @@ public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl<WebSea
 		searchQuery.setTopN(nEntryLimit);
 		List<SearchResult> out = new ArrayList<SearchResult>();
 		try {
-			GoogleSearchResults data = googleSearchApi.search(config.getApiKey(), config.getCustomSearchEngineId(),
+			GoogleSearchResults data = api.search(config.getApiKey(), config.getCustomSearchEngineId(),
 					searchQuery);
 			if (data != null && data.getItems() != null) {
 				for (GoogleSearchResultItem item : data.getItems()) {

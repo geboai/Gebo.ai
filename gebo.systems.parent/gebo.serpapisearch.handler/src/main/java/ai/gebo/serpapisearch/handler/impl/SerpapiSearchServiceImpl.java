@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
@@ -130,12 +131,20 @@ public class SerpapiSearchServiceImpl extends AbstractWebSearchServiceImpl<Serpa
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
+		return search(query, system, nEntryLimit, null);
+	}
+
+	/** Searches with an HTTP client whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
+		final SerpapiSearchApi api = parameters != null ? serpapiSearchApi.using(parameters) : serpapiSearchApi;
 		String apiKey = resolveApiKey();
 		if (apiKey == null)
 			return List.of();
 		List<SearchResult> resultsList = new ArrayList<SearchResult>();
 		try {
-			mapInto(this.serpapiSearchApi.callApi(apiKey, query.getQueryText(), nEntryLimit, null, null, null, null),
+			mapInto(api.callApi(apiKey, query.getQueryText(), nEntryLimit, null, null, null, null),
 					resultsList);
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing serpapi searches", e);
@@ -147,6 +156,14 @@ public class SerpapiSearchServiceImpl extends AbstractWebSearchServiceImpl<Serpa
 	@Override
 	public List<SearchResult> nativeSearch(SerpapiNativeSearchQuery query, SearchableSystemMetaData system,
 			int nEntryLimit) throws IOException, SearchServiceException {
+		return nativeSearch(query, system, nEntryLimit, null);
+	}
+
+	/** Searches natively with an HTTP client whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> nativeSearch(SerpapiNativeSearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
+		final SerpapiSearchApi api = parameters != null ? serpapiSearchApi.using(parameters) : serpapiSearchApi;
 		if (query == null || query.getSearchedTexts() == null || query.getSearchedTexts().isEmpty())
 			return List.of();
 		String apiKey = resolveApiKey();
@@ -157,7 +174,7 @@ public class SerpapiSearchServiceImpl extends AbstractWebSearchServiceImpl<Serpa
 			for (String text : query.getSearchedTexts()) {
 				if (text == null || text.isBlank())
 					continue;
-				mapInto(this.serpapiSearchApi.callApi(apiKey, text, nEntryLimit, query.getEngine(), query.getGl(),
+				mapInto(api.callApi(apiKey, text, nEntryLimit, query.getEngine(), query.getGl(),
 						query.getHl(), query.getTbs()), resultsList);
 			}
 		} catch (GeboRestIntegrationException e) {

@@ -147,7 +147,8 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		for (SearchableSystemMetaData searchableSystemMetaData : systems) {
 			// best effort: a system out of service or not responding does not stop the others
 			final SystemSearchOutcome outcome = searchCalls().search(searchableSystemMetaData, getHandlerId(),
-					() -> searchService.search(query, searchableSystemMetaData, topK));
+					searchService.appliesRetries(),
+					parameters -> searchService.search(query, searchableSystemMetaData, topK, parameters));
 			if (!outcome.available()) {
 				continue;
 			}
@@ -212,7 +213,8 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 
 			// best effort: a system out of service or not responding does not stop the others
 			final SystemSearchOutcome outcome = searchCalls().search(searchableSystemMetaData, getHandlerId(),
-					() -> nativeSearchService.nativeSearch(resultingQueryObject, searchableSystemMetaData, topK));
+					nativeSearchService.appliesRetries(), parameters -> nativeSearchService
+							.nativeSearch(resultingQueryObject, searchableSystemMetaData, topK, parameters));
 			if (!outcome.available()) {
 				continue;
 			}

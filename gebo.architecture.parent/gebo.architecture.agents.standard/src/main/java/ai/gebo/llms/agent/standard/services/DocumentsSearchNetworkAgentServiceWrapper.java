@@ -129,8 +129,9 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 					}
 					for (SearchableSystemMetaData system : wrappedSearchService.getSearchableSystems()) {
 						final SystemSearchOutcome outcome = searchSystem(system,
-								() -> wrappedSearchService.search(query, system, topK), notificationSink,
-								unavailableSources);
+								wrappedSearchService.appliesRetries(),
+								parameters -> wrappedSearchService.search(query, system, topK, parameters),
+								notificationSink, unavailableSources);
 						if (!outcome.available()) {
 							continue;
 						}

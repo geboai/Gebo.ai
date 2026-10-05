@@ -46,7 +46,8 @@ public class SearchServiceWrapperTool extends AbstractSearchServiceWrapperTool {
 		}
 		final List<String> keywords = query.getRelevantKeywords() != null ? query.getRelevantKeywords() : List.of();
 		return pipeline.run(wrapped, toolName, toolDescription, param, keywords,
-				(system, nEntryLimit) -> wrapped.search(query, system, nEntryLimit), toolContext);
+				(system, nEntryLimit, parameters) -> wrapped.search(query, system, nEntryLimit, parameters),
+				toolContext);
 	}
 
 	@Override

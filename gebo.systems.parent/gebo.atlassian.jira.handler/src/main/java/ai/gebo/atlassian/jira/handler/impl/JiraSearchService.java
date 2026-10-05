@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
@@ -76,10 +77,17 @@ public class JiraSearchService extends
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
+		return search(query, system, nEntryLimit, null);
+	}
+
+	/** Searches with a Jira client whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
 		query = CleanQueryUtil.cleanQuery(query);
 		if (system.getSystemConfigurationReference() instanceof GJiraSystem jiraSystem) {
 
-			return executeJql(system, query.getQueryText(), nEntryLimit);
+			return executeJql(system, query.getQueryText(), nEntryLimit, parameters);
 
 		}
 		return List.of();
@@ -179,8 +187,15 @@ public class JiraSearchService extends
 	@Override
 	public List<SearchResult> nativeSearch(JiraIssuesSearchFilter query, SearchableSystemMetaData system,
 			int nEntryLimit) throws IOException, SearchServiceException {
+		return nativeSearch(query, system, nEntryLimit, null);
+	}
+
+	/** Searches natively with a Jira client whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> nativeSearch(JiraIssuesSearchFilter query, SearchableSystemMetaData system,
+			int nEntryLimit, SearchCallParameters parameters) throws IOException, SearchServiceException {
 		String jql = JiraJsqlUtil.createJqlString(query);
-		return executeJql(system, jql, nEntryLimit);
+		return executeJql(system, jql, nEntryLimit, parameters);
 
 	}
 
@@ -224,12 +239,12 @@ public class JiraSearchService extends
 		return buffer.toString();
 	}
 
-	private List<SearchResult> executeJql(SearchableSystemMetaData system, String jql, Integer howmany)
-			throws SearchServiceException {
+	private List<SearchResult> executeJql(SearchableSystemMetaData system, String jql, Integer howmany,
+			SearchCallParameters parameters) throws SearchServiceException {
 		try {
 			List<SearchResult> results = new ArrayList<SearchResult>();
 			if (system.getSystemConfigurationReference() instanceof GJiraSystem jiraSystem) {
-				ApiClient connection = jiraConnectionFactory.getApiClient(jiraSystem);
+				ApiClient connection = jiraConnectionFactory.getApiClient(jiraSystem, parameters);
 				IssueSearchApi searchApi = new IssueSearchApi(connection);
 				SearchAndReconcileResults data = searchApi.searchAndReconsileIssuesUsingJql(jql, null, howmany,
 						List.of("*all"),

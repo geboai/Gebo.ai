@@ -21,6 +21,7 @@ import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.search.model.SearchQuery;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.model.SystemSearchOutcome;
@@ -139,7 +140,7 @@ public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 				runs++;
 				// best effort: a system out of service or not responding is told to the model
 				final SystemSearchOutcome outcome = support.searchCalls().search(system, toolName,
-						() -> searchSystem(query, system, perSearch));
+						service.appliesRetries(), parameters -> searchSystem(query, system, perSearch, parameters));
 				if (!outcome.available()) {
 					failed++;
 					if (!unavailableSources.contains(outcome.unavailableNotice())) {
@@ -199,11 +200,11 @@ public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 	 * structure, as text when it is text or when the system rejects the native one.
 	 */
 	@SuppressWarnings("unchecked")
-	List<SearchResult> searchSystem(Object query, SearchableSystemMetaData system, int nEntryLimit)
-			throws Exception {
+	List<SearchResult> searchSystem(Object query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws Exception {
 		if (nativeService != null && query instanceof INativeQueryObject nativeQuery) {
 			try {
-				return nativeService.nativeSearch(nativeQuery, system, nEntryLimit);
+				return nativeService.nativeSearch(nativeQuery, system, nEntryLimit, parameters);
 			} catch (Exception e) {
 				LOGGER.warn("Tool:" + toolName + " native search failed on system:" + system.getCode()
 						+ ", searching it with the query text instead", e);
@@ -213,7 +214,7 @@ public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 		final SearchQuery searchQuery = new SearchQuery();
 		searchQuery.setQueryText(text);
 		searchQuery.setRelevantKeywords(SearchResultsChunker.keywordsFromText(text));
-		return service.search(searchQuery, system, nEntryLimit);
+		return service.search(searchQuery, system, nEntryLimit, parameters);
 	}
 
 	static Source sourceOf(SearchResult result) {

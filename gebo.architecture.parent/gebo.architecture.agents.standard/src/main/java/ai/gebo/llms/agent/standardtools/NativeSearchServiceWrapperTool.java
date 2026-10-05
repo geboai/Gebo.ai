@@ -59,16 +59,16 @@ public class NativeSearchServiceWrapperTool<N extends INativeQueryObject> extend
 			}
 		}
 		final String queryText = param != null ? param.queryText() : null;
-		return pipeline.run(wrapped, toolName, toolDescription, param, keywords, (system, nEntryLimit) -> {
+		return pipeline.run(wrapped, toolName, toolDescription, param, keywords, (system, nEntryLimit, parameters) -> {
 			if (query != null) {
 				try {
-					return wrapped.nativeSearch(query, system, nEntryLimit);
+					return wrapped.nativeSearch(query, system, nEntryLimit, parameters);
 				} catch (Exception e) {
 					LOGGER.warn("Native search tool:" + toolName + " failed on system:" + system.getCode()
 							+ ", searching it with the query text instead", e);
 				}
 			}
-			return wrapped.search(textQuery(queryText, keywords), system, nEntryLimit);
+			return wrapped.search(textQuery(queryText, keywords), system, nEntryLimit, parameters);
 		}, toolContext);
 	}
 

@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -31,10 +32,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.service.BestEffortSearchCalls.SearchCall;
 import ai.gebo.architecture.search.model.SystemSearchOutcome;
 import ai.gebo.architecture.search.model.SystemSearchOutcome.Unavailability;
 import ai.gebo.restintegration.abstraction.layer.GeboInvalidAccessException;
@@ -164,5 +169,67 @@ class BestEffortSearchCallsTest {
 		assertEquals(Unavailability.FAILED,
 				BestEffortSearchCalls.unavailabilityOf(new SearchServiceException("Brave credentials of the wrong format")));
 		assertEquals(Unavailability.FAILED, BestEffortSearchCalls.unavailabilityOf(new IllegalStateException("?")));
+		// a search service on another node: no answer in time, an error answer
+		assertEquals(Unavailability.NOT_RESPONDING, BestEffortSearchCalls
+				.unavailabilityOf(new SearchServiceException("x", new java.util.concurrent.TimeoutException())));
+		assertEquals(Unavailability.OUT_OF_SERVICE, BestEffortSearchCalls.unavailabilityOf(new SearchServiceException(
+				"x", WebClientResponseException.create(502, "Bad Gateway", null, null, null))));
+		assertEquals(Unavailability.ACCESS_REFUSED, BestEffortSearchCalls.unavailabilityOf(
+				WebClientResponseException.create(401, "Unauthorized", null, null, null)));
+	}
+
+	private static SearchableSystemMetaData<?, ?> system(String code, String name) {
+		SearchableSystemMetaData<Object, Object> system = new SearchableSystemMetaData<>();
+		system.setCode(code);
+		system.setDescription(name);
+		return system;
+	}
+
+	@Test
+	void theSearchIsGivenTheConfiguredParameters() {
+		SearchCallsConfig config = new SearchCallsConfig();
+		config.setRetries(2);
+		config.setHttpConnectTimeoutSeconds(7);
+		config.setHttpReadTimeoutSeconds(33);
+		config.setRetryPauseMillis(0L);
+		calls = new BestEffortSearchCalls(config);
+		AtomicReference<SearchCallParameters> given = new AtomicReference<>();
+
+		SystemSearchOutcome outcome = calls.search(system("web", "The web"), "searchWeb", false, parameters -> {
+			given.set(parameters);
+			return List.of(result("r1"));
+		});
+
+		assertTrue(outcome.available());
+		assertEquals(new SearchCallParameters(Duration.ofSeconds(7), Duration.ofSeconds(33), 2), given.get());
+	}
+
+	@Test
+	void aServiceRetryingItselfIsNotTriedAgainByTheCaller() {
+		AtomicInteger attempts = new AtomicInteger();
+		SearchCall down = parameters -> {
+			attempts.incrementAndGet();
+			throw new SearchServiceException("down", new ConnectException("refused"));
+		};
+
+		SystemSearchOutcome retriedByService = calls(2, 60).search(system("sp", "SharePoint"), "spSearch", true, down);
+		assertEquals(Unavailability.OUT_OF_SERVICE, retriedByService.unavailability());
+		assertEquals(1, attempts.get());
+
+		attempts.set(0);
+		calls.search(system("jira", "Jira"), "jiraSearch", false, down);
+		assertEquals(3, attempts.get());
+	}
+
+	@Test
+	void aRemoteCallerParametersOverrideTheNodeOnes() {
+		SearchCallParameters node = new SearchCallParameters(Duration.ofSeconds(15), Duration.ofSeconds(60), 0);
+
+		assertEquals(new SearchCallParameters(Duration.ofMillis(5000), Duration.ofMillis(20000), 1),
+				node.overriddenBy(5000, 20000, 1));
+		// not sent or not valid: the node's
+		assertEquals(node, node.overriddenBy(null, null, null));
+		assertEquals(node, node.overriddenBy(0, -1, -3).withRetries(0));
+		assertEquals(0, node.overriddenBy(null, null, -3).retries());
 	}
 }

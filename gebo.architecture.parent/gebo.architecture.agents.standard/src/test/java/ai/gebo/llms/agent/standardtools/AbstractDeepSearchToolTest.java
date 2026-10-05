@@ -472,8 +472,8 @@ class AbstractDeepSearchToolTest {
 		when(service.getSearchableSystems()).thenReturn(List.of(failing, working));
 		SearchResult a = result("https://a.example/a", "A");
 		SearchResult b = result("https://a.example/b", "B");
-		when(service.search(any(SearchQuery.class), argThat((SearchableSystemMetaData x) -> x == failing), anyInt())).thenThrow(new RuntimeException("down"));
-		when(service.search(any(SearchQuery.class), argThat((SearchableSystemMetaData x) -> x == working), anyInt())).thenAnswer(invocation -> {
+		when(service.search(any(SearchQuery.class), argThat((SearchableSystemMetaData x) -> x == failing), anyInt(), any())).thenThrow(new RuntimeException("down"));
+		when(service.search(any(SearchQuery.class), argThat((SearchableSystemMetaData x) -> x == working), anyInt(), any())).thenAnswer(invocation -> {
 			SearchQuery query = invocation.getArgument(0);
 			return query.getQueryText().equals("first") ? List.of(a, b) : List.of(b);
 		});
@@ -489,7 +489,7 @@ class AbstractDeepSearchToolTest {
 		assertEquals(List.of("A", "B"), result.getSources().stream().map(Source::getTitle).sorted().toList());
 		assertEquals(List.of("https://a.example/a", "https://a.example/b"),
 				result.getSources().stream().map(Source::getSource).sorted().toList());
-		verify(service, times(2)).search(any(SearchQuery.class), argThat((SearchableSystemMetaData x) -> x == working), anyInt());
+		verify(service, times(2)).search(any(SearchQuery.class), argThat((SearchableSystemMetaData x) -> x == working), anyInt(), any());
 		verify(chunkingService).disposeChunkingSession("session");
 		// the shared documents keep their search result, so the user can chat with them
 		assertEquals(2, collector.getDocuments().size());
@@ -497,7 +497,7 @@ class AbstractDeepSearchToolTest {
 
 		// (SearchableSystemMetaData equality ignores the code: the systems are matched by identity)
 		// every search failing is a failed deep search, a denied user gets no search
-		when(service.search(any(SearchQuery.class), argThat((SearchableSystemMetaData x) -> x == working), anyInt())).thenThrow(new RuntimeException("down"));
+		when(service.search(any(SearchQuery.class), argThat((SearchableSystemMetaData x) -> x == working), anyInt(), any())).thenThrow(new RuntimeException("down"));
 		DeepSearchToolResult failed = tool.deepSearch(param("question", "first"), request("r2"));
 		assertEquals(Status.FAILED, failed.getStatus());
 		// the model is told which sources could not be searched, and why
@@ -536,7 +536,7 @@ class AbstractDeepSearchToolTest {
 		SearchableSystemMetaData system = new SearchableSystemMetaData();
 		INativeSearchService service = jiraService(system);
 		List<String> received = new ArrayList<>();
-		when(service.nativeSearch(any(), any(), anyInt())).thenAnswer(invocation -> {
+		when(service.nativeSearch(any(), any(), anyInt(), any())).thenAnswer(invocation -> {
 			received.add(((SearchToolContentPipelineTest.JqlQuery) invocation.getArgument(0)).getJql());
 			return List.of(result("https://jira.example/ISSUE-1", "ISSUE-1"));
 		});
@@ -553,7 +553,7 @@ class AbstractDeepSearchToolTest {
 		assertEquals(List.of("project = GEBO", "type = Bug"), received);
 		assertTrue(answer.contains("\"status\":\"OK\""), answer);
 		assertTrue(answer.contains("ISSUE-1"), answer);
-		verify(service, never()).search(any(SearchQuery.class), any(SearchableSystemMetaData.class), anyInt());
+		verify(service, never()).search(any(SearchQuery.class), any(SearchableSystemMetaData.class), anyInt(), any());
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -562,9 +562,9 @@ class AbstractDeepSearchToolTest {
 		everyResultIsOneChunk();
 		SearchableSystemMetaData system = new SearchableSystemMetaData();
 		INativeSearchService service = jiraService(system);
-		when(service.nativeSearch(any(), any(), anyInt())).thenThrow(new IllegalArgumentException("bad jql"));
+		when(service.nativeSearch(any(), any(), anyInt(), any())).thenThrow(new IllegalArgumentException("bad jql"));
 		List<String> texts = new ArrayList<>();
-		when(service.search(any(SearchQuery.class), any(SearchableSystemMetaData.class), anyInt()))
+		when(service.search(any(SearchQuery.class), any(SearchableSystemMetaData.class), anyInt(), any()))
 				.thenAnswer(invocation -> {
 					texts.add(((SearchQuery) invocation.getArgument(0)).getQueryText());
 					return List.of(result("https://jira.example/ISSUE-2", "ISSUE-2"));

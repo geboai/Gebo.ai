@@ -137,9 +137,9 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 				}
 				// best effort: a system out of service or not responding does not stop the others
 				final NativeSearchDataStructure systemQuery = queryObject;
-				final SystemSearchOutcome outcome = searchSystem(system,
-						() -> nativeSearchWrapper.nativeSearch(systemQuery, system, topK), notificationSink,
-						unavailableSources);
+				final SystemSearchOutcome outcome = searchSystem(system, nativeSearchWrapper.appliesRetries(),
+						parameters -> nativeSearchWrapper.nativeSearch(systemQuery, system, topK, parameters),
+						notificationSink, unavailableSources);
 				if (!outcome.available()) {
 					continue;
 				}

@@ -20,10 +20,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.Duration;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.googlesearch.handler.model.GoogleSearchRequest;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResults;
 
@@ -47,11 +50,21 @@ class GoogleSearchApi {
 	// timeouts are the search calls' ones: it does not hold a search forever
 	private final RestTemplate restTemplate;
 
+	@Autowired
 	GoogleSearchApi(SearchCallsConfig searchCalls) {
+		this(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout());
+	}
+
+	private GoogleSearchApi(Duration connectTimeout, Duration readTimeout) {
 		final SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-		requestFactory.setConnectTimeout(searchCalls.httpConnectTimeout());
-		requestFactory.setReadTimeout(searchCalls.httpReadTimeout());
+		requestFactory.setConnectTimeout(connectTimeout);
+		requestFactory.setReadTimeout(readTimeout);
 		this.restTemplate = new RestTemplate(requestFactory);
+	}
+
+	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
+	GoogleSearchApi using(SearchCallParameters parameters) {
+		return new GoogleSearchApi(parameters.connectTimeout(), parameters.readTimeout());
 	}
 
 	/**

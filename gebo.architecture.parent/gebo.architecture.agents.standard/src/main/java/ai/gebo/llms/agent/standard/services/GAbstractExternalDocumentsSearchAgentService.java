@@ -3,7 +3,6 @@ package ai.gebo.llms.agent.standard.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.ai.document.Document;
@@ -193,13 +192,16 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 
 	/**
 	 * Searches one system best effort (see {@link BestEffortSearchCalls}): as the current
-	 * user, within the search calls' timeout, tried again only when configured. A system
+	 * user, within the search calls' timeout, with the call parameters the service's
+	 * client software applies (see {@link ai.gebo.architecture.search.service.ISearchService#appliesRetries()} for who tries
+	 * it again, only when configured). A system
 	 * that could not be searched is added to {@code unavailableSources} (the status
 	 * notices the agents reading the search are told) and told to the user; the search
 	 * goes on with the other systems.
 	 */
-	protected SystemSearchOutcome searchSystem(SearchableSystemMetaData<?, ?> system,
-			Callable<List<SearchResult>> search, INotificationSink notificationSink, List<String> unavailableSources) {
+	protected SystemSearchOutcome searchSystem(SearchableSystemMetaData<?, ?> system, boolean serviceAppliesRetries,
+			BestEffortSearchCalls.SearchCall search, INotificationSink notificationSink,
+			List<String> unavailableSources) {
 		BestEffortSearchCalls calls = null;
 		try {
 			calls = runtimeBinder != null ? runtimeBinder.getImplementationOf(BestEffortSearchCalls.class) : null;
@@ -211,7 +213,7 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 		if (calls == null) {
 			calls = defaultSearchCalls();
 		}
-		final SystemSearchOutcome outcome = calls.search(system, getId(), search);
+		final SystemSearchOutcome outcome = calls.search(system, getId(), serviceAppliesRetries, search);
 		if (!outcome.available()) {
 			final String notice = "could not search " + outcome.unavailableNotice();
 			if (!unavailableSources.contains(notice)) {

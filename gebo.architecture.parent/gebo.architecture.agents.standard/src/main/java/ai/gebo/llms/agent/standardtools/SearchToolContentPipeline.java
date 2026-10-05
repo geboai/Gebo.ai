@@ -31,6 +31,7 @@ import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SystemSearchOutcome;
 import ai.gebo.architecture.search.service.BestEffortSearchCalls;
@@ -90,10 +91,13 @@ public class SearchToolContentPipeline {
 	/** The last chunk position of a passage re-joined from contiguous chunks. */
 	static final String PASSAGE_LAST_POSITION = "geboPassageLastPosition";
 
-	/** Runs the search of a tool on one of the systems of its search service. */
+	/**
+	 * Runs the search of a tool on one of the systems of its search service, with the
+	 * call parameters its client software applies (see {@link SearchCallParameters}).
+	 */
 	@FunctionalInterface
 	public interface SystemSearch {
-		List<SearchResult> search(SearchableSystemMetaData system, int nEntryLimit)
+		List<SearchResult> search(SearchableSystemMetaData system, int nEntryLimit, SearchCallParameters parameters)
 				throws IOException, SearchServiceException;
 	}
 
@@ -179,7 +183,7 @@ public class SearchToolContentPipeline {
 					}
 					searchedSystems++;
 					final SystemSearchOutcome outcome = searchCalls.getObject().search(system, toolName,
-							() -> systemSearch.search(system, nEntryLimit));
+							service.appliesRetries(), parameters -> systemSearch.search(system, nEntryLimit, parameters));
 					if (!outcome.available()) {
 						unavailable.add(outcome.unavailableNotice());
 						continue;

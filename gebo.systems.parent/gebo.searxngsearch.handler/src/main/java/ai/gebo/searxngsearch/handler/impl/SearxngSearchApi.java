@@ -26,6 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
 import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import ai.gebo.searxngsearch.handler.model.SearxngApiResponse;
 import ai.gebo.searxngsearch.handler.model.SearxngApiResponse.SearxngApiResult;
@@ -57,6 +58,12 @@ public class SearxngSearchApi {
 
 	SearxngSearchApi(RestTemplateWrapperService restTemplateService) {
 		this.restTemplateService = restTemplateService;
+	}
+
+	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
+	SearxngSearchApi using(SearchCallParameters parameters) {
+		return new SearxngSearchApi(
+				RestTemplateWrapperService.withTimeouts(parameters.connectTimeout(), parameters.readTimeout()));
 	}
 
 	private static String searchEndpoint(String baseUrl) {

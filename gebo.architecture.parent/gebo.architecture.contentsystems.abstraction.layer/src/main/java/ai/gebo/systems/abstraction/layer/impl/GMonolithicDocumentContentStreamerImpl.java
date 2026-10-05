@@ -13,6 +13,8 @@ import ai.gebo.architecture.documents.access.DocumentContentStreamerException;
 import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.architecture.documents.access.StreamingPurpose;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.service.ISearchService;
@@ -35,6 +37,9 @@ public class GMonolithicDocumentContentStreamerImpl implements IGDocumentContent
 	private final IGContentManagementSystemHandlerRepositoryPattern contentManagementSystemHandlerRepositoryPattern;
 	private final ISearchServiceRepositoryPattern searchServicesRepository;
 	private final IGPersistentObjectManager persistentObjectManager;
+	// the timeouts and retries of the search calls, applied to the download of search results
+	// only (the documents of the content systems are streamed as their handlers do)
+	private final SearchCallsConfig searchCallsConfig;
 
 	@Override
 	public TypedInputStream streamContent(StreamingPurpose purpose, IGComponentOriginatedDocument document)
@@ -47,7 +52,7 @@ public class GMonolithicDocumentContentStreamerImpl implements IGDocumentContent
 			} else if (document instanceof SearchResult searchResult) {
 				GeboComponentInfo originComponent = searchResult.getOriginComponent();
 				ISearchService searchService = searchServicesRepository.findByOriginComponent(originComponent);
-				return searchService.loadSearchResult(searchResult);
+				return searchService.loadSearchResult(searchResult, SearchCallParameters.of(searchCallsConfig));
 			}
 		} catch (GeboContentHandlerSystemException | IOException | DocumentContentStreamerException
 				| SearchServiceException e) {

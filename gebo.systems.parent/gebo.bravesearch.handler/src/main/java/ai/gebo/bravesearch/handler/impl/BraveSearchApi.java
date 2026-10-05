@@ -31,6 +31,7 @@ import ai.gebo.bravesearch.handler.model.BraveSearchResultItem;
 import ai.gebo.bravesearch.handler.model.BraveSearchResults;
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
 import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 
 /**
@@ -58,6 +59,12 @@ public class BraveSearchApi {
 
 	BraveSearchApi(RestTemplateWrapperService restTemplateService) {
 		this.restTemplateService = restTemplateService;
+	}
+
+	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
+	BraveSearchApi using(SearchCallParameters parameters) {
+		return new BraveSearchApi(
+				RestTemplateWrapperService.withTimeouts(parameters.connectTimeout(), parameters.readTimeout()));
 	}
 
 	BraveApiResponse callApi(String apiKey, String query, Integer topN) throws GeboRestIntegrationException {

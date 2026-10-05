@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ai.gebo.architecture.search.controller.AggregateRequestBody;
 import ai.gebo.architecture.search.controller.BaseSearchController;
 import ai.gebo.architecture.search.model.CatalogueSample;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -97,8 +98,12 @@ public class GoogleDriveSearchServiceController extends BaseSearchController<Goo
 
 	@PostMapping(value = "search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<SearchResult> restSearchGoogleDrive(@RequestBody SearchQuery query, @RequestParam("systemId") String systemId,
-			@RequestParam("nEntryLimit") int nEntryLimit) throws IOException, SearchServiceException {
-		return search(query, systemId, nEntryLimit);
+			@RequestParam("nEntryLimit") int nEntryLimit,
+			@RequestParam(value = SearchCallParameters.CONNECT_TIMEOUT_MILLIS_PARAM, required = false) Integer connectTimeoutMillis,
+			@RequestParam(value = SearchCallParameters.READ_TIMEOUT_MILLIS_PARAM, required = false) Integer readTimeoutMillis,
+			@RequestParam(value = SearchCallParameters.RETRIES_PARAM, required = false) Integer retries) throws IOException, SearchServiceException {
+		return search(query, systemId, nEntryLimit,
+				searchCallParameters(connectTimeoutMillis, readTimeoutMillis, retries));
 	}
 
 	@GetMapping(value = "getCataloguesListSample", produces = MediaType.APPLICATION_JSON_VALUE)

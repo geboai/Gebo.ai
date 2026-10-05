@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
@@ -61,6 +62,24 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException;
 
+	/**
+	 * Searches applying the call parameters (timeouts, retries) in the service's own
+	 * client software where it can, only for this search: by default a search without
+	 * them.
+	 */
+	public default List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
+		return search(query, system, nEntryLimit);
+	}
+
+	/**
+	 * Whether the service tries a failed search again itself, as many times as the
+	 * call parameters say: when it does not, its caller does.
+	 */
+	public default boolean appliesRetries() {
+		return false;
+	}
+
 	public default List<SearchResult> search(SearchQuery query, String systemId, int nEntryLimit)
 			throws IOException, SearchServiceException {
 		SearchableSystemMetaData system = findSystemById(systemId);
@@ -70,7 +89,26 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 			return null;
 	}
 
+	/** Searches the system with the id applying the call parameters (see the overload by system). */
+	public default List<SearchResult> search(SearchQuery query, String systemId, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
+		SearchableSystemMetaData system = findSystemById(systemId);
+		if (system != null) {
+			return search(query, system, nEntryLimit, parameters);
+		} else
+			return null;
+	}
+
 	public TypedInputStream loadSearchResult(SearchResult result) throws IOException, SearchServiceException;
+
+	/**
+	 * Downloads the content of a search result applying the call parameters in the
+	 * service's own client software where it can: by default a download without them.
+	 */
+	public default TypedInputStream loadSearchResult(SearchResult result, SearchCallParameters parameters)
+			throws IOException, SearchServiceException {
+		return loadSearchResult(result);
+	}
 
 	public Class<CustomSearchResultExtractionDataType> getCustomResultsAggregationDataType()
 			throws SearchServiceException;

@@ -24,6 +24,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.GeboUsernamePasswordContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 
 /**
  * Factory class responsible for creating Confluence connections.
@@ -54,7 +55,17 @@ class ConfluenceConnectionFactory {
 	 * @throws GeboCryptSecretException If there is an issue retrieving or decrypting the secret
 	 */
 	CloudConfluenceConnection getCloudConnection(GConfluenceSystem s) throws GeboCryptSecretException {
-		CloudConfluenceConnection api = new CloudConfluenceConnection(restWrapperService);
+		return getCloudConnection(s, null);
+	}
+
+	/**
+	 * A connection to the cloud system for a search: its HTTP calls time out as the
+	 * search call parameters say (the connections of the content integration, given by
+	 * {@link #getCloudConnection(GConfluenceSystem)}, use the shared client as before).
+	 */
+	CloudConfluenceConnection getCloudConnection(GConfluenceSystem s, SearchCallParameters searchParameters)
+			throws GeboCryptSecretException {
+		CloudConfluenceConnection api = new CloudConfluenceConnection(client(searchParameters));
 		api.setBaseUrl(s.getBaseUri());
 		AbstractGeboSecretContent secret = secretService.getSecretContentById(s.getSecretCode());
 		GeboTokenContent credentials = (GeboTokenContent) secret;
@@ -71,7 +82,17 @@ class ConfluenceConnectionFactory {
 	 * @throws GeboCryptSecretException If there is an issue retrieving or decrypting the secret
 	 */
 	OnPremiseConfluenceConnection getOnPremiseConnection(GConfluenceSystem s) throws GeboCryptSecretException {
-		OnPremiseConfluenceConnection api = new OnPremiseConfluenceConnection(restWrapperService);
+		return getOnPremiseConnection(s, null);
+	}
+
+	/**
+	 * A connection to the on-premise system for a search: its HTTP calls time out as the
+	 * search call parameters say (the connections of the content integration, given by
+	 * {@link #getOnPremiseConnection(GConfluenceSystem)}, use the shared client as before).
+	 */
+	OnPremiseConfluenceConnection getOnPremiseConnection(GConfluenceSystem s, SearchCallParameters searchParameters)
+			throws GeboCryptSecretException {
+		OnPremiseConfluenceConnection api = new OnPremiseConfluenceConnection(client(searchParameters));
 		api.setBaseUrl(s.getBaseUri());
 		AbstractGeboSecretContent secret = secretService.getSecretContentById(s.getSecretCode());
 		GeboUsernamePasswordContent credentials = (GeboUsernamePasswordContent) secret;
@@ -79,5 +100,13 @@ class ConfluenceConnectionFactory {
 		api.setPassword(credentials.getPassword());
 		return api;
 
+	}
+
+	/** The shared client, or one of its own timing out as the search parameters say. */
+	private RestTemplateWrapperService client(SearchCallParameters searchParameters) {
+		return searchParameters != null
+				? RestTemplateWrapperService.withTimeouts(searchParameters.connectTimeout(),
+						searchParameters.readTimeout())
+				: restWrapperService;
 	}
 }

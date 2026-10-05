@@ -34,8 +34,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.model.SystemSearchOutcome;
@@ -88,6 +90,43 @@ public class BestEffortSearchCalls {
 		executor.shutdownNow();
 	}
 
+	/** A search on a system, given the parameters its client software applies. */
+	@FunctionalInterface
+	public interface SearchCall {
+		List<SearchResult> run(SearchCallParameters parameters) throws Exception;
+	}
+
+	/** The parameters the search calls are made with (see {@link SearchCallsConfig}). */
+	public SearchCallParameters parameters() {
+		return SearchCallParameters.of(config);
+	}
+
+	/**
+	 * Runs the search on the system as the current user, best effort, giving it the
+	 * call parameters: tried again here only when the service does not apply the
+	 * retries itself.
+	 *
+	 * @param system                the system searched
+	 * @param callerId              who searches, for the logs
+	 * @param serviceAppliesRetries whether the service retries itself (see
+	 *                              {@link ISearchService#appliesRetries()})
+	 * @param search                the search on the system
+	 */
+	public SystemSearchOutcome search(SearchableSystemMetaData<?, ?> system, String callerId,
+			boolean serviceAppliesRetries, SearchCall search) {
+		final SearchCallParameters parameters = parameters();
+		final String code = system != null ? system.getCode() : null;
+		final String name = system != null && system.getDescription() != null && !system.getDescription().isBlank()
+				? system.getDescription()
+				: code;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("search(...) caller:" + callerId + " system:" + code + " parameters:" + parameters
+					+ (serviceAppliesRetries ? " (the service retries itself)" : ""));
+		}
+		return search(code, name, callerId, serviceAppliesRetries ? 0 : parameters.retries(),
+				() -> search.run(parameters));
+	}
+
 	/**
 	 * Runs the search on the system as the current user, best effort.
 	 *
@@ -104,11 +143,16 @@ public class BestEffortSearchCalls {
 		return search(code, name, callerId, search);
 	}
 
-	/** Runs the search, the system given by its code and name. */
+	/** Runs the search, the system given by its code and name, retried as configured. */
 	public SystemSearchOutcome search(String systemCode, String systemName, String callerId,
 			Callable<List<SearchResult>> search) {
+		return search(systemCode, systemName, callerId, config.effectiveRetries(), search);
+	}
+
+	private SystemSearchOutcome search(String systemCode, String systemName, String callerId, int retries,
+			Callable<List<SearchResult>> search) {
 		final Duration timeout = config.timeout();
-		final int attempts = 1 + config.effectiveRetries();
+		final int attempts = 1 + Math.max(0, retries);
 		final ReactiveIdentityUtil asTheUser = ReactiveIdentityUtil.create();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin search(...) caller:" + callerId + " system:" + systemCode + " timeout:"
@@ -185,8 +229,8 @@ public class BestEffortSearchCalls {
 
 	/**
 	 * Why a search failed, from its causes as the search providers report them (their
-	 * REST integration errors wrapped in a search service error): not responding (a
-	 * timeout), out of service (not reachable, a server error), access refused (401,
+	 * REST integration errors wrapped in a search service error, or the error answers
+	 * of a search service on another node): not responding (a timeout), out of service (not reachable, a server error), access refused (401,
 	 * 403), failed otherwise (quota or rate limit exceeded, a bad request, a failure
 	 * that cannot be told).
 	 */
@@ -196,13 +240,18 @@ public class BestEffortSearchCalls {
 			if (cause instanceof RestClientResponseException response) {
 				return ofStatus(response.getStatusCode().value());
 			}
+			if (cause instanceof WebClientResponseException response) {
+				// a search service on another node answering with an error
+				return ofStatus(response.getStatusCode().value());
+			}
 			if (cause instanceof GeboInvalidAccessException) {
 				return Unavailability.ACCESS_REFUSED;
 			}
 			if (cause instanceof GeboRemoteBackendErrorException) {
 				return Unavailability.OUT_OF_SERVICE;
 			}
-			if (cause instanceof SocketTimeoutException || cause instanceof HttpTimeoutException) {
+			if (cause instanceof SocketTimeoutException || cause instanceof HttpTimeoutException
+					|| cause instanceof TimeoutException) {
 				return Unavailability.NOT_RESPONDING;
 			}
 			if (cause instanceof ConnectException || cause instanceof UnknownHostException

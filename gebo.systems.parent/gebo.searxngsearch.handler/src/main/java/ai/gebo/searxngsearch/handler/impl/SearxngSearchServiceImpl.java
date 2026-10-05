@@ -17,6 +17,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
@@ -139,13 +140,21 @@ public class SearxngSearchServiceImpl extends AbstractWebSearchServiceImpl<Searx
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
+		return search(query, system, nEntryLimit, null);
+	}
+
+	/** Searches with an HTTP client whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
+		final SearxngSearchApi api = parameters != null ? searxngSearchApi.using(parameters) : searxngSearchApi;
 		GSearxngSearchApiCredentials config = firstCredential();
 		if (config == null)
 			return List.of();
 		List<SearchResult> resultsList = new ArrayList<SearchResult>();
 		try {
 			String apiKey = resolveApiKey(config);
-			mapInto(this.searxngSearchApi.callApi(config.getBaseUrl(), apiKey, query.getQueryText(), nEntryLimit),
+			mapInto(api.callApi(config.getBaseUrl(), apiKey, query.getQueryText(), nEntryLimit),
 					nEntryLimit, resultsList);
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing searxng searches", e);
@@ -157,6 +166,14 @@ public class SearxngSearchServiceImpl extends AbstractWebSearchServiceImpl<Searx
 	@Override
 	public List<SearchResult> nativeSearch(SearxngNativeSearchQuery query, SearchableSystemMetaData system,
 			int nEntryLimit) throws IOException, SearchServiceException {
+		return nativeSearch(query, system, nEntryLimit, null);
+	}
+
+	/** Searches natively with an HTTP client whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> nativeSearch(SearxngNativeSearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
+		final SearxngSearchApi api = parameters != null ? searxngSearchApi.using(parameters) : searxngSearchApi;
 		if (query == null || query.getSearchedTexts() == null || query.getSearchedTexts().isEmpty())
 			return List.of();
 		GSearxngSearchApiCredentials config = firstCredential();
@@ -168,7 +185,7 @@ public class SearxngSearchServiceImpl extends AbstractWebSearchServiceImpl<Searx
 			for (String text : query.getSearchedTexts()) {
 				if (text == null || text.isBlank())
 					continue;
-				mapInto(this.searxngSearchApi.callApi(config.getBaseUrl(), apiKey, text, nEntryLimit,
+				mapInto(api.callApi(config.getBaseUrl(), apiKey, text, nEntryLimit,
 						query.getCategories(), query.getTimeRange(), query.getLanguage()), nEntryLimit, resultsList);
 			}
 		} catch (GeboRestIntegrationException e) {

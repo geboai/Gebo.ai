@@ -26,6 +26,7 @@ import ai.gebo.architecture.search.controller.AggregateRequestBody;
 import ai.gebo.architecture.search.controller.BaseNativeSearchController;
 import ai.gebo.architecture.search.controller.CustomTemplateParamsRequestBody;
 import ai.gebo.architecture.search.model.CatalogueSample;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -104,16 +105,25 @@ public class SharePointSearchServiceController
 
 	@PostMapping(value = "search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<SearchResult> restSearchSharePoint(@RequestBody SearchQuery query, @RequestParam("systemId") String systemId,
-			@RequestParam("nEntryLimit") int nEntryLimit) throws IOException, SearchServiceException {
-		return search(query, systemId, nEntryLimit);
+			@RequestParam("nEntryLimit") int nEntryLimit,
+			@RequestParam(value = SearchCallParameters.CONNECT_TIMEOUT_MILLIS_PARAM, required = false) Integer connectTimeoutMillis,
+			@RequestParam(value = SearchCallParameters.READ_TIMEOUT_MILLIS_PARAM, required = false) Integer readTimeoutMillis,
+			@RequestParam(value = SearchCallParameters.RETRIES_PARAM, required = false) Integer retries) throws IOException, SearchServiceException {
+		return search(query, systemId, nEntryLimit,
+				searchCallParameters(connectTimeoutMillis, readTimeoutMillis, retries));
 	}
 
 	@PostMapping(value = "nativeSearch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<SearchResult> restNativeSearchSharePoint(@RequestBody SharePointSearchFilter query,
-			@RequestParam("systemId") String systemId, @RequestParam("nEntryLimit") int nEntryLimit)
+			@RequestParam("systemId") String systemId,
+			@RequestParam("nEntryLimit") int nEntryLimit,
+			@RequestParam(value = SearchCallParameters.CONNECT_TIMEOUT_MILLIS_PARAM, required = false) Integer connectTimeoutMillis,
+			@RequestParam(value = SearchCallParameters.READ_TIMEOUT_MILLIS_PARAM, required = false) Integer readTimeoutMillis,
+			@RequestParam(value = SearchCallParameters.RETRIES_PARAM, required = false) Integer retries)
 			throws IOException, SearchServiceException {
 		SearchableSystemMetaData system = findSystemById(systemId);
-		return nativeSearch(query, system, nEntryLimit);
+		return nativeSearch(query, system, nEntryLimit,
+				searchCallParameters(connectTimeoutMillis, readTimeoutMillis, retries));
 	}
 
 	@GetMapping(value = "getCataloguesListSample", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -26,6 +26,7 @@ import org.springframework.util.StringUtils;
 
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
 import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import ai.gebo.tavilysearch.handler.model.TavilyApiResponse;
 import ai.gebo.tavilysearch.handler.model.TavilyApiResponse.TavilyApiResult;
@@ -58,6 +59,12 @@ public class TavilySearchApi {
 
 	TavilySearchApi(RestTemplateWrapperService restTemplateService) {
 		this.restTemplateService = restTemplateService;
+	}
+
+	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
+	TavilySearchApi using(SearchCallParameters parameters) {
+		return new TavilySearchApi(
+				RestTemplateWrapperService.withTimeouts(parameters.connectTimeout(), parameters.readTimeout()));
 	}
 
 	TavilyApiResponse callApi(String apiKey, String query, Integer topN) throws GeboRestIntegrationException {

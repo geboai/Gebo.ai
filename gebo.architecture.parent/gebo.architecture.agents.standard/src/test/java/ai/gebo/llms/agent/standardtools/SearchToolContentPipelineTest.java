@@ -154,7 +154,7 @@ class SearchToolContentPipelineTest {
 				.thenAnswer(invocation -> List.of(((List<Document>) invocation.getArgument(0)).get(0)));
 
 		SearchToolResult result = pipeline.run(service, "searchWeb", "d", param("release notes", "what the release changed"),
-				List.of(), (s, n) -> List.of(kept, discarded), request("r1"));
+				List.of(), (s, n, p) -> List.of(kept, discarded), request("r1"));
 
 		assertEquals(Status.OK, result.getStatus());
 		assertTrue(result.isRanked());
@@ -177,7 +177,7 @@ class SearchToolContentPipelineTest {
 				.getToolsContext());
 
 		pipeline.run(service, "searchWeb", "d", param("release notes", "what changed"), List.of(),
-				(s, n) -> List.of(kept, discarded), shared);
+				(s, n, p) -> List.of(kept, discarded), shared);
 
 		// only the document whose content was returned, with its search result
 		assertEquals(1, collector.getDocuments().size());
@@ -188,7 +188,7 @@ class SearchToolContentPipelineTest {
 	@Test
 	void theQueryIsTheObjectiveWhenNoneIsGiven() throws Exception {
 		pipeline.run(service, "searchWeb", "d", param("release notes", null), List.of(),
-				(s, n) -> List.of(result("https://a.example/1", "One")), request("r1"));
+				(s, n, p) -> List.of(result("https://a.example/1", "One")), request("r1"));
 
 		verify(ranker).rankAndRemoveIrrelevant(anyList(), eq("release notes"), anyInt());
 	}
@@ -200,24 +200,24 @@ class SearchToolContentPipelineTest {
 		SearchResult third = result("https://a.example/3", "Three");
 
 		SearchToolResult firstCall = pipeline.run(service, "searchWeb", "d", param("q", "o"), List.of(),
-				(s, n) -> List.of(first, second), request("r1"));
+				(s, n, p) -> List.of(first, second), request("r1"));
 		assertEquals(2, firstCall.getFragments().size());
 
 		SearchToolResult retry = pipeline.run(service, "searchWeb", "d", param("q refined", "o"), List.of(),
-				(s, n) -> List.of(second, first), request("r1"));
+				(s, n, p) -> List.of(second, first), request("r1"));
 		assertEquals(Status.NO_RESULTS, retry.getStatus());
 		assertEquals(2, retry.getDocumentsAlreadyReturned());
 		assertTrue(retry.getFragments().isEmpty());
 
 		SearchToolResult widened = pipeline.run(service, "searchWeb", "d", param("q other", "o"), List.of(),
-				(s, n) -> List.of(first, third), request("r1"));
+				(s, n, p) -> List.of(first, third), request("r1"));
 		assertEquals(1, widened.getFragments().size());
 		assertEquals(third.getCode(), widened.getFragments().get(0).getDocumentCode());
 		assertEquals(1, widened.getDocumentsAlreadyReturned());
 
 		// another request starts from scratch
 		SearchToolResult otherRequest = pipeline.run(service, "searchWeb", "d", param("q", "o"), List.of(),
-				(s, n) -> List.of(first, second), request("r2"));
+				(s, n, p) -> List.of(first, second), request("r2"));
 		assertEquals(2, otherRequest.getFragments().size());
 	}
 
@@ -227,7 +227,7 @@ class SearchToolContentPipelineTest {
 		SearchResult sameAgain = result("https://a.example/1", "One");
 
 		SearchToolResult result = pipeline.run(service, "searchWeb", "d", param("q", "o"), List.of(),
-				(s, n) -> List.of(first, sameAgain), request("r1"));
+				(s, n, p) -> List.of(first, sameAgain), request("r1"));
 
 		assertEquals(1, result.getFragments().size());
 	}
@@ -253,7 +253,7 @@ class SearchToolContentPipelineTest {
 		List<String> searched = new ArrayList<>();
 
 		SearchToolResult result = pipeline.run(service, "jiraNativeSearch", "d", param("q", "o"), List.of(),
-				(s, n) -> {
+				(s, n, p) -> {
 					searched.add(s.getCode());
 					return List.of(result("https://a.example/1", "One"));
 				}, request("r1"));
@@ -270,7 +270,7 @@ class SearchToolContentPipelineTest {
 		when(service.getSearchableSystems()).thenReturn(List.of(broken, system));
 
 		SearchToolResult result = pipeline.run(service, "confluenceNativeSearch", "d", param("q", "o"), List.of(),
-				(s, n) -> {
+				(s, n, p) -> {
 					if (s == broken) {
 						throw new java.io.IOException("down");
 					}
@@ -286,7 +286,7 @@ class SearchToolContentPipelineTest {
 		when(ranker.isRankerConfigured()).thenReturn(false);
 
 		SearchToolResult result = pipeline.run(service, "searchWeb", "d", param("q", "o"), List.of(),
-				(s, n) -> List.of(result("https://a.example/1", "One"), result("https://a.example/2", "Two")),
+				(s, n, p) -> List.of(result("https://a.example/1", "One"), result("https://a.example/2", "Two")),
 				request("r1"));
 
 		assertFalse(result.isRanked());
@@ -297,7 +297,7 @@ class SearchToolContentPipelineTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	void thePlainToolParsesTheModelArguments() throws Exception {
-		when(service.search(any(SearchQuery.class), any(SearchableSystemMetaData.class), anyInt()))
+		when(service.search(any(SearchQuery.class), any(SearchableSystemMetaData.class), anyInt(), any()))
 				.thenReturn(List.of(result("https://a.example/1", "One")));
 		ToolCallback tool = new SearchServiceWrapperTool(pipeline, service, "searchWeb", "Search the web").toTool();
 
@@ -335,9 +335,9 @@ class SearchToolContentPipelineTest {
 		when(nativeService.getNativeSearchDataStructureType()).thenReturn(JqlQuery.class);
 		when(nativeService.getSearchableSystems()).thenReturn(List.of(system));
 		when(security.isEnabledForCurrentUser(any())).thenReturn(true);
-		when(nativeService.nativeSearch(any(), any(), anyInt())).thenThrow(new IllegalArgumentException("bad jql"));
+		when(nativeService.nativeSearch(any(), any(), anyInt(), any())).thenThrow(new IllegalArgumentException("bad jql"));
 		List<String> texts = new ArrayList<>();
-		when(nativeService.search(any(SearchQuery.class), any(SearchableSystemMetaData.class), anyInt()))
+		when(nativeService.search(any(SearchQuery.class), any(SearchableSystemMetaData.class), anyInt(), any()))
 				.thenAnswer(invocation -> {
 					texts.add(((SearchQuery) invocation.getArgument(0)).getQueryText());
 					return List.of(result("https://jira.example/ISSUE-3", "ISSUE-3"));
@@ -360,7 +360,7 @@ class SearchToolContentPipelineTest {
 		when(nativeService.getNativeSearchDataStructureType()).thenReturn(JqlQuery.class);
 		when(nativeService.getSearchableSystems()).thenReturn(List.of(system));
 		List<Object> received = new ArrayList<>();
-		when(nativeService.nativeSearch(any(), any(), anyInt())).thenAnswer(invocation -> {
+		when(nativeService.nativeSearch(any(), any(), anyInt(), any())).thenAnswer(invocation -> {
 			received.add(invocation.getArgument(0));
 			return List.of(result("https://jira.example/ISSUE-1", "ISSUE-1"));
 		});
@@ -425,7 +425,7 @@ class SearchToolContentPipelineTest {
 				});
 
 		SearchToolResult result = pipeline.run(service, "searchWeb", "d", param("q", "o"), List.of(),
-				(s, n) -> List.of(result("https://a.example/1", "One")), context);
+				(s, n, p) -> List.of(result("https://a.example/1", "One")), context);
 
 		assertTrue(result.getTokens() <= 600,
 				"returned " + result.getTokens() + " tokens");
@@ -440,7 +440,7 @@ class SearchToolContentPipelineTest {
 				ToolsTokenBudget.TOOLS_CONTEXT_KEY, new ToolsTokenBudget(100)));
 		List<String> searched = new ArrayList<>();
 
-		SearchToolResult result = pipeline.run(service, "searchWeb", "d", param("q", "o"), List.of(), (s, n) -> {
+		SearchToolResult result = pipeline.run(service, "searchWeb", "d", param("q", "o"), List.of(), (s, n, p) -> {
 			searched.add(s.getCode());
 			return List.of(result("https://a.example/1", "One"));
 		}, context);
@@ -470,7 +470,7 @@ class SearchToolContentPipelineTest {
 		for (int i = 0; i < 6; i++) {
 			six.add(result("https://a.example/" + i, "Doc " + i));
 		}
-		pipeline.run(service, "searchWeb", "d", param("q", "o"), List.of(), (s, n) -> six, request("r1"));
+		pipeline.run(service, "searchWeb", "d", param("q", "o"), List.of(), (s, n, p) -> six, request("r1"));
 		return most.get();
 	}
 
