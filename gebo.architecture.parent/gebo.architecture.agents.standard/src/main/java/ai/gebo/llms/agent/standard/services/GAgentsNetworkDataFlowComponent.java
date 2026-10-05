@@ -421,7 +421,7 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		endpoint.setInput(true);
 		endpoint.setOutput(true);
 		endpoint.setTypes(list(MetaEndpointType.WEB_SEARCH));
-		endpoint.setPersonalData(target.personalData());
+		endpoint.setPersonalData(false);
 		if (DataFlowEndpoints.notEmpty(target.secretReference())) {
 			endpoint.setSecretReference(target.secretReference());
 		}
@@ -442,7 +442,7 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		endpoint.setInput(true);
 		endpoint.setOutput(false);
 		endpoint.setTypes(list(MetaEndpointType.DATABASE));
-		endpoint.setPersonalData(target.personalData());
+		endpoint.setPersonalData(false);
 		endpoint.setLocality(DataEndpointLocality.LOCAL_DEPLOYMENT);
 		return endpoint;
 	}

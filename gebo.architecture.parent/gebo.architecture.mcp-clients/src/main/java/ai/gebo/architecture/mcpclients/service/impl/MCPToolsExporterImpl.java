@@ -128,7 +128,7 @@ public class MCPToolsExporterImpl implements MCPToolsExporter {
 	static ToolDataFlowTarget serverTarget(MCPClientConfig config, String toolName) {
 		final String product = "MCP server " + safeCode(config);
 		return new ToolDataFlowTarget(ToolDataFlowTarget.Kind.MCP_SERVER, safeCode(config), product, locatorOf(config),
-				config.getSecretCode(), "MCP tool " + toolName + ": arguments sent to " + product, false);
+				config.getSecretCode(), "MCP tool " + toolName + ": arguments sent to " + product);
 	}
 
 	/**

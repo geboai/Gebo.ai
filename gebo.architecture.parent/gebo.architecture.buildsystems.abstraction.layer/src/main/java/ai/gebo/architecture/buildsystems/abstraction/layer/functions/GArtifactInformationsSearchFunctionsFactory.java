@@ -238,7 +238,7 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
         return GET_ARTIFACTS_INFORMATION.equals(toolName) || GET_ALL_SOFTWARE_ARTIFACTS_LIST.equals(toolName)
                 || GET_ARTIFACTS_DEPENDING_FROM.equals(toolName) || GET_FULL_ARTIFACT_DEPENDENCIES_INFOS.equals(toolName)
                         ? List.of(ToolDataFlowTarget.platformData("Software artifacts catalogue",
-                                toolName + ": software artifacts and dependencies read", false))
+                                toolName + ": software artifacts and dependencies read"))
                         : List.of();
     }
 

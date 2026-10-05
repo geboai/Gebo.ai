@@ -10,7 +10,6 @@
 package ai.gebo.architecture.mcpclients.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.List;
 
@@ -47,7 +46,6 @@ class MCPToolsExporterDataFlowTest {
 		assertEquals("MCP server github", target.product());
 		assertEquals("https://mcp.example.com/mcp", target.locator());
 		assertEquals("github-token", target.secretReference());
-		assertFalse(target.personalData());
 	}
 
 	@Test

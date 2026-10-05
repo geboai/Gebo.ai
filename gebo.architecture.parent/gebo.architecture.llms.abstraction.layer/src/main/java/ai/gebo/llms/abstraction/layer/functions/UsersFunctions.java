@@ -169,7 +169,7 @@ public class UsersFunctions implements IGToolCallbackSource {
 	public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
 		return "getActualUser".equals(toolName) || "searchCurrentUsersTeamsColleagues".equals(toolName)
 				? List.of(ToolDataFlowTarget.platformData("Platform users and groups",
-						toolName + ": users' identities and groups read", true))
+						toolName + ": users' identities and groups read"))
 				: List.of();
 	}
 

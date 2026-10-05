@@ -261,7 +261,7 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 		}
 		return TOOLS.contains(toolName)
 				? List.of(ToolDataFlowTarget.platformData("Knowledge bases catalogue",
-						"Knowledge bases, projects, folders and documents listed", false))
+						"Knowledge bases, projects, folders and documents listed"))
 				: List.of();
 	}
 

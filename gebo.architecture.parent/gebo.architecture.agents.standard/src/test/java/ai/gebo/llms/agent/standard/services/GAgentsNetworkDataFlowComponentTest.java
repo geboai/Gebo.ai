@@ -17,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -26,10 +28,17 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.definition.ToolDefinition;
 import org.springframework.beans.factory.ObjectProvider;
 
+import ai.gebo.application.messaging.model.ComponentMetaInfo;
 import ai.gebo.application.messaging.model.DataEndpoint;
 import ai.gebo.application.messaging.model.DataEndpointLocality;
+import ai.gebo.application.messaging.model.DataFlowPersonalDataPropagation;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
+import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
+import ai.gebo.application.messaging.model.GDataFlowReport;
+import ai.gebo.application.messaging.model.GModuleMetaInfo;
+import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.application.messaging.model.MetaEndpointType;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
@@ -49,12 +58,14 @@ import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfiguration
 import ai.gebo.llms.agent.standard.config.AgenticLoopAgentsInitialization;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.DataFlowEndpoints;
+import ai.gebo.model.base.GeboComponentInfo;
 import ai.gebo.security.services.IGeboSystemUserService;
 
 /**
  * Pins the register entries of the agents networks: the single agent networks report
  * their chat model and what their mounted tools reach (the free chat one without the
- * knowledge bases), the other networks keep the finders' fan-out.
+ * knowledge bases), the other networks keep the finders' fan-out. Personal data
+ * reach them only from a data source an administrator flags.
  */
 class GAgentsNetworkDataFlowComponentTest {
 
@@ -140,9 +151,9 @@ class GAgentsNetworkDataFlowComponentTest {
 		when(others.getDataFlowTargets("readUrl"))
 				.thenReturn(List.of(ToolDataFlowTarget.of(Kind.INTERNET, "page read")));
 		when(others.getDataFlowTargets("getActualUser"))
-				.thenReturn(List.of(ToolDataFlowTarget.platformData("Platform users and groups", "user read", true)));
+				.thenReturn(List.of(ToolDataFlowTarget.platformData("Platform users and groups", "user read")));
 		when(others.getDataFlowTargets("github_search")).thenReturn(List.of(new ToolDataFlowTarget(Kind.MCP_SERVER,
-				"github", "MCP server github", "stdio:npx", null, "arguments sent", false)));
+				"github", "MCP server github", "stdio:npx", null, "arguments sent")));
 		when(others.getDataFlowTargets("now")).thenReturn(List.of());
 		when(toolSources.getImplementations()).thenReturn(List.of(knowledgeBase, others));
 	}
@@ -183,7 +194,8 @@ class GAgentsNetworkDataFlowComponentTest {
 		DataEndpoint internet = endpoint(flow, "internet-pages");
 		assertEquals(DataEndpointLocality.EXTERNAL_PROVIDER, internet.getLocality());
 		DataEndpoint users = endpoint(flow, "platform-data-platform-users-and-groups");
-		assertTrue(users.isPersonalData());
+		// a tool marks no personal data: they come only from the data sources flagged so
+		assertTrue(flow.getDataEndpoints().stream().noneMatch(DataEndpoint::isPersonalData));
 		assertEquals(DataEndpointLocality.LOCAL_DEPLOYMENT, users.getLocality());
 		DataEndpoint mcp = endpoint(flow, "mcp-server-github");
 		assertEquals(DataEndpointLocality.LOCAL_DEPLOYMENT, mcp.getLocality());
@@ -229,7 +241,7 @@ class GAgentsNetworkDataFlowComponentTest {
 		List<ToolCallback> shadowTools = List.of(tool("readUrl"));
 		when(shadow.getToolCallbacks()).thenReturn(shadowTools);
 		when(shadow.getDataFlowTargets("readUrl"))
-				.thenReturn(List.of(ToolDataFlowTarget.platformData("Shadow", "shadow", false)));
+				.thenReturn(List.of(ToolDataFlowTarget.platformData("Shadow", "shadow")));
 		IGToolCallbackSource failing = mock(IGToolCallbackSource.class);
 		when(failing.getToolCallbacks()).thenThrow(new IllegalStateException("Not authenticated"));
 		List<IGToolCallbackSource> sources = new java.util.ArrayList<>(toolSources.getImplementations());
@@ -242,5 +254,68 @@ class GAgentsNetworkDataFlowComponentTest {
 		assertEquals(Kind.INTERNET, targets.get("readUrl").get(0).kind());
 		assertEquals(List.of(), targets.get("now"));
 		assertEquals(6, targets.size());
+	}
+
+	/**
+	 * The single agent network's flow merged with a data source vectorized into the
+	 * vector store its knowledge base search reads, the source flagged or not as
+	 * holding personal data, after the register's propagation.
+	 */
+	private static GDataFlowMetaInfos propagatedWithSource(GDataFlowMetaInfos networkFlow, boolean personalSource) {
+		GeboComponentInfo sourceComponent = new GeboComponentInfo("test-module", "test-content-handler");
+		GDataFlowMetaInfos source = new GDataFlowMetaInfos();
+		source.setComponent(sourceComponent);
+		DataEndpoint documents = new DataEndpoint();
+		documents.setId("data-source");
+		documents.setTypes(List.of(MetaEndpointType.DOCUMENTS));
+		documents.setPersonalData(personalSource);
+		source.getDataEndpoints().add(documents);
+
+		GDataFlowMetaInfos vectorizator = new GDataFlowMetaInfos();
+		vectorizator.setComponent(new GeboComponentInfo(GStandardModulesConstraints.VECTORIZATOR_MODULE,
+				GStandardModulesConstraints.VECTORIZATION_COMPONENT));
+		DataEndpoint vectorStore = new DataEndpoint();
+		vectorStore.setId("vector-store");
+		vectorStore.setTypes(List.of(MetaEndpointType.VECTORIAL_DATABASE));
+		vectorizator.getDataEndpoints().add(vectorStore);
+		vectorizator.getTransformations().add(DataTransformationInfo.of("embed", "embedding",
+				DataTransformationMetaInfo.of("engine", "vectorizes", List.of(MetaEndpointType.DOCUMENTS),
+						List.of(MetaEndpointType.VECTORIAL_DATABASE)),
+				GDataFlowMetaInfos.qualifiedId(sourceComponent, "data-source"), DataFlowEndpoints.vectorStoreRef()));
+
+		DataFlowPersonalDataPropagation.apply(new GDataFlowReport("node", new Date(), new ArrayList<>(List.of(
+				new GModuleMetaInfo("network", List.of(componentOf(networkFlow))),
+				new GModuleMetaInfo("source", List.of(componentOf(source))),
+				new GModuleMetaInfo("vectorizator", List.of(componentOf(vectorizator)))))));
+		return vectorizator;
+	}
+
+	private static ComponentMetaInfo componentOf(GDataFlowMetaInfos flow) {
+		ComponentMetaInfo component = new ComponentMetaInfo();
+		component.setDataFlowMetaInfos(flow);
+		return component;
+	}
+
+	@Test
+	void withoutAFlaggedDataSourceNothingIsPersonalData() {
+		when(networksDao.getConfigurations()).thenReturn(List.of(network(AGENTIC)));
+		GDataFlowMetaInfos flow = component().getDataFlowMetaInfos();
+
+		GDataFlowMetaInfos vectorizator = propagatedWithSource(flow, false);
+
+		assertTrue(flow.getDataEndpoints().stream().noneMatch(DataEndpoint::isPersonalData));
+		assertFalse(vectorizator.getDataEndpoints().get(0).isPersonalData());
+	}
+
+	@Test
+	void aFlaggedDataSourceReachesTheToolsReadingItsStore() {
+		when(networksDao.getConfigurations()).thenReturn(List.of(network(AGENTIC)));
+		GDataFlowMetaInfos flow = component().getDataFlowMetaInfos();
+
+		GDataFlowMetaInfos vectorizator = propagatedWithSource(flow, true);
+
+		assertTrue(vectorizator.getDataEndpoints().get(0).isPersonalData());
+		// the knowledge base search links the network's query to that vector store
+		assertTrue(endpoint(flow, "network-query-" + AGENTIC).isPersonalData());
 	}
 }

@@ -15,6 +15,13 @@ package ai.gebo.architecture.ai.model;
  * purpose (the register's own model lives in another module): the register turns
  * each target into its endpoint.
  *
+ * <p>
+ * A target says nothing about personal data: in the register personal data come
+ * only from the data sources an administrator flags as holding them
+ * ({@code GProjectEndpoint.personalData}), and reach a tool's endpoint only by
+ * the flows linking it to such a source.
+ * </p>
+ *
  * @param kind            what the tool reaches
  * @param reference       the instance reached, when the kind has several: the search
  *                        service id, the MCP client code, the platform data name
@@ -24,10 +31,9 @@ package ai.gebo.architecture.ai.model;
  *                        here
  * @param secretReference the secret it is reached with, null when none
  * @param description     what the tool does with it
- * @param personalData    whether personal data are known to flow through it
  */
 public record ToolDataFlowTarget(Kind kind, String reference, String product, String locator,
-		String secretReference, String description, boolean personalData) {
+		String secretReference, String description) {
 
 	public enum Kind {
 		/** The knowledge bases' vector store (semantic retrieval). */
@@ -53,14 +59,14 @@ public record ToolDataFlowTarget(Kind kind, String reference, String product, St
 	}
 
 	public static ToolDataFlowTarget of(Kind kind, String description) {
-		return new ToolDataFlowTarget(kind, null, null, null, null, description, false);
+		return new ToolDataFlowTarget(kind, null, null, null, null, description);
 	}
 
 	public static ToolDataFlowTarget searchService(String serviceId, String description) {
-		return new ToolDataFlowTarget(Kind.SEARCH_SERVICE, serviceId, null, null, null, description, false);
+		return new ToolDataFlowTarget(Kind.SEARCH_SERVICE, serviceId, null, null, null, description);
 	}
 
-	public static ToolDataFlowTarget platformData(String name, String description, boolean personalData) {
-		return new ToolDataFlowTarget(Kind.PLATFORM_DATA, name, name, null, null, description, personalData);
+	public static ToolDataFlowTarget platformData(String name, String description) {
+		return new ToolDataFlowTarget(Kind.PLATFORM_DATA, name, name, null, null, description);
 	}
 }
