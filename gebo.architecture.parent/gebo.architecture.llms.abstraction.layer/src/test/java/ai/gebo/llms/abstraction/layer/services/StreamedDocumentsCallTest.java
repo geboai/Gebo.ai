@@ -10,6 +10,7 @@
 package ai.gebo.llms.abstraction.layer.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.mock;
@@ -67,5 +68,28 @@ class StreamedDocumentsCallTest {
 				.thenReturn((Flux) Flux.just("<think>reasoning</think>", "the analysis"));
 
 		assertEquals("the analysis", new Service().call(model).trim());
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	void anAnswerGoingAstrayIsStoppedAndWhatCameIsReturned() throws Exception {
+		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
+		java.util.concurrent.atomic.AtomicBoolean cancelled = new java.util.concurrent.atomic.AtomicBoolean();
+		java.util.concurrent.atomic.AtomicInteger sent = new java.util.concurrent.atomic.AtomicInteger();
+		when(model.streamStringResponse(any(), anyMap(), any())).thenReturn((Flux) Flux
+				.just("analysis", "\nLIST=", "1,", "1,", "1,", "1,", "1,", "1,").doOnNext(piece -> sent.incrementAndGet())
+				.doOnCancel(() -> cancelled.set(true)));
+		Service service = new Service() {
+			@Override
+			String call(IGConfigurableChatModel model) throws Exception {
+				return streamLLMWithDocumentsAndConsolidation(model, new GPromptTemplateConfig(),
+						mock(IChatRequestContext.class), List.of("doc"), "", Map.of(),
+						text -> text.toString().split(",").length > 3);
+			}
+		};
+
+		assertEquals("analysis\nLIST=1,1,1,1,", service.call(model));
+		assertTrue(cancelled.get(), "the stream is cancelled");
+		assertEquals(6, sent.get(), "nothing more is read");
 	}
 }

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import org.springframework.ai.document.Document;
 
@@ -28,6 +29,134 @@ import ai.gebo.model.DocumentMetaInfos;
 public final class DeepSearchBatchTrace {
 
 	private DeepSearchBatchTrace() {
+	}
+
+	/**
+	 * A batch as the partial analysis is given it: copies of its fragments numbered
+	 * 1..n as their fragmentId, so the model lists short numbers instead of long opaque
+	 * ids (fewer tokens to copy, less room for a list that repeats itself or makes ids
+	 * up), with the way back to the fragments' own ids.
+	 */
+	public static final class NumberedBatch {
+		private final List<Document> documents;
+		private final Map<String, String> idByNumber;
+
+		private NumberedBatch(List<Document> documents, Map<String, String> idByNumber) {
+			this.documents = documents;
+			this.idByNumber = idByNumber;
+		}
+
+		/** The numbered copies, in the batch order. */
+		public List<Document> documents() {
+			return documents;
+		}
+
+		/** The id of the fragment numbered {@code number}; null when no fragment has it (made up). */
+		public String idOf(String number) {
+			return number != null ? idByNumber.get(number.trim()) : null;
+		}
+	}
+
+	/** The batch numbered (see {@link NumberedBatch}). */
+	public static NumberedBatch numbered(List<Document> batch) {
+		final List<Document> documents = new ArrayList<>();
+		final Map<String, String> idByNumber = new HashMap<>();
+		if (batch != null) {
+			for (Document fragment : batch) {
+				if (fragment == null) {
+					continue;
+				}
+				final String number = String.valueOf(documents.size() + 1);
+				idByNumber.put(number, fragment.getId());
+				documents.add(Document.builder().id(number).text(fragment.getText())
+						.metadata(fragment.getMetadata() != null ? new HashMap<>(fragment.getMetadata()) : new HashMap<>())
+						.score(fragment.getScore()).build());
+			}
+		}
+		return new NumberedBatch(documents, idByNumber);
+	}
+
+	/**
+	 * Watches a partial analysis while it streams: holds once its irrelevant fragments
+	 * lists ({@code marker}=...) have given more entries than the batch has fragments,
+	 * a list that repeats itself or makes ids up. Only the list lines count: the text
+	 * of the analysis may say anything. To be used on one answer, its text growing.
+	 */
+	public static Predicate<CharSequence> runawayWatch(String marker, int batchSize) {
+		return new Predicate<CharSequence>() {
+			/** Where the scan goes on from. */
+			private int scanned = 0;
+			/** Within a list line (after a marker, before its end of line). */
+			private boolean inList = false;
+			private boolean inEntry = false;
+			private int entries = 0;
+
+			@Override
+			public synchronized boolean test(CharSequence text) {
+				while (scanned < text.length()) {
+					if (!inList) {
+						final int at = indexOfIgnoreCase(text, marker, scanned);
+						if (at < 0) {
+							// a marker may be cut between two pieces
+							scanned = Math.max(scanned, text.length() - marker.length() + 1);
+							return false;
+						}
+						inList = true;
+						inEntry = false;
+						scanned = at + marker.length();
+						continue;
+					}
+					final char ch = text.charAt(scanned++);
+					if (ch == '\n' || ch == '\r') {
+						inList = false;
+					} else if (ch == ',') {
+						inEntry = false;
+					} else if (!Character.isWhitespace(ch) && ch != '=' && !inEntry) {
+						inEntry = true;
+						entries++;
+						if (entries > batchSize) {
+							return true;
+						}
+					}
+				}
+				return false;
+			}
+		};
+	}
+
+	private static int indexOfIgnoreCase(CharSequence text, String marker, int from) {
+		final int last = text.length() - marker.length();
+		for (int i = Math.max(0, from); i <= last; i++) {
+			boolean match = true;
+			for (int j = 0; j < marker.length() && match; j++) {
+				match = Character.toUpperCase(text.charAt(i + j)) == Character.toUpperCase(marker.charAt(j));
+			}
+			if (match) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * The analysis without its irrelevant fragments lists ({@code marker}=... up to the
+	 * end of the line): what is kept of an analysis whose list ran away, the list being
+	 * ignored.
+	 */
+	public static String withoutIrrelevantLists(String analysis, String marker) {
+		if (analysis == null) {
+			return "";
+		}
+		final StringBuilder out = new StringBuilder(analysis);
+		int at;
+		while ((at = indexOfIgnoreCase(out, marker, 0)) >= 0) {
+			int end = at;
+			while (end < out.length() && out.charAt(end) != '\n' && out.charAt(end) != '\r') {
+				end++;
+			}
+			out.delete(at, end);
+		}
+		return out.toString();
 	}
 
 	/** The source of a fragment: its URL, else its file name, else its content code. */

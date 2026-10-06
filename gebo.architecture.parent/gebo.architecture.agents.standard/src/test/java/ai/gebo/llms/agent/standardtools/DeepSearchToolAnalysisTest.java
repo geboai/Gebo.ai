@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Vector;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.document.Document;
+
+import ai.gebo.llms.deepsearch.service.impl.DeepSearchBatchTrace;
 
 /** Pins the reading of the irrelevant fragments a partial analysis lists. */
 class DeepSearchToolAnalysisTest {
@@ -29,5 +32,22 @@ class DeepSearchToolAnalysisTest {
 
 		assertEquals(List.of("f0", "f1", "f2"), discarded);
 		assertEquals("The analysis.\n\nSATISFACTORY", cleaned);
+	}
+
+	@Test
+	void theFragmentsListedByNumberAreDiscardedByTheirIds() {
+		DeepSearchBatchTrace.NumberedBatch numbered = DeepSearchBatchTrace.numbered(List.of(
+				Document.builder().id("id-a").text("a").build(), Document.builder().id("id-b").text("b").build(),
+				Document.builder().id("id-c").text("c").build()));
+		Vector<String> numbers = new Vector<>();
+		Vector<String> discarded = new Vector<>();
+		discarded.add("id-c");
+
+		String cleaned = DeepSearchToolAnalysis.cumulateDiscardedFragmentsAndCleanOutput(
+				"The analysis.\nIRRILEVANT=2, 3, 7\n", numbers);
+		DeepSearchToolAnalysis.discardByNumber(numbers, numbered, discarded);
+
+		assertEquals(List.of("id-c", "id-b"), discarded, "7 is no fragment of the batch, id-c counts once");
+		assertEquals("The analysis.\n\n", cleaned);
 	}
 }

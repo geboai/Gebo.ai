@@ -12,10 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -735,6 +737,20 @@ public class BaseLLMSInvokingService {
 	protected String streamLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
 			Map<String, Object> additionalParams) throws LLMConfigException {
+		return streamLLMWithDocumentsAndConsolidation(chatModel, prompt, context, documents, consolidated,
+				additionalParams, null);
+	}
+
+	/**
+	 * The same, stopping the answer as soon as {@code stopWhen}, tested on the text
+	 * received so far after each piece, holds (an answer going astray): the stream is
+	 * cancelled and the text received up to then returned.
+	 *
+	 * @param stopWhen null never stops the answer
+	 */
+	protected String streamLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
+			Map<String, Object> additionalParams, Predicate<CharSequence> stopWhen) throws LLMConfigException {
 		Map<String, Object> params = new HashMap<>(additionalParams);
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
@@ -744,11 +760,20 @@ public class BaseLLMSInvokingService {
 					+ chatModel.getCode());
 		}
 		final AtomicInteger pieces = new AtomicInteger(0);
+		final AtomicBoolean stopped = new AtomicBoolean(false);
+		final StringBuilder received = new StringBuilder();
 		@SuppressWarnings("unchecked")
 		final Flux<String> stream = chatModel.streamStringResponse(prompt, params, context);
-		String result = stream.filter(piece -> piece != null).doOnNext(piece -> pieces.incrementAndGet())
-				.reduce(new StringBuilder(), (text, piece) -> text.append(piece)).map(StringBuilder::toString)
-				.block();
+		stream.filter(piece -> piece != null).doOnNext(piece -> {
+			pieces.incrementAndGet();
+			received.append(piece);
+		}).takeUntil(piece -> stopWhen != null && stopWhen.test(received) && !stopped.getAndSet(true)).blockLast();
+		String result = received.toString();
+		if (stopped.get()) {
+			LOGGER.warn("streamLLMWithDocumentsAndConsolidation(...) prompt:" + prompt.getPromptUse() + " model:"
+					+ chatModel.getCode() + " answer stopped by its caller after " + received.length()
+					+ " character(s) in " + (System.currentTimeMillis() - start) + " ms");
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End streamLLMWithDocumentsAndConsolidation(...) prompt:" + prompt.getPromptUse() + " model:"
 					+ chatModel.getCode() + " " + pieces.get() + " streamed piece(s), "

@@ -10,11 +10,13 @@
 package ai.gebo.llms.deepsearch.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
@@ -57,5 +59,50 @@ class DeepSearchBatchTraceTest {
 				repeated);
 		assertTrue(repeated.contains("p2 x3 (huge.pdf)"), repeated);
 		assertTrue(repeated.contains("made-up x1 (not in the batch)"), repeated);
+	}
+
+	@Test
+	void aBatchIsNumberedForTheModelAndTheNumbersLeadBackToItsFragments() {
+		Document first = Document.builder().id("3f2a9c1e-0000-4000-8000-000000000001").text("first")
+				.metadata(Map.of(DocumentMetaInfos.GEBO_FILE_NAME, "contract.pdf")).build();
+		Document second = Document.builder().id("3f2a9c1e-0000-4000-8000-000000000002").text("second").build();
+
+		DeepSearchBatchTrace.NumberedBatch numbered = DeepSearchBatchTrace.numbered(List.of(first, second));
+
+		assertEquals(List.of("1", "2"), numbered.documents().stream().map(Document::getId).toList());
+		assertEquals("first", numbered.documents().get(0).getText());
+		assertEquals("contract.pdf", numbered.documents().get(0).getMetadata().get(DocumentMetaInfos.GEBO_FILE_NAME));
+		assertEquals(first.getId(), numbered.idOf("1"));
+		assertEquals(second.getId(), numbered.idOf(" 2 "));
+		assertNull(numbered.idOf("3"), "made up");
+		assertEquals("3f2a9c1e-0000-4000-8000-000000000001", first.getId(), "the fragments keep their ids");
+	}
+
+	@Test
+	void theWatchHoldsOnceTheListGivesMoreEntriesThanTheBatchHasFragments() {
+		Predicate<CharSequence> watch = DeepSearchBatchTrace.runawayWatch("IRRILEVANT", 3);
+		StringBuilder text = new StringBuilder();
+
+		text.append("The analysis, with commas, many words, 1, 2, 3, 4, 5.\n");
+		assertFalse(watch.test(text), "the analysis text does not count");
+		text.append("IRRI");
+		assertFalse(watch.test(text));
+		text.append("LEVANT=1, 2,3");
+		assertFalse(watch.test(text), "as many as the fragments");
+		text.append(",1");
+		assertTrue(watch.test(text), "one more than the fragments");
+
+		Predicate<CharSequence> fine = DeepSearchBatchTrace.runawayWatch("IRRILEVANT", 3);
+		assertFalse(fine.test("text\nirrilevant= 1 , 3\n<IS-COMPLETELY-SATISFACTORY/>, a, b, c, d"),
+				"only the list line counts, in any case");
+	}
+
+	@Test
+	void theListsOfARunawayAnalysisAreRemovedFromIt() {
+		assertEquals("The analysis.\n\nend",
+				DeepSearchBatchTrace.withoutIrrelevantLists("The analysis.\nIRRILEVANT=1,2,1,2,1\nend", "IRRILEVANT"));
+		assertEquals("The analysis.\n",
+				DeepSearchBatchTrace.withoutIrrelevantLists("The analysis.\nIRRILEVANT=1,2,1,2,1,2,1,2", "IRRILEVANT"));
+		assertEquals("", DeepSearchBatchTrace.withoutIrrelevantLists(null, "IRRILEVANT"));
 	}
 }

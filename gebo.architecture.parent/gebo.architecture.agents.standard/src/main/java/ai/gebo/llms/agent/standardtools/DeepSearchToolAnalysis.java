@@ -39,6 +39,7 @@ import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.FoldO
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.RollingFold;
 import ai.gebo.llms.deepsearch.service.DeepSearchVerdict;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchBatchTrace;
+import ai.gebo.llms.deepsearch.service.impl.DeepSearchBatchTrace.NumberedBatch;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.GenerativeFunction;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LastWork;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.TokensLimitCompute;
@@ -168,23 +169,35 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 							+ DeepSearchBatchTrace.fragmentSources(documentsList));
 				}
 				final long start = System.currentTimeMillis();
-				// streamed: a long analysis keeps arriving instead of tripping the read timeout
+				// the fragments numbered: the model lists short numbers, not long ids
+				final NumberedBatch numbered = DeepSearchBatchTrace.numbered(documentsList);
+				// streamed: a long analysis keeps arriving instead of tripping the read timeout,
+				// and is stopped as soon as its irrelevant fragments list runs away
 				final String intermediateAnalisys = streamLLMWithDocumentsAndConsolidation(serviceModel,
-						cumulativeAnalisysPrompt, context, documentsList, initialValue, params);
+						cumulativeAnalisysPrompt, context, numbered.documents(), initialValue, params,
+						DeepSearchBatchTrace.runawayWatch(IRRELEVANT_FRAGMENT_MARKER, numbered.documents().size()));
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<DEEP_SEARCH_TOOL_PARTIAL_ANALYSIS>");
 					LOGGER.trace(intermediateAnalisys);
 					LOGGER.trace("</DEEP_SEARCH_TOOL_PARTIAL_ANALYSIS>");
 				}
 				final int discardedBefore = discardedFragmentIds.size();
-				final String cleaned = cumulateDiscardedFragmentsAndCleanOutput(intermediateAnalisys,
-						discardedFragmentIds);
 				final String runaway = DeepSearchBatchTrace.runawayReport(intermediateAnalisys,
-						IRRELEVANT_FRAGMENT_MARKER, documentsList);
+						IRRELEVANT_FRAGMENT_MARKER, numbered.documents());
+				final String cleaned;
 				if (runaway != null) {
+					// a list that repeats itself or makes ids up says nothing reliable: the
+					// fragments of the batch stay read and not judged
 					LOGGER.warn("Deep search tool partial analysis ran away in " + (System.currentTimeMillis() - start)
 							+ " ms, " + (intermediateAnalisys != null ? intermediateAnalisys.length() : 0)
-							+ " character(s): " + runaway + "on batch: " + DeepSearchBatchTrace.composition(documentsList));
+							+ " character(s), its irrelevant fragments list ignored: " + runaway + "on batch: "
+							+ DeepSearchBatchTrace.composition(documentsList));
+					cleaned = DeepSearchBatchTrace.withoutIrrelevantLists(intermediateAnalisys,
+							IRRELEVANT_FRAGMENT_MARKER);
+				} else {
+					final Vector<String> numbers = new Vector<>();
+					cleaned = cumulateDiscardedFragmentsAndCleanOutput(intermediateAnalisys, numbers);
+					discardByNumber(numbers, numbered, discardedFragmentIds);
 				}
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Deep search tool partial analysis of " + documentsList.size() + " fragment(s) done in "
@@ -283,6 +296,28 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 		}
 		return Flux.fromIterable(separateTokens);
 	};
+
+	/**
+	 * The fragments of a numbered batch the model listed as irrelevant, by number: each
+	 * added once to the discarded ones; a number no fragment has (made up) is ignored.
+	 */
+	static void discardByNumber(List<String> numbers, NumberedBatch numbered, Vector<String> discardedFragmentIds) {
+		for (String number : numbers) {
+			final String fragmentId = numbered.idOf(number);
+			if (fragmentId == null) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Deep search tool analysis listed fragment number:" + number + " not in its batch");
+				}
+				continue;
+			}
+			synchronized (discardedFragmentIds) {
+				// the partial analyses run in parallel
+				if (!discardedFragmentIds.contains(fragmentId)) {
+					discardedFragmentIds.add(fragmentId);
+				}
+			}
+		}
+	}
 
 	static String cumulateDiscardedFragmentsAndCleanOutput(String intermediateAnalisys,
 			Vector<String> discardedFragmentIds) {
