@@ -423,3 +423,20 @@ After `b798c735a` (audit items 5 and 6): the answer of the single agent chats st
 | 15 | After an evidence discard the next iteration is not gated (G1: answered twice without searching) | An answer that needed the sources rests on training | Keep the evidence gate on the iteration after a discard; on the last iteration show the answer with a warning that no source was searched | Code, design choice |
 
 Items 5 and 6 of section 11 are done (`b798c735a`).
+
+## 14. Ninth session: document ids, top documents, the end of PURE_SEARCH (2026-10-06, 13:03 - 14:03)
+
+After `15f940802` (no model-chosen maxTokens: a search's contents take a third of the room its model call leaves), `feb48c72c` (every document a tool returns carries a short id of the request, #1 #2...; the search tools rank every chunk and keep the topK best documents with all their chunks, no irrelevance filter; each answer ends with ANSWER-DOCUMENTS listing the ids it rests on, removed while streaming, and Found docs are those) and `a2d384b78` (PURE_SEARCH removed everywhere; the request understanding outputs searchRequested; evidence is required for an analysis or when the user asked to search, and the request stays held until it searches). Only the `gebo.ai` container redeployed; gpt-4.1.
+
+| # | Chat | Request | Outcome |
+|---|---|---|---|
+| I1 | KB | Archiati on the twelve senses, citing the documents | ✓ 32 fragments from the 5 best of 6 documents; the answer listed #3 #2; Found docs = those 2 of 5 |
+| I2 | KB | Detailed analysis, Christ across works and authors (deep search) | ✓ 9 sources with their ids, listed by the answer; 4 made-up knowledge base links removed from the analysis |
+| I3 | no KB | Latest stable PostgreSQL and its date (classified PURE_SEARCH, before a2d384b78) | ✗ no tool in 5 iterations, answer shown with the "no source searched" warning, made-up links removed |
+| I4 | no KB | the same, after a2d384b78 | ✓ QA with searchRequested=true, searchWeb in iteration 1, 4 documents; "18.6, 11 August 2026" from endoflife.date, the link returned by the search, Found docs = that page |
+| I5 | no KB | Java 25 news, citing the pages | ✓ SUMMARY with searchRequested=true, searched at once, 6 documents, the answer rests on 3 |
+| I6 | KB | Find the documents about the twelve senses | ✓ SUMMARY with searchRequested=true, 8 documents, all listed |
+
+**Found during the session:** a closing given as two separate rules (the ids line, then the control marker) made gpt-4.1 drop both, 3 times out of 3; one ordered closing rule fixed it. PURE_SEARCH requests searched once out of five: the deliverable ("the found documents are the deliverable") led the model to list pages from memory; removing it and asking a plain yes/no (searchRequested) made the model search every time in this session.
+
+**Outside this repository:** Gebo.ai.pro's office query rewriting prompt still mentions PURE_SEARCH (read as QA by the parsing), and the generated API clients of Enterprise.Gebo.ai, gebo.unooffice.plugin and rassegna.gebo.ai still list it: to be regenerated there. The generated clients of this repository do not carry searchRequested yet (regeneration).
