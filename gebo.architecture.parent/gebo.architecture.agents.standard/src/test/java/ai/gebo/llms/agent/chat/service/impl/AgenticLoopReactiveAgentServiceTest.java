@@ -243,6 +243,27 @@ class AgenticLoopReactiveAgentServiceTest {
 	}
 
 	@Test
+	void theNextIterationGoesOnFromTheLastOutcomeAsTheReportWriterDoes() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
+		collector.add(List.of(webPage("www.postgresql.org", "https://www.postgresql.org/docs/release/")));
+		List<LoopIteration> history = List.of(new LoopIteration(1, "Shown to the user.", List.of()),
+				new LoopIteration(2, "An older draft.", List.of(), "no search used"),
+				new LoopIteration(3, "The draft built on the deep searches.", List.of(), "coverage thin: complete X"));
+
+		String story = agent.loopStory(history, 40_000, collector);
+
+		assertTrue(story.contains("RESPONSE: Shown to the user."), "a shown text is part of the answer: " + story);
+		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.DISCARDED_DRAFT
+				+ "The draft built on the deep searches."), "the last draft whole: " + story);
+		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.WHY_DISCARDED + "coverage thin: complete X"));
+		assertTrue(!story.contains("An older draft.") && story.contains(AgenticLoopReactiveAgentServiceImpl.SUPERSEDED_DRAFT),
+				"an older draft superseded: " + story);
+		assertTrue(story.contains("#1 www.postgresql.org, https://www.postgresql.org/docs/release"),
+				"the documents so far with their ids: " + story);
+	}
+
+	@Test
 	void theLoopHistoryFitsHalfOfTheBudget() {
 		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
 		StringBuilder longText = new StringBuilder();
@@ -898,6 +919,34 @@ class AgenticLoopReactiveAgentServiceTest {
 				agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM));
 		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.DISCARDED_THIN_COVERAGE), story);
 		assertTrue(story.contains("rests on 1 of the 6"), story);
+	}
+
+	@Test
+	void afterACoverageDiscardTheRequestHasItsEvidenceAndAnAnswerWithoutANewSearchIsShown() {
+		// the sources were searched in the first iteration: the second one, building on its
+		// draft without completing the coverage, is not discarded again for lack of evidence
+		ScriptedLoopAgent agent = callingAgent(
+				List.of(List.of("From Steiner only. " + STOP), List.of("The draft, rewritten. " + STOP),
+						List.of("Never asked. " + STOP)),
+				Map.of(0, List.<String[]>of(new String[] { "deepSearchKnowledgeBase", THIN })));
+
+		String shown = runWithCoverageGate(agent, 5);
+
+		assertEquals("The draft, rewritten. ", shown);
+		assertEquals(2, agent.receivedParams.size(), "no iteration spent on an answer resting on the first search");
+	}
+
+	@Test
+	void afterACoverageDiscardAnAnswerCitingDocumentsNotReadIsStillDiscarded() {
+		ScriptedLoopAgent agent = callingAgent(
+				List.of(List.of("From Steiner only. " + STOP), List.of("As never-read.pdf says. " + STOP),
+						List.of("Without it. " + STOP)),
+				Map.of(0, List.<String[]>of(new String[] { "deepSearchKnowledgeBase", THIN })));
+
+		String shown = runWithCoverageGate(agent, 5);
+
+		assertEquals("Without it. ", shown);
+		assertEquals(3, agent.receivedParams.size());
 	}
 
 	@Test

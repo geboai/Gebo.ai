@@ -151,7 +151,16 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	}
 
 	/** One iteration of the loop: what the model wrote and the tools it called. */
-	record LoopIteration(int number, String text, List<ToolCallExecuted> calls) {
+	record LoopIteration(int number, String text, List<ToolCallExecuted> calls, String discardedFor) {
+		/** An iteration whose text was shown to the user. */
+		LoopIteration(int number, String text, List<ToolCallExecuted> calls) {
+			this(number, text, calls, null);
+		}
+
+		/** Whether its text was discarded, never shown: then why. */
+		boolean discarded() {
+			return discardedFor != null;
+		}
 	}
 
 	/**
@@ -708,6 +717,22 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		return first;
 	}
 
+	/**
+	 * The names an answer may cite a document by after the tools ran in this request:
+	 * the chat's own documents and every document the tools returned or listed so far.
+	 */
+	static List<String> readSoFar(IChatRequestContext chatRequestContext) {
+		final List<String> names = new ArrayList<>(chatDocumentNames(chatRequestContext));
+		final ToolsFoundDocuments collector = collectorOf(chatRequestContext);
+		if (collector != null) {
+			names.addAll(collector.getListedNames());
+			for (GResponseDocumentRef ref : collector.getDocuments()) {
+				names.addAll(citableNames(ref));
+			}
+		}
+		return names;
+	}
+
 	/** The file names of the chat's own documents (chosen or uploaded by the user). */
 	static List<String> chatDocumentNames(IChatRequestContext chatRequestContext) {
 		final List<String> names = new ArrayList<>();
@@ -834,7 +859,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			params.put(MAX_ITERATIONS_PARAM, maxIterations);
 			params.put(AGENT_CONTROL_FINISHED_PROMPT_PARAM, AGENT_CONTROL_FINISHED);
 			params.put(AGENT_CONTROL_CONTINUE_PROMPT_PARAM, AGENT_CONTROL_MORE_TOOLS);
-			params.put(AGENT_SESSION_STORY_PROMPT_PARAM, loopStory(history, budget));
+			params.put(AGENT_SESSION_STORY_PROMPT_PARAM, loopStory(history, budget, collectorOf(chatRequestContext)));
 			params.put(RULES_TO_FOLLOW_PARAM, rulesToFollow(chatRequestContext));
 			final int callsBefore = callBacksListener.getCalls().size();
 			final ControlMarkerStripper stripper = new ControlMarkerStripper();
@@ -894,10 +919,10 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				}
 				if (discard) {
 					if (number < maxIterations) {
-						history.add(new LoopIteration(number,
+						// the draft is kept, with why it was discarded: the next iteration builds on it
+						history.add(new LoopIteration(number, text.toString(), iterationCalls,
 								gate.evidenceRequired() ? discardedNote(gate.tools())
-										: DISCARDED_UNREAD_CITATIONS + String.join(", ", unread) + ".",
-								iterationCalls));
+										: DISCARDED_UNREAD_CITATIONS + String.join(", ", unread) + "."));
 						LOGGER.info("Agentic loop agent id:" + getId() + " iteration " + number
 								+ (gate.evidenceRequired()
 										? " answered without using any tool a request needing the sources' evidence"
@@ -946,8 +971,9 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				if (heldForCoverage && !another) {
 					if (number < maxIterations) {
 						// the answer rests on a thin coverage: done again once, told what to complete
-						history.set(history.size() - 1,
-								new LoopIteration(number, DISCARDED_THIN_COVERAGE + coverageNote, iterationCalls));
+						// the draft is kept, with what to complete: the next iteration builds on it
+						history.set(history.size() - 1, new LoopIteration(number, text.toString(), iterationCalls,
+								DISCARDED_THIN_COVERAGE + coverageNote));
 						LOGGER.info("Agentic loop agent id:" + getId() + " iteration " + number
 								+ " answered on a deep search coverage asking to be completed: discarded, completing it"
 								+ " in the next iteration");
@@ -963,9 +989,18 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 								"Agent: " + contextAgentPersona.getNetworkAgentName()
 										+ " searches what the deep search did not cover..",
 								ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
+						// the sources were searched: the next iteration needs no new evidence, but an
+						// answer without a search may not cite documents this request did not read
+						final SourceGate searched = new SourceGate(gate.tools(), false,
+								readSoFar(chatRequestContext));
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + (number + 1)
+									+ " needs no new evidence, may cite " + searched.readDocumentNames().size()
+									+ " document name(s) read so far");
+						}
 						return asUser(runAs, iteration(number + 1, maxIterations, budget, history, agentModel,
 								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
-								deliverableParams, SourceGate.NONE, runAs));
+								deliverableParams, searched, runAs));
 					}
 					// no iteration left: the answer is shown as it is
 					LOGGER.warn("Agentic loop agent id:" + getId() + " last iteration " + number
@@ -1192,17 +1227,35 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 	}
 
-	/**
-	 * The history of the previous iterations for the next one: the tools each called
-	 * and what it wrote, within half of the budget, shared equally among them; the
-	 * other half is left to the chat history and the tool results of the iteration.
-	 */
+	/** The same, without the documents the tools returned. */
 	protected String loopStory(List<LoopIteration> history, int budget) {
+		return loopStory(history, budget, null);
+	}
+
+	/**
+	 * The history of the previous iterations for the next one, which goes on from the
+	 * last outcome as the report writer goes on from its last draft: the tools each
+	 * iteration called and what it wrote. A text shown to the user is part of the
+	 * answer, kept so it is not repeated; a discarded draft is kept whole when it is the
+	 * last outcome, with why it was discarded, so the next iteration completes it
+	 * instead of starting over, and only by its tool calls once a later draft
+	 * supersedes it. Then the documents the tools returned so far, with their ids. All
+	 * within half of the budget, shared equally; the other half is left to the chat
+	 * history and the tool results of the iteration.
+	 */
+	protected String loopStory(List<LoopIteration> history, int budget, ToolsFoundDocuments collector) {
 		if (history.isEmpty()) {
 			return "No previous iteration: this is the first one.";
 		}
+		int lastDraft = -1;
+		for (int i = 0; i < history.size(); i++) {
+			if (history.get(i).discarded()) {
+				lastDraft = i;
+			}
+		}
 		List<String> pieces = new ArrayList<>();
-		for (LoopIteration iteration : history) {
+		for (int index = 0; index < history.size(); index++) {
+			final LoopIteration iteration = history.get(index);
 			StringBuilder piece = new StringBuilder();
 			piece.append("BEGIN_AGENT-LOOP-").append(iteration.number()).append(NEWLINE);
 			List<CalledFunction> functions = renderFunctions(iteration.calls());
@@ -1210,11 +1263,62 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				piece.append("TOOL-CALLED-").append(i + 1).append(": ").append(functions.get(i).getFunctionName())
 						.append(" params:").append(functions.get(i).getParams()).append(NEWLINE);
 			}
-			piece.append("RESPONSE: ").append(iteration.text()).append(NEWLINE);
+			if (!iteration.discarded()) {
+				piece.append("RESPONSE: ").append(iteration.text()).append(NEWLINE);
+			} else if (index == lastDraft) {
+				piece.append(DISCARDED_DRAFT).append(iteration.text()).append(NEWLINE);
+				piece.append(WHY_DISCARDED).append(iteration.discardedFor()).append(NEWLINE);
+			} else {
+				piece.append(SUPERSEDED_DRAFT).append(NEWLINE);
+			}
 			piece.append("END_AGENT-LOOP-").append(iteration.number()).append(NEWLINE);
 			pieces.add(piece.toString());
 		}
+		final String documents = documentsSoFar(collector);
+		if (!documents.isEmpty()) {
+			pieces.add(documents);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agentic loop agent id:" + getId() + " story of " + history.size() + " iteration(s)"
+					+ (lastDraft >= 0 ? ", the draft of iteration " + history.get(lastDraft).number() + " kept whole" : "")
+					+ ", documents so far:" + (collector != null ? collector.getDocuments().size() : 0));
+		}
 		return String.join("", fitEqually(pieces, Math.max(budget / 2, MIN_SHARED_CONTEXT_TOKENS)));
+	}
+
+	/** Introduces a discarded draft in the story: the user never saw it. */
+	static final String DISCARDED_DRAFT = "DISCARDED DRAFT (the user never saw it, build on it): ";
+	static final String WHY_DISCARDED = "WHY IT WAS DISCARDED: ";
+	static final String SUPERSEDED_DRAFT = "DISCARDED DRAFT: superseded by a later one.";
+
+	/**
+	 * The documents the tools returned so far in the request, each with its id: the
+	 * ones the answer may rest on and list in its ANSWER-DOCUMENTS line.
+	 */
+	static String documentsSoFar(ToolsFoundDocuments collector) {
+		if (collector == null) {
+			return "";
+		}
+		final List<GResponseDocumentRef> documents = collector.getDocuments();
+		if (documents.isEmpty()) {
+			return "";
+		}
+		final StringBuilder list = new StringBuilder("DOCUMENTS RETURNED SO FAR (their doc ids):").append(NEWLINE);
+		for (GResponseDocumentRef ref : documents) {
+			final String id = collector.idOf(ref.getDocumentCode());
+			if (id == null) {
+				continue;
+			}
+			list.append(id).append(' ').append(ref.getName() != null ? ref.getName() : ref.getDocumentCode());
+			for (String name : citableNames(ref)) {
+				if (name != null && name.regionMatches(true, 0, "http", 0, 4)) {
+					list.append(", ").append(name);
+					break;
+				}
+			}
+			list.append(NEWLINE);
+		}
+		return list.toString();
 	}
 
 	/** The iterations the loop may run. */

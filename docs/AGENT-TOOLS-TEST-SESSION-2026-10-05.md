@@ -440,3 +440,18 @@ After `15f940802` (no model-chosen maxTokens: a search's contents take a third o
 **Found during the session:** a closing given as two separate rules (the ids line, then the control marker) made gpt-4.1 drop both, 3 times out of 3; one ordered closing rule fixed it. PURE_SEARCH requests searched once out of five: the deliverable ("the found documents are the deliverable") led the model to list pages from memory; removing it and asking a plain yes/no (searchRequested) made the model search every time in this session.
 
 **Outside this repository:** Gebo.ai.pro's office query rewriting prompt still mentions PURE_SEARCH (read as QA by the parsing), and the generated API clients of Enterprise.Gebo.ai, gebo.unooffice.plugin and rassegna.gebo.ai still list it: to be regenerated there. The generated clients of this repository do not carry searchRequested yet (regeneration).
+
+## 15. Tenth session: the loop goes on from its last outcome (2026-10-06, log time 12:40 - 13:14)
+
+The single-agent loop now remembers as the report writer does: the story of the previous iterations keeps the texts shown to the user (part of the answer), the last discarded draft whole with why it was discarded, older drafts only by their tool calls, and the documents the tools returned so far with their ids. Only the `gebo.ai` container redeployed; gpt-4.1.
+
+| # | Chat | Request | Tools | Outcome |
+|---|---|---|---|---|
+| M1 (= A2) | KB | Archiati's twelve senses vs Blavatsky's seven principles, first build | iteration 1: 1 deep KB (8 fragments, 5 documents), coverage thin, discarded; iterations 2-5: no tool | ✗ the evidence gate, kept after the coverage discard, discarded 4 rewrites of a draft that rested on the first search: ~70 s lost, fixed (below) |
+| M2 (= A2) | KB | the same, after the fix | 1 deep KB (7 fragments, 4 documents, coverage thin) + the two documents read whole (67k and 177k tokens) in the same iteration | ✓ the model completed the coverage itself, no discard; grounded on both authors, Found docs = the 2 documents the answer lists; 2 min 26 s, of which ~1 min 50 s the final model call over ~250k tokens |
+| M3 (= A1) | KB | Christ across the works and authors of the knowledge base | 1 deep KB (31 fragments, 8 documents) | ✓ 8 of 8 documents used, coverage not thin, 3 made-up knowledge base addresses removed from the analysis; 78 s (earlier sessions: 1 source, centred on Steiner) |
+| M4 (= N1) | no KB | Spring AI vs LangChain4j for enterprise RAG, with sources | 1 deep web (5 searches, 24 candidates from 18 hosts loaded in 1.5 s, 5 not loaded with their reasons) | ✓ the 72-fragment batch (64k tokens) analysed in 80 s, no runaway; the answer rests on 6 of the 19 pages read, no address removed; 1 min 44 s |
+
+**Found and fixed:** the evidence gate asks an answer needing the sources to search them, and the loop applies it until the request has searched once. Keeping it after a coverage discard asked the next iteration for new evidence although the request had searched: the model, now seeing its draft, rewrote it without a tool, and each rewrite was discarded up to the last iteration. After a coverage discard the next iteration needs no new evidence; an answer without a search is still discarded when it cites documents this request did not read (the chat's documents and every document the tools returned or listed count as read). The coverage retry stays once per request.
+
+**Observed, no change:** reading two whole documents put ~250k tokens in one model call (within the room computed for gpt-4.1's context); the final call took ~1 min 50 s.
