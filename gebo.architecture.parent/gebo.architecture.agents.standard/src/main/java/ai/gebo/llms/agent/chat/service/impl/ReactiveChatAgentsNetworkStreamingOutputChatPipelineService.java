@@ -156,10 +156,13 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 				request.getUserIntent() != null ? request.getUserIntent() : DeliverableIntent.SUMMARY);
 		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED,
 				Boolean.TRUE.equals(request.getSearchRequested()));
+		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN,
+				Boolean.TRUE.equals(request.getSearchForbidden()));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End buildNetworkEnvironment(...) knowledgeBases:" + knowledgeBaseCodes.size() + " userIntent:"
 					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT) + " searchRequested:"
-					+ environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED));
+					+ environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED) + " searchForbidden:"
+					+ environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN));
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("Knowledge base codes seeded into the network environment: " + knowledgeBaseCodes);

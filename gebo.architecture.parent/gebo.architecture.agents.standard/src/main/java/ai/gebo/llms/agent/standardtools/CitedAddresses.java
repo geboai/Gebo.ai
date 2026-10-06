@@ -32,8 +32,14 @@ import reactor.core.publisher.Flux;
  * fragment, the query and a trailing slash, decoded.
  */
 public final class CitedAddresses {
-	/** A web address in a text. */
-	static final Pattern ADDRESS = Pattern.compile("https?://[^\\s<>\"'`()\\[\\]{}|\\\\^]+",
+	/**
+	 * A web address in a text. It ends at a space, at the ASCII delimiters and at the
+	 * CJK and full-width punctuation (U+3000-U+303F, U+FF01-U+FF0F, U+FF1A-U+FF20,
+	 * U+FF3B-U+FF40, U+FF5B-U+FF65): some models close a citation with one of them right
+	 * after the address.
+	 */
+	static final Pattern ADDRESS = Pattern.compile(
+			"https?://[^\\s<>\"'`()\\[\\]{}|\\\\^\\u3000-\\u303F\\uFF01-\\uFF0F\\uFF1A-\\uFF20\\uFF3B-\\uFF40\\uFF5B-\\uFF65]+",
 			Pattern.CASE_INSENSITIVE);
 	/** A markdown link to a web address: its text and its address. */
 	static final Pattern MARKDOWN_LINK = Pattern.compile("\\[([^\\]\\n]{0,500})\\]\\(\\s*(https?://[^\\s)]+)\\s*\\)",

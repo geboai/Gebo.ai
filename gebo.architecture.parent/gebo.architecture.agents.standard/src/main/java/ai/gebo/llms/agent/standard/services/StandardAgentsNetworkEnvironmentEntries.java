@@ -10,6 +10,12 @@ public class StandardAgentsNetworkEnvironmentEntries {
 	 * the request understanding).
 	 */
 	public static final String SEARCH_REQUESTED = "SEARCH_REQUESTED";
+	/**
+	 * Shared-session environment key holding a {@code Boolean}: whether the user asked
+	 * to answer without searching (from memory, from the conversation), see the request
+	 * understanding.
+	 */
+	public static final String SEARCH_FORBIDDEN = "SEARCH_FORBIDDEN";
 
 	/**
 	 * Shared-session environment key holding a {@code Map<String, GResponseDocumentRef>}

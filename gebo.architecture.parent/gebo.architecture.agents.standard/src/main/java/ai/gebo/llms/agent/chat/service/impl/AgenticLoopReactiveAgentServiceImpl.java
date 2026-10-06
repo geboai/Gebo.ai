@@ -20,6 +20,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.util.json.JsonParser;
@@ -43,6 +45,7 @@ import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.knowledgebase.repositories.uniqueid.VirtualFilesystemUniqueIds;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -151,10 +154,20 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	}
 
 	/** One iteration of the loop: what the model wrote and the tools it called. */
-	record LoopIteration(int number, String text, List<ToolCallExecuted> calls, String discardedFor) {
+	record LoopIteration(int number, String text, List<ToolCallExecuted> calls, String discardedFor,
+			boolean draftToBuildOn) {
 		/** An iteration whose text was shown to the user. */
 		LoopIteration(int number, String text, List<ToolCallExecuted> calls) {
-			this(number, text, calls, null);
+			this(number, text, calls, null, false);
+		}
+
+		/**
+		 * An iteration whose text was discarded, never shown, for the given reason: a draft
+		 * that rests on no tool result is not one to build on, only why it was discarded
+		 * is told.
+		 */
+		LoopIteration(int number, String text, List<ToolCallExecuted> calls, String discardedFor) {
+			this(number, text, calls, discardedFor, false);
 		}
 
 		/** Whether its text was discarded, never shown: then why. */
@@ -194,6 +207,18 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	protected boolean sessionSearchRequested(AgentsCollaborationSessionContext session) {
 		final Object value = session != null && session.getEnvironment() != null
 				? session.getEnvironment().get(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED)
+				: null;
+		return Boolean.TRUE.equals(value);
+	}
+
+	/**
+	 * Whether the user asked to answer without searching (from memory, from the
+	 * conversation), as the shared session environment says; false when it does not
+	 * say.
+	 */
+	protected boolean sessionSearchForbidden(AgentsCollaborationSessionContext session) {
+		final Object value = session != null && session.getEnvironment() != null
+				? session.getEnvironment().get(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN)
 				: null;
 		return Boolean.TRUE.equals(value);
 	}
@@ -301,11 +326,30 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * documents: nothing else was read).
 	 */
 	record SourceGate(Set<String> tools, boolean evidenceRequired, Collection<String> readDocumentNames,
-			CoverageGate coverage) {
+			CoverageGate coverage, boolean holdsUntilSearch) {
 		static final SourceGate NONE = new SourceGate(Set.of(), false, List.of());
 
 		SourceGate(Set<String> tools, boolean evidenceRequired, Collection<String> readDocumentNames) {
 			this(tools, evidenceRequired, readDocumentNames, null);
+		}
+
+		SourceGate(Set<String> tools, boolean evidenceRequired, Collection<String> readDocumentNames,
+				CoverageGate coverage) {
+			this(tools, evidenceRequired, readDocumentNames, coverage, true);
+		}
+
+		/**
+		 * The gate of an iteration that goes on after one whose text was shown: nothing
+		 * held, only a deep search whose coverage asks to be completed holds what follows.
+		 */
+		static SourceGate continuing(CoverageGate coverage) {
+			return coverage == null ? NONE
+					: new SourceGate(coverage.searchTools(), false, List.of(), coverage, false);
+		}
+
+		/** Whether the text is held from the start of the iteration until a search. */
+		boolean holdsFromStart() {
+			return holdsUntilSearch && !tools.isEmpty();
 		}
 	}
 
@@ -322,7 +366,39 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * @param deepSearchTools    the deep search tools mounted (what reports a coverage)
 	 * @param knowledgeBaseTools the tools reaching the internal knowledge bases
 	 */
-	record CoverageGate(Set<String> searchTools, Set<String> deepSearchTools, Set<String> knowledgeBaseTools) {
+	record CoverageGate(Set<String> searchTools, Set<String> deepSearchTools, Set<String> knowledgeBaseTools,
+			CoverageState state) {
+		CoverageGate(Set<String> searchTools, Set<String> deepSearchTools, Set<String> knowledgeBaseTools) {
+			this(searchTools, deepSearchTools, knowledgeBaseTools, new CoverageState());
+		}
+	}
+
+	/**
+	 * The coverage of the request's deep searches, shared by its iterations: whether the
+	 * answer was already redone once to complete a coverage (once per request), and the
+	 * coverage note still not completed, told to the user with the answer.
+	 */
+	static final class CoverageState {
+		private final java.util.concurrent.atomic.AtomicBoolean redone = new java.util.concurrent.atomic.AtomicBoolean();
+		private final java.util.concurrent.atomic.AtomicReference<String> notCompleted = new java.util.concurrent.atomic.AtomicReference<>();
+
+		/** Uses the request's one redo: true the first time only. */
+		boolean redoOnce() {
+			return redone.compareAndSet(false, true);
+		}
+
+		void notCompleted(String note) {
+			notCompleted.set(note);
+		}
+
+		void completed() {
+			notCompleted.set(null);
+		}
+
+		/** The coverage note no search completed, null when none. */
+		String notCompleted() {
+			return notCompleted.get();
+		}
 	}
 
 	/** What a deep search result says of its coverage: whether to complete it, and why. */
@@ -379,26 +455,35 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 		// an answer to a request for an analysis or a search must rest on the tools' results:
 		// the first iteration is held back until it uses a tool (see iteration(...))
-		final Set<String> evidenceTools = evidenceTools(userIntent, searchRequested, agentModel);
+		final boolean searchForbidden = sessionSearchForbidden(session);
+		final Set<String> evidenceTools = searchForbidden ? Set.of()
+				: evidenceTools(userIntent, searchRequested, agentModel);
+		// whatever the deliverable, an answer on a deep search whose coverage is thin is
+		// completed once before it is shown (see CoverageGate): the deep search tells
+		// its coverage by the depth the agent asked, a precise answer is never thin
+		final MountedSearchTools mounted = searchTools(agentModel);
+		final CoverageGate coverage = searchForbidden || mounted.deepSearches().isEmpty() ? null
+				: new CoverageGate(mounted.searches(), mounted.deepSearches(), mounted.knowledgeBaseTools());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agentic loop agent id:" + getId() + " coverage gate:" + (coverage != null)
+					+ (coverage != null ? " deep searches:" + coverage.deepSearchTools() + " knowledge base tools:"
+							+ coverage.knowledgeBaseTools() : ""));
+		}
 		final SourceGate gate;
-		if (!evidenceTools.isEmpty()) {
-			// an analysis or a search on a deep search whose coverage is thin is completed
-			// before the answer (see CoverageGate)
-			final MountedSearchTools mounted = searchTools(agentModel);
-			final CoverageGate coverage = mounted.deepSearches().isEmpty() ? null
-					: new CoverageGate(mounted.searches(), mounted.deepSearches(), mounted.knowledgeBaseTools());
-			gate = new SourceGate(evidenceTools, true, chatDocumentNames(chatRequestContext), coverage);
+		if (searchForbidden) {
+			// the user asked to answer without searching: nothing is held nor checked
+			gate = SourceGate.NONE;
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Agentic loop agent id:" + getId() + " coverage gate:" + (coverage != null)
-						+ (coverage != null ? " deep searches:" + coverage.deepSearchTools() + " knowledge base tools:"
-								+ coverage.knowledgeBaseTools() : ""));
+				LOGGER.debug("Agentic loop agent id:" + getId() + " the user asked not to search: no gate");
 			}
+		} else if (!evidenceTools.isEmpty()) {
+			gate = new SourceGate(evidenceTools, true, chatDocumentNames(chatRequestContext), coverage);
 		} else {
 			// any other answer may not cite documents it did not read: it is checked when it
 			// used no search
-			final Set<String> searches = searchTools(agentModel).searches();
+			final Set<String> searches = mounted.searches();
 			gate = searches.isEmpty() ? SourceGate.NONE
-					: new SourceGate(searches, false, chatDocumentNames(chatRequestContext));
+					: new SourceGate(searches, false, chatDocumentNames(chatRequestContext), coverage);
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Agentic loop agent id:" + getId() + " evidence required:" + gate.evidenceRequired()
@@ -430,9 +515,13 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 									+ " from the session, " + response.getDocumentsRef().size()
 									+ " with the search tools' ones");
 						}
-						warnAboutUnreadCitations(response, chatRequestContext, toolDocuments);
+						if (!searchForbidden) {
+							// the user asked not to search: naming a document is no claim to have read it
+							warnAboutUnreadCitations(response, chatRequestContext, toolDocuments);
+						}
 						warnAboutRemovedAddresses(response, removedAddresses);
 						warnAboutAnswerWithoutSearch(response, toolDocuments);
+						warnAboutThinCoverage(response, coverage);
 					}
 				});
 	}
@@ -541,6 +630,21 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * Tells the user, with a warning on the answer, that it needed the sources and no
 	 * source was searched: it rests on the model's knowledge only.
 	 */
+	/**
+	 * Tells the user, with a warning on the answer, that a deep search of the request
+	 * said its coverage was thin and no search completed it: what the deep search said
+	 * is missing.
+	 */
+	protected void warnAboutThinCoverage(GeboChatResponse response, CoverageGate coverage) {
+		final String note = coverage != null ? coverage.state().notCompleted() : null;
+		if (note == null || response.getBackendMessages() == null) {
+			return;
+		}
+		LOGGER.warn("Agentic loop agent id:" + getId() + " answer shown on a deep search coverage not completed: " + note);
+		response.getBackendMessages().add(GUserMessage.warnMessage("The sources were covered in part",
+				"A deep search of this answer covered its sources in part, and the answer did not complete it: " + note));
+	}
+
 	protected void warnAboutAnswerWithoutSearch(GeboChatResponse response, ToolsFoundDocuments toolDocuments) {
 		if (toolDocuments == null || !toolDocuments.isAnsweredWithoutSearch() || response.getBackendMessages() == null) {
 			return;
@@ -564,7 +668,9 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		final List<String> ids = collector.getAnswerDocumentIds();
 		if (ids != null) {
 			final List<String> unknown = new ArrayList<>();
-			final List<GResponseDocumentRef> listed = collector.documentsOf(ids, unknown);
+			// a knowledge base document's uniqueId, a number too, may be given in place of its
+			// id: an id that is also another document's uniqueId names the one the answer cites
+			final List<GResponseDocumentRef> listed = resolveAnswerIds(collector, collected, ids, answer, unknown);
 			if (!unknown.isEmpty()) {
 				LOGGER.warn("Agentic loop agent id:" + getId() + " answer lists document id(s) no tool gave: " + unknown);
 			}
@@ -592,6 +698,113 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					+ " document(s) the tools returned: all of them are its documents");
 		}
 		return collected;
+	}
+
+	/** Resolves the uniqueId of a knowledge base document by its code; null without one. */
+	private VirtualFilesystemUniqueIds uniqueIds = null;
+
+	@Autowired(required = false)
+	public void setUniqueIds(VirtualFilesystemUniqueIds uniqueIds) {
+		this.uniqueIds = uniqueIds;
+	}
+
+	/**
+	 * The documents the answer's ids name. An id names the document with that id in the
+	 * request (#2) or, as a model reading both may give it, the knowledge base document
+	 * with that uniqueId (12). When an id names two documents that way, the ones the
+	 * answer cites (by name or address) are kept, the one with that id when it cites
+	 * neither. The ids naming no document go to {@code unknown}.
+	 */
+	List<GResponseDocumentRef> resolveAnswerIds(ToolsFoundDocuments collector, List<GResponseDocumentRef> collected,
+			List<String> ids, String answer, List<String> unknown) {
+		final Map<Long, GResponseDocumentRef> byUniqueId = uniqueIdsOf(collected);
+		final List<GResponseDocumentRef> cited = byUniqueId.isEmpty() ? List.of() : citedDocuments(collected, answer);
+		final List<GResponseDocumentRef> listed = new ArrayList<>();
+		for (String id : ids) {
+			final List<GResponseDocumentRef> byId = collector.documentsOf(List.of(id), null);
+			final Matcher number = Pattern.compile("\\d+").matcher(id);
+			final GResponseDocumentRef byUnique = number.find() ? byUniqueId.get(Long.valueOf(number.group())) : null;
+			final List<GResponseDocumentRef> named = new ArrayList<>();
+			if (!byId.isEmpty() && byUnique != null && !byId.contains(byUnique)) {
+				// two documents for one number: the answer's citations tell
+				for (GResponseDocumentRef candidate : List.of(byId.get(0), byUnique)) {
+					if (cited.contains(candidate)) {
+						named.add(candidate);
+					}
+				}
+				if (named.isEmpty()) {
+					named.add(byId.get(0));
+				}
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agentic loop agent id:" + getId() + " answer document id " + id
+							+ " is both the id of " + byId.get(0).getDocumentCode() + " and the uniqueId of "
+							+ byUnique.getDocumentCode() + ": kept " + named.size() + " the answer cites");
+				}
+			} else if (!byId.isEmpty()) {
+				named.addAll(byId);
+			} else if (byUnique != null) {
+				named.add(byUnique);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agentic loop agent id:" + getId() + " answer document id " + id
+							+ " is the uniqueId of " + byUnique.getDocumentCode());
+				}
+			} else if (unknown != null) {
+				unknown.add(id);
+			}
+			for (GResponseDocumentRef ref : named) {
+				if (!listed.contains(ref)) {
+					listed.add(ref);
+				}
+			}
+		}
+		return listed;
+	}
+
+	/** The documents of {@code collected} by their knowledge base uniqueId, when known. */
+	Map<Long, GResponseDocumentRef> uniqueIdsOf(List<GResponseDocumentRef> collected) {
+		final Map<Long, GResponseDocumentRef> byUniqueId = new HashMap<>();
+		if (uniqueIds == null) {
+			return byUniqueId;
+		}
+		for (GResponseDocumentRef ref : collected) {
+			if (ref.getDocumentCode() == null) {
+				continue;
+			}
+			try {
+				final Long uniqueId = uniqueIds.documentUniqueId(ref.getDocumentCode());
+				if (uniqueId != null) {
+					byUniqueId.putIfAbsent(uniqueId, ref);
+				}
+			} catch (RuntimeException e) {
+				LOGGER.error("Agentic loop agent id:" + getId() + " cannot resolve the uniqueId of "
+						+ ref.getDocumentCode(), e);
+			}
+		}
+		return byUniqueId;
+	}
+
+	/**
+	 * Moves to {@code listed} the documents of {@code collected} whose uniqueId is one of
+	 * the {@code unknown} ids: a model reading both a document's id (#2) and its
+	 * uniqueId (12) may give the latter. The ids matched leave {@code unknown}.
+	 */
+	void byUniqueId(List<GResponseDocumentRef> collected, List<String> unknown, List<GResponseDocumentRef> listed) {
+		final Map<Long, GResponseDocumentRef> byUniqueId = uniqueIdsOf(collected);
+		for (java.util.Iterator<String> it = unknown.iterator(); it.hasNext();) {
+			final String id = it.next();
+			final Matcher number = Pattern.compile("\\d+").matcher(id);
+			final GResponseDocumentRef ref = number.find() ? byUniqueId.get(Long.valueOf(number.group())) : null;
+			if (ref != null) {
+				if (!listed.contains(ref)) {
+					listed.add(ref);
+				}
+				it.remove();
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agentic loop agent id:" + getId() + " answer document id " + id
+							+ " is the uniqueId of " + ref.getDocumentCode());
+				}
+			}
+		}
 	}
 
 	/** The documents an answer cites, by their address or their name. */
@@ -622,6 +835,14 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	static final int MIN_CITED_NAME_LENGTH = 6;
 
 	/** A document file name as an answer cites it. */
+	/** A file name without its separators (spaces, underscores, hyphens), lower case. */
+	static String compactName(String name) {
+		return name == null ? "" : name.toLowerCase().replaceAll("[\\s_\\-]+", "");
+	}
+
+	/** An address in an answer, up to the first space. */
+	static final Pattern WEB_ADDRESS = Pattern.compile("(?i)\\b(?:https?|ftp)://\\S+");
+
 	static final Pattern CITED_DOCUMENT = Pattern.compile(
 			"[\\p{L}\\p{N}_.\\-]+\\.(?:pdf|docx?|xlsx?|pptx?|odt|ods|odp|rtf|txt|md|csv|html?|xml|json|epub)\\b",
 			Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
@@ -642,13 +863,18 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			}
 		}
 		final Set<String> unread = new LinkedHashSet<>();
-		final Matcher matcher = CITED_DOCUMENT.matcher(answer);
+		// an address is no file name: what it cites is checked by the addresses the tools
+		// returned (see CitedAddresses), and a file name cut out of it (an encoded
+		// character ends the name) would be one no document has
+		final Matcher matcher = CITED_DOCUMENT.matcher(WEB_ADDRESS.matcher(answer).replaceAll(" "));
 		while (matcher.find()) {
 			final String cited = matcher.group();
 			final String lowerCited = cited.toLowerCase();
-			// a name with spaces is cited by its last part
+			// a name with spaces is cited by its last part; a name may be cited with its
+			// words spaced or joined otherwise ("a b.pdf" for "ab.pdf"): compared without them
+			final String compactCited = compactName(lowerCited);
 			if (read.stream().noneMatch(name -> name.equals(lowerCited) || name.endsWith(" " + lowerCited)
-					|| name.endsWith("/" + lowerCited))) {
+					|| name.endsWith("/" + lowerCited) || compactName(name).endsWith(compactCited))) {
 				unread.add(cited);
 			}
 		}
@@ -886,7 +1112,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			}
 			// the text held back while the iteration has not used a tool yet
 			final StringBuilder held = new StringBuilder();
-			final boolean[] open = { gate == null || gate.tools().isEmpty() };
+			final boolean[] open = { gate == null || !gate.holdsFromStart() };
 			// the coverage the deep searches of this iteration ask to complete, re-read as calls arrive
 			final CoverageWatch coverageWatch = new CoverageWatch(gate != null ? gate.coverage() : null,
 					callBacksListener, callsBefore);
@@ -968,12 +1194,27 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					LOGGER.trace("</AGENTIC_LOOP_ITERATION>");
 				}
 				boolean another = stripper.isContinueRequested() && number < maxIterations;
+				final CoverageState coverageState = gate.coverage() != null ? gate.coverage().state() : null;
+				if (coverageState != null) {
+					if (heldForCoverage) {
+						// told to the user with the answer unless a later search completes it
+						coverageState.notCompleted(coverageNote);
+					} else if (coverageNote == null
+							&& usedEvidenceTool(callBacksListener, callsBefore, gate.coverage().searchTools())) {
+						if (coverageState.notCompleted() != null && LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + number
+									+ " searched the sources after a coverage asking to be completed");
+						}
+						coverageState.completed();
+					}
+				}
 				if (heldForCoverage && !another) {
-					if (number < maxIterations) {
-						// the answer rests on a thin coverage: done again once, told what to complete
-						// the draft is kept, with what to complete: the next iteration builds on it
+					if (number < maxIterations && coverageState.redoOnce()) {
+						// the answer rests on a thin coverage: done again once per request, told what
+						// to complete; the draft is kept, with what to complete: the next iteration
+						// builds on it
 						history.set(history.size() - 1, new LoopIteration(number, text.toString(), iterationCalls,
-								DISCARDED_THIN_COVERAGE + coverageNote));
+								DISCARDED_THIN_COVERAGE + coverageNote, true));
 						LOGGER.info("Agentic loop agent id:" + getId() + " iteration " + number
 								+ " answered on a deep search coverage asking to be completed: discarded, completing it"
 								+ " in the next iteration");
@@ -992,7 +1233,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						// the sources were searched: the next iteration needs no new evidence, but an
 						// answer without a search may not cite documents this request did not read
 						final SourceGate searched = new SourceGate(gate.tools(), false,
-								readSoFar(chatRequestContext));
+								readSoFar(chatRequestContext), gate.coverage());
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + (number + 1)
 									+ " needs no new evidence, may cite " + searched.readDocumentNames().size()
@@ -1002,9 +1243,12 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
 								deliverableParams, searched, runAs));
 					}
-					// no iteration left: the answer is shown as it is
-					LOGGER.warn("Agentic loop agent id:" + getId() + " last iteration " + number
-							+ " answered on a deep search coverage asking to be completed: answering anyway");
+					// done again already, or no iteration left: the answer is shown as it is, the user
+					// is told what the coverage misses
+					LOGGER.warn("Agentic loop agent id:" + getId() + " iteration " + number
+							+ " answered on a deep search coverage asking to be completed, "
+							+ (number < maxIterations ? "already redone once" : "no iteration left")
+							+ ": answering anyway");
 					recordAnswerDocuments(chatRequestContext, stripper, number);
 					return Flux.just(held.toString()).filter(chunk -> !chunk.isEmpty());
 				}
@@ -1023,10 +1267,12 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						"Agent: " + contextAgentPersona.getNetworkAgentName() + " goes on working (step " + (number + 1)
 								+ " of " + maxIterations + ")..",
 						ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
+				// the next iteration is not held, but a deep search of its own whose coverage is
+				// thin holds what follows it, as in the first iteration
 				return releasedText.concatWith(Flux.just(NEWLINE + NEWLINE)).concatWith(asUser(runAs, iteration(
 						number + 1, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-						contextAgentPersona, notificationSink, callBacksListener, deliverableParams, SourceGate.NONE,
-						runAs)));
+						contextAgentPersona, notificationSink, callBacksListener, deliverableParams,
+						SourceGate.continuing(gate.coverage()), runAs)));
 			});
 			return visible.concatWith(next);
 		});
@@ -1265,8 +1511,14 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			}
 			if (!iteration.discarded()) {
 				piece.append("RESPONSE: ").append(iteration.text()).append(NEWLINE);
-			} else if (index == lastDraft) {
+			} else if (index == lastDraft && iteration.draftToBuildOn()) {
+				// written on the tools' results: the next iteration completes it
 				piece.append(DISCARDED_DRAFT).append(iteration.text()).append(NEWLINE);
+				piece.append(WHY_DISCARDED).append(iteration.discardedFor()).append(NEWLINE);
+			} else if (index == lastDraft) {
+				// written on no tool result: only why it was discarded, a draft to rewrite would
+				// be rewritten instead of searching
+				piece.append(DISCARDED_WITHOUT_DRAFT).append(NEWLINE);
 				piece.append(WHY_DISCARDED).append(iteration.discardedFor()).append(NEWLINE);
 			} else {
 				piece.append(SUPERSEDED_DRAFT).append(NEWLINE);
@@ -1280,7 +1532,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Agentic loop agent id:" + getId() + " story of " + history.size() + " iteration(s)"
-					+ (lastDraft >= 0 ? ", the draft of iteration " + history.get(lastDraft).number() + " kept whole" : "")
+					+ (lastDraft >= 0 ? ", iteration " + history.get(lastDraft).number() + " discarded, its draft "
+							+ (history.get(lastDraft).draftToBuildOn() ? "kept whole" : "left out") : "")
 					+ ", documents so far:" + (collector != null ? collector.getDocuments().size() : 0));
 		}
 		return String.join("", fitEqually(pieces, Math.max(budget / 2, MIN_SHARED_CONTEXT_TOKENS)));
@@ -1290,6 +1543,9 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	static final String DISCARDED_DRAFT = "DISCARDED DRAFT (the user never saw it, build on it): ";
 	static final String WHY_DISCARDED = "WHY IT WAS DISCARDED: ";
 	static final String SUPERSEDED_DRAFT = "DISCARDED DRAFT: superseded by a later one.";
+	/** A discarded draft that rests on no tool result: not shown, only why. */
+	static final String DISCARDED_WITHOUT_DRAFT = "DISCARDED ANSWER (the user never saw it, it rested on no source: do not "
+			+ "rewrite it, search first).";
 
 	/**
 	 * The documents the tools returned so far in the request, each with its id: the

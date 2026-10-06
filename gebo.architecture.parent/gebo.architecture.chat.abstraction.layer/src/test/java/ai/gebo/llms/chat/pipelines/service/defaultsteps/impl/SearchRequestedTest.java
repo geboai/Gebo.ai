@@ -38,6 +38,16 @@ class SearchRequestedTest {
 	}
 
 	@Test
+	void theUserAskedNotToSearchWhenTheFieldSaysNever() {
+		assertTrue(DefaultRoutingChatPipelineStepServiceImpl.searchForbidden(List.of("never")));
+		assertTrue(DefaultRoutingChatPipelineStepServiceImpl.searchForbidden(List.of(" Never ")));
+		assertFalse(DefaultRoutingChatPipelineStepServiceImpl.searchRequested(List.of("never")));
+		assertFalse(DefaultRoutingChatPipelineStepServiceImpl.searchForbidden(List.of("true")));
+		assertFalse(DefaultRoutingChatPipelineStepServiceImpl.searchForbidden(List.of("false")));
+		assertFalse(DefaultRoutingChatPipelineStepServiceImpl.searchForbidden(null));
+	}
+
+	@Test
 	void noDeliverableStandsForASearch() {
 		assertTrue(Arrays.stream(DeliverableIntent.values()).noneMatch(intent -> intent.name().contains("SEARCH")));
 	}

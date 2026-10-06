@@ -87,6 +87,12 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 	 * the searches return. Set by the request understanding.
 	 */
 	private Boolean searchRequested = Boolean.FALSE;
+	/**
+	 * Whether the user asked to answer without searching (from memory, from the
+	 * conversation): the answer is then neither held for a search nor checked against
+	 * the documents read. Set by the request understanding.
+	 */
+	private Boolean searchForbidden = Boolean.FALSE;
 
 	public static <RequestType> RequestType actualQuery(GeboTemplatedChatRequest<RequestType> request) {
 		return request.getRewrittenQuery() != null ? request.getRewrittenQuery() : request.getQuery();

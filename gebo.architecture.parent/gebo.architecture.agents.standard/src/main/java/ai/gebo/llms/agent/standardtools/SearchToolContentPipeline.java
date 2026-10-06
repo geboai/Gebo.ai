@@ -265,6 +265,12 @@ public class SearchToolContentPipeline {
 			final LoadedResults loaded = SearchResultsChunker.load(chunkingService.getObject(), fresh, chunkingParams,
 					maxNumChunks, toolName, documentsParallelism(), service.resultsLoading(), openNetworkLoading());
 			final List<Document> chunks = loaded.documents();
+			// what was read, in fragments of documents
+			ToolsProgress.notify(toolContext,
+					"Read " + chunks.size() + " fragment(s) of " + (fresh.size() - loaded.notLoaded().size())
+							+ " document(s)" + (loaded.notLoaded().isEmpty() ? ""
+									: ", " + loaded.notLoaded().size() + " could not be loaded")
+							+ " (" + toolName + ")");
 			final RankingOutcome ranking = rank(chunks, objective, topK, toolName);
 			SearchToolResult result = fit(ranking.documents(), fresh, maxTokens, toolName);
 			tellNotRead(result, loaded, chunks, ranking.documents(), fresh, toolName);

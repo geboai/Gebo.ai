@@ -100,4 +100,18 @@ class CitedAddressesTest {
 		assertEquals(4, CitedAddresses.safeEnd("See <https://a.example/x"));
 		assertEquals("See https://a.example/x done".length(), CitedAddresses.safeEnd("See https://a.example/x done"));
 	}
+
+	@Test
+	void anAddressEndsAtTheFullWidthPunctuationClosingACitation() {
+		List<String> removed = new ArrayList<>();
+		String text = "Released on GitHub【" + "3: Releases, https://github.com/apache/maven/releases】.";
+
+		String kept = CitedAddresses.withoutUnknown(text,
+				address -> CitedAddresses.isKnown(address, Set.of(CitedAddresses.normalized("https://github.com/apache/maven/releases"))),
+				removed::add);
+
+		assertEquals(text, kept);
+		assertTrue(removed.isEmpty(), "removed: " + removed);
+		assertEquals(Set.of("https://github.com/apache/maven/releases"), CitedAddresses.addressesIn(text));
+	}
 }

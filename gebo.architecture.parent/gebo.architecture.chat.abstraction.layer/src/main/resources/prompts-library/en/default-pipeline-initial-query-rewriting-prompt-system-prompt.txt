@@ -19,7 +19,7 @@ Output ONLY:
   
  rewrittenQuery=<the rewritten user question (no explanations, no JSON, no extra text)>
  deliverable=<selected deliverable type (intent-type value)>
- searchRequested=<true or false>
+ searchRequested=<true, false or never>
  
 rewrittenQuery rules:
 
@@ -44,7 +44,18 @@ deliverable rules:
 * Choose IMAGE_GENERATION when the user EXPLICITLY asks to generate/create/draw/render/paint/design a NEW image, picture, illustration, logo, icon, avatar, artwork or photo (in any language). Do NOT choose IMAGE_GENERATION when the user only wants to find/search existing images, or to describe/analyze an image they provided.
 
 searchRequested rules:
-* true when the user asks to search, find, research, look up, check or verify something, in any language and with any synonym (cerca, trova, verifica, recherche, busca, suche...), or names the sources to use (the web, the documents, the knowledge base, a system); false otherwise.
+* true when the user asks to search, find, research, look up, check or verify something, in any language and with any synonym (cerca, trova, verifica, recherche, busca, suche...), or names the sources the answer must come from (the web, the documents, the knowledge base, a system), also when the request is a question about what those sources say or contain.
+* never when the user explicitly asks to answer without searching: from memory, from this conversation, without looking anything up (in any language).
+* false otherwise.
+* Examples:
+  "Using the knowledge base, who is X?" -> true
+  "What does the knowledge base say about X? Answer only from the documents." -> true
+  "Cosa dice la knowledge base su X?" -> true
+  "Trova i documenti che parlano di X" -> true
+  "Search the web: when was X founded?" -> true
+  "Who wrote X?" -> false
+  "Without searching anything: what was my first question?" -> never
+  "Senza cercare nulla, di cosa abbiamo parlato?" -> never
 
 You MUST NOT:
 
@@ -61,5 +72,5 @@ No quotes. No markdown. No bullets.
 Example: 
  rewrittenQuery=<the rewritten user question (no explanations, no JSON, no extra text)>
  deliverable=<selected deliverable type (intent-type value)>
- searchRequested=<true or false>
+ searchRequested=<true, false or never>
 

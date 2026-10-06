@@ -228,8 +228,14 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 				ToolsProgress.notify(toolContext,
 						"Searching the knowledge base: " + ToolsProgress.shown(param.getQuery()));
 			}
-			return search(param, chatKnowledgeBases, ToolsFoundDocuments.from(toolContext),
+			final String answer = search(param, chatKnowledgeBases, ToolsFoundDocuments.from(toolContext),
 					ToolsTokenBudget.from(toolContext));
+			// what was found, in fragments of documents: the answer's heading
+			final String found = answer != null ? answer.lines().findFirst().orElse("") : "";
+			if (found.contains(" fragment(s) of ")) {
+				ToolsProgress.notify(toolContext, "Knowledge base: " + found.replaceAll(":\\s*$", ""));
+			}
+			return answer;
 		};
 		if (KnowledgeBaseKeywords.enabled(fullTextSearchService)) {
 			if (LOGGER.isDebugEnabled()) {

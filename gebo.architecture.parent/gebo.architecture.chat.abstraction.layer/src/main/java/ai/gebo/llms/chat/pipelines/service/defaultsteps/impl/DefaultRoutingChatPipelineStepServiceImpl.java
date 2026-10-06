@@ -231,9 +231,11 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		}
 		runtimeData.getRequestResources().getCurrentRequest().setUserIntent(userIntent);
 		final boolean searchRequested = searchRequested(data.get(SEARCH_REQUESTED_FIELD));
+		final boolean searchForbidden = searchForbidden(data.get(SEARCH_REQUESTED_FIELD));
 		runtimeData.getRequestResources().getCurrentRequest().setSearchRequested(searchRequested);
+		runtimeData.getRequestResources().getCurrentRequest().setSearchForbidden(searchForbidden);
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Search requested:" + searchRequested);
+			LOGGER.debug("Search requested:" + searchRequested + " search forbidden:" + searchForbidden);
 		}
 		return new RewriteAndUserIntent(rewrited_query, userIntent);
 	}
@@ -559,6 +561,17 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		}
 		final String value = values.get(0).trim().toLowerCase();
 		return value.startsWith("true") || value.startsWith("yes") || value.equals("1");
+	}
+
+	/**
+	 * Whether the request understanding said the user asked to answer without searching:
+	 * the field's value never.
+	 */
+	static boolean searchForbidden(List<String> values) {
+		if (values == null || values.isEmpty() || values.get(0) == null) {
+			return false;
+		}
+		return values.get(0).trim().toLowerCase().startsWith("never");
 	}
 
 	private RespondingWith parseDecision(String decision) {

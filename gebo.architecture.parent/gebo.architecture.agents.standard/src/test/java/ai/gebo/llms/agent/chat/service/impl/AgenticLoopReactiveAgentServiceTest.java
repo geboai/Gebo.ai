@@ -249,7 +249,7 @@ class AgenticLoopReactiveAgentServiceTest {
 		collector.add(List.of(webPage("www.postgresql.org", "https://www.postgresql.org/docs/release/")));
 		List<LoopIteration> history = List.of(new LoopIteration(1, "Shown to the user.", List.of()),
 				new LoopIteration(2, "An older draft.", List.of(), "no search used"),
-				new LoopIteration(3, "The draft built on the deep searches.", List.of(), "coverage thin: complete X"));
+				new LoopIteration(3, "The draft built on the deep searches.", List.of(), "coverage thin: complete X", true));
 
 		String story = agent.loopStory(history, 40_000, collector);
 
@@ -261,6 +261,19 @@ class AgenticLoopReactiveAgentServiceTest {
 				"an older draft superseded: " + story);
 		assertTrue(story.contains("#1 www.postgresql.org, https://www.postgresql.org/docs/release"),
 				"the documents so far with their ids: " + story);
+	}
+
+	@Test
+	void aDraftWrittenOnNoSourceIsNotGivenToBuildOnOnlyWhyItWasDiscarded() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
+		List<LoopIteration> history = List.of(
+				new LoopIteration(1, "An answer from memory.", List.of(), "no search used"));
+
+		String story = agent.loopStory(history, 40_000, null);
+
+		assertFalse(story.contains("An answer from memory."), "a draft to rewrite would be rewritten: " + story);
+		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.DISCARDED_WITHOUT_DRAFT), story);
+		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.WHY_DISCARDED + "no search used"), story);
 	}
 
 	@Test
@@ -969,5 +982,146 @@ class AgenticLoopReactiveAgentServiceTest {
 				Map.of(0, List.<String[]>of(new String[] { "deepSearchKnowledgeBase", THIN })));
 
 		assertEquals("Only answer. ", runWithCoverageGate(last, 1));
+	}
+
+	// ---------------------------------------------------------------- coverage for every deliverable, every iteration
+
+	private static String runWithGate(ScriptedLoopAgent agent, int maxIterations,
+			AgenticLoopReactiveAgentServiceImpl.SourceGate gate) {
+		ToolCallsListener listener = new ToolCallsListener();
+		AgentNetworkParticipant persona = mock(AgentNetworkParticipant.class);
+		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
+		IChatRequestContext context = IChatRequestContext.forAgent(IChatRequestContext.builder().requestID("r1").build(),
+				listener);
+		return String.join("", agent.iteration(1, maxIterations, 10_000, new ArrayList<>(), null,
+				new GPromptTemplateConfig(), context, persona, mock(INotificationSink.class), listener,
+				agent.deliverableTemplateParams(DeliverableIntent.DECISION), gate, null).collectList().block());
+	}
+
+	private static final Set<String> SEARCHES = Set.of("deepSearchKnowledgeBase", "searchKnowledgeBase",
+			"getKnowledgeBaseDocumentContents");
+
+	@Test
+	void aDecisionOnAThinCoverageIsCompletedAsAnAnalysisIs() {
+		AgenticLoopReactiveAgentServiceImpl.SourceGate gate = new AgenticLoopReactiveAgentServiceImpl.SourceGate(
+				SEARCHES, false, List.of(), coverageGate());
+		ScriptedLoopAgent agent = callingAgent(
+				List.of(List.of("Pick the first. " + STOP), List.of("Pick the third, all compared. " + STOP)),
+				Map.of(0, List.<String[]>of(new String[] { "deepSearchKnowledgeBase", THIN }), 1,
+						List.<String[]>of(new String[] { "searchKnowledgeBase", "found" })));
+
+		assertEquals("Pick the third, all compared. ", runWithGate(agent, 5, gate));
+		assertNull(gate.coverage().state().notCompleted(), "completed by the second iteration's search");
+	}
+
+	@Test
+	void aDeepSearchMadeAfterAContinueIsCoverageCheckedToo() {
+		AgenticLoopReactiveAgentServiceImpl.SourceGate gate = new AgenticLoopReactiveAgentServiceImpl.SourceGate(
+				SEARCHES, true, List.of(), coverageGate());
+		ScriptedLoopAgent agent = callingAgent(
+				List.of(List.of("Part one. " + MORE), List.of("Part two on a thin coverage. " + STOP),
+						List.of("Part two completed. " + STOP)),
+				Map.of(0, List.<String[]>of(new String[] { "searchKnowledgeBase", "found" }), 1,
+						List.<String[]>of(new String[] { "deepSearchKnowledgeBase", THIN }), 2,
+						List.<String[]>of(new String[] { "searchKnowledgeBase", "found" })));
+
+		String shown = runWithGate(agent, 5, gate);
+
+		assertTrue(shown.startsWith("Part one. "), shown);
+		assertTrue(shown.endsWith("Part two completed. "), shown);
+		assertFalse(shown.contains("thin coverage"), "the second part on the thin coverage is redone: " + shown);
+	}
+
+	@Test
+	void theAnswerIsRedoneOncePerRequestThenShownWithWhatTheCoverageMisses() {
+		AgenticLoopReactiveAgentServiceImpl.SourceGate gate = new AgenticLoopReactiveAgentServiceImpl.SourceGate(
+				SEARCHES, true, List.of(), coverageGate());
+		ScriptedLoopAgent agent = callingAgent(
+				List.of(List.of("First draft. " + STOP), List.of("Second draft, thin again. " + STOP),
+						List.of("Never asked. " + STOP)),
+				Map.of(0, List.<String[]>of(new String[] { "deepSearchKnowledgeBase", THIN }), 1,
+						List.<String[]>of(new String[] { "deepSearchKnowledgeBase", THIN })));
+
+		assertEquals("Second draft, thin again. ", runWithGate(agent, 5, gate));
+		assertEquals(2, agent.receivedParams.size(), "redone once per request");
+		assertTrue(gate.coverage().state().notCompleted() != null, "the user is told what the coverage misses");
+	}
+
+	@Test
+	void aRedoThatDoesNotSearchLeavesTheCoverageToTell() {
+		AgenticLoopReactiveAgentServiceImpl.SourceGate gate = new AgenticLoopReactiveAgentServiceImpl.SourceGate(
+				SEARCHES, true, List.of(), coverageGate());
+		ScriptedLoopAgent agent = callingAgent(
+				List.of(List.of("From Steiner only. " + STOP), List.of("The draft, rewritten. " + STOP)),
+				Map.of(0, List.<String[]>of(new String[] { "deepSearchKnowledgeBase", THIN })));
+
+		assertEquals("The draft, rewritten. ", runWithGate(agent, 5, gate));
+		assertTrue(gate.coverage().state().notCompleted().contains("rests on 1 of the 6"));
+	}
+
+	@Test
+	void aUniqueIdGivenAsADocumentIdNamesItsDocument() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
+		ai.gebo.knowledgebase.repositories.uniqueid.VirtualFilesystemUniqueIds uniqueIds = mock(
+				ai.gebo.knowledgebase.repositories.uniqueid.VirtualFilesystemUniqueIds.class);
+		when(uniqueIds.documentUniqueId("kb/doctrine.pdf")).thenReturn(12L);
+		agent.setUniqueIds(uniqueIds);
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef doctrine = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef();
+		doctrine.setDocumentCode("kb/doctrine.pdf");
+		List<String> unknown = new ArrayList<>(List.of("#12", "#99"));
+		List<ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef> listed = new ArrayList<>();
+
+		agent.byUniqueId(List.of(doctrine), unknown, listed);
+
+		assertEquals(List.of(doctrine), listed);
+		assertEquals(List.of("#99"), unknown);
+	}
+
+	@Test
+	void aFileNameInsideAnAddressIsNoCitation() {
+		assertTrue(AgenticLoopReactiveAgentServiceImpl
+				.unreadCitations("See https://www.rsi.ch/info/La-fusione-realt%C3%A0--3225783.html for it.", List.of())
+				.isEmpty());
+		assertEquals(List.of("report.pdf"),
+				AgenticLoopReactiveAgentServiceImpl.unreadCitations("As report.pdf says.", List.of()));
+	}
+
+	@Test
+	void anIdThatIsAlsoAUniqueIdNamesTheDocumentTheAnswerCites() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
+		ai.gebo.knowledgebase.repositories.uniqueid.VirtualFilesystemUniqueIds uniqueIds = mock(
+				ai.gebo.knowledgebase.repositories.uniqueid.VirtualFilesystemUniqueIds.class);
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef first = webPage("www.a.org", "https://www.a.org/x");
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef senses = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef();
+		senses.setDocumentCode("kb/twelve-senses.pdf");
+		senses.setName("twelve-senses.pdf");
+		collector.add(List.of(first, senses));
+		when(uniqueIds.documentUniqueId("kb/twelve-senses.pdf")).thenReturn(1L);
+		agent.setUniqueIds(uniqueIds);
+		List<String> unknown = new ArrayList<>();
+
+		// #1 is the web page's id and the knowledge base document's uniqueId: the answer cites the document
+		List<ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef> listed = agent.resolveAnswerIds(
+				collector, collector.getDocuments(), List.of("#1"), "As twelve-senses.pdf says.", unknown);
+
+		assertEquals(List.of(senses), listed);
+		assertTrue(unknown.isEmpty());
+		// citing neither, the id is the request's
+		assertEquals(List.of(first), agent.resolveAnswerIds(collector, collector.getDocuments(), List.of("#1"),
+				"No citation.", unknown));
+	}
+
+	@Test
+	void aFileNameCitedWithItsWordsSpacedIsTheDocumentRead() {
+		assertTrue(AgenticLoopReactiveAgentServiceImpl
+				.unreadCitations("From Frammenti di un insegnamento sconosciuto.pdf.",
+						List.of("Frammentidiuninsegnamentosconosciuto.pdf"))
+				.isEmpty());
+		assertTrue(AgenticLoopReactiveAgentServiceImpl
+				.unreadCitations("From nicola rosti - febbraio 2014.pdf.", List.of("nicola rosti - febbraio 2014.pdf"))
+				.isEmpty());
+		assertEquals(List.of("other.pdf"),
+				AgenticLoopReactiveAgentServiceImpl.unreadCitations("From other.pdf.", List.of("document.pdf")));
 	}
 }
