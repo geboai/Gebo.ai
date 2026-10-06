@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
+import ai.gebo.core.contents.security.services.VirtualFilesystemQuery;
 import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.architecture.search.service.BestEffortSearchCalls;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -105,6 +107,88 @@ public class DeepSearchToolsSupport {
 	/** The deep searches a single user request can make, whatever the sources. */
 	public int maxDeepSearchesPerRequest() {
 		return maxDeepSearchesPerRequest;
+	}
+
+	/** Prefix of the properties of the deep searches' coverage. */
+	public static final String COVERAGE_PROPERTIES = "ai.gebo.agents.standard.deep-search-tools.coverage";
+
+	/**
+	 * When the coverage of a deep search is thin and whether the agent must complete it
+	 * before answering (see {@link ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage}).
+	 *
+	 * @param gateEnabled           whether a thin coverage requires its completion
+	 *                              (the agentic loop holds an answer that does not
+	 *                              complete it); when off the coverage is only reported
+	 * @param minDocumentsUsed      fewer documents used as sources than this is thin...
+	 * @param minDocumentsFound     ...when at least this many documents were found
+	 * @param barelyReadFragments   a document read in at most this many fragments is
+	 *                              barely read (knowledge base deep searches only)
+	 * @param barelyReadShare       more than this share of the documents found barely
+	 *                              read is thin
+	 * @param notReachedTrigger     whether the documents of the knowledge bases no
+	 *                              search reached, at least as many as the documents
+	 *                              used, make the coverage thin
+	 */
+	public record CoverageRules(boolean gateEnabled, int minDocumentsUsed, int minDocumentsFound,
+			int barelyReadFragments, double barelyReadShare, boolean notReachedTrigger) {
+		public static final CoverageRules DEFAULTS = new CoverageRules(true, 2, 3, 2, 0.5d, true);
+	}
+
+	private CoverageRules coverageRules = CoverageRules.DEFAULTS;
+
+	@Autowired
+	public void setCoverageRules(@Value("${" + COVERAGE_PROPERTIES + ".gate-enabled:true}") boolean gateEnabled,
+			@Value("${" + COVERAGE_PROPERTIES + ".min-documents-used:2}") int minDocumentsUsed,
+			@Value("${" + COVERAGE_PROPERTIES + ".min-documents-found:3}") int minDocumentsFound,
+			@Value("${" + COVERAGE_PROPERTIES + ".barely-read-fragments:2}") int barelyReadFragments,
+			@Value("${" + COVERAGE_PROPERTIES + ".barely-read-share:0.5}") double barelyReadShare,
+			@Value("${" + COVERAGE_PROPERTIES + ".not-reached-trigger:true}") boolean notReachedTrigger) {
+		this.coverageRules = new CoverageRules(gateEnabled, Math.max(0, minDocumentsUsed),
+				Math.max(0, minDocumentsFound), Math.max(0, barelyReadFragments),
+				barelyReadShare >= 0 && barelyReadShare <= 1 ? barelyReadShare : CoverageRules.DEFAULTS.barelyReadShare(),
+				notReachedTrigger);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Deep search tools coverage rules: " + this.coverageRules);
+		}
+	}
+
+	/** When the coverage of a deep search is thin, and whether its completion is required. */
+	public CoverageRules coverageRules() {
+		return coverageRules;
+	}
+
+	/** The visibility of the knowledge bases' contents, when configured. */
+	private ObjectProvider<IGKnowledgebaseVisibilityService> visibilityService = null;
+
+	@Autowired(required = false)
+	public void setVisibilityService(ObjectProvider<IGKnowledgebaseVisibilityService> visibilityService) {
+		this.visibilityService = visibilityService;
+	}
+
+	/**
+	 * The documents of the given knowledge bases the current user can see, or null when
+	 * they cannot be counted (no knowledge base, no visibility service, a failure).
+	 */
+	public Long countVisibleDocuments(java.util.List<String> knowledgeBaseCodes) {
+		if (knowledgeBaseCodes == null || knowledgeBaseCodes.isEmpty() || visibilityService == null) {
+			return null;
+		}
+		try {
+			final IGKnowledgebaseVisibilityService visibility = visibilityService.getIfAvailable();
+			if (visibility == null) {
+				return null;
+			}
+			final long count = visibility.countVisibleDocuments(
+					VirtualFilesystemQuery.builder().knowledgeBaseCodes(knowledgeBaseCodes).build());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("countVisibleDocuments(" + knowledgeBaseCodes + ") " + count + " document(s)");
+			}
+			return count;
+		} catch (RuntimeException e) {
+			LOGGER.warn("The visible documents of the knowledge bases " + knowledgeBaseCodes
+					+ " could not be counted: the deep search coverage reports no documents not reached", e);
+			return null;
+		}
 	}
 
 	/** The full-text search, when configured: its presence gives the knowledge base deep search its keywords. */

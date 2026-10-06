@@ -68,6 +68,12 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 		return "the internal knowledge base";
 	}
 
+	/** The documents of the chat's knowledge bases the user can see. */
+	@Override
+	protected Long documentsInScope(ToolContext toolContext) {
+		return support.countVisibleDocuments(ToolCallbackDeclarationUtil.chatKnowledgeBases(toolContext));
+	}
+
 	/** The parameter with keywords when the knowledge base searches have a full-text leg. */
 	@Override
 	protected Type paramType() {

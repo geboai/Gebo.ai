@@ -29,6 +29,7 @@ import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
+import ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage.SearchCoverage;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolResult.Source;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
@@ -108,30 +109,54 @@ public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 	protected List<Document> searchDocuments(DeepSearchToolParam<Q> param, List<Q> queries, String question,
 			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId,
 			ToolContext toolContext, List<String> unavailableSources) throws Exception {
-		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, unavailableSources);
+		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, unavailableSources, null);
+	}
+
+	/** The same, recording the yield of each search (it runs them one by one). */
+	@Override
+	protected List<Document> searchDocuments(DeepSearchToolParam<Q> param, List<Q> queries, String question,
+			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId,
+			ToolContext toolContext, List<String> unavailableSources, List<SearchCoverage> searches) throws Exception {
+		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, unavailableSources, searches);
 	}
 
 	@Override
 	protected List<Document> searchDocuments(List<Q> queries, String question, int maxDocuments,
 			int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception {
-		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, new ArrayList<>());
+		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, new ArrayList<>(), null);
 	}
 
 	List<Document> searchDocuments(List<Q> queries, String question, int maxDocuments,
 			Map<String, FoundDocument> foundByFragmentId, List<String> unavailableSources) throws Exception {
+		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, unavailableSources, null);
+	}
+
+	/**
+	 * Runs each search on every system, recording in {@code searches}, when given, the
+	 * results each search gave and the documents it was the first to find.
+	 */
+	List<Document> searchDocuments(List<Q> queries, String question, int maxDocuments,
+			Map<String, FoundDocument> foundByFragmentId, List<String> unavailableSources,
+			List<SearchCoverage> searches) throws Exception {
 		// each document found is read whole (see SearchResultsChunker): fragmentsPerDocument
 		// does not apply
 		// no native search given: the question is searched as text
-		final List<Object> searches = queries.isEmpty() ? List.of(question) : new ArrayList<>(queries);
+		final List<Object> queriesToRun = queries.isEmpty() ? List.of(question) : new ArrayList<>(queries);
 		final int perSearch = Math.max(MIN_RESULTS_PER_SEARCH,
-				Math.min(MAX_RESULTS_PER_SEARCH, (int) Math.ceil((double) maxDocuments / searches.size())));
+				Math.min(MAX_RESULTS_PER_SEARCH, (int) Math.ceil((double) maxDocuments / queriesToRun.size())));
 		final List<SearchableSystemMetaData> systems = service.getSearchableSystems();
 		final Map<String, SearchResult> found = new LinkedHashMap<>();
 		int runs = 0;
 		int failed = 0;
-		search: for (Object query : searches) {
+		search: for (Object query : queriesToRun) {
 			if (systems == null) {
 				break;
+			}
+			final int foundBefore = found.size();
+			int results = 0;
+			final SearchCoverage searchYield = new SearchCoverage(queryText(query), 0, 0);
+			if (searches != null) {
+				searches.add(searchYield);
 			}
 			for (SearchableSystemMetaData system : systems) {
 				if (system == null) {
@@ -153,9 +178,12 @@ public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 							+ outcome.results().size() + " result(s)");
 				}
 				service.setOriginOn(outcome.results());
+				results += outcome.results().size();
+				searchYield.setResults(results);
 				for (SearchResult result : outcome.results()) {
 					if (result != null && result.getCode() != null) {
 						found.putIfAbsent(result.getCode(), result);
+						searchYield.setNewDocuments(found.size() - foundBefore);
 						if (found.size() >= maxDocuments) {
 							break search;
 						}
@@ -174,7 +202,7 @@ public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 			return List.of();
 		}
 		final Set<String> keywords = new LinkedHashSet<>(SearchResultsChunker.keywordsFromText(question));
-		for (Object query : searches) {
+		for (Object query : queriesToRun) {
 			keywords.addAll(SearchResultsChunker.keywordsFromText(queryText(query)));
 		}
 		final ChunkingParams params = SearchResultsChunker.buildChunkingParams(

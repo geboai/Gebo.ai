@@ -10,7 +10,9 @@
 package ai.gebo.llms.agent.standardtools;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -59,6 +61,8 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGProgressNotifier;
 import ai.gebo.llms.agent.standardtools.AbstractDeepSearchTool.FoundDocument;
+import ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage;
+import ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage.SearchCoverage;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam.Depth;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolResult;
@@ -176,7 +180,7 @@ class AbstractDeepSearchToolTest {
 				discarded.add("f2");
 			}
 			return Flux.just("The ", "analysis.");
-		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any());
+		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
 		GeboRagSearchConfig ragSearchConfig = mock(GeboRagSearchConfig.class);
 		when(ragSearchConfig.getDeepSearchGlobalTopK()).thenReturn(30);
 		support = new DeepSearchToolsSupport(provider(analysis), provider(chunkingService), provider(chatModelsDao),
@@ -202,7 +206,7 @@ class AbstractDeepSearchToolTest {
 		// the irrelevant fragment's document is not a source
 		assertEquals(List.of("doc-a"), result.getSources().stream().map(Source::getDocumentCode).toList());
 		verify(analysis).analyze(any(), any(), any(), eq(DeliverableIntent.ANALISYS), anyString(), eq(chatModel),
-				eq(serviceModel), any(), any());
+				eq(serviceModel), any(), any(), any());
 	}
 
 	@Test
@@ -212,7 +216,7 @@ class AbstractDeepSearchToolTest {
 			Vector<String> discarded = invocation.getArgument(7);
 			documents.collectList().block().forEach(x -> discarded.add(x.getId()));
 			return Flux.just("An analysis citing the documents.");
-		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any());
+		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
 		TestDeepSearchTool tool = new TestDeepSearchTool(support,
 				List.of(fragment("f1", "doc-a"), fragment("f2", "doc-b")));
 
@@ -245,7 +249,7 @@ class AbstractDeepSearchToolTest {
 		assertEquals(List.of("Deep search in the test source: agent question",
 				"Deep search in the test source: analysing 3 fragment(s) of 2 document(s)"), notified);
 		// the analysis reports its progress to the same notifier
-		verify(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), eq(notifier));
+		verify(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), eq(notifier), any());
 	}
 
 	@Test
@@ -256,7 +260,7 @@ class AbstractDeepSearchToolTest {
 
 		assertEquals(Status.OK, result.getStatus());
 		verify(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(),
-				eq(IGProgressNotifier.NONE));
+				eq(IGProgressNotifier.NONE), any());
 	}
 
 	@Test
@@ -309,7 +313,7 @@ class AbstractDeepSearchToolTest {
 		doAnswer(invocation -> {
 			analysed.set(invocation.getArgument(1));
 			return Flux.just("ok");
-		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any());
+		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
 		DeepSearchToolParam param = param("agent question");
 		param.setSearchObjective("what for");
 
@@ -332,7 +336,7 @@ class AbstractDeepSearchToolTest {
 		// another request has its own deep searches
 		assertEquals(Status.OK, tool.deepSearch(param("question"), request("r2")).getStatus());
 		verify(analysis, times(support.maxDeepSearchesPerRequest() + 1)).analyze(any(), any(), any(),
-				any(), anyString(), any(), any(), any(), any());
+				any(), anyString(), any(), any(), any(), any(), any());
 	}
 
 	@Test
@@ -362,13 +366,13 @@ class AbstractDeepSearchToolTest {
 		assertEquals(Status.NOT_ALLOWED, denied.deepSearch(param("question"), null).getStatus());
 
 		assertEquals(Status.NO_RESULTS, empty.deepSearch(param(" "), null).getStatus());
-		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any());
+		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
 	}
 
 	@Test
 	void aFailingAnalysisIsAnswered() {
 		doReturn(Flux.error(new IllegalStateException("provider down"))).when(analysis).analyze(any(), any(), any(),
-				any(), anyString(), any(), any(), any(), any());
+				any(), anyString(), any(), any(), any(), any(), any());
 		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a")));
 
 		assertEquals(Status.FAILED, tool.deepSearch(param("question"), null).getStatus());
@@ -415,7 +419,7 @@ class AbstractDeepSearchToolTest {
 		DeepSearchToolResult result = tool.deepSearch(param("question"), full);
 
 		assertEquals(Status.NO_RESULTS, result.getStatus());
-		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any());
+		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
 		// not run, it is not one of the request's deep searches
 		for (int i = 0; i < support.maxDeepSearchesPerRequest(); i++) {
 			assertEquals(Status.OK, tool.deepSearch(param("question " + i), request("r1")).getStatus());
@@ -432,7 +436,7 @@ class AbstractDeepSearchToolTest {
 
 		// 800 tokens hold about 600 words, less than the 1000 a BROAD depth asks
 		verify(analysis).analyze(any(), any(), any(), any(), argThat(note -> note.contains("600 words")), any(),
-				any(), any(), any());
+				any(), any(), any(), any());
 		assertTrue(AbstractDeepSearchTool.lengthTarget(Depth.FOCUSED, 100_000).contains("400 words"));
 		assertTrue(AbstractDeepSearchTool.lengthTarget(Depth.EXHAUSTIVE, 10).contains(
 				AbstractDeepSearchTool.MIN_ANALYSIS_WORDS + " words"), "never shorter than the minimum");
@@ -604,5 +608,129 @@ class AbstractDeepSearchToolTest {
 		param.setQueries(List.of());
 		assertEquals(Status.OK, tool.deepSearch(param, request("r2")).getStatus());
 		assertEquals(List.of("which bugs are open?"), texts);
+	}
+
+	/** Every fragment found, by fragment id: {@code fragments} per document code. */
+	private static Map<String, FoundDocument> foundFragments(Map<String, Integer> fragments) {
+		Map<String, FoundDocument> found = new java.util.LinkedHashMap<>();
+		int id = 0;
+		for (Map.Entry<String, Integer> document : fragments.entrySet()) {
+			for (int i = 0; i < document.getValue(); i++) {
+				found.put("f" + (id++),
+						new FoundDocument(new Source(document.getKey() + ".pdf", null, document.getKey()), null));
+			}
+		}
+		return found;
+	}
+
+	private static List<FoundDocument> used(String... codes) {
+		List<FoundDocument> used = new ArrayList<>();
+		for (String code : codes) {
+			used.add(new FoundDocument(new Source(code + ".pdf", null, code), null));
+		}
+		return used;
+	}
+
+	@Test
+	void theCoverageOfAnAnalysisRestingOnOneOfManyDocumentsIsThinAndAsksToBeCompleted() {
+		// A1 of the 2026-10-05 session: 23 fragments from 6 documents, one used
+		Map<String, Integer> fragments = new java.util.LinkedHashMap<>();
+		fragments.put("quinto-vangelo", 15);
+		fragments.put("pistis", 4);
+		fragments.put("archiati", 1);
+		fragments.put("vangeli", 1);
+		fragments.put("secret-doctrine", 1);
+		fragments.put("scienza-occulta", 1);
+
+		DeepSearchCoverage coverage = AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, foundFragments(fragments),
+				used("quinto-vangelo"), null, 12L, null, DeepSearchToolsSupport.CoverageRules.DEFAULTS);
+
+		assertEquals(6, coverage.getDocumentsFound());
+		assertEquals(1, coverage.getDocumentsUsed());
+		assertEquals(6, coverage.getNotReached());
+		assertTrue(coverage.isCompletionRequired());
+		assertTrue(coverage.getNote().contains("rests on 1 of the 6 documents found"), coverage.getNote());
+		assertTrue(coverage.getNote().contains("4 of the 6 documents found were read in at most 2 fragment(s)"),
+				coverage.getNote());
+		assertTrue(coverage.getNote().contains("6 documents of the knowledge base were not reached"), coverage.getNote());
+		assertTrue(coverage.getDocuments().stream().anyMatch(d -> d.getName().equals("pistis.pdf")
+				&& d.getFragmentsAnalysed() == 4 && !d.isUsedAsSource()));
+		assertTrue(coverage.getDocuments().stream().anyMatch(d -> d.getName().equals("quinto-vangelo.pdf")
+				&& d.getFragmentsAnalysed() == 15 && d.isUsedAsSource()));
+	}
+
+	@Test
+	void aPreciseAnswerOrAWellCoveredAnalysisAsksNothing() {
+		Map<String, Integer> fragments = new java.util.LinkedHashMap<>();
+		fragments.put("a", 6);
+		fragments.put("b", 5);
+		fragments.put("c", 4);
+
+		DeepSearchCoverage focused = AbstractDeepSearchTool.coverage(Depth.FOCUSED, foundFragments(fragments), used("a"),
+				null, 50L, "the figures", DeepSearchToolsSupport.CoverageRules.DEFAULTS);
+		assertFalse(focused.isCompletionRequired());
+		assertNull(focused.getNote());
+		assertEquals(47, focused.getNotReached(), "the coverage is still reported");
+
+		DeepSearchCoverage covered = AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, foundFragments(fragments),
+				used("a", "b", "c"), null, null, null, DeepSearchToolsSupport.CoverageRules.DEFAULTS);
+		assertFalse(covered.isCompletionRequired());
+		assertNull(covered.getNote());
+		assertNull(covered.getNotReached(), "not known for the web");
+	}
+
+	@Test
+	void theWebIsNotJudgedByTheFragmentsReadAndTheAnalysisVerdictCounts() {
+		Map<String, Integer> pages = new java.util.LinkedHashMap<>();
+		pages.put("p1", 1);
+		pages.put("p2", 1);
+		pages.put("p3", 2);
+		List<SearchCoverage> searches = List.of(new SearchCoverage("q1", 10, 2), new SearchCoverage("q2", 5, 1));
+
+		DeepSearchCoverage web = AbstractDeepSearchTool.coverage(Depth.BROAD, foundFragments(pages),
+				used("p1", "p2", "p3"), searches, null, null, DeepSearchToolsSupport.CoverageRules.DEFAULTS);
+		assertFalse(web.isCompletionRequired(), "short pages read whole are not barely read");
+		assertEquals(searches, web.getSearches());
+
+		DeepSearchCoverage missing = AbstractDeepSearchTool.coverage(Depth.BROAD, foundFragments(pages),
+				used("p1", "p2", "p3"), searches, null, "the 2026 figures", DeepSearchToolsSupport.CoverageRules.DEFAULTS);
+		assertTrue(missing.isCompletionRequired());
+		assertTrue(missing.getNote().contains("the analysis reports as missing: the 2026 figures"), missing.getNote());
+	}
+
+	@Test
+	void withTheGateOffTheThinCoverageIsOnlyReportedAndTheRulesAreConfigurable() {
+		Map<String, Integer> fragments = new java.util.LinkedHashMap<>();
+		fragments.put("a", 6);
+		fragments.put("b", 1);
+		fragments.put("c", 1);
+		DeepSearchToolsSupport.CoverageRules off = new DeepSearchToolsSupport.CoverageRules(false, 2, 3, 2, 0.5d, true);
+
+		DeepSearchCoverage reported = AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, foundFragments(fragments),
+				used("a"), null, null, null, off);
+		assertFalse(reported.isCompletionRequired());
+		assertTrue(reported.getNote() != null && reported.getNote().contains("rests on 1 of the 3"));
+
+		DeepSearchToolsSupport.CoverageRules lenient = new DeepSearchToolsSupport.CoverageRules(true, 1, 3, 0, 0.5d,
+				false);
+		assertFalse(AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, foundFragments(fragments), used("a"), null, 30L,
+				null, lenient).isCompletionRequired(), "one document used is enough, not reached does not count");
+
+		support.setCoverageRules(true, -1, 3, 2, 7d, true);
+		assertEquals(0, support.coverageRules().minDocumentsUsed());
+		assertEquals(0.5d, support.coverageRules().barelyReadShare(), "a share out of 0..1 is the default");
+	}
+
+	@Test
+	void theCoverageComesBeforeTheAnalysisInTheResultTheModelReads() {
+		DeepSearchToolResult result = new DeepSearchToolResult();
+		result.setAnalysis("the analysis");
+		result.setCoverage(new DeepSearchCoverage());
+		String json = org.springframework.ai.util.json.JsonParser.toJson(result);
+
+		assertTrue(json.indexOf("\"coverage\"") >= 0 && json.indexOf("\"coverage\"") < json.indexOf("\"analysis\""),
+				json);
+		assertTrue(json.indexOf("\"status\"") < json.indexOf("\"analysis\""), json);
+		assertTrue(json.indexOf("\"completionRequired\"") < json.indexOf("\"documents\""), json);
 	}
 }

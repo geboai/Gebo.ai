@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult.Status;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,8 +23,14 @@ import lombok.NoArgsConstructor;
  * What a deep search tool answers to the model: the analysis of the documents
  * found against the question, with the documents it relies on, plus the outcome of
  * the deep search so the model can tell a failure from an empty result.
+ * <p>
+ * The order is the one the model reads (tool results are otherwise serialized
+ * alphabetically): the outcome and the coverage before the analysis, so a result
+ * cut to the room keeps them.
  */
 @Data
+@JsonPropertyOrder({ "status", "message", "coverage", "fragmentsAnalysed", "tokens", "analysis", "sources",
+		"unavailableSources" })
 public class DeepSearchToolResult {
 	/** A document the analysis relies on. */
 	@Data
@@ -38,6 +46,12 @@ public class DeepSearchToolResult {
 
 	private Status status = Status.OK;
 	private String message = null;
+	/**
+	 * How much of what was found the analysis covers (see {@link DeepSearchCoverage}):
+	 * before the analysis, so a result cut to the room keeps it. Null when nothing was
+	 * analysed.
+	 */
+	private DeepSearchCoverage coverage = null;
 	/** Document fragments found and analysed. */
 	private int fragmentsAnalysed = 0;
 	/** Size of the returned analysis, in tokens. */

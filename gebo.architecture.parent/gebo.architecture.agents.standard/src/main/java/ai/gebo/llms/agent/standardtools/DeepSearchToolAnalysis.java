@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -106,6 +107,22 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 	public Flux<String> analyze(Flux<Document> fragments, IChatRequestContext context, ReactiveIdentityUtil runAs,
 			DeliverableIntent deliverable, String completenessNote, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, Vector<String> discardedFragmentIds, IGProgressNotifier notifier) {
+		return analyze(fragments, context, runAs, deliverable, completenessNote, chatModel, serviceModel,
+				discardedFragmentIds, notifier, null);
+	}
+
+	/**
+	 * The same, handing out what the consolidation reports as missing.
+	 *
+	 * @param notCovered receives what the last consolidation of the partial analyses
+	 *                   reports as missing (its verdict), null when it reports the
+	 *                   report complete; left untouched when no consolidation runs (a
+	 *                   single batch of fragments, no sufficiency check)
+	 */
+	public Flux<String> analyze(Flux<Document> fragments, IChatRequestContext context, ReactiveIdentityUtil runAs,
+			DeliverableIntent deliverable, String completenessNote, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, Vector<String> discardedFragmentIds, IGProgressNotifier notifier,
+			AtomicReference<String> notCovered) {
 		final GPromptTemplateConfig cumulativeAnalisysPrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT);
 		final GPromptTemplateConfig finalAnalisysPrompt = promptsDao
@@ -225,6 +242,10 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Deep search tool fold of " + partials.size() + " partial analyses: complete:"
 								+ verdict.complete() + (verdict.missing() != null ? " missing:" + verdict.missing() : ""));
+					}
+					if (notCovered != null) {
+						// the last fold's verdict is the one on the whole report
+						notCovered.set(verdict.complete() ? null : verdict.missing());
 					}
 					if (LOGGER.isTraceEnabled()) {
 						LOGGER.trace("<DEEP_SEARCH_TOOL_RUNNING_REPORT>");

@@ -63,6 +63,8 @@ Decide it for each request:
   - after a deep search, check its analysis against the question and the angles you planned: the
     angles or details still missing, or only touched on, are completed with focused searches, or
     with another deep search aimed at them, before you write the answer;
+  - the coverage the deep search result reports is measured by the tool: when it says completion is
+    required, its note tells what is thin, complete it with the searches it suggests before answering;
   - when a source has nothing on an angle after those searches, say so in the answer.
 - The documents of a source can be written in languages different from the user's: the results
   already returned in this chat show which ones. Every search on such a source also carries its
