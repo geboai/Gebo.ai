@@ -204,8 +204,9 @@ class AbstractDeepSearchToolTest {
 		assertEquals(3, result.getFragmentsAnalysed());
 		// the agent's searches, blank and repeated ones dropped
 		assertEquals(List.of("first search", "second search"), tool.searched.get());
-		// the irrelevant fragment's document is not a source
-		assertEquals(List.of("doc-a"), result.getSources().stream().map(Source::getDocumentCode).toList());
+		// every document read is a source: the analysis' irrelevant list decides nothing,
+		// the agent's answer says which documents it rests on
+		assertEquals(List.of("doc-a", "doc-b"), result.getSources().stream().map(Source::getDocumentCode).toList());
 		verify(analysis).analyze(any(), any(), any(), eq(DeliverableIntent.ANALISYS), anyString(), eq(chatModel),
 				eq(serviceModel), any(), any(), any());
 	}
@@ -272,8 +273,8 @@ class AbstractDeepSearchToolTest {
 
 		tool.deepSearch(param("question"), request("r1", collector));
 
-		// the irrelevant fragment's document is not shared
-		assertEquals(List.of("doc-a", "doc-c"),
+		// every document read is shared, also the one the analysis listed as irrelevant
+		assertEquals(List.of("doc-a", "doc-b", "doc-c"),
 				collector.getDocuments().stream().map(GResponseDocumentRef::getDocumentCode).toList());
 		// without a collector the tool still answers
 		assertEquals(Status.OK, tool.deepSearch(param("question"), request("r2")).getStatus());

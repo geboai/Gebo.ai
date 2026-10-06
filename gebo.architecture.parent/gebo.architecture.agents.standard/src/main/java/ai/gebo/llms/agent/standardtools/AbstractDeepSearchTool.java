@@ -59,7 +59,8 @@ import reactor.core.publisher.Flux;
  * then analyses every fragment against the agent's question batch by batch and
  * reduces the partial analyses into one (see {@link DeepSearchToolAnalysis}). The
  * agent gets the analysis and its sources, not the documents, so a deep search
- * reads far more than a search tool could return.
+ * reads far more than a search tool could return. The sources are every document
+ * the analysis read; the agent's answer says which of them it rests on.
  * <p>
  * Everything runs in the tool call: no model plans the searches, they are the
  * agent's ones. A deep search is expensive: a request can make at most
@@ -352,16 +353,16 @@ public abstract class AbstractDeepSearchTool<Q> {
 				failed.setDocumentsNotRead(notLoaded.isEmpty() ? null : notLoaded);
 				return failed;
 			}
-			if (analysis != null && !analysis.isBlank() && discardedFragmentIds.containsAll(readFragmentIds)) {
-				// every fragment read judged irrelevant, yet analysed: the judgement contradicts
-				// the analysis, the documents read stay its sources
-				LOGGER.warn("Tool:" + toolName + " analysis judged all the " + readFragmentIds.size()
-						+ " fragment(s) it read irrelevant while analysing them: keeping their documents as sources");
-				foundByFragmentId.keySet().removeAll(unreadFragmentIds);
-			} else {
-				for (String fragmentId : discardedFragmentIds) {
-					foundByFragmentId.remove(fragmentId);
-				}
+			// every document read is a source: the partial analyses' lists of irrelevant
+			// fragments are not reliable (on large batches a model lists every fragment while
+			// analysing them) and decide nothing; the agent reading the analysis says which
+			// documents its answer rests on (ANSWER-DOCUMENTS)
+			foundByFragmentId.keySet().removeAll(unreadFragmentIds);
+			if (LOGGER.isDebugEnabled()) {
+				final long judged = discardedFragmentIds.stream().filter(id -> !unreadFragmentIds.contains(id)).count();
+				LOGGER.debug("Tool:" + toolName + " " + readFragmentIds.size() + " fragment(s) read, " + judged
+						+ " of them listed as irrelevant by the analysis (not used to choose the sources), "
+						+ unreadFragmentIds.size() + " left unread");
 			}
 			final List<FoundDocument> reliedOn = distinctByDocument(foundByFragmentId.values());
 			final DeepSearchToolResult result = new DeepSearchToolResult();
