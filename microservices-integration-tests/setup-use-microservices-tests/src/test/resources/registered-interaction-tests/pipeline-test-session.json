@@ -3,7 +3,7 @@
 		"description": "Testing a simple question with sufficient data in the actual knowledge base, satisfable with simple r.a.g. search",
 		"request": {
 			"id": "9234-233243-UY9",
-			"query": "Chi e' l'arrogante nella pistis sophia?"
+			"query": "Chi è Yaldabaoth nell'Apocrifo di Giovanni e cosa dichiara ai suoi demoni?"
 		},
 		"responseTestCriteria": {
 			"checkNotEmptyDocumentsList": true,
@@ -35,7 +35,7 @@
 		"description": "Testing the shortcut rule to answer directly from actual context information when it contains enough data (was the chat interaction #1)",
 		"request": {
 			"id": "9234-233243-UXZ",
-			"query": "Chi e' l'arrogante nella pistis sophia?"
+			"query": "Chi è Yaldabaoth nell'Apocrifo di Giovanni e cosa dichiara ai suoi demoni?"
 		},
 		"responseTestCriteria": {
 			"checkNotEmptyDocumentsList": true,
@@ -51,7 +51,7 @@
 		"description": "Testing the shortcut rule to answer directly from the internal knowledge base deep search",
 		"request": {
 			"id": "9234-233243-UXX",
-			"query": "Parlami delle interazioni tra Gesu e Maria Maddalena nella tradizione Gnostica ricercando nella knowledge base interna"
+			"query": "Parlami delle interazioni tra Gesù e Maria Maddalena (Myriam) nel Vangelo di Maria, ricercando nella knowledge base interna"
 		},
 		"responseTestCriteria": {
 			"checkNotEmptyDocumentsList": false,
@@ -65,7 +65,7 @@
 		"description": "Testing the shortcut rule to answer directly from actual context information when it contains enough data (was the chat interaction #1)",
 		"request": {
 			"id": "9234-233243-UY1",
-			"query": "Fai un report dettagliato di tutti gli eventi in cui Maria risponde ai discepoli al posto di Gesu nella tradizione Gnostica"
+			"query": "Fai un report dettagliato degli episodi del Vangelo di Maria in cui Myriam parla ai discepoli al posto del Maestro, e di come reagiscono Simon Pietro e Andrea"
 		},
 		"responseTestCriteria": {
 			"checkNotEmptyDocumentsList": true,

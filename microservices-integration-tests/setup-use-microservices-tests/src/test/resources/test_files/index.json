@@ -1,20 +1,17 @@
 [
 	{
-		"path": "/test_files/Vangeli-non-canonici.pdf"
-	},
-	{
 		"path": "/test_files/vangeli-apocrifi-vangelo-di-giovanni.pdf"
 	},
 	{
 		"path": "/test_files/vangeli-apogrifi-il-vangelo-di-giuda.pdf"
 	},
 	{
-		"path": "/test_files/pistis_sophia_svelato.pdf"
+		"path": "/test_files/vangeli-apogrifi-protovangelo-di-giacomo.pdf"
+	},
+	{
+		"path": "/test_files/Vangeli-apogrifi-Il-Vangelo-di-Maria-Maddalena.pdf"
 	},
 	{
 		"path": "/test_files/vangeli-apogrifi-il-vangelo-di-tommaso.pdf"
-	},
-	{
-		"path": "/test_files/vangeli-apogrifi-protovangelo-di-giacomo.pdf"
 	}
 ]
