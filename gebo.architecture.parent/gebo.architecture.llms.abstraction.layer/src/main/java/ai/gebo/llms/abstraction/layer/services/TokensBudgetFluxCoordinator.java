@@ -83,6 +83,10 @@ public class TokensBudgetFluxCoordinator {
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("End map(...) code with 1 batch of documents returning:" + result);
 					}
+					if (result != null && isOutOfBandValue.test(result)) {
+						// no analysis came out of the batch: its documents were not analysed
+						notAnalysed(List.of(input), unprocessedCumulator);
+					}
 					try {
 						emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzing 1 batch of documents!");
 					} catch (Throwable th) {
@@ -95,6 +99,8 @@ public class TokensBudgetFluxCoordinator {
 				} catch (Throwable th) {
 					emitter.notifyLLMProblems();
 					LOGGER.error(EXCEPTION_IN_MAP_PROCESS, th);
+					// the batch failed: its documents were not analysed
+					notAnalysed(input != null ? List.of(input) : List.of(), unprocessedCumulator);
 					return outOfBandValue;
 				}
 			});
@@ -238,6 +244,10 @@ public class TokensBudgetFluxCoordinator {
 							if (LOGGER.isDebugEnabled()) {
 								LOGGER.debug("End map(...) code with " + input.size() + " returning:" + result);
 							}
+							if (result != null && isOutOfBandValue.test(result)) {
+								// no analysis came out of the batch: its documents were not analysed
+								notAnalysed(input, unprocessedCumulator);
+							}
 							try {
 								emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzed " + input.size() + " documents!");
 							} catch (Throwable th) {
@@ -253,10 +263,27 @@ public class TokensBudgetFluxCoordinator {
 						} catch (Throwable th) {
 							emitter.notifyLLMProblems();
 							LOGGER.error(EXCEPTION_IN_MAP_PROCESS, th);
+							// the batch failed: its documents were not analysed
+							notAnalysed(input, unprocessedCumulator);
 							return outOfBandValue;
 						}
 					});
 			}).filter(V -> V != null && !isOutOfBandValue.test(V)).sequential();
+	}
+
+	/**
+	 * The documents of a batch that gave no analysis (it failed, or its analysis was out
+	 * of band) go to the unprocessed cumulator, as the batches never started: they were
+	 * not analysed.
+	 */
+	private static <D> void notAnalysed(List<D> batch, Consumer<D> unprocessedCumulator) {
+		if (batch == null || unprocessedCumulator == null) {
+			return;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Batch of " + batch.size() + " document(s) gave no analysis: left unprocessed");
+		}
+		batch.forEach(unprocessedCumulator);
 	}
 
 	/** The outcome of folding partial analyses into the report: the new report and its verdict. */

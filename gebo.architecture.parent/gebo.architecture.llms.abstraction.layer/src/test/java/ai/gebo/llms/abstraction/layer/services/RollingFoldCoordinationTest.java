@@ -197,4 +197,26 @@ class RollingFoldCoordinationTest {
 			assertTrue(report.contains("A(d" + i + ")"), report);
 		}
 	}
+
+	@Test
+	void theDocumentsOfAFailingOrOutOfBandBatchAreLeftUnprocessed() {
+		GenerativeFunction<String, String> failing = (initial, emitter, documents) -> {
+			if (documents.contains("d1")) {
+				throw new IllegalStateException("stream timed out");
+			}
+			if (documents.contains("d2")) {
+				return "ERR";
+			}
+			analysedDocuments.addAll(documents);
+			return "A(" + String.join(",", documents) + ")";
+		};
+		RollingFold<String> fold = (report, partials, emitter) -> new FoldOutcome<>(
+				report + "[" + String.join(",", partials) + "]", false);
+
+		String report = run(4, failing, fold, 1);
+
+		assertEquals(List.of("d0", "d3"), analysedDocuments.stream().sorted().toList());
+		assertEquals(List.of("d1", "d2"), unprocessed.stream().sorted().toList(), "not analysed");
+		assertTrue(report.contains("A(d0)") && report.contains("A(d3)"), report);
+	}
 }
