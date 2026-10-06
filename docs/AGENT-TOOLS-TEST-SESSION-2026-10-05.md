@@ -333,3 +333,56 @@ Section 8 showed the knowledge base rules firing on a targeted analysis. Judged 
 **Still open, to decide:** the web deep search analyses all it found in one batch (72-73 fragments at half the service model context) and that batch ran away or timed out in every web deep search of this session (3 of 3), and once on the knowledge base (C5, 21 fragments). When a batch runs away its list of irrelevant fragments is not reliable either (C5 discarded a document that speaks of the subject). Finding 4.1; batch size, timeout and the runaway handling are a decision to take.
 
 **Data:** the length of a knowledge base document reaches the coverage from its semantic (vector store) fragments; the full-text index does not store it, so a document found only by full text has no known length and is never judged read in part.
+
+## 10. Sixth session: the runaway of the partial analyses (2026-10-06, 09:25 – 09:32)
+
+After `76d4b94f4`, in both deep searches (the agents' tools and the deep search pipeline): **A** the streamed batch call stops as soon as the irrelevant list gives more entries than the batch has fragments, and a list that ran away is ignored; **B** the fragments of a batch are given to the model numbered 1..n, the numbers mapped back to their ids. Only the `gebo.ai` container redeployed; agent model gpt-4.1, batch (service) model gpt-4o-mini.
+
+| # | Chat | Request (abridged) | Batches (fragments: time) | Irrelevant list | Outcome |
+|---|---|---|---|---|---|
+| R1 (= A1) | KB | Christ in the KB, comparing works and authors | 17: 11.5 s | 6 of 17, plausible | ✓ 28 s for the turn (A1 earlier: 154 s runaway); 1 source of 6 documents, see 10.2 |
+| R2 (= A2) | KB | Archiati's twelve senses vs Blavatsky's seven principles | 22: 11.2 s; 15: 9.2 s | 11 of 22; 0 of 15 | ✓ 47 s, two deep searches, one per author |
+| R3 | KB | Decision: which document to start from for anthroposophy | 19: 8.3 s | 2 of 19 | ◐ coverage thin (two sources read in 2 of 864 and 2 of 568 fragments), the answer not held: see 10.3 |
+| R4 (= N1) | no KB | Spring AI vs LangChain4j, with sources | 74: 20.7 s | **1..74, all** | ◐ 32 s for the deep search (earlier: 170-190 s and lost); the "all irrelevant yet analysed" rule kept the 21 pages; 9 links |
+| R5 | no KB | PostgreSQL vs MongoDB for document management, with sources | 8: 12.9 s; 70: 20.3 s | 3 of 8; **1..67 of 70** | ✗ 67 fragments wrongly discarded: 3 of 22 pages kept as sources, the answer cites 6 links (all returned by the searches), 3 of them missing from Found docs |
+
+No batch ran away or timed out (the stop condition was never needed in these turns); every deep search finished in 8-21 s per batch.
+
+### 10.1 What A and B achieved
+
+- **Time and reliability:** the 72-74 fragment web batch went from a runaway of 170-190 s that lost the whole batch to 20 s with an analysis, three times out of three.
+- **The stop condition** is pinned by unit tests (the stream is cancelled and nothing more read); it did not trigger live, so whether the provider's HTTP stream is actually closed on cancel has not been observed.
+- **The deep search pipeline** (`FullReactiveDeepsearchWorker`) has the same change, verified by its unit tests and compilation only.
+
+### 10.2 What remains wrong: the irrelevant list itself
+
+With numbers the failure of the batch model changed form: on the two large web batches it enumerated the whole range (1..74, 1..67 of 70) while writing a full analysis. A complete enumeration is caught by the existing rule (all fragments judged irrelevant yet analysed: they stay sources), a partial one is not and discards real sources (R5). A negative list ("which fragments did you NOT use") is unreliable whatever the ids: long UUIDs make it repeat itself, short numbers make it enumerate. On the small knowledge base batches (8-22 fragments) the lists were plausible.
+
+### 10.3 Other findings of this session
+
+- **The coverage gate applies only to the deliverables that require evidence** (an analysis, a search): R3 (DECISION) used a deep search whose coverage asked to be completed, and the answer was not held.
+- **KB deep search retrieval concentrated on one document:** R1 got 11 of its 17 fragments from one book; the analysis across authors rests on one source, and the coverage is not thin because the other documents were read and judged irrelevant.
+- **The partial analyses build links from knowledge base paths** (`https://biblioteca-esoterica/...pdf`), against the prompt's url rule; they did not reach the final answers (the agent's link rule held), but they travel in the tool result.
+- **A cited page missing from Found docs is not warned:** the unread-citation warning checks document names, not web addresses.
+
+## 11. Audit and remediation list (2026-10-06)
+
+General (any model, any kind of document), ordered by impact. *Decision* marks a cap, limit, retry or retrieval policy: diagnosed here, to be decided.
+
+| # | Finding | Impact | Remediation | Kind |
+|---|---|---|---|---|
+| 1 | The irrelevant list of a partial analysis is unreliable on large batches: it repeats itself (UUIDs) or enumerates the range (numbers); a partial enumeration discards real sources (R5) | Wrong sources and coverage, answer links missing from Found docs | **C: a positive list** — each extraction block cites the fragment numbers it rests on; the sources are the cited fragments, the irrelevant list goes. Also gives the coverage real per-document use. Interim alternative: a batch whose list covers most of the batch while writing an analysis is treated as "not judged" | Code + shared prompt |
+| 2 | The web deep search analyses everything in one batch (72-74 fragments, ~62k tokens at half the service model context) | One batch carries all the risk; no early stop or fold applies | Smaller batches (share or fragments per batch) — fewer list errors, parallelism, early stop | *Decision* |
+| 3 | The coverage gate applies only to deliverables requiring evidence (R3) | A decision or report on a thin deep search is not completed | Attach the coverage gate whenever deep searches are mounted, whatever the deliverable | Code, small |
+| 4 | KB deep search retrieval concentrated on one document (R1: 11 of 17 fragments) | A cross-document analysis rests on one source | A per-document share in the deep search retrieval (the full-text leg already keeps 3 per document, the semantic one has none) | *Decision* (retrieval policy) |
+| 5 | A cited web page missing from Found docs is not warned | Answer and sources disagree silently | Extend the unread-citation check to the addresses the answer cites | Code, small |
+| 6 | Partial analyses build links from knowledge base paths | Made-up links in the tool result (not in the final answers seen) | Drop from the analysis the links that are no source's address, in code | Code, small |
+| 7 | The length of a KB document is known only from its vector fragments (the full-text index does not store it) | A document found only by full text is never judged read in part | Index the chunk count in the full-text index | *Decision* (indexing) |
+| 8 | The coverage gate holds the first iteration only | A deep search made later is not gated | Hold any iteration that answers on a pending coverage, still once per request | Code, design choice |
+| 9 | The evidence gate retries an analysis answered without tools even when no tool can answer it (N2) | One wasted iteration | Do not require evidence when the request names a source the chat does not have | Code |
+| 10 | "Cerca sul web: ..." classified PURE_SEARCH (earlier sessions) | Answer shaped as a search list | Classification prompt | Prompt |
+| 11 | Stream cancel not observed live | Tokens may keep being billed after a stop | Verify on a provider with a forced runaway (or in the client's logs) | Verification |
+| 12 | Wrong facts copied from web pages (JEP numbers, earlier sessions) | Source quality | None in code: the answer cites the page | Accepted |
+| 13 | Startup "Error exporting MCP tools - Not authenticated" (pre-existing on develop) | Log noise | Separate issue | Out of scope |
+
+Recommended next: **1 (C)**, then **3**, **5** and **6** (small, general, no limit), then decide **2** and **4**.
