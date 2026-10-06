@@ -650,4 +650,132 @@ class AgenticLoopReactiveAgentServiceTest {
 				"what the context already shared with the tools is kept");
 	}
 
+	// ---------------------------------------------------------------- coverage gate
+
+	private static final String THIN = "{\"status\":\"OK\",\"message\":null,\"coverage\":{\"completionRequired\":true,"
+			+ "\"note\":\"The coverage of this deep search is thin: the analysis rests on 1 of the 6 documents found.\","
+			+ "\"documentsFound\":6,\"documentsUsed\":1},\"fragmentsAnalysed\":23,\"analysis\":\"Steiner says...\"}";
+	private static final String COVERED = "{\"status\":\"OK\",\"coverage\":{\"completionRequired\":false,\"note\":null},"
+			+ "\"analysis\":\"...\"}";
+
+	private static AgenticLoopReactiveAgentServiceImpl.CoverageGate coverageGate() {
+		return new AgenticLoopReactiveAgentServiceImpl.CoverageGate(
+				Set.of("searchKnowledgeBase", "getKnowledgeBaseDocumentContents", "deepSearchKnowledgeBase", "searchWeb",
+						"deepSearchWeb"),
+				Set.of("deepSearchKnowledgeBase", "deepSearchWeb"),
+				Set.of("searchKnowledgeBase", "getKnowledgeBaseDocumentContents", "deepSearchKnowledgeBase"));
+	}
+
+	@Test
+	void theCoverageIsReadFromTheDeepSearchResultEvenWhenTheResultIsCut() {
+		AgenticLoopReactiveAgentServiceImpl.CoverageVerdict thin = AgenticLoopReactiveAgentServiceImpl.coverageOf(THIN);
+		assertTrue(thin.completionRequired());
+		assertTrue(thin.note().contains("rests on 1 of the 6"), thin.note());
+
+		AgenticLoopReactiveAgentServiceImpl.CoverageVerdict cut = AgenticLoopReactiveAgentServiceImpl
+				.coverageOf(THIN.substring(0, THIN.indexOf("\"analysis\"") + 15));
+		assertTrue(cut.completionRequired(), "a result cut to the room keeps the coverage written first");
+		assertTrue(cut.note().contains("rests on 1 of the 6"), cut.note());
+
+		assertFalse(AgenticLoopReactiveAgentServiceImpl.coverageOf(COVERED).completionRequired());
+		assertNull(AgenticLoopReactiveAgentServiceImpl.coverageOf("{\"status\":\"OK\",\"analysis\":\"x\"}"));
+		assertNull(AgenticLoopReactiveAgentServiceImpl.coverageOf("not json at all"));
+		assertNull(AgenticLoopReactiveAgentServiceImpl.coverageOf(null));
+	}
+
+	@Test
+	void aThinCoverageIsCompletedOnlyByASearchOfTheSameKindOfSource() {
+		ToolCallsListener listener = new ToolCallsListener();
+		listener.addCall("deepSearchKnowledgeBase", "deep", "{}", THIN);
+		assertTrue(AgenticLoopReactiveAgentServiceImpl.pendingCoverage(listener, 0, coverageGate()) != null);
+
+		listener.addCall("searchWeb", "web", "{}", "found");
+		assertTrue(AgenticLoopReactiveAgentServiceImpl.pendingCoverage(listener, 0, coverageGate()) != null,
+				"a web search does not complete the knowledge base");
+
+		listener.addCall("getKnowledgeBaseDocumentContents", "read", "{}", "text");
+		assertNull(AgenticLoopReactiveAgentServiceImpl.pendingCoverage(listener, 0, coverageGate()));
+
+		ToolCallsListener covered = new ToolCallsListener();
+		covered.addCall("deepSearchWeb", "deep", "{}", COVERED);
+		assertNull(AgenticLoopReactiveAgentServiceImpl.pendingCoverage(covered, 0, coverageGate()));
+		assertNull(AgenticLoopReactiveAgentServiceImpl.pendingCoverage(listener, 3, coverageGate()),
+				"only the calls of the iteration count");
+	}
+
+	/** A loop agent whose model calls make the given tool calls (name and result) before writing. */
+	private static ScriptedLoopAgent callingAgent(List<List<String>> answers, Map<Integer, List<String[]>> callsByModelCall) {
+		return new ScriptedLoopAgent(answers) {
+			@Override
+			protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+					IChatRequestContext context, Map<String, Object> params) {
+				final int call = receivedParams.size();
+				final Flux<String> text = super.callLLMReactive(chatModel, prompt, context, params);
+				final List<String[]> calls = callsByModelCall.get(call);
+				if (calls == null) {
+					return text;
+				}
+				return Flux.defer(() -> {
+					for (String[] toolCall : calls) {
+						context.getToolCallListener().addCall(toolCall[0], "A tool", "{}", toolCall[1]);
+					}
+					return text;
+				});
+			}
+		};
+	}
+
+	private static String runWithCoverageGate(ScriptedLoopAgent agent, int maxIterations) {
+		ToolCallsListener listener = new ToolCallsListener();
+		AgentNetworkParticipant persona = mock(AgentNetworkParticipant.class);
+		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
+		IChatRequestContext context = IChatRequestContext.forAgent(IChatRequestContext.builder().requestID("r1").build(),
+				listener);
+		return String.join("", agent.iteration(1, maxIterations, 10_000, new ArrayList<>(), null,
+				new GPromptTemplateConfig(), context, persona, mock(INotificationSink.class), listener,
+				agent.deliverableTemplateParams(DeliverableIntent.ANALISYS),
+				new AgenticLoopReactiveAgentServiceImpl.SourceGate(
+						Set.of("deepSearchKnowledgeBase", "searchKnowledgeBase", "getKnowledgeBaseDocumentContents"), true,
+						List.of(), coverageGate()),
+				null).collectList().block());
+	}
+
+	@Test
+	void anAnswerOnAThinCoverageIsDiscardedOnceAndTheNextIterationIsToldWhatToComplete() {
+		ScriptedLoopAgent agent = callingAgent(
+				List.of(List.of("From Steiner only. " + STOP), List.of("From all the authors. " + STOP)),
+				Map.of(0, List.<String[]>of(new String[] { "deepSearchKnowledgeBase", THIN }), 1,
+						List.<String[]>of(new String[] { "searchKnowledgeBase", "found" })));
+
+		String shown = runWithCoverageGate(agent, 5);
+
+		assertEquals("From all the authors. ", shown, "the answer on the thin coverage never reaches the user");
+		assertEquals(2, agent.receivedParams.size());
+		String story = String.valueOf(
+				agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM));
+		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.DISCARDED_THIN_COVERAGE), story);
+		assertTrue(story.contains("rests on 1 of the 6"), story);
+	}
+
+	@Test
+	void anAnswerThatCompletesTheCoverageOrRestsOnAGoodOneStreamsAsUsual() {
+		ScriptedLoopAgent completed = callingAgent(List.of(List.of("Complete. " + STOP)),
+				Map.of(0, List.<String[]>of(new String[] { "deepSearchKnowledgeBase", THIN },
+						new String[] { "getKnowledgeBaseDocumentContents", "text" })));
+		assertEquals("Complete. ", runWithCoverageGate(completed, 5));
+		assertEquals(1, completed.receivedParams.size());
+
+		ScriptedLoopAgent covered = callingAgent(List.of(List.of("Covered. " + STOP)),
+				Map.of(0, List.<String[]>of(new String[] { "deepSearchKnowledgeBase", COVERED })));
+		assertEquals("Covered. ", runWithCoverageGate(covered, 5));
+		assertEquals(1, covered.receivedParams.size());
+	}
+
+	@Test
+	void onTheLastIterationTheAnswerOnAThinCoverageIsShown() {
+		ScriptedLoopAgent last = callingAgent(List.of(List.of("Only answer. " + STOP)),
+				Map.of(0, List.<String[]>of(new String[] { "deepSearchKnowledgeBase", THIN })));
+
+		assertEquals("Only answer. ", runWithCoverageGate(last, 1));
+	}
 }

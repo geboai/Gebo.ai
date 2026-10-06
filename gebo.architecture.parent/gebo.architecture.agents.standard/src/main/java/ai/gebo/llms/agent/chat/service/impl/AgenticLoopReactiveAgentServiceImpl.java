@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.util.json.JsonParser;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.AgentCapabilities;
@@ -50,6 +51,7 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
 import ai.gebo.llms.agent.standardtools.DeepSearchToolSource;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
+import ai.gebo.llms.agent.standardtools.KnowledgeBaseDeepSearchTool;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource;
 import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
 import ai.gebo.llms.agent.standardtools.ToolsFoundDocuments;
@@ -207,8 +209,14 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		return evidence;
 	}
 
-	/** The search tools the agent model mounts, the deep searches among them. */
-	record MountedSearchTools(Set<String> searches, Set<String> deepSearches) {
+	/**
+	 * The search tools the agent model mounts, the deep searches among them, and the
+	 * ones reaching the internal knowledge bases (search, browsing, deep search).
+	 */
+	record MountedSearchTools(Set<String> searches, Set<String> deepSearches, Set<String> knowledgeBaseTools) {
+		MountedSearchTools(Set<String> searches, Set<String> deepSearches) {
+			this(searches, deepSearches, Set.of());
+		}
 	}
 
 	/** The tools of the search sources (see {@link #EVIDENCE_TOOL_SOURCES}) the agent model mounts. */
@@ -221,6 +229,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 		final Set<String> searches = new LinkedHashSet<>();
 		final Set<String> deepSearches = new LinkedHashSet<>();
+		final Set<String> knowledgeBaseTools = new LinkedHashSet<>();
 		for (IGToolCallbackSource source : toolsRepositoryPattern.getImplementations()) {
 			if (source == null || !EVIDENCE_TOOL_SOURCES.contains(source.getId())) {
 				continue;
@@ -233,6 +242,12 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						if (DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE.equals(source.getId())) {
 							deepSearches.add(name);
 						}
+						if (InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE
+								.equals(source.getId())
+								|| KnowledgeBaseBrowsingToolSource.KNOWLEDGE_BASE_BROWSING_TOOL_SOURCE.equals(source.getId())
+								|| KnowledgeBaseDeepSearchTool.DEEP_SEARCH_KNOWLEDGE_BASE_TOOL.equals(name)) {
+							knowledgeBaseTools.add(name);
+						}
 					}
 				}
 			} catch (RuntimeException e) {
@@ -240,7 +255,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						+ source.getId() + ": " + e);
 			}
 		}
-		return new MountedSearchTools(searches, deepSearches);
+		return new MountedSearchTools(searches, deepSearches, knowledgeBaseTools);
 	}
 
 	/**
@@ -250,9 +265,39 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * if it cites document files not among {@code readDocumentNames} (the chat's own
 	 * documents: nothing else was read).
 	 */
-	record SourceGate(Set<String> tools, boolean evidenceRequired, Collection<String> readDocumentNames) {
+	record SourceGate(Set<String> tools, boolean evidenceRequired, Collection<String> readDocumentNames,
+			CoverageGate coverage) {
 		static final SourceGate NONE = new SourceGate(Set.of(), false, List.of());
+
+		SourceGate(Set<String> tools, boolean evidenceRequired, Collection<String> readDocumentNames) {
+			this(tools, evidenceRequired, readDocumentNames, null);
+		}
 	}
+
+	/**
+	 * The coverage part of the gate: an answer that follows a deep search whose
+	 * coverage asks to be completed ({@code coverage.completionRequired} in its result,
+	 * see {@link ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage}) is held
+	 * back until a search of the same kind of source follows it (a knowledge base deep
+	 * search by a knowledge base tool, any other by a tool of the other sources); when
+	 * the iteration ends without one, its answer is discarded unseen and done again
+	 * once, told what to complete.
+	 *
+	 * @param searchTools        the search tools mounted (what completes a coverage)
+	 * @param deepSearchTools    the deep search tools mounted (what reports a coverage)
+	 * @param knowledgeBaseTools the tools reaching the internal knowledge bases
+	 */
+	record CoverageGate(Set<String> searchTools, Set<String> deepSearchTools, Set<String> knowledgeBaseTools) {
+	}
+
+	/** What a deep search result says of its coverage: whether to complete it, and why. */
+	record CoverageVerdict(boolean completionRequired, String note) {
+	}
+
+	/** What the next iteration is told of an answer discarded for a thin deep search coverage. */
+	static final String DISCARDED_THIN_COVERAGE = "This answer was discarded, the user never saw it: it was written "
+			+ "on a deep search whose coverage is thin, without completing it. Complete what is missing with focused "
+			+ "searches, documents read whole or a deep search aimed at it, then answer. The coverage: ";
 
 	/** What the next iteration is told of an answer discarded for citing documents it did not read. */
 	static final String DISCARDED_UNREAD_CITATIONS = "This answer was discarded, the user never saw it: it cites documents "
@@ -301,7 +346,17 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		final Set<String> evidenceTools = evidenceTools(userIntent, agentModel);
 		final SourceGate gate;
 		if (!evidenceTools.isEmpty()) {
-			gate = new SourceGate(evidenceTools, true, chatDocumentNames(chatRequestContext));
+			// an analysis or a search on a deep search whose coverage is thin is completed
+			// before the answer (see CoverageGate)
+			final MountedSearchTools mounted = searchTools(agentModel);
+			final CoverageGate coverage = mounted.deepSearches().isEmpty() ? null
+					: new CoverageGate(mounted.searches(), mounted.deepSearches(), mounted.knowledgeBaseTools());
+			gate = new SourceGate(evidenceTools, true, chatDocumentNames(chatRequestContext), coverage);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agentic loop agent id:" + getId() + " coverage gate:" + (coverage != null)
+						+ (coverage != null ? " deep searches:" + coverage.deepSearchTools() + " knowledge base tools:"
+								+ coverage.knowledgeBaseTools() : ""));
+			}
 		} else {
 			// any other answer may not cite documents it did not read: it is checked when it
 			// used no search
@@ -577,23 +632,31 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			// the text held back while the iteration has not used a tool yet
 			final StringBuilder held = new StringBuilder();
 			final boolean[] open = { gate == null || gate.tools().isEmpty() };
+			// the coverage the deep searches of this iteration ask to complete, re-read as calls arrive
+			final CoverageWatch coverageWatch = new CoverageWatch(gate != null ? gate.coverage() : null,
+					callBacksListener, callsBefore);
 			Flux<String> visible = modelText.map(chunk -> {
 				String out = stripper.accept(chunk);
 				text.append(out);
-				return passed(out, held, open, callBacksListener, callsBefore, gate.tools());
+				return passed(out, held, open, callBacksListener, callsBefore, gate.tools(), coverageWatch);
 			}).concatWith(Flux.defer(() -> {
 				String tail = stripper.complete();
 				text.append(tail);
-				return Flux.just(passed(tail, held, open, callBacksListener, callsBefore, gate.tools()));
+				return Flux.just(passed(tail, held, open, callBacksListener, callsBefore, gate.tools(), coverageWatch));
 			})).filter(chunk -> !chunk.isEmpty());
 			Flux<String> next = Flux.defer(() -> {
 				List<ToolCallExecuted> calls = callBacksListener.getCalls();
 				final List<ToolCallExecuted> iterationCalls = new ArrayList<>(
 						calls.subList(Math.min(callsBefore, calls.size()), calls.size()));
+				// held for a deep search coverage to complete: the sources were searched
+				final String coverageNote = coverageWatch.pending();
+				final boolean heldForCoverage = !open[0] && coverageNote != null
+						&& usedEvidenceTool(callBacksListener, callsBefore, gate.tools());
 				// no search used: the answer has not been shown yet
-				final List<String> unread = open[0] || gate.evidenceRequired() ? List.of()
+				final List<String> unread = open[0] || heldForCoverage || gate.evidenceRequired() ? List.of()
 						: unreadCitations(text.toString(), gate.readDocumentNames());
-				final boolean discard = !open[0] && (gate.evidenceRequired() || !unread.isEmpty());
+				final boolean discard = !open[0] && !heldForCoverage
+						&& (gate.evidenceRequired() || !unread.isEmpty());
 				Flux<String> released = Flux.empty();
 				if (!open[0] && !discard) {
 					// nothing to check against: the answer is shown as it is
@@ -640,6 +703,35 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					LOGGER.trace("</AGENTIC_LOOP_ITERATION>");
 				}
 				boolean another = stripper.isContinueRequested() && number < maxIterations;
+				if (heldForCoverage && !another) {
+					if (number < maxIterations) {
+						// the answer rests on a thin coverage: done again once, told what to complete
+						history.set(history.size() - 1,
+								new LoopIteration(number, DISCARDED_THIN_COVERAGE + coverageNote, iterationCalls));
+						LOGGER.info("Agentic loop agent id:" + getId() + " iteration " + number
+								+ " answered on a deep search coverage asking to be completed: discarded, completing it"
+								+ " in the next iteration");
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Agentic loop agent id:" + getId() + " coverage to complete: " + coverageNote);
+						}
+						if (LOGGER.isTraceEnabled()) {
+							LOGGER.trace("<AGENTIC_LOOP_DISCARDED_ITERATION number=" + number + ">");
+							LOGGER.trace(text.toString());
+							LOGGER.trace("</AGENTIC_LOOP_DISCARDED_ITERATION>");
+						}
+						notificationSink.next(
+								"Agent: " + contextAgentPersona.getNetworkAgentName()
+										+ " searches what the deep search did not cover..",
+								ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
+						return asUser(runAs, iteration(number + 1, maxIterations, budget, history, agentModel,
+								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
+								deliverableParams, SourceGate.NONE, runAs));
+					}
+					// no iteration left: the answer is shown as it is
+					LOGGER.warn("Agentic loop agent id:" + getId() + " last iteration " + number
+							+ " answered on a deep search coverage asking to be completed: answering anyway");
+					return Flux.just(held.toString()).filter(chunk -> !chunk.isEmpty());
+				}
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + number + " ended, tools called:"
 							+ (calls.size() - Math.min(callsBefore, calls.size())) + " continue requested:"
@@ -715,17 +807,135 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 */
 	private static String passed(String out, StringBuilder held, boolean[] open, ToolCallsListener callBacksListener,
 			int callsBefore, Set<String> evidenceTools) {
+		return passed(out, held, open, callBacksListener, callsBefore, evidenceTools, null);
+	}
+
+	/**
+	 * The same, also holding the text back while a deep search coverage of the
+	 * iteration asks to be completed ({@code coverageWatch}, null for none): it is
+	 * released once a search of the same kind of source follows the deep search.
+	 */
+	private static String passed(String out, StringBuilder held, boolean[] open, ToolCallsListener callBacksListener,
+			int callsBefore, Set<String> evidenceTools, CoverageWatch coverageWatch) {
+		final boolean coverageToComplete = coverageWatch != null && coverageWatch.pending() != null;
 		if (open[0]) {
-			return out;
+			if (!coverageToComplete) {
+				return out;
+			}
+			// a deep search asked to complete its coverage: what follows waits for it
+			open[0] = false;
 		}
 		held.append(out);
-		if (usedEvidenceTool(callBacksListener, callsBefore, evidenceTools)) {
+		if (!coverageToComplete && usedEvidenceTool(callBacksListener, callsBefore, evidenceTools)) {
 			open[0] = true;
 			final String released = held.toString();
 			held.setLength(0);
 			return released;
 		}
 		return "";
+	}
+
+	/**
+	 * The coverage the deep searches of an iteration ask to complete, re-read only when
+	 * a tool call arrives (the deep search results are parsed once per call, not per
+	 * streamed chunk).
+	 */
+	static final class CoverageWatch {
+		private final CoverageGate gate;
+		private final ToolCallsListener listener;
+		private final int callsBefore;
+		private int callsSeen = -1;
+		private String pending = null;
+
+		CoverageWatch(CoverageGate gate, ToolCallsListener listener, int callsBefore) {
+			this.gate = gate;
+			this.listener = listener;
+			this.callsBefore = callsBefore;
+		}
+
+		/** The coverage note still to complete, or null. */
+		synchronized String pending() {
+			if (gate == null || listener == null) {
+				return null;
+			}
+			final int calls = listener.getCalls().size();
+			if (calls != callsSeen) {
+				callsSeen = calls;
+				pending = pendingCoverage(listener, callsBefore, gate);
+			}
+			return pending;
+		}
+	}
+
+	/**
+	 * The coverage still to complete after the calls since {@code callsBefore}: a deep
+	 * search whose result asks to complete its coverage stays pending until a search of
+	 * the same kind of source follows it (a knowledge base tool for a knowledge base
+	 * deep search, a tool of the other sources for any other); a later deep search of
+	 * the same kind replaces it. The notes of both kinds when both are pending; null
+	 * when none is.
+	 */
+	static String pendingCoverage(ToolCallsListener listener, int callsBefore, CoverageGate gate) {
+		String knowledgeBase = null;
+		String others = null;
+		final List<ToolCallExecuted> calls = listener.getCalls();
+		for (ToolCallExecuted call : new ArrayList<>(calls.subList(Math.min(callsBefore, calls.size()), calls.size()))) {
+			final String name = call.getName();
+			final boolean ofKnowledgeBase = gate.knowledgeBaseTools().contains(name);
+			if (gate.deepSearchTools().contains(name)) {
+				final CoverageVerdict verdict = coverageOf(call.getResult());
+				final String note = verdict != null && verdict.completionRequired()
+						? (verdict.note() != null ? verdict.note() : "complete what the deep search did not cover")
+						: null;
+				if (ofKnowledgeBase) {
+					knowledgeBase = note;
+				} else {
+					others = note;
+				}
+			} else if (gate.searchTools().contains(name)) {
+				if (ofKnowledgeBase) {
+					knowledgeBase = null;
+				} else {
+					others = null;
+				}
+			}
+		}
+		if (knowledgeBase != null && others != null) {
+			return knowledgeBase + " " + others;
+		}
+		return knowledgeBase != null ? knowledgeBase : others;
+	}
+
+	private static final Pattern COMPLETION_REQUIRED = Pattern.compile("\"completionRequired\"\\s*:\\s*true");
+	private static final Pattern COVERAGE_NOTE = Pattern.compile("\"note\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"");
+
+	/**
+	 * What a deep search result says of its coverage, read from its JSON (the coverage
+	 * comes before the analysis, so a result cut to the room keeps it: when the whole
+	 * JSON cannot be read, the coverage's own fields are looked for); null when the
+	 * result says nothing of it or cannot be read, which never holds an answer back.
+	 */
+	@SuppressWarnings("unchecked")
+	static CoverageVerdict coverageOf(String result) {
+		if (result == null || !result.contains("completionRequired")) {
+			return null;
+		}
+		try {
+			final Map<String, Object> read = JsonParser.fromJson(result, Map.class);
+			final Object coverage = read != null ? read.get("coverage") : null;
+			if (coverage instanceof Map<?, ?> fields) {
+				final boolean required = Boolean.TRUE.equals(fields.get("completionRequired"));
+				final Object note = fields.get("note");
+				return new CoverageVerdict(required, note != null ? String.valueOf(note) : null);
+			}
+			return null;
+		} catch (RuntimeException e) {
+			if (!COMPLETION_REQUIRED.matcher(result).find()) {
+				return null;
+			}
+			final Matcher note = COVERAGE_NOTE.matcher(result);
+			return new CoverageVerdict(true, note.find() ? note.group(1).replace("\\\"", "\"") : null);
+		}
 	}
 
 	/**

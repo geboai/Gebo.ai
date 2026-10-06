@@ -504,6 +504,22 @@ ai.gebo.agents.standard.deep-search-tools.max-analysis-tokens: 16000
 # or not a positive number); one more is refused, telling the agent to answer with what
 # it has.
 ai.gebo.agents.standard.deep-search-tools.max-deep-searches-per-request: 8
+# Coverage of a deep search: the tool measures how much of what it found the analysis
+# covers and, when the coverage is thin for an analysis, asks the agent to complete it.
+# Thin when fewer than min-documents-used documents are used out of min-documents-found
+# or more found; or (knowledge bases) when more than barely-read-share of the documents
+# found were read in at most barely-read-fragments fragments; or (knowledge bases, with
+# not-reached-trigger) when the documents no search reached are as many as those used;
+# or when the analysis reports something missing. A FOCUSED deep search is never thin.
+# With gate-enabled the agentic loop discards once an answer written on a thin coverage
+# no search of the same kind of source completed, and the agent completes it; off, the
+# coverage is only reported.
+ai.gebo.agents.standard.deep-search-tools.coverage.gate-enabled: true
+ai.gebo.agents.standard.deep-search-tools.coverage.min-documents-used: 2
+ai.gebo.agents.standard.deep-search-tools.coverage.min-documents-found: 3
+ai.gebo.agents.standard.deep-search-tools.coverage.barely-read-fragments: 2
+ai.gebo.agents.standard.deep-search-tools.coverage.barely-read-share: 0.5
+ai.gebo.agents.standard.deep-search-tools.coverage.not-reached-trigger: true
 # Open-chat pipeline (pipelineCode=open-chat): a "pure chat" experience that never
 # RAGs the internal knowledge base. It answers freely via a KB-free network of agents,
 # can search external systems, and can chat over uploaded/picked files. Its agents
