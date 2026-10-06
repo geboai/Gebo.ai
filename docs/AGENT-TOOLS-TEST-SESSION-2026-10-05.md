@@ -481,3 +481,17 @@ Clean rebuild of the whole reactor (189 modules), only the `gebo.ai` container r
 - searchRequested=never is output by gpt-4o-mini for English ("Without searching anything") but not for Italian ("Senza cercare nulla").
 - The closing (ANSWER-DOCUMENTS and control marker) is missing in 7 to 10 answers of 52; the documents are then the ones the answer cites. The ids sometimes appear inline in the answer ("(#3, #1)").
 - Wrong facts read from pages (W08: the site's "Last Published" date given as Maven 3.9.16's release date, 2026-04-13 in the history page; W03: JEP 507 missed).
+
+## 17. A second, different knowledge base (2026-10-06, log time 19:03 - 19:27)
+
+A new knowledge base made from the UI (knowledge base, project, upload data source) with 5 business and technical documents (a stock management book, a computation method, a product configuration manual, an industrial platform presentation, enterprise AI security considerations), and a chat profile bound to it only. gpt-4.1; every turn's log checked for the knowledge base filters of the semantic, full-text and tool legs.
+
+| Check | Outcome |
+|---|---|
+| 15 questions in a chat of the new profile (listing, quotations, deep searches, whole document reads, cross-document analysis, decision, negative, KB + web, cross-language, recap) | 15 / 15 correct, all quotations found in the tools' results |
+| Isolation, profile bound to one knowledge base | every retrieval filtered on that knowledge base only (semantic KNOWLEDGEBASE_CODE IN [...], full text, tool scope); questions about the other knowledge base's topics answered "not in the knowledge base" |
+| Default profile (the user chooses the knowledge bases) | a new chat uses every knowledge base the user can access; a chat created before the new knowledge base existed also searches it (the scope is resolved per request) |
+
+**Found and fixed** (`f83bf1afa`): models dropped the tags of the documents line and wrote the bare word with the ids on the next line, shown to the user and lost to Found docs. The line now opens with `@@DOCS@@`, a sequence no text has; the stripper also recognizes the former tag and the bare word followed by ids. With it the line was missing in 1 answer of 15 (10 of 52 with the tags) and never shown.
+
+**Observed:** a coverage judged thin on documents read in part that the question does not need (a decision about one manual: the security and platform documents read in part).
