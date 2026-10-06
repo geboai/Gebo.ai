@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "డీప్ సెర్చ్/Jira సెర్చ్"
       },
-      "PURE_SEARCH": {
-        "label": "సహాయంతో శోధన"
-      },
       "imageGeneration": {
         "label": "చిత్రం రూపొందింపు"
       }

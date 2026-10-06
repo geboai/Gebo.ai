@@ -154,9 +154,12 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		environment.put(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE, knowledgeBaseCodes);
 		environment.put(StandardAgentsNetworkEnvironmentEntries.USER_INTENT,
 				request.getUserIntent() != null ? request.getUserIntent() : DeliverableIntent.SUMMARY);
+		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED,
+				Boolean.TRUE.equals(request.getSearchRequested()));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End buildNetworkEnvironment(...) knowledgeBases:" + knowledgeBaseCodes.size() + " userIntent:"
-					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT));
+					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT) + " searchRequested:"
+					+ environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED));
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("Knowledge base codes seeded into the network environment: " + knowledgeBaseCodes);

@@ -98,6 +98,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private static final String REWRITTEN_QUERY_FIELD = REWRITTEN_QUERY_TEMPLATE_PARAM;
 	static final String DEEP_SEARCHED_SYSTEMS = "deepSearchedSystems";
 	private static final String DELIVERABLE_FIELD = DELIVERABLE_TEMPLATE_PARAM;
+	/** The request understanding's field telling whether the user asked to search. */
+	static final String SEARCH_REQUESTED_FIELD = "searchRequested";
 	private static final String INTENT_SELECTION_CRITERIA = "selection-criteria: ";
 	private static final String INTENT_TYPE = "intent-type: ";
 	private static final String END_DELIVERABLE_TYPES_CATALOG = "END_DELIVERABLE_TYPES_CATALOG";
@@ -184,7 +186,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
 		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
 		Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
-				List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD));
+				List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD, SEARCH_REQUESTED_FIELD));
 		// an output with neither field is asked once more by callLLMRepeatableFieldEntryOutput
 		List<String> rewrittenQuery = data.get(REWRITTEN_QUERY_FIELD);
 		List<String> deliverable = data.get(DELIVERABLE_FIELD);
@@ -228,6 +230,11 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 					"**********************************************************************************************");
 		}
 		runtimeData.getRequestResources().getCurrentRequest().setUserIntent(userIntent);
+		final boolean searchRequested = searchRequested(data.get(SEARCH_REQUESTED_FIELD));
+		runtimeData.getRequestResources().getCurrentRequest().setSearchRequested(searchRequested);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Search requested:" + searchRequested);
+		}
 		return new RewriteAndUserIntent(rewrited_query, userIntent);
 	}
 
@@ -545,6 +552,15 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		private final String motivation;
 	}
 
+	/** Whether the request understanding said the user asked to search: true, yes or 1. */
+	static boolean searchRequested(List<String> values) {
+		if (values == null || values.isEmpty() || values.get(0) == null) {
+			return false;
+		}
+		final String value = values.get(0).trim().toLowerCase();
+		return value.startsWith("true") || value.startsWith("yes") || value.equals("1");
+	}
+
 	private RespondingWith parseDecision(String decision) {
 		TreeMap<Integer, RespondingWith> ordered = new TreeMap<Integer, RespondingWith>();
 		String tolower = decision.toLowerCase();
@@ -726,9 +742,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 
 		case CHAT_WITH_FILES: {
 			return List.of(DefaultChatWithFilesStreamingOutputPipelineServiceImpl.DEFAULT_CHAT_WITH_DOCS_STREAMING);
-		}
-		case PURE_SEARCH: {
-			return List.of(DefaultPipelineStreamingPureSearchPipelineStepServiceImpl.PURE_SEARCH_STREAMING_SERVICE);
 		}
 		case DELEGATED_AGENT: {
 			return List.of(DefaultPipelineStreamingDelegatedStepServiceImpl.DEFAULT_CHAT_PIPELINE_STEP_SERVICE);

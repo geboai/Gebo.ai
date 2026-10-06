@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "Deep search/Jira Search"
       },
-      "PURE_SEARCH": {
-        "label": "Pencarian terbantu"
-      },
       "imageGeneration": {
         "label": "Pembuatan gambar"
       }

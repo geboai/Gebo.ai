@@ -81,6 +81,12 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 	private List<UserUploadedContent> userUploadedContents = new ArrayList<>();
 	private List<String> deepSearchDataSources = null;
 	private DeliverableIntent userIntent = DeliverableIntent.UNKNOWN;
+	/**
+	 * Whether the user asked to search, find, research, look up or verify something (in
+	 * any language), or named the sources to use: the answer then has to rest on what
+	 * the searches return. Set by the request understanding.
+	 */
+	private Boolean searchRequested = Boolean.FALSE;
 
 	public static <RequestType> RequestType actualQuery(GeboTemplatedChatRequest<RequestType> request) {
 		return request.getRewrittenQuery() != null ? request.getRewrittenQuery() : request.getQuery();

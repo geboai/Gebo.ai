@@ -1,4 +1,0 @@
-INPUTS:
-- Last User question:
-{question}
-

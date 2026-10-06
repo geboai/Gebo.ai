@@ -15,10 +15,11 @@ Use only information already present in the chat history and user question.
 Avoid adding new entities, products, versions, dates, or requirements not present.
 
 Output ONLY:
- two fields in the format <field>=<value>
+ three fields in the format <field>=<value>
   
  rewrittenQuery=<the rewritten user question (no explanations, no JSON, no extra text)>
  deliverable=<selected deliverable type (intent-type value)>
+ searchRequested=<true or false>
  
 rewrittenQuery rules:
 
@@ -38,9 +39,12 @@ rewrittenQuery rules:
 
 deliverable rules:
 * Consider your generated rewrittenQuery as input and choose from the (G) deliverable type list a single the intent-type field value that mostly fits.
-* Prefer the lightest deliverable that satisfies the request; default to QA when in doubt. Only choose ANALISYS or PURE_SEARCH when the user EXPLICITLY asks for a report/analysis or for a search/research. A normal question that can be answered directly is QA, not ANALISYS.
-* PURE_SEARCH is only for requests that want the found documents, files or results themselves (find, list or locate what exists). When the user asks a question and only says where or how to look for the answer (e.g. "search the web: when was X founded?", "search the documents for X and tell me who he is"), the deliverable is the one the question itself asks for (QA when in doubt), not PURE_SEARCH.
+* Prefer the lightest deliverable that satisfies the request; default to QA when in doubt. Only choose ANALISYS when the user EXPLICITLY asks for a report or an analysis. A normal question that can be answered directly is QA, not ANALISYS.
+* The deliverable is what the user wants back, never how to get it: "search the web: when was X founded?" is QA, "find the documents about X" is SUMMARY or QA, "search and compare in depth" is ANALISYS.
 * Choose IMAGE_GENERATION when the user EXPLICITLY asks to generate/create/draw/render/paint/design a NEW image, picture, illustration, logo, icon, avatar, artwork or photo (in any language). Do NOT choose IMAGE_GENERATION when the user only wants to find/search existing images, or to describe/analyze an image they provided.
+
+searchRequested rules:
+* true when the user asks to search, find, research, look up, check or verify something, in any language and with any synonym (cerca, trova, verifica, recherche, busca, suche...), or names the sources to use (the web, the documents, the knowledge base, a system); false otherwise.
 
 You MUST NOT:
 
@@ -51,10 +55,11 @@ Add keywords lists, alternative queries, or extra metadata.
 Introduce assumptions or guesses.
 
 OUTPUT:
-Return only the two required fields exactly 2 lines:
+Return only the three required fields exactly 3 lines:
 No quotes. No markdown. No bullets.
 
 Example: 
  rewrittenQuery=<the rewritten user question (no explanations, no JSON, no extra text)>
  deliverable=<selected deliverable type (intent-type value)>
+ searchRequested=<true or false>
 

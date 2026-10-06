@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "Chwilio dwfn/Chwilio Jira"
       },
-      "PURE_SEARCH": {
-        "label": "Chwiliad cynorthwyol"
-      },
       "imageGeneration": {
         "label": "Cynhyrchu delwedd"
       }

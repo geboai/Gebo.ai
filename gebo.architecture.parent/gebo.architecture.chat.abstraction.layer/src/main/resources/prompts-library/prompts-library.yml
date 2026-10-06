@@ -163,28 +163,6 @@ ai.gebo.prompts:
       chatHistory: REQUIRED
       contextDocuments: REQUIRED
       toolsCalling: NOT_REQUIRED
-    #pure search
-    - promptUse: default-pipeline-pure-search-datasources-selection-prompt
-      langCode: en
-      systemReference: /prompts-library/en/default-pipeline-pure-search-datasources-selection-prompt-system-prompt.txt
-      userReference: /prompts-library/en/default-pipeline-pure-search-datasources-selection-prompt-user-prompt.txt
-      chatHistory: REQUIRED
-      contextDocuments: REQUIRED
-      toolsCalling: NOT_REQUIRED
-    - promptUse: default-pipeline-pure-search-fallback-prompt
-      langCode: en
-      systemReference: /prompts-library/en/default-pipeline-pure-search-fallback-prompt-system-prompt.txt
-      userReference: /prompts-library/en/default-pipeline-pure-search-fallback-prompt-user-prompt.txt
-      chatHistory: NOT_REQUIRED
-      contextDocuments: NOT_REQUIRED
-      toolsCalling: REQUIRED
-    - promptUse: default-pipeline-pure-search-summary-prompt
-      langCode: en
-      systemReference: /prompts-library/en/default-pipeline-pure-search-summary-prompt-system-prompt.txt
-      userReference: /prompts-library/en/default-pipeline-pure-search-summary-prompt-user-prompt.txt
-      chatHistory: REQUIRED
-      contextDocuments: NOT_REQUIRED
-      toolsCalling: NOT_REQUIRED
       #prompt used by the ranker service to drop the ranked fragments that are
       #completely useless for the query: no chat session is involved, the query is
       #carried by a session-less chat request context
@@ -407,32 +385,6 @@ ai.gebo.prompts:
       placeholders:
         - placeholder: documents
           description: Rendered content of the documents the user attached to the conversation.
-        - placeholder: question
-          description: The user's current question or request text.
-    - code: default-pipeline-pure-search-datasources-selection-prompt
-      description: Selects which deep-search data sources should be queried for a "pure search" pipeline turn.
-      module: chat
-      placeholders:
-        - placeholder: deepSearchDataSources
-          description: Catalog describing the deep-search data sources available to be selected.
-        - placeholder: documents
-          description: Rendered block of any documents/fragments already available for this request.
-        - placeholder: question
-          description: The user's current question or request text.
-    - code: default-pipeline-pure-search-fallback-prompt
-      description: Fallback answer for the "pure search" pipeline step when the selected data sources produce nothing usable.
-      module: chat
-      placeholders:
-        - placeholder: question
-          description: The user's current question or request text.
-    - code: default-pipeline-pure-search-summary-prompt
-      description: Summarizes the results gathered by the "pure search" pipeline step into the final answer.
-      module: chat
-      placeholders:
-        - placeholder: consolidated
-          description: The results consolidated so far by the "pure search" pipeline step.
-        - placeholder: documents
-          description: Rendered block of the documents/fragments gathered by the "pure search" pipeline step.
         - placeholder: question
           description: The user's current question or request text.
     - code: ranker-irrelevant-fragments-filter-prompt

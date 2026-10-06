@@ -2438,9 +2438,6 @@
       },
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "Deep search/Recherche Jira"
-      },
-      "PURE_SEARCH": {
-        "label": "Recherche assistée"
       }
     }
   },

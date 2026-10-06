@@ -361,11 +361,17 @@ class AgenticLoopReactiveAgentServiceTest {
 	}
 
 	@Test
-	void theRetryIsMadeOnceAndTheLastIterationAnswersAnyway() {
-		ScriptedLoopAgent once = toolUsingAgent(
-				List.of(List.of("First. " + STOP), List.of("Second, still without tools. " + STOP)), Set.of());
-		assertEquals("Second, still without tools. ", runNeedingEvidence(once, 5));
-		assertEquals(2, once.receivedParams.size(), "one retry only");
+	void aRequestNeedingTheSourcesStaysHeldUntilItSearchesThemAndTheLastIterationAnswersAnyway() {
+		ScriptedLoopAgent stubborn = toolUsingAgent(List.of(List.of("First. " + STOP),
+				List.of("Second, still without tools. " + STOP), List.of("Third, still without tools. " + STOP)), Set.of());
+		assertEquals("Third, still without tools. ", runNeedingEvidence(stubborn, 3),
+				"discarded as long as it does not search, the last iteration shown");
+		assertEquals(3, stubborn.receivedParams.size());
+
+		ScriptedLoopAgent searching = toolUsingAgent(
+				List.of(List.of("From memory. " + STOP), List.of("From the search. " + STOP)), Set.of(1));
+		assertEquals("From the search. ", runNeedingEvidence(searching, 5));
+		assertEquals(2, searching.receivedParams.size(), "shown as soon as it searches");
 
 		ScriptedLoopAgent last = toolUsingAgent(List.of(List.of("Only answer. " + STOP)), Set.of());
 		assertEquals("Only answer. ", runNeedingEvidence(last, 1), "no iteration left: the answer is shown");
@@ -408,7 +414,7 @@ class AgenticLoopReactiveAgentServiceTest {
 		ScriptedLoopAgent agent = toolUsingAgent(List.of(List.of("From memory. " + STOP), List.of("Searched. " + STOP)),
 				Set.of(0), "notifyUser");
 
-		assertEquals("Searched. ", runNeedingEvidence(agent, 5), "a notification is not a search");
+		assertEquals("Searched. ", runNeedingEvidence(agent, 2), "a notification is not a search: shown only as the last");
 		assertEquals(2, agent.receivedParams.size());
 	}
 
@@ -449,7 +455,7 @@ class AgenticLoopReactiveAgentServiceTest {
 
 		assertEquals(Set.of("deepSearchKnowledgeBase"), agent.evidenceTools(DeliverableIntent.ANALISYS, model));
 		assertEquals(Set.of("searchKnowledgeBase", "deepSearchKnowledgeBase"),
-				agent.evidenceTools(DeliverableIntent.PURE_SEARCH, model));
+				agent.evidenceTools(DeliverableIntent.QA, true, model), "a search asked: any search");
 		assertEquals(Set.of(), agent.evidenceTools(DeliverableIntent.QA, model));
 	}
 
@@ -475,7 +481,7 @@ class AgenticLoopReactiveAgentServiceTest {
 		assertEquals(Set.of("deepSearchKnowledgeBase", "getKnowledgeBaseDocumentContents"),
 				agent.evidenceTools(DeliverableIntent.ANALISYS, model));
 		assertEquals(Set.of("deepSearchKnowledgeBase", "browseKnowledgeBaseDocuments", "getKnowledgeBaseDocumentContents"),
-				agent.evidenceTools(DeliverableIntent.PURE_SEARCH, model));
+				agent.evidenceTools(DeliverableIntent.SUMMARY, true, model));
 	}
 
 	private static IGToolCallbackSource source(String id, String... toolNames) {
@@ -542,6 +548,24 @@ class AgenticLoopReactiveAgentServiceTest {
 		assertFalse(known.isKnown("https://www.postgresql.org/download/"));
 		assertTrue(known.isKnown("https://user.example/page"));
 		assertTrue(known.isKnown("https://chat.example/old"));
+	}
+
+	@Test
+	void theUserIsWarnedOfAnAnswerThatNeededTheSourcesAndSearchedNone() {
+		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, null, null, null,
+				null, null, NO_RENDERER);
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse response = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse();
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
+
+		agent.warnAboutAnswerWithoutSearch(response, collector);
+		assertTrue(response.getBackendMessages() == null || response.getBackendMessages().isEmpty());
+
+		collector.markAnsweredWithoutSearch();
+		agent.warnAboutAnswerWithoutSearch(response, collector);
+		assertEquals(1, response.getBackendMessages().size());
+		assertEquals("No source searched for this answer", response.getBackendMessages().get(0).getSummary());
+		assertTrue(AgenticLoopReactiveAgentServiceImpl.collectorOf(collector.sharedThrough(
+				IChatRequestContext.builder().requestID("r1").toolsContext(Map.of()).build())) == collector);
 	}
 
 	@Test
@@ -662,7 +686,9 @@ class AgenticLoopReactiveAgentServiceTest {
 	@Test
 	void onlyAnalysesAndSearchesNeedTheSourcesEvidence() {
 		assertTrue(AgenticLoopReactiveAgentServiceImpl.needsEvidence(DeliverableIntent.ANALISYS));
-		assertTrue(AgenticLoopReactiveAgentServiceImpl.needsEvidence(DeliverableIntent.PURE_SEARCH));
+		assertTrue(AgenticLoopReactiveAgentServiceImpl.needsEvidence(DeliverableIntent.QA, true),
+				"the user asked to search, whatever the deliverable");
+		assertFalse(AgenticLoopReactiveAgentServiceImpl.needsEvidence(DeliverableIntent.QA, false));
 		assertFalse(AgenticLoopReactiveAgentServiceImpl.needsEvidence(DeliverableIntent.QA));
 		assertFalse(AgenticLoopReactiveAgentServiceImpl.needsEvidence(DeliverableIntent.SUMMARY));
 	}

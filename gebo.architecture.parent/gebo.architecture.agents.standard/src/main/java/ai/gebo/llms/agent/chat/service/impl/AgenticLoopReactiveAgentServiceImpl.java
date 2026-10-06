@@ -51,6 +51,7 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
 import ai.gebo.llms.agent.standardtools.DeepSearchToolSource;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
+import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;
 import ai.gebo.llms.agent.standardtools.CitedAddresses;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseDeepSearchTool;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource;
@@ -156,19 +157,36 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	/**
 	 * What the next iteration is told of an iteration whose answer was discarded
 	 * because it used no tool giving the sources' evidence (see
-	 * {@link #needsEvidence(DeliverableIntent)}).
+	 * {@link #needsEvidence(DeliverableIntent, boolean)}).
 	 */
 	static final String DISCARDED_WITHOUT_EVIDENCE = "This answer was discarded, the user never saw it: it used no search tool, "
-			+ "while the user asked for a deliverable that must rest on what the sources contain now (the chat history "
-			+ "is not a source). Search the sources with the tools first, then answer from what they return.";
+			+ "while the user asked to search or for an analysis, which must rest on what the sources contain now (the chat "
+			+ "history is not a source). Search the sources with the tools first, then answer from what they return.";
 
 	/**
-	 * The deliverables built on the sources' evidence: an analysis or report, a pure
-	 * search. An answer to them that used no tool rests on the model's memory or on
-	 * the chat history only.
+	 * The requests built on the sources' evidence: an analysis or report, and any
+	 * request in which the user asked to search, find, research, look up or verify, or
+	 * named the sources (see the request understanding). An answer to them that used no
+	 * tool rests on the model's memory or on the chat history only.
 	 */
+	static boolean needsEvidence(DeliverableIntent intent, boolean searchRequested) {
+		return intent == DeliverableIntent.ANALISYS || searchRequested;
+	}
+
+	/** The same, the user not having asked to search. */
 	static boolean needsEvidence(DeliverableIntent intent) {
-		return intent == DeliverableIntent.ANALISYS || intent == DeliverableIntent.PURE_SEARCH;
+		return needsEvidence(intent, false);
+	}
+
+	/**
+	 * Whether the user asked to search, as the shared session environment says; false
+	 * when it does not say.
+	 */
+	protected boolean sessionSearchRequested(AgentsCollaborationSessionContext session) {
+		final Object value = session != null && session.getEnvironment() != null
+				? session.getEnvironment().get(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED)
+				: null;
+		return Boolean.TRUE.equals(value);
 	}
 
 	/**
@@ -191,7 +209,13 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * documents read whole); any other deliverable any search.
 	 */
 	protected Set<String> evidenceTools(DeliverableIntent intent, IGConfigurableChatModel<?> agentModel) {
-		if (!needsEvidence(intent)) {
+		return evidenceTools(intent, false, agentModel);
+	}
+
+	/** The same, also needed when the user asked to search (see {@link #needsEvidence(DeliverableIntent, boolean)}). */
+	protected Set<String> evidenceTools(DeliverableIntent intent, boolean searchRequested,
+			IGConfigurableChatModel<?> agentModel) {
+		if (!needsEvidence(intent, searchRequested)) {
 			return Set.of();
 		}
 		final MountedSearchTools mounted = searchTools(agentModel);
@@ -205,7 +229,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			evidence = mounted.searches();
 		}
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Agentic loop agent id:" + getId() + " deliverable:" + intent + " evidence tools:" + evidence);
+			LOGGER.debug("Agentic loop agent id:" + getId() + " deliverable:" + intent + " search requested:"
+					+ searchRequested + " evidence tools:" + evidence);
 		}
 		return evidence;
 	}
@@ -322,10 +347,11 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		// The kind of deliverable the user asked for (a direct answer, an analysis...)
 		// shapes every iteration, as it shapes the report writer's answer.
 		final DeliverableIntent userIntent = sessionUserIntent(session);
+		final boolean searchRequested = sessionSearchRequested(session);
 		final Map<String, Object> deliverableParams = deliverableTemplateParams(userIntent);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Agentic loop agent id:" + getId() + " shapes its answer for the deliverable:"
-					+ userIntent.name());
+					+ userIntent.name() + ", search requested:" + searchRequested);
 		}
 		final List<LoopIteration> history = new ArrayList<>();
 		// The search and deep search tools called by the loop add their documents to this
@@ -344,7 +370,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 		// an answer to a request for an analysis or a search must rest on the tools' results:
 		// the first iteration is held back until it uses a tool (see iteration(...))
-		final Set<String> evidenceTools = evidenceTools(userIntent, agentModel);
+		final Set<String> evidenceTools = evidenceTools(userIntent, searchRequested, agentModel);
 		final SourceGate gate;
 		if (!evidenceTools.isEmpty()) {
 			// an analysis or a search on a deep search whose coverage is thin is completed
@@ -397,6 +423,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						}
 						warnAboutUnreadCitations(response, chatRequestContext, toolDocuments);
 						warnAboutRemovedAddresses(response, removedAddresses);
+						warnAboutAnswerWithoutSearch(response, toolDocuments);
 					}
 				});
 	}
@@ -481,8 +508,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		if (ids == null || chatRequestContext == null || chatRequestContext.getToolsContext() == null) {
 			return;
 		}
-		final ToolsFoundDocuments collector = ToolsFoundDocuments
-				.from(new org.springframework.ai.chat.model.ToolContext(chatRequestContext.getToolsContext()));
+		final ToolsFoundDocuments collector = collectorOf(chatRequestContext);
 		if (collector == null) {
 			return;
 		}
@@ -491,6 +517,28 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + number + " rests on the document(s): "
 					+ ids);
 		}
+	}
+
+	/** The request's found documents a request context shares with its tools, or null. */
+	static ToolsFoundDocuments collectorOf(IChatRequestContext chatRequestContext) {
+		if (chatRequestContext == null || chatRequestContext.getToolsContext() == null) {
+			return null;
+		}
+		return ToolsFoundDocuments
+				.from(new org.springframework.ai.chat.model.ToolContext(chatRequestContext.getToolsContext()));
+	}
+
+	/**
+	 * Tells the user, with a warning on the answer, that it needed the sources and no
+	 * source was searched: it rests on the model's knowledge only.
+	 */
+	protected void warnAboutAnswerWithoutSearch(GeboChatResponse response, ToolsFoundDocuments toolDocuments) {
+		if (toolDocuments == null || !toolDocuments.isAnsweredWithoutSearch() || response.getBackendMessages() == null) {
+			return;
+		}
+		response.getBackendMessages().add(GUserMessage.warnMessage("No source searched for this answer",
+				"The request needed the sources, and none was searched: the answer rests on the model's knowledge only "
+						+ "and is not checked against any source."));
 	}
 
 	/**
@@ -864,15 +912,24 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 								"Agent: " + contextAgentPersona.getNetworkAgentName()
 										+ " searches the sources before answering..",
 								ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
+						// a request needing the sources stays held until it searches them, iteration
+						// after iteration: a model that answers from memory again is discarded again
 						return asUser(runAs, iteration(number + 1, maxIterations, budget, history, agentModel,
 								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
-								deliverableParams, SourceGate.NONE, runAs));
+								deliverableParams, gate.evidenceRequired() ? gate : SourceGate.NONE, runAs));
 					}
 					// no iteration left: the answer is shown as it is
 					LOGGER.warn("Agentic loop agent id:" + getId() + " last iteration " + number
 							+ " used no search although its answer needed one: answering anyway");
 					history.add(new LoopIteration(number, text.toString(), iterationCalls));
 					recordAnswerDocuments(chatRequestContext, stripper, number);
+					if (gate.evidenceRequired()) {
+						// the user is told the answer rests on no search
+						final ToolsFoundDocuments collector = collectorOf(chatRequestContext);
+						if (collector != null) {
+							collector.markAnsweredWithoutSearch();
+						}
+					}
 					return Flux.just(held.toString()).filter(chunk -> !chunk.isEmpty());
 				}
 				history.add(new LoopIteration(number, text.toString(), iterationCalls));

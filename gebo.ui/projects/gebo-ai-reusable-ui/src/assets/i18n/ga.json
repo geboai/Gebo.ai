@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "Cuardach domhain/Cuardach Jira"
       },
-      "PURE_SEARCH": {
-        "label": "Cuardach treoraithe"
-      },
       "imageGeneration": {
         "label": "Giniúint íomhá"
       }

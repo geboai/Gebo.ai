@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "심층 검색/Jira 검색"
       },
-      "PURE_SEARCH": {
-        "label": "도움이 되는 검색"
-      },
       "imageGeneration": {
         "label": "이미지 생성"
       }

@@ -2438,9 +2438,6 @@
       },
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "ຄົ້ນຫາລຶກ/Jira Search"
-      },
-      "PURE_SEARCH": {
-        "label": "ຄົ້ນຫາດ້ວຍຜູ້ຊ່ວຍ"
       }
     }
   },

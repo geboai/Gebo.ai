@@ -47,6 +47,17 @@ public final class ToolsFoundDocuments {
 	private final Map<String, String> idsByCode = new LinkedHashMap<>();
 	/** The ids of the documents the answer says it rests on; null while it said none. */
 	private List<String> answerDocumentIds = null;
+	/** Whether the answer needed the sources and was shown without any search. */
+	private boolean answeredWithoutSearch = false;
+
+	/** Records that the answer needed the sources and was shown without any search. */
+	public synchronized void markAnsweredWithoutSearch() {
+		answeredWithoutSearch = true;
+	}
+
+	public synchronized boolean isAnsweredWithoutSearch() {
+		return answeredWithoutSearch;
+	}
 
 	/**
 	 * Records the documents, once per document code: each new one gets the next short
