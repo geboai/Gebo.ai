@@ -872,7 +872,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * search whose result asks to complete its coverage stays pending until a search of
 	 * the same kind of source follows it (a knowledge base tool for a knowledge base
 	 * deep search, a tool of the other sources for any other); a later deep search of
-	 * the same kind replaces it. The notes of both kinds when both are pending; null
+	 * the same kind replaces it, unless it was refused or failed. The notes of both kinds when both are pending; null
 	 * when none is.
 	 */
 	static String pendingCoverage(ToolCallsListener listener, int callsBefore, CoverageGate gate) {
@@ -883,6 +883,10 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			final String name = call.getName();
 			final boolean ofKnowledgeBase = gate.knowledgeBaseTools().contains(name);
 			if (gate.deepSearchTools().contains(name)) {
+				if (didNotRun(call.getResult())) {
+					// refused (searches repeated, deep searches used up) or failed: nothing completed
+					continue;
+				}
 				final CoverageVerdict verdict = coverageOf(call.getResult());
 				final String note = verdict != null && verdict.completionRequired()
 						? (verdict.note() != null ? verdict.note() : "complete what the deep search did not cover")
@@ -906,7 +910,14 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		return knowledgeBase != null ? knowledgeBase : others;
 	}
 
-	private static final Pattern COMPLETION_REQUIRED = Pattern.compile("\"completionRequired\"\\s*:\\s*true");
+	private static final Pattern DID_NOT_RUN = Pattern.compile("\"status\"\\s*:\\s*\"(NOT_ALLOWED|FAILED)\"");
+
+	/** Whether a tool result says the tool refused to run or failed (status NOT_ALLOWED or FAILED). */
+	static boolean didNotRun(String result) {
+		return result != null && DID_NOT_RUN.matcher(result).find();
+	}
+
+	private static final Pattern COMPLETION_REQUIRED =Pattern.compile("\"completionRequired\"\\s*:\\s*true");
 	private static final Pattern COVERAGE_NOTE = Pattern.compile("\"note\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"");
 
 	/**

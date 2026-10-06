@@ -10,6 +10,7 @@
 package ai.gebo.llms.agent.standardtools;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -72,6 +73,26 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 	@Override
 	protected Long documentsInScope(ToolContext toolContext) {
 		return support.countVisibleDocuments(ToolCallbackDeclarationUtil.chatKnowledgeBases(toolContext));
+	}
+
+	/** A knowledge base document can be read whole (getKnowledgeBaseDocumentContents). */
+	@Override
+	protected boolean documentsReadableWhole() {
+		return true;
+	}
+
+	/** The searches, with the keywords of the full-text leg when the call gives some. */
+	@Override
+	protected List<String> searchesOf(DeepSearchToolParam<String> param, List<String> queries, String question) {
+		final List<String> searches = new ArrayList<>(super.searchesOf(param, queries, question));
+		if (param instanceof KnowledgeBaseDeepSearchToolParam withKeywords && withKeywords.getKeywords() != null) {
+			for (String keyword : withKeywords.getKeywords()) {
+				if (keyword != null && !keyword.isBlank()) {
+					searches.add("keyword:" + keyword);
+				}
+			}
+		}
+		return searches;
 	}
 
 	/** The parameter with keywords when the knowledge base searches have a full-text leg. */

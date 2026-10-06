@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -114,15 +113,16 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 	/**
 	 * The same, handing out what the consolidation reports as missing.
 	 *
-	 * @param notCovered receives what the last consolidation of the partial analyses
-	 *                   reports as missing (its verdict), null when it reports the
-	 *                   report complete; left untouched when no consolidation runs (a
-	 *                   single batch of fragments, no sufficiency check)
+	 * @param outcome receives what the last consolidation of the partial analyses
+	 *                reports as missing (its verdict), null when it reports the report
+	 *                complete, left untouched when no consolidation runs (a single
+	 *                batch of fragments, no sufficiency check); and the fragments left
+	 *                unread. May be null
 	 */
 	public Flux<String> analyze(Flux<Document> fragments, IChatRequestContext context, ReactiveIdentityUtil runAs,
 			DeliverableIntent deliverable, String completenessNote, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, Vector<String> discardedFragmentIds, IGProgressNotifier notifier,
-			AtomicReference<String> notCovered) {
+			DeepSearchAnalysisOutcome outcome) {
 		final GPromptTemplateConfig cumulativeAnalisysPrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT);
 		final GPromptTemplateConfig finalAnalisysPrompt = promptsDao
@@ -225,6 +225,10 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 				LOGGER.debug("Deep search tool left fragment unprocessed:" + document.getId());
 			}
 			discardedFragmentIds.add(document.getId());
+			if (outcome != null) {
+				// not judged irrelevant: never read
+				outcome.getUnreadFragmentIds().add(document.getId());
+			}
 		};
 		final IGProgressNotifier progress = notifier != null ? notifier : IGProgressNotifier.NONE;
 		final Flux<String> resultFlux;
@@ -243,9 +247,9 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 						LOGGER.debug("Deep search tool fold of " + partials.size() + " partial analyses: complete:"
 								+ verdict.complete() + (verdict.missing() != null ? " missing:" + verdict.missing() : ""));
 					}
-					if (notCovered != null) {
+					if (outcome != null) {
 						// the last fold's verdict is the one on the whole report
-						notCovered.set(verdict.complete() ? null : verdict.missing());
+						outcome.setNotCovered(verdict.complete() ? null : verdict.missing());
 					}
 					if (LOGGER.isTraceEnabled()) {
 						LOGGER.trace("<DEEP_SEARCH_TOOL_RUNNING_REPORT>");

@@ -703,6 +703,25 @@ class AgenticLoopReactiveAgentServiceTest {
 				"only the calls of the iteration count");
 	}
 
+	@Test
+	void aRefusedOrFailedDeepSearchDoesNotCompleteTheCoverage() {
+		ToolCallsListener listener = new ToolCallsListener();
+		listener.addCall("deepSearchKnowledgeBase", "deep", "{}", THIN);
+		// the same searches again: refused, it did not run
+		listener.addCall("deepSearchKnowledgeBase", "deep", "{}",
+				"{\"status\":\"NOT_ALLOWED\",\"message\":\"A deep search of this request already ran these searches\"}");
+		assertTrue(AgenticLoopReactiveAgentServiceImpl.pendingCoverage(listener, 0, coverageGate()) != null);
+		// nor does a failed one
+		listener.addCall("deepSearchKnowledgeBase", "deep", "{}",
+				"{\"status\":\"FAILED\",\"message\":\"The documents found could not be analysed\"}");
+		assertTrue(AgenticLoopReactiveAgentServiceImpl.pendingCoverage(listener, 0, coverageGate()) != null);
+
+		// a deep search that ran with other searches and found what was missing
+		listener.addCall("deepSearchKnowledgeBase", "deep", "{}", COVERED);
+		assertNull(AgenticLoopReactiveAgentServiceImpl.pendingCoverage(listener, 0, coverageGate()));
+		assertFalse(AgenticLoopReactiveAgentServiceImpl.didNotRun(COVERED));
+	}
+
 	/** A loop agent whose model calls make the given tool calls (name and result) before writing. */
 	private static ScriptedLoopAgent callingAgent(List<List<String>> answers, Map<Integer, List<String[]>> callsByModelCall) {
 		return new ScriptedLoopAgent(answers) {

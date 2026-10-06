@@ -29,16 +29,22 @@ import lombok.NoArgsConstructor;
  * The verdict and its note come first, the per document detail last.
  */
 @Data
-@JsonPropertyOrder({ "completionRequired", "note", "documentsFound", "documentsUsed", "notReached", "notCovered",
-		"searches", "documents" })
+@JsonPropertyOrder({ "completionRequired", "note", "documentsFound", "documentsUsed", "documentsUnread", "notReached",
+		"notCovered", "searches", "documents" })
 public class DeepSearchCoverage {
-	/** A document found: the fragments of it the analysis read, and whether it is one of its sources. */
+	/**
+	 * A document found: the fragments of it the analysis read and left unread, its
+	 * length in fragments when known, and whether it is one of its sources.
+	 */
 	@Data
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class DocumentCoverage {
 		private String name;
 		private int fragmentsAnalysed;
+		private int fragmentsUnread;
+		/** The fragments the whole document has; null when not known. */
+		private Integer fragmentsInDocument;
 		private boolean usedAsSource;
 	}
 
@@ -61,7 +67,12 @@ public class DeepSearchCoverage {
 	private String note = null;
 	private int documentsFound = 0;
 	private int documentsUsed = 0;
-	/** The documents of the scope (the chat's knowledge bases) no search reached; null when not known. */
+	/** The documents found the analysis left unread (it stopped before their fragments). */
+	private int documentsUnread = 0;
+	/**
+	 * The documents of the scope (the chat's knowledge bases) no search reached; null
+	 * when not known. Told, not judged: their number says nothing of the question.
+	 */
 	private Integer notReached = null;
 	/** What the analysis reports as missing, when it reports it; null otherwise. */
 	private String notCovered = null;

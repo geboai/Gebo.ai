@@ -9,8 +9,12 @@
 
 package ai.gebo.llms.agent.standardtools;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -64,6 +68,8 @@ public class DeepSearchToolsSupport {
 
 	private static final class RequestCount {
 		final AtomicInteger deepSearches = new AtomicInteger(0);
+		/** The searches of the deep searches already run, by tool (see {@link #firstRunOf}). */
+		final Set<String> searches = ConcurrentHashMap.newKeySet();
 		volatile long lastAccess = System.currentTimeMillis();
 	}
 
@@ -120,18 +126,18 @@ public class DeepSearchToolsSupport {
 	 *                              (the agentic loop holds an answer that does not
 	 *                              complete it); when off the coverage is only reported
 	 * @param minDocumentsUsed      fewer documents used as sources than this is thin...
-	 * @param minDocumentsFound     ...when at least this many documents were found
-	 * @param barelyReadFragments   a document read in at most this many fragments is
-	 *                              barely read (knowledge base deep searches only)
-	 * @param barelyReadShare       more than this share of the documents found barely
-	 *                              read is thin
-	 * @param notReachedTrigger     whether the documents of the knowledge bases no
-	 *                              search reached, at least as many as the documents
-	 *                              used, make the coverage thin
+	 * @param minDocumentsFound     ...when at least this many documents were used or
+	 *                              left unread (the documents judged irrelevant do not
+	 *                              count)
+	 * @param barelyReadFragments   a source read in at most this many fragments of a
+	 *                              longer document is read in part (only where a
+	 *                              document can be read whole and its length is known)
+	 * @param barelyReadShare       more than this share of the sources read in part is
+	 *                              thin
 	 */
 	public record CoverageRules(boolean gateEnabled, int minDocumentsUsed, int minDocumentsFound,
-			int barelyReadFragments, double barelyReadShare, boolean notReachedTrigger) {
-		public static final CoverageRules DEFAULTS = new CoverageRules(true, 2, 3, 2, 0.5d, true);
+			int barelyReadFragments, double barelyReadShare) {
+		public static final CoverageRules DEFAULTS = new CoverageRules(true, 2, 3, 2, 0.5d);
 	}
 
 	private CoverageRules coverageRules = CoverageRules.DEFAULTS;
@@ -141,12 +147,10 @@ public class DeepSearchToolsSupport {
 			@Value("${" + COVERAGE_PROPERTIES + ".min-documents-used:2}") int minDocumentsUsed,
 			@Value("${" + COVERAGE_PROPERTIES + ".min-documents-found:3}") int minDocumentsFound,
 			@Value("${" + COVERAGE_PROPERTIES + ".barely-read-fragments:2}") int barelyReadFragments,
-			@Value("${" + COVERAGE_PROPERTIES + ".barely-read-share:0.5}") double barelyReadShare,
-			@Value("${" + COVERAGE_PROPERTIES + ".not-reached-trigger:true}") boolean notReachedTrigger) {
+			@Value("${" + COVERAGE_PROPERTIES + ".barely-read-share:0.5}") double barelyReadShare) {
 		this.coverageRules = new CoverageRules(gateEnabled, Math.max(0, minDocumentsUsed),
 				Math.max(0, minDocumentsFound), Math.max(0, barelyReadFragments),
-				barelyReadShare >= 0 && barelyReadShare <= 1 ? barelyReadShare : CoverageRules.DEFAULTS.barelyReadShare(),
-				notReachedTrigger);
+				barelyReadShare >= 0 && barelyReadShare <= 1 ? barelyReadShare : CoverageRules.DEFAULTS.barelyReadShare());
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Deep search tools coverage rules: " + this.coverageRules);
 		}
@@ -278,6 +282,31 @@ public class DeepSearchToolsSupport {
 					+ requests.size() + " request(s) tracked");
 		}
 		return calls;
+	}
+
+	/**
+	 * Records the searches of a deep search of the request, returning false when a deep
+	 * search of the same tool already ran the same searches in it: it would find the same
+	 * documents again. Always true when the request is unknown.
+	 *
+	 * @param searches the searches, as text: compared regardless of order, case and spaces
+	 */
+	public boolean firstRunOf(String requestId, String toolName, Collection<String> searches) {
+		if (requestId == null || searches == null || searches.isEmpty()) {
+			return true;
+		}
+		evictIdle();
+		final RequestCount count = requests.computeIfAbsent(requestId, id -> new RequestCount());
+		count.lastAccess = System.currentTimeMillis();
+		final String signature = toolName + "\n" + String.join("\n", new TreeSet<>(searches.stream()
+				.filter(search -> search != null)
+				.map(search -> search.trim().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT)).toList()));
+		final boolean first = count.searches.add(signature);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("firstRunOf(...) request:" + requestId + " tool:" + toolName + " " + searches.size()
+					+ " search(es) " + (first ? "not run yet" : "already run by a deep search of the request"));
+		}
+		return first;
 	}
 
 	private void evictIdle() {

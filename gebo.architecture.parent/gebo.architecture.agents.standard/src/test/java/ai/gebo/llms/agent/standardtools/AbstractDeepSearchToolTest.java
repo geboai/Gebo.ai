@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -623,6 +624,17 @@ class AbstractDeepSearchToolTest {
 		return found;
 	}
 
+	/** The fragment ids of the given documents: the ones the analysis left unread. */
+	private static Set<String> fragmentsOf(Map<String, FoundDocument> found, String... codes) {
+		Set<String> ids = new java.util.HashSet<>();
+		for (Map.Entry<String, FoundDocument> fragment : found.entrySet()) {
+			if (List.of(codes).contains(fragment.getValue().source().getDocumentCode())) {
+				ids.add(fragment.getKey());
+			}
+		}
+		return ids;
+	}
+
 	private static List<FoundDocument> used(String... codes) {
 		List<FoundDocument> used = new ArrayList<>();
 		for (String code : codes) {
@@ -631,94 +643,226 @@ class AbstractDeepSearchToolTest {
 		return used;
 	}
 
-	@Test
-	void theCoverageOfAnAnalysisRestingOnOneOfManyDocumentsIsThinAndAsksToBeCompleted() {
-		// A1 of the 2026-10-05 session: 23 fragments from 6 documents, one used
+	private static Map<String, Integer> documents(Object... codesAndFragments) {
 		Map<String, Integer> fragments = new java.util.LinkedHashMap<>();
-		fragments.put("quinto-vangelo", 15);
-		fragments.put("pistis", 4);
-		fragments.put("archiati", 1);
-		fragments.put("vangeli", 1);
-		fragments.put("secret-doctrine", 1);
-		fragments.put("scienza-occulta", 1);
+		for (int i = 0; i < codesAndFragments.length; i += 2) {
+			fragments.put((String) codesAndFragments[i], (Integer) codesAndFragments[i + 1]);
+		}
+		return fragments;
+	}
 
-		DeepSearchCoverage coverage = AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, foundFragments(fragments),
-				used("quinto-vangelo"), null, 12L, null, DeepSearchToolsSupport.CoverageRules.DEFAULTS);
+	private static final DeepSearchToolsSupport.CoverageRules DEFAULTS = DeepSearchToolsSupport.CoverageRules.DEFAULTS;
 
-		assertEquals(6, coverage.getDocumentsFound());
+	@Test
+	void documentsJudgedIrrelevantAreNotMissedAndTheSizeOfTheScopeIsOnlyTold() {
+		// a large knowledge base: one contract holds the answer, the other documents found
+		// were read and judged irrelevant
+		Map<String, FoundDocument> found = foundFragments(documents("contract-a", 15, "policy-b", 4, "ticket-c", 1,
+				"mail-d", 1, "manual-e", 2));
+
+		DeepSearchCoverage coverage = AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, found, Set.of(), Map.of(),
+				used("contract-a"), null, 10000L, null, true, DEFAULTS);
+
+		assertEquals(5, coverage.getDocumentsFound());
 		assertEquals(1, coverage.getDocumentsUsed());
-		assertEquals(6, coverage.getNotReached());
-		assertTrue(coverage.isCompletionRequired());
-		assertTrue(coverage.getNote().contains("rests on 1 of the 6 documents found"), coverage.getNote());
-		assertTrue(coverage.getNote().contains("4 of the 6 documents found were read in at most 2 fragment(s)"),
-				coverage.getNote());
-		assertTrue(coverage.getNote().contains("6 documents of the knowledge base were not reached"), coverage.getNote());
-		assertTrue(coverage.getDocuments().stream().anyMatch(d -> d.getName().equals("pistis.pdf")
-				&& d.getFragmentsAnalysed() == 4 && !d.isUsedAsSource()));
-		assertTrue(coverage.getDocuments().stream().anyMatch(d -> d.getName().equals("quinto-vangelo.pdf")
-				&& d.getFragmentsAnalysed() == 15 && d.isUsedAsSource()));
+		assertEquals(0, coverage.getDocumentsUnread());
+		assertEquals(9995, coverage.getNotReached(), "told");
+		assertFalse(coverage.isCompletionRequired(), "neither the irrelevant documents nor the scope make it thin");
+		assertNull(coverage.getNote());
 	}
 
 	@Test
-	void aPreciseAnswerOrAWellCoveredAnalysisAsksNothing() {
-		Map<String, Integer> fragments = new java.util.LinkedHashMap<>();
-		fragments.put("a", 6);
-		fragments.put("b", 5);
-		fragments.put("c", 4);
+	void documentsTheAnalysisLeftUnreadMakeTheCoverageThinAndAreNamed() {
+		Map<String, FoundDocument> found = foundFragments(documents("contract-a", 5, "contract-b", 4, "annex-c", 3,
+				"annex-d", 2));
 
-		DeepSearchCoverage focused = AbstractDeepSearchTool.coverage(Depth.FOCUSED, foundFragments(fragments), used("a"),
-				null, 50L, "the figures", DeepSearchToolsSupport.CoverageRules.DEFAULTS);
+		DeepSearchCoverage coverage = AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, found,
+				fragmentsOf(found, "annex-c", "annex-d"), Map.of(), used("contract-a", "contract-b"), null, null, null,
+				false, DEFAULTS);
+
+		assertEquals(2, coverage.getDocumentsUnread());
+		assertTrue(coverage.isCompletionRequired());
+		assertTrue(coverage.getNote().contains("2 of the 4 documents found were not read by the analysis: annex-c.pdf, "
+				+ "annex-d.pdf"), coverage.getNote());
+		assertFalse(coverage.getNote().contains("rests on"), "two documents used are enough");
+		assertTrue(coverage.getDocuments().stream().anyMatch(d -> d.getName().equals("annex-c.pdf")
+				&& d.getFragmentsAnalysed() == 0 && d.getFragmentsUnread() == 3 && !d.isUsedAsSource()));
+	}
+
+	@Test
+	void sourcesReadInPartAreNamedForAFullReadWhereADocumentCanBeReadWhole() {
+		Map<String, FoundDocument> found = foundFragments(documents("manual-a", 2, "contract-b", 1, "policy-c", 6,
+				"faq-d", 1));
+		Map<String, Long> lengths = Map.of("manual-a", 40L, "contract-b", 30L, "policy-c", 8L, "faq-d", 1L);
+		List<FoundDocument> sources = used("manual-a", "contract-b", "policy-c", "faq-d");
+
+		DeepSearchCoverage readable = AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, found, Set.of(), lengths,
+				sources, null, null, null, true, DEFAULTS);
+		// 2 of 4 sources read in part is not more than half
+		assertFalse(readable.isCompletionRequired(), readable.getNote());
+		assertEquals(40, readable.getDocuments().get(0).getFragmentsInDocument());
+
+		Map<String, Long> longer = Map.of("manual-a", 40L, "contract-b", 30L, "policy-c", 8L, "faq-d", 12L);
+		DeepSearchCoverage inPart = AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, found, Set.of(), longer, sources,
+				null, null, null, true, DEFAULTS);
+		assertTrue(inPart.isCompletionRequired());
+		assertTrue(inPart.getNote().contains("3 of the 4 sources were read in part: manual-a.pdf (2 of 40 fragments), "
+				+ "contract-b.pdf (1 of 30 fragments), faq-d.pdf (1 of 12 fragments)"), inPart.getNote());
+
+		assertFalse(AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, found, Set.of(), longer, sources, null, null, null,
+				false, DEFAULTS).isCompletionRequired(), "a source that cannot be read whole is not judged");
+		assertFalse(AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, found, Set.of(), Map.of(), sources, null, null,
+				null, true, DEFAULTS).isCompletionRequired(), "nor one whose length is not known");
+	}
+
+	@Test
+	void anAnalysisRestingOnOneOfTheDocumentsItCouldUseIsThin() {
+		Map<String, FoundDocument> found = foundFragments(documents("report-a", 6, "report-b", 3, "report-c", 3));
+
+		DeepSearchCoverage oneOfThree = AbstractDeepSearchTool.coverage(Depth.BROAD, found,
+				fragmentsOf(found, "report-b", "report-c"), Map.of(), used("report-a"), null, null, null, false,
+				DEFAULTS);
+		assertTrue(oneOfThree.getNote().contains("the analysis rests on 1 of the 3 documents it used or left unread"),
+				oneOfThree.getNote());
+
+		DeepSearchCoverage onlyOneRelevant = AbstractDeepSearchTool.coverage(Depth.BROAD, found, Set.of(), Map.of(),
+				used("report-a"), null, null, null, false, DEFAULTS);
+		assertFalse(onlyOneRelevant.isCompletionRequired(), "the others were read and judged irrelevant");
+	}
+
+	@Test
+	void aPreciseAnswerIsNeverThinAndTheAnalysisVerdictCounts() {
+		Map<String, FoundDocument> found = foundFragments(documents("page-1", 1, "page-2", 1, "page-3", 2));
+		List<SearchCoverage> searches = List.of(new SearchCoverage("q1", 10, 2), new SearchCoverage("q2", 5, 0));
+
+		DeepSearchCoverage focused = AbstractDeepSearchTool.coverage(Depth.FOCUSED, found,
+				fragmentsOf(found, "page-2", "page-3"), Map.of(), used("page-1"), searches, null, "the figures", false,
+				DEFAULTS);
 		assertFalse(focused.isCompletionRequired());
 		assertNull(focused.getNote());
-		assertEquals(47, focused.getNotReached(), "the coverage is still reported");
+		assertEquals(2, focused.getDocumentsUnread(), "the coverage is still reported");
+		assertEquals(searches, focused.getSearches());
 
-		DeepSearchCoverage covered = AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, foundFragments(fragments),
-				used("a", "b", "c"), null, null, null, DeepSearchToolsSupport.CoverageRules.DEFAULTS);
-		assertFalse(covered.isCompletionRequired());
-		assertNull(covered.getNote());
-		assertNull(covered.getNotReached(), "not known for the web");
+		DeepSearchCoverage missing = AbstractDeepSearchTool.coverage(Depth.BROAD, found, Set.of(), Map.of(),
+				used("page-1", "page-2", "page-3"), searches, null, "the 2026 figures", false, DEFAULTS);
+		assertTrue(missing.isCompletionRequired());
+		assertTrue(missing.getNote().startsWith("The coverage of this deep search is thin: the analysis reports as "
+				+ "missing: the 2026 figures."), missing.getNote());
 	}
 
 	@Test
-	void theWebIsNotJudgedByTheFragmentsReadAndTheAnalysisVerdictCounts() {
-		Map<String, Integer> pages = new java.util.LinkedHashMap<>();
-		pages.put("p1", 1);
-		pages.put("p2", 1);
-		pages.put("p3", 2);
-		List<SearchCoverage> searches = List.of(new SearchCoverage("q1", 10, 2), new SearchCoverage("q2", 5, 1));
+	void manyDocumentsLeftUnreadAreNamedUpToFive() {
+		Map<String, FoundDocument> found = foundFragments(documents("a", 2, "b", 1, "c", 1, "d", 1, "e", 1, "f", 1,
+				"g", 1));
 
-		DeepSearchCoverage web = AbstractDeepSearchTool.coverage(Depth.BROAD, foundFragments(pages),
-				used("p1", "p2", "p3"), searches, null, null, DeepSearchToolsSupport.CoverageRules.DEFAULTS);
-		assertFalse(web.isCompletionRequired(), "short pages read whole are not barely read");
-		assertEquals(searches, web.getSearches());
+		DeepSearchCoverage coverage = AbstractDeepSearchTool.coverage(Depth.BROAD, found,
+				fragmentsOf(found, "b", "c", "d", "e", "f", "g"), Map.of(), used("a"), null, null, null, false, DEFAULTS);
 
-		DeepSearchCoverage missing = AbstractDeepSearchTool.coverage(Depth.BROAD, foundFragments(pages),
-				used("p1", "p2", "p3"), searches, null, "the 2026 figures", DeepSearchToolsSupport.CoverageRules.DEFAULTS);
-		assertTrue(missing.isCompletionRequired());
-		assertTrue(missing.getNote().contains("the analysis reports as missing: the 2026 figures"), missing.getNote());
+		assertTrue(coverage.getNote().contains("b.pdf, c.pdf, d.pdf, e.pdf, f.pdf and 1 more"), coverage.getNote());
 	}
 
 	@Test
 	void withTheGateOffTheThinCoverageIsOnlyReportedAndTheRulesAreConfigurable() {
-		Map<String, Integer> fragments = new java.util.LinkedHashMap<>();
-		fragments.put("a", 6);
-		fragments.put("b", 1);
-		fragments.put("c", 1);
-		DeepSearchToolsSupport.CoverageRules off = new DeepSearchToolsSupport.CoverageRules(false, 2, 3, 2, 0.5d, true);
+		Map<String, FoundDocument> found = foundFragments(documents("a", 6, "b", 1, "c", 1));
+		Set<String> unread = fragmentsOf(found, "b", "c");
+		DeepSearchToolsSupport.CoverageRules off = new DeepSearchToolsSupport.CoverageRules(false, 2, 3, 2, 0.5d);
 
-		DeepSearchCoverage reported = AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, foundFragments(fragments),
-				used("a"), null, null, null, off);
+		DeepSearchCoverage reported = AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, found, unread, Map.of(),
+				used("a"), null, null, null, false, off);
 		assertFalse(reported.isCompletionRequired());
 		assertTrue(reported.getNote() != null && reported.getNote().contains("rests on 1 of the 3"));
 
-		DeepSearchToolsSupport.CoverageRules lenient = new DeepSearchToolsSupport.CoverageRules(true, 1, 3, 0, 0.5d,
-				false);
-		assertFalse(AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, foundFragments(fragments), used("a"), null, 30L,
-				null, lenient).isCompletionRequired(), "one document used is enough, not reached does not count");
+		DeepSearchToolsSupport.CoverageRules lenient = new DeepSearchToolsSupport.CoverageRules(true, 1, 3, 0, 0.5d);
+		assertFalse(AbstractDeepSearchTool.coverage(Depth.EXHAUSTIVE, found, Set.of(), Map.of(), used("a"), null, 30L,
+				null, true, lenient).isCompletionRequired(), "one document used is enough");
 
-		support.setCoverageRules(true, -1, 3, 2, 7d, true);
+		support.setCoverageRules(true, -1, 3, 2, 7d);
 		assertEquals(0, support.coverageRules().minDocumentsUsed());
 		assertEquals(0.5d, support.coverageRules().barelyReadShare(), "a share out of 0..1 is the default");
+	}
+
+	@Test
+	void theLengthOfADocumentIsReadFromItsFragments() {
+		Document first = fragment("f1", "doc-a");
+		first.getMetadata().put(DocumentMetaInfos.GEBO_CHUNKS_COUNT, 40L);
+		Document second = fragment("f2", "doc-a");
+		second.getMetadata().put(DocumentMetaInfos.GEBO_CHUNKS_COUNT, "40");
+		Document unknown = fragment("f3", "doc-b");
+
+		assertEquals(Map.of("doc-a", 40L), AbstractDeepSearchTool.documentLengths(List.of(first, second, unknown)));
+	}
+
+	@Test
+	void theFragmentsTheAnalysisLeftUnreadAreNeverItsSources() {
+		// the batch of doc-b failed: its fragments were never read
+		doAnswer(invocation -> {
+			Flux<Document> documents = invocation.getArgument(0);
+			documents.collectList().block();
+			DeepSearchAnalysisOutcome outcome = invocation.getArgument(9);
+			outcome.getUnreadFragmentIds().add("f2");
+			Vector<String> discarded = invocation.getArgument(7);
+			discarded.add("f2");
+			return Flux.just("The analysis.");
+		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
+		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a"), fragment("f2", "doc-b")));
+
+		DeepSearchToolResult result = tool.deepSearch(param("question"), request("r1"));
+
+		assertEquals(Status.OK, result.getStatus());
+		assertEquals(List.of("doc-a"), result.getSources().stream().map(Source::getDocumentCode).toList());
+		assertEquals(1, result.getCoverage().getDocumentsUnread());
+		assertTrue(result.getCoverage().isCompletionRequired(), result.getCoverage().getNote());
+	}
+
+	@Test
+	void anAnalysisThatReadNothingIsAFailedDeepSearchWithoutSources() {
+		// every batch failed: the text that came out is not an analysis of the documents
+		doAnswer(invocation -> {
+			Flux<Document> documents = invocation.getArgument(0);
+			List<Document> read = documents.collectList().block();
+			DeepSearchAnalysisOutcome outcome = invocation.getArgument(9);
+			Vector<String> discarded = invocation.getArgument(7);
+			for (Document document : read) {
+				outcome.getUnreadFragmentIds().add(document.getId());
+				discarded.add(document.getId());
+			}
+			return Flux.just("Written without documents.");
+		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
+		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a"), fragment("f3", "doc-a")));
+
+		DeepSearchToolResult result = tool.deepSearch(param("question"), request("r1", collector));
+
+		assertEquals(Status.FAILED, result.getStatus());
+		assertEquals(AbstractDeepSearchTool.NOTHING_READ, result.getMessage());
+		assertNull(result.getAnalysis());
+		assertTrue(result.getSources().isEmpty());
+		assertTrue(collector.getDocuments().isEmpty(), "no document shared as the answer's");
+	}
+
+	@Test
+	void aDeepSearchRepeatingTheSearchesOfAnEarlierOneOfTheRequestIsRefusedWithoutCounting() {
+		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a")));
+		assertEquals(Status.OK, tool.deepSearch(param("question", "open claims", "Claims  2025"), request("r1"))
+				.getStatus());
+
+		// the same searches, in another order, case and spacing
+		DeepSearchToolResult repeated = tool.deepSearch(param("another question", "claims 2025", "OPEN claims"),
+				request("r1"));
+		assertEquals(Status.NOT_ALLOWED, repeated.getStatus());
+		assertEquals(AbstractDeepSearchTool.REPEATED_SEARCHES, repeated.getMessage());
+		verify(analysis, times(1)).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
+
+		// other searches, another request, another tool run
+		assertEquals(Status.OK, tool.deepSearch(param("question", "open claims"), request("r1")).getStatus());
+		assertEquals(Status.OK, tool.deepSearch(param("question", "open claims", "claims 2025"), request("r2"))
+				.getStatus());
+		assertTrue(support.firstRunOf("r1", "deepSearchOther", List.of("claims 2025", "open claims")));
+		assertTrue(support.firstRunOf(null, "deepSearchTest", List.of("open claims")), "an unknown request");
+		// the refused one was not one of the request's deep searches
+		for (int i = 2; i < support.maxDeepSearchesPerRequest(); i++) {
+			assertEquals(Status.OK, tool.deepSearch(param("question " + i), request("r1")).getStatus());
+		}
 	}
 
 	@Test

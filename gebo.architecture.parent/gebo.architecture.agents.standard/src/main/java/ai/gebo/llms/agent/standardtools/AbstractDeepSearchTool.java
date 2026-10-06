@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 
 import org.slf4j.Logger;
@@ -49,6 +48,7 @@ import ai.gebo.llms.agent.standardtools.model.DeepSearchToolResult.Source;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult.Status;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 
@@ -163,6 +163,31 @@ public abstract class AbstractDeepSearchTool<Q> {
 		return null;
 	}
 
+	/**
+	 * Whether the agent can read a document of this source whole (a knowledge base
+	 * document, with the browsing tools): the coverage then names the sources read in
+	 * part. False by default.
+	 */
+	protected boolean documentsReadableWhole() {
+		return false;
+	}
+
+	/**
+	 * The searches of a call as text, to tell a deep search repeating the searches of
+	 * an earlier one of the same request: the searches, or the question when it gives
+	 * none.
+	 */
+	protected List<String> searchesOf(DeepSearchToolParam<Q> param, List<Q> queries, String question) {
+		final List<String> searches = new ArrayList<>();
+		for (Q query : queries) {
+			searches.add(queryText(query));
+		}
+		if (searches.isEmpty()) {
+			searches.add(question);
+		}
+		return searches;
+	}
+
 	public ToolCallback toTool() {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Declaring deep search tool:" + toolName + " over " + sourceDescription());
@@ -205,6 +230,15 @@ public abstract class AbstractDeepSearchTool<Q> {
 			}
 			return DeepSearchToolResult.of(Status.NO_RESULTS,
 					"No room is left in the context for more contents: answer with the contents already found.");
+		}
+		// the same searches find the same documents: the coverage of the first deep search
+		// is completed with other searches, not by running it again
+		if (!support.firstRunOf(requestId, toolName, searchesOf(param, queries, question))) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Tool:" + toolName + " denied: the same searches already ran in a deep search of request:"
+						+ requestId);
+			}
+			return DeepSearchToolResult.of(Status.NOT_ALLOWED, REPEATED_SEARCHES);
 		}
 		final int calls = support.countDeepSearch(requestId);
 		final int maxDeepSearches = support.maxDeepSearchesPerRequest();
@@ -261,7 +295,8 @@ public abstract class AbstractDeepSearchTool<Q> {
 			// every document found, before the analysis drops the ones it judged irrelevant:
 			// what the coverage is measured on
 			final Map<String, FoundDocument> allFound = new LinkedHashMap<>(foundByFragmentId);
-			final AtomicReference<String> notCovered = new AtomicReference<>();
+			// what the analysis reports as missing and the fragments it left unread
+			final DeepSearchAnalysisOutcome analysisOutcome = new DeepSearchAnalysisOutcome();
 			ToolsProgress.notify(toolContext, "Deep search in " + sourceDescription() + ": analysing "
 					+ fragments.size() + " fragment(s) of " + distinctByDocument(foundByFragmentId.values()).size()
 					+ " document(s)");
@@ -277,15 +312,28 @@ public abstract class AbstractDeepSearchTool<Q> {
 							ReactiveIdentityUtil.create(), deliverable,
 							TOOL_COMPLETENESS_NOTE + lengthTarget(param.getDepth(), roomForAnalysis), chatModel,
 							serviceModel,
-							discardedFragmentIds, ToolsProgress.from(toolContext), notCovered)
+							discardedFragmentIds, ToolsProgress.from(toolContext), analysisOutcome)
 					.reduce(new StringBuilder(), StringBuilder::append).map(StringBuilder::toString)
 					.block(DEEP_SEARCH_TIMEOUT);
-			if (analysis != null && !analysis.isBlank()
-					&& discardedFragmentIds.containsAll(foundByFragmentId.keySet())) {
-				// every fragment judged irrelevant, yet analysed: the judgement contradicts the
-				// analysis, the documents found stay its sources
-				LOGGER.warn("Tool:" + toolName + " analysis judged all the " + foundByFragmentId.size()
-						+ " fragment(s) irrelevant while analysing them: keeping their documents as sources");
+			// the fragments the analysis left unread are never its sources
+			final Set<String> unreadFragmentIds = analysisOutcome.getUnreadFragmentIds();
+			final Set<String> readFragmentIds = new LinkedHashSet<>(foundByFragmentId.keySet());
+			readFragmentIds.removeAll(unreadFragmentIds);
+			if (readFragmentIds.isEmpty()) {
+				// every batch failed or none ran: whatever text came out is not an analysis of
+				// the documents found
+				LOGGER.warn("Tool:" + toolName + " analysis read none of the " + foundByFragmentId.size()
+						+ " fragment(s) found: failed");
+				final DeepSearchToolResult failed = DeepSearchToolResult.of(Status.FAILED, NOTHING_READ);
+				failed.setUnavailableSources(unavailableSources.isEmpty() ? null : unavailableSources);
+				return failed;
+			}
+			if (analysis != null && !analysis.isBlank() && discardedFragmentIds.containsAll(readFragmentIds)) {
+				// every fragment read judged irrelevant, yet analysed: the judgement contradicts
+				// the analysis, the documents read stay its sources
+				LOGGER.warn("Tool:" + toolName + " analysis judged all the " + readFragmentIds.size()
+						+ " fragment(s) it read irrelevant while analysing them: keeping their documents as sources");
+				foundByFragmentId.keySet().removeAll(unreadFragmentIds);
 			} else {
 				for (String fragmentId : discardedFragmentIds) {
 					foundByFragmentId.remove(fragmentId);
@@ -299,15 +347,19 @@ public abstract class AbstractDeepSearchTool<Q> {
 				result.getSources().add(found.source());
 			}
 			// how much of what was found the analysis covers, measured here, not judged by a model
-			final DeepSearchCoverage coverage = coverage(param.getDepth(), allFound, reliedOn,
-					searchYields.isEmpty() ? null : searchYields, documentsInScope(toolContext), notCovered.get(),
-					support.coverageRules());
+			final DeepSearchCoverage coverage = coverage(param.getDepth(), allFound,
+					analysisOutcome.getUnreadFragmentIds(), documentLengths(fragments), reliedOn,
+					searchYields.isEmpty() ? null : searchYields, documentsInScope(toolContext),
+					analysisOutcome.getNotCovered(), documentsReadableWhole(), support.coverageRules());
 			result.setCoverage(coverage);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Tool:" + toolName + " coverage: " + coverage.getDocumentsUsed() + " of "
-						+ coverage.getDocumentsFound() + " document(s) found used, not reached:" + coverage.getNotReached()
-						+ " not covered:" + coverage.getNotCovered() + " completion required:"
-						+ coverage.isCompletionRequired());
+						+ coverage.getDocumentsFound() + " document(s) found used, "
+						+ analysisOutcome.getUnreadFragmentIds().size() + " fragment(s) of "
+						+ coverage.getDocumentsUnread() + " document(s) left unread, not reached:"
+						+ coverage.getNotReached() + " not covered:" + coverage.getNotCovered()
+						+ " completion required:" + coverage.isCompletionRequired()
+						+ (coverage.getNote() != null ? " note:" + coverage.getNote() : ""));
 			}
 			if (LOGGER.isTraceEnabled()) {
 				LOGGER.trace("<DEEP_SEARCH_TOOL_COVERAGE tool=" + toolName + ">");
@@ -500,36 +552,94 @@ public abstract class AbstractDeepSearchTool<Q> {
 
 	/** What the agent is told to do when the coverage of an analysis is thin. */
 	static final String COMPLETION_ADVICE = "If the question needs more than this, complete it before answering: "
-			+ "focused searches, documents read whole, or a deep search aimed at what is missing (for example by the "
-			+ "title or the author of the documents not used).";
+			+ "focused searches, the documents named read whole when they can be, or a deep search with other searches "
+			+ "aimed at what is missing (for example by the title or the author of the documents not used).";
+
+	/** What the agent is told when a deep search repeats the searches of an earlier one. */
+	static final String REPEATED_SEARCHES = "A deep search of this request already ran these searches: it would "
+			+ "find the same documents, its result is the one you have. To complete its coverage use other "
+			+ "searches (other terms, the titles or authors of the documents not used), read whole the documents "
+			+ "it names, or answer with what you have.";
+
+	/** What the agent is told when the analysis read none of the documents found. */
+	static final String NOTHING_READ = "The documents found could not be analysed (the analysis failed): there "
+			+ "is no analysis of them. Use the search tools, or answer with what you have and say what could not "
+			+ "be checked.";
+
+	/** Most document names a coverage note lists for each reason. */
+	static final int MAX_NAMED_DOCUMENTS = 5;
 
 	/**
-	 * How much of what was found the analysis covers, and whether it is thin, by the
-	 * rules: a precise answer (FOCUSED) is never thin; any other depth is when fewer
-	 * documents were used than {@code minDocumentsUsed} with at least
-	 * {@code minDocumentsFound} found, when more than {@code barelyReadShare} of the
-	 * documents found were read in at most {@code barelyReadFragments} fragments (only
-	 * where the scope is known: a web page read whole may be short), when the documents
-	 * of the scope no search reached are at least as many as the documents used, or
-	 * when the analysis reports something missing.
-	 *
-	 * @param found      every document found, by fragment id, before the analysis
-	 * @param reliedOn   the documents the analysis relies on (its sources)
-	 * @param searches   the yield of each search, null when not known
-	 * @param inScope    the documents of the scope, null when not known
-	 * @param notCovered what the analysis reports as missing, null when nothing
+	 * The length of each document found, in fragments, by document code, when the
+	 * fragments tell it.
 	 */
-	static DeepSearchCoverage coverage(Depth depth, Map<String, FoundDocument> found, List<FoundDocument> reliedOn,
-			List<SearchCoverage> searches, Long inScope, String notCovered, CoverageRules rules) {
+	static Map<String, Long> documentLengths(List<Document> fragments) {
+		final Map<String, Long> lengths = new HashMap<>();
+		for (Document fragment : fragments) {
+			if (fragment == null || fragment.getMetadata() == null) {
+				continue;
+			}
+			final Object code = fragment.getMetadata().get(DocumentMetaInfos.CONTENT_CODE);
+			final Long length = longOf(fragment.getMetadata().get(DocumentMetaInfos.GEBO_CHUNKS_COUNT));
+			if (code != null && length != null && length > 0) {
+				lengths.merge(code.toString(), length, Math::max);
+			}
+		}
+		return lengths;
+	}
+
+	private static Long longOf(Object value) {
+		if (value instanceof Number number) {
+			return number.longValue();
+		}
+		if (value != null) {
+			try {
+				return Long.parseLong(value.toString().trim());
+			} catch (NumberFormatException e) {
+				return null;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * How much of what was found the analysis covers, and whether it is thin, by rules
+	 * that hold for any kind of document. A precise answer (FOCUSED) is never thin; any
+	 * other depth is when the analysis reports something missing, when documents found
+	 * were left unread (the analysis stopped before their fragments), when more than
+	 * {@code barelyReadShare} of its sources were read in at most
+	 * {@code barelyReadFragments} fragments of a longer document (only where a document
+	 * can be read whole and its length is known), or when it rests on fewer documents
+	 * than {@code minDocumentsUsed} out of at least {@code minDocumentsFound} used or
+	 * left unread. The documents judged irrelevant were read, not missed; the documents
+	 * of the scope no search reached are told, not judged: their number says nothing of
+	 * the question.
+	 *
+	 * @param found         every document found, by fragment id, before the analysis
+	 * @param unread        the fragments the analysis left unread
+	 * @param lengths       the length of each document in fragments, by document code,
+	 *                      when known
+	 * @param reliedOn      the documents the analysis relies on (its sources)
+	 * @param searches      the yield of each search, null when not known
+	 * @param inScope       the documents of the scope, null when not known
+	 * @param notCovered    what the analysis reports as missing, null when nothing
+	 * @param readableWhole whether a document of the source can be read whole
+	 */
+	static DeepSearchCoverage coverage(Depth depth, Map<String, FoundDocument> found, Set<String> unread,
+			Map<String, Long> lengths, List<FoundDocument> reliedOn, List<SearchCoverage> searches, Long inScope,
+			String notCovered, boolean readableWhole, CoverageRules rules) {
 		final DeepSearchCoverage coverage = new DeepSearchCoverage();
-		final Map<String, Integer> fragmentsByDocument = new LinkedHashMap<>();
+		// fragments read and left unread, by document code
+		final Map<String, int[]> fragmentsByDocument = new LinkedHashMap<>();
 		final Map<String, String> names = new LinkedHashMap<>();
-		for (FoundDocument document : found.values()) {
+		for (Map.Entry<String, FoundDocument> fragment : found.entrySet()) {
+			final FoundDocument document = fragment.getValue();
 			if (document == null || document.source() == null || document.source().getDocumentCode() == null) {
 				continue;
 			}
 			final String code = document.source().getDocumentCode();
-			fragmentsByDocument.merge(code, 1, Integer::sum);
+			fragmentsByDocument.computeIfAbsent(code, key -> new int[2])[unread != null
+					&& unread.contains(fragment.getKey()) ? 1 : 0]++;
 			names.putIfAbsent(code, notBlank(document.source().getTitle()) ? document.source().getTitle() : code);
 		}
 		final Set<String> used = new LinkedHashSet<>();
@@ -539,17 +649,25 @@ public abstract class AbstractDeepSearchTool<Q> {
 				used.add(document.source().getDocumentCode());
 			}
 		}
-		int barelyRead = 0;
-		for (Map.Entry<String, Integer> document : fragmentsByDocument.entrySet()) {
-			coverage.getDocuments().add(new DocumentCoverage(names.get(document.getKey()), document.getValue(),
-					used.contains(document.getKey())));
-			if (document.getValue() <= rules.barelyReadFragments()) {
-				barelyRead++;
+		final List<String> unreadDocuments = new ArrayList<>();
+		final List<String> readInPart = new ArrayList<>();
+		for (Map.Entry<String, int[]> document : fragmentsByDocument.entrySet()) {
+			final String code = document.getKey();
+			final int read = document.getValue()[0];
+			final Long length = lengths != null ? lengths.get(code) : null;
+			coverage.getDocuments().add(new DocumentCoverage(names.get(code), read, document.getValue()[1],
+					length != null ? Integer.valueOf(length.intValue()) : null, used.contains(code)));
+			if (read == 0) {
+				unreadDocuments.add(names.get(code));
+			} else if (readableWhole && used.contains(code) && length != null && length > read
+					&& read <= rules.barelyReadFragments()) {
+				readInPart.add(names.get(code) + " (" + read + " of " + length + " fragments)");
 			}
 		}
 		final int documentsFound = fragmentsByDocument.size();
 		coverage.setDocumentsFound(documentsFound);
 		coverage.setDocumentsUsed(used.size());
+		coverage.setDocumentsUnread(unreadDocuments.size());
 		coverage.setNotReached(inScope != null ? (int) Math.max(0, inScope - documentsFound) : null);
 		coverage.setNotCovered(notBlank(notCovered) ? notCovered.trim() : null);
 		coverage.setSearches(searches);
@@ -558,20 +676,21 @@ public abstract class AbstractDeepSearchTool<Q> {
 			return coverage;
 		}
 		final List<String> reasons = new ArrayList<>();
-		if (documentsFound >= rules.minDocumentsFound() && used.size() < rules.minDocumentsUsed()) {
-			reasons.add("the analysis rests on " + used.size() + " of the " + documentsFound + " documents found");
-		}
-		if (inScope != null && documentsFound >= rules.minDocumentsFound()
-				&& barelyRead > documentsFound * rules.barelyReadShare()) {
-			reasons.add(barelyRead + " of the " + documentsFound + " documents found were read in at most "
-					+ rules.barelyReadFragments() + " fragment(s)");
-		}
-		if (rules.notReachedTrigger() && coverage.getNotReached() != null && coverage.getNotReached() > 0
-				&& coverage.getNotReached() >= used.size()) {
-			reasons.add(coverage.getNotReached() + " documents of the knowledge base were not reached by any search");
-		}
 		if (coverage.getNotCovered() != null) {
 			reasons.add("the analysis reports as missing: " + coverage.getNotCovered());
+		}
+		if (!unreadDocuments.isEmpty()) {
+			reasons.add(unreadDocuments.size() + " of the " + documentsFound
+					+ " documents found were not read by the analysis: " + named(unreadDocuments));
+		}
+		if (!used.isEmpty() && readInPart.size() > used.size() * rules.barelyReadShare()) {
+			reasons.add(readInPart.size() + " of the " + used.size() + " sources were read in part: "
+					+ named(readInPart));
+		}
+		final int candidates = used.size() + unreadDocuments.size();
+		if (candidates >= rules.minDocumentsFound() && used.size() < rules.minDocumentsUsed()) {
+			reasons.add("the analysis rests on " + used.size() + " of the " + candidates
+					+ " documents it used or left unread");
 		}
 		if (!reasons.isEmpty()) {
 			coverage.setNote("The coverage of this deep search is thin: " + String.join("; ", reasons) + ". "
@@ -579,6 +698,15 @@ public abstract class AbstractDeepSearchTool<Q> {
 			coverage.setCompletionRequired(rules.gateEnabled());
 		}
 		return coverage;
+	}
+
+	/** Names for a note, at most {@link #MAX_NAMED_DOCUMENTS}. */
+	static String named(List<String> names) {
+		if (names.size() <= MAX_NAMED_DOCUMENTS) {
+			return String.join(", ", names);
+		}
+		return String.join(", ", names.subList(0, MAX_NAMED_DOCUMENTS)) + " and " + (names.size() - MAX_NAMED_DOCUMENTS)
+				+ " more";
 	}
 
 	/** The documents relied on, once each. */
