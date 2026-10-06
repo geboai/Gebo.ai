@@ -405,3 +405,21 @@ After `5ba15fda9`: each search service says how its results are loaded; the web 
 | # | Finding | Impact | Remediation | Kind |
 |---|---|---|---|---|
 | 14 | A search's ranking can leave out the pages that hold the answer (L2: the official release notes and press kits) and the model then answers from training with a made-up link | Wrong, ungrounded answer that looks cited | In code: a cited address that no tool returned is removed or flagged (items 5 and 6); and the ranking of a plain search to be reviewed (how many documents it keeps, whether a document whose title matches the question can be dropped) | Code (5, 6) + *Decision* (ranking) |
+
+## 13. Eighth session: made-up addresses removed by code (2026-10-06, 11:59 – 12:03)
+
+After `b798c735a` (audit items 5 and 6): the answer of the single agent chats streams through a guard that removes every web address no tool of the request returned (except their documents not read), nor the user or the chat gave, warning the user with the addresses removed; a deep search analysis loses the links that are no address of the documents found nor in their fragments. Only the `gebo.ai` container redeployed; gpt-4.1.
+
+| # | Chat | Request | Outcome |
+|---|---|---|---|
+| G1 (= L2) | no KB | Latest stable PostgreSQL and its date, citing the pages | ◐ the made-up `postgresql.org/about/news/postgresql-164-released-2800/` was **removed** from the answer; but the model did not search at all: classified PURE_SEARCH, iteration 1 answered without tools and was discarded, iteration 2 (not gated) answered again from training ("16.4, 9 May 2024"), no documents. See item 15 |
+| G2 (= N1) | no KB | Spring AI vs LangChain4j, with sources (deep web) | ✓ no address removed: the 9 links of the answer were all returned by the searches; 14 sources, 13 documents told as not read |
+| G3 (= A1) | KB | Christ in the KB, comparing works and authors | ✓ the analysis made up 4 links from the knowledge base paths (`https://biblioteca-esoterica/...pdf`): **removed** before the agent read it; the answer gives no address |
+
+**Item 15 (new):** the evidence gate discards a tool-free answer once, and the next iteration is not gated: a model that does not search a second time answers from its training. The guard of item 5 removes its made-up links, not its unsupported facts.
+
+| # | Finding | Impact | Remediation | Kind |
+|---|---|---|---|---|
+| 15 | After an evidence discard the next iteration is not gated (G1: answered twice without searching) | An answer that needed the sources rests on training | Keep the evidence gate on the iteration after a discard; on the last iteration show the answer with a warning that no source was searched | Code, design choice |
+
+Items 5 and 6 of section 11 are done (`b798c735a`).
