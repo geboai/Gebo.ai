@@ -129,7 +129,7 @@ class SearchToolContentPipelineTest {
 				});
 		ranker = mock(IGRankerService.class);
 		when(ranker.isRankerConfigured()).thenReturn(true);
-		when(ranker.rankAndRemoveIrrelevant(anyList(), anyString(), anyInt())).thenAnswer(invocation -> invocation.getArgument(0));
+		when(ranker.rank(anyList(), anyString(), anyInt())).thenAnswer(invocation -> invocation.getArgument(0));
 		security = mock(IGExternalSearchSecurityService.class);
 		when(security.isEnabledForCurrentUser(any())).thenReturn(true);
 		agentsConfig = new StandardAgentsConfig();
@@ -146,15 +146,18 @@ class SearchToolContentPipelineTest {
 	}
 
 	@Test
-	void rankedAgainstTheObjectiveAndTheDiscardedOnesDropped() throws Exception {
+	void everyChunkIsRankedAndTheTopKBestDocumentsAreReturned() throws Exception {
 		SearchResult kept = result("https://a.example/kept", "Kept");
 		SearchResult discarded = result("https://a.example/noise", "Noise");
-		// the ranker keeps only the first document: the other one does not serve the objective
-		when(ranker.rankAndRemoveIrrelevant(anyList(), eq("what the release changed"), eq(8)))
-				.thenAnswer(invocation -> List.of(((List<Document>) invocation.getArgument(0)).get(0)));
+		// the ranker rates the noise below: with one document asked, it is left
+		SearchQueryParam param = param("release notes", "what the release changed");
+		param.setTopK(1);
 
-		SearchToolResult result = pipeline.run(service, "searchWeb", "d", param("release notes", "what the release changed"),
-				List.of(), (s, n, p) -> List.of(kept, discarded), request("r1"));
+		SearchToolResult result = pipeline.run(service, "searchWeb", "d", param, List.of(),
+				(s, n, p) -> List.of(kept, discarded), request("r1"));
+
+		verify(ranker).rank(anyList(), eq("what the release changed"), eq(2));
+		verify(ranker, never()).rankAndRemoveIrrelevant(anyList(), anyString(), anyInt());
 
 		assertEquals(Status.OK, result.getStatus());
 		assertTrue(result.isRanked());
@@ -168,19 +171,20 @@ class SearchToolContentPipelineTest {
 	void theReturnedDocumentsAreSharedWithTheCallingAgent() throws Exception {
 		SearchResult kept = result("https://a.example/kept", "Kept");
 		SearchResult discarded = result("https://a.example/noise", "Noise");
-		when(ranker.rankAndRemoveIrrelevant(anyList(), anyString(), anyInt()))
-				.thenAnswer(invocation -> List.of(((List<Document>) invocation.getArgument(0)).get(0)));
 		ToolsFoundDocuments collector = new ToolsFoundDocuments();
 		ToolContext shared = new ToolContext(collector
 				.sharedThrough(IChatRequestContext.builder().requestID("r1")
 						.toolsContext(Map.of(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, "r1")).build())
 				.getToolsContext());
 
-		pipeline.run(service, "searchWeb", "d", param("release notes", "what changed"), List.of(),
+		SearchQueryParam param = param("release notes", "what changed");
+		param.setTopK(1);
+		SearchToolResult result = pipeline.run(service, "searchWeb", "d", param, List.of(),
 				(s, n, p) -> List.of(kept, discarded), shared);
 
-		// only the document whose content was returned, with its search result
+		// only the document whose content was returned, with its search result and its id
 		assertEquals(1, collector.getDocuments().size());
+		assertEquals("#1", result.getFragments().get(0).getDoc());
 		assertEquals(kept.getCode(), collector.getDocuments().get(0).getDocumentCode());
 		assertTrue(collector.getDocuments().get(0).getNestedSearchResult() != null);
 	}
@@ -190,7 +194,7 @@ class SearchToolContentPipelineTest {
 		pipeline.run(service, "searchWeb", "d", param("release notes", null), List.of(),
 				(s, n, p) -> List.of(result("https://a.example/1", "One")), request("r1"));
 
-		verify(ranker).rankAndRemoveIrrelevant(anyList(), eq("release notes"), anyInt());
+		verify(ranker).rank(anyList(), eq("release notes"), anyInt());
 	}
 
 	@Test
@@ -306,7 +310,7 @@ class SearchToolContentPipelineTest {
 
 		assertTrue(answer.contains("\"status\":\"OK\""), answer);
 		assertTrue(answer.contains("https://a.example/1"), answer);
-		verify(ranker).rankAndRemoveIrrelevant(anyList(), eq("what changed"), eq(3));
+		verify(ranker).rank(anyList(), eq("what changed"), anyInt());
 	}
 
 	/** A native query structure, as a native search service declares one. */

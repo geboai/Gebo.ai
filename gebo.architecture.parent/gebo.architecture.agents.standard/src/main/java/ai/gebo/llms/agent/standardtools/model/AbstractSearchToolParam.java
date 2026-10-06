@@ -23,8 +23,8 @@ public abstract class AbstractSearchToolParam {
 	public static final String SEARCH_OBJECTIVE_DESCRIPTION = "In 1-3 sentences, what information you need and what you "
 			+ "need it for. The contents found are ranked against this objective and the ones that do not serve it are "
 			+ "discarded, so state it precisely.";
-	public static final String TOP_K_DESCRIPTION = "Maximum number of content fragments to return, 8 when not given, "
-			+ "at most 30.";
+	public static final String TOP_K_DESCRIPTION = "Maximum number of documents to return, with their passages found, "
+			+ "8 when not given, at most 30.";
 
 	@ToolParam(required = true, description = SEARCH_OBJECTIVE_DESCRIPTION)
 	private String searchObjective = null;

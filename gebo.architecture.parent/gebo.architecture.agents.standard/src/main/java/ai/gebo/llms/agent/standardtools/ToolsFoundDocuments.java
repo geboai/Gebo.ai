@@ -39,10 +39,20 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRe
 public final class ToolsFoundDocuments {
 	/** Tools context key carrying the collector. */
 	public static final String TOOLS_CONTEXT_KEY = "geboToolsFoundDocuments";
+	/** The prefix of a document's id in the request: "#1", "#2"... */
+	public static final String ID_PREFIX = "#";
 	private final Map<String, GResponseDocumentRef> byCode = new LinkedHashMap<>();
 	private final Set<String> listedNames = new LinkedHashSet<>();
+	/** The id of each document in the request, by document code, in the order they came. */
+	private final Map<String, String> idsByCode = new LinkedHashMap<>();
+	/** The ids of the documents the answer says it rests on; null while it said none. */
+	private List<String> answerDocumentIds = null;
 
-	/** Records the documents, once per document code. */
+	/**
+	 * Records the documents, once per document code: each new one gets the next short
+	 * id of the request ({@code #1}, {@code #2}...), the one the tools show the model
+	 * and the model gives back to say which documents its answer rests on.
+	 */
 	public synchronized void add(Collection<GResponseDocumentRef> refs) {
 		if (refs == null) {
 			return;
@@ -50,8 +60,60 @@ public final class ToolsFoundDocuments {
 		for (GResponseDocumentRef ref : refs) {
 			if (ref != null && ref.getDocumentCode() != null) {
 				byCode.putIfAbsent(ref.getDocumentCode(), ref);
+				idsByCode.computeIfAbsent(ref.getDocumentCode(), code -> ID_PREFIX + (idsByCode.size() + 1));
 			}
 		}
+	}
+
+	/** The short id of a document of the request, null when it was never recorded. */
+	public synchronized String idOf(String documentCode) {
+		return documentCode != null ? idsByCode.get(documentCode) : null;
+	}
+
+	/**
+	 * Records the ids the answer gives as the documents it rests on (several answer
+	 * iterations add theirs).
+	 */
+	public synchronized void addAnswerDocumentIds(Collection<String> ids) {
+		if (answerDocumentIds == null) {
+			answerDocumentIds = new ArrayList<>();
+		}
+		if (ids != null) {
+			for (String id : ids) {
+				if (id != null && !answerDocumentIds.contains(id)) {
+					answerDocumentIds.add(id);
+				}
+			}
+		}
+	}
+
+	/** The ids the answer gave as the documents it rests on; null when it gave none. */
+	public synchronized List<String> getAnswerDocumentIds() {
+		return answerDocumentIds != null ? new ArrayList<>(answerDocumentIds) : null;
+	}
+
+	/**
+	 * The documents of the given ids, in the order of the ids; the ids no document has
+	 * go to {@code unknown}.
+	 */
+	public synchronized List<GResponseDocumentRef> documentsOf(Collection<String> ids, List<String> unknown) {
+		final Map<String, String> codesById = new LinkedHashMap<>();
+		for (Map.Entry<String, String> entry : idsByCode.entrySet()) {
+			codesById.put(entry.getValue(), entry.getKey());
+		}
+		final List<GResponseDocumentRef> documents = new ArrayList<>();
+		for (String id : ids) {
+			final String code = codesById.get(id);
+			final GResponseDocumentRef ref = code != null ? byCode.get(code) : null;
+			if (ref != null) {
+				if (!documents.contains(ref)) {
+					documents.add(ref);
+				}
+			} else if (unknown != null) {
+				unknown.add(id);
+			}
+		}
+		return documents;
 	}
 
 	/** Records the names of documents a tool listed without reading them. */
@@ -81,7 +143,15 @@ public final class ToolsFoundDocuments {
 	 * code, the answer's own first.
 	 */
 	public List<GResponseDocumentRef> mergeInto(List<GResponseDocumentRef> answerDocuments) {
-		final List<GResponseDocumentRef> collected = getDocuments();
+		return mergeInto(answerDocuments, getDocuments());
+	}
+
+	/**
+	 * The given answer documents completed with the given collected ones, once per
+	 * document code, the answer's own first.
+	 */
+	public static List<GResponseDocumentRef> mergeInto(List<GResponseDocumentRef> answerDocuments,
+			List<GResponseDocumentRef> collected) {
 		if (collected.isEmpty()) {
 			return answerDocuments;
 		}

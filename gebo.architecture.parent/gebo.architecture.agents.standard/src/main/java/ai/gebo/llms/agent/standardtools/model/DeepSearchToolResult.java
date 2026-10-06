@@ -42,6 +42,12 @@ public class DeepSearchToolResult {
 		private String source;
 		/** The code identifying the document. */
 		private String documentCode;
+		/** The short id of the document in the request (see the tools' found documents), when known. */
+		private String doc;
+
+		public Source(String title, String source, String documentCode) {
+			this(title, source, documentCode, null);
+		}
 	}
 
 	private Status status = Status.OK;

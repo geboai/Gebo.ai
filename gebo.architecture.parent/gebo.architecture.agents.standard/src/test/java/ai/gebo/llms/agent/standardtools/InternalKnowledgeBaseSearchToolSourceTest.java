@@ -172,7 +172,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 	}
 
 	@Test
-	void aConfiguredRankerKeepsTheBestTopKOfTwiceTheFragmentsRetrieved() throws Exception {
+	void aConfiguredRankerRanksEveryFragmentAndTheTopKBestDocumentsAreKept() throws Exception {
 		IGDocumentsSearchService search = searchFindingDocuments(20);
 		IGRankerService ranker = mock(IGRankerService.class);
 		when(ranker.isRankerConfigured()).thenReturn(true);
@@ -187,10 +187,14 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		String answer = rankingTool(search, ranker).search(query("anthroposophy"), chatWithKnowledgeBases("kb1"),
 				collector, new ToolsTokenBudget(30000));
 
-		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(20), eq(40000));
-		verify(ranker).rank(anyList(), eq("anthroposophy"), eq(10));
+		// 10 documents asked: 3 fragments each, twice as many for the ranker to choose from
+		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(60), eq(120000));
+		verify(ranker).rank(anyList(), eq("anthroposophy"), eq(20));
 		verify(ranker, never()).rankAndRemoveIrrelevant(anyList(), anyString(), anyInt());
-		assertTrue(answer.startsWith("10 fragment(s) found:"), answer.substring(0, 40));
+		assertTrue(answer.startsWith("10 fragment(s) of 10 document(s) found:"), answer.substring(0, 50));
+		final String id = collector.idOf("doc-19");
+		assertTrue(id != null && answer.contains(id + " doc-19 (1)") && answer.contains("doc: " + id),
+				"each document with its id: " + answer.substring(0, Math.min(400, answer.length())));
 		assertTrue(answer.indexOf("fragment19") < answer.indexOf("fragment18"), "best ranked first");
 		assertTrue(answer.contains("doc-10 (1)") && !answer.contains("doc-9 ("),
 				"the fragments the ranker left out are not returned");
@@ -198,17 +202,17 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 	}
 
 	@Test
-	void noRankerConfiguredRetrievesTheFragmentsAskedOnly() throws Exception {
+	void noRankerConfiguredRetrievesTheFragmentsOfTheDocumentsAskedOnly() throws Exception {
 		IGDocumentsSearchService search = searchFindingDocuments(10);
 		IGRankerService ranker = mock(IGRankerService.class);
 		when(ranker.isRankerConfigured()).thenReturn(false);
 
 		String answer = rankingTool(search, ranker).search(query("anthroposophy"), chatWithKnowledgeBases("kb1"));
 
-		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(10),
+		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(30),
 				eq(Integer.MAX_VALUE));
 		verify(ranker, never()).rank(anyList(), anyString(), anyInt());
-		assertTrue(answer.startsWith("10 fragment(s) found:"));
+		assertTrue(answer.startsWith("10 fragment(s) of 10 document(s) found:"));
 	}
 
 	@Test
@@ -220,8 +224,8 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 
 		String answer = rankingTool(search, ranker).search(query("anthroposophy"), chatWithKnowledgeBases("kb1"));
 
-		assertTrue(answer.startsWith("10 fragment(s) found:"), answer.substring(0, 40));
-		assertTrue(answer.contains("fragment9") && !answer.contains("fragment10"), "the first 10 retrieved");
+		assertTrue(answer.startsWith("10 fragment(s) of 10 document(s) found:"), answer.substring(0, 50));
+		assertTrue(answer.contains("fragment9") && !answer.contains("fragment10"), "the first 10 documents retrieved");
 	}
 
 	@Test
@@ -232,12 +236,12 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		String answer = tool(search, null).search(query("anthroposophy"), chatWithKnowledgeBases("kb1"), null, room);
 
 		int answerTokens = ITokensCountable.stringsTokensSize(answer);
-		assertTrue(answer.startsWith("10 fragment(s) found:"), answer.substring(0, 40));
+		assertTrue(answer.startsWith("10 fragment(s) of 10 document(s) found:"), answer.substring(0, 50));
 		assertTrue(answerTokens <= 10000, "answer of " + answerTokens);
 		assertTrue(answerTokens > 9000, "the room is used, answer of " + answerTokens);
 		assertTrue(answer.contains("fragment9"), "every document keeps its share");
 		assertEquals(30000, room.left(), "the tool wrapper takes the answer out of the room, not the tool");
-		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(10), eq(20000));
+		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(30), eq(60000));
 	}
 
 	@Test
@@ -249,7 +253,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 
 		assertTrue(ITokensCountable.stringsTokensSize(answer) <= 5000,
 				"answer of " + ITokensCountable.stringsTokensSize(answer));
-		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(10), eq(10000));
+		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(30), eq(30000));
 		assertEquals(InternalKnowledgeBaseSearchToolSource.DEFAULT_ROOM_DIVISOR,
 				tool(search, configured(0d)).roomDivisor(), "a divisor not positive is not used");
 		assertEquals(InternalKnowledgeBaseSearchToolSource.DEFAULT_ROOM_DIVISOR,
@@ -266,7 +270,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 
 		assertTrue(ITokensCountable.stringsTokensSize(answer) > 10 * ITokensCountable.stringsTokensSize(words(2990, "fragment0")),
 				"the fragments are returned whole");
-		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(10),
+		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(30),
 				eq(Integer.MAX_VALUE));
 	}
 
@@ -302,13 +306,15 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 
 		String answer = tool.search(query("topic"), chatWithKnowledgeBases("kb1"), collector, null);
 
-		assertTrue(answer.startsWith("1 fragment(s) found:"));
+		assertTrue(answer.startsWith("1 fragment(s) of 1 document(s) found:"));
 		assertEquals(List.of("doc-a"), collector.getDocuments().stream().map(x -> x.getDocumentCode()).toList());
+		assertEquals("#1", collector.idOf("doc-a"));
+		assertTrue(answer.contains("doc: #1"), "the fragment carries its document's id: " + answer);
 
 		// sharing never fails the search
 		when(set.getDocumentItems()).thenReturn(null);
 		assertTrue(tool.search(query("topic"), chatWithKnowledgeBases("kb1"), new ToolsFoundDocuments(), null)
-				.startsWith("1 fragment(s) found:"));
+				.startsWith("1 fragment(s) of 1 document(s) found:"));
 	}
 
 	@Test

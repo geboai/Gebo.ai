@@ -212,7 +212,16 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	}
 
 	public record DocumentContent(Long uniqueId, String name, String code, String content, boolean complete,
-			String message) {
+			String message, String doc) {
+		public DocumentContent(Long uniqueId, String name, String code, String content, boolean complete,
+				String message) {
+			this(uniqueId, name, code, content, complete, message, null);
+		}
+
+		/** The same, with the short id of the document in the request (see {@link ToolsFoundDocuments}). */
+		public DocumentContent withDoc(String doc) {
+			return new DocumentContent(uniqueId, name, code, content, complete, message, doc);
+		}
 	}
 
 	// ---------------------------------------------------------------- the source
@@ -552,6 +561,8 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 			return List.of(new DocumentContent(null, null, null, null, false, "Give the uniqueIds of the documents to read."));
 		}
 		final List<DocumentContent> contents = new ArrayList<>();
+		// the documents read, by their place among the contents, to give them their id
+		final Map<Integer, GResponseDocumentRef> readAt = new LinkedHashMap<>();
 		try {
 			final List<String> scope = scope(chatKnowledgeBases, null);
 			final List<Long> asked = param.getUniqueIds().stream().filter(id -> id != null).distinct().toList();
@@ -589,7 +600,9 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 				room -= content.content() != null ? ITokensCountable.stringsTokensSize(content.content()) : 0;
 				contents.add(content);
 				if (content.content() != null) {
-					read.add(new GResponseDocumentRef(document));
+					final GResponseDocumentRef ref = new GResponseDocumentRef(document);
+					read.add(ref);
+					readAt.put(contents.size() - 1, ref);
 				} else {
 					namedOnly.add(document.getName());
 				}
@@ -603,6 +616,11 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 			}
 			if (collector != null && !read.isEmpty()) {
 				collector.add(read);
+				// each document read carries its short id of the request, the one the answer gives back
+				for (Map.Entry<Integer, GResponseDocumentRef> entry : readAt.entrySet()) {
+					contents.set(entry.getKey(),
+							contents.get(entry.getKey()).withDoc(collector.idOf(entry.getValue().getDocumentCode())));
+				}
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug(DOCUMENT_CONTENTS_TOOL + " shared " + read.size()
 							+ " document(s) read with the calling agent's answer");

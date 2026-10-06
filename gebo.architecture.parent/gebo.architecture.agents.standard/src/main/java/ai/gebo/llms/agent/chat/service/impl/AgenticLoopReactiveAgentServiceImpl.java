@@ -387,7 +387,9 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					if (operation != null && operation.getData() != null
 							&& operation.getData().getContent() == response) {
 						final int before = response.getDocumentsRef() != null ? response.getDocumentsRef().size() : 0;
-						response.setDocumentsRef(toolDocuments.mergeInto(response.getDocumentsRef()));
+						// the documents the answer rests on, not every one the tools returned
+						response.setDocumentsRef(ToolsFoundDocuments.mergeInto(response.getDocumentsRef(),
+								answerDocuments(toolDocuments, response.getQueryResponse())));
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("Agentic loop agent id:" + getId() + " answer documents: " + before
 									+ " from the session, " + response.getDocumentsRef().size()
@@ -469,6 +471,98 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			return addresses;
 		}
 	}
+
+	/**
+	 * Records, in the request's found documents, the documents the shown text of an
+	 * iteration says it rests on (its {@code ANSWER-DOCUMENTS} marker).
+	 */
+	void recordAnswerDocuments(IChatRequestContext chatRequestContext, ControlMarkerStripper stripper, int number) {
+		final List<String> ids = stripper.getAnswerDocuments();
+		if (ids == null || chatRequestContext == null || chatRequestContext.getToolsContext() == null) {
+			return;
+		}
+		final ToolsFoundDocuments collector = ToolsFoundDocuments
+				.from(new org.springframework.ai.chat.model.ToolContext(chatRequestContext.getToolsContext()));
+		if (collector == null) {
+			return;
+		}
+		collector.addAnswerDocumentIds(ids);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + number + " rests on the document(s): "
+					+ ids);
+		}
+	}
+
+	/**
+	 * The documents the answer rests on, among the ones the tools of the request
+	 * returned: the ones its {@code ANSWER-DOCUMENTS} marker lists; without a usable
+	 * marker, the ones its text cites (by address or name); when it cites none, every
+	 * one, as no answer could tell.
+	 */
+	List<GResponseDocumentRef> answerDocuments(ToolsFoundDocuments collector, String answer) {
+		final List<GResponseDocumentRef> collected = collector.getDocuments();
+		if (collected.isEmpty()) {
+			return collected;
+		}
+		final List<String> ids = collector.getAnswerDocumentIds();
+		if (ids != null) {
+			final List<String> unknown = new ArrayList<>();
+			final List<GResponseDocumentRef> listed = collector.documentsOf(ids, unknown);
+			if (!unknown.isEmpty()) {
+				LOGGER.warn("Agentic loop agent id:" + getId() + " answer lists document id(s) no tool gave: " + unknown);
+			}
+			if (!listed.isEmpty() || unknown.isEmpty()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agentic loop agent id:" + getId() + " answer rests on " + listed.size() + " of the "
+							+ collected.size() + " document(s) the tools returned: " + ids);
+				}
+				return listed;
+			}
+		} else {
+			LOGGER.warn("Agentic loop agent id:" + getId()
+					+ " answer gives no ANSWER-DOCUMENTS marker: its documents are the ones it cites");
+		}
+		final List<GResponseDocumentRef> cited = citedDocuments(collected, answer);
+		if (!cited.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agentic loop agent id:" + getId() + " answer cites " + cited.size() + " of the "
+						+ collected.size() + " document(s) the tools returned");
+			}
+			return cited;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agentic loop agent id:" + getId() + " answer cites none of the " + collected.size()
+					+ " document(s) the tools returned: all of them are its documents");
+		}
+		return collected;
+	}
+
+	/** The documents an answer cites, by their address or their name. */
+	static List<GResponseDocumentRef> citedDocuments(List<GResponseDocumentRef> documents, String answer) {
+		final List<GResponseDocumentRef> cited = new ArrayList<>();
+		if (answer == null || answer.isBlank()) {
+			return cited;
+		}
+		final String lower = answer.toLowerCase();
+		final Set<String> addresses = CitedAddresses.addressesIn(answer);
+		for (GResponseDocumentRef ref : documents) {
+			for (String name : citableNames(ref)) {
+				if (name == null || name.isBlank()) {
+					continue;
+				}
+				final boolean address = name.regionMatches(true, 0, "http", 0, 4);
+				if (address ? addresses.contains(CitedAddresses.normalized(name))
+						: name.trim().length() >= MIN_CITED_NAME_LENGTH && lower.contains(name.trim().toLowerCase())) {
+					cited.add(ref);
+					break;
+				}
+			}
+		}
+		return cited;
+	}
+
+	/** Shortest document name looked for in an answer: shorter ones match by chance. */
+	static final int MIN_CITED_NAME_LENGTH = 6;
 
 	/** A document file name as an answer cites it. */
 	static final Pattern CITED_DOCUMENT = Pattern.compile(
@@ -608,6 +702,11 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 		if (toolDocuments != null) {
 			readNames.addAll(toolDocuments.getListedNames());
+			// every document the tools read counts as read, also the ones the answer does
+			// not rest on (not among its documents)
+			for (GResponseDocumentRef ref : toolDocuments.getDocuments()) {
+				readNames.addAll(citableNames(ref));
+			}
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("Agentic loop agent id:" + getId() + " names the answer may cite: " + readNames);
@@ -773,6 +872,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					LOGGER.warn("Agentic loop agent id:" + getId() + " last iteration " + number
 							+ " used no search although its answer needed one: answering anyway");
 					history.add(new LoopIteration(number, text.toString(), iterationCalls));
+					recordAnswerDocuments(chatRequestContext, stripper, number);
 					return Flux.just(held.toString()).filter(chunk -> !chunk.isEmpty());
 				}
 				history.add(new LoopIteration(number, text.toString(), iterationCalls));
@@ -813,8 +913,11 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					// no iteration left: the answer is shown as it is
 					LOGGER.warn("Agentic loop agent id:" + getId() + " last iteration " + number
 							+ " answered on a deep search coverage asking to be completed: answering anyway");
+					recordAnswerDocuments(chatRequestContext, stripper, number);
 					return Flux.just(held.toString()).filter(chunk -> !chunk.isEmpty());
 				}
+				// the text of this iteration is shown: the documents it says it rests on count
+				recordAnswerDocuments(chatRequestContext, stripper, number);
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + number + " ended, tools called:"
 							+ (calls.size() - Math.min(callsBefore, calls.size())) + " continue requested:"
@@ -1067,12 +1170,20 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * the model wrote. The markers can be split across chunks: the end of a chunk
 	 * that could be the beginning of a marker is held back until the next one.
 	 */
+	/** Opens the list of the documents an answer rests on, by their short ids ({@code #1 #4}). */
+	static final String ANSWER_DOCUMENTS_OPEN = "<ANSWER-DOCUMENTS>";
+	static final String ANSWER_DOCUMENTS_CLOSE = "</ANSWER-DOCUMENTS>";
+	/** A document id in the ANSWER-DOCUMENTS marker: its number. */
+	private static final Pattern DOCUMENT_ID = Pattern.compile("#?\\s*(\\d+)");
+
 	static final class ControlMarkerStripper {
 		private static final List<String> MARKERS = List.of(AGENT_CONTROL_FINISHED, AGENT_CONTROL_MORE_TOOLS);
 		private static final int LONGEST_MARKER = MARKERS.stream().mapToInt(String::length).max().orElse(0);
 		private final StringBuilder pending = new StringBuilder();
 		private boolean continueRequested = false;
 		private boolean finishRequested = false;
+		/** The ids of the ANSWER-DOCUMENTS marker; null when the text gave none. */
+		private List<String> answerDocuments = null;
 
 		/** The text of the chunk that can be shown now. */
 		String accept(String chunk) {
@@ -1090,6 +1201,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		/** The text still held back, once the stream is over. */
 		String complete() {
 			removeMarkers();
+			// a marker the model did not close ends with the text
+			removeAnswerDocuments(true);
 			String out = pending.toString();
 			pending.setLength(0);
 			return out;
@@ -1105,7 +1218,54 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			return finishRequested;
 		}
 
+		/** The document ids the text says it rests on, "#n" each; null when it gave no marker. */
+		List<String> getAnswerDocuments() {
+			return answerDocuments != null ? new ArrayList<>(answerDocuments) : null;
+		}
+
+		private void removeAnswerDocuments(boolean ended) {
+			int open;
+			while ((open = indexOfIgnoreCase(pending, ANSWER_DOCUMENTS_OPEN, 0)) >= 0) {
+				final int from = open + ANSWER_DOCUMENTS_OPEN.length();
+				final int close = indexOfIgnoreCase(pending, ANSWER_DOCUMENTS_CLOSE, from);
+				if (close < 0) {
+					if (!ended) {
+						// held back until it closes
+						return;
+					}
+					captureAnswerDocuments(pending.substring(from));
+					pending.setLength(open);
+					return;
+				}
+				captureAnswerDocuments(pending.substring(from, close));
+				pending.delete(open, close + ANSWER_DOCUMENTS_CLOSE.length());
+			}
+		}
+
+		private void captureAnswerDocuments(String ids) {
+			if (answerDocuments == null) {
+				answerDocuments = new ArrayList<>();
+			}
+			final Matcher matcher = DOCUMENT_ID.matcher(ids);
+			while (matcher.find()) {
+				final String id = ToolsFoundDocuments.ID_PREFIX + matcher.group(1);
+				if (!answerDocuments.contains(id)) {
+					answerDocuments.add(id);
+				}
+			}
+		}
+
+		private static int indexOfIgnoreCase(CharSequence text, String marker, int from) {
+			for (int i = Math.max(0, from); i <= text.length() - marker.length(); i++) {
+				if (text.toString().regionMatches(true, i, marker, 0, marker.length())) {
+					return i;
+				}
+			}
+			return -1;
+		}
+
 		private void removeMarkers() {
+			removeAnswerDocuments(false);
 			for (String marker : MARKERS) {
 				int index;
 				while ((index = pending.indexOf(marker)) >= 0) {
@@ -1120,12 +1280,21 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 
 		private int heldBack() {
-			for (int length = Math.min(pending.length(), LONGEST_MARKER - 1); length > 0; length--) {
+			// an ANSWER-DOCUMENTS marker not closed yet
+			final int open = indexOfIgnoreCase(pending, ANSWER_DOCUMENTS_OPEN, 0);
+			if (open >= 0) {
+				return pending.length() - open;
+			}
+			for (int length = Math.min(pending.length(),
+					Math.max(LONGEST_MARKER, ANSWER_DOCUMENTS_OPEN.length()) - 1); length > 0; length--) {
 				String suffix = pending.substring(pending.length() - length);
 				for (String marker : MARKERS) {
 					if (marker.startsWith(suffix)) {
 						return length;
 					}
+				}
+				if (ANSWER_DOCUMENTS_OPEN.regionMatches(true, 0, suffix, 0, suffix.length())) {
+					return length;
 				}
 			}
 			return 0;

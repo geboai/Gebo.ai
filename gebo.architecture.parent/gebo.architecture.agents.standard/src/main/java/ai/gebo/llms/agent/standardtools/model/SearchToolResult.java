@@ -53,6 +53,8 @@ public class SearchToolResult {
 		private String source;
 		/** The code identifying the document the fragment comes from. */
 		private String documentCode;
+		/** The short id of the document in the request (see the tools' found documents), when known. */
+		private String doc;
 		/** Position of the fragment in its document, as "n/total" when known. */
 		private String chunk;
 		private String content;

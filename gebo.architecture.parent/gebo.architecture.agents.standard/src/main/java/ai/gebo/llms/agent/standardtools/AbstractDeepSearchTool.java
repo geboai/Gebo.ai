@@ -412,6 +412,12 @@ public abstract class AbstractDeepSearchTool<Q> {
 			final ToolsFoundDocuments collector = ToolsFoundDocuments.from(toolContext);
 			if (collector != null) {
 				collector.add(reliedOn.stream().map(FoundDocument::ref).filter(ref -> ref != null).toList());
+				// each source carries its short id of the request, the one the answer gives back
+				for (FoundDocument found : reliedOn) {
+					if (found.ref() != null && found.source() != null) {
+						found.source().setDoc(collector.idOf(found.ref().getDocumentCode()));
+					}
+				}
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Tool:" + toolName + " shared " + reliedOn.size()
 							+ " document(s) with the calling agent's answer");

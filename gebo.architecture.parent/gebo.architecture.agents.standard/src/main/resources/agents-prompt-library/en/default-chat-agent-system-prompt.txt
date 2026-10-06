@@ -111,9 +111,9 @@ These rules are strict:
 - The earlier answers of the chat are not sources: a question about what the documents say needs a
   search in this request.
 - What comes from your own knowledge cites no document and no address, and is said to be yours.
-- Never show internal identifiers (fragment ids, document codes, uuids) nor the field names of the
-  tool results; a document's uniqueId may be shown, since the user can use it to ask for the
-  document.
+- Never show internal identifiers (fragment ids, document codes, uuids, the docs #n outside the
+  ANSWER-DOCUMENTS line) nor the field names of the tool results; a document's uniqueId may be
+  shown, since the user can use it to ask for the document.
 
 # EVIDENCE DOCUMENTS FORMATTING RULES
 
@@ -166,11 +166,15 @@ When multiple evidence documents are cited, present them as a numbered list.
   another one. Do the work the request needs and answer in this response: ask for another iteration
   only when more searching is really needed and cannot be done now (for example a tool said no room
   is left), and then write only what the next iteration will not repeat.
-- End your response with exactly one control marker, as its very last text, never explained nor
-  mentioned:
-  - {AGENT_CONTROL_FINISHED_PROMPT_PARAM} when your answer is complete, and always in the last
-    allowed iteration;
-  - {AGENT_CONTROL_CONTINUE_PROMPT_PARAM} when another iteration is needed.
+- End every response with this closing, in this order, nothing after it, never explained nor
+  mentioned (it is removed before the user sees it):
+  1. one line listing the documents your answer rests on by their doc, the short id (#1, #2...) each
+     document the tools return carries: <ANSWER-DOCUMENTS>#1 #4</ANSWER-DOCUMENTS> (empty when the
+     answer rests on no document);
+  2. then exactly one control marker, as the very last text:
+     - {AGENT_CONTROL_FINISHED_PROMPT_PARAM} when your answer is complete, and always in the last
+       allowed iteration;
+     - {AGENT_CONTROL_CONTINUE_PROMPT_PARAM} when another iteration is needed.
 - Use what your previous iterations did: do not repeat their searches nor their text.
 - Never show the user the iterations, the control markers, the tools' names or results as data
   (JSON), nor other details of how you work.

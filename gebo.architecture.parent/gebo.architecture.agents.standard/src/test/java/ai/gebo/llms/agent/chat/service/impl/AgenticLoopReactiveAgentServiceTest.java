@@ -136,6 +136,71 @@ class AgenticLoopReactiveAgentServiceTest {
 	}
 
 	@Test
+	void theDocumentsTheAnswerRestsOnAreReadFromItsLastLineAndNeverShown() {
+		ControlMarkerStripper stripper = new ControlMarkerStripper();
+		String shown = stripper.accept("The answer.\n<ANSWER-DOC") + stripper.accept("UMENTS>#3 #1")
+				+ stripper.accept(" #3</ANSWER-DOCUMENTS>") + stripper.accept(STOP) + stripper.complete();
+
+		assertEquals("The answer.\n", shown);
+		assertEquals(List.of("#3", "#1"), stripper.getAnswerDocuments());
+		assertTrue(stripper.isFinishRequested());
+
+		ControlMarkerStripper none = new ControlMarkerStripper();
+		assertEquals("No documents.", none.accept("No documents.") + none.complete());
+		assertNull(none.getAnswerDocuments(), "no marker given");
+
+		ControlMarkerStripper empty = new ControlMarkerStripper();
+		assertEquals("General knowledge. ", empty.accept("General knowledge. <answer-documents></answer-documents>")
+				+ empty.complete());
+		assertEquals(List.of(), empty.getAnswerDocuments(), "rests on no document, in any case");
+
+		ControlMarkerStripper unclosed = new ControlMarkerStripper();
+		assertEquals("Text ", unclosed.accept("Text <ANSWER-DOCUMENTS>2, 5") + unclosed.complete());
+		assertEquals(List.of("#2", "#5"), unclosed.getAnswerDocuments(), "a marker left open ends with the text");
+	}
+
+	@Test
+	void theAnswerDocumentsAreTheOnesItSaysElseTheOnesItCitesElseAll() {
+		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, null, null, null,
+				null, null, NO_RENDERER);
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef release = webPage(
+				"www.postgresql.org", "https://www.postgresql.org/docs/release/");
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef keycloak = webPage("www.keycloak.org",
+				"https://www.keycloak.org/server/db");
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef herodevs = webPage("www.herodevs.com",
+				"https://www.herodevs.com/blog-posts/postgresql-eol");
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
+		collector.add(List.of(keycloak, release, herodevs));
+
+		// the answer says it rests on #2
+		collector.addAnswerDocumentIds(List.of("#2"));
+		assertEquals(List.of(release), agent.answerDocuments(collector, "PostgreSQL 18 (see the release notes)."));
+
+		// no marker: the documents it cites
+		ToolsFoundDocuments cited = new ToolsFoundDocuments();
+		cited.add(List.of(keycloak, release, herodevs));
+		assertEquals(List.of(release),
+				agent.answerDocuments(cited, "See https://www.postgresql.org/docs/release/ for the dates."));
+
+		// ids no tool gave: the documents it cites
+		ToolsFoundDocuments unknown = new ToolsFoundDocuments();
+		unknown.add(List.of(keycloak, release));
+		unknown.addAnswerDocumentIds(List.of("#7"));
+		assertEquals(List.of(keycloak), agent.answerDocuments(unknown, "As www.keycloak.org says."));
+
+		// nothing to tell: all of them
+		ToolsFoundDocuments silent = new ToolsFoundDocuments();
+		silent.add(List.of(keycloak, release));
+		assertEquals(List.of(keycloak, release), agent.answerDocuments(silent, "An answer citing nothing."));
+
+		// an empty marker: the answer rests on no document
+		ToolsFoundDocuments none = new ToolsFoundDocuments();
+		none.add(List.of(keycloak));
+		none.addAnswerDocumentIds(List.of());
+		assertEquals(List.of(), agent.answerDocuments(none, "From general knowledge."));
+	}
+
+	@Test
 	void textThatOnlyLooksLikeAMarkerIsKept() {
 		ControlMarkerStripper stripper = new ControlMarkerStripper();
 		String shown = stripper.accept("a < b and <AGENT-C") + stripper.accept("hat") + stripper.complete();

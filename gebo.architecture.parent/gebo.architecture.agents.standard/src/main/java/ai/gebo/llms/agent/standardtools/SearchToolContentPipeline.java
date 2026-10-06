@@ -64,9 +64,11 @@ import ai.gebo.model.DocumentMetaInfos;
  * {@link SearchToolsRequestRegistry});</li>
  * <li>loads the results as LLM-sized chunks ({@link SearchResultsChunker});</li>
  * <li>ranks the chunks against the search objective with the
- * {@link IGRankerService}, which also throws away the ones that do not serve
- * it;</li>
- * <li>fits the best ones in the requested size.</li>
+ * {@link IGRankerService} (ranking only: the model reading them judges what serves
+ * it) and keeps the topK best documents, rated by their best chunk, with all their
+ * chunks (see {@link RankedDocuments});</li>
+ * <li>fits them in the room the model call leaves, each document with its short id
+ * of the request (see {@link ToolsFoundDocuments#idOf(String)}).</li>
  * </ol>
  * The collaborators are resolved on use: the tool sources are collected while the
  * chat models are built, and ranking reaches back to the chat models.
@@ -314,6 +316,14 @@ public class SearchToolContentPipeline {
 			}
 			requestRegistry.markReturned(requestId, returnedCodes);
 			shareFoundDocuments(toolContext, fresh, returnedCodes, toolName);
+			// each fragment carries the short id of its document in the request, the one the
+			// answer gives back
+			final ToolsFoundDocuments collector = ToolsFoundDocuments.from(toolContext);
+			if (collector != null) {
+				for (Fragment fragment : result.getFragments()) {
+					fragment.setDoc(collector.idOf(fragment.getDocumentCode()));
+				}
+			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End run(...) tool:" + toolName + " status:" + result.getStatus() + " returns "
 						+ result.getFragments().size() + " fragment(s) from " + returnedCodes.size()
@@ -352,8 +362,8 @@ public class SearchToolContentPipeline {
 	record RankingOutcome(List<Document> documents, boolean ranked, String note) {
 	}
 
-	/** Why a document read is not in the results: no passage of it serves the objective. */
-	static final String NOT_RELEVANT_TO_THE_OBJECTIVE = "read, no passage serves the search objective";
+	/** Why a document read is not in the results: other documents ranked better. */
+	static final String NOT_RELEVANT_TO_THE_OBJECTIVE = "read, ranked below the documents returned";
 	/** Why a document read is not in the results: no room was left for it. */
 	static final String LEFT_OUT_FOR_ROOM = "read, left out: no room left in the context for it";
 
@@ -403,9 +413,10 @@ public class SearchToolContentPipeline {
 	}
 
 	/**
-	 * Ranks the chunks against the objective, the ranker service also dropping the
-	 * ones that do not serve it. Without a ranker, or when ranking fails, the chunks
-	 * are kept in their retrieval order.
+	 * Ranks every chunk against the objective (ranking only, no irrelevance filter) and
+	 * keeps the chunks of the {@code topK} best documents, rated by their best chunk.
+	 * Without a ranker, or when ranking fails, the documents are taken in their
+	 * retrieval order.
 	 */
 	RankingOutcome rank(List<Document> chunks, String objective, int topK, String toolName) {
 		if (chunks.isEmpty()) {
@@ -417,22 +428,29 @@ public class SearchToolContentPipeline {
 				LOGGER.debug("Tool:" + toolName + " has no ranker configured, " + chunks.size()
 						+ " chunk(s) kept in retrieval order");
 			}
-			return new RankingOutcome(limit(chunks, topK), false,
+			return new RankingOutcome(RankedDocuments.top(chunks, topK, false), false,
 					"No ranker is configured: the contents are in search order, not ranked.");
 		}
 		try {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Tool:" + toolName + " ranking " + chunks.size() + " chunk(s) topK:" + topK);
 			}
-			final List<Document> ranked = ranker.rankAndRemoveIrrelevant(chunks, objective, topK);
+			// every chunk ranked: the documents are chosen by their best one
+			final List<Document> ranked = ranker.rank(chunks, objective, chunks.size());
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Tool:" + toolName + " ranking kept " + (ranked != null ? ranked.size() : 0) + " of "
 						+ chunks.size() + " chunk(s)");
 			}
-			return new RankingOutcome(limit(ranked != null ? ranked : List.of(), topK), true, null);
+			final List<Document> kept = RankedDocuments.top(ranked != null ? ranked : List.of(), topK, false);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Tool:" + toolName + " kept " + kept.size() + " chunk(s) of the "
+						+ RankedDocuments.documentsIn(kept) + " best of " + RankedDocuments.documentsIn(chunks)
+						+ " document(s), topK:" + topK);
+			}
+			return new RankingOutcome(kept, true, null);
 		} catch (Throwable th) {
 			LOGGER.warn("Tool:" + toolName + " ranking failed, the chunks are kept in retrieval order", th);
-			return new RankingOutcome(limit(chunks, topK), false,
+			return new RankingOutcome(RankedDocuments.top(chunks, topK, false), false,
 					"Ranking failed: the contents are in search order, not ranked.");
 		}
 	}
@@ -553,7 +571,7 @@ public class SearchToolContentPipeline {
 			final String code = stringOf(metaData.get(DocumentMetaInfos.CONTENT_CODE));
 			final SearchResult source = code != null ? byCode.get(code) : null;
 			result.getFragments().add(new Fragment(ref++, titleOf(source, metaData), sourceOf(source, metaData), code,
-					chunkOf(metaData), content));
+					null, chunkOf(metaData), content));
 			used += contentTokens;
 			if (LOGGER.isTraceEnabled()) {
 				LOGGER.trace("<SEARCH_TOOL_FRAGMENT tool=" + toolName + " ref=" + (ref - 1) + " document=" + code
@@ -571,10 +589,6 @@ public class SearchToolContentPipeline {
 					+ documents.size() + " fragment(s) in " + used + " of " + maxTokens + " token(s)");
 		}
 		return result;
-	}
-
-	private static List<Document> limit(List<Document> documents, int topK) {
-		return documents.size() > topK ? new ArrayList<>(documents.subList(0, topK)) : documents;
 	}
 
 	static int topK(AbstractSearchToolParam param) {

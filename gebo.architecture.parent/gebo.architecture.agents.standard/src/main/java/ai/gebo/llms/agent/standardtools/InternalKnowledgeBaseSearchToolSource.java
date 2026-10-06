@@ -65,11 +65,14 @@ import lombok.Data;
  * {@code ai.gebo.agents.standard.knowledge-base-search-room-divisor}
  * ({@value #DEFAULT_ROOM_DIVISOR} by default), shared equally among the documents
  * found; the tool wrapper takes what it returns out of the room. A model call sharing no room
- * leaves the answer bounded by the fragments asked only (topK).
+ * leaves the answer bounded by the documents asked only (topK).
  * <p>
- * With a ranker configured ({@link IGRankerService#isRankerConfigured()}), twice the
- * fragments asked are retrieved and {@link IGRankerService#rank(List, String, int)}
- * keeps the best topK of them, best first, without the irrelevance filter.
+ * topK counts documents: the fragments retrieved are ranked against the query by the
+ * ranker model only ({@link IGRankerService#rank(List, String, int)}, no irrelevance
+ * filter: the model reading them judges), the documents rated by their best fragment,
+ * and the topK best kept with all their fragments, in reading order (see
+ * {@link RankedDocuments}). Each document carries its short id of the request
+ * ({@link ToolsFoundDocuments#idOf(String)}), the one the answer gives back.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.agents.standard", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Service
@@ -87,7 +90,7 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	static final int MAX_FIT_ATTEMPTS = 4;
 	static final int DEFAULT_TOP_K = 10;
 	static final int MAX_TOP_K = 30;
-	/** With a ranker configured, the fragments retrieved for it to keep the best topK of. */
+	/** With a ranker configured, the fragments retrieved for it to choose the best topK documents of. */
 	static final int RANKING_RETRIEVAL_FACTOR = 2;
 	private static final String NEWLINE = "\r\n";
 
@@ -154,7 +157,7 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 		private String query;
 		@JsonPropertyDescription("Optional alternative phrasings of the query, to widen the semantic search")
 		private List<String> alternativeQueries;
-		@JsonPropertyDescription("Optional maximum number of fragments to return, 10 when not given")
+		@JsonPropertyDescription("Optional maximum number of documents to return, with their fragments found, 10 when not given")
 		private Integer topK;
 	}
 
@@ -296,11 +299,12 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 						.forEach(semanticQueries::add);
 			}
 			int topK = param.getTopK() != null ? Math.max(1, Math.min(MAX_TOP_K, param.getTopK())) : DEFAULT_TOP_K;
-			// with a ranker, twice the fragments asked are retrieved and the ranker keeps
-			// the best topK of them
+			// topK documents: their fragments retrieved, twice as many with a ranker to choose
+			// the best documents from
 			final IGRankerService ranker = rankerService != null ? rankerService.getIfAvailable() : null;
 			final boolean ranking = ranker != null && ranker.isRankerConfigured();
-			final int retrievalTopK = ranking ? topK * RANKING_RETRIEVAL_FACTOR : topK;
+			final int retrievalTopK = topK * KnowledgeBaseDeepSearchTool.FRAGMENTS_PER_DOCUMENT
+					* (ranking ? RANKING_RETRIEVAL_FACTOR : 1);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Begin search(...) knowledge base tool over " + kbCodes.size() + " knowledge base(s) with "
 						+ semanticQueries.size() + " quer(ies) topK:" + topK + " retrieved:" + retrievalTopK
@@ -327,7 +331,8 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 				return "No document found in the internal knowledge base for: " + param.getQuery();
 			}
 			final List<Document> retrieved = documents;
-			documents = ranking ? rank(ranker, documents, param.getQuery(), topK) : documents;
+			documents = ranking ? rank(ranker, documents, param.getQuery(), topK)
+					: RankedDocuments.top(documents, topK, true);
 			if (collector != null) {
 				// the documents found become the calling agent's answer documents, only the
 				// ones the ranker kept when it ranked them; sharing them never fails the search
@@ -346,11 +351,14 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			List<String> rendered = new ArrayList<>();
 			for (Document document : documents) {
 				IGDocumentContentRenderer<Object> renderer = rendererFactory.get(document);
-				rendered.add(renderer != null ? renderer.render(document) : document.getText());
+				final String id = idOf(collector, document);
+				// the short id of its document in the request, the one the answer gives back
+				rendered.add((id != null ? "doc: " + id + NEWLINE : "")
+						+ (renderer != null ? renderer.render(document) : document.getText()));
 			}
 			// the documents these fragments come from, the only evidence of this search
-			final String heading = documents.size() + " fragment(s) found:" + NEWLINE + documentsLine(documents)
-					+ NEWLINE;
+			final String heading = documents.size() + " fragment(s) of " + RankedDocuments.documentsIn(documents)
+					+ " document(s) found:" + NEWLINE + documentsLine(documents, collector) + NEWLINE;
 			String answer = heading + fragmentsText(rendered);
 			if (callBudget != null) {
 				// the fragments share equally what the heading leaves of the answer's room;
@@ -394,22 +402,29 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	 */
 	List<Document> rank(IGRankerService ranker, List<Document> retrieved, String query, int topK) {
 		try {
-			final List<Document> ranked = ranker.rank(retrieved, query, topK);
-			final List<Document> kept = ranked != null ? limit(ranked, topK) : List.of();
+			// every fragment ranked: the documents are chosen by their best one
+			final List<Document> ranked = ranker.rank(retrieved, query, retrieved.size());
+			final List<Document> kept = ranked != null ? RankedDocuments.top(ranked, topK, true) : List.of();
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("rank(...) knowledge base tool kept " + kept.size() + " of " + retrieved.size()
-						+ " retrieved fragment(s) topK:" + topK);
+						+ " retrieved fragment(s), from the " + RankedDocuments.documentsIn(kept) + " best of "
+						+ RankedDocuments.documentsIn(retrieved) + " document(s), topK:" + topK);
 			}
 			return kept;
 		} catch (Throwable th) {
-			LOGGER.warn("Knowledge base tool ranking failed, the first " + topK + " of " + retrieved.size()
-					+ " fragment(s) are kept in retrieval order", th);
-			return limit(retrieved, topK);
+			LOGGER.warn("Knowledge base tool ranking failed, the first " + topK + " of "
+					+ RankedDocuments.documentsIn(retrieved) + " document(s) are kept in retrieval order", th);
+			return RankedDocuments.top(retrieved, topK, true);
 		}
 	}
 
-	private static List<Document> limit(List<Document> documents, int topK) {
-		return documents.size() > topK ? new ArrayList<>(documents.subList(0, topK)) : documents;
+	/** The short id of the document of a fragment in the request, null without a collector. */
+	private static String idOf(ToolsFoundDocuments collector, Document fragment) {
+		if (collector == null || fragment.getMetadata() == null) {
+			return null;
+		}
+		final Object code = fragment.getMetadata().get(DocumentMetaInfos.CONTENT_CODE);
+		return code != null ? collector.idOf(code.toString()) : null;
 	}
 
 	/** The fragments, one after the other. */
@@ -426,6 +441,11 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	 * found is evidence of these documents only.
 	 */
 	static String documentsLine(List<Document> documents) {
+		return documentsLine(documents, null);
+	}
+
+	/** The same, each document with its short id of the request when known. */
+	static String documentsLine(List<Document> documents, ToolsFoundDocuments collector) {
 		final Map<String, Integer> fragmentsByDocument = new LinkedHashMap<>();
 		for (Document document : documents) {
 			final Map<String, Object> metaData = document.getMetadata();
@@ -433,7 +453,9 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			if (name == null && metaData != null) {
 				name = metaData.get(DocumentMetaInfos.CONTENT_CODE);
 			}
-			fragmentsByDocument.merge(name != null ? String.valueOf(name) : "unnamed document", 1, Integer::sum);
+			final String id = idOf(collector, document);
+			fragmentsByDocument.merge((id != null ? id + " " : "") + (name != null ? String.valueOf(name) : "unnamed document"),
+					1, Integer::sum);
 		}
 		final StringBuilder line = new StringBuilder("Documents of these fragments (the only ones this search found): ");
 		boolean first = true;
