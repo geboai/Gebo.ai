@@ -403,7 +403,10 @@ public abstract class AbstractDeepSearchTool<Q> {
 			final int sourcesTokens = ITokensCountable.stringsTokensSize(JsonParser.toJson(result.getSources()))
 					+ ITokensCountable.stringsTokensSize(JsonParser.toJson(coverage))
 					+ (notRead.isEmpty() ? 0 : ITokensCountable.stringsTokensSize(JsonParser.toJson(notRead)));
-			fit(result, analysis,
+			// the links of the analysis that are no address of the documents found, nor in
+			// their contents, are made up: removed before the agent reads them
+			final String checkedAnalysis = withoutMadeUpLinks(analysis, allFound, fragments);
+			fit(result, checkedAnalysis,
 					Math.max(0, ToolsTokenBudget.grantFor(toolContext, support.maxAnalysisTokens()) - sourcesTokens));
 			// the agent sharing a collector gives these documents as its answer's ones
 			final ToolsFoundDocuments collector = ToolsFoundDocuments.from(toolContext);
@@ -632,6 +635,43 @@ public abstract class AbstractDeepSearchTool<Q> {
 			}
 		}
 		return notRead;
+	}
+
+	/**
+	 * The analysis without the links that are no address of the documents found nor
+	 * appear in the fragments read: a partial analysis can build them from a document's
+	 * path or code. The text of a link stays.
+	 */
+	String withoutMadeUpLinks(String analysis, Map<String, FoundDocument> found, List<Document> fragments) {
+		if (analysis == null || analysis.isBlank()) {
+			return analysis;
+		}
+		final Set<String> known = new LinkedHashSet<>();
+		for (FoundDocument document : found.values()) {
+			if (document != null && document.source() != null && document.source().getSource() != null) {
+				CitedAddresses.addresses(List.of(document.source().getSource()), known);
+			}
+		}
+		for (Document fragment : fragments) {
+			if (fragment == null) {
+				continue;
+			}
+			CitedAddresses.addressesIn(fragment.getText(), known);
+			if (fragment.getMetadata() != null) {
+				final Object url = fragment.getMetadata().get(DocumentMetaInfos.CONTENT_ORIGINAL_URL);
+				if (url != null) {
+					CitedAddresses.addresses(List.of(url.toString()), known);
+				}
+			}
+		}
+		final List<String> removed = new ArrayList<>();
+		final String checked = CitedAddresses.withoutUnknown(analysis, address -> CitedAddresses.isKnown(address, known),
+				removed::add);
+		if (!removed.isEmpty()) {
+			LOGGER.warn("Tool:" + toolName + " analysis gave " + removed.size()
+					+ " address(es) no document found has, removed: " + removed);
+		}
+		return checked;
 	}
 
 	/** What the agent is told when the analysis read none of the documents found. */

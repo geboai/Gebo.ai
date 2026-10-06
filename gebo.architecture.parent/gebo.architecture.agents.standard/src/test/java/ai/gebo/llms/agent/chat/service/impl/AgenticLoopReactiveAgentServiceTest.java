@@ -460,6 +460,39 @@ class AgenticLoopReactiveAgentServiceTest {
 		assertFalse(response.getBackendMessages().get(0).getDetail().contains("a.pdf"));
 	}
 
+	@Test
+	void theAddressesAnAnswerMayGiveAreTheToolsTheUserAndTheChatOnes() {
+		ToolCallsListener listener = new ToolCallsListener();
+		AgenticLoopReactiveAgentServiceImpl.KnownAddresses known = new AgenticLoopReactiveAgentServiceImpl.KnownAddresses(
+				IChatRequestContext.builder().requestID("r1").actualUserRequest("Look at https://user.example/page")
+						.consolidatedHistory("Earlier: https://chat.example/old").build(),
+				listener, null);
+
+		assertFalse(known.isKnown("https://www.postgresql.org/download/"));
+		listener.addCall("searchWeb", "web", "{}", "{\"fragments\":[{\"source\":\"https://www.postgresql.org/docs/release/\"}],"
+				+ "\"documentsNotRead\":[{\"source\":\"https://www.postgresql.org/about/press/\",\"reason\":\"x\"}]}");
+
+		assertTrue(known.isKnown("https://www.postgresql.org/docs/release"), "re-read as the tools are called");
+		assertFalse(known.isKnown("https://www.postgresql.org/about/press/"), "a document not read is not citable");
+		assertFalse(known.isKnown("https://www.postgresql.org/download/"));
+		assertTrue(known.isKnown("https://user.example/page"));
+		assertTrue(known.isKnown("https://chat.example/old"));
+	}
+
+	@Test
+	void theUserIsWarnedOfTheAddressesRemovedFromTheAnswer() {
+		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, null, null, null,
+				null, null, NO_RENDERER);
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse response = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse();
+
+		agent.warnAboutRemovedAddresses(response, new java.util.LinkedHashSet<>());
+		assertTrue(response.getBackendMessages() == null || response.getBackendMessages().isEmpty());
+
+		agent.warnAboutRemovedAddresses(response, new java.util.LinkedHashSet<>(List.of("https://www.postgresql.org/download/")));
+		assertEquals(1, response.getBackendMessages().size());
+		assertTrue(response.getBackendMessages().get(0).getDetail().contains("https://www.postgresql.org/download/"));
+	}
+
 	/** A web search result as the web search services make it: named after its site. */
 	private static ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef webPage(String site,
 			String uri) {

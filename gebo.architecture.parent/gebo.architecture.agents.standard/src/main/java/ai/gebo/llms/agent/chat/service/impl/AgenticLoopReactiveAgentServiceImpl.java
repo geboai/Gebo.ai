@@ -51,6 +51,7 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
 import ai.gebo.llms.agent.standardtools.DeepSearchToolSource;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
+import ai.gebo.llms.agent.standardtools.CitedAddresses;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseDeepSearchTool;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource;
 import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
@@ -368,8 +369,18 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			LOGGER.debug("Agentic loop agent id:" + getId() + " evidence required:" + gate.evidenceRequired()
 					+ " answer held until a search:" + !gate.tools().isEmpty());
 		}
-		Flux<String> text = iteration(1, maxIterations, budget, history, agentModel, agentPrompt, loopContext,
-				contextAgentPersona, notificationSink, callBacksListener, deliverableParams, gate, runAs);
+		final Flux<String> iterations = iteration(1, maxIterations, budget, history, agentModel, agentPrompt,
+				loopContext, contextAgentPersona, notificationSink, callBacksListener, deliverableParams, gate, runAs);
+		// an address no tool returned, nor the user or the chat gave, is made up: removed as
+		// the answer streams
+		final Set<String> removedAddresses = java.util.Collections.synchronizedSet(new LinkedHashSet<>());
+		final KnownAddresses knownAddresses = new KnownAddresses(chatRequestContext, callBacksListener, toolDocuments);
+		Flux<String> text = CitedAddresses.guarded(iterations, knownAddresses::isKnown, address -> {
+			if (removedAddresses.add(address)) {
+				LOGGER.warn("Agentic loop agent id:" + getId() + " answer gives an address no tool returned, removed: "
+						+ address);
+			}
+		});
 		final GeboChatResponse response = new GeboChatResponse();
 		return renderOutputStream(text, response, session, contextAgentPersona, notificationSink, callBacksListener)
 				.doOnNext(operation -> {
@@ -383,8 +394,80 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 									+ " with the search tools' ones");
 						}
 						warnAboutUnreadCitations(response, chatRequestContext, toolDocuments);
+						warnAboutRemovedAddresses(response, removedAddresses);
 					}
 				});
+	}
+
+	/**
+	 * Tells the user, with a warning on the answer, the addresses removed from it: no
+	 * tool of the request returned them, nor did the user or the chat give them.
+	 */
+	protected void warnAboutRemovedAddresses(GeboChatResponse response, Set<String> removedAddresses) {
+		if (removedAddresses.isEmpty() || response.getBackendMessages() == null) {
+			return;
+		}
+		final List<String> removed;
+		synchronized (removedAddresses) {
+			removed = new ArrayList<>(removedAddresses);
+		}
+		response.getBackendMessages().add(GUserMessage.warnMessage("Addresses removed from the answer",
+				"The answer gave " + String.join(", ", removed)
+						+ ", not returned by the searches of this request: removed, what it says of them is not checked."));
+	}
+
+	/**
+	 * The addresses an answer may give: the ones its tools returned in this request
+	 * (except the documents they could not read), the user's request, the chat history
+	 * and documents, and the answer's documents; re-read as the tools are called.
+	 */
+	static final class KnownAddresses {
+		private final IChatRequestContext context;
+		private final ToolCallsListener listener;
+		private final ToolsFoundDocuments toolDocuments;
+		private int callsSeen = -1;
+		private Set<String> known = Set.of();
+
+		KnownAddresses(IChatRequestContext context, ToolCallsListener listener, ToolsFoundDocuments toolDocuments) {
+			this.context = context;
+			this.listener = listener;
+			this.toolDocuments = toolDocuments;
+		}
+
+		synchronized boolean isKnown(String address) {
+			final int calls = listener != null ? listener.getCalls().size() : 0;
+			if (calls != callsSeen) {
+				callsSeen = calls;
+				known = addresses();
+			}
+			return CitedAddresses.isKnown(address, known);
+		}
+
+		private Set<String> addresses() {
+			final Set<String> addresses = new LinkedHashSet<>();
+			if (listener != null) {
+				for (ToolCallExecuted call : new ArrayList<>(listener.getCalls())) {
+					CitedAddresses.addressesIn(CitedAddresses.withoutDocumentsNotRead(call.getResult()), addresses);
+				}
+			}
+			if (context != null) {
+				CitedAddresses.addressesIn(context.getActualUserRequest(), addresses);
+				CitedAddresses.addressesIn(context.getConsolidatedHistory(), addresses);
+				if (context.getDocuments() != null) {
+					for (Document document : context.getDocuments()) {
+						if (document != null) {
+							CitedAddresses.addressesIn(String.valueOf(document.getMetadata()), addresses);
+						}
+					}
+				}
+			}
+			if (toolDocuments != null) {
+				for (GResponseDocumentRef ref : toolDocuments.getDocuments()) {
+					CitedAddresses.addresses(citableNames(ref), addresses);
+				}
+			}
+			return addresses;
+		}
 	}
 
 	/** A document file name as an answer cites it. */
