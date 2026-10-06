@@ -76,11 +76,11 @@ public class SearchToolContentPipeline {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SearchToolContentPipeline.class);
 	static final int DEFAULT_TOP_K = 8;
 	static final int MAX_TOP_K = 30;
+	/** The size of the contents when the model call shares no room (see {@link #resultTokens}). */
 	static final int DEFAULT_MAX_TOKENS = 4000;
 	static final int MIN_MAX_TOKENS = ToolsTokenBudget.MIN_USEFUL_TOKENS;
 	/** The fittings tried to bring a whole result in its room. */
 	static final int MAX_ROOM_FIT_ATTEMPTS = 3;
-	static final int MAX_MAX_TOKENS = 16000;
 	/** Longest search objective handed to the ranker, in tokens. */
 	static final int MAX_OBJECTIVE_TOKENS = 300;
 	/** Results asked to each searched system, for each fragment wanted. */
@@ -159,9 +159,10 @@ public class SearchToolContentPipeline {
 			return SearchToolResult.of(Status.NO_RESULTS, "No search done: the query is empty.");
 		}
 		final int topK = topK(param);
-		// never more than what the calling model call has left for its tools' results
+		// the size of the contents is the room the calling model call leaves to its tools'
+		// results, as for every tool: never a size the model chooses
 		final ToolsTokenBudget callBudget = ToolsTokenBudget.from(toolContext);
-		final int maxTokens = callBudget != null ? callBudget.grant(maxTokens(param)) : maxTokens(param);
+		final int maxTokens = resultTokens(callBudget);
 		final String objective = objective(param, queryText);
 		final String requestId = ToolCallbackDeclarationUtil.requestId(toolContext);
 		if (LOGGER.isDebugEnabled()) {
@@ -272,7 +273,11 @@ public class SearchToolContentPipeline {
 				// fitted again by what their titles, sources and the JSON framing add
 				int contentsTokens = maxTokens;
 				for (int attempt = 0; attempt < MAX_ROOM_FIT_ATTEMPTS; attempt++) {
+					// the documents not read are told beside the contents, never at their expense
+					final List<DocumentNotRead> notRead = result.getDocumentsNotRead();
+					result.setDocumentsNotRead(null);
 					final int overshoot = ITokensCountable.stringsTokensSize(JsonParser.toJson(result)) - maxTokens;
+					result.setDocumentsNotRead(notRead);
 					if (overshoot <= 0 || contentsTokens - overshoot <= 0) {
 						break;
 					}
@@ -576,9 +581,36 @@ public class SearchToolContentPipeline {
 		return param.getTopK() != null ? Math.max(1, Math.min(MAX_TOP_K, param.getTopK())) : DEFAULT_TOP_K;
 	}
 
-	static int maxTokens(AbstractSearchToolParam param) {
-		return param.getMaxTokens() != null ? Math.max(MIN_MAX_TOKENS, Math.min(MAX_MAX_TOKENS, param.getMaxTokens()))
-				: DEFAULT_MAX_TOKENS;
+	/**
+	 * The tokens the contents may take: the room the model call leaves to its tools'
+	 * results divided by the room divisor (the same rule as the knowledge base search,
+	 * see {@code ai.gebo.agents.standard.knowledge-base-search-room-divisor}), never more
+	 * than the room; {@link #DEFAULT_MAX_TOKENS} when the model call shares no room.
+	 */
+	int resultTokens(ToolsTokenBudget callBudget) {
+		if (callBudget == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("resultTokens(...) no room shared by the model call: " + DEFAULT_MAX_TOKENS + " (tok)");
+			}
+			return DEFAULT_MAX_TOKENS;
+		}
+		final double divisor = roomDivisor();
+		final int tokens = callBudget
+				.grant((int) Math.min(Integer.MAX_VALUE, Math.floor(callBudget.left() / divisor)));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("resultTokens(...) room left:" + callBudget.left() + " (tok) divisor:" + divisor
+					+ " contents at most:" + tokens + " (tok)");
+		}
+		return tokens;
+	}
+
+	/** The divisor of the room left to the tools, as the knowledge base search's one. */
+	double roomDivisor() {
+		final StandardAgentsConfig config = agentsConfig.getIfAvailable();
+		final double divisor = config != null ? config.getKnowledgeBaseSearchRoomDivisor()
+				: InternalKnowledgeBaseSearchToolSource.DEFAULT_ROOM_DIVISOR;
+		return divisor > 0 && !Double.isInfinite(divisor) ? divisor
+				: InternalKnowledgeBaseSearchToolSource.DEFAULT_ROOM_DIVISOR;
 	}
 
 	/** The objective to rank against, the query when the model gave none, bounded in size. */

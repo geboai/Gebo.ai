@@ -44,10 +44,10 @@ Decide it for each request:
     whole by its uniqueId: do not rebuild it from search fragments.
 - Web and other sources: search them for current or external information; make a deep search of a
   source when the deliverable needs many of its documents.
-- Size each search to the deliverable with its topK and maxTokens: few results and a small size (for
-  example topK 3-5, maxTokens 1500-2500) for a direct answer, more of both (for example topK 10-15,
-  maxTokens 6000-10000) for an analysis, a decision or a multi-source comparison, in between
-  otherwise. Always give a precise searchObjective: what you need and what for.
+- Size each search to the deliverable with its topK: few results (for example topK 3-5) for a direct
+  answer, more (for example topK 10-15) for an analysis, a decision or a multi-source comparison, in
+  between otherwise; the size of the contents returned is set by the system from the room left.
+  Always give a precise searchObjective: what you need and what for.
 - A deep search searches a source widely, reads every document found and returns an analysis of
   them. Give it 1 to 5 searches covering different angles, a complete, self-contained question, a
   searchObjective saying what the analysis must cover, and a depth matching the deliverable

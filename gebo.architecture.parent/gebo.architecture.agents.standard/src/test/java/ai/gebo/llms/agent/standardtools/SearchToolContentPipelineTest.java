@@ -370,7 +370,7 @@ class SearchToolContentPipelineTest {
 		String schema = tool.getToolDefinition().inputSchema();
 		assertTrue(schema.contains("\"jql\""), schema);
 		assertTrue(schema.contains("\"searchObjective\""), schema);
-		assertTrue(schema.contains("\"maxTokens\""), schema);
+		assertFalse(schema.contains("\"maxTokens\""), "the size is never the model's choice: " + schema);
 
 		String answer = tool.call("{\"query\":{\"jql\":\"project = GEBO\"},\"searchObjective\":\"open bugs\"}",
 				request("r1"));
@@ -412,8 +412,16 @@ class SearchToolContentPipelineTest {
 	}
 
 	@Test
+	void theSizeOfTheContentsComesFromTheRoomNeverFromTheModel() {
+		assertEquals(600, pipeline.resultTokens(new ToolsTokenBudget(1800)), "a third of the room left");
+		assertEquals(SearchToolContentPipeline.DEFAULT_MAX_TOKENS, pipeline.resultTokens(null), "no room shared");
+		ToolsTokenBudget large = new ToolsTokenBudget(660000);
+		assertEquals(220000, pipeline.resultTokens(large));
+	}
+
+	@Test
 	void theContentsNeverTakeMoreThanTheModelCallLeaves() throws Exception {
-		ToolsTokenBudget budget = new ToolsTokenBudget(600);
+		ToolsTokenBudget budget = new ToolsTokenBudget(1800);
 		ToolContext context = new ToolContext(Map.of(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, "r1",
 				ToolsTokenBudget.TOOLS_CONTEXT_KEY, budget));
 		when(chunkingService.streamChunks(any(IGComponentOriginatedDocument.class), any(), anyString()))
@@ -427,11 +435,12 @@ class SearchToolContentPipelineTest {
 		SearchToolResult result = pipeline.run(service, "searchWeb", "d", param("q", "o"), List.of(),
 				(s, n, p) -> List.of(result("https://a.example/1", "One")), context);
 
+		assertEquals(Status.OK, result.getStatus());
 		assertTrue(result.getTokens() <= 600,
 				"returned " + result.getTokens() + " tokens");
 		final int asRead = ITokensCountable.stringsTokensSize(org.springframework.ai.util.json.JsonParser.toJson(result));
-		assertTrue(asRead <= 600, "the whole result as the model reads it fits the room: " + asRead);
-		assertEquals(600, budget.left(), "the tool wrapper takes what was returned out of the room, not the pipeline");
+		assertTrue(asRead <= 600, "the whole result as the model reads it fits its share of the room: " + asRead);
+		assertEquals(1800, budget.left(), "the tool wrapper takes what was returned out of the room, not the pipeline");
 	}
 
 	@Test

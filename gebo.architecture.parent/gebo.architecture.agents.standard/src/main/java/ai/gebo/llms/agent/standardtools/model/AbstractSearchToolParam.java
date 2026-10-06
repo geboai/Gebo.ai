@@ -25,15 +25,11 @@ public abstract class AbstractSearchToolParam {
 			+ "discarded, so state it precisely.";
 	public static final String TOP_K_DESCRIPTION = "Maximum number of content fragments to return, 8 when not given, "
 			+ "at most 30.";
-	public static final String MAX_TOKENS_DESCRIPTION = "Maximum total size of the returned contents, in tokens, 4000 "
-			+ "when not given.";
 
 	@ToolParam(required = true, description = SEARCH_OBJECTIVE_DESCRIPTION)
 	private String searchObjective = null;
 	@ToolParam(required = false, description = TOP_K_DESCRIPTION)
 	private Integer topK = null;
-	@ToolParam(required = false, description = MAX_TOKENS_DESCRIPTION)
-	private Integer maxTokens = null;
 
 	/**
 	 * The query as plain text, used when the model gave no objective and for the

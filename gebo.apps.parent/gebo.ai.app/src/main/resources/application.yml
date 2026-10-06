@@ -503,8 +503,11 @@ ai.gebo.websearch.size-probe:
   enabled: true
   timeout-ms: 1500
   parallelism: 8
-# The knowledge base search tool's answer takes at most the room its model call leaves
-# to the tools' results divided by this (3 when not set; no room shared, topK only)
+# The answer of a search tool (the knowledge base search and the search tools of the
+# web and the other systems) takes at most the room its model call leaves to the tools'
+# results divided by this (3 when not set): the size is never chosen by the model. No
+# room shared: the knowledge base search is bounded by its topK only, the other search
+# tools take 4000 tokens.
 ai.gebo.agents.standard.knowledge-base-search-room-divisor: 3
 # In-flight LLM sub-analysis calls of a deep search per data source (2 when not set);
 # with ai.gebo.deepsearch.max-concurrent-sources it caps the concurrent LLM calls

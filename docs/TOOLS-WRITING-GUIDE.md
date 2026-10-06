@@ -235,21 +235,26 @@ tokens. The wrapper accounts for them.
    }
    ```
 
-2. **Ask for what you want, get what there is.**
+2. **The size is never the model's choice.** A tool has no parameter for the
+   size of its result (no `maxTokens`): models ask for sizes that only an ideal
+   index would fill, and a general purpose installation has imperfect indexing
+   and data. The size comes from the room (below), computed by the platform.
+
+3. **Ask for what you want, get what there is.**
    `ToolsTokenBudget.grantFor(toolContext, wanted)` is `wanted` when the model
    call has no room (your own limit applies), never more than the room left
    otherwise.
 
-3. **Prefer producing to size over cutting.** When a model writes the content
+4. **Prefer producing to size over cutting.** When a model writes the content
    (an analysis, a summary), ask it for a length that fits the granted tokens
    (the deep search tools turn the room into the number of words they ask for,
    `AbstractDeepSearchTool.lengthTarget`): an analysis written short keeps its
    conclusions, a cut one loses them.
 
-4. **Fit what you return.** `ToolsTokenBudget.fitText(text, maxTokens)` returns
+5. **Fit what you return.** `ToolsTokenBudget.fitText(text, maxTokens)` returns
    the text whole, or cut and marked with its real size.
 
-5. **Fit the result as the model reads it.** When the text travels inside an
+6. **Fit the result as the model reads it.** When the text travels inside an
    object, its JSON adds field names, quotes and escapes. Fit, measure the JSON,
    fit again by the overshoot:
 
@@ -297,7 +302,9 @@ what lets the model cite and decide.
 call several tools in the same round (several searches), take a **share**
 instead, so the later calls are not left with nothing: the knowledge base search
 takes the room divided by `ai.gebo.agents.standard.knowledge-base-search-room-divisor`
-(3 by default, `InternalKnowledgeBaseSearchToolSource.maxResultTokens`).
+(3 by default, `InternalKnowledgeBaseSearchToolSource.maxResultTokens`), and so do
+the search tools of the web and the other systems
+(`SearchToolContentPipeline.resultTokens`).
 
 ### Results you cannot size
 

@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +25,8 @@ import lombok.NoArgsConstructor;
  * empty result.
  */
 @Data
+@JsonPropertyOrder({ "status", "message", "ranked", "documentsFound", "documentsAlreadyReturned", "tokens",
+		"unavailableSources", "fragments", "documentsNotRead" })
 public class SearchToolResult {
 	public enum Status {
 		/** Contents found and returned. */
