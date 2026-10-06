@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.core.contents.security.services.VirtualFilesystemQuery;
+import ai.gebo.architecture.search.config.OpenNetworkLoadingConfig;
 import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.architecture.search.service.BestEffortSearchCalls;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -159,6 +160,20 @@ public class DeepSearchToolsSupport {
 	/** When the coverage of a deep search is thin, and whether its completion is required. */
 	public CoverageRules coverageRules() {
 		return coverageRules;
+	}
+
+	/** How the results of the services searching an open network are loaded, when configured. */
+	private ObjectProvider<OpenNetworkLoadingConfig> openNetworkLoading = null;
+
+	@Autowired(required = false)
+	public void setOpenNetworkLoading(ObjectProvider<OpenNetworkLoadingConfig> openNetworkLoading) {
+		this.openNetworkLoading = openNetworkLoading;
+	}
+
+	/** The open network loading settings: the configured ones, else the defaults. */
+	public OpenNetworkLoadingConfig openNetworkLoading() {
+		final OpenNetworkLoadingConfig config = openNetworkLoading != null ? openNetworkLoading.getIfAvailable() : null;
+		return config != null ? config : new OpenNetworkLoadingConfig();
 	}
 
 	/** The visibility of the knowledge bases' contents, when configured. */

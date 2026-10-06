@@ -611,6 +611,43 @@ codebase — Google Search credentials are configured through the admin UI and p
 MongoDB (`GoogleSearchConfigDaoImpl`), not through this file. Leave this block commented; editing
 it has no effect either way.
 
+## 19b. Loading the results of an open network (web search)
+
+Once a search has given its pool of candidates, each search service says how its results are
+loaded. Systems sized to answer (Confluence, SharePoint, Jira, Google Drive, the connector
+microservices) load a few results at a time (`ai.gebo.agents.standard.search-documents-parallelism`),
+each within 60 s. The web search providers (Google, Brave, SerpApi, Tavily, SearXNG) load their
+pages as an open network: at once, grouped by host, each page and the whole loading within a
+deadline. The deep search tools, the search tools and the search agents all apply it.
+
+```yaml
+ai.gebo.search.open-network-loading:
+  capped: false
+  candidates-cap: 20
+  per-page-deadline-seconds: 60
+  loading-phase-deadline-seconds: 60
+  per-host-concurrency: 2
+  per-host-pause-millis: 500
+  per-host-failures-before-skip: 2
+```
+
+| Key | Type | Default | Meaning |
+|---|---|---|---|
+| `ai.gebo.search.open-network-loading.capped` | boolean | `false` | When `true`, only the first `candidates-cap` candidates of the pool are loaded; when `false`, all of them. |
+| `ai.gebo.search.open-network-loading.candidates-cap` | int | `20` | The candidates loaded when `capped`, in the order the search gave them. |
+| `ai.gebo.search.open-network-loading.per-page-deadline-seconds` | int | `60` | Most time one page may take to be loaded and read. |
+| `ai.gebo.search.open-network-loading.loading-phase-deadline-seconds` | int | `60` | Most time the whole loading may take: the pages that have not arrived by then are not read. |
+| `ai.gebo.search.open-network-loading.per-host-concurrency` | int | `2` | Pages of the same host loaded at the same time. |
+| `ai.gebo.search.open-network-loading.per-host-pause-millis` | long | `500` | Pause between two requests to the same host (`0` for none). |
+| `ai.gebo.search.open-network-loading.per-host-failures-before-skip` | int | `2` | Failed pages of a host (not answering, refused, unreadable) after which its other pages are not requested. |
+
+A value that is not a positive number means the default. Every page not loaded (with its reason:
+not within its deadline, its site skipped, no readable content, the loading phase ended, beyond the
+cap), not read by the analysis or judged not relevant is told to the agent in the tool result
+(`documentsNotRead`) and is never among the answer's documents. The pages are loaded on the
+application's thread pool: a page past its deadline keeps its thread until the HTTP read timeout
+(`ai.gebo.search.calls.http-read-timeout-seconds`).
+
 ## 20. User workflows — activation, password reset, outbound mail
 
 Bound by `GeboUserWorkflowsConfig` (`ai.gebo.userflows`). **Not present in the shipped Docker

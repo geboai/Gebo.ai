@@ -29,8 +29,11 @@ import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
+import ai.gebo.llms.agent.standard.services.SearchResultsChunker.LoadedResults;
+import ai.gebo.llms.agent.standard.services.SearchResultsChunker.NotLoaded;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage.SearchCoverage;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam;
+import ai.gebo.llms.agent.standardtools.model.DocumentNotRead;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolResult.Source;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.model.DocumentMetaInfos;
@@ -109,7 +112,7 @@ public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 	protected List<Document> searchDocuments(DeepSearchToolParam<Q> param, List<Q> queries, String question,
 			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId,
 			ToolContext toolContext, List<String> unavailableSources) throws Exception {
-		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, unavailableSources, null);
+		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, unavailableSources, null, null);
 	}
 
 	/** The same, recording the yield of each search (it runs them one by one). */
@@ -117,27 +120,40 @@ public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 	protected List<Document> searchDocuments(DeepSearchToolParam<Q> param, List<Q> queries, String question,
 			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId,
 			ToolContext toolContext, List<String> unavailableSources, List<SearchCoverage> searches) throws Exception {
-		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, unavailableSources, searches);
+		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, unavailableSources, searches,
+				null);
+	}
+
+	/** The same, telling the documents found that could not be loaded, with why. */
+	@Override
+	protected List<Document> searchDocuments(DeepSearchToolParam<Q> param, List<Q> queries, String question,
+			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId,
+			ToolContext toolContext, List<String> unavailableSources, List<SearchCoverage> searches,
+			List<DocumentNotRead> notLoaded) throws Exception {
+		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, unavailableSources, searches,
+				notLoaded);
 	}
 
 	@Override
 	protected List<Document> searchDocuments(List<Q> queries, String question, int maxDocuments,
 			int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId) throws Exception {
-		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, new ArrayList<>(), null);
+		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, new ArrayList<>(), null, null);
 	}
 
 	List<Document> searchDocuments(List<Q> queries, String question, int maxDocuments,
 			Map<String, FoundDocument> foundByFragmentId, List<String> unavailableSources) throws Exception {
-		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, unavailableSources, null);
+		return searchDocuments(queries, question, maxDocuments, foundByFragmentId, unavailableSources, null, null);
 	}
 
 	/**
 	 * Runs each search on every system, recording in {@code searches}, when given, the
-	 * results each search gave and the documents it was the first to find.
+	 * results each search gave and the documents it was the first to find, and loads the
+	 * documents found as the service says (see {@link ISearchService#resultsLoading()}),
+	 * telling in {@code notLoaded}, when given, the ones that could not be loaded.
 	 */
 	List<Document> searchDocuments(List<Q> queries, String question, int maxDocuments,
 			Map<String, FoundDocument> foundByFragmentId, List<String> unavailableSources,
-			List<SearchCoverage> searches) throws Exception {
+			List<SearchCoverage> searches, List<DocumentNotRead> notLoaded) throws Exception {
 		// each document found is read whole (see SearchResultsChunker): fragmentsPerDocument
 		// does not apply
 		// no native search given: the question is searched as text
@@ -208,9 +224,16 @@ public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 		final ChunkingParams params = SearchResultsChunker.buildChunkingParams(
 				MAX_FRAGMENTS_PER_DOCUMENT * SearchResultsChunker.LLM_CHUNK_TOKENS, MAX_FRAGMENTS_PER_DOCUMENT,
 				new ArrayList<>(keywords));
-		final List<Document> fragments = SearchResultsChunker.chunkToDocuments(support.chunkingService(),
+		final LoadedResults loaded = SearchResultsChunker.load(support.chunkingService(),
 				new ArrayList<>(found.values()), params, MAX_FRAGMENTS_PER_DOCUMENT, toolName,
-				support.documentsParallelism());
+				support.documentsParallelism(), service.resultsLoading(), support.openNetworkLoading());
+		final List<Document> fragments = loaded.documents();
+		if (notLoaded != null) {
+			for (NotLoaded missing : loaded.notLoaded()) {
+				final Source source = sourceOf(missing.result());
+				notLoaded.add(new DocumentNotRead(source.getTitle(), source.getSource(), missing.reason()));
+			}
+		}
 		for (Document fragment : fragments) {
 			final Object code = fragment.getMetadata().get(DocumentMetaInfos.CONTENT_CODE);
 			final SearchResult result = code != null ? found.get(code.toString()) : null;

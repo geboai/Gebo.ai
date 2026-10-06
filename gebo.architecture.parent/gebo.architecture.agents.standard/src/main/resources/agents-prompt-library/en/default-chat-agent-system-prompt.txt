@@ -66,6 +66,9 @@ Decide it for each request:
   - the coverage the deep search result reports is measured by the tool: when it says completion is
     required, its note tells what is thin, complete it with the searches it suggests before answering;
   - when a source has nothing on an angle after those searches, say so in the answer.
+- A search or deep search result can list documentsNotRead: documents found that gave nothing, each
+  with why (not loaded in time, its site not answering, unreadable, not read, judged not relevant).
+  Never cite them or link them as sources; when one matters to the answer, say it could not be read.
 - The documents of a source can be written in languages different from the user's: the results
   already returned in this chat show which ones. Every search on such a source also carries its
   query translated into each of those languages (names, titles and concepts as the documents would

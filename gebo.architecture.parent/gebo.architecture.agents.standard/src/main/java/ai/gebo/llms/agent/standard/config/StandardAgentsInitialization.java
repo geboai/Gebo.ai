@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -38,6 +39,7 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.search.model.SearchServiceException;
+import ai.gebo.architecture.search.config.OpenNetworkLoadingConfig;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
@@ -598,6 +600,20 @@ public class StandardAgentsInitialization {
 		return SearchAgentPromptPatcher.withAgentPlaceholders(prompt);
 	}
 
+	/** How the results of the services searching an open network are loaded, when configured. */
+	private ObjectProvider<OpenNetworkLoadingConfig> openNetworkLoading = null;
+
+	@Autowired(required = false)
+	public void setOpenNetworkLoading(ObjectProvider<OpenNetworkLoadingConfig> openNetworkLoading) {
+		this.openNetworkLoading = openNetworkLoading;
+	}
+
+	/** The open network loading settings: the configured ones, else the defaults. */
+	OpenNetworkLoadingConfig openNetworkLoading() {
+		final OpenNetworkLoadingConfig config = openNetworkLoading != null ? openNetworkLoading.getIfAvailable() : null;
+		return config != null ? config : new OpenNetworkLoadingConfig();
+	}
+
 	@Bean
 	public IGDynamicAgentServiceSupplier externalSourcesAgentServicesSupplier() {
 		return new IGDynamicAgentServiceSupplier() {
@@ -622,6 +638,7 @@ public class StandardAgentsInitialization {
 									runtimeBinder, rendererFactory, chunkingService, rankerService,
 									standardAgentsConfig.getMaxChunksPerDocument(),
 									standardAgentsConfig.getSearchDocumentsParallelism(), nativeSearch);
+							nativeWrapper.setOpenNetworkLoading(openNetworkLoading());
 							outServices.add(nativeWrapper);
 							if (LOGGER.isDebugEnabled()) {
 								LOGGER.debug("Registered native search agent service id:" + nativeWrapper.getId());
@@ -632,6 +649,7 @@ public class StandardAgentsInitialization {
 									runtimeBinder, rendererFactory, chunkingService, rankerService,
 									standardAgentsConfig.getMaxChunksPerDocument(),
 									standardAgentsConfig.getSearchDocumentsParallelism(), search);
+							wrapper.setOpenNetworkLoading(openNetworkLoading());
 							outServices.add(wrapper);
 							if (LOGGER.isDebugEnabled()) {
 								LOGGER.debug("Registered search agent service id:" + wrapper.getId());

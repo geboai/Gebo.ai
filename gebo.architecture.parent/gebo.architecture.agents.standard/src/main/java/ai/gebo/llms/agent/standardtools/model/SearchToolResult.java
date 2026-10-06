@@ -70,6 +70,12 @@ public class SearchToolResult {
 	 * the results. Null when every source was searched.
 	 */
 	private List<String> unavailableSources = null;
+	/**
+	 * The documents found that give nothing to the results, with why (not loaded, no
+	 * passage serving the search objective, left out for room): never among the answer's
+	 * documents. Null when there is none.
+	 */
+	private List<DocumentNotRead> documentsNotRead = null;
 	private List<Fragment> fragments = new ArrayList<>();
 
 	public static SearchToolResult of(Status status, String message) {

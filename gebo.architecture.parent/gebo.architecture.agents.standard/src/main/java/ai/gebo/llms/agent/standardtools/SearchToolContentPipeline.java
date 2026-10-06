@@ -24,6 +24,7 @@ import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.util.json.JsonParser;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
@@ -31,6 +32,7 @@ import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.search.config.OpenNetworkLoadingConfig;
 import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SystemSearchOutcome;
@@ -40,8 +42,11 @@ import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
+import ai.gebo.llms.agent.standard.services.SearchResultsChunker.LoadedResults;
+import ai.gebo.llms.agent.standard.services.SearchResultsChunker.NotLoaded;
 import ai.gebo.llms.agent.standardtools.model.AbstractSearchToolParam;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult;
+import ai.gebo.llms.agent.standardtools.model.DocumentNotRead;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult.Fragment;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult.Status;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
@@ -119,6 +124,20 @@ public class SearchToolContentPipeline {
 		this.requestRegistry = requestRegistry;
 		this.agentsConfig = agentsConfig;
 		this.searchCalls = searchCalls;
+	}
+
+	/** How the results of the services searching an open network are loaded, when configured. */
+	private ObjectProvider<OpenNetworkLoadingConfig> openNetworkLoading = null;
+
+	@Autowired(required = false)
+	public void setOpenNetworkLoading(ObjectProvider<OpenNetworkLoadingConfig> openNetworkLoading) {
+		this.openNetworkLoading = openNetworkLoading;
+	}
+
+	/** The open network loading settings: the configured ones, else the defaults. */
+	OpenNetworkLoadingConfig openNetworkLoading() {
+		final OpenNetworkLoadingConfig config = openNetworkLoading != null ? openNetworkLoading.getIfAvailable() : null;
+		return config != null ? config : new OpenNetworkLoadingConfig();
 	}
 
 	/** The documents found loaded and chunked at the same time. */
@@ -239,10 +258,13 @@ public class SearchToolContentPipeline {
 			final ChunkingParams chunkingParams = SearchResultsChunker.buildChunkingParams(perDocumentBudget,
 					maxNumChunks, keywords);
 			ToolsProgress.notify(toolContext, "Reading " + fresh.size() + " document(s) found (" + toolName + ")");
-			final List<Document> chunks = SearchResultsChunker.chunkToDocuments(chunkingService.getObject(), fresh,
-					chunkingParams, maxNumChunks, toolName, documentsParallelism());
+			// loaded as the service says: an open network (the web) wide, within deadlines
+			final LoadedResults loaded = SearchResultsChunker.load(chunkingService.getObject(), fresh, chunkingParams,
+					maxNumChunks, toolName, documentsParallelism(), service.resultsLoading(), openNetworkLoading());
+			final List<Document> chunks = loaded.documents();
 			final RankingOutcome ranking = rank(chunks, objective, topK, toolName);
 			SearchToolResult result = fit(ranking.documents(), fresh, maxTokens, toolName);
+			tellNotRead(result, loaded, chunks, ranking.documents(), fresh, toolName);
 			// told before fitting the room: what could not be searched is part of the answer
 			result.setUnavailableSources(unavailable.isEmpty() ? null : unavailable);
 			if (callBudget != null) {
@@ -260,6 +282,7 @@ public class SearchToolContentPipeline {
 								+ " (tok), contents fitted again in " + contentsTokens + " (tok)");
 					}
 					result = fit(ranking.documents(), fresh, contentsTokens, toolName);
+					tellNotRead(result, loaded, chunks, ranking.documents(), fresh, toolName);
 				}
 			}
 			result.setRanked(ranking.ranked());
@@ -322,6 +345,56 @@ public class SearchToolContentPipeline {
 	}
 
 	record RankingOutcome(List<Document> documents, boolean ranked, String note) {
+	}
+
+	/** Why a document read is not in the results: no passage of it serves the objective. */
+	static final String NOT_RELEVANT_TO_THE_OBJECTIVE = "read, no passage serves the search objective";
+	/** Why a document read is not in the results: no room was left for it. */
+	static final String LEFT_OUT_FOR_ROOM = "read, left out: no room left in the context for it";
+
+	/**
+	 * Tells in the result the documents found that give nothing to it, with why: the ones
+	 * not loaded, then the ones read whose passages are not among the results (none
+	 * serving the objective, or no room left).
+	 */
+	static void tellNotRead(SearchToolResult result, LoadedResults loaded, List<Document> chunks,
+			List<Document> ranked, List<SearchResult> sources, String toolName) {
+		final List<DocumentNotRead> notRead = new ArrayList<>();
+		for (NotLoaded missing : loaded.notLoaded()) {
+			notRead.add(new DocumentNotRead(titleOf(missing.result(), Map.of()), sourceOf(missing.result(), Map.of()),
+					missing.reason()));
+		}
+		final Set<String> returned = new LinkedHashSet<>();
+		for (Fragment fragment : result.getFragments()) {
+			if (fragment.getDocumentCode() != null) {
+				returned.add(fragment.getDocumentCode());
+			}
+		}
+		final Set<String> read = codesOf(chunks);
+		final Set<String> rankedCodes = codesOf(ranked);
+		for (SearchResult source : sources) {
+			final String code = source.getCode();
+			if (code != null && read.contains(code) && !returned.contains(code)) {
+				notRead.add(new DocumentNotRead(titleOf(source, Map.of()), sourceOf(source, Map.of()),
+						rankedCodes.contains(code) ? LEFT_OUT_FOR_ROOM : NOT_RELEVANT_TO_THE_OBJECTIVE));
+			}
+		}
+		result.setDocumentsNotRead(notRead.isEmpty() ? null : notRead);
+		if (LOGGER.isDebugEnabled() && !notRead.isEmpty()) {
+			LOGGER.debug("Tool:" + toolName + " tells " + notRead.size() + " document(s) found that give nothing: "
+					+ loaded.notLoaded().size() + " not loaded");
+		}
+	}
+
+	private static Set<String> codesOf(List<Document> documents) {
+		final Set<String> codes = new LinkedHashSet<>();
+		for (Document document : documents) {
+			final Object code = document.getMetadata().get(DocumentMetaInfos.CONTENT_CODE);
+			if (code != null) {
+				codes.add(code.toString());
+			}
+		}
+		return codes;
 	}
 
 	/**

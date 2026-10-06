@@ -29,6 +29,7 @@ import ai.gebo.architecture.search.config.WebResultSizeProbeConfig;
 import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchResultsLoading;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchServiceException;
@@ -101,6 +102,12 @@ public abstract class AbstractWebSearchServiceImpl<N extends INativeQueryObject>
 	@Override
 	public String getDescription() {
 		return WEB_SEARCH_DESCRIPTION;
+	}
+
+	/** The pages found are on sites of the open network: loaded as such. */
+	@Override
+	public SearchResultsLoading resultsLoading() {
+		return SearchResultsLoading.OPEN_NETWORK;
 	}
 
 	protected String tryArgueContentType(String link) {

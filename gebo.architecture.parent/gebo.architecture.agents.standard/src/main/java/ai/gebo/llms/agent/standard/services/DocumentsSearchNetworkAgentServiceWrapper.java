@@ -31,6 +31,7 @@ import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.model.SystemSearchOutcome;
 import ai.gebo.architecture.search.service.ISearchService;
+import ai.gebo.architecture.search.model.SearchResultsLoading;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -44,6 +45,12 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 	private static final String SEARCH_AGENT_DESCRIPTION = " search agent";
 	public static final String SEARCH_AGENT = "SearchAgent";
 	private final ISearchService<?> wrappedSearchService;
+
+	/** Its results are loaded as its search service says. */
+	@Override
+	protected SearchResultsLoading resultsLoading() {
+		return wrappedSearchService.resultsLoading();
+	}
 
 	public DocumentsSearchNetworkAgentServiceWrapper(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,

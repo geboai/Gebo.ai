@@ -42,6 +42,7 @@ import ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage.DocumentCoverage;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage.SearchCoverage;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam;
+import ai.gebo.llms.agent.standardtools.model.DocumentNotRead;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam.Depth;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolResult;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolResult.Source;
@@ -152,6 +153,20 @@ public abstract class AbstractDeepSearchTool<Q> {
 			ToolContext toolContext, List<String> unavailableSources, List<SearchCoverage> searches) throws Exception {
 		return searchDocuments(param, queries, question, maxDocuments, fragmentsPerDocument, foundByFragmentId,
 				toolContext, unavailableSources);
+	}
+
+	/**
+	 * The same, telling in {@code notLoaded} the documents found that could not be
+	 * loaded, with why: by default as
+	 * {@link #searchDocuments(DeepSearchToolParam, List, String, int, int, Map, ToolContext, List, List)},
+	 * telling none.
+	 */
+	protected List<Document> searchDocuments(DeepSearchToolParam<Q> param, List<Q> queries, String question,
+			int maxDocuments, int fragmentsPerDocument, Map<String, FoundDocument> foundByFragmentId,
+			ToolContext toolContext, List<String> unavailableSources, List<SearchCoverage> searches,
+			List<DocumentNotRead> notLoaded) throws Exception {
+		return searchDocuments(param, queries, question, maxDocuments, fragmentsPerDocument, foundByFragmentId,
+				toolContext, unavailableSources, searches);
 	}
 
 	/**
@@ -273,21 +288,29 @@ public abstract class AbstractDeepSearchTool<Q> {
 			final List<String> unavailableSources = new ArrayList<>();
 			// the yield of each search, when the source runs them one by one
 			final List<SearchCoverage> searchYields = new ArrayList<>();
+			// the documents found that could not be loaded, with why
+			final List<DocumentNotRead> notLoaded = new ArrayList<>();
 			final List<Document> fragments = searchDocuments(param, queries, question, support.searchTopK(),
 					fragmentsPerDocument(param.getDepth()), foundByFragmentId, toolContext, unavailableSources,
-					searchYields);
+					searchYields, notLoaded);
 			if (fragments == null || fragments.isEmpty()) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("End deepSearch(...) tool:" + toolName + " found no document, "
-							+ unavailableSources.size() + " source(s) not searched");
+							+ unavailableSources.size() + " source(s) not searched, " + notLoaded.size()
+							+ " document(s) found not loaded");
 				}
-				final DeepSearchToolResult none = unavailableSources.isEmpty()
-						? DeepSearchToolResult.of(Status.NO_RESULTS,
-								"No document found in " + sourceDescription() + " for these searches.")
-						: DeepSearchToolResult.of(Status.NO_RESULTS, "No document found in " + sourceDescription()
-								+ ": some sources could not be searched (" + String.join("; ", unavailableSources)
-								+ "). Go on without them.");
+				final DeepSearchToolResult none = !notLoaded.isEmpty()
+						? DeepSearchToolResult.of(Status.NO_RESULTS, "None of the " + notLoaded.size()
+								+ " documents found in " + sourceDescription()
+								+ " could be loaded (see documentsNotRead): search something else, or go on without them.")
+						: unavailableSources.isEmpty()
+								? DeepSearchToolResult.of(Status.NO_RESULTS,
+										"No document found in " + sourceDescription() + " for these searches.")
+								: DeepSearchToolResult.of(Status.NO_RESULTS, "No document found in "
+										+ sourceDescription() + ": some sources could not be searched ("
+										+ String.join("; ", unavailableSources) + "). Go on without them.");
 				none.setUnavailableSources(unavailableSources.isEmpty() ? null : unavailableSources);
+				none.setDocumentsNotRead(notLoaded.isEmpty() ? null : notLoaded);
 				return none;
 			}
 			final DeliverableIntent deliverable = deliverable(param.getDepth());
@@ -326,6 +349,7 @@ public abstract class AbstractDeepSearchTool<Q> {
 						+ " fragment(s) found: failed");
 				final DeepSearchToolResult failed = DeepSearchToolResult.of(Status.FAILED, NOTHING_READ);
 				failed.setUnavailableSources(unavailableSources.isEmpty() ? null : unavailableSources);
+				failed.setDocumentsNotRead(notLoaded.isEmpty() ? null : notLoaded);
 				return failed;
 			}
 			if (analysis != null && !analysis.isBlank() && discardedFragmentIds.containsAll(readFragmentIds)) {
@@ -345,6 +369,13 @@ public abstract class AbstractDeepSearchTool<Q> {
 			result.setUnavailableSources(unavailableSources.isEmpty() ? null : unavailableSources);
 			for (FoundDocument found : reliedOn) {
 				result.getSources().add(found.source());
+			}
+			final List<DocumentNotRead> notRead = documentsNotRead(notLoaded, allFound, unreadFragmentIds, reliedOn);
+			result.setDocumentsNotRead(notRead.isEmpty() ? null : notRead);
+			if (LOGGER.isDebugEnabled() && !notRead.isEmpty()) {
+				LOGGER.debug("Tool:" + toolName + " tells " + notRead.size() + " document(s) found that give nothing: "
+						+ notLoaded.size() + " not loaded, " + (notRead.size() - notLoaded.size())
+						+ " not read by the analysis or judged not relevant");
 			}
 			// how much of what was found the analysis covers, measured here, not judged by a model
 			final DeepSearchCoverage coverage = coverage(param.getDepth(), allFound,
@@ -370,7 +401,8 @@ public abstract class AbstractDeepSearchTool<Q> {
 			// runaway analysis, the sources and the coverage listed with it taking their part
 			// of the room left
 			final int sourcesTokens = ITokensCountable.stringsTokensSize(JsonParser.toJson(result.getSources()))
-					+ ITokensCountable.stringsTokensSize(JsonParser.toJson(coverage));
+					+ ITokensCountable.stringsTokensSize(JsonParser.toJson(coverage))
+					+ (notRead.isEmpty() ? 0 : ITokensCountable.stringsTokensSize(JsonParser.toJson(notRead)));
 			fit(result, analysis,
 					Math.max(0, ToolsTokenBudget.grantFor(toolContext, support.maxAnalysisTokens()) - sourcesTokens));
 			// the agent sharing a collector gives these documents as its answer's ones
@@ -560,6 +592,47 @@ public abstract class AbstractDeepSearchTool<Q> {
 			+ "find the same documents, its result is the one you have. To complete its coverage use other "
 			+ "searches (other terms, the titles or authors of the documents not used), read whole the documents "
 			+ "it names, or answer with what you have.";
+
+	/** Why a document found is not among the sources: the analysis stopped before it. */
+	static final String NOT_READ_BY_THE_ANALYSIS = "found, not read by the analysis (it stopped before its fragments)";
+	/** Why a document found is not among the sources: read and judged not relevant. */
+	static final String JUDGED_NOT_RELEVANT = "read, judged not relevant to the question";
+
+	/**
+	 * The documents found that give nothing to the analysis, with why: the ones not
+	 * loaded, then each document found that is not a source: not read by the analysis
+	 * when none of its fragments was read, else judged not relevant.
+	 */
+	static List<DocumentNotRead> documentsNotRead(List<DocumentNotRead> notLoaded, Map<String, FoundDocument> found,
+			Set<String> unreadFragmentIds, List<FoundDocument> reliedOn) {
+		final List<DocumentNotRead> notRead = new ArrayList<>(notLoaded);
+		final Set<String> sources = new LinkedHashSet<>();
+		for (FoundDocument document : reliedOn) {
+			if (document != null && document.source() != null && document.source().getDocumentCode() != null) {
+				sources.add(document.source().getDocumentCode());
+			}
+		}
+		final Map<String, Source> byCode = new LinkedHashMap<>();
+		final Set<String> read = new LinkedHashSet<>();
+		for (Map.Entry<String, FoundDocument> fragment : found.entrySet()) {
+			final FoundDocument document = fragment.getValue();
+			if (document == null || document.source() == null || document.source().getDocumentCode() == null) {
+				continue;
+			}
+			final String code = document.source().getDocumentCode();
+			byCode.putIfAbsent(code, document.source());
+			if (unreadFragmentIds == null || !unreadFragmentIds.contains(fragment.getKey())) {
+				read.add(code);
+			}
+		}
+		for (Map.Entry<String, Source> document : byCode.entrySet()) {
+			if (!sources.contains(document.getKey())) {
+				notRead.add(new DocumentNotRead(document.getValue().getTitle(), document.getValue().getSource(),
+						read.contains(document.getKey()) ? JUDGED_NOT_RELEVANT : NOT_READ_BY_THE_ANALYSIS));
+			}
+		}
+		return notRead;
+	}
 
 	/** What the agent is told when the analysis read none of the documents found. */
 	static final String NOTHING_READ = "The documents found could not be analysed (the analysis failed): there "

@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @JsonPropertyOrder({ "status", "message", "coverage", "fragmentsAnalysed", "tokens", "analysis", "sources",
-		"unavailableSources" })
+		"unavailableSources", "documentsNotRead" })
 public class DeepSearchToolResult {
 	/** A document the analysis relies on. */
 	@Data
@@ -64,6 +64,12 @@ public class DeepSearchToolResult {
 	 * the analysis. Null when every source was searched.
 	 */
 	private List<String> unavailableSources = null;
+	/**
+	 * The documents found that give nothing to the analysis, with why (not loaded, not
+	 * read by the analysis, judged not relevant): never among its sources. Null when
+	 * there is none.
+	 */
+	private List<DocumentNotRead> documentsNotRead = null;
 
 	public static DeepSearchToolResult of(Status status, String message) {
 		DeepSearchToolResult result = new DeepSearchToolResult();

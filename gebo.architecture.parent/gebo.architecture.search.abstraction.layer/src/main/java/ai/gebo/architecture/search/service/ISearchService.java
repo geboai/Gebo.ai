@@ -11,6 +11,7 @@ import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
+import ai.gebo.architecture.search.model.SearchResultsLoading;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
@@ -78,6 +79,14 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 	 */
 	public default boolean appliesRetries() {
 		return false;
+	}
+
+	/**
+	 * How the results found are loaded to be read: as from a system sized to answer by
+	 * default; the services searching an open network (the web) load them as such.
+	 */
+	public default SearchResultsLoading resultsLoading() {
+		return SearchResultsLoading.RELIABLE;
 	}
 
 	public default List<SearchResult> search(SearchQuery query, String systemId, int nEntryLimit)

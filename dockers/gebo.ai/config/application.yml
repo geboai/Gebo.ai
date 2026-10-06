@@ -296,6 +296,25 @@ ai.gebo.search.calls:
   retry-pause-millis: 1000
   http-connect-timeout-seconds: 15
   http-read-timeout-seconds: 60
+# Results of the services searching an open network (the web search providers): once
+# a search has given its pool of candidates, the pages are loaded at once, grouped by
+# host. Each host gets at most per-host-concurrency pages at a time, with
+# per-host-pause-millis between its requests, and its other pages are not requested
+# after per-host-failures-before-skip failed ones (so no site is overloaded or blocks
+# the search). Each page within per-page-deadline-seconds, the whole loading within
+# loading-phase-deadline-seconds: what has not arrived by then is not read. With
+# capped, only the first candidates-cap candidates are loaded. Every page not loaded,
+# not read or not relevant is told to the agent with its reason, never among the
+# answer's documents. Systems sized to answer (Confluence, SharePoint, Jira, the
+# connector microservices) keep loading a few results at a time.
+ai.gebo.search.open-network-loading:
+  capped: false
+  candidates-cap: 20
+  per-page-deadline-seconds: 60
+  loading-phase-deadline-seconds: 60
+  per-host-concurrency: 2
+  per-host-pause-millis: 500
+  per-host-failures-before-skip: 2
 # Web search results: after each search, a best-effort HEAD request per distinct
 # result URL fills the result size from its declared Content-Length (unknown when
 # the server declares none). Low timeouts: the search waits for it, never fails on it.

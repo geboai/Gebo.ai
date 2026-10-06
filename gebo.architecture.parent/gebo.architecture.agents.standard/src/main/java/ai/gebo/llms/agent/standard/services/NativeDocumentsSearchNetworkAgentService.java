@@ -34,6 +34,7 @@ import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.model.SystemSearchOutcome;
 import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
+import ai.gebo.architecture.search.model.SearchResultsLoading;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -47,6 +48,12 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 	public static final String NATIVE_SEARCH_AGENT_FOR = "Native search Agent for ";
 	public static final String NATIVE_SEARCHER_AGENT = "NativeSearcherAgent";
 	final INativeSearchService<CustomSearchResultExtractionDataType, NativeSearchDataStructure> nativeSearchWrapper;
+
+	/** Its results are loaded as its search service says. */
+	@Override
+	protected SearchResultsLoading resultsLoading() {
+		return nativeSearchWrapper.resultsLoading();
+	}
 
 	public NativeDocumentsSearchNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,

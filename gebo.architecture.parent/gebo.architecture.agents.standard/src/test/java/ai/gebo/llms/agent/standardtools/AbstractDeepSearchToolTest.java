@@ -793,6 +793,23 @@ class AbstractDeepSearchToolTest {
 	}
 
 	@Test
+	void theDocumentsFoundThatGiveNothingAreToldWithWhyAndAreNeverSources() {
+		Map<String, FoundDocument> found = foundFragments(documents("contract-a", 3, "annex-b", 2, "policy-c", 1));
+		List<ai.gebo.llms.agent.standardtools.model.DocumentNotRead> notLoaded = List.of(
+				new ai.gebo.llms.agent.standardtools.model.DocumentNotRead("Page", "https://a.example/p",
+						"not loaded within 60 s"));
+
+		List<ai.gebo.llms.agent.standardtools.model.DocumentNotRead> notRead = AbstractDeepSearchTool
+				.documentsNotRead(notLoaded, found, fragmentsOf(found, "policy-c"), used("contract-a"));
+
+		assertEquals(List.of("Page", "annex-b.pdf", "policy-c.pdf"),
+				notRead.stream().map(ai.gebo.llms.agent.standardtools.model.DocumentNotRead::getTitle).toList());
+		assertEquals(List.of("not loaded within 60 s", AbstractDeepSearchTool.JUDGED_NOT_RELEVANT,
+				AbstractDeepSearchTool.NOT_READ_BY_THE_ANALYSIS),
+				notRead.stream().map(ai.gebo.llms.agent.standardtools.model.DocumentNotRead::getReason).toList());
+	}
+
+	@Test
 	void theFragmentsTheAnalysisLeftUnreadAreNeverItsSources() {
 		// the batch of doc-b failed: its fragments were never read
 		doAnswer(invocation -> {

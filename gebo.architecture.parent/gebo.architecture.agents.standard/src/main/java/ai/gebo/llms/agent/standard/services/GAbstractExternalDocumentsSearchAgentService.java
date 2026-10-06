@@ -16,6 +16,8 @@ import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.search.config.OpenNetworkLoadingConfig;
+import ai.gebo.architecture.search.model.SearchResultsLoading;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
@@ -55,6 +57,22 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 	protected final int maxChunksPerDocument;
 	/** The documents found loaded and chunked at the same time. */
 	protected final int documentsParallelism;
+	/** How the results of an open network are loaded (see {@link #resultsLoading()}): the defaults until set. */
+	private OpenNetworkLoadingConfig openNetworkLoading = new OpenNetworkLoadingConfig();
+
+	public void setOpenNetworkLoading(OpenNetworkLoadingConfig openNetworkLoading) {
+		if (openNetworkLoading != null) {
+			this.openNetworkLoading = openNetworkLoading;
+		}
+	}
+
+	/**
+	 * How the results of this agent's search service are loaded: as from a system sized
+	 * to answer, unless the agent's service says otherwise.
+	 */
+	protected SearchResultsLoading resultsLoading() {
+		return SearchResultsLoading.RELIABLE;
+	}
 
 	public GAbstractExternalDocumentsSearchAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
@@ -96,8 +114,16 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 		final ChunkingParams params = buildSearchChunkingParams(agentModel, command, keywords);
 		// The chunking itself (session lifecycle, per-document cap, error chunks) is shared
 		// with the search tools, see SearchResultsChunker.
-		final List<Document> documents = SearchResultsChunker.chunkToDocuments(chunkingService, results, params,
-				maxChunksPerDocument, getId(), documentsParallelism);
+		final SearchResultsChunker.LoadedResults loaded = SearchResultsChunker.load(chunkingService, results, params,
+				maxChunksPerDocument, getId(), documentsParallelism, resultsLoading(), openNetworkLoading);
+		final List<Document> documents = loaded.documents();
+		if (!loaded.notLoaded().isEmpty() && notificationSink != null) {
+			// the user is told what could not be read (each one with its reason in the log)
+			notificationSink.next(
+					"Agent: " + getId() + " could not read " + loaded.notLoaded().size() + " of the " + results.size()
+							+ " documents found",
+					INotificationSink.NotificationObject.NotificationType.INFO);
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End chunkToDocuments(...) agent id:" + getId() + " kept " + documents.size()
 					+ " content document(s)");
