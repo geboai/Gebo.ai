@@ -1124,4 +1124,40 @@ class AgenticLoopReactiveAgentServiceTest {
 		assertEquals(List.of("other.pdf"),
 				AgenticLoopReactiveAgentServiceImpl.unreadCitations("From other.pdf.", List.of("document.pdf")));
 	}
+
+	// ---------------------------------------------------------------- the documents line
+
+	private static String strip(ControlMarkerStripper stripper, String... chunks) {
+		StringBuilder shown = new StringBuilder();
+		for (String chunk : chunks) {
+			shown.append(stripper.accept(chunk));
+		}
+		return shown.append(stripper.complete()).toString();
+	}
+
+	@Test
+	void theDocumentsLineIsRemovedWhateverFormTheModelGivesIt() {
+		ControlMarkerStripper sequence = new ControlMarkerStripper();
+		assertEquals("The answer.\n\n", strip(sequence, "The answer.\n\n@@DO", "CS@@ #1 #", "4\n", STOP));
+		assertEquals(List.of("#1", "#4"), sequence.getAnswerDocuments());
+		assertTrue(sequence.isFinishRequested());
+
+		ControlMarkerStripper tag = new ControlMarkerStripper();
+		assertEquals("The answer. ", strip(tag, "The answer. <ANSWER-DOCUMENTS>#2</ANSWER-DOCUMENTS>", STOP));
+		assertEquals(List.of("#2"), tag.getAnswerDocuments());
+
+		// the bare word, the ids on the next line, nothing else: what a model wrote
+		ControlMarkerStripper bare = new ControlMarkerStripper();
+		assertEquals("Tutte tratte dal documento.\n\n",
+				strip(bare, "Tutte tratte dal documento.\n\nANSWER-DOCUMENTS\n#", "5\n\n"));
+		assertEquals(List.of("#5"), bare.getAnswerDocuments());
+	}
+
+	@Test
+	void theWordInTheTextWithoutIdsIsText() {
+		ControlMarkerStripper stripper = new ControlMarkerStripper();
+		assertEquals("The ANSWER-DOCUMENTS line is internal. ",
+				strip(stripper, "The ANSWER-DOCUMENTS line is internal. ", STOP));
+		assertEquals(null, stripper.getAnswerDocuments());
+	}
 }

@@ -1587,7 +1587,13 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * the model wrote. The markers can be split across chunks: the end of a chunk
 	 * that could be the beginning of a marker is held back until the next one.
 	 */
-	/** Opens the list of the documents an answer rests on, by their short ids ({@code #1 #4}). */
+	/**
+	 * Opens the line of the documents an answer rests on, by their short ids
+	 * ({@code @@DOCS@@ #1 #4}): a sequence no text has, so the line is found even when a
+	 * model writes it its own way.
+	 */
+	static final String ANSWER_DOCUMENTS_SEQUENCE = "@@DOCS@@";
+	/** The former tag form of the line, still recognized. */
 	static final String ANSWER_DOCUMENTS_OPEN = "<ANSWER-DOCUMENTS>";
 	static final String ANSWER_DOCUMENTS_CLOSE = "</ANSWER-DOCUMENTS>";
 	/** A document id in the ANSWER-DOCUMENTS marker: its number. */
@@ -1640,22 +1646,30 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			return answerDocuments != null ? new ArrayList<>(answerDocuments) : null;
 		}
 
+		/**
+		 * Removes the line of the documents the answer rests on: it starts with
+		 * {@link #ANSWER_DOCUMENTS_SEQUENCE} (or the tag {@link #ANSWER_DOCUMENTS_OPEN}, or
+		 * the bare word ANSWER-DOCUMENTS a model may write instead) and goes on with the
+		 * ids, their separators and line ends, up to the next text or control marker. A
+		 * bare word with no id after it is text, left as it is. A line whose ids may still
+		 * go on is held back until the next chunk, or captured when the stream is over.
+		 */
 		private void removeAnswerDocuments(boolean ended) {
-			int open;
-			while ((open = indexOfIgnoreCase(pending, ANSWER_DOCUMENTS_OPEN, 0)) >= 0) {
-				final int from = open + ANSWER_DOCUMENTS_OPEN.length();
-				final int close = indexOfIgnoreCase(pending, ANSWER_DOCUMENTS_CLOSE, from);
-				if (close < 0) {
-					if (!ended) {
-						// held back until it closes
-						return;
-					}
-					captureAnswerDocuments(pending.substring(from));
-					pending.setLength(open);
+			int from = 0;
+			DocumentsLine line;
+			while ((line = documentsLine(pending, from, ended)) != null) {
+				if (!line.complete()) {
+					// held back until the ids end
 					return;
 				}
-				captureAnswerDocuments(pending.substring(from, close));
-				pending.delete(open, close + ANSWER_DOCUMENTS_CLOSE.length());
+				if (!line.marker()) {
+					// the word in the text, no ids: not the line
+					from = line.end();
+					continue;
+				}
+				captureAnswerDocuments(line.ids());
+				pending.delete(line.start(), line.end());
+				from = line.start();
 			}
 		}
 
@@ -1697,24 +1711,87 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 
 		private int heldBack() {
-			// an ANSWER-DOCUMENTS marker not closed yet
-			final int open = indexOfIgnoreCase(pending, ANSWER_DOCUMENTS_OPEN, 0);
-			if (open >= 0) {
-				return pending.length() - open;
+			// a documents line whose ids may still go on
+			int from = 0;
+			DocumentsLine line;
+			while ((line = documentsLine(pending, from, false)) != null) {
+				if (!line.complete()) {
+					return pending.length() - line.start();
+				}
+				from = line.end();
 			}
-			for (int length = Math.min(pending.length(),
-					Math.max(LONGEST_MARKER, ANSWER_DOCUMENTS_OPEN.length()) - 1); length > 0; length--) {
+			for (int length = Math.min(pending.length(), Math.max(LONGEST_MARKER, LONGEST_DOCUMENTS_START) - 1);
+					length > 0; length--) {
 				String suffix = pending.substring(pending.length() - length);
 				for (String marker : MARKERS) {
 					if (marker.startsWith(suffix)) {
 						return length;
 					}
 				}
-				if (ANSWER_DOCUMENTS_OPEN.regionMatches(true, 0, suffix, 0, suffix.length())) {
-					return length;
+				for (String start : DOCUMENTS_STARTS) {
+					if (start.regionMatches(true, 0, suffix, 0, suffix.length())) {
+						return length;
+					}
 				}
 			}
 			return 0;
 		}
 	}
+
+	/**
+	 * The documents line found in a text: where it starts and ends, its ids, whether
+	 * it is a marker (it gave ids, or used the sequence or the tag) and whether it is
+	 * complete (something follows its ids, or the text is over).
+	 */
+	record DocumentsLine(int start, int end, String ids, boolean marker, boolean complete) {
+	}
+
+	/** What opens the documents line: the sequence asked, the tag, the bare word. */
+	static final List<String> DOCUMENTS_STARTS = List.of(ANSWER_DOCUMENTS_SEQUENCE, ANSWER_DOCUMENTS_OPEN,
+			"ANSWER-DOCUMENTS");
+	static final int LONGEST_DOCUMENTS_START = DOCUMENTS_STARTS.stream().mapToInt(String::length).max().orElse(0);
+
+	/** The first documents line of {@code text} from {@code from}; null when none starts there. */
+	static DocumentsLine documentsLine(CharSequence text, int from, boolean ended) {
+		int start = -1;
+		String token = null;
+		for (String candidate : DOCUMENTS_STARTS) {
+			final int index = ControlMarkerStripper.indexOfIgnoreCase(text, candidate, from);
+			if (index >= 0 && (start < 0 || index < start)) {
+				start = index;
+				token = candidate;
+			}
+		}
+		if (start < 0) {
+			return null;
+		}
+		final int idsStart = start + token.length();
+		int end = idsStart;
+		while (end < text.length() && isDocumentsLineChar(text.charAt(end))) {
+			end++;
+		}
+		final String ids = text.subSequence(idsStart, end).toString();
+		final boolean gaveIds = DOCUMENT_ID_NUMBER.matcher(ids).find();
+		final boolean marker = gaveIds || !token.equals("ANSWER-DOCUMENTS");
+		if (end < text.length() || ended) {
+			// the closing tag of the tag form goes with the line
+			if (end < text.length() && text.toString().regionMatches(true, end, ANSWER_DOCUMENTS_CLOSE, 0,
+					Math.min(ANSWER_DOCUMENTS_CLOSE.length(), text.length() - end))) {
+				if (text.length() - end < ANSWER_DOCUMENTS_CLOSE.length() && !ended) {
+					return new DocumentsLine(start, end, ids, marker, false);
+				}
+				end = Math.min(text.length(), end + ANSWER_DOCUMENTS_CLOSE.length());
+			}
+			return new DocumentsLine(start, end, ids, marker, true);
+		}
+		return new DocumentsLine(start, end, ids, marker, false);
+	}
+
+	/** The ids of a documents line, their separators and line ends. */
+	private static boolean isDocumentsLineChar(char c) {
+		return Character.isWhitespace(c) || Character.isDigit(c) || c == '#' || c == ',' || c == ';' || c == ':'
+				|| c == '>';
+	}
+
+	private static final Pattern DOCUMENT_ID_NUMBER = Pattern.compile("\\d");
 }

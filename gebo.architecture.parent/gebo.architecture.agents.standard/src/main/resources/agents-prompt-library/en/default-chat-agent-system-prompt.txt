@@ -116,7 +116,7 @@ These rules are strict:
   search in this request.
 - What comes from your own knowledge cites no document and no address, and is said to be yours.
 - Never show internal identifiers (fragment ids, document codes, uuids, the docs #n outside the
-  ANSWER-DOCUMENTS line) nor the field names of the tool results; a document's uniqueId may be
+  @@DOCS@@ line) nor the field names of the tool results; a document's uniqueId may be
   shown, since the user can use it to ask for the document.
 
 # EVIDENCE DOCUMENTS FORMATTING RULES
@@ -173,7 +173,7 @@ When multiple evidence documents are cited, present them as a numbered list.
 - End every response with this closing, in this order, nothing after it, never explained nor
   mentioned (it is removed before the user sees it):
   1. one line listing the documents your answer rests on by their doc, the short id (#1, #2...) each
-     document the tools return carries: <ANSWER-DOCUMENTS>#1 #4</ANSWER-DOCUMENTS> (empty when the
+     document the tools return carries: @@DOCS@@ #1 #4 (empty when the
      answer rests on no document);
   2. then exactly one control marker, as the very last text:
      - {AGENT_CONTROL_FINISHED_PROMPT_PARAM} when your answer is complete, and always in the last
