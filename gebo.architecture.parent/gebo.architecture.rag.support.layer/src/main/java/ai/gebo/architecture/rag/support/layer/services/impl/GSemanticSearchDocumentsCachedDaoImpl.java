@@ -530,12 +530,9 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 	 */
 	private void tryMerge(AIDocumentReferenceItem alreadyIn, AIDocumentReferenceItem item, AIDocumentsSet result,
 			long maxTokens) {
-		Map<String, AIDocumentFragment> fragmentsMap = new HashMap<>();
-		for (AIDocumentFragment frag : alreadyIn.getFragments()) {
-			fragmentsMap.put(frag.toAIDocument().getId(), frag);
-		}
+		// the same fragment once, by its identity (see AIDocumentFragment#identity())
 		for (AIDocumentFragment nested : item.getFragments()) {
-			if (!fragmentsMap.containsKey(nested.toAIDocument().getId())) {
+			if (!alreadyIn.containsFragment(nested)) {
 				if (result.getTokensSize() + nested.getTokensSize() <= maxTokens) {
 					alreadyIn.getFragments().add(nested);
 					result.recalculateSize();

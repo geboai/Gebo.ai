@@ -95,6 +95,34 @@ public class AIDocumentFragment implements IAIContent, Cloneable, ITokensCountab
 	}
 
 	/**
+	 * The identity of the fragment: its chunk id, the same in the vector store and in
+	 * the full-text index, so a fragment found by two searches is one fragment. Its
+	 * {@link #getCode() code} is the code of its document, shared by all the fragments
+	 * of that document: it groups fragments, it does not tell them apart. A fragment
+	 * without an id is identified by its document, position and content.
+	 */
+	public String identity() {
+		if (documentId != null) {
+			return documentId;
+		}
+		return code + "#" + chunkPosition + "#" + (documentContent != null ? documentContent.hashCode() : 0);
+	}
+
+	/** Whether the two are the same fragment (see {@link #identity()}). */
+	public boolean sameFragmentAs(AIDocumentFragment other) {
+		return other != null && identity().equals(other.identity());
+	}
+
+	/** A copy of the fragment, so changing one (its rank, its weight) leaves the other as it is. */
+	public AIDocumentFragment copy() {
+		try {
+			return (AIDocumentFragment) clone();
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalStateException("Cannot copy the fragment " + identity(), e);
+		}
+	}
+
+	/**
 	 * Retrieves the associated Document object.
 	 * 
 	 * @return the Document object.

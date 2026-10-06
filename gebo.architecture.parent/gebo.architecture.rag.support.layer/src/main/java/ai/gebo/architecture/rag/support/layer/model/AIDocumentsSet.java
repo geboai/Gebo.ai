@@ -17,6 +17,8 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 
 import ai.gebo.model.ExtractedDocumentMetaData;
@@ -110,14 +112,36 @@ public class AIDocumentsSet implements IAIContent, IJsonClonable<AIDocumentsSet>
 		}
 	}
 
+	/**
+	 * The documents of the given sets, each once with all their fragments: documents
+	 * are grouped by their code, fragments are told apart by their identity (their
+	 * chunk id, the same in every store, see {@link AIDocumentFragment#identity()}),
+	 * so a fragment two searches found is kept once and every other fragment of a
+	 * document is kept. The sets joined are left as they are.
+	 */
 	public static AIDocumentsSet join(AIDocumentsSet... result) {
 		Map<String, AIDocumentReferenceItem> docsMap = new HashMap<String, AIDocumentReferenceItem>();
+		int fragmentsIn = 0;
+		int sets = 0;
 		for (AIDocumentsSet ragDocumentsCachedDaoResult : result) {
-			if (ragDocumentsCachedDaoResult != null)
+			if (ragDocumentsCachedDaoResult != null) {
+				sets++;
+				fragmentsIn += ragDocumentsCachedDaoResult.countFragments();
 				joinMap(ragDocumentsCachedDaoResult, docsMap);
+			}
 		}
-		return fromMap(docsMap);
+		final AIDocumentsSet joined = fromMap(docsMap);
+		if (JOIN_LOGGER.isDebugEnabled()) {
+			final int fragmentsOut = joined.countFragments();
+			JOIN_LOGGER.debug("join(...) " + sets + " set(s), " + fragmentsIn + " fragment(s) in, " + fragmentsOut
+					+ " fragment(s) of " + joined.getDocumentItems().size() + " document(s) out, "
+					+ (fragmentsIn - fragmentsOut) + " found more than once");
+		}
+		return joined;
 	}
+
+	/** The logger of the joins, by this class. */
+	private static final Logger JOIN_LOGGER = LoggerFactory.getLogger(AIDocumentsSet.class);
 
 	public static AIDocumentsSet fromMap(Map<String, AIDocumentReferenceItem> docsMap) {
 		AIDocumentsSet results = new AIDocumentsSet();
@@ -126,26 +150,24 @@ public class AIDocumentsSet implements IAIContent, IJsonClonable<AIDocumentsSet>
 		return results;
 	}
 
+	/**
+	 * Adds the documents of the set to the map, by their code: a document already in
+	 * the map gets the fragments it does not hold yet (see
+	 * {@link AIDocumentReferenceItem#containsFragment(AIDocumentFragment)}). The map
+	 * holds copies: the set is left as it is.
+	 */
 	public static void joinMap(AIDocumentsSet result, Map<String, AIDocumentReferenceItem> docsMap) {
 		result.documentItems.forEach(doc -> {
-			if (!docsMap.containsKey(doc.getCode())) {
-				try {
-					docsMap.put(doc.getCode(), (AIDocumentReferenceItem) doc.clone());
-				} catch (CloneNotSupportedException e) {
-					LOGGER.error("Error cloning", e);
-				}
+			final AIDocumentReferenceItem inMap = docsMap.get(doc.getCode());
+			if (inMap == null) {
+				docsMap.put(doc.getCode(), doc.copy());
 			} else {
-				AIDocumentReferenceItem docCopy = docsMap.get(doc.getCode());
 				for (AIDocumentFragment fragment : doc.getFragments()) {
-					if (!docCopy.getFragments().stream().anyMatch(x -> x.getCode().equals(fragment.getCode()))) {
-						try {
-							docCopy.getFragments().add((AIDocumentFragment) fragment.clone());
-						} catch (CloneNotSupportedException e) {
-							LOGGER.error("Error cloning", e);
-						}
+					if (!inMap.containsFragment(fragment)) {
+						inMap.getFragments().add(fragment.copy());
 					}
 				}
-
+				inMap.recalculateSize();
 			}
 		});
 	}
@@ -171,12 +193,13 @@ public class AIDocumentsSet implements IAIContent, IJsonClonable<AIDocumentsSet>
 	public List<Document> aiDocumentsList() {
 		final List<Document> documents = new ArrayList<Document>();
 		final List<AIDocumentFragment> fragments = new ArrayList<AIDocumentFragment>();
+		// each fragment once, by its identity (see AIDocumentFragment#identity())
 		final Map<String, Boolean> alreadyInserted = new HashMap<String, Boolean>();
 		documentItems.forEach(x -> {
 			x.getFragments().forEach(y -> {
-				if (!alreadyInserted.containsKey(y.getDocumentId())) {
+				if (!alreadyInserted.containsKey(y.identity())) {
 					fragments.add(y);
-					alreadyInserted.put(y.getDocumentId(), true);
+					alreadyInserted.put(y.identity(), true);
 				}
 			});
 		});
@@ -187,6 +210,10 @@ public class AIDocumentsSet implements IAIContent, IJsonClonable<AIDocumentsSet>
 		return documents;
 	}
 
+	/**
+	 * The set of the given chunks: grouped by their document's code, each chunk once
+	 * (see {@link AIDocumentFragment#identity()}).
+	 */
 	public static AIDocumentsSet from(List<Document> documents) {
 
 		Map<String, AIDocumentReferenceItem> data = new HashMap<String, AIDocumentReferenceItem>();
@@ -199,7 +226,7 @@ public class AIDocumentsSet implements IAIContent, IJsonClonable<AIDocumentsSet>
 				item.setCode(code);
 				return item;
 			});
-			data.get(fragment.getCode()).getFragments().add(fragment);
+			data.get(fragment.getCode()).addFragmentIfAbsent(fragment);
 			data.get(fragment.getCode()).recalculateSize();
 		}
 		return fromMap(data);
