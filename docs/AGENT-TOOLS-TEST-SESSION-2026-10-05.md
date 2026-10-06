@@ -455,3 +455,29 @@ The single-agent loop now remembers as the report writer does: the story of the 
 **Found and fixed:** the evidence gate asks an answer needing the sources to search them, and the loop applies it until the request has searched once. Keeping it after a coverage discard asked the next iteration for new evidence although the request had searched: the model, now seeing its draft, rewrote it without a tool, and each rewrite was discarded up to the last iteration. After a coverage discard the next iteration needs no new evidence; an answer without a search is still discarded when it cites documents this request did not read (the chat's documents and every document the tools returned or listed count as read). The coverage retry stays once per request.
 
 **Observed, no change:** reading two whole documents put ~250k tokens in one model call (within the room computed for gpt-4.1's context); the final call took ~1 min 50 s.
+
+## 16. Full retest on a clean rebuild (2026-10-06, log time 14:31 - 17:51)
+
+Clean rebuild of the whole reactor (189 modules), only the `gebo.ai` container redeployed, TRACE on the agents, the tools, the deep searches and the pipeline steps, DEBUG on the retrieval layer. Every question of this session's series rerun (52 turns in 4 chats: 34 on the `biblioteca-esoterica` knowledge base, 18 without knowledge base), each turn's whole log saved, every quotation of the answers checked against what the tools returned. gpt-4.1, service model gpt-4o-mini.
+
+| Round | Code | OK | Partial | Failed | Quotations verified |
+|---|---|---|---|---|---|
+| 1 (stopped at K10) | `37fc9d388` + the loop memory | 9 | 1 | 0 | - |
+| 2 | + `d9547f899` (retrieval merge) | 42 | 4 | 6 | 145 / 145 |
+| 3 | + `299408e89` (gates, ids, guards) | 46 | 3 | 3 | 204 / 204 |
+
+**Found and fixed:**
+- **Retrieval merge** (`d9547f899`): `AIDocumentsSet.join` compared fragments by their code, the code of their document, so a document found by two legs (semantic probes, full text, graph) kept only one leg's fragments. The Pistis Sophia deep search read 3 fragments of it; after the fix 27, and the answer has the six-book structure it missed. Fragments are told apart by their chunk id, documents grouped by their code, everywhere (joins, the multi-hop merge, the vector and full-text grouping).
+- **Loop memory** (R1, a regression of `ca7c59222`): a draft discarded for resting on no source was given to build on, and gpt-4.1 rewrote it 4 times instead of searching (K32, W11). Now only why it was discarded is told; a coverage discard keeps the draft whole. K32 and W11 pass.
+- **Requests bound to the sources** (F4): "Using the knowledge base...", "What does the knowledge base say..." were classified searchRequested=false and answered without any search (K14, K25). Examples in the prompt were not enough for gpt-4o-mini; a reminder next to the question was. K14 now searches and finds only the Pythagorean triangle as a symbol.
+- **Coverage for every deliverable and iteration** (P2, P3, O1): the coverage gate is built whenever deep searches are mounted and carried after a continue; the redo is once per request, and a coverage no search completed is told with the answer (K21, W12: "The sources were covered in part").
+- **Document ids** (F1, F1b): gpt-4.1 lists the knowledge base uniqueIds in place of the request's ids once the chat showed them; a uniqueId now names its document, an id that is both names the one the answer cites (K17: 7 of 7 documents in Found docs, 4 before).
+- **Guards**: an address ends at full-width punctuation (a real link was removed, W08); a file name inside an address or cited with its words spaced is no document not read (W12, K14).
+- **Notifications**: the search tools tell the user what they read in fragments of documents.
+
+**Still open:**
+- K25: in a chat whose history already holds the answer, gpt-4.1 does not search again even when told to, 5 iterations out of 5 (the answer is shown with the "no source searched" warning). Forcing the tool call was tried and reverted (`03c1be81e`).
+- W13: with F4, asking a chat without knowledge base about its documents costs 5 iterations (the evidence gate retries to the last iteration, as decided); W24: the model then searched the web and presented the pages as "the knowledge base documents".
+- searchRequested=never is output by gpt-4o-mini for English ("Without searching anything") but not for Italian ("Senza cercare nulla").
+- The closing (ANSWER-DOCUMENTS and control marker) is missing in 7 to 10 answers of 52; the documents are then the ones the answer cites. The ids sometimes appear inline in the answer ("(#3, #1)").
+- Wrong facts read from pages (W08: the site's "Last Published" date given as Maven 3.9.16's release date, 2026-04-13 in the history page; W03: JEP 507 missed).
