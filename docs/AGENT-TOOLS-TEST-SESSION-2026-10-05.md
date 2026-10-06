@@ -299,3 +299,20 @@ After the rule on analytical requests (`016af74d1`: plan the searches across the
 **What the rule changed:** the angles are planned (N1's searches cover each aspect asked). **What it did not:** no turn completed its deep search with further searches; every analytical turn ran one deep search per source and answered (A1 left authors out). A rule in the prompt depends on the model: a model-agnostic way would be in code (for example the deep search result telling the agent which documents or angles it covered).
 
 **Other observations:** a web deep search batch of 73 fragments still ran away at half the service model context (A4); N1's 72-fragment batch did not. The evidence gate retries an analysis answered without tools even when no tool can answer it (N2).
+
+## 8. Fourth session: deep search coverage (2026-10-06, 06:43 – 06:54)
+
+After the coverage report of the deep search tools (`3ba4238ff`) and the coverage gate of the agentic loop (`f4596fdf9`), with the default rules (thin when fewer than 2 documents are used of 3 or more found; knowledge base only, when more than half of the documents found were read in at most 2 fragments, or when the documents of the knowledge bases no search reached are as many as the documents used; or when the analysis reports something missing; FOCUSED never thin; gate on). Only the `gebo.ai` container redeployed; gpt-4.1.
+
+| # | Chat | Request (abridged) | Tools | Coverage and gate | Outcome |
+|---|---|---|---|---|---|
+| C1 (= A1) | KB | Detailed analysis: Christ in the KB, comparing works and authors | iteration 1: deep KB (5 searches, 20 fragments, 2 sources); iteration 2: KB search (5 queries), 2 documents read whole | thin: 5 of 7 documents read in at most 2 fragments, 5 not reached → answer discarded, completed | ✓ answer by author (Steiner, Gurdjieff/Ouspensky, gnostic texts, Archiati), with divergences and limits; no leak of the discarded text; ~1 min 40 s |
+| C2 (= A2) | KB | Analysis: Archiati's twelve senses vs Blavatsky's seven principles | iteration 1: 2 deep KB; iteration 2: the same 2 deep KB again | thin both times (3 of 8 used, 4 not reached; 2 of 3 used, 2 barely read, 9 not reached) → discarded, redone | ◐ grounded, but ~37 s spent on deep searches that repeat the first ones |
+| C3 | KB | A date in Archiati's *I grandi segni dei tempi*, asking for a FOCUSED deep search | 1 KB search (the model chose a plain search) | gate not involved | ✓ 5 s |
+| C4 (= N1) | no KB | Comparative analysis Spring AI vs LangChain4j for enterprise RAG, with sources | 1 deep web (5 searches, 75 fragments, 18 sources) | 18 of 19 used: not thin, streamed as usual | ✓ no warning; the 73-fragment web batch **ran away** again (170 s, see 4.1) |
+
+**What works:** the gate completes a thin knowledge base analysis for gpt-4.1 without relying on the prompt (C1, where A1 left authors out); a well covered web analysis is not slowed (C4); the result keeps the coverage before the analysis.
+
+**Finding: the knowledge base rules fire on a targeted analysis.** With a knowledge base of 12 documents and a question about two named authors (C2), "not reached ≥ used" and "barely read" hold for every deep search: the documents not reached are mostly unrelated to the question, and the gate costs an iteration. The agent then repeats the same deep searches rather than the focused searches or full reads the note suggests. Not changed: the thresholds, and whether "not reached" should count only for broad questions, are a decision to take.
+
+**Limit by design:** the gate holds the first iteration only (as the evidence gate): a deep search made in a later iteration reports its coverage but is not gated.
