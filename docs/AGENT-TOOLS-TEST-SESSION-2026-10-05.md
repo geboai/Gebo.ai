@@ -386,3 +386,22 @@ General (any model, any kind of document), ordered by impact. *Decision* marks a
 | 13 | Startup "Error exporting MCP tools - Not authenticated" (pre-existing on develop) | Log noise | Separate issue | Out of scope |
 
 Recommended next: **1 (C)**, then **3**, **5** and **6** (small, general, no limit), then decide **2** and **4**.
+
+## 12. Seventh session: loading the results of an open network (2026-10-06, 10:41 – 10:43)
+
+After `5ba15fda9`: each search service says how its results are loaded; the web providers load as an open network (all candidates at once, grouped by host, 2 at a time per host with 500 ms between requests, a host skipped after 2 failed pages, 60 s per page and 60 s for the whole loading, all configurable under `ai.gebo.search.open-network-loading`), and every result that gives nothing is told to the agent as `documentsNotRead`, with its reason. Only the `gebo.ai` container redeployed; gpt-4.1.
+
+| # | Chat | Request | Loading | Outcome |
+|---|---|---|---|---|
+| L1 (= N1) | no KB | Spring AI vs LangChain4j, with sources (deep web) | 26 candidates from 21 hosts in ~1 s (pages cached by earlier runs); medium.com skipped after 2 failed pages; 19 read, 7 not loaded, each with its reason | ◐ 21 documents told as not read (7 not loaded, 14 not read or judged not relevant), none cited; the 73-fragment batch listed 67 fragments irrelevant again (audit item 1): 5 sources |
+| L2 | no KB | Latest stable PostgreSQL and its date, citing the pages (search) | 12 candidates from 10 hosts in ~2 s, all loaded | ✗ the ranker kept nextcloud.com and chirpstack.io and left out the postgresql.org pages (release notes, 17 and 18 press kits), told as "no passage serves the search objective"; the answer gave **16.2 of February 2024** from training with a `postgresql.org/download` link no search returned, and no warning |
+
+**What works:** the loading is per source; the web pages load at once and a failing site stops being asked; the agent gets every result that gave nothing with its reason, and none of them reaches Found docs.
+
+**New finding (L2):** when the ranking leaves out the pages that hold the answer, the model answers from its training with a made-up link on the right domain. Two general gaps meet: the ranking of a small search (topK 4, 1500 tokens) can drop the authoritative page, and nothing in code catches a cited address that no tool returned (audit items 5 and 6).
+
+**Not observed live:** a page past its deadline, a capped pool, the loading phase ending (covered by unit tests with real timings).
+
+| # | Finding | Impact | Remediation | Kind |
+|---|---|---|---|---|
+| 14 | A search's ranking can leave out the pages that hold the answer (L2: the official release notes and press kits) and the model then answers from training with a made-up link | Wrong, ungrounded answer that looks cited | In code: a cited address that no tool returned is removed or flagged (items 5 and 6); and the ranking of a plain search to be reviewed (how many documents it keeps, whether a document whose title matches the question can be dropped) | Code (5, 6) + *Decision* (ranking) |
