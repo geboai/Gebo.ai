@@ -582,10 +582,10 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * The metadata key under which Spring AI's OpenAI client keeps the reasoning of a
 	 * streamed answer (the reasoning_content or reasoning field of the provider).
 	 */
-	static final String REASONING_CONTENT_METADATA = "reasoningContent";
+	static final String REASONING_CONTENT_METADATA = ThinkingStream.REASONING_CONTENT_METADATA;
 
 	/** What parts, while it streams, the cut answer from the one written again. */
-	static final String ANSWER_WRITTEN_AGAIN_SEPARATOR = "\n\n---\n\n";
+	static final String ANSWER_WRITTEN_AGAIN_SEPARATOR = CutAnswer.SEPARATOR;
 
 	/** The user warned that the streamed answer was cut. */
 	private Flux<GeboChatMessageEnvelope> cutWarning(GeboChatResponse response, String finishReason,

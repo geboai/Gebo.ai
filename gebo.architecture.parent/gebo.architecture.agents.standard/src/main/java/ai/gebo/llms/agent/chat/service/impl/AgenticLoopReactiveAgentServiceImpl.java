@@ -17,11 +17,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.util.json.JsonParser;
@@ -46,6 +50,8 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.knowledgebase.repositories.uniqueid.VirtualFilesystemUniqueIds;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -67,8 +73,12 @@ import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.agent.standardtools.WebSearchToolSource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.services.impl.CutAnswer;
+import ai.gebo.llms.chat.abstraction.layer.services.impl.ThinkingStream;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityService;
@@ -161,7 +171,13 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 
 	/** One iteration of the loop: what the model wrote and the tools it called. */
 	record LoopIteration(int number, String text, List<ToolCallExecuted> calls, String discardedFor,
-			boolean draftToBuildOn) {
+			boolean draftToBuildOn, boolean cut) {
+		/** An iteration the model's output limit did not cut. */
+		LoopIteration(int number, String text, List<ToolCallExecuted> calls, String discardedFor,
+				boolean draftToBuildOn) {
+			this(number, text, calls, discardedFor, draftToBuildOn, false);
+		}
+
 		/** An iteration whose text was shown to the user. */
 		LoopIteration(int number, String text, List<ToolCallExecuted> calls) {
 			this(number, text, calls, null, false);
@@ -198,6 +214,21 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	static final String EMPTY_ANSWER_STORY = "EMPTY ANSWER (the user saw nothing): the output limit was reached before any "
 			+ "text, the reasoning took it all. Its tools' results are not kept here: call again only what the answer "
 			+ "needs, with focused searches rather than whole documents, keep the reasoning short and write the answer.";
+	/**
+	 * Why an iteration cut by the model's output limit, its reasoning having taken most of
+	 * it, is written again (see {@link CutAnswer}).
+	 */
+	static final String DISCARDED_CUT = "This answer was cut by the output limit, its reasoning took most of it: write "
+			+ "the whole answer again from its beginning, keeping the reasoning short.";
+	/**
+	 * Where, in the streamed answer, the one written again after a cut one starts: a
+	 * character no text has, on a line of its own, parted by a rule once the answer is
+	 * guarded (see {@link #createResponse}).
+	 */
+	static final String ANSWER_RESTART_MARK = "\uE000";
+	static final String ANSWER_RESTART = "\n\n" + ANSWER_RESTART_MARK + "\n\n";
+	/** What the mark becomes in the answer the user sees while it streams. */
+	static final String ANSWER_RESTART_RULE = "---";
 
 	static final String DISCARDED_WITHOUT_EVIDENCE = "This answer was discarded, the user never saw it: it used no search tool, "
 			+ "while the user asked to search or for an analysis, which must rest on what the sources contain now (the chat "
@@ -546,11 +577,28 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			}
 			return keep;
 		});
+		// the answer written again after a cut one is the answer: the cut one, shown as it
+		// streamed, is parted from it by a rule (see iteration(...))
+		final AtomicInteger restartAt = new AtomicInteger(-1);
+		final AtomicInteger streamed = new AtomicInteger();
+		text = text.map(chunk -> {
+			final int mark = chunk.indexOf(ANSWER_RESTART_MARK);
+			if (mark < 0) {
+				streamed.addAndGet(chunk.length());
+				return chunk;
+			}
+			final String parted = chunk.substring(0, mark) + ANSWER_RESTART_RULE
+					+ chunk.substring(mark + ANSWER_RESTART_MARK.length());
+			restartAt.set(streamed.get() + mark + ANSWER_RESTART_RULE.length());
+			streamed.addAndGet(parted.length());
+			return parted;
+		});
 		final GeboChatResponse response = new GeboChatResponse();
 		return renderOutputStream(text, response, session, contextAgentPersona, notificationSink, callBacksListener)
 				.doOnNext(operation -> {
 					if (operation != null && operation.getData() != null
 							&& operation.getData().getContent() == response) {
+						keepTheAnswerWrittenAgain(response, restartAt.get());
 						final int before = response.getDocumentsRef() != null ? response.getDocumentsRef().size() : 0;
 						// the documents the answer rests on, not every one the tools returned
 						response.setDocumentsRef(ToolsFoundDocuments.mergeInto(response.getDocumentsRef(),
@@ -568,8 +616,41 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						warnAboutAnswerWithoutSearch(response, toolDocuments);
 						warnAboutThinCoverage(response, coverage);
 						warnAboutEmptyAnswer(response);
+						warnAboutCutAnswer(response, history);
 					}
 				});
+	}
+
+	/**
+	 * The answer written again after a cut one ({@code restartAt}, where it starts in the
+	 * streamed text, -1 for none) kept as the answer, the user told it was written again.
+	 */
+	protected void keepTheAnswerWrittenAgain(GeboChatResponse response, int restartAt) {
+		final String answer = response.getQueryResponse();
+		if (restartAt < 0 || answer == null || restartAt > answer.length()) {
+			return;
+		}
+		response.setQueryResponse(answer.substring(restartAt).stripLeading());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agentic loop agent id:" + getId() + " the answer written again is kept: " + restartAt
+					+ " character(s) of the cut one left out of " + answer.length());
+		}
+		if (response.getBackendMessages() != null) {
+			response.getBackendMessages().add(CutAnswer.writtenAgainNote());
+		}
+	}
+
+	/**
+	 * Tells the user, with a warning on the answer, that the model's output limit cut it
+	 * and it was not written again: mostly answer (a model looping), no lower thinking
+	 * level to ask, written again already or no iteration left.
+	 */
+	protected void warnAboutCutAnswer(GeboChatResponse response, List<LoopIteration> history) {
+		if (response.getBackendMessages() == null || history.stream().noneMatch(i -> !i.discarded() && i.cut())) {
+			return;
+		}
+		LOGGER.warn("Agentic loop agent id:" + getId() + " the answer was cut by the output limit: the user is told");
+		response.getBackendMessages().add(CutAnswer.incompleteWarning());
 	}
 
 	/**
@@ -1161,15 +1242,24 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				LOGGER.trace(String.valueOf(params.get(AGENT_SESSION_STORY_PROMPT_PARAM)));
 				LOGGER.trace("</AGENTIC_LOOP_STORY>");
 			}
+			// why the model stopped writing, and its reasoning, streamed to the user as it comes
+			final AtomicReference<String> finishReason = new AtomicReference<>();
+			final ThinkingStream thinking = new ThinkingStream();
+			final ISinkUIEmitter ui = notificationSink instanceof ISinkUIEmitter emitter ? emitter : null;
 			Flux<String> modelText;
 			try {
 				// the tools' results of this iteration pile up in its model call: they may take
 				// what the loop's budget leaves after this iteration's own placeholders
-				modelText = callLLMReactive(agentModel, agentPrompt,
+				modelText = callLLMReactiveResponses(agentModel, agentPrompt,
 						chatRequestContext != null
 								? chatRequestContext.withToolsRoom(ToolsTokenBudget.leftForTools(budget, params))
 								: null,
-						params);
+						params).map(response -> chunkText(response, finishReason, thinking, ui))
+						.filter(chunk -> !chunk.isEmpty()).concatWith(Flux.defer(() -> {
+							// a reasoning no text came after ends with the model's output
+							thinkingTo(ui, thinking.complete());
+							return Flux.<String>empty();
+						}));
 			} catch (LLMConfigException e) {
 				return Flux.error(e);
 			}
@@ -1192,6 +1282,13 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				List<ToolCallExecuted> calls = callBacksListener.getCalls();
 				final List<ToolCallExecuted> iterationCalls = new ArrayList<>(
 						calls.subList(Math.min(callsBefore, calls.size()), calls.size()));
+				// the model's output limit cut this iteration (see CutAnswer)
+				final boolean cut = CutAnswer.isCut(finishReason.get());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + number + " finish reason:"
+							+ finishReason.get() + " after " + text.length() + " text and " + thinking.writtenChars()
+							+ " reasoning character(s)");
+				}
 				// held for a deep search coverage to complete: the sources were searched
 				final String coverageNote = coverageWatch.pending();
 				final boolean heldForCoverage = !open[0] && coverageNote != null
@@ -1252,13 +1349,17 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					if (number < maxIterations && !previousEmpty) {
 						// nothing to show: the model's output was cut before any text, written once more
 						history.add(new LoopIteration(number, text.toString(), iterationCalls, DISCARDED_EMPTY));
+						// cut by the output limit: written again asking for less reasoning, when it can be asked
+						final IGConfigurableChatModel againModel = cut ? lowerThinking(agentModel) : null;
 						LOGGER.warn("Agentic loop agent id:" + getId() + " iteration " + number + " wrote no text after "
 								+ iterationCalls.size() + " tool call(s) (the output limit may have been reached while "
-								+ "reasoning): writing it in iteration " + (number + 1));
+								+ "reasoning, finish reason " + finishReason.get() + "): writing it in iteration "
+								+ (number + 1) + (againModel != null ? " with less reasoning" : ""));
 						notificationSink.next(
 								"Agent: " + contextAgentPersona.getNetworkAgentName() + " writes the answer again..",
 								ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
-						return asUser(runAs, iteration(number + 1, maxIterations, budget, history, agentModel,
+						return asUser(runAs, iteration(number + 1, maxIterations, budget, history,
+								againModel != null ? againModel : agentModel,
 								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
 								deliverableParams, SourceGate.continuing(gate.coverage()), runAs));
 					}
@@ -1266,7 +1367,39 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 							+ (previousEmpty ? " again" : "") + (number < maxIterations ? "" : ", the last one")
 							+ ": the answer is empty");
 				}
-				history.add(new LoopIteration(number, text.toString(), iterationCalls));
+				if (cut && !text.toString().isBlank()) {
+					final boolean writtenAgainBefore = history.stream()
+							.anyMatch(i -> DISCARDED_CUT.equals(i.discardedFor()));
+					final IGConfigurableChatModel againModel = !writtenAgainBefore && number < maxIterations
+							&& CutAnswer.reasoningTookTheBudget(thinking.writtenChars(), text.length())
+									? lowerThinking(agentModel)
+									: null;
+					if (againModel != null) {
+						// the cut draft is kept: the next iteration writes the whole answer again
+						history.add(new LoopIteration(number, text.toString(), iterationCalls, DISCARDED_CUT, true));
+						LOGGER.warn("Agentic loop agent id:" + getId() + " iteration " + number
+								+ " cut by the output limit (finish reason " + finishReason.get() + ") after "
+								+ text.length() + " text and " + thinking.writtenChars()
+								+ " reasoning character(s): written again with less reasoning in iteration "
+								+ (number + 1));
+						notificationSink.next(
+								"Agent: " + contextAgentPersona.getNetworkAgentName() + " writes the answer again..",
+								ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
+						// what the user saw of the cut answer ends here; a held one was never shown
+						final Flux<String> restart = open[0] ? Flux.just(ANSWER_RESTART) : Flux.<String>empty();
+						return restart.concatWith(asUser(runAs, iteration(number + 1, maxIterations, budget, history,
+								againModel, agentPrompt, chatRequestContext, contextAgentPersona, notificationSink,
+								callBacksListener, deliverableParams, SourceGate.continuing(gate.coverage()), runAs)));
+					}
+					LOGGER.warn("Agentic loop agent id:" + getId() + " iteration " + number
+							+ " cut by the output limit (finish reason " + finishReason.get() + ") after " + text.length()
+							+ " text and " + thinking.writtenChars() + " reasoning character(s), not written again ("
+							+ (writtenAgainBefore ? "written again already"
+									: number < maxIterations ? "mostly text, or no lower thinking level to ask"
+											: "no iteration left")
+							+ "): the user is told it is incomplete");
+				}
+				history.add(new LoopIteration(number, text.toString(), iterationCalls, null, false, cut));
 				final Flux<String> releasedText = released;
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<AGENTIC_LOOP_ITERATION number=" + number + ">");
@@ -1359,6 +1492,92 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			});
 			return visible.concatWith(next);
 		});
+	}
+
+	/**
+	 * The model's answer to an iteration as it streams, with what its text alone does not
+	 * carry: its reasoning and why it stopped.
+	 */
+	protected Flux<ChatResponse> callLLMReactiveResponses(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params)
+			throws LLMConfigException {
+		return chatModel.streamResponse(prompt, params, context);
+	}
+
+	/**
+	 * The text of a streamed chunk: its reasoning sent to the user ({@code ui}, null when
+	 * the request has no chat to show it in), why the model stopped kept.
+	 */
+	private String chunkText(ChatResponse response, AtomicReference<String> finishReason, ThinkingStream thinking,
+			ISinkUIEmitter ui) {
+		if (response == null || response.getResults() == null) {
+			return "";
+		}
+		final StringBuilder out = new StringBuilder();
+		for (Generation generation : response.getResults()) {
+			final String finish = generation.getMetadata() != null ? generation.getMetadata().getFinishReason() : null;
+			if (finish != null && !finish.isBlank()) {
+				finishReason.set(finish);
+			}
+			if (generation.getOutput() == null) {
+				continue;
+			}
+			final Object reasoning = generation.getOutput().getMetadata() != null
+					? generation.getOutput().getMetadata().get(ThinkingStream.REASONING_CONTENT_METADATA)
+					: null;
+			if (reasoning instanceof String soFar) {
+				thinkingTo(ui, thinking.reasoning(soFar));
+			}
+			if (generation.getOutput().getText() != null) {
+				out.append(generation.getOutput().getText());
+			}
+		}
+		if (!out.toString().isBlank()) {
+			// the text starts: the reasoning ended
+			thinkingTo(ui, thinking.complete());
+		}
+		return out.toString();
+	}
+
+	/** The reasoning events sent to the user's chat, never failing the answer. */
+	private void thinkingTo(ISinkUIEmitter ui, List<GThinkingEvent> events) {
+		if (ui == null || events.isEmpty()) {
+			return;
+		}
+		try {
+			for (GThinkingEvent event : events) {
+				ui.next(new GeboChatMessageEnvelope<GThinkingEvent>(event));
+			}
+		} catch (RuntimeException e) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agentic loop agent id:" + getId() + " the reasoning could not be sent to the chat: "
+						+ e.getMessage());
+			}
+		}
+	}
+
+	/**
+	 * The agent's model asked for one thinking level less (see {@link CutAnswer#lower}),
+	 * null when there is none to ask or it is not this agent's running model.
+	 */
+	protected IGConfigurableChatModel lowerThinking(IGConfigurableChatModel agentModel) {
+		if (agentModel == null || !(agentModel.getConfig() instanceof GBaseChatModelConfig modelConfig)) {
+			return null;
+		}
+		final ChatModelThinkingOption lower = CutAnswer.lower(modelConfig.getThinking());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agentic loop agent id:" + getId() + " model thinking " + modelConfig.getThinking()
+					+ ", one level less: " + lower);
+		}
+		if (lower == null) {
+			return null;
+		}
+		try {
+			return withThinking(agentModel, lower);
+		} catch (LLMConfigException | RuntimeException e) {
+			LOGGER.error("Agentic loop agent id:" + getId() + " cannot ask its model for thinking " + lower, e);
+			return null;
+		}
 	}
 
 	/**

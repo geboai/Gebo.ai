@@ -18,15 +18,18 @@ import ai.gebo.model.GUserMessage;
  * thinking level one step lower; otherwise (a model looping, or no lower level to ask)
  * the user is warned the answer is incomplete.
  */
-final class CutAnswer {
+public final class CutAnswer {
 	/** The finish reasons of a cut answer: OpenAI-style providers and Ollama, Anthropic, Google. */
 	private static final String[] CUT_REASONS = { "LENGTH", "MAX_TOKENS" };
+
+	/** What parts, while it streams, the cut answer from the one written again. */
+	public static final String SEPARATOR = "\n\n---\n\n";
 
 	private CutAnswer() {
 	}
 
 	/** Whether the model stopped because its generated tokens ran out. */
-	static boolean isCut(String finishReason) {
+	public static boolean isCut(String finishReason) {
 		if (finishReason == null) {
 			return false;
 		}
@@ -40,7 +43,7 @@ final class CutAnswer {
 	}
 
 	/** Whether the reasoning took the budget: more of it written than of the answer. */
-	static boolean reasoningTookTheBudget(long reasoningChars, long answerChars) {
+	public static boolean reasoningTookTheBudget(long reasoningChars, long answerChars) {
 		return reasoningChars > answerChars;
 	}
 
@@ -48,7 +51,7 @@ final class CutAnswer {
 	 * The thinking level one step below the configured one, null when there is none lower
 	 * that can be asked: no thinking has no portable spelling across providers.
 	 */
-	static ChatModelThinkingOption lower(ChatModelThinkingOption configured) {
+	public static ChatModelThinkingOption lower(ChatModelThinkingOption configured) {
 		if (configured == null) {
 			return ChatModelThinkingOption.LOW_THINKING;
 		}
@@ -66,13 +69,13 @@ final class CutAnswer {
 	}
 
 	/** The note telling the user the answer is written again. */
-	static GUserMessage writtenAgainNote() {
+	public static GUserMessage writtenAgainNote() {
 		return GUserMessage.infoMessage("Answer written again",
 				"The model used up the tokens it can generate reasoning, so the answer was cut: it is written again with less reasoning.");
 	}
 
 	/** The warning telling the user the answer is incomplete. */
-	static GUserMessage incompleteWarning() {
+	public static GUserMessage incompleteWarning() {
 		return GUserMessage.warnMessage("Answer incomplete",
 				"The model reached the maximum tokens it can generate: the answer was cut.");
 	}

@@ -1,7 +1,10 @@
 package ai.gebo.architecture.agents.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -20,6 +23,7 @@ import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -43,6 +47,34 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, runtimeBinder, securityService, agentRoleDao,
 				rendererFactory);
 
+	}
+
+	/** A copy of an agent's model asked for another thinking level. */
+	@FunctionalInterface
+	protected static interface ThinkingVariant {
+		IGConfigurableChatModel with(ChatModelThinkingOption thinking) throws LLMConfigException;
+	}
+
+	/**
+	 * How to copy the model of each running execution with another thinking level, its
+	 * options otherwise the same (tools, their calling manager bound to the execution's
+	 * listener, the execution's own tools): weak, an entry goes with its model.
+	 */
+	private final Map<IGConfigurableChatModel, ThinkingVariant> thinkingVariants = Collections
+			.synchronizedMap(new WeakHashMap<>());
+
+	/**
+	 * The model of a running execution of this agent ({@code agentModel}, as given to
+	 * {@link #createResponse}) asked for another thinking level, null when it is not one.
+	 */
+	protected IGConfigurableChatModel withThinking(IGConfigurableChatModel agentModel, ChatModelThinkingOption thinking)
+			throws LLMConfigException {
+		final ThinkingVariant variant = agentModel != null ? thinkingVariants.get(agentModel) : null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("withThinking(...) agent id:" + getId() + " thinking:" + thinking + " known model:"
+					+ (variant != null));
+		}
+		return variant != null ? variant.with(thinking) : null;
 	}
 
 	/**
@@ -130,6 +162,12 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
 				createToolCallingManager(callBacksListener, allFunctions, additionalTools, runAs), additionalTools);
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
+		final IGConfigurableChatModel baseModel = copiedModel;
+		thinkingVariants.put(agentModel,
+				thinking -> baseModel.cloneWithOptions(getId(),
+						new ChatModelConfigOptions(configOptions.getTemperature(), configOptions.getTopP(), thinking,
+								configOptions.getToolsName(), configOptions.getToolCallingManager(),
+								configOptions.getAdditionalTools())));
 
 		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
 				agentConfig.getMainLoopPromptUseCode(), false);

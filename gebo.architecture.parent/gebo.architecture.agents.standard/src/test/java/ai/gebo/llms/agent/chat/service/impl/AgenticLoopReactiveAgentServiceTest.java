@@ -91,6 +91,17 @@ class AgenticLoopReactiveAgentServiceTest {
 			return Flux.fromIterable(answers.get(index));
 		}
 
+		/** The scripted text, as the model's streamed chunks. */
+		@Override
+		protected Flux<org.springframework.ai.chat.model.ChatResponse> callLLMReactiveResponses(
+				IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt, IChatRequestContext context,
+				Map<String, Object> params) {
+			return callLLMReactive(chatModel, prompt, context, params)
+					.map(text -> new org.springframework.ai.chat.model.ChatResponse(List.of(
+							new org.springframework.ai.chat.model.Generation(
+									new org.springframework.ai.chat.messages.AssistantMessage(text)))));
+		}
+
 		ToolCallsListener listenerFor(IChatRequestContext context) {
 			return agentToolCallsListener(context);
 		}
