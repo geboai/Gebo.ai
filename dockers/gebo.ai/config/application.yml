@@ -338,6 +338,11 @@ ai.gebo.deepsearch.sufficiency-check-enabled: true
 # budget) takes this share of it; the rest is left to the token estimation error and to what
 # the model writes (0.7 when not set; 0 < factor <= 1)
 ai.gebo.llms.tokens-budget.factor: 0.7
+# The release of what the chunking sessions leave behind: the cached chunks and cached
+# document copies whose session no longer exists, and the cache files no record names, are
+# deleted once older than this many seconds, which is also the interval between two checks
+# (300 when not set): it covers the moments a distributed run has no settled state
+ai.gebo.documents-cache.orphans.grace-seconds: 300
 # Share of an analysis batch one piece of a document read whole (chat with documents) fills,
 # and the least batch budget an analysis lane goes on with (0.25 when not set; 0 < factor < 1)
 ai.gebo.deepsearch.chunk-filling-factor: 0.25
