@@ -5106,6 +5106,14 @@
       "fileExportLoaded": {
         "summary": "File exported",
         "detail": "Go to browser downloads section"
+      },
+      "26d2e86337c5e72dabe92cc45f3e636b2059877ad337543c662950a22f3f4304": {
+        "summary": "Answer written again",
+        "detail": "The model used up the tokens it can generate reasoning, so the answer was cut: it is written again with less reasoning."
+      },
+      "f4827f476f0bd2b6537f7506ed61c15ad9cd5092a746fcee775837b6c2d88d56": {
+        "summary": "Answer incomplete",
+        "detail": "The model reached the maximum tokens it can generate: the answer was cut."
       }
     }
   },

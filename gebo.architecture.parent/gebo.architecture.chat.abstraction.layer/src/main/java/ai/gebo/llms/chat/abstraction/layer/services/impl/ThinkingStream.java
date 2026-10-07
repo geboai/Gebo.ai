@@ -34,6 +34,8 @@ final class ThinkingStream {
 	private final StringBuilder pending = new StringBuilder();
 	private final StringBuilder whole = new StringBuilder();
 	private boolean active = false;
+	/** All the reasoning written so far, every round of it. */
+	private long written = 0;
 
 	/** Events for the reasoning field of a chunk: all the reasoning so far. */
 	List<GThinkingEvent> reasoning(String soFar) {
@@ -82,6 +84,11 @@ final class ThinkingStream {
 		return out;
 	}
 
+	/** The characters of reasoning the model wrote so far, every round of it. */
+	long writtenChars() {
+		return written;
+	}
+
 	private List<GThinkingEvent> add(String delta) {
 		if (delta.isEmpty()) {
 			return List.of();
@@ -90,6 +97,7 @@ final class ThinkingStream {
 			LOGGER.debug("add(...) the model is reasoning: its reasoning is streamed");
 		}
 		active = true;
+		written += delta.length();
 		pending.append(delta);
 		whole.append(delta);
 		if (pending.length() >= FRAGMENT_CHARS || delta.indexOf('\n') >= 0) {
