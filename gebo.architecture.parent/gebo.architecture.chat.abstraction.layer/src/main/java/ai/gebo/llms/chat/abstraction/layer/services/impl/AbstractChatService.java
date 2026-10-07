@@ -53,6 +53,7 @@ import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigura
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -344,15 +345,31 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			return startEnvelope;
 		});
 
-		Flux<GeboChatMessageEnvelope> bodyFlux = res.map(x -> {
+		// the reasoning the model writes before its answer, streamed to the user as it comes
+		final ThinkingStream thinking = new ThinkingStream();
+		Flux<GeboChatMessageEnvelope> bodyFlux = res.concatMap(x -> {
 
 			GeboChatMessageEnvelope<String> envelope = new GeboChatMessageEnvelope<String>();
-			GeboChatMessageEnvelope returned = envelope;
+			final List<GeboChatMessageEnvelope> out = new ArrayList<>();
 			final StringBuffer contentSegment = new StringBuffer("");
 			if (x != null && x.getResults() != null && !x.getResults().isEmpty()) {
 				for (Generation rs : x.getResults()) {
+					// why the model stopped writing (stop, length...), on the chunk that ends it
+					if (LOGGER.isDebugEnabled() && rs.getMetadata() != null && rs.getMetadata().getFinishReason() != null
+							&& !rs.getMetadata().getFinishReason().isBlank()) {
+						LOGGER.debug("Streamed answer finish reason: " + rs.getMetadata().getFinishReason() + " after "
+								+ buffer.length() + " character(s)");
+					}
 					if (rs.getOutput() != null) {
 						MessageType type = rs.getOutput().getMessageType();
+						// the reasoning given in a field of its own (reasoning_content), all of it so
+						// far on each chunk: Spring AI's OpenAI client keeps it as reasoningContent
+						final Object reasoning = rs.getOutput().getMetadata() != null
+								? rs.getOutput().getMetadata().get(REASONING_CONTENT_METADATA)
+								: null;
+						if (reasoning instanceof String soFar) {
+							thinkingEvents(out, thinking.reasoning(soFar));
+						}
 
 						String text = rs.getOutput().getText();
 						if (text != null) {
@@ -378,14 +395,22 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			String thisText = contentSegment.toString();
 			buffer.append(thisText);
 			if (!skipThinkingMarkup || ClientChatCallUtil.isAfterThinking(buffer.toString())) {
+				if (!thisText.isBlank()) {
+					// the answer starts: the reasoning ended
+					thinkingEvents(out, thinking.complete());
+				}
 				// a quotation still open is held until it closes
 				envelope.setContent(quoting != null ? quoting.next(thisText) : thisText);
+				out.add(envelope);
+			} else {
+				// the text before the end of the thinking tags is the reasoning
+				thinkingEvents(out, thinking.inline(thisText));
 			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Sending a String content:" + contentSegment.toString());
 			}
 
-			return returned;
+			return Flux.fromIterable(out);
 		}).onErrorResume(exc -> {
 			final String msg = "Error while streaming chat respose";
 			LOGGER.error(msg, exc);
@@ -396,6 +421,12 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		}).filter(x -> {
 			return x.getContentObjectType() != null && x.getContent() != null && x.getContent() != null
 					&& x.getContent().toString().trim().length() > 0;
+		});
+		// a reasoning the answer never came after (the model was cut while reasoning) ends here
+		Flux<GeboChatMessageEnvelope> thinkingEndFlux = Flux.defer(() -> {
+			final List<GeboChatMessageEnvelope> out = new ArrayList<>();
+			thinkingEvents(out, thinking.complete());
+			return Flux.fromIterable(out);
 		});
 		// what the quotations rendering still holds once the answer ended
 		Mono<GeboChatMessageEnvelope> heldFlux = Mono.fromSupplier(() -> {
@@ -440,7 +471,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			}
 			return finalEnvelope;
 		});
-		Flux<GeboChatMessageEnvelope> responseFlux = startFlux.concatWith(bodyFlux).concatWith(heldFlux)
+		Flux<GeboChatMessageEnvelope> responseFlux = startFlux.concatWith(bodyFlux).concatWith(thinkingEndFlux)
+				.concatWith(heldFlux)
 				.concatWith(trailingFlux)
 				.concatWithValues(GeboChatMessageEnvelope.FINAL_MESSAGE);
 		responseFlux = responseFlux.doOnComplete(() -> {
@@ -454,6 +486,19 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			LOGGER.debug("End composeFlux(....)");
 		}
 		return responseFlux;
+	}
+
+	/**
+	 * The metadata key under which Spring AI's OpenAI client keeps the reasoning of a
+	 * streamed answer (the reasoning_content or reasoning field of the provider).
+	 */
+	static final String REASONING_CONTENT_METADATA = "reasoningContent";
+
+	/** The reasoning events as envelopes, added to the ones a chunk gives. */
+	private static void thinkingEvents(List<GeboChatMessageEnvelope> out, List<GThinkingEvent> events) {
+		for (GThinkingEvent event : events) {
+			out.add(new GeboChatMessageEnvelope<GThinkingEvent>(event));
+		}
 	}
 
 	/**

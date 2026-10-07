@@ -3199,6 +3199,9 @@
       },
       "CalledFunctionsListBtn": {
         "help": "Show or hide the functions the AI called"
+      },
+      "ThinkingLabel": {
+        "label": "Reasoning:"
       }
     },
     "ChangeDescriptionComponent": {

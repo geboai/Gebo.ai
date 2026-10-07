@@ -52,6 +52,9 @@ interface GeboChatInteraction {
     loading?: boolean;
     pipelineRouterDecisionCode?: string;
     streamingModelName?: string;
+    // The reasoning the model writes before its answer, as it streams: accumulated and shown in
+    // the answer's place until the answer starts, never part of the answer.
+    streamingThinking?: string;
 };
 
 /**
@@ -1447,9 +1450,19 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             flushText();
                             this.handleGeboChatResponse(interaction, recvd.content, r, suggestChatDescription, doSpeach, recvd.lastMessage);
                         } break;
+                        case "GThinkingEvent": {
+                            if (recvd.content?.completed) {
+                                // the reasoning ended: the answer takes its place
+                                interaction.streamingThinking = undefined;
+                            } else if (recvd.content?.text) {
+                                interaction.streamingThinking = (interaction.streamingThinking ?? "") + recvd.content.text;
+                                this.scrollToBottom();
+                            }
+                        } break;
                     }
                 }
                 if (recvd.lastMessage === true) {
+                    interaction.streamingThinking = undefined;
                     flushText();
                     interaction.loading = false;
                     this.chatStreaming = false;

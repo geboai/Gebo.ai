@@ -89,6 +89,12 @@
             {{interaction?.response?.usedChatModelCode || interaction?.streamingModelName || modelName }}
           </div>
 
+          @if (interaction?.streamingThinking) {
+            <div class="gebo-ai-reusable-chat__interaction-thinking">
+              <span id="ThinkingLabel" class="gebo-ai-reusable-chat__interaction-thinking-label" gebo-ai-text>Reasoning:</span>
+              <div class="gebo-ai-reusable-chat__interaction-thinking-text"><i>{{interaction.streamingThinking}}</i></div>
+            </div>
+          }
           <markdown lineNumbers lineHighlight mermaid clipboard [mermaidOptions]="options"
           [data]="interaction?.response?.queryResponse"></markdown>
 
