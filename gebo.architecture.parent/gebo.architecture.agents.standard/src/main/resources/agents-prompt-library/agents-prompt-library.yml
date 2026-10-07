@@ -39,6 +39,7 @@ ai.gebo.agents.prompts.library:
     agentPrompt: true
     systemReference: /agents-prompt-library/en/default-chat-agent-system-prompt.txt
     userReference: /agents-prompt-library/en/default-chat-agent-user-prompt.txt
+    toolsResultsReference: /agents-prompt-library/en/default-chat-agent-tools-results-prompt.txt
     chatHistory: REQUIRED
     contextDocuments: REQUIRED
     toolsCalling: REQUIRED
@@ -49,6 +50,7 @@ ai.gebo.agents.prompts.library:
     agentPrompt: true
     systemReference: /agents-prompt-library/en/pure-chat-agent-system-prompt.txt
     userReference: /agents-prompt-library/en/pure-chat-agent-user-prompt.txt
+    toolsResultsReference: /agents-prompt-library/en/pure-chat-agent-tools-results-prompt.txt
     chatHistory: REQUIRED
     contextDocuments: REQUIRED
     toolsCalling: REQUIRED
