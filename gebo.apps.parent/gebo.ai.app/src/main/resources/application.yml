@@ -436,10 +436,11 @@ ai.gebo.rag-threashold-autotune.config.enabled: false
 # too low for this workload: a SUMMARY deliverable was cut mid-stream at exactly
 # 80.008 s, and a dropped stream is never retried because the tokens already emitted
 # cannot be replayed - the answer simply ends where it was. Raised so that a multi
-# cycle report has room to finish. See docs/LLMS-NETWORKING-PARAMS.md.
+# cycle report has room to finish; 180000 ms then cut a deep search analysis of about
+# 110k tokens of input at exactly 3 minutes. See docs/LLMS-NETWORKING-PARAMS.md.
 ai.gebo.llms.default.clients.config:
   web-client-config:
-    response-timeout: 180000
+    response-timeout: 240000
 
 ai.gebo.ragsearch.config:
   # Hybrid retrieval: run the lexical (full text) leg beside the semantic one and

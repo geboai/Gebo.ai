@@ -14,7 +14,7 @@
 | --- | --- |
 | Config prefix | `ai.gebo.llms.default.clients.config` — `GeboDefaultLlmsServiceClientsProviderConfig` |
 | `web-client-config.connect-timeout` | `30000` ms |
-| `web-client-config.response-timeout` | `80000` ms — used as **both** read and write timeout |
+| `web-client-config.response-timeout` | `240000` ms (4 minutes; `80000` ms before 2026-10-07) — used as **both** read and write timeout |
 | `retry-config.max-attempts` | `5` |
 | `retry-config.backoff-interval` | `5000` ms |
 | `retry-config.retry-timeout` | `80000` ms |
