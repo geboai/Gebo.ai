@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.services.AgentException;
@@ -38,6 +39,7 @@ import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
+import ai.gebo.system.ingestion.IGLanguageDetector;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
@@ -68,6 +70,12 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	protected final IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService;
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.class);
+	/**
+	 * The platform's language detector (the one the ingestion tags the documents
+	 * with), naming the language of the user's message for the agents' prompts; null
+	 * where it is not deployed, the prompts then ask the model to deduce it.
+	 */
+	private IGLanguageDetector languageDetector = null;
 
 	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
 			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
@@ -134,6 +142,11 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		}
 	}
 
+	@Autowired(required = false)
+	public void setLanguageDetector(IGLanguageDetector languageDetector) {
+		this.languageDetector = languageDetector;
+	}
+
 	/**
 	 * Builds the environment map seeded into the agents network session
 	 * ({@code session.getEnvironment()}). The default network contributes the
@@ -158,11 +171,17 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 				Boolean.TRUE.equals(request.getSearchRequested()));
 		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN,
 				Boolean.TRUE.equals(request.getSearchForbidden()));
+		// detected on the user's own text, not on the rewritten request
+		final String userLanguage = UserLanguage.of(languageDetector, request.getQuery());
+		if (userLanguage != null) {
+			environment.put(StandardAgentsNetworkEnvironmentEntries.USER_LANGUAGE, userLanguage);
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End buildNetworkEnvironment(...) knowledgeBases:" + knowledgeBaseCodes.size() + " userIntent:"
 					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT) + " searchRequested:"
 					+ environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED) + " searchForbidden:"
-					+ environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN));
+					+ environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN) + " userLanguage:"
+					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_LANGUAGE));
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("Knowledge base codes seeded into the network environment: " + knowledgeBaseCodes);

@@ -1160,4 +1160,39 @@ class AgenticLoopReactiveAgentServiceTest {
 				strip(stripper, "The ANSWER-DOCUMENTS line is internal. ", STOP));
 		assertEquals(null, stripper.getAnswerDocuments());
 	}
+
+	// ---------------------------------------------------------------- the answer's language
+
+	@Test
+	void theAnswersLanguageIsTheDetectedOneOrLeftToTheModel() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
+		AgentsCollaborationSessionContext session = mock(AgentsCollaborationSessionContext.class);
+		Map<String, Object> environment = new HashMap<>();
+		when(session.getEnvironment()).thenReturn(environment);
+
+		assertEquals(AgenticLoopReactiveAgentServiceImpl.USER_LANGUAGE_UNDETECTED, agent.sessionUserLanguage(session));
+		assertEquals(AgenticLoopReactiveAgentServiceImpl.USER_LANGUAGE_UNDETECTED, agent.sessionUserLanguage(null));
+		environment.put(StandardAgentsNetworkEnvironmentEntries.USER_LANGUAGE, "English");
+		assertEquals("English", agent.sessionUserLanguage(session));
+	}
+
+	@Test
+	void everyIterationNamesTheAnswersLanguage() {
+		AgentNetworkParticipant persona = mock(AgentNetworkParticipant.class);
+		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
+
+		ScriptedLoopAgent named = new ScriptedLoopAgent(List.of(List.of("4. " + STOP)));
+		Map<String, Object> deliverable = new HashMap<>(named.deliverableTemplateParams(DeliverableIntent.QA));
+		deliverable.put(AgenticLoopReactiveAgentServiceImpl.USER_LANGUAGE_PARAM, "English");
+		named.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), null, persona,
+				mock(INotificationSink.class), new ToolCallsListener(), deliverable).collectList().block();
+		assertEquals("English", named.receivedParams.get(0).get(AgenticLoopReactiveAgentServiceImpl.USER_LANGUAGE_PARAM));
+
+		// a loop started without the session's language still renders the prompts naming it
+		ScriptedLoopAgent unnamed = new ScriptedLoopAgent(List.of(List.of("4. " + STOP)));
+		unnamed.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), null, persona,
+				mock(INotificationSink.class), new ToolCallsListener()).collectList().block();
+		assertEquals(AgenticLoopReactiveAgentServiceImpl.USER_LANGUAGE_UNDETECTED,
+				unnamed.receivedParams.get(0).get(AgenticLoopReactiveAgentServiceImpl.USER_LANGUAGE_PARAM));
+	}
 }

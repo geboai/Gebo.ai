@@ -98,6 +98,10 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * of the long system prompt only, the model kept the prompt's defaults over them.
 	 */
 	static final String RULES_TO_FOLLOW_PARAM = "RULES_TO_FOLLOW";
+	/** The language the answer is written in, named (see {@link #sessionUserLanguage}). */
+	static final String USER_LANGUAGE_PARAM = "userLanguage";
+	/** What the prompts say of the answer's language when the user's one was not detected. */
+	static final String USER_LANGUAGE_UNDETECTED = "the language of the user's current request";
 	private static final String NEWLINE = "\r\n";
 
 	public AgenticLoopReactiveAgentServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsDao,
@@ -221,6 +225,18 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				? session.getEnvironment().get(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN)
 				: null;
 		return Boolean.TRUE.equals(value);
+	}
+
+	/**
+	 * The language the answer is written in, as the prompts name it: the one detected
+	 * on the user's message (see the shared session environment), otherwise "the
+	 * language of the user's current request", left to the model.
+	 */
+	protected String sessionUserLanguage(AgentsCollaborationSessionContext session) {
+		final Object value = session != null && session.getEnvironment() != null
+				? session.getEnvironment().get(StandardAgentsNetworkEnvironmentEntries.USER_LANGUAGE)
+				: null;
+		return value instanceof String language && !language.isBlank() ? language : USER_LANGUAGE_UNDETECTED;
 	}
 
 	/**
@@ -433,10 +449,13 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		// shapes every iteration, as it shapes the report writer's answer.
 		final DeliverableIntent userIntent = sessionUserIntent(session);
 		final boolean searchRequested = sessionSearchRequested(session);
-		final Map<String, Object> deliverableParams = deliverableTemplateParams(userIntent);
+		final Map<String, Object> deliverableParams = new HashMap<>(deliverableTemplateParams(userIntent));
+		// named for the prompts, the user template and the closing of the tools' results
+		deliverableParams.put(USER_LANGUAGE_PARAM, sessionUserLanguage(session));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Agentic loop agent id:" + getId() + " shapes its answer for the deliverable:"
-					+ userIntent.name() + ", search requested:" + searchRequested);
+					+ userIntent.name() + ", search requested:" + searchRequested + ", answer's language:"
+					+ deliverableParams.get(USER_LANGUAGE_PARAM));
 		}
 		final List<LoopIteration> history = new ArrayList<>();
 		// The search and deep search tools called by the loop add their documents to this
@@ -1087,6 +1106,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			params.put(AGENT_CONTROL_CONTINUE_PROMPT_PARAM, AGENT_CONTROL_MORE_TOOLS);
 			params.put(AGENT_SESSION_STORY_PROMPT_PARAM, loopStory(history, budget, collectorOf(chatRequestContext)));
 			params.put(RULES_TO_FOLLOW_PARAM, rulesToFollow(chatRequestContext));
+			// the prompts name the answer's language: never missing, whoever started the loop
+			params.putIfAbsent(USER_LANGUAGE_PARAM, USER_LANGUAGE_UNDETECTED);
 			final int callsBefore = callBacksListener.getCalls().size();
 			final ControlMarkerStripper stripper = new ControlMarkerStripper();
 			final StringBuilder text = new StringBuilder();

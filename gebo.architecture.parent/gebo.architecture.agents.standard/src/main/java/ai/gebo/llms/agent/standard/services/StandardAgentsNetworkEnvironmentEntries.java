@@ -16,6 +16,12 @@ public class StandardAgentsNetworkEnvironmentEntries {
 	 * understanding.
 	 */
 	public static final String SEARCH_FORBIDDEN = "SEARCH_FORBIDDEN";
+	/**
+	 * Shared-session environment key holding a {@code String}: the English name of the
+	 * language the user's message is written in (e.g. "English"), detected on the
+	 * user's own text; absent when the detection is not trusted.
+	 */
+	public static final String USER_LANGUAGE = "USER_LANGUAGE";
 
 	/**
 	 * Shared-session environment key holding a {@code Map<String, GResponseDocumentRef>}

@@ -12,6 +12,6 @@ the answer):
 # The user's current request
 {question}
 
-IMPORTANT: ALWAYS RESPOND WITH USER'S LANGUAGE (deducted from the request above), whatever the
-language of the documents and of the tools' results, unless the rules above or the user in this
-chat ask for another one; quotations stay in the language of their documents.
+IMPORTANT: ALWAYS RESPOND WITH USER'S LANGUAGE: {userLanguage}, whatever the language of the
+documents and of the tools' results, unless the rules above or the user in this chat ask for another
+one; quotations stay in the language of their documents.
