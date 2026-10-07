@@ -419,8 +419,13 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			exceptionEnvelope.setContent(userMessage);
 			return Flux.just(exceptionEnvelope);
 		}).filter(x -> {
-			return x.getContentObjectType() != null && x.getContent() != null && x.getContent() != null
-					&& x.getContent().toString().trim().length() > 0;
+			if (x.getContentObjectType() == null || x.getContent() == null) {
+				return false;
+			}
+			// a piece of the answer made only of line ends is part of it (paragraphs, headings,
+			// tables): only an empty one is dropped
+			return x.getContent() instanceof String text ? !text.isEmpty()
+					: x.getContent().toString().trim().length() > 0;
 		});
 		// a reasoning the answer never came after (the model was cut while reasoning) ends here
 		Flux<GeboChatMessageEnvelope> thinkingEndFlux = Flux.defer(() -> {
