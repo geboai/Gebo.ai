@@ -185,6 +185,18 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * because it used no tool giving the sources' evidence (see
 	 * {@link #needsEvidence(DeliverableIntent, boolean)}).
 	 */
+	/**
+	 * Why an iteration that wrote no text is discarded: the model's output was cut by
+	 * its output limit before any text (a reasoning model may spend it all reasoning on a
+	 * large context), the provider reporting it as a normal end.
+	 */
+	static final String DISCARDED_EMPTY = "This attempt wrote no text: its output was cut by the output limit before "
+			+ "any answer, its reasoning took it all.";
+	/** What the next iteration is told of an iteration that wrote no text. */
+	static final String EMPTY_ANSWER_STORY = "EMPTY ANSWER (the user saw nothing): the output limit was reached before any "
+			+ "text, the reasoning took it all. Its tools' results are not kept here: call again only what the answer "
+			+ "needs, with focused searches rather than whole documents, keep the reasoning short and write the answer.";
+
 	static final String DISCARDED_WITHOUT_EVIDENCE = "This answer was discarded, the user never saw it: it used no search tool, "
 			+ "while the user asked to search or for an analysis, which must rest on what the sources contain now (the chat "
 			+ "history is not a source). Search the sources with the tools first, then answer from what they return.";
@@ -541,8 +553,24 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						warnAboutRemovedAddresses(response, removedAddresses);
 						warnAboutAnswerWithoutSearch(response, toolDocuments);
 						warnAboutThinCoverage(response, coverage);
+						warnAboutEmptyAnswer(response);
 					}
 				});
+	}
+
+	/**
+	 * Tells the user, with a warning on the answer, that no answer could be written:
+	 * the model's output was cut before any text, also when written once more.
+	 */
+	protected void warnAboutEmptyAnswer(GeboChatResponse response) {
+		final Object text = response.getQueryResponse();
+		if ((text != null && !String.valueOf(text).isBlank()) || response.getBackendMessages() == null) {
+			return;
+		}
+		LOGGER.warn("Agentic loop agent id:" + getId() + " the answer is empty: the user is told");
+		response.getBackendMessages().add(GUserMessage.warnMessage("No answer written",
+				"The model wrote no answer: its output limit was reached before any text, its reasoning took it all. "
+						+ "Ask again, or narrow the question."));
 	}
 
 	/**
@@ -1204,6 +1232,26 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					}
 					return Flux.just(held.toString()).filter(chunk -> !chunk.isEmpty());
 				}
+				if (text.toString().isBlank() && !stripper.isContinueRequested()) {
+					final boolean previousEmpty = !history.isEmpty()
+							&& DISCARDED_EMPTY.equals(history.get(history.size() - 1).discardedFor());
+					if (number < maxIterations && !previousEmpty) {
+						// nothing to show: the model's output was cut before any text, written once more
+						history.add(new LoopIteration(number, text.toString(), iterationCalls, DISCARDED_EMPTY));
+						LOGGER.warn("Agentic loop agent id:" + getId() + " iteration " + number + " wrote no text after "
+								+ iterationCalls.size() + " tool call(s) (the output limit may have been reached while "
+								+ "reasoning): writing it in iteration " + (number + 1));
+						notificationSink.next(
+								"Agent: " + contextAgentPersona.getNetworkAgentName() + " writes the answer again..",
+								ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
+						return asUser(runAs, iteration(number + 1, maxIterations, budget, history, agentModel,
+								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
+								deliverableParams, SourceGate.continuing(gate.coverage()), runAs));
+					}
+					LOGGER.warn("Agentic loop agent id:" + getId() + " iteration " + number + " wrote no text"
+							+ (previousEmpty ? " again" : "") + (number < maxIterations ? "" : ", the last one")
+							+ ": the answer is empty");
+				}
 				history.add(new LoopIteration(number, text.toString(), iterationCalls));
 				final Flux<String> releasedText = released;
 				if (LOGGER.isTraceEnabled()) {
@@ -1532,6 +1580,9 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			}
 			if (!iteration.discarded()) {
 				piece.append("RESPONSE: ").append(iteration.text()).append(NEWLINE);
+			} else if (index == lastDraft && DISCARDED_EMPTY.equals(iteration.discardedFor())) {
+				// it wrote nothing: the next iteration writes the answer
+				piece.append(EMPTY_ANSWER_STORY).append(NEWLINE);
 			} else if (index == lastDraft && iteration.draftToBuildOn()) {
 				// written on the tools' results: the next iteration completes it
 				piece.append(DISCARDED_DRAFT).append(iteration.text()).append(NEWLINE);

@@ -1195,4 +1195,33 @@ class AgenticLoopReactiveAgentServiceTest {
 		assertEquals(AgenticLoopReactiveAgentServiceImpl.USER_LANGUAGE_UNDETECTED,
 				unnamed.receivedParams.get(0).get(AgenticLoopReactiveAgentServiceImpl.USER_LANGUAGE_PARAM));
 	}
+
+	// ---------------------------------------------------------------- an iteration writing no text
+
+	@Test
+	void anIterationWritingNoTextIsWrittenOnceMore() {
+		// the model's output cut before any text: only the control marker arrives
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of(STOP), List.of("4. " + STOP)));
+
+		assertEquals("4. ", run(agent, 3));
+		assertEquals(2, agent.receivedParams.size(), "written once more");
+		assertTrue(String.valueOf(agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM))
+				.contains(AgenticLoopReactiveAgentServiceImpl.EMPTY_ANSWER_STORY), "the next iteration is told why");
+	}
+
+	@Test
+	void anIterationWritingNoTextAgainEndsTheLoop() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of(STOP), List.of(STOP), List.of("never " + STOP)));
+
+		assertEquals("", run(agent, 5));
+		assertEquals(2, agent.receivedParams.size(), "once more, not more");
+	}
+
+	@Test
+	void theLastIterationWritingNoTextIsNotWrittenAgain() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of(STOP), List.of("never " + STOP)));
+
+		assertEquals("", run(agent, 1));
+		assertEquals(1, agent.receivedParams.size());
+	}
 }
