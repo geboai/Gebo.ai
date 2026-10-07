@@ -53,6 +53,7 @@ import ai.gebo.knowledgebase.repositories.uniqueid.VirtualFilesystemUniqueIds;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
+import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -77,6 +78,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.CutAnswer;
+import ai.gebo.llms.chat.abstraction.layer.session.model.IChatSessionEntryDocuments;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.ThinkingStream;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.model.DocumentMetaInfos;
@@ -603,6 +605,16 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						// the documents the answer rests on, not every one the tools returned
 						response.setDocumentsRef(ToolsFoundDocuments.mergeInto(response.getDocumentsRef(),
 								answerDocuments(toolDocuments, response.getQueryResponse())));
+						// the documents of the chat's earlier answers it names are given with it
+						final List<GResponseDocumentRef> earlier = citedEarlierDocuments(response.getQueryResponse(),
+								chatRequestContext);
+						if (!earlier.isEmpty()) {
+							response.setDocumentsRef(ToolsFoundDocuments.mergeInto(response.getDocumentsRef(), earlier));
+							if (LOGGER.isDebugEnabled()) {
+								LOGGER.debug("Agentic loop agent id:" + getId() + " answer names " + earlier.size()
+										+ " document(s) of the chat's earlier answers: given with it");
+							}
+						}
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("Agentic loop agent id:" + getId() + " answer documents: " + before
 									+ " from the session, " + response.getDocumentsRef().size()
@@ -1101,7 +1113,11 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		return names;
 	}
 
-	/** The file names of the chat's own documents (chosen or uploaded by the user). */
+	/**
+	 * The names of the chat's documents: its own (chosen or uploaded by the user) and the
+	 * ones its earlier answers rested on, read then: they stay valid for the chat, each
+	 * answer being one of what the next requests are given.
+	 */
 	static List<String> chatDocumentNames(IChatRequestContext chatRequestContext) {
 		final List<String> names = new ArrayList<>();
 		if (chatRequestContext != null && chatRequestContext.getDocuments() != null) {
@@ -1114,7 +1130,45 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				}
 			}
 		}
+		for (GResponseDocumentRef ref : earlierAnswersDocuments(chatRequestContext)) {
+			names.addAll(citableNames(ref));
+		}
 		return names;
+	}
+
+	/** The documents the chat's earlier answers rested on, as kept with its history. */
+	static List<GResponseDocumentRef> earlierAnswersDocuments(IChatRequestContext chatRequestContext) {
+		final List<GResponseDocumentRef> documents = new ArrayList<>();
+		final List<IChatSessionEntry> interactions = chatRequestContext != null ? chatRequestContext.getInteractions()
+				: null;
+		if (interactions != null) {
+			for (IChatSessionEntry interaction : interactions) {
+				if (interaction instanceof IChatSessionEntryDocuments withDocuments
+						&& withDocuments.getDocumentsRef() != null) {
+					documents.addAll(withDocuments.getDocumentsRef());
+				}
+			}
+		}
+		return documents;
+	}
+
+	/**
+	 * The documents of the chat's earlier answers this answer names: given with it, as
+	 * the documents it rests on.
+	 */
+	static List<GResponseDocumentRef> citedEarlierDocuments(String answer, IChatRequestContext chatRequestContext) {
+		final List<GResponseDocumentRef> cited = new ArrayList<>();
+		final int citedNames = unreadCitations(answer, List.of()).size();
+		if (citedNames == 0) {
+			return cited;
+		}
+		for (GResponseDocumentRef ref : earlierAnswersDocuments(chatRequestContext)) {
+			// one of the names the answer cites is this document's
+			if (unreadCitations(answer, citableNames(ref)).size() < citedNames) {
+				cited.add(ref);
+			}
+		}
+		return cited;
 	}
 
 	/**

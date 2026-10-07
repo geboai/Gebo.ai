@@ -87,7 +87,9 @@ public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateS
 		interaction.setUserTokenSize(length);
 		interaction.setUserIntent(request.getUserIntent());
 		interaction.setAssistant(response.getQueryResponse());
-		length = ITokensCountable.tokensEstimator.estimate(response.getQueryResponse());
+		// the documents the answer rested on: they stay valid for the chat
+		interaction.setDocumentsRef(CSSSimplefiedInteraction.keptDocuments(response.getDocumentsRef()));
+		length = ITokensCountable.tokensEstimator.estimate(response.getQueryResponse() + interaction.documentsNote());
 		interaction.setAssistantTokenSize(length);
 		interactions.add(interaction);
 		return session;

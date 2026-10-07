@@ -19,6 +19,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
+import ai.gebo.llms.chat.abstraction.layer.session.model.IChatSessionEntryDocuments;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -87,7 +88,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 	}
 
 	@AllArgsConstructor
-	static final class InteractionWrapper implements IChatSessionEntry {
+	static final class InteractionWrapper implements IChatSessionEntry, IChatSessionEntryDocuments {
 		CSSSimplefiedInteraction interaction = null;
 		String feedbackNote = null;
 
@@ -100,8 +101,15 @@ public class LLMChatRequestResources implements ITokensCountable {
 		@Override
 		public String getAssistant() {
 
-			String assistant = interaction.getAssistant() != null ? interaction.getAssistant() : "";
+			// the documents the answer rested on follow it: the model knows them as read then
+			String assistant = (interaction.getAssistant() != null ? interaction.getAssistant() : "")
+					+ interaction.documentsNote();
 			return feedbackNote != null ? assistant + feedbackNote : assistant;
+		}
+
+		@Override
+		public List<GResponseDocumentRef> getDocumentsRef() {
+			return interaction.getDocumentsRef() != null ? interaction.getDocumentsRef() : List.of();
 		}
 	}
 
