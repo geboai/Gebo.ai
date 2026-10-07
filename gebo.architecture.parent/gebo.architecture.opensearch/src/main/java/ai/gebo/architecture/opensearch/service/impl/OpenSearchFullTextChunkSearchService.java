@@ -29,6 +29,7 @@ import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
 import ai.gebo.architecture.fulltext.model.FullTextChunk;
 import ai.gebo.architecture.fulltext.model.FullTextChunkSearchHit;
 import ai.gebo.architecture.fulltext.model.FullTextDocument;
+import ai.gebo.architecture.opensearch.config.OpenSearchIndexBootstrapConfig;
 import ai.gebo.model.DocumentMetaInfos;
 
 import java.io.IOException;
@@ -182,8 +183,8 @@ public class OpenSearchFullTextChunkSearchService {
 
 	/**
 	 * Runs the search, logging the call at DEBUG and the query sent and the hits at
-	 * TRACE: every term of a query must match (operator AND, see buildMainQuery), so a
-	 * query with no hit is told apart from an index with nothing for these filters.
+	 * TRACE: most of a query's words must match (see buildMainQuery), so a query with no
+	 * hit is told apart from an index with nothing for these filters.
 	 */
 	private List<FullTextChunkSearchHit> runSearch(SearchRequest.Builder sb, Query finalQuery,
 			FullTextSearchMetaDataFilter filter, String what, int topK) throws OpenSearchException, IOException {
@@ -230,10 +231,28 @@ public class OpenSearchFullTextChunkSearchService {
 		}
 	}
 
-	private Query buildMainQuery(String q) {
-		return Query.of(qq -> qq.multiMatch(mm -> mm.query(q).fields("content^4", "document_title^2", "meta.*^0.5")
-				.operator(org.opensearch.client.opensearch._types.query_dsl.Operator.And)
-				.type(org.opensearch.client.opensearch._types.query_dsl.TextQueryType.BestFields)));
+	/**
+	 * How many of a query's words a passage must have: all of them up to two words, three
+	 * quarters of them above (OpenSearch's minimum_should_match).
+	 */
+	static final String MINIMUM_WORDS_MATCHING = "2<75%";
+
+	/**
+	 * A query's passages: its words as written, weighed first; the same words without
+	 * their accents ("Svabhavat" finds "Svâbhâvat"), weighed less; the words close
+	 * together as in the passage, weighed more.
+	 */
+	static Query buildMainQuery(String q) {
+		final Query asWritten = Query.of(qq -> qq.multiMatch(mm -> mm.query(q)
+				.fields("content^4", "document_title^2", "meta.*^0.5").type(TextQueryType.BestFields)
+				.minimumShouldMatch(MINIMUM_WORDS_MATCHING)));
+		final Query folded = Query.of(qq -> qq.multiMatch(mm -> mm.query(q)
+				.fields("content." + OpenSearchIndexBootstrapConfig.FOLDED_SUBFIELD + "^2",
+						"document_title." + OpenSearchIndexBootstrapConfig.FOLDED_SUBFIELD)
+				.type(TextQueryType.BestFields).minimumShouldMatch(MINIMUM_WORDS_MATCHING)));
+		final Query near = Query.of(qq -> qq.matchPhrase(mp -> mp
+				.field("content." + OpenSearchIndexBootstrapConfig.FOLDED_SUBFIELD).query(q).slop(2).boost(2f)));
+		return Query.of(qq -> qq.bool(b -> b.should(asWritten, folded, near).minimumShouldMatch("1")));
 	}
 
 	private List<Query> buildFilters(FullTextSearchMetaDataFilter f) {
