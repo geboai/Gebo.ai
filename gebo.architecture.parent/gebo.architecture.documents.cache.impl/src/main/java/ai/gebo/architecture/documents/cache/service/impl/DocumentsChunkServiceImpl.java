@@ -259,7 +259,7 @@ public class DocumentsChunkServiceImpl
 						}
 					}
 					return matchingCriterias;
-				}).findFirst();
+				}).filter(this::hasChunkFiles).findFirst();
 		// if there is a matching operation than we return those chunks
 		if (matchingOperation.isPresent()) {
 			if (LOGGER.isDebugEnabled()) {
@@ -700,6 +700,27 @@ public class DocumentsChunkServiceImpl
 
 	}
 
+	/**
+	 * Whether the chunk files of an operation are in this work directory: an operation
+	 * recorded by another instance (its own work directory) or whose files were cleaned
+	 * up is no cache.
+	 */
+	private boolean hasChunkFiles(DocumentChunkOperation operation) {
+		if (operation.getChunkSetsList() == null || operation.getChunkSetsList().isEmpty()) {
+			return false;
+		}
+		final String workDirectory = configService.getGeboWorkDirectory();
+		for (String chunkSetId : operation.getChunkSetsList()) {
+			if (!Files.exists(Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME, chunkSetId))) {
+				LOGGER.warn("Cached chunks of document " + operation.getOriginalDocumentCode() + " (operation "
+						+ operation.getId() + ", session " + operation.getChunkingSessionId()
+						+ ") have lost their file " + chunkSetId + ": not used");
+				return false;
+			}
+		}
+		return true;
+	}
+
 	@Override
 	protected void cleanupResources(DocumentChunkOperation data) {
 		if (LOGGER.isDebugEnabled()) {
@@ -753,10 +774,22 @@ public class DocumentsChunkServiceImpl
 			LOGGER.debug("Begin getCachedChunk(" + document.getCode() + "..)");
 		}
 		List<DocumentChunkOperation> data = repository.findByOriginalDocumentCode(document.getCode());
-		if (!data.isEmpty()) {
-			DocumentChunkOperation entry = data.get(0);
+		// the chunks of this chunking session, else the most recent ones (an operation reused
+		// from another session); an operation whose chunk files are gone is no cache
+		final Comparator<DocumentChunkOperation> newestFirst = Comparator.comparing(DocumentChunkOperation::getCreated,
+				Comparator.nullsLast(Comparator.reverseOrder()));
+		Optional<DocumentChunkOperation> chosen = data.stream()
+				.filter(op -> chunkSessionId != null && chunkSessionId.equals(op.getChunkingSessionId()))
+				.sorted(newestFirst).filter(this::hasChunkFiles).findFirst();
+		if (chosen.isEmpty()) {
+			chosen = data.stream().sorted(newestFirst).filter(this::hasChunkFiles).findFirst();
+		}
+		if (chosen.isPresent()) {
+			DocumentChunkOperation entry = chosen.get();
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("End getCachedChunk(" + document.getCode() + "..) getting next chunk");
+				LOGGER.debug("End getCachedChunk(" + document.getCode() + "..) getting next chunk of operation "
+						+ entry.getId() + " of session " + entry.getChunkingSessionId() + " (" + data.size()
+						+ " operation(s) for the document, asked session " + chunkSessionId + ")");
 			}
 			return getNextChunkSet(document, entry.getId(), entry.getChunkSetsList().get(0), chunkSessionId);
 		}
