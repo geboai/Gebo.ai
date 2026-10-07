@@ -40,6 +40,9 @@ public class GPromptTemplateConfig {
   @JsonProperty("userPromptTemplate")
   private String userPromptTemplate = null;
 
+  @JsonProperty("toolsResultsPromptTemplate")
+  private String toolsResultsPromptTemplate = null;
+
   /**
    * Gets or Sets chatHistory
    */
@@ -242,6 +245,24 @@ public class GPromptTemplateConfig {
 
   public void setUserPromptTemplate(String userPromptTemplate) {
     this.userPromptTemplate = userPromptTemplate;
+  }
+
+  public GPromptTemplateConfig toolsResultsPromptTemplate(String toolsResultsPromptTemplate) {
+    this.toolsResultsPromptTemplate = toolsResultsPromptTemplate;
+    return this;
+  }
+
+   /**
+   * Get toolsResultsPromptTemplate
+   * @return toolsResultsPromptTemplate
+  **/
+  @Schema(description = "")
+  public String getToolsResultsPromptTemplate() {
+    return toolsResultsPromptTemplate;
+  }
+
+  public void setToolsResultsPromptTemplate(String toolsResultsPromptTemplate) {
+    this.toolsResultsPromptTemplate = toolsResultsPromptTemplate;
   }
 
   public GPromptTemplateConfig chatHistory(ChatHistoryEnum chatHistory) {
@@ -500,6 +521,7 @@ public class GPromptTemplateConfig {
         Objects.equals(this.description, gpromptTemplateConfig.description) &&
         Objects.equals(this.systemPromptTemplate, gpromptTemplateConfig.systemPromptTemplate) &&
         Objects.equals(this.userPromptTemplate, gpromptTemplateConfig.userPromptTemplate) &&
+        Objects.equals(this.toolsResultsPromptTemplate, gpromptTemplateConfig.toolsResultsPromptTemplate) &&
         Objects.equals(this.chatHistory, gpromptTemplateConfig.chatHistory) &&
         Objects.equals(this.contextDocuments, gpromptTemplateConfig.contextDocuments) &&
         Objects.equals(this.toolsCalling, gpromptTemplateConfig.toolsCalling) &&
@@ -517,7 +539,7 @@ public class GPromptTemplateConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, systemPromptTemplate, userPromptTemplate, chatHistory, contextDocuments, toolsCalling, langCode, promptUse, modelProvider, modelCode, promptCategory, tokensSize, configDeclarated, agentPrompt, agentId, placeholders);
+    return Objects.hash(code, description, systemPromptTemplate, userPromptTemplate, toolsResultsPromptTemplate, chatHistory, contextDocuments, toolsCalling, langCode, promptUse, modelProvider, modelCode, promptCategory, tokensSize, configDeclarated, agentPrompt, agentId, placeholders);
   }
 
 
@@ -530,6 +552,7 @@ public class GPromptTemplateConfig {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    systemPromptTemplate: ").append(toIndentedString(systemPromptTemplate)).append("\n");
     sb.append("    userPromptTemplate: ").append(toIndentedString(userPromptTemplate)).append("\n");
+    sb.append("    toolsResultsPromptTemplate: ").append(toIndentedString(toolsResultsPromptTemplate)).append("\n");
     sb.append("    chatHistory: ").append(toIndentedString(chatHistory)).append("\n");
     sb.append("    contextDocuments: ").append(toIndentedString(contextDocuments)).append("\n");
     sb.append("    toolsCalling: ").append(toIndentedString(toolsCalling)).append("\n");

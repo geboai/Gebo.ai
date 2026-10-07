@@ -159,6 +159,15 @@
             <ngx-monaco-editor #userMonaco style="height: 250px; width: 100%" [options]="options"
               formControlName="userPromptTemplate" (onInit)="onUserEditorInit($event)"></ngx-monaco-editor>
           </div>
+
+          <div class="col-12">
+            <label id="toolsResultsPromptTemplateLabel" gebo-ai-text>Tool results closing template</label>
+            <div>
+              <small id="toolsResultsPromptTemplateHint" gebo-ai-text>Optional: text added at the end of every tool result. When tools run, their results come after the user prompt, so this is the last text the model reads before answering.</small>
+            </div>
+            <ngx-monaco-editor #toolsResultsMonaco style="height: 120px; width: 100%" [options]="options"
+              formControlName="toolsResultsPromptTemplate" (onInit)="onToolsResultsEditorInit($event)"></ngx-monaco-editor>
+          </div>
         </div>
       </p-tabpanel>
 

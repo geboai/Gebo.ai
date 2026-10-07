@@ -6393,6 +6393,12 @@
       "agentId": {
         "label": "Agent id",
         "help": "Identifier of the agent owning this prompt (optional)"
+      },
+      "toolsResultsPromptTemplateLabel": {
+        "label": "Tool results closing template"
+      },
+      "toolsResultsPromptTemplateHint": {
+        "label": "Optional: text added at the end of every tool result. When tools run, their results come after the user prompt, so this is the last text the model reads before answering."
       }
     }
   },

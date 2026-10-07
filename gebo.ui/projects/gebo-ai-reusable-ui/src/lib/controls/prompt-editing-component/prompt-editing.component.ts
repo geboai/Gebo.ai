@@ -104,6 +104,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
         description: new FormControl<string | null | undefined>(null),
         systemPromptTemplate: new FormControl<string | null | undefined>(null),
         userPromptTemplate: new FormControl<string | null | undefined>(null, [Validators.required]),
+        toolsResultsPromptTemplate: new FormControl<string | null | undefined>(null),
         chatHistory: new FormControl<GPromptTemplateConfig.ChatHistoryEnum | null | undefined>(null, [Validators.required]),
         contextDocuments: new FormControl<GPromptTemplateConfig.ContextDocumentsEnum | null | undefined>(null, [Validators.required]),
         toolsCalling: new FormControl<GPromptTemplateConfig.ToolsCallingEnum | null | undefined>(null, [Validators.required]),
@@ -115,13 +116,15 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
         agentId: new FormControl<string | null | undefined>(null)
     });
 
-    /** The two Monaco editor instances, once initialized. */
+    /** The Monaco editor instances, once initialized. */
     private systemEditor?: any;
     private userEditor?: any;
+    private toolsResultsEditor?: any;
 
     /** Monaco decoration ids currently applied to each editor. */
     private systemDecorationIds: string[] = [];
     private userDecorationIds: string[] = [];
+    private toolsResultsDecorationIds: string[] = [];
 
     private formSubscription?: Subscription;
 
@@ -139,6 +142,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
             this.recomputeMissingPlaceholders();
             this.applyDecorations(this.systemEditor);
             this.applyDecorations(this.userEditor);
+            this.applyDecorations(this.toolsResultsEditor);
             this.onValidatorChange();
         });
     }
@@ -159,6 +163,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
             description: obj?.description ?? null,
             systemPromptTemplate: obj?.systemPromptTemplate ?? null,
             userPromptTemplate: obj?.userPromptTemplate ?? null,
+            toolsResultsPromptTemplate: obj?.toolsResultsPromptTemplate ?? null,
             chatHistory: obj?.chatHistory ?? null,
             contextDocuments: obj?.contextDocuments ?? null,
             toolsCalling: obj?.toolsCalling ?? null,
@@ -184,6 +189,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
             this.recomputeMissingPlaceholders();
             this.applyDecorations(this.systemEditor);
             this.applyDecorations(this.userEditor);
+            this.applyDecorations(this.toolsResultsEditor);
             this.onValidatorChange();
             return;
         }
@@ -200,6 +206,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
                 this.recomputeMissingPlaceholders();
                 this.applyDecorations(this.systemEditor);
                 this.applyDecorations(this.userEditor);
+                this.applyDecorations(this.toolsResultsEditor);
                 this.onValidatorChange();
                 this.changeDetectorRef.markForCheck();
             },
@@ -208,6 +215,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
                 this.recomputeMissingPlaceholders();
                 this.applyDecorations(this.systemEditor);
                 this.applyDecorations(this.userEditor);
+                this.applyDecorations(this.toolsResultsEditor);
                 this.onValidatorChange();
                 this.changeDetectorRef.markForCheck();
             }
@@ -215,12 +223,14 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
     }
 
     /**
-     * Concatenation of the system and user templates, used for placeholder checks.
+     * Concatenation of the system, user and tools results templates, used for
+     * placeholder checks.
      */
     private concatenatedTemplateText(): string {
         const system = this.formGroup.controls["systemPromptTemplate"].value ?? "";
         const user = this.formGroup.controls["userPromptTemplate"].value ?? "";
-        return system + "\n" + user;
+        const toolsResults = this.formGroup.controls["toolsResultsPromptTemplate"].value ?? "";
+        return system + "\n" + user + "\n" + toolsResults;
     }
 
     /**
@@ -254,6 +264,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
             description: raw.description ?? undefined,
             systemPromptTemplate: raw.systemPromptTemplate ?? undefined,
             userPromptTemplate: raw.userPromptTemplate,
+            toolsResultsPromptTemplate: raw.toolsResultsPromptTemplate ?? undefined,
             chatHistory: raw.chatHistory,
             contextDocuments: raw.contextDocuments,
             toolsCalling: raw.toolsCalling,
@@ -305,6 +316,15 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
     }
 
     /**
+     * Captures the Monaco editor for the tools results template.
+     * @param editor the Monaco editor instance
+     */
+    onToolsResultsEditorInit(editor: any): void {
+        this.toolsResultsEditor = editor;
+        this.applyDecorations(this.toolsResultsEditor);
+    }
+
+    /**
      * Highlights every documented placeholder occurrence ({code}) in the given editor.
      * @param editor the Monaco editor to decorate
      */
@@ -339,6 +359,8 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
             this.systemDecorationIds = editor.deltaDecorations(this.systemDecorationIds, decorations);
         } else if (editor === this.userEditor) {
             this.userDecorationIds = editor.deltaDecorations(this.userDecorationIds, decorations);
+        } else if (editor === this.toolsResultsEditor) {
+            this.toolsResultsDecorationIds = editor.deltaDecorations(this.toolsResultsDecorationIds, decorations);
         }
     }
 

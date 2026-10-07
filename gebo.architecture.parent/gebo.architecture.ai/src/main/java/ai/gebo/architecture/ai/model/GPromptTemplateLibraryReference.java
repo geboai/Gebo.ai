@@ -24,5 +24,10 @@ public class GPromptTemplateLibraryReference {
 	private String systemReference = null;
 	@NotNull
 	private String userReference = null;
+	/**
+	 * Optional resource of the text closing every tool result of the prompt's model
+	 * calls (see {@link GPromptTemplateConfig#getToolsResultsPromptTemplate()}).
+	 */
+	private String toolsResultsReference = null;
 
 }

@@ -222,6 +222,16 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	@Override
 	public List<ToolCallback> wrapTools(ReactiveIdentityUtil runAs, ToolCallsListener toolCallListener) {
+		return wrapToolsClosingResults(runAs, toolCallListener, null);
+	}
+
+	/**
+	 * The enabled tools of this model, each closing its results with
+	 * {@code toolsResultsClosing} when not null (see
+	 * {@link GPromptTemplateConfig#getToolsResultsPromptTemplate()}).
+	 */
+	protected List<ToolCallback> wrapToolsClosingResults(ReactiveIdentityUtil runAs,
+			ToolCallsListener toolCallListener, String toolsResultsClosing) {
 		List<String> toolNames = config.getEnabledFunctions();
 		if (toolNames == null)
 			toolNames = List.of();
@@ -229,7 +239,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 		List<ToolCallback> wrapped = new ArrayList<>();
 		for (ToolCallback toolCallback : tools) {
-			wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener));
+			wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener, toolsResultsClosing));
 		}
 		// the tools made for this use of the model are not in the repository: without this
 		// they would be executable but never declared to the model
@@ -237,13 +247,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		for (ToolCallback toolCallback : additionalTools != null ? additionalTools : List.<ToolCallback>of()) {
 			final String name = toolCallback.getToolDefinition().name();
 			if (toolNames.contains(name) && wrapped.stream().noneMatch(x -> name.equals(x.getToolDefinition().name()))) {
-				wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener));
+				wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener, toolsResultsClosing));
 				additional++;
 			}
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("wrapTools(...) model:" + getCode() + " declares " + wrapped.size() + " tool(s), " + additional
-					+ " of them made for this use of the model");
+					+ " of them made for this use of the model"
+					+ (toolsResultsClosing != null ? ", their results closed by the prompt's text" : ""));
 		}
 		return wrapped;
 	}
@@ -427,10 +438,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 		ChatClientRequestSpec reqObject = client.prompt();
 
-		final List<ToolCallback> tools = prompt.getToolsCalling() == null
-				|| prompt.getToolsCalling() == ContextContentRequired.REQUIRED
-						? wrapTools(runAs, chatContext.getToolCallListener())
-						: List.of();
+		final boolean toolsCalling = prompt.getToolsCalling() == null
+				|| prompt.getToolsCalling() == ContextContentRequired.REQUIRED;
+		final List<ToolCallback> tools = toolsCalling
+				? wrapToolsClosingResults(runAs, chatContext.getToolCallListener(),
+						createToolsResultsClosing(prompt, params, chatContext))
+				: List.of();
 		reqObject = reqObject.toolCallbacks(tools);
 		// chat histroy in user, assistant format
 		reqObject = reqObject.messages(messages);
@@ -602,6 +615,41 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				chatContext.getConsolidatedHistory() != null ? chatContext.getConsolidatedHistory() : "");
 		String content = promptTemplate.render(allParams);
 		return new UserMessage(content);
+	}
+
+	/**
+	 * The text closing every tool result of this call: the prompt's tools results
+	 * template, rendered with the parameters of the user message but the documents
+	 * (they are in the user message). The tool calling loop puts the tools' results after
+	 * the user message, so when tools run this is the last text the model reads before
+	 * answering. Null when the prompt has none.
+	 */
+	protected String createToolsResultsClosing(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatContext) {
+		final String template = prompt.getToolsResultsPromptTemplate();
+		if (template == null || template.isBlank()) {
+			return null;
+		}
+		final Map<String, Object> allParams = new HashMap<>(params);
+		allParams.remove(IChatRequestContext.DOCUMENTS_PROMPT_PARAM);
+		allParams.put(IChatRequestContext.USER_QUESTION_PROMPT_PARAM,
+				chatContext != null && chatContext.getActualUserRequest() != null ? chatContext.getActualUserRequest()
+						: "");
+		allParams.put(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM,
+				chatContext != null && chatContext.getConsolidatedHistory() != null
+						? chatContext.getConsolidatedHistory()
+						: "");
+		final String closing = new PromptTemplate(template).render(allParams);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("createToolsResultsClosing(...) prompt:" + prompt.getPromptUse() + " closes the tools' results"
+					+ " with " + closing.length() + " character(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<TOOLS_RESULTS_PROMPT>");
+			LOGGER.trace(closing);
+			LOGGER.trace("</TOOLS_RESULTS_PROMPT>");
+		}
+		return closing;
 	}
 
 	protected String createDocumentsRendering(Object object) {

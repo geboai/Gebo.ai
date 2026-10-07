@@ -101,6 +101,15 @@ public class PromptTemplateProvidersImplementation implements IGStaticPromptsPro
 		prompt.setModelCode(reference.getModelCode());
 		prompt.setSystemPromptTemplate(tryLoadString(reference.getSystemReference(), objectFromActualClassLoader));
 		prompt.setUserPromptTemplate(tryLoadString(reference.getUserReference(), objectFromActualClassLoader));
+		// optional, unlike the system and user templates
+		if (reference.getToolsResultsReference() != null && !reference.getToolsResultsReference().isBlank()) {
+			prompt.setToolsResultsPromptTemplate(
+					tryLoadString(reference.getToolsResultsReference(), objectFromActualClassLoader));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Prompt:" + reference.getPromptUse() + " closes its tools' results with:"
+						+ reference.getToolsResultsReference());
+			}
+		}
 		prompt.setChatHistory(reference.getChatHistory());
 		prompt.setContextDocuments(reference.getContextDocuments());
 		prompt.setToolsCalling(reference.getToolsCalling());
