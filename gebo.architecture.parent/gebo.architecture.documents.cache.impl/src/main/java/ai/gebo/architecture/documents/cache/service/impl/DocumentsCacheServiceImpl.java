@@ -7,8 +7,10 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,18 +51,42 @@ public class DocumentsCacheServiceImpl
 	@Override
 	public TypedInputStream streamDocument(StreamingPurpose streamingPurpose, IGComponentOriginatedDocument reference)
 			throws DocumentCacheAccessException, IOException {
+		return streamDocument(streamingPurpose, reference, null);
+	}
+
+	@Override
+	public TypedInputStream streamDocument(StreamingPurpose streamingPurpose, IGComponentOriginatedDocument reference,
+			String chunkingSessionId) throws DocumentCacheAccessException, IOException {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin streamDocument(" + reference.getCode() + ");");
+			LOGGER.debug("Begin streamDocument(" + reference.getCode() + ") chunking session:" + chunkingSessionId);
 		}
 		SupplierWithException isSupplier = () -> {
 			return documentContentStreamer.streamContent(streamingPurpose, reference);
 		};
-		return streamDocumentWithLocalCache(isSupplier, reference);
+		return streamDocumentWithLocalCache(isSupplier, reference, chunkingSessionId);
 
 	}
 
+	@Override
+	public void releaseSession(String chunkingSessionId) {
+		if (chunkingSessionId == null) {
+			return;
+		}
+		final List<DocumentCacheEntry> kept;
+		try (Stream<DocumentCacheEntry> entries = repository.findByChunkingSessionId(chunkingSessionId)) {
+			kept = entries.toList();
+		}
+		kept.forEach(this::cleanupResources);
+		repository.deleteByChunkingSessionId(chunkingSessionId);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("releaseSession(" + chunkingSessionId + ") released " + kept.size()
+					+ " cached document copie(s)");
+		}
+	}
+
 	private TypedInputStream streamDocumentWithLocalCache(SupplierWithException typedInputStreamSupplier,
-			IGComponentOriginatedDocument reference) throws IOException, DocumentCacheAccessException {
+			IGComponentOriginatedDocument reference, String chunkingSessionId)
+			throws IOException, DocumentCacheAccessException {
 		Optional<DocumentCacheEntry> inCacheCopy = repository.findById(reference.getCode());
 		boolean loadAndCache = true;
 		if (inCacheCopy.isPresent() && inCacheCopy.get().getBinaryDocumentName() != null) {
@@ -77,10 +103,18 @@ public class DocumentsCacheServiceImpl
 					// Serve from local filesystem
 					DocumentCacheEntry cacheEntry = inCacheCopy.get();
 					cacheEntry.setLastAccessed(new Date());
+					if (chunkingSessionId != null) {
+						// the copy is now kept for the session using it, released with it
+						cacheEntry.setChunkingSessionId(chunkingSessionId);
+					}
 					repository.save(cacheEntry);
 					InputStream is = Files.newInputStream(filePath, StandardOpenOption.READ);
 					return TypedInputStream.of(is, cacheEntry.getContentType(), cacheEntry.getExtension());
 				}
+			}
+			// a stale copy, or a record whose file is gone: its file too goes
+			if (Files.exists(filePath)) {
+				cleanupResources(inCacheCopy.get());
 			}
 			repository.delete(inCacheCopy.get());
 		}
@@ -89,6 +123,7 @@ public class DocumentsCacheServiceImpl
 		cacheEntry.setBinaryDocumentName(newFileName);
 		cacheEntry.setId(reference.getCode());
 		cacheEntry.setLastAccessed(new Date());
+		cacheEntry.setChunkingSessionId(chunkingSessionId);
 		Path cacheFolder = Path.of(configService.getGeboWorkDirectory(), FILESCACHEFOLDER);
 		Files.createDirectories(cacheFolder);
 		Path filePath = Path.of(configService.getGeboWorkDirectory(), FILESCACHEFOLDER,

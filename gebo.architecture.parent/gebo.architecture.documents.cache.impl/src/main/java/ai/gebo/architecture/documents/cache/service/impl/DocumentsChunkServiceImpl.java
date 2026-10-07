@@ -286,7 +286,8 @@ public class DocumentsChunkServiceImpl
 		// We ask the cacheService to stream the document
 		TypedInputStream is = null;
 		try {
-			is = this.cacheService.streamDocument(StreamingPurpose.INGESTING, document);
+			// the copy is kept for this chunking session, released with it
+			is = this.cacheService.streamDocument(StreamingPurpose.INGESTING, document, chunkSessionId);
 
 			if (is != null && is.getInputStream() != null) {
 				if (LOGGER.isDebugEnabled()) {
@@ -960,6 +961,12 @@ public class DocumentsChunkServiceImpl
 			}
 		});
 		documentChunkOperationRepository.deleteByChunkingSessionId(chunkSessionId);
+		// the documents downloaded for the session go with it
+		try {
+			cacheService.releaseSession(chunkSessionId);
+		} catch (Throwable th) {
+			LOGGER.error("Cannot release the cached documents of chunking session " + chunkSessionId, th);
+		}
 		chunkingSessionRepo.deleteById(chunkSessionId);
 
 	}

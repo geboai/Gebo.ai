@@ -90,7 +90,7 @@ class ChunkPositionsTest {
 	/** Four pages, each one chunk; only the first and the third talk of the keyword. */
 	private DocumentChunkingResponse chunk(ChunkingPolicy policy, boolean sampling) throws Exception {
 		IDocumentsCacheService cacheService = mock(IDocumentsCacheService.class);
-		when(cacheService.streamDocument(any(StreamingPurpose.class), any())).thenAnswer(call ->
+		when(cacheService.streamDocument(any(StreamingPurpose.class), any(), any())).thenAnswer(call ->
 				TypedInputStream.of(new ByteArrayInputStream("pages".getBytes()), "application/pdf", "pdf"));
 		IGDocumentReferenceIngestionHandler ingestionHandler = mock(IGDocumentReferenceIngestionHandler.class);
 		when(ingestionHandler.handleContent(any(GDocumentReference.class), any(TypedInputStream.class)))
