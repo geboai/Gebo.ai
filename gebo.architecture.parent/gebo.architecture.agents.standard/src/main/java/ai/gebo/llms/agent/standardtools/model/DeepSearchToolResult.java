@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
  * cut to the room keeps them.
  */
 @Data
-@JsonPropertyOrder({ "status", "message", "coverage", "fragmentsAnalysed", "tokens", "analysis", "sources",
+@JsonPropertyOrder({ "status", "message", "coverage", "fragmentsAnalysed", "tokens", "analysis", "quotes", "sources",
 		"unavailableSources", "documentsNotRead" })
 public class DeepSearchToolResult {
 	/** A document the analysis relies on. */
@@ -50,6 +50,21 @@ public class DeepSearchToolResult {
 		}
 	}
 
+	/**
+	 * A quotation of the analysis, its words checked against the document it comes
+	 * from: the analysis' only words that may be quoted, the rest of it is a summary.
+	 */
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class Quote {
+		/** The short id of the document in the request, when known. */
+		private String doc;
+		private String title;
+		/** The exact words of the document. */
+		private String text;
+	}
+
 	private Status status = Status.OK;
 	private String message = null;
 	/**
@@ -63,6 +78,8 @@ public class DeepSearchToolResult {
 	/** Size of the returned analysis, in tokens. */
 	private int tokens = 0;
 	private String analysis = null;
+	/** The quotations of the analysis, checked against their documents; null when none. */
+	private List<Quote> quotes = null;
 	private List<Source> sources = new ArrayList<>();
 	/**
 	 * The sources that could not be searched, and why (not responding within the

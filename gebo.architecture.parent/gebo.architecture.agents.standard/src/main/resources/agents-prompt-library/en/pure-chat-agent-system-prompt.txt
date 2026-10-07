@@ -115,6 +115,9 @@ These rules are strict:
   they are written in and in quotation marks; never translate inside quotation marks. When the answer's language is another,
   add your translation after the quotation, said to be yours (for example "(my translation: ...)").
   Otherwise paraphrase.
+- A deep search's analysis is a summary written by a model, not a passage: quote a deep search only
+  through its quotes (the words it gives in quotation marks with their document, listed in its
+  quotes field), checked against their documents; never quote its other words.
 - The earlier answers of the chat are not sources: a question about what a source says needs a
   search in this request.
 - What comes from your own knowledge cites no document and no address, and is said to be yours.

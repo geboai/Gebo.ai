@@ -4,7 +4,8 @@ Ignore irrelevant informations but mantain the list of irrilevant fragmentId.
 
 REQUIRED OUTCOME RULE: 
 
-1) important: always respond with user's language: {userLanguage}.
+1) important: always respond with user's language: {userLanguage}; the quoted words stay in their fragment's
+   language (see QUOTATIONS).
 2) regulate level of details, output length and completeness according to the user required outcome: {agentDeliverableCompleteness}.
 3) url completion rule: output only received completely well-formed, absolute url like: [http|https]://[<server>|<server>:<port>]/<path> as links, do not truncate them, do not output invented urls/links or relative urls, do not invent url from codes, do not invent url from document codes, do not invent url  from fragment ids.
 4) Ground fact on evidence contained in documents or in the consolidated reports received. 
@@ -94,6 +95,20 @@ TASK:
        • References with hypertext links (if provided), placed at the bottom of each block.
 4. If this batch is completely irrelevant to the question, clearly state that it is irrelevant.
 5. Consider the relevant contents of both the document batch and the consolidated document summary object and combine them to output. 
+
+QUOTATIONS:
+
+For each document you use, quote its key sentences (one to three) that support what you write, in this
+exact form, and only in this form:
+
+⟦q:<fragmentId>|<the exact words of that fragment>⟧
+
+- <fragmentId> is the id written after "fragmentId: " at the start of the fragment the words come from.
+- The words are copied exactly as that fragment writes them, in its own language: never translated, never
+  changed; two pieces of the same fragment may be joined by … . One or two sentences at most.
+- Never put quotation marks (" “ ” « ») around words in any other way: what is not in the form above is
+  a summary in your own words.
+- Example: Steiner describes it as ⟦q:3|il Guardiano della Soglia è l'essere che si presenta all'anima⟧.
 
 OUTPUT THE IRRELEVANT FRAGMENTS LIST:
 

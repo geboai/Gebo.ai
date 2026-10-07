@@ -49,6 +49,7 @@ import ai.gebo.llms.agent.standardtools.model.DeepSearchToolResult.Source;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult.Status;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
+import ai.gebo.llms.deepsearch.service.impl.DeepSearchQuotations;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
@@ -385,6 +386,7 @@ public abstract class AbstractDeepSearchTool<Q> {
 					searchYields.isEmpty() ? null : searchYields, documentsInScope(toolContext),
 					analysisOutcome.getNotCovered(), documentsReadableWhole(), support.coverageRules());
 			result.setCoverage(coverage);
+			result.setQuotes(quotesOf(analysis, analysisOutcome, allFound));
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Tool:" + toolName + " coverage: " + coverage.getDocumentsUsed() + " of "
 						+ coverage.getDocumentsFound() + " document(s) found used, "
@@ -464,6 +466,34 @@ public abstract class AbstractDeepSearchTool<Q> {
 			super(String.join("; ", unavailableSources));
 			this.unavailableSources = List.copyOf(unavailableSources);
 		}
+	}
+
+	/**
+	 * The quotations the analysis kept, checked against their fragments, that its final
+	 * text gives: each with the short id of its document; null when none.
+	 */
+	protected List<DeepSearchToolResult.Quote> quotesOf(String analysis, DeepSearchAnalysisOutcome outcome,
+			Map<String, FoundDocument> found) {
+		if (analysis == null || outcome == null) {
+			return null;
+		}
+		final List<DeepSearchToolResult.Quote> quotes = new ArrayList<>();
+		for (DeepSearchQuotations.Quote quote : outcome.getQuotations().quotes()) {
+			if (!analysis.contains(quote.text())) {
+				// left out by the consolidation
+				continue;
+			}
+			final FoundDocument document = quote.fragmentId() != null && found != null ? found.get(quote.fragmentId())
+					: null;
+			final Source source = document != null ? document.source() : null;
+			quotes.add(new DeepSearchToolResult.Quote(source != null ? source.getDoc() : null,
+					source != null && source.getTitle() != null ? source.getTitle() : quote.title(), quote.text()));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("quotesOf(...) " + quotes.size() + " of " + outcome.getQuotations().quotes().size()
+					+ " verified quotation(s) in the final analysis");
+		}
+		return quotes.isEmpty() ? null : quotes;
 	}
 
 	/**

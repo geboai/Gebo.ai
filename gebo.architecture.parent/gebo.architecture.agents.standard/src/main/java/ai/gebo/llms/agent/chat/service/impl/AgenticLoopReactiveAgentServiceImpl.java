@@ -56,6 +56,8 @@ import ai.gebo.llms.agent.standardtools.DeepSearchToolSource;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;
 import ai.gebo.llms.agent.standardtools.CitedAddresses;
+import ai.gebo.llms.agent.standardtools.SummaryQuotationGuard;
+import ai.gebo.llms.deepsearch.service.impl.DeepSearchQuotations;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseDeepSearchTool;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource;
 import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
@@ -531,6 +533,18 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				LOGGER.warn("Agentic loop agent id:" + getId() + " answer gives an address no tool returned, removed: "
 						+ address);
 			}
+		});
+		// a deep search's summary quoted as if it were a document's words is not a quotation:
+		// its quotation marks are taken away as the answer streams (best effort)
+		final SummaryQuotationGuard summaryQuotations = new SummaryQuotationGuard(callBacksListener,
+				mounted.deepSearches());
+		text = DeepSearchQuotations.unquotingWhere(text, words -> {
+			final boolean keep = summaryQuotations.keep(words);
+			if (!keep) {
+				LOGGER.warn("Agentic loop agent id:" + getId() + " answer quotes a deep search's summary as a document,"
+						+ " quotation marks taken away: " + (words.length() <= 80 ? words : words.substring(0, 80) + "..."));
+			}
+			return keep;
 		});
 		final GeboChatResponse response = new GeboChatResponse();
 		return renderOutputStream(text, response, session, contextAgentPersona, notificationSink, callBacksListener)

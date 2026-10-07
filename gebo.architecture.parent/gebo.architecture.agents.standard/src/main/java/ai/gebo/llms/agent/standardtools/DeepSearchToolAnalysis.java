@@ -39,6 +39,7 @@ import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.FoldO
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.RollingFold;
 import ai.gebo.llms.deepsearch.service.DeepSearchVerdict;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchBatchTrace;
+import ai.gebo.llms.deepsearch.service.impl.DeepSearchQuotations;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchBatchTrace.NumberedBatch;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.GenerativeFunction;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LastWork;
@@ -139,6 +140,9 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 					+ " parallelism:" + analysisParallelism + " satisfactoryThreshold:" + satisfactoryThreshold
 					+ " sufficiencyCheck:" + defaultDeepsearchConfig.isSufficiencyCheckEnabled());
 		}
+		// the quotations of this analysis: the outcome's when given, so the tool can list them
+		final DeepSearchQuotations quotations = outcome != null ? outcome.getQuotations()
+				: new DeepSearchQuotations();
 		final Map<String, Object> sharedParams = new HashMap<>();
 		sharedParams.put(AGENT_DELIVERABLE_COMPLETENESS,
 				(deliverable != null ? deliverable.name() + " " + deliverable.getAgentDeliverableCompleteness() : "")
@@ -205,7 +209,8 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 							+ (intermediateAnalisys != null ? intermediateAnalisys.length() : 0) + " character(s), "
 							+ (discardedFragmentIds.size() - discardedBefore) + " fragment id(s) discarded");
 				}
-				return cleaned;
+				// its quotations checked against the fragments of its batch (best effort)
+				return quotations.keepVerified(cleaned, numbered);
 			});
 		};
 		LastWork<String, String> finalAnalisysWork = (list, _emitter) -> {
@@ -283,7 +288,8 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 					ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputCleaningFunction,
 					STRING_STREAMER, tokensBudget, runAs, analysisParallelism, unprocessedCumulator);
 		}
-		return resultFlux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
+		// the quotations the standard way, with no fragment id
+		return quotations.render(resultFlux).subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 	}
 
 	/** Streams an already complete text in small pieces, as a model would. */

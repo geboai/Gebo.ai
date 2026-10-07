@@ -340,6 +340,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		});
 
 		Flux<String> resultFlux = null;
+		// the quotations of the whole request, checked against their fragments (best effort)
+		final DeepSearchQuotations quotations = new DeepSearchQuotations();
 		final AtomicLong docsCounter = new AtomicLong(0l);
 		final Function<Document, Document> countingMapper = x -> {
 			docsCounter.incrementAndGet();
@@ -378,6 +380,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 							Map<String, Object> params = new HashMap<>(commonParams);
 							params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, documents);
 							params.put(IChatRequestContext.CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
+							// read directly, with no partial analysis: the answer may quote them
+							quotations.addSources(documents);
 							resultFlux = DeepSearchVerdict
 									.withoutVerdict(callLLMReactive(chatModel, finalAnalisysPrompt, context, params));
 						} catch (Throwable th) {
@@ -394,7 +398,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 				resultFlux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
 						cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel,
-						commonParams, irrelevantFragments);
+						commonParams, irrelevantFragments, quotations);
 				resultFlux = Flux.concat(resultFlux, Flux.defer(() -> {
 					if (docsCounter.get() == 0l) {
 						return backupNotFoundDocuments;
@@ -415,7 +419,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				Flux<Document> documentFlux = x.get().map(countingMapper);
 				Flux<String> flux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
 						cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel,
-						commonParams, irrelevantFragments);
+						commonParams, irrelevantFragments, quotations);
 				return flux.buffer();
 			}, maxConcurrentSources).subscribeOn(Schedulers.boundedElastic(), true).buffer();
 			resultFlux = resultsBuffer.map(lists -> {
@@ -459,13 +463,17 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		}
 
 		final StringBuffer cumulative = new StringBuffer();
-		Flux<GeboChatMessageEnvelope> intermediateStreamingFlux = resultFlux.map(x -> {
+		// what the user gets: the quotations the standard way, with no fragment id
+		Flux<GeboChatMessageEnvelope> intermediateStreamingFlux = quotations.render(resultFlux).map(x -> {
 			cumulative.append(x);
 			return x;
 		}).map(piece -> new GeboChatMessageEnvelope<>(piece));
 		Flux<GeboChatMessageEnvelope> finalMessages = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
 				response.setQueryResponse(cumulative.toString());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Deep search answer with " + quotations.quotes().size() + " verified quotation(s)");
+				}
 				for (String fragmentId : irrelevantFragments) {
 					resultsByFragmentId.remove(fragmentId);
 					docrefsByFragmentId.remove(fragmentId);
@@ -570,12 +578,14 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT);
 		// raw tokens budget calculation
 		Vector<String> discardedFragmentIds = new Vector<>();
+		// the quotations of the request, checked against their fragments (best effort)
+		final DeepSearchQuotations quotations = new DeepSearchQuotations();
 		Flux<String> resultFlux = generateDeepSearchFlux(docsFlux, context, runAs, sinkUIEmitter, request,
 				cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel,
-				commonParams, discardedFragmentIds);
+				commonParams, discardedFragmentIds, quotations);
 
 		final StringBuffer cumulative = new StringBuffer();
-		Flux<GeboChatMessageEnvelope> intermediateStreamingFlux = resultFlux.map(x -> {
+		Flux<GeboChatMessageEnvelope> intermediateStreamingFlux = quotations.render(resultFlux).map(x -> {
 			cumulative.append(x);
 			return x;
 		}).map(piece -> new GeboChatMessageEnvelope<>(piece));
@@ -631,7 +641,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			GPromptTemplateConfig cumulativeAnalisysPrompt, GPromptTemplateConfig emptyResponsePrompt,
 			GPromptTemplateConfig finalAnalisysPrompt, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, Map<String, Object> commonParams,
-			Vector<String> discardedFragmentIds) {
+			Vector<String> discardedFragmentIds, DeepSearchQuotations quotations) {
 		final int subanalisysThreashold = defaultDeepsearchConfig
 				.getSatisfactorySubAnalisysThreashold(request.getUserIntent());
 		final int analysisParallelism = Math.max(1, this.defaultDeepsearchConfig.getAnalysisParallelism());
@@ -721,7 +731,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 							+ (intermediateAnalisys != null ? intermediateAnalisys.length() : 0) + " character(s), "
 							+ (discardedFragmentIds.size() - discardedBefore) + " fragment id(s) discarded");
 				}
-				return cleaned;
+				// its quotations checked against the fragments of its batch (best effort)
+				return quotations.keepVerified(cleaned, numbered);
 			});
 
 		};

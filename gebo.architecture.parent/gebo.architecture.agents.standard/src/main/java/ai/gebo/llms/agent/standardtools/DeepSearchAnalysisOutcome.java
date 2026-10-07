@@ -12,6 +12,8 @@ package ai.gebo.llms.agent.standardtools;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import ai.gebo.llms.deepsearch.service.impl.DeepSearchQuotations;
+
 /**
  * What a deep search analysis tells besides its text, for the coverage of the deep
  * search: what the consolidation reports as missing, and the fragments the analysis
@@ -22,6 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DeepSearchAnalysisOutcome {
 	private volatile String notCovered = null;
 	private final Set<String> unreadFragmentIds = ConcurrentHashMap.newKeySet();
+	/** The quotations of the analysis, each checked against its fragment. */
+	private final DeepSearchQuotations quotations = new DeepSearchQuotations();
 
 	/** What the last consolidation reports as missing; null when complete or unknown. */
 	public String getNotCovered() {
@@ -35,5 +39,10 @@ public class DeepSearchAnalysisOutcome {
 	/** The fragments left unread by the analysis. */
 	public Set<String> getUnreadFragmentIds() {
 		return unreadFragmentIds;
+	}
+
+	/** The quotations of the analysis (see {@link DeepSearchQuotations}). */
+	public DeepSearchQuotations getQuotations() {
+		return quotations;
 	}
 }
