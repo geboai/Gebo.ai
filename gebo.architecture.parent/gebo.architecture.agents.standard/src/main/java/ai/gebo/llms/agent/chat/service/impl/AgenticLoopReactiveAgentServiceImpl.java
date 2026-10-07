@@ -1284,6 +1284,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						calls.subList(Math.min(callsBefore, calls.size()), calls.size()));
 				// the model's output limit cut this iteration (see CutAnswer)
 				final boolean cut = CutAnswer.isCut(finishReason.get());
+				// cut while its reasoning took the output limit: the next iteration asks for less
+				final boolean reasoningCut = cut && CutAnswer.reasoningTookTheBudget(thinking.writtenChars(), text.length());
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + number + " finish reason:"
 							+ finishReason.get() + " after " + text.length() + " text and " + thinking.writtenChars()
@@ -1323,9 +1325,19 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 								"Agent: " + contextAgentPersona.getNetworkAgentName()
 										+ " searches the sources before answering..",
 								ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
+						// a draft cut while reasoning: the next iteration asks for less reasoning
+						final IGConfigurableChatModel lessReasoning = reasoningCut ? lowerThinkingAs(runAs, agentModel)
+								: null;
+						if (lessReasoning != null) {
+							LOGGER.warn("Agentic loop agent id:" + getId() + " discarded iteration " + number
+									+ " was cut by the output limit after " + text.length() + " text and "
+									+ thinking.writtenChars() + " reasoning character(s): iteration " + (number + 1)
+									+ " asks for less reasoning");
+						}
 						// a request needing the sources stays held until it searches them, iteration
 						// after iteration: a model that answers from memory again is discarded again
-						return asUser(runAs, iteration(number + 1, maxIterations, budget, history, agentModel,
+						return asUser(runAs, iteration(number + 1, maxIterations, budget, history,
+								lessReasoning != null ? lessReasoning : agentModel,
 								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
 								deliverableParams, gate.evidenceRequired() ? gate : SourceGate.NONE, runAs));
 					}
@@ -1350,7 +1362,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						// nothing to show: the model's output was cut before any text, written once more
 						history.add(new LoopIteration(number, text.toString(), iterationCalls, DISCARDED_EMPTY));
 						// cut by the output limit: written again asking for less reasoning, when it can be asked
-						final IGConfigurableChatModel againModel = cut ? lowerThinking(agentModel) : null;
+						final IGConfigurableChatModel againModel = cut ? lowerThinkingAs(runAs, agentModel) : null;
 						LOGGER.warn("Agentic loop agent id:" + getId() + " iteration " + number + " wrote no text after "
 								+ iterationCalls.size() + " tool call(s) (the output limit may have been reached while "
 								+ "reasoning, finish reason " + finishReason.get() + "): writing it in iteration "
@@ -1372,7 +1384,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 							.anyMatch(i -> DISCARDED_CUT.equals(i.discardedFor()));
 					final IGConfigurableChatModel againModel = !writtenAgainBefore && number < maxIterations
 							&& CutAnswer.reasoningTookTheBudget(thinking.writtenChars(), text.length())
-									? lowerThinking(agentModel)
+									? lowerThinkingAs(runAs, agentModel)
 									: null;
 					if (againModel != null) {
 						// the cut draft is kept: the next iteration writes the whole answer again
@@ -1554,6 +1566,15 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						+ e.getMessage());
 			}
 		}
+	}
+
+	/**
+	 * The same, the copy made as the user ({@code runAs}, null to keep the thread's
+	 * identity): an iteration's decisions run on the thread its model stream ended on,
+	 * which carries none, and the copy resolves its tools for the user.
+	 */
+	private IGConfigurableChatModel lowerThinkingAs(ReactiveIdentityUtil runAs, IGConfigurableChatModel agentModel) {
+		return runAs != null ? runAs.doRunAsWithReturn(() -> lowerThinking(agentModel)) : lowerThinking(agentModel);
 	}
 
 	/**

@@ -77,6 +77,7 @@ import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.security.services.SecurityAuditTaxonomy;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -276,14 +277,18 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			throws LLMConfigException {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		long startMillis = System.currentTimeMillis();
+		// the user of the request, as the model's stream samples it (see streamResponse)
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		try {
 			final DeepSearchQuotations quotations = answerQuotations(prompt, params, chatRequestContext);
 			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, params, chatRequestContext);
 			Flux<GeboChatMessageEnvelope> composed = composeFlux(res, context, request, response,
 					chatRequestContext.getToolsContext(), chatHistoryConsolidation, historySizeTarget,
 					configurableChatModel, showedDocuments, quotations,
-					thinking -> withThinking(configurableChatModel, thinking).streamResponse(prompt, params,
-							chatRequestContext));
+					// the copy of the model is made as the user (its tools resolved for the user): the
+					// stream's thread, where an answer turns out cut, carries no identity
+					thinking -> runAs.doRunAsWithReturnAndException(() -> withThinking(configurableChatModel,
+							thinking).streamResponse(prompt, params, chatRequestContext)));
 			// Logged once at stream completion/error (not per chunk) to avoid flooding
 			// the audit log with one event per streamed token.
 			return composed
