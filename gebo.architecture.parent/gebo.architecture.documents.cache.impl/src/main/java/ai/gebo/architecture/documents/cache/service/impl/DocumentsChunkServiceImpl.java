@@ -377,8 +377,9 @@ public class DocumentsChunkServiceImpl
 									outContents = withMetaData;
 								}
 
-								response.setEmpty(outContents.isEmpty());
-
+								// the document is empty when none of its pages gives a chunk (see below),
+								// not when its last page gives none: a page number alone, under the least
+								// chunk length, took a whole document for an empty file
 								for (Document _document : outContents) {
 									// the position in the document, counted on every split chunk: a chunk left
 									// out by a matching policy keeps its place, so consecutive positions are
