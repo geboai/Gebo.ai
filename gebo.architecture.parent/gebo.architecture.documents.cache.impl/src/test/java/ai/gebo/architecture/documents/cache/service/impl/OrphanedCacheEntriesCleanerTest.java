@@ -41,9 +41,8 @@ import ai.gebo.architecture.documents.cache.service.impl.model.DocumentChunkOper
 import ai.gebo.config.service.IGGeboConfigService;
 
 /**
- * Pins what is released after the grace period: the cached chunks and document copies
- * whose session no longer exists or never had one, their files, and the files no record
- * names; never what a living session holds, nor a file younger than the grace period.
+ * Pins what is released after the grace period: the cached chunks whose session no
+ * longer exists or never had one, their files, and the files no record names; never what a living session holds, nor a file younger than the grace period.
  */
 class OrphanedCacheEntriesCleanerTest {
 
@@ -107,22 +106,6 @@ class OrphanedCacheEntriesCleanerTest {
 		assertFalse(Files.exists(work.resolve(".CHCACHE").resolve("gone-set")));
 		assertFalse(Files.exists(work.resolve(".CHCACHE").resolve("none-set")));
 		assertTrue(Files.exists(work.resolve(".CHCACHE").resolve("living-set")));
-	}
-
-	@Test
-	void aDocumentCopyOfASessionGoneIsReleasedWithItsFile() throws Exception {
-		when(operations.findByLastAccessedLessThan(any())).thenReturn(Stream.of());
-		when(operations.findAll()).thenReturn(List.of());
-		final DocumentCacheEntry copy = new DocumentCacheEntry();
-		copy.setId("web/page");
-		copy.setChunkingSessionId("disposed-session");
-		copy.setBinaryDocumentName("copy-file");
-		final Path copyFile = file(".FCACHE", "copy-file", old);
-		when(copies.findByLastAccessedLessThan(any())).thenReturn(Stream.of(copy));
-
-		assertEquals(1, cleaner.releaseOrphans(now).documentCopies());
-		verify(copies).delete(copy);
-		assertFalse(Files.exists(copyFile));
 	}
 
 	@Test

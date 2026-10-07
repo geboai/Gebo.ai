@@ -21,15 +21,19 @@ import java.io.ByteArrayInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.ArgumentCaptor;
 
 import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.architecture.documents.access.StreamingPurpose;
+import ai.gebo.architecture.documents.cache.config.DocumentsCacheTtlConfig;
 import ai.gebo.architecture.documents.cache.repository.DocumentCacheEntryRepository;
 import ai.gebo.architecture.documents.cache.service.impl.model.DocumentCacheEntry;
 import ai.gebo.config.service.IGGeboConfigService;
@@ -37,10 +41,11 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.base.TypedInputStream;
 
 /**
- * Pins the documents a chunking session downloads: kept for it and released with it,
- * their files too.
+ * Pins the life of a cached document copy: deleted with its file once not accessed for
+ * its time to live (5 minutes unless configured), and a stale copy leaving no file
+ * behind.
  */
-class DocumentsCacheSessionTest {
+class DocumentsCacheTtlTest {
 
 	@TempDir
 	Path workDirectory;
@@ -63,7 +68,7 @@ class DocumentsCacheSessionTest {
 			saved.add(call.getArgument(0));
 			return call.getArgument(0);
 		});
-		cache = new DocumentsCacheServiceImpl(configService, entries, streamer);
+		cache = new DocumentsCacheServiceImpl(configService, entries, streamer, new DocumentsCacheTtlConfig());
 		document = new GDocumentReference();
 		document.setCode("web/page");
 	}
@@ -73,47 +78,39 @@ class DocumentsCacheSessionTest {
 	}
 
 	@Test
-	void aDocumentDownloadedForASessionIsKeptForIt() throws Exception {
-		cache.streamDocument(StreamingPurpose.INGESTING, document, "tool-session").getInputStream().close();
+	void aCopyNotAccessedForItsTimeToLiveIsDeletedWithItsFile() throws Exception {
+		cache.streamDocument(StreamingPurpose.INGESTING, document).getInputStream().close();
+		final DocumentCacheEntry copy = saved.get(0);
+		when(entries.findByLastAccessedLessThan(any())).thenReturn(Stream.of(copy));
+		final long before = System.currentTimeMillis();
 
-		assertEquals(1, saved.size());
-		assertEquals("tool-session", saved.get(0).getChunkingSessionId());
-		assertTrue(Files.exists(fileOf(saved.get(0))));
+		cache.expireCopies();
+
+		assertFalse(Files.exists(fileOf(copy)));
+		final ArgumentCaptor<Date> threshold = ArgumentCaptor.forClass(Date.class);
+		verify(entries).deleteByLastAccessedLessThan(threshold.capture());
+		final long age = before - threshold.getValue().getTime();
+		assertTrue(age >= 299_000 && age <= 301_000, "five minutes after the last access: " + age);
 	}
 
 	@Test
-	void releasingTheSessionDeletesItsCopiesAndTheirFiles() throws Exception {
-		cache.streamDocument(StreamingPurpose.INGESTING, document, "tool-session").getInputStream().close();
-		final DocumentCacheEntry entry = saved.get(0);
-		when(entries.findByChunkingSessionId("tool-session")).thenReturn(java.util.stream.Stream.of(entry));
-
-		cache.releaseSession("tool-session");
-
-		assertFalse(Files.exists(fileOf(entry)));
-		verify(entries).deleteByChunkingSessionId("tool-session");
-	}
-
-	@Test
-	void aCopyServedToAnotherSessionIsNowKeptForIt() throws Exception {
-		cache.streamDocument(StreamingPurpose.INGESTING, document, "first").getInputStream().close();
-		final DocumentCacheEntry entry = saved.get(0);
-		when(entries.findById("web/page")).thenReturn(Optional.of(entry));
-
-		cache.streamDocument(StreamingPurpose.INGESTING, document, "second").getInputStream().close();
-
-		assertEquals("second", entry.getChunkingSessionId());
+	void theTimeToLiveIsFiveMinutesUnlessConfigured() {
+		assertEquals(300_000L, new DocumentsCacheTtlConfig().ttlMillis());
+		final DocumentsCacheTtlConfig configured = new DocumentsCacheTtlConfig();
+		configured.setTtlSeconds(30);
+		assertEquals(30_000L, configured.ttlMillis());
 	}
 
 	@Test
 	void aStaleCopyLeavesNoFileBehind() throws Exception {
-		cache.streamDocument(StreamingPurpose.INGESTING, document, "first").getInputStream().close();
+		cache.streamDocument(StreamingPurpose.INGESTING, document).getInputStream().close();
 		final DocumentCacheEntry stale = saved.get(0);
 		final Path staleFile = fileOf(stale);
 		when(entries.findById("web/page")).thenReturn(Optional.of(stale));
 		// the document changed after the copy was made
-		document.setModificationDate(new java.util.Date(System.currentTimeMillis() + 60_000));
+		document.setModificationDate(new Date(System.currentTimeMillis() + 60_000));
 
-		cache.streamDocument(StreamingPurpose.INGESTING, document, "second").getInputStream().close();
+		cache.streamDocument(StreamingPurpose.INGESTING, document).getInputStream().close();
 
 		assertFalse(Files.exists(staleFile), "the stale copy's file is deleted with its record");
 		assertTrue(Files.exists(fileOf(saved.get(saved.size() - 1))));

@@ -60,7 +60,7 @@ class DocumentEmptinessTest {
 
 	private DocumentChunkingResponse chunk(String... pages) throws Exception {
 		IDocumentsCacheService cacheService = mock(IDocumentsCacheService.class);
-		when(cacheService.streamDocument(any(StreamingPurpose.class), any(), any())).thenAnswer(
+		when(cacheService.streamDocument(any(StreamingPurpose.class), any())).thenAnswer(
 				call -> TypedInputStream.of(new ByteArrayInputStream("pages".getBytes()), "application/pdf", "pdf"));
 		IGDocumentReferenceIngestionHandler ingestionHandler = mock(IGDocumentReferenceIngestionHandler.class);
 		when(ingestionHandler.handleContent(any(GDocumentReference.class), any(TypedInputStream.class)))

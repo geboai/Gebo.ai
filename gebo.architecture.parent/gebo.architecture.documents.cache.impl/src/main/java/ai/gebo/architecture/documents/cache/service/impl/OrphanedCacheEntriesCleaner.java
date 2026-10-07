@@ -36,11 +36,11 @@ import lombok.AllArgsConstructor;
 
 /**
  * Deletes what the chunking sessions left behind, older than the grace period (see
- * {@link CacheOrphansCleanupConfig}): the cached chunks and the cached document copies
- * whose session no longer exists (or never had one), their records and their files,
- * and the files of this instance's cache folders no record names (written before their
- * record by a chunking that never recorded it, or left by a record another instance
- * deleted).
+ * {@link CacheOrphansCleanupConfig}): the cached chunks whose session no longer exists
+ * (or never had one), their records and their files, and the files of the cache folders
+ * no record names (written before their record by a chunking that never recorded it, a
+ * copy whose record was replaced, or left by a record another instance deleted). The
+ * cached document copies expire by their own time to live (see DocumentsCacheServiceImpl).
  */
 @Component
 @AllArgsConstructor
@@ -56,9 +56,9 @@ public class OrphanedCacheEntriesCleaner {
 	private final CacheOrphansCleanupConfig config;
 
 	/** What a check deleted. */
-	record Released(int chunkOperations, int documentCopies, int unreferencedFiles) {
+	record Released(int chunkOperations, int unreferencedFiles) {
 		int total() {
-			return chunkOperations + documentCopies + unreferencedFiles;
+			return chunkOperations + unreferencedFiles;
 		}
 	}
 
@@ -68,8 +68,8 @@ public class OrphanedCacheEntriesCleaner {
 			final Released released = releaseOrphans(new Date());
 			if (released.total() > 0) {
 				LOGGER.info("Released the orphaned cache entries older than " + config.getGraceSeconds() + " s: "
-						+ released.chunkOperations() + " cached chunk operation(s), " + released.documentCopies()
-						+ " cached document copie(s), " + released.unreferencedFiles() + " unreferenced file(s)");
+						+ released.chunkOperations() + " cached chunk operation(s), " + released.unreferencedFiles()
+						+ " unreferenced file(s)");
 			} else if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("releaseOrphans() no orphaned cache entry older than " + config.getGraceSeconds() + " s");
 			}
@@ -98,20 +98,6 @@ public class OrphanedCacheEntriesCleaner {
 			chunkOperations.delete(operation);
 		}
 
-		final List<DocumentCacheEntry> orphanCopies;
-		try (Stream<DocumentCacheEntry> stale = documentCopies.findByLastAccessedLessThan(threshold)) {
-			orphanCopies = stale.filter(copy -> !sessionExists(copy.getChunkingSessionId(), alive)).toList();
-		}
-		for (DocumentCacheEntry copy : orphanCopies) {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Releasing the cached copy of " + copy.getId() + " (session " + copy.getChunkingSessionId()
-						+ ")");
-			}
-			if (copy.getBinaryDocumentName() != null) {
-				delete(work.resolve(DOCUMENTS_FOLDER).resolve(copy.getBinaryDocumentName()));
-			}
-			documentCopies.delete(copy);
-		}
 
 		// the files no record names, older than the grace period
 		final Set<String> chunkFiles = new HashSet<>();
@@ -124,7 +110,7 @@ public class OrphanedCacheEntriesCleaner {
 		});
 		final int unreferenced = deleteUnreferenced(work.resolve(CHUNKS_FOLDER), chunkFiles, threshold)
 				+ deleteUnreferenced(work.resolve(DOCUMENTS_FOLDER), copyFiles, threshold);
-		return new Released(orphanOperations.size(), orphanCopies.size(), unreferenced);
+		return new Released(orphanOperations.size(), unreferenced);
 	}
 
 	private boolean sessionExists(String sessionId, Map<String, Boolean> alive) {

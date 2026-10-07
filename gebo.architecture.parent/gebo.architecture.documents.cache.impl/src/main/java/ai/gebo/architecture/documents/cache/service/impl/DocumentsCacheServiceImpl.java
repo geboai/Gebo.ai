@@ -7,18 +7,18 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.documents.access.DocumentContentStreamerException;
 import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.architecture.documents.access.StreamingPurpose;
+import ai.gebo.architecture.documents.cache.config.DocumentsCacheTtlConfig;
 import ai.gebo.architecture.documents.cache.repository.DocumentCacheEntryRepository;
 import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException;
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
@@ -41,52 +41,43 @@ public class DocumentsCacheServiceImpl
 	public DocumentsCacheServiceImpl(
 
 			IGGeboConfigService configService, DocumentCacheEntryRepository repository,
-			IGDocumentContentStreamer documentContentStreamer) {
-		super(repository, 5 * 60 * 1000);
+			IGDocumentContentStreamer documentContentStreamer, DocumentsCacheTtlConfig ttlConfig) {
+		// a copy lives this long after its last access (ai.gebo.documents-cache.ttl-seconds)
+		super(repository, ttlConfig.ttlMillis());
 		this.documentContentStreamer = documentContentStreamer;
 		this.configService = configService;
 
 	}
 
-	@Override
-	public TypedInputStream streamDocument(StreamingPurpose streamingPurpose, IGComponentOriginatedDocument reference)
-			throws DocumentCacheAccessException, IOException {
-		return streamDocument(streamingPurpose, reference, null);
+	/**
+	 * The copies not accessed for their time to live deleted, records and files: the
+	 * expiry of this cache only (the chunk cache's chunks are read later, by the steps of
+	 * their session, and are released with it).
+	 */
+	@Scheduled(initialDelay = 10000, fixedRate = 120000)
+	public void expireCopies() {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("expireCopies() the copies not accessed for " + cacheLastUsedMillisecondAgoExpiration / 1000
+					+ " s");
+		}
+		checkExpirationTick();
 	}
 
 	@Override
-	public TypedInputStream streamDocument(StreamingPurpose streamingPurpose, IGComponentOriginatedDocument reference,
-			String chunkingSessionId) throws DocumentCacheAccessException, IOException {
+	public TypedInputStream streamDocument(StreamingPurpose streamingPurpose, IGComponentOriginatedDocument reference)
+			throws DocumentCacheAccessException, IOException {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin streamDocument(" + reference.getCode() + ") chunking session:" + chunkingSessionId);
+			LOGGER.debug("Begin streamDocument(" + reference.getCode() + ");");
 		}
 		SupplierWithException isSupplier = () -> {
 			return documentContentStreamer.streamContent(streamingPurpose, reference);
 		};
-		return streamDocumentWithLocalCache(isSupplier, reference, chunkingSessionId);
+		return streamDocumentWithLocalCache(isSupplier, reference);
 
-	}
-
-	@Override
-	public void releaseSession(String chunkingSessionId) {
-		if (chunkingSessionId == null) {
-			return;
-		}
-		final List<DocumentCacheEntry> kept;
-		try (Stream<DocumentCacheEntry> entries = repository.findByChunkingSessionId(chunkingSessionId)) {
-			kept = entries.toList();
-		}
-		kept.forEach(this::cleanupResources);
-		repository.deleteByChunkingSessionId(chunkingSessionId);
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("releaseSession(" + chunkingSessionId + ") released " + kept.size()
-					+ " cached document copie(s)");
-		}
 	}
 
 	private TypedInputStream streamDocumentWithLocalCache(SupplierWithException typedInputStreamSupplier,
-			IGComponentOriginatedDocument reference, String chunkingSessionId)
-			throws IOException, DocumentCacheAccessException {
+			IGComponentOriginatedDocument reference) throws IOException, DocumentCacheAccessException {
 		Optional<DocumentCacheEntry> inCacheCopy = repository.findById(reference.getCode());
 		boolean loadAndCache = true;
 		if (inCacheCopy.isPresent() && inCacheCopy.get().getBinaryDocumentName() != null) {
@@ -103,10 +94,6 @@ public class DocumentsCacheServiceImpl
 					// Serve from local filesystem
 					DocumentCacheEntry cacheEntry = inCacheCopy.get();
 					cacheEntry.setLastAccessed(new Date());
-					if (chunkingSessionId != null) {
-						// the copy is now kept for the session using it, released with it
-						cacheEntry.setChunkingSessionId(chunkingSessionId);
-					}
 					repository.save(cacheEntry);
 					InputStream is = Files.newInputStream(filePath, StandardOpenOption.READ);
 					return TypedInputStream.of(is, cacheEntry.getContentType(), cacheEntry.getExtension());
@@ -123,7 +110,6 @@ public class DocumentsCacheServiceImpl
 		cacheEntry.setBinaryDocumentName(newFileName);
 		cacheEntry.setId(reference.getCode());
 		cacheEntry.setLastAccessed(new Date());
-		cacheEntry.setChunkingSessionId(chunkingSessionId);
 		Path cacheFolder = Path.of(configService.getGeboWorkDirectory(), FILESCACHEFOLDER);
 		Files.createDirectories(cacheFolder);
 		Path filePath = Path.of(configService.getGeboWorkDirectory(), FILESCACHEFOLDER,
