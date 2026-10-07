@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-package ai.gebo.llms.agent.chat.service.impl;
+package ai.gebo.llms.chat.abstraction.layer.services;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -20,25 +20,25 @@ import ai.gebo.system.ingestion.IGLanguageDetector;
 /**
  * The language a user's message is written in, as the platform's language detector
  * (the one the ingestion tags the documents with) tells it: named in English (e.g.
- * "English", "Italian") so that a prompt can say it outright instead of asking the
- * model to deduce it, which a model fails to do once the tools' results in another
- * language fill its context.
+ * "English", "Italian") so that the prompts say it outright instead of asking the
+ * model to deduce it, which a model fails to do once documents or tools' results in
+ * another language fill its context.
  */
-final class UserLanguage {
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserLanguage.class);
+public final class UserLanguageDetection {
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserLanguageDetection.class);
 	/** Below this length the detection is not tried (as for the keywords' language). */
-	static final int MIN_DETECTION_CHARS = 30;
+	public static final int MIN_DETECTION_CHARS = 30;
 	/** Below this confidence the detection is not trusted (as for the keywords' language). */
-	static final double MIN_CONFIDENCE = 0.5;
+	public static final double MIN_CONFIDENCE = 0.5;
 
-	private UserLanguage() {
+	private UserLanguageDetection() {
 	}
 
 	/**
 	 * The English name of the language of {@code text}; null when there is no
 	 * detector, the text is too short or the detection is not trusted.
 	 */
-	static String of(IGLanguageDetector detector, String text) {
+	public static String of(IGLanguageDetector detector, String text) {
 		if (detector == null || text == null) {
 			return null;
 		}
@@ -65,7 +65,7 @@ final class UserLanguage {
 	}
 
 	/** The English name of a language code ("it" gives "Italian"); null for no code. */
-	static String englishName(String code) {
+	public static String englishName(String code) {
 		if (code == null || code.isBlank()) {
 			return null;
 		}

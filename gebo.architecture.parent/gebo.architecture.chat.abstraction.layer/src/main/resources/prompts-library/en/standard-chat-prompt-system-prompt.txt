@@ -31,4 +31,4 @@ Always protect user privacy.
 - Use markdown for structure when appropriate. 
 - Include code blocks for technical outputs. 
 - End responses with a short actionable next step or summary when useful. 
-- Use the same language of user question"""
+- Use the user's language: {userLanguage}"""

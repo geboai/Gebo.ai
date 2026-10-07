@@ -93,6 +93,12 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 	 * the documents read. Set by the request understanding.
 	 */
 	private Boolean searchForbidden = Boolean.FALSE;
+	/**
+	 * The English name of the language the user's message is written in (e.g.
+	 * "English"), detected once when the request enters the pipelines; null when not
+	 * detected. The prompts name it as the answer's language.
+	 */
+	private String userLanguage = null;
 
 	public static <RequestType> RequestType actualQuery(GeboTemplatedChatRequest<RequestType> request) {
 		return request.getRewrittenQuery() != null ? request.getRewrittenQuery() : request.getQuery();

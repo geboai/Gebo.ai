@@ -613,8 +613,21 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		allParams.put(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, chatContext.getActualUserRequest());
 		allParams.put(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM,
 				chatContext.getConsolidatedHistory() != null ? chatContext.getConsolidatedHistory() : "");
-		String content = promptTemplate.render(allParams);
+		String content = promptTemplate.render(withUserLanguage(allParams, chatContext));
 		return new UserMessage(content);
+	}
+
+	/**
+	 * The parameters with the answer's language ({@code {userLanguage}}): the user's
+	 * language detected for the request, or what says to deduce it; a caller's own
+	 * value is kept. Every template of every call may name it, never missing.
+	 */
+	protected static Map<String, Object> withUserLanguage(Map<String, Object> params,
+			IChatRequestContext chatContext) {
+		final Map<String, Object> withLanguage = params != null ? new HashMap<>(params) : new HashMap<>();
+		withLanguage.putIfAbsent(IChatRequestContext.USER_LANGUAGE_PROMPT_PARAM,
+				IChatRequestContext.answerLanguage(chatContext));
+		return withLanguage;
 	}
 
 	/**
@@ -639,7 +652,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				chatContext != null && chatContext.getConsolidatedHistory() != null
 						? chatContext.getConsolidatedHistory()
 						: "");
-		final String closing = new PromptTemplate(template).render(allParams);
+		final String closing = new PromptTemplate(template).render(withUserLanguage(allParams, chatContext));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("createToolsResultsClosing(...) prompt:" + prompt.getPromptUse() + " closes the tools' results"
 					+ " with " + closing.length() + " character(s)");
@@ -682,7 +695,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			IChatRequestContext chatContext) {
 		String systemTemplate = prompt.getSystemPromptTemplate();
 		PromptTemplate template = new PromptTemplate(systemTemplate);
-		String content = template.render(params);
+		String content = template.render(withUserLanguage(params, chatContext));
 		List<String> rules = chatContext != null ? chatContext.getRulesToFollow() : null;
 		if (rules != null && !rules.isEmpty()) {
 			StringBuilder withRules = new StringBuilder(content);

@@ -89,6 +89,11 @@ final class ToolsContextSharing {
 			public List<String> getRulesToFollow() {
 				return context.getRulesToFollow();
 			}
+
+			@Override
+			public String getUserLanguage() {
+				return context.getUserLanguage();
+			}
 		};
 	}
 }

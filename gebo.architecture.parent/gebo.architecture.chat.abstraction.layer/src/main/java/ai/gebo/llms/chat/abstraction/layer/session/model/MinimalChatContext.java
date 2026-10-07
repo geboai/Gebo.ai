@@ -55,6 +55,10 @@ public class MinimalChatContext implements ITokensCountable {
 			if (currentRequest.getId() != null) {
 				toolsContext.put(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, currentRequest.getId());
 			}
+			if (currentRequest.getUserLanguage() != null) {
+				builder = builder.userLanguage(currentRequest.getUserLanguage());
+				toolsContext.put(ToolCallbackDeclarationUtil.USER_LANGUAGE_CONTEXT_KEY, currentRequest.getUserLanguage());
+			}
 		}
 		// the knowledge bases the tools may search, browse and read: the chat's
 		if (availableKnowledgeBaseCodes != null) {

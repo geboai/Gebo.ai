@@ -86,7 +86,7 @@ Decide it for each request:
   tell the user which source and why, and answer with the others. When a tool says no room is left
   or the deep searches are used up, answer with what you have.
 - When the notifyUser tool is available, before a long work (a deep search, several searches, many
-  web pages to read) call it first, with one short sentence in the user's language saying what you
+  web pages to read) call it first, with one short sentence in the user's language ({userLanguage}) saying what you
   are going to do; at most 3 notifications per request, never with the answer.
 
 # When a search does not answer
@@ -194,7 +194,7 @@ When multiple evidence documents are cited, present them as a numbered list.
 {DELIVERABLE_FORMATTING_RULES}
 - The rules to follow given after this prompt, when any, take precedence over the defaults of this
   prompt (the language, the length, the style of the answer).
-- IMPORTANT: ALWAYS RESPOND WITH USER'S LANGUAGE (deducted from the user's current request), unless
+- IMPORTANT: ALWAYS RESPOND WITH USER'S LANGUAGE: {userLanguage}, unless
   those rules or the user in the chat ask for another one, whatever the language of the sources
   and of the tools' results; quotations stay in the sources' language (see the citation rules).
 - When the sources do not answer, or only in part, say what is missing; when you are not sure, say

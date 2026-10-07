@@ -145,6 +145,11 @@ public class LLMChatRequestResources implements ITokensCountable {
 		}
 
 		@Override
+		public String getUserLanguage() {
+			return currentRequest != null ? currentRequest.getUserLanguage() : null;
+		}
+
+		@Override
 		public List<IChatSessionEntry> getInteractions() {
 			List<IChatSessionEntry> entries = new ArrayList<IChatSessionEntry>();
 			if (chathistory.getLatestEntries() != null) {
@@ -183,6 +188,10 @@ public class LLMChatRequestResources implements ITokensCountable {
 			if (availableKnowledgeBaseCodes != null) {
 				toolsContext.put(ToolCallbackDeclarationUtil.CHAT_KNOWLEDGE_BASES_CONTEXT_KEY,
 						List.copyOf(availableKnowledgeBaseCodes));
+			}
+			// the tools calling a model of their own name the answer's language to it
+			if (currentRequest != null && currentRequest.getUserLanguage() != null) {
+				toolsContext.put(ToolCallbackDeclarationUtil.USER_LANGUAGE_CONTEXT_KEY, currentRequest.getUserLanguage());
 			}
 			return toolsContext;
 		}

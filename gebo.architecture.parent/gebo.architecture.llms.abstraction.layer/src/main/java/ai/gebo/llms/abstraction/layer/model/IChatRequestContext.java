@@ -21,6 +21,14 @@ public interface IChatRequestContext {
 	public static final String CONSOLIDATED_HISTORY_PROMPT_PARAM = "consolidatedChatHistory";
 	public static final String DOCUMENTS_PROMPT_PARAM = "documents";
 	public static final String CONSOLIDATED_SUMMARY_PROMPT_PARAM = "consolidated";
+	/**
+	 * The prompts' placeholder naming the language the answer is written in (see
+	 * {@link #getUserLanguage()}): every model call renders it, with
+	 * {@link #USER_LANGUAGE_UNDETECTED} when the user's language was not detected.
+	 */
+	public static final String USER_LANGUAGE_PROMPT_PARAM = "userLanguage";
+	/** What the prompts say of the answer's language when the user's one was not detected. */
+	public static final String USER_LANGUAGE_UNDETECTED = "the language of the user's current request";
 
 	public static interface IDocument {
 		public String getId();
@@ -61,6 +69,20 @@ public interface IChatRequestContext {
 	// Rules the user or the administrators set for the answers of this chat.
 	public default List<String> getRulesToFollow() {
 		return List.of();
+	}
+
+	/**
+	 * The English name of the language the user's message is written in (e.g.
+	 * "English"), detected once for the request; null when not detected.
+	 */
+	public default String getUserLanguage() {
+		return null;
+	}
+
+	/** The answer's language as the prompts name it: the user's one, or what says to deduce it. */
+	public static String answerLanguage(IChatRequestContext context) {
+		final String language = context != null ? context.getUserLanguage() : null;
+		return language != null && !language.isBlank() ? language : USER_LANGUAGE_UNDETECTED;
 	}
 
 	public default IChatRequestContext integrateWithDocuments(Object documents) {
@@ -180,6 +202,11 @@ public interface IChatRequestContext {
 			public List<String> getRulesToFollow() {
 				return IChatRequestContext.this.getRulesToFollow();
 			}
+
+			@Override
+			public String getUserLanguage() {
+				return IChatRequestContext.this.getUserLanguage();
+			}
 		};
 	}
 
@@ -201,6 +228,7 @@ public interface IChatRequestContext {
 		private final Map<String, Object> pipelineInfos;
 		private final ToolCallsListener toolCallListener;
 		private final List<String> rulesToFollow;
+		private final String userLanguage;
 	}
 
 	public static ChatRequestContextImplBuilder builder() {
@@ -261,6 +289,11 @@ public interface IChatRequestContext {
 			@Override
 			public List<String> getRulesToFollow() {
 				return IChatRequestContext.this.getRulesToFollow();
+			}
+
+			@Override
+			public String getUserLanguage() {
+				return IChatRequestContext.this.getUserLanguage();
 			}
 		};
 	}
@@ -324,6 +357,11 @@ public interface IChatRequestContext {
 			@Override
 			public List<String> getRulesToFollow() {
 				return IChatRequestContext.this.getRulesToFollow();
+			}
+
+			@Override
+			public String getUserLanguage() {
+				return IChatRequestContext.this.getUserLanguage();
 			}
 		};
 	}

@@ -158,6 +158,8 @@ ai.gebo.agents.prompts.uses:
         description: The completeness level required for the deliverable (e.g. QA, HOWTO, ANALISYS), driving how deep the answer must go.
       - placeholder: SHARED_CONTEXT
         description: The evidence gathered by the other agents in the network, to be turned into the final answer.
+      - placeholder: userLanguage
+        description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
   - code: tool-calling-agent-prompt
     description: Main loop prompt for the generic string-to-string tool-calling agent, which executes tool calls on behalf of the network.
     module: agents-standard

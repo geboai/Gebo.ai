@@ -46,6 +46,8 @@ ai.gebo.openchat.prompts.uses:
         description: The user's original question or request driving the network.
       - placeholder: SHARED_CONTEXT
         description: The context/evidence shared across all agents in the network so far.
+      - placeholder: userLanguage
+        description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
   - code: open-chat-answer-writer-agent-prompt
     description: Main loop prompt for the open-chat writer agent. It produces a free-form, conversational answer to any kind of question, using external search results or attached files only when present and relevant, and does not force citations, evidence organization or a deliverable-format template.
     module: open-chat
@@ -66,3 +68,5 @@ ai.gebo.openchat.prompts.uses:
         description: The user's original question or request driving the network.
       - placeholder: SHARED_CONTEXT
         description: Any evidence gathered by the external search agents or content of attached files, to be woven into the answer only when relevant.
+      - placeholder: userLanguage
+        description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.

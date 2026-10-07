@@ -332,7 +332,8 @@ public abstract class AbstractDeepSearchTool<Q> {
 			// the analysis is asked to fit the room its model call leaves (see lengthTarget)
 			final int roomForAnalysis = ToolsTokenBudget.grantFor(toolContext, support.maxAnalysisTokens());
 			final String analysis = support.analysis()
-					.analyze(Flux.fromIterable(fragments), analysisContext(question, requestId),
+					.analyze(Flux.fromIterable(fragments),
+							analysisContext(question, requestId, ToolCallbackDeclarationUtil.userLanguage(toolContext)),
 							ReactiveIdentityUtil.create(), deliverable,
 							TOOL_COMPLETENESS_NOTE + lengthTarget(param.getDepth(), roomForAnalysis), chatModel,
 							serviceModel,
@@ -465,13 +466,18 @@ public abstract class AbstractDeepSearchTool<Q> {
 		}
 	}
 
-	/** The context of the analysis: the agent's question, without chat history. */
-	static IChatRequestContext analysisContext(String question, String requestId) {
+	/**
+	 * The context of the analysis: the agent's question, without chat history, and the
+	 * language of the user's message, the analysis' language (the question may be
+	 * written in the documents' one).
+	 */
+	static IChatRequestContext analysisContext(String question, String requestId, String userLanguage) {
 		final Map<String, Object> toolsContext = new HashMap<>();
 		if (requestId != null) {
 			toolsContext.put(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, requestId);
 		}
-		return IChatRequestContext.builder().actualUserRequest(question).requestID(requestId).consolidatedHistory("")
+		return IChatRequestContext.builder().actualUserRequest(question).requestID(requestId).userLanguage(userLanguage)
+				.consolidatedHistory("")
 				.interactions(new ArrayList<>()).documents(new ArrayList<>()).toolsContext(toolsContext)
 				.pipelineInfos(new HashMap<>()).build();
 	}

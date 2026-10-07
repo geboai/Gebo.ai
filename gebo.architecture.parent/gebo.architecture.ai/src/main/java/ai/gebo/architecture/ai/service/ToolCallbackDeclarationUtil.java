@@ -56,6 +56,22 @@ public class ToolCallbackDeclarationUtil {
 	public static final String CHAT_KNOWLEDGE_BASES_CONTEXT_KEY = "geboChatKnowledgeBases";
 
 	/**
+	 * Tools context key carrying the English name of the language the user's message
+	 * is written in, detected once per user request: a tool calling a model of its own
+	 * (a deep search's analysis) names it to that model.
+	 */
+	public static final String USER_LANGUAGE_CONTEXT_KEY = "geboUserLanguage";
+
+	/** The language of the user's message a tool is called for, or null when not known. */
+	public static String userLanguage(ToolContext toolContext) {
+		if (toolContext == null || toolContext.getContext() == null) {
+			return null;
+		}
+		Object value = toolContext.getContext().get(USER_LANGUAGE_CONTEXT_KEY);
+		return value instanceof String language && !language.isBlank() ? language : null;
+	}
+
+	/**
 	 * The codes of the knowledge bases of the chat a tool is called for. Empty when the
 	 * chat has none, and when the tool is not called for a chat session: a call
 	 * outside a chat has no knowledge base.

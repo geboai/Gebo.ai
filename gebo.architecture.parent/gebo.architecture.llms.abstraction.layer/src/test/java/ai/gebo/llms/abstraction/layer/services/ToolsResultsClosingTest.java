@@ -120,6 +120,30 @@ class ToolsResultsClosingTest {
 	}
 
 	@Test
+	void everyTemplateOfTheCallNamesTheUsersLanguage() {
+		AdditionalToolsDeclarationTest.DeclaringModel model = new AdditionalToolsDeclarationTest.DeclaringModel(
+				mock(IGToolCallbackSourceRepositoryPattern.class), mock(IChatModelUsageAdvisorFactory.class));
+		IChatRequestContext english = mock(IChatRequestContext.class);
+		when(english.getActualUserRequest()).thenReturn("Who is Fohat?");
+		when(english.getUserLanguage()).thenReturn("English");
+		GPromptTemplateConfig prompt = GPromptTemplateConfig.of("Answer in {userLanguage}.",
+				"{question} ({userLanguage})", "a-use");
+		prompt.setToolsResultsPromptTemplate("Still in {userLanguage}.");
+
+		assertEquals("Answer in English.", model.createSystemMessage(prompt, Map.of(), english).getText());
+		assertEquals("Who is Fohat? (English)", model.createLastUserMessage(prompt, Map.of(), english).getText());
+		assertEquals("Still in English.", model.createToolsResultsClosing(prompt, Map.of(), english));
+
+		IChatRequestContext undetected = mock(IChatRequestContext.class);
+		when(undetected.getActualUserRequest()).thenReturn("Who is Fohat?");
+		assertEquals("Answer in " + IChatRequestContext.USER_LANGUAGE_UNDETECTED + ".",
+				model.createSystemMessage(prompt, Map.of(), undetected).getText(), "left to the model");
+		assertEquals("Answer in Italian.", model.createSystemMessage(prompt,
+				Map.of(IChatRequestContext.USER_LANGUAGE_PROMPT_PARAM, "Italian"), english).getText(),
+				"a caller's own value is kept");
+	}
+
+	@Test
 	void everyToolOfTheCallClosesItsResults() {
 		IGToolCallbackSourceRepositoryPattern repository = mock(IGToolCallbackSourceRepositoryPattern.class);
 		ToolCallback searchWeb = tool("searchWeb", "pages");

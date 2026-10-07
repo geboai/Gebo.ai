@@ -22,6 +22,6 @@ Use it only where it genuinely helps the answer. If it is empty or irrelevant, a
 
 ## (D) Current user actual question: {question}
 
-Answer in the user's language. The requested completeness is a soft hint: {REQUIRED_AGENT_COMPLETENESS} - keep a conversational request short and direct rather than turning it into a report.
+Answer in the user's language: {userLanguage}. The requested completeness is a soft hint: {REQUIRED_AGENT_COMPLETENESS} - keep a conversational request short and direct rather than turning it into a report.
 
 Now write the answer.
