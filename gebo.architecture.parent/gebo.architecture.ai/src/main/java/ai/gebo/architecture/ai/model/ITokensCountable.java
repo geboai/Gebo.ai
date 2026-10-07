@@ -50,14 +50,28 @@ public interface ITokensCountable {
 		return totalTokens;
 	}
 
+	/**
+	 * The tokens of every value of the map (its keys are not counted), each sized by
+	 * itself: a countable value gives its own size, any other its text's.
+	 */
 	public static int tokensSize(Map<String, Object> params) {
 		if (params == null)
 			return 0;
-		String variables[] = new String[params.size()];
-		int index = 0;
+		int toks = 0;
 		for (Object value : params.values()) {
-			variables[index] = value.toString();
+			toks += valueTokensSize(value);
 		}
-		return stringsTokensSize(variables);
+		return toks;
+	}
+
+	/** The tokens of one value: its own size when countable, its text's otherwise, none when null. */
+	private static int valueTokensSize(Object value) {
+		if (value == null) {
+			return 0;
+		}
+		if (value instanceof ITokensCountable countable) {
+			return countable.getTokensSize();
+		}
+		return stringsTokensSize(value.toString());
 	}
 }
