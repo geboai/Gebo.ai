@@ -1059,6 +1059,22 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
+	public String getUserRequiredLanguage(GeboChatRequest request) throws GeboChatSessionLifecycleException {
+		return session(request).getUserRequiredLanguage();
+	}
+
+	@Override
+	public void setUserRequiredLanguage(GeboChatRequest request, String language)
+			throws GeboChatSessionLifecycleException {
+		final GUserChatSession session = session(request);
+		session.setUserRequiredLanguage(language);
+		sessionRepository.save(session);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Chat " + request.getUserChatContextCode() + " user required language now:" + language);
+		}
+	}
+
+	@Override
 	public List<GKnowledgeBase> getSessionAvailableKnowledgeBases(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException {
 		List<GKnowledgeBase> out = new ArrayList<GKnowledgeBase>();

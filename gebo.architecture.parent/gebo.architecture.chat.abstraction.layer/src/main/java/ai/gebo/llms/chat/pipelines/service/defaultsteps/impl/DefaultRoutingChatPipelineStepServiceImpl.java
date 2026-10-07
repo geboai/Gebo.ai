@@ -100,6 +100,11 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private static final String DELIVERABLE_FIELD = DELIVERABLE_TEMPLATE_PARAM;
 	/** The request understanding's field telling whether the user asked to search. */
 	static final String SEARCH_REQUESTED_FIELD = "searchRequested";
+	/**
+	 * The request understanding's field naming the language the latest user message
+	 * explicitly asks the answers in: kept on the chat until the user asks for another.
+	 */
+	static final String USER_REQUIRED_LANGUAGE_FIELD = "userRequiredLanguage";
 	private static final String INTENT_SELECTION_CRITERIA = "selection-criteria: ";
 	private static final String INTENT_TYPE = "intent-type: ";
 	private static final String END_DELIVERABLE_TYPES_CATALOG = "END_DELIVERABLE_TYPES_CATALOG";
@@ -186,7 +191,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
 		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
 		Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
-				List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD, SEARCH_REQUESTED_FIELD));
+				List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD, SEARCH_REQUESTED_FIELD, USER_REQUIRED_LANGUAGE_FIELD));
 		// an output with neither field is asked once more by callLLMRepeatableFieldEntryOutput
 		List<String> rewrittenQuery = data.get(REWRITTEN_QUERY_FIELD);
 		List<String> deliverable = data.get(DELIVERABLE_FIELD);
@@ -236,6 +241,28 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		runtimeData.getRequestResources().getCurrentRequest().setSearchForbidden(searchForbidden);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Search requested:" + searchRequested + " search forbidden:" + searchForbidden);
+		}
+		// a language the user explicitly asks the answers in wins over the one the message
+		// is written in (detected when the request entered the pipelines): asked in this
+		// message it is kept on the chat, until the user asks for another one
+		final GeboChatRequest currentRequest = runtimeData.getRequestResources().getCurrentRequest();
+		final String askedLanguage = userRequiredLanguage(data.get(USER_REQUIRED_LANGUAGE_FIELD));
+		final String keptLanguage = chatSessionLifecycleService.getUserRequiredLanguage(currentRequest);
+		if (askedLanguage != null && !askedLanguage.equalsIgnoreCase(String.valueOf(keptLanguage))) {
+			chatSessionLifecycleService.setUserRequiredLanguage(currentRequest, askedLanguage);
+		}
+		final String answerLanguage = askedLanguage != null ? askedLanguage : keptLanguage;
+		if (answerLanguage != null) {
+			runtimeData.getRequestResources().getCurrentRequest().setUserLanguage(answerLanguage);
+			if (runtimeData.getMinimalChatContext() != null
+					&& runtimeData.getMinimalChatContext().getCurrentRequest() != null) {
+				runtimeData.getMinimalChatContext().getCurrentRequest().setUserLanguage(answerLanguage);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("User required language asked in the message:" + askedLanguage + " kept on the chat:"
+					+ keptLanguage + ", the request's now:"
+					+ runtimeData.getRequestResources().getCurrentRequest().getUserLanguage());
 		}
 		return new RewriteAndUserIntent(rewrited_query, userIntent);
 	}
@@ -572,6 +599,27 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			return false;
 		}
 		return values.get(0).trim().toLowerCase().startsWith("never");
+	}
+
+	/**
+	 * The language the request understanding said the user explicitly asks the answers
+	 * in, as a capitalized English name ("English"); null when the user asks for none.
+	 */
+	static String userRequiredLanguage(List<String> values) {
+		if (values == null || values.isEmpty() || values.get(0) == null) {
+			return null;
+		}
+		final String lower = values.get(0).trim().toLowerCase();
+		if (lower.startsWith("none") || lower.startsWith("null") || lower.startsWith("no ") || lower.equals("no")
+				|| lower.startsWith("not ") || lower.startsWith("n/a")) {
+			return null;
+		}
+		// the name only: the words before any comment, without punctuation
+		final String value = values.get(0).trim().replaceAll("[^\\p{L} ].*$", "").trim();
+		if (value.isEmpty()) {
+			return null;
+		}
+		return Character.toUpperCase(value.charAt(0)) + value.substring(1);
 	}
 
 	private RespondingWith parseDecision(String decision) {

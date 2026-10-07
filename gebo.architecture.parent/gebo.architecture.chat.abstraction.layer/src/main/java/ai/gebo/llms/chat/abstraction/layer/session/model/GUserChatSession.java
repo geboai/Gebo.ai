@@ -53,6 +53,12 @@ public class GUserChatSession extends GBaseObject {
 	private List<ChatInteractions> interactions = new ArrayList<ChatInteractions>(); // List of chat interactions
 	private String chatModelCode = null; // Code for the chat model used
 	private List<String> choosedKnowledgeBases = null; // List of chosen knowledge bases for the chat
+	/**
+	 * The language the user explicitly asked the answers of this chat in (e.g.
+	 * "French"), named in English; null when the user never asked for one. It holds
+	 * until the user asks for another one.
+	 */
+	private String userRequiredLanguage = null;
 
 	public IChatRequestContext createChatRequestContext() {
 		ChatRequestContextImplBuilder builder = IChatRequestContext.builder();
@@ -91,6 +97,7 @@ public class GUserChatSession extends GBaseObject {
 						pipelineInfos.put("routed-params", interaction.getResponse().getPipelineParams());
 					}
 					builder.pipelineInfos(pipelineInfos);
+					builder.userLanguage(interaction.getRequest().getUserLanguage());
 				}
 			}
 		}

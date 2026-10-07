@@ -15,11 +15,12 @@ Use only information already present in the chat history and user question.
 Avoid adding new entities, products, versions, dates, or requirements not present.
 
 Output ONLY:
- three fields in the format <field>=<value>
+ four fields in the format <field>=<value>
   
  rewrittenQuery=<the rewritten user question (no explanations, no JSON, no extra text)>
  deliverable=<selected deliverable type (intent-type value)>
  searchRequested=<true, false or never>
+ userRequiredLanguage=<the language the latest user question explicitly asks the answer in, named in English, or none>
  
 rewrittenQuery rules:
 
@@ -57,6 +58,17 @@ searchRequested rules:
   "Without searching anything: what was my first question?" -> never
   "Senza cercare nulla, di cosa abbiamo parlato?" -> never
 
+userRequiredLanguage rules (the latest user question only: the chat keeps a language asked earlier):
+* The language the latest user question EXPLICITLY asks the answer to be written in, named in English:
+  English, Italian, French, German, Spanish...
+* none when it asks for no language: the language the question is written in is not a request.
+* Examples:
+  "Rispondimi in inglese: chi e' X?" -> English
+  "D'ora in poi rispondimi sempre in francese. Chi e' X?" -> French
+  "Please answer in Italian: who is X?" -> Italian
+  "Chi e' X?" -> none
+  "Who is X?" -> none
+
 You MUST NOT:
 
 Answer the question.
@@ -66,11 +78,12 @@ Add keywords lists, alternative queries, or extra metadata.
 Introduce assumptions or guesses.
 
 OUTPUT:
-Return only the three required fields exactly 3 lines:
+Return only the four required fields exactly 4 lines:
 No quotes. No markdown. No bullets.
 
 Example: 
  rewrittenQuery=<the rewritten user question (no explanations, no JSON, no extra text)>
  deliverable=<selected deliverable type (intent-type value)>
  searchRequested=<true, false or never>
+ userRequiredLanguage=<the language the latest user question explicitly asks the answer in, named in English, or none>
 
