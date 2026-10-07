@@ -73,6 +73,17 @@ class DeepSearchQuotationsTest {
 	}
 
 	@Test
+	void aWordBrokenAtTheEndOfALineIsOneWord() {
+		final String page = "Egli in tal caso è penetrato nel mondo spirituale, ma rinun-\nzia a progredire più oltre, e "
+				+ "diventa prigioniero di quella figura che gli si presenta all'anima.";
+
+		assertTrue(DeepSearchQuotations.contains(DeepSearchQuotations.normalized(page),
+				"è penetrato nel mondo spirituale, ma rinunzia a progredire più oltre"));
+		assertEquals("ben definito", DeepSearchQuotations.normalized("ben de-\r\nfinito"));
+		assertEquals("a b", DeepSearchQuotations.normalized("a - b"), "a dash between words is not a broken word");
+	}
+
+	@Test
 	void aQuotationWrittenForAnotherFragmentOfTheBatchIsKeptWithItsRealFragment() {
 		final DeepSearchQuotations quotations = new DeepSearchQuotations();
 

@@ -72,6 +72,8 @@ public class DeepSearchQuotations {
 	static final Pattern INLINE_CODE = Pattern.compile("`[^`\\n]*`");
 	/** A fenced code block's fence: what it encloses is never changed. */
 	static final String FENCE = "```";
+	/** A word broken by a hyphen at the end of a line: its two parts, to be joined. */
+	static final Pattern LINE_END_HYPHEN = Pattern.compile("(\\p{L})[-\\u2010\\u2011][ \\t]*\\R[ \\t]*(\\p{L})");
 	/** Below this many normalized characters a quoted span is a word, not a quotation: left as it is. */
 	static final int MIN_QUOTE_CHARS = 25;
 	/** How much the streamed rendering holds back for a quotation still open. */
@@ -634,12 +636,16 @@ public class DeepSearchQuotations {
 		return any;
 	}
 
-	/** Letters and digits only, lower case, without accents, single spaced. */
+	/**
+	 * Letters and digits only, lower case, without accents, single spaced; a word broken
+	 * by a hyphen at the end of a line ("rinun-" / "zia") is one word.
+	 */
 	public static String normalized(String text) {
 		if (text == null) {
 			return "";
 		}
-		final String decomposed = Normalizer.normalize(text, Normalizer.Form.NFKD).replaceAll("\\p{M}", "");
+		final String joined = LINE_END_HYPHEN.matcher(text.replace("­", "")).replaceAll("$1$2");
+		final String decomposed = Normalizer.normalize(joined, Normalizer.Form.NFKD).replaceAll("\\p{M}", "");
 		return decomposed.toLowerCase().replaceAll("[^\\p{L}\\p{N}]+", " ").trim();
 	}
 

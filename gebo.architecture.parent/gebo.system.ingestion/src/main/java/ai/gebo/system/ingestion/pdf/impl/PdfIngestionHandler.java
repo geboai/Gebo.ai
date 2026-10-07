@@ -41,14 +41,17 @@ import ai.gebo.system.ingestion.impl.GAbstractConfiguredHandler;
  */
 @Service
 public class PdfIngestionHandler extends GAbstractConfiguredHandler {
+    private final PdfIngestionConfig config;
 
     /**
      * Constructor for PdfIngestionHandler.
      * 
      * @param dao The configuration DAO for the ingestion handler
+     * @param config Whether a page in columns is read column by column
      */
-    public PdfIngestionHandler(IGIngestionHandlerConfigDao dao) {
+    public PdfIngestionHandler(IGIngestionHandlerConfigDao dao, PdfIngestionConfig config) {
         super(dao);
+        this.config = config;
     }
 
     /**
@@ -126,9 +129,16 @@ public class PdfIngestionHandler extends GAbstractConfiguredHandler {
             enrichMetaData(reference, metadata);
             enrichPdfMetadata(pdfReader, metadata);
             int pages = pdfReader.getNumberOfPages();
+            // a page in columns read column by column, any other page as before
+            final boolean columnAware = config == null || config.isColumnAwareExtraction();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("handleContent(...) " + reference.getCode() + " pages:" + pages + " column aware:"
+                        + columnAware);
+            }
             List<Document> docs = new ArrayList<Document>();
             for (int i = 1; i <= pages; i++) {
-                String text = (PdfTextExtractor.getTextFromPage(pdfReader, i));
+                String text = columnAware ? ColumnAwarePdfTextExtractor.textOfPage(pdfReader, i)
+                        : PdfTextExtractor.getTextFromPage(pdfReader, i);
                 Map<String, Object> clonedMetaData = new HashMap<String, Object>(
                         metadata != null ? metadata : new HashMap());
                 clonedMetaData.put(DocumentMetaInfos.CONTENT_PAGE, "" + i);

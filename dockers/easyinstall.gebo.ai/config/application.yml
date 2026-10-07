@@ -340,6 +340,10 @@ ai.gebo.llms.tokens-budget.factor: 0.7
 # Share of an analysis batch one piece of a document read whole (chat with documents) fills,
 # and the least batch budget an analysis lane goes on with (0.25 when not set; 0 < factor < 1)
 ai.gebo.deepsearch.chunk-filling-factor: 0.25
+# PDF ingestion: a page whose text is in columns (a vertical gutter through almost every
+# line, in the page's own text direction) is read one column after the other; any other page
+# is read as before. Takes effect on the documents ingested afterwards (true when not set)
+ai.gebo.ingestion.pdf.column-aware-extraction: true
 # Languages whose stop words the chunks' keyword filter ignores when neither the
 # keywords' nor the chunk's language is detected with confidence (it,en when not set)
 ai.gebo.search.keyword-stop-words.fallback-languages: it,en
