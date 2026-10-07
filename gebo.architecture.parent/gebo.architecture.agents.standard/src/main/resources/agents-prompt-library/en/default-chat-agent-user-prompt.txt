@@ -4,6 +4,9 @@
 # Documents of the chat (chosen or uploaded by the user, or found for this request), if any
 {documents}
 
+# Documents of the chat's earlier answers (read then, or named from a list of the tools), if any
+{EARLIER_ANSWERS_DOCUMENTS}
+
 # Rules to follow for this chat, set by the user or by the administrators
 They take precedence over the defaults of the instructions (the language, the length, the style of
 the answer):

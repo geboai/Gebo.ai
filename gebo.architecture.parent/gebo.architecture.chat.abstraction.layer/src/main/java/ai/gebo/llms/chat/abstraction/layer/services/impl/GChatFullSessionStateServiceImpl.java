@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatSessionLifeCycleConfig;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSReferredContentList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,10 +87,13 @@ public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateS
 		interaction.setRequestId(request.getId());
 		interaction.setUserTokenSize(length);
 		interaction.setUserIntent(request.getUserIntent());
-		interaction.setAssistant(response.getQueryResponse());
+		interaction.setAssistant(CSSSimplefiedInteraction.withoutDocumentsNotes(response.getQueryResponse()));
 		// the documents the answer rested on: they stay valid for the chat
 		interaction.setDocumentsRef(CSSSimplefiedInteraction.keptDocuments(response.getDocumentsRef()));
-		length = ITokensCountable.tokensEstimator.estimate(response.getQueryResponse() + interaction.documentsNote());
+		interaction.setListedDocumentNames(response.getListedDocumentNames() != null
+				&& !response.getListedDocumentNames().isEmpty() ? new ArrayList<>(response.getListedDocumentNames()) : null);
+		length = ITokensCountable.tokensEstimator.estimate(interaction.getAssistant())
+				+ interaction.documentsTokensSize();
 		interaction.setAssistantTokenSize(length);
 		interactions.add(interaction);
 		return session;

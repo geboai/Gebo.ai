@@ -82,6 +82,8 @@ ai.gebo.agents.prompts.uses:
         description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
       - placeholder: documents
         description: The documents of the chat request (chosen or uploaded by the user, or found for it), between BEGIN_CONTEXT and END_CONTEXT; empty when there are none.
+      - placeholder: EARLIER_ANSWERS_DOCUMENTS
+        description: For each earlier answer of the chat that had some, the request it answered, the documents it rested on (read then) and the ones it named from a list of the tools (only listed); "none" when no answer had any.
   - code: pure-chat-agent-prompt
     description: Main loop prompt of the single-agent chat agent of the chats without knowledge base (AgenticLoopPureChatNetworkAgentService), driving its iterate-until-done control loop; like default-chat-agent-prompt, it also tells the agent that the chat has no knowledge base.
     module: agents-standard
@@ -108,6 +110,8 @@ ai.gebo.agents.prompts.uses:
         description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
       - placeholder: documents
         description: The documents of the chat request (chosen or uploaded by the user, or found for it), between BEGIN_CONTEXT and END_CONTEXT; empty when there are none.
+      - placeholder: EARLIER_ANSWERS_DOCUMENTS
+        description: For each earlier answer of the chat that had some, the request it answered, the documents it rested on (read then) and the ones it named from a list of the tools (only listed); "none" when no answer had any.
   - code: controller-coordinator-agent-prompt
     description: Main loop prompt for the network's coordinator/controller agent, which turns the user's request into a routing plan dispatching the other agents in the network.
     module: agents-standard

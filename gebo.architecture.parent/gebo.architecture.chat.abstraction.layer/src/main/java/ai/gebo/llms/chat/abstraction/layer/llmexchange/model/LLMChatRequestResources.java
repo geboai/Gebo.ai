@@ -101,15 +101,22 @@ public class LLMChatRequestResources implements ITokensCountable {
 		@Override
 		public String getAssistant() {
 
-			// the documents the answer rested on follow it: the model knows them as read then
-			String assistant = (interaction.getAssistant() != null ? interaction.getAssistant() : "")
-					+ interaction.documentsNote();
+			// the answer as the user read it: the documents it rested on are told apart (see
+			// getDocumentsRef), and a note naming them an answer copied is not given again
+			String assistant = interaction.getAssistant() != null
+					? CSSSimplefiedInteraction.withoutDocumentsNotes(interaction.getAssistant())
+					: "";
 			return feedbackNote != null ? assistant + feedbackNote : assistant;
 		}
 
 		@Override
 		public List<GResponseDocumentRef> getDocumentsRef() {
 			return interaction.getDocumentsRef() != null ? interaction.getDocumentsRef() : List.of();
+		}
+
+		@Override
+		public List<String> getListedDocumentNames() {
+			return interaction.getListedDocumentNames() != null ? interaction.getListedDocumentNames() : List.of();
 		}
 	}
 

@@ -78,6 +78,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.CutAnswer;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
 import ai.gebo.llms.chat.abstraction.layer.session.model.IChatSessionEntryDocuments;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.ThinkingStream;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
@@ -112,6 +113,11 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * of the long system prompt only, the model kept the prompt's defaults over them.
 	 */
 	static final String RULES_TO_FOLLOW_PARAM = "RULES_TO_FOLLOW";
+	/**
+	 * The documents of the chat's earlier answers, given apart from the answers: given
+	 * after each answer, models copied them into their own.
+	 */
+	static final String EARLIER_ANSWERS_DOCUMENTS_PARAM = "EARLIER_ANSWERS_DOCUMENTS";
 	/** The language the answer is written in, named (see {@link #sessionUserLanguage}). */
 	static final String USER_LANGUAGE_PARAM = "userLanguage";
 	/** What the prompts say of the answer's language when the user's one was not detected. */
@@ -615,6 +621,17 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 										+ " document(s) of the chat's earlier answers: given with it");
 							}
 						}
+						// the documents the tools only listed (in this request or for an earlier
+						// answer) it names: kept with the chat's history, the next requests may name them
+						final List<String> listed = new ArrayList<>(
+								toolDocuments != null ? toolDocuments.getListedNames() : List.of());
+						listed.addAll(earlierAnswersListedNames(chatRequestContext));
+						final List<String> namedListed = namedDocuments(response.getQueryResponse(), listed);
+						response.setListedDocumentNames(namedListed.isEmpty() ? null : namedListed);
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Agentic loop agent id:" + getId() + " answer names " + namedListed.size()
+									+ " of " + listed.size() + " document(s) only listed: kept with the history");
+						}
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("Agentic loop agent id:" + getId() + " answer documents: " + before
 									+ " from the session, " + response.getDocumentsRef().size()
@@ -1026,13 +1043,36 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			final String lowerCited = cited.toLowerCase();
 			// a name with spaces is cited by its last part; a name may be cited with its
 			// words spaced or joined otherwise ("a b.pdf" for "ab.pdf"): compared without them
-			final String compactCited = compactName(lowerCited);
-			if (read.stream().noneMatch(name -> name.equals(lowerCited) || name.endsWith(" " + lowerCited)
-					|| name.endsWith("/" + lowerCited) || compactName(name).endsWith(compactCited))) {
+			if (read.stream().noneMatch(name -> citesName(lowerCited, name))) {
 				unread.add(cited);
 			}
 		}
 		return new ArrayList<>(unread);
+	}
+
+	/** Whether a file name cited in an answer (lower case) is the given document name's (lower case). */
+	private static boolean citesName(String lowerCited, String lowerName) {
+		return lowerName.equals(lowerCited) || lowerName.endsWith(" " + lowerCited)
+				|| lowerName.endsWith("/" + lowerCited) || compactName(lowerName).endsWith(compactName(lowerCited));
+	}
+
+	/** The given document names the answer cites, once each, in their order. */
+	static List<String> namedDocuments(String answer, Collection<String> documentNames) {
+		final List<String> named = new ArrayList<>();
+		if (documentNames == null || documentNames.isEmpty()) {
+			return named;
+		}
+		final List<String> cited = unreadCitations(answer, List.of());
+		for (String name : documentNames) {
+			if (name == null || named.contains(name)) {
+				continue;
+			}
+			final String lowerName = name.trim().toLowerCase();
+			if (cited.stream().anyMatch(c -> citesName(c.toLowerCase(), lowerName))) {
+				named.add(name);
+			}
+		}
+		return named;
 	}
 
 	/**
@@ -1133,7 +1173,82 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		for (GResponseDocumentRef ref : earlierAnswersDocuments(chatRequestContext)) {
 			names.addAll(citableNames(ref));
 		}
+		names.addAll(earlierAnswersListedNames(chatRequestContext));
 		return names;
+	}
+
+	/** The names of the documents the tools only listed for the chat's earlier answers, as they named them. */
+	static List<String> earlierAnswersListedNames(IChatRequestContext chatRequestContext) {
+		final List<String> names = new ArrayList<>();
+		final List<IChatSessionEntry> interactions = chatRequestContext != null ? chatRequestContext.getInteractions()
+				: null;
+		if (interactions != null) {
+			for (IChatSessionEntry interaction : interactions) {
+				if (interaction instanceof IChatSessionEntryDocuments withDocuments
+						&& withDocuments.getListedDocumentNames() != null) {
+					for (String name : withDocuments.getListedDocumentNames()) {
+						if (name != null && !names.contains(name)) {
+							names.add(name);
+						}
+					}
+				}
+			}
+		}
+		return names;
+	}
+
+	/** The longest part of a user's request naming the earlier answer its documents go with. */
+	static final int EARLIER_REQUEST_SHOWN_LENGTH = 120;
+
+	/**
+	 * What the model is told of the documents of the chat's earlier answers, apart from
+	 * the answers: for each answer that had some, the request it answered and the
+	 * documents it rested on (read then) and the ones the tools only listed that it
+	 * named; "none" when no answer had any.
+	 */
+	static String earlierAnswersDocumentsText(IChatRequestContext chatRequestContext) {
+		final List<IChatSessionEntry> interactions = chatRequestContext != null ? chatRequestContext.getInteractions()
+				: null;
+		final StringBuilder text = new StringBuilder();
+		if (interactions != null) {
+			int number = 0;
+			for (IChatSessionEntry interaction : interactions) {
+				number++;
+				if (!(interaction instanceof IChatSessionEntryDocuments withDocuments)) {
+					continue;
+				}
+				final List<String> read = new ArrayList<>();
+				if (withDocuments.getDocumentsRef() != null) {
+					for (GResponseDocumentRef ref : withDocuments.getDocumentsRef()) {
+						final List<String> citable = citableNames(ref);
+						if (!citable.isEmpty() && !read.contains(citable.get(0))) {
+							read.add(citable.get(0));
+						}
+					}
+				}
+				final List<String> listed = withDocuments.getListedDocumentNames() != null
+						? withDocuments.getListedDocumentNames()
+						: List.of();
+				if (read.isEmpty() && listed.isEmpty()) {
+					continue;
+				}
+				String request = interaction.getUser() != null ? interaction.getUser().strip().replaceAll("\\s+", " ")
+						: "";
+				if (request.length() > EARLIER_REQUEST_SHOWN_LENGTH) {
+					request = request.substring(0, EARLIER_REQUEST_SHOWN_LENGTH) + "...";
+				}
+				text.append("- Earlier answer ").append(number).append(", to the request \"").append(request)
+						.append("\":").append(NEWLINE);
+				if (!read.isEmpty()) {
+					text.append("  rested on (read then): ").append(String.join("; ", read)).append(NEWLINE);
+				}
+				if (!listed.isEmpty()) {
+					text.append("  named from a list of the tools (only listed, not read): ")
+							.append(String.join("; ", listed)).append(NEWLINE);
+				}
+			}
+		}
+		return text.length() > 0 ? text.toString() : "none";
 	}
 
 	/** The documents the chat's earlier answers rested on, as kept with its history. */
@@ -1283,6 +1398,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			params.put(AGENT_CONTROL_CONTINUE_PROMPT_PARAM, AGENT_CONTROL_MORE_TOOLS);
 			params.put(AGENT_SESSION_STORY_PROMPT_PARAM, loopStory(history, budget, collectorOf(chatRequestContext)));
 			params.put(RULES_TO_FOLLOW_PARAM, rulesToFollow(chatRequestContext));
+			params.put(EARLIER_ANSWERS_DOCUMENTS_PARAM, earlierAnswersDocumentsText(chatRequestContext));
 			// the prompts name the answer's language: never missing, whoever started the loop
 			params.putIfAbsent(USER_LANGUAGE_PARAM, USER_LANGUAGE_UNDETECTED);
 			final int callsBefore = callBacksListener.getCalls().size();
@@ -1295,6 +1411,9 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				LOGGER.trace("<AGENTIC_LOOP_STORY iteration=" + number + ">");
 				LOGGER.trace(String.valueOf(params.get(AGENT_SESSION_STORY_PROMPT_PARAM)));
 				LOGGER.trace("</AGENTIC_LOOP_STORY>");
+				LOGGER.trace("<AGENTIC_LOOP_EARLIER_ANSWERS_DOCUMENTS iteration=" + number + ">");
+				LOGGER.trace(String.valueOf(params.get(EARLIER_ANSWERS_DOCUMENTS_PARAM)));
+				LOGGER.trace("</AGENTIC_LOOP_EARLIER_ANSWERS_DOCUMENTS>");
 			}
 			// why the model stopped writing, and its reasoning, streamed to the user as it comes
 			final AtomicReference<String> finishReason = new AtomicReference<>();
@@ -1536,6 +1655,11 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				}
 				// the text of this iteration is shown: the documents it says it rests on count
 				recordAnswerDocuments(chatRequestContext, stripper, number);
+				if (stripper.getRemovedDocumentsNotes() > 0 && LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + number + " removed "
+							+ stripper.getRemovedDocumentsNotes()
+							+ " note(s) naming an answer's documents copied into its text");
+				}
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + number + " ended, tools called:"
 							+ (calls.size() - Math.min(callsBefore, calls.size())) + " continue requested:"
@@ -1987,6 +2111,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		private boolean finishRequested = false;
 		/** The ids of the ANSWER-DOCUMENTS marker; null when the text gave none. */
 		private List<String> answerDocuments = null;
+		/** The notes naming an answer's documents the model copied into its text, removed. */
+		private int removedDocumentsNotes = 0;
 
 		/** The text of the chunk that can be shown now. */
 		String accept(String chunk) {
@@ -2006,6 +2132,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			removeMarkers();
 			// a marker the model did not close ends with the text
 			removeAnswerDocuments(true);
+			removeDocumentsNotes(true);
 			String out = pending.toString();
 			pending.setLength(0);
 			return out;
@@ -2019,6 +2146,50 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 
 		boolean isFinishRequested() {
 			return finishRequested;
+		}
+
+		int getRemovedDocumentsNotes() {
+			return removedDocumentsNotes;
+		}
+
+		/**
+		 * Removes the notes naming the documents an answer rested on (see
+		 * {@link CSSSimplefiedInteraction#DOCUMENTS_NOTE_START}), from their start to
+		 * their closing bracket or their line end, with the blanks before them: the
+		 * earlier answers were given with such notes, and a model copied them into its own
+		 * answer. A note not ended yet is held back until the next chunk, or removed when
+		 * the stream is over.
+		 */
+		/** Where the blanks before the given position start. */
+		private int withBlanksBefore(int index) {
+			int start = index;
+			while (start > 0 && Character.isWhitespace(pending.charAt(start - 1))) {
+				start--;
+			}
+			return start;
+		}
+
+		private void removeDocumentsNotes(boolean ended) {
+			int index;
+			int from = 0;
+			while ((index = pending.indexOf(CSSSimplefiedInteraction.DOCUMENTS_NOTE_START, from)) >= 0) {
+				int end = index + CSSSimplefiedInteraction.DOCUMENTS_NOTE_START.length();
+				while (end < pending.length() && pending.charAt(end) != ']' && pending.charAt(end) != '\r'
+						&& pending.charAt(end) != '\n') {
+					end++;
+				}
+				if (end == pending.length() && !ended) {
+					// held back until the note ends
+					return;
+				}
+				if (end < pending.length() && pending.charAt(end) == ']') {
+					end++;
+				}
+				final int start = withBlanksBefore(index);
+				pending.delete(start, end);
+				removedDocumentsNotes++;
+				from = start;
+			}
 		}
 
 		/** The document ids the text says it rests on, "#n" each; null when it gave no marker. */
@@ -2077,6 +2248,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 
 		private void removeMarkers() {
 			removeAnswerDocuments(false);
+			removeDocumentsNotes(false);
 			for (String marker : MARKERS) {
 				int index;
 				while ((index = pending.indexOf(marker)) >= 0) {
@@ -2091,6 +2263,11 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 
 		private int heldBack() {
+			// a note naming an answer's documents not ended yet
+			final int note = pending.indexOf(CSSSimplefiedInteraction.DOCUMENTS_NOTE_START);
+			if (note >= 0) {
+				return pending.length() - withBlanksBefore(note);
+			}
 			// a documents line whose ids may still go on
 			int from = 0;
 			DocumentsLine line;
@@ -2100,9 +2277,13 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				}
 				from = line.end();
 			}
-			for (int length = Math.min(pending.length(), Math.max(LONGEST_MARKER, LONGEST_DOCUMENTS_START) - 1);
-					length > 0; length--) {
+			for (int length = Math.min(pending.length(), Math.max(Math.max(LONGEST_MARKER, LONGEST_DOCUMENTS_START),
+					CSSSimplefiedInteraction.DOCUMENTS_NOTE_START.length()) - 1); length > 0; length--) {
 				String suffix = pending.substring(pending.length() - length);
+				if (CSSSimplefiedInteraction.DOCUMENTS_NOTE_START.startsWith(suffix)) {
+					// the blanks before a note go with it
+					return pending.length() - withBlanksBefore(pending.length() - length);
+				}
 				for (String marker : MARKERS) {
 					if (marker.startsWith(suffix)) {
 						return length;

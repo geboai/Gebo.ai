@@ -22,7 +22,8 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRe
 
 /**
  * Pins the documents an answer rested on, kept with the chat's history: without their
- * fragments, and named after the answer for the model.
+ * fragments, named apart from the answer for the model, and a note naming them an answer
+ * copied removed from its text.
  */
 class EarlierAnswerDocumentsTest {
 
@@ -48,12 +49,29 @@ class EarlierAnswerDocumentsTest {
 	}
 
 	@Test
-	void theDocumentsFollowTheAnswerForTheModel() {
+	void theDocumentsAreNamedOnceEach() {
 		final CSSSimplefiedInteraction interaction = new CSSSimplefiedInteraction();
-		interaction.setDocumentsRef(CSSSimplefiedInteraction.keptDocuments(List.of(ref("a.pdf"), ref("b.pdf"))));
+		interaction.setDocumentsRef(
+				CSSSimplefiedInteraction.keptDocuments(List.of(ref("a.pdf"), ref("b.pdf"), ref("a.pdf"))));
 
-		assertEquals("\n\n" + CSSSimplefiedInteraction.DOCUMENTS_NOTE_HEAD + "a.pdf; b.pdf]",
-				interaction.documentsNote());
-		assertEquals("", new CSSSimplefiedInteraction().documentsNote(), "an interaction saved before: no note");
+		assertEquals(List.of("a.pdf", "b.pdf"), interaction.documentNames());
+		assertTrue(new CSSSimplefiedInteraction().documentNames().isEmpty(), "an interaction saved before");
+		assertEquals(0, new CSSSimplefiedInteraction().documentsTokensSize());
+		interaction.setListedDocumentNames(List.of("c.pdf"));
+		assertTrue(interaction.documentsTokensSize() > 0);
+	}
+
+	@Test
+	void aCopiedNoteIsRemovedFromTheAnswer() {
+		final String answer = "The Secret Doctrine speaks of Fohat.\n\n"
+				+ "[Documents this answer rested on, read then: a.pdf; b.pdf]\n\n"
+				+ "[Documents this answer rested on, read then: a.pdf]";
+
+		assertEquals("The Secret Doctrine speaks of Fohat.", CSSSimplefiedInteraction.withoutDocumentsNotes(answer));
+		assertEquals("Text\nmore", CSSSimplefiedInteraction
+				.withoutDocumentsNotes("Text [Documents this answer rested on: a.pdf\nmore"), "a note ended by its line");
+		assertEquals("No note [here](link).",
+				CSSSimplefiedInteraction.withoutDocumentsNotes("No note [here](link)."));
+		assertNull(CSSSimplefiedInteraction.withoutDocumentsNotes(null));
 	}
 }

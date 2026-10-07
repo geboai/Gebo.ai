@@ -22,4 +22,12 @@ public interface IChatSessionEntryDocuments {
 
 	/** The documents the answer rested on, none when unknown. */
 	List<GResponseDocumentRef> getDocumentsRef();
+
+	/**
+	 * The names of the documents the tools only listed for the answer (not read) that it
+	 * names, none when unknown.
+	 */
+	default List<String> getListedDocumentNames() {
+		return List.of();
+	}
 }

@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,11 +62,14 @@ public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessi
 		int length = ITokensCountable.tokensEstimator.estimate(request.getQuery());
 		interaction.setRequestId(request.getId());
 		interaction.setUserTokenSize(length);
-		interaction.setAssistant(response.getQueryResponse());
+		interaction.setAssistant(CSSSimplefiedInteraction.withoutDocumentsNotes(response.getQueryResponse()));
 		interaction.setUserIntent(request.getUserIntent());
 		// the documents the answer rested on: they stay valid for the chat
 		interaction.setDocumentsRef(CSSSimplefiedInteraction.keptDocuments(response.getDocumentsRef()));
-		length = ITokensCountable.tokensEstimator.estimate(response.getQueryResponse() + interaction.documentsNote());
+		interaction.setListedDocumentNames(response.getListedDocumentNames() != null
+				&& !response.getListedDocumentNames().isEmpty() ? new ArrayList<>(response.getListedDocumentNames()) : null);
+		length = ITokensCountable.tokensEstimator.estimate(interaction.getAssistant())
+				+ interaction.documentsTokensSize();
 		interaction.setAssistantTokenSize(length);
 		interactions.add(interaction);
 		return session;
