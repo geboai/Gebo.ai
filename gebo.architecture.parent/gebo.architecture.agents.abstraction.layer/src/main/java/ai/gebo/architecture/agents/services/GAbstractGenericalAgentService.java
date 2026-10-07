@@ -1553,7 +1553,9 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			IChatRequestContext chatRequestContext) {
 		final int history = chatHistoryTokens(prompt, chatRequestContext);
 		final int documents = contextDocumentsTokens(prompt, chatRequestContext);
-		final int budget = (agentModel.getContextLength() - prompt.getTokensSize() - history - documents) * 2 / 3;
+		// the tokens budget's share of what the context leaves (ai.gebo.llms.tokens-budget.factor)
+		final int budget = (int) ((agentModel.getContextLength() - prompt.getTokensSize() - history - documents)
+				* BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("agentTokenBudget(...) agent:" + getId() + " contextLength:" + agentModel.getContextLength()
 					+ " prompt:" + prompt.getTokensSize() + " (tok) chat history:" + history

@@ -146,7 +146,8 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 			FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter, int topK)
 			throws FullTextException, LLMConfigException, GeboChatSessionLifecycleException {
 
-		int tokensBudget = (int) (((double) contextWindowLength) * 0.75);
+		// the tokens budget's share of the context window (ai.gebo.llms.tokens-budget.factor)
+		int tokensBudget = (int) (((double) contextWindowLength) * BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
 		AIDocumentsSet documentSet = searchesService.search(minimalChatContext.getCurrentRequest(),
 				searchRewritings.getRewrittenSemanticSearchSentences(), semanticSearchMetaDataFilter,
 				searchRewritings.getRewrittenFullTextSearchSentences(), fullTextSearchMetaDataFilter,

@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -73,8 +74,9 @@ public class DefaultChatWithFilesStreamingOutputPipelineServiceImpl implements I
 		GPromptTemplateConfig prompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_WITH_DOCUMENTS_PROMPT);
 		double fullRequestSize = runtimeData.getRequestResources().getTokensSize() + prompt.getTokensSize();
-		// the request fits when it takes 80% of the context window at most
-		if (fullRequestSize <= 0.8 * contextWindow) {
+		// the request fits when it takes the tokens budget's share of the context window at most
+		// (ai.gebo.llms.tokens-budget.factor)
+		if (fullRequestSize <= BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF * contextWindow) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("execute(...) the request of " + (long) fullRequestSize + " (tok) fits the context of "
 						+ (long) contextWindow + " (tok): answered with all its documents");
@@ -91,7 +93,7 @@ public class DefaultChatWithFilesStreamingOutputPipelineServiceImpl implements I
 			// the same request: its rules, feedback notes, tool calls recorder and knowledge bases
 			resources.copyRequestValuesFrom(runtimeData.getRequestResources());
 			double minimizedContextRequestSize = ITokensCountable.tokensSize(prompt, resources);
-			if (minimizedContextRequestSize <= 0.8 * contextWindow) {
+			if (minimizedContextRequestSize <= BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF * contextWindow) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("execute(...) the request of " + (long) fullRequestSize + " (tok) does not fit the context of "
 							+ (long) contextWindow + " (tok), with the selected documents only, "

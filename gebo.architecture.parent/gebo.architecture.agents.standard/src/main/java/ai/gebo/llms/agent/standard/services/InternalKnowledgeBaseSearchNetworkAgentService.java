@@ -1,5 +1,6 @@
 package ai.gebo.llms.agent.standard.services;
 
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -185,7 +186,8 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			}
 
 			final int topK = retrievalTopK(command);
-			final int tokensBudget = (int) (agentModel.getContextLength() * 0.75);
+			// the tokens budget's share of the context window (ai.gebo.llms.tokens-budget.factor)
+			final int tokensBudget = (int) (agentModel.getContextLength() * BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Searching internal knowledge base over " + kbCodes.size() + " knowledge base(s) topK:"
 						+ topK + " tokensBudget:" + tokensBudget);

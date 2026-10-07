@@ -326,7 +326,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			params.putAll(cachedParams);
 			int usedTokens = tokensLength(latestInteractions, params.toString(), rewrited_query)
 					+ _prompt.getTokensSize();
-			int remainingContext = (int) (((double) (serviceModel.getContextLength() - usedTokens)) * 0.8d);
+			// the tokens budget's share of what the context leaves (ai.gebo.llms.tokens-budget.factor)
+			int remainingContext = (int) (((double) (serviceModel.getContextLength() - usedTokens))
+					* BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
 			final int documentsTokenBudget = Math.min(remainingContext,
 					this.chatPipelinesConfig.getMaxRoutingDecisionDocumentsTokenBudget());
 			IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();

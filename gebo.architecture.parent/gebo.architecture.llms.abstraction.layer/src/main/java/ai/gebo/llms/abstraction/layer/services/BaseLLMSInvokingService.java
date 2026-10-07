@@ -1002,7 +1002,8 @@ public class BaseLLMSInvokingService {
 	protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
 			IChatRequestContext context, Map<String, Object> params, Stream<LLMInputDocument> inputStream)
 			throws LLMConfigException {
-		int contextWindow = chatModel.getContextLength() * 2 / 3;
+		// the whole context: computeFragmentBudget applies the tokens budget's factor, once
+		int contextWindow = chatModel.getContextLength();
 		List<ConsolidationInputBatch> currentBatchesQueue = new ArrayList<BaseLLMSInvokingAndProvidingService.ConsolidationInputBatch>();
 		LLMInputDocument currentInput = null;
 		final int promptLength = prompt.getTokensSize();

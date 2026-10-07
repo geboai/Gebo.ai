@@ -1,5 +1,6 @@
 package ai.gebo.llms.deepsearch.service.impl;
 
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -371,7 +372,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 							totalTokens += ITokensCountable.stringsTokensSize(document.getText());
 						}
 					}
-					if (totalTokens <= (chatModel.getContextLength() * 3 / 4)) {
+					// the documents fit the tokens budget's share of the context window
+					// (ai.gebo.llms.tokens-budget.factor)
+					if (totalTokens <= (int) (chatModel.getContextLength() * BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF)) {
 						try {
 							try {
 								sinkUIEmitter.notifyUser(STREAMING_RESULTS, GENERATING_ANALISYS, PI_PI_FILE, 3000l,
