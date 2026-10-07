@@ -24,11 +24,13 @@ import org.springframework.ai.chat.messages.MessageType;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.content.Media;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
+import ai.gebo.architecture.ai.model.ContextContentRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
@@ -64,6 +66,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerSe
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService;
+import ai.gebo.llms.deepsearch.service.impl.DeepSearchQuotations;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
@@ -161,6 +164,45 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	}
 
 	/**
+	 * The quotations of an answer, checked against what the model is given to answer:
+	 * the documents of the call (the prompt's documents parameter, the request's
+	 * documents when the prompt takes them) and the results of the tools it calls.
+	 */
+	protected DeepSearchQuotations answerQuotations(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatRequestContext) {
+		final DeepSearchQuotations quotations = new DeepSearchQuotations();
+		final List<Document> documents = new ArrayList<>();
+		final Object given = params != null ? params.get(IChatRequestContext.DOCUMENTS_PROMPT_PARAM) : null;
+		if (given instanceof AIDocumentsSet set) {
+			documents.addAll(set.aiDocumentsList());
+		} else if (given instanceof Collection<?> collection) {
+			for (Object item : collection) {
+				if (item instanceof Document document) {
+					documents.add(document);
+				}
+			}
+		}
+		if (chatRequestContext != null && (prompt == null || prompt.getContextDocuments() == null
+				|| prompt.getContextDocuments() == ContextContentRequired.REQUIRED)) {
+			final List<Document> requestDocuments = chatRequestContext.getDocuments();
+			if (requestDocuments != null) {
+				documents.addAll(requestDocuments);
+			}
+		}
+		quotations.addSources(documents);
+		if (chatRequestContext != null) {
+			quotations.addToolResults(chatRequestContext.getToolCallListener());
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Answer quotations checked against " + documents.size() + " document(s)"
+					+ (chatRequestContext != null && chatRequestContext.getToolCallListener() != null
+							? " and the tools' results"
+							: ""));
+		}
+		return quotations;
+	}
+
+	/**
 	 * Calls the chat client, processes the chat response, and updates the
 	 * associated GeboChatResponse.
 	 *
@@ -181,10 +223,15 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		long startMillis = System.currentTimeMillis();
 		try {
+			final DeepSearchQuotations quotations = answerQuotations(prompt, Map.of(), chatRequestContext);
 			ChatResponse chatresponse = configurableChatModel.response(prompt, Map.of(), chatRequestContext);
 			AssistantMessage callResponseObject = chatresponse.getResult().getOutput();
 			String responseText = callResponseObject.getText();
-			response.setQueryResponse(responseText);
+			// the quotations the standard way, checked against the answer's sources (best effort)
+			response.setQueryResponse(quotations.render(responseText));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Answer with " + quotations.quotes().size() + " verified quotation(s)");
+			}
 			// the called functions are recorded into the response as the tools run (see
 			// recordToolCalls(...))
 
@@ -222,10 +269,11 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		long startMillis = System.currentTimeMillis();
 		try {
+			final DeepSearchQuotations quotations = answerQuotations(prompt, params, chatRequestContext);
 			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, params, chatRequestContext);
 			Flux<GeboChatMessageEnvelope> composed = composeFlux(res, context, request, response,
 					chatRequestContext.getToolsContext(), chatHistoryConsolidation, historySizeTarget,
-					configurableChatModel, showedDocuments);
+					configurableChatModel, showedDocuments, quotations);
 			// Logged once at stream completion/error (not per chunk) to avoid flooding
 			// the audit log with one event per streamed token.
 			return composed
@@ -263,6 +311,19 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			final GeboChatRequest request, final GeboChatResponse response, final Map<String, Object> toolsContext,
 			boolean chatHistoryConsolidation, int historySizeTarget, IGConfigurableChatModel configurableChatModel,
 			AIDocumentsSet showedDocuments) {
+		return composeFlux(res, context, request, response, toolsContext, chatHistoryConsolidation, historySizeTarget,
+				configurableChatModel, showedDocuments, null);
+	}
+
+	/**
+	 * The same, the answer's quotations given the standard way as it streams and as it is
+	 * saved (see {@link DeepSearchQuotations}); as the model wrote them when
+	 * {@code quotations} is null.
+	 */
+	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<ChatResponse> res, final KBContext context,
+			final GeboChatRequest request, final GeboChatResponse response, final Map<String, Object> toolsContext,
+			boolean chatHistoryConsolidation, int historySizeTarget, IGConfigurableChatModel configurableChatModel,
+			AIDocumentsSet showedDocuments, final DeepSearchQuotations quotations) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Beginning composeFlux(....)");
 		}
@@ -270,6 +331,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 				: List.of();
 		final StringBuffer buffer = new StringBuffer();
 		final boolean skipThinkingMarkup = configurableChatModel.isApplyThinkingMarkupHandling();
+		final DeepSearchQuotations.Streaming quoting = quotations != null ? quotations.streaming() : null;
 
 		Mono<GeboChatMessageEnvelope> startFlux = Mono.fromSupplier(() -> {
 			if (LOGGER.isDebugEnabled()) {
@@ -315,10 +377,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			}
 			String thisText = contentSegment.toString();
 			buffer.append(thisText);
-			if (!skipThinkingMarkup) {
-				envelope.setContent(thisText);
-			} else if (ClientChatCallUtil.isAfterThinking(buffer.toString())) {
-				envelope.setContent(thisText);
+			if (!skipThinkingMarkup || ClientChatCallUtil.isAfterThinking(buffer.toString())) {
+				// a quotation still open is held until it closes
+				envelope.setContent(quoting != null ? quoting.next(thisText) : thisText);
 			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Sending a String content:" + contentSegment.toString());
@@ -336,13 +397,31 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			return x.getContentObjectType() != null && x.getContent() != null && x.getContent() != null
 					&& x.getContent().toString().trim().length() > 0;
 		});
+		// what the quotations rendering still holds once the answer ended
+		Mono<GeboChatMessageEnvelope> heldFlux = Mono.fromSupplier(() -> {
+			final String held = quoting != null ? quoting.rest() : "";
+			if (held.isEmpty()) {
+				return null;
+			}
+			GeboChatMessageEnvelope<String> envelope = new GeboChatMessageEnvelope<String>();
+			envelope.setContent(held);
+			return envelope;
+		});
 		Mono<GeboChatMessageEnvelope> trailingFlux = Mono.fromSupplier(() -> {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Sending a GeboChatResponse trailing content with lastMessage: true");
 			}
 			String responseText = buffer.toString();
 			response.setThinkingOutputs(ClientChatCallUtil.extractThinking(responseText));
-			response.setQueryResponse(ClientChatCallUtil.removeThinking(responseText));
+			if (quotations != null) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Streamed answer with " + quotations.quotes().size() + " verified quotation(s)");
+				}
+				// saved as it was streamed: the quotations the standard way
+				response.setQueryResponse(quotations.render(ClientChatCallUtil.removeThinking(responseText)));
+			} else {
+				response.setQueryResponse(ClientChatCallUtil.removeThinking(responseText));
+			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Streamed response carries " + response.getCalledFunctions().size()
 						+ " recorded called function(s)");
@@ -361,7 +440,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			}
 			return finalEnvelope;
 		});
-		Flux<GeboChatMessageEnvelope> responseFlux = startFlux.concatWith(bodyFlux).concatWith(trailingFlux)
+		Flux<GeboChatMessageEnvelope> responseFlux = startFlux.concatWith(bodyFlux).concatWith(heldFlux)
+				.concatWith(trailingFlux)
 				.concatWithValues(GeboChatMessageEnvelope.FINAL_MESSAGE);
 		responseFlux = responseFlux.doOnComplete(() -> {
 			try {

@@ -97,6 +97,11 @@ The partial contributions and the consolidated report quote the documents only i
 ⟦Q<number>|<exact words>⟧ (or ⟦q:<id>|<exact words>⟧). Each was checked against its document.
 - Keep every quotation you use exactly as you receive it, character by character: never translate, shorten,
   merge or rewrite one, never change its id or number, never write a new one.
+- When you receive the documents themselves (each starting with "fragmentId: ") instead of partial
+  contributions, quote the key sentences (one to three) of each document you use in this form:
+  ⟦q:<fragmentId>|<the exact words of that document>⟧, <fragmentId> being the id written after "fragmentId: "
+  in the document the words come from, the words copied exactly as it writes them, in its own language;
+  two pieces of the same document may be joined by … .
 - Never put quotation marks (" “ ” « ») around any other words: anything else is a summary.
 - The patterns are turned into standard citations before the text is shown.
 

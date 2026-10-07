@@ -195,6 +195,8 @@ ai.gebo.prompts:
       placeholders:
         - placeholder: question
           description: The chat content used as the basis for the generated summary/title.
+        - placeholder: userLanguage
+          description: The language the title is written in, named in English (e.g. English, Italian), the language of the chat's first request; "the language of the user's current request" when it could not be detected.
     - code: chat-rule-proposal-prompt
       description: Proposes up to 3 general rules for future answers from a rated chatbot answer and the user's feedback; the user picks and edits them before they are saved.
       module: chat
@@ -205,6 +207,8 @@ ai.gebo.prompts:
           description: The answer the chatbot gave.
         - placeholder: feedback
           description: The user's rating and comment on that answer.
+        - placeholder: userLanguage
+          description: The language the rules are written in, named in English (e.g. English, Italian), the language the rated question was answered in; "the language of the user's current request" when it could not be detected.
     - code: chat-rule-conflict-prompt
       description: Lists the existing chat rules that a new or edited rule contradicts, as advice before it is saved.
       module: chat
@@ -213,6 +217,8 @@ ai.gebo.prompts:
           description: The new or edited rule.
         - placeholder: documents
           description: The numbered rules it would apply together with.
+        - placeholder: userLanguage
+          description: The language the advice is written in, named in English (e.g. English, Italian), as detected on the new rule; "the language of the user's current request" when it could not be detected.
     - code: history-consolidation-prompt
       description: Compresses the chat history (and any prior consolidated summary) down to a target size while preserving the relevant context.
       module: chat

@@ -20,6 +20,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
 
+import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.model.DocumentMetaInfos;
 import reactor.core.publisher.Flux;
 
@@ -126,5 +127,85 @@ class DeepSearchQuotationsTest {
 
 		assertEquals("“il Guardiano della Soglia è l'essere che si presenta all'anima”",
 				quotations.render("“il Guardiano della Soglia è l'essere che si presenta all'anima”"));
+	}
+
+	@Test
+	void anAnswerQuotesTheDocumentsItReadsByTheirFragmentId() {
+		final DeepSearchQuotations quotations = new DeepSearchQuotations();
+		quotations.addSources(List.of(fragment("kb/scienza-occulta.pdf#12", STEINER, "scienza-occulta.pdf"),
+				fragment("kb/secret-doctrine.pdf#3", "Fohat is the steed and Thought is the rider.", "secret-doctrine.pdf")));
+
+		assertEquals("Steiner: “il Guardiano della Soglia è l'essere che si presenta all'anima” (scienza-occulta.pdf).",
+				quotations.render("Steiner: ⟦q:kb/scienza-occulta.pdf#12|il Guardiano della Soglia è l'essere che si "
+						+ "presenta all'anima⟧."));
+		assertEquals("Blavatsky: “Fohat is the steed” (secret-doctrine.pdf).",
+				quotations.render("Blavatsky: ⟦q:kb/scienza-occulta.pdf#12|Fohat is the steed⟧."),
+				"a miscopied id: the document that has the words is named");
+		assertEquals("Steiner: il Guardiano rappresenta le paure dell'individuo.",
+				quotations.render("Steiner: ⟦q:kb/scienza-occulta.pdf#12|il Guardiano rappresenta le paure dell'individuo⟧."),
+				"words no document has are plain text");
+		assertEquals(2, quotations.quotes().size());
+		assertEquals("kb/secret-doctrine.pdf#3", quotations.quotes().get(1).fragmentId());
+	}
+
+	@Test
+	void codeIsNeverChanged() {
+		final DeepSearchQuotations quotations = new DeepSearchQuotations();
+		quotations.addSources(List.of(fragment("uuid-c", STEINER, "scienza-occulta.pdf")));
+		final String answer = "Set it with `config.put(\"a long key nobody ever wrote down\")`, then:\n"
+				+ "```json\n{\"description\": \"a long value no document has ever written\"}\n```\n"
+				+ "and “a long sentence no document has ever written”.";
+
+		assertEquals("Set it with `config.put(\"a long key nobody ever wrote down\")`, then:\n"
+				+ "```json\n{\"description\": \"a long value no document has ever written\"}\n```\n"
+				+ "and a long sentence no document has ever written.", quotations.render(answer));
+	}
+
+	@Test
+	void theStreamedRenderingGivesCodeAsItArrives() {
+		final DeepSearchQuotations quotations = new DeepSearchQuotations();
+		quotations.addSources(List.of(fragment("uuid-c", STEINER, "scienza-occulta.pdf")));
+		final String whole = "Code:\n```java\nString s = \"a long string literal nobody ever wrote\";\n```\nSteiner: "
+				+ "⟦q:uuid-c|il Guardiano della Soglia è l'essere⟧, not “a long sentence no document has ever written”.";
+		final List<String> pieces = List.of("Code:\n`", "``java\nString s = \"a long string ", "literal nobody ever wrote\";\n`",
+				"``\nSteiner: ⟦q:uu", "id-c|il Guardiano della Soglia è l'essere⟧, not “a long sentence no ",
+				"document has ever written”.");
+		final DeepSearchQuotations.Streaming streaming = quotations.streaming();
+		final StringBuilder streamed = new StringBuilder();
+		for (String piece : pieces) {
+			streamed.append(streaming.next(piece));
+		}
+		streamed.append(streaming.rest());
+
+		assertEquals("Code:\n```java\nString s = \"a long string literal nobody ever wrote\";\n```\nSteiner: “il "
+				+ "Guardiano della Soglia è l'essere” (scienza-occulta.pdf), not a long sentence no document has ever "
+				+ "written.", streamed.toString());
+		assertEquals(streamed.toString(), new DeepSearchQuotations() {
+			{
+				addSources(List.of(fragment("uuid-c", STEINER, "scienza-occulta.pdf")));
+			}
+		}.render(whole), "streamed or whole, the same text");
+	}
+
+	@Test
+	void anAnswerWithNoSourceKeepsItsQuotationMarks() {
+		final DeepSearchQuotations quotations = new DeepSearchQuotations();
+
+		assertEquals("Hamlet: “To be, or not to be, that is the question”.",
+				quotations.render("Hamlet: “To be, or not to be, that is the question”."));
+	}
+
+	@Test
+	void theToolsResultsMayBeQuoted() {
+		final DeepSearchQuotations quotations = new DeepSearchQuotations();
+		quotations.addSources(List.of(fragment("uuid-c", STEINER, "scienza-occulta.pdf")));
+		final ToolCallsListener calls = new ToolCallsListener();
+		quotations.addToolResults(calls);
+		calls.addCall("searchWeb", "web search", "{}",
+				"{\"results\":[{\"snippet\":\"Fohat is the steed and Thought is the rider.\"}]}");
+
+		assertEquals("Blavatsky: “Fohat is the steed and Thought is the rider”, not an invented sentence of the model.",
+				quotations.render("Blavatsky: “Fohat is the steed and Thought is the rider”, not “an invented sentence "
+						+ "of the model”."));
 	}
 }

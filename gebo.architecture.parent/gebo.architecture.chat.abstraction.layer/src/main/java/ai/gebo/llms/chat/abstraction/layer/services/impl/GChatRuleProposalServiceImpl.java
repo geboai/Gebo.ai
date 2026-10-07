@@ -15,6 +15,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -37,9 +40,11 @@ import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRuleProposalService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRulesService;
+import ai.gebo.llms.chat.abstraction.layer.services.UserLanguageDetection;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.system.ingestion.IGLanguageDetector;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -54,6 +59,9 @@ public class GChatRuleProposalServiceImpl implements IGChatRuleProposalService {
 	private final IGPromptConfigDao promptsDao;
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	private final IGChatRulesService rulesService;
+	/** The platform's language detector: the advice is written in the language of the rule. */
+	private final ObjectProvider<IGLanguageDetector> languageDetector;
+	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	private static final Pattern CONFLICT_LINE = Pattern.compile("^\\s*(\\d+)\\s*[:.)-]\\s*(.*)$");
 
 	@Override
@@ -90,10 +98,16 @@ public class GChatRuleProposalServiceImpl implements IGChatRuleProposalService {
 			throw new LLMConfigException("No internal services or default chat model present");
 		}
 		GPromptTemplateConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.CHAT_RULE_CONFLICT_PROMPT);
+		final String ruleLanguage = detectedLanguage(candidate.getText());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("checkRuleConflicts(...) against " + others.size() + " rule(s), advice language:"
+					+ ruleLanguage);
+		}
 		String reply = ClientChatCallUtil.removeThinking(model.textResponse(prompt,
 				Map.of(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, candidate.getText().trim(),
 						IChatRequestContext.DOCUMENTS_PROMPT_PARAM, numbered.toString()),
-				IChatRequestContext.of(candidate.getText().trim())));
+				IChatRequestContext.builder().actualUserRequest(candidate.getText().trim()).userLanguage(ruleLanguage)
+						.build()));
 		List<ChatRuleConflict> conflicts = new ArrayList<ChatRuleConflict>();
 		if (reply != null) {
 			for (String line : reply.split("\\R")) {
@@ -145,15 +159,29 @@ public class GChatRuleProposalServiceImpl implements IGChatRuleProposalService {
 				: "";
 		GChatAnswerFeedback feedback = feedbackRepository
 				.findById(GChatAnswerFeedback.idOf(userChatContextCode, requestId)).orElse(null);
+		// the rules in the language the rated question was answered in
+		final String language = exchange.getRequest().getUserLanguage() != null
+				? exchange.getRequest().getUserLanguage()
+				: detectedLanguage(question);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("proposeRules(...) chat:" + userChatContextCode + " request:" + requestId + " rules language:"
+					+ language);
+		}
 		String reply = model.textResponse(prompt,
 				Map.of(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, question, "answer", answer, "feedback",
 						describe(feedback)),
-				historyBefore(interactions, rated, userChatContextCode, question));
+				historyBefore(interactions, rated, userChatContextCode, question, language));
 		return parse(ClientChatCallUtil.removeThinking(reply));
 	}
 
+	/** The English name of the text's language, null when it cannot be told. */
+	private String detectedLanguage(String text) {
+		final IGLanguageDetector detector = languageDetector != null ? languageDetector.getIfAvailable() : null;
+		return UserLanguageDetection.of(detector, text);
+	}
+
 	private static IChatRequestContext historyBefore(List<ChatInteractions> interactions, int rated,
-			String userChatContextCode, String question) {
+			String userChatContextCode, String question, String language) {
 		List<IChatSessionEntry> history = new ArrayList<IChatSessionEntry>();
 		for (int i = Math.max(0, rated - HISTORY_EXCHANGES); i < rated; i++) {
 			ChatInteractions x = interactions.get(i);
@@ -165,7 +193,7 @@ public class GChatRuleProposalServiceImpl implements IGChatRuleProposalService {
 					.build());
 		}
 		return IChatRequestContext.builder().sessionID(userChatContextCode).actualUserRequest(question)
-				.interactions(history).build();
+				.interactions(history).userLanguage(language).build();
 	}
 
 	private static String describe(GChatAnswerFeedback feedback) {
