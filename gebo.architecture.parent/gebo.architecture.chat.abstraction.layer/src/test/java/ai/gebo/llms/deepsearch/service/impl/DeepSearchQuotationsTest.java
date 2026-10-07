@@ -66,11 +66,24 @@ class DeepSearchQuotationsTest {
 
 		assertEquals("Steiner: il Guardiano rappresenta le paure dell'individuo.",
 				quotations.keepVerified("Steiner: ⟦q:1|il Guardiano rappresenta le paure dell'individuo⟧.", batch()));
-		assertEquals("Blavatsky: Fohat is the steed.",
-				quotations.keepVerified("Blavatsky: ⟦q:9|Fohat is the steed⟧.", batch()), "a fragment number made up");
-		assertEquals("Blavatsky: Fohat is the steed.",
-				quotations.keepVerified("Blavatsky: ⟦q:1|Fohat is the steed⟧.", batch()), "the words of another fragment");
+		assertEquals("Blavatsky: Fohat rides the steed.",
+				quotations.keepVerified("Blavatsky: ⟦q:9|Fohat rides the steed⟧.", batch()),
+				"a fragment number made up, words no fragment has");
 		assertTrue(quotations.quotes().isEmpty());
+	}
+
+	@Test
+	void aQuotationWrittenForAnotherFragmentOfTheBatchIsKeptWithItsRealFragment() {
+		final DeepSearchQuotations quotations = new DeepSearchQuotations();
+
+		assertEquals("Blavatsky: ⟦Q1|Fohat is the steed⟧.",
+				quotations.keepVerified("Blavatsky: ⟦q:1|Fohat is the steed⟧.", batch()),
+				"the number of another fragment: the fragment that has the words");
+		assertEquals("uuid-b", quotations.quotes().get(0).fragmentId());
+		assertEquals("secret-doctrine.pdf", quotations.quotes().get(0).title());
+		assertEquals("Blavatsky: ⟦Q2|Fohat is the steed⟧.",
+				quotations.keepVerified("Blavatsky: ⟦q:9|Fohat is the steed⟧.", batch()),
+				"a number made up: the fragment that has the words");
 	}
 
 	@Test

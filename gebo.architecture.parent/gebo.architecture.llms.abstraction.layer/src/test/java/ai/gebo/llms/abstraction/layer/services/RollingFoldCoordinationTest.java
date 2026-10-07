@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.FoldOutcome;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.GenerativeFunction;
+import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LaneBudget;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.RollingFold;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.security.services.RunAsWithReturn;
@@ -33,8 +34,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Scheduler;
 
 /**
- * Pins the rolling fold of the deep analyses: the partial analyses are folded into a
- * running report as they come, and a report judged enough stops the batches not
+ * Pins the rolling fold of the deep analyses: the documents are analysed in lanes, each
+ * a consolidation chain handing its consolidation over when its analysis is satisfying,
+ * when no room is left for a batch, or when the documents end; the hand-overs are folded
+ * into a running report as they come, and a report judged enough stops the analyses not
  * started yet once the minimum of analysed batches is reached.
  */
 class RollingFoldCoordinationTest {
@@ -50,23 +53,32 @@ class RollingFoldCoordinationTest {
 		return runAs;
 	}
 
-	/** One document per batch, each analysed in {@code millis}. */
+	/**
+	 * One document per batch, each analysed in {@code millis}: an analysis gives the
+	 * consolidation it received followed by its own, as the analysis prompt combines them.
+	 */
 	private GenerativeFunction<String, String> analysis(long millis) {
-		return (initial, emitter, documents) -> {
+		return (consolidation, emitter, documents) -> {
 			Thread.sleep(millis);
 			analysedDocuments.addAll(documents);
-			return "A(" + String.join(",", documents) + ")";
+			return consolidation + "A(" + String.join(",", documents) + ")";
 		};
 	}
 
+	/** Every analysis satisfying: each hands over, one checkpoint per analysis. */
 	private String run(int documents, GenerativeFunction<String, String> analysis, RollingFold<String> fold,
 			int minimumAnalysedBatches) {
-		return run(documents, analysis, fold, minimumAnalysedBatches, 100_000);
+		return run(documents, analysis, fold, minimumAnalysedBatches, 100_000, 1, text -> true,
+				new LaneBudget<>(consolidation -> 1, 0));
 	}
 
-	/** Each analysis and the report weigh their length. */
+	/**
+	 * A batch is as many documents as its budget; each checkpoint and the report weigh
+	 * their length, the report taking its weight out of the fold budget.
+	 */
 	private String run(int documents, GenerativeFunction<String, String> analysis, RollingFold<String> fold,
-			int minimumAnalysedBatches, long foldTokensBudget) {
+			int minimumAnalysedBatches, long foldTokensBudget, int lanes, Predicate<String> laneSatisfied,
+			LaneBudget<String> laneBudget) {
 		List<String> source = new ArrayList<>();
 		for (int i = 0; i < documents; i++) {
 			source.add("d" + i);
@@ -74,9 +86,10 @@ class RollingFoldCoordinationTest {
 		Predicate<String> outOfBand = value -> value == null || value.equals("ERR");
 		Flux<String> result = TokensBudgetFluxCoordinator.tokenBudgetCoordinateWithRollingFold(
 				Flux.fromIterable(source), IGProgressNotifier.NONE, document -> true,
-				(list, budget) -> !list.isEmpty(), analysis, fold, reports -> String.join("+", reports), String::length,
-				foldTokensBudget, "", "ERR", outOfBand, text -> text, text -> Flux.just(text), Flux.just("EMPTY"), 1000,
-				runningInPlace(), 1, minimumAnalysedBatches, unprocessed::add);
+				(list, budget) -> list.size() >= Math.max(1, budget), analysis, fold,
+				reports -> String.join("+", reports), String::length, report -> foldTokensBudget - report.length(), "",
+				"ERR", outOfBand, text -> text, text -> Flux.just(text), Flux.just("EMPTY"), laneBudget,
+				runningInPlace(), lanes, minimumAnalysedBatches, laneSatisfied, unprocessed::add);
 		return String.join("", result.collectList().block(Duration.ofSeconds(30)));
 	}
 
@@ -166,7 +179,7 @@ class RollingFoldCoordinationTest {
 			return new FoldOutcome<>("R" + partials.size(), false);
 		};
 
-		run(8, analysis(1), fold, 1, 30);
+		run(8, analysis(1), fold, 1, 30, 1, text -> true, new LaneBudget<>(consolidation -> 1, 0));
 
 		assertEquals(8, analysedDocuments.size());
 		assertTrue(overBudget.isEmpty(), "folds over their budget: " + overBudget);
@@ -218,5 +231,62 @@ class RollingFoldCoordinationTest {
 		assertEquals(List.of("d0", "d3"), analysedDocuments.stream().sorted().toList());
 		assertEquals(List.of("d1", "d2"), unprocessed.stream().sorted().toList(), "not analysed");
 		assertTrue(report.contains("A(d0)") && report.contains("A(d3)"), report);
+	}
+
+	@Test
+	void aLaneChainsItsConsolidation() {
+		final List<String> received = Collections.synchronizedList(new ArrayList<>());
+		GenerativeFunction<String, String> chained = (consolidation, emitter, documents) -> {
+			received.add(consolidation);
+			analysedDocuments.addAll(documents);
+			return consolidation + "A(" + String.join(",", documents) + ")";
+		};
+		RollingFold<String> fold = (report, partials, emitter) -> new FoldOutcome<>(report + "[" + partials + "]",
+				false);
+
+		String report = run(3, chained, fold, 1, 100_000, 1, text -> false, new LaneBudget<>(consolidation -> 1, 0));
+
+		assertEquals(List.of("", "A(d0)", "A(d0)A(d1)"), received, "each analysis gets the consolidation before it");
+		assertEquals("A(d0)A(d1)A(d2)", report, "one chain, handed over when the documents end");
+	}
+
+	@Test
+	void aLaneHandsOverWhenItsConsolidationLeavesNoRoom() {
+		final List<String> received = Collections.synchronizedList(new ArrayList<>());
+		GenerativeFunction<String, String> chained = (consolidation, emitter, documents) -> {
+			received.add(consolidation);
+			analysedDocuments.addAll(documents);
+			return consolidation + "A(" + String.join(",", documents) + ")";
+		};
+		RollingFold<String> fold = (report, partials, emitter) -> new FoldOutcome<>(
+				report + "[" + String.join(",", partials) + "]", false);
+		// a batch is as many documents as the budget: 3 less a fifth of the consolidation's weight
+		LaneBudget<String> budget = new LaneBudget<>(consolidation -> 3 - consolidation.length() / 5, 2);
+
+		String report = run(6, chained, fold, 1, 100_000, 1, text -> false, budget);
+
+		assertEquals(6, analysedDocuments.size());
+		for (String consolidation : received) {
+			assertTrue(3 - consolidation.length() / 5 >= 2, "no analysis starts without room: " + consolidation);
+		}
+		assertTrue(received.stream().filter(String::isEmpty).count() > 1, "a new chain after each hand-over");
+		for (int i = 0; i < 6; i++) {
+			assertTrue(report.contains("d" + i), report);
+		}
+	}
+
+	@Test
+	void theLanesShareTheDocumentsEachAnalysingItsOwn() {
+		RollingFold<String> fold = (report, partials, emitter) -> new FoldOutcome<>(
+				report + "[" + String.join(",", partials) + "]", false);
+
+		String report = run(10, analysis(20), fold, 1, 100_000, 3, text -> false,
+				new LaneBudget<>(consolidation -> 1, 0));
+
+		assertEquals(10, analysedDocuments.size());
+		assertEquals(10, analysedDocuments.stream().distinct().count(), "each document analysed once");
+		for (int i = 0; i < 10; i++) {
+			assertTrue(report.contains("A(d" + i + ")"), report);
+		}
 	}
 }

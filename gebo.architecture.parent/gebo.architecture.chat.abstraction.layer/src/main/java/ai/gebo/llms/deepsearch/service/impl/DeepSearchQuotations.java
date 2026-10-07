@@ -94,21 +94,20 @@ public class DeepSearchQuotations {
 
 	/**
 	 * A partial analysis with its quotations checked against its batch: each
-	 * {@code ⟦q:<number>|words⟧} whose words its fragment has is kept as
+	 * {@code ⟦q:<number>|words⟧} whose words its fragment, or another fragment of the
+	 * batch, has is kept as
 	 * {@code ⟦Q<n>|words⟧}, the others become their words; quotation marks around words
-	 * no fragment of the batch has are taken away.
+	 * no fragment read so far has are taken away.
 	 */
 	public String keepVerified(String partialAnalysis, DeepSearchBatchTrace.NumberedBatch batch) {
 		if (partialAnalysis == null || partialAnalysis.isEmpty()) {
 			return partialAnalysis;
 		}
 		final Map<String, Document> byNumber = new LinkedHashMap<>();
-		final List<String> batchTexts = new ArrayList<>();
 		if (batch != null) {
 			for (Document numbered : batch.documents()) {
 				byNumber.put(numbered.getId(), numbered);
 				final String text = normalized(numbered.getText());
-				batchTexts.add(text);
 				fragmentTexts.add(text);
 			}
 		}
@@ -119,28 +118,50 @@ public class DeepSearchQuotations {
 		int last = 0;
 		while (matcher.find()) {
 			out.append(partialAnalysis, last, matcher.start());
-			final String number = matcher.group(1).trim();
+			final String written = matcher.group(1).trim();
 			final String words = matcher.group(2).trim();
-			final Document fragment = byNumber.get(number);
-			if (fragment != null && !words.isEmpty() && contains(normalized(fragment.getText()), words)) {
+			// the fragment of the number written when it has the words, else the first of the
+			// batch that has them (a model may write the number of another fragment)
+			String number = null;
+			if (!words.isEmpty()) {
+				final Document named = byNumber.get(written);
+				if (named != null && contains(normalized(named.getText()), words)) {
+					number = written;
+				} else {
+					for (Map.Entry<String, Document> entry : byNumber.entrySet()) {
+						if (contains(normalized(entry.getValue().getText()), words)) {
+							number = entry.getKey();
+							break;
+						}
+					}
+				}
+			}
+			if (number != null) {
+				final Document fragment = byNumber.get(number);
 				final String key = "Q" + next.getAndIncrement();
 				final Map<String, Object> metadata = fragment.getMetadata();
 				quotes.put(key, new Quote(key, words, batch.idOf(number), stringOf(metadata.get(DocumentMetaInfos.CONTENT_CODE)),
 						titleOf(metadata)));
 				out.append("⟦").append(key).append('|').append(words).append('⟧');
 				kept++;
+				if (LOGGER.isDebugEnabled() && !number.equals(written)) {
+					LOGGER.debug("Deep search quotation written for fragment:" + written + " found in fragment:" + number
+							+ ": " + abbreviated(words));
+				}
 			} else {
 				out.append(words);
 				dropped++;
 				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Deep search quotation not found in fragment:" + number + ", kept as plain text: "
+					LOGGER.debug("Deep search quotation not found in fragment:" + written + " nor in its batch, kept as plain text: "
 							+ abbreviated(words));
 				}
 			}
 			last = matcher.end();
 		}
 		out.append(partialAnalysis.substring(last));
-		final String checked = outsideCode(out.toString(), prose -> unquoteUnverified(prose, batchTexts));
+		// against every fragment read so far: an analysis carries the consolidation of the ones
+		// before it, quoting their fragments
+		final String checked = outsideCode(out.toString(), prose -> unquoteUnverified(prose, fragmentTexts));
 		if (LOGGER.isDebugEnabled() && (kept > 0 || dropped > 0)) {
 			LOGGER.debug("Deep search partial analysis quotations: " + kept + " verified, " + dropped
 					+ " not found in their fragment");

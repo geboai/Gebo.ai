@@ -2,7 +2,10 @@ package ai.gebo.llms.deepsearch.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -45,6 +48,14 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 	private boolean sufficiencyCheckEnabled = true;
 	// The batches analysed, by deliverable, before a report judged enough may stop the analysis.
 	private List<DeepSearchSufficiencyMinimum> sufficiencyMinimumAnalysedBatches = new ArrayList<DeepSearchSufficiencyMinimum>();
+	// Share of an analysis batch one piece of a document read whole (chat with documents) may fill: about
+	// 1/factor pieces per batch, a batch exceeding its budget by one piece at most; it is also the least
+	// budget an analysis lane goes on with (below it the lane hands its consolidation over). The batch
+	// budget itself is the one budget formula (ai.gebo.llms.tokens-budget.factor). 0 < factor < 1.
+	// Set via ai.gebo.deepsearch.chunk-filling-factor.
+	private double chunkFillingFactor = DEFAULT_CHUNK_FILLING_FACTOR;
+
+	public static final double DEFAULT_CHUNK_FILLING_FACTOR = 0.25d;
 
 	@Data
 	@NoArgsConstructor
@@ -110,6 +121,31 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 						.filter(x -> x.intents != null && x.intents.contains(finalIntent)).findFirst()
 						.orElse(this.sufficiencyMinimumAnalysedBatches.get(0)).getMinimumAnalysedBatches());
 	}
+
+	/**
+	 * The tokens of a piece of a document read whole, out of the budget of a batch with
+	 * no consolidation: the budget times the {@link #getChunkFillingFactor() filling
+	 * factor}, at least 1.
+	 */
+	public int chunkTokens(long batchBudget) {
+		return (int) Math.max(1, Math.min(Integer.MAX_VALUE, (long) (Math.max(0, batchBudget)
+				* factorOrDefault(chunkFillingFactor, DEFAULT_CHUNK_FILLING_FACTOR, "chunk-filling-factor"))));
+	}
+
+	/** The factor when 0 < factor < 1, else its default (told once). */
+	private static double factorOrDefault(double factor, double defaultValue, String name) {
+		if (factor > 0d && factor < 1d) {
+			return factor;
+		}
+		if (INVALID_FACTORS_WARNED.add(name)) {
+			LoggerFactory.getLogger(DeepSearchDefaultConfig.class).warn("ai.gebo.deepsearch." + name + "="
+					+ factor + " is not between 0 and 1 (excluded): " + defaultValue + " is used");
+		}
+		return defaultValue;
+	}
+
+	private static final Set<String> INVALID_FACTORS_WARNED = ConcurrentHashMap
+			.newKeySet();
 
 	public int getSatisfactorySubAnalisysThreashold(DeliverableIntent intent) {
 		if (intent == null)

@@ -331,6 +331,14 @@ ai.gebo.deepsearch.analysis-parallelism: 2
 # Deep search analyses folded into a running report, stopping once the consolidation model
 # judges it enough (true when not set; false: stop on the satisfactory batches count)
 ai.gebo.deepsearch.sufficiency-check-enabled: true
+# The one budget formula of every consolidation and deep analysis: a call is given documents
+# for (context length - prompt - the values filling it - the consolidation it carries) times
+# this factor, the rest left to the token estimation error and to what the model writes
+# (0.7 when not set; 0 < factor <= 1)
+ai.gebo.llms.tokens-budget.factor: 0.7
+# Share of an analysis batch one piece of a document read whole (chat with documents) fills,
+# and the least batch budget an analysis lane goes on with (0.25 when not set; 0 < factor < 1)
+ai.gebo.deepsearch.chunk-filling-factor: 0.25
 # Languages whose stop words the chunks' keyword filter ignores when neither the
 # keywords' nor the chunk's language is detected with confidence (it,en when not set)
 ai.gebo.search.keyword-stop-words.fallback-languages: it,en

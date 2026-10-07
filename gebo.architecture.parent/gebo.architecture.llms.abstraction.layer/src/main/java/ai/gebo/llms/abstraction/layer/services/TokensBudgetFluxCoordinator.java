@@ -10,6 +10,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.function.ToLongFunction;
 
 import org.slf4j.Logger;
@@ -17,17 +19,23 @@ import org.slf4j.LoggerFactory;
 
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.core.Disposable;
 import reactor.core.scheduler.Scheduler;
 
 /**
- * Token budgeted map/reduce over a stream of documents: the documents are grouped in
- * batches fitting a tokens budget, each batch is analysed in parallel (map), the
- * analyses are then reduced into the final result. Progress goes to an
- * {@link IGProgressNotifier}, so the same coordination serves the chat pipelines,
- * the agents and the tools.
+ * Token budgeted map/reduce over a stream of documents. The documents are analysed in
+ * lanes running in parallel: each lane is a consolidation chain, every analysis of a
+ * lane receiving the consolidation its analysis before gave (the initial value on the
+ * first) and giving the new one, the batch of documents of each analysis sized on the
+ * room that consolidation leaves ({@link LaneBudget}). A lane hands its consolidation
+ * over (a checkpoint) and starts a new chain when its analysis declares it satisfying,
+ * when the consolidation leaves no room for a batch any more, and when the documents
+ * end; the checkpoints, each on different documents, are then reduced into the final
+ * result. Progress goes to an {@link IGProgressNotifier}, so the same coordination
+ * serves the chat pipelines, the agents and the tools.
  */
 public class TokensBudgetFluxCoordinator {
 	private static final String EXCEPTION_IN_FLAT_MAP = "Exception in flatMap(...)";
@@ -47,6 +55,14 @@ public class TokensBudgetFluxCoordinator {
 	@FunctionalInterface
 	public static interface TokensLimitCompute<D> {
 		boolean higherThanBudgetTokens(List<D> d, long budget);
+	}
+
+	/**
+	 * The batch budget of a lane: the tokens of documents an analysis may be given beside
+	 * the consolidation it carries, and the least budget worth an analysis: below it the
+	 * lane hands its consolidation over and starts a new chain.
+	 */
+	public static record LaneBudget<T>(ToLongFunction<T> batchBudget, long minimumBatchBudget) {
 	}
 
 	public static <D, T, Y> Flux<Y> tokenBudgetCoordinateAlreadySplitted(Flux<D> source, IGProgressNotifier emitter,
@@ -152,16 +168,16 @@ public class TokensBudgetFluxCoordinator {
 			Predicate<D> validDocumentCheck, TokensLimitCompute<D> tokensCompute, GenerativeFunction<D, T> generative,
 			LastWork<T, Y> finalWork, T initialValue, T outOfBandValue, Predicate<T> isOutOfBandValue,
 			Y finalOutOFBoundValue, Predicate<Y> isFinalOutOFBoundValue, Predicate<T> isEndOfProcessingCondition,
-			Function<T, T> outputCleaningFunction, Function<T, Flux<Y>> streamingFunction, long tokensBudget,
-			ReactiveIdentityUtil runAs, int parallelism, Consumer<D> unprocessedCumulator) {
+			Function<T, T> outputCleaningFunction, Function<T, Flux<Y>> streamingFunction, LaneBudget<T> laneBudget,
+			ReactiveIdentityUtil runAs, int lanes, Predicate<T> laneSatisfied, Consumer<D> unprocessedCumulator) {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin tokenBudgetCoordinate(..) ");
+			LOGGER.debug("Begin tokenBudgetCoordinate(..) lanes:" + lanes);
 		}
 		final AtomicBoolean endOfProcessing = new AtomicBoolean(false);
 
-		Flux<List<T>> flux = analysedBatches(source, emitter, validDocumentCheck, tokensCompute, generative,
-				initialValue, outOfBandValue, isOutOfBandValue, isEndOfProcessingCondition, outputCleaningFunction,
-				tokensBudget, runAs, parallelism, unprocessedCumulator, endOfProcessing, null).buffer();
+		Flux<List<T>> flux = laneCheckpoints(source, emitter, validDocumentCheck, tokensCompute, generative,
+				initialValue, isOutOfBandValue, isEndOfProcessingCondition, laneSatisfied, outputCleaningFunction,
+				laneBudget, runAs, lanes, unprocessedCumulator, endOfProcessing, null).buffer();
 		Flux<Y> finalFlux = flux.flatMap(IntermediateResult -> {
 			return runAs.doRunAsWithReturn(() -> {
 				try {
@@ -205,70 +221,220 @@ public class TokensBudgetFluxCoordinator {
 		return finalFlux;
 	}
 
+	/** The end of the documents, in the queue the lanes take them from. */
+	private static final Object END_OF_DOCUMENTS = new Object();
+	/** How long a lane waits for a document before checking it was not cancelled. */
+	private static final long TAKE_POLL_MILLIS = 200l;
+
 	/**
-	 * The map stage: the documents grouped in batches fitting the tokens budget, each
-	 * batch analysed in parallel; once {@code endOfProcessing} is set, the batches not
-	 * started yet are not analysed (their documents go to the unprocessed cumulator).
-	 * Returns the analyses, out-of-band ones dropped, in completion order.
+	 * The map stage: the documents analysed in {@code lanes} consolidation chains running
+	 * in parallel (see {@link TokensBudgetFluxCoordinator}), each taking the next
+	 * documents as it is ready for them. Returns the lanes' checkpoints, in the order they
+	 * come. Once {@code endOfProcessing} is set, no analysis starts: the documents not
+	 * analysed go to the unprocessed cumulator, and every lane hands over what it
+	 * consolidated so far.
 	 */
-	private static <D, T> Flux<T> analysedBatches(Flux<D> source, IGProgressNotifier emitter,
+	private static <D, T> Flux<T> laneCheckpoints(Flux<D> source, IGProgressNotifier emitter,
 			Predicate<D> validDocumentCheck, TokensLimitCompute<D> tokensCompute, GenerativeFunction<D, T> generative,
-			T initialValue, T outOfBandValue, Predicate<T> isOutOfBandValue, Predicate<T> isEndOfProcessingCondition,
-			Function<T, T> outputCleaningFunction, long tokensBudget, ReactiveIdentityUtil runAs, int parallelism,
-			Consumer<D> unprocessedCumulator, AtomicBoolean endOfProcessing, Runnable onAnalysed) {
-		return emitQueueWhenPredicateTrue(source.filter(validDocumentCheck),
-				list -> tokensCompute.higherThanBudgetTokens(list, tokensBudget)).parallel(parallelism)
-				.runOn(runAs.wrap(Schedulers.boundedElastic())).map(input -> {
-					return runAs.doRunAsWithReturn(() -> {
-						if (LOGGER.isDebugEnabled()) {
-							LOGGER.debug("Begin map(...) code with " + input.size() + " elements");
-						}
-						if (endOfProcessing.get()) {
-							if (LOGGER.isDebugEnabled()) {
-								LOGGER.debug("Shortcutting process in map(...)");
-							}
-							if (input != null) {
-								input.forEach(unprocessedCumulator);
-							}
-							// Reactor's map() forbids null: return the out-of-band value, which is
-							// dropped downstream by the isOutOfBandValue filter (see .filter below).
-							return outOfBandValue;
-						}
-						try {
-							try {
-								emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzing " + input.size() + " documents");
-							} catch (Throwable th) {
-								LOGGER.error("Error notifying user about documents analysis start", th);
-							}
-							T result = generative.iterateCumulation(initialValue, emitter, input);
-							if (LOGGER.isDebugEnabled()) {
-								LOGGER.debug("End map(...) code with " + input.size() + " returning:" + result);
-							}
-							if (result != null && isOutOfBandValue.test(result)) {
-								// no analysis came out of the batch: its documents were not analysed
-								notAnalysed(input, unprocessedCumulator);
-							}
-							try {
-								emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzed " + input.size() + " documents!");
-							} catch (Throwable th) {
-								LOGGER.error("Error notifying user about documents analysis completion", th);
-							}
-							if (isEndOfProcessingCondition != null && isEndOfProcessingCondition.test(result)) {
-								endOfProcessing.set(true);
-							}
-							if (onAnalysed != null) {
-								onAnalysed.run();
-							}
-							return outputCleaningFunction.apply(result);
-						} catch (Throwable th) {
-							emitter.notifyLLMProblems();
-							LOGGER.error(EXCEPTION_IN_MAP_PROCESS, th);
-							// the batch failed: its documents were not analysed
-							notAnalysed(input, unprocessedCumulator);
-							return outOfBandValue;
-						}
-					});
-			}).filter(V -> V != null && !isOutOfBandValue.test(V)).sequential();
+			T initialValue, Predicate<T> isOutOfBandValue, Predicate<T> isEndOfProcessingCondition,
+			Predicate<T> laneSatisfied, Function<T, T> outputCleaningFunction, LaneBudget<T> laneBudget,
+			ReactiveIdentityUtil runAs, int lanes, Consumer<D> unprocessedCumulator, AtomicBoolean endOfProcessing,
+			Runnable onAnalysed) {
+		return Flux.defer(() -> {
+			final LinkedBlockingQueue<Object> queue = new LinkedBlockingQueue<>();
+			final Disposable feeding = source.filter(validDocumentCheck).subscribe(queue::add, error -> {
+				LOGGER.error("The documents stream failed: the lanes analyse the documents that came", error);
+				queue.add(END_OF_DOCUMENTS);
+			}, () -> queue.add(END_OF_DOCUMENTS));
+			final int laneCount = Math.max(1, lanes);
+			return Flux.range(0, laneCount).flatMap(lane -> Flux.<T>create(sink -> runAs.doRunAsWithReturn(() -> {
+				new Lane<D, T>(lane, queue, emitter, tokensCompute, generative, initialValue, isOutOfBandValue,
+						isEndOfProcessingCondition, laneSatisfied, outputCleaningFunction, laneBudget,
+						unprocessedCumulator, endOfProcessing, onAnalysed).run(sink);
+				return null;
+			})).subscribeOn(runAs.wrap(Schedulers.boundedElastic())), laneCount)
+					.doFinally(signal -> feeding.dispose());
+		});
+	}
+
+	/**
+	 * A consolidation chain: each analysis receives the consolidation of the one before
+	 * and a batch of the next documents sized on the room that consolidation leaves.
+	 */
+	private static final class Lane<D, T> {
+		private final int number;
+		private final LinkedBlockingQueue<Object> queue;
+		private final IGProgressNotifier emitter;
+		private final TokensLimitCompute<D> tokensCompute;
+		private final GenerativeFunction<D, T> generative;
+		private final T initialValue;
+		private final Predicate<T> isOutOfBandValue;
+		private final Predicate<T> isEndOfProcessingCondition;
+		private final Predicate<T> laneSatisfied;
+		private final Function<T, T> outputCleaningFunction;
+		private final LaneBudget<T> laneBudget;
+		private final Consumer<D> unprocessedCumulator;
+		private final AtomicBoolean endOfProcessing;
+		private final Runnable onAnalysed;
+		private T consolidation;
+		private int cycles = 0;
+
+		Lane(int number, LinkedBlockingQueue<Object> queue, IGProgressNotifier emitter,
+				TokensLimitCompute<D> tokensCompute, GenerativeFunction<D, T> generative, T initialValue,
+				Predicate<T> isOutOfBandValue, Predicate<T> isEndOfProcessingCondition, Predicate<T> laneSatisfied,
+				Function<T, T> outputCleaningFunction, LaneBudget<T> laneBudget, Consumer<D> unprocessedCumulator,
+				AtomicBoolean endOfProcessing, Runnable onAnalysed) {
+			this.number = number;
+			this.queue = queue;
+			this.emitter = emitter;
+			this.tokensCompute = tokensCompute;
+			this.generative = generative;
+			this.initialValue = initialValue;
+			this.isOutOfBandValue = isOutOfBandValue;
+			this.isEndOfProcessingCondition = isEndOfProcessingCondition;
+			this.laneSatisfied = laneSatisfied;
+			this.outputCleaningFunction = outputCleaningFunction;
+			this.laneBudget = laneBudget;
+			this.unprocessedCumulator = unprocessedCumulator;
+			this.endOfProcessing = endOfProcessing;
+			this.onAnalysed = onAnalysed;
+			this.consolidation = initialValue;
+		}
+
+		@SuppressWarnings("unchecked")
+		void run(FluxSink<T> sink) {
+			boolean documentsEnded = false;
+			while (!documentsEnded && !sink.isCancelled()) {
+				if (endOfProcessing.get()) {
+					leaveUnprocessed(sink);
+					break;
+				}
+				final long budget = laneBudget.batchBudget().applyAsLong(consolidation);
+				if (budget < laneBudget.minimumBatchBudget()) {
+					if (cycles > 0) {
+						// the consolidation leaves no room for a batch: handed over, a new chain starts
+						checkpoint(sink, "no room left for a batch, budget:" + budget + " (tok)");
+						continue;
+					}
+					LOGGER.warn("Lane " + number + " batch budget " + budget + " (tok) under its minimum "
+							+ laneBudget.minimumBatchBudget() + " (tok) with no consolidation: one document per batch");
+				}
+				final List<D> batch = new ArrayList<>();
+				while (batch.isEmpty() || !tokensCompute.higherThanBudgetTokens(batch, budget)) {
+					final Object next = take(sink);
+					if (next == null) {
+						// cancelled
+						batch.forEach(unprocessedCumulator);
+						return;
+					}
+					if (next == END_OF_DOCUMENTS) {
+						// left for the other lanes
+						queue.add(END_OF_DOCUMENTS);
+						documentsEnded = true;
+						break;
+					}
+					batch.add((D) next);
+				}
+				if (!batch.isEmpty()) {
+					analyse(batch, budget, sink);
+				}
+			}
+			if (cycles > 0) {
+				checkpoint(sink, documentsEnded ? "documents ended" : "analysis stopped");
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Lane " + number + " ended");
+			}
+			sink.complete();
+		}
+
+		private void analyse(List<D> batch, long budget, FluxSink<T> sink) {
+			if (endOfProcessing.get()) {
+				batch.forEach(unprocessedCumulator);
+				return;
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Lane " + number + " analysis " + (cycles + 1) + " of its chain: " + batch.size()
+						+ " document(s), batch budget:" + budget + " (tok)");
+			}
+			try {
+				try {
+					emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzing " + batch.size() + " documents");
+				} catch (Throwable th) {
+					LOGGER.error("Error notifying user about documents analysis start", th);
+				}
+				final T result = generative.iterateCumulation(consolidation, emitter, batch);
+				if (result == null || isOutOfBandValue.test(result)) {
+					// no analysis came out of the batch: its documents were not analysed, the
+					// consolidation stays as it was
+					notAnalysed(batch, unprocessedCumulator);
+					return;
+				}
+				try {
+					emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzed " + batch.size() + " documents!");
+				} catch (Throwable th) {
+					LOGGER.error("Error notifying user about documents analysis completion", th);
+				}
+				if (onAnalysed != null) {
+					onAnalysed.run();
+				}
+				final boolean satisfied = laneSatisfied != null && laneSatisfied.test(result);
+				if (isEndOfProcessingCondition != null && isEndOfProcessingCondition.test(result)) {
+					endOfProcessing.set(true);
+				}
+				consolidation = outputCleaningFunction.apply(result);
+				cycles++;
+				if (satisfied) {
+					checkpoint(sink, "its analysis is satisfying");
+				}
+			} catch (Throwable th) {
+				emitter.notifyLLMProblems();
+				LOGGER.error(EXCEPTION_IN_MAP_PROCESS, th);
+				// the batch failed: its documents were not analysed, the consolidation stays
+				notAnalysed(batch, unprocessedCumulator);
+			}
+		}
+
+		/** Hands the consolidation over and starts a new chain. */
+		private void checkpoint(FluxSink<T> sink, String why) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Lane " + number + " hands over its consolidation of " + cycles + " analysis(es): " + why);
+			}
+			sink.next(consolidation);
+			consolidation = initialValue;
+			cycles = 0;
+		}
+
+		/** The documents left once the analysis stopped: not analysed. */
+		@SuppressWarnings("unchecked")
+		private void leaveUnprocessed(FluxSink<T> sink) {
+			while (true) {
+				final Object next = take(sink);
+				if (next == null) {
+					return;
+				}
+				if (next == END_OF_DOCUMENTS) {
+					queue.add(END_OF_DOCUMENTS);
+					return;
+				}
+				unprocessedCumulator.accept((D) next);
+			}
+		}
+
+		/** The next document, or the end of them; null when the lane is cancelled. */
+		private Object take(FluxSink<T> sink) {
+			try {
+				while (!sink.isCancelled()) {
+					final Object next = queue.poll(TAKE_POLL_MILLIS, TimeUnit.MILLISECONDS);
+					if (next != null) {
+						return next;
+					}
+				}
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+			return null;
+		}
 	}
 
 	/**
@@ -300,13 +466,15 @@ public class TokensBudgetFluxCoordinator {
 	}
 
 	/**
-	 * Token budgeted map with a rolling reduce: the batches are analysed in parallel as
-	 * in {@link #tokenBudgetCoordinate}, and the analyses are folded into a running
-	 * report while the others are still being analysed. The folding is adaptive: when
-	 * the previous fold is over, the next one takes every analysis that arrived in the
-	 * meantime, as many as fit {@code foldTokensBudget} with the report (always at least
-	 * one), so the folds are few when the analyses come quickly and frequent when they
-	 * come slowly. No fold is made before {@code minimumAnalysedBatches} batches are
+	 * Token budgeted map with a rolling reduce: the documents are analysed in lanes as
+	 * in {@link #tokenBudgetCoordinate}, and the lanes' checkpoints are folded into a
+	 * running report while the lanes go on; a lane hands over when its analysis is
+	 * satisfying ({@code laneSatisfied}), so the report can be judged as soon as a lane
+	 * believes it has enough. The folding is adaptive: when the previous fold is over,
+	 * the next one takes every checkpoint that arrived in the meantime, as many as fit
+	 * the budget {@code foldBudget} gives beside the report (always at least one), so the
+	 * folds are few when the checkpoints come quickly and frequent when they come
+	 * slowly. No fold is made before {@code minimumAnalysedBatches} batches are
 	 * analysed (it could not stop anything), nor while a first analysis is alone (it may
 	 * be the only one: a lone analysis with an empty report is the report itself, no fold
 	 * needed), unless the waiting analyses already fill the budget.
@@ -320,22 +488,22 @@ public class TokensBudgetFluxCoordinator {
 	public static <D, T, Y> Flux<Y> tokenBudgetCoordinateWithRollingFold(Flux<D> source, IGProgressNotifier emitter,
 			Predicate<D> validDocumentCheck, TokensLimitCompute<D> tokensCompute, GenerativeFunction<D, T> generative,
 			RollingFold<T> rollingFold, Function<List<T>, T> appendWhenFoldFails, ToLongFunction<T> tokensOf,
-			long foldTokensBudget, T initialValue, T outOfBandValue, Predicate<T> isOutOfBandValue,
+			ToLongFunction<T> foldBudget, T initialValue, T outOfBandValue, Predicate<T> isOutOfBandValue,
 			Function<T, T> outputCleaningFunction, Function<T, Flux<Y>> streamingFunction, Flux<Y> emptyResult,
-			long tokensBudget, ReactiveIdentityUtil runAs, int parallelism, int minimumAnalysedBatches,
-			Consumer<D> unprocessedCumulator) {
+			LaneBudget<T> laneBudget, ReactiveIdentityUtil runAs, int lanes, int minimumAnalysedBatches,
+			Predicate<T> laneSatisfied, Consumer<D> unprocessedCumulator) {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin tokenBudgetCoordinateWithRollingFold(..) parallelism:" + parallelism
-					+ " foldTokensBudget:" + foldTokensBudget + " minimumAnalysedBatches:" + minimumAnalysedBatches);
+			LOGGER.debug("Begin tokenBudgetCoordinateWithRollingFold(..) lanes:" + lanes + " minimumAnalysedBatches:"
+					+ minimumAnalysedBatches);
 		}
 		final AtomicBoolean endOfProcessing = new AtomicBoolean(false);
 		final AtomicInteger analysed = new AtomicInteger(0);
-		final Flux<T> partials = analysedBatches(source, emitter, validDocumentCheck, tokensCompute, generative,
-				initialValue, outOfBandValue, isOutOfBandValue, null, outputCleaningFunction, tokensBudget, runAs,
-				parallelism, unprocessedCumulator, endOfProcessing, analysed::incrementAndGet);
+		final Flux<T> partials = laneCheckpoints(source, emitter, validDocumentCheck, tokensCompute, generative,
+				initialValue, isOutOfBandValue, null, laneSatisfied, outputCleaningFunction, laneBudget, runAs, lanes,
+				unprocessedCumulator, endOfProcessing, analysed::incrementAndGet);
 		final Mono<T> folded = Mono.<T>create(sink -> {
 			final RollingReport<T> rolling = new RollingReport<>(rollingFold, appendWhenFoldFails, tokensOf,
-					foldTokensBudget, initialValue, minimumAnalysedBatches, analysed, endOfProcessing, emitter);
+					foldBudget, initialValue, minimumAnalysedBatches, analysed, endOfProcessing, emitter);
 			final Scheduler folding = runAs.wrap(Schedulers.boundedElastic());
 			final AtomicInteger wip = new AtomicInteger(0);
 			final AtomicBoolean sourceDone = new AtomicBoolean(false);
@@ -388,7 +556,8 @@ public class TokensBudgetFluxCoordinator {
 		private final RollingFold<T> rollingFold;
 		private final Function<List<T>, T> appendWhenFoldFails;
 		private final ToLongFunction<T> tokensOf;
-		private final long foldTokensBudget;
+		/** The budget of a fold's checkpoints, given the report it carries. */
+		private final ToLongFunction<T> foldBudget;
 		private final T initialValue;
 		private final int minimumAnalysedBatches;
 		private final AtomicInteger analysed;
@@ -399,12 +568,12 @@ public class TokensBudgetFluxCoordinator {
 		private int folds = 0;
 
 		RollingReport(RollingFold<T> rollingFold, Function<List<T>, T> appendWhenFoldFails, ToLongFunction<T> tokensOf,
-				long foldTokensBudget, T initialValue, int minimumAnalysedBatches, AtomicInteger analysed,
+				ToLongFunction<T> foldBudget, T initialValue, int minimumAnalysedBatches, AtomicInteger analysed,
 				AtomicBoolean endOfProcessing, IGProgressNotifier emitter) {
 			this.rollingFold = rollingFold;
 			this.appendWhenFoldFails = appendWhenFoldFails;
 			this.tokensOf = tokensOf;
-			this.foldTokensBudget = foldTokensBudget;
+			this.foldBudget = foldBudget;
 			this.initialValue = initialValue;
 			this.minimumAnalysedBatches = minimumAnalysedBatches;
 			this.analysed = analysed;
@@ -440,37 +609,38 @@ public class TokensBudgetFluxCoordinator {
 					report = waiting.poll();
 					continue;
 				}
-				final long reportTokens = tokens(report);
+				// the budget of the checkpoints beside the report this fold carries
+				final long budget = foldBudget.applyAsLong(report != null ? report : initialValue);
 				long waitingTokens = 0l;
 				for (T partial : waiting) {
 					waitingTokens += tokens(partial);
 				}
-				final boolean roomLeft = reportTokens + waitingTokens < foldTokensBudget;
+				final boolean roomLeft = waitingTokens < budget;
 				if (!sourceDone && roomLeft && (analysed.get() < minimumAnalysedBatches
 						|| (report == null && waiting.size() == 1))) {
 					// no stop possible yet, or a first analysis alone that may be the only one
 					// (then it is the report, no fold needed): wait for more analyses
 					return;
 				}
-				fold(takeGroup(reportTokens));
+				fold(takeGroup(budget));
 			}
 		}
 
-		/** The waiting analyses that fit the budget with the report, at least one. */
-		private List<T> takeGroup(long reportTokens) {
+		/** The waiting checkpoints that fit the budget left beside the report, at least one. */
+		private List<T> takeGroup(long budget) {
 			final List<T> group = new ArrayList<>();
-			long used = reportTokens;
+			long used = 0l;
 			while (!waiting.isEmpty()) {
 				final long next = tokens(waiting.peek());
-				if (!group.isEmpty() && used + next > foldTokensBudget) {
+				if (!group.isEmpty() && used + next > budget) {
 					break;
 				}
 				used += next;
 				group.add(waiting.poll());
 			}
-			if (used > foldTokensBudget) {
-				LOGGER.warn("A fold of " + group.size() + " analysis(es) and the report takes " + used
-						+ " (tok), over its budget of " + foldTokensBudget + " (tok)");
+			if (used > budget) {
+				LOGGER.warn("A fold of " + group.size() + " checkpoint(s) takes " + used
+						+ " (tok), over the budget of " + budget + " (tok) its report leaves");
 			}
 			return group;
 		}

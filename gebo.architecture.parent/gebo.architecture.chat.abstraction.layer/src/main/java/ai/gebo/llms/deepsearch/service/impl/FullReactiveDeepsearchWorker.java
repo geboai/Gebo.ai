@@ -17,6 +17,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.ToLongFunction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,7 @@ import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.FoldO
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.RollingFold;
 import ai.gebo.llms.deepsearch.service.DeepSearchVerdict;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.GenerativeFunction;
+import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LaneBudget;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LastWork;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.TokensLimitCompute;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
@@ -302,7 +304,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			return Flux.empty();
 		}
 
-		final IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
+		// each analysis call is given its documents: the request's own are not added to every call
+		final IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext()
+				.cloneWithNewDocumentsList(List.of());
 		// prompt template for input document analisys
 		final GPromptTemplateConfig cumulativeAnalisysPrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT);
@@ -312,8 +316,6 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		// prompt template for empty documents
 		final GPromptTemplateConfig emptyResponsePrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT);
-		// raw tokens budget calculation
-		final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
 		final GeboChatResponse response = runtimeData.getChatResponse();
 		final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
 		final Map<String, Object> commonParams = new HashMap<>();
@@ -539,6 +541,27 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		final Map<String, Object> commonParams = new HashMap<>();
 		commonParams.put(AGENT_DELIVERABLE_COMPLETENESS,
 				request.getUserIntent().name() + ": " + request.getUserIntent().getAgentDeliverableCompleteness());
+		// each analysis call is given its pieces: the selected documents are not added to every call
+		final IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext()
+				.cloneWithNewDocumentsList(List.of());
+		// prompt template for input document analisys
+		final GPromptTemplateConfig cumulativeAnalisysPrompt = promptsDao
+				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT);
+		// prompt template for final analisys
+		final GPromptTemplateConfig finalAnalisysPrompt = promptsDao
+				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT);
+		// prompt template for empty documents
+		final GPromptTemplateConfig emptyResponsePrompt = promptsDao
+				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT);
+		// a selected document is read whole: it is split into pieces each filling its share of the
+		// batch an analysis with no consolidation is given, on the model writing the analyses
+		final int pieceTokens = defaultDeepsearchConfig.chunkTokens(Math.max(0,
+				computeFragmentBudget("", cumulativeAnalisysPrompt.getTokensSize(), serviceModel.getContextLength(),
+						DeepSearchBudgets.knownValues(cumulativeAnalisysPrompt, commonParams, context))));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Huge files analysis: model:" + serviceModel.getCode() + " context:"
+					+ serviceModel.getContextLength() + " document pieces of " + pieceTokens + " (tok) at most");
+		}
 		Map<String, GResponseDocumentRef> docrefs = new Hashtable<>();
 		Flux<Document> docsFlux = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
@@ -564,19 +587,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				sinkUIEmitter.next(new GeboChatMessageEnvelope(processingEvent));
 			}
 			return doc;
-		});
+		}).flatMapIterable(doc -> DocumentPieces.of(doc, pieceTokens));
 
-		final IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
-		// prompt template for input document analisys
-		final GPromptTemplateConfig cumulativeAnalisysPrompt = promptsDao
-				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT);
-		// prompt template for final analisys
-		final GPromptTemplateConfig finalAnalisysPrompt = promptsDao
-				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT);
-		// prompt template for empty documents
-		final GPromptTemplateConfig emptyResponsePrompt = promptsDao
-				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT);
-		// raw tokens budget calculation
 		Vector<String> discardedFragmentIds = new Vector<>();
 		// the quotations of the request, checked against their fragments (best effort)
 		final DeepSearchQuotations quotations = new DeepSearchQuotations();
@@ -646,13 +658,32 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				.getSatisfactorySubAnalisysThreashold(request.getUserIntent());
 		final int analysisParallelism = Math.max(1, this.defaultDeepsearchConfig.getAnalysisParallelism());
 		final AtomicInteger satisfactorySubanalisys = new AtomicInteger(0);
-		final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
 		final Map<String, Object> sharedParams = new HashMap<>(commonParams);
 		sharedParams.put(AGENT_DELIVERABLE_COMPLETENESS,
 				request.getUserIntent() != null
 						? request.getUserIntent().name() + " "
 								+ request.getUserIntent().getAgentDeliverableCompleteness()
 						: "");
+		// the batch of an analysis: the one budget formula on the model writing the analyses, given
+		// the consolidation its lane carries; a lane whose consolidation leaves less than a piece of
+		// a document hands it over and starts a new chain
+		final Map<String, Object> analysisKnown = DeepSearchBudgets.knownValues(cumulativeAnalisysPrompt, sharedParams,
+				context);
+		final ToLongFunction<String> batchBudget = consolidation -> Math.max(0,
+				computeFragmentBudget(consolidation != null ? consolidation : "", cumulativeAnalisysPrompt.getTokensSize(),
+						serviceModel.getContextLength(), analysisKnown));
+		final long emptyBatchBudget = batchBudget.applyAsLong("");
+		final LaneBudget<String> laneBudget = new LaneBudget<>(batchBudget,
+				defaultDeepsearchConfig.chunkTokens(emptyBatchBudget));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Deep search analyses: model:" + serviceModel.getCode() + " context:"
+					+ serviceModel.getContextLength() + " batch budget with no consolidation:" + emptyBatchBudget
+					+ " (tok) lanes:" + analysisParallelism + " a lane goes on while its budget is "
+					+ laneBudget.minimumBatchBudget() + " (tok) at least");
+		}
+		// an analysis judging what its lane consolidated enough hands it over
+		final Predicate<String> laneSatisfied = text -> text != null
+				&& text.toUpperCase().contains(PARTIAL_ANALISYS_SATISFACTORY);
 		final Flux<String> backupNotFoundDocuments = Flux.defer(() -> {
 			Flux<String> outFlux = null;
 			try {
@@ -774,8 +805,18 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			// consolidation model judges it enough (its verdict line)
 			final int minimumAnalysedBatches = this.defaultDeepsearchConfig
 					.minimumAnalysedBatchesBeforeStop(request.getUserIntent());
-			// a fold holds the report and the analyses in 2/3 of the chat model context, beside its prompt
-			final long foldTokensBudget = Math.max(1, chatModel.getContextLength() * 2l / 3 - finalAnalisysPrompt.getTokensSize());
+			// the lanes' hand-overs a fold takes: the one budget formula on the chat model, which
+			// writes it, given the report the fold carries
+			final Map<String, Object> foldKnown = DeepSearchBudgets.knownValues(finalAnalisysPrompt, sharedParams,
+					context);
+			final ToLongFunction<String> foldBudget = report -> Math.max(0,
+					computeFragmentBudget(report != null ? report : "", finalAnalisysPrompt.getTokensSize(),
+							chatModel.getContextLength(), foldKnown));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Deep search consolidation: model:" + chatModel.getCode() + " context:"
+						+ chatModel.getContextLength() + " fold budget with no report:" + foldBudget.applyAsLong("")
+						+ " (tok)");
+			}
 			final RollingFold<String> rollingFold = (report, partials, _emitter) -> {
 				return runAs.doRunAsWithReturnAndException(() -> {
 					final Map<String, Object> params = new HashMap<>(sharedParams);
@@ -795,14 +836,14 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			};
 			resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinateWithRollingFold(docsFlux, sinkUIEmitter,
 					isValidDocument, tokensLimitCompute, intermediateProcess, rollingFold,
-					reports -> String.join("\n\n", reports), ITokensCountable::stringsTokensSize, foldTokensBudget, "",
+					reports -> String.join("\n\n", reports), ITokensCountable::stringsTokensSize, foldBudget, "",
 					ERROR_IN_PROCESS, outOfBandString, outputCleaningFunction, stringStreamer, backupNotFoundDocuments,
-					tokensBudget, runAs, analysisParallelism, minimumAnalysedBatches, unprocessedCumulator);
+					laneBudget, runAs, analysisParallelism, minimumAnalysedBatches, laneSatisfied, unprocessedCumulator);
 		} else {
 			resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(docsFlux, sinkUIEmitter, isValidDocument,
 					tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS, outOfBandString,
 					ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputCleaningFunction,
-					stringStreamer, tokensBudget, runAs, analysisParallelism, unprocessedCumulator);
+					stringStreamer, laneBudget, runAs, analysisParallelism, laneSatisfied, unprocessedCumulator);
 		}
 		return resultFlux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 	}

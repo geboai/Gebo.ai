@@ -109,6 +109,9 @@ exact form, and only in this form:
 - Never put quotation marks (" “ ” « ») around words in any other way: what is not in the form above is
   a summary in your own words.
 - Example: Steiner describes it as ⟦q:3|il Guardiano della Soglia è l'essere che si presenta all'anima⟧.
+- The consolidated document summary object may hold quotations already checked, in the form
+  ⟦Q<number>|<exact words>⟧: keep each one you use exactly as you receive it, character by character, and
+  never write a new one in that form.
 
 OUTPUT THE IRRELEVANT FRAGMENTS LIST:
 

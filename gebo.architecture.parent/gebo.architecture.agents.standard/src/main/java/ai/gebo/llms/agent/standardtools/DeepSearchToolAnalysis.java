@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.ToLongFunction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,9 +40,11 @@ import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.FoldO
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.RollingFold;
 import ai.gebo.llms.deepsearch.service.DeepSearchVerdict;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchBatchTrace;
+import ai.gebo.llms.deepsearch.service.impl.DeepSearchBudgets;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchQuotations;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchBatchTrace.NumberedBatch;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.GenerativeFunction;
+import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LaneBudget;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LastWork;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.TokensLimitCompute;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
@@ -67,12 +70,6 @@ import reactor.core.scheduler.Schedulers;
 @Service
 public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService {
 	private final static Logger LOGGER = LoggerFactory.getLogger(DeepSearchToolAnalysis.class);
-	/**
-	 * Share of the service model's context a batch of fragments of a partial analysis
-	 * may fill: half of it, the rest left to the prompt and to the partial analysis it
-	 * writes.
-	 */
-	static final double BATCH_CONTEXT_SHARE = 0.5d;
 	private static final String SORRY_SOMETHING_GONE_WRONG = "Sorry, something gone wrong on last step of the execution";
 	private static final String CONSOLIDATED_SUMMARY_PROMPT_PARAM = "consolidated";
 	static final String AGENT_DELIVERABLE_COMPLETENESS = "agentDeliverableCompleteness";
@@ -134,19 +131,32 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 		final int satisfactoryThreshold = defaultDeepsearchConfig.getSatisfactorySubAnalisysThreashold(deliverable);
 		final int analysisParallelism = Math.max(1, defaultDeepsearchConfig.getAnalysisParallelism());
 		final AtomicInteger satisfactorySubanalisys = new AtomicInteger(0);
-		final long tokensBudget = (long) (serviceModel.getContextLength() * BATCH_CONTEXT_SHARE);
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin analyze(...) deliverable:" + deliverable + " tokensBudget:" + tokensBudget
-					+ " parallelism:" + analysisParallelism + " satisfactoryThreshold:" + satisfactoryThreshold
-					+ " sufficiencyCheck:" + defaultDeepsearchConfig.isSufficiencyCheckEnabled());
-		}
-		// the quotations of this analysis: the outcome's when given, so the tool can list them
-		final DeepSearchQuotations quotations = outcome != null ? outcome.getQuotations()
-				: new DeepSearchQuotations();
 		final Map<String, Object> sharedParams = new HashMap<>();
 		sharedParams.put(AGENT_DELIVERABLE_COMPLETENESS,
 				(deliverable != null ? deliverable.name() + " " + deliverable.getAgentDeliverableCompleteness() : "")
 						+ (completenessNote != null ? completenessNote : ""));
+		// the batch of an analysis: the one budget formula on the model writing the analyses, given
+		// the consolidation its lane carries; a lane whose consolidation leaves less than a piece of
+		// a document hands it over and starts a new chain
+		final Map<String, Object> analysisKnown = DeepSearchBudgets.knownValues(cumulativeAnalisysPrompt, sharedParams,
+				context);
+		final ToLongFunction<String> batchBudget = consolidation -> Math.max(0,
+				computeFragmentBudget(consolidation != null ? consolidation : "", cumulativeAnalisysPrompt.getTokensSize(),
+						serviceModel.getContextLength(), analysisKnown));
+		final long emptyBatchBudget = batchBudget.applyAsLong("");
+		final LaneBudget<String> laneBudget = new LaneBudget<>(batchBudget,
+				defaultDeepsearchConfig.chunkTokens(emptyBatchBudget));
+		// an analysis judging what its lane consolidated enough hands it over
+		final Predicate<String> laneSatisfied = text -> text != null
+				&& text.toUpperCase().contains(PARTIAL_ANALISYS_SATISFACTORY);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin analyze(...) deliverable:" + deliverable + " batch budget with no consolidation:"
+					+ emptyBatchBudget + " (tok) lanes:" + analysisParallelism + " satisfactoryThreshold:"
+					+ satisfactoryThreshold + " sufficiencyCheck:" + defaultDeepsearchConfig.isSufficiencyCheckEnabled());
+		}
+		// the quotations of this analysis: the outcome's when given, so the tool can list them
+		final DeepSearchQuotations quotations = outcome != null ? outcome.getQuotations()
+				: new DeepSearchQuotations();
 		final Flux<String> backupNotFoundDocuments = Flux.defer(() -> {
 			Flux<String> outFlux = null;
 			try {
@@ -254,8 +264,17 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 			// the partial analyses folded into a running report, the analysis stopping once the
 			// consolidation model judges it enough (its verdict line)
 			final int minimumAnalysedBatches = defaultDeepsearchConfig.minimumAnalysedBatchesBeforeStop(deliverable);
-			// a fold holds the report and the analyses in 2/3 of the chat model context, beside its prompt
-			final long foldTokensBudget = Math.max(1, chatModel.getContextLength() * 2l / 3 - finalAnalisysPrompt.getTokensSize());
+			// the lanes' hand-overs a fold takes: the one budget formula on the chat model, which
+			// writes it, given the report the fold carries
+			final Map<String, Object> foldKnown = DeepSearchBudgets.knownValues(finalAnalisysPrompt, sharedParams,
+					context);
+			final ToLongFunction<String> foldBudget = report -> Math.max(0,
+					computeFragmentBudget(report != null ? report : "", finalAnalisysPrompt.getTokensSize(),
+							chatModel.getContextLength(), foldKnown));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Deep search tool consolidation: model:" + chatModel.getCode()
+						+ " fold budget with no report:" + foldBudget.applyAsLong("") + " (tok)");
+			}
 			final RollingFold<String> rollingFold = (report, partials, _emitter) -> {
 				return runAs.doRunAsWithReturnAndException(() -> {
 					final Map<String, Object> params = new HashMap<>(sharedParams);
@@ -279,14 +298,14 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 			};
 			resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinateWithRollingFold(fragments, progress,
 					isValidDocument, tokensLimitCompute, intermediateProcess, rollingFold,
-					reports -> String.join("\n\n", reports), ITokensCountable::stringsTokensSize, foldTokensBudget, "",
+					reports -> String.join("\n\n", reports), ITokensCountable::stringsTokensSize, foldBudget, "",
 					ERROR_IN_PROCESS, outOfBandString, outputCleaningFunction, STRING_STREAMER, backupNotFoundDocuments,
-					tokensBudget, runAs, analysisParallelism, minimumAnalysedBatches, unprocessedCumulator);
+					laneBudget, runAs, analysisParallelism, minimumAnalysedBatches, laneSatisfied, unprocessedCumulator);
 		} else {
 			resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(fragments, progress, isValidDocument,
 					tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS, outOfBandString,
 					ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputCleaningFunction,
-					STRING_STREAMER, tokensBudget, runAs, analysisParallelism, unprocessedCumulator);
+					STRING_STREAMER, laneBudget, runAs, analysisParallelism, laneSatisfied, unprocessedCumulator);
 		}
 		// the quotations the standard way, with no fragment id
 		return quotations.render(resultFlux).subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
