@@ -460,11 +460,13 @@ The single-agent loop now remembers as the report writer does: the story of the 
 
 Clean rebuild of the whole reactor (189 modules), only the `gebo.ai` container redeployed, TRACE on the agents, the tools, the deep searches and the pipeline steps, DEBUG on the retrieval layer. Every question of this session's series rerun (52 turns in 4 chats: 34 on the `biblioteca-esoterica` knowledge base, 18 without knowledge base), each turn's whole log saved, every quotation of the answers checked against what the tools returned. gpt-4.1, service model gpt-4o-mini.
 
-| Round | Code | OK | Partial | Failed | Quotations verified |
+| Round | Code | OK | Partial | Failed | Quotations found in the turn's log* |
 |---|---|---|---|---|---|
 | 1 (stopped at K10) | `37fc9d388` + the loop memory | 9 | 1 | 0 | - |
 | 2 | + `d9547f899` (retrieval merge) | 42 | 4 | 6 | 145 / 145 |
 | 3 | + `299408e89` (gates, ids, guards) | 46 | 3 | 3 | 204 / 204 |
+
+\* **Correction (2026-10-07): these figures are inflated.** The checker counted a quotation as found when its text appeared anywhere in the turn's log, the model's own text included. Rechecked against the documents' text only, across all the rounds of sections 16 and 17 and the Qwen3.5-122b series (gpt-4.1 and Qwen, 616 quotations): 402 verified (65%, found word for word); 94 partial (15%, real but cut, with an ellipsis or a page break); 42 taken from a deep search's analysis (7%, sentences written by the gpt-4o-mini analysis given as the documents' words, with both models: gpt-4.1 in r1/K07, r2/K22, r3/K34, Qwen in K24 and K15); 78 found only in the model's own text (13%, some translations of real quotations, others invented, e.g. r2/K24, r2/r3 K34); none found nowhere. The figures were not recomputed per round. The quotations taken from the analyses are what `4236fdac2` and `bb18ec4d1` address: deep search analyses and the pipeline answers give as quotations only the ones checked against their documents.
 
 **Found and fixed:**
 - **Retrieval merge** (`d9547f899`): `AIDocumentsSet.join` compared fragments by their code, the code of their document, so a document found by two legs (semantic probes, full text, graph) kept only one leg's fragments. The Pistis Sophia deep search read 3 fragments of it; after the fix 27, and the answer has the six-book structure it missed. Fragments are told apart by their chunk id, documents grouped by their code, everywhere (joins, the multi-hop merge, the vector and full-text grouping).
@@ -488,7 +490,7 @@ A new knowledge base made from the UI (knowledge base, project, upload data sour
 
 | Check | Outcome |
 |---|---|
-| 15 questions in a chat of the new profile (listing, quotations, deep searches, whole document reads, cross-document analysis, decision, negative, KB + web, cross-language, recap) | 15 / 15 correct, all quotations found in the tools' results |
+| 15 questions in a chat of the new profile (listing, quotations, deep searches, whole document reads, cross-document analysis, decision, negative, KB + web, cross-language, recap) | 15 / 15 correct; quotations found in the turn's log (inflated, see the correction in section 16) |
 | Isolation, profile bound to one knowledge base | every retrieval filtered on that knowledge base only (semantic KNOWLEDGEBASE_CODE IN [...], full text, tool scope); questions about the other knowledge base's topics answered "not in the knowledge base" |
 | Default profile (the user chooses the knowledge bases) | a new chat uses every knowledge base the user can access; a chat created before the new knowledge base existed also searches it (the scope is resolved per request) |
 
