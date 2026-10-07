@@ -131,6 +131,39 @@ class CachedChunksSelectionTest {
 	}
 
 	@Test
+	void disposingASessionAlreadyDisposedIsNothing() {
+		when(sessions.findById("gone")).thenReturn(Optional.empty());
+
+		service.disposeChunkingSession("gone");
+		service.disposeChunkingSession(null);
+
+		verify(operations, never()).deleteByChunkingSessionId(any());
+		verify(sessions, never()).deleteById(any());
+	}
+
+	@Test
+	void aReadDoesNotWriteAgainARecordDisposedMeanwhile() throws Exception {
+		final DocumentChunkOperation disposed = operation("disposed", "job-session", 1_000L, true);
+		when(operations.findByOriginalDocumentCode(document.getCode())).thenReturn(List.of(disposed));
+		when(operations.existsById("disposed")).thenReturn(false);
+
+		service.getCachedChunkSet(document, "job-session");
+
+		verify(operations, never()).save(any());
+	}
+
+	@Test
+	void aReadRefreshesARecordStillThere() throws Exception {
+		final DocumentChunkOperation alive = operation("alive", "job-session", 1_000L, true);
+		when(operations.findByOriginalDocumentCode(document.getCode())).thenReturn(List.of(alive));
+		when(operations.existsById("alive")).thenReturn(true);
+
+		service.getCachedChunkSet(document, "job-session");
+
+		verify(operations).save(alive);
+	}
+
+	@Test
 	void theSessionOfAFinishedJobIsDisposedByItsId() {
 		final IDocumentsChunkService chunking = mock(IDocumentsChunkService.class);
 		when(chunking.retrieveChunkingSession("job:J1")).thenReturn("session-uuid");

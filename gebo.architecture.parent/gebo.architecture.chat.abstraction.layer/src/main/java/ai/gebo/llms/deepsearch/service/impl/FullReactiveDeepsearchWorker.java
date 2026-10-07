@@ -302,6 +302,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			suppliers.add(supplier);
 		}
 		if (suppliers.isEmpty()) {
+			// nothing to search: the chunking session ends here
+			disposeChunkingSession(chunkSessionId);
 			return Flux.empty();
 		}
 
@@ -516,13 +518,10 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 						} catch (Throwable e) {
 							LOGGER.error("Error completing request", e);
 						}
-						try {
-							this.chunkingService.disposeChunkingSession(chunkSessionId);
-						} catch (Throwable th) {
-							LOGGER.error("Error disposing chunking session " + chunkSessionId, th);
-						}
 					});
-				});
+				})
+				// the chunking session ends however the search ends: completed, failed or cancelled
+				.doFinally(signal -> runAs.doAs(() -> disposeChunkingSession(chunkSessionId)));
 
 		return finalFlux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 
@@ -623,19 +622,27 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				.publishOn(threadManager.getScheduler()).doOnComplete(() -> {
 					runAs.doAs(() -> {
 						try {
-							this.chunkingService.disposeChunkingSession(chunkSessionId);
-						} catch (Throwable th) {
-							LOGGER.error("Error disposing chunking session " + chunkSessionId, th);
-						}
-
-						try {
 							sessionLifecycleService.chatRequestCompleted(request, chatModel);
 						} catch (Throwable e) {
 							LOGGER.error("Error completing request", e);
 						}
 					});
-				});
+				})
+				// the chunking session ends however the answer ends: completed, failed or cancelled
+				.doFinally(signal -> runAs.doAs(() -> disposeChunkingSession(chunkSessionId)));
 		return finalFlux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
+	}
+
+	/** The chunking session of a request ended, never failing what ends it. */
+	private void disposeChunkingSession(String chunkSessionId) {
+		try {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Disposing the chunking session " + chunkSessionId);
+			}
+			this.chunkingService.disposeChunkingSession(chunkSessionId);
+		} catch (Throwable th) {
+			LOGGER.error("Error disposing chunking session " + chunkSessionId, th);
+		}
 	}
 
 	private static Function<String, Flux<String>> stringStreamer = (data) -> {

@@ -479,6 +479,8 @@ public class DocumentsChunkServiceImpl
 						LOGGER.debug("End looping contents stream");
 					}
 					if (!exceptions.isEmpty()) {
+						// the chunk sets written so far are no cache: no record will name them
+						cleanupResources(chunkOperation);
 						throw new DocumentCacheAccessException("Cannot split in chunk because of an exception",
 								exceptions);
 					}
@@ -511,6 +513,16 @@ public class DocumentsChunkServiceImpl
 						}
 						objectMapper.writeValue(writtenFile.toFile(), currentChunkSet);
 						chunkSets.clear();
+					}
+					if (!chunkOperation.getChunkSetsList().isEmpty() && chunkSessionId != null
+							&& !exists(chunkSessionId)) {
+						// the session was disposed while this chunking ran (its caller timed out, was
+						// cancelled or ended): nothing will read these chunks, nor dispose them
+						LOGGER.warn("Chunking of " + document.getCode() + " ended after its session " + chunkSessionId
+								+ " was disposed: its " + chunkOperation.getChunkSetsList().size()
+								+ " chunk set(s) deleted, not recorded");
+						cleanupResources(chunkOperation);
+						return response;
 					}
 					if (!chunkOperation.getChunkSetsList().isEmpty()) {
 						response.setId(chunkOperation.getId());
@@ -690,7 +702,10 @@ public class DocumentsChunkServiceImpl
 				response.setNextChunkSetId(nextChunk);
 			}
 			operation.setLastAccessed(new Date());
-			this.repository.save(operation);
+			// a record disposed meanwhile (its session ended) is not written again
+			if (this.repository.existsById(operation.getId())) {
+				this.repository.save(operation);
+			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End getNextChunk(" + document.getCode() + ",'" + chunkRequestId + "','" + chunkId + "')");
 			}
@@ -925,7 +940,17 @@ public class DocumentsChunkServiceImpl
 
 	@Override
 	public void disposeChunkingSession(String chunkSessionId) {
-		checkExistence(chunkSessionId);
+		// disposing a session already disposed (or never created) is nothing to do: every
+		// end of its caller may dispose it
+		if (chunkSessionId == null || !exists(chunkSessionId)) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("disposeChunkingSession(" + chunkSessionId + ") no such session: nothing to dispose");
+			}
+			return;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin disposeChunkingSession(" + chunkSessionId + ")");
+		}
 		Stream<DocumentChunkOperation> stream = documentChunkOperationRepository
 				.findByChunkingSessionId(chunkSessionId);
 		stream.forEach(op -> {
