@@ -275,15 +275,15 @@ class AgenticLoopReactiveAgentServiceTest {
 	}
 
 	@Test
-	void aDraftWrittenOnNoSourceIsNotGivenToBuildOnOnlyWhyItWasDiscarded() {
+	void aDraftWrittenOnNoSourceIsGivenWithWhyItWasDiscarded() {
 		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
 		List<LoopIteration> history = List.of(
 				new LoopIteration(1, "An answer from memory.", List.of(), "no search used"));
 
 		String story = agent.loopStory(history, 40_000, null);
 
-		assertFalse(story.contains("An answer from memory."), "a draft to rewrite would be rewritten: " + story);
-		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.DISCARDED_WITHOUT_DRAFT), story);
+		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.DISCARDED_WITHOUT_DRAFT + "An answer from memory."),
+				"the next iteration learns from what the previous one wrote: " + story);
 		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.WHY_DISCARDED + "no search used"), story);
 	}
 
@@ -371,6 +371,21 @@ class AgenticLoopReactiveAgentServiceTest {
 				.block());
 	}
 
+	/**
+	 * Runs the loop asking for an analysis, the evidence of the sources required, the
+	 * request's documents collected by {@code collector}.
+	 */
+	private static String runNeedingEvidence(ScriptedLoopAgent agent, int maxIterations, ToolsFoundDocuments collector) {
+		ToolCallsListener listener = new ToolCallsListener();
+		AgentNetworkParticipant persona = mock(AgentNetworkParticipant.class);
+		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
+		IChatRequestContext context = IChatRequestContext.forAgent(collector.sharedThrough(
+				IChatRequestContext.builder().requestID("r1").toolsContext(Map.of()).build()), listener);
+		return String.join("", agent.iteration(1, maxIterations, 10_000, new ArrayList<>(), null,
+				new GPromptTemplateConfig(), context, persona, mock(INotificationSink.class), listener,
+				agent.deliverableTemplateParams(DeliverableIntent.ANALISYS), true).collectList().block());
+	}
+
 	/** Runs the loop asking for an analysis, the evidence of the sources required. */
 	private static String runNeedingEvidence(ScriptedLoopAgent agent, int maxIterations) {
 		ToolCallsListener listener = new ToolCallsListener();
@@ -384,17 +399,31 @@ class AgenticLoopReactiveAgentServiceTest {
 	}
 
 	@Test
-	void anAnalysisWrittenWithoutToolsIsDiscardedAndTheSourcesAreSearched() {
+	void anAnalysisWrittenWithoutToolsIsShownAndTheUserToldWhenTheAgentStops() {
 		ScriptedLoopAgent agent = toolUsingAgent(
-				List.of(List.of("From ", "memory. " + STOP), List.of("From ", "the documents. " + STOP)), Set.of(1));
+				List.of(List.of("From ", "memory. " + STOP), List.of("Never asked. " + STOP)), Set.of());
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
 
-		String shown = runNeedingEvidence(agent, 5);
+		String shown = runNeedingEvidence(agent, 5, collector);
 
-		assertEquals("From the documents. ", shown, "the answer without evidence never reaches the user");
+		assertEquals("From memory. ", shown, "the agent chose to answer: streamed as written");
+		assertEquals(1, agent.receivedParams.size(), "no iteration forced");
+		assertTrue(collector.isAnsweredWithoutSearch(), "the user is told no source was searched");
+	}
+
+	@Test
+	void anAnswerWithoutToolsIsTheNextIterationsInputWhenTheAgentGoesOn() {
+		ScriptedLoopAgent agent = toolUsingAgent(
+				List.of(List.of("From memory. " + MORE), List.of("From the documents. " + STOP)), Set.of(1));
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
+
+		String shown = runNeedingEvidence(agent, 5, collector);
+
+		assertTrue(shown.startsWith("From memory. ") && shown.endsWith("From the documents. "), shown);
 		assertEquals(2, agent.receivedParams.size());
 		assertTrue(String.valueOf(agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM))
-				.contains(AgenticLoopReactiveAgentServiceImpl.DISCARDED_WITHOUT_EVIDENCE),
-				"the next iteration knows why the answer was discarded");
+				.contains("RESPONSE: From memory."), "the previous answer is an input of the next call");
+		assertFalse(collector.isAnsweredWithoutSearch(), "the sources were searched in the end");
 	}
 
 	@Test
@@ -406,20 +435,15 @@ class AgenticLoopReactiveAgentServiceTest {
 	}
 
 	@Test
-	void aRequestNeedingTheSourcesStaysHeldUntilItSearchesThemAndTheLastIterationAnswersAnyway() {
-		ScriptedLoopAgent stubborn = toolUsingAgent(List.of(List.of("First. " + STOP),
-				List.of("Second, still without tools. " + STOP), List.of("Third, still without tools. " + STOP)), Set.of());
-		assertEquals("Third, still without tools. ", runNeedingEvidence(stubborn, 3),
-				"discarded as long as it does not search, the last iteration shown");
-		assertEquals(3, stubborn.receivedParams.size());
-
-		ScriptedLoopAgent searching = toolUsingAgent(
-				List.of(List.of("From memory. " + STOP), List.of("From the search. " + STOP)), Set.of(1));
-		assertEquals("From the search. ", runNeedingEvidence(searching, 5));
-		assertEquals(2, searching.receivedParams.size(), "shown as soon as it searches");
+	void aRequestNeedingTheSourcesWithoutSearchIsToldOnlyWhenNoIterationSearchedThem() {
+		ToolsFoundDocuments stubbornCollector = new ToolsFoundDocuments();
+		ScriptedLoopAgent stubborn = toolUsingAgent(List.of(List.of("First. " + MORE),
+				List.of("Second, still without tools. " + STOP)), Set.of());
+		assertEquals("First. \r\n\r\nSecond, still without tools. ", runNeedingEvidence(stubborn, 3, stubbornCollector));
+		assertTrue(stubbornCollector.isAnsweredWithoutSearch());
 
 		ScriptedLoopAgent last = toolUsingAgent(List.of(List.of("Only answer. " + STOP)), Set.of());
-		assertEquals("Only answer. ", runNeedingEvidence(last, 1), "no iteration left: the answer is shown");
+		assertEquals("Only answer. ", runNeedingEvidence(last, 1));
 	}
 
 	@Test
@@ -459,23 +483,21 @@ class AgenticLoopReactiveAgentServiceTest {
 		ScriptedLoopAgent agent = toolUsingAgent(List.of(List.of("From memory. " + STOP), List.of("Searched. " + STOP)),
 				Set.of(0), "notifyUser");
 
-		assertEquals("Searched. ", runNeedingEvidence(agent, 2), "a notification is not a search: shown only as the last");
-		assertEquals(2, agent.receivedParams.size());
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
+		assertEquals("From memory. ", runNeedingEvidence(agent, 2, collector));
+		assertTrue(collector.isAnsweredWithoutSearch(), "a notification is not a search");
 	}
 
 	@Test
-	void anAnalysisNeedsTheDeepSearchWhenTheAgentHasOne() {
+	void anAnswerOnAPlainSearchIsShownWhenTheAgentStopsWithoutTheDeepSearch() {
 		ScriptedLoopAgent agent = toolUsingAgent(
 				List.of(List.of("From five fragments. " + STOP), List.of("From the deep search. " + STOP)), Set.of(0),
 				"searchKnowledgeBase");
 
-		assertEquals("From the deep search. ",
-				runNeedingEvidence(agent, 5, Set.of("deepSearchKnowledgeBase", "deepSearchWeb")));
-		// Set.of has no iteration order: each name is looked for on its own
-		String story = String.valueOf(
-				agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM));
-		assertTrue(story.contains("deepSearchKnowledgeBase") && story.contains("deepSearchWeb"),
-				"the next iteration knows which tools count");
+		assertEquals("From five fragments. ",
+				runNeedingEvidence(agent, 5, Set.of("deepSearchKnowledgeBase", "deepSearchWeb")),
+				"the agent chose to answer on a plain search: shown, no iteration forced");
+		assertEquals(1, agent.receivedParams.size());
 	}
 
 	@Test

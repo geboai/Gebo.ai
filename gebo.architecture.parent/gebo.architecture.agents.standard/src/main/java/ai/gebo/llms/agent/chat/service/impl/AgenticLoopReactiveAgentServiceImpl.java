@@ -1437,9 +1437,11 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			} catch (LLMConfigException e) {
 				return Flux.error(e);
 			}
-			// the text held back while the iteration has not used a tool yet
+			// the text held back while the iteration has not used a tool yet: only to check the
+			// documents an answer cites; a request needing the sources is streamed as written,
+			// the agent deciding whether it searches them (the user told when it did not)
 			final StringBuilder held = new StringBuilder();
-			final boolean[] open = { gate == null || !gate.holdsFromStart() };
+			final boolean[] open = { gate == null || !gate.holdsFromStart() || gate.evidenceRequired() };
 			// the coverage the deep searches of this iteration ask to complete, re-read as calls arrive
 			final CoverageWatch coverageWatch = new CoverageWatch(gate != null ? gate.coverage() : null,
 					callBacksListener, callsBefore);
@@ -1667,6 +1669,21 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 							+ stripper.isContinueRequested() + " finish requested:" + stripper.isFinishRequested()
 							+ " next iteration:" + another);
 				}
+				// a request needing the sources the agent answered without searching them: its
+				// answer is shown as any other, and the next iteration (when the agent goes on)
+				// gets it with the rest of the story
+				final boolean notSearched = gate.evidenceRequired() && !usedEvidenceTool(callBacksListener, 0, gate.tools());
+				if (notSearched) {
+					LOGGER.info("Agentic loop agent id:" + getId() + " iteration " + number
+							+ " answered a request needing the sources' evidence without searching them: shown, "
+							+ (another ? "the agent goes on" : "the user is told no source was searched"));
+					if (!another) {
+						final ToolsFoundDocuments collector = collectorOf(chatRequestContext);
+						if (collector != null) {
+							collector.markAnsweredWithoutSearch();
+						}
+					}
+				}
 				if (!another) {
 					return releasedText;
 				}
@@ -1675,11 +1692,14 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 								+ " of " + maxIterations + ")..",
 						ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
 				// the next iteration is not held, but a deep search of its own whose coverage is
-				// thin holds what follows it, as in the first iteration
+				// thin holds what follows it, as in the first iteration; a request needing the
+				// sources not searched yet keeps needing them, for the user to be told at the end
+				final SourceGate nextGate = notSearched
+						? new SourceGate(gate.tools(), true, gate.readDocumentNames(), gate.coverage(), false)
+						: SourceGate.continuing(gate.coverage());
 				return releasedText.concatWith(Flux.just(NEWLINE + NEWLINE)).concatWith(asUser(runAs, iteration(
 						number + 1, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-						contextAgentPersona, notificationSink, callBacksListener, deliverableParams,
-						SourceGate.continuing(gate.coverage()), runAs)));
+						contextAgentPersona, notificationSink, callBacksListener, deliverableParams, nextGate, runAs)));
 			});
 			return visible.concatWith(next);
 		});
@@ -2021,9 +2041,9 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				piece.append(DISCARDED_DRAFT).append(iteration.text()).append(NEWLINE);
 				piece.append(WHY_DISCARDED).append(iteration.discardedFor()).append(NEWLINE);
 			} else if (index == lastDraft) {
-				// written on no tool result: only why it was discarded, a draft to rewrite would
-				// be rewritten instead of searching
-				piece.append(DISCARDED_WITHOUT_DRAFT).append(NEWLINE);
+				// written on no tool result: given with why it was discarded, the next iteration
+				// learning from what it wrote
+				piece.append(DISCARDED_WITHOUT_DRAFT).append(iteration.text()).append(NEWLINE);
 				piece.append(WHY_DISCARDED).append(iteration.discardedFor()).append(NEWLINE);
 			} else {
 				piece.append(SUPERSEDED_DRAFT).append(NEWLINE);
@@ -2049,8 +2069,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	static final String WHY_DISCARDED = "WHY IT WAS DISCARDED: ";
 	static final String SUPERSEDED_DRAFT = "DISCARDED DRAFT: superseded by a later one.";
 	/** A discarded draft that rests on no tool result: not shown, only why. */
-	static final String DISCARDED_WITHOUT_DRAFT = "DISCARDED ANSWER (the user never saw it, it rested on no source: do not "
-			+ "rewrite it, search first).";
+	static final String DISCARDED_WITHOUT_DRAFT = "DISCARDED ANSWER (the user never saw it, it rested on no source "
+			+ "read in this request): ";
 
 	/**
 	 * The documents the tools returned so far in the request, each with its id: the

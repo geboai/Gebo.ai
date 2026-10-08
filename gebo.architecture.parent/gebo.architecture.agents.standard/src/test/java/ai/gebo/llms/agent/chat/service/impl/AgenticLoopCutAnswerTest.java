@@ -183,7 +183,7 @@ class AgenticLoopCutAnswerTest {
 	}
 
 	@Test
-	void aDraftDiscardedForTheEvidenceAndCutWhileReasoningIsFollowedWithLessReasoning() {
+	void anAnswerNeedingTheSourcesCutWhileReasoningIsShownAndWrittenAgainWithLessReasoning() {
 		final String reasoning = "Weighing what the sources may hold. ".repeat(20);
 		final ScriptedChunksAgent agent = new ScriptedChunksAgent(
 				List.of(List.of(chunk(reasoning, "An answer from memory", "LENGTH")),
@@ -196,10 +196,10 @@ class AgenticLoopCutAnswerTest {
 				agent.iteration(1, 2, 10_000, new ArrayList<>(), model, new GPromptTemplateConfig(), null, persona,
 						mock(INotificationSink.class), new ToolCallsListener(), Map.of(), true).collectList().block());
 
-		assertEquals(List.of(model, agent.lowered), agent.models, "the draft needing the sources is discarded,"
-				+ " the next iteration asks for less reasoning");
-		assertFalse(streamed.contains(AgenticLoopReactiveAgentServiceImpl.ANSWER_RESTART_MARK),
-				"the discarded draft was never shown: no mark");
+		assertEquals(List.of(model, agent.lowered), agent.models, "the cut answer is written again,"
+				+ " the next iteration asking for less reasoning");
+		assertTrue(streamed.contains(AgenticLoopReactiveAgentServiceImpl.ANSWER_RESTART_MARK),
+				"the cut answer was shown, as any other: the one written again follows the mark");
 	}
 
 	@Test
