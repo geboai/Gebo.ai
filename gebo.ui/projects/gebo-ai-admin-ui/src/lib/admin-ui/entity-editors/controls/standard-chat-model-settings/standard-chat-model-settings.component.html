@@ -42,7 +42,7 @@
           @if(maxGeneratedTokens===true) {
             <div class="col-4">
               <gebo-ai-field id="maxGeneratedTokens" label="Max number of generated tokens"
-                help="Configure thinking efforts the model will do">
+                help="Maximum number of tokens the model may generate for one answer, its reasoning included (if empty, the provider's default applies)">
                 <p-inputNumber id="maxGeneratedTokens" formControlName="maxGeneratedTokens" [maxFractionDigits]="0"
                   styleClass="w-full" gebo-ai-field-element />
                 </gebo-ai-field>
