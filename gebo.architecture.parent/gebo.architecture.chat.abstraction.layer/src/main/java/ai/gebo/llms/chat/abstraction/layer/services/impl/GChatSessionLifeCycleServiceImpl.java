@@ -834,13 +834,27 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		if (shrinked != null && shrinked.isToBeShrinked()) {
 			requestShrink(request.getUserChatContextCode(), getTargetShrinkResize(targetChatModel));
 		}
+		// the minimal context the next request's internal services work with is prepared
+		// now, in the background: the request does not wait for its history to be summarized
+		final IGConfigurableChatModel serviceModel = chatModelsDao
+				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
+		if (shrinked != null && serviceModel != null) {
+			requestShrink(request.getUserChatContextCode(),
+					IGChatSessionStateShrinkerService.serviceModelContextBudget(serviceModel), true);
+		}
 	}
 
 	private void requestShrink(String sessionCode, int tokensBudget) {
-		LOGGER.debug("Queueing the shrink of chat {} to {} tokens", sessionCode, tokensBudget);
+		requestShrink(sessionCode, tokensBudget, false);
+	}
+
+	private void requestShrink(String sessionCode, int tokensBudget, boolean minimalContextOnly) {
+		LOGGER.debug("Queueing the {} of chat {} to {} tokens",
+				minimalContextOnly ? "minimal context preparation" : "shrink", sessionCode, tokensBudget);
 		SessionShrinkRequestPayload checkPayload = new SessionShrinkRequestPayload();
 		checkPayload.setTokensBudget(tokensBudget);
 		checkPayload.setUserChatSessionCode(sessionCode);
+		checkPayload.setMinimalContextOnly(minimalContextOnly);
 		GMessageEnvelope<SessionShrinkRequestPayload> envelope = envelopeFactory.newMessageFrom(this, checkPayload);
 		envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
 		envelope.setTargetComponent(SessionShrinkMessagesReceiver.SESSION_SHRINKER);

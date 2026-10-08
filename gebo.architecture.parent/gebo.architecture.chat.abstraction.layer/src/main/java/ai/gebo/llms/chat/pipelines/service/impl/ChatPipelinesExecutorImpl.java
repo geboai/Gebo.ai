@@ -14,6 +14,7 @@ import org.springframework.beans.factory.ObjectProvider;
 
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -120,7 +121,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		resources = this.chatSessionLifecycleService.startRequest(request, chatModel,
 				LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
 		MinimalChatContext minimalChatContext = this.chatSessionLifecycleService.getMinimalChatContext(request,
-				serviceModel.getContextLength() / 3);
+				IGChatSessionStateShrinkerService.serviceModelContextBudget(serviceModel));
 		// One recorder for every tool called while answering this request, by any step
 		// or agent: it fills the response's called functions as the calls happen, so the
 		// response carries them whenever and wherever it is saved or streamed.

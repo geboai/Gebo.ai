@@ -47,7 +47,8 @@ public class SessionShrinkMessagesReceiver extends GAbstractTimedOutMessageRecei
 
 					if (msgpayload instanceof GMessageEnvelope envelope
 							&& envelope.getPayload() instanceof SessionShrinkRequestPayload shrinkPayload) {
-						uniqueMap.put(shrinkPayload.getUserChatSessionCode(), shrinkPayload);
+						uniqueMap.put(shrinkPayload.getUserChatSessionCode()
+								+ (shrinkPayload.isMinimalContextOnly() ? "|minimal" : ""), shrinkPayload);
 					}
 				}
 			}
@@ -56,14 +57,31 @@ public class SessionShrinkMessagesReceiver extends GAbstractTimedOutMessageRecei
 				LOGGER.debug("Shrink batch of {} requests for {} chats", messages.getPayload() instanceof GMessagesBatchPayload b ? b.size() : 0,
 						uniqueMap.size());
 			}
+			// a chat's state is shrunk before its minimal context is prepared: the shrink
+			// replaces the history the minimal context is made of
 			for (SessionShrinkRequestPayload entry : uniqueMap.values()) {
-				try {
-					long start = System.currentTimeMillis();
-					shrinker.shrink(entry.getUserChatSessionCode(), entry.getTokensBudget());
-					LOGGER.debug("Shrunk chat {} to a {} tokens target in {} ms", entry.getUserChatSessionCode(),
-							entry.getTokensBudget(), System.currentTimeMillis() - start);
-				} catch (Throwable e) {
-					LOGGER.error("Error shrinking " + entry.getUserChatSessionCode(), e);
+				if (!entry.isMinimalContextOnly()) {
+					try {
+						long start = System.currentTimeMillis();
+						shrinker.shrink(entry.getUserChatSessionCode(), entry.getTokensBudget());
+						LOGGER.debug("Shrunk chat {} to a {} tokens target in {} ms", entry.getUserChatSessionCode(),
+								entry.getTokensBudget(), System.currentTimeMillis() - start);
+					} catch (Throwable e) {
+						LOGGER.error("Error shrinking " + entry.getUserChatSessionCode(), e);
+					}
+				}
+			}
+			for (SessionShrinkRequestPayload entry : uniqueMap.values()) {
+				if (entry.isMinimalContextOnly()) {
+					try {
+						long start = System.currentTimeMillis();
+						shrinker.prepareMinimalContext(entry.getUserChatSessionCode(), entry.getTokensBudget());
+						LOGGER.debug("Prepared the minimal context of chat {} for {} tokens in {} ms",
+								entry.getUserChatSessionCode(), entry.getTokensBudget(),
+								System.currentTimeMillis() - start);
+					} catch (Throwable e) {
+						LOGGER.error("Error preparing the minimal context of " + entry.getUserChatSessionCode(), e);
+					}
 				}
 			}
 		}
