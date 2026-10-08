@@ -1,6 +1,9 @@
 package ai.gebo.llms.abstraction.layer.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +20,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
+import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.model.OperationStatus;
 import lombok.AllArgsConstructor;
@@ -88,29 +92,83 @@ public class ModelRuntimeConfigureHandler {
 		return OperationStatus.of(model);
 	}
 
+	/**
+	 * The system roles of a chat model saved by a chat model configuration screen, each
+	 * held by one model of the configured ones: the system default service model
+	 * ({@link ChatModelsUses#INTERNAL_SERVICES}, not default) and the system default chat
+	 * model ({@link ChatModelsUses#CHAT}, default).
+	 */
+	public void handleSystemChatModels(GBaseChatModelConfig config) throws GeboPersistenceException {
+		handleDefaultModel(GBaseChatModelConfig.class, config,
+				runtimeBinder.getImplementationOf(IGChatModelRuntimeConfigurationDao.class));
+	}
+
+	/**
+	 * Keeps one default model of the kind and, for chat models, the two system roles
+	 * unique: the system default chat model (uses CHAT, default) and the system default
+	 * service model (uses INTERNAL_SERVICES, not default). When the given model takes a
+	 * role, the other models holding it lose it; a chat model losing a role is a plain
+	 * chat model (uses CHAT, not default). Two models with the service use left the
+	 * runtime on the first one found, whatever the setup showed.
+	 */
 	protected void handleDefaultModel(Class<? extends GBaseModelConfig> configType, GBaseModelConfig config,
 			IGRuntimeModelConfigurationDao<? extends IGConfigurableModel, ? extends GBaseModelConfig> dao)
 			throws GeboPersistenceException {
 		if (config.getDefaultModel() != null && config.getDefaultModel()) {
-			List<? extends GBaseModelConfig> all = persistentManager.findAllExtendingType(configType);
-			for (GBaseModelConfig gBaseChatModelConfig : all) {
-				if (!(gBaseChatModelConfig.getClass().getName().equals(config.getClass().getName())
-						&& gBaseChatModelConfig.getCode().equals(config.getCode()))) {
-					if (gBaseChatModelConfig.getDefaultModel() != null && gBaseChatModelConfig.getDefaultModel()) {
-						gBaseChatModelConfig.setDefaultModel(false);
-						persistentManager.update(gBaseChatModelConfig);
-						IGConfigurableModel model = dao.findByCode(gBaseChatModelConfig.getCode());
-						if (model != null) {
-							try {
-								// The demoted model is refreshed with its OWN configuration - the one
-								// just updated to defaultModel=false. Handing it the incoming model's
-								// config would push a foreign provider's type into it (and fail).
-								model.reconfigure(gBaseChatModelConfig);
-							} catch (LLMConfigException e) {
-								LOGGER.error("Error in reconfigure a llm", e);
-							}
-						}
-					}
+			takeRoleFromOthers(configType, config, dao, "default model",
+					other -> other.getDefaultModel() != null && other.getDefaultModel(),
+					ModelRuntimeConfigureHandler::toPlainModel);
+		} else if (config instanceof GBaseChatModelConfig chatConfig && isServiceModel(chatConfig)) {
+			takeRoleFromOthers(configType, config, dao, "system default service model",
+					other -> other instanceof GBaseChatModelConfig otherChat && isServiceModel(otherChat),
+					ModelRuntimeConfigureHandler::toPlainModel);
+		}
+	}
+
+	private static boolean isServiceModel(GBaseChatModelConfig config) {
+		return config.getForUses() != null && config.getForUses().contains(ChatModelsUses.INTERNAL_SERVICES);
+	}
+
+	/** A model without its system role: not default and, for a chat model, a plain chat model. */
+	private static void toPlainModel(GBaseModelConfig config) {
+		config.setDefaultModel(false);
+		if (config instanceof GBaseChatModelConfig chatConfig) {
+			chatConfig.setForUses(new ArrayList<>(List.of(ChatModelsUses.CHAT)));
+		}
+	}
+
+	/**
+	 * Takes a role from the other models of the kind holding it: each one is saved
+	 * without it and its live model refreshed.
+	 */
+	private void takeRoleFromOthers(Class<? extends GBaseModelConfig> configType, GBaseModelConfig config,
+			IGRuntimeModelConfigurationDao<? extends IGConfigurableModel, ? extends GBaseModelConfig> dao, String role,
+			Predicate<GBaseModelConfig> holdsRole, Consumer<GBaseModelConfig> dropRole)
+			throws GeboPersistenceException {
+		List<? extends GBaseModelConfig> all = persistentManager.findAllExtendingType(configType);
+		for (GBaseModelConfig other : all) {
+			if (other.getClass().getName().equals(config.getClass().getName())
+					&& other.getCode().equals(config.getCode())) {
+				continue;
+			}
+			if (!holdsRole.test(other)) {
+				continue;
+			}
+			dropRole.accept(other);
+			persistentManager.update(other);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Model " + other.getCode() + " is no longer the " + role + ": " + config.getCode()
+						+ " is");
+			}
+			IGConfigurableModel model = dao.findByCode(other.getCode());
+			if (model != null) {
+				try {
+					// The demoted model is refreshed with its OWN configuration - the one
+					// just updated without the role. Handing it the incoming model's
+					// config would push a foreign provider's type into it (and fail).
+					model.reconfigure(other);
+				} catch (LLMConfigException e) {
+					LOGGER.error("Error in reconfigure a llm", e);
 				}
 			}
 		}

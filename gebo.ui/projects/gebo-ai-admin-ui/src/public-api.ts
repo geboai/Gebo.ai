@@ -109,6 +109,7 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-google
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-mistralai-chatmodel-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-mistralai-embedmodel-admin.component";
 export * from "./lib/admin-ui/entity-editors/controls/standard-chat-model-settings/standard-chat-model-settings.component";
+export * from "./lib/admin-ui/entity-editors/controls/chat-model-role/chat-model-role.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-sharepoint-admin/gebo-ai-sharepoint-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-sharepoint-admin/gebo-ai-sharepoint-system-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-aws-s3-admin/gebo-ai-aws-s3-endpoint.component";

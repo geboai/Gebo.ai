@@ -7008,5 +7008,31 @@
         "label": "Month"
       }
     }
+  },
+  "GeboAIChatModelRoleModule": {
+    "GeboAIChatModelRoleComponent": {
+      "modelRole": {
+        "label": "Model role",
+        "help": "One system default service model and one system default chat model are kept: choosing one of them here takes the role from the model holding it, which becomes a chat model"
+      },
+      "RoleServiceLabel": {
+        "label": "System default service model"
+      },
+      "RoleServiceHelp": {
+        "label": "Will be used for history consolidation, information extraction and other internal services, choose a cheap and fast one"
+      },
+      "RoleDefaultChatLabel": {
+        "label": "System default chat model"
+      },
+      "RoleDefaultChatHelp": {
+        "label": "Will be used as high capacity agentic model and quality responder"
+      },
+      "RoleChatLabel": {
+        "label": "Chat model"
+      },
+      "RoleChatHelp": {
+        "label": "Model to be used in explicit configurations"
+      }
+    }
   }
 }

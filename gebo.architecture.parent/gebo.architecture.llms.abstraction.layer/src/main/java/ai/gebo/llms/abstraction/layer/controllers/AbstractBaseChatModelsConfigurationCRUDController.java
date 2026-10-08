@@ -24,12 +24,12 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.SecurityAuditTaxonomy;
 import io.micrometer.observation.annotation.Observed;
-import lombok.AllArgsConstructor;
 
 /**
  * Abstract base class for CRUD operations on chat model configurations.
@@ -40,7 +40,6 @@ import lombok.AllArgsConstructor;
  *
  * AI generated comments
  */
-@AllArgsConstructor
 @Observed(name = "gebo.llms.config.crud")
 public abstract class AbstractBaseChatModelsConfigurationCRUDController<ChatModelConfigType extends GBaseChatModelConfig, ModelChoice extends GBaseChatModelChoice> {
 
@@ -58,6 +57,19 @@ public abstract class AbstractBaseChatModelsConfigurationCRUDController<ChatMode
 	protected final Class<ChatModelConfigType> type;
 
 	protected final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	// Keeps one system default chat model and one system default service model
+	@Autowired
+	protected ModelRuntimeConfigureHandler configureHandler;
+
+	protected AbstractBaseChatModelsConfigurationCRUDController(IGPersistentObjectManager persistentObjectManager,
+			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao, Class<ChatModelConfigType> type,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		this.persistentObjectManager = persistentObjectManager;
+		this.modelRuntimeConfigurationDao = modelRuntimeConfigurationDao;
+		this.type = type;
+		this.securityAuditLoggerService = securityAuditLoggerService;
+	}
 
 	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
 	// itself) so newSecurityEvent()'s caller-stack capture points at insert/
@@ -112,25 +124,16 @@ public abstract class AbstractBaseChatModelsConfigurationCRUDController<ChatMode
 	}
 
 	/**
-	 * Ensures that only one model is set as the default.
-	 * If the given configuration is set as default, other models are updated accordingly.
+	 * Ensures that one model only is the system default chat model and one only the
+	 * system default service model: when the given configuration takes a role, the
+	 * other models lose it (see
+	 * {@link ModelRuntimeConfigureHandler#handleSystemChatModels(GBaseChatModelConfig)}).
 	 *
-	 * @param config The configuration that may be set as default.
+	 * @param config The configuration that may take a system role.
 	 * @throws GeboPersistenceException If a persistence error occurs.
 	 */
 	protected void handleDefaultModel(ChatModelConfigType config) throws GeboPersistenceException {
-		if (config.getDefaultModel() != null && config.getDefaultModel()) {
-			List<GBaseChatModelConfig> all = persistentObjectManager.findAllExtendingType(GBaseChatModelConfig.class);
-			for (GBaseChatModelConfig gBaseChatModelConfig : all) {
-				if (!(gBaseChatModelConfig.getClass().getName().equals(config.getClass().getName())
-						&& gBaseChatModelConfig.getCode().equals(config.getCode()))) {
-					if (gBaseChatModelConfig.getDefaultModel() != null && gBaseChatModelConfig.getDefaultModel()) {
-						gBaseChatModelConfig.setDefaultModel(false);
-						persistentObjectManager.update(gBaseChatModelConfig);
-					}
-				}
-			}
-		}
+		configureHandler.handleSystemChatModels(config);
 	}
 
 	/**
