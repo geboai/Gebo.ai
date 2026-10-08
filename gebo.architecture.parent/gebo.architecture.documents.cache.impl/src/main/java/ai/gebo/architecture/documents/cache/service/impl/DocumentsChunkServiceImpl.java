@@ -941,6 +941,25 @@ public class DocumentsChunkServiceImpl
 
 	@Override
 	public void disposeChunkingSession(String chunkSessionId) {
+		// a caller disposes its session as it ends, also when its request was cancelled:
+		// the cancellation interrupts its thread, and MongoDB refuses to work on an
+		// interrupted thread (the session and its files would stay). The interruption is
+		// put aside while disposing and given back to the caller
+		final boolean interrupted = Thread.interrupted();
+		if (interrupted) {
+			LOGGER.warn("disposeChunkingSession(" + chunkSessionId
+					+ ") called on an interrupted thread (its request cancelled): disposed anyway");
+		}
+		try {
+			dispose(chunkSessionId);
+		} finally {
+			if (interrupted) {
+				Thread.currentThread().interrupt();
+			}
+		}
+	}
+
+	private void dispose(String chunkSessionId) {
 		// disposing a session already disposed (or never created) is nothing to do: every
 		// end of its caller may dispose it
 		if (chunkSessionId == null || !exists(chunkSessionId)) {
@@ -962,7 +981,9 @@ public class DocumentsChunkServiceImpl
 		});
 		documentChunkOperationRepository.deleteByChunkingSessionId(chunkSessionId);
 		chunkingSessionRepo.deleteById(chunkSessionId);
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End disposeChunkingSession(" + chunkSessionId + ")");
+		}
 	}
 
 	static TokenTextSplitter get(TextChunkingSpecs specs) {

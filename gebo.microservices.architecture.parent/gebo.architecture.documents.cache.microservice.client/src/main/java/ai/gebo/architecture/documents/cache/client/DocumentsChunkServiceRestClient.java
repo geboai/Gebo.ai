@@ -126,9 +126,24 @@ public class DocumentsChunkServiceRestClient implements IDocumentsChunkService {
 
 	@Override
 	public void disposeChunkingSession(String chunkSessionId) {
-		webClient.post().uri(builder -> builder.path(BASE_PATH + "disposeChunkingSession")
-				.queryParam("chunkSessionId", chunkSessionId).build()).headers(this::applyCallerToken).retrieve()
-				.toBodilessEntity().block();
+		// a caller disposes its session as it ends, also when its request was cancelled:
+		// the cancellation interrupts its thread, where block() would fail at once (the
+		// session and its files would stay). The interruption is put aside while disposing
+		// and given back to the caller
+		final boolean interrupted = Thread.interrupted();
+		if (interrupted) {
+			LOGGER.warn("disposeChunkingSession(" + chunkSessionId
+					+ ") called on an interrupted thread (its request cancelled): disposed anyway");
+		}
+		try {
+			webClient.post().uri(builder -> builder.path(BASE_PATH + "disposeChunkingSession")
+					.queryParam("chunkSessionId", chunkSessionId).build()).headers(this::applyCallerToken).retrieve()
+					.toBodilessEntity().block();
+		} finally {
+			if (interrupted) {
+				Thread.currentThread().interrupt();
+			}
+		}
 	}
 
 	// ---------------------------------------------------------------------

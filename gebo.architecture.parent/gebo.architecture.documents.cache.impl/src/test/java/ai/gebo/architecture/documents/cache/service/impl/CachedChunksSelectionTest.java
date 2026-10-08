@@ -10,7 +10,9 @@
 package ai.gebo.architecture.documents.cache.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -139,6 +141,33 @@ class CachedChunksSelectionTest {
 
 		verify(operations, never()).deleteByChunkingSessionId(any());
 		verify(sessions, never()).deleteById(any());
+	}
+
+	@Test
+	void aSessionIsDisposedOnTheThreadOfACancelledRequestWhichStaysInterrupted() throws Exception {
+		// MongoDB refuses to work on an interrupted thread ("Interrupted waiting for lock")
+		when(sessions.findById("cancelled-session")).thenAnswer(call -> {
+			if (Thread.currentThread().isInterrupted()) {
+				throw new IllegalStateException("Interrupted waiting for lock");
+			}
+			return Optional.of(new ChunkingSession());
+		});
+		final DocumentChunkOperation written = operation("written", "cancelled-session", 1_000L, true);
+		when(operations.findByChunkingSessionId("cancelled-session")).thenReturn(java.util.stream.Stream.of(written));
+		final Path file = workDirectory.resolve(".CHCACHE").resolve("written-set");
+
+		Thread.currentThread().interrupt();
+		final boolean stillInterrupted;
+		try {
+			service.disposeChunkingSession("cancelled-session");
+		} finally {
+			stillInterrupted = Thread.interrupted();
+		}
+
+		assertFalse(Files.exists(file), "its chunk files deleted");
+		verify(operations).deleteByChunkingSessionId("cancelled-session");
+		verify(sessions).deleteById("cancelled-session");
+		assertTrue(stillInterrupted, "the caller still sees its request cancelled");
 	}
 
 	@Test

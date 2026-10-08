@@ -344,7 +344,16 @@ public final class SearchResultsChunker {
 			// what has not arrived by the end of the loading phase is left
 			Flux.merge(hosts).take(phase).doOnNext(chunks::add).blockLast(phase.plus(LOADING_PHASE_MARGIN));
 		} catch (RuntimeException e) {
-			LOGGER.warn("openNetworkChunks(...) caller:" + callerId + " loading phase did not end in time", e);
+			if (Thread.currentThread().isInterrupted() || e.getCause() instanceof InterruptedException) {
+				// the request was cancelled (its tool calls' threads interrupted), no timeout
+				LOGGER.warn("openNetworkChunks(...) caller:" + callerId
+						+ " loading phase interrupted (its request cancelled)");
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("openNetworkChunks(...) caller:" + callerId + " interruption", e);
+				}
+			} else {
+				LOGGER.warn("openNetworkChunks(...) caller:" + callerId + " loading phase did not end in time", e);
+			}
 		}
 		int stillLoading = 0;
 		int notRequested = 0;
