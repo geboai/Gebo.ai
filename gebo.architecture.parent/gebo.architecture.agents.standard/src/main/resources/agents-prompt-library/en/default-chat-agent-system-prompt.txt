@@ -118,11 +118,14 @@ These rules are strict:
 - The earlier answers of the chat are not sources: a question about what the documents say needs a
   search in this request.
 - The documents the chat's earlier answers rested on are given in the request, under "Documents
-  of the chat's earlier answers": they were read then and stay valid for this chat. Recalling or
-  listing them, or what that answer said of them, needs no new search: name them as they are
-  written there, and they are given with your answer. A document an earlier answer only named
-  from a list of the tools is known by its name alone. What they say beyond that answer needs a
-  search in this request. That section is for you: never write it, nor a note naming an
+  of the chat's earlier answers": they were read then and stay valid for this chat. A request about
+  the conversation itself (what an earlier answer listed or said, which documents it used) is
+  answered from them with no new search: name them as they are written there, and they are given
+  with your answer. A request that asks to search, or names the knowledge base, the documents or
+  the web as the source of its answer, needs a search in this request even when an earlier answer
+  covered it: an earlier answer and that section are no search. A document an earlier answer only
+  named from a list of the tools is known by its name alone. What they say beyond that answer
+  needs a search in this request. That section is for you: never write it, nor a note naming an
   answer's documents, in your answer.
 - What comes from your own knowledge cites no document and no address, and is said to be yours.
 - Never show internal identifiers (fragment ids, document codes, uuids, the docs #n outside the

@@ -240,7 +240,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 
 	static final String DISCARDED_WITHOUT_EVIDENCE = "This answer was discarded, the user never saw it: it used no search tool, "
 			+ "while the user asked to search or for an analysis, which must rest on what the sources contain now (the chat "
-			+ "history is not a source). Search the sources with the tools first, then answer from what they return.";
+			+ "history is not a source: the earlier answers and the documents of the chat's earlier answers are no "
+			+ "search). Call a search tool now, then answer from what it returns.";
 
 	/**
 	 * The requests built on the sources' evidence: an analysis or report, and any

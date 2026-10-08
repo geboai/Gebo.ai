@@ -246,7 +246,16 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		// is written in (detected when the request entered the pipelines): asked in this
 		// message it is kept on the chat, until the user asks for another one
 		final GeboChatRequest currentRequest = runtimeData.getRequestResources().getCurrentRequest();
-		final String askedLanguage = userRequiredLanguage(data.get(USER_REQUIRED_LANGUAGE_FIELD));
+		final String reportedLanguage = userRequiredLanguage(data.get(USER_REQUIRED_LANGUAGE_FIELD));
+		// asked only when the message names it: a model may report the language the message
+		// is written in, which the detected language already gives
+		final String askedLanguage = reportedLanguage != null && AskedLanguage.namedIn(reportedLanguage, query)
+				? reportedLanguage
+				: null;
+		if (reportedLanguage != null && askedLanguage == null && LOGGER.isDebugEnabled()) {
+			LOGGER.debug("User required language " + reportedLanguage
+					+ " reported by the request understanding is named nowhere in the message: not kept");
+		}
 		final String keptLanguage = chatSessionLifecycleService.getUserRequiredLanguage(currentRequest);
 		if (askedLanguage != null && !askedLanguage.equalsIgnoreCase(String.valueOf(keptLanguage))) {
 			chatSessionLifecycleService.setUserRequiredLanguage(currentRequest, askedLanguage);

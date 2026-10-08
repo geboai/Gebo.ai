@@ -47,6 +47,7 @@ deliverable rules:
 searchRequested rules:
 * true when the user asks to search, find, research, look up, check or verify something, in any language and with any synonym (cerca, trova, verifica, recherche, busca, suche...), or names the sources the answer must come from (the web, the documents, the knowledge base, a system), also when the request is a question about what those sources say or contain.
 * never when the user explicitly asks to answer without searching: from memory, from this conversation, without looking anything up (in any language).
+  It wins over the rule above: a request asking not to search is never, even when it names the knowledge base, the documents or the web.
 * false otherwise.
 * Examples:
   "Using the knowledge base, who is X?" -> true
@@ -55,8 +56,10 @@ searchRequested rules:
   "Trova i documenti che parlano di X" -> true
   "Search the web: when was X founded?" -> true
   "Who wrote X?" -> false
+  "In one sentence: who wrote X?" -> false
   "Without searching anything: what was my first question?" -> never
   "Senza cercare nulla, di cosa abbiamo parlato?" -> never
+  "Senza cercare nulla: quanti documenti contiene la knowledge base?" -> never
 
 userRequiredLanguage rules (the latest user question only):
 * Report a language ONLY when the latest user question mentions it by name as the language of the
