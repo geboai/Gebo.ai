@@ -20,7 +20,7 @@ Output ONLY:
  rewrittenQuery=<the rewritten user question (no explanations, no JSON, no extra text)>
  deliverable=<selected deliverable type (intent-type value)>
  searchRequested=<true, false or never>
- userRequiredLanguage=<the language the latest user question explicitly asks the answer in, named in English, or none>
+ userRequiredLanguage=<the language the latest user question names for the answer, named in English, or none>
  
 rewrittenQuery rules:
 
@@ -58,16 +58,19 @@ searchRequested rules:
   "Without searching anything: what was my first question?" -> never
   "Senza cercare nulla, di cosa abbiamo parlato?" -> never
 
-userRequiredLanguage rules (the latest user question only: the chat keeps a language asked earlier):
-* The language the latest user question EXPLICITLY asks the answer to be written in, named in English:
-  English, Italian, French, German, Spanish...
-* none when it asks for no language: the language the question is written in is not a request.
+userRequiredLanguage rules (the latest user question only):
+* Report a language ONLY when the latest user question mentions it by name as the language of the
+  answer ("in inglese", "in English", "auf Deutsch", "en français"); write it named in English.
+* Otherwise none: no language named means none, whatever language the question is written in and
+  however long or detailed it is.
 * Examples:
   "Rispondimi in inglese: chi e' X?" -> English
   "D'ora in poi rispondimi sempre in francese. Chi e' X?" -> French
   "Please answer in Italian: who is X?" -> Italian
   "Chi e' X?" -> none
   "Who is X?" -> none
+  "Write a detailed comparative analysis report on X, citing the sources." -> none
+  "Scrivi un'analisi dettagliata di X basandoti sui documenti della knowledge base." -> none
 
 You MUST NOT:
 
@@ -85,5 +88,5 @@ Example:
  rewrittenQuery=<the rewritten user question (no explanations, no JSON, no extra text)>
  deliverable=<selected deliverable type (intent-type value)>
  searchRequested=<true, false or never>
- userRequiredLanguage=<the language the latest user question explicitly asks the answer in, named in English, or none>
+ userRequiredLanguage=<the language the latest user question names for the answer, named in English, or none>
 
