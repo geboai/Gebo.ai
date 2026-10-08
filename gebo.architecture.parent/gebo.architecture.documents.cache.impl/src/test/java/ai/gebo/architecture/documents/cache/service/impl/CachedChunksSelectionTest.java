@@ -116,12 +116,37 @@ class CachedChunksSelectionTest {
 	}
 
 	@Test
-	void anOperationReusedFromAnotherSessionIsReadWhenTheSessionHasNone() throws Exception {
-		final DocumentChunkOperation older = operation("older", "session-a", 1_000L, true);
-		final DocumentChunkOperation newer = operation("newer", "session-b", 2_000L, true);
-		when(operations.findByOriginalDocumentCode(document.getCode())).thenReturn(List.of(older, newer));
+	void theChunksAnotherCallerMadeOfTheDocumentAreNeverRead() throws Exception {
+		// a tool's sample or keyword filtered chunking of the same document: its chunking
+		// parameters are not recorded, so it can not stand for the job's chunks
+		final DocumentChunkOperation toolSample = operation("tool-sample", "search-session", 2_000L, true);
+		when(operations.findByOriginalDocumentCode(document.getCode())).thenReturn(List.of(toolSample));
 
-		assertEquals("newer", service.getCachedChunkSet(document, "job-session").getId(), "the most recent");
+		assertThrows(DocumentCacheAccessException.class, () -> service.getCachedChunkSet(document, "job-session"));
+		assertThrows(DocumentCacheAccessException.class, () -> service.getCachedChunkSet(document, null),
+				"no session, no chunks of whoever made them");
+	}
+
+	@Test
+	void theChunksOfAnotherSessionOfTheSameJobAreRead() throws Exception {
+		final ChunkingSession jobSession = session("job-session", "job:J1");
+		final ChunkingSession twin = session("job-session-twin", "job:J1");
+		when(sessions.findByChunkingReference("job:J1")).thenReturn(List.of(jobSession, twin));
+		final DocumentChunkOperation ofTheTwin = operation("of-the-twin", "job-session-twin", 1_000L, true);
+		final DocumentChunkOperation toolSample = operation("tool-sample", "search-session", 2_000L, true);
+		when(operations.findByOriginalDocumentCode(document.getCode())).thenReturn(List.of(ofTheTwin, toolSample));
+
+		assertEquals("of-the-twin", service.getCachedChunkSet(document, "job-session").getId(),
+				"the job's session opened twice, not the newer chunks of another caller");
+	}
+
+	/** A session with its reference, found by its id. */
+	private ChunkingSession session(String id, String reference) {
+		final ChunkingSession session = new ChunkingSession();
+		session.setCode(id);
+		session.setChunkingReference(reference);
+		when(sessions.findById(id)).thenReturn(Optional.of(session));
+		return session;
 	}
 
 	@Test

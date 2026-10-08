@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.Flow.Publisher;
@@ -790,15 +792,25 @@ public class DocumentsChunkServiceImpl
 			LOGGER.debug("Begin getCachedChunk(" + document.getCode() + "..)");
 		}
 		List<DocumentChunkOperation> data = repository.findByOriginalDocumentCode(document.getCode());
-		// the chunks of this chunking session, else the most recent ones (an operation reused
-		// from another session); an operation whose chunk files are gone is no cache
+		// the chunks of this chunking session, else of another session of the same reference
+		// (a job whose session was opened twice): never the chunks another caller made of
+		// the same document (a tool's sample, a keyword filtered chunking), whose chunking
+		// parameters are not recorded. An operation whose chunk files are gone is no cache
 		final Comparator<DocumentChunkOperation> newestFirst = Comparator.comparing(DocumentChunkOperation::getCreated,
 				Comparator.nullsLast(Comparator.reverseOrder()));
 		Optional<DocumentChunkOperation> chosen = data.stream()
 				.filter(op -> chunkSessionId != null && chunkSessionId.equals(op.getChunkingSessionId()))
 				.sorted(newestFirst).filter(this::hasChunkFiles).findFirst();
 		if (chosen.isEmpty()) {
-			chosen = data.stream().sorted(newestFirst).filter(this::hasChunkFiles).findFirst();
+			final Set<String> sameReference = sessionsOfTheSameReference(chunkSessionId);
+			if (!sameReference.isEmpty()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("getCachedChunk(" + document.getCode() + "..) no chunks in session " + chunkSessionId
+							+ ": looking in the other session(s) of its reference " + sameReference);
+				}
+				chosen = data.stream().filter(op -> sameReference.contains(op.getChunkingSessionId()))
+						.sorted(newestFirst).filter(this::hasChunkFiles).findFirst();
+			}
 		}
 		if (chosen.isPresent()) {
 			DocumentChunkOperation entry = chosen.get();
@@ -810,9 +822,31 @@ public class DocumentsChunkServiceImpl
 			return getNextChunkSet(document, entry.getId(), entry.getChunkSetsList().get(0), chunkSessionId);
 		}
 
-		LOGGER.error("Chunks for document " + document.getCode() + " have not been found");
+		LOGGER.error("Chunks for document " + document.getCode() + " have not been found in the chunking session "
+				+ chunkSessionId + " (" + data.size() + " operation(s) of other sessions for the document)");
 
 		throw new DocumentCacheAccessException("No existing cached chunks");
+	}
+
+	/**
+	 * The other sessions with the reference of {@code chunkSessionId} (a job's session
+	 * opened twice): none when it is null or no longer exists.
+	 */
+	private Set<String> sessionsOfTheSameReference(String chunkSessionId) {
+		if (chunkSessionId == null) {
+			return Set.of();
+		}
+		final Optional<ChunkingSession> session = chunkingSessionRepo.findById(chunkSessionId);
+		if (session.isEmpty() || session.get().getChunkingReference() == null) {
+			return Set.of();
+		}
+		final Set<String> ids = new HashSet<>();
+		for (ChunkingSession other : chunkingSessionRepo.findByChunkingReference(session.get().getChunkingReference())) {
+			if (other.getCode() != null && !other.getCode().equals(chunkSessionId)) {
+				ids.add(other.getCode());
+			}
+		}
+		return ids;
 	}
 
 	public Flux<IDocumentChunkWithRef> streamChunks(IGComponentOriginatedDocument document,

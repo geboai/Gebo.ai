@@ -102,9 +102,16 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 							processorConfig.getGraphRagProcessorReceiverConfig().getConcurrentGraphExtractionWorkers());
 
 					try {
-						// get the first cached chunks group
+						// get the first cached chunks group, of this job's chunking session (as the
+						// other indexing steps read them)
+						final String chunkingSession = chunkingService
+								.retrieveChunkingSession("job:" + payload.getJobId());
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Reading the cached chunks of " + payload.getDocumentReference().getCode()
+									+ " from the chunking session " + chunkingSession + " of job:" + payload.getJobId());
+						}
 						DocumentChunkingResponse current = chunkingService
-								.getCachedChunkSet(payload.getDocumentReference(), null);
+								.getCachedChunkSet(payload.getDocumentReference(), chunkingSession);
 
 						while (current != null && !current.isEmpty()) {
 							// Stream the chunks in this group
@@ -165,7 +172,7 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 							// Fetch next group of chunks
 							if (current.getNextChunkSetId() != null) {
 								current = chunkingService.getNextChunkSet(payload.getDocumentReference(),
-										current.getId(), current.getNextChunkSetId(), null);
+										current.getId(), current.getNextChunkSetId(), chunkingSession);
 							} else {
 								current = null;
 							}
