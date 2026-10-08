@@ -154,7 +154,17 @@ public final class DeepSearchBatchTrace {
 			while (end < out.length() && out.charAt(end) != '\n' && out.charAt(end) != '\r') {
 				end++;
 			}
-			out.delete(at, end);
+			// a list written as markdown ("**MARKER=1,2**", "- MARKER=..."): its decoration
+			// before the marker goes with it, the text of a line before it stays
+			int start = at;
+			while (start > 0 && out.charAt(start - 1) != '\n' && out.charAt(start - 1) != '\r'
+					&& !Character.isLetterOrDigit(out.charAt(start - 1))) {
+				start--;
+			}
+			if (start > 0 && out.charAt(start - 1) != '\n' && out.charAt(start - 1) != '\r') {
+				start = at;
+			}
+			out.delete(start, end);
 		}
 		return out.toString();
 	}

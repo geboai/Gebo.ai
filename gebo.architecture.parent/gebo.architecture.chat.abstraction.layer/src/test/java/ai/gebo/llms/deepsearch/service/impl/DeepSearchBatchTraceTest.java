@@ -105,4 +105,15 @@ class DeepSearchBatchTraceTest {
 				DeepSearchBatchTrace.withoutIrrelevantLists("The analysis.\nIRRILEVANT=1,2,1,2,1,2,1,2", "IRRILEVANT"));
 		assertEquals("", DeepSearchBatchTrace.withoutIrrelevantLists(null, "IRRILEVANT"));
 	}
+
+	@Test
+	void aListWrittenAsMarkdownLeavesNoDecoration() {
+		assertEquals("The analysis.\n\nend", DeepSearchBatchTrace
+				.withoutIrrelevantLists("The analysis.\n**RELEVANT_FRAGMENTS=4,5,8**\nend", "RELEVANT_FRAGMENTS"));
+		assertEquals("The analysis.\n\nend", DeepSearchBatchTrace
+				.withoutIrrelevantLists("The analysis.\n- RELEVANT_FRAGMENTS=4\nend", "RELEVANT_FRAGMENTS"));
+		assertEquals("Text before it: \nend", DeepSearchBatchTrace
+				.withoutIrrelevantLists("Text before it: RELEVANT_FRAGMENTS=4\nend", "RELEVANT_FRAGMENTS"),
+				"the text of the line before the marker stays");
+	}
 }

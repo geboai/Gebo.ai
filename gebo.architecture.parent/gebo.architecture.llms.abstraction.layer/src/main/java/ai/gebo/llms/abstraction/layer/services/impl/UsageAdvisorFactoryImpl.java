@@ -63,8 +63,8 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 				response = chain.nextCall(request);
 			} catch (RuntimeException e) {
 				// A failed call still consumed time and is the interesting part of the tail.
-				LLMUsageRecorder.bestEffort("account a failed chat call",
-						() -> recordUsage(username, stack, start, null, new TokenCounters(), LLMCallOutcome.ERROR));
+				LLMUsageRecorder.bestEffort("account a failed chat call", () -> recordUsage(username, stack, start, null,
+						new TokenCounters(), new AnswerShape(), LLMCallOutcome.ERROR));
 				throw e;
 			}
 			// Accounted best effort, outside the call: it must never fail a successful call.
@@ -72,7 +72,7 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 			// every tool calling round trip the model made (see adviseStream).
 			// No time to first token: a blocking call gives no signal before it is complete.
 			LLMUsageRecorder.bestEffort("account a chat call", () -> recordUsage(username, stack, start, null,
-					TokenCounters.of(usageOf(response)), LLMCallOutcome.SUCCESS));
+					TokenCounters.of(usageOf(response)), AnswerShape.of(response), LLMCallOutcome.SUCCESS));
 			return response;
 		}
 
@@ -95,6 +95,7 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 			// every chunk of the second round repeats the first round's tokens. Summing
 			// counted those once per chunk; the maximum is the total of all the rounds.
 			final TokenCounters counters = new TokenCounters();
+			final AnswerShape shape = new AnswerShape();
 			final FirstTokenTimer firstToken = new FirstTokenTimer();
 			// Per chunk accounting is best effort: a throw here would error the whole stream.
 			return chain.nextStream(request)
@@ -104,8 +105,9 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 						if (isMeaningful(usage)) {
 							counters.max(usage);
 						}
+						shape.add(response);
 					})).doFinally(signal -> LLMUsageRecorder.bestEffort("account a chat stream",
-							() -> recordUsage(username, stack, start, firstToken.firstTokenNanos(), counters,
+							() -> recordUsage(username, stack, start, firstToken.firstTokenNanos(), counters, shape,
 									outcomeOf(signal))));
 		}
 
@@ -200,16 +202,75 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 		}
 
 		/**
+		 * How a call ended, for the DEBUG log: the last finish reason the provider gave and
+		 * the characters of text and of reasoning it streamed. A call cut by the output limit
+		 * (finish reason LENGTH) with no text spent it reasoning. The reasoning comes in the
+		 * {@value #REASONING_CONTENT_METADATA} metadata of the answer, piece by piece or
+		 * grown piece after piece.
+		 */
+		static final class AnswerShape {
+			/** The metadata of the answer holding its reasoning (as the reasoning stream reads it). */
+			static final String REASONING_CONTENT_METADATA = "reasoningContent";
+			private String finishReason = null;
+			private long textChars = 0;
+			private long reasoningChars = 0;
+			private String reasoningSoFar = "";
+
+			synchronized void add(ChatClientResponse response) {
+				final org.springframework.ai.chat.model.ChatResponse chat = response != null ? response.chatResponse()
+						: null;
+				final org.springframework.ai.chat.model.Generation result = chat != null ? chat.getResult() : null;
+				if (result == null) {
+					return;
+				}
+				if (result.getMetadata() != null && result.getMetadata().getFinishReason() != null
+						&& !result.getMetadata().getFinishReason().isBlank()) {
+					finishReason = result.getMetadata().getFinishReason();
+				}
+				if (result.getOutput() == null) {
+					return;
+				}
+				final String text = result.getOutput().getText();
+				if (text != null) {
+					textChars += text.length();
+				}
+				final Object reasoning = result.getOutput().getMetadata() != null
+						? result.getOutput().getMetadata().get(REASONING_CONTENT_METADATA)
+						: null;
+				if (reasoning instanceof String piece && !piece.isEmpty()) {
+					if (piece.startsWith(reasoningSoFar)) {
+						// the same reasoning grown
+						reasoningChars += piece.length() - reasoningSoFar.length();
+					} else {
+						reasoningChars += piece.length();
+					}
+					reasoningSoFar = piece;
+				}
+			}
+
+			static AnswerShape of(ChatClientResponse response) {
+				final AnswerShape shape = new AnswerShape();
+				shape.add(response);
+				return shape;
+			}
+
+			@Override
+			public synchronized String toString() {
+				return "finishReason=" + finishReason + " text=" + textChars + " reasoning=" + reasoningChars;
+			}
+		}
+
+		/**
 		 * Writes the single usage record of one call. Always writes, even when the provider
 		 * never returned usage metadata: the response time is worth recording on its own, and a
 		 * call that produced no usage used to vanish from the audit entirely.
 		 */
 		private void recordUsage(String username, String callerStack, long startNanos, Long firstTokenNanos,
-				TokenCounters counters, LLMCallOutcome outcome) {
+				TokenCounters counters, AnswerShape shape, LLMCallOutcome outcome) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Chat call ended outcome=" + outcome + " model=" + config.getCode() + " tokens="
 						+ counters.input() + "/" + counters.output() + "/" + counters.total() + " firstToken="
-						+ (firstTokenNanos != null ? "timed" : "n/a"));
+						+ (firstTokenNanos != null ? "timed" : "n/a") + " " + shape);
 			}
 			usageRecorder.record(config, LLMUsageRecorder.safeProviderId(providerId), ModelType.CHAT, pricing,
 					username, callerStack, startNanos, firstTokenNanos, counters.input(), counters.output(),
