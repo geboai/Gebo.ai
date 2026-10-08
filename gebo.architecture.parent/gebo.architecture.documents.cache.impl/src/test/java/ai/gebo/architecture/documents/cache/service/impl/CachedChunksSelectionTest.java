@@ -53,9 +53,10 @@ import reactor.core.scheduler.Schedulers;
 import tools.jackson.databind.ObjectMapper;
 
 /**
- * Pins which cached chunks the indexing steps read: the ones of their chunking session,
- * else the most recent ones, never an operation whose chunk files are gone (written by
- * another instance in its own work directory, or cleaned up).
+ * Pins the chunk cache's sessions: the chunks a session reads are its own (else a twin
+ * session's of the same reference), never another caller's; another session's chunks of
+ * the same document version and parameters are reused in the session's own record; a
+ * disposal is logical, and a late read produces the released chunks again.
  */
 class CachedChunksSelectionTest {
 
@@ -84,6 +85,7 @@ class CachedChunksSelectionTest {
 				mock(IGLanguageDetector.class));
 		document = new GDocumentReference();
 		document.setCode("kb/project/source/book.pdf");
+		document.setModificationDate(new Date(5_000L));
 	}
 
 	/** An operation of a session, its chunks in one file, written or not in the work directory. */
@@ -179,7 +181,6 @@ class CachedChunksSelectionTest {
 		});
 		final DocumentChunkOperation written = operation("written", "cancelled-session", 1_000L, true);
 		when(operations.findByChunkingSessionId("cancelled-session")).thenReturn(java.util.stream.Stream.of(written));
-		final Path file = workDirectory.resolve(".CHCACHE").resolve("written-set");
 
 		Thread.currentThread().interrupt();
 		final boolean stillInterrupted;
@@ -189,10 +190,157 @@ class CachedChunksSelectionTest {
 			stillInterrupted = Thread.interrupted();
 		}
 
-		assertFalse(Files.exists(file), "its chunk files deleted");
-		verify(operations).deleteByChunkingSessionId("cancelled-session");
-		verify(sessions).deleteById("cancelled-session");
+		verify(sessions).save(org.mockito.ArgumentMatchers.argThat(ChunkingSession::disposed));
 		assertTrue(stillInterrupted, "the caller still sees its request cancelled");
+	}
+
+	@Test
+	void aDisposalKeepsTheRecordsAndRestartsTheGraceOfTheFiles() throws Exception {
+		final ChunkingSession living = session("living-session", "job:J2");
+		final DocumentChunkOperation written = operation("written", "living-session", 1_000L, true);
+		final Path file = workDirectory.resolve(".CHCACHE").resolve("written-set");
+		Files.setLastModifiedTime(file, java.nio.file.attribute.FileTime.fromMillis(1_000L));
+		when(operations.findByChunkingSessionId("living-session")).thenReturn(java.util.stream.Stream.of(written));
+
+		service.disposeChunkingSession("living-session");
+
+		assertTrue(living.disposed(), "disposed logically");
+		verify(sessions).save(living);
+		verify(operations, never()).deleteByChunkingSessionId(any());
+		verify(sessions, never()).deleteById(any());
+		assertTrue(Files.exists(file), "the files go after the grace period");
+		assertTrue(Files.getLastModifiedTime(file).toMillis() > 1_000L, "their grace starts at the disposal");
+
+		service.disposeChunkingSession("living-session");
+		verify(sessions).save(living);
+	}
+
+	@Test
+	void anotherSessionsChunksOfTheSameVersionAndParametersAreReusedInItsOwnRecord() throws Exception {
+		final java.util.Map<String, DocumentChunkOperation> stored = storedRecords();
+		final DocumentChunkOperation made = producible("made", "tool-session", 1_000L, true);
+		stored.put(made.getId(), made);
+		when(operations.findByOriginalDocumentCode(document.getCode())).thenReturn(List.of(made));
+
+		final DocumentChunkingResponse response = service.getChunkSet(document, params(), "job-session");
+
+		final DocumentChunkOperation own = stored.get(response.getId());
+		assertEquals("job-session", own.getChunkingSessionId(), "the session's own record");
+		assertEquals(made.getChunkSetsList(), own.getChunkSetsList(), "naming the same files");
+		assertEquals("tool-session", made.getChunkingSessionId(), "the other session's record untouched");
+		assertEquals("job-session", response.getCurrentChunkSet().getChunkingSessionId(), "read as the reader's");
+	}
+
+	@Test
+	void noChunksAreReusedFromAnotherVersionOrOtherParameters() throws Exception {
+		final java.util.Map<String, DocumentChunkOperation> stored = storedRecords();
+		final DocumentChunkOperation olderVersion = producible("older-version", "tool-session", 1_000L, true);
+		olderVersion.setDocumentModificationDate(new Date(1L));
+		final DocumentChunkOperation sampled = producible("sampled", "tool-session", 2_000L, true);
+		sampled.getChunkingParams().setSamplingMode(true);
+		stored.put(olderVersion.getId(), olderVersion);
+		stored.put(sampled.getId(), sampled);
+		when(operations.findByOriginalDocumentCode(document.getCode())).thenReturn(List.of(olderVersion, sampled));
+
+		service.getChunkSet(document, params(), "job-session");
+
+		verify(operations, never()).insert(any(DocumentChunkOperation.class));
+	}
+
+	@Test
+	void aLateReadOfADisposedSessionProducesItsChunksAgain() throws Exception {
+		final java.util.Map<String, DocumentChunkOperation> stored = storedRecords();
+		final DocumentChunkOperation released = producible("released", "job-session", 1_000L, false);
+		final DocumentChunkOperation alive = producible("alive", "tool-session", 2_000L, true);
+		stored.put(released.getId(), released);
+		stored.put(alive.getId(), alive);
+		when(operations.findByOriginalDocumentCode(document.getCode())).thenReturn(List.of(released, alive));
+
+		final DocumentChunkingResponse response = service.getCachedChunkSet(document, "job-session");
+
+		assertEquals("job-session", stored.get(response.getId()).getChunkingSessionId());
+		verify(operations).delete(released);
+	}
+
+	@Test
+	void aReadWhoseNextFileIsGoneGoesOnFromTheSameSetProducedAgain() throws Exception {
+		final java.util.Map<String, DocumentChunkOperation> stored = storedRecords();
+		final DocumentChunkOperation half = producible("half", "job-session", 1_000L, true);
+		half.setChunkSetsList(List.of("half-set", "half-gone-set"));
+		final DocumentChunkOperation whole = producible("whole", "tool-session", 2_000L, true);
+		whole.setChunkSetsList(List.of("whole-set", "whole-second-set"));
+		writeSet("whole-second-set");
+		stored.put(half.getId(), half);
+		stored.put(whole.getId(), whole);
+		when(operations.findByOriginalDocumentCode(document.getCode())).thenReturn(List.of(half, whole));
+
+		final DocumentChunkingResponse response = service.getNextChunkSet(document, "half", "half-gone-set",
+				"job-session");
+
+		final DocumentChunkOperation again = stored.get(response.getId());
+		assertEquals("job-session", again.getChunkingSessionId());
+		assertEquals("whole-second-set", response.getCurrentChunkSet().getId(), "the second set, as asked");
+	}
+
+	@Test
+	void aSessionCreatedMeanwhileByAConcurrentCallerIsReportedAsExisting() {
+		when(sessions.findByChunkingReference("job:J3")).thenReturn(List.of());
+		when(sessions.insert(any(ChunkingSession.class)))
+				.thenThrow(new org.springframework.dao.DuplicateKeyException("chunkingReference_unique"));
+
+		assertThrows(IllegalStateException.class, () -> service.createChunkingSession("job:J3"));
+	}
+
+	@Test
+	void creatingAgainTheSessionOfAProcedureThatEndedReopensItOnlyALivingOneIsADuplicate() {
+		final ChunkingSession ended = session("request-session", "request:R1");
+		ended.setLogicalDeletionTimestamp(new Date());
+		when(sessions.findByChunkingReference("request:R1")).thenReturn(List.of(ended));
+
+		assertEquals("request-session", service.createChunkingSession("request:R1"), "the same request run again");
+		assertFalse(ended.disposed(), "reopened");
+		verify(sessions).save(ended);
+		verify(sessions, never()).insert(any(ChunkingSession.class));
+
+		assertThrows(IllegalStateException.class, () -> service.createChunkingSession("request:R1"),
+				"a living session with the reference: a duplicate");
+	}
+
+	/** Records inserted or stubbed, found by their id. */
+	private java.util.Map<String, DocumentChunkOperation> storedRecords() {
+		final java.util.Map<String, DocumentChunkOperation> stored = new java.util.HashMap<>();
+		when(operations.findById(anyString())).thenAnswer(call -> Optional.ofNullable(stored.get(call.getArgument(0))));
+		when(operations.insert(any(DocumentChunkOperation.class))).thenAnswer(call -> {
+			final DocumentChunkOperation inserted = call.getArgument(0);
+			stored.put(inserted.getId(), inserted);
+			return inserted;
+		});
+		when(operations.existsById(anyString())).thenAnswer(call -> stored.containsKey(call.getArgument(0)));
+		return stored;
+	}
+
+	/** The chunking parameters of the records made by {@link #producible}. */
+	private static ai.gebo.architecture.documents.cache.model.ChunkingParams params() {
+		return new ai.gebo.architecture.documents.cache.model.ChunkingParams(
+				ai.gebo.architecture.documents.cache.model.ChunkingPolicy.SPLIT_CHUNKS, null, null, null,
+				List.of(ai.gebo.architecture.documents.cache.model.TextChunkingSpecs.DEFAULT_SPECS), true, 50000,
+				-1l, false);
+	}
+
+	/** A record of the document's version with its chunking parameters recorded. */
+	private DocumentChunkOperation producible(String id, String session, long createdMillis, boolean fileWritten)
+			throws Exception {
+		final DocumentChunkOperation operation = operation(id, session, createdMillis, fileWritten);
+		operation.setChunkingParams(params());
+		operation.setDocumentModificationDate(document.getModificationDate());
+		return operation;
+	}
+
+	private void writeSet(String name) throws Exception {
+		final DocumentChunksSet set = new DocumentChunksSet();
+		set.setId(name);
+		set.setChunks(List.of());
+		new ObjectMapper().writeValue(workDirectory.resolve(".CHCACHE").resolve(name).toFile(), set);
 	}
 
 	@Test

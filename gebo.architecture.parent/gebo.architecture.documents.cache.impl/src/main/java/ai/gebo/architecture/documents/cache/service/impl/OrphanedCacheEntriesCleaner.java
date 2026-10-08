@@ -29,18 +29,27 @@ import ai.gebo.architecture.documents.cache.config.CacheOrphansCleanupConfig;
 import ai.gebo.architecture.documents.cache.repository.ChunkingSessionRepository;
 import ai.gebo.architecture.documents.cache.repository.DocumentCacheEntryRepository;
 import ai.gebo.architecture.documents.cache.repository.DocumentChunkOperationRepository;
-import ai.gebo.architecture.documents.cache.service.impl.model.DocumentCacheEntry;
+import ai.gebo.architecture.documents.cache.service.impl.model.ChunkingSession;
 import ai.gebo.architecture.documents.cache.service.impl.model.DocumentChunkOperation;
 import ai.gebo.config.service.IGGeboConfigService;
 import lombok.AllArgsConstructor;
 
 /**
- * Deletes what the chunking sessions left behind, older than the grace period (see
- * {@link CacheOrphansCleanupConfig}): the cached chunks whose session no longer exists
- * (or never had one), their records and their files, and the files of the cache folders
- * no record names (written before their record by a chunking that never recorded it, a
- * copy whose record was replaced, or left by a record another instance deleted). The
- * cached document copies expire by their own time to live (see DocumentsCacheServiceImpl).
+ * Deletes what the chunking sessions left behind (see {@link CacheOrphansCleanupConfig}):
+ * <ul>
+ * <li>the sessions disposed longer than the retention, with their records;</li>
+ * <li>the records whose session no longer exists, or never had one, older than the grace
+ * period;</li>
+ * <li>the chunk files no record of a living session names, older than the grace period: a
+ * chunk file may be named by the records of several sessions (one reusing another's
+ * chunks), it stays while one of them lives. A disposed session's records keep naming
+ * their files, which go: a late read produces them again;</li>
+ * <li>the files of the documents cache folder no record names, older than the grace
+ * period (the cached copies expire by their own time to live, see
+ * DocumentsCacheServiceImpl).</li>
+ * </ul>
+ * A file's age is its last modified time, restarted when its session is disposed or a
+ * session reuses it, and checked again just before the file is deleted.
  */
 @Component
 @AllArgsConstructor
@@ -56,9 +65,9 @@ public class OrphanedCacheEntriesCleaner {
 	private final CacheOrphansCleanupConfig config;
 
 	/** What a check deleted. */
-	record Released(int chunkOperations, int unreferencedFiles) {
+	record Released(int expiredSessions, int chunkOperations, int unreferencedFiles) {
 		int total() {
-			return chunkOperations + unreferencedFiles;
+			return expiredSessions + chunkOperations + unreferencedFiles;
 		}
 	}
 
@@ -67,11 +76,13 @@ public class OrphanedCacheEntriesCleaner {
 		try {
 			final Released released = releaseOrphans(new Date());
 			if (released.total() > 0) {
-				LOGGER.info("Released the orphaned cache entries older than " + config.getGraceSeconds() + " s: "
-						+ released.chunkOperations() + " cached chunk operation(s), " + released.unreferencedFiles()
-						+ " unreferenced file(s)");
+				LOGGER.info("Released the cache entries left behind: " + released.expiredSessions()
+						+ " session(s) disposed more than " + config.getRetentionDays() + " day(s) ago, "
+						+ released.chunkOperations() + " cached chunk operation(s) without session, "
+						+ released.unreferencedFiles() + " file(s) no living record names, older than "
+						+ config.getGraceSeconds() + " s");
 			} else if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("releaseOrphans() no orphaned cache entry older than " + config.getGraceSeconds() + " s");
+				LOGGER.debug("releaseOrphans() nothing to release");
 			}
 		} catch (Throwable th) {
 			LOGGER.error("Exception releasing the orphaned cache entries", th);
@@ -80,44 +91,61 @@ public class OrphanedCacheEntriesCleaner {
 
 	Released releaseOrphans(Date now) throws IOException {
 		final Date threshold = new Date(now.getTime() - config.graceMillis());
-		final Map<String, Boolean> alive = new HashMap<>();
+		final Date retentionThreshold = new Date(now.getTime() - config.retentionMillis());
 		final Path work = Path.of(configService.getGeboWorkDirectory());
 
+		// the sessions, the ones disposed longer than the retention deleted with their records
+		final Map<String, ChunkingSession> byId = new HashMap<>();
+		int expiredSessions = 0;
+		for (ChunkingSession session : sessions.findAll()) {
+			if (session.getLogicalDeletionTimestamp() != null
+					&& session.getLogicalDeletionTimestamp().before(retentionThreshold)) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Deleting the chunking session " + session.getCode() + " of "
+							+ session.getChunkingReference() + ", disposed at " + session.getLogicalDeletionTimestamp()
+							+ ", with its records");
+				}
+				chunkOperations.deleteByChunkingSessionId(session.getCode());
+				sessions.deleteById(session.getCode());
+				expiredSessions++;
+			} else if (session.getCode() != null) {
+				byId.put(session.getCode(), session);
+			}
+		}
+
+		// the records whose session no longer exists, or never had one
 		final List<DocumentChunkOperation> orphanOperations;
 		try (Stream<DocumentChunkOperation> stale = chunkOperations.findByLastAccessedLessThan(threshold)) {
-			orphanOperations = stale.filter(op -> !sessionExists(op.getChunkingSessionId(), alive)).toList();
+			orphanOperations = stale.filter(
+					op -> op.getChunkingSessionId() == null || !byId.containsKey(op.getChunkingSessionId())).toList();
 		}
 		for (DocumentChunkOperation operation : orphanOperations) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Releasing the cached chunks of " + operation.getOriginalDocumentCode() + " (operation "
 						+ operation.getId() + ", session " + operation.getChunkingSessionId() + ")");
 			}
-			for (String chunkSet : operation.getChunkSetsList()) {
-				delete(work.resolve(CHUNKS_FOLDER).resolve(chunkSet));
-			}
+			// its files go below, unless a living session's record names them too
 			chunkOperations.delete(operation);
 		}
 
-
-		// the files no record names, older than the grace period
-		final Set<String> chunkFiles = new HashSet<>();
-		chunkOperations.findAll().forEach(op -> chunkFiles.addAll(op.getChunkSetsList()));
+		// the files no record of a living session names, no record at all for the copies
+		final Set<String> liveChunkFiles = new HashSet<>();
+		chunkOperations.findAll().forEach(op -> {
+			final ChunkingSession session = op.getChunkingSessionId() != null ? byId.get(op.getChunkingSessionId())
+					: null;
+			if (session != null && !session.disposed() && op.getChunkSetsList() != null) {
+				liveChunkFiles.addAll(op.getChunkSetsList());
+			}
+		});
 		final Set<String> copyFiles = new HashSet<>();
 		documentCopies.findAll().forEach(copy -> {
 			if (copy.getBinaryDocumentName() != null) {
 				copyFiles.add(copy.getBinaryDocumentName());
 			}
 		});
-		final int unreferenced = deleteUnreferenced(work.resolve(CHUNKS_FOLDER), chunkFiles, threshold)
+		final int unreferenced = deleteUnreferenced(work.resolve(CHUNKS_FOLDER), liveChunkFiles, threshold)
 				+ deleteUnreferenced(work.resolve(DOCUMENTS_FOLDER), copyFiles, threshold);
-		return new Released(orphanOperations.size(), unreferenced);
-	}
-
-	private boolean sessionExists(String sessionId, Map<String, Boolean> alive) {
-		if (sessionId == null) {
-			return false;
-		}
-		return alive.computeIfAbsent(sessionId, id -> sessions.findById(id).isPresent());
+		return new Released(expiredSessions, orphanOperations.size(), unreferenced);
 	}
 
 	private int deleteUnreferenced(Path folder, Set<String> referenced, Date threshold) throws IOException {
@@ -130,11 +158,18 @@ public class OrphanedCacheEntriesCleaner {
 					.filter(file -> !referenced.contains(file.getFileName().toString()))
 					.filter(file -> olderThan(file, threshold)).toList();
 		}
-		unreferenced.forEach(this::delete);
-		if (!unreferenced.isEmpty() && LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Deleted " + unreferenced.size() + " unreferenced file(s) of " + folder);
+		int deleted = 0;
+		for (Path file : unreferenced) {
+			// touched meanwhile (a session reusing it, or disposed): its grace restarted
+			if (olderThan(file, threshold)) {
+				delete(file);
+				deleted++;
+			}
 		}
-		return unreferenced.size();
+		if (deleted > 0 && LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Deleted " + deleted + " unreferenced file(s) of " + folder);
+		}
+		return deleted;
 	}
 
 	private static boolean olderThan(Path file, Date threshold) {
