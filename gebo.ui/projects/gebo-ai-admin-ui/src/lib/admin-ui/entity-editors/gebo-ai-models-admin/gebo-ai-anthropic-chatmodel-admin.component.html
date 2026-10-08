@@ -78,11 +78,11 @@
               </div>
 
             </div>
-            <gebo-ai-standard-chat-model-settings-component id="ChatModelSettings" gebo-ai-label [formGroup]="formGroup"></gebo-ai-standard-chat-model-settings-component>
           </p-tabpanel>
           <p-tabpanel [value]="1">
             <gebo-advanced-chatmodel-group-component id="AdvancedChatModelGroup" gebo-ai-label [mode]="mode"  [entityDataLoaded]="entityDataLoaded"
             [formGroup]="formGroup"></gebo-advanced-chatmodel-group-component>
+            <gebo-ai-standard-chat-model-settings-component id="ChatModelSettings" gebo-ai-label [formGroup]="formGroup"></gebo-ai-standard-chat-model-settings-component>
           </p-tabpanel>
           <p-tabpanel [value]="2">
             <gebo-ai-access-control id="AccessControl" gebo-ai-label [formGroup]="formGroup"></gebo-ai-access-control>

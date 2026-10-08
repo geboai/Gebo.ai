@@ -33,14 +33,14 @@
             </gebo-ai-field>
           </div>
           @if(thinking===true) {
-            <div class="col-6">
+            <div class="col-4">
               <gebo-ai-field id="thinking" label="Thinking efforts" help="Configure thinking efforts the model will do (not all model supports this)">
                 <geboai-editable-listbox-component formControlName="thinking" [data]="thinkingOptions" />
               </gebo-ai-field>
             </div>
           }
           @if(maxGeneratedTokens===true) {
-            <div class="col-6">
+            <div class="col-4">
               <gebo-ai-field id="maxGeneratedTokens" label="Max number of generated tokens"
                 help="Configure thinking efforts the model will do">
                 <p-inputNumber id="maxGeneratedTokens" formControlName="maxGeneratedTokens" [maxFractionDigits]="0"
