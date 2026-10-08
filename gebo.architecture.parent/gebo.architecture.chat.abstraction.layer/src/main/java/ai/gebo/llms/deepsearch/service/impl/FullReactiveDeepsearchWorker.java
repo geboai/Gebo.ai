@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -82,7 +81,6 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 	private static final String GENERATING_ANALISYS = "Generating analisys..";
 	private static final String STREAMING_RESULTS = "StreamingResults";
 	private static final String UTF_8 = "UTF-8";
-	private static final String COMMA_CHARACTER = ",";
 	private static final String CALLING_LLM_PROBLEM_ON_FINAL_ANALISYS = "CALLING LLM PROBLEM ON FINAL ANALISYS";
 	private static final String SORRY_SOMETHING_GONE_WRONG = "Sorry, something gone wrong on last step of the execution";
 	private static final String EXCEPTION_ON_EMPTY_RESULTS = "Exception on empty results";
@@ -90,7 +88,6 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 	private static final String AGENT_DELIVERABLE_COMPLETENESS = "agentDeliverableCompleteness";
 	private static final String ERROR_IN_PROCESS = "<!-ERROR-IN-PROCESS->";
 	private static final String PARTIAL_ANALISYS_SATISFACTORY = "<IS-COMPLETELY-SATISFACTORY/>";
-	private static final String IRRELEVANT_FRAGMENT_MARKER = "IRRILEVANT";
 	private final static Logger LOGGER = LoggerFactory.getLogger(FullReactiveDeepsearchWorker.class);
 	private final IGReactiveEnabledDeepSearchDataSourceLookupService enabledDataSourcesLookupService;
 	private final DeepSearchDefaultConfig defaultDeepsearchConfig;
@@ -352,7 +349,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			docsCounter.incrementAndGet();
 			return x;
 		};
-		final Vector<String> irrelevantFragments = new Vector<>();
+		// the fragments the analyses leave unread, and the ones they find relevant
+		final Vector<String> unreadFragments = new Vector<>();
+		final DeepSearchRelevance relevance = new DeepSearchRelevance();
 		if (suppliers.isEmpty()) {
 			resultFlux = backupNotFoundDocuments;
 		} else if (suppliers.size() == 1) {
@@ -405,7 +404,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 				resultFlux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
 						cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel,
-						commonParams, irrelevantFragments, quotations);
+						commonParams, unreadFragments, quotations, relevance);
 				resultFlux = Flux.concat(resultFlux, Flux.defer(() -> {
 					if (docsCounter.get() == 0l) {
 						return backupNotFoundDocuments;
@@ -426,7 +425,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				Flux<Document> documentFlux = x.get().map(countingMapper);
 				Flux<String> flux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
 						cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel,
-						commonParams, irrelevantFragments, quotations);
+						commonParams, unreadFragments, quotations, relevance);
 				return flux.buffer();
 			}, maxConcurrentSources).subscribeOn(Schedulers.boundedElastic(), true).buffer();
 			resultFlux = resultsBuffer.map(lists -> {
@@ -481,9 +480,29 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Deep search answer with " + quotations.quotes().size() + " verified quotation(s)");
 				}
-				for (String fragmentId : irrelevantFragments) {
+				for (String fragmentId : unreadFragments) {
 					resultsByFragmentId.remove(fragmentId);
 					docrefsByFragmentId.remove(fragmentId);
+				}
+				// the documents of the answer: the ones the analyses found relevant (listed,
+				// quoted or named), every one read when they found none
+				relevance.recordQuotations(quotations);
+				if (relevance.isEmpty()) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Deep search answer documents: no fragment found relevant, the "
+								+ resultsByFragmentId.size() + " result(s) and " + docrefsByFragmentId.size()
+								+ " document(s) read are given");
+					}
+				} else {
+					final int resultsBefore = resultsByFragmentId.size();
+					final int docrefsBefore = docrefsByFragmentId.size();
+					resultsByFragmentId.keySet().removeIf(fragmentId -> !relevance.isRelevant(fragmentId));
+					docrefsByFragmentId.keySet().removeIf(fragmentId -> !relevance.isRelevant(fragmentId));
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Deep search answer documents: " + relevance.summary() + ", fragments given "
+								+ resultsByFragmentId.size() + " of " + resultsBefore + " result(s), "
+								+ docrefsByFragmentId.size() + " of " + docrefsBefore + " document(s)");
+					}
 				}
 
 				Map<String, GResponseDocumentRef> docsMap = new HashMap<>();
@@ -596,7 +615,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		final DeepSearchQuotations quotations = new DeepSearchQuotations();
 		Flux<String> resultFlux = generateDeepSearchFlux(docsFlux, context, runAs, sinkUIEmitter, request,
 				cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel,
-				commonParams, discardedFragmentIds, quotations);
+				commonParams, discardedFragmentIds, quotations, new DeepSearchRelevance());
 
 		final StringBuffer cumulative = new StringBuffer();
 		Flux<GeboChatMessageEnvelope> intermediateStreamingFlux = quotations.render(resultFlux).map(x -> {
@@ -663,7 +682,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			GPromptTemplateConfig cumulativeAnalisysPrompt, GPromptTemplateConfig emptyResponsePrompt,
 			GPromptTemplateConfig finalAnalisysPrompt, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, Map<String, Object> commonParams,
-			Vector<String> discardedFragmentIds, DeepSearchQuotations quotations) {
+			Vector<String> discardedFragmentIds, DeepSearchQuotations quotations, DeepSearchRelevance relevance) {
 		final int subanalisysThreashold = defaultDeepsearchConfig
 				.getSatisfactorySubAnalisysThreashold(request.getUserIntent());
 		final int analysisParallelism = Math.max(1, this.defaultDeepsearchConfig.getAnalysisParallelism());
@@ -725,52 +744,33 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				// the fragments numbered: the model lists short numbers, not long ids
 				final DeepSearchBatchTrace.NumberedBatch numbered = DeepSearchBatchTrace.numbered(documentsList);
 				// streamed: a long analysis keeps arriving instead of tripping the read timeout,
-				// and is stopped as soon as its irrelevant fragments list runs away
+				// and is stopped as soon as its relevant fragments list runs away
 				final String intermediateAnalisys = streamLLMWithDocumentsAndConsolidation(serviceModel,
 						cumulativeAnalisysPrompt, context, numbered.documents(), initialValue, params,
-						DeepSearchBatchTrace.runawayWatch(IRRELEVANT_FRAGMENT_MARKER, numbered.documents().size()));
+						DeepSearchBatchTrace.runawayWatch(DeepSearchRelevance.RELEVANT_FRAGMENTS_MARKER,
+								numbered.documents().size()));
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<DEEP_SEARCH_PARTIAL_ANALYSIS>");
 					LOGGER.trace(intermediateAnalisys);
 					LOGGER.trace("</DEEP_SEARCH_PARTIAL_ANALYSIS>");
 				}
-				final int discardedBefore = discardedFragmentIds.size();
 				final String runaway = DeepSearchBatchTrace.runawayReport(intermediateAnalisys,
-						IRRELEVANT_FRAGMENT_MARKER, numbered.documents());
-				final String cleaned;
+						DeepSearchRelevance.RELEVANT_FRAGMENTS_MARKER, numbered.documents());
 				if (runaway != null) {
-					// a list that repeats itself or makes ids up says nothing reliable: the
-					// fragments of the batch stay, not judged
+					// a list that repeats itself or makes ids up says nothing reliable: ignored
 					LOGGER.warn("Partial analysis ran away in " + (System.currentTimeMillis() - start) + " ms, "
 							+ (intermediateAnalisys != null ? intermediateAnalisys.length() : 0)
-							+ " character(s), its irrelevant fragments list ignored: " + runaway + "on batch: "
+							+ " character(s), its relevant fragments list ignored: " + runaway + "on batch: "
 							+ DeepSearchBatchTrace.composition(documentsList));
-					cleaned = DeepSearchBatchTrace.withoutIrrelevantLists(intermediateAnalisys,
-							IRRELEVANT_FRAGMENT_MARKER);
-				} else {
-					final Vector<String> numbers = new Vector<>();
-					cleaned = cumulateDiscardedFragmentsAndCleanOutput(intermediateAnalisys, numbers);
-					for (String number : numbers) {
-						final String fragmentId = numbered.idOf(number);
-						if (fragmentId == null) {
-							if (LOGGER.isDebugEnabled()) {
-								LOGGER.debug("Partial analysis listed fragment number:" + number + " not in its batch");
-							}
-							continue;
-						}
-						synchronized (discardedFragmentIds) {
-							// the partial analyses run in parallel
-							if (!discardedFragmentIds.contains(fragmentId)) {
-								discardedFragmentIds.add(fragmentId);
-							}
-						}
-					}
 				}
+				final int relevant = relevance.recordAnalysis(intermediateAnalisys, numbered, runaway != null);
+				final String cleaned = DeepSearchBatchTrace.withoutIrrelevantLists(intermediateAnalisys,
+						DeepSearchRelevance.RELEVANT_FRAGMENTS_MARKER);
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("End partial analysis of " + documentsList.size() + " fragment(s) in "
 							+ (System.currentTimeMillis() - start) + " ms: "
 							+ (intermediateAnalisys != null ? intermediateAnalisys.length() : 0) + " character(s), "
-							+ (discardedFragmentIds.size() - discardedBefore) + " fragment id(s) discarded");
+							+ relevant + " fragment(s) relevant by its list or the documents it names");
 				}
 				// its quotations checked against the fragments of its batch (best effort)
 				return quotations.keepVerified(cleaned, numbered);
@@ -858,53 +858,4 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		return resultFlux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 	}
 
-	private String cumulateDiscardedFragmentsAndCleanOutput(String intermediateAnalisys,
-			Vector<String> discardedFragmentIds) {
-
-		if (intermediateAnalisys == null || intermediateAnalisys.trim().length() == 0)
-			return "";
-		final int startCharacter = intermediateAnalisys.toLowerCase().indexOf(IRRELEVANT_FRAGMENT_MARKER.toLowerCase());
-		if (startCharacter < 0)
-			return intermediateAnalisys;
-		final int endCharacter = Math.max(intermediateAnalisys.indexOf("\r", startCharacter),
-				intermediateAnalisys.indexOf("\n", startCharacter));
-		if (endCharacter < 0) {
-			String line = intermediateAnalisys.substring(startCharacter);
-			extractIrrelevantFragmentsFromLine(line, discardedFragmentIds);
-			String cleaned = intermediateAnalisys.substring(0, startCharacter);
-			return cleaned;
-		} else {
-			String line = intermediateAnalisys.substring(startCharacter, endCharacter);
-			extractIrrelevantFragmentsFromLine(line, discardedFragmentIds);
-			String cleaned = intermediateAnalisys.substring(0, startCharacter)
-					+ intermediateAnalisys.substring(endCharacter);
-			return cleaned;
-		}
-
-	}
-
-	private void extractIrrelevantFragmentsFromLine(String line, Vector<String> discardedFragmentIds) {
-		int startIndex = line.toLowerCase().indexOf(IRRELEVANT_FRAGMENT_MARKER.toLowerCase());
-		String commaSeparatedList = line.substring(startIndex + IRRELEVANT_FRAGMENT_MARKER.length()).replace("=", "")
-				.trim();
-		if (commaSeparatedList.length() > 0) {
-			StringTokenizer tokenizer = new StringTokenizer(commaSeparatedList, COMMA_CHARACTER);
-			while (tokenizer.hasMoreTokens()) {
-				String fragmentId = tokenizer.nextToken();
-
-				StringBuffer cleanedFragmentId = new StringBuffer();
-				char chars[] = fragmentId.toCharArray();
-				for (char ch : chars) {
-					if (Character.isAlphabetic(ch) || Character.isDigit(ch) || ch == '-') {
-						cleanedFragmentId.append(ch);
-					}
-				}
-				discardedFragmentIds.add(cleanedFragmentId.toString());
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("LLM Has discarded fragment:" + cleanedFragmentId);
-				}
-			}
-		}
-
-	}
 }

@@ -355,15 +355,12 @@ public abstract class AbstractDeepSearchTool<Q> {
 				failed.setDocumentsNotRead(notLoaded.isEmpty() ? null : notLoaded);
 				return failed;
 			}
-			// every document read is a source: the partial analyses' lists of irrelevant
-			// fragments are not reliable (on large batches a model lists every fragment while
-			// analysing them) and decide nothing; the agent reading the analysis says which
+			// every document read is a source: what the partial analyses find relevant is
+			// told in the logs and decides nothing; the agent reading the analysis says which
 			// documents its answer rests on (ANSWER-DOCUMENTS)
 			foundByFragmentId.keySet().removeAll(unreadFragmentIds);
 			if (LOGGER.isDebugEnabled()) {
-				final long judged = discardedFragmentIds.stream().filter(id -> !unreadFragmentIds.contains(id)).count();
-				LOGGER.debug("Tool:" + toolName + " " + readFragmentIds.size() + " fragment(s) read, " + judged
-						+ " of them listed as irrelevant by the analysis (not used to choose the sources), "
+				LOGGER.debug("Tool:" + toolName + " " + readFragmentIds.size() + " fragment(s) read, "
 						+ unreadFragmentIds.size() + " left unread");
 			}
 			final List<FoundDocument> reliedOn = distinctByDocument(foundByFragmentId.values());
@@ -433,7 +430,7 @@ public abstract class AbstractDeepSearchTool<Q> {
 			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End deepSearch(...) tool:" + toolName + " status:" + result.getStatus() + " analysed "
-						+ fragments.size() + " fragment(s), " + discardedFragmentIds.size() + " discarded, "
+						+ fragments.size() + " fragment(s), " + discardedFragmentIds.size() + " left unread, "
 						+ result.getSources().size() + " source(s), " + result.getTokens() + " token(s)");
 			}
 			if (LOGGER.isTraceEnabled()) {

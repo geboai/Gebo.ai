@@ -113,23 +113,24 @@ exact form, and only in this form:
   ⟦Q<number>|<exact words>⟧: keep each one you use exactly as you receive it, character by character, and
   never write a new one in that form.
 
-OUTPUT THE IRRELEVANT FRAGMENTS LIST:
+OUTPUT THE RELEVANT FRAGMENTS LIST:
 
 Each document fragment of the batch begins with a line "fragmentId: <its id>".
-After the extracted content, output on its own line the field IRRILEVANT= followed by the comma (,) separated
-list of the fragmentId of the irrelevant fragments of this batch, in this form:
+After the extracted content, output on its own line the field RELEVANT_FRAGMENTS= followed by the comma (,)
+separated list of the fragmentId of the fragments of this batch your extracted content rests on, in this form:
 
-IRRILEVANT=<comma separated list of the fragmentId of the irrelevant fragments>
+RELEVANT_FRAGMENTS=<comma separated list of the fragmentId of the relevant fragments>
 
-- Use the field name IRRILEVANT exactly as is, in uppercase, followed by the equal sign, without any additional informations or translations or comment.
+- Use the field name RELEVANT_FRAGMENTS exactly as is, in uppercase, followed by the equal sign, without any additional informations or translations or comment.
 - Write only the id value that follows "fragmentId: " in the line of its fragment, copied exactly, without the "fragmentId:" label.
 - Report only fragmentId values present in this batch. Never number, generate or invent identifiers.
-- List each fragmentId at most once.
-- If no fragment of this batch is irrelevant, output the field with an empty list:
+- List each fragmentId at most once, and only the fragments that really answer the question: a fragment is
+  never listed because it is in the batch.
+- If no fragment of this batch is relevant, output the field with an empty list:
 
-IRRILEVANT=
+RELEVANT_FRAGMENTS=
 
-That row will be used to remove irrilevant document fragments from the user interface.
+That row will be used to show the user the documents the answer rests on.
 
 
 SATISFACTION EVALUATION:

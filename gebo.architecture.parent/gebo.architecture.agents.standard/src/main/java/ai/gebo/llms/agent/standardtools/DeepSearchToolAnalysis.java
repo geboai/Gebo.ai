@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -42,6 +41,7 @@ import ai.gebo.llms.deepsearch.service.DeepSearchVerdict;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchBatchTrace;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchBudgets;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchQuotations;
+import ai.gebo.llms.deepsearch.service.impl.DeepSearchRelevance;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchBatchTrace.NumberedBatch;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.GenerativeFunction;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LaneBudget;
@@ -75,8 +75,6 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 	static final String AGENT_DELIVERABLE_COMPLETENESS = "agentDeliverableCompleteness";
 	private static final String ERROR_IN_PROCESS = "<!-ERROR-IN-PROCESS->";
 	private static final String PARTIAL_ANALISYS_SATISFACTORY = "<IS-COMPLETELY-SATISFACTORY/>";
-	private static final String IRRELEVANT_FRAGMENT_MARKER = "IRRILEVANT";
-	private static final String COMMA_CHARACTER = ",";
 	private final IGPromptConfigDao promptsDao;
 	private final DeepSearchDefaultConfig defaultDeepsearchConfig;
 
@@ -96,8 +94,7 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 	 *                             the analysis
 	 * @param chatModel            writes the final analysis
 	 * @param serviceModel         writes the partial analyses
-	 * @param discardedFragmentIds receives the fragments judged irrelevant or left
-	 *                             unprocessed
+	 * @param discardedFragmentIds receives the fragments left unprocessed
 	 * @param notifier             tells the user the progress of the analysis
 	 *                             ({@link IGProgressNotifier#NONE} for none)
 	 * @return the final analysis, streamed
@@ -155,6 +152,9 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 					+ satisfactoryThreshold + " sufficiencyCheck:" + defaultDeepsearchConfig.isSufficiencyCheckEnabled());
 		}
 		// the quotations of this analysis: the outcome's when given, so the tool can list them
+		// what the partial analyses find relevant: told in the logs, the agent choosing the
+		// documents its answer rests on
+		final DeepSearchRelevance relevance = new DeepSearchRelevance();
 		final DeepSearchQuotations quotations = outcome != null ? outcome.getQuotations()
 				: new DeepSearchQuotations();
 		final Flux<String> backupNotFoundDocuments = Flux.defer(() -> {
@@ -186,38 +186,33 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 				// the fragments numbered: the model lists short numbers, not long ids
 				final NumberedBatch numbered = DeepSearchBatchTrace.numbered(documentsList);
 				// streamed: a long analysis keeps arriving instead of tripping the read timeout,
-				// and is stopped as soon as its irrelevant fragments list runs away
+				// and is stopped as soon as its relevant fragments list runs away
 				final String intermediateAnalisys = streamLLMWithDocumentsAndConsolidation(serviceModel,
 						cumulativeAnalisysPrompt, context, numbered.documents(), initialValue, params,
-						DeepSearchBatchTrace.runawayWatch(IRRELEVANT_FRAGMENT_MARKER, numbered.documents().size()));
+						DeepSearchBatchTrace.runawayWatch(DeepSearchRelevance.RELEVANT_FRAGMENTS_MARKER,
+								numbered.documents().size()));
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<DEEP_SEARCH_TOOL_PARTIAL_ANALYSIS>");
 					LOGGER.trace(intermediateAnalisys);
 					LOGGER.trace("</DEEP_SEARCH_TOOL_PARTIAL_ANALYSIS>");
 				}
-				final int discardedBefore = discardedFragmentIds.size();
 				final String runaway = DeepSearchBatchTrace.runawayReport(intermediateAnalisys,
-						IRRELEVANT_FRAGMENT_MARKER, numbered.documents());
-				final String cleaned;
+						DeepSearchRelevance.RELEVANT_FRAGMENTS_MARKER, numbered.documents());
 				if (runaway != null) {
-					// a list that repeats itself or makes ids up says nothing reliable: the
-					// fragments of the batch stay read and not judged
+					// a list that repeats itself or makes ids up says nothing reliable: ignored
 					LOGGER.warn("Deep search tool partial analysis ran away in " + (System.currentTimeMillis() - start)
 							+ " ms, " + (intermediateAnalisys != null ? intermediateAnalisys.length() : 0)
-							+ " character(s), its irrelevant fragments list ignored: " + runaway + "on batch: "
+							+ " character(s), its relevant fragments list ignored: " + runaway + "on batch: "
 							+ DeepSearchBatchTrace.composition(documentsList));
-					cleaned = DeepSearchBatchTrace.withoutIrrelevantLists(intermediateAnalisys,
-							IRRELEVANT_FRAGMENT_MARKER);
-				} else {
-					final Vector<String> numbers = new Vector<>();
-					cleaned = cumulateDiscardedFragmentsAndCleanOutput(intermediateAnalisys, numbers);
-					discardByNumber(numbers, numbered, discardedFragmentIds);
 				}
+				final int relevant = relevance.recordAnalysis(intermediateAnalisys, numbered, runaway != null);
+				final String cleaned = DeepSearchBatchTrace.withoutIrrelevantLists(intermediateAnalisys,
+						DeepSearchRelevance.RELEVANT_FRAGMENTS_MARKER);
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Deep search tool partial analysis of " + documentsList.size() + " fragment(s) done in "
 							+ (System.currentTimeMillis() - start) + " ms: "
 							+ (intermediateAnalisys != null ? intermediateAnalisys.length() : 0) + " character(s), "
-							+ (discardedFragmentIds.size() - discardedBefore) + " fragment id(s) discarded");
+							+ relevant + " fragment(s) relevant by its list or the documents it names");
 				}
 				// its quotations checked against the fragments of its batch (best effort)
 				return quotations.keepVerified(cleaned, numbered);
@@ -254,7 +249,7 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 			}
 			discardedFragmentIds.add(document.getId());
 			if (outcome != null) {
-				// not judged irrelevant: never read
+				// never read
 				outcome.getUnreadFragmentIds().add(document.getId());
 			}
 		};
@@ -322,73 +317,4 @@ public class DeepSearchToolAnalysis extends BaseLLMSInvokingAndProvidingService 
 		return Flux.fromIterable(separateTokens);
 	};
 
-	/**
-	 * The fragments of a numbered batch the model listed as irrelevant, by number: each
-	 * added once to the discarded ones; a number no fragment has (made up) is ignored.
-	 */
-	static void discardByNumber(List<String> numbers, NumberedBatch numbered, Vector<String> discardedFragmentIds) {
-		for (String number : numbers) {
-			final String fragmentId = numbered.idOf(number);
-			if (fragmentId == null) {
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Deep search tool analysis listed fragment number:" + number + " not in its batch");
-				}
-				continue;
-			}
-			synchronized (discardedFragmentIds) {
-				// the partial analyses run in parallel
-				if (!discardedFragmentIds.contains(fragmentId)) {
-					discardedFragmentIds.add(fragmentId);
-				}
-			}
-		}
-	}
-
-	static String cumulateDiscardedFragmentsAndCleanOutput(String intermediateAnalisys,
-			Vector<String> discardedFragmentIds) {
-		if (intermediateAnalisys == null || intermediateAnalisys.trim().length() == 0)
-			return "";
-		final int startCharacter = intermediateAnalisys.toLowerCase().indexOf(IRRELEVANT_FRAGMENT_MARKER.toLowerCase());
-		if (startCharacter < 0)
-			return intermediateAnalisys;
-		final int endCharacter = Math.max(intermediateAnalisys.indexOf("\r", startCharacter),
-				intermediateAnalisys.indexOf("\n", startCharacter));
-		if (endCharacter < 0) {
-			extractIrrelevantFragmentsFromLine(intermediateAnalisys.substring(startCharacter), discardedFragmentIds);
-			return intermediateAnalisys.substring(0, startCharacter);
-		} else {
-			extractIrrelevantFragmentsFromLine(intermediateAnalisys.substring(startCharacter, endCharacter),
-					discardedFragmentIds);
-			return intermediateAnalisys.substring(0, startCharacter) + intermediateAnalisys.substring(endCharacter);
-		}
-	}
-
-	private static void extractIrrelevantFragmentsFromLine(String line, Vector<String> discardedFragmentIds) {
-		int startIndex = line.toLowerCase().indexOf(IRRELEVANT_FRAGMENT_MARKER.toLowerCase());
-		String commaSeparatedList = line.substring(startIndex + IRRELEVANT_FRAGMENT_MARKER.length()).replace("=", "")
-				.trim();
-		if (commaSeparatedList.length() > 0) {
-			StringTokenizer tokenizer = new StringTokenizer(commaSeparatedList, COMMA_CHARACTER);
-			while (tokenizer.hasMoreTokens()) {
-				StringBuilder cleanedFragmentId = new StringBuilder();
-				for (char ch : tokenizer.nextToken().toCharArray()) {
-					if (Character.isAlphabetic(ch) || Character.isDigit(ch) || ch == '-') {
-						cleanedFragmentId.append(ch);
-					}
-				}
-				// a model can repeat the same id over and over: each id counts once
-				final String fragmentId = cleanedFragmentId.toString();
-				synchronized (discardedFragmentIds) {
-					// the partial analyses run in parallel
-					if (fragmentId.isEmpty() || discardedFragmentIds.contains(fragmentId)) {
-						continue;
-					}
-					discardedFragmentIds.add(fragmentId);
-				}
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Deep search tool analysis discarded fragment:" + fragmentId);
-				}
-			}
-		}
-	}
 }
