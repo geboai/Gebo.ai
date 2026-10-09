@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * MistralModelCapabilities
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T13:37:14.667236589+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T14:15:14.658386498+02:00[Europe/Rome]")
 
 public class MistralModelCapabilities {
   @JsonProperty("completion_chat")
@@ -42,6 +42,24 @@ public class MistralModelCapabilities {
 
   @JsonProperty("classification")
   private Boolean classification = null;
+
+  @JsonProperty("reasoning")
+  private Boolean reasoning = null;
+
+  @JsonProperty("ocr")
+  private Boolean ocr = null;
+
+  @JsonProperty("moderation")
+  private Boolean moderation = null;
+
+  @JsonProperty("audio")
+  private Boolean audio = null;
+
+  @JsonProperty("audio_transcription")
+  private Boolean audioTranscription = null;
+
+  @JsonProperty("audio_speech")
+  private Boolean audioSpeech = null;
 
   public MistralModelCapabilities completionChat(Boolean completionChat) {
     this.completionChat = completionChat;
@@ -151,6 +169,114 @@ public class MistralModelCapabilities {
     this.classification = classification;
   }
 
+  public MistralModelCapabilities reasoning(Boolean reasoning) {
+    this.reasoning = reasoning;
+    return this;
+  }
+
+   /**
+   * Get reasoning
+   * @return reasoning
+  **/
+  @Schema(description = "")
+  public Boolean isReasoning() {
+    return reasoning;
+  }
+
+  public void setReasoning(Boolean reasoning) {
+    this.reasoning = reasoning;
+  }
+
+  public MistralModelCapabilities ocr(Boolean ocr) {
+    this.ocr = ocr;
+    return this;
+  }
+
+   /**
+   * Get ocr
+   * @return ocr
+  **/
+  @Schema(description = "")
+  public Boolean isOcr() {
+    return ocr;
+  }
+
+  public void setOcr(Boolean ocr) {
+    this.ocr = ocr;
+  }
+
+  public MistralModelCapabilities moderation(Boolean moderation) {
+    this.moderation = moderation;
+    return this;
+  }
+
+   /**
+   * Get moderation
+   * @return moderation
+  **/
+  @Schema(description = "")
+  public Boolean isModeration() {
+    return moderation;
+  }
+
+  public void setModeration(Boolean moderation) {
+    this.moderation = moderation;
+  }
+
+  public MistralModelCapabilities audio(Boolean audio) {
+    this.audio = audio;
+    return this;
+  }
+
+   /**
+   * Get audio
+   * @return audio
+  **/
+  @Schema(description = "")
+  public Boolean isAudio() {
+    return audio;
+  }
+
+  public void setAudio(Boolean audio) {
+    this.audio = audio;
+  }
+
+  public MistralModelCapabilities audioTranscription(Boolean audioTranscription) {
+    this.audioTranscription = audioTranscription;
+    return this;
+  }
+
+   /**
+   * Get audioTranscription
+   * @return audioTranscription
+  **/
+  @Schema(description = "")
+  public Boolean isAudioTranscription() {
+    return audioTranscription;
+  }
+
+  public void setAudioTranscription(Boolean audioTranscription) {
+    this.audioTranscription = audioTranscription;
+  }
+
+  public MistralModelCapabilities audioSpeech(Boolean audioSpeech) {
+    this.audioSpeech = audioSpeech;
+    return this;
+  }
+
+   /**
+   * Get audioSpeech
+   * @return audioSpeech
+  **/
+  @Schema(description = "")
+  public Boolean isAudioSpeech() {
+    return audioSpeech;
+  }
+
+  public void setAudioSpeech(Boolean audioSpeech) {
+    this.audioSpeech = audioSpeech;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -166,12 +292,18 @@ public class MistralModelCapabilities {
         Objects.equals(this.functionCalling, mistralModelCapabilities.functionCalling) &&
         Objects.equals(this.fineTuning, mistralModelCapabilities.fineTuning) &&
         Objects.equals(this.vision, mistralModelCapabilities.vision) &&
-        Objects.equals(this.classification, mistralModelCapabilities.classification);
+        Objects.equals(this.classification, mistralModelCapabilities.classification) &&
+        Objects.equals(this.reasoning, mistralModelCapabilities.reasoning) &&
+        Objects.equals(this.ocr, mistralModelCapabilities.ocr) &&
+        Objects.equals(this.moderation, mistralModelCapabilities.moderation) &&
+        Objects.equals(this.audio, mistralModelCapabilities.audio) &&
+        Objects.equals(this.audioTranscription, mistralModelCapabilities.audioTranscription) &&
+        Objects.equals(this.audioSpeech, mistralModelCapabilities.audioSpeech);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(completionChat, completionFim, functionCalling, fineTuning, vision, classification);
+    return Objects.hash(completionChat, completionFim, functionCalling, fineTuning, vision, classification, reasoning, ocr, moderation, audio, audioTranscription, audioSpeech);
   }
 
 
@@ -186,6 +318,12 @@ public class MistralModelCapabilities {
     sb.append("    fineTuning: ").append(toIndentedString(fineTuning)).append("\n");
     sb.append("    vision: ").append(toIndentedString(vision)).append("\n");
     sb.append("    classification: ").append(toIndentedString(classification)).append("\n");
+    sb.append("    reasoning: ").append(toIndentedString(reasoning)).append("\n");
+    sb.append("    ocr: ").append(toIndentedString(ocr)).append("\n");
+    sb.append("    moderation: ").append(toIndentedString(moderation)).append("\n");
+    sb.append("    audio: ").append(toIndentedString(audio)).append("\n");
+    sb.append("    audioTranscription: ").append(toIndentedString(audioTranscription)).append("\n");
+    sb.append("    audioSpeech: ").append(toIndentedString(audioSpeech)).append("\n");
     sb.append("}");
     return sb.toString();
   }

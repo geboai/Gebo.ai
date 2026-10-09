@@ -25,7 +25,7 @@ import java.util.List;
  * MistralBaseModelCard
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T13:37:14.667236589+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T14:15:14.658386498+02:00[Europe/Rome]")
 
 public class MistralBaseModelCard {
   @JsonProperty("id")
@@ -72,6 +72,9 @@ public class MistralBaseModelCard {
 
   @JsonProperty("archived")
   private Boolean archived = null;
+
+  @JsonProperty("type")
+  private String type = null;
 
   public MistralBaseModelCard id(String id) {
     this.id = id;
@@ -351,6 +354,24 @@ public class MistralBaseModelCard {
     this.archived = archived;
   }
 
+  public MistralBaseModelCard type(String type) {
+    this.type = type;
+    return this;
+  }
+
+   /**
+   * Get type
+   * @return type
+  **/
+  @Schema(description = "")
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -375,12 +396,13 @@ public class MistralBaseModelCard {
         Objects.equals(this.deprecation, mistralBaseModelCard.deprecation) &&
         Objects.equals(this.deprecationReplacementModel, mistralBaseModelCard.deprecationReplacementModel) &&
         Objects.equals(this.defaultModelTemperature, mistralBaseModelCard.defaultModelTemperature) &&
-        Objects.equals(this.archived, mistralBaseModelCard.archived);
+        Objects.equals(this.archived, mistralBaseModelCard.archived) &&
+        Objects.equals(this.type, mistralBaseModelCard.type);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, capabilities, job, root, object, created, ownedBy, name, description, maxContextLength, aliases, deprecation, deprecationReplacementModel, defaultModelTemperature, archived);
+    return Objects.hash(id, capabilities, job, root, object, created, ownedBy, name, description, maxContextLength, aliases, deprecation, deprecationReplacementModel, defaultModelTemperature, archived, type);
   }
 
 
@@ -404,6 +426,7 @@ public class MistralBaseModelCard {
     sb.append("    deprecationReplacementModel: ").append(toIndentedString(deprecationReplacementModel)).append("\n");
     sb.append("    defaultModelTemperature: ").append(toIndentedString(defaultModelTemperature)).append("\n");
     sb.append("    archived: ").append(toIndentedString(archived)).append("\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -27,4 +27,5 @@ export interface MistralBaseModelCard {
     deprecationReplacementModel?: string;
     defaultModelTemperature?: number;
     archived?: boolean;
+    type?: string;
 }

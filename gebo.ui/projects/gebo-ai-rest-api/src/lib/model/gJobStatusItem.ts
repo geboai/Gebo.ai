@@ -19,10 +19,10 @@ export interface GJobStatusItem {
     workflowId?: string;
     projectEndpointReference?: GObjectRefGProjectEndpoint;
     startDateTime?: Date;
-    jobType?: GJobStatusItem.JobTypeEnum;
     processing?: boolean;
     finished?: boolean;
     endDateTime?: Date;
+    jobType?: GJobStatusItem.JobTypeEnum;
 }
 export namespace GJobStatusItem {
     export type JobTypeEnum = 'CONTENTS_READING' | 'VECTORIZING_CONTENTS' | 'CONTENTS_READING_VECTORIZING';

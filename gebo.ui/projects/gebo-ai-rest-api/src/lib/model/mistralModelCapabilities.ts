@@ -17,4 +17,10 @@ export interface MistralModelCapabilities {
     fineTuning?: boolean;
     vision?: boolean;
     classification?: boolean;
+    reasoning?: boolean;
+    ocr?: boolean;
+    moderation?: boolean;
+    audio?: boolean;
+    audioTranscription?: boolean;
+    audioSpeech?: boolean;
 }
