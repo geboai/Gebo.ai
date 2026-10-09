@@ -34,6 +34,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
+import ai.gebo.llms.abstraction.layer.services.IGReasoningExtractor;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.services.ThinkTagSkippingOutputConverter;
@@ -196,10 +197,21 @@ public class OllamaChatModelConfigurationSupportService
 			return true;
 		}
 
+		/**
+		 * A model Ollama runs without its thinking api writes its reasoning in its text
+		 * between thinking tags: taken out of the answer (InlineThinkingSplitter), a model
+		 * writing none answering as it streams.
+		 */
 		@Override
 		public boolean isApplyThinkingMarkupHandling() {
 
 			return true;
+		}
+
+		/** Ollama's thinking, as its chunks give it ({@link #REASONING}). */
+		@Override
+		protected IGReasoningExtractor reasoningExtractor() {
+			return REASONING;
 		}
 
 		@Override
@@ -214,6 +226,13 @@ public class OllamaChatModelConfigurationSupportService
 					observationRegistry);
 		}
 	};
+
+	/**
+	 * Ollama's thinking (the think api): Spring AI's OllamaChatModel keeps it in the
+	 * "thinking" metadata of each chunk's message, the piece the chunk adds (the whole of
+	 * it on a blocking call's answer).
+	 */
+	static final IGReasoningExtractor REASONING = IGReasoningExtractor.metadataPieces("thinking");
 
 	/**
 	 * Returns the type of chat model this service supports
