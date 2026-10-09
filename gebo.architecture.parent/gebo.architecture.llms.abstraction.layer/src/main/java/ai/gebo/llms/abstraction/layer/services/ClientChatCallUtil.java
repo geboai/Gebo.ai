@@ -25,10 +25,6 @@ public class ClientChatCallUtil {
 	private static final String USER_TURN_END_ESCAPED = "< < <END_USER> > >";
 	private static final String ASSISTANT_TURN_START_ESCAPED = "< < <ASSISTANT> > >";
 	private static final String USER_TURN_START_ESCAPED = "< < <USER> > >";
-	private static final String THINK_TAG_END = "</think>";
-	private static final String THINK_TAG_START = "<think>";
-	private static final String THINKING_TAG_END = "</thinking>";
-	private static final String THINKING_TAG_START = "<thinking>";
 	private static final String ASSISTANT_TURN_END = "<<<END_ASSISTANT>>>";
 	private static final String ASSISTANT_TURN_START = "<<<ASSISTANT>>>";
 	private static final String USER_TURN_END = "<<<END_USER>>>";
@@ -41,141 +37,37 @@ public class ClientChatCallUtil {
 	private static final String BEGIN_DOCUMENTS = "BEGIN DOCUMENTS";
 	private static final String NEWLINE = "\r\n";
 
+	/**
+	 * The answer of a model's whole text: the reasoning it wrote between thinking tags
+	 * removed, every block of it ({@link InlineThinkingSplitter}).
+	 */
 	public static String removeThinking(String data) {
-		String outString = null;
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin removeThinking(..) of " + data);
+		if (data == null || data.isEmpty()) {
+			return data;
 		}
-		if (data == null || data.trim().length() == 0) {
-			outString = data;
-		} else {
-			String lower = data.toLowerCase();
-
-			int startTag = lower.indexOf(THINK_TAG_START);
-			int endTag = lower.indexOf(THINK_TAG_END);
-			if (endTag > 0) {
-				outString = data.substring(endTag + THINK_TAG_END.length());
-				if (startTag < 0) {
-					LOGGER.warn("End of thinking tag retrieved but no " + THINK_TAG_START
-							+ " found, returning after end aniway=>" + outString);
-					LOGGER.warn("Think phase whas:" + data.substring(0, endTag));
-				}
-
-			} else {
-				startTag = lower.indexOf(THINKING_TAG_START);
-				endTag = lower.indexOf(THINKING_TAG_END);
-				if (endTag > 0) {
-					outString = data.substring(endTag + THINKING_TAG_START.length());
-					if (startTag < 0) {
-						LOGGER.warn("End of thinking tag retrieved but no " + THINK_TAG_START
-								+ " found, returning after end aniway=>" + outString);
-						LOGGER.warn("Think phase whas:" + data.substring(0, endTag));
-					}
-				} else {
-					outString = data;
-				}
-			}
+		final String answer = InlineThinkingSplitter.split(data).answer();
+		if (LOGGER.isDebugEnabled() && answer.length() != data.length()) {
+			LOGGER.debug("removeThinking(..) removed " + (data.length() - answer.length())
+					+ " character(s) of reasoning and tags");
 		}
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End removeThinking(..) returning " + outString);
-		}
-		return outString;
+		return answer;
 	}
 
-	public static boolean isInsideThinking(String data) {
-		String lower = data.toLowerCase();
-		int endTag = lower.indexOf(THINK_TAG_END);
-		if (endTag >= 0)
-			return false;
-		int startTag = lower.indexOf(THINK_TAG_START);
-		endTag = lower.indexOf(THINKING_TAG_END);
-		if (endTag >= 0)
-			return false;
-
-		if (startTag >= 0)
-			return true;
-		startTag = lower.indexOf(THINKING_TAG_START);
-		if (startTag >= 0)
-			return true;
-		return false;
-	}
-
-	public static boolean isAfterThinking(String data) {
-		String lower = data.toLowerCase();
-		int endTag = lower.indexOf(THINK_TAG_END);
-		if (endTag >= 0)
-			return true;
-		int startTag = lower.indexOf(THINK_TAG_START);
-		endTag = lower.indexOf(THINKING_TAG_END);
-		if (endTag >= 0)
-			return true;
-		return false;
-	}
-
-	public static boolean isWithThinking(String data) {
-		String lower = data.toLowerCase();
-		return lower.contains(THINKING_TAG_START) || lower.contains(THINK_TAG_START);
-	}
-
-	public static boolean isNonThinkingOutput(String data) {
-		if (isWithThinking(data))
-			return isAfterThinking(data);
-		else
-			return true;
-	}
-
+	/**
+	 * The reasoning a model wrote between thinking tags in its whole text, as steps
+	 * (paragraphs, or lines), null when it wrote none.
+	 */
 	public static List<String> extractThinking(String data) {
 		if (data == null || data.isEmpty()) {
 			return null;
 		}
-
-		final String lower = data.toLowerCase();
-
-		// Find first occurrence of any marker; if none -> null
-		int firstThink = lower.indexOf(THINK_TAG_START);
-		int firstThinking = lower.indexOf(THINKING_TAG_START);
-		if (firstThink < 0 && firstThinking < 0) {
-			return null;
-		}
-
-		List<String> steps = new java.util.ArrayList<>();
-
-		// Scan left-to-right and extract each <think>...</think> and
-		// <thinking>...</thinking> block
-		int i = 0;
-		while (i < data.length()) {
-			int sThink = lower.indexOf(THINK_TAG_START, i);
-			int sThinking = lower.indexOf(THINKING_TAG_START, i);
-
-			// Pick nearest start tag
-			int start;
-			String startTag;
-			String endTag;
-			if (sThink >= 0 && (sThinking < 0 || sThink <= sThinking)) {
-				start = sThink;
-				startTag = THINK_TAG_START;
-				endTag = THINK_TAG_END;
-			} else if (sThinking >= 0) {
-				start = sThinking;
-				startTag = THINKING_TAG_START;
-				endTag = THINKING_TAG_END;
-			} else {
-				break;
-			}
-
-			int contentStart = start + startTag.length();
-			int end = lower.indexOf(endTag, contentStart);
-			if (end < 0) {
-				// Unclosed tag: stop scanning to avoid infinite loop
-				break;
-			}
-
-			String chunk = data.substring(contentStart, end);
-
+		final List<String> steps = new ArrayList<>();
+		for (String chunk : InlineThinkingSplitter.blocks(data)) {
 			// Split into "steps": prefer paragraph-like boundaries, otherwise
 			// newline-based.
 			// - If it contains <p>...</p>, extract each <p> block.
 			// - Else split by blank lines / line breaks.
+			final List<String> paragraphs = new ArrayList<>();
 			String chunkLower = chunk.toLowerCase();
 			if (chunkLower.contains("<p>")) {
 				int p = 0;
@@ -189,20 +81,16 @@ public class ClientChatCallUtil {
 						break;
 					String pText = chunk.substring(pContentStart, pEnd).trim();
 					if (!pText.isEmpty())
-						steps.add(pText);
+						paragraphs.add(pText);
 					p = pEnd + 4;
 				}
-				// If there were <p> but nothing extracted (malformed), fallback
-				if (steps.isEmpty()) {
-					addStepsByNewlines(steps, chunk);
-				}
-			} else {
-				addStepsByNewlines(steps, chunk);
 			}
-
-			i = end + endTag.length();
+			// no <p> blocks, or malformed ones: by line ends
+			if (paragraphs.isEmpty()) {
+				addStepsByNewlines(paragraphs, chunk);
+			}
+			steps.addAll(paragraphs);
 		}
-
 		return steps.isEmpty() ? null : steps;
 	}
 

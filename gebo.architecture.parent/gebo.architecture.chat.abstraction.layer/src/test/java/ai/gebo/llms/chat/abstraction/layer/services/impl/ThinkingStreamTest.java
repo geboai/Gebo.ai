@@ -58,9 +58,10 @@ class ThinkingStreamTest {
 	}
 
 	@Test
-	void theThinkingTagsAreNotPartOfTheReasoning() {
+	void theReasoningWrittenBetweenTagsIsStreamedAsGiven() {
 		final ThinkingStream stream = new ThinkingStream();
-		final List<GThinkingEvent> events = new ArrayList<>(stream.inline("<think>Let me consider the question.\n"));
+		final List<GThinkingEvent> events = new ArrayList<>(stream.delta("Let me consider "));
+		events.addAll(stream.delta("the question.\n"));
 		events.addAll(stream.complete());
 
 		assertEquals("Let me consider the question.\n", texts(events));

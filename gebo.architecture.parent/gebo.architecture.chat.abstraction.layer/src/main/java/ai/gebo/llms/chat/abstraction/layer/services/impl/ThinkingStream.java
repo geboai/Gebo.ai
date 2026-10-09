@@ -20,9 +20,11 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
 /**
  * The reasoning of a streamed answer, as events for the user: a model gives its
  * reasoning either in a field of its own, each chunk carrying all of it so far, or in its
- * text between thinking tags. The reasoning is sent in fragments of at least
- * {@value #FRAGMENT_CHARS} characters (or up to a line end), not one tiny piece per chunk,
- * and a completing event tells it ended when the answer starts.
+ * text between thinking tags (split from the answer by an
+ * {@link ai.gebo.llms.abstraction.layer.services.InlineThinkingSplitter}). The reasoning
+ * is sent in fragments of at least {@value #FRAGMENT_CHARS} characters (or up to a line
+ * end), not one tiny piece per chunk, and a completing event tells it ended when the
+ * answer starts.
  */
 public final class ThinkingStream {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ThinkingStream.class);
@@ -33,7 +35,6 @@ public final class ThinkingStream {
 	 * streamed answer (the reasoning_content or reasoning field of the provider).
 	 */
 	public static final String REASONING_CONTENT_METADATA = "reasoningContent";
-	private static final String[] TAGS = { "<think>", "</think>", "<thinking>", "</thinking>" };
 	/** The reasoning of the field so far, as the last chunk gave it. */
 	private String accumulated = "";
 	private final StringBuilder pending = new StringBuilder();
@@ -53,16 +54,12 @@ public final class ThinkingStream {
 		return add(delta);
 	}
 
-	/** Events for text written between thinking tags. */
-	public List<GThinkingEvent> inline(String text) {
+	/** Events for a piece of reasoning, as the model wrote it (the text between its thinking tags). */
+	public List<GThinkingEvent> delta(String text) {
 		if (text == null || text.isEmpty()) {
 			return List.of();
 		}
-		String clean = text;
-		for (String tag : TAGS) {
-			clean = clean.replace(tag, "");
-		}
-		return add(clean);
+		return add(text);
 	}
 
 	/** The events ending the reasoning, when one is going on: what is pending, then the completion. */
