@@ -263,6 +263,14 @@ public class DeepSearchToolsSupport {
 	 * by the depth, this only stops a runaway one ({@value #MAX_ANALYSIS_TOKENS_PROPERTY},
 	 * {@value #DEFAULT_MAX_ANALYSIS_TOKENS} by default).
 	 */
+	/**
+	 * Whether the standard knowledge base deep search tool is declared: off where a
+	 * product brings its own (see StandardAgentsConfig.KnowledgeBaseTools).
+	 */
+	public boolean knowledgeBaseToolsEnabled() {
+		return StandardAgentsConfig.knowledgeBaseToolsEnabled(agentsConfig.getIfAvailable());
+	}
+
 	/** The documents found loaded and chunked at the same time. */
 	public int documentsParallelism() {
 		final StandardAgentsConfig config = agentsConfig.getIfAvailable();

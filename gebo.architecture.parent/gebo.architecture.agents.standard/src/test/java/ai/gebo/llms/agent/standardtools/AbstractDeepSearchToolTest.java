@@ -191,6 +191,30 @@ class AbstractDeepSearchToolTest {
 	}
 
 	@Test
+	void theKnowledgeBaseDeepSearchToolIsDeclaredUnlessTheKnowledgeBaseToolsAreOff() {
+		ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern noServices = org.mockito.Mockito
+				.mock(ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern.class);
+		when(noServices.getImplementations()).thenReturn(List.of());
+		ObjectProvider<ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService> documentsSearch = provider(
+				org.mockito.Mockito.mock(ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService.class));
+		ai.gebo.security.services.IGSecurityService platformSecurity = org.mockito.Mockito
+				.mock(ai.gebo.security.services.IGSecurityService.class);
+
+		assertEquals(List.of(KnowledgeBaseDeepSearchTool.DEEP_SEARCH_KNOWLEDGE_BASE_TOOL),
+				new DeepSearchToolSource(support, noServices, documentsSearch, platformSecurity).tools().stream()
+						.map(AbstractDeepSearchTool::getToolName).toList(),
+				"on by default");
+
+		StandardAgentsConfig off = new StandardAgentsConfig();
+		off.getKnowledgeBaseTools().setEnabled(false);
+		DeepSearchToolsSupport offSupport = new DeepSearchToolsSupport(provider(analysis), provider(chunkingService),
+				provider(chatModelsDao), provider(mock(GeboRagSearchConfig.class)), provider(security), provider(off),
+				DeepSearchToolsSupport.DEFAULT_MAX_ANALYSIS_TOKENS);
+		assertTrue(new DeepSearchToolSource(offSupport, noServices, documentsSearch, platformSecurity).tools().isEmpty(),
+				"a product bringing its own deepSearchKnowledgeBase turns the standard one off");
+	}
+
+	@Test
 	void analysesTheFragmentsFoundAndGivesTheDocumentsReliedOn() {
 		TestDeepSearchTool tool = new TestDeepSearchTool(support,
 				List.of(fragment("f1", "doc-a"), fragment("f2", "doc-b"), fragment("f3", "doc-a")));

@@ -551,6 +551,38 @@ class AgenticLoopReactiveAgentServiceTest {
 				agent.evidenceTools(DeliverableIntent.SUMMARY, true, model));
 	}
 
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	void aProductsOwnSearchToolsDeclaredAsEvidenceAreTreatedAsTheStandardOnes() throws Exception {
+		// a product searching its knowledge bases its own way, with the standard tools' names
+		List<org.springframework.ai.tool.ToolCallback> ownTools = source("productKnowledgeBaseTools",
+				"searchKnowledgeBase", "deepSearchKnowledgeBase").getToolCallbacks();
+		ai.gebo.llms.agent.standardtools.IGEvidenceToolSource declared = mock(
+				ai.gebo.llms.agent.standardtools.IGEvidenceToolSource.class);
+		when(declared.getId()).thenReturn("productKnowledgeBaseTools");
+		when(declared.getToolCallbacks()).thenReturn(ownTools);
+		when(declared.isDeepSearchTool("deepSearchKnowledgeBase")).thenReturn(true);
+		when(declared.isKnowledgeBaseTool(org.mockito.ArgumentMatchers.anyString())).thenReturn(true);
+		IGToolCallbackSource notDeclared = source("productOtherTools", "countArticles");
+		IGToolCallbackSourceRepositoryPattern repository = mock(IGToolCallbackSourceRepositoryPattern.class);
+		when(repository.getImplementations()).thenReturn(List.of(declared, notDeclared));
+		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, repository, null,
+				null, null, null, NO_RENDERER);
+		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
+		ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig config = mock(
+				ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.class);
+		when(config.getEnabledFunctions())
+				.thenReturn(List.of("searchKnowledgeBase", "deepSearchKnowledgeBase", "countArticles"));
+		when(model.getConfig()).thenReturn(config);
+
+		AgenticLoopReactiveAgentServiceImpl.MountedSearchTools mounted = agent.searchTools(model);
+		assertEquals(Set.of("searchKnowledgeBase", "deepSearchKnowledgeBase"), mounted.searches(),
+				"a source not declared is no evidence");
+		assertEquals(Set.of("deepSearchKnowledgeBase"), mounted.deepSearches());
+		assertEquals(Set.of("searchKnowledgeBase", "deepSearchKnowledgeBase"), mounted.knowledgeBaseTools());
+		assertEquals(Set.of("deepSearchKnowledgeBase"), agent.evidenceTools(DeliverableIntent.ANALISYS, model));
+	}
+
 	private static IGToolCallbackSource source(String id, String... toolNames) {
 		IGToolCallbackSource source = mock(IGToolCallbackSource.class);
 		when(source.getId()).thenReturn(id);

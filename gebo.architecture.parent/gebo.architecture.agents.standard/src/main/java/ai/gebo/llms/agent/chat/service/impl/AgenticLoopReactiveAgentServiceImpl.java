@@ -60,6 +60,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
 import ai.gebo.llms.agent.standardtools.DeepSearchToolSource;
+import ai.gebo.llms.agent.standardtools.IGEvidenceToolSource;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;
 import ai.gebo.llms.agent.standardtools.CitedAddresses;
@@ -297,7 +298,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * The tool sources whose tools return what the sources contain: a call to one of
 	 * their tools is the evidence an answer rests on. The knowledge base browsing tools
 	 * are among them: they list the documents of the chat's knowledge bases and read
-	 * them whole. The other tools (the date, the users, notifyUser...) are not.
+	 * them whole. The other tools (the date, the users, notifyUser...) are not. A source
+	 * declaring itself an {@link IGEvidenceToolSource} is one too.
 	 */
 	static final Set<String> EVIDENCE_TOOL_SOURCES = Set.of(
 			InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE,
@@ -361,7 +363,11 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		final Set<String> deepSearches = new LinkedHashSet<>();
 		final Set<String> knowledgeBaseTools = new LinkedHashSet<>();
 		for (IGToolCallbackSource source : toolsRepositoryPattern.getImplementations()) {
-			if (source == null || !EVIDENCE_TOOL_SOURCES.contains(source.getId())) {
+			// a product's own search tools are evidence too, as the source declares them
+			final IGEvidenceToolSource declared = source instanceof IGEvidenceToolSource evidenceSource
+					? evidenceSource
+					: null;
+			if (source == null || (declared == null && !EVIDENCE_TOOL_SOURCES.contains(source.getId()))) {
 				continue;
 			}
 			try {
@@ -369,13 +375,15 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					final String name = tool.getToolDefinition().name();
 					if (enabled.contains(name)) {
 						searches.add(name);
-						if (DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE.equals(source.getId())) {
+						if (DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE.equals(source.getId())
+								|| (declared != null && declared.isDeepSearchTool(name))) {
 							deepSearches.add(name);
 						}
 						if (InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE
 								.equals(source.getId())
 								|| KnowledgeBaseBrowsingToolSource.KNOWLEDGE_BASE_BROWSING_TOOL_SOURCE.equals(source.getId())
-								|| KnowledgeBaseDeepSearchTool.DEEP_SEARCH_KNOWLEDGE_BASE_TOOL.equals(name)) {
+								|| KnowledgeBaseDeepSearchTool.DEEP_SEARCH_KNOWLEDGE_BASE_TOOL.equals(name)
+								|| (declared != null && declared.isKnowledgeBaseTool(name))) {
 							knowledgeBaseTools.add(name);
 						}
 					}
