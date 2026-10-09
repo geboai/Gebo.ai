@@ -83,12 +83,14 @@ public final class ThinkingNormalizationAdvisor implements CallAdvisor, StreamAd
 	public Flux<ChatClientResponse> adviseStream(ChatClientRequest request, StreamAdvisorChain chain) {
 		// one reading per round: the ToolCallingAdvisor calls the chain again for each round
 		return Flux.defer(() -> {
-			final Round round = new Round(extractor.round(), inlineTags.getAsBoolean() ? new InlineThinkingSplitter() : null);
+			final IGReasoningExtractor.Round reading = extractor.round();
+			final Round round = new Round(reading, inlineTags.getAsBoolean() ? new InlineThinkingSplitter() : null);
 			final AtomicReference<ChatClientResponse> last = new AtomicReference<>();
-			return chain.nextStream(request).concatMap(chunk -> {
+			return chain.nextStream(reading.streaming(request)).concatMap(chunk -> {
 				last.set(chunk);
 				return Flux.fromIterable(round.normalize(chunk));
-			}).concatWith(Flux.defer(() -> Flux.fromIterable(round.rest(last.get()))));
+			}).concatWith(Flux.defer(() -> Flux.fromIterable(round.rest(last.get()))))
+					.doFinally(signal -> reading.close());
 		});
 	}
 
@@ -210,20 +212,22 @@ public final class ThinkingNormalizationAdvisor implements CallAdvisor, StreamAd
 			return List.of(chunk.mutate().chatResponse(normalized.build()).build());
 		}
 
-		/** What the splitter still held when the round ended, as a last chunk. */
+		/**
+		 * What the reading and the splitter still held when the round ended, as a last
+		 * chunk.
+		 */
 		List<ChatClientResponse> rest(ChatClientResponse last) {
-			if (splitter == null) {
-				return List.of();
-			}
-			final InlineThinkingSplitter.Split rest = splitter.end();
-			if (rest.isEmpty() || last == null) {
+			final String held = reading.end();
+			final InlineThinkingSplitter.Split rest = splitter != null ? splitter.end() : InlineThinkingSplitter.Split.EMPTY;
+			final String thinking = (held != null ? held : "") + rest.thinking();
+			if ((thinking.isEmpty() && rest.answer().isEmpty()) || last == null) {
 				return List.of();
 			}
 			final ChatResponse.Builder chat = ChatResponse.builder()
 					.generations(List.of(new Generation(new AssistantMessage(rest.answer()))))
 					.metadata(GChatAnswerChunk.THINKING_ACTIVE_METADATA, Boolean.FALSE);
-			if (!rest.thinking().isEmpty()) {
-				chat.metadata(GChatAnswerChunk.THINKING_DELTA_METADATA, rest.thinking());
+			if (!thinking.isEmpty()) {
+				chat.metadata(GChatAnswerChunk.THINKING_DELTA_METADATA, thinking);
 			}
 			return List.of(last.mutate().chatResponse(chat.build()).build());
 		}

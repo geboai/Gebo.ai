@@ -23,6 +23,7 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
 import com.anthropic.models.messages.OutputConfig;
+import com.anthropic.models.messages.ThinkingConfigAdaptive;
 
 import ai.gebo.llms.anthropic.http.AnthropicClientCustomizer;
 
@@ -36,6 +37,7 @@ import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGReasoningExtractor;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -175,12 +177,15 @@ public class AnthropicChatModelConfigurationSupportService
 								+ " at the provider default", config.getCode(), config.getThinking(), modelCode);
 					}
 				} else {
+					// the thinking summarized: the current models omit its text by default, and
+					// the user is shown the thinking as it comes
 					if (thinking.disabled()) {
 						builder = builder.thinkingDisabled();
 					} else if (thinking.effort() != null) {
-						builder = builder.thinkingAdaptive().effort(thinking.effort());
+						builder = builder.thinkingAdaptive(ThinkingConfigAdaptive.Display.SUMMARIZED)
+								.effort(thinking.effort());
 					} else {
-						builder = builder.thinkingAdaptive();
+						builder = builder.thinkingAdaptive(ThinkingConfigAdaptive.Display.SUMMARIZED);
 					}
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Chat model {} ({}) configured with thinking {} as {}", config.getCode(), modelCode,
@@ -229,6 +234,12 @@ public class AnthropicChatModelConfigurationSupportService
 		@Override
 		protected boolean isReasoningGeneration(Generation generation) {
 			return isThinkingBlock(generation);
+		}
+
+		/** Claude's thinking, read as it streams ({@link AnthropicReasoningExtractor}). */
+		@Override
+		protected IGReasoningExtractor reasoningExtractor() {
+			return new AnthropicReasoningExtractor();
 		}
 
 		@Override

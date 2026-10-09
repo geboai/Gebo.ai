@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import org.springframework.ai.chat.client.ChatClientRequest;
 import org.springframework.ai.chat.model.Generation;
 
 /**
@@ -44,6 +45,23 @@ public interface IGReasoningExtractor {
 	@FunctionalInterface
 	interface Round {
 		Reasoning of(Generation generation);
+
+		/**
+		 * The request of a streamed round, as the reading needs it sent (a provider whose
+		 * reasoning is read off its HTTP stream marks the request); as it is by default.
+		 */
+		default ChatClientRequest streaming(ChatClientRequest request) {
+			return request;
+		}
+
+		/** The reasoning still held when the round's stream ended; none by default. */
+		default String end() {
+			return "";
+		}
+
+		/** The round is over, however it ended: what the reading holds is released. */
+		default void close() {
+		}
 	}
 
 	/** A new reading, for a new model round. */
