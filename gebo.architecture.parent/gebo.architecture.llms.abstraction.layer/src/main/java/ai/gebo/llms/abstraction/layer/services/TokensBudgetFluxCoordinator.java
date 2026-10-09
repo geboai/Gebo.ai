@@ -55,6 +55,14 @@ public class TokensBudgetFluxCoordinator {
 	@FunctionalInterface
 	public static interface TokensLimitCompute<D> {
 		boolean higherThanBudgetTokens(List<D> d, long budget);
+
+		/**
+		 * The documents of a batch as the user is told them while it is analysed: how
+		 * many by default, their names when the documents carry them.
+		 */
+		default String describe(List<D> batch) {
+			return batch.size() + " documents";
+		}
 	}
 
 	/**
@@ -348,6 +356,19 @@ public class TokensBudgetFluxCoordinator {
 			sink.complete();
 		}
 
+		/** The batch as the user is told it, best effort: how many when it can not be described. */
+		private String described(List<D> batch) {
+			try {
+				final String described = tokensCompute.describe(batch);
+				if (described != null && !described.isBlank()) {
+					return described;
+				}
+			} catch (RuntimeException e) {
+				LOGGER.warn("Cannot describe a batch of " + batch.size() + " documents to the user: " + e);
+			}
+			return batch.size() + " documents";
+		}
+
 		private void analyse(List<D> batch, long budget, FluxSink<T> sink) {
 			if (endOfProcessing.get()) {
 				batch.forEach(unprocessedCumulator);
@@ -359,7 +380,7 @@ public class TokensBudgetFluxCoordinator {
 			}
 			try {
 				try {
-					emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzing " + batch.size() + " documents");
+					emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzing " + described(batch));
 				} catch (Throwable th) {
 					LOGGER.error("Error notifying user about documents analysis start", th);
 				}
@@ -371,7 +392,7 @@ public class TokensBudgetFluxCoordinator {
 					return;
 				}
 				try {
-					emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzed " + batch.size() + " documents!");
+					emitter.notifyProgress(UUID.randomUUID().toString(), "Analyzed " + described(batch) + "!");
 				} catch (Throwable th) {
 					LOGGER.error("Error notifying user about documents analysis completion", th);
 				}

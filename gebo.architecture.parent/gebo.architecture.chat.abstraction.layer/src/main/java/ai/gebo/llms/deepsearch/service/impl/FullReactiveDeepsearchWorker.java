@@ -49,6 +49,7 @@ import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.FoldOutcome;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.RollingFold;
 import ai.gebo.llms.deepsearch.service.DeepSearchVerdict;
+import ai.gebo.llms.deepsearch.service.DocumentNamesShown;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.GenerativeFunction;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LaneBudget;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LastWork;
@@ -578,10 +579,14 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		Flux<Document> docsFlux = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
 				try {
-					sinkUIEmitter.notifyUser("search-ikb", "Doing analisys on selected documents", PI_PI_FILE, 3000l,
-							NotificationType.INFO);
 					AIDocumentsSet aiDoc = runtimeData.getRequestResources().allDocuments();
-					return Flux.fromIterable(aiDoc.aiDocumentsList());
+					final List<Document> selected = aiDoc.aiDocumentsList();
+					// the documents analysed told by their names
+					final String names = DocumentNamesShown.ofFragments(selected);
+					sinkUIEmitter.notifyUser("search-ikb",
+							"Doing analisys on selected documents" + (names != null ? ": " + names : ""), PI_PI_FILE,
+							3000l, NotificationType.INFO);
+					return Flux.fromIterable(selected);
 				} catch (Throwable e) {
 					LOGGER.error("Error streaming selected documents to analyze", e);
 					return Flux.empty();

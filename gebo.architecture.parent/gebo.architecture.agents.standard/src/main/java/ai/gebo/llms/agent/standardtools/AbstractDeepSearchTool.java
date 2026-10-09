@@ -10,6 +10,7 @@
 package ai.gebo.llms.agent.standardtools;
 
 import ai.gebo.llms.deepsearch.service.DeepSearchAnalysisOutcome;
+import ai.gebo.llms.deepsearch.service.DocumentNamesShown;
 import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -323,9 +324,11 @@ public abstract class AbstractDeepSearchTool<Q> {
 			final Map<String, FoundDocument> allFound = new LinkedHashMap<>(foundByFragmentId);
 			// what the analysis reports as missing and the fragments it left unread
 			final DeepSearchAnalysisOutcome analysisOutcome = new DeepSearchAnalysisOutcome();
+			final List<FoundDocument> analysed = distinctByDocument(foundByFragmentId.values());
+			final String analysedNames = DocumentNamesShown.shown(analysed.stream().map(AbstractDeepSearchTool::nameOf).toList());
 			ToolsProgress.notify(toolContext, "Deep search in " + sourceDescription() + ": analysing "
-					+ fragments.size() + " fragment(s) of " + distinctByDocument(foundByFragmentId.values()).size()
-					+ " document(s)");
+					+ (analysedNames != null ? analysedNames + " (" : "") + fragments.size() + " fragment(s) of "
+					+ analysed.size() + " document(s)" + (analysedNames != null ? ")" : ""));
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Tool:" + toolName + " analysing " + fragments.size() + " fragment(s) for deliverable:"
 						+ deliverable + " with chatModel:" + chatModel.getCode() + " serviceModel:"
@@ -872,6 +875,17 @@ public abstract class AbstractDeepSearchTool<Q> {
 			}
 		}
 		return new ArrayList<>(byCode.values());
+	}
+
+	/** The name a document found is told by to the user: its name, else its title, else its source. */
+	static String nameOf(FoundDocument document) {
+		if (document.ref() != null && notBlank(document.ref().getName())) {
+			return document.ref().getName();
+		}
+		if (document.source() != null && notBlank(document.source().getTitle())) {
+			return document.source().getTitle();
+		}
+		return document.source() != null ? document.source().getSource() : null;
 	}
 
 	static boolean notBlank(String value) {

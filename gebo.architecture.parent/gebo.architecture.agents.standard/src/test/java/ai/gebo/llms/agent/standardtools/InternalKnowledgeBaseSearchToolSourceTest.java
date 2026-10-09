@@ -202,6 +202,18 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 	}
 
 	@Test
+	void theUserIsToldTheNamesOfTheDocumentsFound() throws Exception {
+		IGDocumentsSearchService search = searchFindingDocuments(5);
+		List<String> told = new ArrayList<>();
+
+		tool(search, null).search(query("anthroposophy"), chatWithKnowledgeBases("kb1"), null, null, told::add);
+
+		assertEquals(List.of(
+				"Knowledge base: \"doc-0\", \"doc-1\", \"doc-2\" and 2 more (5 fragment(s) of 5 document(s))"),
+				told);
+	}
+
+	@Test
 	void noRankerConfiguredRetrievesTheFragmentsOfTheDocumentsAskedOnly() throws Exception {
 		IGDocumentsSearchService search = searchFindingDocuments(10);
 		IGRankerService ranker = mock(IGRankerService.class);
