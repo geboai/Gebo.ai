@@ -168,15 +168,23 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chat-anthropic
           doModelsLookup: true
           choices:
-            - code: claude-sonnet-5
+            # The current lineup (Claude Models API, 2026-10). The models before it remain
+            # callable as legacy models, but the setup validates every code against the
+            # live models list, so only current models are preset.
+            - code: claude-sonnet-5-5
               uses: CHAT
-              description: Claude Sonnet 5
+              description: Claude Sonnet 5.5
               defaultChoice: true
-            - code: claude-haiku-4-5
+            # Thinking adaptively, steered by an effort level like the rest of the lineup.
+            - code: claude-haiku-5-5
               uses: INTERNAL_SERVICES
-              description: Claude Haiku 4.5
-            - code: claude-opus-4-8
-              description: Claude Opus 4.8
+              description: Claude Haiku 5.5
+            - code: claude-opus-5-5
+              description: Claude Opus 5.5
+              uses: CHAT
+            # Thinks on every request: "no thinking" is not accepted by this model.
+            - code: claude-fable-5-1
+              description: Claude Fable 5.1
               uses: CHAT
 
 # AWS Bedrock vendor temporarily disabled: the Claude 4.x cross-region inference-profile
