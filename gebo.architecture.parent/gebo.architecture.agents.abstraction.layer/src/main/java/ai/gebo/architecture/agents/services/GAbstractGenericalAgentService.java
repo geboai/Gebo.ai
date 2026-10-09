@@ -19,6 +19,7 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
@@ -133,11 +134,20 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	 */
 	protected ToolCallsListener notifyingToolCallsListener(AgentNetworkParticipant contextAgentPersona,
 			INotificationSink notificationSink) {
+		return notifyingToolCallsListener(contextAgentPersona, notificationSink, null);
+	}
+
+	/**
+	 * The same notifying listener, forwarding every call it records to the given
+	 * request level listener (see {@link #agentToolCallsListener(IChatRequestContext)}).
+	 */
+	protected ToolCallsListener notifyingToolCallsListener(AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink, ToolCallsListener requestListener) {
 		if (notificationSink == null || contextAgentPersona == null || !contextAgentPersona.isAllowedToNotifyUser()) {
-			return new ToolCallsListener();
+			return ToolCallsListener.childOf(requestListener, null);
 		}
 		final String agentName = contextAgentPersona.getNetworkAgentName();
-		return new ToolCallsListener(executed -> {
+		return ToolCallsListener.childOf(requestListener, executed -> {
 			if (executed == null || GAbstractGenericalAgentService.NOTIFY_USER_TOOL.equals(executed.getName())) {
 				return;
 			}
@@ -152,6 +162,24 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			notificationSink.next("Agent: " + agentName + " used tool: " + executed.getName(),
 					INotificationSink.NotificationObject.NotificationType.INFO);
 		});
+	}
+
+	/**
+	 * The listener of this agent's own tool calls (its loop history, its notifications),
+	 * forwarding each call to the listener of the user request the context carries, so
+	 * the request collects the calls of every agent of the network. The agent must call
+	 * its model with {@code IChatRequestContext.forAgent(context, listener)}: the model
+	 * wraps the tools with the listener of the context it is called with.
+	 */
+	protected ToolCallsListener agentToolCallsListener(IChatRequestContext chatRequestContext) {
+		final ToolCallsListener requestListener = chatRequestContext != null
+				? chatRequestContext.getToolCallListener()
+				: null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agent service id:" + getId() + " records its tool calls"
+					+ (requestListener != null ? " for the user request" : " without a request level recorder"));
+		}
+		return ToolCallsListener.childOf(requestListener, null);
 	}
 
 	@Override
@@ -380,7 +408,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
 				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
-				createToolCallingManager(callBacksListener, allFunctions, additionalFunctions, runAs));
+				createToolCallingManager(callBacksListener, allFunctions, additionalFunctions, runAs),
+				additionalFunctions);
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End getAgentModel(...) for agent service id:" + getId());
@@ -608,6 +637,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	private static final String END_SHARED_CONTEXT_DELTA = "END SHARED CONTEXT DELTA";
 	private static final String BEGIN_SHARED_CONTEXT_DELTA = "BEGIN SHARED CONTEXT DELTA";
 	private static final String END_AGENT_CONTEXT_CONTRIBUTION = "END AGENT CONTEXT CONTRIBUTION";
+	private static final String CONTRIBUTION_STATUS = "STATUS: ";
 	private static final String BEGIN_CONTEXT_CONTRIBUTION_FROM_AGENT = "BEGIN CONTEXT CONTRIBUTION FROM AGENT:";
 	private static final String DESCRIPTION_OF_YOUR_ROLE = "Description of your role: ";
 	private static final String NEWLINE = "\r\n";
@@ -1254,15 +1284,33 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		return renderContributionData(data);
 	}
 
-	/** Frames the rendered data of a contribution with its agent's markers. */
+	private static boolean hasStatusNotices(AgentProducedSessionContribution contribution) {
+		return contribution.getStatusNotices() != null && !contribution.getStatusNotices().isEmpty();
+	}
+
+	/**
+	 * Frames the rendered data of a contribution with its agent's markers and its
+	 * status notices, if any (see {@link AgentsExchangeMessage#getStatusNotices()}).
+	 */
 	private String wrapContribution(AgentProducedSessionContribution agentProducedSessionContribution,
 			String contributionAsString) {
 		StringBuffer inner = new StringBuffer();
-		if (contributionAsString != null && !contributionAsString.isBlank() && !contributionAsString.isEmpty()) {
+		final List<String> statusNotices = agentProducedSessionContribution.getStatusNotices();
+		final boolean hasData = contributionAsString != null && !contributionAsString.isBlank();
+		final boolean hasStatus = statusNotices != null && !statusNotices.isEmpty();
+		// a contribution with no data still tells its status (e.g. no source could be searched)
+		if (hasData || hasStatus) {
 			inner.append(BEGIN_CONTEXT_CONTRIBUTION_FROM_AGENT);
 			inner.append(agentProducedSessionContribution.getAgentName());
 			inner.append(NEWLINE);
-			inner.append(contributionAsString);
+			if (hasStatus) {
+				for (String notice : statusNotices) {
+					inner.append(CONTRIBUTION_STATUS).append(notice).append(NEWLINE);
+				}
+			}
+			if (hasData) {
+				inner.append(contributionAsString);
+			}
 			inner.append(END_AGENT_CONTEXT_CONTRIBUTION);
 			inner.append(NEWLINE);
 		}
@@ -1334,7 +1382,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		for (AgentProducedSessionContribution contribution : remainingContributions) {
 			String contributionData = renderSharedContributionData(contribution.getData());
 			if (contributionData == null || contributionData.isBlank()) {
-				continue;
+				if (!hasStatusNotices(contribution)) {
+					continue;
+				}
+				// no data, but how it was produced is still told (e.g. no source could be searched)
+				contributionData = "";
 			}
 			minContribution = Math.min(contribution.getContributionUniqueNr(), minContribution);
 			maxContribution = Math.max(contribution.getContributionUniqueNr(), maxContribution);
@@ -1386,7 +1438,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		for (AgentProducedSessionContribution contribution : contributions) {
 			String data = renderSharedContributionData(contribution.getData());
 			if (data == null || data.isBlank()) {
-				continue;
+				if (!hasStatusNotices(contribution)) {
+					continue;
+				}
+				// no data, but how it was produced is still told (e.g. no source could be searched)
+				data = "";
 			}
 			String whole = wrapContribution(contribution, data);
 			int wholeTokens = ITokensCountable.stringsTokensSize(whole);
@@ -1489,19 +1545,44 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 
 	/**
 	 * The token budget of an agent's placeholders: two thirds of what the model's
-	 * context leaves after the prompt template and, when the prompt asks for it, the
-	 * chat history the model call adds as messages of its own.
+	 * context leaves after the prompt template and, when the prompt asks for them, the
+	 * chat history the model call adds as messages of its own and the request's
+	 * documents it renders.
 	 */
 	protected int agentTokenBudget(IGConfigurableChatModel agentModel, GPromptTemplateConfig prompt,
 			IChatRequestContext chatRequestContext) {
 		final int history = chatHistoryTokens(prompt, chatRequestContext);
-		final int budget = (agentModel.getContextLength() - prompt.getTokensSize() - history) * 2 / 3;
+		final int documents = contextDocumentsTokens(prompt, chatRequestContext);
+		// the tokens budget's share of what the context leaves (ai.gebo.llms.tokens-budget.factor)
+		final int budget = (int) ((agentModel.getContextLength() - prompt.getTokensSize() - history - documents)
+				* BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("agentTokenBudget(...) agent:" + getId() + " contextLength:" + agentModel.getContextLength()
-					+ " prompt:" + prompt.getTokensSize() + " (tok) chat history:" + history + " (tok) budget:"
-					+ budget + " (tok)");
+					+ " prompt:" + prompt.getTokensSize() + " (tok) chat history:" + history
+					+ " (tok) context documents:" + documents + " (tok) budget:" + budget + " (tok)");
 		}
 		return budget;
+	}
+
+	/**
+	 * The tokens of the request's documents a model call renders for the prompt: when
+	 * the prompt requires the context documents and one of its templates has the
+	 * documents placeholder.
+	 */
+	public static int contextDocumentsTokens(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext) {
+		if (prompt == null || chatRequestContext == null || (prompt.getContextDocuments() != null
+				&& prompt.getContextDocuments() != ai.gebo.architecture.ai.model.ContextContentRequired.REQUIRED)) {
+			return 0;
+		}
+		final String placeholder = "{" + IChatRequestContext.DOCUMENTS_PROMPT_PARAM + "}";
+		final boolean rendered = (prompt.getSystemPromptTemplate() != null
+				&& prompt.getSystemPromptTemplate().contains(placeholder))
+				|| (prompt.getUserPromptTemplate() != null && prompt.getUserPromptTemplate().contains(placeholder));
+		final List<Document> documents = rendered ? chatRequestContext.getDocuments() : null;
+		if (documents == null || documents.isEmpty()) {
+			return 0;
+		}
+		return (int) Math.min(Integer.MAX_VALUE, BaseLLMSInvokingService.weight(documents));
 	}
 
 	/**

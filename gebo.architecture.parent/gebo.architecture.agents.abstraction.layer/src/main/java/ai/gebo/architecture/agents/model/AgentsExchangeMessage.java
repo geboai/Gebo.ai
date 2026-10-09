@@ -1,5 +1,6 @@
 package ai.gebo.architecture.agents.model;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -34,6 +35,18 @@ public class AgentsExchangeMessage<PayloadType> {
 	@NotNull
 	private PayloadType payload;
 	private int executionOrder = 0;
+	/**
+	 * How the payload was produced, when the agents reading it must know (e.g. the
+	 * sources a search could not reach, and why): shared with the payload and shown to
+	 * every agent reading it. Null when there is nothing to tell.
+	 */
+	private List<String> statusNotices = null;
+
+	/** A message with no status to tell (the constructor the agents build their messages with). */
+	public AgentsExchangeMessage(String collaborationContextId, MessageSemantic messageSemantic, String fromAgent,
+			GAgentRole fromAgentRole, String toAgent, PayloadType payload, int executionOrder) {
+		this(collaborationContextId, messageSemantic, fromAgent, fromAgentRole, toAgent, payload, executionOrder, null);
+	}
 	public static <PayloadType> AgentsExchangeMessage<PayloadType> of(AgentsCollaborationSessionContext context,
 			String targetAgent, PayloadType data, MessageSemantic messageSemantic) {
 		AgentsExchangeMessage<PayloadType> m = new AgentsExchangeMessage<PayloadType>();

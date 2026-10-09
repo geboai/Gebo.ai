@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.architecture.agents.model.PipelineType;
 import ai.gebo.architecture.agents.services.IGConfiguredDefaultChatNetworksOfAgents;
+import ai.gebo.llms.deepsearch.service.SearchResultsChunker;
+import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import lombok.Data;
 
 @Configuration
@@ -26,6 +28,20 @@ public class StandardAgentsConfig implements IGConfiguredDefaultChatNetworksOfAg
 	 * {@code ai.gebo.agents.standard.max-chunks-per-document} in application.yml.
 	 */
 	private int maxChunksPerDocument = 10;
+	/**
+	 * The documents found that the search tools and the document-search agents load and
+	 * chunk at the same time (as {@code ai.gebo.deepsearch.documents-parallelism} does for
+	 * the deep searches). Set via {@code ai.gebo.agents.standard.search-documents-parallelism}
+	 * in application.yml.
+	 */
+	private int searchDocumentsParallelism = SearchResultsChunker.DEFAULT_DOCUMENTS_PARALLELISM;
+	/**
+	 * The knowledge base search tool's answer takes at most the room its model call
+	 * leaves to the tools' results divided by this (a third by default). Set via
+	 * {@code ai.gebo.agents.standard.knowledge-base-search-room-divisor} in
+	 * application.yml.
+	 */
+	private double knowledgeBaseSearchRoomDivisor = InternalKnowledgeBaseSearchToolSource.DEFAULT_ROOM_DIVISOR;
 
 	/**
 	 * The network of agents the chats with a chat profile (RAG pipeline) are handed to
@@ -55,7 +71,9 @@ public class StandardAgentsConfig implements IGConfiguredDefaultChatNetworksOfAg
 	public void logResolvedConfiguration() {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Standard agents configuration resolved: enabled:" + enabled + " maxChunksPerDocument:"
-					+ maxChunksPerDocument + " defaultChatNetworkOfAgents:" + defaultChatNetworkOfAgents
+					+ maxChunksPerDocument + " searchDocumentsParallelism:" + searchDocumentsParallelism
+					+ " knowledgeBaseSearchRoomDivisor:" + knowledgeBaseSearchRoomDivisor
+					+ " defaultChatNetworkOfAgents:" + defaultChatNetworkOfAgents
 					+ " defaultPureChatNetworkOfAgents:" + defaultPureChatNetworkOfAgents);
 		}
 	}

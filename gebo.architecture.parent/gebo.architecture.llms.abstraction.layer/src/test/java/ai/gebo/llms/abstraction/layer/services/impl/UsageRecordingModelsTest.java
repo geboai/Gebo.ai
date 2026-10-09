@@ -274,4 +274,44 @@ class UsageRecordingModelsTest {
 
 		verify(crud, never()).enqueueUsage(any());
 	}
+
+	@Test
+	void usageRecordsTheRealProviderAndTheModelTypeCode() {
+		ILLMSUsageCrudService crud = mock(ILLMSUsageCrudService.class);
+		LLMUsageRecorder recorder = new LLMUsageRecorder(crud);
+		EmbeddingModel provider = mock(EmbeddingModel.class);
+		when(provider.call(any())).thenReturn(embeddingResponse(12));
+		GBaseEmbeddingModelConfig config = mock(GBaseEmbeddingModelConfig.class);
+		when(config.getModelTypeCode()).thenReturn("embedding-regolo.ai");
+		UsageRecordingEmbeddingModel model = new UsageRecordingEmbeddingModel(provider, () -> config, () -> recorder,
+				null, () -> "regolo.ai");
+
+		model.embed(List.of("a"));
+
+		ArgumentCaptor<LLMUsageDetailDto> captor = ArgumentCaptor.forClass(LLMUsageDetailDto.class);
+		verify(crud, times(1)).enqueueUsage(captor.capture());
+		assertEquals("regolo.ai", captor.getValue().getProviderId());
+		assertEquals("embedding-regolo.ai", captor.getValue().getModelTypeCode());
+	}
+
+	@Test
+	void usageOfAModelWithoutProviderRecordsItAsUnknown() {
+		ILLMSUsageCrudService crud = mock(ILLMSUsageCrudService.class);
+		LLMUsageRecorder recorder = new LLMUsageRecorder(crud);
+		ChatModel provider = mock(ChatModel.class);
+		when(provider.call(any(Prompt.class))).thenReturn(new ChatResponse(
+				List.of(new Generation(new AssistantMessage("ok")))));
+		GBaseChatModelConfig config = mock(GBaseChatModelConfig.class);
+		when(config.getModelTypeCode()).thenReturn("chatgpt-OpenAI");
+		ChatModel model = new UsageRecordingChatModel(provider, config, recorder, null, () -> {
+			throw new IllegalStateException("no type");
+		});
+
+		assertEquals("ok", model.call("hello"));
+
+		ArgumentCaptor<LLMUsageDetailDto> captor = ArgumentCaptor.forClass(LLMUsageDetailDto.class);
+		verify(crud, times(1)).enqueueUsage(captor.capture());
+		assertEquals("unknown", captor.getValue().getProviderId());
+		assertEquals("chatgpt-OpenAI", captor.getValue().getModelTypeCode());
+	}
 }

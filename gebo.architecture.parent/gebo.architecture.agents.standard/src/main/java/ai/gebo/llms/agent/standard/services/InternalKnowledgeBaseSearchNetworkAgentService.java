@@ -1,5 +1,6 @@
 package ai.gebo.llms.agent.standard.services;
 
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -125,6 +126,16 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 					+ (command != null ? command.getTopK() : null) + " executeRanking:"
 					+ (command != null ? command.getExecuteRanking() : null));
 		}
+		// the knowledge bases of the chat, or of the caller outside a chat: with none there is
+		// nothing to search (an empty list would filter nothing and search everything)
+		final List<String> kbCodes = sessionKnowledgeBaseCodes(session);
+		if (kbCodes.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End retrieveDocuments(...) internal-KB agent id:" + getId()
+						+ " not run: no knowledge base in the session environment");
+			}
+			return List.of();
+		}
 		try {
 			if (notificationSink != null) {
 				notificationSink.next("Agent: " + getId() + " is planning the search queries",
@@ -158,7 +169,6 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 				LOGGER.trace("</PLANNED_FULL_TEXT_QUERIES>");
 			}
 
-			final List<String> kbCodes = sessionKnowledgeBaseCodes(session);
 			SemanticSearchMetaDataFilter semanticFilter = new SemanticSearchMetaDataFilter();
 			semanticFilter.setKnowledgeBasesCodes(kbCodes);
 			FullTextSearchMetaDataFilter fullTextFilter = new FullTextSearchMetaDataFilter();
@@ -176,7 +186,8 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			}
 
 			final int topK = retrievalTopK(command);
-			final int tokensBudget = (int) (agentModel.getContextLength() * 0.75);
+			// the tokens budget's share of the context window (ai.gebo.llms.tokens-budget.factor)
+			final int tokensBudget = (int) (agentModel.getContextLength() * BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Searching internal knowledge base over " + kbCodes.size() + " knowledge base(s) topK:"
 						+ topK + " tokensBudget:" + tokensBudget);
@@ -204,43 +215,40 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 	}
 
 	/**
-	 * Resolve the knowledge base codes this search must be scoped to. The
-	 * authoritative source is the {@code KNOWLEDGE_BASES_CODE} entry shared in the
-	 * network session environment (populated by the chat pipeline for the current
-	 * session). It is used whenever it is present and non-empty; otherwise the agent
-	 * falls back to the visibility service.
+	 * The knowledge base codes this search is scoped to: the {@code KNOWLEDGE_BASES_CODE}
+	 * entry of the network session environment, the only source. The chat pipeline seeds
+	 * it with the knowledge bases of the chat (its chat profile's), a call from outside a
+	 * chat with all the ones its user can see (see
+	 * {@link UserKnowledgeBasesExecutionEnvironment}). None when the entry is missing or
+	 * empty: a chat without knowledge bases searches none.
 	 */
-	@SuppressWarnings("unchecked")
 	private List<String> sessionKnowledgeBaseCodes(AgentsCollaborationSessionContext session) {
-		Object environmentCodes = session != null && session.getEnvironment() != null
-				? session.getEnvironment().get(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE)
-				: null;
-		if (environmentCodes instanceof List<?> codes && !codes.isEmpty()) {
+		final List<String> codes = environmentKnowledgeBaseCodes(session);
+		if (codes.isEmpty()) {
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Scoping internal-KB search to " + codes.size()
-						+ " knowledge base code(s) from the session environment");
+				LOGGER.debug("No knowledge base codes in the session environment: the internal-KB search reaches none");
 			}
-			if (LOGGER.isTraceEnabled()) {
-				LOGGER.trace("Session scoped knowledge base codes: " + codes);
-			}
-			return (List<String>) codes;
+			return codes;
 		}
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("No knowledge base codes in the session environment, falling back to the visibility service");
-		}
-		return visibleKnowledgeBaseCodes();
-	}
-
-	private List<String> visibleKnowledgeBaseCodes() {
-		List<GKnowledgeBase> visibles = knowledgeBaseVisibilityService.allVisibleKnowledgebases();
-		List<String> codes = visibles != null ? visibles.stream().map(GKnowledgeBase::getCode).toList() : List.of();
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("visibleKnowledgeBaseCodes() resolved " + codes.size() + " visible knowledge base code(s)");
+			LOGGER.debug("Scoping internal-KB search to " + codes.size()
+					+ " knowledge base code(s) from the session environment");
 		}
 		if (LOGGER.isTraceEnabled()) {
-			LOGGER.trace("Visible knowledge base codes: " + codes);
+			LOGGER.trace("Session scoped knowledge base codes: " + codes);
 		}
 		return codes;
 	}
 
+	/** The knowledge base codes of the session environment, none when it has none. */
+	static List<String> environmentKnowledgeBaseCodes(AgentsCollaborationSessionContext session) {
+		final Object environmentCodes = session != null && session.getEnvironment() != null
+				? session.getEnvironment().get(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE)
+				: null;
+		if (!(environmentCodes instanceof List<?> codes)) {
+			return List.of();
+		}
+		return codes.stream().filter(code -> code instanceof String text && !text.isBlank()).map(String.class::cast)
+				.distinct().toList();
+	}
 }

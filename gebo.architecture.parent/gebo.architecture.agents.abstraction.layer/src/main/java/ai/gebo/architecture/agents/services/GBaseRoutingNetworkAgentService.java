@@ -192,7 +192,9 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null)
 					+ " contributionNr:" + actualContributionNr + " fromAgent:" + msg.getFromAgent());
 		}
-		final ToolCallsListener callsListener = new ToolCallsListener();
+		// this agent's own tool calls, forwarded to the user request's recorder
+		final ToolCallsListener callsListener = agentToolCallsListener(chatRequestContext);
+		final IChatRequestContext agentContext = IChatRequestContext.forAgent(chatRequestContext, callsListener);
 		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -260,7 +262,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Requesting the routing plan from the agent model, routable peers:" + typesMap.size());
 		}
-		Map<String, Object> populated = (Map) agentModel.structuredResponse(prompt, params, chatRequestContext,
+		Map<String, Object> populated = (Map) agentModel.structuredResponse(prompt, params, agentContext,
 				LinkedHashMap.class);
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("<ROUTING_PLAN agent=" + getId() + ">");

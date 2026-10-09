@@ -1,6 +1,5 @@
 package ai.gebo.llms.agent.standard.services;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,8 +31,10 @@ import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.model.SystemSearchOutcome;
 import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
+import ai.gebo.architecture.search.model.SearchResultsLoading;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -48,14 +49,20 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 	public static final String NATIVE_SEARCHER_AGENT = "NativeSearcherAgent";
 	final INativeSearchService<CustomSearchResultExtractionDataType, NativeSearchDataStructure> nativeSearchWrapper;
 
+	/** Its results are loaded as its search service says. */
+	@Override
+	protected SearchResultsLoading resultsLoading() {
+		return nativeSearchWrapper.resultsLoading();
+	}
+
 	public NativeDocumentsSearchNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGDocumentContentRendererProvider rendererFactory, IDocumentsChunkService chunkingService,
-			IGRankerService rankerService, int maxChunksPerDocument,
+			IGRankerService rankerService, int maxChunksPerDocument, int documentsParallelism,
 			INativeSearchService<CustomSearchResultExtractionDataType, NativeSearchDataStructure> nativeSearchWrapper) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
-				rendererFactory, chunkingService, rankerService, maxChunksPerDocument);
+				rendererFactory, chunkingService, rankerService, maxChunksPerDocument, documentsParallelism);
 		this.nativeSearchWrapper = nativeSearchWrapper;
 	}
 
@@ -92,6 +99,18 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
 			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
 			INotificationSink notificationSink) throws AgentException {
+		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
+				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, new ArrayList<>());
+	}
+
+	@Override
+	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
+			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
+			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
+			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
+			INotificationSink notificationSink, List<String> unavailableSources) throws AgentException {
 		final SearchAgentCommand command = msg.getPayload();
 		final int topK = retrievalTopK(command);
 		if (LOGGER.isDebugEnabled()) {
@@ -123,14 +142,21 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 					LOGGER.trace(String.valueOf(queryObject));
 					LOGGER.trace("</NATIVE_QUERY>");
 				}
-				List<SearchResult> systemResults = nativeSearchWrapper.nativeSearch(queryObject, system, topK);
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Native search on system:" + system.getCode() + " returned "
-							+ (systemResults != null ? systemResults.size() : 0) + " result(s)");
+				// best effort: a system out of service or not responding does not stop the others
+				final NativeSearchDataStructure systemQuery = queryObject;
+				final SystemSearchOutcome outcome = searchSystem(system, nativeSearchWrapper.appliesRetries(),
+						parameters -> nativeSearchWrapper.nativeSearch(systemQuery, system, topK, parameters),
+						notificationSink, unavailableSources);
+				if (!outcome.available()) {
+					continue;
 				}
-				results.addAll(systemResults);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Native search on system:" + system.getCode() + " returned " + outcome.results().size()
+							+ " result(s)");
+				}
+				results.addAll(outcome.results());
 			}
-		} catch (LLMConfigException | IOException | SearchServiceException e) {
+		} catch (LLMConfigException | SearchServiceException e) {
 			throw new AgentException("Error executing native search agent " + getId(), e);
 		}
 		// The native query object is provider-specific, so derive relevance keywords from

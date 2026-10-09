@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.springframework.ai.tool.ToolCallback;
 
+import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 
@@ -71,4 +72,13 @@ public interface IGToolCallbackSource {
      * @return A list of ToolCallback objects.
      */
     public List<ToolCallback> getToolCallbacks();
+
+    /**
+     * Where the tool of this source named {@code toolName} sends or reads data, for the
+     * compliance data-flow register (see {@link ToolDataFlowTarget}); none by default,
+     * as for a tool that only computes (the date) or talks to the user.
+     */
+    public default List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
+        return List.of();
+    }
 }

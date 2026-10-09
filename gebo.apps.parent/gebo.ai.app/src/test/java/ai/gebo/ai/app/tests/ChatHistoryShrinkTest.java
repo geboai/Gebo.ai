@@ -32,6 +32,10 @@ import ai.gebo.llms.chat.abstraction.layer.repository.ShrinkedChatSessionStateRe
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ShrinkedChatSessionState;
+import ai.gebo.llms.chat.abstraction.layer.model.MinimalChatContextCacheItem;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 
 public class ChatHistoryShrinkTest extends AbstractBaseTestLLmsIntegrationTests {
 
@@ -131,6 +135,54 @@ public class ChatHistoryShrinkTest extends AbstractBaseTestLLmsIntegrationTests 
 				.map(x -> x.getUser()).toList();
 		assertEquals(13, latest.size());
 		assertEquals("QUESTION-12", latest.get(12));
+	}
+
+	/** The minimal context a request's internal services get, for a budget its history exceeds. */
+	private static final int SERVICE_BUDGET = 120;
+
+	private MinimalChatContextCacheItem onlyMinimalContext(String chat) {
+		List<MinimalChatContextCacheItem> items = minimalContextCache.findByUserChatContextCode(chat).stream()
+				.filter(item -> item.getTokensBudget() != null && item.getTokensBudget() == SERVICE_BUDGET).toList();
+		assertEquals(1, items.size(), "One minimal context per chat and budget is kept");
+		return items.get(0);
+	}
+
+	@Test
+	public void testTheMinimalContextSummarizesOnlyTheExchangesNotYetSummarizedAndKeepsTheLatestVerbatim()
+			throws Exception {
+		String chat = newSession();
+		chat(chat, 0, 20);
+
+		int before = prompts.size();
+		shrinker.prepareMinimalContext(chat, SERVICE_BUDGET);
+		CSSConsolidatedChatHistory first = onlyMinimalContext(chat).getItem().getChatHistory();
+		int pointer = first.getLastInteractionPointer();
+		List<CSSSimplefiedInteraction> verbatim = first.getLatestEntries().getInteractions();
+		assertTrue(!verbatim.isEmpty() && verbatim.size() <= 8, "The latest exchanges stay verbatim");
+		assertEquals(20, pointer + verbatim.size());
+		assertEquals(question(19), verbatim.get(verbatim.size() - 1).getUser());
+		String summarized = String.join(" ", prompts.subList(before, prompts.size()));
+		assertTrue(summarized.contains(question(0)) && summarized.contains(question(pointer - 1)));
+		assertFalse(summarized.contains(question(pointer)), "Verbatim: " + question(pointer));
+
+		chat(chat, 20, 23);
+		before = prompts.size();
+		shrinker.prepareMinimalContext(chat, SERVICE_BUDGET);
+		CSSConsolidatedChatHistory second = onlyMinimalContext(chat).getItem().getChatHistory();
+		String next = String.join(" ", prompts.subList(before, prompts.size()));
+		for (int i = 0; i < pointer; i++) {
+			assertFalse(next.contains(question(i)), "Already summarized: " + question(i));
+		}
+		assertTrue(next.contains(question(pointer)), "Left the verbatim exchanges: " + question(pointer));
+		assertTrue(next.contains(first.getConsolidationText()), "The previous summary is carried forward");
+		assertEquals(23, second.getLastInteractionPointer() + second.getLatestEntries().getInteractions().size());
+
+		// the next request finds it ready: nothing is summarized again
+		before = prompts.size();
+		MinimalChatContext mc = new MinimalChatContext();
+		mc.setChatHistory(shrinkedRepository.findById(chat).orElseThrow().getChatHistory());
+		shrinker.shrinkedMinimalContext(chat, mc, SERVICE_BUDGET);
+		assertEquals(before, prompts.size(), "The prepared minimal context is reused");
 	}
 
 	private void chat(String chat, int from, int to) throws Exception {

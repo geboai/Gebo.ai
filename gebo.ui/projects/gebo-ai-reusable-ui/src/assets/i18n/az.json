@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "Dərin axtarış/Jira Axtarış"
       },
-      "PURE_SEARCH": {
-        "label": "Köməkçi axtarış"
-      },
       "imageGeneration": {
         "label": "Şəkil yaradılması"
       }

@@ -24,11 +24,14 @@ import java.util.List;
  * LLMUsageDrillDownLevelSubdimensions
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-03T11:31:06.696503642+02:00[Europe/Rome]")
 
 public class LLMUsageDrillDownLevelSubdimensions {
   @JsonProperty("providerId")
   private List<String> providerId = null;
+
+  @JsonProperty("modelTypeCode")
+  private List<String> modelTypeCode = null;
 
   @JsonProperty("username")
   private List<String> username = null;
@@ -107,6 +110,32 @@ public class LLMUsageDrillDownLevelSubdimensions {
 
   public void setProviderId(List<String> providerId) {
     this.providerId = providerId;
+  }
+
+  public LLMUsageDrillDownLevelSubdimensions modelTypeCode(List<String> modelTypeCode) {
+    this.modelTypeCode = modelTypeCode;
+    return this;
+  }
+
+  public LLMUsageDrillDownLevelSubdimensions addModelTypeCodeItem(String modelTypeCodeItem) {
+    if (this.modelTypeCode == null) {
+      this.modelTypeCode = new ArrayList<>();
+    }
+    this.modelTypeCode.add(modelTypeCodeItem);
+    return this;
+  }
+
+   /**
+   * Get modelTypeCode
+   * @return modelTypeCode
+  **/
+  @Schema(description = "")
+  public List<String> getModelTypeCode() {
+    return modelTypeCode;
+  }
+
+  public void setModelTypeCode(List<String> modelTypeCode) {
+    this.modelTypeCode = modelTypeCode;
   }
 
   public LLMUsageDrillDownLevelSubdimensions username(List<String> username) {
@@ -276,6 +305,7 @@ public class LLMUsageDrillDownLevelSubdimensions {
     }
     LLMUsageDrillDownLevelSubdimensions llMUsageDrillDownLevelSubdimensions = (LLMUsageDrillDownLevelSubdimensions) o;
     return Objects.equals(this.providerId, llMUsageDrillDownLevelSubdimensions.providerId) &&
+        Objects.equals(this.modelTypeCode, llMUsageDrillDownLevelSubdimensions.modelTypeCode) &&
         Objects.equals(this.username, llMUsageDrillDownLevelSubdimensions.username) &&
         Objects.equals(this.model, llMUsageDrillDownLevelSubdimensions.model) &&
         Objects.equals(this.callerStack, llMUsageDrillDownLevelSubdimensions.callerStack) &&
@@ -286,7 +316,7 @@ public class LLMUsageDrillDownLevelSubdimensions {
 
   @Override
   public int hashCode() {
-    return Objects.hash(providerId, username, model, callerStack, modelType, year, month);
+    return Objects.hash(providerId, modelTypeCode, username, model, callerStack, modelType, year, month);
   }
 
 
@@ -296,6 +326,7 @@ public class LLMUsageDrillDownLevelSubdimensions {
     sb.append("class LLMUsageDrillDownLevelSubdimensions {\n");
     
     sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
+    sb.append("    modelTypeCode: ").append(toIndentedString(modelTypeCode)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    model: ").append(toIndentedString(model)).append("\n");
     sb.append("    callerStack: ").append(toIndentedString(callerStack)).append("\n");

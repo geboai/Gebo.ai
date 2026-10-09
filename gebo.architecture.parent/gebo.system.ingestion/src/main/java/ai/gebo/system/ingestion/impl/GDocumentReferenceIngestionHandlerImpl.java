@@ -100,6 +100,9 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 		if (reference.getCode() != null) {
 			meta.put(DocumentMetaInfos.CONTENT_CODE, reference.getCode());
 		}
+		if (reference.getUniqueId() != null) {
+			meta.put(DocumentMetaInfos.GEBO_UNIQUE_ID, reference.getUniqueId());
+		}
 		if (reference.getDescription() != null) {
 			meta.put(DocumentMetaInfos.CONTENT_DESCRIPTION, reference.getDescription());
 		}

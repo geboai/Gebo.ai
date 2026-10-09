@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "ጥልቅ ፍለጋ/Jira ፍለጋ"
       },
-      "PURE_SEARCH": {
-        "label": "የተረዳ ፍለጋ"
-      },
       "imageGeneration": {
         "label": "የምስል ፍጠራ"
       }

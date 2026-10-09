@@ -296,24 +296,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 	}
 
 	private DataEndpoint describeChatModel(String kind, IGConfigurableChatModel model, String description) {
-		if (model == null || model.getConfig() == null) {
-			return null;
-		}
-		GBaseModelConfig config = model.getConfig();
-		DataEndpoint endpoint = new DataEndpoint();
-		endpoint.setId(kind + "-model-" + model.getCode());
-		endpoint.setDescription(describeModel(description, model.getDescription(), config));
-		endpoint.setProduct(providerOf(config, "chat model"));
-		endpoint.setEndpoint(config.getBaseUrl());
-		endpoint.setTypes(list(MetaEndpointType.LLM_ENDPOINT));
-		endpoint.setInput(true);
-		endpoint.setOutput(true);
-		endpoint.setPersonalData(false);
-		if (notEmpty(config.getApiSecretCode())) {
-			endpoint.setSecretReference(config.getApiSecretCode());
-		}
-		endpoint.setLocality(localityOf(endpoint.getEndpoint()));
-		return endpoint;
+		return DataFlowEndpoints.chatModel(kind, model, description);
 	}
 
 	private DataEndpoint describeEmbeddingModel(GChatProfileConfiguration profile,
@@ -332,24 +315,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 		} catch (RuntimeException e) {
 			return null;
 		}
-		if (model == null || model.getConfig() == null) {
-			return null;
-		}
-		GBaseModelConfig config = model.getConfig();
-		DataEndpoint endpoint = new DataEndpoint();
-		endpoint.setId("embedding-model-" + model.getCode());
-		endpoint.setDescription(describeModel("Embedding model", model.getDescription(), config));
-		endpoint.setProduct(providerOf(config, "embedding model"));
-		endpoint.setEndpoint(config.getBaseUrl());
-		endpoint.setTypes(list(MetaEndpointType.LLM_ENDPOINT));
-		endpoint.setInput(true);
-		endpoint.setOutput(true);
-		endpoint.setPersonalData(false);
-		if (notEmpty(config.getApiSecretCode())) {
-			endpoint.setSecretReference(config.getApiSecretCode());
-		}
-		endpoint.setLocality(localityOf(endpoint.getEndpoint()));
-		return endpoint;
+		return DataFlowEndpoints.embeddingModel(model);
 	}
 
 	private IGConfigurableChatModel responderModel(GChatProfileConfiguration profile,
@@ -363,99 +329,41 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 	}
 
 	private DataEndpoint describeRankerModel() {
-		IGRankerModelRuntimeConfigurationDao rankerModelsDao = rankerModelsDaoProvider.getIfAvailable();
-		if (rankerModelsDao == null) {
-			return null;
-		}
-		IGConfigurableRankerModel model;
-		try {
-			model = rankerModelsDao.defaultHandler();
-		} catch (RuntimeException e) {
-			return null;
-		}
-		if (model == null || model.getConfig() == null) {
-			return null;
-		}
-		GBaseModelConfig config = model.getConfig();
-		DataEndpoint endpoint = new DataEndpoint();
-		endpoint.setId("ranker-model-" + model.getCode());
-		endpoint.setDescription(describeModel("Reranker model", model.getDescription(), config));
-		endpoint.setProduct(providerOf(config, "ranker model"));
-		endpoint.setEndpoint(config.getBaseUrl());
-		endpoint.setTypes(list(MetaEndpointType.LLM_ENDPOINT));
-		endpoint.setInput(true);
-		endpoint.setOutput(true);
-		endpoint.setPersonalData(false);
-		if (notEmpty(config.getApiSecretCode())) {
-			endpoint.setSecretReference(config.getApiSecretCode());
-		}
-		endpoint.setLocality(localityOf(endpoint.getEndpoint()));
-		return endpoint;
+		return DataFlowEndpoints.rankerModel(rankerModelsDaoProvider.getIfAvailable());
 	}
 
 	private IGConfigurableChatModel utilityModel(IGChatModelRuntimeConfigurationDao chatModelsDao) {
-		if (chatModelsDao == null) {
-			return null;
-		}
-		try {
-			IGConfigurableChatModel model = chatModelsDao.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-			return model != null ? model : chatModelsDao.defaultHandler();
-		} catch (RuntimeException e) {
-			return null;
-		}
+		return DataFlowEndpoints.utilityModel(chatModelsDao);
 	}
 
 	/** The vector store the vectorizator publishes; connected to when it exists. */
 	private String vectorStoreRef() {
-		return GDataFlowMetaInfos.qualifiedId(new GeboComponentInfo(GStandardModulesConstraints.VECTORIZATOR_MODULE,
-				GStandardModulesConstraints.VECTORIZATION_COMPONENT), "vector-store");
+		return DataFlowEndpoints.vectorStoreRef();
 	}
 
 	private String fullTextIndexRef() {
-		return GDataFlowMetaInfos.qualifiedId(new GeboComponentInfo(GStandardModulesConstraints.FULLTEXT_MODULE,
-				GStandardModulesConstraints.FULLTEXT_INDEXING_COMPONENT), "fulltext-index");
+		return DataFlowEndpoints.fullTextIndexRef();
 	}
 
 	private void link(GDataFlowMetaInfos flow, String kind, String key, String description, MetaEndpointType from,
 			MetaEndpointType to, String sourceQualifiedId, String destQualifiedId) {
-		DataTransformationMetaInfo engine = DataTransformationMetaInfo.of(kind + "-" + key, description, list(from),
-				list(to));
-		flow.getEngines().add(engine);
-		flow.getTransformations()
-				.add(DataTransformationInfo.of(kind + "-flow-" + key, description, engine, sourceQualifiedId,
-						destQualifiedId));
+		DataFlowEndpoints.link(flow, kind, key, description, from, to, sourceQualifiedId, destQualifiedId);
 	}
 
 	private void addUnique(GDataFlowMetaInfos flow, DataEndpoint endpoint) {
-		for (DataEndpoint existing : flow.getDataEndpoints()) {
-			if (existing.getId() != null && existing.getId().equals(endpoint.getId())) {
-				return;
-			}
-		}
-		flow.getDataEndpoints().add(endpoint);
+		DataFlowEndpoints.addUnique(flow, endpoint);
 	}
 
 	private DataEndpointLocality localityOf(String locator) {
-		DataEndpointLocality hint = DataEndpointLocality.hintFromLocator(locator);
-		return hint == DataEndpointLocality.LOCAL_DEPLOYMENT ? DataEndpointLocality.LOCAL_DEPLOYMENT
-				: DataEndpointLocality.EXTERNAL_PROVIDER;
+		return DataFlowEndpoints.localityOf(locator);
 	}
 
 	private String providerOf(GBaseModelConfig config, String fallback) {
-		GBaseModelChoice choice = config.getChoosedModel();
-		if (choice != null && choice.getMetaInfos() != null && notEmpty(choice.getMetaInfos().getProviderId())) {
-			return choice.getMetaInfos().getProviderId();
-		}
-		return notEmpty(config.getModelTypeCode()) ? config.getModelTypeCode() : fallback;
+		return DataFlowEndpoints.providerOf(config, fallback);
 	}
 
 	private String describeModel(String prefix, String modelDescription, GBaseModelConfig config) {
-		GBaseModelChoice choice = config.getChoosedModel();
-		String modelName = choice != null ? choice.getCode() : null;
-		if (notEmpty(modelName)) {
-			return prefix + " (" + modelName + ")";
-		}
-		return notEmpty(modelDescription) ? prefix + " - " + modelDescription : prefix;
+		return DataFlowEndpoints.describeModel(prefix, modelDescription, config);
 	}
 
 	private static boolean notEmpty(String s) {

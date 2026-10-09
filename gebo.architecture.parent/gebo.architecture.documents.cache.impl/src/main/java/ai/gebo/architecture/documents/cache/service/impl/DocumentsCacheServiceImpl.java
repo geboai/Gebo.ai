@@ -12,11 +12,13 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.documents.access.DocumentContentStreamerException;
 import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.architecture.documents.access.StreamingPurpose;
+import ai.gebo.architecture.documents.cache.config.DocumentsCacheTtlConfig;
 import ai.gebo.architecture.documents.cache.repository.DocumentCacheEntryRepository;
 import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException;
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
@@ -39,11 +41,26 @@ public class DocumentsCacheServiceImpl
 	public DocumentsCacheServiceImpl(
 
 			IGGeboConfigService configService, DocumentCacheEntryRepository repository,
-			IGDocumentContentStreamer documentContentStreamer) {
-		super(repository, 5 * 60 * 1000);
+			IGDocumentContentStreamer documentContentStreamer, DocumentsCacheTtlConfig ttlConfig) {
+		// a copy lives this long after its last access (ai.gebo.documents-cache.ttl-seconds)
+		super(repository, ttlConfig.ttlMillis());
 		this.documentContentStreamer = documentContentStreamer;
 		this.configService = configService;
 
+	}
+
+	/**
+	 * The copies not accessed for their time to live deleted, records and files: the
+	 * expiry of this cache only (the chunk cache's chunks are read later, by the steps of
+	 * their session, and are released with it).
+	 */
+	@Scheduled(initialDelay = 10000, fixedRate = 120000)
+	public void expireCopies() {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("expireCopies() the copies not accessed for " + cacheLastUsedMillisecondAgoExpiration / 1000
+					+ " s");
+		}
+		checkExpirationTick();
 	}
 
 	@Override
@@ -81,6 +98,10 @@ public class DocumentsCacheServiceImpl
 					InputStream is = Files.newInputStream(filePath, StandardOpenOption.READ);
 					return TypedInputStream.of(is, cacheEntry.getContentType(), cacheEntry.getExtension());
 				}
+			}
+			// a stale copy, or a record whose file is gone: its file too goes
+			if (Files.exists(filePath)) {
+				cleanupResources(inCacheCopy.get());
 			}
 			repository.delete(inCacheCopy.get());
 		}

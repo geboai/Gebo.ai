@@ -15,11 +15,16 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chatmodel-regolo.ai
           doModelsLookup: true
           choices:
+            # A reasoning model: its reasoning counts in maxGeneratedTokens, a high reasoning
+            # effort could use them all before the answer; maxGeneratedTokens stays moderate,
+            # it also bounds a looping answer. 8000 leaves room to an exhaustive report (one
+            # cut at 6000, after about 28700 characters of a comparative analysis): a looping
+            # answer is stopped at most 2000 tokens later, about 20 seconds.
             - code: qwen3.5-122b
               uses: CHAT
               defaultChoice: true
-              thinking: HIGH_THINKING
-              maxGeneratedTokens: 6000
+              thinking: MEDIUM_THINKING
+              maxGeneratedTokens: 8000
             - code: gpt-oss-120b
               description: OpenAI Gpt OSS 120b
               uses: CHAT
@@ -27,14 +32,16 @@ ai.gebo.llms.vendors.setup.config:
             - code: glm5.2
               description: Z.ai GLM 5.2
               uses: CHAT
-            # NO_THINKING states the intent - an internal services model should not spend
-            # tokens reasoning - but an openai compatible provider has no portable way to
-            # ask for it, so this one is not sent: see the thinking handling in
-            # GenericOpenAIAPIChatModelConfigurationSupportService.
+            # An internal services model should spend few tokens reasoning. gpt-oss cannot
+            # stop reasoning and NO_THINKING is not sent to an openai compatible provider
+            # (see the thinking handling in GenericOpenAIAPIChatModelConfigurationSupportService):
+            # left at regolo.ai's default effort, about one partial analysis in six generated all
+            # its maxGeneratedTokens without any text and came back empty. LOW_THINKING is sent as
+            # reasoning_effort "low", which regolo.ai lists among the parameters of the model.
             - code: gpt-oss-20b
               description: OpenAI Gpt OSS 20b
               uses: INTERNAL_SERVICES
-              thinking: NO_THINKING
+              thinking: LOW_THINKING
               maxGeneratedTokens: 4000
         - type: EMBEDDING
           serviceHandler: embedding-regolo.ai

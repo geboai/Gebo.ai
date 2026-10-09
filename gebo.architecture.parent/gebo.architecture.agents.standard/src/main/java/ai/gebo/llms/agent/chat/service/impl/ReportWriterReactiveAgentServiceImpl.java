@@ -68,8 +68,8 @@ import reactor.core.scheduler.Schedulers;
 public class ReportWriterReactiveAgentServiceImpl
 		extends GAbstractReactiveAgentService<String, GeboChatMessageEnvelope, GeboChatResponse>
 		implements IReportWriterReactiveAgentService {
-	private static final String REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM = "REQUIRED_AGENT_COMPLETENESS";
-	private static final String DELIVERABLE_FORMATTING_RULES_TEMPLATE_PARAM = "DELIVERABLE_FORMATTING_RULES";
+	protected static final String REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM = "REQUIRED_AGENT_COMPLETENESS";
+	protected static final String DELIVERABLE_FORMATTING_RULES_TEMPLATE_PARAM = "DELIVERABLE_FORMATTING_RULES";
 	static final String DELIVERABLE_FORMATS_RESOURCE_PATH = "/agents-prompt-library/en/deliverable-formats/";
 	private static final Map<DeliverableIntent, String> DELIVERABLE_FORMATS_CACHE = new ConcurrentHashMap<>();
 	private static final String END_AGENT_LOOP = "END_AGENT-LOOP-";
@@ -165,8 +165,26 @@ public class ReportWriterReactiveAgentServiceImpl
 		List<Map<String, Object>> output = super.createAgentTemplateParams(prompt, network, agentRole,
 				contextAgentPersona, session, mySessionContext, input, agentsDao, actualContributionNr, tokenBudget,
 				splitByBudget);
-		DeliverableIntent actualUserIntent = (DeliverableIntent) session.getEnvironment()
-				.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT);
+		final DeliverableIntent actualUserIntent = sessionUserIntent(session);
+		final Map<String, Object> deliverableParams = deliverableTemplateParams(actualUserIntent);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Report writer required deliverable completeness:" + actualUserIntent.name()
+					+ " applied to " + output.size() + " parameter window(s)");
+		}
+		for (Map<String, Object> window : output) {
+			window.putAll(deliverableParams);
+		}
+		return output;
+	}
+
+	/**
+	 * The kind of deliverable the user asked for (QA, HOWTO, ANALISYS...), as the
+	 * routing classified it into the shared environment, SUMMARY when it is absent.
+	 */
+	protected DeliverableIntent sessionUserIntent(AgentsCollaborationSessionContext session) {
+		DeliverableIntent actualUserIntent = session != null && session.getEnvironment() != null
+				? (DeliverableIntent) session.getEnvironment().get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT)
+				: null;
 		if (actualUserIntent == null) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("No " + StandardAgentsNetworkEnvironmentEntries.USER_INTENT
@@ -174,25 +192,26 @@ public class ReportWriterReactiveAgentServiceImpl
 			}
 			actualUserIntent = DeliverableIntent.SUMMARY;
 		}
-		final String completeness = actualUserIntent.name() + ": " + actualUserIntent.getAgentDeliverableCompleteness();
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Report writer required deliverable completeness:" + actualUserIntent.name()
-					+ " applied to " + output.size() + " parameter window(s)");
-		}
+		return actualUserIntent;
+	}
+
+	/**
+	 * The prompt parameters shaping the deliverable: the required completeness and the
+	 * formatting rules of that deliverable kind only. The writer is never asked to
+	 * select its own branch out of a catalogue of every type, and the prompt does not
+	 * carry the branches it will not use.
+	 */
+	protected Map<String, Object> deliverableTemplateParams(DeliverableIntent intent) {
+		final String completeness = intent.name() + ": " + intent.getAgentDeliverableCompleteness();
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("<" + REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM + ">");
 			LOGGER.trace(completeness);
 			LOGGER.trace("</" + REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM + ">");
 		}
-		// Only the rule for THIS deliverable type reaches the prompt: the writer is never
-		// asked to select its own branch out of a catalogue of every type, and the prompt
-		// does not carry the branches it will not use.
-		final String formattingRules = deliverableFormattingRules(actualUserIntent);
-		for (Map<String, Object> window : output) {
-			window.put(REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM, completeness);
-			window.put(DELIVERABLE_FORMATTING_RULES_TEMPLATE_PARAM, formattingRules);
-		}
-		return output;
+		final Map<String, Object> params = new HashMap<>();
+		params.put(REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM, completeness);
+		params.put(DELIVERABLE_FORMATTING_RULES_TEMPLATE_PARAM, deliverableFormattingRules(intent));
+		return params;
 	}
 	@Override
 	public String getId() {
@@ -366,13 +385,15 @@ public class ReportWriterReactiveAgentServiceImpl
 					ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
 			response.setQueryResponse(queryResponse);
 			response.setDocumentsRef(extractDocumentsList(session));
+			// This network response carries the writer's own calls, for its cycle history;
+			// the calls of the whole request (every agent) are recorded on the pipeline
+			// response by the request's recorder.
 			response.setCalledFunctions(renderFunctions(callBacksListener.getCalls()));
 			GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
 			envelope.setLastMessage(lastMessage);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End createResponse(...) report writer agent id:" + getId() + " final response length:"
-						+ queryResponse.length() + " calledFunctions:"
-						+ (response.getCalledFunctions() != null ? response.getCalledFunctions().size() : 0));
+						+ queryResponse.length() + " own tool calls:" + callBacksListener.getCalls().size());
 			}
 			if (LOGGER.isTraceEnabled()) {
 				LOGGER.trace("<REPORT_WRITER_FINAL_TEXT>");
@@ -731,7 +752,8 @@ public class ReportWriterReactiveAgentServiceImpl
 				int tcIndex = 0;
 				for (CalledFunction callF : geboChatResponse.getCalledFunctions()) {
 					buffer.append(
-							TOOL_CALLED + tcIndex + ": " + callF.getFunctionName() + " params:" + callF.getParams());
+							TOOL_CALLED + tcIndex + ": " + callF.getFunctionName() + " params:"
+									+ callF.getParamsDescription());
 					buffer.append(NEWLINE);
 					tcIndex++;
 				}
@@ -765,8 +787,8 @@ public class ReportWriterReactiveAgentServiceImpl
 				LOGGER.trace("</EXECUTED_TOOL_CALL>");
 			}
 		}
-		return calls != null ? calls.stream().map(x -> new CalledFunction(x.getName(), x.getToolDescription(),
-				List.of(), x.getToolInput() != null ? List.of(x.getToolInput()) : List.of())).toList() : List.of();
+		// the input goes to paramsDescription: params is not serialized, the user never saw it
+		return calls != null ? calls.stream().map(ToolCallsListener::toCalledFunction).toList() : List.of();
 	}
 
 }

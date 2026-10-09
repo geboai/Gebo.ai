@@ -53,9 +53,22 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 
 			DocumentChunkingResponse processed = null;
 			try {
+				// the job's session, disposed or not (a late batch reopens it), created by the
+				// first batch; one created meanwhile by a concurrent batch is taken
 				String chunkingSessionId = chunkingService.retrieveChunkingSession("job:" + payload.getJobId());
 				if (chunkingSessionId == null) {
-					chunkingSessionId = chunkingService.createChunkingSession("job:" + payload.getJobId());
+					try {
+						chunkingSessionId = chunkingService.createChunkingSession("job:" + payload.getJobId());
+					} catch (IllegalStateException e) {
+						chunkingSessionId = chunkingService.retrieveChunkingSession("job:" + payload.getJobId());
+						if (chunkingSessionId == null) {
+							throw e;
+						}
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("The chunking session of job:" + payload.getJobId()
+									+ " was created by a concurrent batch: " + chunkingSessionId);
+						}
+					}
 				}
 
 				ChunkingParams params = parameterProvider.provideChunkingParams(payload.getDocumentReference());

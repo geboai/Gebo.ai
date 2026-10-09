@@ -20,6 +20,7 @@ import java.util.function.BiFunction;
 
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.util.json.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,11 @@ import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.abstraction.layer.functions.model.CurrentUserTeamsMembersGroupsFilter;
 import ai.gebo.llms.abstraction.layer.functions.model.RestrictedUserInfos;
 import ai.gebo.llms.abstraction.layer.functions.model.VoidObject;
@@ -79,16 +82,6 @@ public class UsersFunctions implements IGToolCallbackSource {
 	private ToolCallback currentUserFunction() {
 
 		BiFunction<VoidObject, ToolContext, RestrictedUserInfos> thisFunction = (t, c) -> {
-			KBContext contextVisibility = LLMtInteractionContextThreadLocal.Context.get();
-			CalledFunction function = new CalledFunction();
-			function.setFunctionName("getActualUser");
-			function.setFunctionDescription("Get actual user informations");
-			function.setParamsDescription(List.of("No parameters"));
-			if (contextVisibility != null) {
-
-				contextVisibility.getCalledFunctions().add(function);
-			}
-			ToolCallbackDeclarationUtil.addCallToContext(c, function);
 			return RestrictedUserInfos.of(securityService.getCurrentUser());
 		};
 		return ToolCallbackDeclarationUtil.declare(thisFunction, "getActualUser", "Get actual user informations",
@@ -126,7 +119,6 @@ public class UsersFunctions implements IGToolCallbackSource {
 	private UsersList searchCurrentUsersTeamsColleague(CurrentUserTeamsMembersGroupsFilter filter, ToolContext c) {
 		UsersList out = new UsersList();
 		UserInfos currentUser = securityService.getCurrentUser();
-		KBContext contextVisibility = LLMtInteractionContextThreadLocal.Context.get();
 		List<String> params = new ArrayList<String>();
 		UsersGroup groupFilter = new UsersGroup();
 		if (filter.getGroupCode() != null && filter.getGroupCode().trim().length() > 0) {
@@ -161,16 +153,24 @@ public class UsersFunctions implements IGToolCallbackSource {
 			return RestrictedUserInfos.of(x);
 		}).toList();
 		out.addAll(list);
-		CalledFunction function = new CalledFunction();
-		function.setFunctionName("searchCurrentUsersTeamsColleagues");
-		function.setFunctionDescription("Get actual user's and colleagues list");
-		function.setParamsDescription(params);
-		if (contextVisibility != null) {
-
-			contextVisibility.getCalledFunctions().add(function);
+		// the colleagues that fit the room the model call has left to its tools' results,
+		// whole and in order (see ToolsTokenBudget); all of them without a room
+		final ToolsTokenBudget budget = ToolsTokenBudget.from(c);
+		if (budget == null || out.isEmpty()) {
+			return out;
 		}
-		ToolCallbackDeclarationUtil.addCallToContext(c, function);
-		return out;
+		final UsersList kept = new UsersList();
+		kept.addAll(ToolsTokenBudget.fitItems(out, budget.left(), JsonParser::toJson));
+		return kept;
+	}
+
+	/** The users tools read the platform's users and groups: personal data. */
+	@Override
+	public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
+		return "getActualUser".equals(toolName) || "searchCurrentUsersTeamsColleagues".equals(toolName)
+				? List.of(ToolDataFlowTarget.platformData("Platform users and groups",
+						toolName + ": users' identities and groups read"))
+				: List.of();
 	}
 
 	/**

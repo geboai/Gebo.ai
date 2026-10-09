@@ -1,9 +1,11 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.knowledgebase.repositories.uniqueid.VirtualFilesystemUniqueIds;
 import ai.gebo.architecture.ai.model.MetaDocumentRenderer;
 import ai.gebo.architecture.ai.model.MetaDocumentRenderer.MetaDocumentRendererBuilder;
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
@@ -45,6 +47,13 @@ public class StandardDocumentRenderers {
 	@Qualifier(IGDocumentContentRenderer.STANDARD_RENDERER)
 	public static class DocumentDocumentContentRenderer implements IGDocumentContentRenderer<Document> {
 
+		private VirtualFilesystemUniqueIds uniqueIds = null;
+
+		@Autowired(required = false)
+		public void setUniqueIds(VirtualFilesystemUniqueIds uniqueIds) {
+			this.uniqueIds = uniqueIds;
+		}
+
 		@Override
 		public String getId() {
 
@@ -69,6 +78,8 @@ public class StandardDocumentRenderers {
 			builder.name(get(document, DocumentMetaInfos.GEBO_FILE_NAME));
 			builder.title(get(document, DocumentMetaInfos.TITLE));
 			builder.documentCode(get(document, DocumentMetaInfos.CONTENT_CODE));
+			builder.documentUniqueId(documentUniqueId(document.getMetadata(), get(document, DocumentMetaInfos.CONTENT_CODE),
+					uniqueIds));
 			builder.knowledgeBase(get(document, DocumentMetaInfos.KNOWLEDGEBASE_CODE));
 			builder.project(get(document, DocumentMetaInfos.PROJECT_CODE));
 			builder.url(get(document, DocumentMetaInfos.CONTENT_ORIGINAL_URL));
@@ -89,6 +100,13 @@ public class StandardDocumentRenderers {
 	@Qualifier(IGDocumentContentRenderer.STANDARD_RENDERER)
 	public static class AIDocumentFragmentDocumentContentRenderer
 			implements IGDocumentContentRenderer<AIDocumentFragment> {
+
+		private VirtualFilesystemUniqueIds uniqueIds = null;
+
+		@Autowired(required = false)
+		public void setUniqueIds(VirtualFilesystemUniqueIds uniqueIds) {
+			this.uniqueIds = uniqueIds;
+		}
 
 		@Override
 		public String getId() {
@@ -116,6 +134,7 @@ public class StandardDocumentRenderers {
 			builder.name(get(document, DocumentMetaInfos.GEBO_FILE_NAME));
 			builder.title(get(document, DocumentMetaInfos.TITLE));
 			builder.documentCode(document.getCode());
+			builder.documentUniqueId(documentUniqueId(document.getMetaData(), document.getCode(), uniqueIds));
 			builder.knowledgeBase(get(document, DocumentMetaInfos.KNOWLEDGEBASE_CODE));
 			builder.project(get(document, DocumentMetaInfos.PROJECT_CODE));
 			builder.url(get(document, DocumentMetaInfos.CONTENT_ORIGINAL_URL));
@@ -136,6 +155,13 @@ public class StandardDocumentRenderers {
 	@Qualifier(IGDocumentContentRenderer.STANDARD_RENDERER)
 	public static class AIDocumentDocumentContentRenderer
 			implements IGDocumentContentRenderer<AIDocumentReferenceItem> {
+
+		private VirtualFilesystemUniqueIds uniqueIds = null;
+
+		@Autowired(required = false)
+		public void setUniqueIds(VirtualFilesystemUniqueIds uniqueIds) {
+			this.uniqueIds = uniqueIds;
+		}
 
 		private static final String NEWLINE = "\r\n";
 
@@ -163,6 +189,7 @@ public class StandardDocumentRenderers {
 			builder.name(document.getName());
 			builder.title(get(document, DocumentMetaInfos.TITLE));
 			builder.documentCode(document.getCode());
+			builder.documentUniqueId(documentUniqueId(null, document.getCode(), uniqueIds));
 			builder.knowledgeBase(get(document, DocumentMetaInfos.KNOWLEDGEBASE_CODE));
 			builder.project(get(document, DocumentMetaInfos.PROJECT_CODE));
 			builder.url(get(document, DocumentMetaInfos.CONTENT_ORIGINAL_URL));
@@ -221,5 +248,33 @@ public class StandardDocumentRenderers {
 			return buffer.toString();
 		}
 
+	}
+
+	/**
+	 * The uniqueId of the document a content comes from: the one ingested with it, else
+	 * the one stored for its document code (contents ingested before the uniqueId
+	 * existed); null when neither is known.
+	 */
+	static Long documentUniqueId(java.util.Map<String, Object> metadata, String documentCode,
+			VirtualFilesystemUniqueIds uniqueIds) {
+		final Object value = metadata != null ? metadata.get(DocumentMetaInfos.GEBO_UNIQUE_ID) : null;
+		if (value instanceof Number number) {
+			return number.longValue();
+		}
+		if (value instanceof String text && !text.isBlank()) {
+			try {
+				return (long) Double.parseDouble(text.trim());
+			} catch (NumberFormatException e) {
+				// resolved from the document code below
+			}
+		}
+		if (uniqueIds == null || documentCode == null) {
+			return null;
+		}
+		try {
+			return uniqueIds.documentUniqueId(documentCode);
+		} catch (RuntimeException e) {
+			return null;
+		}
 	}
 }

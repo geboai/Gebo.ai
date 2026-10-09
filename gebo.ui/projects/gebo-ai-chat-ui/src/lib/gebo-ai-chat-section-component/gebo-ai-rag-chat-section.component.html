@@ -96,21 +96,21 @@
       [disableFilesBrowsers]="disableFilesBrowsers"
       [chatWithExternalFiles]="chatUIOptions?.chatWithExternalFiles === true"
       (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
-      (updatedChatAction)="onUpdatedChat($event)" [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
+      (updatedChatAction)="onUpdatedChat($event)" (branchedChatAction)="onBranchedChat($event)" [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
     }
     @if (openChat===true) {
     <gebo-ai-reusable-chat-component [ragsystem]="false" [chatInfo]="currentChat"
       [disableFilesBrowsers]="disableFilesBrowsers"
       [chatWithExternalFiles]="chatUIOptions?.chatWithExternalFiles === true"
       (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
-      (updatedChatAction)="onUpdatedChat($event)" [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
+      (updatedChatAction)="onUpdatedChat($event)" (branchedChatAction)="onBranchedChat($event)" [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
     }
     @if (openOpenChat===true) {
     <gebo-ai-reusable-chat-component [ragsystem]="true" [pipelineId]="OPEN_CHAT_PIPELINE" [chatInfo]="currentChat"
       [disableFilesBrowsers]="disableFilesBrowsers"
       [chatWithExternalFiles]="chatUIOptions?.chatWithExternalFiles === true"
       (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
-      (updatedChatAction)="onUpdatedChat($event)" [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
+      (updatedChatAction)="onUpdatedChat($event)" (branchedChatAction)="onBranchedChat($event)" [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
     }
   </div>
 </div>

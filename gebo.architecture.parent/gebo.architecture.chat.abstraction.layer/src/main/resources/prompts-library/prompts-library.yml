@@ -163,38 +163,6 @@ ai.gebo.prompts:
       chatHistory: REQUIRED
       contextDocuments: REQUIRED
       toolsCalling: NOT_REQUIRED
-    #pure search
-    - promptUse: default-pipeline-pure-search-datasources-selection-prompt
-      langCode: en
-      systemReference: /prompts-library/en/default-pipeline-pure-search-datasources-selection-prompt-system-prompt.txt
-      userReference: /prompts-library/en/default-pipeline-pure-search-datasources-selection-prompt-user-prompt.txt
-      chatHistory: REQUIRED
-      contextDocuments: REQUIRED
-      toolsCalling: NOT_REQUIRED
-    - promptUse: default-pipeline-pure-search-fallback-prompt
-      langCode: en
-      systemReference: /prompts-library/en/default-pipeline-pure-search-fallback-prompt-system-prompt.txt
-      userReference: /prompts-library/en/default-pipeline-pure-search-fallback-prompt-user-prompt.txt
-      chatHistory: NOT_REQUIRED
-      contextDocuments: NOT_REQUIRED
-      toolsCalling: REQUIRED
-    - promptUse: default-pipeline-pure-search-summary-prompt
-      langCode: en
-      systemReference: /prompts-library/en/default-pipeline-pure-search-summary-prompt-system-prompt.txt
-      userReference: /prompts-library/en/default-pipeline-pure-search-summary-prompt-user-prompt.txt
-      chatHistory: REQUIRED
-      contextDocuments: NOT_REQUIRED
-      toolsCalling: NOT_REQUIRED
-    - promptUse: default-chat-agent-prompt
-      langCode: en
-      agentId: ChatAgentService
-      agentPrompt: true
-      systemReference: /prompts-library/en/default-chat-agent-system-prompt.txt
-      userReference: /prompts-library/en/default-chat-agent-user-prompt.txt
-      chatHistory: REQUIRED
-      contextDocuments: REQUIRED
-      toolsCalling: REQUIRED
-      description: Default Chat Agent prompt
       #prompt used by the ranker service to drop the ranked fragments that are
       #completely useless for the query: no chat session is involved, the query is
       #carried by a session-less chat request context
@@ -227,6 +195,8 @@ ai.gebo.prompts:
       placeholders:
         - placeholder: question
           description: The chat content used as the basis for the generated summary/title.
+        - placeholder: userLanguage
+          description: The language the title is written in, named in English (e.g. English, Italian), the language of the chat's first request; "the language of the user's current request" when it could not be detected.
     - code: chat-rule-proposal-prompt
       description: Proposes up to 3 general rules for future answers from a rated chatbot answer and the user's feedback; the user picks and edits them before they are saved.
       module: chat
@@ -237,6 +207,8 @@ ai.gebo.prompts:
           description: The answer the chatbot gave.
         - placeholder: feedback
           description: The user's rating and comment on that answer.
+        - placeholder: userLanguage
+          description: The language the rules are written in, named in English (e.g. English, Italian), the language the rated question was answered in; "the language of the user's current request" when it could not be detected.
     - code: chat-rule-conflict-prompt
       description: Lists the existing chat rules that a new or edited rule contradicts, as advice before it is saved.
       module: chat
@@ -245,6 +217,8 @@ ai.gebo.prompts:
           description: The new or edited rule.
         - placeholder: documents
           description: The numbered rules it would apply together with.
+        - placeholder: userLanguage
+          description: The language the advice is written in, named in English (e.g. English, Italian), as detected on the new rule; "the language of the user's current request" when it could not be detected.
     - code: history-consolidation-prompt
       description: Compresses the chat history (and any prior consolidated summary) down to a target size while preserving the relevant context.
       module: chat
@@ -265,6 +239,8 @@ ai.gebo.prompts:
           description: Rendered block of retrieved/attached documents or fragments for this request (can be empty).
         - placeholder: question
           description: The user's current question or request text.
+        - placeholder: userLanguage
+          description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
     - code: standard-rag-prompt
       description: Default Retrieval-Augmented Generation (RAG) chat prompt that blends retrieved company knowledge with general model knowledge.
       module: chat
@@ -273,6 +249,8 @@ ai.gebo.prompts:
           description: Rendered block of retrieved documents/chunks from the RAG system for this request (can be empty).
         - placeholder: question
           description: The user's current question or request text.
+        - placeholder: userLanguage
+          description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
     - code: default-pipeline-routing-decision-prompt
       description: Routes an incoming chat turn to the right pipeline strategy (plain chat, RAG, tools, deep search, etc.) by having the model choose a deliverable type.
       module: chat
@@ -301,6 +279,8 @@ ai.gebo.prompts:
           description: Rendered block of retrieved documents/chunks used as evidence for the answer.
         - placeholder: question
           description: The user's current question or request text.
+        - placeholder: userLanguage
+          description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
     - code: default-pipeline-chat-output-prompt
       description: Produces the final answer for the plain-chat pipeline step (no retrieval involved).
       module: chat
@@ -309,6 +289,8 @@ ai.gebo.prompts:
           description: Rendered block of any attached documents or fragments for this request (can be empty).
         - placeholder: question
           description: The user's current question or request text.
+        - placeholder: userLanguage
+          description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
     - code: default-pipeline-tools-call-output-prompt
       description: Produces the final answer for the pipeline step that follows a tool-calling turn.
       module: chat
@@ -317,6 +299,8 @@ ai.gebo.prompts:
           description: The user's current question or request text.
         - placeholder: toolsList
           description: Description of the tools that were available to be called for this request.
+        - placeholder: userLanguage
+          description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
     - code: deep-search-file-analisys-prompt
       description: Analyzes a single file/document found during a deep-search run and extracts the information relevant to the ongoing research.
       module: chat
@@ -329,6 +313,8 @@ ai.gebo.prompts:
           description: Rendered content of the file/document under analysis.
         - placeholder: question
           description: The original research question driving the deep-search run.
+        - placeholder: userLanguage
+          description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
     - code: deep-search-data-sources-file-analisys-prompt
       description: Analyzes a file/document coming from an external deep-search data source and extracts the information relevant to the ongoing research.
       module: chat
@@ -343,6 +329,8 @@ ai.gebo.prompts:
           description: Rendered content of the file/document under analysis.
         - placeholder: question
           description: The original research question driving the deep-search run.
+        - placeholder: userLanguage
+          description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
     - code: deep-search-consolidation-prompt
       description: Consolidates the findings gathered across a deep-search run into the running research summary.
       module: chat
@@ -355,6 +343,8 @@ ai.gebo.prompts:
           description: Newly gathered documents/fragments to fold into the consolidated research summary.
         - placeholder: question
           description: The original research question driving the deep-search run.
+        - placeholder: userLanguage
+          description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
     - code: deep-search-content-rating-prompt
       description: Rates how relevant a retrieved content fragment is to the deep-search research goal, used to filter out noise.
       module: chat
@@ -411,6 +401,8 @@ ai.gebo.prompts:
       placeholders:
         - placeholder: question
           description: The original research question driving the deep-search run.
+        - placeholder: userLanguage
+          description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
     - code: default-pipeline-chat-with-documents-prompt
       description: Answers a chat turn where the user has attached documents directly to the conversation (not retrieved via RAG).
       module: chat
@@ -419,48 +411,8 @@ ai.gebo.prompts:
           description: Rendered content of the documents the user attached to the conversation.
         - placeholder: question
           description: The user's current question or request text.
-    - code: default-pipeline-pure-search-datasources-selection-prompt
-      description: Selects which deep-search data sources should be queried for a "pure search" pipeline turn.
-      module: chat
-      placeholders:
-        - placeholder: deepSearchDataSources
-          description: Catalog describing the deep-search data sources available to be selected.
-        - placeholder: documents
-          description: Rendered block of any documents/fragments already available for this request.
-        - placeholder: question
-          description: The user's current question or request text.
-    - code: default-pipeline-pure-search-fallback-prompt
-      description: Fallback answer for the "pure search" pipeline step when the selected data sources produce nothing usable.
-      module: chat
-      placeholders:
-        - placeholder: question
-          description: The user's current question or request text.
-    - code: default-pipeline-pure-search-summary-prompt
-      description: Summarizes the results gathered by the "pure search" pipeline step into the final answer.
-      module: chat
-      placeholders:
-        - placeholder: consolidated
-          description: The results consolidated so far by the "pure search" pipeline step.
-        - placeholder: documents
-          description: Rendered block of the documents/fragments gathered by the "pure search" pipeline step.
-        - placeholder: question
-          description: The user's current question or request text.
-    - code: default-chat-agent-prompt
-      description: Main loop prompt for the default single-agent chat agent (ChatAgentService), driving its iterate-until-done control loop.
-      module: chat
-      placeholders:
-        - placeholder: AGENT_CONTROL_CONTINUE_PROMPT_PARAM
-          description: The control token the agent must emit to signal it needs another loop iteration.
-        - placeholder: AGENT_CONTROL_FINISHED_PROMPT_PARAM
-          description: The control token the agent must emit to signal its work is complete.
-        - placeholder: CURRENT_ITERATION
-          description: The current iteration number of the agent's control loop.
-        - placeholder: MAX_ITERATIONS
-          description: The maximum number of iterations allowed for the agent's control loop.
-        - placeholder: AGENT_SESSION_STORY
-          description: Narrative reconstruction of the agent session's turns so far.
-        - placeholder: question
-          description: The user's current question or request text.
+        - placeholder: userLanguage
+          description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
     - code: ranker-irrelevant-fragments-filter-prompt
       description: Filters out retrieved fragments that are completely irrelevant to the query before ranking/using them, independent of any chat session.
       module: chat

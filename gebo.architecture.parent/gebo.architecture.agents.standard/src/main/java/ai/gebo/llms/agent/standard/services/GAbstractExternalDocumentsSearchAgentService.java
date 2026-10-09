@@ -1,11 +1,9 @@
 package ai.gebo.llms.agent.standard.services;
 
+import ai.gebo.llms.deepsearch.service.SearchResultsChunker;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.ai.document.Document;
@@ -18,13 +16,15 @@ import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.documents.cache.model.ChunkingParams;
-import ai.gebo.architecture.documents.cache.model.ChunkingPolicy;
-import ai.gebo.architecture.documents.cache.model.DocumentChunk;
-import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
-import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.search.config.OpenNetworkLoadingConfig;
+import ai.gebo.architecture.search.model.SearchResultsLoading;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.model.SystemSearchOutcome;
+import ai.gebo.architecture.search.service.BestEffortSearchCalls;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
@@ -47,29 +47,45 @@ import ai.gebo.security.services.IGSecurityService;
 public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbstractStandardDocumentsSearchAgentService {
 
 	/** Target chunk size when feeding chunks to an LLM (larger than the embedding default of 512). */
-	private static final int LLM_CHUNK_TOKENS = 1024;
+	private static final int LLM_CHUNK_TOKENS = SearchResultsChunker.LLM_CHUNK_TOKENS;
 	/** Fraction of the agent model context window allotted to retrieved documents. */
 	private static final double DOC_BUDGET_FRACTION = 0.5;
-	/** Cache-file batching granularity for the chunking service. */
-	private static final long DEFAULT_TOKENS_PER_CHUNK_SET = 50000L;
-	/** Minimum token length of a word to be kept as a matching keyword. */
-	private static final int MIN_KEYWORD_LENGTH = 3;
 	/** Fallback per-document chunk cap when none (or a non-positive one) is configured. */
 	private static final int DEFAULT_MAX_CHUNKS_PER_DOCUMENT = 10;
 
 	protected final IDocumentsChunkService chunkingService;
 	/** Hard cap on the number of chunks kept per source document (bounds the ranker candidate pool). */
 	protected final int maxChunksPerDocument;
+	/** The documents found loaded and chunked at the same time. */
+	protected final int documentsParallelism;
+	/** How the results of an open network are loaded (see {@link #resultsLoading()}): the defaults until set. */
+	private OpenNetworkLoadingConfig openNetworkLoading = new OpenNetworkLoadingConfig();
+
+	public void setOpenNetworkLoading(OpenNetworkLoadingConfig openNetworkLoading) {
+		if (openNetworkLoading != null) {
+			this.openNetworkLoading = openNetworkLoading;
+		}
+	}
+
+	/**
+	 * How the results of this agent's search service are loaded: as from a system sized
+	 * to answer, unless the agent's service says otherwise.
+	 */
+	protected SearchResultsLoading resultsLoading() {
+		return SearchResultsLoading.RELIABLE;
+	}
 
 	public GAbstractExternalDocumentsSearchAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGDocumentContentRendererProvider rendererFactory, IDocumentsChunkService chunkingService,
-			IGRankerService rankerService, int maxChunksPerDocument) {
+			IGRankerService rankerService, int maxChunksPerDocument, int documentsParallelism) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
 				rendererFactory, rankerService);
 		this.chunkingService = chunkingService;
 		this.maxChunksPerDocument = maxChunksPerDocument > 0 ? maxChunksPerDocument : DEFAULT_MAX_CHUNKS_PER_DOCUMENT;
+		this.documentsParallelism = documentsParallelism > 0 ? documentsParallelism
+				: SearchResultsChunker.DEFAULT_DOCUMENTS_PARALLELISM;
 	}
 
 	/**
@@ -97,59 +113,23 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 			LOGGER.trace("Matching keywords derived for chunking: " + keywords);
 		}
 		final ChunkingParams params = buildSearchChunkingParams(agentModel, command, keywords);
-		final String chunkingSession = chunkingService.createChunkingSession("agent-search:" + UUID.randomUUID());
-		try {
-			List<IDocumentChunkWithRef> chunks = chunkingService
-					.streamChunks(results, params, chunkingSession, 4).sequential().collectList().block();
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("chunkToDocuments(...) produced " + (chunks != null ? chunks.size() : 0)
-						+ " raw chunk(s) in session:" + chunkingSession);
-			}
-			List<Document> documents = new ArrayList<>();
-			if (chunks != null) {
-				final Map<String, Integer> chunksPerDocument = new HashMap<>();
-				int cappedOut = 0;
-				for (IDocumentChunkWithRef chunkWithRef : chunks) {
-					if (chunkWithRef == null || chunkWithRef.isErrorState() || chunkWithRef.getChunk() == null) {
-						continue;
-					}
-					DocumentChunk chunk = chunkWithRef.getChunk();
-					if (chunk.getChunkData() == null || chunk.getChunkData().isBlank()) {
-						continue;
-					}
-					final String sourceCode = chunk.getOriginalDocumentCode() != null
-							? chunk.getOriginalDocumentCode()
-							: "";
-					final int kept = chunksPerDocument.getOrDefault(sourceCode, 0);
-					if (kept >= maxChunksPerDocument) {
-						cappedOut++;
-						continue;
-					}
-					chunksPerDocument.put(sourceCode, kept + 1);
-					if (LOGGER.isTraceEnabled()) {
-						LOGGER.trace("<SEARCH_CHUNK document=" + sourceCode + " nr=" + (kept + 1) + ">");
-						LOGGER.trace(chunk.getChunkData());
-						LOGGER.trace("</SEARCH_CHUNK>");
-					}
-					documents.add(new Document(chunk.getChunkData(), chunk.getMetaData()));
-				}
-				if (LOGGER.isDebugEnabled() && cappedOut > 0) {
-					LOGGER.debug("chunkToDocuments(...) agent id:" + getId() + " dropped " + cappedOut
-							+ " chunk(s) over the per-document cap of " + maxChunksPerDocument + " across "
-							+ chunksPerDocument.size() + " source document(s)");
-				}
-			}
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("End chunkToDocuments(...) agent id:" + getId() + " kept " + documents.size()
-						+ " content document(s)");
-			}
-			return documents;
-		} finally {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Disposing the chunking session:" + chunkingSession + " of agent id:" + getId());
-			}
-			chunkingService.disposeChunkingSession(chunkingSession);
+		// The chunking itself (session lifecycle, per-document cap, error chunks) is shared
+		// with the search tools, see SearchResultsChunker.
+		final SearchResultsChunker.LoadedResults loaded = SearchResultsChunker.load(chunkingService, results, params,
+				maxChunksPerDocument, getId(), documentsParallelism, resultsLoading(), openNetworkLoading);
+		final List<Document> documents = loaded.documents();
+		if (!loaded.notLoaded().isEmpty() && notificationSink != null) {
+			// the user is told what could not be read (each one with its reason in the log)
+			notificationSink.next(
+					"Agent: " + getId() + " could not read " + loaded.notLoaded().size() + " of the " + results.size()
+							+ " documents found",
+					INotificationSink.NotificationObject.NotificationType.INFO);
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End chunkToDocuments(...) agent id:" + getId() + " kept " + documents.size()
+					+ " content document(s)");
+		}
+		return documents;
 	}
 
 	/**
@@ -200,33 +180,17 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 	protected ChunkingParams buildSearchChunkingParams(IGConfigurableChatModel agentModel, SearchAgentCommand command,
 			List<String> keywords) {
 		final int topK = command != null ? Math.max(1, command.getTopK()) : 1;
-		final int perDocumentBudget = (int) Math.max(LLM_CHUNK_TOKENS,
+		final int perDocumentBudget = (int) Math.max(SearchResultsChunker.LLM_CHUNK_TOKENS,
 				(agentModel.getContextLength() * DOC_BUDGET_FRACTION) / topK);
 		final int maxNumChunks = Math.min(maxChunksPerDocument,
-				Math.max(1, (int) Math.ceil((perDocumentBudget * 2.0) / LLM_CHUNK_TOKENS)));
-		final TextChunkingSpecs specs = TextChunkingSpecs.of(LLM_CHUNK_TOKENS,
-				TextChunkingSpecs.MIN_CHUNKS_LENGTH_TO_EMBED, maxNumChunks);
-
-		final List<String> matchingKeywords = keywords != null
-				? keywords.stream().filter(k -> k != null && !k.isBlank()).map(String::trim).distinct().toList()
-				: List.of();
-
-		final ChunkingParams params = new ChunkingParams();
-		params.setChunkingSpecs(List.of(specs));
-		params.setEnrichWithMetaData(true);
-		params.setTokensPerChunkSet(DEFAULT_TOKENS_PER_CHUNK_SET);
-		if (!matchingKeywords.isEmpty()) {
-			params.setChunkingPolicy(ChunkingPolicy.MATCHING_CHUNKS_AFTER_THREASHOLD);
-			params.setTokensThreashold(perDocumentBudget);
-			params.setMatchingKeywords(matchingKeywords);
-			params.setKeywordHits(1);
-		} else {
-			params.setChunkingPolicy(ChunkingPolicy.SPLIT_CHUNKS);
-		}
+				Math.max(1, (int) Math.ceil((perDocumentBudget * 2.0) / SearchResultsChunker.LLM_CHUNK_TOKENS)));
+		final ChunkingParams params = SearchResultsChunker.buildChunkingParams(perDocumentBudget, maxNumChunks,
+				keywords);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("buildSearchChunkingParams(...) agent id:" + getId() + " topK:" + topK + " perDocumentBudget:"
 					+ perDocumentBudget + " (tok) maxNumChunks:" + maxNumChunks + " policy:" + params.getChunkingPolicy()
-					+ " matchingKeywords:" + matchingKeywords.size());
+					+ " matchingKeywords:"
+					+ (params.getMatchingKeywords() != null ? params.getMatchingKeywords().size() : 0));
 		}
 		return params;
 	}
@@ -242,8 +206,7 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 			}
 			return List.of();
 		}
-		List<String> keywords = Arrays.stream(command.getCommand().split("\\W+")).map(String::trim)
-				.filter(word -> word.length() >= MIN_KEYWORD_LENGTH).distinct().toList();
+		List<String> keywords = SearchResultsChunker.keywordsFromText(command.getCommand());
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("keywordsFromCommand(...) agent id:" + getId() + " derived " + keywords.size()
 					+ " matching keyword(s)");
@@ -252,5 +215,52 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 			LOGGER.trace("Derived keywords: " + keywords);
 		}
 		return keywords;
+	}
+
+	/**
+	 * Searches one system best effort (see {@link BestEffortSearchCalls}): as the current
+	 * user, within the search calls' timeout, with the call parameters the service's
+	 * client software applies (see {@link ai.gebo.architecture.search.service.ISearchService#appliesRetries()} for who tries
+	 * it again, only when configured). A system
+	 * that could not be searched is added to {@code unavailableSources} (the status
+	 * notices the agents reading the search are told) and told to the user; the search
+	 * goes on with the other systems.
+	 */
+	protected SystemSearchOutcome searchSystem(SearchableSystemMetaData<?, ?> system, boolean serviceAppliesRetries,
+			BestEffortSearchCalls.SearchCall search, INotificationSink notificationSink,
+			List<String> unavailableSources) {
+		BestEffortSearchCalls calls = null;
+		try {
+			calls = runtimeBinder != null ? runtimeBinder.getImplementationOf(BestEffortSearchCalls.class) : null;
+		} catch (RuntimeException e) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No search calls registered, agent id:" + getId() + " uses the default ones", e);
+			}
+		}
+		if (calls == null) {
+			calls = defaultSearchCalls();
+		}
+		final SystemSearchOutcome outcome = calls.search(system, getId(), serviceAppliesRetries, search);
+		if (!outcome.available()) {
+			final String notice = "could not search " + outcome.unavailableNotice();
+			if (!unavailableSources.contains(notice)) {
+				unavailableSources.add(notice);
+			}
+			if (notificationSink != null) {
+				notificationSink.next("Agent: " + getId() + " " + notice,
+						INotificationSink.NotificationObject.NotificationType.INFO);
+			}
+		}
+		return outcome;
+	}
+
+	private static BestEffortSearchCalls defaultCalls = null;
+
+	/** The best effort calls with the default settings, when none is registered. */
+	private static synchronized BestEffortSearchCalls defaultSearchCalls() {
+		if (defaultCalls == null) {
+			defaultCalls = new BestEffortSearchCalls(new SearchCallsConfig());
+		}
+		return defaultCalls;
 	}
 }

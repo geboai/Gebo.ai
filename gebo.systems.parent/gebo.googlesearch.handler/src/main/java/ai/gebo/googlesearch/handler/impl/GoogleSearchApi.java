@@ -15,28 +15,25 @@
 package ai.gebo.googlesearch.handler.impl;
 
 import java.io.UnsupportedEncodingException;
-import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.Duration;
 import java.util.List;
-import java.util.function.BiFunction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.model.ToolContext;
-import org.springframework.ai.tool.ToolCallback;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
-import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
-import ai.gebo.googlesearch.handler.model.GoogleSearchConfig;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.googlesearch.handler.model.GoogleSearchRequest;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResults;
 
@@ -46,10 +43,29 @@ class GoogleSearchApi {
 	static Logger LOGGER = LoggerFactory.getLogger(GoogleSearchApi.class);
 	/** Base URL for Google Custom Search API */
 	private static final String googleSearch = "https://www.googleapis.com/customsearch/v1?key=";
-	/** Descriptive text for logging search operations */
-	static final String RUNNING_A_GOOGLE_SEARCH = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_DESCRIPTION;
-	/** Function name for the search web tool */
-	static final String SEARCH_WEB_WITH_GOOGLE = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_NAME;
+	/** Most results the Custom Search API returns in one call. */
+	static final int MAX_RESULTS_PER_CALL = 10;
+
+	// the Google API is called with an HTTP client of its own, whose connect and read
+	// timeouts are the search calls' ones: it does not hold a search forever
+	private final RestTemplate restTemplate;
+
+	@Autowired
+	GoogleSearchApi(SearchCallsConfig searchCalls) {
+		this(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout());
+	}
+
+	private GoogleSearchApi(Duration connectTimeout, Duration readTimeout) {
+		final SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+		requestFactory.setConnectTimeout(connectTimeout);
+		requestFactory.setReadTimeout(readTimeout);
+		this.restTemplate = new RestTemplate(requestFactory);
+	}
+
+	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
+	GoogleSearchApi using(SearchCallParameters parameters) {
+		return new GoogleSearchApi(parameters.connectTimeout(), parameters.readTimeout());
+	}
 
 	/**
 	 * search with google api documentation:
@@ -73,58 +89,29 @@ class GoogleSearchApi {
 		}
 		String charset = "UTF-8";
 		String language = request.getLanguage();
-		language = "lang_en";
 		String search = request.getQuery();
-		URL url = new URL(googleSearch + URLEncoder.encode(apiKey, charset) + "&cx="
-				+ URLEncoder.encode(customSearchEngineId, charset) + "&q=" + URLEncoder.encode(search, charset) + "&lr"
-				+ URLEncoder.encode(language, charset));
+		StringBuilder address = new StringBuilder(googleSearch).append(URLEncoder.encode(apiKey, charset))
+				.append("&cx=").append(URLEncoder.encode(customSearchEngineId, charset)).append("&q=")
+				.append(URLEncoder.encode(search, charset));
+		// lr restricts the results to a language, as "lang_<code>": only when one is asked
+		if (language != null && !language.isBlank()) {
+			String languageRestrict = language.startsWith("lang_") ? language : "lang_" + language;
+			address.append("&lr=").append(URLEncoder.encode(languageRestrict, charset));
+		}
+		// num is the number of results, 1 to 10 for the Custom Search API
+		if (request.getTopN() != null && request.getTopN() > 0) {
+			address.append("&num=").append(Math.min(MAX_RESULTS_PER_CALL, request.getTopN()));
+		}
+		URL url = new URL(address.toString());
 		if (LOGGER.isDebugEnabled()) {
 			// Never the API key: the logs are read by far more people than the key should be.
 			LOGGER.debug("Google search url:" + url.toString().replace(URLEncoder.encode(apiKey, charset), "***"));
 		}
-		RestTemplate restTemplate = new RestTemplate();
 		URI uri = url.toURI();
 		ResponseEntity<GoogleSearchResults> returned = restTemplate.getForEntity(uri, GoogleSearchResults.class);
 		if (returned.hasBody())
 			return returned.getBody();
 		return new GoogleSearchResults();
-	}
-
-	/**
-	 * Creates a ToolCallback that can be used to perform Google searches.
-	 * 
-	 * @param config Configuration containing API key and Custom Search Engine ID
-	 * @return A ToolCallback that can execute Google searches
-	 */
-	ToolCallback create(GoogleSearchConfig config) {
-		BiFunction<GoogleSearchRequest, ToolContext, GoogleSearchResults> thisFunction = (GoogleSearchRequest request,
-				ToolContext toolContext) -> {
-			GoogleSearchResults results = null;
-
-			LOGGER.info("Begin running google search");
-			KBContext context = LLMtInteractionContextThreadLocal.Context.get();
-			LLMtInteractionContextThreadLocal.CalledFunction calledFunction = new LLMtInteractionContextThreadLocal.CalledFunction();
-			calledFunction.setFunctionName(SEARCH_WEB_WITH_GOOGLE);
-			calledFunction.setFunctionDescription(RUNNING_A_GOOGLE_SEARCH);
-			if (request.getQuery() != null) {
-				calledFunction.setParamsDescription(List.of(request.getQuery()));
-			}
-			if (context != null) {
-				// Add the function call to the current context for tracking
-				context.getCalledFunctions().add(calledFunction);
-			}
-			ToolCallbackDeclarationUtil.addCallToContext(toolContext, calledFunction);
-			try {
-				results = search(config.getApiKey(), config.getCustomSearchEngineId(), request);
-			} catch (Throwable th) {
-				LOGGER.error("Error running google search", th);
-				results = new GoogleSearchResults();
-			}
-			LOGGER.info("End running google search");
-			return results;
-		};
-		return ToolCallbackDeclarationUtil.declare(thisFunction, SEARCH_WEB_WITH_GOOGLE, RUNNING_A_GOOGLE_SEARCH,
-				GoogleSearchRequest.class, GoogleSearchResults.class);
 	}
 
 }

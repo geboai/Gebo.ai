@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -151,7 +152,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 				IGConfigurableChatModel serviceModel = this.chatModelsConfigDao
 						.findByUses(ChatModelsUses.INTERNAL_SERVICES);
 				if (serviceModel != null) {
-					int serviceBudget = serviceModel.getContextLength() / 3;
+					int serviceBudget = IGChatSessionStateShrinkerService.serviceModelContextBudget(serviceModel);
 					if (serviceBudget < tokensBudget) {
 						MinimalChatContext newValue = this.shrinkedMinimalContext(out.getUserChatContextCode(),
 								minimalChatContext, serviceBudget);
@@ -536,24 +537,134 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 		return out;
 	}
 
+	@Override
+	public void prepareMinimalContext(String sessionCode, int tokensBudget) throws LLMConfigException, IOException {
+		final Optional<ShrinkedChatSessionState> shrinked = this.shrinkedStateRepository.findById(sessionCode);
+		if (shrinked.isEmpty() || shrinked.get().getChatHistory() == null) {
+			return;
+		}
+		final MinimalChatContext mc = new MinimalChatContext();
+		mc.setChatHistory(shrinked.get().getChatHistory());
+		if (mc.getTokensSize() <= tokensBudget) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Minimal context of chat {} fits {} tokens: none prepared", sessionCode, tokensBudget);
+			}
+			return;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Preparing the minimal context of chat {} for {} tokens", sessionCode, tokensBudget);
+		}
+		shrinkedMinimalContext(sessionCode, mc, tokensBudget);
+	}
+
+	/**
+	 * The chat's history in the budget: the latest exchanges verbatim (up to the ones the
+	 * chat's own consolidation keeps, as many as fit three quarters of the budget) and a
+	 * summary of the others in the remaining quarter, as the chat's own consolidation
+	 * does. The summary built for the chat's previous request, when it still matches the
+	 * history, is carried forward: only the exchanges it does not cover are summarized.
+	 */
 	private MinimalChatContext doShrinking(String sessionCode, MinimalChatContext mc, int tokensBudget)
 			throws LLMConfigException {
 
 		IGConfigurableChatModel serviceModel = this.chatModelsConfigDao
 				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-		CSSConsolidatedChatHistory consolidated = this.consolidateHistory(mc.getChatHistory().getLatestEntries(),
-				tokensBudget, 0, mc.getChatHistory(), mc.createChatRequestContext(), serviceModel, false);
+		final CSSSimplifiedChatHistory entries = mc.getChatHistory().getLatestEntries();
+		final int summaryTarget = tokensBudget / 4;
+		final int verbatim = verbatimInteractions(entries,
+				this.chatConfig.getLeaveLastInteractionsOnHistoryConsolidation(), tokensBudget - summaryTarget);
+		final CSSConsolidatedChatHistory previous = previousMinimalSummary(sessionCode, entries, tokensBudget);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Minimal context of chat {} for {} tokens: {} exchange(s) verbatim, previous summary {}",
+					sessionCode, tokensBudget, verbatim,
+					previous != null ? "covering " + previous.getLastInteractionPointer() + " exchange(s)" : "none");
+		}
+		CSSConsolidatedChatHistory consolidated = previous != null
+				? this.consolidateHistory(entries, summaryTarget, verbatim, previous, mc.createChatRequestContext(),
+						serviceModel, true)
+				: this.consolidateHistory(entries, summaryTarget, verbatim, mc.getChatHistory(),
+						mc.createChatRequestContext(), serviceModel, false);
 		MinimalChatContext newMinimized = new MinimalChatContext();
 		newMinimized.setChatHistory(consolidated);
 		MinimalChatContextCacheItem item = new MinimalChatContextCacheItem();
 		item.setItem(newMinimized);
-		List<CSSSimplefiedInteraction> latest = mc.getChatHistory().getLatestEntries().getInteractions();
+		List<CSSSimplefiedInteraction> latest = entries.getInteractions();
 		item.setLastRequestId(!latest.isEmpty() ? latest.get(latest.size() - 1).getRequestId() : "EMPTY");
 		item.setUserChatContextCode(sessionCode);
 		item.setTokensBudget(tokensBudget);
 		item.recalculateId();
 		this.minimalChatContextCacheItemRepository.save(item);
+		removeOlderMinimalContexts(sessionCode, tokensBudget, item.getId());
 		return newMinimized;
+	}
+
+	/**
+	 * How many of the latest exchanges stay verbatim: at most {@code maxVerbatim}, as many
+	 * as fit {@code room} tokens.
+	 */
+	static int verbatimInteractions(CSSSimplifiedChatHistory entries, int maxVerbatim, int room) {
+		final List<CSSSimplefiedInteraction> interactions = entries.getInteractions();
+		int count = 0;
+		int size = 0;
+		for (int i = interactions.size() - 1; i >= 0 && count < maxVerbatim; i--) {
+			size += interactions.get(i).getTokensSize();
+			if (size > room) {
+				break;
+			}
+			count++;
+		}
+		return count;
+	}
+
+	/**
+	 * The summary the chat's previous minimal context for this budget made, when it still
+	 * summarizes the first exchanges of the history: the exchange following it (its first
+	 * verbatim one, or the one its request ended) is the same request. Null when none
+	 * matches: the history is summarized from its start.
+	 */
+	private CSSConsolidatedChatHistory previousMinimalSummary(String sessionCode, CSSSimplifiedChatHistory entries,
+			int tokensBudget) {
+		final List<CSSSimplefiedInteraction> interactions = entries.getInteractions();
+		CSSConsolidatedChatHistory best = null;
+		for (MinimalChatContextCacheItem item : this.minimalChatContextCacheItemRepository
+				.findByUserChatContextCode(sessionCode)) {
+			if (!Objects.equals(item.getTokensBudget(), tokensBudget) || item.getItem() == null
+					|| item.getItem().getChatHistory() == null) {
+				continue;
+			}
+			final CSSConsolidatedChatHistory history = item.getItem().getChatHistory();
+			final Integer pointer = history.getLastInteractionPointer();
+			if (history.getConsolidationText() == null || history.getConsolidationText().isEmpty() || pointer == null
+					|| pointer <= 0 || pointer > interactions.size()) {
+				continue;
+			}
+			final List<CSSSimplefiedInteraction> verbatim = history.getLatestEntries() != null
+					? history.getLatestEntries().getInteractions()
+					: List.of();
+			final boolean matches = !verbatim.isEmpty() && pointer < interactions.size()
+					? Objects.equals(verbatim.get(0).getRequestId(), interactions.get(pointer).getRequestId())
+					: Objects.equals(item.getLastRequestId(), interactions.get(pointer - 1).getRequestId());
+			if (matches && (best == null || pointer > best.getLastInteractionPointer())) {
+				best = history;
+			}
+		}
+		return best;
+	}
+
+	/** Removes the chat's minimal contexts for the budget older than the given one. */
+	private void removeOlderMinimalContexts(String sessionCode, int tokensBudget, String keptId) {
+		int removed = 0;
+		for (MinimalChatContextCacheItem item : this.minimalChatContextCacheItemRepository
+				.findByUserChatContextCode(sessionCode)) {
+			if (Objects.equals(item.getTokensBudget(), tokensBudget) && !Objects.equals(item.getId(), keptId)) {
+				this.minimalChatContextCacheItemRepository.delete(item);
+				removed++;
+			}
+		}
+		if (removed > 0 && LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Removed {} older minimal context(s) of chat {} for {} tokens", removed, sessionCode,
+					tokensBudget);
+		}
 	}
 
 }

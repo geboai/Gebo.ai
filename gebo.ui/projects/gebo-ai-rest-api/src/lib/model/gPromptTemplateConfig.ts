@@ -15,6 +15,7 @@ export interface GPromptTemplateConfig {
     description?: string;
     systemPromptTemplate?: string;
     userPromptTemplate: string;
+    toolsResultsPromptTemplate?: string;
     chatHistory: GPromptTemplateConfig.ChatHistoryEnum;
     contextDocuments: GPromptTemplateConfig.ContextDocumentsEnum;
     toolsCalling: GPromptTemplateConfig.ToolsCallingEnum;

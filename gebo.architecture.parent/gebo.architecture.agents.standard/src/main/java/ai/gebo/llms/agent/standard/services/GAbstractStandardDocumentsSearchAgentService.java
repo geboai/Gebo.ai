@@ -160,7 +160,7 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 					LOGGER.trace(command.getCommand());
 					LOGGER.trace("</RANKING_QUERY>");
 				}
-				List<Document> ranked = rankerService.call(documents, command.getCommand(), command.getTopK());
+				List<Document> ranked = rankerService.rankAndRemoveIrrelevant(documents, command.getCommand(), command.getTopK());
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Ranking produced " + (ranked != null ? ranked.size() : 0)
 							+ " document(s) for agent id:" + getId());

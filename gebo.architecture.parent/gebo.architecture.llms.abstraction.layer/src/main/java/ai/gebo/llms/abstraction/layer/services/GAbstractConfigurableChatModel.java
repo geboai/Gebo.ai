@@ -50,6 +50,7 @@ import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -117,6 +118,20 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 */
 	protected final ObservationRegistry observationRegistry;
 	protected static final ObjectMapper mapper = new ObjectMapper();
+	/**
+	 * The tools made for this use of the model (see
+	 * {@link ChatModelConfigOptions#getAdditionalTools()}), declared with the repository
+	 * ones when the configuration enables them.
+	 */
+	protected List<ToolCallback> additionalTools = List.of();
+	/**
+	 * The share of what a model call's messages and tools' definitions leave of the
+	 * context that its tools' results may take.
+	 */
+	public static final double TOOLS_ROOM_SHARE = 2.0d / 3.0d;
+	/** The models already warned of having no known context length, warned once. */
+	private static final java.util.Set<String> UNKNOWN_CONTEXT_LENGTH_WARNED = java.util.concurrent.ConcurrentHashMap
+			.newKeySet();
 
 	protected abstract IGConfigurableChatModel cloneMeWithInjection();
 
@@ -200,12 +215,23 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		this.model = configureModel(config, type, null);
 		Builder builder = ChatClient.builder(configureModel(config, type, null));
 		// Priced through this model's getPricingConditions(), read when each call ends.
-		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions))
+		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions,
+				this::getProviderId))
 				.build();
 	}
 
 	@Override
 	public List<ToolCallback> wrapTools(ReactiveIdentityUtil runAs, ToolCallsListener toolCallListener) {
+		return wrapToolsClosingResults(runAs, toolCallListener, null);
+	}
+
+	/**
+	 * The enabled tools of this model, each closing its results with
+	 * {@code toolsResultsClosing} when not null (see
+	 * {@link GPromptTemplateConfig#getToolsResultsPromptTemplate()}).
+	 */
+	protected List<ToolCallback> wrapToolsClosingResults(ReactiveIdentityUtil runAs,
+			ToolCallsListener toolCallListener, String toolsResultsClosing) {
 		List<String> toolNames = config.getEnabledFunctions();
 		if (toolNames == null)
 			toolNames = List.of();
@@ -213,7 +239,22 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 		List<ToolCallback> wrapped = new ArrayList<>();
 		for (ToolCallback toolCallback : tools) {
-			wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener));
+			wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener, toolsResultsClosing));
+		}
+		// the tools made for this use of the model are not in the repository: without this
+		// they would be executable but never declared to the model
+		int additional = 0;
+		for (ToolCallback toolCallback : additionalTools != null ? additionalTools : List.<ToolCallback>of()) {
+			final String name = toolCallback.getToolDefinition().name();
+			if (toolNames.contains(name) && wrapped.stream().noneMatch(x -> name.equals(x.getToolDefinition().name()))) {
+				wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener, toolsResultsClosing));
+				additional++;
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("wrapTools(...) model:" + getCode() + " declares " + wrapped.size() + " tool(s), " + additional
+					+ " of them made for this use of the model"
+					+ (toolsResultsClosing != null ? ", their results closed by the prompt's text" : ""));
 		}
 		return wrapped;
 	}
@@ -311,6 +352,15 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 */
 	@Override
 	public int getContextLength() {
+		final Integer contextLength = knownContextLength();
+		return contextLength != null ? contextLength : 8192;
+	}
+
+	/**
+	 * The context length the configuration or the model metadata give (less the
+	 * configured maximum generated tokens), null when neither gives one.
+	 */
+	protected Integer knownContextLength() {
 		Integer contextLength = null;
 		if (getConfig() != null) {
 			contextLength = getConfig().getContextLength();
@@ -340,9 +390,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				contextLength = realContextWindow;
 			}
 		}
-		if (contextLength == null || contextLength.intValue() == 0)
-			contextLength = 8192;
-		return contextLength;
+		return contextLength == null || contextLength.intValue() <= 0 ? null : contextLength;
 	}
 
 	/**
@@ -390,15 +438,20 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 		ChatClientRequestSpec reqObject = client.prompt();
 
-		if (prompt.getToolsCalling() == null || prompt.getToolsCalling() == ContextContentRequired.REQUIRED) {
-			reqObject = reqObject.toolCallbacks(wrapTools(runAs, chatContext.getToolCallListener()));
-		} else {
-			reqObject = reqObject.toolCallbacks(List.of());
-		}
+		final boolean toolsCalling = prompt.getToolsCalling() == null
+				|| prompt.getToolsCalling() == ContextContentRequired.REQUIRED;
+		final List<ToolCallback> tools = toolsCalling
+				? wrapToolsClosingResults(runAs, chatContext.getToolCallListener(),
+						createToolsResultsClosing(prompt, params, chatContext))
+				: List.of();
+		reqObject = reqObject.toolCallbacks(tools);
 		// chat histroy in user, assistant format
 		reqObject = reqObject.messages(messages);
 		// tools call environment
 		Map<String, Object> toolContext = chatContext.getToolsContext();
+		if (!tools.isEmpty()) {
+			toolContext = withToolsRoom(toolContext, messages, tools, LOGGER.isDebugEnabled() ? tokens : -1);
+		}
 		if (toolContext != null) {
 			reqObject = reqObject.toolContext(toolContext);
 		}
@@ -406,6 +459,58 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			LOGGER.debug("End prepareCall(" + prompt.getPromptUse() + ", ...,...)");
 		}
 		return new RequestSpec(reqObject, tokens, config != null ? config.getCode() : "<<empty model>>");
+	}
+
+	/**
+	 * The tools context of a model call with tools, carrying the room its context leaves
+	 * to the tools' results (see {@link ToolsTokenBudget}): two thirds ({@link #TOOLS_ROOM_SHARE})
+	 * of what the messages and the tools' definitions leave of the context length, the
+	 * rest left to the answer, the tool calls' arguments and the model's messages
+	 * between the tool rounds. A budget an agent shares through the request context is
+	 * capped to it, never replaced, so the smaller of the two applies. Without a known
+	 * context length no room is set (the 8192 of {@link #getContextLength()} is a guess):
+	 * the tools are left to their own sizes, as before.
+	 *
+	 * @param messagesTokens the tokens of the messages when already counted, -1 when not
+	 * @return a copy of the given tools context (never the caller's map)
+	 */
+	protected Map<String, Object> withToolsRoom(Map<String, Object> toolsContext, List<Message> messages,
+			List<ToolCallback> tools, long messagesTokens) {
+		if (knownContextLength() == null) {
+			if (UNKNOWN_CONTEXT_LENGTH_WARNED.add(String.valueOf(getCode()))) {
+				LOGGER.warn("Chat model " + getCode() + " has no known context length: its tools' results are not "
+						+ "bounded by the room left in its context");
+			}
+			return toolsContext;
+		}
+		final int contextLength = getContextLength();
+		long used = messagesTokens;
+		if (used < 0) {
+			used = 0;
+			for (Message message : messages) {
+				used += ITokensCountable.stringsTokensSize(message.getText());
+			}
+		}
+		long definitions = 0;
+		for (ToolCallback tool : tools) {
+			definitions += ITokensCountable.stringsTokensSize(tool.getToolDefinition().name(),
+					tool.getToolDefinition().description(), tool.getToolDefinition().inputSchema());
+		}
+		final int room = (int) Math.max(0,
+				Math.min(Integer.MAX_VALUE, (long) ((contextLength - used - definitions) * TOOLS_ROOM_SHARE)));
+		final Map<String, Object> withRoom = toolsContext != null ? new HashMap<>(toolsContext) : new HashMap<>();
+		final ToolsTokenBudget shared = ToolsTokenBudget.from(withRoom);
+		if (shared != null) {
+			shared.capTo(room);
+		} else {
+			withRoom.put(ToolsTokenBudget.TOOLS_CONTEXT_KEY, new ToolsTokenBudget(room));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("withToolsRoom(...) model:" + getCode() + " context:" + contextLength + " messages:" + used
+					+ " tools definitions:" + definitions + " (tok) room for " + tools.size() + " tool(s) results:"
+					+ room + " (tok)" + (shared != null ? " capping the shared budget, now " + shared.left() : ""));
+		}
+		return withRoom;
 	}
 
 	protected List<Message> createCompleteHistory(IChatRequestContext chatContext) {
@@ -439,6 +544,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	}
 
+	protected final static String COMPRESSED_HISTORY_ONLY_MESSAGE_CHAT_TEMPLATE = "BEGIN_CONSOLIDATED_HISTORY\r\n{"
+			+ IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM + "}\r\nEND_CONSOLIDATED_HISTORY\r\n";
+
 	protected final static String COMPRESSED_HISTORY_FIRST_MESSAGE_CHAT_TEMPLATE = "BEGIN_CONSOLIDATED_HISTORY\r\n{"
 			+ IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM
 			+ "}\r\nEND_CONSOLIDATED_HISTORY\r\nUSER-QUESTION={" + IChatRequestContext.USER_QUESTION_PROMPT_PARAM
@@ -447,7 +555,18 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	protected List<Message> createCompressedHistory(IChatRequestContext chatContext) {
 		List<Message> messages = new ArrayList<>();
 		String consolidated = chatContext.getConsolidatedHistory();
-		List<IChatSessionEntry> interactions = chatContext.getInteractions();
+		List<IChatSessionEntry> interactions = chatContext.getInteractions() != null ? chatContext.getInteractions()
+				: List.of();
+		if (interactions.isEmpty()) {
+			// only the summary of the older turns is left: it is the whole history
+			PromptTemplate template = new PromptTemplate(COMPRESSED_HISTORY_ONLY_MESSAGE_CHAT_TEMPLATE);
+			template.add(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM, consolidated);
+			messages.add(new UserMessage(template.render()));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("createCompressedHistory(...) chat history is the consolidated summary only");
+			}
+			return messages;
+		}
 		for (int i = 0; i < interactions.size(); i++) {
 			if (i == 0) {
 				String user = interactions.get(0).getUser();
@@ -494,8 +613,56 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		allParams.put(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, chatContext.getActualUserRequest());
 		allParams.put(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM,
 				chatContext.getConsolidatedHistory() != null ? chatContext.getConsolidatedHistory() : "");
-		String content = promptTemplate.render(allParams);
+		String content = promptTemplate.render(withUserLanguage(allParams, chatContext));
 		return new UserMessage(content);
+	}
+
+	/**
+	 * The parameters with the answer's language ({@code {userLanguage}}): the user's
+	 * language detected for the request, or what says to deduce it; a caller's own
+	 * value is kept. Every template of every call may name it, never missing.
+	 */
+	protected static Map<String, Object> withUserLanguage(Map<String, Object> params,
+			IChatRequestContext chatContext) {
+		final Map<String, Object> withLanguage = params != null ? new HashMap<>(params) : new HashMap<>();
+		withLanguage.putIfAbsent(IChatRequestContext.USER_LANGUAGE_PROMPT_PARAM,
+				IChatRequestContext.answerLanguage(chatContext));
+		return withLanguage;
+	}
+
+	/**
+	 * The text closing every tool result of this call: the prompt's tools results
+	 * template, rendered with the parameters of the user message but the documents
+	 * (they are in the user message). The tool calling loop puts the tools' results after
+	 * the user message, so when tools run this is the last text the model reads before
+	 * answering. Null when the prompt has none.
+	 */
+	protected String createToolsResultsClosing(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatContext) {
+		final String template = prompt.getToolsResultsPromptTemplate();
+		if (template == null || template.isBlank()) {
+			return null;
+		}
+		final Map<String, Object> allParams = new HashMap<>(params);
+		allParams.remove(IChatRequestContext.DOCUMENTS_PROMPT_PARAM);
+		allParams.put(IChatRequestContext.USER_QUESTION_PROMPT_PARAM,
+				chatContext != null && chatContext.getActualUserRequest() != null ? chatContext.getActualUserRequest()
+						: "");
+		allParams.put(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM,
+				chatContext != null && chatContext.getConsolidatedHistory() != null
+						? chatContext.getConsolidatedHistory()
+						: "");
+		final String closing = new PromptTemplate(template).render(withUserLanguage(allParams, chatContext));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("createToolsResultsClosing(...) prompt:" + prompt.getPromptUse() + " closes the tools' results"
+					+ " with " + closing.length() + " character(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<TOOLS_RESULTS_PROMPT>");
+			LOGGER.trace(closing);
+			LOGGER.trace("</TOOLS_RESULTS_PROMPT>");
+		}
+		return closing;
 	}
 
 	protected String createDocumentsRendering(Object object) {
@@ -528,7 +695,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			IChatRequestContext chatContext) {
 		String systemTemplate = prompt.getSystemPromptTemplate();
 		PromptTemplate template = new PromptTemplate(systemTemplate);
-		String content = template.render(params);
+		String content = template.render(withUserLanguage(params, chatContext));
 		List<String> rules = chatContext != null ? chatContext.getRulesToFollow() : null;
 		if (rules != null && !rules.isEmpty()) {
 			StringBuilder withRules = new StringBuilder(content);
@@ -716,7 +883,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("doWithChatModel() handing out the usage recording raw model of code=" + getCode());
 		}
-		return chatModelCalling.call(usageAdvisorFactory.recording(model, config, this::getPricingConditions));
+		return chatModelCalling.call(usageAdvisorFactory.recording(model, config, this::getPricingConditions,
+				this::getProviderId));
 	}
 
 	@Override
@@ -738,6 +906,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				modelConfigClone.setTopP(configOptions.getTopP());
 			}
 			IGConfigurableChatModel handler = cloneMeWithInjection();
+			if (handler instanceof GAbstractConfigurableChatModel clone && configOptions.getAdditionalTools() != null) {
+				clone.additionalTools = List.copyOf(configOptions.getAdditionalTools());
+			}
 			if (handler instanceof IGProviderDealPricedModel priced) {
 				// The clone is priced like this model, by its provider deal; best effort.
 				try {
@@ -757,7 +928,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 						.builder(configurableChatModel.configureModel(modelConfigClone, type,
 								configOptions.getToolCallingManager()))
 						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone,
-								configurableChatModel::getPricingConditions))
+								configurableChatModel::getPricingConditions, configurableChatModel::getProviderId))
 						.build();
 			} else
 				throw new IllegalStateException(

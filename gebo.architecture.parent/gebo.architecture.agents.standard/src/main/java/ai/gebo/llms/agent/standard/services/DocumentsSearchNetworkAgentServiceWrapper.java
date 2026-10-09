@@ -1,6 +1,5 @@
 package ai.gebo.llms.agent.standard.services;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,9 @@ import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.model.SystemSearchOutcome;
 import ai.gebo.architecture.search.service.ISearchService;
+import ai.gebo.architecture.search.model.SearchResultsLoading;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -45,13 +46,19 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 	public static final String SEARCH_AGENT = "SearchAgent";
 	private final ISearchService<?> wrappedSearchService;
 
+	/** Its results are loaded as its search service says. */
+	@Override
+	protected SearchResultsLoading resultsLoading() {
+		return wrappedSearchService.resultsLoading();
+	}
+
 	public DocumentsSearchNetworkAgentServiceWrapper(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGDocumentContentRendererProvider rendererFactory, IDocumentsChunkService chunkingService,
-			IGRankerService rankerService, int maxChunksPerDocument, ISearchService<?> wrappedSearchService) {
+			IGRankerService rankerService, int maxChunksPerDocument, int documentsParallelism, ISearchService<?> wrappedSearchService) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
-				rendererFactory, chunkingService, rankerService, maxChunksPerDocument);
+				rendererFactory, chunkingService, rankerService, maxChunksPerDocument, documentsParallelism);
 		this.wrappedSearchService = wrappedSearchService;
 	}
 
@@ -88,6 +95,18 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
 			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
 			INotificationSink notificationSink) throws AgentException {
+		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
+				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, new ArrayList<>());
+	}
+
+	@Override
+	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
+			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
+			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
+			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
+			INotificationSink notificationSink, List<String> unavailableSources) throws AgentException {
 		final SearchAgentCommand command = msg.getPayload();
 		final int topK = retrievalTopK(command);
 		if (LOGGER.isDebugEnabled()) {
@@ -116,18 +135,24 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 						keywords.addAll(query.getRelevantKeywords());
 					}
 					for (SearchableSystemMetaData system : wrappedSearchService.getSearchableSystems()) {
-						List<SearchResult> systemResults = wrappedSearchService.search(query, system, topK);
-						if (LOGGER.isDebugEnabled()) {
-							LOGGER.debug("Search on system:" + system.getCode() + " returned "
-									+ (systemResults != null ? systemResults.size() : 0) + " result(s)");
+						final SystemSearchOutcome outcome = searchSystem(system,
+								wrappedSearchService.appliesRetries(),
+								parameters -> wrappedSearchService.search(query, system, topK, parameters),
+								notificationSink, unavailableSources);
+						if (!outcome.available()) {
+							continue;
 						}
-						results.addAll(systemResults);
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Search on system:" + system.getCode() + " returned " + outcome.results().size()
+									+ " result(s)");
+						}
+						results.addAll(outcome.results());
 					}
 				}
 			} else if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Query extraction produced no search query for agent id:" + getId());
 			}
-		} catch (LLMConfigException | IOException | SearchServiceException e) {
+		} catch (LLMConfigException | SearchServiceException e) {
 			throw new AgentException("Error executing search agent " + getId(), e);
 		}
 		// Prefer the LLM-generated relevant keywords; fall back to the command text.

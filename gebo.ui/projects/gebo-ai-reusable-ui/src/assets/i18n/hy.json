@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "Խորը որոնում/Jira որոնում"
       },
-      "PURE_SEARCH": {
-        "label": "Օգնությամբ որոնում"
-      },
       "imageGeneration": {
         "label": "Պատկերի գեներացում"
       }

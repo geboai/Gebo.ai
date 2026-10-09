@@ -7,7 +7,10 @@ import java.util.Map;
 
 import org.springframework.ai.document.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ai.gebo.architecture.ai.model.ITokensCountable;
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
@@ -16,6 +19,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
+import ai.gebo.llms.chat.abstraction.layer.session.model.IChatSessionEntryDocuments;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,9 +39,21 @@ public class LLMChatRequestResources implements ITokensCountable {
 	private CSSConsolidatedChatHistory chathistory = null;
 	private GeboChatRequest currentRequest = null;
 	private LLMRequestGenerationPolicy generationPolicy;
+	/**
+	 * The recorder of every tool called while answering the current request, handed to
+	 * the model calls through the request contexts; set by the owner of the response
+	 * (the pipeline executor), never persisted.
+	 */
+	@JsonIgnore
+	private transient ToolCallsListener toolCallsListener = null;
+
 	// Request id -> note appended to that answer in the history shown to the model.
 	private Map<String, String> answerFeedbackNotes = new HashMap<String, String>();
 	private List<String> rulesToFollow = new ArrayList<String>();
+	// The codes of the knowledge bases of the chat (its chat profile's), given to the
+	// tools of every model call of this request; computed per request, never persisted.
+	@JsonIgnore
+	private transient List<String> availableKnowledgeBaseCodes = null;
 
 	public LLMChatRequestResources(AIDocumentsSet chatWithDocuments, AIDocumentsSet retrievedDocuments,
 			AIDocumentsSet uploadedDocuments, AIDocumentsSet llmGeneratedDocuments,
@@ -52,8 +68,27 @@ public class LLMChatRequestResources implements ITokensCountable {
 		this.generationPolicy = generationPolicy;
 	}
 
+	/**
+	 * Takes the values the session lifecycle gives each request (the rules to follow,
+	 * the feedback notes of the answers, the tool calls recorder, the knowledge bases of
+	 * the chat) from the resources of the same request: for resources rebuilt from
+	 * another set, which would otherwise lose them.
+	 */
+	public void copyRequestValuesFrom(LLMChatRequestResources request) {
+		if (request == null) {
+			return;
+		}
+		this.rulesToFollow = request.rulesToFollow != null ? new ArrayList<String>(request.rulesToFollow)
+				: new ArrayList<String>();
+		this.answerFeedbackNotes = request.answerFeedbackNotes != null
+				? new HashMap<String, String>(request.answerFeedbackNotes)
+				: new HashMap<String, String>();
+		this.toolCallsListener = request.toolCallsListener;
+		this.availableKnowledgeBaseCodes = request.availableKnowledgeBaseCodes;
+	}
+
 	@AllArgsConstructor
-	static final class InteractionWrapper implements IChatSessionEntry {
+	static final class InteractionWrapper implements IChatSessionEntry, IChatSessionEntryDocuments {
 		CSSSimplefiedInteraction interaction = null;
 		String feedbackNote = null;
 
@@ -66,8 +101,22 @@ public class LLMChatRequestResources implements ITokensCountable {
 		@Override
 		public String getAssistant() {
 
-			String assistant = interaction.getAssistant() != null ? interaction.getAssistant() : "";
+			// the answer as the user read it: the documents it rested on are told apart (see
+			// getDocumentsRef), and a note naming them an answer copied is not given again
+			String assistant = interaction.getAssistant() != null
+					? CSSSimplefiedInteraction.withoutDocumentsNotes(interaction.getAssistant())
+					: "";
 			return feedbackNote != null ? assistant + feedbackNote : assistant;
+		}
+
+		@Override
+		public List<GResponseDocumentRef> getDocumentsRef() {
+			return interaction.getDocumentsRef() != null ? interaction.getDocumentsRef() : List.of();
+		}
+
+		@Override
+		public List<String> getListedDocumentNames() {
+			return interaction.getListedDocumentNames() != null ? interaction.getListedDocumentNames() : List.of();
 		}
 	}
 
@@ -102,13 +151,17 @@ public class LLMChatRequestResources implements ITokensCountable {
 		}
 		@Override
 		public ToolCallsListener getToolCallListener() {
-			
-			return null;
+			return toolCallsListener;
 		}
 
 		@Override
 		public List<String> getRulesToFollow() {
 			return rulesToFollow != null ? rulesToFollow : List.of();
+		}
+
+		@Override
+		public String getUserLanguage() {
+			return currentRequest != null ? currentRequest.getUserLanguage() : null;
 		}
 
 		@Override
@@ -140,8 +193,22 @@ public class LLMChatRequestResources implements ITokensCountable {
 
 		@Override
 		public Map<String, Object> getToolsContext() {
-
-			return new HashMap<String, Object>();
+			// The request id lets the tools keep request-scoped state across their calls
+			// (e.g. the search tools not returning twice the same content in one answer).
+			Map<String, Object> toolsContext = new HashMap<String, Object>();
+			if (currentRequest != null && currentRequest.getId() != null) {
+				toolsContext.put(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, currentRequest.getId());
+			}
+			// the knowledge bases the tools may search, browse and read: the chat's
+			if (availableKnowledgeBaseCodes != null) {
+				toolsContext.put(ToolCallbackDeclarationUtil.CHAT_KNOWLEDGE_BASES_CONTEXT_KEY,
+						List.copyOf(availableKnowledgeBaseCodes));
+			}
+			// the tools calling a model of their own name the answer's language to it
+			if (currentRequest != null && currentRequest.getUserLanguage() != null) {
+				toolsContext.put(ToolCallbackDeclarationUtil.USER_LANGUAGE_CONTEXT_KEY, currentRequest.getUserLanguage());
+			}
+			return toolsContext;
 		}
 
 		@Override

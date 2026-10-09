@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "Padziļinātā meklēšana/Jira Search"
       },
-      "PURE_SEARCH": {
-        "label": "Palīdzētā meklēšana"
-      },
       "imageGeneration": {
         "label": "Attēlu ģenerēšana"
       }

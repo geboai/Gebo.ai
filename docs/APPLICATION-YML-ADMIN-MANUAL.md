@@ -586,6 +586,14 @@ large-scale ingestion tuning.
 |---|---|---|---|
 | `ai.gebo.rag-threashold-autotune.config.enabled` | boolean | `true` | Periodically re-computes optimal RAG similarity thresholds per vector store / embedding model / knowledge base, by sampling document fragments, generating synthetic questions, and rating match quality. |
 | `ai.gebo.agents.standard.enabled` | boolean | `true` | Enables the built-in standard document-search agents, i.e. the default network of agents. On unless explicitly set to `false`. |
+| `ai.gebo.agents.standard.deep-search-tools.enabled` | boolean | `true` | Exposes the deep search tools (`deepSearchKnowledgeBase`, `deepSearchWeb`, `deepSearch<Product>`) to the agents operating their own tools, such as the agentic chat. |
+| `ai.gebo.agents.standard.deep-search-tools.max-analysis-tokens` | int | `16000` | Safety cap, in tokens, of the analysis a deep search tool returns. Its length is asked to the model through the depth the agent chooses; this only cuts a runaway analysis. |
+| `ai.gebo.agents.standard.deep-search-tools.max-deep-searches-per-request` | int | `8` | Deep searches a single user request can make, whatever the sources (a value that is not positive means the default). One more is refused, and the agent is told to answer with what it already has. |
+| `ai.gebo.agents.standard.deep-search-tools.coverage.gate-enabled` | boolean | `true` | A deep search reports its coverage: documents found, used and left unread, fragments read of each, the yield of each search, the documents of the chat's knowledge bases no search reached (reported, never judged). When it is thin for an analysis (the analysis reports something missing, documents were left unread, its sources were read in part, or it rests on too few documents), the agentic chats (with and without knowledge base) discard once an answer written on it that no search of the same kind of source completed, and the agent completes the coverage before answering. On the last iteration the answer is shown anyway. Off, the coverage is only reported. A FOCUSED deep search is never thin. |
+| `ai.gebo.agents.standard.deep-search-tools.coverage.min-documents-used` | int | `2` | The coverage is thin when the analysis rests on fewer documents than this, out of at least `min-documents-found` documents it used or left unread (the documents judged irrelevant do not count). |
+| `ai.gebo.agents.standard.deep-search-tools.coverage.min-documents-found` | int | `3` | Documents used or left unread by the analysis before `min-documents-used` applies. |
+| `ai.gebo.agents.standard.deep-search-tools.coverage.barely-read-fragments` | int | `2` | Knowledge base only (its documents can be read whole): a source read in at most this many fragments of a longer document is read in part, and named for a full read. |
+| `ai.gebo.agents.standard.deep-search-tools.coverage.barely-read-share` | double | `0.5` | Knowledge base only: the coverage is thin when more than this share of the sources were read in part (a value outside 0..1 means the default). |
 | `ai.gebo.chatpipes.defaultPipelineStepIsChatAgent` | boolean | `true` | **Currently has no effect** - the value is read and never used. The behaviour it describes (agentic flow vs. the LLM routing/decision step) is governed by `ai.gebo.agents.standard.enabled` instead. See [`CHAT-PIPELINE-ROUTING-ARCHITECTURE.md`](./CHAT-PIPELINE-ROUTING-ARCHITECTURE.md) §8. |
 
 ## 19. Web search tool (Google Custom Search)
@@ -602,6 +610,43 @@ Shipped **commented out**, and for good reason beyond being optional: `enabled`/
 codebase — Google Search credentials are configured through the admin UI and persisted to
 MongoDB (`GoogleSearchConfigDaoImpl`), not through this file. Leave this block commented; editing
 it has no effect either way.
+
+## 19b. Loading the results of an open network (web search)
+
+Once a search has given its pool of candidates, each search service says how its results are
+loaded. Systems sized to answer (Confluence, SharePoint, Jira, Google Drive, the connector
+microservices) load a few results at a time (`ai.gebo.agents.standard.search-documents-parallelism`),
+each within 60 s. The web search providers (Google, Brave, SerpApi, Tavily, SearXNG) load their
+pages as an open network: at once, grouped by host, each page and the whole loading within a
+deadline. The deep search tools, the search tools and the search agents all apply it.
+
+```yaml
+ai.gebo.search.open-network-loading:
+  capped: false
+  candidates-cap: 20
+  per-page-deadline-seconds: 60
+  loading-phase-deadline-seconds: 60
+  per-host-concurrency: 2
+  per-host-pause-millis: 500
+  per-host-failures-before-skip: 2
+```
+
+| Key | Type | Default | Meaning |
+|---|---|---|---|
+| `ai.gebo.search.open-network-loading.capped` | boolean | `false` | When `true`, only the first `candidates-cap` candidates of the pool are loaded; when `false`, all of them. |
+| `ai.gebo.search.open-network-loading.candidates-cap` | int | `20` | The candidates loaded when `capped`, in the order the search gave them. |
+| `ai.gebo.search.open-network-loading.per-page-deadline-seconds` | int | `60` | Most time one page may take to be loaded and read. |
+| `ai.gebo.search.open-network-loading.loading-phase-deadline-seconds` | int | `60` | Most time the whole loading may take: the pages that have not arrived by then are not read. |
+| `ai.gebo.search.open-network-loading.per-host-concurrency` | int | `2` | Pages of the same host loaded at the same time. |
+| `ai.gebo.search.open-network-loading.per-host-pause-millis` | long | `500` | Pause between two requests to the same host (`0` for none). |
+| `ai.gebo.search.open-network-loading.per-host-failures-before-skip` | int | `2` | Failed pages of a host (not answering, refused, unreadable) after which its other pages are not requested. |
+
+A value that is not a positive number means the default. Every page not loaded (with its reason:
+not within its deadline, its site skipped, no readable content, the loading phase ended, beyond the
+cap), not read by the analysis or judged not relevant is told to the agent in the tool result
+(`documentsNotRead`) and is never among the answer's documents. The pages are loaded on the
+application's thread pool: a page past its deadline keeps its thread until the HTTP read timeout
+(`ai.gebo.search.calls.http-read-timeout-seconds`).
 
 ## 20. User workflows — activation, password reset, outbound mail
 

@@ -10,35 +10,29 @@
 package ai.gebo.searxngsearch.handler.impl;
 
 import java.net.URI;
-import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import java.util.List;
-import java.util.function.BiFunction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.model.ToolContext;
-import org.springframework.ai.tool.ToolCallback;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
-import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import ai.gebo.searxngsearch.handler.model.SearxngApiResponse;
 import ai.gebo.searxngsearch.handler.model.SearxngApiResponse.SearxngApiResult;
-import ai.gebo.searxngsearch.handler.model.SearxngSearchConfig;
 import ai.gebo.searxngsearch.handler.model.SearxngSearchRequest;
 import ai.gebo.searxngsearch.handler.model.SearxngSearchResultItem;
 import ai.gebo.searxngsearch.handler.model.SearxngSearchResults;
-import lombok.AllArgsConstructor;
 
 /**
  * Thin REST client for a self-hosted SearXNG instance ({@code format=json}) and
@@ -46,14 +40,31 @@ import lombok.AllArgsConstructor;
  * bearer token. Query is properly percent-encoded.
  */
 @Service
-@AllArgsConstructor
 public class SearxngSearchApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SearxngSearchApi.class);
-	static final String SEARCH_WEB_WITH_SEARXNG = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_NAME;
-	static final String RUNNING_A_SEARXNG_SEARCH = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_DESCRIPTION;
 	private static final int DEFAULT_LIMIT = 5;
 
 	private final RestTemplateWrapperService restTemplateService;
+
+	/**
+	 * The provider is called with an HTTP client of its own, whose connect and read
+	 * timeouts are the search calls' ones (see {@link SearchCallsConfig}): a provider not
+	 * answering on a sloppy network does not hold the search forever.
+	 */
+	@Autowired
+	public SearxngSearchApi(SearchCallsConfig searchCalls) {
+		this(RestTemplateWrapperService.withTimeouts(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
+	}
+
+	SearxngSearchApi(RestTemplateWrapperService restTemplateService) {
+		this.restTemplateService = restTemplateService;
+	}
+
+	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
+	SearxngSearchApi using(SearchCallParameters parameters) {
+		return new SearxngSearchApi(
+				RestTemplateWrapperService.withTimeouts(parameters.connectTimeout(), parameters.readTimeout()));
+	}
 
 	private static String searchEndpoint(String baseUrl) {
 		String base = baseUrl.trim();
@@ -125,31 +136,4 @@ public class SearxngSearchApi {
 		return out;
 	}
 
-	ToolCallback create(SearxngSearchConfig config) {
-		BiFunction<SearxngSearchRequest, ToolContext, SearxngSearchResults> thisFunction = (request, toolContext) -> {
-			SearxngSearchResults results = null;
-			LOGGER.info("Begin running searxng search");
-			KBContext context = LLMtInteractionContextThreadLocal.Context.get();
-			LLMtInteractionContextThreadLocal.CalledFunction calledFunction = new LLMtInteractionContextThreadLocal.CalledFunction();
-			calledFunction.setFunctionName(SEARCH_WEB_WITH_SEARXNG);
-			calledFunction.setFunctionDescription(RUNNING_A_SEARXNG_SEARCH);
-			if (request.getQuery() != null) {
-				calledFunction.setParamsDescription(List.of(request.getQuery()));
-			}
-			if (context != null) {
-				context.getCalledFunctions().add(calledFunction);
-			}
-			ToolCallbackDeclarationUtil.addCallToContext(toolContext, calledFunction);
-			try {
-				results = search(config.getBaseUrl(), config.getApiKey(), request);
-			} catch (Throwable th) {
-				LOGGER.error("Error running searxng search", th);
-				results = new SearxngSearchResults();
-			}
-			LOGGER.info("End running searxng search");
-			return results;
-		};
-		return ToolCallbackDeclarationUtil.declare(thisFunction, SEARCH_WEB_WITH_SEARXNG, RUNNING_A_SEARXNG_SEARCH,
-				SearxngSearchRequest.class, SearxngSearchResults.class);
-	}
 }

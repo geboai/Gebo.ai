@@ -10,35 +10,29 @@
 package ai.gebo.serpapisearch.handler.impl;
 
 import java.net.URI;
-import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import java.util.List;
-import java.util.function.BiFunction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.model.ToolContext;
-import org.springframework.ai.tool.ToolCallback;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
-import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import ai.gebo.serpapisearch.handler.model.SerpapiApiResponse;
 import ai.gebo.serpapisearch.handler.model.SerpapiApiResponse.SerpapiOrganicResult;
-import ai.gebo.serpapisearch.handler.model.SerpapiSearchConfig;
 import ai.gebo.serpapisearch.handler.model.SerpapiSearchRequest;
 import ai.gebo.serpapisearch.handler.model.SerpapiSearchResultItem;
 import ai.gebo.serpapisearch.handler.model.SerpapiSearchResults;
-import lombok.AllArgsConstructor;
 
 /**
  * Thin REST client for SerpApi (search.json) + the LLM tool factory. SerpApi
@@ -46,16 +40,33 @@ import lombok.AllArgsConstructor;
  * The query is percent-encoded via {@code encode().build()}.
  */
 @Service
-@AllArgsConstructor
 public class SerpapiSearchApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SerpapiSearchApi.class);
 	public static final String SERPAPI_SEARCH_URL = "https://serpapi.com/search.json";
-	static final String SEARCH_WEB_WITH_SERPAPI = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_NAME;
-	static final String RUNNING_A_SERPAPI_SEARCH = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_DESCRIPTION;
 	private static final int DEFAULT_NUM = 5;
 	private static final String DEFAULT_ENGINE = "google";
 
 	private final RestTemplateWrapperService restTemplateService;
+
+	/**
+	 * The provider is called with an HTTP client of its own, whose connect and read
+	 * timeouts are the search calls' ones (see {@link SearchCallsConfig}): a provider not
+	 * answering on a sloppy network does not hold the search forever.
+	 */
+	@Autowired
+	public SerpapiSearchApi(SearchCallsConfig searchCalls) {
+		this(RestTemplateWrapperService.withTimeouts(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
+	}
+
+	SerpapiSearchApi(RestTemplateWrapperService restTemplateService) {
+		this.restTemplateService = restTemplateService;
+	}
+
+	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
+	SerpapiSearchApi using(SearchCallParameters parameters) {
+		return new SerpapiSearchApi(
+				RestTemplateWrapperService.withTimeouts(parameters.connectTimeout(), parameters.readTimeout()));
+	}
 
 	SerpapiApiResponse callApi(String apiKey, String query, Integer topN, String engine, String gl, String hl,
 			String tbs) throws GeboRestIntegrationException {
@@ -108,31 +119,4 @@ public class SerpapiSearchApi {
 		return out;
 	}
 
-	ToolCallback create(SerpapiSearchConfig config) {
-		BiFunction<SerpapiSearchRequest, ToolContext, SerpapiSearchResults> thisFunction = (request, toolContext) -> {
-			SerpapiSearchResults results = null;
-			LOGGER.info("Begin running serpapi search");
-			KBContext context = LLMtInteractionContextThreadLocal.Context.get();
-			LLMtInteractionContextThreadLocal.CalledFunction calledFunction = new LLMtInteractionContextThreadLocal.CalledFunction();
-			calledFunction.setFunctionName(SEARCH_WEB_WITH_SERPAPI);
-			calledFunction.setFunctionDescription(RUNNING_A_SERPAPI_SEARCH);
-			if (request.getQuery() != null) {
-				calledFunction.setParamsDescription(List.of(request.getQuery()));
-			}
-			if (context != null) {
-				context.getCalledFunctions().add(calledFunction);
-			}
-			ToolCallbackDeclarationUtil.addCallToContext(toolContext, calledFunction);
-			try {
-				results = search(config.getApiKey(), request);
-			} catch (Throwable th) {
-				LOGGER.error("Error running serpapi search", th);
-				results = new SerpapiSearchResults();
-			}
-			LOGGER.info("End running serpapi search");
-			return results;
-		};
-		return ToolCallbackDeclarationUtil.declare(thisFunction, SEARCH_WEB_WITH_SERPAPI, RUNNING_A_SERPAPI_SEARCH,
-				SerpapiSearchRequest.class, SerpapiSearchResults.class);
-	}
 }

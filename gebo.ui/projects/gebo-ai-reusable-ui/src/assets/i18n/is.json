@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "Djúpleit/Jira leit"
       },
-      "PURE_SEARCH": {
-        "label": "Aðstoð með leit"
-      },
       "imageGeneration": {
         "label": "Myndagerð"
       }

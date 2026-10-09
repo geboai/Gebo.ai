@@ -10,9 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import org.springframework.beans.factory.ObjectProvider;
+
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -23,6 +27,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
+import ai.gebo.llms.chat.abstraction.layer.services.UserLanguageDetection;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineConfiguration;
@@ -46,6 +51,7 @@ import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.chat.pipelines.service.SinkUIEmitterImpl;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.ReactiveIdentityUtil;
+import ai.gebo.system.ingestion.IGLanguageDetector;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import reactor.core.publisher.Flux;
@@ -62,7 +68,29 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	protected final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	protected final ChatProfilesRepository chatProfilesRepository;
 	protected final IGeboThreadManager threadManager;
+	/**
+	 * The platform's language detector (the one the ingestion tags the documents with),
+	 * naming the language of each user's message for every prompt of the request;
+	 * nothing where it is not deployed, the prompts then ask the model to deduce it.
+	 */
+	protected final ObjectProvider<IGLanguageDetector> languageDetector;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ChatPipelinesExecutorImpl.class);
+
+	/**
+	 * Sets on the request the language its message is written in, when the detector is
+	 * deployed and trusts its detection (see {@link UserLanguageDetection}).
+	 */
+	protected void detectUserLanguage(GeboChatRequest request) {
+		if (request == null || request.getUserLanguage() != null) {
+			return;
+		}
+		final IGLanguageDetector detector = languageDetector != null ? languageDetector.getIfAvailable() : null;
+		request.setUserLanguage(UserLanguageDetection.of(detector, request.getQuery()));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Request:" + request.getId() + " user's language:" + request.getUserLanguage()
+					+ (detector == null ? " (no language detector deployed)" : ""));
+		}
+	}
 
 	protected void add(ChatPipelineExecutionRuntimeData runtimeData, IChatPipelineStepRuntimeData stepdata) {
 		runtimeData.getExecutedSteps().add(stepdata);
@@ -83,6 +111,9 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 			ISinkUIEmitter emitter, LinkedHashMap<String, Object> environment, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, String pipelineCode, boolean streaming)
 			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
+		// the language of the user's own message, detected once for every step, agent and
+		// tool of the request: the prompts name it as the answer's language
+		detectUserLanguage(request);
 		ChatPipelineConfiguration config = getCfgOrDefault(pipelineCode);
 		IChatPipelineStepService firstService = getStep(config.getStepInputId());
 		IChatPipelineStepService routerService = getStep(config.getStepRouterId());
@@ -90,7 +121,16 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		resources = this.chatSessionLifecycleService.startRequest(request, chatModel,
 				LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
 		MinimalChatContext minimalChatContext = this.chatSessionLifecycleService.getMinimalChatContext(request,
-				serviceModel.getContextLength() / 3);
+				IGChatSessionStateShrinkerService.serviceModelContextBudget(serviceModel));
+		// One recorder for every tool called while answering this request, by any step
+		// or agent: it fills the response's called functions as the calls happen, so the
+		// response carries them whenever and wherever it is saved or streamed.
+		final ToolCallsListener requestToolCalls = ToolCallsListener.appendingTo(response.getCalledFunctions());
+		resources.setToolCallsListener(requestToolCalls);
+		minimalChatContext.setToolCallsListener(requestToolCalls);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Recording the tool calls of request:" + request.getId() + " into its response");
+		}
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(config,
 				chatModel.getContextLength(), resources, response, minimalChatContext, streaming);
 		if (environment != null) {

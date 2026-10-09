@@ -19,9 +19,11 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.mcpclients.model.MCPClientConfig;
 import ai.gebo.architecture.mcpclients.model.MCPTool;
+import ai.gebo.architecture.mcpclients.model.MCPTransportType;
 import ai.gebo.architecture.mcpclients.repository.McpClientConfigRepository;
 import ai.gebo.architecture.mcpclients.service.MCPToolsExporter;
 import ai.gebo.security.services.IGSecurityService;
@@ -105,6 +107,42 @@ public class MCPToolsExporterImpl implements MCPToolsExporter {
 			LOGGER.error(ERROR_EXPORTING_MCP_TOOLS, t);
 		}
 		return callbacks;
+	}
+
+	/**
+	 * An MCP tool sends what the model gives it to its external MCP server: the server
+	 * it is exported from (among the ones the current identity may use).
+	 */
+	@Override
+	public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
+		for (ToolCallback callback : getToolCallbacks()) {
+			if (callback instanceof McpRemoteToolCallback remote
+					&& remote.getToolDefinition().name().equals(toolName)) {
+				return List.of(serverTarget(remote.getConfig(), toolName));
+			}
+		}
+		return List.of();
+	}
+
+	/** The MCP server of a configuration, as a data-flow target. */
+	static ToolDataFlowTarget serverTarget(MCPClientConfig config, String toolName) {
+		final String product = "MCP server " + safeCode(config);
+		return new ToolDataFlowTarget(ToolDataFlowTarget.Kind.MCP_SERVER, safeCode(config), product, locatorOf(config),
+				config.getSecretCode(), "MCP tool " + toolName + ": arguments sent to " + product);
+	}
+
+	/**
+	 * Where the server is reached: its endpoint URL, or the command started for a stdio
+	 * server (its arguments are left out, they may carry credentials).
+	 */
+	static String locatorOf(MCPClientConfig config) {
+		if (config.getTransportType() == MCPTransportType.STDIO) {
+			return config.getStdioCommand() != null ? "stdio:" + config.getStdioCommand() : "stdio";
+		}
+		final String base = config.getBaseUrl() != null ? config.getBaseUrl() : "";
+		final String path = config.getTransportType() == MCPTransportType.SSE_LEGACY ? config.getSseEndpoint()
+				: config.getMcpEndpoint();
+		return path != null ? base + path : base;
 	}
 
 	private void addVisibleToolsOf(MCPClientConfig config, List<ToolCallback> callbacks) {

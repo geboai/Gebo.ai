@@ -52,6 +52,11 @@ class McpRemoteToolCallback implements IGExternalToolCallback {
 				.inputSchema(isBlank(inputSchema) ? EMPTY_OBJECT_SCHEMA : inputSchema).build();
 	}
 
+	/** The MCP server configuration this tool is called on. */
+	MCPClientConfig getConfig() {
+		return config;
+	}
+
 	@Override
 	public ToolDefinition getToolDefinition() {
 		return toolDefinition;

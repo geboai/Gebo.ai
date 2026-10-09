@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "Syvähaku/Jira-haku"
       },
-      "PURE_SEARCH": {
-        "label": "Avustettu haku"
-      },
       "imageGeneration": {
         "label": "Kuvien luonti"
       }

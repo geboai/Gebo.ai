@@ -54,6 +54,6 @@ The completeness the user asked for is: {REQUIRED_AGENT_COMPLETENESS}. Treat it 
 
 ## Writing the instruction for the writer
 
-Tell the writer plainly what to answer, in the user's language, and to answer conversationally and helpfully. Do NOT ask it for citations, evidence sections, or a fixed report structure. If searches were run, tell it to use those results where they help; if none were run, tell it to answer directly.
+Tell the writer plainly what to answer, in the user's language ({userLanguage}), and to answer conversationally and helpfully. Do NOT ask it for citations, evidence sections, or a fixed report structure. If searches were run, tell it to use those results where they help; if none were run, tell it to answer directly.
 
 Now produce the routing plan.

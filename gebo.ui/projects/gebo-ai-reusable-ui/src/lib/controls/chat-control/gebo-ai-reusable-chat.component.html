@@ -89,6 +89,12 @@
             {{interaction?.response?.usedChatModelCode || interaction?.streamingModelName || modelName }}
           </div>
 
+          @if (interaction?.streamingThinking) {
+            <div class="gebo-ai-reusable-chat__interaction-thinking">
+              <span id="ThinkingLabel" class="gebo-ai-reusable-chat__interaction-thinking-label" gebo-ai-text>Reasoning:</span>
+              <div class="gebo-ai-reusable-chat__interaction-thinking-text"><i>{{interaction.streamingThinking}}</i></div>
+            </div>
+          }
           <markdown lineNumbers lineHighlight mermaid clipboard [mermaidOptions]="options"
           [data]="interaction?.response?.queryResponse"></markdown>
 
@@ -102,9 +108,75 @@
                 [disabled]="chatStreaming"
                 (onClick)="exportResponse(userChatContextCode, interaction.response?.id, 'PDF')"
               title="Export response to PDF" gebo-ai-label class="custom-pdf-btn"></p-button>
+              <span class="gebo-ai-reusable-chat__interaction-feedback">
+                <p-button id="goodAnswerBtn" gebo-ai-label [rounded]="true" [text]="true"
+                  [icon]="ratingOf(interaction) === 'POSITIVE' ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'"
+                  [disabled]="chatStreaming || savingFeedback" (onClick)="rateAnswer(interaction, 'POSITIVE')"
+                title="Good answer"></p-button>
+                <p-button id="badAnswerBtn" gebo-ai-label [rounded]="true" [text]="true"
+                  [icon]="ratingOf(interaction) === 'NEGATIVE' ? 'pi pi-thumbs-down-fill' : 'pi pi-thumbs-down'"
+                  [disabled]="chatStreaming || savingFeedback" (onClick)="rateAnswer(interaction, 'NEGATIVE')"
+                title="Bad answer"></p-button>
+              </span>
+              <p-button id="branchChatBtn" gebo-ai-label [rounded]="true" [text]="true"
+                [disabled]="chatStreaming || branching" [loading]="branching" (onClick)="branchFrom(interaction)"
+                title="Continue in a new chat from this answer" class="custom-blue-btn">
+                <ng-template #icon let-iconClass="class">
+                  <svg [class]="iconClass" class="gebo-ai-reusable-chat__branch-icon" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="6" cy="5" r="2.5"></circle>
+                    <circle cx="6" cy="19" r="2.5"></circle>
+                    <circle cx="18" cy="7" r="2.5"></circle>
+                    <path d="M6 7.5v9"></path>
+                    <path d="M18 9.5c0 4-3 5.5-7 6.2-2 .35-3.5 1-4.4 1.9"></path>
+                  </svg>
+                </ng-template>
+              </p-button>
             </div>
           }
         </div>
+        @if(interaction?.response?.calledFunctions?.length) {
+          <div class="gebo-ai-reusable-chat__interaction-item">
+            <span class="gebo-ai-reusable-chat__interaction-item-icon">
+              <i class="pi pi-microchip" id="CalledFunction"></i>
+            </span>
+            <span class="gebo-ai-reusable-chat__interaction-item-title" id="CalledFunctionsCtl" gebo-ai-text>AI Called functions</span>
+            <span class="gebo-ai-reusable-chat__called-functions-count">({{interaction.response?.calledFunctions?.length}})</span>
+            <p-button id="CalledFunctionsListBtn" gebo-ai-label title="Show the functions called"
+              [text]="true" [rounded]="true" size="small"
+              styleClass="gebo-ai-reusable-chat__called-function-toggle"
+              [icon]="isCalledFunctionsListExpanded(interaction.request?.id) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+              (onClick)="toggleCalledFunctionsList(interaction.request?.id)"></p-button>
+            @if (isCalledFunctionsListExpanded(interaction.request?.id)) {
+              <ul class="gebo-ai-reusable-chat__called-functions">
+                @for (calledFunction of interaction.response?.calledFunctions; track $index; let fi = $index) {
+                  <li class="gebo-ai-reusable-chat__called-function">
+                    <div class="gebo-ai-reusable-chat__called-function-header">
+                      <i class="pi pi-bolt"></i>
+                      <span class="gebo-ai-reusable-chat__called-function-name">{{calledFunction.functionName}}</span>
+                      @if (calledFunction.paramsDescription?.length) {
+                        <p-button id="CalledFunctionParamsBtn" gebo-ai-label title="Show the parameters"
+                          [text]="true" [rounded]="true" size="small"
+                          styleClass="gebo-ai-reusable-chat__called-function-toggle"
+                          [icon]="isCalledFunctionParamsExpanded(interaction.request?.id, fi) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                          (onClick)="toggleCalledFunctionParams(interaction.request?.id, fi)"></p-button>
+                      }
+                    </div>
+                    @if (isCalledFunctionParamsExpanded(interaction.request?.id, fi)) {
+                      <dl class="gebo-ai-reusable-chat__called-function-params">
+                        @for (param of calledFunctionParams(calledFunction); track $index) {
+                          <dt>{{param.name}}</dt>
+                          <dd>{{param.value}}</dd>
+                        }
+                      </dl>
+                    }
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+        }
+
         @if(ragsystem && interaction?.response?.documentsRef?.length) {
           <div class="gebo-ai-reusable-chat__interaction-item">
             <span class="gebo-ai-reusable-chat__interaction-item-icon">
@@ -125,20 +197,6 @@
                 (onClick)="toggleInteractionDocs(interaction.request.id)"
                 [icon]="isInteractionDocsExpanded(interaction.request.id) ? 'pi pi-chevron-up' : 'pi pi-chevron-down'">
               </p-button>
-            }
-          </div>
-        }
-
-        @if(interaction?.response?.calledFunctions?.length) {
-          <div class="gebo-ai-reusable-chat__interaction-item">
-            <span class="gebo-ai-reusable-chat__interaction-item-icon">
-              <i class="pi pi-microchip" id="CalledFunction"></i>
-            </span>
-            <span class="gebo-ai-reusable-chat__interaction-item-title">AI Called functions</span>
-            @for (calledFunction of interaction.response?.calledFunctions; track calledFunction.functionName) {
-              <i class="pi pi-bolt"></i>
-              {{calledFunction.functionName}}
-              <span id="WithParams" gebo-ai-text>with params:</span>{{calledFunction.paramsDescription}}
             }
           </div>
         }
@@ -208,3 +266,20 @@
     (saveAction)="doSaveChangedDescription()"></gebo-ai-chat-change-description>
   </div>
 </div>
+<p-dialog [visible]="feedbackDialogOpened" [modal]="true" [closable]="true" (visibleChange)="$event ? null : closeFeedbackDialog()"
+  [style]="{width: '32rem', maxWidth: '95vw'}" [formGroup]="feedbackFormGroup">
+  <ng-template #header>
+    <span id="badAnswerDialogTitle" gebo-ai-text>What was wrong with this answer?</span>
+  </ng-template>
+  <div class="gebo-ai-reusable-chat__feedback-dialog">
+    <textarea pTextarea id="badAnswerComment" formControlName="comment" rows="4" maxlength="2000"
+      class="gebo-ai-reusable-chat__feedback-comment" placeholder="Optional: tell what you expected"
+      gebo-ai-label></textarea>
+    <div class="gebo-ai-reusable-chat__feedback-dialog-buttons">
+      <p-button id="cancelBadAnswerBtn" gebo-ai-label label="Cancel" severity="secondary" [text]="true"
+      (onClick)="closeFeedbackDialog()"></p-button>
+      <p-button id="saveBadAnswerBtn" gebo-ai-label label="Send feedback" icon="pi pi-send"
+      [disabled]="savingFeedback" (onClick)="saveNegativeFeedback()"></p-button>
+    </div>
+  </div>
+</p-dialog>

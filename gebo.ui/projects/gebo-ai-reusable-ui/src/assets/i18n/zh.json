@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "深度检索/Jira搜索"
       },
-      "PURE_SEARCH": {
-        "label": "辅助搜索"
-      },
       "imageGeneration": {
         "label": "图像生成"
       }

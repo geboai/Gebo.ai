@@ -23,7 +23,16 @@ public class LLMDailyUsageDetail {
 
 	@Id
 	private String id = UUID.randomUUID().toString();
+	/**
+	 * The real provider of the model called, e.g. "openai". Null in the records
+	 * written before it existed whose model type is unknown where they are converted.
+	 */
 	private String providerId;
+	/**
+	 * The code of the model type called, e.g. "chatgpt-OpenAI". The records written
+	 * before it existed carried it under providerId.
+	 */
+	private String modelTypeCode;
 	private String username;
 	private String model;
 	private String callerStack;

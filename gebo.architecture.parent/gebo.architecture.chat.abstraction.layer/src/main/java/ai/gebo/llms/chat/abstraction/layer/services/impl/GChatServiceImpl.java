@@ -120,13 +120,13 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
+			recordToolCalls(fullRequest, chatResponse);
 			IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 
 			chatResponse = callChatClient(handler, gprompt, kbcontext, request, chatResponse, chatRequestContext, null);
 		}
 
 		// Set response details
-		chatResponse.setCalledFunctions(kbcontext.getCalledFunctions());
 		if (handler.getConfig() != null && handler.getConfig().getChoosedModel() != null) {
 			chatResponse.setUsedChatModelCode(handler.getConfig().getChoosedModel().getCode());
 		}
@@ -238,6 +238,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 				LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 						LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
+				recordToolCalls(fullRequest, gresponse);
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 				return streamChatClient(handler, gprompt, Map.of(), kbcontext, request, gresponse, chatRequestContext,
 						fullRequest.getTokensSize() > contextWindowSize / 3, contextWindowSize / 3, null);

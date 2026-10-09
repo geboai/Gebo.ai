@@ -32,4 +32,10 @@ public class SharePointSearchServiceRestClient
 		super(webClient, urlResolver, tokenPropagator, documentContentStreamer, endpoint,
 				MicrosoftResultsExtractionData.class, SharePointSearchFilter.class);
 	}
+
+	/** The SharePoint search service retries a failed search itself, with the Graph client: it is sent the retries. */
+	@Override
+	public boolean appliesRetries() {
+		return true;
+	}
 }

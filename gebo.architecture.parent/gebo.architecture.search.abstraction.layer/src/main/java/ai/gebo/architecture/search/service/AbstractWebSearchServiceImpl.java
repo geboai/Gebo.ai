@@ -19,12 +19,17 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import ai.gebo.architecture.search.config.WebResultSizeProbeConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchResultsLoading;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchServiceException;
@@ -70,9 +75,39 @@ public abstract class AbstractWebSearchServiceImpl<N extends INativeQueryObject>
 	protected int SocketTimeout = 20000;
 	protected int ConnectTimeout = 10000;
 
+	/** The size probe settings; the defaults when none is configured. */
+	private WebResultSizeProbeConfig sizeProbeConfig = null;
+
+	@Autowired(required = false)
+	public void setSizeProbeConfig(WebResultSizeProbeConfig sizeProbeConfig) {
+		this.sizeProbeConfig = sizeProbeConfig;
+	}
+
+	/**
+	 * The results of a search, their size filled where their server declares it (see
+	 * {@link WebResultSizeProbe}): best effort, the results are returned whatever the
+	 * probe gives. Every web searcher returns its results through it.
+	 */
+	protected List<SearchResult> withSizes(List<SearchResult> results) {
+		try {
+			new WebResultSizeProbe(sizeProbeConfig).fillSizes(results);
+		} catch (Throwable th) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("withSizes(...) search:" + getId() + " results returned without sizes: " + th);
+			}
+		}
+		return results;
+	}
+
 	@Override
 	public String getDescription() {
 		return WEB_SEARCH_DESCRIPTION;
+	}
+
+	/** The pages found are on sites of the open network: loaded as such. */
+	@Override
+	public SearchResultsLoading resultsLoading() {
+		return SearchResultsLoading.OPEN_NETWORK;
 	}
 
 	protected String tryArgueContentType(String link) {
@@ -150,12 +185,26 @@ public abstract class AbstractWebSearchServiceImpl<N extends INativeQueryObject>
 	 */
 	@Override
 	public TypedInputStream loadSearchResult(SearchResult result) throws IOException {
+		return load(result, createClient());
+	}
+
+	/**
+	 * Downloads the result page with a client whose timeouts and retries are the call
+	 * parameters' (the Apache client's own retries of a failed request become theirs).
+	 */
+	@Override
+	public TypedInputStream loadSearchResult(SearchResult result, SearchCallParameters parameters)
+			throws IOException {
+		return load(result, parameters != null ? createClient(parameters) : createClient());
+	}
+
+	private TypedInputStream load(SearchResult result, CloseableHttpClient httpClient) throws IOException {
 		final String uri = result.getResultReference() != null ? result.getResultReference().getUri() : null;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin loadSearchResult(...) uri=" + uri);
 		}
 		HttpGet request = createGetRequestFor(result);
-		CloseableHttpClient client = createClient();
+		CloseableHttpClient client = httpClient;
 		CloseableHttpResponse response = null;
 		try {
 			response = client.execute(request);
@@ -279,6 +328,19 @@ public abstract class AbstractWebSearchServiceImpl<N extends INativeQueryObject>
 				.setDefaultCookieStore(cookieStore).build();
 
 		return httpClient;
+	}
+
+	/** A client whose connect and socket timeouts, and retries, are the call parameters'. */
+	private CloseableHttpClient createClient(SearchCallParameters parameters) {
+		RequestConfig globalConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.BEST_MATCH)
+				.setSocketTimeout(parameters.readTimeoutMillis()).setConnectTimeout(parameters.connectTimeoutMillis())
+				.build();
+		CookieStore cookieStore = new BasicCookieStore();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("createClient(...) for a search result download, parameters:" + parameters);
+		}
+		return HttpClients.custom().setDefaultRequestConfig(globalConfig).setDefaultCookieStore(cookieStore)
+				.setRetryHandler(new DefaultHttpRequestRetryHandler(parameters.retries(), false)).build();
 	}
 
 	private HttpGet createGetRequestFor(SearchResult result) throws UnsupportedEncodingException {

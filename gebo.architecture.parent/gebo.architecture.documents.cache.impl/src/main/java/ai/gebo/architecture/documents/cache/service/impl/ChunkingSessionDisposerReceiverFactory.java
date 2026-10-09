@@ -2,6 +2,8 @@ package ai.gebo.architecture.documents.cache.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +21,7 @@ import lombok.AllArgsConstructor;
 @Scope("singleton")
 
 public class ChunkingSessionDisposerReceiverFactory extends GAbstractMessageReceiverFactory {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ChunkingSessionDisposerReceiverFactory.class);
 	public static final String DISPOSE_CHUNKING_SESSION_FOR_JOBS = "dispose-chunking-session-for-jobs";
 	static final MessageReceiverFactoryConfig factoryConfig = new MessageReceiverFactoryConfig();
 	static {
@@ -35,7 +38,19 @@ public class ChunkingSessionDisposerReceiverFactory extends GAbstractMessageRece
 		@Override
 		public void accept(GMessageEnvelope msg) {
 			if (msg.getPayload() instanceof GFinishedWorkflowPayload finishedWorkFlowPayload) {
-				chunkingService.disposeChunkingSession("job:" + finishedWorkFlowPayload.getJobId());
+				// the session is found by its reference, the job: it is disposed by its id
+				final String reference = "job:" + finishedWorkFlowPayload.getJobId();
+				final String chunkingSessionId = chunkingService.retrieveChunkingSession(reference);
+				if (chunkingSessionId == null) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("No chunking session for " + reference + " to dispose");
+					}
+					return;
+				}
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Disposing the chunking session " + chunkingSessionId + " of " + reference);
+				}
+				chunkingService.disposeChunkingSession(chunkingSessionId);
 			}
 		}
 

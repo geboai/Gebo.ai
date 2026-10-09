@@ -5,6 +5,7 @@ import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsS
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import java.util.concurrent.atomic.AtomicReference;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.model.GUserMessage;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -113,6 +115,26 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	}
 
 	/**
+	 * Adds the messages of a network answer (warnings and notices for the user) to the
+	 * pipeline response, each once: the network answer is merged onto that response,
+	 * which is what the user receives.
+	 */
+	static void mergeBackendMessages(GeboChatResponse networkResponse, GeboChatResponse pipelineResponse) {
+		if (networkResponse == null || pipelineResponse == null || networkResponse == pipelineResponse
+				|| networkResponse.getBackendMessages() == null || networkResponse.getBackendMessages().isEmpty()) {
+			return;
+		}
+		if (pipelineResponse.getBackendMessages() == null) {
+			pipelineResponse.setBackendMessages(new ArrayList<>());
+		}
+		for (GUserMessage message : networkResponse.getBackendMessages()) {
+			if (message != null && !pipelineResponse.getBackendMessages().contains(message)) {
+				pipelineResponse.getBackendMessages().add(message);
+			}
+		}
+	}
+
+	/**
 	 * Builds the environment map seeded into the agents network session
 	 * ({@code session.getEnvironment()}). The default network contributes the
 	 * available knowledge-base codes and the user intent. Subclasses (e.g. the
@@ -132,9 +154,20 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		environment.put(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE, knowledgeBaseCodes);
 		environment.put(StandardAgentsNetworkEnvironmentEntries.USER_INTENT,
 				request.getUserIntent() != null ? request.getUserIntent() : DeliverableIntent.SUMMARY);
+		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED,
+				Boolean.TRUE.equals(request.getSearchRequested()));
+		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN,
+				Boolean.TRUE.equals(request.getSearchForbidden()));
+		// detected on the user's own message when the request entered the pipelines
+		if (request.getUserLanguage() != null) {
+			environment.put(StandardAgentsNetworkEnvironmentEntries.USER_LANGUAGE, request.getUserLanguage());
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End buildNetworkEnvironment(...) knowledgeBases:" + knowledgeBaseCodes.size() + " userIntent:"
-					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT));
+					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT) + " searchRequested:"
+					+ environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED) + " searchForbidden:"
+					+ environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN) + " userLanguage:"
+					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_LANGUAGE));
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("Knowledge base codes seeded into the network environment: " + knowledgeBaseCodes);
@@ -254,12 +287,16 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 						LOGGER.trace("</NETWORK_CHAT_RESPONSE>");
 					}
 					responseReference.setQueryResponse(response.getQueryResponse());
-					responseReference.setCalledFunctions(response.getCalledFunctions());
+					// The called functions are not copied: the request's recorder already fills
+					// them on this response with the calls of every agent of the network.
 					responseReference.setDocumentsRef(response.getDocumentsRef());
+					responseReference.setListedDocumentNames(response.getListedDocumentNames());
 					// Carry any additional content the writer produced (e.g. the office
 					// assistant's document part) onto the emitted response. Null for the
 					// default network, which never sets it.
 					responseReference.setAdditionalContents(response.getAdditionalContents());
+					// the messages the agents give the user with their answer (e.g. a warning)
+					mergeBackendMessages(response, responseReference);
 					return new GeboChatMessageEnvelope(responseReference);
 				}
 				return x;

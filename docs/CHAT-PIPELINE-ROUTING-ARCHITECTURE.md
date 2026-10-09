@@ -141,7 +141,7 @@ default menu entry deliberately sends no route so that §3.3 runs. Per-data-sour
 search items differ from each other only by the `deepSearchedSystems` pipeline
 parameter, not by their route.
 
-`TOOLS_USE_RESPONSE`, `PURE_SEARCH` and `PURE_LLM_RESPONSE` have **no menu item** —
+`TOOLS_USE_RESPONSE` and `PURE_LLM_RESPONSE` have **no menu item** —
 they are reachable only as LLM-router outcomes, i.e. only when the agents network is
 disabled.
 
@@ -161,7 +161,6 @@ The office plugin ships its own provider,
 | `DEEP_SEARCH_RESPONSE` | `default-deepsearch-streaming` | `DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl` |
 | `TOOLS_USE_RESPONSE` | `default-tool-using-streaming` | `DefaultToolUsingStreamingOutputChatPipelineServiceImpl` |
 | `CHAT_WITH_FILES` | `default-chat-with-docs-streaming` | `DefaultChatWithFilesStreamingOutputPipelineServiceImpl` |
-| `PURE_SEARCH` | `PURE_SEARCH_STREAMING_SERVICE` | `DefaultPipelineStreamingPureSearchPipelineStepServiceImpl` |
 | `DELEGATED_AGENT` | `DEFAULT_CHAT_PIPELINE_SERVICE` | `DefaultPipelineStreamingDelegatedStepServiceImpl` |
 | `IMAGE_GENERATION_RESPONSE` | `IMAGE_GENERATION_STREAMING_SERVICE` | `DefaultImageGenerationStreamingOutputChatPipelineServiceImpl` |
 | `PURE_LLM_RESPONSE` *(and `default:`)* | `default-streaming-output` | `DefaultStreamingOutputChatPipelineServiceImpl` |

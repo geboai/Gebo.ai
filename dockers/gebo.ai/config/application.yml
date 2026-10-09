@@ -279,6 +279,83 @@ ai.gebo.ragsearch.config:
   # Minimum cosine similarity a fragment must reach to be retrieved.
   default-similarity-threshold: 0.57
 ai.gebo.agents.standard.enabled: true
+# Found documents the search tools and the document-search agents load and chunk
+# at the same time (2 when not set)
+ai.gebo.agents.standard.search-documents-parallelism: 2
+# Search services calls (web, native, every search tool, agent and deep search): best
+# effort, a system out of service or not answering within timeout-seconds is reported
+# (to the model when the caller is a tool) and the others are searched; retries: times
+# a failure that can pass (not responding, out of service) is tried again, none by
+# default. The clients of the searched systems (web providers, Jira, Confluence,
+# SharePoint, the connector microservices) connect and read within the
+# http-*-timeout-seconds during searches and search result downloads, coherent with a
+# sloppy network.
+ai.gebo.search.calls:
+  retries: 0
+  timeout-seconds: 60
+  retry-pause-millis: 1000
+  http-connect-timeout-seconds: 15
+  http-read-timeout-seconds: 60
+# Results of the services searching an open network (the web search providers): once
+# a search has given its pool of candidates, the pages are loaded at once, grouped by
+# host. Each host gets at most per-host-concurrency pages at a time, with
+# per-host-pause-millis between its requests, and its other pages are not requested
+# after per-host-failures-before-skip failed ones (so no site is overloaded or blocks
+# the search). Each page within per-page-deadline-seconds, the whole loading within
+# loading-phase-deadline-seconds: what has not arrived by then is not read. With
+# capped, only the first candidates-cap candidates are loaded. Every page not loaded,
+# not read or not relevant is told to the agent with its reason, never among the
+# answer's documents. Systems sized to answer (Confluence, SharePoint, Jira, the
+# connector microservices) keep loading a few results at a time.
+ai.gebo.search.open-network-loading:
+  capped: false
+  candidates-cap: 20
+  per-page-deadline-seconds: 60
+  loading-phase-deadline-seconds: 60
+  per-host-concurrency: 2
+  per-host-pause-millis: 500
+  per-host-failures-before-skip: 2
+# Web search results: after each search, a best-effort HEAD request per distinct
+# result URL fills the result size from its declared Content-Length (unknown when
+# the server declares none). Low timeouts: the search waits for it, never fails on it.
+ai.gebo.websearch.size-probe:
+  enabled: true
+  timeout-ms: 1500
+  parallelism: 8
+# The knowledge base search tool's answer takes at most the room its model call leaves
+# to the tools' results divided by this (3 when not set; no room shared, topK only)
+ai.gebo.agents.standard.knowledge-base-search-room-divisor: 3
+# In-flight LLM sub-analysis calls of a deep search per data source (2 when not set);
+# with ai.gebo.deepsearch.max-concurrent-sources it caps the concurrent LLM calls
+ai.gebo.deepsearch.analysis-parallelism: 2
+# Deep search analyses folded into a running report, stopping once the consolidation model
+# judges it enough (true when not set; false: stop on the satisfactory batches count)
+ai.gebo.deepsearch.sufficiency-check-enabled: true
+# The security factor of every tokens budget: a consolidation or deep analysis is given
+# documents for (context length - prompt - the values filling it - the consolidation it carries)
+# times this factor, and every check of what fits a model's context (chat with documents, the
+# router's documents, the knowledge base searches, the deep search's direct analysis, the agents'
+# budget) takes this share of it; the rest is left to the token estimation error and to what
+# the model writes (0.7 when not set; 0 < factor <= 1)
+ai.gebo.llms.tokens-budget.factor: 0.7
+# The release of what the chunking sessions leave behind: the cached chunks whose session no
+# longer exists, and the cache files no record names, are deleted once older than this many
+# seconds, which is also the interval between two checks
+# (300 when not set): it covers the moments a distributed run has no settled state
+ai.gebo.documents-cache.orphans.grace-seconds: 300
+# The life of a cached document copy: deleted, record and file, once not accessed for this
+# many seconds (300 when not set)
+ai.gebo.documents-cache.ttl-seconds: 300
+# Share of an analysis batch one piece of a document read whole (chat with documents) fills,
+# and the least batch budget an analysis lane goes on with (0.25 when not set; 0 < factor < 1)
+ai.gebo.deepsearch.chunk-filling-factor: 0.25
+# PDF ingestion: a page whose text is in columns (a vertical gutter through almost every
+# line, in the page's own text direction) is read one column after the other; any other page
+# is read as before. Takes effect on the documents ingested afterwards (true when not set)
+ai.gebo.ingestion.pdf.column-aware-extraction: true
+# Languages whose stop words the chunks' keyword filter ignores when neither the
+# keywords' nor the chunk's language is detected with confidence (it,en when not set)
+ai.gebo.search.keyword-stop-words.fallback-languages: it,en
 ai.gebo.chatpipes.defaultPipelineStepIsChatAgent: true
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:

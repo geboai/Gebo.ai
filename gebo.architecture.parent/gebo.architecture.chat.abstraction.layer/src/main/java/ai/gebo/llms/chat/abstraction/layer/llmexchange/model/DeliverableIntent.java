@@ -14,9 +14,6 @@ public enum DeliverableIntent {
 			"recommendation or tradeoff evaluation", 3), // (recommendation/tradeoffs)
 	SUMMARY("User wants a synthetic outcome  or some sinonyms of this in all languages", "synthetic outcome", 4), // (short
 																													// synthesis)
-	PURE_SEARCH(
-			"User asked a search, a research, find documents, find files, or some sinonyms of this in all languages (excluding the rules for REPORT)",
-			"pure search outcome, files or document files search", 5),
 	ANALISYS("User EXPLICITLY requested a structured/detailed report or a multi-source analysis (e.g. a report, detailed report, in-depth analysis, or comparison across many documents). Do NOT choose this for ordinary questions that can be answered directly.", "detailed analisys report", 6), // (structured,
 																														// detailed,
 																														// multi-section)

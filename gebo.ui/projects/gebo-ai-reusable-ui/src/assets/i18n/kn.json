@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "ಡೀಪ್ ಸರ್ಚ್/Jira ಹುಡುಕಾಟ"
       },
-      "PURE_SEARCH": {
-        "label": " ನೆರವು ಹುಡುಕು"
-      },
       "imageGeneration": {
         "label": "ಚಿತ್ರ ರಚನೆ"
       }

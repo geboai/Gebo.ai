@@ -51,7 +51,8 @@ public class UsageRecordingImageModel<ModelConfig extends GBaseImageModelConfig>
 	}
 
 	private ImageResponse recorded(java.util.function.Supplier<ImageResponse> generation) {
-		LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), ModelType.IMAGE, delegate::getPricingConditions);
+		LLMUsageRecorder.Call call = recorder.begin(delegate.getConfig(), LLMUsageRecorder.safeProviderId(delegate::getProviderId), ModelType.IMAGE,
+				delegate::getPricingConditions);
 		final ImageResponse response;
 		try {
 			response = generation.get();

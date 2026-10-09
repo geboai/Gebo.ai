@@ -3167,6 +3167,41 @@
       },
       "AiActInteractionDisclaimer": {
         "label": "You are interacting with an AI system. Responses are AI-generated and may be inaccurate or incomplete — always verify important information before relying on it."
+      },
+      "CalledFunctionParamsBtn": {
+        "help": "Show the parameters"
+      },
+      "goodAnswerBtn": {
+        "help": "Good answer"
+      },
+      "badAnswerBtn": {
+        "help": "Bad answer: tell what was wrong"
+      },
+      "branchChatBtn": {
+        "help": "Continue in a new chat from this answer"
+      },
+      "badAnswerDialogTitle": {
+        "label": "What was wrong with this answer?"
+      },
+      "badAnswerComment": {
+        "placeholder": "Optional: tell what you expected",
+        "help": "Your comment is shown to the assistant on the next questions of this chat"
+      },
+      "cancelBadAnswerBtn": {
+        "label": "Cancel"
+      },
+      "saveBadAnswerBtn": {
+        "label": "Send feedback"
+      },
+      "CHAT_BRANCHED": {
+        "summary": "Chat branched",
+        "detail": "The conversation continues in a new chat, starting from the chosen answer"
+      },
+      "CalledFunctionsListBtn": {
+        "help": "Show or hide the functions the AI called"
+      },
+      "ThinkingLabel": {
+        "label": "Reasoning:"
       }
     },
     "ChangeDescriptionComponent": {
@@ -3311,11 +3346,13 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "Deep search/Jira Search"
       },
-      "PURE_SEARCH": {
-        "label": "Assisted search"
-      },
       "imageGeneration": {
         "label": "Image generation"
+      }
+    },
+    "GeboAIChatInputShellComponent": {
+      "PendingSendHint": {
+        "label": "The message will be sent as soon as the chat is ready…"
       }
     }
   },
@@ -3478,7 +3515,7 @@
       },
       "maxGeneratedTokens": {
         "label": "Max number of generated tokens",
-        "help": "Configure thinking efforts the model will do"
+        "help": "Maximum number of tokens the model may generate for one answer, its reasoning included (if empty, the provider's default applies)"
       },
       "thinking": {
         "label": "Thinking efforts",
@@ -5069,6 +5106,14 @@
       "fileExportLoaded": {
         "summary": "File exported",
         "detail": "Go to browser downloads section"
+      },
+      "26d2e86337c5e72dabe92cc45f3e636b2059877ad337543c662950a22f3f4304": {
+        "summary": "Answer written again",
+        "detail": "The model used up the tokens it can generate reasoning, so the answer was cut: it is written again with less reasoning."
+      },
+      "f4827f476f0bd2b6537f7506ed61c15ad9cd5092a746fcee775837b6c2d88d56": {
+        "summary": "Answer incomplete",
+        "detail": "The model reached the maximum tokens it can generate: the answer was cut."
       }
     }
   },
@@ -5376,6 +5421,10 @@
       },
       "PERDATASOURCEMODE": {
         "label": "Per data source user/group access"
+      },
+      "externalSourceSearchEnabledByDefault": {
+        "label": "External sources searchable by everyone by default",
+        "help": "The configured external search sources (the internal knowledge base excluded) can be searched by every user, except where a users/groups access is configured below"
       }
     }
   },
@@ -6355,6 +6404,12 @@
       "agentId": {
         "label": "Agent id",
         "help": "Identifier of the agent owning this prompt (optional)"
+      },
+      "toolsResultsPromptTemplateLabel": {
+        "label": "Tool results closing template"
+      },
+      "toolsResultsPromptTemplateHint": {
+        "label": "Optional: text added at the end of every tool result. When tools run, their results come after the user prompt, so this is the last text the model reads before answering."
       }
     }
   },
@@ -6559,7 +6614,7 @@
         "label": "Filter Drill Down"
       },
       "ProviderIdFilterLabel": {
-        "label": "Provider ID"
+        "label": "Provider"
       },
       "ProviderIdFilterSelect": {
         "placeholder": "All"
@@ -6704,6 +6759,49 @@
       },
       "MaxTimeToFirstTokenSeries": {
         "label": "Max Time to First Token (s)"
+      },
+      "ModelTypeCodeFilterLabel": {
+        "label": "Provider service"
+      },
+      "ModelTypeCodeFilterSelect": {
+        "placeholder": "All"
+      },
+      "ShowingLabel": {
+        "label": "Showing"
+      },
+      "AllUsageLabel": {
+        "label": "All LLM usage, no filter applied"
+      },
+      "ClearFiltersBtn": {
+        "label": "Clear all",
+        "help": "Remove every filter and show all the LLM usage"
+      },
+      "PendingFiltersLabel": {
+        "label": "Filter changes not applied yet: press Filter"
+      },
+      "ProviderIdFilterChip": {
+        "label": "Provider"
+      },
+      "ModelTypeCodeFilterChip": {
+        "label": "Provider service"
+      },
+      "ModelTypeFilterChip": {
+        "label": "Model type"
+      },
+      "ModelFilterChip": {
+        "label": "Model"
+      },
+      "UsernameFilterChip": {
+        "label": "User"
+      },
+      "CallerStackFilterChip": {
+        "label": "Caller stack"
+      },
+      "YearFilterChip": {
+        "label": "Year"
+      },
+      "MonthFilterChip": {
+        "label": "Month"
       }
     },
     "GeboAILLMSUsageUserDashboardComponent": {
@@ -6720,7 +6818,7 @@
         "label": "Filter Drill Down"
       },
       "ProviderIdFilterLabel": {
-        "label": "Provider ID"
+        "label": "Provider"
       },
       "ProviderIdFilterSelect": {
         "placeholder": "All"
@@ -6865,6 +6963,75 @@
       },
       "MaxTimeToFirstTokenSeries": {
         "label": "Max Time to First Token (s)"
+      },
+      "ModelTypeCodeFilterLabel": {
+        "label": "Provider service"
+      },
+      "ModelTypeCodeFilterSelect": {
+        "placeholder": "All"
+      },
+      "ShowingLabel": {
+        "label": "Showing"
+      },
+      "AllUsageLabel": {
+        "label": "All LLM usage, no filter applied"
+      },
+      "ClearFiltersBtn": {
+        "label": "Clear all",
+        "help": "Remove every filter and show all the LLM usage"
+      },
+      "PendingFiltersLabel": {
+        "label": "Filter changes not applied yet: press Filter"
+      },
+      "ProviderIdFilterChip": {
+        "label": "Provider"
+      },
+      "ModelTypeCodeFilterChip": {
+        "label": "Provider service"
+      },
+      "ModelTypeFilterChip": {
+        "label": "Model type"
+      },
+      "ModelFilterChip": {
+        "label": "Model"
+      },
+      "UsernameFilterChip": {
+        "label": "User"
+      },
+      "CallerStackFilterChip": {
+        "label": "Caller stack"
+      },
+      "YearFilterChip": {
+        "label": "Year"
+      },
+      "MonthFilterChip": {
+        "label": "Month"
+      }
+    }
+  },
+  "GeboAIChatModelRoleModule": {
+    "GeboAIChatModelRoleComponent": {
+      "modelRole": {
+        "label": "Model role",
+        "help": "One system default service model and one system default chat model are kept: choosing one of them here takes the role from the model holding it, which becomes a chat model"
+      },
+      "RoleServiceLabel": {
+        "label": "System default service model"
+      },
+      "RoleServiceHelp": {
+        "label": "Will be used for history consolidation, information extraction and other internal services, choose a cheap and fast one"
+      },
+      "RoleDefaultChatLabel": {
+        "label": "System default chat model"
+      },
+      "RoleDefaultChatHelp": {
+        "label": "Will be used as high capacity agentic model and quality responder"
+      },
+      "RoleChatLabel": {
+        "label": "Chat model"
+      },
+      "RoleChatHelp": {
+        "label": "Model to be used in explicit configurations"
       }
     }
   }

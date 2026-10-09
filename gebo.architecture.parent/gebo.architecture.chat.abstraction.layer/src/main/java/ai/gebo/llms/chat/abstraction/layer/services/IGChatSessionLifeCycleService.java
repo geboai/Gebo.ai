@@ -108,6 +108,33 @@ public interface IGChatSessionLifeCycleService {
 	public List<GKnowledgeBase> getSessionAvailableKnowledgeBases(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException;
 
+	/**
+	 * The language the user explicitly asked the answers of the request's chat in,
+	 * null when none.
+	 */
+	public default String getUserRequiredLanguage(GeboChatRequest request)
+			throws GeboChatSessionLifecycleException {
+		return null;
+	}
+
+	/** Keeps on the request's chat the language the user explicitly asked its answers in. */
+	public default void setUserRequiredLanguage(GeboChatRequest request, String language)
+			throws GeboChatSessionLifecycleException {
+	}
+
+	/**
+	 * The language the request's chat is held in: set by the first trusted detection of
+	 * a user's message, null when none was detected yet.
+	 */
+	public default String getChatLanguage(GeboChatRequest request) throws GeboChatSessionLifecycleException {
+		return null;
+	}
+
+	/** Keeps on the request's chat the language it is held in. */
+	public default void setChatLanguage(GeboChatRequest request, String language)
+			throws GeboChatSessionLifecycleException {
+	}
+
 	public IGConfigurableChatModel getSessionChatModel(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException;
 

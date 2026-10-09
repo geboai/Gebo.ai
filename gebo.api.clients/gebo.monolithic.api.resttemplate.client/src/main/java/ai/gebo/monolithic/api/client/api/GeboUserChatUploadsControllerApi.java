@@ -4,6 +4,7 @@ import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
 import java.io.File;
 import ai.gebo.monolithic.api.client.model.OperationStatusListUserUploadedContent;
+import ai.gebo.monolithic.api.client.model.UserUploadedContent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-03T11:31:06.696503642+02:00[Europe/Rome]")
 
 public class GeboUserChatUploadsControllerApi {
     private ApiClient apiClient;
@@ -100,23 +101,38 @@ public class GeboUserChatUploadsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
+     * @param body  (required)
+     * @param userSessionCode  (required)
      * @return OperationStatusListUserUploadedContent
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListUserUploadedContent deleteSessionUploads() throws RestClientException {
-        return deleteSessionUploadsWithHttpInfo().getBody();
+    public OperationStatusListUserUploadedContent deleteSessionUploads(List<UserUploadedContent> body, String userSessionCode) throws RestClientException {
+        return deleteSessionUploadsWithHttpInfo(body, userSessionCode).getBody();
     }
 
     /**
      * 
      * 
      * <p><b>200</b> - OK
+     * @param body  (required)
+     * @param userSessionCode  (required)
      * @return ResponseEntity&lt;OperationStatusListUserUploadedContent&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListUserUploadedContent> deleteSessionUploadsWithHttpInfo() throws RestClientException {
-        Object postBody = null;
-        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatUploadsController/deleteSessionUploads").build().toUriString();
+    public ResponseEntity<OperationStatusListUserUploadedContent> deleteSessionUploadsWithHttpInfo(List<UserUploadedContent> body, String userSessionCode) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteSessionUploads");
+        }
+        // verify the required parameter 'userSessionCode' is set
+        if (userSessionCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'userSessionCode' when calling deleteSessionUploads");
+        }
+        // create path and map variables
+        final Map<String, Object> uriVariables = new HashMap<String, Object>();
+        uriVariables.put("userSessionCode", userSessionCode);
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatUploadsController/deleteSessionUploads/{userSessionCode}").buildAndExpand(uriVariables).toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -127,7 +143,7 @@ public class GeboUserChatUploadsControllerApi {
          };
         final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
         final String[] contentTypes = { 
-            "multipart/form-data"
+            "application/json"
          };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 

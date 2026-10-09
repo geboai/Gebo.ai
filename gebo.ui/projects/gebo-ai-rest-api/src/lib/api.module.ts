@@ -39,6 +39,7 @@ import { FileUploadsControllerService } from './api/fileUploadsController.servic
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
 import { GeboA2AServerAdminControllerService } from './api/geboA2AServerAdminController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
+import { GeboAdminChatRulesControllerService } from './api/geboAdminChatRulesController.service';
 import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
 import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsController.service';
 import { GeboAdminRagAutotuneControllerService } from './api/geboAdminRagAutotuneController.service';
@@ -48,6 +49,7 @@ import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngular
 import { GeboChatControllerService } from './api/geboChatController.service';
 import { GeboChatPipelinesControllerService } from './api/geboChatPipelinesController.service';
 import { GeboChatProfileLookupControllerService } from './api/geboChatProfileLookupController.service';
+import { GeboChatRulesControllerService } from './api/geboChatRulesController.service';
 import { GeboCoreAnalisysControllerService } from './api/geboCoreAnalisysController.service';
 import { GeboDeepSearchAdminControllerService } from './api/geboDeepSearchAdminController.service';
 import { GeboDeepSearchControllerService } from './api/geboDeepSearchController.service';
@@ -187,6 +189,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     FunctionsLookupControllerService,
     GeboA2AServerAdminControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
+    GeboAdminChatRulesControllerService,
     GeboAdminPromptUseInfoControllerService,
     GeboAdminPromptsControllerService,
     GeboAdminRagAutotuneControllerService,
@@ -196,6 +199,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GeboChatControllerService,
     GeboChatPipelinesControllerService,
     GeboChatProfileLookupControllerService,
+    GeboChatRulesControllerService,
     GeboCoreAnalisysControllerService,
     GeboDeepSearchAdminControllerService,
     GeboDeepSearchControllerService,

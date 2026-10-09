@@ -63,7 +63,7 @@ class GeboChatModelUsageAdvisorTest {
 
 		advisor.adviseStream(mock(ChatClientRequest.class), chain).blockLast();
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(),
+		verify(recorder, times(1)).record(eq(config), isNull(), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(),
 				isNull(), eq(12L), eq(0L), eq(12L), eq(LLMCallOutcome.SUCCESS));
 	}
 
@@ -95,7 +95,7 @@ class GeboChatModelUsageAdvisorTest {
 
 		advisor.adviseStream(mock(ChatClientRequest.class), chain).blockLast();
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(), notNull(), eq(250L), eq(30L),
+		verify(recorder, times(1)).record(eq(config), isNull(), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(), notNull(), eq(250L), eq(30L),
 				eq(280L), eq(LLMCallOutcome.SUCCESS));
 	}
 
@@ -109,7 +109,7 @@ class GeboChatModelUsageAdvisorTest {
 
 		advisor.adviseStream(mock(ChatClientRequest.class), chain).blockLast();
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(), notNull(), eq(0L), eq(0L), eq(0L),
+		verify(recorder, times(1)).record(eq(config), isNull(), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(), notNull(), eq(0L), eq(0L), eq(0L),
 				eq(LLMCallOutcome.SUCCESS));
 	}
 
@@ -128,7 +128,7 @@ class GeboChatModelUsageAdvisorTest {
 			// the failure is propagated to the caller
 		}
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(), notNull(), eq(40L), eq(0L), eq(40L),
+		verify(recorder, times(1)).record(eq(config), isNull(), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(), notNull(), eq(40L), eq(0L), eq(40L),
 				eq(LLMCallOutcome.ERROR));
 	}
 
@@ -142,7 +142,21 @@ class GeboChatModelUsageAdvisorTest {
 
 		advisor.adviseCall(mock(ChatClientRequest.class), chain);
 
-		verify(recorder, times(1)).record(eq(config), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(), isNull(), eq(250L), eq(30L),
+		verify(recorder, times(1)).record(eq(config), isNull(), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(), isNull(), eq(250L), eq(30L),
 				eq(280L), eq(LLMCallOutcome.SUCCESS));
+	}
+
+	@Test
+	void callIsAttributedToTheRealProviderOfTheModel() {
+		LLMUsageRecorder recorder = mock(LLMUsageRecorder.class);
+		GBaseChatModelConfig config = mock(GBaseChatModelConfig.class);
+		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder, null, () -> "openai");
+		CallAdvisorChain chain = mock(CallAdvisorChain.class);
+		when(chain.nextCall(any())).thenReturn(chunk(250, 30, 280));
+
+		advisor.adviseCall(mock(ChatClientRequest.class), chain);
+
+		verify(recorder, times(1)).record(eq(config), eq("openai"), eq(ModelType.CHAT), isNull(), anyString(),
+				anyString(), anyLong(), isNull(), eq(250L), eq(30L), eq(280L), eq(LLMCallOutcome.SUCCESS));
 	}
 }

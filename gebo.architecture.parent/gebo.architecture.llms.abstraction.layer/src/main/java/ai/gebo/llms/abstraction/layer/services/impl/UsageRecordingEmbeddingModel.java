@@ -34,6 +34,7 @@ public class UsageRecordingEmbeddingModel implements EmbeddingModel {
 	private final Supplier<? extends GBaseEmbeddingModelConfig> config;
 	private final Supplier<LLMUsageRecorder> recorder;
 	private final Supplier<GModelPricingConditions> pricing;
+	private final Supplier<String> providerId;
 
 	/**
 	 * @param pricing the owning model's {@code IGConfigurableModel.getPricingConditions()},
@@ -41,10 +42,21 @@ public class UsageRecordingEmbeddingModel implements EmbeddingModel {
 	 */
 	public UsageRecordingEmbeddingModel(EmbeddingModel delegate, Supplier<? extends GBaseEmbeddingModelConfig> config,
 			Supplier<LLMUsageRecorder> recorder, Supplier<GModelPricingConditions> pricing) {
+		this(delegate, config, recorder, pricing, null);
+	}
+
+	/**
+	 * @param providerId the owning model's {@code IGConfigurableModel.getProviderId()},
+	 *                   read when a call starts; null records the provider as unknown
+	 */
+	public UsageRecordingEmbeddingModel(EmbeddingModel delegate, Supplier<? extends GBaseEmbeddingModelConfig> config,
+			Supplier<LLMUsageRecorder> recorder, Supplier<GModelPricingConditions> pricing,
+			Supplier<String> providerId) {
 		this.delegate = delegate;
 		this.config = config;
 		this.recorder = recorder;
 		this.pricing = pricing;
+		this.providerId = providerId;
 	}
 
 	/** The provider model this wrapper forwards to. */
@@ -62,7 +74,7 @@ public class UsageRecordingEmbeddingModel implements EmbeddingModel {
 			}
 			return delegate.call(request);
 		}
-		LLMUsageRecorder.Call call = usageRecorder.begin(config.get(), ModelType.EMBEDDING, pricing);
+		LLMUsageRecorder.Call call = usageRecorder.begin(config.get(), LLMUsageRecorder.safeProviderId(providerId), ModelType.EMBEDDING, pricing);
 		final EmbeddingResponse response;
 		try {
 			response = delegate.call(request);
@@ -85,7 +97,7 @@ public class UsageRecordingEmbeddingModel implements EmbeddingModel {
 		if (usageRecorder == null) {
 			return delegate.embed(document);
 		}
-		LLMUsageRecorder.Call call = usageRecorder.begin(config.get(), ModelType.EMBEDDING, pricing);
+		LLMUsageRecorder.Call call = usageRecorder.begin(config.get(), LLMUsageRecorder.safeProviderId(providerId), ModelType.EMBEDDING, pricing);
 		try {
 			float[] embedding = delegate.embed(document);
 			call.success();

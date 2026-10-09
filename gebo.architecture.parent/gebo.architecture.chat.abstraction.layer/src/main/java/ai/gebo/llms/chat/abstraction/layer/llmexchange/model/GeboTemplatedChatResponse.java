@@ -45,6 +45,9 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 	private List<GResponseDocumentRef> forcedDocumentsRef = new ArrayList<GResponseDocumentRef>(); // Forced document
 																									// references
 	private List<GResponseDocumentRef> documentsRef = new ArrayList<GResponseDocumentRef>(); // Document references
+	// Names of the documents the tools only listed (not read) that the answer names: kept
+	// with the chat's history, the next requests may name them
+	private List<String> listedDocumentNames = null;
 	// List of functions called during the interaction
 	private List<CalledFunction> calledFunctions = new ArrayList<LLMtInteractionContextThreadLocal.CalledFunction>();
 	private ChatModelRequestContextWindowStats contextWindowStats = null; // Statistics related to the context window
@@ -75,6 +78,7 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 		query = r.query;
 		backendMessages = r.backendMessages;
 		documentsRef = r.documentsRef;
+		listedDocumentNames = r.listedDocumentNames;
 		calledFunctions = r.calledFunctions;
 	}
 

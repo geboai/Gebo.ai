@@ -10,9 +10,7 @@
 package ai.gebo.architecture.rag.support.layer.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
@@ -144,24 +142,71 @@ public class AIDocumentReferenceItem implements IAIContent, Cloneable {
 		return documents;
 	}
 
+	/**
+	 * Whether the document holds the fragment already: the same fragment, by its
+	 * identity (see {@link AIDocumentFragment#identity()}), not any fragment of the
+	 * same document.
+	 */
+	public boolean containsFragment(AIDocumentFragment fragment) {
+		return fragments != null && fragments.stream().anyMatch(x -> x.sameFragmentAs(fragment));
+	}
+
+	/**
+	 * Adds the fragment unless the document holds it already (see
+	 * {@link #containsFragment(AIDocumentFragment)}).
+	 *
+	 * @return whether it was added
+	 */
+	public boolean addFragmentIfAbsent(AIDocumentFragment fragment) {
+		if (fragment == null || containsFragment(fragment)) {
+			return false;
+		}
+		if (fragments == null) {
+			fragments = new ArrayList<AIDocumentFragment>();
+		}
+		fragments.add(fragment);
+		return true;
+	}
+
+	/**
+	 * A copy of the document with its own list of fragments, each a copy: adding to
+	 * the copy or weighing it leaves this document as it is.
+	 */
+	public AIDocumentReferenceItem copy() {
+		try {
+			final AIDocumentReferenceItem copy = (AIDocumentReferenceItem) clone();
+			copy.fragments = new ArrayList<AIDocumentFragment>();
+			if (fragments != null) {
+				for (AIDocumentFragment fragment : fragments) {
+					copy.fragments.add(fragment.copy());
+				}
+			}
+			return copy;
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalStateException("Cannot copy the document " + code, e);
+		}
+	}
+
+	/**
+	 * The fragments of the given references of a same document, each once (see
+	 * {@link AIDocumentFragment#identity()}), in their order in the document.
+	 */
 	public static AIDocumentReferenceItem join(AIDocumentReferenceItem... docs) {
 		AIDocumentReferenceItem outDoc = new AIDocumentReferenceItem();
 		if (docs != null && docs.length > 0) {
-			try {
-				outDoc = (AIDocumentReferenceItem) docs[0].clone();
-
-				Map<String, AIDocumentFragment> fragmentsMap = new HashMap<String, AIDocumentFragment>();
-				for (AIDocumentReferenceItem doc : docs) {
-					doc.fragments.forEach(x -> {
-						fragmentsMap.put(x.getCode(), x);
-					});
+			outDoc = docs[0].copy();
+			outDoc.fragments = new ArrayList<AIDocumentFragment>();
+			for (AIDocumentReferenceItem doc : docs) {
+				if (doc != null && doc.fragments != null) {
+					for (AIDocumentFragment fragment : doc.fragments) {
+						if (!outDoc.containsFragment(fragment)) {
+							outDoc.fragments.add(fragment.copy());
+						}
+					}
 				}
-				outDoc.fragments = new ArrayList<AIDocumentFragment>(fragmentsMap.values());
-				outDoc.reorderFragmentsByPosition();
-				outDoc.recalculateSize();
-			} catch (CloneNotSupportedException e) {
-				throw new RuntimeException("Clone not supported...", e);
 			}
+			outDoc.reorderFragmentsByPosition();
+			outDoc.recalculateSize();
 		}
 		return outDoc;
 	}

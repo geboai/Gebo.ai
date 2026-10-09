@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "گہری تلاش/Jira تلاش"
       },
-      "PURE_SEARCH": {
-        "label": "مدد یافتہ تلاش"
-      },
       "imageGeneration": {
         "label": "تصویر تیار کرنا"
       }

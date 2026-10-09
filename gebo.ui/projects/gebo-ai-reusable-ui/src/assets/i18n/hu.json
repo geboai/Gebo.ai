@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "Mélykeresés/Jira keresés"
       },
-      "PURE_SEARCH": {
-        "label": "Asszisztált keresés"
-      },
       "imageGeneration": {
         "label": "Kép generálása"
       }

@@ -46,6 +46,7 @@ import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
 import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
+import ai.gebo.llms.chat.pipelines.service.IGUserRequestIntentClassifier;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
@@ -76,7 +77,7 @@ import lombok.ToString;
 @Component
 @AllArgsConstructor
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingService
-		implements IRoutingChatPipelineStepService {
+		implements IRoutingChatPipelineStepService, IGUserRequestIntentClassifier {
 
 	public static final String PIPELINE_EXECUTOR_SUGGESTION = "pipelineExecutorSuggestion";
 	private static final String SCANNING_HUGE_FILE_WITH_LLMS = "Scanning huge file with llms";
@@ -97,6 +98,13 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private static final String REWRITTEN_QUERY_FIELD = REWRITTEN_QUERY_TEMPLATE_PARAM;
 	static final String DEEP_SEARCHED_SYSTEMS = "deepSearchedSystems";
 	private static final String DELIVERABLE_FIELD = DELIVERABLE_TEMPLATE_PARAM;
+	/** The request understanding's field telling whether the user asked to search. */
+	static final String SEARCH_REQUESTED_FIELD = "searchRequested";
+	/**
+	 * The request understanding's field naming the language the latest user message
+	 * explicitly asks the answers in: kept on the chat until the user asks for another.
+	 */
+	static final String USER_REQUIRED_LANGUAGE_FIELD = "userRequiredLanguage";
 	private static final String INTENT_SELECTION_CRITERIA = "selection-criteria: ";
 	private static final String INTENT_TYPE = "intent-type: ";
 	private static final String END_DELIVERABLE_TYPES_CATALOG = "END_DELIVERABLE_TYPES_CATALOG";
@@ -152,6 +160,24 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		private final DeliverableIntent userIntent;
 	}
 
+	/**
+	 * The same rewrite and deliverable classification this router runs first, for the
+	 * routers that do not decide the route with the model (e.g. the open-chat one).
+	 */
+	@Override
+	public DeliverableIntent classifyUserRequest(ChatPipelineExecutionRuntimeData runtimeData,
+			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			throws ChatPipelineException {
+		try {
+			String latestInteractions = RoutingPromptUtil.latestInteractionsPromptPart(
+					runtimeData.getRequestResources().getChathistory().getLatestEntries().getInteractions());
+			return doRequestRewriteAndUserIntent(runtimeData, emitter, chatModel, serviceModel, latestInteractions)
+					.getUserIntent();
+		} catch (GeboChatSessionLifecycleException | IOException | LLMConfigException e) {
+			throw new ChatPipelineException("Cannot classify the user request", e);
+		}
+	}
+
 	private RewriteAndUserIntent doRequestRewriteAndUserIntent(ChatPipelineExecutionRuntimeData runtimeData,
 			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
 			String latestInteractions) throws GeboChatSessionLifecycleException, IOException, LLMConfigException {
@@ -165,7 +191,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
 		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
 		Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
-				List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD));
+				List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD, SEARCH_REQUESTED_FIELD, USER_REQUIRED_LANGUAGE_FIELD));
+		// an output with neither field is asked once more by callLLMRepeatableFieldEntryOutput
 		List<String> rewrittenQuery = data.get(REWRITTEN_QUERY_FIELD);
 		List<String> deliverable = data.get(DELIVERABLE_FIELD);
 		String rewrited_query = rewrittenQuery != null && !rewrittenQuery.isEmpty() ? rewrittenQuery.get(0) : null;
@@ -208,6 +235,60 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 					"**********************************************************************************************");
 		}
 		runtimeData.getRequestResources().getCurrentRequest().setUserIntent(userIntent);
+		final boolean searchRequested = searchRequested(data.get(SEARCH_REQUESTED_FIELD));
+		final boolean searchForbidden = searchForbidden(data.get(SEARCH_REQUESTED_FIELD));
+		runtimeData.getRequestResources().getCurrentRequest().setSearchRequested(searchRequested);
+		runtimeData.getRequestResources().getCurrentRequest().setSearchForbidden(searchForbidden);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Search requested:" + searchRequested + " search forbidden:" + searchForbidden);
+		}
+		// a language the user explicitly asks the answers in wins over the one the message
+		// is written in (detected when the request entered the pipelines): asked in this
+		// message it is kept on the chat, until the user asks for another one
+		final GeboChatRequest currentRequest = runtimeData.getRequestResources().getCurrentRequest();
+		final String reportedLanguage = userRequiredLanguage(data.get(USER_REQUIRED_LANGUAGE_FIELD));
+		// asked only when the message names it: a model may report the language the message
+		// is written in, which the detected language already gives
+		final String askedLanguage = reportedLanguage != null && AskedLanguage.namedIn(reportedLanguage, query)
+				? reportedLanguage
+				: null;
+		if (reportedLanguage != null && askedLanguage == null && LOGGER.isDebugEnabled()) {
+			LOGGER.debug("User required language " + reportedLanguage
+					+ " reported by the request understanding is named nowhere in the message: not kept");
+		}
+		final String keptLanguage = chatSessionLifecycleService.getUserRequiredLanguage(currentRequest);
+		if (askedLanguage != null && !askedLanguage.equalsIgnoreCase(String.valueOf(keptLanguage))) {
+			chatSessionLifecycleService.setUserRequiredLanguage(currentRequest, askedLanguage);
+		}
+		// the chat keeps the language it started in: its first trusted detection, never
+		// changed by a later one (a short or misdetected message, or none detected, does
+		// not switch it); only a language the user asks for wins over it
+		final String detectedLanguage = currentRequest.getUserLanguage();
+		String chatLanguage = chatSessionLifecycleService.getChatLanguage(currentRequest);
+		if (chatLanguage == null && detectedLanguage != null) {
+			chatLanguage = detectedLanguage;
+			chatSessionLifecycleService.setChatLanguage(currentRequest, chatLanguage);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat language set by the first trusted detection: " + chatLanguage);
+			}
+		}
+		final String answerLanguage = chatLanguage(askedLanguage, keptLanguage, chatLanguage, detectedLanguage);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Answer language:" + answerLanguage + " (asked:" + askedLanguage + " kept:" + keptLanguage
+					+ " chat:" + chatLanguage + " detected:" + detectedLanguage + ")");
+		}
+		if (answerLanguage != null) {
+			runtimeData.getRequestResources().getCurrentRequest().setUserLanguage(answerLanguage);
+			if (runtimeData.getMinimalChatContext() != null
+					&& runtimeData.getMinimalChatContext().getCurrentRequest() != null) {
+				runtimeData.getMinimalChatContext().getCurrentRequest().setUserLanguage(answerLanguage);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("User required language asked in the message:" + askedLanguage + " kept on the chat:"
+					+ keptLanguage + ", the request's now:"
+					+ runtimeData.getRequestResources().getCurrentRequest().getUserLanguage());
+		}
 		return new RewriteAndUserIntent(rewrited_query, userIntent);
 	}
 
@@ -270,7 +351,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			params.putAll(cachedParams);
 			int usedTokens = tokensLength(latestInteractions, params.toString(), rewrited_query)
 					+ _prompt.getTokensSize();
-			int remainingContext = (int) (((double) (serviceModel.getContextLength() - usedTokens)) * 0.8d);
+			// the tokens budget's share of what the context leaves (ai.gebo.llms.tokens-budget.factor)
+			int remainingContext = (int) (((double) (serviceModel.getContextLength() - usedTokens))
+					* BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
 			final int documentsTokenBudget = Math.min(remainingContext,
 					this.chatPipelinesConfig.getMaxRoutingDecisionDocumentsTokenBudget());
 			IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
@@ -525,6 +608,63 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		private final String motivation;
 	}
 
+	/** Whether the request understanding said the user asked to search: true, yes or 1. */
+	static boolean searchRequested(List<String> values) {
+		if (values == null || values.isEmpty() || values.get(0) == null) {
+			return false;
+		}
+		final String value = values.get(0).trim().toLowerCase();
+		return value.startsWith("true") || value.startsWith("yes") || value.equals("1");
+	}
+
+	/**
+	 * Whether the request understanding said the user asked to answer without searching:
+	 * the field's value never.
+	 */
+	static boolean searchForbidden(List<String> values) {
+		if (values == null || values.isEmpty() || values.get(0) == null) {
+			return false;
+		}
+		return values.get(0).trim().toLowerCase().startsWith("never");
+	}
+
+	/**
+	 * The language of a request's answer: the one the user asks for in this message, else
+	 * the one asked earlier and kept on the chat, else the chat's own (its first trusted
+	 * detection), else this message's detection (none of the others known); null when
+	 * nothing is known (the prompts then ask for the language of the request).
+	 */
+	static String chatLanguage(String asked, String kept, String chat, String detected) {
+		if (asked != null) {
+			return asked;
+		}
+		if (kept != null) {
+			return kept;
+		}
+		return chat != null ? chat : detected;
+	}
+
+	/**
+	 * The language the request understanding said the user explicitly asks the answers
+	 * in, as a capitalized English name ("English"); null when the user asks for none.
+	 */
+	static String userRequiredLanguage(List<String> values) {
+		if (values == null || values.isEmpty() || values.get(0) == null) {
+			return null;
+		}
+		final String lower = values.get(0).trim().toLowerCase();
+		if (lower.startsWith("none") || lower.startsWith("null") || lower.startsWith("no ") || lower.equals("no")
+				|| lower.startsWith("not ") || lower.startsWith("n/a")) {
+			return null;
+		}
+		// the name only: the words before any comment, without punctuation
+		final String value = values.get(0).trim().replaceAll("[^\\p{L} ].*$", "").trim();
+		if (value.isEmpty()) {
+			return null;
+		}
+		return Character.toUpperCase(value.charAt(0)) + value.substring(1);
+	}
+
 	private RespondingWith parseDecision(String decision) {
 		TreeMap<Integer, RespondingWith> ordered = new TreeMap<Integer, RespondingWith>();
 		String tolower = decision.toLowerCase();
@@ -706,9 +846,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 
 		case CHAT_WITH_FILES: {
 			return List.of(DefaultChatWithFilesStreamingOutputPipelineServiceImpl.DEFAULT_CHAT_WITH_DOCS_STREAMING);
-		}
-		case PURE_SEARCH: {
-			return List.of(DefaultPipelineStreamingPureSearchPipelineStepServiceImpl.PURE_SEARCH_STREAMING_SERVICE);
 		}
 		case DELEGATED_AGENT: {
 			return List.of(DefaultPipelineStreamingDelegatedStepServiceImpl.DEFAULT_CHAT_PIPELINE_STEP_SERVICE);

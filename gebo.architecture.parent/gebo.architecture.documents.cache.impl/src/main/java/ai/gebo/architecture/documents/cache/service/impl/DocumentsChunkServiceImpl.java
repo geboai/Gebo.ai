@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.Flow.Publisher;
@@ -27,6 +29,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter.Builder;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import tools.jackson.databind.ObjectMapper;
@@ -70,6 +73,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGAIDocumentMetaDataEnricher;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
+import ai.gebo.system.ingestion.IGLanguageDetector;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
 import ai.gebo.system.ingestion.model.MetaDataHeaderInfos;
 import jakarta.el.MethodNotFoundException;
@@ -102,6 +106,11 @@ public class DocumentsChunkServiceImpl
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final IGeboThreadManager geboThreadManager;
 	private final IKeywordMatcherService keywordMatcherService;
+	private final IGLanguageDetector languageDetector;
+	/** Shorter texts are not detected: the detector says so itself, it often gives nothing. */
+	static final int MIN_LANGUAGE_DETECTION_CHARS = 30;
+	/** A detected language below this probability is not trusted. */
+	static final double MIN_LANGUAGE_CONFIDENCE = 0.5;
 	private final ChunkingSessionRepository chunkingSessionRepo;
 	private final static JTokkitTokenCountEstimator estimator = new JTokkitTokenCountEstimator();
 	private final static ObjectMapper objectMapper = new ObjectMapper();
@@ -115,7 +124,7 @@ public class DocumentsChunkServiceImpl
 			IGeboThreadManager geboThreadManager, IGPersistentObjectManager persistentObjectManager,
 			GeboDocumentsCacheConfig cacheConfig, ChunkingSessionRepository chunkingSessionRepo,
 			DocumentChunkOperationRepository documentChunkOperationRepository,
-			IKeywordMatcherService keywordMatcherService) {
+			IKeywordMatcherService keywordMatcherService, IGLanguageDetector languageDetector) {
 		super(chunkOperationRepository, ttlCacheIt);
 		this.cacheService = cacheService;
 		this.configService = configService;
@@ -129,6 +138,67 @@ public class DocumentsChunkServiceImpl
 		this.chunkingSessionRepo = chunkingSessionRepo;
 		this.documentChunkOperationRepository = documentChunkOperationRepository;
 		this.keywordMatcherService = keywordMatcherService;
+		this.languageDetector = languageDetector;
+	}
+
+	/**
+	 * The language of the matching keywords (most often written by a model, in any
+	 * language), detected once for the whole document; null when they are too short or
+	 * the detection is not trusted.
+	 */
+	String keywordsLanguage(List<String> keywords) {
+		if (keywords == null || keywords.isEmpty() || languageDetector == null) {
+			return null;
+		}
+		final String text = String.join(" ", keywords);
+		if (text.length() < MIN_LANGUAGE_DETECTION_CHARS) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("keywordsLanguage(...) " + text.length() + " character(s) of keywords, too short to detect");
+			}
+			return null;
+		}
+		try {
+			final IGLanguageDetector.DetectedLanguage detected = languageDetector.detect(text);
+			final String language = detected != null && detected.getConfidence() >= MIN_LANGUAGE_CONFIDENCE
+					&& detected.getLanguage() != null && !detected.getLanguage().isBlank() ? detected.getLanguage()
+							: null;
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("keywordsLanguage(...) detected:" + detected + " used:" + language);
+			}
+			return language;
+		} catch (IOException | RuntimeException e) {
+			LOGGER.warn("Cannot detect the language of the matching keywords, their stop words fall back: " + e);
+			return null;
+		}
+	}
+
+	/**
+	 * The languages whose stop words a chunk is matched with: the keywords' and the
+	 * chunk's own, as the ingestion detected it, when trusted.
+	 */
+	static List<String> matchingLanguages(String keywordsLanguage, Map<String, Object> chunkMetadata) {
+		final List<String> languages = new ArrayList<String>(2);
+		if (keywordsLanguage != null) {
+			languages.add(keywordsLanguage);
+		}
+		final Object language = chunkMetadata != null ? chunkMetadata.get(DocumentMetaInfos.LANGUAGE) : null;
+		final Object confidence = chunkMetadata != null ? chunkMetadata.get(DocumentMetaInfos.LANGUAGE_CONFIDENCE)
+				: null;
+		double trust = 0;
+		if (confidence instanceof Number number) {
+			trust = number.doubleValue();
+		} else if (confidence != null) {
+			try {
+				trust = Double.parseDouble(confidence.toString());
+			} catch (NumberFormatException e) {
+				trust = 0;
+			}
+		}
+		if (language != null && !language.toString().isBlank() && trust >= MIN_LANGUAGE_CONFIDENCE
+				&& !languages.contains(language.toString())) {
+			languages.add(language.toString());
+		}
+		return languages;
 	}
 
 	@Override
@@ -163,45 +233,11 @@ public class DocumentsChunkServiceImpl
 				.filter(x -> x.getChunkType() == DocumentChunkType.IMAGE).findFirst();
 		if (imageConfig.isPresent())
 			throw new MethodNotFoundException("The images chunking is not yet implemented");
-		// Check if there is a matching request in the last ttlCacheIt period of time
-		// already done to be reused
-		List<DocumentChunkOperation> matchingOperations = repository.findByOriginalDocumentCode(document.getCode());
-
-		final long actualTime = System.currentTimeMillis();
-		Comparator<? super DocumentChunkOperation> comparator = (o1,
-				o2) -> ((int) (o1.getLastAccessed().getTime() - o2.getLastAccessed().getTime()) / 1000);
-		Optional<DocumentChunkOperation> matchingOperation = matchingOperations.stream().sorted(comparator)
-				.filter(x -> {
-
-					// Check if the request whas to enrich with metadata and all matching parameters
-					boolean matchingCriterias = x.isEnrichWithMetaData() == enrichWithMetaData
-							&& x.getChunkingPolicy() == params.getChunkingPolicy()
-							&& this.sameKeyWords(params.getMatchingKeywords(), x.getMatchingKeywords());
-					if (matchingCriterias) {
-						// checking that the request is in the last ttlCacheIt milliseconds
-						matchingCriterias = (actualTime - x.getLastAccessed().getTime()) < ttlCacheIt;
-						if (matchingCriterias) {
-							for (AbstractChunkingSpecs spec : chunkingSpecs) {
-								Optional<AbstractChunkingSpecs> sameType = x.getChunkingSpecs().stream()
-										.filter(y -> y.getClass().equals(spec.getClass())).findFirst();
-								matchingCriterias = matchingCriterias && sameType.isPresent();
-								if (matchingCriterias) {
-									matchingCriterias = matchingCriterias && sameType.get().equals(spec);
-								}
-							}
-						}
-					}
-					return matchingCriterias;
-				}).findFirst();
-		// if there is a matching operation than we return those chunks
-		if (matchingOperation.isPresent()) {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("operation getChunk(" + document.getCode() + ",...) has found cached data");
-			}
-			// returning the first chunk as 0 index id
-			DocumentChunkOperation operationData = matchingOperation.get();
-			return getNextChunkSet(document, operationData.getId(), operationData.getChunkSetsList().get(0),
-					chunkSessionId);
+		// the chunks already made of this document version with the same parameters, by any
+		// session, whose files are here: reused, the session recording its own record
+		final DocumentChunkingResponse reused = reuse(document, params, chunkSessionId);
+		if (reused != null) {
+			return reused;
 		}
 		// We have to calculate chunking from scratch
 		Optional<AbstractChunkingSpecs> textConfig = chunkingSpecs.stream()
@@ -247,6 +283,9 @@ public class DocumentsChunkServiceImpl
 					final List<DocumentChunksSet> chunkSets = new ArrayList<DocumentChunksSet>();
 					chunkOperation.setEnrichWithMetaData(enrichWithMetaData);
 					chunkOperation.setChunkingSpecs(chunkingSpecs);
+					// what makes the chunks reusable by another session, and producible again
+					chunkOperation.setChunkingParams(params);
+					chunkOperation.setDocumentModificationDate(document.getModificationDate());
 					chunkOperation.setOriginalDocumentCode(document.getCode());
 					chunkOperation.setChunkingSessionId(chunkSessionId);
 					if (LOGGER.isDebugEnabled()) {
@@ -254,6 +293,9 @@ public class DocumentsChunkServiceImpl
 					}
 					final boolean chunkAll = params.getChunkingPolicy() == null
 							|| params.getChunkingPolicy() == ChunkingPolicy.SPLIT_CHUNKS;
+					// the stop words ignored in the matching keywords are the ones of their
+					// language and of each chunk's (see matchingLanguages)
+					final String keywordsLanguage = chunkAll ? null : keywordsLanguage(params.getMatchingKeywords());
 					final AtomicLong atomicLong = new AtomicLong(0l);
 					final AtomicBoolean samplingBudgetReached = new AtomicBoolean(false);
 					docsStream.forEach(doc -> {
@@ -306,9 +348,14 @@ public class DocumentsChunkServiceImpl
 									outContents = withMetaData;
 								}
 
-								response.setEmpty(outContents.isEmpty());
-
+								// the document is empty when none of its pages gives a chunk (see below),
+								// not when its last page gives none: a page number alone, under the least
+								// chunk length, took a whole document for an empty file
 								for (Document _document : outContents) {
+									// the position in the document, counted on every split chunk: a chunk left
+									// out by a matching policy keeps its place, so consecutive positions are
+									// contiguous text
+									final long position = atomicLong.incrementAndGet();
 									boolean considerChunk = chunkAll;
 									int bytesSize = _document.getText() != null ? _document.getText().length() * 2 : 0;
 									int tokensSize = _document.getText() != null && _document.isText()
@@ -327,7 +374,8 @@ public class DocumentsChunkServiceImpl
 											if (currentTokensLength >= params.getTokensThreashold().longValue()) {
 
 												considerChunk = this.keywordMatcherService.isMatching(
-														params.getMatchingKeywords(), _document.getText(), nhits);
+														params.getMatchingKeywords(), _document.getText(), nhits,
+														matchingLanguages(keywordsLanguage, _document.getMetadata()));
 											} else {
 												considerChunk = true;
 											}
@@ -335,7 +383,8 @@ public class DocumentsChunkServiceImpl
 											break;
 										case ONLY_MATCHING_CHUNKS: {
 											considerChunk = this.keywordMatcherService.isMatching(
-													params.getMatchingKeywords(), _document.getText(), nhits);
+													params.getMatchingKeywords(), _document.getText(), nhits,
+													matchingLanguages(keywordsLanguage, _document.getMetadata()));
 										}
 											break;
 										}
@@ -350,7 +399,7 @@ public class DocumentsChunkServiceImpl
 										response.setEmpty(false);
 										DocumentChunk chunk = DocumentChunk.ofText(document.getCode(),
 												_document.getText(), _document.getMetadata());
-										chunk.setChunkPosition(atomicLong.incrementAndGet());
+										chunk.setChunkPosition(position);
 
 										chunk.setBytesSize((long) bytesSize);
 										chunk.setTokensSize((long) tokensSize);
@@ -403,8 +452,25 @@ public class DocumentsChunkServiceImpl
 						LOGGER.debug("End looping contents stream");
 					}
 					if (!exceptions.isEmpty()) {
+						// the chunk sets written so far are no cache: no record will name them
+						cleanupResources(chunkOperation);
 						throw new DocumentCacheAccessException("Cannot split in chunk because of an exception",
 								exceptions);
+					}
+					// the count the positions refer to, on the chunks returned now: the chunk sets
+					// read later get it from the operation (see getNextChunkSet). A sample is
+					// merged below into a single chunk, 1 of 1, whatever it was read from
+					chunkOperation.setDocumentChunks(samplingMode ? 1l : atomicLong.get());
+					if (response.getCurrentChunkSet() != null && response.getCurrentChunkSet().getChunks() != null) {
+						for (DocumentChunk chunk : response.getCurrentChunkSet().getChunks()) {
+							chunk.setChunksCount(atomicLong.get());
+						}
+					}
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("document " + document.getCode() + " split into " + atomicLong.get()
+								+ " chunk(s), " + chunkOperation.getTotalChunks() + " kept by policy:"
+								+ params.getChunkingPolicy() + ", " + chunkOperation.getTotalTokensSize() + " (tok) "
+								+ chunkOperation.getTotalBytesSize() + " byte(s)");
 					}
 					if (!chunkSets.isEmpty()) {
 						DocumentChunksSet currentChunkSet = chunkSets.get(0);
@@ -420,6 +486,17 @@ public class DocumentsChunkServiceImpl
 						}
 						objectMapper.writeValue(writtenFile.toFile(), currentChunkSet);
 						chunkSets.clear();
+					}
+					if (!chunkOperation.getChunkSetsList().isEmpty() && chunkSessionId != null
+							&& !exists(chunkSessionId)) {
+						// the session no longer exists (its retention passed while this chunking ran):
+						// nothing will read these chunks. A session only disposed meanwhile still
+						// records them, its files released after the grace period
+						LOGGER.warn("Chunking of " + document.getCode() + " ended after its session " + chunkSessionId
+								+ " was deleted: its " + chunkOperation.getChunkSetsList().size()
+								+ " chunk set(s) deleted, not recorded");
+						cleanupResources(chunkOperation);
+						return response;
 					}
 					if (!chunkOperation.getChunkSetsList().isEmpty()) {
 						response.setId(chunkOperation.getId());
@@ -574,15 +651,48 @@ public class DocumentsChunkServiceImpl
 		DocumentChunkOperation operation = optionalChunkOperation.get();
 		int index = operation.getChunkSetsList().indexOf(chunkId);
 		if (index >= 0) {
-			DocumentChunkingResponse response = new DocumentChunkingResponse();
-			response.setEmpty(false);
 			String workDirectory = configService.getGeboWorkDirectory();
 			Path fileToRead = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME, chunkId);
+			if (!Files.exists(fileToRead)) {
+				// released (its session disposed, the grace passed) or written on another
+				// instance: the chunks are produced again, and read on from the same set
+				final String target = chunkSessionId != null ? chunkSessionId : operation.getChunkingSessionId();
+				final DocumentChunkOperation again = produceAgain(document, operation, target);
+				if (again == null) {
+					throw new DocumentCacheAccessException(
+							"Chunk set " + chunkId + " of the chunking operation " + chunkRequestId + " is gone");
+				}
+				if (index >= again.getChunkSetsList().size()) {
+					// the document gives fewer chunk sets now (its current content changed)
+					LOGGER.warn("Chunks of document " + document.getCode() + " produced again in "
+							+ again.getChunkSetsList().size() + " set(s), set " + (index + 1)
+							+ " asked: no more chunks");
+					final DocumentChunkingResponse none = new DocumentChunkingResponse();
+					none.setEmpty(true);
+					none.setId(again.getId());
+					none.setChunkingSessionId(target);
+					return none;
+				}
+				return getNextChunkSet(document, again.getId(), again.getChunkSetsList().get(index), target);
+			}
+			DocumentChunkingResponse response = new DocumentChunkingResponse();
+			response.setEmpty(false);
 			DocumentChunksSet chunkSet = objectMapper.readValue(fileToRead.toFile(), DocumentChunksSet.class);
 			if (chunkSet.getChunks() != null) {
+				// the count the positions refer to; an operation written before it was recorded
+				// only knows the kept chunks
+				final long documentChunks = operation.getDocumentChunks() > 0 ? operation.getDocumentChunks()
+						: operation.getTotalChunks();
 				for (DocumentChunk chunk : chunkSet.getChunks()) {
-					chunk.setChunksCount((long) operation.getTotalChunks());
+					chunk.setChunksCount(documentChunks);
+					// a chunk file may be shared by sessions: the chunks read are the reader's
+					if (chunkSessionId != null) {
+						chunk.setChunkingSessionId(chunkSessionId);
+					}
 				}
+			}
+			if (chunkSessionId != null) {
+				chunkSet.setChunkingSessionId(chunkSessionId);
 			}
 			response.setCurrentChunkSet(chunkSet);
 			response.setId(chunkRequestId);
@@ -595,7 +705,10 @@ public class DocumentsChunkServiceImpl
 				response.setNextChunkSetId(nextChunk);
 			}
 			operation.setLastAccessed(new Date());
-			this.repository.save(operation);
+			// a record disposed meanwhile (its session ended) is not written again
+			if (this.repository.existsById(operation.getId())) {
+				this.repository.save(operation);
+			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End getNextChunk(" + document.getCode() + ",'" + chunkRequestId + "','" + chunkId + "')");
 			}
@@ -603,6 +716,174 @@ public class DocumentsChunkServiceImpl
 		} else
 			throw new DocumentCacheAccessException(chunkId + " not part of the chunking operation " + chunkRequestId);
 
+	}
+
+	/**
+	 * Whether the chunk files of an operation are in this work directory: an operation
+	 * recorded by another instance (its own work directory) or whose files were cleaned
+	 * up is no cache.
+	 */
+	private boolean hasChunkFiles(DocumentChunkOperation operation) {
+		if (operation.getChunkSetsList() == null || operation.getChunkSetsList().isEmpty()) {
+			return false;
+		}
+		final String workDirectory = configService.getGeboWorkDirectory();
+		for (String chunkSetId : operation.getChunkSetsList()) {
+			if (!Files.exists(Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME, chunkSetId))) {
+				// a disposed session's files are released after the grace period: no anomaly
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Cached chunks of document " + operation.getOriginalDocumentCode() + " (operation "
+							+ operation.getId() + ", session " + operation.getChunkingSessionId()
+							+ ") have no file " + chunkSetId + " here: not used");
+				}
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/** The most recent records first. */
+	private static final Comparator<DocumentChunkOperation> NEWEST_FIRST = Comparator
+			.comparing(DocumentChunkOperation::getCreated, Comparator.nullsLast(Comparator.reverseOrder()));
+
+	/**
+	 * Whether two chunkings give the same chunks: every chunking parameter equal, the
+	 * matching keywords in any order and case. False when either is unknown (a record
+	 * written before the parameters were recorded).
+	 */
+	boolean sameChunking(ChunkingParams recorded, ChunkingParams asked) {
+		if (recorded == null || asked == null) {
+			return false;
+		}
+		final List<AbstractChunkingSpecs> recordedSpecs = recorded.getChunkingSpecs() != null
+				? recorded.getChunkingSpecs()
+				: List.of();
+		final List<AbstractChunkingSpecs> askedSpecs = asked.getChunkingSpecs() != null ? asked.getChunkingSpecs()
+				: List.of();
+		return recorded.getChunkingPolicy() == asked.getChunkingPolicy()
+				&& Objects.equals(recorded.getTokensThreashold(), asked.getTokensThreashold())
+				&& Objects.equals(recorded.getKeywordHits(), asked.getKeywordHits())
+				&& sameKeyWords(recorded.getMatchingKeywords(), asked.getMatchingKeywords())
+				&& recordedSpecs.equals(askedSpecs) && recorded.isEnrichWithMetaData() == asked.isEnrichWithMetaData()
+				&& recorded.getTokensPerChunkSet() == asked.getTokensPerChunkSet()
+				&& recorded.isSamplingMode() == asked.isSamplingMode()
+				&& recorded.getSampledTokens() == asked.getSampledTokens();
+	}
+
+	/**
+	 * The chunks already made of this version of the document with the same parameters,
+	 * by any session, whose files are in this work directory; null when there are none.
+	 * Another session's chunks are recorded for this session too (its own record, naming
+	 * the same files): sessions never share a record, and the files stay while a record of
+	 * a living session names them (see OrphanedCacheEntriesCleaner).
+	 */
+	private DocumentChunkingResponse reuse(IGComponentOriginatedDocument document, ChunkingParams params,
+			String chunkSessionId) throws DocumentCacheAccessException, IOException {
+		final List<DocumentChunkOperation> records = repository.findByOriginalDocumentCode(document.getCode());
+		final Optional<DocumentChunkOperation> same = records.stream()
+				.filter(op -> sameChunking(op.getChunkingParams(), params)
+						&& Objects.equals(op.getDocumentModificationDate(), document.getModificationDate()))
+				.sorted(NEWEST_FIRST).filter(this::hasChunkFiles).findFirst();
+		if (same.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("reuse(" + document.getCode() + ") no chunks of this version with these parameters here ("
+						+ records.size() + " record(s) of the document): chunking it for session " + chunkSessionId);
+			}
+			return null;
+		}
+		final DocumentChunkOperation source = same.get();
+		if (chunkSessionId != null && chunkSessionId.equals(source.getChunkingSessionId())) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("reuse(" + document.getCode() + ") already chunked in session " + chunkSessionId
+						+ " (operation " + source.getId() + ")");
+			}
+			return getNextChunkSet(document, source.getId(), source.getChunkSetsList().get(0), chunkSessionId);
+		}
+		// the files' grace restarts before the record naming them is written: a cleaner
+		// releasing them meanwhile finds them too young
+		touch(source);
+		final DocumentChunkOperation own = new DocumentChunkOperation();
+		own.setOriginalDocumentCode(source.getOriginalDocumentCode());
+		own.setChunkSetsList(new ArrayList<>(source.getChunkSetsList()));
+		own.setChunkingSpecs(source.getChunkingSpecs());
+		own.setChunkingParams(source.getChunkingParams());
+		own.setDocumentModificationDate(source.getDocumentModificationDate());
+		own.setEnrichWithMetaData(source.isEnrichWithMetaData());
+		own.setTotalBytesSize(source.getTotalBytesSize());
+		own.setTotalTokensSize(source.getTotalTokensSize());
+		own.setTotalChunks(source.getTotalChunks());
+		own.setDocumentChunks(source.getDocumentChunks());
+		own.setChunkingSessionId(chunkSessionId);
+		repository.insert(own);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("reuse(" + document.getCode() + ") the chunks of session " + source.getChunkingSessionId()
+					+ " (operation " + source.getId() + ", " + source.getChunkSetsList().size()
+					+ " file(s)) recorded for session " + chunkSessionId + " as operation " + own.getId());
+		}
+		return getNextChunkSet(document, own.getId(), own.getChunkSetsList().get(0), chunkSessionId);
+	}
+
+	/**
+	 * The chunks of a record whose files are gone (released after its session's disposal,
+	 * or on another instance), produced again in {@code chunkSessionId} with the record's
+	 * parameters, from the document as the documents cache gives it now (its current
+	 * version once its cached copy expired): the record that replaces it, null when it
+	 * can not be produced again.
+	 */
+	private DocumentChunkOperation produceAgain(IGComponentOriginatedDocument document, DocumentChunkOperation stale,
+			String chunkSessionId) throws DocumentCacheAccessException, IOException {
+		if (stale.getChunkingParams() == null) {
+			LOGGER.warn("Chunks of document " + document.getCode() + " (operation " + stale.getId()
+					+ ") are gone and can not be produced again: their chunking parameters were not recorded");
+			return null;
+		}
+		if (chunkSessionId != null && !exists(chunkSessionId)) {
+			LOGGER.warn("Chunks of document " + document.getCode() + " (operation " + stale.getId()
+					+ ") are gone and can not be produced again: their session " + chunkSessionId + " was deleted");
+			return null;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Producing again the chunks of document " + document.getCode() + " (operation "
+					+ stale.getId() + " of session " + stale.getChunkingSessionId() + ", files gone) for session "
+					+ chunkSessionId + ", from its current content");
+		}
+		final DocumentChunkingResponse produced = getChunkSet(document, stale.getChunkingParams(), chunkSessionId);
+		final Optional<DocumentChunkOperation> again = produced != null && produced.getId() != null
+				? repository.findById(produced.getId())
+				: Optional.empty();
+		if (again.isEmpty()) {
+			LOGGER.warn("Chunks of document " + document.getCode() + " produced again: the document gives none now");
+			return null;
+		}
+		if (Objects.equals(stale.getChunkingSessionId(), chunkSessionId) && !stale.getId().equals(again.get().getId())) {
+			// replaced by the record just written
+			repository.delete(stale);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Produced again the chunks of document " + document.getCode() + " as operation "
+					+ again.get().getId() + " (" + again.get().getChunkSetsList().size() + " file(s))");
+		}
+		return again.get();
+	}
+
+	/**
+	 * Restarts the grace period of a record's chunk files (their last modified time set to
+	 * now): the cleaner releases a file only once older than it.
+	 */
+	private void touch(DocumentChunkOperation operation) {
+		final String workDirectory = configService.getGeboWorkDirectory();
+		final java.nio.file.attribute.FileTime now = java.nio.file.attribute.FileTime
+				.fromMillis(System.currentTimeMillis());
+		for (String chunkSetId : operation.getChunkSetsList()) {
+			final Path file = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME, chunkSetId);
+			try {
+				if (Files.exists(file)) {
+					Files.setLastModifiedTime(file, now);
+				}
+			} catch (IOException e) {
+				LOGGER.warn("Cannot restart the grace period of the chunk file " + file + ": " + e);
+			}
+		}
 	}
 
 	@Override
@@ -658,17 +939,72 @@ public class DocumentsChunkServiceImpl
 			LOGGER.debug("Begin getCachedChunk(" + document.getCode() + "..)");
 		}
 		List<DocumentChunkOperation> data = repository.findByOriginalDocumentCode(document.getCode());
-		if (!data.isEmpty()) {
-			DocumentChunkOperation entry = data.get(0);
+		// the chunks of this chunking session, else of another session of the same reference
+		// (a job whose session was opened twice): never the chunks another caller made of
+		// the same document (a tool's sample, a keyword filtered chunking). A record whose
+		// chunk files are gone (released after its session's disposal, or on another
+		// instance) has its chunks produced again
+		List<DocumentChunkOperation> candidates = data.stream()
+				.filter(op -> chunkSessionId != null && chunkSessionId.equals(op.getChunkingSessionId()))
+				.sorted(NEWEST_FIRST).toList();
+		if (candidates.isEmpty()) {
+			final Set<String> sameReference = sessionsOfTheSameReference(chunkSessionId);
+			if (!sameReference.isEmpty()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("getCachedChunk(" + document.getCode() + "..) no chunks in session " + chunkSessionId
+							+ ": looking in the other session(s) of its reference " + sameReference);
+				}
+				candidates = data.stream().filter(op -> sameReference.contains(op.getChunkingSessionId()))
+						.sorted(NEWEST_FIRST).toList();
+			}
+		}
+		Optional<DocumentChunkOperation> chosen = candidates.stream().filter(this::hasChunkFiles).findFirst();
+		if (chosen.isEmpty() && !candidates.isEmpty()) {
+			final Optional<DocumentChunkOperation> producible = candidates.stream()
+					.filter(op -> op.getChunkingParams() != null).findFirst();
+			final DocumentChunkOperation again = producible.isPresent()
+					? produceAgain(document, producible.get(),
+							chunkSessionId != null ? chunkSessionId : producible.get().getChunkingSessionId())
+					: null;
+			if (again != null) {
+				chosen = Optional.of(again);
+			}
+		}
+		if (chosen.isPresent()) {
+			DocumentChunkOperation entry = chosen.get();
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("End getCachedChunk(" + document.getCode() + "..) getting next chunk");
+				LOGGER.debug("End getCachedChunk(" + document.getCode() + "..) getting next chunk of operation "
+						+ entry.getId() + " of session " + entry.getChunkingSessionId() + " (" + data.size()
+						+ " operation(s) for the document, asked session " + chunkSessionId + ")");
 			}
 			return getNextChunkSet(document, entry.getId(), entry.getChunkSetsList().get(0), chunkSessionId);
 		}
 
-		LOGGER.error("Chunks for document " + document.getCode() + " have not been found");
+		LOGGER.error("Chunks for document " + document.getCode() + " have not been found in the chunking session "
+				+ chunkSessionId + " (" + data.size() + " operation(s) of other sessions for the document)");
 
 		throw new DocumentCacheAccessException("No existing cached chunks");
+	}
+
+	/**
+	 * The other sessions with the reference of {@code chunkSessionId} (a job's session
+	 * opened twice): none when it is null or no longer exists.
+	 */
+	private Set<String> sessionsOfTheSameReference(String chunkSessionId) {
+		if (chunkSessionId == null) {
+			return Set.of();
+		}
+		final Optional<ChunkingSession> session = chunkingSessionRepo.findById(chunkSessionId);
+		if (session.isEmpty() || session.get().getChunkingReference() == null) {
+			return Set.of();
+		}
+		final Set<String> ids = new HashSet<>();
+		for (ChunkingSession other : chunkingSessionRepo.findByChunkingReference(session.get().getChunkingReference())) {
+			if (other.getCode() != null && !other.getCode().equals(chunkSessionId)) {
+				ids.add(other.getCode());
+			}
+		}
+		return ids;
 	}
 
 	public Flux<IDocumentChunkWithRef> streamChunks(IGComponentOriginatedDocument document,
@@ -763,14 +1099,39 @@ public class DocumentsChunkServiceImpl
 
 	@Override
 	public String createChunkingSession(String reference) {
-		if (retrieveChunkingSession(reference) != null)
+		final List<ChunkingSession> existing = chunkingSessionRepo.findByChunkingReference(reference);
+		if (!existing.isEmpty()) {
+			final ChunkingSession previous = existing.get(0);
+			if (previous.disposed()) {
+				// the procedure of this reference ran before and ended (a disposed session is
+				// kept for the retention): it runs again in the same session, reopened
+				previous.setLogicalDeletionTimestamp(null);
+				previous.setDateModified(new Date());
+				chunkingSessionRepo.save(previous);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("createChunkingSession(" + reference + ") reopened the disposed session "
+							+ previous.getCode());
+				}
+				return previous.getCode();
+			}
 			throw new IllegalStateException("The chunking session with reference " + reference + " already exists");
+		}
 		ChunkingSession session = new ChunkingSession();
 		session.setCode(UUID.randomUUID().toString());
 		session.setChunkingReference(reference);
 		session.setDateCreated(new Date());
 		session.setDateModified(new Date());
-		chunkingSessionRepo.insert(session);
+		try {
+			chunkingSessionRepo.insert(session);
+		} catch (DuplicateKeyException e) {
+			// created meanwhile by a concurrent caller (the reference is unique, see
+			// ChunkCacheIndexes)
+			throw new IllegalStateException("The chunking session with reference " + reference + " already exists",
+					e);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("createChunkingSession(" + reference + ") created session " + session.getCode());
+		}
 		return session.getCode();
 	}
 
@@ -797,18 +1158,68 @@ public class DocumentsChunkServiceImpl
 
 	@Override
 	public void disposeChunkingSession(String chunkSessionId) {
-		checkExistence(chunkSessionId);
-		Stream<DocumentChunkOperation> stream = documentChunkOperationRepository
-				.findByChunkingSessionId(chunkSessionId);
-		stream.forEach(op -> {
-			try {
-				cleanupResources(op);
-			} catch (Throwable th) {
+		// a caller disposes its session as it ends, also when its request was cancelled:
+		// the cancellation interrupts its thread, and MongoDB refuses to work on an
+		// interrupted thread (the session and its files would stay). The interruption is
+		// put aside while disposing and given back to the caller
+		final boolean interrupted = Thread.interrupted();
+		if (interrupted) {
+			LOGGER.warn("disposeChunkingSession(" + chunkSessionId
+					+ ") called on an interrupted thread (its request cancelled): disposed anyway");
+		}
+		try {
+			dispose(chunkSessionId);
+		} finally {
+			if (interrupted) {
+				Thread.currentThread().interrupt();
 			}
-		});
-		documentChunkOperationRepository.deleteByChunkingSessionId(chunkSessionId);
-		chunkingSessionRepo.deleteById(chunkSessionId);
+		}
+	}
 
+	/**
+	 * The disposal is logical: the session is marked disposed and keeps its records for the
+	 * retention, so a late read of its chunks produces them again; its chunk files are
+	 * touched, their grace period starting now, and go once no record of a living session
+	 * names them (see OrphanedCacheEntriesCleaner).
+	 */
+	private void dispose(String chunkSessionId) {
+		// disposing a session already disposed (or never created) is nothing to do: every
+		// end of its caller may dispose it
+		final Optional<ChunkingSession> found = chunkSessionId != null ? chunkingSessionRepo.findById(chunkSessionId)
+				: Optional.empty();
+		if (found.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("disposeChunkingSession(" + chunkSessionId + ") no such session: nothing to dispose");
+			}
+			return;
+		}
+		final ChunkingSession session = found.get();
+		if (session.disposed()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("disposeChunkingSession(" + chunkSessionId + ") already disposed at "
+						+ session.getLogicalDeletionTimestamp());
+			}
+			return;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin disposeChunkingSession(" + chunkSessionId + ") of " + session.getChunkingReference());
+		}
+		int records = 0;
+		try (Stream<DocumentChunkOperation> stream = documentChunkOperationRepository
+				.findByChunkingSessionId(chunkSessionId)) {
+			for (DocumentChunkOperation op : (Iterable<DocumentChunkOperation>) stream::iterator) {
+				touch(op);
+				records++;
+			}
+		}
+		final Date now = new Date();
+		session.setLogicalDeletionTimestamp(now);
+		session.setDateModified(now);
+		chunkingSessionRepo.save(session);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End disposeChunkingSession(" + chunkSessionId + ") disposed with " + records
+					+ " record(s) kept, their files released after the grace period");
+		}
 	}
 
 	static TokenTextSplitter get(TextChunkingSpecs specs) {

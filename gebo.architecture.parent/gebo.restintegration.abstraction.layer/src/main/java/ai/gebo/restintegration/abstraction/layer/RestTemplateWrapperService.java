@@ -11,6 +11,7 @@ package ai.gebo.restintegration.abstraction.layer;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -51,6 +53,29 @@ public class RestTemplateWrapperService {
 	 */
 	public RestTemplateWrapperService() {
 
+	}
+
+	/** A wrapper calling through the given RestTemplate. */
+	public RestTemplateWrapperService(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+	}
+
+	/**
+	 * A wrapper of its own whose calls time out: for callers that must not wait forever
+	 * on a provider (the shared bean's RestTemplate has no timeout, and the other users
+	 * of it keep that).
+	 *
+	 * @param connectTimeout time a call may take to connect
+	 * @param readTimeout    time a call may wait for the answer
+	 */
+	public static RestTemplateWrapperService withTimeouts(Duration connectTimeout, Duration readTimeout) {
+		final SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+		requestFactory.setConnectTimeout(connectTimeout);
+		requestFactory.setReadTimeout(readTimeout);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("withTimeouts(...) connect:" + connectTimeout + " read:" + readTimeout);
+		}
+		return new RestTemplateWrapperService(new RestTemplate(requestFactory));
 	}
 
 	/**

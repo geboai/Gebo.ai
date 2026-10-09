@@ -23,6 +23,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext.ChatRequestContextImpl.ChatRequestContextImplBuilder;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry.ChatSessionEntryImpl.ChatSessionEntryImplBuilder;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
@@ -53,6 +54,38 @@ public class GUserChatSession extends GBaseObject {
 	private List<ChatInteractions> interactions = new ArrayList<ChatInteractions>(); // List of chat interactions
 	private String chatModelCode = null; // Code for the chat model used
 	private List<String> choosedKnowledgeBases = null; // List of chosen knowledge bases for the chat
+	/**
+	 * The language the user explicitly asked the answers of this chat in (e.g.
+	 * "French"), named in English; null when the user never asked for one. It holds
+	 * until the user asks for another one.
+	 */
+	private String userRequiredLanguage = null;
+	/**
+	 * The language this chat is held in (e.g. "Italian"), named in English: set by the
+	 * first trusted detection of a user's message and never changed by a later one, so a
+	 * short or misdetected message does not switch it; only a language the user asks for
+	 * explicitly ({@link #userRequiredLanguage}) wins over it. Null until a message is
+	 * detected.
+	 */
+	private String chatLanguage = null;
+
+	/**
+	 * The language of the earliest request of this chat that had one, the request
+	 * {@code excludedRequestId} left out (the one being answered); null when none had
+	 * one. The language of a chat started before its own was kept.
+	 */
+	public String earliestRequestLanguage(String excludedRequestId) {
+		if (interactions != null) {
+			for (ChatInteractions interaction : interactions) {
+				final GeboChatRequest request = interaction != null ? interaction.getRequest() : null;
+				if (request != null && request.getUserLanguage() != null && !request.getUserLanguage().isBlank()
+						&& (excludedRequestId == null || !excludedRequestId.equals(request.getId()))) {
+					return request.getUserLanguage();
+				}
+			}
+		}
+		return null;
+	}
 
 	public IChatRequestContext createChatRequestContext() {
 		ChatRequestContextImplBuilder builder = IChatRequestContext.builder();
@@ -91,6 +124,7 @@ public class GUserChatSession extends GBaseObject {
 						pipelineInfos.put("routed-params", interaction.getResponse().getPipelineParams());
 					}
 					builder.pipelineInfos(pipelineInfos);
+					builder.userLanguage(interaction.getRequest().getUserLanguage());
 				}
 			}
 		}

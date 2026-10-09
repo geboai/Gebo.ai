@@ -29,7 +29,6 @@ QA | &quot;QA&quot;
 HOWTO | &quot;HOWTO&quot;
 DECISION | &quot;DECISION&quot;
 SUMMARY | &quot;SUMMARY&quot;
-PURE_SEARCH | &quot;PURE_SEARCH&quot;
 ANALISYS | &quot;ANALISYS&quot;
 IMAGE_GENERATION | &quot;IMAGE_GENERATION&quot;
 UNKNOWN | &quot;UNKNOWN&quot;

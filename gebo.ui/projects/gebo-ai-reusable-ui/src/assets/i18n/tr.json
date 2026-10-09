@@ -3264,9 +3264,6 @@
       "DEEP_SEARCH_RESPONSE.jira": {
         "label": "Derin arama/Jira Arama"
       },
-      "PURE_SEARCH": {
-        "label": "Yardımlı arama"
-      },
       "imageGeneration": {
         "label": "Görsel oluşturma"
       }

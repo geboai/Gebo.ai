@@ -25,6 +25,11 @@
 			<artifactId>opensearch-java</artifactId>
 			<version>3.5.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		
 

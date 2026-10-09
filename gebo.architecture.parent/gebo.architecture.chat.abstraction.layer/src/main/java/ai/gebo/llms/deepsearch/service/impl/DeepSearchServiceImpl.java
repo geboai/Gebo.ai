@@ -88,7 +88,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingService
 					if (flow != null) {
 						flow = flow.transform(ReactiveMonitor.monitor("pure-search"));
 					}
-					flow.filter(x -> x != null).onErrorResume(exc -> {
+					flow = flow.filter(x -> x != null).onErrorResume(exc -> {
 						final String msg = "Error while streaming chat respose";
 						LOGGER.error(msg, exc);
 
@@ -115,7 +115,8 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingService
 							}
 						}
 					};
-					flow.doAfterTerminate(deleteChunkingSessionRunnable);
+					// disposed however the flow ends: completed, failed or cancelled
+					flow = flow.doFinally(signal -> deleteChunkingSessionRunnable.run());
 				}
 				return flow;
 			});

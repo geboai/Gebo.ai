@@ -20,6 +20,7 @@ import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.ai.service.IGExternalToolCallback;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.mcpserver.model.GeboMCPServerConfig;
+import ai.gebo.llms.agent.standard.services.UserKnowledgeBasesExecutionEnvironment;
 import io.modelcontextprotocol.server.McpServerFeatures.SyncToolSpecification;
 import lombok.AllArgsConstructor;
 
@@ -40,6 +41,7 @@ public class GeboMcpToolsProvider {
 
 	private final IGToolCallbackSourceRepositoryPattern toolRepository;
 	private final GeboMcpSecurityContextSupport securitySupport;
+	private final UserKnowledgeBasesExecutionEnvironment userEnvironment;
 
 	/**
 	 * Resolves the enabled tools of the given configuration to MCP tool
@@ -61,7 +63,7 @@ public class GeboMcpToolsProvider {
 		callbacks = callbacks.stream().filter(x -> !IGExternalToolCallback.isExternalTool(x)).toList();
 		List<ToolCallback> secured = new ArrayList<>();
 		for (ToolCallback callback : callbacks) {
-			secured.add(new GeboMcpSecurityAwareToolCallback(callback, securitySupport));
+			secured.add(new GeboMcpSecurityAwareToolCallback(callback, securitySupport, userEnvironment));
 		}
 		return McpToolUtils.toSyncToolSpecification(secured);
 	}

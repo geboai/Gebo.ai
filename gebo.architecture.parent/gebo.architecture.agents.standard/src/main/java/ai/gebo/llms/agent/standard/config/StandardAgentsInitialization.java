@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -38,6 +39,7 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.search.model.SearchServiceException;
+import ai.gebo.architecture.search.config.OpenNetworkLoadingConfig;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
@@ -59,8 +61,10 @@ import ai.gebo.llms.agent.standard.services.InternalKnowledgeBaseSearchNetworkAg
 import ai.gebo.llms.agent.standard.services.NativeDocumentsSearchNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.SearchAgentPromptPatcher;
 import ai.gebo.llms.agent.standard.services.StringToStringToolCallingNetworkAgent;
+import ai.gebo.llms.agent.standardtools.DeepSearchToolSource;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
+import ai.gebo.llms.agent.standardtools.WebSearchToolSource;
 import jakarta.annotation.PostConstruct;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
@@ -155,6 +159,22 @@ public class StandardAgentsInitialization {
 			autoMountingConfig.setExcludedToolSources(excludedSources);
 			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
 					StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE);
+		}
+		// The default network searches the web with its web search agents: the web
+		// search tool on the tool-calling agent would duplicate them.
+		if (!excludedSources.contains(WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE)) {
+			excludedSources.add(WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE);
+			autoMountingConfig.setExcludedToolSources(excludedSources);
+			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
+					WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE);
+		}
+		// The default network deep searches with the deep search pipelines: the deep
+		// search tools are for the agents that operate their own tools.
+		if (!excludedSources.contains(DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE)) {
+			excludedSources.add(DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE);
+			autoMountingConfig.setExcludedToolSources(excludedSources);
+			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
+					DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE);
 		}
 	}
 
@@ -580,6 +600,20 @@ public class StandardAgentsInitialization {
 		return SearchAgentPromptPatcher.withAgentPlaceholders(prompt);
 	}
 
+	/** How the results of the services searching an open network are loaded, when configured. */
+	private ObjectProvider<OpenNetworkLoadingConfig> openNetworkLoading = null;
+
+	@Autowired(required = false)
+	public void setOpenNetworkLoading(ObjectProvider<OpenNetworkLoadingConfig> openNetworkLoading) {
+		this.openNetworkLoading = openNetworkLoading;
+	}
+
+	/** The open network loading settings: the configured ones, else the defaults. */
+	OpenNetworkLoadingConfig openNetworkLoading() {
+		final OpenNetworkLoadingConfig config = openNetworkLoading != null ? openNetworkLoading.getIfAvailable() : null;
+		return config != null ? config : new OpenNetworkLoadingConfig();
+	}
+
 	@Bean
 	public IGDynamicAgentServiceSupplier externalSourcesAgentServicesSupplier() {
 		return new IGDynamicAgentServiceSupplier() {
@@ -602,7 +636,9 @@ public class StandardAgentsInitialization {
 							NativeDocumentsSearchNetworkAgentService nativeWrapper = new NativeDocumentsSearchNetworkAgentService(
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
 									runtimeBinder, rendererFactory, chunkingService, rankerService,
-									standardAgentsConfig.getMaxChunksPerDocument(), nativeSearch);
+									standardAgentsConfig.getMaxChunksPerDocument(),
+									standardAgentsConfig.getSearchDocumentsParallelism(), nativeSearch);
+							nativeWrapper.setOpenNetworkLoading(openNetworkLoading());
 							outServices.add(nativeWrapper);
 							if (LOGGER.isDebugEnabled()) {
 								LOGGER.debug("Registered native search agent service id:" + nativeWrapper.getId());
@@ -611,7 +647,9 @@ public class StandardAgentsInitialization {
 							DocumentsSearchNetworkAgentServiceWrapper wrapper = new DocumentsSearchNetworkAgentServiceWrapper(
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
 									runtimeBinder, rendererFactory, chunkingService, rankerService,
-									standardAgentsConfig.getMaxChunksPerDocument(), search);
+									standardAgentsConfig.getMaxChunksPerDocument(),
+									standardAgentsConfig.getSearchDocumentsParallelism(), search);
+							wrapper.setOpenNetworkLoading(openNetworkLoading());
 							outServices.add(wrapper);
 							if (LOGGER.isDebugEnabled()) {
 								LOGGER.debug("Registered search agent service id:" + wrapper.getId());

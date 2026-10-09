@@ -18,8 +18,14 @@ import org.springframework.stereotype.Service;
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
 import com.azure.identity.implementation.IdentityClientOptions;
+import com.microsoft.graph.core.authentication.AzureIdentityAuthenticationProvider;
+import com.microsoft.graph.core.requests.GraphClientFactory;
+import com.microsoft.graph.core.requests.options.GraphClientOption;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
+import com.microsoft.kiota.RequestOption;
+import com.microsoft.kiota.http.middleware.options.RetryHandlerOption;
 
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboOauth2SecretContent;
@@ -27,6 +33,7 @@ import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.sharepoint.handler.GSharepointContentManagementSystem;
 import ai.gebo.systems.abstraction.layer.VirtualFilesystemBrowsingException;
+import okhttp3.OkHttpClient;
 
 /**
  * Factory class responsible for creating Microsoft Graph clients for SharePoint access.
@@ -80,5 +87,47 @@ class GMicrosoftGraphClientFactory {
 		ClientSecretCredential clientSecretCredential = clientSecretCredentialBuilder.build();
 		GraphServiceClient graphClient = new GraphServiceClient(clientSecretCredential, scopes);
 		return graphClient;
+	}
+
+	/**
+	 * A client of the SharePoint system for a search: its HTTP calls time out, and are
+	 * retried, as the search call parameters say (the clients of the content
+	 * integration, given by {@link #getServiceClient(GSharepointContentManagementSystem)},
+	 * keep the SDK's own settings).
+	 */
+	GraphServiceClient getServiceClient(GSharepointContentManagementSystem system, SearchCallParameters searchParameters)
+			throws VirtualFilesystemBrowsingException, GeboCryptSecretException {
+		if (searchParameters == null) {
+			return getServiceClient(system);
+		}
+		final AzureIdentityAuthenticationProvider authentication = new AzureIdentityAuthenticationProvider(
+				clientSecretCredential(system), new String[0], MS_GRAPH_DEFAULT_SCOPE);
+		final RetryHandlerOption retries = new RetryHandlerOption(RetryHandlerOption.DEFAULT_SHOULD_RETRY,
+				Math.min(Math.max(0, searchParameters.retries()), RetryHandlerOption.MAX_RETRIES),
+				RetryHandlerOption.DEFAULT_DELAY);
+		final OkHttpClient httpClient = GraphClientFactory
+				.create(new RequestOption[] { new GraphClientOption(), retries })
+				.connectTimeout(searchParameters.connectTimeout()).readTimeout(searchParameters.readTimeout())
+				.callTimeout(searchParameters.connectTimeout().plus(searchParameters.readTimeout())).build();
+		return new GraphServiceClient(authentication, httpClient);
+	}
+
+	/** The credential of the system, as {@link #getServiceClient(GSharepointContentManagementSystem)} builds it. */
+	private ClientSecretCredential clientSecretCredential(GSharepointContentManagementSystem system)
+			throws VirtualFilesystemBrowsingException, GeboCryptSecretException {
+		String secretCode = system.getSecretCode();
+		if (secretCode == null)
+			throw new VirtualFilesystemBrowsingException("Sharepoint system without credentials");
+		AbstractGeboSecretContent secretContent = secretAccessService.getSecretContentById(secretCode);
+		if (secretContent == null || secretContent.type() != GeboSecretType.OAUTH2_STANDARD) {
+			throw new VirtualFilesystemBrowsingException(
+					"Sharepoint system with credentials " + secretCode + " invalid");
+		}
+		GeboOauth2SecretContent oauth2secret = (GeboOauth2SecretContent) secretContent;
+		ClientSecretCredentialBuilder clientSecretCredentialBuilder = new ClientSecretCredentialBuilder();
+		clientSecretCredentialBuilder.clientId(oauth2secret.getClientId());
+		clientSecretCredentialBuilder.tenantId(oauth2secret.getCustomAttributes().get("tenantId"));
+		clientSecretCredentialBuilder.clientSecret(oauth2secret.getSecret());
+		return clientSecretCredentialBuilder.build();
 	}
 }

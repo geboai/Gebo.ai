@@ -28,7 +28,6 @@ import ai.gebo.llms.agent.chat.service.impl.AgenticLoopPureChatReactiveAgentServ
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.chat.service.impl.GReactiveChatAgentsNetworkServiceFactoryImpl;
 import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
-import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 
 /**
  * The single agent with tools working in a loop, as two networks the chats can be
@@ -58,21 +57,27 @@ public class AgenticLoopAgentsInitialization {
 	@Bean
 	public IGDynamicAgentConfigDataSource agenticLoopAgentConfigDataSource() {
 		return IGDynamicAgentConfigDataSource.of(agentConfig(AGENTIC_LOOP_AGENT_CONFIG,
-				AgenticLoopReactiveAgentServiceImpl.AGENTIC_LOOP_NETWORK_AGENT_SERVICE, AGENT_DESCRIPTION));
+				AgenticLoopReactiveAgentServiceImpl.AGENTIC_LOOP_NETWORK_AGENT_SERVICE, AGENT_DESCRIPTION,
+				StandardAgentsPromptsLibraryConfig.DEFAULT_CHAT_AGENT_PROMPT));
 	}
 
 	@Bean
 	public IGDynamicAgentConfigDataSource agenticLoopPureChatAgentConfigDataSource() {
 		return IGDynamicAgentConfigDataSource.of(agentConfig(AGENTIC_LOOP_PURE_CHAT_AGENT_CONFIG,
 				AgenticLoopPureChatReactiveAgentServiceImpl.AGENTIC_LOOP_PURE_CHAT_NETWORK_AGENT_SERVICE,
-				PURE_CHAT_AGENT_DESCRIPTION));
+				PURE_CHAT_AGENT_DESCRIPTION, StandardAgentsPromptsLibraryConfig.PURE_CHAT_AGENT_PROMPT));
 	}
 
-	private static GAgentConfig agentConfig(String code, String serviceId, String description) {
+	/**
+	 * An agentic loop agent config on its main loop prompt: the chats with a knowledge
+	 * base and the free chats, which have none and are told so, have their own.
+	 */
+	private static GAgentConfig agentConfig(String code, String serviceId, String description,
+			String mainLoopPromptUseCode) {
 		GAgentConfig config = new GAgentConfig();
 		config.setCode(code);
 		config.setAgentServiceId(serviceId);
-		config.setMainLoopPromptUseCode(GeboPromptsLibrary.DEFAULT_CHAT_AGENT_PROMPT);
+		config.setMainLoopPromptUseCode(mainLoopPromptUseCode);
 		config.setDescription(description);
 		config.setAgentRoleCode(REPORT_WRITER_AGENT_ROLE);
 		config.setAccessibleToAll(true);
