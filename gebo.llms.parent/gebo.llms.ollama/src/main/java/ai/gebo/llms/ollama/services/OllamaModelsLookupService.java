@@ -65,9 +65,11 @@ public class OllamaModelsLookupService {
 	public static class ShowParam {
 		public ShowParam(String n) {
 			this.name = n;
+			this.model = n;
 		}
 
-		public String name = null;
+		// "model" is the current field, "name" the one servers before it read
+		public String name = null, model = null;
 	}
 
 	/**
@@ -101,16 +103,18 @@ public class OllamaModelsLookupService {
 					List<GOllamaChatModelChoice> out = new ArrayList<GOllamaChatModelChoice>();
 					if (modelsList != null && modelsList.models != null) {
 						for (Model m : modelsList.models) {
-							// Get detailed information for each model
-							ResponseEntity<HashMap> infos = restTemplateWrapper
-									.postForEntity(new URI(baseUrl + "api/show"), new ShowParam(m.name), HashMap.class);
-							HashMap content = infos.getBody();
+							Map<String, Object> show = show(baseUrl, m);
+							if (!offers(show, CHAT_CAPABILITY))
+								continue;
 							GOllamaChatModelChoice choice = new GOllamaChatModelChoice();
 							choice.setCode(m.model);
-							choice.setDescription(m.name + " " + m.details);
-							if (infos.hasBody()) {
-								choice.setModelDetails(encodeDotKeys(infos.getBody()));
+							choice.setDescription(describe(m));
+							if (show != null) {
+								choice.setModelDetails(encodeDotKeys(show));
 							}
+							choice.setMetaInfos(metaInfos(m, show));
+							choice.setContextLength(choice.getMetaInfos().getContextLength());
+							choice.setSupportsFunctionCalls(choice.getMetaInfos().getSupportsFunctionCalls());
 							out.add(choice);
 						}
 					}
@@ -136,7 +140,8 @@ public class OllamaModelsLookupService {
 			}
 		} finally {
 		}
-		return llmTypeFiltrerRepoPattern.filterChatModels(OllamaChatModelConfigurationSupportService.type, result);
+		return byNameWhenUnknown(result,
+				r -> llmTypeFiltrerRepoPattern.filterChatModels(OllamaChatModelConfigurationSupportService.type, r));
 	}
 
 	/**
@@ -163,16 +168,17 @@ public class OllamaModelsLookupService {
 					List<GOllamaEmbeddingModelChoice> out = new ArrayList<GOllamaEmbeddingModelChoice>();
 					if (modelsList != null && modelsList.models != null) {
 						for (Model m : modelsList.models) {
-							// Get detailed information for each model
-							ResponseEntity<HashMap> infos = restTemplateWrapper
-									.postForEntity(new URI(baseUrl + "api/show"), new ShowParam(m.name), HashMap.class);
-							HashMap content = infos.getBody();
+							Map<String, Object> show = show(baseUrl, m);
+							if (!offers(show, EMBEDDING_CAPABILITY))
+								continue;
 							GOllamaEmbeddingModelChoice choice = new GOllamaEmbeddingModelChoice();
 							choice.setCode(m.model);
-							choice.setDescription(m.name + " " + m.details);
-							if (infos.hasBody()) {
-								choice.setModelDetails(encodeDotKeys(infos.getBody()));
+							choice.setDescription(describe(m));
+							if (show != null) {
+								choice.setModelDetails(encodeDotKeys(show));
 							}
+							choice.setMetaInfos(metaInfos(m, show));
+							choice.setContextLength(choice.getMetaInfos().getContextLength());
 							out.add(choice);
 						}
 					}
@@ -198,8 +204,8 @@ public class OllamaModelsLookupService {
 			}
 		} finally {
 		}
-		return llmTypeFiltrerRepoPattern.filterEmbeddingModels(OllamaEmbeddingModelConfigurationSupportService.type,
-				result);
+		return byNameWhenUnknown(result, r -> llmTypeFiltrerRepoPattern
+				.filterEmbeddingModels(OllamaEmbeddingModelConfigurationSupportService.type, r));
 	}
 
 	/**
@@ -209,6 +215,118 @@ public class OllamaModelsLookupService {
 	 * @param m The map whose keys need to be encoded
 	 * @return A new map with encoded keys
 	 */
+	static final String CHAT_CAPABILITY = "completion", EMBEDDING_CAPABILITY = "embedding";
+	static final String INFORMATIVE_URL = "https://ollama.com/library";
+
+	/**
+	 * The /api/show answer of a model, or null when it cannot be read: one model the
+	 * server cannot describe must not cost the whole list.
+	 */
+	private Map<String, Object> show(String baseUrl, Model m) {
+		try {
+			ResponseEntity<HashMap> infos = restTemplateWrapper.postForEntity(new URI(baseUrl + "api/show"),
+					new ShowParam(m.name), HashMap.class);
+			return infos.hasBody() ? infos.getBody() : null;
+		} catch (Throwable e) {
+			LOGGER.warn("Cannot read the details of the ollama model " + m.name + ": " + e.getMessage());
+			return null;
+		}
+	}
+
+	/**
+	 * The capabilities /api/show reports (completion, tools, vision, thinking,
+	 * embedding, insert), null when the server does not report them.
+	 */
+	static List<String> capabilities(Map<String, Object> show) {
+		if (show != null && show.get("capabilities") instanceof List<?> list) {
+			return list.stream().map(String::valueOf).toList();
+		}
+		return null;
+	}
+
+	/**
+	 * Whether a model offers a capability; true when its capabilities are unknown,
+	 * the model code then decides as before.
+	 */
+	static boolean offers(Map<String, Object> show, String capability) {
+		List<String> capabilities = capabilities(show);
+		return capabilities == null || capabilities.contains(capability);
+	}
+
+	/**
+	 * The context length /api/show reports in model_info as {@code <arch>.context_length}.
+	 */
+	static Integer contextLength(Map<String, Object> show) {
+		if (show != null && show.get("model_info") instanceof Map<?, ?> info) {
+			for (Entry<?, ?> entry : info.entrySet()) {
+				if (String.valueOf(entry.getKey()).endsWith(".context_length")
+						&& entry.getValue() instanceof Number number) {
+					return number.intValue();
+				}
+			}
+		}
+		return null;
+	}
+
+	/** The model name with its size and quantization, from /api/tags details. */
+	static String describe(Model m) {
+		List<String> traits = new ArrayList<>();
+		if (m.details != null) {
+			for (String key : List.of("parameter_size", "quantization_level")) {
+				Object value = m.details.get(key);
+				if (value != null && !String.valueOf(value).isBlank())
+					traits.add(String.valueOf(value));
+			}
+		}
+		String name = m.name != null ? m.name : m.model;
+		return traits.isEmpty() ? name : name + " (" + String.join(", ", traits) + ")";
+	}
+
+	static ai.gebo.llms.models.metainfos.ModelMetaInfo metaInfos(Model m, Map<String, Object> show) {
+		ai.gebo.llms.models.metainfos.ModelMetaInfo meta = new ai.gebo.llms.models.metainfos.ModelMetaInfo();
+		meta.setProviderId(OllamaChatModelConfigurationSupportService.type.getProviderId());
+		meta.setModelId(m.model);
+		meta.setDescription(describe(m));
+		meta.setInformativeUrl(INFORMATIVE_URL);
+		// The model's own window: what a request gets also depends on the num_ctx the
+		// server runs it with
+		meta.setContextLength(contextLength(show));
+		List<String> capabilities = capabilities(show);
+		if (capabilities != null) {
+			meta.setChatModel(capabilities.contains(CHAT_CAPABILITY));
+			meta.setEmbeddingModel(capabilities.contains(EMBEDDING_CAPABILITY));
+			meta.setSupportsFunctionCalls(capabilities.contains("tools"));
+			meta.setSupportsVision(capabilities.contains("vision"));
+			meta.setSupportsReasoning(capabilities.contains("thinking"));
+		}
+		return meta;
+	}
+
+	/**
+	 * Applies the name based type filter to the models whose capabilities the server
+	 * did not report: the ones it reported are already sorted by them, and an
+	 * embedding model without "embed" in its name (bge-m3, all-minilm ...) must not be
+	 * dropped from the embedding list.
+	 */
+	private static <C extends ai.gebo.llms.abstraction.layer.model.GBaseModelChoice> OperationStatus<List<C>> byNameWhenUnknown(
+			OperationStatus<List<C>> result,
+			java.util.function.Function<OperationStatus<List<C>>, OperationStatus<List<C>>> nameFilter) {
+		if (result.getResult() == null)
+			return nameFilter.apply(result);
+		List<C> known = new ArrayList<>();
+		List<C> unknown = new ArrayList<>();
+		for (C choice : result.getResult()) {
+			boolean reported = choice.getMetaInfos() != null && (choice.getMetaInfos().getChatModel() != null
+					|| choice.getMetaInfos().getEmbeddingModel() != null);
+			(reported ? known : unknown).add(choice);
+		}
+		OperationStatus<List<C>> filtered = nameFilter.apply(OperationStatus.of(unknown, result.getMessages()));
+		List<C> out = new ArrayList<>(known);
+		if (filtered.getResult() != null)
+			out.addAll(filtered.getResult());
+		return OperationStatus.of(out, filtered.getMessages());
+	}
+
 	private Map encodeDotKeys(Map<String, Object> m) {
 		HashMap<String, Object> values = new HashMap<String, Object>();
 		Set<Entry<String, Object>> entries = m.entrySet();
