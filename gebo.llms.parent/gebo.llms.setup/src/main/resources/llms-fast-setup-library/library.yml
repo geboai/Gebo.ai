@@ -392,12 +392,8 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chatmodel-mistral
           doModelsLookup: true
           choices:
-            - code: magistral-medium-latest
-              description: Magistral medium Latest
-              uses: CHAT
-            - code: devstral-medium-latest
-              description: Devstral medium
-              uses: CHAT
+            # The Magistral and Devstral models retired on 2026-07-31; reasoning is now a
+            # capability of the generalist models.
             - code: mistral-medium-latest
               description: Mistral Medium Latest
               uses: CHAT
@@ -405,7 +401,7 @@ ai.gebo.llms.vendors.setup.config:
               description: Mistral Large Latest
               uses: CHAT
               defaultChoice: true
-            - code: magistral-small-latest
+            - code: mistral-small-latest
               description: Mistral Small Latest
               uses: CHAT
             - code: ministral-8b-latest
