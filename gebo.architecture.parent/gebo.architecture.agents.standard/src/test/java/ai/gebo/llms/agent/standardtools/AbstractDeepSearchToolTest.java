@@ -250,7 +250,8 @@ class AbstractDeepSearchToolTest {
 		tool.deepSearch(param("agent question", "first search"), new ToolContext(context.getToolsContext()));
 
 		assertEquals(List.of("Deep search in the test source: agent question",
-				"Deep search in the test source: analysing 3 fragment(s) of 2 document(s)"), notified);
+				"Deep search in the test source: analysing \"title doc-a\", \"title doc-b\" (3 fragment(s) of 2 document(s))"),
+				notified, "the documents analysed named");
 		// the analysis reports its progress to the same notifier
 		verify(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), eq(notifier), any());
 	}

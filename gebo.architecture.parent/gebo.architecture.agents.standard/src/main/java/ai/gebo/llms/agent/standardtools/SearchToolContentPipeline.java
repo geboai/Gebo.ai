@@ -41,6 +41,7 @@ import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
+import ai.gebo.llms.deepsearch.service.DocumentNamesShown;
 import ai.gebo.llms.deepsearch.service.SearchResultsChunker;
 import ai.gebo.llms.deepsearch.service.SearchResultsChunker.LoadedResults;
 import ai.gebo.llms.deepsearch.service.SearchResultsChunker.NotLoaded;
@@ -260,7 +261,9 @@ public class SearchToolContentPipeline {
 					.max(1, (int) Math.ceil((perDocumentBudget * 2.0) / SearchResultsChunker.LLM_CHUNK_TOKENS)));
 			final ChunkingParams chunkingParams = SearchResultsChunker.buildChunkingParams(perDocumentBudget,
 					maxNumChunks, keywords);
-			ToolsProgress.notify(toolContext, "Reading " + fresh.size() + " document(s) found (" + toolName + ")");
+			final String freshNames = DocumentNamesShown.shown(fresh.stream().map(result -> DocumentNamesShown.nameOf(result)).toList());
+			ToolsProgress.notify(toolContext, "Reading " + (freshNames != null ? freshNames + " (" : "") + fresh.size()
+					+ " document(s) found" + (freshNames != null ? ")" : "") + " (" + toolName + ")");
 			// loaded as the service says: an open network (the web) wide, within deadlines
 			final LoadedResults loaded = SearchResultsChunker.load(chunkingService.getObject(), fresh, chunkingParams,
 					maxNumChunks, toolName, documentsParallelism(), service.resultsLoading(), openNetworkLoading());
@@ -697,5 +700,4 @@ public class SearchToolContentPipeline {
 	private static boolean notBlank(String value) {
 		return value != null && !value.isBlank();
 	}
-
 }

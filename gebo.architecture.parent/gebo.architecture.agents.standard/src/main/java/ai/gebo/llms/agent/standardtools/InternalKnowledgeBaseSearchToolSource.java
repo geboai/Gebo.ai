@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,7 @@ import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
+import ai.gebo.llms.deepsearch.service.DocumentNamesShown;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
@@ -246,14 +248,9 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 				ToolsProgress.notify(toolContext,
 						"Searching the knowledge base: " + ToolsProgress.shown(param.getQuery()));
 			}
-			final String answer = search(param, chatKnowledgeBases, ToolsFoundDocuments.from(toolContext),
-					ToolsTokenBudget.from(toolContext));
-			// what was found, in fragments of documents: the answer's heading
-			final String found = answer != null ? answer.lines().findFirst().orElse("") : "";
-			if (found.contains(" fragment(s) of ")) {
-				ToolsProgress.notify(toolContext, "Knowledge base: " + found.replaceAll(":\\s*$", ""));
-			}
-			return answer;
+			// what was found, the documents named, told to the user
+			return search(param, chatKnowledgeBases, ToolsFoundDocuments.from(toolContext),
+					ToolsTokenBudget.from(toolContext), found -> ToolsProgress.notify(toolContext, found));
 		};
 		if (KnowledgeBaseKeywords.enabled(fullTextSearchService)) {
 			if (LOGGER.isDebugEnabled()) {
@@ -284,6 +281,15 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	 */
 	String search(KnowledgeBaseSearchParam param, List<String> chatKnowledgeBases, ToolsFoundDocuments collector,
 			ToolsTokenBudget callBudget) {
+		return search(param, chatKnowledgeBases, collector, callBudget, null);
+	}
+
+	/**
+	 * The same, telling what was found to {@code foundProgress} (may be null): the
+	 * names of the documents and how many fragments of them.
+	 */
+	String search(KnowledgeBaseSearchParam param, List<String> chatKnowledgeBases, ToolsFoundDocuments collector,
+			ToolsTokenBudget callBudget, Consumer<String> foundProgress) {
 		if (param == null || param.getQuery() == null || param.getQuery().isBlank()) {
 			return "No search done: the query is empty.";
 		}
@@ -384,6 +390,12 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			// the documents these fragments come from, the only evidence of this search
 			final String heading = documents.size() + " fragment(s) of " + RankedDocuments.documentsIn(documents)
 					+ " document(s) found:" + NEWLINE + documentsLine(documents, collector) + NEWLINE;
+			if (foundProgress != null) {
+				final String names = DocumentNamesShown.ofFragments(documents);
+				foundProgress.accept("Knowledge base: " + (names != null ? names + " (" : "") + documents.size()
+						+ " fragment(s) of " + RankedDocuments.documentsIn(documents) + " document(s)"
+						+ (names != null ? ")" : ""));
+			}
 			String answer = heading + fragmentsText(rendered);
 			if (callBudget != null) {
 				// the fragments share equally what the heading leaves of the answer's room;

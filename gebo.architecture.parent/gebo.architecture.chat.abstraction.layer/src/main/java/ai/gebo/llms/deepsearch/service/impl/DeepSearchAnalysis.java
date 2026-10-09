@@ -46,6 +46,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetCalculator;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.service.DeepSearchAnalysisOutcome;
+import ai.gebo.llms.deepsearch.service.DocumentNamesShown;
 import ai.gebo.llms.deepsearch.service.DeepSearchVerdict;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
@@ -235,8 +236,19 @@ public class DeepSearchAnalysis extends BaseLLMSInvokingAndProvidingService {
 		};
 		Predicate<Document> isValidDocument = (document) -> document.isText() && document.getText() != null
 				&& document.getText().trim().length() > 0;
-		TokensLimitCompute<Document> tokensLimitCompute = (list, budget) -> TokensBudgetCalculator
-				.higherThanBudget(list, budget);
+		final TokensLimitCompute<Document> tokensLimitCompute = new TokensLimitCompute<Document>() {
+			@Override
+			public boolean higherThanBudgetTokens(List<Document> list, long budget) {
+				return TokensBudgetCalculator.higherThanBudget(list, budget);
+			}
+
+			/** The names of the batch's documents, of the knowledge base or of an external source. */
+			@Override
+			public String describe(List<Document> batch) {
+				final String names = DocumentNamesShown.ofFragments(batch);
+				return names != null ? names + " (" + batch.size() + " fragments)" : batch.size() + " fragments";
+			}
+		};
 		Predicate<String> outOfBandString = (v) -> v == null || v.equals(ERROR_IN_PROCESS);
 		Predicate<String> isEndOfProcessingCondition = (text) -> text != null
 				&& text.toUpperCase().contains(PARTIAL_ANALISYS_SATISFACTORY)
