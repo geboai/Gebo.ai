@@ -50,6 +50,16 @@ class AnthropicThinkingRequestTest {
 	}
 
 	@Test
+	void anUnsetOrAutomaticOptionIsAdaptiveThinkingWhereTheModelTakesIt() {
+		// Opus 5.5 always thinks: its thinking text is shown only when asked for
+		assertEquals(new ThinkingRequest(false, null), request(null, ALWAYS_THINKING, "claude-opus-5-5"));
+		assertEquals(new ThinkingRequest(false, null),
+				request(ChatModelThinkingOption.AUTO, CURRENT, "claude-haiku-5-5"));
+		assertNull(request(null, BUDGET_ONLY, "claude-haiku-4-5"), "a budget-only model keeps its default");
+		assertNull(request(null, null, "claude-opus-5-5"), "unknown capabilities keep the default");
+	}
+
+	@Test
 	void aBudgetOnlyModelKeepsTheProviderDefault() {
 		assertNull(request(ChatModelThinkingOption.HIGH_THINKING, BUDGET_ONLY, "claude-haiku-4-5"));
 		assertEquals(new ThinkingRequest(true, null),
