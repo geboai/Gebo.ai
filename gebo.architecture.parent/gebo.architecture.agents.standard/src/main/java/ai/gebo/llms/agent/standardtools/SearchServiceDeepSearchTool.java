@@ -28,9 +28,9 @@ import ai.gebo.architecture.search.model.SystemSearchOutcome;
 import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
-import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
-import ai.gebo.llms.agent.standard.services.SearchResultsChunker.LoadedResults;
-import ai.gebo.llms.agent.standard.services.SearchResultsChunker.NotLoaded;
+import ai.gebo.llms.deepsearch.service.SearchResultsChunker;
+import ai.gebo.llms.deepsearch.service.SearchResultsChunker.LoadedResults;
+import ai.gebo.llms.deepsearch.service.SearchResultsChunker.NotLoaded;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage.SearchCoverage;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam;
 import ai.gebo.llms.agent.standardtools.model.DocumentNotRead;
@@ -50,7 +50,7 @@ import ai.gebo.model.DocumentMetaInfos;
  */
 public class SearchServiceDeepSearchTool<Q> extends AbstractDeepSearchTool<Q> {
 	/** Fragments read of each document found. */
-	static final int MAX_FRAGMENTS_PER_DOCUMENT = 6;
+	static final int MAX_FRAGMENTS_PER_DOCUMENT = SearchResultsChunker.DEEP_SEARCH_FRAGMENTS_PER_DOCUMENT;
 	/** Most results asked to a system for one search. */
 	static final int MAX_RESULTS_PER_SEARCH = 20;
 	static final int MIN_RESULTS_PER_SEARCH = 5;

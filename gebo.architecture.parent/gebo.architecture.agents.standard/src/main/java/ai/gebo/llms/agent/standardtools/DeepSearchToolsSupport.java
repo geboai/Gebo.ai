@@ -36,7 +36,7 @@ import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
-import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
+import ai.gebo.llms.deepsearch.service.SearchResultsChunker;
 
 /**
  * What every deep search tool shares: its collaborators, resolved on use (the tool

@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-package ai.gebo.llms.agent.standard.services;
+package ai.gebo.llms.deepsearch.service;
 
 import java.net.URI;
 import java.time.Duration;
@@ -59,6 +59,11 @@ public final class SearchResultsChunker {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SearchResultsChunker.class);
 	/** Target chunk size when feeding chunks to an LLM (larger than the embedding default of 512). */
 	public static final int LLM_CHUNK_TOKENS = 1024;
+	/**
+	 * The fragments of a document a deep search reads, the tools' and the pipelines' alike:
+	 * {@value #LLM_CHUNK_TOKENS} tokens each, past them only the ones matching the keywords.
+	 */
+	public static final int DEEP_SEARCH_FRAGMENTS_PER_DOCUMENT = 6;
 	/** Cache-file batching granularity for the chunking service. */
 	public static final long DEFAULT_TOKENS_PER_CHUNK_SET = 50000L;
 	/** Minimum length of a word to be kept as a matching keyword. */

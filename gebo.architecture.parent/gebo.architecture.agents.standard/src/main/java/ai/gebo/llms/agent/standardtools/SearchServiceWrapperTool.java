@@ -9,7 +9,7 @@ import org.springframework.ai.tool.ToolCallback;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.service.ISearchService;
-import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
+import ai.gebo.llms.deepsearch.service.SearchResultsChunker;
 import ai.gebo.llms.agent.standardtools.model.SearchQueryParam;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult;
 

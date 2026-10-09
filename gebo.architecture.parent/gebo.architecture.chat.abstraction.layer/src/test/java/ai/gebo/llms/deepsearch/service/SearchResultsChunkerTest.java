@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-package ai.gebo.llms.agent.standard.services;
+package ai.gebo.llms.deepsearch.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

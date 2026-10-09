@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.agent.standardtools;
 
+import ai.gebo.llms.deepsearch.service.DeepSearchAnalysisOutcome;
 import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.ArrayList;

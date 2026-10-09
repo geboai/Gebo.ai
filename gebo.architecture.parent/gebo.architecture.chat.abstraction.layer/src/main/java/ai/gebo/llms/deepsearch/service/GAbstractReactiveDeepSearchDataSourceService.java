@@ -3,6 +3,7 @@ package ai.gebo.llms.deepsearch.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,8 +21,10 @@ import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
+import ai.gebo.architecture.search.config.OpenNetworkLoadingConfig;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchResultsLoading;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
@@ -40,6 +43,7 @@ import ai.gebo.llms.deepsearch.datasources.model.PureSearchDocumentResultError;
 import ai.gebo.llms.deepsearch.datasources.model.PureSearchExternalDataSourceResultEntry;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.GUserMessage.MsgServerity;
 import ai.gebo.security.services.ReactiveIdentityUtil;
@@ -75,6 +79,22 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	}
 
 	private final static int NCONTEXT_WINDOW_LENGTH_THREASHOLD = 2;
+	// how the results of an open network are loaded (see SearchResultsChunker); its
+	// defaults when none is given
+	private OpenNetworkLoadingConfig openNetworkLoading = null;
+
+	/** How the results of an open network are loaded (see {@link SearchResultsChunker}). */
+	public void setOpenNetworkLoading(OpenNetworkLoadingConfig openNetworkLoading) {
+		this.openNetworkLoading = openNetworkLoading;
+	}
+
+	/**
+	 * How the documents this data source finds are loaded: reliably (its systems are
+	 * sized to answer) unless it says they are open network pages.
+	 */
+	protected SearchResultsLoading resultsLoading() {
+		return SearchResultsLoading.RELIABLE;
+	}
 
 	@Data
 	public final static class KeywordsList {
@@ -242,65 +262,76 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		dsr.setQuery(GeboChatRequest.actualQuery(request));
 		MinimalChatContext minimalChatContext = runtimeData.getMinimalChatContext();
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
-		Flux<List<SearchWithResults>> searchBlockFlux = Flux.defer(() -> {
+		// the documents found are loaded as the deep search tools load them (SearchResultsChunker):
+		// within the loading deadlines of an open network, a few fragments of each document, the
+		// ones that could not be loaded told with why; loaded on a bounded elastic thread, as the
+		// loading blocks
+		return Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
+				final List<SearchWithResults> results;
 				try {
-					return Flux.just(executeSearches(dsr, minimalChatContext, deepSearchDefaultConfig, chatModel,
-							serviceModel, chunkingSessionId, topK));
+					results = executeSearches(dsr, minimalChatContext, deepSearchDefaultConfig, chatModel, serviceModel,
+							chunkingSessionId, topK);
 				} catch (Throwable e) {
 					throw new RuntimeException(e);
-
 				}
-			});
-		}).subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
-
-		ParallelFlux<List<SearchWithResults>> searchResults = ParallelFlux.from(searchBlockFlux);
-
-		ParallelFlux<IDocumentChunkWithRef> chunksFlux = searchResults.concatMap(results -> {
-
-			return runAs.doRunAsWithReturn(() -> {
-				Map<String, Boolean> joinedKeywords = new HashMap<>();
-				List<SearchResult> found = new ArrayList<>();
-				for (SearchWithResults item : results) {
-					found.addAll(item.getResults());
+				final Map<String, SearchResult> foundByCode = new LinkedHashMap<>();
+				final Map<String, Boolean> joinedKeywords = new LinkedHashMap<>();
+				for (String kw : SearchResultsChunker.keywordsFromText(dsr.getQuery())) {
+					joinedKeywords.put(kw.toLowerCase(), true);
+				}
+				for (SearchWithResults item : results != null ? results : List.<SearchWithResults>of()) {
+					for (SearchResult result : item.getResults()) {
+						if (result != null && result.getCode() != null) {
+							foundByCode.putIfAbsent(result.getCode(), result);
+						}
+					}
 					if (item.getSearchQuery() != null && item.getSearchQuery().getRelevantKeywords() != null) {
 						for (String kw : item.getSearchQuery().getRelevantKeywords()) {
 							joinedKeywords.put(kw.toLowerCase(), true);
 						}
-
 					}
 					if (item.getNativeQueryObject() != null) {
-						List<String> kws = item.getNativeQueryObject().relevantKeywords();
-						for (String kw : kws) {
+						for (String kw : item.getNativeQueryObject().relevantKeywords()) {
 							joinedKeywords.put(kw.toLowerCase(), true);
 						}
 					}
-
 				}
-				List<String> keywords = new ArrayList<>(joinedKeywords.keySet());
-				ChunkingParams chunkingParams = new ChunkingParams();
-				chunkingParams.setChunkingPolicy(ChunkingPolicy.SPLIT_CHUNKS);
-				chunkingParams.setEnrichWithMetaData(false);
-				chunkingParams.setMatchingKeywords(keywords);
-				TextChunkingSpecs textChunkingSpecs = TextChunkingSpecs.of(4096);
-				chunkingParams.getChunkingSpecs().add(textChunkingSpecs);
-
-				return this.chunkingService.streamChunks(found, chunkingParams, chunkingSessionId,
-						deepSearchDefaultConfig.getDocumentsParallelism());
+				if (foundByCode.isEmpty()) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("streamSearchResults(...) handler:" + getHandlerId() + " found no document");
+					}
+					return Flux.<DocumentWithSearchResult>empty();
+				}
+				final int fragmentsPerDocument = SearchResultsChunker.DEEP_SEARCH_FRAGMENTS_PER_DOCUMENT;
+				final ChunkingParams chunkingParams = SearchResultsChunker.buildChunkingParams(
+						fragmentsPerDocument * SearchResultsChunker.LLM_CHUNK_TOKENS, fragmentsPerDocument,
+						new ArrayList<>(joinedKeywords.keySet()));
+				final SearchResultsChunker.LoadedResults loaded = SearchResultsChunker.load(chunkingService,
+						new ArrayList<>(foundByCode.values()), chunkingParams, fragmentsPerDocument, getHandlerId(),
+						deepSearchDefaultConfig.getDocumentsParallelism(), resultsLoading(), openNetworkLoading);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("streamSearchResults(...) handler:" + getHandlerId() + " loaded " + loaded.documents().size()
+							+ " fragment(s) of " + foundByCode.size() + " document(s) found, "
+							+ loaded.notLoaded().size() + " not loaded");
+					for (SearchResultsChunker.NotLoaded missing : loaded.notLoaded()) {
+						LOGGER.debug("streamSearchResults(...) handler:" + getHandlerId() + " not loaded:"
+								+ missing.result().getCode() + ": " + missing.reason());
+					}
+				}
+				final List<DocumentWithSearchResult> documents = new ArrayList<>();
+				for (Document fragment : loaded.documents()) {
+					final Object code = fragment.getMetadata() != null
+							? fragment.getMetadata().get(DocumentMetaInfos.CONTENT_CODE)
+							: null;
+					final SearchResult result = code != null ? foundByCode.get(code.toString()) : null;
+					if (result != null) {
+						documents.add(new DocumentWithSearchResult(result, fragment));
+					}
+				}
+				return Flux.fromIterable(documents);
 			});
-		}).runOn(runAs.wrap(Schedulers.parallel()));
-
-		ParallelFlux<DocumentWithSearchResult> parallelResult = chunksFlux.map(resultEntry -> {
-			if (!resultEntry.isErrorState()) {
-				SearchResult entry = (SearchResult) resultEntry.getDocumentRef();
-				DocumentChunk chunk = resultEntry.getChunk();
-				Document document = new Document(chunk.getId(), chunk.getChunkData(), chunk.getMetaData());
-				DocumentWithSearchResult value = new DocumentWithSearchResult(entry, document);
-				return value;
-			} else
-				return null;
-		});
-		return parallelResult.sequential().filter(x -> x != null);
+		}).subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 	}
 
 }

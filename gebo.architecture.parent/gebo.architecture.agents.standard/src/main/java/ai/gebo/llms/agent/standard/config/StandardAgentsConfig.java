@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.architecture.agents.model.PipelineType;
 import ai.gebo.architecture.agents.services.IGConfiguredDefaultChatNetworksOfAgents;
-import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
+import ai.gebo.llms.deepsearch.service.SearchResultsChunker;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import lombok.Data;
 

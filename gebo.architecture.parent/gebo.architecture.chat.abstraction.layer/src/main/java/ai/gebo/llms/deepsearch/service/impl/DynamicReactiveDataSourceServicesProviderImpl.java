@@ -45,6 +45,8 @@ public class DynamicReactiveDataSourceServicesProviderImpl implements IGReactive
 	final IGSecurityService securityService;
 	final IGExternalSearchSecurityService externalSearchSecurityService;
 	final BestEffortSearchCalls searchCalls;
+	// how the results of an open network are loaded, the deep search tools' way
+	final org.springframework.beans.factory.ObjectProvider<ai.gebo.architecture.search.config.OpenNetworkLoadingConfig> openNetworkLoading;
 	private final static Logger LOGGER = LoggerFactory.getLogger(DynamicReactiveDataSourceServicesProviderImpl.class);
 
 	@Override
@@ -67,6 +69,7 @@ public class DynamicReactiveDataSourceServicesProviderImpl implements IGReactive
 						ingestionHandler, deepSearchDefaultConfig, chunkingService, threadManager, promptsDao,
 						dataSourcesCatalogsService, securityService, externalSearchSecurityService);
 				wrapper.setSearchCalls(searchCalls);
+				wrapper.setOpenNetworkLoading(openNetworkLoading.getIfAvailable());
 				wrappers.add(wrapper);
 			} catch (Throwable e) {
 				LOGGER.error("Exception in getDynamicDeepSearchServices()", e);

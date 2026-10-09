@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-package ai.gebo.llms.agent.standardtools;
+package ai.gebo.llms.deepsearch.service;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

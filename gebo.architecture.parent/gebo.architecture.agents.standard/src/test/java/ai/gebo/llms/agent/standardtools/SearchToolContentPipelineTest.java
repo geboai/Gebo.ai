@@ -58,7 +58,7 @@ import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.IGComponentOriginatedDocument;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
-import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
+import ai.gebo.llms.deepsearch.service.SearchResultsChunker;
 import reactor.core.publisher.Flux;
 
 /**

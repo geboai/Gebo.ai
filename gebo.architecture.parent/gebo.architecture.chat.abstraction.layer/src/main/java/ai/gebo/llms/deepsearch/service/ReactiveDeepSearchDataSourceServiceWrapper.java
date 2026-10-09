@@ -54,6 +54,12 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveDeepSearchDataSourceServiceWrapper.class);
 	private BestEffortSearchCalls searchCalls = null;
 
+	/** The documents found load as the search service says (see {@link ISearchService#resultsLoading()}). */
+	@Override
+	protected ai.gebo.architecture.search.model.SearchResultsLoading resultsLoading() {
+		return searchService.resultsLoading();
+	}
+
 	/** The best effort calls of the search services (see {@link BestEffortSearchCalls}). */
 	public void setSearchCalls(BestEffortSearchCalls searchCalls) {
 		this.searchCalls = searchCalls;

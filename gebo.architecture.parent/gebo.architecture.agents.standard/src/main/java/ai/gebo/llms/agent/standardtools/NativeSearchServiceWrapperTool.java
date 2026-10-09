@@ -13,7 +13,7 @@ import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
-import ai.gebo.llms.agent.standard.services.SearchResultsChunker;
+import ai.gebo.llms.deepsearch.service.SearchResultsChunker;
 import ai.gebo.llms.agent.standardtools.model.NativeSearchParam;
 import ai.gebo.llms.agent.standardtools.model.SearchToolResult;
 
