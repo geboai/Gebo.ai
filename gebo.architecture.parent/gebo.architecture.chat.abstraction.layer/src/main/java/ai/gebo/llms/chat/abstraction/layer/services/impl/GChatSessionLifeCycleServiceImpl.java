@@ -855,6 +855,14 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		checkPayload.setTokensBudget(tokensBudget);
 		checkPayload.setUserChatSessionCode(sessionCode);
 		checkPayload.setMinimalContextOnly(minimalContextOnly);
+		// run as the user the chat belongs to: its summaries' model calls are theirs
+		final GUserChatSession chat = sessionRepository.findById(sessionCode).orElse(null);
+		final String owner = chat != null ? chat.getUsername() : null;
+		checkPayload.setUsername(owner);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Chat {} {} runs as user {}", sessionCode,
+					minimalContextOnly ? "minimal context preparation" : "shrink", owner);
+		}
 		GMessageEnvelope<SessionShrinkRequestPayload> envelope = envelopeFactory.newMessageFrom(this, checkPayload);
 		envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
 		envelope.setTargetComponent(SessionShrinkMessagesReceiver.SESSION_SHRINKER);

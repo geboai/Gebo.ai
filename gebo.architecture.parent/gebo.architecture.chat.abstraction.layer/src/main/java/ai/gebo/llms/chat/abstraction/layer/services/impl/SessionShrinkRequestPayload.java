@@ -10,5 +10,9 @@ public class SessionShrinkRequestPayload extends GBaseMessagePayload {
 	// only the chat's minimal context for the budget is prepared (see
 	// IGChatSessionStateShrinkerService#prepareMinimalContext), not the chat's state shrunk
 	private boolean minimalContextOnly = false;
+	// the user the chat belongs to: the shrink and the minimal context run as that user,
+	// their model calls accounted to them (they run on the receiver's thread, which carries
+	// no identity)
+	private String username = null;
 
 }
