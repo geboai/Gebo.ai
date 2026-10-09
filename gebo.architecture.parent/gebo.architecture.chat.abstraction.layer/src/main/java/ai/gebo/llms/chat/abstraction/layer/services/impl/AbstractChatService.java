@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.AssistantMessage.ToolCall;
-import org.springframework.ai.chat.messages.MessageType;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.content.Media;
@@ -48,6 +47,7 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -55,7 +55,6 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.ChatModelConfigOptions;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
-import ai.gebo.llms.abstraction.layer.services.InlineThinkingSplitter;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
@@ -366,10 +365,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		final List<GResponseDocumentRef> docrefs = showedDocuments != null ? GResponseDocumentRef.from(showedDocuments)
 				: List.of();
 		final StringBuffer buffer = new StringBuffer();
-		// the reasoning a model writes in its text between thinking tags, split from its answer
-		final InlineThinkingSplitter inline = configurableChatModel.isApplyThinkingMarkupHandling()
-				? new InlineThinkingSplitter()
-				: null;
 		// the quotations rendering of the answer, a new one when the answer is written again
 		final AtomicReference<DeepSearchQuotations.Streaming> quoting = new AtomicReference<>(
 				quotations != null ? quotations.streaming() : null);
@@ -389,61 +384,44 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 		// the reasoning the model writes before its answer, streamed to the user as it comes
 		final ThinkingStream thinking = new ThinkingStream();
+		// all the reasoning of the answer, saved with it
+		final StringBuilder reasoning = new StringBuilder();
 		final Function<ChatResponse, Flux<GeboChatMessageEnvelope>> chunkEnvelopes = x -> {
-
 			final List<GeboChatMessageEnvelope> out = new ArrayList<>();
-			final StringBuffer contentSegment = new StringBuffer("");
-			if (x != null && x.getResults() != null && !x.getResults().isEmpty()) {
-				for (Generation rs : x.getResults()) {
-					// why the model stopped writing (stop, length...), on the chunk that ends it
-					final String finish = rs.getMetadata() != null ? rs.getMetadata().getFinishReason() : null;
-					if (finish != null && !finish.isBlank()) {
-						finishReason.set(finish);
-						if (LOGGER.isDebugEnabled()) {
-							LOGGER.debug("Streamed answer finish reason: " + finish + " after " + buffer.length()
-									+ " character(s)");
-						}
-					}
-					if (rs.getOutput() != null) {
-						MessageType type = rs.getOutput().getMessageType();
-						// the reasoning given in a field of its own (reasoning_content), all of it so
-						// far on each chunk: Spring AI's OpenAI client keeps it as reasoningContent
-						final Object reasoning = rs.getOutput().getMetadata() != null
-								? rs.getOutput().getMetadata().get(REASONING_CONTENT_METADATA)
-								: null;
-						if (reasoning instanceof String soFar) {
-							thinkingEvents(out, thinking.reasoning(soFar));
-						}
-
-						String text = rs.getOutput().getText();
-						if (text != null) {
-							contentSegment.append(text);
-						}
-						List<Media> medias = rs.getOutput().getMedia();
-						if (medias != null && !medias.isEmpty()) {
-							for (Media media : medias) {
-								LLMGeneratedResource generatedResource;
-								try {
-									generatedResource = this.chatStorageAreaService.addMedia(media,
-											request.getUserChatContextCode());
-									response.getGeneratedResources().add(generatedResource);
-								} catch (Throwable e) {
-									LOGGER.error("Error receiving media", e);
-								}
-
-							}
-						}
-					}
+			// the answer and the reasoning the chunk adds, every provider alike
+			// (ThinkingNormalizationAdvisor)
+			final GChatAnswerChunk chunk = GChatAnswerChunk.of(x);
+			// why the model stopped writing (stop, length...), on the chunk that ends it
+			if (chunk.finishReason() != null) {
+				finishReason.set(chunk.finishReason());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Streamed answer finish reason: " + chunk.finishReason() + " after "
+							+ buffer.length() + " character(s)");
 				}
 			}
-			String thisText = contentSegment.toString();
-			buffer.append(thisText);
-			textEnvelopes(out, inline != null ? inline.next(thisText) : new InlineThinkingSplitter.Split(thisText, ""),
-					thinking, quoting.get());
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Sending a String content:" + contentSegment.toString());
+			for (Media media : chunk.media()) {
+				try {
+					LLMGeneratedResource generatedResource = this.chatStorageAreaService.addMedia(media,
+							request.getUserChatContextCode());
+					response.getGeneratedResources().add(generatedResource);
+				} catch (Throwable e) {
+					LOGGER.error("Error receiving media", e);
+				}
 			}
-
+			buffer.append(chunk.answer());
+			reasoning.append(chunk.thinking());
+			thinkingEvents(out, thinking.delta(chunk.thinking()));
+			if (!chunk.answer().isBlank()) {
+				// the answer starts: the reasoning ended
+				thinkingEvents(out, thinking.complete());
+			}
+			// a quotation still open is held until it closes
+			final DeepSearchQuotations.Streaming quotingNow = quoting.get();
+			out.add(new GeboChatMessageEnvelope<String>(
+					quotingNow != null ? quotingNow.next(chunk.answer()) : chunk.answer()));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Sending a String content:" + chunk.answer());
+			}
 			return Flux.fromIterable(out);
 		};
 		final Function<Throwable, Flux<GeboChatMessageEnvelope>> streamError = exc -> {
@@ -463,17 +441,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			return x.getContent() instanceof String text ? !text.isEmpty()
 					: x.getContent().toString().trim().length() > 0;
 		};
-		// what the splitter still holds once the model's text ended (a tag's possible start)
-		final Flux<GeboChatMessageEnvelope> inlineRest = Flux.defer(() -> {
-			if (inline == null) {
-				return Flux.<GeboChatMessageEnvelope>empty();
-			}
-			final List<GeboChatMessageEnvelope> out = new ArrayList<>();
-			textEnvelopes(out, inline.end(), thinking, quoting.get());
-			return Flux.fromIterable(out);
-		});
-		Flux<GeboChatMessageEnvelope> bodyFlux = res.concatMap(chunkEnvelopes).concatWith(inlineRest)
-				.onErrorResume(streamError).filter(sent);
+		Flux<GeboChatMessageEnvelope> bodyFlux = res.concatMap(chunkEnvelopes).onErrorResume(streamError).filter(sent);
 		// an answer cut because the model's generated tokens ran out: written again once with
 		// less reasoning when its reasoning took them, the user warned otherwise
 		final ChatModelThinkingOption lowerThinking = retry != null
@@ -505,14 +473,14 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			response.getBackendMessages().add(note);
 			out.add(new GeboChatMessageEnvelope<GUserMessage>(note));
 			out.add(new GeboChatMessageEnvelope<String>(ANSWER_WRITTEN_AGAIN_SEPARATOR));
-			// the answer saved is the one written again
+			// the answer saved is the one written again, with its reasoning
 			buffer.setLength(0);
+			reasoning.setLength(0);
 			quoting.set(quotations != null ? quotations.streaming() : null);
 			finishReason.set(null);
 			final long reasoningBefore = thinking.writtenChars();
 			return Flux.fromIterable(out)
-					.concatWith(again.concatMap(chunkEnvelopes).concatWith(inlineRest).onErrorResume(streamError)
-							.filter(sent))
+					.concatWith(again.concatMap(chunkEnvelopes).onErrorResume(streamError).filter(sent))
 					.concatWith(Flux.defer(() -> CutAnswer.isCut(finishReason.get())
 							? cutWarning(response, finishReason.get(), thinking.writtenChars() - reasoningBefore,
 									ClientChatCallUtil.removeThinking(buffer.toString()).length())
@@ -540,7 +508,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 				LOGGER.debug("Sending a GeboChatResponse trailing content with lastMessage: true");
 			}
 			String responseText = buffer.toString();
-			response.setThinkingOutputs(ClientChatCallUtil.extractThinking(responseText));
+			response.setThinkingOutputs(ClientChatCallUtil.thinkingSteps(reasoning.toString()));
 			if (quotations != null) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Streamed answer with " + quotations.quotes().size() + " verified quotation(s)");
@@ -672,23 +640,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			response.getBackendMessages().add(CutAnswer.incompleteWarning());
 		}
 		return again;
-	}
-
-	/**
-	 * The envelopes of a piece of the model's text: the reasoning written in it, then its
-	 * answer, the reasoning completed when the answer starts. A quotation still open in the
-	 * answer is held until it closes.
-	 */
-	private static void textEnvelopes(List<GeboChatMessageEnvelope> out, InlineThinkingSplitter.Split split,
-			ThinkingStream thinking, DeepSearchQuotations.Streaming quoting) {
-		thinkingEvents(out, thinking.delta(split.thinking()));
-		if (!split.answer().isBlank()) {
-			// the answer starts: the reasoning ended
-			thinkingEvents(out, thinking.complete());
-		}
-		final GeboChatMessageEnvelope<String> envelope = new GeboChatMessageEnvelope<String>();
-		envelope.setContent(quoting != null ? quoting.next(split.answer()) : split.answer());
-		out.add(envelope);
 	}
 
 	/** The reasoning events as envelopes, added to the ones a chunk gives. */

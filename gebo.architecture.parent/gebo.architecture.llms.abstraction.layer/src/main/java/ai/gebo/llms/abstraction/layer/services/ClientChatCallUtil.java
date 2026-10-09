@@ -62,36 +62,50 @@ public class ClientChatCallUtil {
 			return null;
 		}
 		final List<String> steps = new ArrayList<>();
-		for (String chunk : InlineThinkingSplitter.blocks(data)) {
-			// Split into "steps": prefer paragraph-like boundaries, otherwise
-			// newline-based.
-			// - If it contains <p>...</p>, extract each <p> block.
-			// - Else split by blank lines / line breaks.
-			final List<String> paragraphs = new ArrayList<>();
-			String chunkLower = chunk.toLowerCase();
-			if (chunkLower.contains("<p>")) {
-				int p = 0;
-				while (p < chunk.length()) {
-					int pStart = chunkLower.indexOf("<p>", p);
-					if (pStart < 0)
-						break;
-					int pContentStart = pStart + 3;
-					int pEnd = chunkLower.indexOf("</p>", pContentStart);
-					if (pEnd < 0)
-						break;
-					String pText = chunk.substring(pContentStart, pEnd).trim();
-					if (!pText.isEmpty())
-						paragraphs.add(pText);
-					p = pEnd + 4;
-				}
-			}
-			// no <p> blocks, or malformed ones: by line ends
-			if (paragraphs.isEmpty()) {
-				addStepsByNewlines(paragraphs, chunk);
-			}
-			steps.addAll(paragraphs);
+		for (String block : InlineThinkingSplitter.blocks(data)) {
+			addSteps(steps, block);
 		}
 		return steps.isEmpty() ? null : steps;
+	}
+
+	/** A model's reasoning as steps (paragraphs, or lines), null when there is none. */
+	public static List<String> thinkingSteps(String reasoning) {
+		if (reasoning == null || reasoning.isBlank()) {
+			return null;
+		}
+		final List<String> steps = new ArrayList<>();
+		addSteps(steps, reasoning);
+		return steps.isEmpty() ? null : steps;
+	}
+
+	/**
+	 * The steps of a piece of reasoning: its {@code <p>} blocks when it has them, its
+	 * paragraphs or lines otherwise.
+	 */
+	private static void addSteps(List<String> steps, String chunk) {
+		final List<String> paragraphs = new ArrayList<>();
+		String chunkLower = chunk.toLowerCase();
+		if (chunkLower.contains("<p>")) {
+			int p = 0;
+			while (p < chunk.length()) {
+				int pStart = chunkLower.indexOf("<p>", p);
+				if (pStart < 0)
+					break;
+				int pContentStart = pStart + 3;
+				int pEnd = chunkLower.indexOf("</p>", pContentStart);
+				if (pEnd < 0)
+					break;
+				String pText = chunk.substring(pContentStart, pEnd).trim();
+				if (!pText.isEmpty())
+					paragraphs.add(pText);
+				p = pEnd + 4;
+			}
+		}
+		// no <p> blocks, or malformed ones: by line ends
+		if (paragraphs.isEmpty()) {
+			addStepsByNewlines(paragraphs, chunk);
+		}
+		steps.addAll(paragraphs);
 	}
 
 	/**

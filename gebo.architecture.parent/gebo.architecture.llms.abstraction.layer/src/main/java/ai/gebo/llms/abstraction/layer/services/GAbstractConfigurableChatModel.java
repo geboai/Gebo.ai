@@ -55,6 +55,8 @@ import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswer;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
@@ -216,10 +218,11 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		this.model = configureModel(config, type, null);
 		Builder builder = ChatClient.builder(configureModel(config, type, null));
 		// Priced through this model's getPricingConditions(), read when each call ends; a
-		// call's answer read from its answer generation, not from a reasoning one.
+		// call's answer read from its answer generation, not from a reasoning one; the
+		// reasoning of every model round apart from the answer, every provider alike.
 		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions,
-				this::getProviderId), new AnswerFirstGenerations.Advisor(this::isReasoningGeneration))
-				.build();
+				this::getProviderId), new AnswerFirstGenerations.Advisor(this::isReasoningGeneration),
+				thinkingNormalization()).build();
 	}
 
 	@Override
@@ -448,6 +451,21 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 */
 	protected boolean isReasoningGeneration(Generation generation) {
 		return false;
+	}
+
+	/**
+	 * How the provider's Spring AI model gives the reasoning apart from the answer. The
+	 * OpenAI reading by default (the reasoning_content of the OpenAI compatible APIs, as
+	 * Spring AI's OpenAI model keeps it): a provider keeping it otherwise gives its own.
+	 */
+	protected IGReasoningExtractor reasoningExtractor() {
+		return IGReasoningExtractor.OPENAI;
+	}
+
+	/** The advisor giving every model round's answer and reasoning the same shape. */
+	ThinkingNormalizationAdvisor thinkingNormalization() {
+		return new ThinkingNormalizationAdvisor(reasoningExtractor(), this::isApplyThinkingMarkupHandling,
+				this::isReasoningGeneration);
 	}
 
 	/**
@@ -824,8 +842,23 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				logPerformances(reqObject, timestamp);
 			}
 
-			return reqObject.getRequestSpec().stream().content().subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
+			// the answer only, its reasoning apart (ThinkingNormalizationAdvisor)
+			return reqObject.getRequestSpec().stream().chatResponse().map(GChatAnswerChunk::of)
+					.map(GChatAnswerChunk::answer).filter(answer -> !answer.isEmpty())
+					.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 		});
+	}
+
+	@Override
+	public Flux<GChatAnswerChunk> streamAnswer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		return streamResponse(promptTemplate, params, chatContext).map(GChatAnswerChunk::of);
+	}
+
+	@Override
+	public GChatAnswer answer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		return GChatAnswer.of(response(promptTemplate, params, chatContext));
 	}
 
 	@Override
@@ -986,7 +1019,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 								configOptions.getToolCallingManager()))
 						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone,
 								configurableChatModel::getPricingConditions, configurableChatModel::getProviderId),
-								new AnswerFirstGenerations.Advisor(configurableChatModel::isReasoningGeneration))
+								new AnswerFirstGenerations.Advisor(configurableChatModel::isReasoningGeneration),
+								configurableChatModel.thinkingNormalization())
 						.build();
 			} else
 				throw new IllegalStateException(

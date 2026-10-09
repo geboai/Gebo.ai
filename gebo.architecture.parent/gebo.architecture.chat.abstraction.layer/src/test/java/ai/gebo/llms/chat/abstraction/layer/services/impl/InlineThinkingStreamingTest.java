@@ -21,10 +21,13 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.Generation;
+import org.springframework.ai.chat.prompt.Prompt;
 
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
@@ -34,7 +37,9 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGReasoningExtractor;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.ThinkingNormalizationAdvisor;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -48,9 +53,9 @@ import ai.gebo.security.services.IGSecurityService;
 import reactor.core.publisher.Flux;
 
 /**
- * A streamed answer of a model writing its reasoning between thinking tags: the reasoning
- * reaches the user as thinking events, completed before the answer, and never as answer
- * text, however the chunks cut the tags.
+ * A streamed answer of a model writing its reasoning between thinking tags, through its
+ * ChatClient to the user: the reasoning reaches the user as thinking events, completed
+ * before the answer, and never as answer text, however the chunks cut the tags.
  */
 class InlineThinkingStreamingTest {
 
@@ -75,13 +80,31 @@ class InlineThinkingStreamingTest {
 		return model;
 	}
 
+	/**
+	 * The chunks a model streams, as the chat model's ChatClient gives them: normalized by
+	 * the ThinkingNormalizationAdvisor of a model writing its reasoning between tags.
+	 */
 	private static Flux<ChatResponse> chunks(String... texts) {
-		return Flux.range(0, texts.length).map(i -> {
+		final Flux<ChatResponse> raw = Flux.range(0, texts.length).map(i -> {
 			final AssistantMessage message = AssistantMessage.builder().content(texts[i]).properties(Map.of()).build();
 			return new ChatResponse(List.of(new Generation(message, i == texts.length - 1
 					? ChatGenerationMetadata.builder().finishReason("STOP").build()
 					: ChatGenerationMetadata.NULL)));
 		});
+		final ChatModel model = new ChatModel() {
+			@Override
+			public ChatResponse call(Prompt prompt) {
+				throw new UnsupportedOperationException();
+			}
+
+			@Override
+			public Flux<ChatResponse> stream(Prompt prompt) {
+				return raw;
+			}
+		};
+		return ChatClient.builder(model)
+				.defaultAdvisors(new ThinkingNormalizationAdvisor(IGReasoningExtractor.OPENAI, () -> true, g -> false))
+				.build().prompt("q").stream().chatResponse();
 	}
 
 	private static List<GeboChatMessageEnvelope> run(Flux<ChatResponse> res, GeboChatResponse response) {

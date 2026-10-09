@@ -32,6 +32,7 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
@@ -76,15 +77,20 @@ class CutAnswerStreamingTest {
 		return model;
 	}
 
-	/** A chunk: its reasoning so far, its text, why the model stopped (null while it writes). */
-	private static ChatResponse chunk(String reasoningSoFar, String text, String finish) {
-		final AssistantMessage message = AssistantMessage.builder().content(text)
-				.properties(reasoningSoFar != null ? Map.of(AbstractChatService.REASONING_CONTENT_METADATA, reasoningSoFar)
-						: Map.of())
-				.build();
+	/**
+	 * A normalized chunk (ThinkingNormalizationAdvisor): the reasoning it adds, its text,
+	 * why the model stopped (null while it writes).
+	 */
+	private static ChatResponse chunk(String reasoning, String text, String finish) {
+		final AssistantMessage message = AssistantMessage.builder().content(text).build();
 		final ChatGenerationMetadata metadata = finish != null ? ChatGenerationMetadata.builder().finishReason(finish).build()
 				: ChatGenerationMetadata.NULL;
-		return new ChatResponse(List.of(new Generation(message, metadata)));
+		final ChatResponse.Builder chunk = ChatResponse.builder().generations(List.of(new Generation(message, metadata)))
+				.metadata(GChatAnswerChunk.THINKING_ACTIVE_METADATA, reasoning != null);
+		if (reasoning != null) {
+			chunk.metadata(GChatAnswerChunk.THINKING_DELTA_METADATA, reasoning);
+		}
+		return chunk.build();
 	}
 
 	private static List<GeboChatMessageEnvelope> run(AbstractChatService service, Flux<ChatResponse> res,
@@ -102,7 +108,7 @@ class CutAnswerStreamingTest {
 	@Test
 	void theReasoningTookTheBudgetTheAnswerIsWrittenAgain() {
 		final String reasoning = "Let me think about every part of the question. ".repeat(20);
-		final Flux<ChatResponse> cut = Flux.just(chunk(reasoning, "", null), chunk(reasoning, "Short", "LENGTH"));
+		final Flux<ChatResponse> cut = Flux.just(chunk(reasoning, "", null), chunk(null, "Short", "LENGTH"));
 		final List<ChatModelThinkingOption> asked = new ArrayList<>();
 		final GeboChatResponse response = new GeboChatResponse();
 
@@ -177,8 +183,8 @@ class CutAnswerStreamingTest {
 		final List<ChatModelThinkingOption> asked = new ArrayList<>();
 
 		final List<GeboChatMessageEnvelope> envelopes = run(service(),
-				Flux.just(chunk("Brief thought.", "", null), chunk("Brief thought.", "# Title\n\n", null),
-						chunk("Brief thought.", "Body.", "STOP")),
+				Flux.just(chunk("Brief thought.", "", null), chunk(null, "# Title\n\n", null),
+						chunk(null, "Body.", "STOP")),
 				model(ChatModelThinkingOption.HIGH_THINKING), response, thinking -> {
 					asked.add(thinking);
 					return Flux.empty();
