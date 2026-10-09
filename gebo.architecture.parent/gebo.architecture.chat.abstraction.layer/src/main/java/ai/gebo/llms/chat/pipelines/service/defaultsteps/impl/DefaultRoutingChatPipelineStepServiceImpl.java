@@ -260,7 +260,23 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		if (askedLanguage != null && !askedLanguage.equalsIgnoreCase(String.valueOf(keptLanguage))) {
 			chatSessionLifecycleService.setUserRequiredLanguage(currentRequest, askedLanguage);
 		}
-		final String answerLanguage = askedLanguage != null ? askedLanguage : keptLanguage;
+		// the chat keeps the language it started in: its first trusted detection, never
+		// changed by a later one (a short or misdetected message, or none detected, does
+		// not switch it); only a language the user asks for wins over it
+		final String detectedLanguage = currentRequest.getUserLanguage();
+		String chatLanguage = chatSessionLifecycleService.getChatLanguage(currentRequest);
+		if (chatLanguage == null && detectedLanguage != null) {
+			chatLanguage = detectedLanguage;
+			chatSessionLifecycleService.setChatLanguage(currentRequest, chatLanguage);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat language set by the first trusted detection: " + chatLanguage);
+			}
+		}
+		final String answerLanguage = chatLanguage(askedLanguage, keptLanguage, chatLanguage, detectedLanguage);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Answer language:" + answerLanguage + " (asked:" + askedLanguage + " kept:" + keptLanguage
+					+ " chat:" + chatLanguage + " detected:" + detectedLanguage + ")");
+		}
 		if (answerLanguage != null) {
 			runtimeData.getRequestResources().getCurrentRequest().setUserLanguage(answerLanguage);
 			if (runtimeData.getMinimalChatContext() != null
@@ -610,6 +626,22 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			return false;
 		}
 		return values.get(0).trim().toLowerCase().startsWith("never");
+	}
+
+	/**
+	 * The language of a request's answer: the one the user asks for in this message, else
+	 * the one asked earlier and kept on the chat, else the chat's own (its first trusted
+	 * detection), else this message's detection (none of the others known); null when
+	 * nothing is known (the prompts then ask for the language of the request).
+	 */
+	static String chatLanguage(String asked, String kept, String chat, String detected) {
+		if (asked != null) {
+			return asked;
+		}
+		if (kept != null) {
+			return kept;
+		}
+		return chat != null ? chat : detected;
 	}
 
 	/**

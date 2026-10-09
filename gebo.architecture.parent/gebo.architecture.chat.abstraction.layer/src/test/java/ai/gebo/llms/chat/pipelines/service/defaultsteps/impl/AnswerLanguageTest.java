@@ -70,4 +70,48 @@ class AnswerLanguageTest {
 		assertFalse(AskedLanguage.namedIn("Klingonese", "Answer in Klingonese"), "no language has that name");
 		assertFalse(AskedLanguage.namedIn(null, "Answer in English"));
 	}
+
+	@Test
+	void aChatKeepsTheLanguageItStartedInWhateverALaterMessageIsDetectedAs() {
+		// "E come ha conosciuto Gurdjieff?" detected Galician, "And about death?" too short
+		assertEquals("Italian", DefaultRoutingChatPipelineStepServiceImpl.chatLanguage(null, null, "Italian", "Galician"));
+		assertEquals("English", DefaultRoutingChatPipelineStepServiceImpl.chatLanguage(null, null, "English", null));
+	}
+
+	@Test
+	void aLanguageTheUserAsksForWinsOverTheChatsOwn() {
+		assertEquals("French", DefaultRoutingChatPipelineStepServiceImpl.chatLanguage("French", "German", "Italian", "Italian"),
+				"asked in this message");
+		assertEquals("German", DefaultRoutingChatPipelineStepServiceImpl.chatLanguage(null, "German", "Italian", "Italian"),
+				"asked earlier and kept");
+	}
+
+	@Test
+	void withoutAChatLanguageTheMessagesDetectionAppliesElseNone() {
+		assertEquals("Italian", DefaultRoutingChatPipelineStepServiceImpl.chatLanguage(null, null, null, "Italian"));
+		assertNull(DefaultRoutingChatPipelineStepServiceImpl.chatLanguage(null, null, null, null),
+				"the prompts ask for the language of the request");
+	}
+
+	@Test
+	void aChatStartedBeforeItsLanguageWasKeptHasTheLanguageOfItsEarliestRequestThatHadOne() {
+		final ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession chat = new ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession();
+		chat.getInteractions().add(interaction("r1", null));
+		chat.getInteractions().add(interaction("r2", "Italian"));
+		chat.getInteractions().add(interaction("r3", "Galician"));
+
+		assertEquals("Italian", chat.earliestRequestLanguage("r3"));
+		assertEquals("Galician", chat.earliestRequestLanguage("r2"), "the request being answered left out");
+		assertNull(new ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession().earliestRequestLanguage(null));
+	}
+
+	private static ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions interaction(String id,
+			String language) {
+		final ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest request = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest();
+		request.setId(id);
+		request.setUserLanguage(language);
+		final ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions interaction = new ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions();
+		interaction.setRequest(request);
+		return interaction;
+	}
 }
