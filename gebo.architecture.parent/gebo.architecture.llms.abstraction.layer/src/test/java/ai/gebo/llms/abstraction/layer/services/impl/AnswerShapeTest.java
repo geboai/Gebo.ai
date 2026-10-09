@@ -21,32 +21,36 @@ import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.services.impl.UsageAdvisorFactoryImpl.GeboChatModelUsageAdvisor.AnswerShape;
 
 /**
  * Pins how a call ended, as its DEBUG line tells it: the last finish reason, the text
- * and the reasoning streamed, a reasoning given piece by piece or grown.
+ * and the reasoning streamed, read from the normalized chunks every provider alike.
  */
 class AnswerShapeTest {
 
+	/** A normalized chunk: the reasoning it adds, its text, why the model stopped. */
 	private static ChatClientResponse chunk(String reasoning, String text, String finish) {
-		final AssistantMessage message = AssistantMessage.builder().content(text)
-				.properties(reasoning != null ? Map.of(AnswerShape.REASONING_CONTENT_METADATA, reasoning) : Map.of())
-				.build();
 		final ChatGenerationMetadata metadata = finish != null
 				? ChatGenerationMetadata.builder().finishReason(finish).build()
 				: ChatGenerationMetadata.NULL;
-		return new ChatClientResponse(new ChatResponse(List.of(new Generation(message, metadata))), Map.of());
+		final ChatResponse.Builder chat = ChatResponse.builder()
+				.generations(List.of(new Generation(AssistantMessage.builder().content(text).build(), metadata)));
+		if (reasoning != null) {
+			chat.metadata(GChatAnswerChunk.THINKING_DELTA_METADATA, reasoning);
+		}
+		return new ChatClientResponse(chat.build(), Map.of());
 	}
 
 	@Test
 	void aCallCutWhileReasoningShowsNoTextAndTheLimit() {
 		final AnswerShape shape = new AnswerShape();
 		shape.add(chunk("Weighing", "", null));
-		shape.add(chunk("Weighing the sources", "", null));
-		shape.add(chunk("Weighing the sources...", "", "LENGTH"));
+		shape.add(chunk(" the sources", "", null));
+		shape.add(chunk("...", "", "LENGTH"));
 
-		assertEquals("finishReason=LENGTH text=0 reasoning=23", shape.toString(), "a grown reasoning counted once");
+		assertEquals("finishReason=LENGTH text=0 reasoning=23", shape.toString());
 	}
 
 	@Test
@@ -59,5 +63,15 @@ class AnswerShapeTest {
 
 		assertEquals("finishReason=STOP text=11 reasoning=13", shape.toString());
 		assertEquals("finishReason=null text=0 reasoning=0", new AnswerShape().toString(), "a failed call");
+	}
+
+	@Test
+	void aBlockingCallsWholeReasoningIsCounted() {
+		final AnswerShape shape = AnswerShape.of(new ChatClientResponse(ChatResponse.builder()
+				.generations(List.of(new Generation(new AssistantMessage("The answer."),
+						ChatGenerationMetadata.builder().finishReason("STOP").build())))
+				.metadata(GChatAnswerChunk.THINKING_METADATA, "Let me think.").build(), Map.of()));
+
+		assertEquals("finishReason=STOP text=11 reasoning=13", shape.toString());
 	}
 }

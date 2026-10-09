@@ -18,51 +18,29 @@ import org.slf4j.LoggerFactory;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
 
 /**
- * The reasoning of a streamed answer, as events for the user: a model gives its
- * reasoning either in a field of its own, each chunk carrying all of it so far, or in its
- * text between thinking tags. The reasoning is sent in fragments of at least
- * {@value #FRAGMENT_CHARS} characters (or up to a line end), not one tiny piece per chunk,
- * and a completing event tells it ended when the answer starts.
+ * The reasoning of a streamed answer, as events for the user: the pieces of reasoning
+ * the answer's chunks add, every provider alike (as the
+ * {@link ai.gebo.llms.abstraction.layer.services.ThinkingNormalizationAdvisor} gives
+ * them). The reasoning is sent in fragments of at least {@value #FRAGMENT_CHARS} characters (or up to a line
+ * end), not one tiny piece per chunk, and a completing event tells it ended when the
+ * answer starts.
  */
 public final class ThinkingStream {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ThinkingStream.class);
 	/** The least characters an event carries, unless a line ends. */
 	static final int FRAGMENT_CHARS = 100;
-	/**
-	 * The metadata key under which Spring AI's OpenAI client keeps the reasoning of a
-	 * streamed answer (the reasoning_content or reasoning field of the provider).
-	 */
-	public static final String REASONING_CONTENT_METADATA = "reasoningContent";
-	private static final String[] TAGS = { "<think>", "</think>", "<thinking>", "</thinking>" };
-	/** The reasoning of the field so far, as the last chunk gave it. */
-	private String accumulated = "";
 	private final StringBuilder pending = new StringBuilder();
 	private final StringBuilder whole = new StringBuilder();
 	private boolean active = false;
 	/** All the reasoning written so far, every round of it. */
 	private long written = 0;
 
-	/** Events for the reasoning field of a chunk: all the reasoning so far. */
-	public List<GThinkingEvent> reasoning(String soFar) {
-		if (soFar == null || soFar.isEmpty()) {
-			return List.of();
-		}
-		// the same reasoning grown, or a new one (a later round of the answer)
-		final String delta = soFar.startsWith(accumulated) ? soFar.substring(accumulated.length()) : soFar;
-		accumulated = soFar;
-		return add(delta);
-	}
-
-	/** Events for text written between thinking tags. */
-	public List<GThinkingEvent> inline(String text) {
+	/** Events for a piece of reasoning, as the model wrote it (the text between its thinking tags). */
+	public List<GThinkingEvent> delta(String text) {
 		if (text == null || text.isEmpty()) {
 			return List.of();
 		}
-		String clean = text;
-		for (String tag : TAGS) {
-			clean = clean.replace(tag, "");
-		}
-		return add(clean);
+		return add(text);
 	}
 
 	/** The events ending the reasoning, when one is going on: what is pending, then the completion. */

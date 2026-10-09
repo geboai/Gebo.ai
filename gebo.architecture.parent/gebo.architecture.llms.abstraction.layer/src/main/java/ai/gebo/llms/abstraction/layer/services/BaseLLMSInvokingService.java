@@ -38,6 +38,8 @@ import tools.jackson.databind.ObjectMapper;
 import ai.gebo.architecture.ai.model.ContextContentRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ITokensCountable;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswer;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.model.DocumentMetaInfos;
 import lombok.AllArgsConstructor;
@@ -727,6 +729,19 @@ public class BaseLLMSInvokingService {
 	}
 
 	/**
+	 * The same call, its answer with its reasoning apart, every provider alike (see
+	 * {@link IGConfigurableChatModel#answer}).
+	 */
+	protected GChatAnswer answerLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
+			Map<String, Object> additionalParams) throws LLMConfigException {
+		Map<String, Object> params = new HashMap<>(additionalParams);
+		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+		return chatModel.answer(prompt, params, context);
+	}
+
+	/**
 	 * The same call as
 	 * {@link #callLLMWithDocumentsAndConsolidation(IGConfigurableChatModel, GPromptTemplateConfig, IChatRequestContext, Object, String, Map)},
 	 * the answer streamed and joined: its text arrives while the model writes it, so a
@@ -1124,6 +1139,16 @@ public class BaseLLMSInvokingService {
 	protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
 			IChatRequestContext context, Map<String, Object> params) throws LLMConfigException {
 		return chatModel.streamStringResponse(prompt, params, context);
+	}
+
+	/**
+	 * The same, the answer streamed with its reasoning apart, every provider alike (see
+	 * {@link IGConfigurableChatModel#streamAnswer}).
+	 */
+	protected Flux<GChatAnswerChunk> callLLMReactiveAnswer(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params)
+			throws LLMConfigException {
+		return chatModel.streamAnswer(prompt, params, context);
 	}
 
 }

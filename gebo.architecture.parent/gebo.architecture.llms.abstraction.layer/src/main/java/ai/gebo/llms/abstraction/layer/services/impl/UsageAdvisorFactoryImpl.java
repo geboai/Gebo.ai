@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.function.Supplier;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisor;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
@@ -204,22 +205,27 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 		/**
 		 * How a call ended, for the DEBUG log: the last finish reason the provider gave and
 		 * the characters of text and of reasoning it streamed. A call cut by the output limit
-		 * (finish reason LENGTH) with no text spent it reasoning. The reasoning comes in the
-		 * {@value #REASONING_CONTENT_METADATA} metadata of the answer, piece by piece or
-		 * grown piece after piece.
+		 * (finish reason LENGTH) with no text spent it reasoning. The reasoning is read as the
+		 * ThinkingNormalizationAdvisor (ordered inside this advisor) gives it, every provider
+		 * alike: the piece each chunk adds ({@link GChatAnswerChunk#THINKING_DELTA_METADATA}),
+		 * a blocking call's whole ({@link GChatAnswerChunk#THINKING_METADATA}).
 		 */
 		static final class AnswerShape {
-			/** The metadata of the answer holding its reasoning (as the reasoning stream reads it). */
-			static final String REASONING_CONTENT_METADATA = "reasoningContent";
 			private String finishReason = null;
 			private long textChars = 0;
 			private long reasoningChars = 0;
-			private String reasoningSoFar = "";
 
 			synchronized void add(ChatClientResponse response) {
 				final org.springframework.ai.chat.model.ChatResponse chat = response != null ? response.chatResponse()
 						: null;
-				final org.springframework.ai.chat.model.Generation result = chat != null ? chat.getResult() : null;
+				if (chat == null) {
+					return;
+				}
+				if (chat.getMetadata() != null) {
+					reasoningChars += length(chat.getMetadata().get(GChatAnswerChunk.THINKING_DELTA_METADATA))
+							+ length(chat.getMetadata().get(GChatAnswerChunk.THINKING_METADATA));
+				}
+				final org.springframework.ai.chat.model.Generation result = chat.getResult();
 				if (result == null) {
 					return;
 				}
@@ -234,18 +240,10 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 				if (text != null) {
 					textChars += text.length();
 				}
-				final Object reasoning = result.getOutput().getMetadata() != null
-						? result.getOutput().getMetadata().get(REASONING_CONTENT_METADATA)
-						: null;
-				if (reasoning instanceof String piece && !piece.isEmpty()) {
-					if (piece.startsWith(reasoningSoFar)) {
-						// the same reasoning grown
-						reasoningChars += piece.length() - reasoningSoFar.length();
-					} else {
-						reasoningChars += piece.length();
-					}
-					reasoningSoFar = piece;
-				}
+			}
+
+			private static long length(Object reasoning) {
+				return reasoning instanceof String text ? text.length() : 0;
 			}
 
 			static AnswerShape of(ChatClientResponse response) {

@@ -21,11 +21,6 @@ import java.util.function.Predicate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.AssistantMessage.ToolCall;
-import org.springframework.ai.chat.messages.MessageType;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.content.Media;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
@@ -48,6 +43,8 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswer;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -231,13 +228,13 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		long startMillis = System.currentTimeMillis();
 		try {
 			final DeepSearchQuotations quotations = answerQuotations(prompt, Map.of(), chatRequestContext);
-			ChatResponse chatresponse = writtenAgainIfCut(
-					configurableChatModel.response(prompt, Map.of(), chatRequestContext), configurableChatModel, prompt,
+			// the answer without its reasoning, every provider alike
+			final GChatAnswer answer = writtenAgainIfCut(
+					configurableChatModel.answer(prompt, Map.of(), chatRequestContext), configurableChatModel, prompt,
 					Map.of(), chatRequestContext, response);
-			AssistantMessage callResponseObject = chatresponse.getResult().getOutput();
-			String responseText = callResponseObject.getText();
 			// the quotations the standard way, checked against the answer's sources (best effort)
-			response.setQueryResponse(quotations.render(responseText));
+			response.setQueryResponse(quotations.render(answer.answer()));
+			response.setThinkingOutputs(ClientChatCallUtil.thinkingSteps(answer.thinking()));
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Answer with " + quotations.quotes().size() + " verified quotation(s)");
 			}
@@ -281,14 +278,14 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		try {
 			final DeepSearchQuotations quotations = answerQuotations(prompt, params, chatRequestContext);
-			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, params, chatRequestContext);
+			Flux<GChatAnswerChunk> res = configurableChatModel.streamAnswer(prompt, params, chatRequestContext);
 			Flux<GeboChatMessageEnvelope> composed = composeFlux(res, context, request, response,
 					chatRequestContext.getToolsContext(), chatHistoryConsolidation, historySizeTarget,
 					configurableChatModel, showedDocuments, quotations,
 					// the copy of the model is made as the user (its tools resolved for the user): the
 					// stream's thread, where an answer turns out cut, carries no identity
 					thinking -> runAs.doRunAsWithReturnAndException(() -> withThinking(configurableChatModel,
-							thinking).streamResponse(prompt, params, chatRequestContext)));
+							thinking).streamAnswer(prompt, params, chatRequestContext)));
 			// Logged once at stream completion/error (not per chunk) to avoid flooding
 			// the audit log with one event per streamed token.
 			return composed
@@ -322,7 +319,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * @param docrefs                  List of document references
 	 * @return A Flux of GeboChatMessageEnvelope representing the whole stream
 	 */
-	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<ChatResponse> res, final KBContext context,
+	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<GChatAnswerChunk> res, final KBContext context,
 			final GeboChatRequest request, final GeboChatResponse response, final Map<String, Object> toolsContext,
 			boolean chatHistoryConsolidation, int historySizeTarget, IGConfigurableChatModel configurableChatModel,
 			AIDocumentsSet showedDocuments) {
@@ -335,7 +332,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * saved (see {@link DeepSearchQuotations}); as the model wrote them when
 	 * {@code quotations} is null.
 	 */
-	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<ChatResponse> res, final KBContext context,
+	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<GChatAnswerChunk> res, final KBContext context,
 			final GeboChatRequest request, final GeboChatResponse response, final Map<String, Object> toolsContext,
 			boolean chatHistoryConsolidation, int historySizeTarget, IGConfigurableChatModel configurableChatModel,
 			AIDocumentsSet showedDocuments, final DeepSearchQuotations quotations) {
@@ -346,7 +343,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	/** The same answer streamed again by the model asked for another thinking level. */
 	@FunctionalInterface
 	protected static interface AnswerRetry {
-		Flux<ChatResponse> stream(ChatModelThinkingOption thinking) throws LLMConfigException;
+		Flux<GChatAnswerChunk> stream(ChatModelThinkingOption thinking) throws LLMConfigException;
 	}
 
 	/**
@@ -355,7 +352,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * {@link CutAnswer}); the user is warned the answer is incomplete otherwise, or when
 	 * {@code retry} is null.
 	 */
-	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<ChatResponse> res, final KBContext context,
+	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<GChatAnswerChunk> res, final KBContext context,
 			final GeboChatRequest request, final GeboChatResponse response, final Map<String, Object> toolsContext,
 			boolean chatHistoryConsolidation, int historySizeTarget, IGConfigurableChatModel configurableChatModel,
 			AIDocumentsSet showedDocuments, final DeepSearchQuotations quotations, final AnswerRetry retry) {
@@ -365,7 +362,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		final List<GResponseDocumentRef> docrefs = showedDocuments != null ? GResponseDocumentRef.from(showedDocuments)
 				: List.of();
 		final StringBuffer buffer = new StringBuffer();
-		final boolean skipThinkingMarkup = configurableChatModel.isApplyThinkingMarkupHandling();
 		// the quotations rendering of the answer, a new one when the answer is written again
 		final AtomicReference<DeepSearchQuotations.Streaming> quoting = new AtomicReference<>(
 				quotations != null ? quotations.streaming() : null);
@@ -385,73 +381,42 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 		// the reasoning the model writes before its answer, streamed to the user as it comes
 		final ThinkingStream thinking = new ThinkingStream();
-		final Function<ChatResponse, Flux<GeboChatMessageEnvelope>> chunkEnvelopes = x -> {
-
-			GeboChatMessageEnvelope<String> envelope = new GeboChatMessageEnvelope<String>();
+		// all the reasoning of the answer, saved with it
+		final StringBuilder reasoning = new StringBuilder();
+		// each chunk: the answer and the reasoning it adds, every provider alike
+		final Function<GChatAnswerChunk, Flux<GeboChatMessageEnvelope>> chunkEnvelopes = chunk -> {
 			final List<GeboChatMessageEnvelope> out = new ArrayList<>();
-			final StringBuffer contentSegment = new StringBuffer("");
-			if (x != null && x.getResults() != null && !x.getResults().isEmpty()) {
-				for (Generation rs : x.getResults()) {
-					// why the model stopped writing (stop, length...), on the chunk that ends it
-					final String finish = rs.getMetadata() != null ? rs.getMetadata().getFinishReason() : null;
-					if (finish != null && !finish.isBlank()) {
-						finishReason.set(finish);
-						if (LOGGER.isDebugEnabled()) {
-							LOGGER.debug("Streamed answer finish reason: " + finish + " after " + buffer.length()
-									+ " character(s)");
-						}
-					}
-					if (rs.getOutput() != null) {
-						MessageType type = rs.getOutput().getMessageType();
-						// the reasoning given in a field of its own (reasoning_content), all of it so
-						// far on each chunk: Spring AI's OpenAI client keeps it as reasoningContent
-						final Object reasoning = rs.getOutput().getMetadata() != null
-								? rs.getOutput().getMetadata().get(REASONING_CONTENT_METADATA)
-								: null;
-						if (reasoning instanceof String soFar) {
-							thinkingEvents(out, thinking.reasoning(soFar));
-						}
-
-						String text = rs.getOutput().getText();
-						if (text != null) {
-							contentSegment.append(text);
-						}
-						List<Media> medias = rs.getOutput().getMedia();
-						if (medias != null && !medias.isEmpty()) {
-							for (Media media : medias) {
-								LLMGeneratedResource generatedResource;
-								try {
-									generatedResource = this.chatStorageAreaService.addMedia(media,
-											request.getUserChatContextCode());
-									response.getGeneratedResources().add(generatedResource);
-								} catch (Throwable e) {
-									LOGGER.error("Error receiving media", e);
-								}
-
-							}
-						}
-					}
+			// why the model stopped writing (stop, length...), on the chunk that ends it
+			if (chunk.finishReason() != null) {
+				finishReason.set(chunk.finishReason());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Streamed answer finish reason: " + chunk.finishReason() + " after "
+							+ buffer.length() + " character(s)");
 				}
 			}
-			String thisText = contentSegment.toString();
-			buffer.append(thisText);
-			if (!skipThinkingMarkup || ClientChatCallUtil.isAfterThinking(buffer.toString())) {
-				if (!thisText.isBlank()) {
-					// the answer starts: the reasoning ended
-					thinkingEvents(out, thinking.complete());
+			for (Media media : chunk.media()) {
+				try {
+					LLMGeneratedResource generatedResource = this.chatStorageAreaService.addMedia(media,
+							request.getUserChatContextCode());
+					response.getGeneratedResources().add(generatedResource);
+				} catch (Throwable e) {
+					LOGGER.error("Error receiving media", e);
 				}
-				// a quotation still open is held until it closes
-				final DeepSearchQuotations.Streaming quotingNow = quoting.get();
-				envelope.setContent(quotingNow != null ? quotingNow.next(thisText) : thisText);
-				out.add(envelope);
-			} else {
-				// the text before the end of the thinking tags is the reasoning
-				thinkingEvents(out, thinking.inline(thisText));
 			}
+			buffer.append(chunk.answer());
+			reasoning.append(chunk.thinking());
+			thinkingEvents(out, thinking.delta(chunk.thinking()));
+			if (!chunk.answer().isBlank()) {
+				// the answer starts: the reasoning ended
+				thinkingEvents(out, thinking.complete());
+			}
+			// a quotation still open is held until it closes
+			final DeepSearchQuotations.Streaming quotingNow = quoting.get();
+			out.add(new GeboChatMessageEnvelope<String>(
+					quotingNow != null ? quotingNow.next(chunk.answer()) : chunk.answer()));
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Sending a String content:" + contentSegment.toString());
+				LOGGER.debug("Sending a String content:" + chunk.answer());
 			}
-
 			return Flux.fromIterable(out);
 		};
 		final Function<Throwable, Flux<GeboChatMessageEnvelope>> streamError = exc -> {
@@ -487,7 +452,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			if (lowerThinking == null || !CutAnswer.reasoningTookTheBudget(reasoningChars, answerChars)) {
 				return cutWarning(response, finishReason.get(), reasoningChars, answerChars);
 			}
-			final Flux<ChatResponse> again;
+			final Flux<GChatAnswerChunk> again;
 			try {
 				again = retry.stream(lowerThinking);
 			} catch (LLMConfigException | RuntimeException e) {
@@ -503,8 +468,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			response.getBackendMessages().add(note);
 			out.add(new GeboChatMessageEnvelope<GUserMessage>(note));
 			out.add(new GeboChatMessageEnvelope<String>(ANSWER_WRITTEN_AGAIN_SEPARATOR));
-			// the answer saved is the one written again
+			// the answer saved is the one written again, with its reasoning
 			buffer.setLength(0);
+			reasoning.setLength(0);
 			quoting.set(quotations != null ? quotations.streaming() : null);
 			finishReason.set(null);
 			final long reasoningBefore = thinking.writtenChars();
@@ -537,7 +503,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 				LOGGER.debug("Sending a GeboChatResponse trailing content with lastMessage: true");
 			}
 			String responseText = buffer.toString();
-			response.setThinkingOutputs(ClientChatCallUtil.extractThinking(responseText));
+			response.setThinkingOutputs(ClientChatCallUtil.thinkingSteps(reasoning.toString()));
 			if (quotations != null) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Streamed answer with " + quotations.quotes().size() + " verified quotation(s)");
@@ -583,12 +549,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		return responseFlux;
 	}
 
-	/**
-	 * The metadata key under which Spring AI's OpenAI client keeps the reasoning of a
-	 * streamed answer (the reasoning_content or reasoning field of the provider).
-	 */
-	static final String REASONING_CONTENT_METADATA = ThinkingStream.REASONING_CONTENT_METADATA;
-
 	/** What parts, while it streams, the cut answer from the one written again. */
 	static final String ANSWER_WRITTEN_AGAIN_SEPARATOR = CutAnswer.SEPARATOR;
 
@@ -623,48 +583,39 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * with less reasoning when its reasoning took them (the user never saw the cut one),
 	 * the user warned it is incomplete otherwise.
 	 */
-	private ChatResponse writtenAgainIfCut(ChatResponse answer, IGConfigurableChatModel model,
+	private GChatAnswer writtenAgainIfCut(GChatAnswer answer, IGConfigurableChatModel model,
 			GPromptTemplateConfig prompt, Map<String, Object> params, IChatRequestContext chatRequestContext,
 			GeboChatResponse response) throws LLMConfigException {
-		final Generation result = answer != null ? answer.getResult() : null;
-		final String finish = result != null && result.getMetadata() != null ? result.getMetadata().getFinishReason()
-				: null;
+		final String finish = answer.finishReason();
 		if (!CutAnswer.isCut(finish)) {
 			return answer;
 		}
-		final AssistantMessage output = result.getOutput();
-		final String text = output != null && output.getText() != null ? output.getText() : "";
-		final String answerText = ClientChatCallUtil.removeThinking(text);
-		final Object reasoning = output != null && output.getMetadata() != null
-				? output.getMetadata().get(REASONING_CONTENT_METADATA)
-				: null;
-		final long reasoningChars = (reasoning instanceof String field ? field.length() : 0)
-				+ (text.length() - answerText.length());
+		final long answerChars = answer.answer().length();
+		final long reasoningChars = answer.thinking().length();
 		final ChatModelThinkingOption lower = model.getConfig() instanceof GBaseChatModelConfig modelConfig
 				? CutAnswer.lower(modelConfig.getThinking())
 				: null;
-		if (lower == null || !CutAnswer.reasoningTookTheBudget(reasoningChars, answerText.length())) {
-			LOGGER.warn("Answer cut (finish reason " + finish + ") after " + answerText.length() + " answer and "
+		if (lower == null || !CutAnswer.reasoningTookTheBudget(reasoningChars, answerChars)) {
+			LOGGER.warn("Answer cut (finish reason " + finish + ") after " + answerChars + " answer and "
 					+ reasoningChars + " reasoning character(s): the user is warned it is incomplete");
 			response.getBackendMessages().add(CutAnswer.incompleteWarning());
 			return answer;
 		}
-		LOGGER.warn("Answer cut (finish reason " + finish + ") after " + answerText.length() + " answer and "
+		LOGGER.warn("Answer cut (finish reason " + finish + ") after " + answerChars + " answer and "
 				+ reasoningChars + " reasoning character(s): asked again with thinking " + lower);
-		final ChatResponse again;
+		final GChatAnswer again;
 		try {
-			again = withThinking(model, lower).response(prompt, params, chatRequestContext);
+			again = withThinking(model, lower).answer(prompt, params, chatRequestContext);
 		} catch (LLMConfigException | RuntimeException e) {
 			LOGGER.error("Cannot ask the cut answer again with thinking " + lower, e);
 			response.getBackendMessages().add(CutAnswer.incompleteWarning());
 			return answer;
 		}
-		final Generation againResult = again != null ? again.getResult() : null;
-		if (againResult == null) {
+		if (again == null || again.source() == null || again.source().getResult() == null) {
 			response.getBackendMessages().add(CutAnswer.incompleteWarning());
 			return answer;
 		}
-		if (againResult.getMetadata() != null && CutAnswer.isCut(againResult.getMetadata().getFinishReason())) {
+		if (CutAnswer.isCut(again.finishReason())) {
 			LOGGER.warn("Answer asked again with thinking " + lower + " cut again: the user is warned it is incomplete");
 			response.getBackendMessages().add(CutAnswer.incompleteWarning());
 		}

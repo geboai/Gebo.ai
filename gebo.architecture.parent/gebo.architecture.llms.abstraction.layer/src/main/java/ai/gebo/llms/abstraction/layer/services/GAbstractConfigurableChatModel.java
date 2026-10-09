@@ -33,6 +33,7 @@ import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
@@ -54,6 +55,8 @@ import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswer;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
@@ -214,10 +217,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		this.type = type;
 		this.model = configureModel(config, type, null);
 		Builder builder = ChatClient.builder(configureModel(config, type, null));
-		// Priced through this model's getPricingConditions(), read when each call ends.
+		// Priced through this model's getPricingConditions(), read when each call ends; a
+		// call's answer read from its answer generation, not from a reasoning one; the
+		// reasoning of every model round apart from the answer, every provider alike.
 		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions,
-				this::getProviderId))
-				.build();
+				this::getProviderId), new AnswerFirstGenerations.Advisor(this::isReasoningGeneration),
+				thinkingNormalization()).build();
 	}
 
 	@Override
@@ -436,6 +441,31 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0)
 			return config.getMaxGeneratedTokens();
 		return defaultMaxGeneratedTokens(contextWindowOf(config));
+	}
+
+	/**
+	 * Whether a generation of a blocking call's response is the model's reasoning rather
+	 * than its answer. False by default: the providers whose Spring AI model returns its
+	 * reasoning as generations of their own say which ones they are, so that the answer
+	 * is read from the answer generation ({@link AnswerFirstGenerations}).
+	 */
+	protected boolean isReasoningGeneration(Generation generation) {
+		return false;
+	}
+
+	/**
+	 * How the provider's Spring AI model gives the reasoning apart from the answer. The
+	 * OpenAI reading by default (the reasoning_content of the OpenAI compatible APIs, as
+	 * Spring AI's OpenAI model keeps it): a provider keeping it otherwise gives its own.
+	 */
+	protected IGReasoningExtractor reasoningExtractor() {
+		return IGReasoningExtractor.OPENAI;
+	}
+
+	/** The advisor giving every model round's answer and reasoning the same shape. */
+	ThinkingNormalizationAdvisor thinkingNormalization() {
+		return new ThinkingNormalizationAdvisor(reasoningExtractor(), this::isApplyThinkingMarkupHandling,
+				this::isReasoningGeneration);
 	}
 
 	/**
@@ -754,8 +784,15 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		return new SystemMessage(content);
 	}
 
+	@Deprecated
 	@Override
 	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		return responses(promptTemplate, params, chatContext);
+	}
+
+	/** The streamed chunks, normalized (ThinkingNormalizationAdvisor). */
+	private Flux<ChatResponse> responses(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		return runAs.doRunAsWithReturnAndException(() -> {
@@ -812,8 +849,23 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				logPerformances(reqObject, timestamp);
 			}
 
-			return reqObject.getRequestSpec().stream().content().subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
+			// the answer only, its reasoning apart (ThinkingNormalizationAdvisor)
+			return reqObject.getRequestSpec().stream().chatResponse().map(GChatAnswerChunk::of)
+					.map(GChatAnswerChunk::answer).filter(answer -> !answer.isEmpty())
+					.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 		});
+	}
+
+	@Override
+	public Flux<GChatAnswerChunk> streamAnswer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		return responses(promptTemplate, params, chatContext).map(GChatAnswerChunk::of);
+	}
+
+	@Override
+	public GChatAnswer answer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		return GChatAnswer.of(response(promptTemplate, params, chatContext));
 	}
 
 	@Override
@@ -928,8 +980,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("doWithChatModel() handing out the usage recording raw model of code=" + getCode());
 		}
-		return chatModelCalling.call(usageAdvisorFactory.recording(model, config, this::getPricingConditions,
-				this::getProviderId));
+		return chatModelCalling.call(new AnswerFirstGenerations.Model(usageAdvisorFactory.recording(model, config,
+				this::getPricingConditions, this::getProviderId), this::isReasoningGeneration));
 	}
 
 	@Override
@@ -973,7 +1025,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 						.builder(configurableChatModel.configureModel(modelConfigClone, type,
 								configOptions.getToolCallingManager()))
 						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone,
-								configurableChatModel::getPricingConditions, configurableChatModel::getProviderId))
+								configurableChatModel::getPricingConditions, configurableChatModel::getProviderId),
+								new AnswerFirstGenerations.Advisor(configurableChatModel::isReasoningGeneration),
+								configurableChatModel.thinkingNormalization())
 						.build();
 			} else
 				throw new IllegalStateException(

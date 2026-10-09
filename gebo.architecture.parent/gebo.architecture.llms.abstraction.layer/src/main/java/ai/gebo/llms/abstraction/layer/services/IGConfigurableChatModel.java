@@ -25,6 +25,8 @@ import org.springframework.ai.tool.resolution.ToolCallbackResolver;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswer;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.security.services.ReactiveIdentityUtil;
@@ -78,11 +80,27 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 	 * @param chatContext
 	 * @return
 	 * @throws LLMConfigException
+	 * @deprecated the chunks as Spring AI gives them: read
+	 *             {@link #streamAnswer(GPromptTemplateConfig, Map, IChatRequestContext)},
+	 *             the answer and its reasoning every provider alike. To be removed.
 	 */
+	@Deprecated
 	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException;
 
+	/**
+	 * The answer streamed without its reasoning: the pieces of answer text only, empty
+	 * ones left out.
+	 */
 	public Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException;
+
+	/**
+	 * The answer streamed with its reasoning apart, every provider alike: each piece
+	 * carries the answer text and the reasoning it adds, the reasoning of every model round
+	 * of a tool calling loop included.
+	 */
+	public Flux<GChatAnswerChunk> streamAnswer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException;
 
 	/***********************************************************************************************
@@ -98,6 +116,12 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 			IChatRequestContext chatContext) throws LLMConfigException;
 
 	public String textResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException;
+
+	/**
+	 * The answer of a blocking call with its reasoning apart, every provider alike.
+	 */
+	public GChatAnswer answer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException;
 
 	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,

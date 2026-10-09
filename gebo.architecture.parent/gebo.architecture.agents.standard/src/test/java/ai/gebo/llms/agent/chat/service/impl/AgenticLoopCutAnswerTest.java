@@ -23,25 +23,30 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.Generation;
+import org.springframework.ai.chat.prompt.Prompt;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGReasoningExtractor;
+import ai.gebo.llms.abstraction.layer.services.ThinkingNormalizationAdvisor;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.LoopIteration;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.CutAnswer;
-import ai.gebo.llms.chat.abstraction.layer.services.impl.ThinkingStream;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.model.GUserMessage;
 import reactor.core.publisher.Flux;
@@ -71,11 +76,26 @@ class AgenticLoopCutAnswerTest {
 			this.calls = calls;
 		}
 
+		/** The scripted chunks as the model's ChatClient streams them: normalized. */
 		@Override
-		protected Flux<ChatResponse> callLLMReactiveResponses(IGConfigurableChatModel chatModel,
+		protected Flux<GChatAnswerChunk> callLLMReactiveResponses(IGConfigurableChatModel chatModel,
 				GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params) {
 			models.add(chatModel);
-			return Flux.fromIterable(calls.get(Math.min(models.size() - 1, calls.size() - 1)));
+			final Flux<ChatResponse> raw = Flux.fromIterable(calls.get(Math.min(models.size() - 1, calls.size() - 1)));
+			final ChatModel model = new ChatModel() {
+				@Override
+				public ChatResponse call(Prompt prompt) {
+					throw new UnsupportedOperationException();
+				}
+
+				@Override
+				public Flux<ChatResponse> stream(Prompt prompt) {
+					return raw;
+				}
+			};
+			return ChatClient.builder(model)
+					.defaultAdvisors(new ThinkingNormalizationAdvisor(IGReasoningExtractor.OPENAI, () -> false, g -> false))
+					.build().prompt("q").stream().chatResponse().map(GChatAnswerChunk::of);
 		}
 
 		@Override
@@ -85,10 +105,13 @@ class AgenticLoopCutAnswerTest {
 		}
 	}
 
-	/** A chunk: the reasoning so far, its text, why the model stopped (null while it writes). */
+	/**
+	 * A chunk as the OpenAI client streams it: the reasoning so far, its text, why the model
+	 * stopped (null while it writes).
+	 */
 	private static ChatResponse chunk(String reasoningSoFar, String text, String finish) {
 		final AssistantMessage message = AssistantMessage.builder().content(text)
-				.properties(reasoningSoFar != null ? Map.of(ThinkingStream.REASONING_CONTENT_METADATA, reasoningSoFar)
+				.properties(reasoningSoFar != null ? Map.of(IGReasoningExtractor.REASONING_CONTENT_METADATA, reasoningSoFar)
 						: Map.of())
 				.build();
 		return new ChatResponse(List.of(new Generation(message,

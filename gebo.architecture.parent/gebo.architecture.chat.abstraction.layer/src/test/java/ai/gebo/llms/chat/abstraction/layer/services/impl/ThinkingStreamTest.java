@@ -33,17 +33,17 @@ class ThinkingStreamTest {
 	}
 
 	@Test
-	void theReasoningFieldIsStreamedAsItGrowsOnce() {
+	void theReasoningIsStreamedInFragmentsOnce() {
 		final ThinkingStream stream = new ThinkingStream();
 		final List<GThinkingEvent> events = new ArrayList<>();
-		String soFar = "";
+		String whole = "";
 		for (int i = 0; i < 60; i++) {
-			soFar += "word" + i + " ";
-			events.addAll(stream.reasoning(soFar));
+			whole += "word" + i + " ";
+			events.addAll(stream.delta("word" + i + " "));
 		}
 		events.addAll(stream.complete());
 
-		assertEquals(soFar, texts(events), "every piece once, in order");
+		assertEquals(whole, texts(events), "every piece once, in order");
 		assertTrue(events.size() < 15, "fragments, not one event per piece: " + events.size());
 		assertTrue(events.get(events.size() - 1).isCompleted());
 		assertEquals(1, events.stream().filter(GThinkingEvent::isCompleted).count());
@@ -53,14 +53,15 @@ class ThinkingStreamTest {
 	void aLineEndSendsTheFragmentAtOnce() {
 		final ThinkingStream stream = new ThinkingStream();
 
-		assertTrue(stream.reasoning("short").isEmpty());
-		assertEquals("short thought\n", texts(stream.reasoning("short thought\n")));
+		assertTrue(stream.delta("short").isEmpty());
+		assertEquals("short thought\n", texts(stream.delta(" thought\n")));
 	}
 
 	@Test
-	void theThinkingTagsAreNotPartOfTheReasoning() {
+	void theReasoningWrittenBetweenTagsIsStreamedAsGiven() {
 		final ThinkingStream stream = new ThinkingStream();
-		final List<GThinkingEvent> events = new ArrayList<>(stream.inline("<think>Let me consider the question.\n"));
+		final List<GThinkingEvent> events = new ArrayList<>(stream.delta("Let me consider "));
+		events.addAll(stream.delta("the question.\n"));
 		events.addAll(stream.complete());
 
 		assertEquals("Let me consider the question.\n", texts(events));
@@ -70,17 +71,17 @@ class ThinkingStreamTest {
 	void noReasoningNoEvents() {
 		final ThinkingStream stream = new ThinkingStream();
 
-		assertTrue(stream.reasoning("").isEmpty());
+		assertTrue(stream.delta("").isEmpty());
 		assertTrue(stream.complete().isEmpty(), "nothing to complete");
 	}
 
 	@Test
 	void aLaterReasoningStartsAgain() {
 		final ThinkingStream stream = new ThinkingStream();
-		stream.reasoning("first round of reasoning\n");
+		stream.delta("first round of reasoning\n");
 		stream.complete();
 
-		final List<GThinkingEvent> second = stream.reasoning("second\n");
+		final List<GThinkingEvent> second = stream.delta("second\n");
 		assertEquals("second\n", texts(second), "a new reasoning, not the end of the first");
 		assertFalse(stream.complete().isEmpty());
 	}

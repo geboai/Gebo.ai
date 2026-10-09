@@ -17,11 +17,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.anthropic.AnthropicChatModel;
 import org.springframework.ai.anthropic.AnthropicChatOptions;
 import org.springframework.ai.anthropic.AnthropicChatOptions.Builder;
+import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
 import com.anthropic.models.messages.OutputConfig;
+import com.anthropic.models.messages.ThinkingConfigAdaptive;
 
 import ai.gebo.llms.anthropic.http.AnthropicClientCustomizer;
 
@@ -35,6 +37,7 @@ import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGReasoningExtractor;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -159,7 +162,10 @@ public class AnthropicChatModelConfigurationSupportService
 			//   those models keep the provider default.
 			// Which one a model takes, and which effort levels it accepts, is read from the
 			// Models API capabilities; the model code is the fallback when they are unknown.
-			if (config.getThinking() != null) {
+			// An option left unset (or Automatic) asks a model taking adaptive thinking for
+			// adaptive thinking with no effort: what the current models run when thinking is
+			// omitted, its text shown (they omit it by default).
+			{
 				String modelCode = config.getChoosedModel() != null ? config.getChoosedModel().getCode() : null;
 				AnthropicThinkingSupport support = config.getChoosedModel() != null
 						? AnthropicThinkingSupport.readFrom(config.getChoosedModel().getModelDetails())
@@ -168,18 +174,21 @@ public class AnthropicChatModelConfigurationSupportService
 					support = modelsService.getThinkingSupport(apiKey, config.getBaseUrl(), modelCode);
 				}
 				ThinkingRequest thinking = thinkingRequest(config.getThinking(), support, modelCode);
-				if (thinking == null) {
+				if (thinking == null && config.getThinking() != null) {
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Chat model {} asks for thinking {} but {} cannot express it: the model is left"
 								+ " at the provider default", config.getCode(), config.getThinking(), modelCode);
 					}
-				} else {
+				} else if (thinking != null) {
+					// the thinking summarized: the current models omit its text by default, and
+					// the user is shown the thinking as it comes
 					if (thinking.disabled()) {
 						builder = builder.thinkingDisabled();
 					} else if (thinking.effort() != null) {
-						builder = builder.thinkingAdaptive().effort(thinking.effort());
+						builder = builder.thinkingAdaptive(ThinkingConfigAdaptive.Display.SUMMARIZED)
+								.effort(thinking.effort());
 					} else {
-						builder = builder.thinkingAdaptive();
+						builder = builder.thinkingAdaptive(ThinkingConfigAdaptive.Display.SUMMARIZED);
 					}
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Chat model {} ({}) configured with thinking {} as {}", config.getCode(), modelCode,
@@ -220,12 +229,37 @@ public class AnthropicChatModelConfigurationSupportService
 			return model;
 		}
 
+		/**
+		 * Spring AI's Anthropic model returns a call's thinking blocks as generations of
+		 * their own ahead of the answer: a thinking block with its "signature", a redacted
+		 * one with its "data".
+		 */
+		@Override
+		protected boolean isReasoningGeneration(Generation generation) {
+			return isThinkingBlock(generation);
+		}
+
+		/** Claude's thinking, read as it streams ({@link AnthropicReasoningExtractor}). */
+		@Override
+		protected IGReasoningExtractor reasoningExtractor() {
+			return new AnthropicReasoningExtractor();
+		}
+
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 			AnthropicConfigurableChatModel anthropicChatModel = new AnthropicConfigurableChatModel(rendererFactory,
 					toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
 			return anthropicChatModel;
 		}
+	}
+
+	/** Whether the generation is a thinking block of a Claude call's response. */
+	static boolean isThinkingBlock(Generation generation) {
+		if (generation == null || generation.getOutput() == null || generation.getOutput().getMetadata() == null) {
+			return false;
+		}
+		final var properties = generation.getOutput().getMetadata();
+		return properties.containsKey("signature") || properties.containsKey("data");
 	}
 
 	/**
@@ -302,7 +336,12 @@ public class AnthropicChatModelConfigurationSupportService
 	/**
 	 * Maps the thinking option of a configuration onto what the model accepts.
 	 *
-	 * @param option    the configured option
+	 * An option left unset, or Automatic, is adaptive thinking with no effort on a model
+	 * whose capabilities say it takes adaptive thinking: the current models run it when
+	 * thinking is omitted (Opus 5.5 cannot leave it), and only asking for it lets their
+	 * thinking text be shown. Without known capabilities it leaves the provider default.
+	 *
+	 * @param option    the configured option, null when unset
 	 * @param support   the thinking the model accepts, from the Models API; null when
 	 *                  unknown, the model code is then all there is to go by
 	 * @param modelCode the configured model code
@@ -311,8 +350,8 @@ public class AnthropicChatModelConfigurationSupportService
 	 */
 	static ThinkingRequest thinkingRequest(ChatModelThinkingOption option, AnthropicThinkingSupport support,
 			String modelCode) {
-		if (option == null)
-			return null;
+		if (option == null || option == ChatModelThinkingOption.AUTO)
+			return support != null && support.adaptive() ? new ThinkingRequest(false, null) : null;
 		if (support == null) {
 			if (isBudgetOnlyThinkingModel(modelCode))
 				return null;

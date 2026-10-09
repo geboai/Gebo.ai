@@ -28,8 +28,10 @@ public final class AnthropicClientCustomizer {
 
     public static AnthropicHttpClientBuilderCustomizer from(IGLlmsServiceClientsProvider provider) {
         GeboLlmsClientConfig cfg = provider.getClientConfig();
+        // the thinking tap first: it sees the request and the stream the retries end with
         return builder -> builder
                 .timeout(Duration.ofMillis(cfg.getReadTimeoutMs()))
+                .interceptor(AnthropicThinkingTap.INSTANCE)
                 .interceptor(provider.getOkHttpRetryInterceptor());
     }
 

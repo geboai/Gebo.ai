@@ -41,6 +41,7 @@ import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -54,8 +55,10 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationCon
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.services.impl.ThinkingStream;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.services.IGSecurityService;
@@ -332,7 +335,7 @@ public class ReportWriterReactiveAgentServiceImpl
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Report writer using single-window reactive LLM call (tokenBudget:" + tokenBudget + ")");
 			}
-			textStream = callLLMReactive(agentModel, agentPrompt, chatRequestContext, params.get(0));
+			textStream = writeReactive(agentModel, agentPrompt, chatRequestContext, params.get(0), notificationSink);
 		} else {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Report writer using token-budget coordinator over " + params.size()
@@ -345,6 +348,61 @@ public class ReportWriterReactiveAgentServiceImpl
 
 		return renderOutputStream(textStream, response, session, contextAgentPersona, notificationSink,
 				callBacksListener);
+	}
+
+	/**
+	 * The model's answer as it streams, with what its text alone does not carry: its
+	 * reasoning, every provider alike and every model round of its tools included, and why
+	 * it stopped.
+	 */
+	protected Flux<GChatAnswerChunk> callLLMReactiveResponses(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params)
+			throws LLMConfigException {
+		return chatModel.streamAnswer(prompt, params, context);
+	}
+
+	/**
+	 * The text the writer writes, as it streams: an output of the network, its reasoning
+	 * goes to the user's chat as it comes ({@code notificationSink}, when it is the chat's
+	 * emitter), completed when the text starts.
+	 */
+	protected Flux<String> writeReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+			IChatRequestContext context, Map<String, Object> params, INotificationSink notificationSink)
+			throws LLMConfigException {
+		final Flux<GChatAnswerChunk> chunks = callLLMReactiveResponses(chatModel, prompt, context, params);
+		final ISinkUIEmitter ui = notificationSink instanceof ISinkUIEmitter emitter ? emitter : null;
+		return Flux.defer(() -> {
+			final ThinkingStream thinking = new ThinkingStream();
+			return chunks.map(chunk -> {
+				thinkingTo(ui, thinking.delta(chunk.thinking()));
+				if (!chunk.answer().isBlank()) {
+					// the text starts: the reasoning ended
+					thinkingTo(ui, thinking.complete());
+				}
+				return chunk.answer();
+			}).filter(text -> !text.isEmpty()).concatWith(Flux.defer(() -> {
+				// a reasoning no text came after ends with the model's output
+				thinkingTo(ui, thinking.complete());
+				return Flux.<String>empty();
+			}));
+		});
+	}
+
+	/** The reasoning events sent to the user's chat, never failing the answer. */
+	protected void thinkingTo(ISinkUIEmitter ui, List<GThinkingEvent> events) {
+		if (ui == null || events.isEmpty()) {
+			return;
+		}
+		try {
+			for (GThinkingEvent event : events) {
+				ui.next(new GeboChatMessageEnvelope<GThinkingEvent>(event));
+			}
+		} catch (RuntimeException e) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agent id:" + getId() + " the reasoning could not be sent to the chat: "
+						+ e.getMessage());
+			}
+		}
 	}
 
 	/**
@@ -527,7 +585,7 @@ public class ReportWriterReactiveAgentServiceImpl
 								LOGGER.trace(evidence.toString());
 								LOGGER.trace("</EXTRACTED_EVIDENCE>");
 							}
-							return callLLMReactive(agentModel, agentPrompt, chatRequestContext, writing);
+							return writeReactive(agentModel, agentPrompt, chatRequestContext, writing, notificationSink);
 						});
 					} catch (LLMConfigException e) {
 						return Flux.error(e);
