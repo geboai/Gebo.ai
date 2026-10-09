@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.google.genai.GoogleGenAiChatModel;
 import org.springframework.ai.google.genai.GoogleGenAiChatModel.ChatModel;
 import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
-import org.springframework.ai.google.genai.common.GoogleGenAiThinkingLevel;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
@@ -144,35 +143,13 @@ public class GoogleVertexChatModelConfigurationSupportService
 				builder = builder.maxOutputTokens(config.getMaxGeneratedTokens());
 			}
 
-			// Gemini takes a thinking level, a scale that lines up with ours except at the
-			// bottom: there is no way to switch reasoning off, only to ask for the least of
-			// it, so NO_THINKING becomes MINIMAL rather than pretending to disable it.
-			// AUTO sends nothing, leaving the provider default alone - which is also what
-			// THINKING_LEVEL_UNSPECIFIED would mean, spelled without a request.
-			if (config.getThinking() != null) {
-				switch (config.getThinking()) {
-				case NO_THINKING: {
-					builder = builder.thinkingLevel(GoogleGenAiThinkingLevel.MINIMAL);
-				}
-					break;
-				case LOW_THINKING: {
-					builder = builder.thinkingLevel(GoogleGenAiThinkingLevel.LOW);
-				}
-					break;
-				case MEDIUM_THINKING: {
-					builder = builder.thinkingLevel(GoogleGenAiThinkingLevel.MEDIUM);
-				}
-					break;
-				case HIGH_THINKING: {
-					builder = builder.thinkingLevel(GoogleGenAiThinkingLevel.HIGH);
-				}
-					break;
-				default:
-					break;
-				}
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Chat model {} configured with thinking {}", config.getCode(), config.getThinking());
-				}
+			// No thinking level is sent: which levels a Gemini model takes is the model's own
+			// (Spring AI checks it against a table: 2.5 Flash and Flash-Lite take none, 3 Pro
+			// preview LOW and HIGH only), and a level the model does not take fails the call.
+			// The model thinks as its provider default says; the editor offers no thinking.
+			if (config.getThinking() != null && LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat model {} has thinking {} configured: not sent, Gemini models think at their"
+						+ " default", config.getCode(), config.getThinking());
 			}
 
 			// Configure enabled functions if specified
