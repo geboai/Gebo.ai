@@ -136,7 +136,7 @@ public class DeepseekModelsLookupService {
 						"Invalid Deepseek credentials format", "Inserted credentials of type:" + secret.type()));
 			}
 			// Enrich model choices with additional metadata
-			metaEnricher.enrichChatModelMetaInfos(DeepseekChatModelConfigurationSupportService.DEEPSEEK_CHAT_MODEL_TYPE, models, (choice) -> {
+			metaEnricher.enrichChatModelMetaInfos(DeepseekChatModelConfigurationSupportService.type.getProviderId(), models, (choice) -> {
 				ModelMetaInfo meta = new ModelMetaInfo();
 
 				return meta;

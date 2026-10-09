@@ -93,7 +93,9 @@ public class ModelsListProviderProxyService {
 
 		// Call the provider handler to get the list of models
 		try {
-			return handler.geModels(null, config, clearApiKey, choiceType, type);
+			// The provider id keys the models library lookup of the handler's enrichment
+			return handler.geModels(type != null ? type.getProviderId() : null, config, clearApiKey, choiceType,
+					type);
 		} catch (Throwable th) {
 			return OperationStatus.ofError("Problem retrieving models list", th.getLocalizedMessage());
 		}
