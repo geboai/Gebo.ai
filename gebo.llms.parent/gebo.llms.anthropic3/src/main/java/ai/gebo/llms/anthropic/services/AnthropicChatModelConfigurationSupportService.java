@@ -130,6 +130,7 @@ public class AnthropicChatModelConfigurationSupportService
 			// Configure Anthropic chat options (apiKey lives in options in Spring AI 2.0)
 			Builder builder = AnthropicChatOptions.builder();
 			builder.apiKey(apiKey);
+			builder.timeout(AnthropicClientCustomizer.requestTimeout(clientsProvider));
 			// Anthropic requires max_tokens on every request: without a configured value it was
 			// Spring AI's 4096, which the always on thinking of the current models eats into,
 			// cutting long answers. The default is a share of the model's context window.
