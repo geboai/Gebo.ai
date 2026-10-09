@@ -10,6 +10,7 @@
 package ai.gebo.architecture.documents.cache.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -51,6 +52,7 @@ import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.IGAIDocumentMetaDataEnricher;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
+import ai.gebo.system.ingestion.ContentHash;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
 import ai.gebo.system.ingestion.IGLanguageDetector;
 import reactor.core.scheduler.Schedulers;
@@ -152,6 +154,28 @@ class ChunkPositionsTest {
 
 		assertEquals(List.of(1l, 2l, 3l, 4l), positions(response), "the indexing policy is unchanged");
 		assertEquals(4l, response.getCurrentChunkSet().getChunks().get(0).getChunksCount());
+	}
+
+	@Test
+	void theWholeTextIsHashedAsItIsReadAndTheHashKeptWithTheChunks() throws Exception {
+		DocumentChunkingResponse response = chunk(ChunkingPolicy.SPLIT_CHUNKS);
+
+		final String expected = new ContentHash().add("Page one speaks of the contract renewal terms.")
+				.add("Page two is about something else entirely.")
+				.add("Page three again speaks of the contract penalties.")
+				.add("Page four closes the document with signatures.").hex();
+		assertEquals(expected, response.getContentHash(), "the hash of the pages' text, in reading order");
+		ArgumentCaptor<DocumentChunkOperation> saved = ArgumentCaptor.forClass(DocumentChunkOperation.class);
+		verify(operations).insert(saved.capture());
+		assertEquals(expected, saved.getValue().getContentHash(), "kept on the record");
+		when(operations.findById(saved.getValue().getId())).thenReturn(Optional.of(saved.getValue()));
+		assertEquals(expected, service.getNextChunkSet(document, saved.getValue().getId(),
+				saved.getValue().getChunkSetsList().get(0), null).getContentHash(), "given back when read again");
+	}
+
+	@Test
+	void aSampleHasNoHashItsTextIsNotReadWhole() throws Exception {
+		assertNull(chunk(ChunkingPolicy.ONLY_MATCHING_CHUNKS, true).getContentHash());
 	}
 
 	@Test

@@ -24,6 +24,7 @@ import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
+import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -52,6 +53,16 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 			data.setJobId(payload.getJobId());
 
 			DocumentChunkingResponse processed = null;
+			if (unchangedSinceLastIngestion(payload)) {
+				// same date and size as when last ingested: not read again
+				data.setBatchDiscardedInput(1);
+				data.setTimestamp(new Date());
+				sendStatus(data);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("End acceptSingleMessage(...) => " + data.toString());
+				}
+				return data;
+			}
 			try {
 				// the job's session, disposed or not (a late batch reopens it), created by the
 				// first batch; one created meanwhile by a concurrent batch is taken
@@ -78,7 +89,12 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 				data.setTokensProcessed(processed.getTotalTokensSize());
 				data.setChunksProcessed(processed.getTotalChunksNumber());
 				data.setTimestamp(new Date());
-				if (!processed.isEmpty()) {
+				if (!processed.isEmpty() && sameTextAsLastIngested(payload, processed.getContentHash())) {
+					// read again, the same text as when last ingested: its indexes stay as they are
+					data.setBatchDiscardedInput(1);
+				} else if (!processed.isEmpty()) {
+					// the hash of what is indexed now, acknowledged back to the content handler
+					payload.setHash(processed.getContentHash());
 					data.setBatchDocumentsProcessed(1);
 					data.setBatchSentToNextStep(1);
 
@@ -97,21 +113,64 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 				LOGGER.error("Fail to prepare & deliver chunks =>" + processed, e);
 				data.setBatchDocumentsProcessingErrors(1);
 			} finally {
-				try {
-					GMessageEnvelope<GContentsProcessingStatusUpdatePayload> _envelope = GMessageEnvelope
-							.newMessageFrom(emitter, data);
-					_envelope.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
-					_envelope.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
-					_envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
-					broker.accept(_envelope);
-				} catch (Throwable th) {
-				}
+				sendStatus(data);
 			}
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End acceptSingleMessage(...) => " + data.toString());
 		}
 		return data;
+	}
+
+	private void sendStatus(GContentsProcessingStatusUpdatePayload data) {
+		try {
+			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> _envelope = GMessageEnvelope
+					.newMessageFrom(emitter, data);
+			_envelope.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
+			_envelope.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
+			_envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
+			broker.accept(_envelope);
+		} catch (Throwable th) {
+		}
+	}
+
+	/**
+	 * Whether the document is as it was when last ingested, by what its content
+	 * handler tells without reading it: a last ingestion known, with the same
+	 * modification date and the same size. A date or a size unknown on either side
+	 * tells nothing: the document is read.
+	 */
+	static boolean unchangedSinceLastIngestion(GDocumentReferencePayload payload) {
+		final GDocumentReference document = payload.getDocumentReference();
+		final boolean unchanged = payload.getLastIngestedHash() != null && document != null
+				&& document.getModificationDate() != null && payload.getLastIngestedModificationDate() != null
+				&& document.getModificationDate().getTime() == payload.getLastIngestedModificationDate().getTime()
+				&& document.getFileSize() != null && payload.getLastIngestedFileSize() != null
+				&& document.getFileSize().longValue() == payload.getLastIngestedFileSize().longValue();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Document:" + (document != null ? document.getCode() : null) + " modificationDate:"
+					+ (document != null ? document.getModificationDate() : null) + " fileSize:"
+					+ (document != null ? document.getFileSize() : null) + " last ingested hash:"
+					+ payload.getLastIngestedHash() + " modificationDate:" + payload.getLastIngestedModificationDate()
+					+ " fileSize:" + payload.getLastIngestedFileSize() + " => "
+					+ (unchanged ? "unchanged, not read again" : "read"));
+		}
+		return unchanged;
+	}
+
+	/**
+	 * Whether the text read is the one last ingested: its hash equal to the last
+	 * ingested one, both known.
+	 */
+	static boolean sameTextAsLastIngested(GDocumentReferencePayload payload, String contentHash) {
+		final boolean same = contentHash != null && contentHash.equals(payload.getLastIngestedHash());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Document:"
+					+ (payload.getDocumentReference() != null ? payload.getDocumentReference().getCode() : null)
+					+ " text hash:" + contentHash + " last ingested:" + payload.getLastIngestedHash() + " => "
+					+ (same ? "same text, discarded" : "changed, sent on"));
+		}
+		return same;
 	}
 
 	@Override

@@ -72,6 +72,7 @@ import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGAIDocumentMetaDataEnricher;
+import ai.gebo.system.ingestion.ContentHash;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGLanguageDetector;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
@@ -298,9 +299,15 @@ public class DocumentsChunkServiceImpl
 					final String keywordsLanguage = chunkAll ? null : keywordsLanguage(params.getMatchingKeywords());
 					final AtomicLong atomicLong = new AtomicLong(0l);
 					final AtomicBoolean samplingBudgetReached = new AtomicBoolean(false);
+					// the hash of the whole text, computed while it is read: what tells a changed
+					// document from one only touched (a sample reads part of it: no hash)
+					final ContentHash contentHash = samplingMode ? null : new ContentHash();
 					docsStream.forEach(doc -> {
 						if (samplingBudgetReached.get())
 							return;
+						if (contentHash != null && doc.isText()) {
+							contentHash.add(doc.getText());
+						}
 						try {
 							MetaDataHeaderInfos metaDataHeader = null;
 							// We calculate metaDataHeader if enrichWithMetaData is true (it will be the
@@ -471,6 +478,14 @@ public class DocumentsChunkServiceImpl
 								+ " chunk(s), " + chunkOperation.getTotalChunks() + " kept by policy:"
 								+ params.getChunkingPolicy() + ", " + chunkOperation.getTotalTokensSize() + " (tok) "
 								+ chunkOperation.getTotalBytesSize() + " byte(s)");
+					}
+					if (contentHash != null) {
+						chunkOperation.setContentHash(contentHash.hex());
+						response.setContentHash(chunkOperation.getContentHash());
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("document " + document.getCode() + " text hash:" + chunkOperation.getContentHash()
+									+ " over " + contentHash.getTexts() + " text(s)");
+						}
 					}
 					if (!chunkSets.isEmpty()) {
 						DocumentChunksSet currentChunkSet = chunkSets.get(0);
@@ -700,6 +715,7 @@ public class DocumentsChunkServiceImpl
 			response.setTotalBytesSize(operation.getTotalBytesSize());
 			response.setTotalTokensSize(operation.getTotalTokensSize());
 			response.setChunkingSessionId(chunkSessionId);
+			response.setContentHash(operation.getContentHash());
 			if (index < operation.getChunkSetsList().size() - 1) {
 				String nextChunk = operation.getChunkSetsList().get(index + 1);
 				response.setNextChunkSetId(nextChunk);
@@ -813,6 +829,7 @@ public class DocumentsChunkServiceImpl
 		own.setTotalTokensSize(source.getTotalTokensSize());
 		own.setTotalChunks(source.getTotalChunks());
 		own.setDocumentChunks(source.getDocumentChunks());
+		own.setContentHash(source.getContentHash());
 		own.setChunkingSessionId(chunkSessionId);
 		repository.insert(own);
 		if (LOGGER.isDebugEnabled()) {

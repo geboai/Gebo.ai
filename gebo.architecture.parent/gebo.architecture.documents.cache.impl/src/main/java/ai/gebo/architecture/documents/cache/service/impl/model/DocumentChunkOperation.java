@@ -46,6 +46,12 @@ public class DocumentChunkOperation extends AbstractCachedEntry {
 	 * it was recorded.
 	 */
 	private long documentChunks = 0l;
+	/**
+	 * The hash of the document's whole extracted text (see ContentHash), null when the
+	 * text was not read whole (a sample) or for an operation written before it was
+	 * recorded.
+	 */
+	private String contentHash = null;
 	@HashIndexed
 	private String chunkingSessionId = null;
 
