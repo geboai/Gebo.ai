@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.anthropic.AnthropicChatModel;
 import org.springframework.ai.anthropic.AnthropicChatOptions;
 import org.springframework.ai.anthropic.AnthropicChatOptions.Builder;
+import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
@@ -220,12 +221,31 @@ public class AnthropicChatModelConfigurationSupportService
 			return model;
 		}
 
+		/**
+		 * Spring AI's Anthropic model returns a call's thinking blocks as generations of
+		 * their own ahead of the answer: a thinking block with its "signature", a redacted
+		 * one with its "data".
+		 */
+		@Override
+		protected boolean isReasoningGeneration(Generation generation) {
+			return isThinkingBlock(generation);
+		}
+
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 			AnthropicConfigurableChatModel anthropicChatModel = new AnthropicConfigurableChatModel(rendererFactory,
 					toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
 			return anthropicChatModel;
 		}
+	}
+
+	/** Whether the generation is a thinking block of a Claude call's response. */
+	static boolean isThinkingBlock(Generation generation) {
+		if (generation == null || generation.getOutput() == null || generation.getOutput().getMetadata() == null) {
+			return false;
+		}
+		final var properties = generation.getOutput().getMetadata();
+		return properties.containsKey("signature") || properties.containsKey("data");
 	}
 
 	/**

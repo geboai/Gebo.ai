@@ -33,6 +33,7 @@ import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
@@ -214,9 +215,10 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		this.type = type;
 		this.model = configureModel(config, type, null);
 		Builder builder = ChatClient.builder(configureModel(config, type, null));
-		// Priced through this model's getPricingConditions(), read when each call ends.
+		// Priced through this model's getPricingConditions(), read when each call ends; a
+		// call's answer read from its answer generation, not from a reasoning one.
 		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions,
-				this::getProviderId))
+				this::getProviderId), new AnswerFirstGenerations.Advisor(this::isReasoningGeneration))
 				.build();
 	}
 
@@ -436,6 +438,16 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0)
 			return config.getMaxGeneratedTokens();
 		return defaultMaxGeneratedTokens(contextWindowOf(config));
+	}
+
+	/**
+	 * Whether a generation of a blocking call's response is the model's reasoning rather
+	 * than its answer. False by default: the providers whose Spring AI model returns its
+	 * reasoning as generations of their own say which ones they are, so that the answer
+	 * is read from the answer generation ({@link AnswerFirstGenerations}).
+	 */
+	protected boolean isReasoningGeneration(Generation generation) {
+		return false;
 	}
 
 	/**
@@ -928,8 +940,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("doWithChatModel() handing out the usage recording raw model of code=" + getCode());
 		}
-		return chatModelCalling.call(usageAdvisorFactory.recording(model, config, this::getPricingConditions,
-				this::getProviderId));
+		return chatModelCalling.call(new AnswerFirstGenerations.Model(usageAdvisorFactory.recording(model, config,
+				this::getPricingConditions, this::getProviderId), this::isReasoningGeneration));
 	}
 
 	@Override
@@ -973,7 +985,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 						.builder(configurableChatModel.configureModel(modelConfigClone, type,
 								configOptions.getToolCallingManager()))
 						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone,
-								configurableChatModel::getPricingConditions, configurableChatModel::getProviderId))
+								configurableChatModel::getPricingConditions, configurableChatModel::getProviderId),
+								new AnswerFirstGenerations.Advisor(configurableChatModel::isReasoningGeneration))
 						.build();
 			} else
 				throw new IllegalStateException(
