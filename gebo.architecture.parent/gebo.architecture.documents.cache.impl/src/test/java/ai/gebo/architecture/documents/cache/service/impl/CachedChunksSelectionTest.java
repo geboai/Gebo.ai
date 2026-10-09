@@ -232,6 +232,20 @@ class CachedChunksSelectionTest {
 	}
 
 	@Test
+	void reusedChunksCarryTheHashOfTheTextTheyWereMadeFrom() throws Exception {
+		final java.util.Map<String, DocumentChunkOperation> stored = storedRecords();
+		final DocumentChunkOperation made = producible("made", "tool-session", 1_000L, true);
+		made.setContentHash("0123ABCD");
+		stored.put(made.getId(), made);
+		when(operations.findByOriginalDocumentCode(document.getCode())).thenReturn(List.of(made));
+
+		final DocumentChunkingResponse response = service.getChunkSet(document, params(), "job-session");
+
+		assertEquals("0123ABCD", response.getContentHash());
+		assertEquals("0123ABCD", stored.get(response.getId()).getContentHash(), "on the session's own record");
+	}
+
+	@Test
 	void noChunksAreReusedFromAnotherVersionOrOtherParameters() throws Exception {
 		final java.util.Map<String, DocumentChunkOperation> stored = storedRecords();
 		final DocumentChunkOperation olderVersion = producible("older-version", "tool-session", 1_000L, true);

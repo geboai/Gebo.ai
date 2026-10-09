@@ -16,6 +16,8 @@ import java.util.Date;
 
 import ai.gebo.application.messaging.model.GBaseMessagePayload;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * AI generated comments
@@ -36,6 +38,8 @@ public class GContentEmbeddingHandshakePayload extends GBaseMessagePayload {
     private String hash = null;
     
     // Size of the file in bytes
+    @Getter
+    @Setter
     private Long fileSize = null;
     
     // Flag indicating whether the content has been processed

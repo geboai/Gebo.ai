@@ -42,6 +42,7 @@ import ai.gebo.core.messages.GContentEmbeddingHandshakePayload;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentMessageFragmentPayload;
 import ai.gebo.core.messages.GUserMessagePayload;
+import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent.GVectorizedContentId;
@@ -395,8 +396,24 @@ public class GEmbedderImpl implements IGEmbedder {
 					GContentEmbeddingHandshakePayload handshake = GContentEmbeddingHandshakePayload.ack(payload);
 					GMessageEnvelope<GContentEmbeddingHandshakePayload> handshakeMsg = GMessageEnvelope
 							.newMessageFrom(emitter, handshake);
-					handshakeMsg.setTargetModule(x.getSourceModule());
-					handshakeMsg.setTargetComponent(x.getSourceComponent());
+					// to the content handler the document comes from (the message was sent on by
+					// the steps in between, the chunker last)
+					final GDocumentReference ackedDocument = payload.getDocumentReference();
+					final String contentHandlerModule = ackedDocument.getMessagingModuleId() != null
+							? ackedDocument.getMessagingModuleId()
+							: (ackedDocument.getOriginComponent() != null
+									? ackedDocument.getOriginComponent().getMessagingModuleId()
+									: null);
+					handshakeMsg.setTargetModule(contentHandlerModule != null ? contentHandlerModule
+							: x.getSourceModule());
+					handshakeMsg.setTargetComponent(contentHandlerModule != null
+							? GStandardModulesConstraints.MODULE_IOC_DISPATCHER_COMPONENT
+							: x.getSourceComponent());
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Acknowledging the ingestion of:" + handshake.getContentCode() + " hash:"
+								+ handshake.getHash() + " to module:" + handshakeMsg.getTargetModule()
+								+ " component:" + handshakeMsg.getTargetComponent());
+					}
 					handshakeMsg.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 					handshakes.add(handshakeMsg);
 				}

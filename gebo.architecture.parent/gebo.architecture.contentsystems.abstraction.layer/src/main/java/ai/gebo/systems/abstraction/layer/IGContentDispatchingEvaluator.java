@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 
 import ai.gebo.core.messages.GAbstractContentMessageFragmentPayload;
 import ai.gebo.core.messages.GContentEmbeddingHandshakePayload;
+import ai.gebo.systems.abstraction.layer.model.ContentHandshakeData;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.system.ingestion.GeboIngestionException;
 
@@ -72,5 +73,15 @@ public interface IGContentDispatchingEvaluator {
     public boolean isProcessable(SendEvaluationPolicy evaluationPolicy, GDocumentReference docref,
             IGContentManagementSystemHandler handler,
             Map<String, Object> handlerCache);
+
+    /**
+     * The last acknowledgement of the content's ingestion: what the content was
+     * (hash, modification date, size) when an indexing step last stored it.
+     *
+     * @param contentCode the code of the content (its document reference)
+     * @return the newest processed acknowledgement, null when the content was never
+     *         ingested
+     */
+    public ContentHandshakeData lastIngested(String contentCode);
 
 }

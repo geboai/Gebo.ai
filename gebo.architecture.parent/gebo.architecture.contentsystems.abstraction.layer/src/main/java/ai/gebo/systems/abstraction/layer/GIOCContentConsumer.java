@@ -42,6 +42,7 @@ import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseVersionableObject;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator.SendEvaluationPolicy;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory.EnricherMappers;
+import ai.gebo.systems.abstraction.layer.model.ContentHandshakeData;
 
 /********************************************************************************************************************
  * Consumer that implements the IOC on the infrastructure via content system
@@ -150,6 +151,14 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 						payload.setEndPoint(GCentralizedProjectEndpoint.of(endpoint));
 						payload.setFragmentType(MessageFragmentType.SINGLE_FRAGMENT);
 						payload.setRequiresEmbeddingHandshake(true);
+						// what the document was when last ingested: the chunker reads it again
+						// only if it changed since
+						ContentHandshakeData lastIngested = evaluator.lastIngested(docref.getCode());
+						if (lastIngested != null) {
+							payload.setLastIngestedHash(lastIngested.getHash());
+							payload.setLastIngestedModificationDate(lastIngested.getModificationDate());
+							payload.setLastIngestedFileSize(lastIngested.getFileSize());
+						}
 						payload.setJobId(jobStatus.getCode());
 						enrichers.getContentPayloadMapper().apply(payload);
 						WorkflowMessageContext messageContext = new WorkflowMessageContext(workflowContext, payload);

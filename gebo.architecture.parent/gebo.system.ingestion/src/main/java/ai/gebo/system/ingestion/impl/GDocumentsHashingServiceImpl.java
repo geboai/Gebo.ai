@@ -12,16 +12,15 @@
 
 package ai.gebo.system.ingestion.impl;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.system.ingestion.ContentHash;
 import ai.gebo.system.ingestion.IGDocumentsHashingService;
 
 /**
@@ -62,30 +61,18 @@ public class GDocumentsHashingServiceImpl implements IGDocumentsHashingService {
 	}
 
 	/**
-	 * Calculates an MD5 hash of the content from a list of documents.
-	 * The method concatenates all document text and generates a hash from the combined content.
-	 *
-	 * @param content List of Document objects to be hashed
-	 * @return A hexadecimal string representation of the MD5 hash
-	 * @throws IOException If an I/O error occurs
-	 * @throws NoSuchAlgorithmException If the MD5 algorithm is not available
+	 * The hash of the documents' texts: the same as the one computed while the text is
+	 * read (see {@link ContentHash}), the documents with no text left out.
 	 */
 	@Override
-	public String recalculateHash(List<Document> content) throws IOException, NoSuchAlgorithmException  {
-		
-			ByteArrayOutputStream bos=new ByteArrayOutputStream();
-			for (Document document : content) {
-				bos.write(document.getText().getBytes());
+	public String recalculateHash(List<Document> content) throws IOException, NoSuchAlgorithmException {
+		final ContentHash hash = new ContentHash();
+		for (Document document : content) {
+			if (document.isText()) {
+				hash.add(document.getText());
 			}
-			bos.flush();
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(bos.toByteArray());
-			byte[] digest = md.digest();
-			return bytesToHex(digest);
-		
-
+		}
+		return hash.hex();
 	}
-
-	
 
 }
