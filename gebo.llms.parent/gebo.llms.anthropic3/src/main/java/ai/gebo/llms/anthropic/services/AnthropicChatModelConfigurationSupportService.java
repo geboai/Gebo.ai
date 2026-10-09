@@ -136,12 +136,9 @@ public class AnthropicChatModelConfigurationSupportService
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
-			if (config.getTemperature() != null) {
-				builder = builder.temperature(config.getTemperature());
-			}
-			if (config.getTopP() != null) {
-				builder = builder.topP(config.getTopP());
-			}
+			// No sampling parameter is sent: the current Claude models removed temperature and
+			// top_p (a request carrying them is a 400), the depth of an answer is steered by
+			// the thinking effort instead.
 			if (config.getBaseUrl() != null && !config.getBaseUrl().isBlank()) {
 				builder = builder.baseUrl(config.getBaseUrl());
 			}

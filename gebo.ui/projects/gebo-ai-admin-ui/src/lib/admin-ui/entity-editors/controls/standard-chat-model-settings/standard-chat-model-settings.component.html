@@ -11,6 +11,7 @@
 
 @if (formGroup) {
   <div class="col-12 grid" [formGroup]="formGroup">
+    @if(samplingSettings===true) {
     <div class="col-4">
       <gebo-ai-field id="temperature" label="Temperature"
         help="Temperature the model will respond, from {{minTemperature}} to {{maxTemperature}} (if unsure leave empty)">
@@ -25,6 +26,7 @@
             [maxFractionDigits]="maxTopPDigits" styleClass="w-full" gebo-ai-field-element />
           </gebo-ai-field>
         </div>
+    }
         <div class="col-4">
           <gebo-ai-field id="contextLength" label="Context length (tokens)"
             help="Amount of text an AI model can consider when processing (if not set {{defaultContextLength}} will be used)">
