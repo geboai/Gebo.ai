@@ -80,7 +80,11 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 	 * @param chatContext
 	 * @return
 	 * @throws LLMConfigException
+	 * @deprecated the chunks as Spring AI gives them: read
+	 *             {@link #streamAnswer(GPromptTemplateConfig, Map, IChatRequestContext)},
+	 *             the answer and its reasoning every provider alike. To be removed.
 	 */
+	@Deprecated
 	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException;
 

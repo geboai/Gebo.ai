@@ -784,8 +784,15 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		return new SystemMessage(content);
 	}
 
+	@Deprecated
 	@Override
 	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		return responses(promptTemplate, params, chatContext);
+	}
+
+	/** The streamed chunks, normalized (ThinkingNormalizationAdvisor). */
+	private Flux<ChatResponse> responses(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		return runAs.doRunAsWithReturnAndException(() -> {
@@ -852,7 +859,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public Flux<GChatAnswerChunk> streamAnswer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
-		return streamResponse(promptTemplate, params, chatContext).map(GChatAnswerChunk::of);
+		return responses(promptTemplate, params, chatContext).map(GChatAnswerChunk::of);
 	}
 
 	@Override

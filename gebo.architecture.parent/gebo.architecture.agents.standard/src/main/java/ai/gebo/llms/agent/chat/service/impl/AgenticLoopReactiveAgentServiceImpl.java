@@ -24,8 +24,6 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.util.json.JsonParser;
@@ -52,6 +50,7 @@ import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.knowledgebase.repositories.uniqueid.VirtualFilesystemUniqueIds;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -1715,47 +1714,33 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 
 	/**
 	 * The model's answer to an iteration as it streams, with what its text alone does not
-	 * carry: its reasoning and why it stopped.
+	 * carry: its reasoning, every provider alike and every model round of its tools
+	 * included, and why it stopped.
 	 */
-	protected Flux<ChatResponse> callLLMReactiveResponses(IGConfigurableChatModel chatModel,
+	protected Flux<GChatAnswerChunk> callLLMReactiveResponses(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params)
 			throws LLMConfigException {
-		return chatModel.streamResponse(prompt, params, context);
+		return chatModel.streamAnswer(prompt, params, context);
 	}
 
 	/**
 	 * The text of a streamed chunk: its reasoning sent to the user ({@code ui}, null when
 	 * the request has no chat to show it in), why the model stopped kept.
 	 */
-	private String chunkText(ChatResponse response, AtomicReference<String> finishReason, ThinkingStream thinking,
+	private String chunkText(GChatAnswerChunk chunk, AtomicReference<String> finishReason, ThinkingStream thinking,
 			ISinkUIEmitter ui) {
-		if (response == null || response.getResults() == null) {
+		if (chunk == null) {
 			return "";
 		}
-		final StringBuilder out = new StringBuilder();
-		for (Generation generation : response.getResults()) {
-			final String finish = generation.getMetadata() != null ? generation.getMetadata().getFinishReason() : null;
-			if (finish != null && !finish.isBlank()) {
-				finishReason.set(finish);
-			}
-			if (generation.getOutput() == null) {
-				continue;
-			}
-			final Object reasoning = generation.getOutput().getMetadata() != null
-					? generation.getOutput().getMetadata().get(ThinkingStream.REASONING_CONTENT_METADATA)
-					: null;
-			if (reasoning instanceof String soFar) {
-				thinkingTo(ui, thinking.reasoning(soFar));
-			}
-			if (generation.getOutput().getText() != null) {
-				out.append(generation.getOutput().getText());
-			}
+		if (chunk.finishReason() != null) {
+			finishReason.set(chunk.finishReason());
 		}
-		if (!out.toString().isBlank()) {
+		thinkingTo(ui, thinking.delta(chunk.thinking()));
+		if (!chunk.answer().isBlank()) {
 			// the text starts: the reasoning ended
 			thinkingTo(ui, thinking.complete());
 		}
-		return out.toString();
+		return chunk.answer();
 	}
 
 	/** The reasoning events sent to the user's chat, never failing the answer. */

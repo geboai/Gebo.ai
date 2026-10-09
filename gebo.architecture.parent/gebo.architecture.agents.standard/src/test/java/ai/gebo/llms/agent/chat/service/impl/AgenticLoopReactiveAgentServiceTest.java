@@ -93,13 +93,12 @@ class AgenticLoopReactiveAgentServiceTest {
 
 		/** The scripted text, as the model's streamed chunks. */
 		@Override
-		protected Flux<org.springframework.ai.chat.model.ChatResponse> callLLMReactiveResponses(
+		protected Flux<ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk> callLLMReactiveResponses(
 				IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt, IChatRequestContext context,
 				Map<String, Object> params) {
 			return callLLMReactive(chatModel, prompt, context, params)
-					.map(text -> new org.springframework.ai.chat.model.ChatResponse(List.of(
-							new org.springframework.ai.chat.model.Generation(
-									new org.springframework.ai.chat.messages.AssistantMessage(text)))));
+					.map(text -> new ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk(text, "", false, null,
+							List.of(), null));
 		}
 
 		ToolCallsListener listenerFor(IChatRequestContext context) {
