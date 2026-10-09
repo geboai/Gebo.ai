@@ -201,6 +201,21 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		assertEquals(10, collector.getDocuments().size(), "only the ranked documents are the answer's");
 	}
 
+	@SuppressWarnings("unchecked")
+	@Test
+	void theSearchToolIsNotDeclaredWhenTheKnowledgeBaseToolsAreOff() throws Exception {
+		StandardAgentsConfig off = new StandardAgentsConfig();
+		off.getKnowledgeBaseTools().setEnabled(false);
+		org.springframework.beans.factory.ObjectProvider<StandardAgentsConfig> config = mock(
+				org.springframework.beans.factory.ObjectProvider.class);
+		when(config.getIfAvailable()).thenReturn(off);
+		InternalKnowledgeBaseSearchToolSource tool = tool(searchFindingDocuments(1), config);
+
+		assertTrue(tool.getToolCallbacks().isEmpty());
+		assertTrue(tool.getFullToolReferences().isEmpty());
+		assertTrue(tool(searchFindingDocuments(1), configured(3.0d)).getToolCallbacks().size() == 1, "on by default");
+	}
+
 	@Test
 	void theUserIsToldTheNamesOfTheDocumentsFound() throws Exception {
 		IGDocumentsSearchService search = searchFindingDocuments(5);

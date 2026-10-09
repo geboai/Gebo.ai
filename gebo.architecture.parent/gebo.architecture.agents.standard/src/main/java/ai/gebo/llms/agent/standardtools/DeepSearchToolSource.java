@@ -132,8 +132,12 @@ public class DeepSearchToolSource implements IGToolCallbackSource {
 	List<AbstractDeepSearchTool<?>> tools() {
 		final List<AbstractDeepSearchTool<?>> tools = new ArrayList<>();
 		final IGDocumentsSearchService documentsSearch = documentsSearchService.getIfAvailable();
-		if (documentsSearch != null) {
+		if (documentsSearch != null && support.knowledgeBaseToolsEnabled()) {
 			tools.add(new KnowledgeBaseDeepSearchTool(support, documentsSearch, securityService));
+		} else if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Deep search tool:" + KnowledgeBaseDeepSearchTool.DEEP_SEARCH_KNOWLEDGE_BASE_TOOL
+					+ " not declared: " + (documentsSearch == null ? "no documents search service"
+							: "the standard knowledge base tools are off"));
 		}
 		final Set<String> names = new HashSet<>();
 		names.add(KnowledgeBaseDeepSearchTool.DEEP_SEARCH_KNOWLEDGE_BASE_TOOL);

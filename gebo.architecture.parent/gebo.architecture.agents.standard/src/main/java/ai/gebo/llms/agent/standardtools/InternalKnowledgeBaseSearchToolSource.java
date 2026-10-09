@@ -212,8 +212,19 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 		return ToolsCategory.KNOWLEDGE_BASE_VARIOUS_SEARCHES;
 	}
 
+	/**
+	 * Whether the tool is declared: off where a product brings its own knowledge base
+	 * search of the same name (see StandardAgentsConfig.KnowledgeBaseTools).
+	 */
+	private boolean enabled() {
+		return StandardAgentsConfig.knowledgeBaseToolsEnabled(agentsConfig != null ? agentsConfig.getIfAvailable() : null);
+	}
+
 	@Override
 	public List<ToolReference> getFullToolReferences() {
+		if (!enabled()) {
+			return List.of();
+		}
 		ToolReference reference = new ToolReference();
 		reference.setName(SEARCH_KNOWLEDGE_BASE_TOOL);
 		reference.setDescription(SEARCH_KNOWLEDGE_BASE_DESCRIPTION);
@@ -226,7 +237,8 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	 */
 	@Override
 	public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
-		return SEARCH_KNOWLEDGE_BASE_TOOL.equals(toolName) ? knowledgeBaseSearchTargets("Knowledge base search")
+		return SEARCH_KNOWLEDGE_BASE_TOOL.equals(toolName) && enabled()
+				? knowledgeBaseSearchTargets("Knowledge base search")
 				: List.of();
 	}
 
@@ -241,6 +253,12 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 
 	@Override
 	public List<ToolCallback> getToolCallbacks() {
+		if (!enabled()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Tool:" + SEARCH_KNOWLEDGE_BASE_TOOL + " not declared: the standard knowledge base tools are off");
+			}
+			return List.of();
+		}
 		// the call is recorded for the request by the tool wrapper (RunAsToolCallback)
 		BiFunction<KnowledgeBaseSearchParam, ToolContext, String> search = (param, toolContext) -> {
 			final List<String> chatKnowledgeBases = ToolCallbackDeclarationUtil.chatKnowledgeBases(toolContext);

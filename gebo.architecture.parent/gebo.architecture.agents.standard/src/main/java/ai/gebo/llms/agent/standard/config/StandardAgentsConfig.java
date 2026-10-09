@@ -44,6 +44,24 @@ public class StandardAgentsConfig implements IGConfiguredDefaultChatNetworksOfAg
 	private double knowledgeBaseSearchRoomDivisor = InternalKnowledgeBaseSearchToolSource.DEFAULT_ROOM_DIVISOR;
 
 	/**
+	 * The standard knowledge base search tools ({@code searchKnowledgeBase},
+	 * {@code deepSearchKnowledgeBase}). Off where a product brings its own tools of the
+	 * same names, searching its knowledge bases its own way. Set via
+	 * {@code ai.gebo.agents.standard.knowledge-base-tools.enabled} (on by default).
+	 */
+	private KnowledgeBaseTools knowledgeBaseTools = new KnowledgeBaseTools();
+
+	@Data
+	public static class KnowledgeBaseTools {
+		private boolean enabled = true;
+	}
+
+	/** Whether the standard knowledge base search tools are on: they are with no configuration. */
+	public static boolean knowledgeBaseToolsEnabled(StandardAgentsConfig config) {
+		return config == null || config.getKnowledgeBaseTools() == null || config.getKnowledgeBaseTools().isEnabled();
+	}
+
+	/**
 	 * The network of agents the chats with a chat profile (RAG pipeline) are handed to
 	 * when neither the chat profile nor an administrator chose one. Set via
 	 * {@code ai.gebo.agents.standard.default-chat-network-of-agents}.
