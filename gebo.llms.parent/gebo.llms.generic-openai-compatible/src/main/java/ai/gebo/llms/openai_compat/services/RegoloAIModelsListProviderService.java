@@ -207,7 +207,33 @@ public class RegoloAIModelsListProviderService implements IGModelsListProvider {
 		entry.setContextLength(getContextWindowLength(model));
 		entry.setNativeModelMetaInfos(model);
 		entry.setPricingConditions(getPricingConditions(model));
+		entry.setMetaInfos(metaInfos(model, entry));
 		return entry;
+	}
+
+	/**
+	 * What LiteLLM's model_info tells of a model: its output limit and the
+	 * capabilities it flags (function calling, response schema, vision, reasoning).
+	 */
+	static ModelMetaInfo metaInfos(RegoloAIModel model, GBaseModelChoice entry) {
+		ModelMetaInfo meta = new ModelMetaInfo();
+		meta.setModelId(model.getModel_name());
+		meta.setContextLength(entry.getContextLength());
+		Map<String, Object> info = model.getModel_info();
+		if (info != null) {
+			if (info.get("max_output_tokens") instanceof Number max)
+				meta.setMaxOutputToken(max.intValue());
+			meta.setSupportsFunctionCalls(flag(info, "supports_function_calling"));
+			meta.setSupportsStructuredOutput(flag(info, "supports_response_schema"));
+			meta.setSupportsVision(flag(info, "supports_vision"));
+			meta.setSupportsReasoning(flag(info, "supports_reasoning"));
+		}
+		return meta;
+	}
+
+	/** A LiteLLM capability flag: missing means not supported for a model it describes. */
+	private static Boolean flag(Map<String, Object> info, String key) {
+		return Boolean.TRUE.equals(info.get(key));
 	}
 
 	/**

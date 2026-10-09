@@ -37,6 +37,7 @@ import ai.gebo.llms.abstraction.layer.model.GRankerModelType;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
+import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai.api.utils.OpenAIApiException;
@@ -231,6 +232,9 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 
 				List<ChatModelChoiceType> list = new ArrayList<ChatModelChoiceType>();
 				for (OpenAIModel openAIModel : filteredModels) {
+					// A provider flagging a model inactive (Groq) does not serve it
+					if (Boolean.FALSE.equals(openAIModel.getActive()))
+						continue;
 					ChatModelChoiceType entry = type.newInstance();
 					entry.setCode(openAIModel.getId());
 					if (openAIModel.getMetaInfos() != null) {
@@ -239,7 +243,11 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 						entry.setContextLength(openAIModel.getMetaInfos().getContextLength());
 
 					} else {
-
+						ModelMetaInfo live = liveMetaInfos(openAIModel, config.getProviderId());
+						if (live != null) {
+							entry.setMetaInfos(live);
+							entry.setContextLength(live.getContextLength());
+						}
 					}
 					if (entry.getDescription() == null) {
 						entry.setDescription(openAIModel.getId());
@@ -247,6 +255,9 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 					list.add(entry);
 				}
 				this.enricherService.enrichChatModelMetaInfos(config.getProviderId(), list, defaultMetainfoFactory);
+				for (ChatModelChoiceType entry : list) {
+					describe(entry);
+				}
 				return list;
 			} catch (Throwable e) {
 				throwed.add(e);
@@ -323,4 +334,43 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 		return null;
 	}
 
+
+	/**
+	 * What the model object tells beyond its id: the shutdown date OpenAI publishes,
+	 * the context window and output limit some compatible providers add (Groq). Null
+	 * when it tells none of them, the models library then describes the model alone.
+	 */
+	static ModelMetaInfo liveMetaInfos(OpenAIModel model, String providerId) {
+		boolean shutdown = model.getShutdown_date() != null && !model.getShutdown_date().isBlank();
+		if (!shutdown && model.getContext_window() == null && model.getMax_completion_tokens() == null)
+			return null;
+		ModelMetaInfo meta = new ModelMetaInfo();
+		meta.setProviderId(providerId);
+		meta.setModelId(model.getId());
+		meta.setContextLength(model.getContext_window());
+		meta.setMaxOutputToken(model.getMax_completion_tokens());
+		if (shutdown) {
+			meta.setDeprecated(true);
+			meta.setRetirementDate(model.getShutdown_date());
+		}
+		return meta;
+	}
+
+	/**
+	 * A choice still described by its bare id takes the description the models
+	 * library has for it; a model with an announced shutdown says when.
+	 */
+	static void describe(GBaseModelChoice entry) {
+		ModelMetaInfo meta = entry.getMetaInfos();
+		if (meta == null)
+			return;
+		if (entry.getCode() != null && entry.getCode().equals(entry.getDescription()) && meta.getDescription() != null
+				&& !meta.getDescription().isBlank()) {
+			entry.setDescription(meta.getDescription());
+		}
+		if (meta.getRetirementDate() != null && entry.getDescription() != null
+				&& !entry.getDescription().contains("shuts down")) {
+			entry.setDescription(entry.getDescription() + " (shuts down " + meta.getRetirementDate() + ")");
+		}
+	}
 }
