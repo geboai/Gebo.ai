@@ -321,3 +321,43 @@ metadata keys and AssistantMessage subclasses preserved; the SSE endpoints and `
 12. Deep search output step streams thinking.
 13. Usage tracking reads the separated thinking.
 Then full build, tests, live pass, one PR.
+
+## 7. As implemented
+
+The thirteen steps are one commit each on the branch. Where the code differs from the design
+above, or settles what the design left open:
+
+- **Where the reasoning travels.** In the response metadata (`ChatResponseMetadata`), not in the
+  message metadata: Spring AI's `MessageAggregator` (2.0.1) builds the assistant message a tool
+  round replays from the message metadata of the round's chunks, never from the response
+  metadata, so nothing Gebo adds is replayed to the model (pinned by a test running a real tool
+  round). Keys: `geboThinkingDelta`, `geboThinkingActive` (stream), `geboThinking` (call).
+- **Order.** The normalization advisor is at `LOWEST_PRECEDENCE - 50`: inside the
+  `ToolCallingAdvisor` (`HIGHEST_PRECEDENCE + 300`) and inside the usage advisor
+  (`LOWEST_PRECEDENCE - 100`), outside the model's own advisors (`LOWEST_PRECEDENCE`).
+- **Step 3 includes the `composeFlux` bridge.** Once the advisor takes the tags out of the text,
+  `composeFlux`'s own splitter (step 2) sees no tags: it reads the normalized chunks in the same
+  commit, so no commit loses the inline reasoning. Step 4 moves its signature to
+  `Flux<GChatAnswerChunk>`.
+- **The splitter's rules** (step 2): a block opens with its tag at the start of a line (a tag named
+  inside a line of the answer is text); a closing tag before any tag ends a block the chat
+  template opened, its preceding text being reasoning on the whole text but already given as
+  answer while streaming (nothing tells them apart before the tag comes). Text outside tags is
+  answer, which also settles defect 7 for every markup model, not only through field reasoning.
+- **Readings per provider** (steps 6-9): OpenAI and compatible, cumulative `reasoningContent`;
+  DeepSeek, the `DeepSeekAssistantMessage` field, piece by piece; Mistral, `thinking_content`,
+  piece by piece; Ollama, `thinking`, piece by piece; Claude, the tap (below). None of DeepSeek,
+  Mistral or Ollama reached the user before: Gebo read only `reasoningContent`.
+- **Claude** (step 6). The tap is an OkHttp application interceptor added first by
+  `AnthropicClientCustomizer`; the round's request is marked on a copy of its options (the tool
+  loop sends the same options object every round). Gate: verified against a local server
+  streaming a recorded Messages stream through the real `AnthropicChatModel`, SDK and OkHttp
+  client (all the thinking before the first piece of answer, once; without the tap, none before
+  the answer). The live check on a real Claude model is part of the live pass.
+- **Deep search** (step 12). `analyze` gains an overload with a `DeepSearchOutputThinking`
+  channel instead of a changed signature: the agents' tools keep the former one (their analysis is
+  not the user's output). A running report's folds are blocking calls: each fold's reasoning is
+  sent when it ends, completed when the report's text comes.
+- **Removed:** `ClientChatCallUtil.isAfterThinking`, `isInsideThinking`, `isWithThinking`,
+  `isNonThinkingOutput`; `ThinkingStream.reasoning` and its `REASONING_CONTENT_METADATA`.
+  `streamResponse` is deprecated.
