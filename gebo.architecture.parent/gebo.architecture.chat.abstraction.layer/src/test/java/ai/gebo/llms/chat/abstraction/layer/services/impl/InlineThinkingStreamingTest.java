@@ -34,6 +34,7 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
@@ -108,8 +109,8 @@ class InlineThinkingStreamingTest {
 	}
 
 	private static List<GeboChatMessageEnvelope> run(Flux<ChatResponse> res, GeboChatResponse response) {
-		return service().composeFlux(res, null, new GeboChatRequest(), response, Map.of(), false, 0, taggingModel(),
-				null, null, null).collectList().block();
+		return service().composeFlux(res.map(GChatAnswerChunk::of), null, new GeboChatRequest(), response, Map.of(),
+				false, 0, taggingModel(), null, null, null).collectList().block();
 	}
 
 	private static String streamedText(List<GeboChatMessageEnvelope> envelopes) {

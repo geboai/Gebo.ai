@@ -95,8 +95,8 @@ class CutAnswerStreamingTest {
 
 	private static List<GeboChatMessageEnvelope> run(AbstractChatService service, Flux<ChatResponse> res,
 			IGConfigurableChatModel model, GeboChatResponse response, AbstractChatService.AnswerRetry retry) {
-		return service.composeFlux(res, null, new GeboChatRequest(), response, Map.of(), false, 0, model, null, null,
-				retry).collectList().block();
+		return service.composeFlux(res.map(GChatAnswerChunk::of), null, new GeboChatRequest(), response, Map.of(),
+				false, 0, model, null, null, retry).collectList().block();
 	}
 
 	private static String streamedText(List<GeboChatMessageEnvelope> envelopes) {
@@ -115,7 +115,8 @@ class CutAnswerStreamingTest {
 		final List<GeboChatMessageEnvelope> envelopes = run(service(), cut, model(ChatModelThinkingOption.HIGH_THINKING),
 				response, thinking -> {
 					asked.add(thinking);
-					return Flux.just(chunk(null, "The whole answer.\n\n", null), chunk(null, "Its end.", "STOP"));
+					return Flux.just(chunk(null, "The whole answer.\n\n", null), chunk(null, "Its end.", "STOP"))
+							.map(GChatAnswerChunk::of);
 				});
 
 		assertEquals(List.of(ChatModelThinkingOption.MEDIUM_THINKING), asked, "once, one level lower");
@@ -170,7 +171,7 @@ class CutAnswerStreamingTest {
 		final GeboChatResponse response = new GeboChatResponse();
 
 		run(service(), Flux.just(chunk(reasoning, "Cut", "LENGTH")), model(ChatModelThinkingOption.MEDIUM_THINKING),
-				response, thinking -> Flux.just(chunk(null, "Cut again", "LENGTH")));
+				response, thinking -> Flux.just(chunk(null, "Cut again", "LENGTH")).map(GChatAnswerChunk::of));
 
 		assertEquals("Cut again", response.getQueryResponse());
 		assertEquals(List.of(CutAnswer.writtenAgainNote().getId(), CutAnswer.incompleteWarning().getId()),
