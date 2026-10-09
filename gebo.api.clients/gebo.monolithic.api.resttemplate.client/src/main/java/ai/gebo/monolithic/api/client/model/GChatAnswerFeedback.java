@@ -23,7 +23,7 @@ import java.util.Date;
  * GChatAnswerFeedback
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-03T11:31:06.696503642+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T13:37:14.667236589+02:00[Europe/Rome]")
 
 public class GChatAnswerFeedback {
   @JsonProperty("id")

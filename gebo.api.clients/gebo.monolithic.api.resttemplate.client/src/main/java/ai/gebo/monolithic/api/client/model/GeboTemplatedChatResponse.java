@@ -32,7 +32,7 @@ import java.util.Map;
  * GeboTemplatedChatResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T13:37:14.667236589+02:00[Europe/Rome]")
 
 public class GeboTemplatedChatResponse {
   @JsonProperty("id")
@@ -67,6 +67,9 @@ public class GeboTemplatedChatResponse {
 
   @JsonProperty("documentsRef")
   private List<GResponseDocumentRef> documentsRef = null;
+
+  @JsonProperty("listedDocumentNames")
+  private List<String> listedDocumentNames = null;
 
   @JsonProperty("calledFunctions")
   private List<CalledFunction> calledFunctions = null;
@@ -316,6 +319,32 @@ public class GeboTemplatedChatResponse {
     this.documentsRef = documentsRef;
   }
 
+  public GeboTemplatedChatResponse listedDocumentNames(List<String> listedDocumentNames) {
+    this.listedDocumentNames = listedDocumentNames;
+    return this;
+  }
+
+  public GeboTemplatedChatResponse addListedDocumentNamesItem(String listedDocumentNamesItem) {
+    if (this.listedDocumentNames == null) {
+      this.listedDocumentNames = new ArrayList<>();
+    }
+    this.listedDocumentNames.add(listedDocumentNamesItem);
+    return this;
+  }
+
+   /**
+   * Get listedDocumentNames
+   * @return listedDocumentNames
+  **/
+  @Schema(description = "")
+  public List<String> getListedDocumentNames() {
+    return listedDocumentNames;
+  }
+
+  public void setListedDocumentNames(List<String> listedDocumentNames) {
+    this.listedDocumentNames = listedDocumentNames;
+  }
+
   public GeboTemplatedChatResponse calledFunctions(List<CalledFunction> calledFunctions) {
     this.calledFunctions = calledFunctions;
     return this;
@@ -469,6 +498,7 @@ public class GeboTemplatedChatResponse {
         Objects.equals(this.backendMessages, geboTemplatedChatResponse.backendMessages) &&
         Objects.equals(this.forcedDocumentsRef, geboTemplatedChatResponse.forcedDocumentsRef) &&
         Objects.equals(this.documentsRef, geboTemplatedChatResponse.documentsRef) &&
+        Objects.equals(this.listedDocumentNames, geboTemplatedChatResponse.listedDocumentNames) &&
         Objects.equals(this.calledFunctions, geboTemplatedChatResponse.calledFunctions) &&
         Objects.equals(this.contextWindowStats, geboTemplatedChatResponse.contextWindowStats) &&
         Objects.equals(this.generatedResources, geboTemplatedChatResponse.generatedResources) &&
@@ -479,7 +509,7 @@ public class GeboTemplatedChatResponse {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId);
+    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, listedDocumentNames, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId);
   }
 
 
@@ -499,6 +529,7 @@ public class GeboTemplatedChatResponse {
     sb.append("    backendMessages: ").append(toIndentedString(backendMessages)).append("\n");
     sb.append("    forcedDocumentsRef: ").append(toIndentedString(forcedDocumentsRef)).append("\n");
     sb.append("    documentsRef: ").append(toIndentedString(documentsRef)).append("\n");
+    sb.append("    listedDocumentNames: ").append(toIndentedString(listedDocumentNames)).append("\n");
     sb.append("    calledFunctions: ").append(toIndentedString(calledFunctions)).append("\n");
     sb.append("    contextWindowStats: ").append(toIndentedString(contextWindowStats)).append("\n");
     sb.append("    generatedResources: ").append(toIndentedString(generatedResources)).append("\n");

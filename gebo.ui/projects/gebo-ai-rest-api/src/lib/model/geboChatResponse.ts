@@ -29,6 +29,7 @@ export interface GeboChatResponse {
     backendMessages?: Array<GUserMessage>;
     forcedDocumentsRef?: Array<GResponseDocumentRef>;
     documentsRef?: Array<GResponseDocumentRef>;
+    listedDocumentNames?: Array<string>;
     calledFunctions?: Array<CalledFunction>;
     contextWindowStats?: ChatModelRequestContextWindowStats;
     generatedResources?: Array<LLMGeneratedResource>;

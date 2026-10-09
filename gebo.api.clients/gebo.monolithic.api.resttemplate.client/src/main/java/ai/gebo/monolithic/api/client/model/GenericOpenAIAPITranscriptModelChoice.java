@@ -25,7 +25,7 @@ import java.util.Date;
  * GenericOpenAIAPITranscriptModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T13:37:14.667236589+02:00[Europe/Rome]")
 
 public class GenericOpenAIAPITranscriptModelChoice {
   @JsonProperty("code")

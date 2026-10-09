@@ -268,7 +268,7 @@ public class SharePointSearchServiceControllerApiTest {
         SharePointSearchFilter body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restNativeSearchSharePoint(body, systemId, nEntryLimit);
+        List<SearchResult> response = api.restNativeSearchSharePoint(body, systemId, nEntryLimit, null, null, null);
 
         // TODO: test validations
     }
@@ -285,7 +285,7 @@ public class SharePointSearchServiceControllerApiTest {
         SearchQuery body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restSearchSharePoint(body, systemId, nEntryLimit);
+        List<SearchResult> response = api.restSearchSharePoint(body, systemId, nEntryLimit, null, null, null);
 
         // TODO: test validations
     }

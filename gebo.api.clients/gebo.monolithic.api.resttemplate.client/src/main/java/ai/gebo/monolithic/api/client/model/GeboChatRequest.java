@@ -28,7 +28,7 @@ import java.util.List;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T13:37:14.667236589+02:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -111,6 +111,15 @@ public class GeboChatRequest {
 
   }  @JsonProperty("userIntent")
   private UserIntentEnum userIntent = null;
+
+  @JsonProperty("searchRequested")
+  private Boolean searchRequested = null;
+
+  @JsonProperty("searchForbidden")
+  private Boolean searchForbidden = null;
+
+  @JsonProperty("userLanguage")
+  private String userLanguage = null;
 
   @JsonProperty("additionalContents")
   private List<AdditionalContent> additionalContents = null;
@@ -428,6 +437,60 @@ public class GeboChatRequest {
     this.userIntent = userIntent;
   }
 
+  public GeboChatRequest searchRequested(Boolean searchRequested) {
+    this.searchRequested = searchRequested;
+    return this;
+  }
+
+   /**
+   * Get searchRequested
+   * @return searchRequested
+  **/
+  @Schema(description = "")
+  public Boolean isSearchRequested() {
+    return searchRequested;
+  }
+
+  public void setSearchRequested(Boolean searchRequested) {
+    this.searchRequested = searchRequested;
+  }
+
+  public GeboChatRequest searchForbidden(Boolean searchForbidden) {
+    this.searchForbidden = searchForbidden;
+    return this;
+  }
+
+   /**
+   * Get searchForbidden
+   * @return searchForbidden
+  **/
+  @Schema(description = "")
+  public Boolean isSearchForbidden() {
+    return searchForbidden;
+  }
+
+  public void setSearchForbidden(Boolean searchForbidden) {
+    this.searchForbidden = searchForbidden;
+  }
+
+  public GeboChatRequest userLanguage(String userLanguage) {
+    this.userLanguage = userLanguage;
+    return this;
+  }
+
+   /**
+   * Get userLanguage
+   * @return userLanguage
+  **/
+  @Schema(description = "")
+  public String getUserLanguage() {
+    return userLanguage;
+  }
+
+  public void setUserLanguage(String userLanguage) {
+    this.userLanguage = userLanguage;
+  }
+
   public GeboChatRequest additionalContents(List<AdditionalContent> additionalContents) {
     this.additionalContents = additionalContents;
     return this;
@@ -497,13 +560,16 @@ public class GeboChatRequest {
         Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents) &&
         Objects.equals(this.deepSearchDataSources, geboChatRequest.deepSearchDataSources) &&
         Objects.equals(this.userIntent, geboChatRequest.userIntent) &&
+        Objects.equals(this.searchRequested, geboChatRequest.searchRequested) &&
+        Objects.equals(this.searchForbidden, geboChatRequest.searchForbidden) &&
+        Objects.equals(this.userLanguage, geboChatRequest.userLanguage) &&
         Objects.equals(this.additionalContents, geboChatRequest.additionalContents) &&
         Objects.equals(this.tokensSize, geboChatRequest.tokensSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, forcedDocumentsRef, userUploadedContents, deepSearchDataSources, userIntent, additionalContents, tokensSize);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, forcedDocumentsRef, userUploadedContents, deepSearchDataSources, userIntent, searchRequested, searchForbidden, userLanguage, additionalContents, tokensSize);
   }
 
 
@@ -527,6 +593,9 @@ public class GeboChatRequest {
     sb.append("    userUploadedContents: ").append(toIndentedString(userUploadedContents)).append("\n");
     sb.append("    deepSearchDataSources: ").append(toIndentedString(deepSearchDataSources)).append("\n");
     sb.append("    userIntent: ").append(toIndentedString(userIntent)).append("\n");
+    sb.append("    searchRequested: ").append(toIndentedString(searchRequested)).append("\n");
+    sb.append("    searchForbidden: ").append(toIndentedString(searchForbidden)).append("\n");
+    sb.append("    userLanguage: ").append(toIndentedString(userLanguage)).append("\n");
     sb.append("    additionalContents: ").append(toIndentedString(additionalContents)).append("\n");
     sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("}");

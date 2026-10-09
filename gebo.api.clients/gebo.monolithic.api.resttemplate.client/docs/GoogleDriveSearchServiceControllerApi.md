@@ -554,7 +554,7 @@ No authorization required
 
 <a name="restSearchGoogleDrive"></a>
 # **restSearchGoogleDrive**
-> List&lt;SearchResult&gt; restSearchGoogleDrive(body, systemId, nEntryLimit)
+> List&lt;SearchResult&gt; restSearchGoogleDrive(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries)
 
 
 
@@ -569,8 +569,11 @@ GoogleDriveSearchServiceControllerApi apiInstance = new GoogleDriveSearchService
 SearchQuery body = new SearchQuery(); // SearchQuery | 
 String systemId = "systemId_example"; // String | 
 Integer nEntryLimit = 56; // Integer | 
+Integer connectTimeoutMillis = 56; // Integer | 
+Integer readTimeoutMillis = 56; // Integer | 
+Integer retries = 56; // Integer | 
 try {
-    List<SearchResult> result = apiInstance.restSearchGoogleDrive(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restSearchGoogleDrive(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GoogleDriveSearchServiceControllerApi#restSearchGoogleDrive");
@@ -585,6 +588,9 @@ Name | Type | Description  | Notes
  **body** | [**SearchQuery**](SearchQuery.md)|  |
  **systemId** | **String**|  |
  **nEntryLimit** | **Integer**|  |
+ **connectTimeoutMillis** | **Integer**|  | [optional]
+ **readTimeoutMillis** | **Integer**|  | [optional]
+ **retries** | **Integer**|  | [optional]
 
 ### Return type
 

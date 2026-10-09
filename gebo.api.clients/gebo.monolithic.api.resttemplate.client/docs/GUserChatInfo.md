@@ -9,6 +9,6 @@ Name | Type | Description | Notes
 **contextCode** | **String** |  |  [optional]
 **chatProfileCode** | **String** |  |  [optional]
 **chatModelCode** | **String** |  |  [optional]
+**pipelineCode** | **String** |  |  [optional]
 **ragChat** | **Boolean** |  |  [optional]
 **chatCreationDateTime** | [**Date**](Date.md) |  |  [optional]
-**pipelineCode** | **String** |  |  [optional]

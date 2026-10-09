@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T13:37:14.667236589+02:00[Europe/Rome]")
 
 public class JiraSearchServiceControllerApi {
     private ApiClient apiClient;
@@ -683,11 +683,14 @@ public class JiraSearchServiceControllerApi {
      * @param body  (required)
      * @param systemId  (required)
      * @param nEntryLimit  (required)
+     * @param connectTimeoutMillis  (optional)
+     * @param readTimeoutMillis  (optional)
+     * @param retries  (optional)
      * @return List&lt;SearchResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchResult> restNativeSearchJira(JiraIssuesSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
-        return restNativeSearchJiraWithHttpInfo(body, systemId, nEntryLimit).getBody();
+    public List<SearchResult> restNativeSearchJira(JiraIssuesSearchFilter body, String systemId, Integer nEntryLimit, Integer connectTimeoutMillis, Integer readTimeoutMillis, Integer retries) throws RestClientException {
+        return restNativeSearchJiraWithHttpInfo(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries).getBody();
     }
 
     /**
@@ -697,10 +700,13 @@ public class JiraSearchServiceControllerApi {
      * @param body  (required)
      * @param systemId  (required)
      * @param nEntryLimit  (required)
+     * @param connectTimeoutMillis  (optional)
+     * @param readTimeoutMillis  (optional)
+     * @param retries  (optional)
      * @return ResponseEntity&lt;List&lt;SearchResult&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchResult>> restNativeSearchJiraWithHttpInfo(JiraIssuesSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
+    public ResponseEntity<List<SearchResult>> restNativeSearchJiraWithHttpInfo(JiraIssuesSearchFilter body, String systemId, Integer nEntryLimit, Integer connectTimeoutMillis, Integer readTimeoutMillis, Integer retries) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -721,6 +727,9 @@ public class JiraSearchServiceControllerApi {
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "systemId", systemId));
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "nEntryLimit", nEntryLimit));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "connectTimeoutMillis", connectTimeoutMillis));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "readTimeoutMillis", readTimeoutMillis));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "retries", retries));
 
         final String[] accepts = { 
             "application/json"
@@ -743,11 +752,14 @@ public class JiraSearchServiceControllerApi {
      * @param body  (required)
      * @param systemId  (required)
      * @param nEntryLimit  (required)
+     * @param connectTimeoutMillis  (optional)
+     * @param readTimeoutMillis  (optional)
+     * @param retries  (optional)
      * @return List&lt;SearchResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchResult> restSearchJira(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
-        return restSearchJiraWithHttpInfo(body, systemId, nEntryLimit).getBody();
+    public List<SearchResult> restSearchJira(SearchQuery body, String systemId, Integer nEntryLimit, Integer connectTimeoutMillis, Integer readTimeoutMillis, Integer retries) throws RestClientException {
+        return restSearchJiraWithHttpInfo(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries).getBody();
     }
 
     /**
@@ -757,10 +769,13 @@ public class JiraSearchServiceControllerApi {
      * @param body  (required)
      * @param systemId  (required)
      * @param nEntryLimit  (required)
+     * @param connectTimeoutMillis  (optional)
+     * @param readTimeoutMillis  (optional)
+     * @param retries  (optional)
      * @return ResponseEntity&lt;List&lt;SearchResult&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchResult>> restSearchJiraWithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
+    public ResponseEntity<List<SearchResult>> restSearchJiraWithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit, Integer connectTimeoutMillis, Integer readTimeoutMillis, Integer retries) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -781,6 +796,9 @@ public class JiraSearchServiceControllerApi {
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "systemId", systemId));
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "nEntryLimit", nEntryLimit));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "connectTimeoutMillis", connectTimeoutMillis));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "readTimeoutMillis", readTimeoutMillis));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "retries", retries));
 
         final String[] accepts = { 
             "application/json"

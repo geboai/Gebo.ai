@@ -268,7 +268,7 @@ public class JiraSearchServiceControllerApiTest {
         JiraIssuesSearchFilter body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restNativeSearchJira(body, systemId, nEntryLimit);
+        List<SearchResult> response = api.restNativeSearchJira(body, systemId, nEntryLimit, null, null, null);
 
         // TODO: test validations
     }
@@ -285,7 +285,7 @@ public class JiraSearchServiceControllerApiTest {
         SearchQuery body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restSearchJira(body, systemId, nEntryLimit);
+        List<SearchResult> response = api.restSearchJira(body, systemId, nEntryLimit, null, null, null);
 
         // TODO: test validations
     }
