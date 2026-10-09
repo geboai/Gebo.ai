@@ -171,6 +171,30 @@ class ReingestionChangeDetectionTest {
 	}
 
 	@Test
+	void aDocumentOfASourceGivingNoSizeWithTheLastIngestedDateIsNotReadAgain() throws Exception {
+		// a wiki page: a remote date, no size
+		final GDocumentReferencePayload payload = payload(new Date(LAST_MODIFIED.getTime()), null, LAST_HASH);
+		payload.setLastIngestedFileSize(null);
+
+		final GContentsProcessingStatusUpdatePayload status = receiver.acceptSingleMessage(envelope(payload));
+
+		assertEquals(1, status.getBatchDiscardedInput());
+		verify(chunkingService, never()).prepareChunks(any(IGComponentOriginatedDocument.class), any(), anyString());
+	}
+
+	@Test
+	void aSizeKnownOnOneSideOnlyIsAChange() throws Exception {
+		chunkedWithHash("DDDD");
+		final GDocumentReferencePayload sizeNow = payload(new Date(LAST_MODIFIED.getTime()), LAST_SIZE, LAST_HASH);
+		sizeNow.setLastIngestedFileSize(null);
+		final GDocumentReferencePayload sizeBefore = payload(new Date(LAST_MODIFIED.getTime()), null, LAST_HASH);
+
+		assertEquals(1, receiver.acceptSingleMessage(envelope(sizeNow)).getBatchSentToNextStep());
+		assertEquals(1, receiver.acceptSingleMessage(envelope(sizeBefore)).getBatchSentToNextStep());
+		verify(chunkingService, times(2)).prepareChunks(any(IGComponentOriginatedDocument.class), any(), anyString());
+	}
+
+	@Test
 	void chunksWithNoHashAreSentOn() throws Exception {
 		// chunks recorded before the hash was (reused), or a sample: nothing tells the text
 		// is the same

@@ -136,17 +136,18 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 
 	/**
 	 * Whether the document is as it was when last ingested, by what its content
-	 * handler tells without reading it: a last ingestion known, with the same
-	 * modification date and the same size. A date or a size unknown on either side
-	 * tells nothing: the document is read.
+	 * handler tells without reading it (the dates and sizes of the source system): a
+	 * last ingestion known, with the same modification date, and the same size or no
+	 * size on either side (a source giving no size, as a wiki page). A date unknown
+	 * on either side, or a size known on one side only, tells nothing: the document
+	 * is read.
 	 */
 	static boolean unchangedSinceLastIngestion(GDocumentReferencePayload payload) {
 		final GDocumentReference document = payload.getDocumentReference();
 		final boolean unchanged = payload.getLastIngestedHash() != null && document != null
 				&& document.getModificationDate() != null && payload.getLastIngestedModificationDate() != null
 				&& document.getModificationDate().getTime() == payload.getLastIngestedModificationDate().getTime()
-				&& document.getFileSize() != null && payload.getLastIngestedFileSize() != null
-				&& document.getFileSize().longValue() == payload.getLastIngestedFileSize().longValue();
+				&& sameSize(document.getFileSize(), payload.getLastIngestedFileSize());
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Document:" + (document != null ? document.getCode() : null) + " modificationDate:"
 					+ (document != null ? document.getModificationDate() : null) + " fileSize:"
@@ -156,6 +157,16 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 					+ (unchanged ? "unchanged, not read again" : "read"));
 		}
 		return unchanged;
+	}
+
+	/**
+	 * Equal sizes, or no size on both sides.
+	 */
+	private static boolean sameSize(Long size, Long lastIngestedSize) {
+		if (size == null || lastIngestedSize == null) {
+			return size == null && lastIngestedSize == null;
+		}
+		return size.longValue() == lastIngestedSize.longValue();
 	}
 
 	/**
