@@ -28,7 +28,8 @@ public final class KnowledgeBaseKeywords {
 
 	public static final String KEYWORDS_DESCRIPTION = "Optional exact terms for the full-text search: names, technical terms, "
 			+ "short quotations, written as the documents write them (their language, spelling and accents). "
-			+ "Each keyword is searched as a whole (all its words), the keywords one or the other.";
+			+ "Each keyword is searched as a whole (all its words), the keywords one or the other. One string, the "
+			+ "keywords separated by commas (e.g. \"Svabhavat, Dhyan Chohans\").";
 
 	private KnowledgeBaseKeywords() {
 	}
@@ -42,6 +43,27 @@ public final class KnowledgeBaseKeywords {
 	 * The full-text queries of a search: its keywords when it gives some, its queries
 	 * otherwise; blanks and repetitions left out.
 	 */
+	static List<String> fullTextQueries(String keywords, List<String> queries) {
+		return fullTextQueries(commaSeparated(keywords), queries);
+	}
+
+	/**
+	 * The items of a comma separated string (the keywords, the alternative queries of a
+	 * tool call: one string, which every model writes, where a list is not), trimmed, the
+	 * blank ones left out.
+	 */
+	static List<String> commaSeparated(String text) {
+		final List<String> items = new ArrayList<>();
+		if (text != null) {
+			for (String item : text.split(",")) {
+				if (!item.isBlank()) {
+					items.add(item.strip());
+				}
+			}
+		}
+		return items;
+	}
+
 	static List<String> fullTextQueries(List<String> keywords, List<String> queries) {
 		final List<String> fromKeywords = cleaned(keywords);
 		return !fromKeywords.isEmpty() ? fromKeywords : cleaned(queries);

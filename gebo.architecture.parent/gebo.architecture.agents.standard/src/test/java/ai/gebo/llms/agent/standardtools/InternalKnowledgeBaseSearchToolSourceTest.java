@@ -432,7 +432,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		InternalKnowledgeBaseSearchToolSource tool = tool(search, null);
 		InternalKnowledgeBaseSearchToolSource.KnowledgeBaseKeywordsSearchParam withKeywords = new InternalKnowledgeBaseSearchToolSource.KnowledgeBaseKeywordsSearchParam();
 		withKeywords.setQuery("what is the cosmic substance");
-		withKeywords.setKeywords(List.of("Svâbhâvat", " ", "Dhyân Chohans", "Svâbhâvat"));
+		withKeywords.setKeywords("Svâbhâvat, , Dhyân Chohans, Svâbhâvat");
 		KnowledgeBaseSearchParam plain = query("topic");
 		plain.setAlternativeQueries("other phrasing");
 
@@ -461,11 +461,46 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
+	void theKeywordsAreOneCommaSeparatedStringForBothKnowledgeBaseTools() {
+		for (Class<?> param : List.of(InternalKnowledgeBaseSearchToolSource.KnowledgeBaseKeywordsSearchParam.class,
+				ai.gebo.llms.agent.standardtools.model.KnowledgeBaseDeepSearchToolParam.class)) {
+			final String schema = org.springframework.ai.util.json.schema.JsonSchemaGenerator.generateForType(param);
+			final Map<String, Object> properties = (Map<String, Object>) new org.springframework.ai.util.JsonHelper()
+					.fromJsonToMap(schema).get("properties");
+			final Map<String, Object> keywords = (Map<String, Object>) properties.get("keywords");
+
+			assertEquals("string", keywords.get("type"), schema);
+			assertTrue(String.valueOf(keywords.get("description")).contains("separated by commas"), schema);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	void theKeywordsAsAModelWritesThemAreReadAndSearchedEachOnItsOwn() throws Exception {
+		// as qwen3.5-122b wrote them: one string, where a list made the conversion of the call fail
+		final InternalKnowledgeBaseSearchToolSource.KnowledgeBaseKeywordsSearchParam param = new org.springframework.ai.util.JsonHelper()
+				.fromJson("{\"query\": \"il padre di Gurdjieff\", \"keywords\": \"padre, Gurdjieff , ashokh\"}",
+						InternalKnowledgeBaseSearchToolSource.KnowledgeBaseKeywordsSearchParam.class);
+		final ai.gebo.llms.agent.standardtools.model.KnowledgeBaseDeepSearchToolParam deep = new org.springframework.ai.util.JsonHelper()
+				.fromJson("{\"queries\": [\"il padre di Gurdjieff\"], \"question\": \"q\", \"keywords\": \"ashokh\"}",
+						ai.gebo.llms.agent.standardtools.model.KnowledgeBaseDeepSearchToolParam.class);
+		IGDocumentsSearchService search = searchFindingDocuments(3);
+
+		tool(search, null).search(param, chatWithKnowledgeBases("kb1"));
+
+		ArgumentCaptor<List<String>> fullText = ArgumentCaptor.forClass(List.class);
+		verify(search).search(anyString(), anyList(), any(), fullText.capture(), any(), anyString(), anyInt(), anyInt());
+		assertEquals(List.of("padre", "Gurdjieff", "ashokh"), fullText.getValue());
+		assertEquals("ashokh", deep.getKeywords());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
 	void aToolCallsCommaSeparatedAlternativeQueriesAreSearchedEachOnItsOwn() throws Exception {
 		// as qwen3.5-122b wrote them, the list having failed the conversion of the call
 		final InternalKnowledgeBaseSearchToolSource.KnowledgeBaseKeywordsSearchParam param = new org.springframework.ai.util.JsonHelper()
 				.fromJson("{\"query\": \"Sarmoung confraternita\", \"alternativeQueries\": \"Sarmoung, fratellanza "
-						+ "Sarmoung,, Sarmoung Brotherhood , \", \"keywords\": [\"Sarmoung\"], \"topK\": 5}",
+						+ "Sarmoung,, Sarmoung Brotherhood , \", \"keywords\": \"Sarmoung\", \"topK\": 5}",
 						InternalKnowledgeBaseSearchToolSource.KnowledgeBaseKeywordsSearchParam.class);
 		IGDocumentsSearchService search = searchFindingDocuments(3);
 		InternalKnowledgeBaseSearchToolSource tool = tool(search, null);

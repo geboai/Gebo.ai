@@ -170,15 +170,7 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 
 	/** The alternative phrasings of a search: the comma separated ones given, trimmed, blanks left out. */
 	static List<String> alternativeQueries(String commaSeparated) {
-		final List<String> queries = new ArrayList<>();
-		if (commaSeparated != null) {
-			for (String query : commaSeparated.split(",")) {
-				if (!query.isBlank()) {
-					queries.add(query.strip());
-				}
-			}
-		}
-		return queries;
+		return KnowledgeBaseKeywords.commaSeparated(commaSeparated);
 	}
 
 	/**
@@ -191,7 +183,7 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	@JsonClassDescription("An internal knowledge base search")
 	public static class KnowledgeBaseKeywordsSearchParam extends KnowledgeBaseSearchParam {
 		@JsonPropertyDescription(KnowledgeBaseKeywords.KEYWORDS_DESCRIPTION)
-		private List<String> keywords;
+		private String keywords;
 	}
 
 	/** The full-text search, when configured: its presence gives the tool its keywords. */
