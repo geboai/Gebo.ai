@@ -196,6 +196,17 @@ class ThinkingNormalizationAdvisorTest {
 	}
 
 	@Test
+	void aProviderGivingItsReasoningPieceByPieceIsReadAsItComes() {
+		final List<GChatAnswerChunk> chunks = streamed(client(streaming(prompt -> Flux.just(
+				chunk("", Map.of("thinking", "Let "), List.of(), null), chunk("", Map.of("thinking", "Let me."), List.of(), null),
+				text("The answer."))), IGReasoningExtractor.metadataPieces("thinking"), false));
+
+		assertEquals(List.of("Let ", "Let me.", ""), chunks.stream().map(GChatAnswerChunk::thinking).toList(),
+				"each piece as given, even one starting as the reasoning so far");
+		assertEquals("The answer.", answers(chunks));
+	}
+
+	@Test
 	void aBlockingCallsReasoningIsApartFromItsAnswer() {
 		final ChatResponse claude = new ChatResponse(List.of(
 				new Generation(AssistantMessage.builder().content("Let me think.").properties(Map.of("signature", "s")).build()),

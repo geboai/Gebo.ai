@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import java.util.function.Function;
+
 import org.springframework.ai.chat.client.ChatClientRequest;
 import org.springframework.ai.chat.model.Generation;
 
@@ -93,6 +95,24 @@ public interface IGReasoningExtractor {
 
 	/** The reasoning of the OpenAI compatible APIs, as Spring AI's OpenAI model keeps it. */
 	IGReasoningExtractor OPENAI = metadata(REASONING_CONTENT_METADATA);
+
+	/**
+	 * The reasoning each chunk gives as the piece it adds, as the function reads it (null
+	 * when the chunk gives none); the whole reasoning on a blocking call's answer.
+	 */
+	static IGReasoningExtractor pieces(Function<Generation, String> reasoning) {
+		return () -> generation -> {
+			final String piece = generation != null && generation.getOutput() != null ? reasoning.apply(generation)
+					: null;
+			return new Reasoning(piece, textOf(generation), false);
+		};
+	}
+
+	/** The reasoning each chunk gives as the piece it adds, in a metadata of the answer. */
+	static IGReasoningExtractor metadataPieces(String key) {
+		return pieces(generation -> generation.getOutput().getMetadata() != null
+				&& generation.getOutput().getMetadata().get(key) instanceof String piece ? piece : null);
+	}
 
 	/**
 	 * What the reasoning grew by: the text is all of it so far, or (a provider giving only

@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.deepseek.DeepSeekAssistantMessage;
 import org.springframework.ai.deepseek.DeepSeekChatModel;
 import org.springframework.ai.deepseek.DeepSeekChatOptions;
 import org.springframework.ai.deepseek.api.DeepSeekApi;
@@ -32,6 +33,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportSe
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.abstraction.layer.services.IGReasoningExtractor;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.deepseek.model.GDeepseekChatModelChoice;
@@ -228,6 +230,12 @@ public class DeepseekChatModelConfigurationSupportService
 			return model;
 		}
 
+		/** DeepSeek's reasoning, as its chunks give it ({@link #REASONING}). */
+		@Override
+		protected IGReasoningExtractor reasoningExtractor() {
+			return REASONING;
+		}
+
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
@@ -235,6 +243,16 @@ public class DeepseekChatModelConfigurationSupportService
 					observationRegistry);
 		}
 	};
+
+	/**
+	 * DeepSeek's reasoning: Spring AI's DeepSeekChatModel keeps it in a field of its own
+	 * message class, the piece each streamed chunk adds (the whole of it on a blocking
+	 * call's answer), not in the metadata the OpenAI reading looks at.
+	 */
+	static final IGReasoningExtractor REASONING = IGReasoningExtractor.pieces(
+			generation -> generation.getOutput() instanceof DeepSeekAssistantMessage message
+					? message.getReasoningContent()
+					: null);
 
 	/**
 	 * Returns the type of chat model supported by this service
