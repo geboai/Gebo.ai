@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswer;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -46,6 +47,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetCalculator;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.service.DeepSearchAnalysisOutcome;
+import ai.gebo.llms.deepsearch.service.DeepSearchOutputThinking;
 import ai.gebo.llms.deepsearch.service.DocumentNamesShown;
 import ai.gebo.llms.deepsearch.service.DeepSearchVerdict;
 import ai.gebo.security.services.ReactiveIdentityUtil;
@@ -123,6 +125,23 @@ public class DeepSearchAnalysis extends BaseLLMSInvokingAndProvidingService {
 			IGConfigurableChatModel serviceModel, Vector<String> discardedFragmentIds, IGProgressNotifier notifier,
 			DeepSearchQuotations quotations, DeepSearchRelevance relevance, DeepSearchAnalysisOutcome outcome,
 			Runnable onModelFailure, String label) {
+		return analyze(fragments, context, runAs, deliverable, completenessNote, chatModel, serviceModel,
+				discardedFragmentIds, notifier, quotations, relevance, outcome, onModelFailure, label,
+				DeepSearchOutputThinking.NONE);
+	}
+
+	/**
+	 * The same, the reasoning of the calls writing the output (the final analysis, the
+	 * running report's folds, the answer when nothing was found) given to
+	 * {@code outputThinking}: the deep search answering the user streams it to the chat.
+	 */
+	public Flux<String> analyze(Flux<Document> fragments, IChatRequestContext context, ReactiveIdentityUtil runAs,
+			DeliverableIntent deliverable, String completenessNote, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, Vector<String> discardedFragmentIds, IGProgressNotifier notifier,
+			DeepSearchQuotations quotations, DeepSearchRelevance relevance, DeepSearchAnalysisOutcome outcome,
+			Runnable onModelFailure, String label, DeepSearchOutputThinking outputThinking) {
+		final DeepSearchOutputThinking thinking = outputThinking != null ? outputThinking
+				: DeepSearchOutputThinking.NONE;
 		final GPromptTemplateConfig cumulativeAnalisysPrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT);
 		final GPromptTemplateConfig finalAnalisysPrompt = promptsDao
@@ -161,7 +180,7 @@ public class DeepSearchAnalysis extends BaseLLMSInvokingAndProvidingService {
 				Map<String, Object> params = new HashMap<>(sharedParams);
 				params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, "");
 				params.put(CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
-				outFlux = callLLMReactive(chatModel, emptyResponsePrompt, context, params);
+				outFlux = thinking.text(callLLMReactiveAnswer(chatModel, emptyResponsePrompt, context, params));
 			} catch (Throwable th) {
 				if (onModelFailure != null) {
 					onModelFailure.run();
@@ -227,8 +246,8 @@ public class DeepSearchAnalysis extends BaseLLMSInvokingAndProvidingService {
 					Map<String, Object> params = new HashMap<>(sharedParams);
 					params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, list);
 					params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
-					return DeepSearchVerdict
-							.withoutVerdict(callLLMReactive(chatModel, finalAnalisysPrompt, context, params));
+					return DeepSearchVerdict.withoutVerdict(
+							thinking.text(callLLMReactiveAnswer(chatModel, finalAnalisysPrompt, context, params)));
 				} else {
 					return backupNotFoundDocuments;
 				}
@@ -285,8 +304,11 @@ public class DeepSearchAnalysis extends BaseLLMSInvokingAndProvidingService {
 			final RollingFold<String> rollingFold = (report, partials, _emitter) -> {
 				return runAs.doRunAsWithReturnAndException(() -> {
 					final Map<String, Object> params = new HashMap<>(sharedParams);
-					final DeepSearchVerdict verdict = DeepSearchVerdict.of(callLLMWithDocumentsAndConsolidation(
-							chatModel, finalAnalisysPrompt, context, partials, report, params));
+					// the report is the output: the fold's reasoning goes where the output's goes
+					final GChatAnswer folded = answerLLMWithDocumentsAndConsolidation(chatModel, finalAnalisysPrompt,
+							context, partials, report, params);
+					thinking.reasoning(folded.thinking());
+					final DeepSearchVerdict verdict = DeepSearchVerdict.of(folded.answer());
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug(label + " fold of " + partials.size() + " partial analyses: complete:"
 								+ verdict.complete() + (verdict.missing() != null ? " missing:" + verdict.missing() : ""));
