@@ -74,7 +74,6 @@ import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.agent.standardtools.WebSearchToolSource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.CutAnswer;
@@ -1713,17 +1712,6 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	}
 
 	/**
-	 * The model's answer to an iteration as it streams, with what its text alone does not
-	 * carry: its reasoning, every provider alike and every model round of its tools
-	 * included, and why it stopped.
-	 */
-	protected Flux<GChatAnswerChunk> callLLMReactiveResponses(IGConfigurableChatModel chatModel,
-			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params)
-			throws LLMConfigException {
-		return chatModel.streamAnswer(prompt, params, context);
-	}
-
-	/**
 	 * The text of a streamed chunk: its reasoning sent to the user ({@code ui}, null when
 	 * the request has no chat to show it in), why the model stopped kept.
 	 */
@@ -1741,23 +1729,6 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			thinkingTo(ui, thinking.complete());
 		}
 		return chunk.answer();
-	}
-
-	/** The reasoning events sent to the user's chat, never failing the answer. */
-	private void thinkingTo(ISinkUIEmitter ui, List<GThinkingEvent> events) {
-		if (ui == null || events.isEmpty()) {
-			return;
-		}
-		try {
-			for (GThinkingEvent event : events) {
-				ui.next(new GeboChatMessageEnvelope<GThinkingEvent>(event));
-			}
-		} catch (RuntimeException e) {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Agentic loop agent id:" + getId() + " the reasoning could not be sent to the chat: "
-						+ e.getMessage());
-			}
-		}
 	}
 
 	/**
