@@ -407,7 +407,7 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		withKeywords.setQuery("what is the cosmic substance");
 		withKeywords.setKeywords(List.of("Svâbhâvat", " ", "Dhyân Chohans", "Svâbhâvat"));
 		KnowledgeBaseSearchParam plain = query("topic");
-		plain.setAlternativeQueries(List.of("other phrasing"));
+		plain.setAlternativeQueries("other phrasing");
 
 		tool.search(withKeywords, chatWithKnowledgeBases("kb1"));
 		tool.search(plain, chatWithKnowledgeBases("kb1"));
@@ -417,5 +417,44 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 				anyString(), anyInt(), anyInt());
 		assertEquals(List.of("Svâbhâvat", "Dhyân Chohans"), fullText.getAllValues().get(0));
 		assertEquals(List.of("topic", "other phrasing"), fullText.getAllValues().get(1));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	void theModelIsToldToGiveTheAlternativeQueriesAsOneCommaSeparatedString() {
+		final String schema = org.springframework.ai.util.json.schema.JsonSchemaGenerator
+				.generateForType(InternalKnowledgeBaseSearchToolSource.KnowledgeBaseKeywordsSearchParam.class);
+		final Map<String, Object> properties = (Map<String, Object>) new org.springframework.ai.util.JsonHelper()
+				.fromJsonToMap(schema).get("properties");
+		final Map<String, Object> alternatives = (Map<String, Object>) properties.get("alternativeQueries");
+
+		assertEquals("string", alternatives.get("type"), schema);
+		assertTrue(String.valueOf(alternatives.get("description")).contains("separated by commas"), schema);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	void aToolCallsCommaSeparatedAlternativeQueriesAreSearchedEachOnItsOwn() throws Exception {
+		// as qwen3.5-122b wrote them, the list having failed the conversion of the call
+		final InternalKnowledgeBaseSearchToolSource.KnowledgeBaseKeywordsSearchParam param = new org.springframework.ai.util.JsonHelper()
+				.fromJson("{\"query\": \"Sarmoung confraternita\", \"alternativeQueries\": \"Sarmoung, fratellanza "
+						+ "Sarmoung,, Sarmoung Brotherhood , \", \"keywords\": [\"Sarmoung\"], \"topK\": 5}",
+						InternalKnowledgeBaseSearchToolSource.KnowledgeBaseKeywordsSearchParam.class);
+		IGDocumentsSearchService search = searchFindingDocuments(3);
+		InternalKnowledgeBaseSearchToolSource tool = tool(search, null);
+
+		tool.search(param, chatWithKnowledgeBases("kb1"));
+
+		ArgumentCaptor<List<String>> semantic = ArgumentCaptor.forClass(List.class);
+		verify(search).search(anyString(), semantic.capture(), any(), anyList(), any(), anyString(), anyInt(), anyInt());
+		assertEquals(List.of("Sarmoung confraternita", "Sarmoung", "fratellanza Sarmoung", "Sarmoung Brotherhood"),
+				semantic.getValue(), "each phrasing trimmed, the blank ones left out");
+	}
+
+	@Test
+	void noOrBlankAlternativeQueriesAreNone() {
+		assertEquals(List.of(), InternalKnowledgeBaseSearchToolSource.alternativeQueries(null));
+		assertEquals(List.of(), InternalKnowledgeBaseSearchToolSource.alternativeQueries(" , ,"));
+		assertEquals(List.of("one phrasing"), InternalKnowledgeBaseSearchToolSource.alternativeQueries("one phrasing"));
 	}
 }

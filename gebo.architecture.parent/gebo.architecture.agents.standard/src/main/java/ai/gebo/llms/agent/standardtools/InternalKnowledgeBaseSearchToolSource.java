@@ -155,10 +155,28 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	public static class KnowledgeBaseSearchParam {
 		@JsonPropertyDescription("The question or topic to search, as precise as possible")
 		private String query;
-		@JsonPropertyDescription("Optional alternative phrasings of the query, to widen the semantic search")
-		private List<String> alternativeQueries;
+		/**
+		 * One string, the phrasings separated by commas: a list was given by some models as
+		 * a single string, and its conversion failed the whole call.
+		 */
+		@JsonPropertyDescription("Optional alternative phrasings of the query, to widen the semantic search: one string, "
+				+ "the phrasings separated by commas (e.g. \"first phrasing, second phrasing\")")
+		private String alternativeQueries;
 		@JsonPropertyDescription("Optional maximum number of documents to return, with their fragments found, 10 when not given")
 		private Integer topK;
+	}
+
+	/** The alternative phrasings of a search: the comma separated ones given, trimmed, blanks left out. */
+	static List<String> alternativeQueries(String commaSeparated) {
+		final List<String> queries = new ArrayList<>();
+		if (commaSeparated != null) {
+			for (String query : commaSeparated.split(",")) {
+				if (!query.isBlank()) {
+					queries.add(query.strip());
+				}
+			}
+		}
+		return queries;
 	}
 
 	/**
@@ -300,9 +318,10 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			}
 			List<String> semanticQueries = new ArrayList<>();
 			semanticQueries.add(param.getQuery());
-			if (param.getAlternativeQueries() != null) {
-				param.getAlternativeQueries().stream().filter(x -> x != null && !x.isBlank()).limit(4)
-						.forEach(semanticQueries::add);
+			alternativeQueries(param.getAlternativeQueries()).stream().limit(4).forEach(semanticQueries::add);
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("search(...) knowledge base tool alternative queries:'" + param.getAlternativeQueries()
+						+ "' searched:" + semanticQueries);
 			}
 			int topK = param.getTopK() != null ? Math.max(1, Math.min(MAX_TOP_K, param.getTopK())) : DEFAULT_TOP_K;
 			// topK documents: their fragments retrieved, twice as many with a ranker to choose
