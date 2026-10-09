@@ -187,8 +187,10 @@ ai.gebo.llms.vendors.setup.config:
               description: Claude Fable 5.1
               uses: CHAT
 
-# AWS Bedrock vendor temporarily disabled: the Claude 4.x cross-region inference-profile
-# model ids below need verification against the live Bedrock catalog before re-enabling.
+# AWS Bedrock vendor temporarily disabled: the model lookup now lists the inference
+# profile ids the profile-only models are invoked by (us./eu./apac./global.), but the
+# codes below (Claude 4.5 generation) are outdated and need checking against a live
+# Bedrock account before re-enabling (current Claude ids: anthropic.claude-*-5-5).
 #    - vendorInfo:
 #        vendorId: aws-bedrock
 #        name: AWS Bedrock
