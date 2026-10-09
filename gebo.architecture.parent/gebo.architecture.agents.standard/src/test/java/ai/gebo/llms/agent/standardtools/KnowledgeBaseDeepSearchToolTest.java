@@ -122,7 +122,7 @@ class KnowledgeBaseDeepSearchToolTest {
 				.thenReturn(found);
 		KnowledgeBaseDeepSearchTool tool = toolOn(search, mock(DeepSearchToolsSupport.class));
 		KnowledgeBaseDeepSearchToolParam withKeywords = new KnowledgeBaseDeepSearchToolParam();
-		withKeywords.setKeywords(List.of("Fohat"));
+		withKeywords.setKeywords("Fohat");
 		DeepSearchToolParam<String> plain = new DeepSearchToolParam<>();
 
 		tool.searchDocuments(withKeywords, List.of("cosmic electricity"), "question", 10, 3, new HashMap<>(), chat("kb"), new ArrayList<>());

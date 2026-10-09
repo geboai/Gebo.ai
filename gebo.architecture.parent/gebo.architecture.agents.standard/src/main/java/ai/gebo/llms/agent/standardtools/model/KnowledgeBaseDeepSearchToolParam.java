@@ -9,8 +9,6 @@
 
 package ai.gebo.llms.agent.standardtools.model;
 
-import java.util.List;
-
 import org.springframework.ai.tool.annotation.ToolParam;
 
 import com.fasterxml.jackson.annotation.JsonClassDescription;
@@ -31,5 +29,5 @@ import lombok.ToString;
 @JsonClassDescription("A deep search: the searches to run and the question their documents are analysed against")
 public class KnowledgeBaseDeepSearchToolParam extends DeepSearchToolParam<String> {
 	@ToolParam(required = false, description = KnowledgeBaseKeywords.KEYWORDS_DESCRIPTION)
-	private List<String> keywords = null;
+	private String keywords = null;
 }

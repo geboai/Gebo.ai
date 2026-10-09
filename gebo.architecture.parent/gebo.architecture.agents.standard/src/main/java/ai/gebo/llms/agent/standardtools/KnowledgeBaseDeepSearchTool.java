@@ -86,7 +86,7 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 	protected List<String> searchesOf(DeepSearchToolParam<String> param, List<String> queries, String question) {
 		final List<String> searches = new ArrayList<>(super.searchesOf(param, queries, question));
 		if (param instanceof KnowledgeBaseDeepSearchToolParam withKeywords && withKeywords.getKeywords() != null) {
-			for (String keyword : withKeywords.getKeywords()) {
+			for (String keyword : KnowledgeBaseKeywords.commaSeparated(withKeywords.getKeywords())) {
 				if (keyword != null && !keyword.isBlank()) {
 					searches.add("keyword:" + keyword);
 				}
