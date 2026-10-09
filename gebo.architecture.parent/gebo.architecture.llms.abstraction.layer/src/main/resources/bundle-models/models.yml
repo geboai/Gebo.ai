@@ -220,21 +220,3 @@ ai.gebo.models.bundle.library:
       tokenizingThreashold:
       description:
       informativeUrl:
-    - providerId: deepseek
-      modelId: deepseek-chat
-      chatModel: true
-      embeddingModel: false
-      contextLength: 64000
-      maxOutputToken: 8000
-      tokenizingThreashold:
-      description:
-      informativeUrl:
-    - providerId: deepseek
-      modelId: deepseek-reasoner
-      chatModel: true
-      embeddingModel: false
-      contextLength: 64000
-      maxOutputToken: 8000
-      tokenizingThreashold:
-      description:
-      informativeUrl:

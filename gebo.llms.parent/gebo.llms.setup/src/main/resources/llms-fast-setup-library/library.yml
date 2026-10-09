@@ -287,13 +287,15 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chat-deepseek
           doModelsLookup: true
           choices:
-            - code: deepseek-chat
-              description: DeepSeek Latest Non thinking
+            # deepseek-chat and deepseek-reasoner were discontinued on 2026-07-24: thinking
+            # is now a setting of the model (the thinking option), not a model of its own.
+            - code: deepseek-flash
+              description: DeepSeek V4.1 Flash
               uses: CHAT , INTERNAL_SERVICES
-            - code: deepseek-reasoner
-              description: DeepSeek Latest Thinking
-              uses: CHAT
               defaultChoice: true
+            - code: deepseek-v4-pro
+              description: DeepSeek V4 Pro
+              uses: CHAT
     - vendorInfo:
         vendorId: xai
         name: XaI
