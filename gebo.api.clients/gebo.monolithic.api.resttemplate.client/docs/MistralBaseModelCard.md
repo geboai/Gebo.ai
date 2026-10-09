@@ -18,3 +18,4 @@ Name | Type | Description | Notes
 **deprecationReplacementModel** | **String** |  |  [optional]
 **defaultModelTemperature** | **Double** |  |  [optional]
 **archived** | **Boolean** |  |  [optional]
+**type** | **String** |  |  [optional]

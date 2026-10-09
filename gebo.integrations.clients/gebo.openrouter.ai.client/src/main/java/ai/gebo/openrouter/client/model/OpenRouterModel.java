@@ -68,4 +68,8 @@ public class OpenRouterModel {
 	/** Associated Hugging Face model id, when applicable. */
 	@JsonProperty("hugging_face_id")
 	private String huggingFaceId;
+
+	/** The date (yyyy-MM-dd) the model leaves OpenRouter, null while none is planned. */
+	@JsonProperty("expiration_date")
+	private String expirationDate;
 }

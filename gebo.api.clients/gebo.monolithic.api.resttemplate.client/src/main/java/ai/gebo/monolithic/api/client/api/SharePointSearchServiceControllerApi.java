@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T14:15:14.658386498+02:00[Europe/Rome]")
 
 public class SharePointSearchServiceControllerApi {
     private ApiClient apiClient;
@@ -683,11 +683,14 @@ public class SharePointSearchServiceControllerApi {
      * @param body  (required)
      * @param systemId  (required)
      * @param nEntryLimit  (required)
+     * @param connectTimeoutMillis  (optional)
+     * @param readTimeoutMillis  (optional)
+     * @param retries  (optional)
      * @return List&lt;SearchResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchResult> restNativeSearchSharePoint(SharePointSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
-        return restNativeSearchSharePointWithHttpInfo(body, systemId, nEntryLimit).getBody();
+    public List<SearchResult> restNativeSearchSharePoint(SharePointSearchFilter body, String systemId, Integer nEntryLimit, Integer connectTimeoutMillis, Integer readTimeoutMillis, Integer retries) throws RestClientException {
+        return restNativeSearchSharePointWithHttpInfo(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries).getBody();
     }
 
     /**
@@ -697,10 +700,13 @@ public class SharePointSearchServiceControllerApi {
      * @param body  (required)
      * @param systemId  (required)
      * @param nEntryLimit  (required)
+     * @param connectTimeoutMillis  (optional)
+     * @param readTimeoutMillis  (optional)
+     * @param retries  (optional)
      * @return ResponseEntity&lt;List&lt;SearchResult&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchResult>> restNativeSearchSharePointWithHttpInfo(SharePointSearchFilter body, String systemId, Integer nEntryLimit) throws RestClientException {
+    public ResponseEntity<List<SearchResult>> restNativeSearchSharePointWithHttpInfo(SharePointSearchFilter body, String systemId, Integer nEntryLimit, Integer connectTimeoutMillis, Integer readTimeoutMillis, Integer retries) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -721,6 +727,9 @@ public class SharePointSearchServiceControllerApi {
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "systemId", systemId));
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "nEntryLimit", nEntryLimit));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "connectTimeoutMillis", connectTimeoutMillis));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "readTimeoutMillis", readTimeoutMillis));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "retries", retries));
 
         final String[] accepts = { 
             "application/json"
@@ -743,11 +752,14 @@ public class SharePointSearchServiceControllerApi {
      * @param body  (required)
      * @param systemId  (required)
      * @param nEntryLimit  (required)
+     * @param connectTimeoutMillis  (optional)
+     * @param readTimeoutMillis  (optional)
+     * @param retries  (optional)
      * @return List&lt;SearchResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchResult> restSearchSharePoint(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
-        return restSearchSharePointWithHttpInfo(body, systemId, nEntryLimit).getBody();
+    public List<SearchResult> restSearchSharePoint(SearchQuery body, String systemId, Integer nEntryLimit, Integer connectTimeoutMillis, Integer readTimeoutMillis, Integer retries) throws RestClientException {
+        return restSearchSharePointWithHttpInfo(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries).getBody();
     }
 
     /**
@@ -757,10 +769,13 @@ public class SharePointSearchServiceControllerApi {
      * @param body  (required)
      * @param systemId  (required)
      * @param nEntryLimit  (required)
+     * @param connectTimeoutMillis  (optional)
+     * @param readTimeoutMillis  (optional)
+     * @param retries  (optional)
      * @return ResponseEntity&lt;List&lt;SearchResult&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchResult>> restSearchSharePointWithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
+    public ResponseEntity<List<SearchResult>> restSearchSharePointWithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit, Integer connectTimeoutMillis, Integer readTimeoutMillis, Integer retries) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -781,6 +796,9 @@ public class SharePointSearchServiceControllerApi {
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "systemId", systemId));
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "nEntryLimit", nEntryLimit));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "connectTimeoutMillis", connectTimeoutMillis));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "readTimeoutMillis", readTimeoutMillis));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "retries", retries));
 
         final String[] accepts = { 
             "application/json"

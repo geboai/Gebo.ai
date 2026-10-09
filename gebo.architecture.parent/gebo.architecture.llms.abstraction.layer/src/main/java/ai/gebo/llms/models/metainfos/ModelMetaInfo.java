@@ -52,11 +52,103 @@ public class ModelMetaInfo {
 	// URL for additional information about the model
 	private String informativeUrl = null;
 
+	// Indicates if the model accepts images as input
+	private Boolean supportsVision = null;
+
+	// Indicates if the model can reason (thinking) before answering
+	private Boolean supportsReasoning = null;
+
+	// Indicates if the provider deprecated the model: still callable, headed for retirement
+	private Boolean deprecated = null;
+
+	// ISO-8601 date (or date-time) the provider deprecated the model, as the provider publishes it
+	private String deprecationDate = null;
+
+	// ISO-8601 date (or date-time) the provider retires the model, as the provider publishes it
+	private String retirementDate = null;
+
+	// The model the provider suggests in place of a deprecated one
+	private String replacementModel = null;
+
 	/**
 	 * Default constructor for ModelMetaInfo.
 	 */
 	public ModelMetaInfo() {
 
+	}
+
+	/**
+	 * A copy of this meta info: the models library keeps its entries as shared
+	 * singletons, a choice gets its own copy so enriching it never edits the library.
+	 *
+	 * @return a new ModelMetaInfo with the same values
+	 */
+	public ModelMetaInfo copy() {
+		ModelMetaInfo copy = new ModelMetaInfo();
+		copy.providerId = providerId;
+		copy.modelId = modelId;
+		copy.chatModel = chatModel;
+		copy.embeddingModel = embeddingModel;
+		copy.supportsStructuredOutput = supportsStructuredOutput;
+		copy.supportsFunctionCalls = supportsFunctionCalls;
+		copy.contextLength = contextLength;
+		copy.tokenizingThreashold = tokenizingThreashold;
+		copy.maxOutputToken = maxOutputToken;
+		copy.description = description;
+		copy.informativeUrl = informativeUrl;
+		copy.supportsVision = supportsVision;
+		copy.supportsReasoning = supportsReasoning;
+		copy.deprecated = deprecated;
+		copy.deprecationDate = deprecationDate;
+		copy.retirementDate = retirementDate;
+		copy.replacementModel = replacementModel;
+		return copy;
+	}
+
+	/**
+	 * Fills the values this meta info does not know from another one, leaving the
+	 * known ones untouched: what a provider's models api returns wins over the static
+	 * models library, which only fills the gaps.
+	 *
+	 * @param other the meta info the missing values are taken from, may be null
+	 */
+	public void fillMissingFrom(ModelMetaInfo other) {
+		if (other == null)
+			return;
+		if (providerId == null)
+			providerId = other.providerId;
+		if (modelId == null)
+			modelId = other.modelId;
+		if (chatModel == null)
+			chatModel = other.chatModel;
+		if (embeddingModel == null)
+			embeddingModel = other.embeddingModel;
+		if (supportsStructuredOutput == null)
+			supportsStructuredOutput = other.supportsStructuredOutput;
+		if (supportsFunctionCalls == null)
+			supportsFunctionCalls = other.supportsFunctionCalls;
+		if (contextLength == null)
+			contextLength = other.contextLength;
+		if (tokenizingThreashold == null)
+			tokenizingThreashold = other.tokenizingThreashold;
+		if (maxOutputToken == null)
+			maxOutputToken = other.maxOutputToken;
+		if (description == null || description.isBlank())
+			description = other.description;
+		if (informativeUrl == null)
+			informativeUrl = other.informativeUrl;
+		if (supportsVision == null)
+			supportsVision = other.supportsVision;
+		if (supportsReasoning == null)
+			supportsReasoning = other.supportsReasoning;
+		if (deprecated == null)
+			deprecated = other.deprecated;
+		if (deprecationDate == null)
+			deprecationDate = other.deprecationDate;
+		if (retirementDate == null)
+			retirementDate = other.retirementDate;
+		if (replacementModel == null)
+			replacementModel = other.replacementModel;
 	}
 
 	/**
@@ -255,5 +347,53 @@ public class ModelMetaInfo {
 	 */
 	public void setSupportsFunctionCalls(Boolean supportsFunctionCalls) {
 		this.supportsFunctionCalls = supportsFunctionCalls;
+	}
+
+	public Boolean getSupportsVision() {
+		return supportsVision;
+	}
+
+	public void setSupportsVision(Boolean supportsVision) {
+		this.supportsVision = supportsVision;
+	}
+
+	public Boolean getSupportsReasoning() {
+		return supportsReasoning;
+	}
+
+	public void setSupportsReasoning(Boolean supportsReasoning) {
+		this.supportsReasoning = supportsReasoning;
+	}
+
+	public Boolean getDeprecated() {
+		return deprecated;
+	}
+
+	public void setDeprecated(Boolean deprecated) {
+		this.deprecated = deprecated;
+	}
+
+	public String getDeprecationDate() {
+		return deprecationDate;
+	}
+
+	public void setDeprecationDate(String deprecationDate) {
+		this.deprecationDate = deprecationDate;
+	}
+
+	public String getRetirementDate() {
+		return retirementDate;
+	}
+
+	public void setRetirementDate(String retirementDate) {
+		this.retirementDate = retirementDate;
+	}
+
+	public String getReplacementModel() {
+		return replacementModel;
+	}
+
+	public void setReplacementModel(String replacementModel) {
+		this.replacementModel = replacementModel;
 	}
 }

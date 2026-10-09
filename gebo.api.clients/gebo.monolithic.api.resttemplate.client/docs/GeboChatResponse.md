@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **backendMessages** | [**List&lt;GUserMessage&gt;**](GUserMessage.md) |  |  [optional]
 **forcedDocumentsRef** | [**List&lt;GResponseDocumentRef&gt;**](GResponseDocumentRef.md) |  |  [optional]
 **documentsRef** | [**List&lt;GResponseDocumentRef&gt;**](GResponseDocumentRef.md) |  |  [optional]
+**listedDocumentNames** | **List&lt;String&gt;** |  |  [optional]
 **calledFunctions** | [**List&lt;CalledFunction&gt;**](CalledFunction.md) |  |  [optional]
 **contextWindowStats** | [**ChatModelRequestContextWindowStats**](ChatModelRequestContextWindowStats.md) |  |  [optional]
 **generatedResources** | [**List&lt;LLMGeneratedResource&gt;**](LLMGeneratedResource.md) |  |  [optional]

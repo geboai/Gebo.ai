@@ -46,8 +46,13 @@ import lombok.Data;
  */
 @Service
 public class DeepseekModelsLookupService {
+	/** The default Deepseek api base url, the one the chat models use too */
+	public static final String DEEPSEEK_BASE_URL = "https://api.deepseek.com";
 	/** The URL endpoint for retrieving Deepseek model information */
-	public static final String DEEPSEEK_MODELS_URL = "https://api.deepseek.com/models";
+	public static final String DEEPSEEK_MODELS_URL = DEEPSEEK_BASE_URL + "/models";
+	public static final String INFORMATIVE_URL = "https://api-docs.deepseek.com/quick_start/pricing";
+	/** Keys of the model details */
+	public static final String EFFORT_LEVELS = "effortLevels", DEFAULT_EFFORT = "defaultEffort";
 	
 	/** Service for enriching model choices with metadata */
 	@Autowired
@@ -69,7 +74,20 @@ public class DeepseekModelsLookupService {
 	 */
 	@Data
 	public static class DeepseekModel {
-		private String id = null, object = null, owner = null;
+		private String id = null, object = null, owned_by = null, name = null;
+		private Integer context_window = null, max_output_tokens = null;
+		private List<String> input_modalities = null, output_modalities = null;
+		private DeepseekEffort effort = null;
+	}
+
+	/**
+	 * The reasoning effort levels a model accepts, and the one a request gets when it
+	 * names none
+	 */
+	@Data
+	public static class DeepseekEffort {
+		private List<String> supported_levels = null;
+		private String default_level = null;
 	}
 
 	/**
@@ -112,18 +130,14 @@ public class DeepseekModelsLookupService {
 						.fromSingleValue(rawHeaders);
 
 				HttpEntity requestEntity = new HttpEntity<>(header);
-				ResponseEntity<DeepseekModelsList> data = restTemplateWrapperService.exchange(DEEPSEEK_MODELS_URL,
-						HttpMethod.GET, requestEntity, DeepseekModelsList.class);
+				ResponseEntity<DeepseekModelsList> data = restTemplateWrapperService.exchange(
+						modelsUrl(config.getBaseUrl()), HttpMethod.GET, requestEntity, DeepseekModelsList.class);
 				if (data.hasBody()) {
 					DeepseekModelsList deepseekModelsList = data.getBody();
 					if (deepseekModelsList.getData() != null) {
 						// Convert API model responses to GDeepseekChatModelChoice objects
-						List<GDeepseekChatModelChoice> deepseekList = deepseekModelsList.getData().stream().map(x -> {
-							GDeepseekChatModelChoice choice = new GDeepseekChatModelChoice();
-							choice.setCode(x.getId());
-							choice.setDescription(x.getId());
-							return choice;
-						}).toList();
+						List<GDeepseekChatModelChoice> deepseekList = deepseekModelsList.getData().stream()
+								.filter(x -> x.getId() != null).map(DeepseekModelsLookupService::toChoice).toList();
 						models.addAll(deepseekList);
 					}
 				} else {
@@ -136,9 +150,9 @@ public class DeepseekModelsLookupService {
 						"Invalid Deepseek credentials format", "Inserted credentials of type:" + secret.type()));
 			}
 			// Enrich model choices with additional metadata
-			metaEnricher.enrichChatModelMetaInfos(DeepseekChatModelConfigurationSupportService.DEEPSEEK_CHAT_MODEL_TYPE, models, (choice) -> {
+			metaEnricher.enrichChatModelMetaInfos(DeepseekChatModelConfigurationSupportService.type.getProviderId(), models, (choice) -> {
 				ModelMetaInfo meta = new ModelMetaInfo();
-
+				meta.setInformativeUrl(INFORMATIVE_URL);
 				return meta;
 			});
 			return OperationStatus.of(models);
@@ -153,5 +167,58 @@ public class DeepseekModelsLookupService {
 					GUserMessage.errorMessage("Problem accessing Deepseek Models list", e));
 		}
 
+	}
+
+	/**
+	 * The models endpoint under the configured base url, the chat models' one, or the
+	 * default when none is configured.
+	 */
+	static String modelsUrl(String baseUrl) {
+		if (baseUrl == null || baseUrl.isBlank())
+			return DEEPSEEK_MODELS_URL;
+		String base = baseUrl.trim();
+		while (base.endsWith("/"))
+			base = base.substring(0, base.length() - 1);
+		return base + "/models";
+	}
+
+	/**
+	 * A choice carrying what the models api tells of the model: its name, context
+	 * window, output limit, image input and reasoning effort levels.
+	 */
+	static GDeepseekChatModelChoice toChoice(DeepseekModel model) {
+		GDeepseekChatModelChoice choice = new GDeepseekChatModelChoice();
+		choice.setCode(model.getId());
+		String name = model.getName() != null && !model.getName().isBlank() ? model.getName() : null;
+		choice.setDescription(name != null && !name.equalsIgnoreCase(model.getId())
+				? name + " (" + model.getId() + ")"
+				: model.getId());
+		ModelMetaInfo meta = new ModelMetaInfo();
+		meta.setProviderId(DeepseekChatModelConfigurationSupportService.type.getProviderId());
+		meta.setModelId(model.getId());
+		meta.setChatModel(true);
+		meta.setEmbeddingModel(false);
+		meta.setDescription(choice.getDescription());
+		meta.setInformativeUrl(INFORMATIVE_URL);
+		// Every current Deepseek model takes tools, the api has no field for it
+		meta.setSupportsFunctionCalls(true);
+		meta.setContextLength(model.getContext_window());
+		meta.setMaxOutputToken(model.getMax_output_tokens());
+		if (model.getInput_modalities() != null)
+			meta.setSupportsVision(model.getInput_modalities().contains("image"));
+		if (model.getEffort() != null) {
+			List<String> levels = model.getEffort().getSupported_levels() != null
+					? List.copyOf(model.getEffort().getSupported_levels())
+					: List.of();
+			meta.setSupportsReasoning(!levels.isEmpty());
+			choice.getModelDetails().put(EFFORT_LEVELS, new ArrayList<>(levels));
+			if (model.getEffort().getDefault_level() != null)
+				choice.getModelDetails().put(DEFAULT_EFFORT, model.getEffort().getDefault_level());
+		}
+		choice.setMetaInfos(meta);
+		choice.setContextLength(meta.getContextLength());
+		choice.setInformativeUrl(INFORMATIVE_URL);
+		choice.setSupportsFunctionCalls(true);
+		return choice;
 	}
 }

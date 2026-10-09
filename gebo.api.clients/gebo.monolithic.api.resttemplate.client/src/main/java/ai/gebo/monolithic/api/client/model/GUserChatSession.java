@@ -27,7 +27,7 @@ import java.util.List;
  * GUserChatSession
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T14:15:14.658386498+02:00[Europe/Rome]")
 
 public class GUserChatSession {
   @JsonProperty("code")
@@ -80,6 +80,12 @@ public class GUserChatSession {
 
   @JsonProperty("choosedKnowledgeBases")
   private List<String> choosedKnowledgeBases = null;
+
+  @JsonProperty("userRequiredLanguage")
+  private String userRequiredLanguage = null;
+
+  @JsonProperty("chatLanguage")
+  private String chatLanguage = null;
 
   public GUserChatSession code(String code) {
     this.code = code;
@@ -403,6 +409,42 @@ public class GUserChatSession {
     this.choosedKnowledgeBases = choosedKnowledgeBases;
   }
 
+  public GUserChatSession userRequiredLanguage(String userRequiredLanguage) {
+    this.userRequiredLanguage = userRequiredLanguage;
+    return this;
+  }
+
+   /**
+   * Get userRequiredLanguage
+   * @return userRequiredLanguage
+  **/
+  @Schema(description = "")
+  public String getUserRequiredLanguage() {
+    return userRequiredLanguage;
+  }
+
+  public void setUserRequiredLanguage(String userRequiredLanguage) {
+    this.userRequiredLanguage = userRequiredLanguage;
+  }
+
+  public GUserChatSession chatLanguage(String chatLanguage) {
+    this.chatLanguage = chatLanguage;
+    return this;
+  }
+
+   /**
+   * Get chatLanguage
+   * @return chatLanguage
+  **/
+  @Schema(description = "")
+  public String getChatLanguage() {
+    return chatLanguage;
+  }
+
+  public void setChatLanguage(String chatLanguage) {
+    this.chatLanguage = chatLanguage;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -429,12 +471,14 @@ public class GUserChatSession {
         Objects.equals(this.chatMemoryId, guserChatSession.chatMemoryId) &&
         Objects.equals(this.interactions, guserChatSession.interactions) &&
         Objects.equals(this.chatModelCode, guserChatSession.chatModelCode) &&
-        Objects.equals(this.choosedKnowledgeBases, guserChatSession.choosedKnowledgeBases);
+        Objects.equals(this.choosedKnowledgeBases, guserChatSession.choosedKnowledgeBases) &&
+        Objects.equals(this.userRequiredLanguage, guserChatSession.userRequiredLanguage) &&
+        Objects.equals(this.chatLanguage, guserChatSession.chatLanguage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, contextCode, chatProfileCode, modelReference, ragChat, pipelineCode, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, contextCode, chatProfileCode, modelReference, ragChat, pipelineCode, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases, userRequiredLanguage, chatLanguage);
   }
 
 
@@ -460,6 +504,8 @@ public class GUserChatSession {
     sb.append("    interactions: ").append(toIndentedString(interactions)).append("\n");
     sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
     sb.append("    choosedKnowledgeBases: ").append(toIndentedString(choosedKnowledgeBases)).append("\n");
+    sb.append("    userRequiredLanguage: ").append(toIndentedString(userRequiredLanguage)).append("\n");
+    sb.append("    chatLanguage: ").append(toIndentedString(chatLanguage)).append("\n");
     sb.append("}");
     return sb.toString();
   }

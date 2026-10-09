@@ -51,12 +51,17 @@ public class GModelChoiceMetaInfoEnricherServiceImpl implements IGModelChoiceMet
             choice.setSupportsFunctionCalls(choice.getMetaInfos().getSupportsFunctionCalls());
         }
         if (choice.getMetaInfos() != null && choice.getSupportsStructuredOutput() == null) {
-            choice.setSupportsStructuredOutput(choice.getSupportsStructuredOutput());
+            choice.setSupportsStructuredOutput(choice.getMetaInfos().getSupportsStructuredOutput());
         }
     }
 
     /**
      * Enriches general metadata information for model choices.
+     * <p>
+     * A choice that already carries meta infos got them from the provider's models api:
+     * those values win, the models library and the default factory only fill what the
+     * provider did not tell. A choice without meta infos gets a copy of the library
+     * entry, or the default factory's, as before.
      *
      * @param providerId the provider ID
      * @param choice the model choice
@@ -64,27 +69,34 @@ public class GModelChoiceMetaInfoEnricherServiceImpl implements IGModelChoiceMet
      */
     private <ModelChoiceType extends GBaseModelChoice> void enrichMetaInfos(String providerId, ModelChoiceType choice,
             Function<ModelChoiceType, ModelMetaInfo> defaultMetainfoFactory) {
-        // Check and retrieve metadata if not already set
-        if (choice.getMetaInfos() == null) {
-            ModelMetaInfo meta = dao.findByProviderIdAndModelId(providerId, choice.getCode());
-            if (meta == null) {
-                meta = dao.findByModelId(choice.getCode());
+        ModelMetaInfo library = dao.findByProviderIdAndModelId(providerId, choice.getCode());
+        if (library == null) {
+            library = dao.findByModelId(choice.getCode());
+        }
+        ModelMetaInfo live = choice.getMetaInfos();
+        if (live != null) {
+            live.fillMissingFrom(library);
+            live.fillMissingFrom(defaultMetainfoFactory.apply(choice));
+            if (choice.getDescription() == null || choice.getDescription().isBlank()) {
+                choice.setDescription(live.getDescription());
             }
+        } else {
+            ModelMetaInfo meta = library != null ? library.copy() : defaultMetainfoFactory.apply(choice);
             if (meta == null) {
-                meta = defaultMetainfoFactory.apply(choice);
+                return;
             }
             choice.setMetaInfos(meta);
-
-            // Update choice properties based on retrieved metadata
-            if (choice.getInformativeUrl() == null) {
-                choice.setInformativeUrl(meta.getInformativeUrl());
-            }
-            if (choice.getContextLength() == null) {
-                choice.setContextLength(meta.getContextLength());
-            }
-            if (meta.getDescription() != null && meta.getDescription().trim().length()>0) {
+            if (meta.getDescription() != null && meta.getDescription().trim().length() > 0) {
                 choice.setDescription(meta.getDescription());
             }
+        }
+        // Update choice properties based on the resulting metadata
+        ModelMetaInfo meta = choice.getMetaInfos();
+        if (choice.getInformativeUrl() == null) {
+            choice.setInformativeUrl(meta.getInformativeUrl());
+        }
+        if (choice.getContextLength() == null) {
+            choice.setContextLength(meta.getContextLength());
         }
     }
 

@@ -18,6 +18,11 @@ public class OpenAIModel extends OpenAIObject{
 	
     private String owned_by=null;
     private ModelMetaInfo metaInfos=null;
+    // The date (yyyy-MM-dd) OpenAI shuts the model down, null while none is announced
+    private String shutdown_date=null;
+    // Fields some OpenAI compatible providers add to the model object (Groq, ...)
+    private Integer context_window=null, max_completion_tokens=null;
+    private Boolean active=null;
     
 	public OpenAIModel() {
 		
@@ -34,6 +39,30 @@ public class OpenAIModel extends OpenAIObject{
 	}
 	public void setMetaInfos(ModelMetaInfo metaInfos) {
 		this.metaInfos = metaInfos;
+	}
+	public String getShutdown_date() {
+		return shutdown_date;
+	}
+	public void setShutdown_date(String shutdown_date) {
+		this.shutdown_date = shutdown_date;
+	}
+	public Integer getContext_window() {
+		return context_window;
+	}
+	public void setContext_window(Integer context_window) {
+		this.context_window = context_window;
+	}
+	public Integer getMax_completion_tokens() {
+		return max_completion_tokens;
+	}
+	public void setMax_completion_tokens(Integer max_completion_tokens) {
+		this.max_completion_tokens = max_completion_tokens;
+	}
+	public Boolean getActive() {
+		return active;
+	}
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 }

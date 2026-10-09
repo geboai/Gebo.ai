@@ -21,4 +21,6 @@ public class MistralBaseModelCard {
 	String deprecation_replacement_model;
 	Double default_model_temperature;
 	Boolean archived = null;
+	// "base" or "fine-tuned"
+	String type;
 }

@@ -32,4 +32,20 @@ public final class AnthropicClientCustomizer {
                 .timeout(Duration.ofMillis(cfg.getReadTimeoutMs()))
                 .interceptor(provider.getOkHttpRetryInterceptor());
     }
+
+    /**
+     * The configured request timeout, to be set on the model's {@code AnthropicChatOptions}
+     * as well as on the HTTP client.
+     * <p>
+     * Setting it on the client alone is not enough: when the options carry no timeout,
+     * Spring AI's {@code AnthropicSetup} applies its own 60 seconds to the SDK client,
+     * as the whole call's limit, after running the customizer. Claude answers longer
+     * than a minute were therefore cancelled mid-stream (a CANCEL stream reset at
+     * 60.0 s) while {@code ai.gebo.llms.default.clients.config.web-client-config.response-timeout}
+     * said otherwise - the same trap {@code OpenAiClientCustomizer.requestTimeout}
+     * documents for the OpenAI options.
+     */
+    public static Duration requestTimeout(IGLlmsServiceClientsProvider provider) {
+        return Duration.ofMillis(provider.getClientConfig().getReadTimeoutMs());
+    }
 }

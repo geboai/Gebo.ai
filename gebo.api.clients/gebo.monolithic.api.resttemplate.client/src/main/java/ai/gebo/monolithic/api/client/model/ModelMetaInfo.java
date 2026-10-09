@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ModelMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T14:15:14.658386498+02:00[Europe/Rome]")
 
 public class ModelMetaInfo {
   @JsonProperty("providerId")
@@ -57,6 +57,24 @@ public class ModelMetaInfo {
 
   @JsonProperty("informativeUrl")
   private String informativeUrl = null;
+
+  @JsonProperty("supportsVision")
+  private Boolean supportsVision = null;
+
+  @JsonProperty("supportsReasoning")
+  private Boolean supportsReasoning = null;
+
+  @JsonProperty("deprecated")
+  private Boolean deprecated = null;
+
+  @JsonProperty("deprecationDate")
+  private String deprecationDate = null;
+
+  @JsonProperty("retirementDate")
+  private String retirementDate = null;
+
+  @JsonProperty("replacementModel")
+  private String replacementModel = null;
 
   public ModelMetaInfo providerId(String providerId) {
     this.providerId = providerId;
@@ -256,6 +274,114 @@ public class ModelMetaInfo {
     this.informativeUrl = informativeUrl;
   }
 
+  public ModelMetaInfo supportsVision(Boolean supportsVision) {
+    this.supportsVision = supportsVision;
+    return this;
+  }
+
+   /**
+   * Get supportsVision
+   * @return supportsVision
+  **/
+  @Schema(description = "")
+  public Boolean isSupportsVision() {
+    return supportsVision;
+  }
+
+  public void setSupportsVision(Boolean supportsVision) {
+    this.supportsVision = supportsVision;
+  }
+
+  public ModelMetaInfo supportsReasoning(Boolean supportsReasoning) {
+    this.supportsReasoning = supportsReasoning;
+    return this;
+  }
+
+   /**
+   * Get supportsReasoning
+   * @return supportsReasoning
+  **/
+  @Schema(description = "")
+  public Boolean isSupportsReasoning() {
+    return supportsReasoning;
+  }
+
+  public void setSupportsReasoning(Boolean supportsReasoning) {
+    this.supportsReasoning = supportsReasoning;
+  }
+
+  public ModelMetaInfo deprecated(Boolean deprecated) {
+    this.deprecated = deprecated;
+    return this;
+  }
+
+   /**
+   * Get deprecated
+   * @return deprecated
+  **/
+  @Schema(description = "")
+  public Boolean isDeprecated() {
+    return deprecated;
+  }
+
+  public void setDeprecated(Boolean deprecated) {
+    this.deprecated = deprecated;
+  }
+
+  public ModelMetaInfo deprecationDate(String deprecationDate) {
+    this.deprecationDate = deprecationDate;
+    return this;
+  }
+
+   /**
+   * Get deprecationDate
+   * @return deprecationDate
+  **/
+  @Schema(description = "")
+  public String getDeprecationDate() {
+    return deprecationDate;
+  }
+
+  public void setDeprecationDate(String deprecationDate) {
+    this.deprecationDate = deprecationDate;
+  }
+
+  public ModelMetaInfo retirementDate(String retirementDate) {
+    this.retirementDate = retirementDate;
+    return this;
+  }
+
+   /**
+   * Get retirementDate
+   * @return retirementDate
+  **/
+  @Schema(description = "")
+  public String getRetirementDate() {
+    return retirementDate;
+  }
+
+  public void setRetirementDate(String retirementDate) {
+    this.retirementDate = retirementDate;
+  }
+
+  public ModelMetaInfo replacementModel(String replacementModel) {
+    this.replacementModel = replacementModel;
+    return this;
+  }
+
+   /**
+   * Get replacementModel
+   * @return replacementModel
+  **/
+  @Schema(description = "")
+  public String getReplacementModel() {
+    return replacementModel;
+  }
+
+  public void setReplacementModel(String replacementModel) {
+    this.replacementModel = replacementModel;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -276,12 +402,18 @@ public class ModelMetaInfo {
         Objects.equals(this.tokenizingThreashold, modelMetaInfo.tokenizingThreashold) &&
         Objects.equals(this.maxOutputToken, modelMetaInfo.maxOutputToken) &&
         Objects.equals(this.description, modelMetaInfo.description) &&
-        Objects.equals(this.informativeUrl, modelMetaInfo.informativeUrl);
+        Objects.equals(this.informativeUrl, modelMetaInfo.informativeUrl) &&
+        Objects.equals(this.supportsVision, modelMetaInfo.supportsVision) &&
+        Objects.equals(this.supportsReasoning, modelMetaInfo.supportsReasoning) &&
+        Objects.equals(this.deprecated, modelMetaInfo.deprecated) &&
+        Objects.equals(this.deprecationDate, modelMetaInfo.deprecationDate) &&
+        Objects.equals(this.retirementDate, modelMetaInfo.retirementDate) &&
+        Objects.equals(this.replacementModel, modelMetaInfo.replacementModel);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(providerId, modelId, chatModel, embeddingModel, supportsStructuredOutput, supportsFunctionCalls, contextLength, tokenizingThreashold, maxOutputToken, description, informativeUrl);
+    return Objects.hash(providerId, modelId, chatModel, embeddingModel, supportsStructuredOutput, supportsFunctionCalls, contextLength, tokenizingThreashold, maxOutputToken, description, informativeUrl, supportsVision, supportsReasoning, deprecated, deprecationDate, retirementDate, replacementModel);
   }
 
 
@@ -301,6 +433,12 @@ public class ModelMetaInfo {
     sb.append("    maxOutputToken: ").append(toIndentedString(maxOutputToken)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
+    sb.append("    supportsVision: ").append(toIndentedString(supportsVision)).append("\n");
+    sb.append("    supportsReasoning: ").append(toIndentedString(supportsReasoning)).append("\n");
+    sb.append("    deprecated: ").append(toIndentedString(deprecated)).append("\n");
+    sb.append("    deprecationDate: ").append(toIndentedString(deprecationDate)).append("\n");
+    sb.append("    retirementDate: ").append(toIndentedString(retirementDate)).append("\n");
+    sb.append("    replacementModel: ").append(toIndentedString(replacementModel)).append("\n");
     sb.append("}");
     return sb.toString();
   }

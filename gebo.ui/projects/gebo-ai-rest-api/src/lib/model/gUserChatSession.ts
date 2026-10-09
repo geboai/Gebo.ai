@@ -30,4 +30,6 @@ export interface GUserChatSession {
     interactions?: Array<ChatInteractions>;
     chatModelCode?: string;
     choosedKnowledgeBases?: Array<string>;
+    userRequiredLanguage?: string;
+    chatLanguage?: string;
 }

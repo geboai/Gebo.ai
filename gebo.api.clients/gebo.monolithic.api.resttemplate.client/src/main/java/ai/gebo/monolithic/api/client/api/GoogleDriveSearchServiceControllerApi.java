@@ -28,7 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-30T11:45:05.547749100+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T14:15:14.658386498+02:00[Europe/Rome]")
 
 public class GoogleDriveSearchServiceControllerApi {
     private ApiClient apiClient;
@@ -597,11 +597,14 @@ public class GoogleDriveSearchServiceControllerApi {
      * @param body  (required)
      * @param systemId  (required)
      * @param nEntryLimit  (required)
+     * @param connectTimeoutMillis  (optional)
+     * @param readTimeoutMillis  (optional)
+     * @param retries  (optional)
      * @return List&lt;SearchResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<SearchResult> restSearchGoogleDrive(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
-        return restSearchGoogleDriveWithHttpInfo(body, systemId, nEntryLimit).getBody();
+    public List<SearchResult> restSearchGoogleDrive(SearchQuery body, String systemId, Integer nEntryLimit, Integer connectTimeoutMillis, Integer readTimeoutMillis, Integer retries) throws RestClientException {
+        return restSearchGoogleDriveWithHttpInfo(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries).getBody();
     }
 
     /**
@@ -611,10 +614,13 @@ public class GoogleDriveSearchServiceControllerApi {
      * @param body  (required)
      * @param systemId  (required)
      * @param nEntryLimit  (required)
+     * @param connectTimeoutMillis  (optional)
+     * @param readTimeoutMillis  (optional)
+     * @param retries  (optional)
      * @return ResponseEntity&lt;List&lt;SearchResult&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<SearchResult>> restSearchGoogleDriveWithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit) throws RestClientException {
+    public ResponseEntity<List<SearchResult>> restSearchGoogleDriveWithHttpInfo(SearchQuery body, String systemId, Integer nEntryLimit, Integer connectTimeoutMillis, Integer readTimeoutMillis, Integer retries) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -635,6 +641,9 @@ public class GoogleDriveSearchServiceControllerApi {
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "systemId", systemId));
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "nEntryLimit", nEntryLimit));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "connectTimeoutMillis", connectTimeoutMillis));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "readTimeoutMillis", readTimeoutMillis));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "retries", retries));
 
         final String[] accepts = { 
             "application/json"

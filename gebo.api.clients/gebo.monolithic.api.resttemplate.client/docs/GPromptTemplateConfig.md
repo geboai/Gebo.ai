@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **description** | **String** |  |  [optional]
 **systemPromptTemplate** | **String** |  |  [optional]
 **userPromptTemplate** | **String** |  | 
+**toolsResultsPromptTemplate** | **String** |  |  [optional]
 **chatHistory** | [**ChatHistoryEnum**](#ChatHistoryEnum) |  | 
 **contextDocuments** | [**ContextDocumentsEnum**](#ContextDocumentsEnum) |  | 
 **toolsCalling** | [**ToolsCallingEnum**](#ToolsCallingEnum) |  | 

@@ -394,6 +394,51 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	}
 
 	/**
+	 * The context window of a configuration's model: the configured one, else the one
+	 * the chosen model carries or its provider's metadata report. Null when none is
+	 * known.
+	 */
+	public static Integer contextWindowOf(GBaseChatModelConfig<?> config) {
+		if (config == null)
+			return null;
+		Integer contextLength = config.getContextLength();
+		if ((contextLength == null || contextLength <= 0) && config.getChoosedModel() instanceof GBaseModelChoice choice) {
+			contextLength = choice.getContextLength();
+			if ((contextLength == null || contextLength <= 0) && choice.getMetaInfos() != null) {
+				contextLength = choice.getMetaInfos().getContextLength();
+			}
+		}
+		return contextLength == null || contextLength <= 0 ? null : contextLength;
+	}
+
+	/**
+	 * The default maximum of generated tokens for a context window, when the
+	 * configuration sets none: a share of the window, by steps - 4K below 30K tokens,
+	 * 8K up to 120K, 10K above. Null when the window is unknown.
+	 */
+	public static Integer defaultMaxGeneratedTokens(Integer contextWindow) {
+		if (contextWindow == null || contextWindow <= 0)
+			return null;
+		if (contextWindow < 30_000)
+			return 4096;
+		if (contextWindow <= 120_000)
+			return 8192;
+		return 10240;
+	}
+
+	/**
+	 * The maximum of generated tokens of a configuration: the configured one, else the
+	 * default its model's context window gives. Null when neither is known.
+	 */
+	public static Integer maxGeneratedTokensOf(GBaseChatModelConfig<?> config) {
+		if (config == null)
+			return null;
+		if (config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0)
+			return config.getMaxGeneratedTokens();
+		return defaultMaxGeneratedTokens(contextWindowOf(config));
+	}
+
+	/**
 	 * Retrieves the chat client associated with the model.
 	 * 
 	 * @return The chat client for interacting with the model.

@@ -30,7 +30,7 @@ import java.util.Map;
  * GDocumentReference
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-23T10:58:39.441743170+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-09T14:15:14.658386498+02:00[Europe/Rome]")
 
 public class GDocumentReference {
   @JsonProperty("code")
@@ -62,6 +62,9 @@ public class GDocumentReference {
 
   @JsonProperty("parentVirtualFolderCode")
   private String parentVirtualFolderCode = null;
+
+  @JsonProperty("uniqueId")
+  private Long uniqueId = null;
 
   @JsonProperty("absolutePath")
   private String absolutePath = null;
@@ -368,6 +371,24 @@ public class GDocumentReference {
 
   public void setParentVirtualFolderCode(String parentVirtualFolderCode) {
     this.parentVirtualFolderCode = parentVirtualFolderCode;
+  }
+
+  public GDocumentReference uniqueId(Long uniqueId) {
+    this.uniqueId = uniqueId;
+    return this;
+  }
+
+   /**
+   * Get uniqueId
+   * @return uniqueId
+  **/
+  @Schema(description = "")
+  public Long getUniqueId() {
+    return uniqueId;
+  }
+
+  public void setUniqueId(Long uniqueId) {
+    this.uniqueId = uniqueId;
   }
 
   public GDocumentReference absolutePath(String absolutePath) {
@@ -998,6 +1019,7 @@ public class GDocumentReference {
         Objects.equals(this.modificationDate, gdocumentReference.modificationDate) &&
         Objects.equals(this.version, gdocumentReference.version) &&
         Objects.equals(this.parentVirtualFolderCode, gdocumentReference.parentVirtualFolderCode) &&
+        Objects.equals(this.uniqueId, gdocumentReference.uniqueId) &&
         Objects.equals(this.absolutePath, gdocumentReference.absolutePath) &&
         Objects.equals(this.parentProjectCode, gdocumentReference.parentProjectCode) &&
         Objects.equals(this.rootKnowledgebaseCode, gdocumentReference.rootKnowledgebaseCode) &&
@@ -1034,7 +1056,7 @@ public class GDocumentReference {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, parentVirtualFolderCode, absolutePath, parentProjectCode, rootKnowledgebaseCode, uri, relativePath, name, deleted, messagingModuleId, projectEndpointReference, nestedInArchive, absoluteArchivePath, archiveInternalPath, customMetaInfos, lastesJobId, aclAliases, extIntegrationCode, synchronizationUUID, extension, contentType, geboFileArchetypeId, fileSize, unmanagedContentType, referenceType, skippedVectorizationContent, artificiallyGeneratedContent, originComponent, attributesValues, langCode, translationOfDocumentCode, categoryCodes, publishedDate, author);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, parentVirtualFolderCode, uniqueId, absolutePath, parentProjectCode, rootKnowledgebaseCode, uri, relativePath, name, deleted, messagingModuleId, projectEndpointReference, nestedInArchive, absoluteArchivePath, archiveInternalPath, customMetaInfos, lastesJobId, aclAliases, extIntegrationCode, synchronizationUUID, extension, contentType, geboFileArchetypeId, fileSize, unmanagedContentType, referenceType, skippedVectorizationContent, artificiallyGeneratedContent, originComponent, attributesValues, langCode, translationOfDocumentCode, categoryCodes, publishedDate, author);
   }
 
 
@@ -1053,6 +1075,7 @@ public class GDocumentReference {
     sb.append("    modificationDate: ").append(toIndentedString(modificationDate)).append("\n");
     sb.append("    version: ").append(toIndentedString(version)).append("\n");
     sb.append("    parentVirtualFolderCode: ").append(toIndentedString(parentVirtualFolderCode)).append("\n");
+    sb.append("    uniqueId: ").append(toIndentedString(uniqueId)).append("\n");
     sb.append("    absolutePath: ").append(toIndentedString(absolutePath)).append("\n");
     sb.append("    parentProjectCode: ").append(toIndentedString(parentProjectCode)).append("\n");
     sb.append("    rootKnowledgebaseCode: ").append(toIndentedString(rootKnowledgebaseCode)).append("\n");

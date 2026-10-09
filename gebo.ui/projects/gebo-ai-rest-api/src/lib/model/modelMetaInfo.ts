@@ -22,4 +22,10 @@ export interface ModelMetaInfo {
     maxOutputToken?: number;
     description?: string;
     informativeUrl?: string;
+    supportsVision?: boolean;
+    supportsReasoning?: boolean;
+    deprecated?: boolean;
+    deprecationDate?: string;
+    retirementDate?: string;
+    replacementModel?: string;
 }

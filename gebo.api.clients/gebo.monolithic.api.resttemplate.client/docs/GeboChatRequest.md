@@ -18,6 +18,9 @@ Name | Type | Description | Notes
 **userUploadedContents** | [**List&lt;UserUploadedContent&gt;**](UserUploadedContent.md) |  |  [optional]
 **deepSearchDataSources** | **List&lt;String&gt;** |  |  [optional]
 **userIntent** | [**UserIntentEnum**](#UserIntentEnum) |  |  [optional]
+**searchRequested** | **Boolean** |  |  [optional]
+**searchForbidden** | **Boolean** |  |  [optional]
+**userLanguage** | **String** |  |  [optional]
 **additionalContents** | [**List&lt;AdditionalContent&gt;**](AdditionalContent.md) |  |  [optional]
 **tokensSize** | **Integer** |  |  [optional]
 

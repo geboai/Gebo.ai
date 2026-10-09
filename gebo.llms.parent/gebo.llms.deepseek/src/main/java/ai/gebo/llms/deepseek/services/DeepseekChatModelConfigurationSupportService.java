@@ -169,11 +169,10 @@ public class DeepseekChatModelConfigurationSupportService
 			}
 			// Deepseek carries the two halves of the setting separately: thinking switches
 			// the mode on or off, reasoning_effort says how deep it goes once it is on.
-			// The depth scale is shorter than ours - the api offers HIGH, which is what a
-			// normal request gets anyway, and MAX above it - so LOW and MEDIUM can only
-			// turn thinking on and leave the depth at the provider default: deepseek has
-			// no level below it to ask for. HIGH_THINKING, our "maximum thinking", is the
-			// one that reaches for MAX.
+			// The models api lists the levels each model accepts (low, high, max today),
+			// but the client only knows HIGH and MAX, so LOW and MEDIUM can only turn
+			// thinking on and leave the depth at the provider default. HIGH_THINKING, our
+			// "maximum thinking", reaches for the highest level the model lists.
 			// AUTO sends neither, which is what it means: leave the provider default alone.
 			if (config.getThinking() != null) {
 				switch (config.getThinking()) {
@@ -187,8 +186,11 @@ public class DeepseekChatModelConfigurationSupportService
 				}
 					break;
 				case HIGH_THINKING: {
-					builder = builder.thinking(DeepSeekApi.ChatCompletionRequest.Thinking.ENABLED)
-							.reasoningEffort(DeepSeekApi.ChatCompletionRequest.ReasoningEffort.MAX);
+					builder = builder.thinking(DeepSeekApi.ChatCompletionRequest.Thinking.ENABLED);
+					DeepSeekApi.ChatCompletionRequest.ReasoningEffort effort = maximumEffort(
+							config.getChoosedModel() != null ? config.getChoosedModel().getModelDetails() : null);
+					if (effort != null)
+						builder = builder.reasoningEffort(effort);
 				}
 					break;
 				default:
@@ -296,5 +298,22 @@ public class DeepseekChatModelConfigurationSupportService
 			throws GeboPersistenceException, LLMConfigException {
 
 		return configureHandler.insertAndConfigure(config, type);
+	}
+
+	/**
+	 * The highest reasoning effort a model accepts among the ones the client can send,
+	 * from the levels the models api listed for it. MAX when the levels are unknown (a
+	 * configuration saved before they were read), as before they were; null when the
+	 * model lists levels but none the client knows.
+	 */
+	static DeepSeekApi.ChatCompletionRequest.ReasoningEffort maximumEffort(java.util.Map<String, Object> details) {
+		Object levels = details != null ? details.get(DeepseekModelsLookupService.EFFORT_LEVELS) : null;
+		if (!(levels instanceof java.util.Collection<?> list) || list.isEmpty())
+			return DeepSeekApi.ChatCompletionRequest.ReasoningEffort.MAX;
+		if (list.contains("max"))
+			return DeepSeekApi.ChatCompletionRequest.ReasoningEffort.MAX;
+		if (list.contains("high"))
+			return DeepSeekApi.ChatCompletionRequest.ReasoningEffort.HIGH;
+		return null;
 	}
 }

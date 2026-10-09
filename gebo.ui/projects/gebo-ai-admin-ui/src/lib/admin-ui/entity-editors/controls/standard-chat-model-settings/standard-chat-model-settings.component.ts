@@ -58,6 +58,8 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
     // Input bounds for context length parameter
     @Input() minContextLength: number = 1024;
     @Input() maxContextLength: number = 2000000;
+    // Whether the provider takes the sampling parameters (temperature, top-p)
+    @Input() samplingSettings: boolean = true;
     @Input() thinking: boolean = true;
     @Input() maxGeneratedTokens: boolean = true;
 
