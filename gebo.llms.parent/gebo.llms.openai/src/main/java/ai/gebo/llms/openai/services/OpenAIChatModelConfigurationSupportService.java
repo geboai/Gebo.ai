@@ -262,11 +262,34 @@ public class OpenAIChatModelConfigurationSupportService
 		OpenAIApiConfig providerConfig = new OpenAIApiConfig();
 		providerConfig.setProviderId("openai");
 
-		return this.openaiApiUtil.getChatModels(GOpenAIChatModelChoice.class, providerConfig, config, (choice) -> {
-			ModelMetaInfo meta = new ModelMetaInfo();
-			meta.setInformativeUrl("https://platform.openai.com/docs/models/");
-			return meta;
-		}, type);
+		OperationStatus<List<GOpenAIChatModelChoice>> result = this.openaiApiUtil.getChatModels(
+				GOpenAIChatModelChoice.class, providerConfig, config, (choice) -> {
+					ModelMetaInfo meta = new ModelMetaInfo();
+					meta.setInformativeUrl("https://platform.openai.com/docs/models/");
+					return meta;
+				}, type);
+		if (result != null && result.getResult() != null) {
+			result.setResult(result.getResult().stream().filter(c -> isChatModel(c.getCode())).toList());
+		}
+		return result;
+	}
+
+	/**
+	 * Whether a model listed by GET /v1/models is a chat model. The endpoint lists
+	 * every model of the account with no type, so the speech, transcription, image,
+	 * moderation, realtime/audio and legacy completion models are recognised by id,
+	 * as the image, speech and transcription lists recognise theirs.
+	 */
+	static boolean isChatModel(String modelId) {
+		if (modelId == null)
+			return false;
+		String id = modelId.toLowerCase();
+		for (String marker : List.of("tts", "whisper", "transcribe", "dall-e", "image", "moderation", "realtime",
+				"audio", "embedding", "babbage", "davinci", "sora", "gpt-live", "translate")) {
+			if (id.contains(marker))
+				return false;
+		}
+		return true;
 	}
 
 	/**

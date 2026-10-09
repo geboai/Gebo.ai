@@ -5,24 +5,6 @@
 ai.gebo.models.bundle.library:
   modelsInfo:
     - providerId: openai
-      modelId: o1
-      chatModel: true
-      embeddingModel: false
-      contextLength: 200000
-      maxOutputToken: 100000
-      tokenizingThreashold:
-      description: O1 openai flagship reasoning model
-      informativeUrl: https://platform.openai.com/docs/models/o1
-    - providerId: openai
-      modelId: o1-mini
-      chatModel: true
-      embeddingModel: false
-      contextLength: 128000
-      maxOutputToken: 16384
-      tokenizingThreashold:
-      description: O1-mini reasoning model
-      informativeUrl: https://platform.openai.com/docs/models/o1-mini
-    - providerId: openai
       modelId: gpt-4o
       chatModel: true
       embeddingModel: false
@@ -59,15 +41,6 @@ ai.gebo.models.bundle.library:
       description: GPT-4.1 model
       informativeUrl: https://platform.openai.com/docs/models/gpt-4.1
     - providerId: openai
-      modelId: chatgpt-4o-latest
-      chatModel: true
-      embeddingModel: false
-      contextLength: 128000
-      maxOutputToken: 16384
-      tokenizingThreashold:
-      description: GPT-4o latest update openai flagship model
-      informativeUrl: https://platform.openai.com/docs/models/gpt-4o
-    - providerId: openai
       modelId: gpt-4o-mini
       chatModel: true
       embeddingModel: false
@@ -85,24 +58,6 @@ ai.gebo.models.bundle.library:
       tokenizingThreashold:
       description: GPT-4o mini 2024-07-18 openai flagship model
       informativeUrl: https://platform.openai.com/docs/models/gpt-4o-mini
-    - providerId: openai
-      modelId: gpt-4-turbo
-      chatModel: true
-      embeddingModel: false
-      contextLength: 128000
-      maxOutputToken: 16384
-      tokenizingThreashold:
-      description: GPT-4o-turbo openai  model
-      informativeUrl: https://platform.openai.com/docs/models/gpt-4-turbo
-    - providerId: openai
-      modelId: gpt-3.5-turbo
-      chatModel: true
-      embeddingModel: false
-      contextLength: 128000
-      maxOutputToken: 16384
-      tokenizingThreashold:
-      description: gpt-3.5-turbo openai  model
-      informativeUrl: https://platform.openai.com/docs/models/gpt-4-turbo
     - providerId: openai
       modelId: text-embedding-3-large
       chatModel: false

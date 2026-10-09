@@ -96,22 +96,25 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chatgpt-OpenAI
           doModelsLookup: true
           choices:
-            - code: gpt-4o
-              description: Gpt 4o
-              contextWindow: 128000
+            # The current flagships (developers.openai.com models page, 2026-10); their
+            # limits come from the models library and the lookup, not from here.
+            - code: gpt-6.1-sol
+              description: GPT 6.1 Sol
+              uses: CHAT
+              defaultChoice: true
+            - code: gpt-6-astra
+              description: GPT 6 Astra (most capable)
+              uses: CHAT
+            - code: gpt-5
+              description: Gpt 5
+              contextWindow: 400000
               uses: CHAT
             - code: gpt-4.1
               description: Gpt 4.1
               contextWindow: 1000000
               uses: CHAT
-              defaultChoice: true
-            - code: gpt-5
-              description: Gpt 5
-              contextWindow: 400000
-              uses: CHAT
-            - code: gpt-4o-mini
-              description: Gpt 4o mini
-              contextWindow: 128000
+            - code: gpt-6-luna
+              description: GPT 6 Luna (efficient, high volume)
               uses: INTERNAL_SERVICES
         - type: EMBEDDING
           serviceHandler: embedding-OpenAI
@@ -124,13 +127,14 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: image-generation-OpenAI
           doModelsLookup: true
           choices:
-            - code: gpt-image-1
-              description: GPT Image 1 (high quality image generation)
+            # gpt-image-1 was shut down on 2026-10-01, DALL-E 2 and 3 on 2026-05-12.
+            - code: gpt-image-2.5-flare
+              description: GPT Image 2.5 Flare (fast image generation)
               defaultChoice: true
-            - code: dall-e-3
-              description: DALL-E 3
-            - code: dall-e-2
-              description: DALL-E 2
+            - code: gpt-image-2.5-sunburst
+              description: GPT Image 2.5 Sunburst (highest quality)
+            - code: gpt-image-2
+              description: GPT Image 2
         - type: TTS
           serviceHandler: openai-tts
           doModelsLookup: true
@@ -146,9 +150,12 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: openai-transcript
           doModelsLookup: true
           choices:
+            # gpt-4o-transcribe, gpt-4o-mini-transcribe and whisper-1 shut down on 2027-02-26.
+            - code: gpt-transcribe
+              description: GPT Transcribe (speech to text)
+              defaultChoice: true
             - code: gpt-4o-transcribe
               description: GPT-4o Transcribe (speech to text)
-              defaultChoice: true
             - code: gpt-4o-mini-transcribe
               description: GPT-4o mini Transcribe
             - code: whisper-1
