@@ -28,8 +28,8 @@ import ai.gebo.llms.anthropic.http.AnthropicClientCustomizer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
-import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
@@ -39,13 +39,10 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
+import ai.gebo.llms.anthropic.model.AnthropicThinkingSupport;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelChoice;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelConfig;
 import ai.gebo.model.OperationStatus;
-import ai.gebo.secrets.model.AbstractGeboSecretContent;
-import ai.gebo.secrets.model.GeboSecretType;
-import ai.gebo.secrets.model.GeboTokenContent;
-import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.el.MethodNotFoundException;
 import lombok.AllArgsConstructor;
@@ -86,8 +83,6 @@ public class AnthropicChatModelConfigurationSupportService
 	/**
 	 * Service for accessing secrets like API keys
 	 */
-	final IGeboSecretsAccessService secretService;
-
 	/**
 	 * Repository for tools/functions that can be called by the models
 	 */
@@ -127,19 +122,7 @@ public class AnthropicChatModelConfigurationSupportService
 		@Override
 		protected AnthropicChatModel configureModel(GAnthropicChatModelConfig config, GChatModelType type,
 				ToolCallingManager toolsCallsManager) throws LLMConfigException {
-			String apiKey = null;
-			if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0)
-				throw new LLMConfigException("Anthropic api cannot work without needed api key configuration");
-			try {
-				AbstractGeboSecretContent secret = secretService.getSecretContentById(config.getApiSecretCode());
-				if (secret.type() == GeboSecretType.TOKEN) {
-					apiKey = ((GeboTokenContent) secret).getToken();
-				} else {
-					throw new LLMConfigException("Anthropic api can work only with an api key of type TOKEN");
-				}
-			} catch (GeboCryptSecretException e) {
-				throw new LLMConfigException("Anthropic api  key configuration gone wrong ", e);
-			}
+			String apiKey = modelsService.resolveApiKey(config);
 
 			// Get the client providers for making API calls
 			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
@@ -159,58 +142,46 @@ public class AnthropicChatModelConfigurationSupportService
 			if (config.getTopP() != null) {
 				builder = builder.topP(config.getTopP());
 			}
+			if (config.getBaseUrl() != null && !config.getBaseUrl().isBlank()) {
+				builder = builder.baseUrl(config.getBaseUrl());
+			}
 
 			// Claude expresses thinking in two generations of api, and which one a model
-			// takes is not negotiable:
+			// takes is not negotiable: sending the wrong one is a failed call (a 400) rather
+			// than a degraded answer.
 			// - the current models let the model decide adaptively and take the depth as an
-			//   effort level. They reject a token budget outright, with a 400.
-			// - the older ones (4.5 and earlier, of which claude-haiku-4-5 is the one this
-			//   installation presets) know neither adaptive nor effort: they want an
-			//   explicit budget in tokens, which has to be at least 1024 and stay below
-			//   maxTokens - a pair we cannot derive when no generation cap is configured.
-			// Sending the wrong one of the two is a failed call rather than a degraded
-			// answer, so only the adaptive form is sent here and a model of the older
-			// generation keeps the provider default, exactly as before this was mapped.
-			// Newer models default to the adaptive branch: the exclusion names the
-			// generations known to need a budget instead of listing the ones that do not,
-			// so a model released after this code keeps working.
+			//   effort level. They reject a token budget outright.
+			// - the older ones (4.5 and earlier) know neither adaptive nor effort: they want
+			//   an explicit budget in tokens, which has to be at least 1024 and stay below
+			//   maxTokens - a pair we cannot derive when no generation cap is configured, so
+			//   those models keep the provider default.
+			// Which one a model takes, and which effort levels it accepts, is read from the
+			// Models API capabilities; the model code is the fallback when they are unknown.
 			if (config.getThinking() != null) {
 				String modelCode = config.getChoosedModel() != null ? config.getChoosedModel().getCode() : null;
-				if (isBudgetOnlyThinkingModel(modelCode)) {
+				AnthropicThinkingSupport support = config.getChoosedModel() != null
+						? AnthropicThinkingSupport.readFrom(config.getChoosedModel().getModelDetails())
+						: null;
+				if (support == null && modelCode != null) {
+					support = modelsService.getThinkingSupport(apiKey, config.getBaseUrl(), modelCode);
+				}
+				ThinkingRequest thinking = thinkingRequest(config.getThinking(), support, modelCode);
+				if (thinking == null) {
 					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug(
-								"Chat model {} asks for thinking {} but {} belongs to the claude generation configured"
-										+ " by token budget, which needs a generation cap to be expressed: the model is"
-										+ " left at the provider default",
-								config.getCode(), config.getThinking(), modelCode);
+						LOGGER.debug("Chat model {} asks for thinking {} but {} cannot express it: the model is left"
+								+ " at the provider default", config.getCode(), config.getThinking(), modelCode);
 					}
 				} else {
-					switch (config.getThinking()) {
-					case NO_THINKING: {
+					if (thinking.disabled()) {
 						builder = builder.thinkingDisabled();
-					}
-						break;
-					case LOW_THINKING: {
-						builder = builder.thinkingAdaptive().effort(OutputConfig.Effort.LOW);
-					}
-						break;
-					case MEDIUM_THINKING: {
-						builder = builder.thinkingAdaptive().effort(OutputConfig.Effort.MEDIUM);
-					}
-						break;
-					case HIGH_THINKING: {
-						// Our HIGH_THINKING is labelled "maximum thinking" in the admin screens,
-						// so it reaches for the top of claude's scale rather than for HIGH, which
-						// is merely what a request gets when it asks for nothing.
-						builder = builder.thinkingAdaptive().effort(OutputConfig.Effort.MAX);
-					}
-						break;
-					default:
-						break;
+					} else if (thinking.effort() != null) {
+						builder = builder.thinkingAdaptive().effort(thinking.effort());
+					} else {
+						builder = builder.thinkingAdaptive();
 					}
 					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Chat model {} ({}) configured with thinking {}", config.getCode(), modelCode,
-								config.getThinking());
+						LOGGER.debug("Chat model {} ({}) configured with thinking {} as {}", config.getCode(), modelCode,
+								config.getThinking(), thinking);
 					}
 				}
 			}
@@ -320,16 +291,90 @@ public class AnthropicChatModelConfigurationSupportService
 	}
 
 	/**
+	 * What a configured thinking option becomes in a request: thinking turned off, or
+	 * adaptive thinking with an optional effort level.
+	 */
+	record ThinkingRequest(boolean disabled, OutputConfig.Effort effort) {
+	}
+
+	/**
+	 * Maps the thinking option of a configuration onto what the model accepts.
+	 *
+	 * @param option    the configured option
+	 * @param support   the thinking the model accepts, from the Models API; null when
+	 *                  unknown, the model code is then all there is to go by
+	 * @param modelCode the configured model code
+	 * @return the thinking to request, or null to leave the model at the provider
+	 *         default
+	 */
+	static ThinkingRequest thinkingRequest(ChatModelThinkingOption option, AnthropicThinkingSupport support,
+			String modelCode) {
+		if (option == null)
+			return null;
+		if (support == null) {
+			if (isBudgetOnlyThinkingModel(modelCode))
+				return null;
+			return switch (option) {
+			case NO_THINKING -> new ThinkingRequest(true, null);
+			case LOW_THINKING -> new ThinkingRequest(false, OutputConfig.Effort.LOW);
+			case MEDIUM_THINKING -> new ThinkingRequest(false, OutputConfig.Effort.MEDIUM);
+			// Our HIGH_THINKING is labelled "maximum thinking" in the admin screens, so it
+			// reaches for the top of claude's scale rather than for HIGH, which is merely
+			// what a request gets when it asks for nothing.
+			case HIGH_THINKING -> new ThinkingRequest(false, OutputConfig.Effort.MAX);
+			default -> null;
+			};
+		}
+		switch (option) {
+		case NO_THINKING:
+			return support.disabled() ? new ThinkingRequest(true, null) : null;
+		case LOW_THINKING:
+		case MEDIUM_THINKING:
+		case HIGH_THINKING:
+			if (!support.adaptive())
+				return null;
+			return new ThinkingRequest(false, effortFor(option, support));
+		default:
+			return null;
+		}
+	}
+
+	/**
+	 * The effort level for an option, among the ones the model accepts: low and medium
+	 * as asked, maximum thinking as the highest level the model has. Null when the
+	 * model takes no effort, or not the one asked: adaptive thinking alone then lets
+	 * the model choose.
+	 */
+	private static OutputConfig.Effort effortFor(ChatModelThinkingOption option, AnthropicThinkingSupport support) {
+		switch (option) {
+		case LOW_THINKING:
+			return support.acceptsEffort("low") ? OutputConfig.Effort.LOW : null;
+		case MEDIUM_THINKING:
+			return support.acceptsEffort("medium") ? OutputConfig.Effort.MEDIUM : null;
+		case HIGH_THINKING: {
+			List<String> scale = AnthropicThinkingSupport.EFFORT_SCALE;
+			for (int i = scale.size() - 1; i >= 0; i--) {
+				if (support.acceptsEffort(scale.get(i)))
+					return OutputConfig.Effort.of(scale.get(i));
+			}
+			return null;
+		}
+		default:
+			return null;
+		}
+	}
+
+	/**
 	 * Whether the model configures its thinking by a token budget rather than by the
-	 * adaptive mode and an effort level.
+	 * adaptive mode and an effort level, judged from its code alone.
 	 *
 	 * <p>
-	 * The claude 4.5 generation and everything before it knows neither adaptive thinking
-	 * nor an effort level and answers both with a 400; the generations after it answer a
-	 * token budget the same way. There is no capability flag to read this from, the
-	 * model code being all that identifies the generation, so the test names the older
-	 * ones: a model this code has never heard of is taken as one of the newer ones,
-	 * which is the direction releases move in.
+	 * Only used when the Models API capabilities of the model are unknown. The claude
+	 * 4.5 generation and everything before it knows neither adaptive thinking nor an
+	 * effort level and answers both with a 400; the generations after it answer a token
+	 * budget the same way. The test names the older ones: a model this code has never
+	 * heard of is taken as one of the newer ones, which is the direction releases move
+	 * in.
 	 * </p>
 	 *
 	 * @param modelCode the configured model code, null when none is chosen yet
