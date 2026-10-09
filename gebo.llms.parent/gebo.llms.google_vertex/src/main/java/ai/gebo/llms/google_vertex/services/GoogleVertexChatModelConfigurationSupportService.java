@@ -70,8 +70,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 	 * List of available Google Vertex chat model choices based on ChatModel enum
 	 * values
 	 */
-	static final List<GGoogleVertexChatModelChoice> choices = GBaseModelChoice.of(GGoogleVertexChatModelChoice.class,
-			ChatModel.values());
+	static final List<GGoogleVertexChatModelChoice> choices = distinctByCode(
+			GBaseModelChoice.of(GGoogleVertexChatModelChoice.class, ChatModel.values()));
 
 	/**
 	 * Repository for tool callbacks used by the models
@@ -247,7 +247,83 @@ public class GoogleVertexChatModelConfigurationSupportService
 	 */
 	@Override
 	public OperationStatus<List<GGoogleVertexChatModelChoice>> getModelChoices(GGoogleVertexChatModelConfig config) {
-		return OperationStatus.of(choices);
+		if (config == null || config.getApiSecretCode() == null || config.getApiSecretCode().isBlank()) {
+			return OperationStatus.of(choices, ai.gebo.model.GUserMessage.warnMessage("Google Vertex models",
+					"No credentials are configured yet: the models Spring AI knows are offered"));
+		}
+		Client client = null;
+		try {
+			client = configurator.createGenAiClient(config.getApiSecretCode(), config.getBaseUrl());
+			List<GGoogleVertexChatModelChoice> live = new java.util.ArrayList<>();
+			for (com.google.genai.types.Model model : client.models
+					.list(com.google.genai.types.ListModelsConfig.builder().queryBase(true).pageSize(100).build())) {
+				GGoogleVertexChatModelChoice choice = toChoice(model);
+				if (choice != null)
+					live.add(choice);
+			}
+			if (!live.isEmpty())
+				return OperationStatus.of(distinctByCode(live));
+			return OperationStatus.of(choices, ai.gebo.model.GUserMessage.warnMessage("Google Vertex models",
+					"Vertex AI listed no Gemini model: the models Spring AI knows are offered"));
+		} catch (Throwable th) {
+			LOGGER.warn("Cannot list the Vertex AI publisher models: " + th.getMessage());
+			return OperationStatus.of(choices, ai.gebo.model.GUserMessage.warnMessage("Google Vertex models",
+					"Vertex AI could not be asked for its models (" + th.getMessage()
+							+ "): the models Spring AI knows are offered"));
+		} finally {
+			if (client != null) {
+				try {
+					client.close();
+				} catch (Throwable e) {
+				}
+			}
+		}
+	}
+
+	/**
+	 * A chat choice for a Vertex publisher model, null for what is not a Gemini chat
+	 * model (embedding, image, live, speech ones). The name comes as
+	 * {@code publishers/google/models/<id>}; the limits are filled when the api tells
+	 * them.
+	 */
+	static GGoogleVertexChatModelChoice toChoice(com.google.genai.types.Model model) {
+		String name = model.name().orElse(null);
+		if (name == null)
+			return null;
+		String id = name.substring(name.lastIndexOf('/') + 1);
+		String lower = id.toLowerCase();
+		if (!lower.startsWith("gemini-"))
+			return null;
+		for (String excluded : List.of("embedding", "image", "live", "tts", "audio")) {
+			if (lower.contains(excluded))
+				return null;
+		}
+		GGoogleVertexChatModelChoice choice = new GGoogleVertexChatModelChoice();
+		choice.setCode(id);
+		choice.setDescription(model.displayName().filter(d -> !d.isBlank()).map(d -> d + " (" + id + ")").orElse(id));
+		ai.gebo.llms.models.metainfos.ModelMetaInfo meta = new ai.gebo.llms.models.metainfos.ModelMetaInfo();
+		meta.setProviderId(type.getProviderId());
+		meta.setModelId(id);
+		meta.setChatModel(true);
+		meta.setDescription(choice.getDescription());
+		meta.setContextLength(model.inputTokenLimit().orElse(null));
+		meta.setMaxOutputToken(model.outputTokenLimit().orElse(null));
+		meta.setSupportsReasoning(model.thinking().orElse(null));
+		meta.setInformativeUrl("https://cloud.google.com/vertex-ai/generative-ai/docs/models");
+		choice.setMetaInfos(meta);
+		choice.setContextLength(meta.getContextLength());
+		choice.setInformativeUrl(meta.getInformativeUrl());
+		return choice;
+	}
+
+	/** The choices without the duplicates two enum constants naming one model id make. */
+	static <C extends GBaseModelChoice> List<C> distinctByCode(List<C> choices) {
+		java.util.Map<String, C> byCode = new java.util.LinkedHashMap<>();
+		for (C choice : choices) {
+			if (choice.getCode() != null)
+				byCode.putIfAbsent(choice.getCode(), choice);
+		}
+		return List.copyOf(byCode.values());
 	}
 
 	/**
