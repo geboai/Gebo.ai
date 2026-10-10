@@ -1,0 +1,37 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+<!-- A picture of the rule list, which is where the schedule is actually read and edited -->
+<div class="geboWeek" aria-hidden="true">
+  @for (row of rows; track $index) {
+    <div class="geboWeek__row">
+      <span class="geboWeek__day">{{row.name}}</span>
+      <span class="geboWeek__cells">
+        @for (cell of row.cells; track $index) {
+          <span class="geboWeek__cell" [class.geboWeek__cell--on]="cell.on"
+          [class.geboWeek__cell--hot]="cell.hot"></span>
+        }
+      </span>
+    </div>
+  }
+  <div class="geboWeek__row geboWeek__row--axis">
+    <span class="geboWeek__day"></span>
+    <span class="geboWeek__cells">
+      @for (hour of hours; track hour) {
+        <span class="geboWeek__tick">
+          @if (ticks.includes(hour)) {
+            <span class="geboWeek__tickLabel">{{tickLabel(hour)}}</span>
+          }
+        </span>
+      }
+    </span>
+  </div>
+</div>

@@ -10,48 +10,29 @@
 
 
 
-/* AI generated comments */
-import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ValidationErrors, ValidatorFn } from "@angular/forms";
-import { ReindexingFrequencyOptionsControllerService, ReindexingProgrammedTable, ReindexingTime, ReindexTimeStructureMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { Component, forwardRef, OnDestroy, OnInit } from "@angular/core";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { ReindexingProgrammedTable } from "@Gebo.ai/gebo-ai-rest-api";
+import { Subscription } from "rxjs";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
+import { browserTimeZone } from "./schedule-format";
+import {
+    SCHEDULE_PRESETS, SchedulePreset, ScheduleRemark, ScheduleRule,
+    copyRule, matchesPreset, newRule, pictureOf, presetRules, rulesAreComplete, rulesToTables,
+    scheduleRemarks, splitTables, tablesToRules
+} from "./schedule-rules.model";
 
 /**
- * Defines the time slots units based on the ReindexingTime array
- */
-type timeSlotUnities = ReindexingTime[];
-
-/**
- * Interface representing the internal structure for reindexing time periods
- * Contains separate arrays for different frequency types (daily, dates, hours, monthly, weekly)
- */
-interface InternalRappr {
-    daily: timeSlotUnities;
-    dates: timeSlotUnities;
-    hours: timeSlotUnities;
-    monthly: timeSlotUnities;
-    weekly: timeSlotUnities;
-};
-
-/**
- * Interface for period options used in the scheduling component
- * Contains a code representing the frequency type and a human-readable description
- */
-interface PeriodOption {
-    code: ReindexingProgrammedTable.FrequencyEnum;
-    description: string;
-}
-
-/**
- * Available period options for scheduling
- * Defines the types of periods users can select for reindexing schedules
- */
-const availPeriods: PeriodOption[] = [{ code: "DAILY", description: "Daily programming" }, { code: "WEEKLY", description: "Weekly programming" }, { code: "DATES", description: "Dates & times" }];
-
-/**
- * Component responsible for managing content reindexing schedules
- * Provides a UI for setting, editing, and displaying reindexing schedules with various frequency options
- * Implements ControlValueAccessor to integrate with Angular forms
+ * Editor of the schedule on which a data source is re-checked for contents to ingest.
+ *
+ * The value exchanged with the host form stays exactly what the backend persists, a list of
+ * ReindexingProgrammedTable: the rule list the user edits is a view model, mapped at this
+ * boundary by rulesToTables / tablesToRules and never sent anywhere.
+ *
+ * Frequencies the engine cannot honour are not offered (see SchedulableFrequency), and tables of
+ * those frequencies already stored on an endpoint are carried through untouched rather than being
+ * dropped by a save made here.
  */
 @Component({
     selector: "gebo-ai-content-reindex-scheduler-component",
@@ -68,363 +49,284 @@ const availPeriods: PeriodOption[] = [{ code: "DAILY", description: "Daily progr
     ],
     standalone: false
 })
-export class GeboAIContentReindexScheduleComponent implements OnChanges, OnInit, ControlValueAccessor {
+export class GeboAIContentReindexScheduleComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
-    /**
-     * Input property that allows specifying which frequency types should be available in the component
-     */
-    @Input() public frequencyTypes?: ReindexingProgrammedTable.FrequencyEnum[];
-
-    /**
-     * List of frequency periods that can be scheduled based on input configuration
-     */
-    public availableSchedulablePeriods?: ReindexingProgrammedTable.FrequencyEnum[];
-
-    /**
-     * Current value of the scheduled reindexing configurations
-     */
-    public value?: ReindexingProgrammedTable[];
-
-    /**
-     * Temporarily edited value during modification process
-     */
-    public editedValue?: ReindexingProgrammedTable[];
-
-    /**
-     * Current UI mode - either displaying schedules or editing them
-     */
+    /** Whether the editor dialog is open. */
     public mode: "DISPLAY" | "EDITING" = "DISPLAY";
 
-    /**
-     * Human-readable representations of configured time schedules
-     */
-    public displayTimes: string[] = [];
+    /** The saved schedule, as rules. */
+    public rules: ScheduleRule[] = [];
+
+    /** The rules being edited; discarded as a whole when the editor is cancelled. */
+    public draftRules: ScheduleRule[] = [];
+
+    /** The rule whose editor is open, if any. */
+    public expandedRuleId?: string;
+
+    /** Whether the host form disabled this control. */
+    public disabled: boolean = false;
+
+    /** The language day names, clock times and dates are rendered in. */
+    public locale: string = "en";
+
+    /** The browser time zone, named next to the absolute dates. */
+    public readonly timeZone: string = browserTimeZone();
+
+    /** The ready made schedules offered above the rule list. */
+    public readonly presets: SchedulePreset[] = SCHEDULE_PRESETS;
+
+    /** Hours of the day touched by the saved schedule, for the collapsed rail. */
+    public litHours: number[] = [];
+
+    /** The twenty four hours of the day, for the collapsed rail. */
+    public readonly hours: number[] = Array.from({ length: 24 }, (unused, i) => i);
+
+    /** Hours of the week touched by the rules being edited, for the week grid. */
+    public editedCells: number[] = [];
+
+    /** Hours of the week touched by the rule being edited, drawn stronger in the grid. */
+    public highlightedCells: number[] = [];
+
+    /** What is worth pointing out about the schedule being edited. */
+    public remarks: ScheduleRemark[] = [];
 
     /**
-     * Flag indicating if data is being loaded or processed
+     * The tables as last received or last emitted. Kept so that rows surviving an edit keep the
+     * createdTime they were born with: the scheduling engine reads it to decide whether a run was
+     * missed, so re-stamping it on save would quietly cancel the catch-up of a late schedule.
      */
-    public loading: boolean = false;
+    private storedTables: ReindexingProgrammedTable[] = [];
 
-    /**
-     * Metadata about time structures for different frequency types
-     */
-    public timeMetaInfos: ReindexTimeStructureMetaInfo[] = [];
+    /** Tables of frequencies this editor does not own, re-emitted unchanged. */
+    private passthroughTables: ReindexingProgrammedTable[] = [];
 
-    /**
-     * Controls whether value changes should be emitted or not
-     */
-    private emitValue: boolean = true;
+    /** Subscription to the language chooser. */
+    private languageSubscription?: Subscription;
 
-    /**
-     * Form group for managing the schedule editing UI
-     */
-    formGroup: FormGroup = new FormGroup({
-        newFrequency: new FormControl(),
-        daily: new FormControl(),
-        dates: new FormControl(),
-        hours: new FormControl(),
-        monthly: new FormControl(),
-        weekly: new FormControl()
-    });
-
-    /**
-     * Returns periods that haven't been scheduled yet
-     * Filters the available periods to only show ones that aren't already configured
-     */
-    public get unscheduledPeriods(): PeriodOption[] {
-        const outPeriods: PeriodOption[] = availPeriods.filter(x => {
-            return !this.editedValue || !this.editedValue.find(y => y.frequency === x.code);
-        });
-        return outPeriods;
-    }
-
-    /**
-     * Constructor initializes the component with required services
-     * @param reindexingFrequencyController Service to handle reindexing frequency operations
-     */
-    constructor(private reindexingFrequencyController: ReindexingFrequencyOptionsControllerService) {
-
-    }
-
-    /**
-     * Lifecycle hook that responds to changes in input properties
-     * @param changes SimpleChanges object containing changed properties
-     */
-    ngOnChanges(changes: SimpleChanges): void {
+    constructor(private translationService: GeboAITranslationService) {
 
     }
 
-    /**
-     * Validates a reindexing programmed table entry based on its frequency and values
-     * Checks if the time components match the expected format for the given frequency
-     * @param frequency The frequency type to validate
-     * @param value The time slot values to validate
-     * @returns Boolean indicating whether the values are valid for the given frequency
-     */
-    private validateReindexingProgrammedTable(frequency: ReindexingProgrammedTable.FrequencyEnum, value?: timeSlotUnities): boolean {
-        let validated: boolean = true;
-        const format = this.timeMetaInfos.find(x => x.frequency === frequency);
-        if (!value) {
-            validated = true;
-        } else if (value && value.length && format) {
-            value?.forEach(x => {
-                if (x.timeComponent && x.timeComponent?.length && x.timeComponent.length === format.periodComponents?.length) {
-                    format.periodComponents.forEach((cFmt, i) => {
-                        if (x.timeComponent) {
-                            const tComponentValue = x.timeComponent[i];
-                            if (tComponentValue === undefined) {
-                                validated = false;
-                            }
-                        } else {
-                            validated = false;
-                        }
-                    });
-                } else {
-                    validated = false;
-                }
-            });
-        }
-        console.log("For time:" + frequency + " validation=>" + validated);
-        return validated;
-    }
-
-    /**
-     * Initializes the component and sets up form validation
-     * Fetches time structure metadata required for validation
-     */
-    ngOnInit(): void {
-        const validateFunction: ValidatorFn = (fg) => {
-            const dataStructure: InternalRappr = fg.value;
-            let out: ValidationErrors | null = null;
-            if (this.validateReindexingProgrammedTable("DAILY", dataStructure?.daily) &&
-                this.validateReindexingProgrammedTable("DATES", dataStructure?.dates) &&
-                this.validateReindexingProgrammedTable("HOURLY", dataStructure?.hours) &&
-                this.validateReindexingProgrammedTable("MONTHLY", dataStructure?.monthly) &&
-                this.validateReindexingProgrammedTable("WEEKLY", dataStructure?.weekly)) {
-                out = null;
-                console.log("Scheduling validated");
-            } else {
-                console.log("Scheduling NOT validated");
-                out = { invalidValue: "Invalid time expression" };
-            };
-            return out;
-        };
-        this.formGroup.addValidators(validateFunction);
-        this.loading = true;
-        this.reindexingFrequencyController.getAllTimeStructureMetaInfos().subscribe({
-            next: (timeMetaInfos) => {
-                this.timeMetaInfos = timeMetaInfos;
-            },
-            error: () => {
-                this.loading = false;
-            },
-            complete: () => {
-                this.loading = false;
+    async ngOnInit() {
+        await this.translationService.tryInit();
+        this.locale = this.translationService.actualLanguageCode;
+        this.languageSubscription = this.translationService.languageChanges.subscribe({
+            next: () => {
+                this.locale = this.translationService.actualLanguageCode;
             }
         });
+    }
 
+    ngOnDestroy(): void {
+        if (this.languageSubscription) {
+            this.languageSubscription.unsubscribe();
+        }
+    }
+
+    /** True when there is nothing scheduled at all. */
+    public get unscheduled(): boolean {
+        return !this.rules.length;
+    }
+
+    /** True when every rule being edited is complete enough to be saved. */
+    public get canConfirm(): boolean {
+        return rulesAreComplete(this.draftRules);
+    }
+
+    /** The preset the rules being edited correspond to, or undefined when they are bespoke. */
+    public selectedPreset?: SchedulePreset;
+
+    /** True when nothing is scheduled in the editor, which is the "never" choice. */
+    public get draftIsEmpty(): boolean {
+        return !this.draftRules.length;
+    }
+
+    /** Opens the editor on a copy of the saved rules. */
+    public enterEdit(): void {
+        if (this.disabled) {
+            return;
+        }
+        this.draftRules = this.rules.map(r => cloneRule(r));
+        this.expandedRuleId = this.draftRules.length === 1 ? this.draftRules[0].id : undefined;
+        this.refreshDraft();
+        this.mode = "EDITING";
     }
 
     /**
-     * Confirms changes made in the edit mode and updates the schedule values
-     * Propagates changes through the ControlValueAccessor
+     * Closes the editor without keeping anything. The draft is a separate array, so there is no
+     * residue left behind to be picked up by the next save.
      */
-    confirmEditedValues(): void {
-        const value: InternalRappr = this.formGroup.value;
-        this.notifyValuesChanges(value);
-        this.displayValue();
+    public cancelEdit(): void {
+        this.draftRules = [];
+        this.expandedRuleId = undefined;
+        this.remarks = [];
         this.mode = "DISPLAY";
     }
 
-    /**
-     * Adds a new scheduling entry based on the selected frequency
-     * Prepares the new entry for editing
-     */
-    addScheduling(): void {
-        const value = this.formGroup.value;
-        const newEntry: ReindexingProgrammedTable = { frequency: value.newFrequency, times: [{ timeComponent: [] }] };
-        if (this.editedValue) {
-            this.editedValue = [...this.editedValue, newEntry];
-        } else {
-            this.editedValue = [newEntry];
-        }
-        this.showEdit();
-        this.formGroup.controls["newFrequency"].setValue(undefined);
-    }
-
-    /**
-     * Switches to edit mode and populates form with current values
-     * Sets form controls based on the current schedule configuration
-     */
-    showEdit(): void {
-        if (this.editedValue) {
-            this.mode = "EDITING";
-            this.editedValue.forEach(x => {
-                switch (x.frequency) {
-                    case "DAILY": {
-                        this.formGroup.controls["daily"].setValue(x.times);
-                    } break;
-                    case "DATES": {
-                        this.formGroup.controls["dates"].setValue(x.times);
-                    } break;
-                    case "HOURLY": {
-                        this.formGroup.controls["hours"].setValue(x.times);
-                    } break;
-                    case "MONTHLY": {
-                        this.formGroup.controls["monthly"].setValue(x.times);
-                    } break;
-                    case "WEEKLY": {
-                        this.formGroup.controls["weekly"].setValue(x.times);
-                    } break;
-                    case "YEARLY": { } break;
-                }
-            });
+    /** Reacts to the dialog being dismissed by its own close control. */
+    public onDialogVisibleChange(visible: boolean): void {
+        if (visible === false) {
+            this.cancelEdit();
         }
     }
 
-    /**
-     * Cancels the current editing operation and reverts to display mode
-     * Discards any unsaved changes
-     */
-    abandonEdit(): void {
+    /** Keeps the edited rules and reports them to the host form. */
+    public confirmEdit(): void {
+        if (!this.canConfirm) {
+            return;
+        }
+        this.rules = this.draftRules.map(r => cloneRule(r));
+        const tables: ReindexingProgrammedTable[] = rulesToTables(this.rules, this.storedTables, this.passthroughTables);
+        this.storedTables = tables;
+        this.refreshDisplay();
+        this.onTouched();
+        this.onChange(tables);
+        this.draftRules = [];
+        this.expandedRuleId = undefined;
         this.mode = "DISPLAY";
-        this.editedValue = undefined;
-        this.formGroup.patchValue({});
     }
 
-    /**
-     * Enters edit mode and initializes edited value with current value
-     * Creates a copy of the current schedule for editing
-     */
-    enterEdit(): void {
-        if (this.value) {
-            this.editedValue = [...this.value];
-        } else {
-            this.editedValue = [];
+    /** Replaces the whole schedule with a ready made one. */
+    public applyPreset(preset: SchedulePreset): void {
+        this.draftRules = presetRules(preset);
+        this.expandedRuleId = undefined;
+        this.refreshDraft();
+    }
+
+    /** Clears the schedule, so the source is only re-checked when it is published by hand. */
+    public applyNever(): void {
+        this.draftRules = [];
+        this.expandedRuleId = undefined;
+        this.refreshDraft();
+    }
+
+    /** Appends a rule and opens it. */
+    public addRule(): void {
+        const rule = newRule("DAILY");
+        this.draftRules = [...this.draftRules, rule];
+        this.expandedRuleId = rule.id;
+        this.refreshDraft();
+    }
+
+    /** Takes an edit coming from a rule card. */
+    public updateRule(index: number, rule: ScheduleRule): void {
+        const rules = this.draftRules.slice();
+        rules[index] = rule;
+        this.draftRules = rules;
+        this.refreshDraft();
+    }
+
+    /** Drops a rule. */
+    public removeRule(index: number): void {
+        const rules = this.draftRules.slice();
+        const [dropped] = rules.splice(index, 1);
+        this.draftRules = rules;
+        if (dropped && this.expandedRuleId === dropped.id) {
+            this.expandedRuleId = undefined;
         }
-        this.showEdit();
+        this.refreshDraft();
+    }
+
+    /** Adds a copy of a rule right after it. */
+    public duplicateRule(index: number): void {
+        const rules = this.draftRules.slice();
+        const copy = copyRule(rules[index]);
+        rules.splice(index + 1, 0, copy);
+        this.draftRules = rules;
+        this.expandedRuleId = copy.id;
+        this.refreshDraft();
+    }
+
+    /** Opens one rule's editor at a time. */
+    public setExpanded(rule: ScheduleRule, expanded: boolean): void {
+        this.expandedRuleId = expanded ? rule.id : undefined;
+        this.refreshHighlight();
+    }
+
+    /** True when this rule's editor is the open one. */
+    public isExpanded(rule: ScheduleRule): boolean {
+        return this.expandedRuleId === rule.id;
+    }
+
+    /** Recomputes the week grid, the remarks and the selected preset. */
+    private refreshDraft(): void {
+        this.editedCells = pictureOf(this.draftRules).cells;
+        this.remarks = scheduleRemarks(this.draftRules);
+        this.selectedPreset = this.draftRules.length
+            ? SCHEDULE_PRESETS.find(p => matchesPreset(this.draftRules, p))
+            : undefined;
+        this.refreshHighlight();
+    }
+
+    /** Recomputes the hours the open rule covers. */
+    private refreshHighlight(): void {
+        const open = this.draftRules.find(r => r.id === this.expandedRuleId);
+        this.highlightedCells = open ? pictureOf([open]).cells : [];
+    }
+
+    /** Recomputes what the collapsed summary draws. */
+    private refreshDisplay(): void {
+        this.litHours = pictureOf(this.rules).hours;
+    }
+
+    /** True when the hour carries at least one check, for the collapsed rail. */
+    public isLit(hour: number): boolean {
+        return this.litHours.indexOf(hour) >= 0;
+    }
+
+    /** True when the hour gets a printed label under the collapsed rail. */
+    public isRailTick(hour: number): boolean {
+        return hour % 6 === 0;
+    }
+
+    /** The label printed under the collapsed rail. */
+    public railLabel(hour: number): string {
+        return (hour < 10 ? "0" : "") + hour;
     }
 
     /**
-     * Updates the component value and notifies the form
-     * Called when schedule values have changed
-     * @param newValue The new schedule configuration
-     */
-    private notifyValuesChanges(newValue: InternalRappr) {
-        const value: ReindexingProgrammedTable[] = this.readDataInput(newValue);
-        this.editedValue = value;
-        this.value = value;
-        this.onChange(value);
-    }
-
-    /**
-     * Creates a ReindexingProgrammedTable array for a specific frequency
-     * Constructs the data structure for a single frequency type
-     * @param frequency The frequency type 
-     * @param data The time slots for this frequency
-     * @returns Array of ReindexingProgrammedTable entries
-     */
-    private readVector(frequency: ReindexingProgrammedTable.FrequencyEnum, data: timeSlotUnities): ReindexingProgrammedTable[] {
-        const out: ReindexingProgrammedTable[] = [];
-        if (data) {
-            const pt: ReindexingProgrammedTable = {
-                frequency: frequency,
-                times: data
-            };
-            out.push(pt);
-        }
-        return out;
-    }
-
-    /**
-     * Transforms the internal form representation to the API's expected format
-     * Combines data from different frequency controls into a unified structure
-     * @param newValue The form value in InternalRappr format
-     * @returns Array of ReindexingProgrammedTable with valid configurations
-     */
-    private readDataInput(newValue: InternalRappr): ReindexingProgrammedTable[] {
-        const out: ReindexingProgrammedTable[] = [
-            ...this.readVector("HOURLY", newValue.hours),
-            ...this.readVector("DAILY", newValue.daily),
-            ...this.readVector("WEEKLY", newValue.weekly),
-            ...this.readVector("MONTHLY", newValue.monthly),
-            ...this.readVector("DATES", newValue.dates)
-        ];
-        const cleanout: ReindexingProgrammedTable[] = [];
-        out.forEach(x => {
-            if (x.times && x.times.length) {
-                cleanout.push(x);
-            }
-        });
-        return cleanout;
-    }
-
-    /**
-     * ControlValueAccessor implementation: writes a value to the component
-     * Updates the component's internal state with the new value
-     * @param obj The value to write
+     * ControlValueAccessor: takes the tables stored on the endpoint and derives the rules from
+     * them, without reporting anything back to the host form.
      */
     writeValue(obj: any): void {
-        this.value = obj;
-        this.editedValue = obj;
-        this.displayValue();
-
+        const tables: ReindexingProgrammedTable[] = Array.isArray(obj) ? obj : [];
+        const split = splitTables(tables);
+        this.storedTables = tables;
+        this.passthroughTables = split.passthrough;
+        this.rules = tablesToRules(split.editable);
+        this.refreshDisplay();
     }
 
-    /**
-     * Fetches human-readable representations of the schedule values
-     * Converts technical time specifications to user-friendly display strings
-     */
-    private displayValue(): void {
+    /** Reports a new value to the host form. */
+    private onChange: (v: any) => void = () => { };
 
-        if (this.value && this.value.length) {
-            this.emitValue = false;
-
-            this.emitValue = true;
-            this.loading = true;
-            this.reindexingFrequencyController.displayTimeValues(this.value).subscribe({
-                next: (dValue) => {
-                    this.displayTimes = dValue;
-                },
-                error: () => {
-                    this.loading = false;
-                },
-                complete: () => {
-                    this.loading = false;
-                }
-            });
-        } else {
-            this.displayTimes = [];
-            this.formGroup.patchValue({});
-        }
-    }
-
-    /**
-     * Function to call when value changes, used by ControlValueAccessor
-     */
-    private onChange: (v: any) => void = (v: any) => { };
-
-    /**
-     * ControlValueAccessor implementation: registers a callback for value changes
-     * @param fn The callback function
-     */
     registerOnChange(fn: any): void {
         this.onChange = fn;
     }
 
-    /**
-     * ControlValueAccessor implementation: registers a callback for touched state
-     * @param fn The callback function
-     */
+    /** Tells the host form the control was used. */
+    private onTouched: () => void = () => { };
+
     registerOnTouched(fn: any): void {
-
+        this.onTouched = fn;
     }
 
-    /**
-     * ControlValueAccessor implementation: handles disabled state changes
-     * @param isDisabled Whether the control should be disabled
-     */
     setDisabledState?(isDisabled: boolean): void {
-
+        this.disabled = isDisabled;
+        if (isDisabled && this.mode === "EDITING") {
+            this.cancelEdit();
+        }
     }
+}
+
+/** A deep copy of a rule that keeps its identity, so the open card stays open across an edit. */
+function cloneRule(rule: ScheduleRule): ScheduleRule {
+    return {
+        id: rule.id,
+        kind: rule.kind,
+        minute: rule.minute,
+        days: rule.days ? rule.days.slice() : undefined,
+        times: rule.times ? rule.times.map(t => ({ hour: t.hour, minute: t.minute })) : undefined,
+        dates: rule.dates ? rule.dates.slice() : undefined
+    };
 }
