@@ -12,6 +12,7 @@ package ai.gebo.llms.chat.abstraction.layer.services.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.ObjectProvider;
 
 import ai.gebo.application.messaging.model.DataEndpoint;
+import ai.gebo.application.messaging.model.DataEndpointAccess;
 import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
 import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
@@ -30,6 +32,9 @@ import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
+import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
+import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
+import ai.gebo.llms.deepsearch.model.DeepSearchConfig.DeepSearchDataSourceAccess;
 
 /**
  * Pins the search sources put in the register once: one per system of every search
@@ -107,5 +112,46 @@ class GSearchSourcesDataFlowComponentTest {
 	@Test
 	void nothingSearchableNothingReported() throws Exception {
 		assertNull(flowOf(service(ISearchService.class, "disabled", false, searched(null, "x", null))));
+	}
+
+	@Test
+	void withoutDeepSearchSettingsASourceIsOpenToEveryoneByDefault() throws Exception {
+		ISearchService jira = service(ISearchService.class, "jira-search", true);
+
+		DataEndpointAccess access = GSearchSourcesDataFlowComponent.access(jira, new DeepSearchDefaultConfig()).get(0);
+
+		assertTrue(access.isAccessibleToAll());
+		assertEquals("Deep search settings - default for external sources", access.getGrantedBy());
+		assertEquals(DataEndpointAccess.Mechanism.USERS_GROUPS, access.getMechanism());
+	}
+
+	@Test
+	void theRowOfTheSourceDecidesWhenTheGridIsInUse() throws Exception {
+		ISearchService jira = service(ISearchService.class, "jira-search", true);
+		DeepSearchConfig config = new DeepSearchConfig();
+		config.setAccessibleGroups(List.of("everyone-else"));
+		config.setPerDataSourceConfigured(true);
+		config.getDataSourcesAccesses()
+				.add(new DeepSearchDataSourceAccess(List.of("hr"), List.of("anna@example.com"), null, "jira-search"));
+
+		DataEndpointAccess access = GSearchSourcesDataFlowComponent.access(jira, config).get(0);
+
+		assertEquals("Deep search settings - access to 'jira-search'", access.getGrantedBy());
+		assertEquals(List.of("hr"), access.getGroups());
+		assertEquals(List.of("anna@example.com"), access.getUsers());
+		assertFalse(access.isAccessibleToAll());
+	}
+
+	@Test
+	void theSettingsForEverySourceDecideWithoutTheGrid() throws Exception {
+		ISearchService jira = service(ISearchService.class, "jira-search", true);
+		DeepSearchConfig config = new DeepSearchConfig();
+		config.setAccessibleGroups(List.of("hr"));
+		config.setExternalSourceSearchEnabledByDefault(false);
+
+		DataEndpointAccess access = GSearchSourcesDataFlowComponent.access(jira, config).get(0);
+
+		assertEquals("Deep search settings - access to every external source", access.getGrantedBy());
+		assertEquals(List.of("hr"), access.getGroups());
 	}
 }

@@ -15,6 +15,8 @@
  * report -> module -> component -> flow nesting on every change detection pass.
  */
 
+import { DataEndpointAccess } from "@Gebo.ai/gebo-ai-rest-api";
+
 /** How far data travels to reach an endpoint - mirrors the backend enum. */
 export type DataFlowLocality = "LOCAL_DEPLOYMENT" | "SAME_NETWORK" | "EXTERNAL_PROVIDER";
 
@@ -39,8 +41,21 @@ export interface DataFlowEndpointNode {
     disposer?: string;
     /** The messaging component that reported this endpoint. */
     ownerComponent: string;
+    /** How the register names that component, when it reports a name. */
+    ownerDescription?: string;
     /** The node this endpoint was reported from. */
     nodeId?: string;
+    /**
+     * Set only on a component's tab, on an endpoint another component reports but
+     * this component's steps read from or write to: drawn so the flow does not stop
+     * at the tab's edge, and marked as belonging elsewhere.
+     */
+    reachedFrom?: string;
+    /**
+     * Who may reach what the endpoint stands for: the access rules configured on
+     * the objects it is built from (knowledge base, project, chat profile...).
+     */
+    access?: DataEndpointAccess[];
 }
 
 /** An engine applied between two endpoints. */
@@ -53,6 +68,8 @@ export interface DataFlowTransformationNode {
     sourceId: string;
     destinationId: string;
     ownerComponent: string;
+    /** How the register names that component, when it reports a name. */
+    ownerDescription?: string;
 }
 
 /** Counts driving the summary strip above the graph. */
@@ -65,3 +82,42 @@ export interface DataFlowSummary {
     /** Retaining endpoints (output === true) with no disposer component wired. */
     retainingWithoutErasure: number;
 }
+
+/**
+ * A tab of the data-flow register: every flow, or what one reporting component
+ * declares - the register split by where its metadata come from.
+ */
+export interface DataFlowTab {
+    /** {@link ALL_FLOWS_TAB}, or the reporting component (module.component). */
+    key: string;
+    /** The name the component reports, else its messaging id. */
+    label: string;
+    /** Endpoints the component reports. */
+    endpoints: number;
+    /** Steps the component reports. */
+    transformations: number;
+}
+
+/**
+ * One access rule as the access model in force applies it:
+ * - LISTS: its users and groups decide;
+ * - ACL: its ACL entries decide;
+ * - ACL_AND_LISTS: its ACL entries, its users and groups allowing too (a READ);
+ * - NOT_APPLIED: it holds ACL entries the users/groups model does not read.
+ */
+export interface AccessRuleView {
+    grantedBy: string;
+    scope: string;
+    note?: string;
+    mode: "LISTS" | "ACL" | "ACL_AND_LISTS" | "NOT_APPLIED";
+    everyone: boolean;
+    users: string[];
+    /** Group descriptions with their code. */
+    groups: string[];
+    /** ACL entries as "who (grant)". */
+    acl: string[];
+    administrators: boolean;
+}
+
+/** The tab showing the whole register. */
+export const ALL_FLOWS_TAB = "__all__";

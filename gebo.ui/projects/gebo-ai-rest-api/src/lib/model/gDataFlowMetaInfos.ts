@@ -16,6 +16,7 @@ import { GeboComponentInfo } from './geboComponentInfo';
 
 export interface GDataFlowMetaInfos { 
     component?: GeboComponentInfo;
+    description?: string;
     dataEndpoints?: Array<DataEndpoint>;
     engines?: Array<DataTransformationMetaInfo>;
     transformations?: Array<DataTransformationInfo>;

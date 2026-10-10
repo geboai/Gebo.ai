@@ -7,10 +7,11 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component, input } from "@angular/core";
+import { Component, forwardRef, Inject, input } from "@angular/core";
 
 import { SimpleNode, NgDiagramNodeTemplate, NgDiagramNodeSelectedDirective, NgDiagramPortComponent } from "ng-diagram";
 import { DataFlowEndpointNode } from "./compliance-data-flow.model";
+import { ComplianceComponent } from "./compliance.component";
 
 /**
  * A store or interface in the compliance data-flow graph.
@@ -29,7 +30,9 @@ import { DataFlowEndpointNode } from "./compliance-data-flow.model";
     template: `
         <div class="node-card p-3 border-round shadow-2 flex flex-column gap-2 text-left relative"
           style="min-width: 240px; max-width: 280px; background-color: var(--surface-card, #ffffff);"
-          [style.border-top]="'4px solid ' + localityColor()">
+          [style.border-top]="'4px solid ' + localityColor()"
+          [style.outline]="node().data.reachedFrom ? '2px dashed var(--surface-500, #6b7280)' : null"
+          [style.outline-offset]="node().data.reachedFrom ? '3px' : null">
 
           <ng-diagram-port [side]="'left'" [type]="'target'" [id]="'port-left'"
             [style.pointer-events]="'none'"></ng-diagram-port>
@@ -41,6 +44,16 @@ import { DataFlowEndpointNode } from "./compliance-data-flow.model";
               {{ node().data.description }}
             </span>
             <div class="flex gap-1 flex-shrink-0">
+              @if (node().data.access?.length) {
+                <!-- who may reach what the endpoint stands for: the users/groups or ACL
+                     entries of the objects it is built from, listed in a dialog -->
+                <button type="button" class="p-1 border-round border-none cursor-pointer bg-primary-100 text-primary text-xs"
+                  title="Who can access it" aria-label="Who can access it"
+                  (pointerdown)="$event.stopPropagation()"
+                  (click)="$event.stopPropagation(); parent.openAccess(node().data)">
+                  <i class="pi pi-user"></i>
+                </button>
+              }
               @if (node().data.input) {
                 <span class="p-1 border-round bg-green-100 text-green-700 text-xs font-semibold" title="Data is read from here">IN</span>
               }
@@ -81,7 +94,7 @@ import { DataFlowEndpointNode } from "./compliance-data-flow.model";
             }
           </div>
 
-          <div class="text-xs text-muted-color border-top-1 surface-border pt-2">
+          <div class="text-xs text-muted-color border-top-1 surface-border pt-2" style="overflow-wrap: anywhere;">
             @if (node().data.disposer) {
               <div [title]="'Erasure component: ' + node().data.disposer">
                 <i class="pi pi-trash text-green-600"></i>
@@ -112,14 +125,23 @@ import { DataFlowEndpointNode } from "./compliance-data-flow.model";
             }
             <div class="mt-1" [title]="node().data.ownerComponent">
               <i class="pi pi-box"></i>
-              <span class="font-semibold"> Reported by: </span>{{ node().data.ownerComponent }}
+              <span class="font-semibold"> Reported by: </span>{{ node().data.ownerDescription || node().data.ownerComponent }}
             </div>
+            @if (node().data.reachedFrom) {
+              <div class="mt-1" [title]="'Reported by another component: drawn here because the steps of ' + node().data.reachedFrom + ' read from it or write to it'">
+                <i class="pi pi-link"></i>
+                <span class="font-semibold"> Reached from: </span>{{ node().data.reachedFrom }}
+              </div>
+            }
           </div>
         </div>
         `
 })
 export class DataEndpointNodeComponent implements NgDiagramNodeTemplate<DataFlowEndpointNode, SimpleNode<DataFlowEndpointNode>> {
     node = input.required<SimpleNode<DataFlowEndpointNode>>();
+
+    constructor(@Inject(forwardRef(() => ComplianceComponent)) protected parent: ComplianceComponent) {
+    }
 
     /** The endpoint kinds that actually RETAIN data - the ones GDPR Art. 17 erasure applies to. */
     private static readonly STORE_TYPES = new Set<string>([

@@ -5879,6 +5879,48 @@
       },
       "PersonalDataScopeText": {
         "label": "\"May carry personal data\" marks a flow as in scope for a personal-data assessment - it is not an automated determination. Whether ingested content is personal or purely business/company data is the data controller's call: personal data start only from the data sources flagged as holding them and follow the flow - to the stores they feed, the chats and agents reading those stores, and the models and services these write to."
+      },
+      "AllFlowsTab": {
+        "label": "All flows"
+      },
+      "ReachedFromLegendText": {
+        "label": "Reported by another component"
+      },
+      "AccessDialogTitle": {
+        "label": "Who can access it"
+      },
+      "AccessModelAclText": {
+        "label": "Access model of this installation: ACL entries."
+      },
+      "AccessModelGroupsText": {
+        "label": "Access model of this installation: users and groups."
+      },
+      "AccessModelUnknownText": {
+        "label": "The access model of this installation could not be read."
+      },
+      "AccessNotAppliedText": {
+        "label": "Not applied: it holds ACL entries, which the users and groups model does not read."
+      },
+      "AccessEveryoneText": {
+        "label": "Every user"
+      },
+      "AccessAclLabel": {
+        "label": "ACL entries"
+      },
+      "AccessUsersLabel": {
+        "label": "Users"
+      },
+      "AccessGroupsLabel": {
+        "label": "Groups"
+      },
+      "AccessNobodyText": {
+        "label": "Nobody is listed: only administrators."
+      },
+      "AccessListsAlsoText": {
+        "label": "To read it, its users and groups are allowed too, besides its ACL entries."
+      },
+      "AccessAdministratorsText": {
+        "label": "Administrators can always access it."
       }
     }
   },

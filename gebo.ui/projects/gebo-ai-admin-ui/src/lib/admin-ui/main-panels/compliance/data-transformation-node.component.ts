@@ -58,9 +58,10 @@ import { DataFlowTransformationNode } from "./compliance-data-flow.model";
             }
           </div>
 
-          <div class="text-xs text-muted-color border-top-1 surface-border pt-2" [title]="node().data.ownerComponent">
+          <div class="text-xs text-muted-color border-top-1 surface-border pt-2" style="overflow-wrap: anywhere;"
+            [title]="node().data.ownerComponent">
             <i class="pi pi-box"></i>
-            <span class="font-semibold"> Reported by: </span>{{ node().data.ownerComponent }}
+            <span class="font-semibold"> Reported by: </span>{{ node().data.ownerDescription || node().data.ownerComponent }}
           </div>
         </div>
         `

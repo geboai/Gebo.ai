@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.DataEndpoint;
+import ai.gebo.application.messaging.model.DataEndpointAccess;
 import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
@@ -185,6 +186,7 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+		flow.setDescription("Agents networks");
 
 		// every enabled search service: the searcher agents search them
 		final List<ISearchService> searchServices = GSearchSourcesDataFlowComponent
@@ -217,6 +219,14 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			query.setTypes(list(MetaEndpointType.CHAT_SESSION));
 			query.setPersonalData(false);
 			query.setLocality(DataEndpointLocality.LOCAL_DEPLOYMENT);
+			// who may use the network: checked as an EXECUTE when it is offered as an MCP
+			// tool (filterCanDoAction), so its ACL entries in the ACL model
+			DataEndpointAccess access = DataEndpointAccess
+					.of(network, "Network of agents '" + code + "'", "Using it as an MCP tool",
+							DataEndpointAccess.Mechanism.CONTENT)
+					.withAclAliases(network.getAclAliases());
+			access.setGrant("EXECUTE");
+			query.setAccess(new ArrayList<DataEndpointAccess>(List.of(access)));
 			flow.getDataEndpoints().add(query);
 
 			// the members' configurations and tools are read under the platform's system

@@ -30,6 +30,7 @@ import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.model.MetaEndpointType;
+import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
 import ai.gebo.architecture.opensearch.config.OpenSearchConfig;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.messages.GDocumentReferencePayload;
@@ -90,6 +91,7 @@ public class GContentFullTextMessagesReceiverFactoryComponent extends GAbstractT
 		}
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+		flow.setDescription(GStandardWorkflowStep.FULLTEXT_INDEXING.getDescription());
 
 		DataEndpoint index = new DataEndpoint();
 		index.setId(GStandardDataFlowEndpoints.FULLTEXT_INDEX);

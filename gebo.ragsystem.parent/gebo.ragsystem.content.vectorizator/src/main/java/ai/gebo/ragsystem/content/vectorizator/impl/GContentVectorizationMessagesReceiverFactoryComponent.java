@@ -31,6 +31,7 @@ import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.model.MetaEndpointType;
+import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.messages.GDocumentReferencePayload;
 import ai.gebo.core.messages.GRawContentMessageFragmentPayload;
@@ -106,6 +107,7 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 	public GDataFlowMetaInfos getDataFlowMetaInfos() {
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+		flow.setDescription(GStandardWorkflowStep.EMBEDDING.getDescription());
 
 		DataEndpoint vectorStore = describeVectorStore();
 		if (vectorStore != null) {
