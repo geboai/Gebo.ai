@@ -459,6 +459,12 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
         return { endpoints, transformations };
     }
 
+    /** The whole name of the part of a report the selected tab draws (a network of agents). */
+    protected selectedSectionDescription(): string | undefined {
+        const tab = this.tabs.find(candidate => candidate.key === this.selectedTab);
+        return tab?.section ? tab.label : undefined;
+    }
+
     /** Draws another tab: a fresh diagram mount, as when the dialog opens. */
     protected selectTab(value: string | number | undefined): void {
         const tab = value == null ? ALL_FLOWS_TAB : String(value);
