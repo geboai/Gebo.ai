@@ -24,6 +24,8 @@ public class DocumentMetaInfos {
 	public static final String CONTENT_PAGE = "CONTENT_PAGE";
 	public static final String SUBTITLE = "SUBTITLE";
 	public static final String TITLE = "TITLE";
+	/** The author of a document, as its file tells it. */
+	public static final String AUTHOR = "AUTHOR";
 	public static final String CONTENT_EXTENSION = "CONTENT_EXTENSION";
 	public static final String CONTENT_ORIGINAL_URL = "CONTENT_ORIGINAL_URL";
 	public static final String CONTENT_TYPE = "Content-type";

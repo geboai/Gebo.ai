@@ -73,6 +73,7 @@ public class MSWordIngestionHandler extends GAbstractConfiguredHandler {
 		if (cp != null) {
 			DocumentTitles.putTitle(metadata, cp.getTitle(), "docx properties");
 			DocumentTitles.putSubtitle(metadata, cp.getSubject(), "docx properties");
+			DocumentTitles.putAuthor(metadata, cp.getCreator(), "docx properties");
 		}
 		// fall‑back: cerca stile "Title" / "Subtitle" nelle prime righe
 		for (XWPFParagraph p : doc.getParagraphs()) {
@@ -98,6 +99,7 @@ public class MSWordIngestionHandler extends GAbstractConfiguredHandler {
 		if (doc.getSummaryInformation() != null) {
 			DocumentTitles.putTitle(metadata, doc.getSummaryInformation().getTitle(), "doc summary information");
 			DocumentTitles.putSubtitle(metadata, doc.getSummaryInformation().getSubject(), "doc summary information");
+			DocumentTitles.putAuthor(metadata, doc.getSummaryInformation().getAuthor(), "doc summary information");
 		}
 		// fall‑back: cerca paragrafo con stile "Title" / "Subtitle"
 		Range rng = doc.getRange();

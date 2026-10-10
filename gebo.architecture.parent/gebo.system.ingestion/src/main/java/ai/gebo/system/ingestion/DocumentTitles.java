@@ -28,9 +28,9 @@ import ai.gebo.model.DocumentMetaInfos;
 import lombok.experimental.UtilityClass;
 
 /**
- * The title and the subtitle of a document, kept in its metadata as
- * {@link DocumentMetaInfos#TITLE} and {@link DocumentMetaInfos#SUBTITLE}: what the
- * format handlers find in the file. A value already there is kept (the content
+ * The title, the subtitle and the author of a document, kept in its metadata as
+ * {@link DocumentMetaInfos#TITLE}, {@link DocumentMetaInfos#SUBTITLE} and
+ * {@link DocumentMetaInfos#AUTHOR}: what the format handlers find in the file. A value already there is kept (the content
  * handler's, or the one of a more reliable source read first), a blank one is never
  * set, the white space is collapsed.
  */
@@ -43,7 +43,7 @@ public class DocumentTitles {
 	/** The underline making the line above a markdown level 1 (setext) heading. */
 	private static final Pattern MARKDOWN_TITLE_UNDERLINE = Pattern.compile("^ {0,3}=+\\s*$");
 	private static final Pattern MARKDOWN_FENCE = Pattern.compile("^ {0,3}(```|~~~).*");
-	private static final Pattern FRONT_MATTER_FIELD = Pattern.compile("^(title|subtitle|description)\\s*:\\s*(.*)$",
+	private static final Pattern FRONT_MATTER_FIELD = Pattern.compile("^(title|subtitle|description|author)\\s*:\\s*(.*)$",
 			Pattern.CASE_INSENSITIVE);
 	private static final String FRONT_MATTER_DELIMITER = "---";
 	/** What Office's PDF printing puts before the file name it gives as the title. */
@@ -68,6 +68,21 @@ public class DocumentTitles {
 
 	public static boolean hasSubtitle(Map<String, Object> meta) {
 		return meta != null && clean(meta.get(DocumentMetaInfos.SUBTITLE)) != null;
+	}
+
+	public static boolean hasAuthor(Map<String, Object> meta) {
+		return meta != null && clean(meta.get(DocumentMetaInfos.AUTHOR)) != null;
+	}
+
+	/**
+	 * Sets the author unless the metadata has one already (the content handler's
+	 * first): none when the source tells none.
+	 *
+	 * @param source where the author comes from, for the logs
+	 * @return whether it was set
+	 */
+	public static boolean putAuthor(Map<String, Object> meta, Object candidate, String source) {
+		return put(meta, DocumentMetaInfos.AUTHOR, candidate, source);
 	}
 
 	/**
@@ -139,7 +154,7 @@ public class DocumentTitles {
 
 	/**
 	 * An html page's title: its {@code <title>}, else its {@code og:title}, else its
-	 * first {@code <h1>}; its description as the subtitle.
+	 * first {@code <h1>}; its description as the subtitle; its author meta.
 	 */
 	public static void fromHtml(org.jsoup.nodes.Document page, Map<String, Object> meta) {
 		if (page == null) {
@@ -150,6 +165,7 @@ public class DocumentTitles {
 		final Element h1 = page.selectFirst("h1");
 		putTitle(meta, h1 != null ? h1.text() : null, "html <h1>");
 		putSubtitle(meta, attribute(page.selectFirst("meta[name=description]"), "content"), "html description");
+		putAuthor(meta, attribute(page.selectFirst("meta[name=author]"), "content"), "html author");
 	}
 
 	private static String attribute(Element element, String name) {
@@ -159,7 +175,8 @@ public class DocumentTitles {
 	/**
 	 * A markdown text's title: the {@code title} of its front matter, else its first
 	 * level 1 heading; the {@code subtitle} (or {@code description}) of its front
-	 * matter, else its first level 2 heading, as the subtitle. Fenced code is skipped.
+	 * matter, else its first level 2 heading, as the subtitle; the {@code author} of its
+	 * front matter. Fenced code is skipped.
 	 */
 	public static void fromMarkdown(String text, Map<String, Object> meta) {
 		if (text == null || text.isEmpty()) {
@@ -225,6 +242,8 @@ public class DocumentTitles {
 				final String value = unquoted(field.group(2));
 				if ("title".equalsIgnoreCase(field.group(1))) {
 					putTitle(meta, value, "markdown front matter");
+				} else if ("author".equalsIgnoreCase(field.group(1))) {
+					putAuthor(meta, value, "markdown front matter");
 				} else {
 					putSubtitle(meta, value, "markdown front matter");
 				}
@@ -242,7 +261,7 @@ public class DocumentTitles {
 		return trimmed;
 	}
 
-	/** A spreadsheet's title and subject, from its document properties. */
+	/** A spreadsheet's title, subject and author, from its document properties. */
 	public static void fromWorkbook(Workbook workbook, Map<String, Object> meta) {
 		try {
 			if (workbook instanceof XSSFWorkbook xlsx) {
@@ -251,12 +270,14 @@ public class DocumentTitles {
 				if (core != null) {
 					putTitle(meta, core.getTitle(), "xlsx properties");
 					putSubtitle(meta, core.getSubject(), "xlsx properties");
+					putAuthor(meta, core.getCreator(), "xlsx properties");
 				}
 			} else if (workbook instanceof HSSFWorkbook xls) {
 				final SummaryInformation summary = xls.getSummaryInformation();
 				if (summary != null) {
 					putTitle(meta, summary.getTitle(), "xls summary information");
 					putSubtitle(meta, summary.getSubject(), "xls summary information");
+					putAuthor(meta, summary.getAuthor(), "xls summary information");
 				}
 			}
 		} catch (RuntimeException e) {
@@ -268,13 +289,16 @@ public class DocumentTitles {
 		}
 	}
 
-	/** An OpenDocument's title and subject, from its meta.xml. */
+	/** An OpenDocument's title, subject and author, from its meta.xml. */
 	public static void fromOdfDocument(OdfDocument document, Map<String, Object> meta, String source) {
 		try {
 			final OdfOfficeMeta office = document != null ? document.getOfficeMetadata() : null;
 			if (office != null) {
 				putTitle(meta, office.getTitle(), source);
 				putSubtitle(meta, office.getSubject(), source);
+				// who created it, else who last saved it
+				putAuthor(meta, office.getInitialCreator(), source);
+				putAuthor(meta, office.getCreator(), source);
 			}
 		} catch (RuntimeException e) {
 			LOGGER.warn("Cannot read the title of the document " + meta.get(DocumentMetaInfos.CONTENT_CODE) + " from "
