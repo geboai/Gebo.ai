@@ -83,7 +83,7 @@ import { DataFlowEndpointNode } from "./compliance-data-flow.model";
             }
           </div>
 
-          <div class="text-xs text-muted-color border-top-1 surface-border pt-2">
+          <div class="text-xs text-muted-color border-top-1 surface-border pt-2" style="overflow-wrap: anywhere;">
             @if (node().data.disposer) {
               <div [title]="'Erasure component: ' + node().data.disposer">
                 <i class="pi pi-trash text-green-600"></i>
