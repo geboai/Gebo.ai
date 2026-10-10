@@ -29,6 +29,7 @@ import ai.gebo.document.model.GeboDocument;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.TypedInputStream;
+import ai.gebo.system.ingestion.DocumentTitles;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGLanguageDetector;
@@ -121,6 +122,8 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 		if (reference.getExtension() != null) {
 			meta.put(DocumentMetaInfos.CONTENT_EXTENSION, reference.getExtension());
 		}
+		// the author the content source tells, before the one of the file
+		DocumentTitles.putAuthor(meta, reference.getAuthor(), "content handler");
 		if (reference.getName() != null) {
 			meta.put(DocumentMetaInfos.GEBO_FILE_NAME, reference.getName());
 			meta.put("file_name", reference.getName());

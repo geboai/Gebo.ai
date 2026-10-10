@@ -10,6 +10,7 @@
 package ai.gebo.system.ingestion.pdf.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -40,6 +41,7 @@ class PdfIngestionHandlerTitleTest {
 		}
 		if (subject != null) {
 			document.addSubject(subject);
+			document.addAuthor("H. P. Blavatsky");
 		}
 		document.open();
 		for (String line : lines) {
@@ -56,6 +58,7 @@ class PdfIngestionHandlerTitleTest {
 				meta);
 		assertEquals("The Secret Doctrine", meta.get(DocumentMetaInfos.TITLE));
 		assertEquals("Cosmogenesis", meta.get(DocumentMetaInfos.SUBTITLE));
+		assertEquals("H. P. Blavatsky", meta.get(DocumentMetaInfos.AUTHOR));
 	}
 
 	@Test
@@ -75,5 +78,6 @@ class PdfIngestionHandlerTitleTest {
 		PdfIngestionHandler.enrichPdfMetadata(pdf(null, null, "Isis Unveiled", "Volume one"), meta);
 		assertEquals("Isis Unveiled", meta.get(DocumentMetaInfos.TITLE));
 		assertEquals("Volume one", meta.get(DocumentMetaInfos.SUBTITLE));
+		assertNull(meta.get(DocumentMetaInfos.AUTHOR));
 	}
 }

@@ -50,6 +50,23 @@ class DocumentTitlesTest {
 		return meta.get(DocumentMetaInfos.SUBTITLE);
 	}
 
+	private static Object author(Map<String, Object> meta) {
+		return meta.get(DocumentMetaInfos.AUTHOR);
+	}
+
+	@Test
+	void anAuthorAlreadyThereIsKeptNoneIsSetWithoutOne() {
+		final Map<String, Object> meta = meta();
+		meta.put(DocumentMetaInfos.AUTHOR, "From the content handler");
+		assertFalse(DocumentTitles.putAuthor(meta, "From the file", "test"));
+		assertEquals("From the content handler", author(meta));
+
+		final Map<String, Object> none = meta();
+		assertFalse(DocumentTitles.putAuthor(none, " ", "test"));
+		assertFalse(DocumentTitles.hasAuthor(none));
+		assertFalse(none.containsKey(DocumentMetaInfos.AUTHOR));
+	}
+
 	@Test
 	void aTitleAlreadyThereIsKeptABlankOneIsReplacedAndTheWhiteSpaceIsCollapsed() {
 		final Map<String, Object> meta = meta();
@@ -92,10 +109,12 @@ class DocumentTitlesTest {
 		final Map<String, Object> meta = meta();
 		DocumentTitles.fromHtml(Jsoup.parse("<html><head><title> Isis Unveiled </title>"
 				+ "<meta property=\"og:title\" content=\"Og title\">"
-				+ "<meta name=\"description\" content=\"A master key to the mysteries\"></head>"
+				+ "<meta name=\"description\" content=\"A master key to the mysteries\">"
+				+ "<meta name=\"author\" content=\"H. P. Blavatsky\"></head>"
 				+ "<body><h1>Heading</h1><p>text</p></body></html>"), meta);
 		assertEquals("Isis Unveiled", title(meta));
 		assertEquals("A master key to the mysteries", subtitle(meta));
+		assertEquals("H. P. Blavatsky", author(meta));
 	}
 
 	@Test
@@ -114,10 +133,11 @@ class DocumentTitlesTest {
 	@Test
 	void aMarkdownTitleComesFromItsFrontMatterFirst() {
 		final Map<String, Object> meta = meta();
-		DocumentTitles.fromMarkdown("---\nlayout: post\ntitle: \"The Voice of the Silence\"\n"
+		DocumentTitles.fromMarkdown("---\nlayout: post\ntitle: \"The Voice of the Silence\"\nauthor: H. P. Blavatsky\n"
 				+ "description: 'Fragments'\n---\n# Heading\n## Second\ntext", meta);
 		assertEquals("The Voice of the Silence", title(meta));
 		assertEquals("Fragments", subtitle(meta));
+		assertEquals("H. P. Blavatsky", author(meta));
 	}
 
 	@Test
@@ -145,6 +165,7 @@ class DocumentTitlesTest {
 		final Map<String, Object> meta = meta();
 		DocumentTitles.fromMarkdown("just some text\nover two lines", meta);
 		assertNull(title(meta));
+		assertNull(author(meta));
 	}
 
 	@Test
@@ -154,6 +175,7 @@ class DocumentTitlesTest {
 			workbook.createSheet("data");
 			workbook.getProperties().getCoreProperties().setTitle("Planetary chains");
 			workbook.getProperties().getCoreProperties().setSubjectProperty("Rounds and races");
+			workbook.getProperties().getCoreProperties().setCreator("A. P. Sinnett");
 			workbook.write(bytes);
 		}
 		final Map<String, Object> meta = meta();
@@ -162,6 +184,7 @@ class DocumentTitlesTest {
 		}
 		assertEquals("Planetary chains", title(meta));
 		assertEquals("Rounds and races", subtitle(meta));
+		assertEquals("A. P. Sinnett", author(meta));
 	}
 
 	@Test
@@ -172,6 +195,7 @@ class DocumentTitlesTest {
 			workbook.createInformationProperties();
 			workbook.getSummaryInformation().setTitle("Cosmic cycles");
 			workbook.getSummaryInformation().setSubject("Manvantaras");
+			workbook.getSummaryInformation().setAuthor("G. de Purucker");
 			workbook.write(bytes);
 		}
 		final Map<String, Object> meta = meta();
@@ -180,6 +204,7 @@ class DocumentTitlesTest {
 		}
 		assertEquals("Cosmic cycles", title(meta));
 		assertEquals("Manvantaras", subtitle(meta));
+		assertEquals("G. de Purucker", author(meta));
 	}
 
 	@Test
@@ -197,6 +222,8 @@ class DocumentTitlesTest {
 		final OdfSpreadsheetDocument document = OdfSpreadsheetDocument.newSpreadsheetDocument();
 		document.getOfficeMetadata().setTitle("Root races");
 		document.getOfficeMetadata().setSubject("Chronology");
+		document.getOfficeMetadata().setInitialCreator("R. Steiner");
+		document.getOfficeMetadata().setCreator("Last editor");
 		document.save(bytes);
 		document.close();
 		final Map<String, Object> meta = meta();
@@ -206,5 +233,6 @@ class DocumentTitlesTest {
 		read.close();
 		assertEquals("Root races", title(meta));
 		assertEquals("Chronology", subtitle(meta));
+		assertEquals("R. Steiner", author(meta));
 	}
 }

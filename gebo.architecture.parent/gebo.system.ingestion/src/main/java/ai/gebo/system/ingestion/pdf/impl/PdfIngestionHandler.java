@@ -42,8 +42,8 @@ import ai.gebo.system.ingestion.impl.GAbstractConfiguredHandler;
  */
 @Service
 public class PdfIngestionHandler extends GAbstractConfiguredHandler {
-    /** The title and the subject in the PDF document information dictionary. */
-    static final String PDF_INFO_TITLE = "Title", PDF_INFO_SUBJECT = "Subject";
+    /** The title, the subject and the author in the PDF document information dictionary. */
+    static final String PDF_INFO_TITLE = "Title", PDF_INFO_SUBJECT = "Subject", PDF_INFO_AUTHOR = "Author";
     private final PdfIngestionConfig config;
 
     /**
@@ -83,6 +83,7 @@ public class PdfIngestionHandler extends GAbstractConfiguredHandler {
             // the keys of the document information dictionary, as the PDF names them
             DocumentTitles.putTitle(meta, DocumentTitles.pdfInfoTitle(info.get(PDF_INFO_TITLE)), "pdf info");
             DocumentTitles.putSubtitle(meta, info.get(PDF_INFO_SUBJECT), "pdf info");
+            DocumentTitles.putAuthor(meta, info.get(PDF_INFO_AUTHOR), "pdf info");
         }
         // Fallback: use first (and second) non‑empty line(s) of page 1
         if (!DocumentTitles.hasTitle(meta) || !DocumentTitles.hasSubtitle(meta)) {
