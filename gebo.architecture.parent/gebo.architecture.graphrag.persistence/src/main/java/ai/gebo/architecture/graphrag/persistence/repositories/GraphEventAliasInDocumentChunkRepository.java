@@ -17,9 +17,9 @@ public interface GraphEventAliasInDocumentChunkRepository
 			MATCH (c:document_chunk)<-[:contained_in]-(evic:event_alias_chunk)-[:discovered_event_alias]->(ev:event_alias)
 			MATCH (c)-[:chunk_of]->(dr:document_reference)
 			WHERE ev.id IN $aliasIds
-			  AND ($kbCodes IS NULL OR dr.knowledgebase_code IN $kbCodes)
+			  AND ($kbCodes IS NULL OR dr.knowledgeBaseCode IN $kbCodes)
 			RETURN c.id AS chunkId,
-			       dr.id AS documentReferenceId,
+			       dr.code AS documentReferenceId,
 			       collect(DISTINCT ev.id) AS matchedIds,
 			       count(*) AS occurrences
 			""")
