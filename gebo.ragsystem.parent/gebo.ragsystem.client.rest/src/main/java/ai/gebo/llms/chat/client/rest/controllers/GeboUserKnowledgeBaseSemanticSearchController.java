@@ -32,6 +32,7 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.vectorstores.EmbedTypeFilters;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.GObjectRef;
 import jakarta.validation.Valid;
@@ -135,7 +136,8 @@ public class GeboUserKnowledgeBaseSemanticSearchController {
 			if (param.topK != null) {
 				searchRequestBuilder.topK(param.topK);
 			}
-			searchRequestBuilder.filterExpression(filterExpression.toString());
+			// the vectors of the contents, not those of the file names and titles
+			searchRequestBuilder.filterExpression(EmbedTypeFilters.contentsOnly(filterExpression.toString()));
 			SearchRequest searchRequest = searchRequestBuilder.build();
 			
 			// Retrieve similar documents and extract their content codes

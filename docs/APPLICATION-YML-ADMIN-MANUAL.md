@@ -281,6 +281,33 @@ Scope and trade-offs of `LOCAL`:
 
 Every setting is optional: `use: LOCAL` alone is a working configuration.
 
+### 9.2 File name and title vectors
+
+Beside the vectors of its contents, every document gets one vector embedding its file name and,
+when they are known, one embedding its title and one its author (the content source's author
+first, e.g. a press review article's, else the file's). They carry the metadata of the contents'
+vectors, with `EMBED_TYPE` set to `FILE_NAME`, `TITLE` or `AUTHOR`; the contents' vectors carry
+`EMBED_TYPE: DOCUMENT`. The semantic searches of contents filter on
+`EMBED_TYPE != 'FILE_NAME' && EMBED_TYPE != 'TITLE' && EMBED_TYPE != 'AUTHOR'`, which keeps the
+contents' vectors written before this field existed (they have none); the agent tools finding
+documents by title, author or file name search the other types.
+
+The documents vectorized before these vectors existed are given them once the application starts,
+in the background, without being ingested again (three embeddings per document at most):
+
+| Property | Type | Shipped default | Description |
+|---|---|---|---|
+| `ai.gebo.docscache.config.fileNameTitleBackfillEnabled` | boolean | `true` | Runs the backfill at startup. |
+| `ai.gebo.docscache.config.fileNameTitleBackfillBatchSize` | int | `50` | Documents done per batch. |
+
+**Redis and MongoDB Atlas:** a filter on a field the search index does not declare is an error
+there, so when a vector store is created Gebo reconciles its index with the metadata keys it filters
+on (`DocumentMetaInfos.ALL_ATTRIBUTES`): it creates the index when missing, and adds the fields an
+existing index lacks — `EMBED_TYPE` on an index created before it existed — logging each change at
+INFO. If that fails (the log says so at WARN, e.g. missing rights, or a plain `mongod` without
+`mongot`), add the field by hand: Redis `FT.ALTER geboidx SCHEMA ADD $.EMBED_TYPE AS EMBED_TYPE TEXT`,
+Atlas a `filter` field on `metadata.EMBED_TYPE`. Qdrant and `LOCAL` need nothing.
+
 `spring.ai.openai.api-key` / `spring.ai.openai.chat.api-key` ship as literal `DUMMYKEY` — this is a
 Spring AI auto-configuration bootstrap requirement (the bean must construct even before an admin
 configures a real key through the UI), not a real credential; it's overwritten by the actual

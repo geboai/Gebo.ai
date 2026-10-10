@@ -45,11 +45,14 @@ import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.CountDoc
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.DocumentContent;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.DocumentContentsParam;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.DocumentsCount;
+import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.FindDocumentsParam;
+import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.FoundDocumentItem;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.ListPage;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.PageParam;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseBrowsingToolSource.VirtualFilesystemItem;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseDocumentChunksReader.DocumentChunks;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.model.EmbedType;
 
 /**
  * Pins the knowledge base browsing tools: limited to the chat's visible knowledge
@@ -61,6 +64,7 @@ class KnowledgeBaseBrowsingToolSourceTest {
 
 	private IGKnowledgebaseVisibilityService visibility;
 	private KnowledgeBaseDocumentChunksReader reader;
+	private KnowledgeBaseDocumentIdentitySearch identity;
 
 	@SuppressWarnings("unchecked")
 	private static <T> ObjectProvider<T> provider(T value) {
@@ -91,10 +95,12 @@ class KnowledgeBaseBrowsingToolSourceTest {
 	void setUp() {
 		visibility = mock(IGKnowledgebaseVisibilityService.class);
 		reader = mock(KnowledgeBaseDocumentChunksReader.class);
+		identity = mock(KnowledgeBaseDocumentIdentitySearch.class);
 	}
 
 	private KnowledgeBaseBrowsingToolSource tools() {
-		return new KnowledgeBaseBrowsingToolSource(provider(visibility), provider(reader));
+		return new KnowledgeBaseBrowsingToolSource(provider(visibility), provider(reader), provider(identity),
+				provider((ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig) null));
 	}
 
 	@Test
@@ -310,7 +316,80 @@ class KnowledgeBaseBrowsingToolSourceTest {
 	}
 
 	@Test
-	void theSevenToolsAreDeclaredWithTheirDataFlows() {
+	void documentsAreFoundByTitleAmongThoseTheUserCanReadTheMostSimilarFirst() {
+		when(identity.search(any(), any(), any(), org.mockito.ArgumentMatchers.anyInt(),
+				org.mockito.ArgumentMatchers.anyDouble())).thenReturn(List.of(
+						new KnowledgeBaseDocumentIdentitySearch.FoundDocument(7L, "The Secret Doctrine", 0.92, "embedding-1"),
+						new KnowledgeBaseDocumentIdentitySearch.FoundDocument(5L, "Isis Unveiled", 0.71, "embedding-1"),
+						new KnowledgeBaseDocumentIdentitySearch.FoundDocument(9L, "Hidden", 0.65, "embedding-1")));
+		ArgumentCaptor<VirtualFilesystemQuery> query = ArgumentCaptor.forClass(VirtualFilesystemQuery.class);
+		// 9 is not readable by the user; the visibility service gives them in its own order
+		when(visibility.browseVisibleDocuments(query.capture(), any(Pageable.class)))
+				.thenReturn(new PageImpl<>(List.of(document(5L, "doc-5", "isis.pdf"), document(7L, "doc-7", "sd.pdf"))));
+		FindDocumentsParam param = new FindDocumentsParam();
+		param.setText("secret doctrine");
+		param.setMaxResults(500);
+		ToolsFoundDocuments collector = new ToolsFoundDocuments();
+
+		ListPage<FoundDocumentItem> found = tools().findDocuments(param, EmbedType.TITLE, chat("kb1", "kb1-child"), null,
+				collector);
+
+		verify(identity).search("secret doctrine", EmbedType.TITLE, List.of("kb1", "kb1-child"),
+				KnowledgeBaseBrowsingToolSource.MAX_PAGE_SIZE, 0.0);
+		assertEquals(List.of(7L, 5L),
+				found.items().stream().map(FoundDocumentItem::uniqueId).toList());
+		assertEquals("The Secret Doctrine", found.items().get(0).title());
+		assertEquals("sd.pdf", found.items().get(0).name());
+		assertEquals(0.92, found.items().get(0).similarity());
+		assertEquals(List.of(7L, 5L, 9L), query.getValue().getUniqueIds());
+		assertEquals(List.of("sd.pdf", "isis.pdf"), collector.getListedNames());
+	}
+
+	@Test
+	void documentsAreFoundByFileNameOnlyInTheChatsKnowledgeBasesAndWithAText() {
+		FindDocumentsParam param = new FindDocumentsParam();
+		param.setText("v4man");
+		param.setKnowledgeBaseCode("other-kb");
+		ListPage<FoundDocumentItem> outside = tools().findDocuments(param, EmbedType.FILE_NAME, chat("kb1"), null, null);
+		assertTrue(outside.items().isEmpty());
+		assertTrue(outside.message().contains("other-kb"), outside.message());
+
+		param.setText(" ");
+		param.setKnowledgeBaseCode(null);
+		ListPage<FoundDocumentItem> noText = tools().findDocuments(param, EmbedType.FILE_NAME, chat("kb1"), null, null);
+		assertTrue(noText.message().contains("file name"), noText.message());
+		verifyNoInteractions(identity);
+
+		param.setText("v4man");
+		when(identity.search(any(), any(), any(), org.mockito.ArgumentMatchers.anyInt(),
+				org.mockito.ArgumentMatchers.anyDouble())).thenReturn(List.of());
+		ListPage<FoundDocumentItem> none = tools().findDocuments(param, EmbedType.FILE_NAME, chat("kb1"), null, null);
+		assertTrue(none.items().isEmpty());
+		assertTrue(none.message().contains("No document"), none.message());
+		verify(identity).search("v4man", EmbedType.FILE_NAME, List.of("kb1"), KnowledgeBaseBrowsingToolSource.DEFAULT_PAGE_SIZE,
+				0.0);
+	}
+
+	@Test
+	void documentsAreFoundByAuthorWithTheAuthorVectors() {
+		when(identity.search(any(), any(), any(), org.mockito.ArgumentMatchers.anyInt(),
+				org.mockito.ArgumentMatchers.anyDouble())).thenReturn(List.of(
+						new KnowledgeBaseDocumentIdentitySearch.FoundDocument(7L, "H. P. Blavatsky", 0.95, "embedding-1")));
+		when(visibility.browseVisibleDocuments(any(VirtualFilesystemQuery.class), any(Pageable.class)))
+				.thenReturn(new PageImpl<>(List.of(document(7L, "doc-7", "sd.pdf"))));
+		FindDocumentsParam param = new FindDocumentsParam();
+		param.setText("Blavatsky");
+
+		ListPage<FoundDocumentItem> found = tools().findDocuments(param, EmbedType.AUTHOR, chat("kb1"), null, null);
+
+		verify(identity).search("Blavatsky", EmbedType.AUTHOR, List.of("kb1"), KnowledgeBaseBrowsingToolSource.DEFAULT_PAGE_SIZE,
+				0.0);
+		assertEquals("H. P. Blavatsky", found.items().get(0).matched());
+		assertEquals("sd.pdf", found.items().get(0).name());
+	}
+
+	@Test
+	void theTenToolsAreDeclaredWithTheirDataFlows() {
 		KnowledgeBaseBrowsingToolSource tools = tools();
 
 		assertEquals(KnowledgeBaseBrowsingToolSource.TOOLS,

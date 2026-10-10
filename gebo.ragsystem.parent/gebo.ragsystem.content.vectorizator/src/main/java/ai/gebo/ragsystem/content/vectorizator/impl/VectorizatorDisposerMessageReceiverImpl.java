@@ -160,8 +160,10 @@ public class VectorizatorDisposerMessageReceiverImpl extends GAbstractMessageRec
 				try {
 					String vectorStoreId = x.getId().getVectorStoreId();
 					VectorStore store = storeById.get(vectorStoreId);
-					if (store != null && x.getVectorsId() != null && !x.getVectorsId().isEmpty()) {
-						store.delete(x.getVectorsId());
+					// the contents', the file name's and the title's
+					final List<String> vectorsId = x.allVectorsId();
+					if (store != null && !vectorsId.isEmpty()) {
+						store.delete(vectorsId);
 					}
 				} catch (Throwable th) {
 					LOGGER.error("Error in dispose endpoint vectors", th);

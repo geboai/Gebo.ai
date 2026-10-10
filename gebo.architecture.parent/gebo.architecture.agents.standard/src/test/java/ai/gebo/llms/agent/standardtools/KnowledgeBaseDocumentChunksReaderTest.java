@@ -33,6 +33,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.vectorstores.EmbedTypeFilters;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGExtendedVectorStore;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent.GVectorizedContentId;
@@ -91,9 +92,15 @@ class KnowledgeBaseDocumentChunksReaderTest {
 		return document;
 	}
 
+	/**
+	 * The key the document is filtered by, after checking the filter keeps the
+	 * vectors of the contents only.
+	 */
 	private static String filteredKey(SearchRequest request) {
 		Filter.Expression expression = request.getFilterExpression();
-		return ((Filter.Key) expression.left()).key();
+		assertEquals(Filter.ExpressionType.AND, expression.type());
+		assertEquals(EmbedTypeFilters.contentsOnly().build(), expression.right());
+		return ((Filter.Key) ((Filter.Expression) expression.left()).left()).key();
 	}
 
 	@BeforeEach
