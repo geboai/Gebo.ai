@@ -66,9 +66,9 @@ class SemanticSearchMetaDataFilterTest {
 		FilterExpressionBuilder b = new FilterExpressionBuilder();
 		// the condition given, in parentheses, then the contents only
 		assertEquals(
-				b.and(b.and(b.group(b.gt(DocumentMetaInfos.GEBO_TOKEN_LENGTH, 10)),
-						b.ne(DocumentMetaInfos.EMBED_TYPE, "FILE_NAME")), b.ne(DocumentMetaInfos.EMBED_TYPE, "TITLE"))
-						.build(),
+				b.and(b.and(b.and(b.group(b.gt(DocumentMetaInfos.GEBO_TOKEN_LENGTH, 10)),
+						b.ne(DocumentMetaInfos.EMBED_TYPE, "FILE_NAME")), b.ne(DocumentMetaInfos.EMBED_TYPE, "TITLE")),
+						b.ne(DocumentMetaInfos.EMBED_TYPE, "AUTHOR")).build(),
 				parser.parse(EmbedTypeFilters.contentsOnly(DocumentMetaInfos.GEBO_TOKEN_LENGTH + " > 10")));
 	}
 }

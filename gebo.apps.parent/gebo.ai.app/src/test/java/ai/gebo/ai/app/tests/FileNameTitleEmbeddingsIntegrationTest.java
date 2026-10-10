@@ -125,11 +125,13 @@ public class FileNameTitleEmbeddingsIntegrationTest extends AbstractMongoOnlyBas
 		// a title, with the metadata of its contents' vectors but for what they embed
 		int titled = 0;
 		final Map<GDocumentReference, String> titles = new HashMap<>();
+		final Map<GDocumentReference, String> authors = new HashMap<>();
 		for (GVectorizedContent record : vectorized) {
 			final String code = record.getId().getDocReferenceCode();
 			assertEquals(1, record.getFileNameVectorsId() != null ? record.getFileNameVectorsId().size() : -1,
 					"One file name vector for " + code);
 			assertNotNull(record.getTitleVectorsId(), "The title vectors are recorded for " + code);
+			assertNotNull(record.getAuthorVectorsId(), "The author vectors are recorded for " + code);
 			final Map<String, Object> content = metadataOf(store, record.getVectorsId().get(0));
 			assertEquals(EmbedType.DOCUMENT.name(), content.get(DocumentMetaInfos.EMBED_TYPE),
 					"The contents' vectors are marked as such for " + code);
@@ -143,8 +145,18 @@ public class FileNameTitleEmbeddingsIntegrationTest extends AbstractMongoOnlyBas
 				assertSameMetadata(content, title, code);
 				titles.put(references.get(code), content.get(DocumentMetaInfos.TITLE).toString());
 			}
+			// an author vector exactly when the document has an author
+			assertEquals(content.containsKey(DocumentMetaInfos.AUTHOR) ? 1 : 0, record.getAuthorVectorsId().size(),
+					"The author vectors of " + code);
+			if (!record.getAuthorVectorsId().isEmpty()) {
+				final Map<String, Object> author = metadataOf(store, record.getAuthorVectorsId().get(0));
+				assertEquals(EmbedType.AUTHOR.name(), author.get(DocumentMetaInfos.EMBED_TYPE));
+				assertSameMetadata(content, author, code);
+				authors.put(references.get(code), content.get(DocumentMetaInfos.AUTHOR).toString());
+			}
 		}
 		assertTrue(titled > 0, "Some documents of the corpus have a title");
+		LOGGER.info("Documents with an author: " + authors.values());
 
 		// 2. the searches of contents never find a file name or title vector
 		final SemanticSearchMetaDataFilter contents = new SemanticSearchMetaDataFilter();
@@ -177,21 +189,31 @@ public class FileNameTitleEmbeddingsIntegrationTest extends AbstractMongoOnlyBas
 					"Found by its title " + titledDocument.getValue() + ": " + byTitle);
 			assertTrue(byTitle.stream().allMatch(x -> x.matched() != null));
 		}
+		for (Map.Entry<GDocumentReference, String> authored : authors.entrySet()) {
+			final List<FoundDocument> byAuthor = identitySearch.search(authored.getValue(), EmbedType.AUTHOR,
+					List.of(knowledgeBase), 10, 0.0);
+			assertTrue(byAuthor.stream().anyMatch(x -> x.uniqueId().equals(authored.getKey().getUniqueId())),
+					"Found by its author " + authored.getValue() + ": " + byAuthor);
+		}
 
 		// 4. a document vectorized before the file name and title vectors existed is
 		// given them by the backfill, with the same metadata
 		final GVectorizedContent legacy = vectorized.get(0);
 		final List<String> legacyIds = new ArrayList<>(legacy.getFileNameVectorsId());
 		legacyIds.addAll(legacy.getTitleVectorsId());
+		legacyIds.addAll(legacy.getAuthorVectorsId());
 		store.delete(legacyIds);
 		mongoTemplate.updateFirst(new Query(Criteria.where("_id").is(legacy.getId())),
-				new Update().unset("fileNameVectorsId").unset("titleVectorsId"), GVectorizedContent.class);
+				new Update().unset("fileNameVectorsId").unset("titleVectorsId").unset("authorVectorsId"),
+				GVectorizedContent.class);
 		backfill.backfillAll();
 		final GVectorizedContent backfilled = vectorizedContentRepository.findById(legacy.getId()).orElseThrow();
 		assertEquals(1, backfilled.getFileNameVectorsId().size(), "The backfill gave the file name vector back");
 		assertNotEquals(legacy.getFileNameVectorsId().get(0), backfilled.getFileNameVectorsId().get(0));
 		assertEquals(legacy.getTitleVectorsId().size(), backfilled.getTitleVectorsId().size(),
 				"The backfill gave the title vector back when there is a title");
+		assertEquals(legacy.getAuthorVectorsId().size(), backfilled.getAuthorVectorsId().size(),
+				"The backfill gave the author vector back when there is an author");
 		final Map<String, Object> legacyContent = metadataOf(store, backfilled.getVectorsId().get(0));
 		final Map<String, Object> backfilledName = metadataOf(store, backfilled.getFileNameVectorsId().get(0));
 		assertEquals(EmbedType.FILE_NAME.name(), backfilledName.get(DocumentMetaInfos.EMBED_TYPE));

@@ -139,6 +139,7 @@ public class GEmbedderImpl implements IGEmbedder {
 			x.setVectorsId(new ArrayList<String>());
 			x.setFileNameVectorsId(null);
 			x.setTitleVectorsId(null);
+			x.setAuthorVectorsId(null);
 
 		});
 
@@ -193,8 +194,8 @@ public class GEmbedderImpl implements IGEmbedder {
 		Date now = new Date();
 		List<GUserMessage> allUserMessages = new ArrayList<GUserMessage>();
 
-		// The vectors of each document's file name and title, beside those of its
-		// contents, the same in every vector store
+		// The vectors of each document's file name, title and author, beside those of
+		// its contents, the same in every vector store
 		final Map<String, IdentityVectors> identityVectorsPerDocCode = new HashMap<String, IdentityVectors>();
 		for (GMessageEnvelope<GDocumentMessageFragmentPayload> x : messagesList) {
 			GDocumentMessageFragmentPayload payload = x.getPayload();
@@ -224,12 +225,7 @@ public class GEmbedderImpl implements IGEmbedder {
 				final IdentityVectors identityVectors = identityVectorsPerDocCode
 						.get(x.getPayload().getDocumentReference().getCode());
 				if (identityVectors != null) {
-					if (identityVectors.fileName() != null) {
-						tokenizeddocuments.add(identityVectors.fileName());
-					}
-					if (identityVectors.title() != null) {
-						tokenizeddocuments.add(identityVectors.title());
-					}
+					tokenizeddocuments.addAll(identityVectors.all());
 				}
 
 				// Create success message for this document
@@ -315,6 +311,7 @@ public class GEmbedderImpl implements IGEmbedder {
 								IdentityVectors.NONE);
 						final List<String> fileNameIds = ids(identityVectors.fileName());
 						final List<String> titleIds = ids(identityVectors.title());
+						final List<String> authorIds = ids(identityVectors.author());
 						List<GVectorizedContent> vectorizedList = vectorizedMap.get(code);
 						if (vectorizedList == null) {
 							vectorizedMap.put(code, vectorizedList = new ArrayList<GVectorizedContent>());
@@ -339,6 +336,7 @@ public class GEmbedderImpl implements IGEmbedder {
 							vect.setVectorsId(newIds);
 							vect.setFileNameVectorsId(fileNameIds);
 							vect.setTitleVectorsId(titleIds);
+							vect.setAuthorVectorsId(authorIds);
 							vect.setLastestJobId(x.getPayload().getJobId());
 							vect.setLastVectorizedDate(now);
 						} else {
@@ -359,6 +357,7 @@ public class GEmbedderImpl implements IGEmbedder {
 							vect.setVectorsId(newIds);
 							vect.setFileNameVectorsId(fileNameIds);
 							vect.setTitleVectorsId(titleIds);
+							vect.setAuthorVectorsId(authorIds);
 							vect.setLastVectorizedDate(now);
 							vectorizedList.add(vect);
 						}

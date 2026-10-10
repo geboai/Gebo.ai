@@ -371,7 +371,25 @@ class KnowledgeBaseBrowsingToolSourceTest {
 	}
 
 	@Test
-	void theNineToolsAreDeclaredWithTheirDataFlows() {
+	void documentsAreFoundByAuthorWithTheAuthorVectors() {
+		when(identity.search(any(), any(), any(), org.mockito.ArgumentMatchers.anyInt(),
+				org.mockito.ArgumentMatchers.anyDouble())).thenReturn(List.of(
+						new KnowledgeBaseDocumentIdentitySearch.FoundDocument(7L, "H. P. Blavatsky", 0.95, "embedding-1")));
+		when(visibility.browseVisibleDocuments(any(VirtualFilesystemQuery.class), any(Pageable.class)))
+				.thenReturn(new PageImpl<>(List.of(document(7L, "doc-7", "sd.pdf"))));
+		FindDocumentsParam param = new FindDocumentsParam();
+		param.setText("Blavatsky");
+
+		ListPage<FoundDocumentItem> found = tools().findDocuments(param, EmbedType.AUTHOR, chat("kb1"), null, null);
+
+		verify(identity).search("Blavatsky", EmbedType.AUTHOR, List.of("kb1"), KnowledgeBaseBrowsingToolSource.DEFAULT_PAGE_SIZE,
+				0.0);
+		assertEquals("H. P. Blavatsky", found.items().get(0).matched());
+		assertEquals("sd.pdf", found.items().get(0).name());
+	}
+
+	@Test
+	void theTenToolsAreDeclaredWithTheirDataFlows() {
 		KnowledgeBaseBrowsingToolSource tools = tools();
 
 		assertEquals(KnowledgeBaseBrowsingToolSource.TOOLS,

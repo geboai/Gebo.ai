@@ -97,6 +97,12 @@ public class GVectorizedContent {
      * document was vectorized before they existed.
      */
     private List<String> titleVectorsId = null;
+    /**
+     * The ids of the vectors of the document's author (see
+     * {@link ai.gebo.model.EmbedType#AUTHOR}), none when it has no author; null when
+     * the document was vectorized before they existed.
+     */
+    private List<String> authorVectorsId = null;
     private Long fileSize = null;
     private Date modificationDate = null;
     private Date lastVectorizedDate = null;
@@ -106,7 +112,7 @@ public class GVectorizedContent {
 
     /**
      * Every vector of the document in its vector store: its contents', its file
-     * name's and its title's; what deleting the document deletes.
+     * name's, its title's and its author's; what deleting the document deletes.
      */
     public List<String> allVectorsId() {
         final List<String> all = new ArrayList<String>();
@@ -118,6 +124,9 @@ public class GVectorizedContent {
         }
         if (titleVectorsId != null) {
             all.addAll(titleVectorsId);
+        }
+        if (authorVectorsId != null) {
+            all.addAll(authorVectorsId);
         }
         return all;
     }

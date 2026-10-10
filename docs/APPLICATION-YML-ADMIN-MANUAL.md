@@ -284,14 +284,16 @@ Every setting is optional: `use: LOCAL` alone is a working configuration.
 ### 9.2 File name and title vectors
 
 Beside the vectors of its contents, every document gets one vector embedding its file name and,
-when its file tells one, one embedding its title. They carry the metadata of the contents' vectors,
-with `EMBED_TYPE` set to `FILE_NAME` or `TITLE`; the contents' vectors carry `EMBED_TYPE: DOCUMENT`.
-The semantic searches of contents filter on `EMBED_TYPE != 'FILE_NAME' && EMBED_TYPE != 'TITLE'`,
-which keeps the contents' vectors written before this field existed (they have none); the agent
-tools finding documents by title or file name search the other two types.
+when they are known, one embedding its title and one its author (the content source's author
+first, e.g. a press review article's, else the file's). They carry the metadata of the contents'
+vectors, with `EMBED_TYPE` set to `FILE_NAME`, `TITLE` or `AUTHOR`; the contents' vectors carry
+`EMBED_TYPE: DOCUMENT`. The semantic searches of contents filter on
+`EMBED_TYPE != 'FILE_NAME' && EMBED_TYPE != 'TITLE' && EMBED_TYPE != 'AUTHOR'`, which keeps the
+contents' vectors written before this field existed (they have none); the agent tools finding
+documents by title, author or file name search the other types.
 
 The documents vectorized before these vectors existed are given them once the application starts,
-in the background, without being ingested again (two embeddings per document at most):
+in the background, without being ingested again (three embeddings per document at most):
 
 | Property | Type | Shipped default | Description |
 |---|---|---|---|

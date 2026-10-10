@@ -21,9 +21,9 @@ import lombok.experimental.UtilityClass;
  * {@link DocumentMetaInfos#EMBED_TYPE}).
  *
  * <p>
- * The searches of contents exclude the file name and the title vectors rather than
- * asking for the {@link EmbedType#DOCUMENT} ones: the vectors written before the
- * file name and title ones existed have no embed type, and "is missing" cannot be
+ * The searches of contents exclude the file name, title and author vectors rather
+ * than asking for the {@link EmbedType#DOCUMENT} ones: the vectors written before the
+ * other ones existed have no embed type, and "is missing" cannot be
  * filtered on every vector store, while "is not" matches a vector without the field
  * on all of them.
  * </p>
@@ -33,13 +33,16 @@ public class EmbedTypeFilters {
 
 	/** Only the vectors of contents, as a filter expression in text. */
 	public static final String CONTENTS_ONLY = DocumentMetaInfos.EMBED_TYPE + " != '" + EmbedType.FILE_NAME.name()
-			+ "' && " + DocumentMetaInfos.EMBED_TYPE + " != '" + EmbedType.TITLE.name() + "'";
+			+ "' && " + DocumentMetaInfos.EMBED_TYPE + " != '" + EmbedType.TITLE.name() + "' && "
+			+ DocumentMetaInfos.EMBED_TYPE + " != '" + EmbedType.AUTHOR.name() + "'";
 
 	/** Only the vectors of contents. */
 	public static Op contentsOnly() {
 		final FilterExpressionBuilder builder = new FilterExpressionBuilder();
-		return builder.and(builder.ne(DocumentMetaInfos.EMBED_TYPE, EmbedType.FILE_NAME.name()),
-				builder.ne(DocumentMetaInfos.EMBED_TYPE, EmbedType.TITLE.name()));
+		return builder.and(
+				builder.and(builder.ne(DocumentMetaInfos.EMBED_TYPE, EmbedType.FILE_NAME.name()),
+						builder.ne(DocumentMetaInfos.EMBED_TYPE, EmbedType.TITLE.name())),
+				builder.ne(DocumentMetaInfos.EMBED_TYPE, EmbedType.AUTHOR.name()));
 	}
 
 	/** The vectors of contents when the type is null, else only those of that type. */

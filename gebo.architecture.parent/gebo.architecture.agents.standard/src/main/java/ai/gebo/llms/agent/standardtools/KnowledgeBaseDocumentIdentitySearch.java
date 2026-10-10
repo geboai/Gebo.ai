@@ -35,16 +35,17 @@ import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.services.IGSecurityService;
 
 /**
- * Finds the documents of knowledge bases by the meaning of their file name or of
- * their title: a semantic search on the vectors embedding them (see
- * {@link EmbedType#FILE_NAME} and {@link EmbedType#TITLE}), with the access rights
+ * Finds the documents of knowledge bases by the meaning of their file name, their
+ * title or their author: a semantic search on the vectors embedding them (see
+ * {@link EmbedType#FILE_NAME}, {@link EmbedType#TITLE} and {@link EmbedType#AUTHOR}),
+ * with the access rights
  * of the knowledge base searches, one hit per document, the best first.
  */
 @Component
 public class KnowledgeBaseDocumentIdentitySearch {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeBaseDocumentIdentitySearch.class);
 
-	/** A document found: its uniqueId, the name or title matched and how similar it is. */
+	/** A document found: its uniqueId, the file name, title or author matched and how similar it is. */
 	public record FoundDocument(Long uniqueId, String matched, double score, String embeddingModelCode) {
 	}
 
@@ -61,7 +62,7 @@ public class KnowledgeBaseDocumentIdentitySearch {
 	}
 
 	/**
-	 * The documents of the knowledge bases whose file name or title (as the type says)
+	 * The documents of the knowledge bases whose file name, title or author (as the type says)
 	 * is the most similar to the text, best first, one per document, searched in the
 	 * vector store of the default embedding model and of those of the knowledge bases.
 	 */

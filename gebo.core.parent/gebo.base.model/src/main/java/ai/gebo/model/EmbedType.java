@@ -19,5 +19,10 @@ public enum EmbedType {
 	/** The document's file name, as its content source names it. */
 	FILE_NAME,
 	/** The document's title, as its file tells it (see {@link DocumentMetaInfos#TITLE}). */
-	TITLE
+	TITLE,
+	/**
+	 * The document's author, as its content source or its file tells it (see
+	 * {@link DocumentMetaInfos#AUTHOR}).
+	 */
+	AUTHOR
 }

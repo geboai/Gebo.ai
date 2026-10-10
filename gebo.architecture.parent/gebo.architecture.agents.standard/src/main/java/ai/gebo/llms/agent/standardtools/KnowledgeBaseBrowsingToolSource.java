@@ -83,10 +83,12 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	public static final String DOCUMENT_CONTENTS_TOOL = "getKnowledgeBaseDocumentContents";
 	public static final String FIND_DOCUMENTS_BY_TITLE_TOOL = "findKnowledgeBaseDocumentsByTitle";
 	public static final String FIND_DOCUMENTS_BY_FILE_NAME_TOOL = "findKnowledgeBaseDocumentsByFileName";
+	public static final String FIND_DOCUMENTS_BY_AUTHOR_TOOL = "findKnowledgeBaseDocumentsByAuthor";
 	/** Every tool of this source. */
 	public static final Set<String> TOOLS = Set.of(COUNT_DOCUMENTS_TOOL, BROWSE_KNOWLEDGE_BASES_TOOL,
 			BROWSE_PROJECTS_TOOL, BROWSE_PROJECT_ENDPOINTS_TOOL, BROWSE_FOLDERS_TOOL, BROWSE_DOCUMENTS_TOOL,
-			DOCUMENT_CONTENTS_TOOL, FIND_DOCUMENTS_BY_TITLE_TOOL, FIND_DOCUMENTS_BY_FILE_NAME_TOOL);
+			DOCUMENT_CONTENTS_TOOL, FIND_DOCUMENTS_BY_TITLE_TOOL, FIND_DOCUMENTS_BY_FILE_NAME_TOOL,
+			FIND_DOCUMENTS_BY_AUTHOR_TOOL);
 
 	/** Items in a page when the call does not say. */
 	public static final int DEFAULT_PAGE_SIZE = 50;
@@ -115,6 +117,10 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	static final String FIND_DOCUMENTS_BY_FILE_NAME_DESCRIPTION = "Finds the documents of the knowledge bases of this chat "
 			+ "whose file name is similar in meaning to the text given, even when not written the same (uniqueId, name, "
 			+ "similarity), the most similar first. Use their uniqueId to read them whole.";
+	static final String FIND_DOCUMENTS_BY_AUTHOR_DESCRIPTION = "Finds the documents of the knowledge bases of this chat "
+			+ "whose author is similar to the name given, even when not written the same (uniqueId, name, title, "
+			+ "author matched, similarity), the most similar first; only the documents whose author is known. "
+			+ "Use their uniqueId to read them whole.";
 
 	private final ObjectProvider<IGKnowledgebaseVisibilityService> visibilityService;
 	private final ObjectProvider<KnowledgeBaseDocumentChunksReader> chunksReader;
@@ -201,7 +207,7 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	@Data
 	@JsonClassDescription("Which documents to find")
 	public static class FindDocumentsParam {
-		@JsonPropertyDescription("The text to compare the titles or file names with: the title, the file name, or words meaning them")
+		@JsonPropertyDescription("The text to compare the titles, file names or authors with: the title, the file name, the author's name, or words meaning them")
 		private String text;
 		@JsonPropertyDescription("Optional code of one knowledge base of the chat")
 		private String knowledgeBaseCode;
@@ -283,7 +289,8 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 				{ BROWSE_DOCUMENTS_TOOL, BROWSE_DOCUMENTS_DESCRIPTION },
 				{ DOCUMENT_CONTENTS_TOOL, DOCUMENT_CONTENTS_DESCRIPTION },
 				{ FIND_DOCUMENTS_BY_TITLE_TOOL, FIND_DOCUMENTS_BY_TITLE_DESCRIPTION },
-				{ FIND_DOCUMENTS_BY_FILE_NAME_TOOL, FIND_DOCUMENTS_BY_FILE_NAME_DESCRIPTION } }) {
+				{ FIND_DOCUMENTS_BY_FILE_NAME_TOOL, FIND_DOCUMENTS_BY_FILE_NAME_DESCRIPTION },
+				{ FIND_DOCUMENTS_BY_AUTHOR_TOOL, FIND_DOCUMENTS_BY_AUTHOR_DESCRIPTION } }) {
 			final ToolReference reference = new ToolReference();
 			reference.setName(tool[0]);
 			reference.setDescription(tool[1]);
@@ -305,10 +312,11 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 							"Knowledge base documents read whole"),
 					ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.EMBEDDING_MODEL, "Document name embedded to read its chunks"));
 		}
-		if (FIND_DOCUMENTS_BY_TITLE_TOOL.equals(toolName) || FIND_DOCUMENTS_BY_FILE_NAME_TOOL.equals(toolName)) {
+		if (FIND_DOCUMENTS_BY_TITLE_TOOL.equals(toolName) || FIND_DOCUMENTS_BY_FILE_NAME_TOOL.equals(toolName)
+				|| FIND_DOCUMENTS_BY_AUTHOR_TOOL.equals(toolName)) {
 			return List.of(
 					ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.KNOWLEDGE_BASE_VECTOR_STORE,
-							"Knowledge base documents found by their title or file name"),
+							"Knowledge base documents found by their title, file name or author"),
 					ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.EMBEDDING_MODEL, "Text searched embedded"));
 		}
 		return TOOLS.contains(toolName)
@@ -363,6 +371,12 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 						EmbedType.FILE_NAME, ToolCallbackDeclarationUtil.chatKnowledgeBases(context),
 						ToolsTokenBudget.from(context), ToolsFoundDocuments.from(context)),
 				FIND_DOCUMENTS_BY_FILE_NAME_TOOL, FIND_DOCUMENTS_BY_FILE_NAME_DESCRIPTION, FindDocumentsParam.class,
+				ListPage.class));
+		callbacks.add(ToolCallbackDeclarationUtil.declare(
+				(BiFunction<FindDocumentsParam, ToolContext, ListPage>) (param, context) -> findDocuments(param,
+						EmbedType.AUTHOR, ToolCallbackDeclarationUtil.chatKnowledgeBases(context),
+						ToolsTokenBudget.from(context), ToolsFoundDocuments.from(context)),
+				FIND_DOCUMENTS_BY_AUTHOR_TOOL, FIND_DOCUMENTS_BY_AUTHOR_DESCRIPTION, FindDocumentsParam.class,
 				ListPage.class));
 		return callbacks;
 	}
@@ -595,8 +609,8 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	}
 
 	/**
-	 * The documents of the chat's knowledge bases whose title or file name (as the type
-	 * says) is the most similar in meaning to the text, the most similar first, among
+	 * The documents of the chat's knowledge bases whose title, file name or author (as
+	 * the type says) is the most similar in meaning to the text, the most similar first, among
 	 * those the user can read; their names shared with the calling agent when it
 	 * collects them (see {@link ToolsFoundDocuments#addListed}). As many as asked, at
 	 * most {@link #MAX_PAGE_SIZE}, else as many as a knowledge base search gives; as
@@ -604,8 +618,9 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	 */
 	ListPage<FoundDocumentItem> findDocuments(FindDocumentsParam param, EmbedType type, List<String> chatKnowledgeBases,
 			ToolsTokenBudget budget, ToolsFoundDocuments collector) {
-		final String tool = type == EmbedType.TITLE ? FIND_DOCUMENTS_BY_TITLE_TOOL : FIND_DOCUMENTS_BY_FILE_NAME_TOOL;
-		final String what = type == EmbedType.TITLE ? "title" : "file name";
+		final String tool = type == EmbedType.TITLE ? FIND_DOCUMENTS_BY_TITLE_TOOL
+				: type == EmbedType.AUTHOR ? FIND_DOCUMENTS_BY_AUTHOR_TOOL : FIND_DOCUMENTS_BY_FILE_NAME_TOOL;
+		final String what = type == EmbedType.TITLE ? "title" : type == EmbedType.AUTHOR ? "author" : "file name";
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin " + tool + "(" + param + ")");
 		}

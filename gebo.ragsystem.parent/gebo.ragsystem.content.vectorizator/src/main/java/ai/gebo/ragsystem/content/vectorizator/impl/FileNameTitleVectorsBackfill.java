@@ -42,15 +42,15 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
- * Gives the documents vectorized before the file name and title vectors existed
- * those vectors (see {@link DocumentIdentityVectors}), once the application is
+ * Gives the documents vectorized before the file name, title and author vectors
+ * existed those vectors (see {@link DocumentIdentityVectors}), once the application is
  * started, without ingesting them again: the metadata of one vector of a document's
  * contents tells its file name, its title and the metadata the new vectors copy.
  *
  * <p>
  * A document is pending in a vector store while its {@link GVectorizedContent} has
  * no file name vectors ids (null); once done, they are recorded (none when it has
- * no file name) with its title's. The record is updated only if no vectorization
+ * no file name) with its title's and its author's. The record is updated only if no vectorization
  * changed it meanwhile, else the vectors just added are deleted: the vectorization
  * gave the document its own. A document whose metadata cannot be read stays
  * pending, for the next start.
@@ -61,6 +61,7 @@ public class FileNameTitleVectorsBackfill {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileNameTitleVectorsBackfill.class);
 	static final String FILE_NAME_VECTORS_ID = "fileNameVectorsId";
 	static final String TITLE_VECTORS_ID = "titleVectorsId";
+	static final String AUTHOR_VECTORS_ID = "authorVectorsId";
 	static final String VECTORS_ID = "vectorsId";
 	static final String VECTOR_STORE_ID = "_id.vectorStoreId";
 
@@ -175,12 +176,7 @@ public class FileNameTitleVectorsBackfill {
 			}
 			final IdentityVectors identity = DocumentIdentityVectors.ofContentMetadata(metadata);
 			vectors.put(record, identity);
-			if (identity.fileName() != null) {
-				toAdd.add(identity.fileName());
-			}
-			if (identity.title() != null) {
-				toAdd.add(identity.title());
-			}
+			toAdd.addAll(identity.all());
 		}
 		if (!toAdd.isEmpty()) {
 			try {
@@ -201,12 +197,14 @@ public class FileNameTitleVectorsBackfill {
 			final GVectorizedContent record = entry.getKey();
 			final List<String> fileNameIds = ids(entry.getValue().fileName());
 			final List<String> titleIds = ids(entry.getValue().title());
+			final List<String> authorIds = ids(entry.getValue().author());
 			// only if no vectorization changed the document meanwhile
 			final Query unchanged = new Query(Criteria.where("_id").is(record.getId()).and(FILE_NAME_VECTORS_ID).is(null)
 					.and(VECTORS_ID).is(record.getVectorsId()));
 			final long updated = mongoTemplate
 					.updateFirst(unchanged,
-							new Update().set(FILE_NAME_VECTORS_ID, fileNameIds).set(TITLE_VECTORS_ID, titleIds),
+							new Update().set(FILE_NAME_VECTORS_ID, fileNameIds).set(TITLE_VECTORS_ID, titleIds)
+									.set(AUTHOR_VECTORS_ID, authorIds),
 							GVectorizedContent.class)
 					.getModifiedCount();
 			if (updated > 0) {
@@ -215,6 +213,7 @@ public class FileNameTitleVectorsBackfill {
 				outcome.changed++;
 				orphans.addAll(fileNameIds);
 				orphans.addAll(titleIds);
+				orphans.addAll(authorIds);
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("backfill(...) " + record.getId().getDocReferenceCode()
 							+ " was vectorized meanwhile, its backfilled vectors are deleted");

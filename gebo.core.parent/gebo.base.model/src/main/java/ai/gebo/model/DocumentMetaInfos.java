@@ -56,8 +56,8 @@ public class DocumentMetaInfos {
 	public static final String CATEGORIES = "CATEGORIES";
 	/**
 	 * What a vector embeds (see {@link EmbedType}): a part of the document's contents,
-	 * its file name or its title. The vectors of the contents written before the
-	 * file name and title ones existed have none.
+	 * its file name, its title or its author. The vectors of the contents written
+	 * before the other ones existed have none.
 	 */
 	public static final String EMBED_TYPE = "EMBED_TYPE";
 	public static final String GEBO_EXTERNAL_SEARCH_RESULT_JSON = "GEBO_SEARCH_RESULT_JSON";
