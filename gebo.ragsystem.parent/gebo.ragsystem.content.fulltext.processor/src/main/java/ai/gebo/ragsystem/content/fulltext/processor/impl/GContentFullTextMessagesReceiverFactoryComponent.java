@@ -26,6 +26,7 @@ import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
+import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.model.MetaEndpointType;
@@ -91,7 +92,7 @@ public class GContentFullTextMessagesReceiverFactoryComponent extends GAbstractT
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
 
 		DataEndpoint index = new DataEndpoint();
-		index.setId("fulltext-index");
+		index.setId(GStandardDataFlowEndpoints.FULLTEXT_INDEX);
 		// Name the actual index the chunks land in - the store name an auditor needs
 		// to locate the retained data (see OpenSearchFullTextChunkIndexService).
 		index.setDescription("Full-text index of ingested chunks (index 'kb_chunks')");
@@ -122,10 +123,7 @@ public class GContentFullTextMessagesReceiverFactoryComponent extends GAbstractT
 
 		flow.getTransformations().add(DataTransformationInfo.of("fulltext-indexing",
 				"Chunks are indexed into OpenSearch and retained", indexer,
-				GDataFlowMetaInfos.qualifiedId(
-						new GeboComponentInfo(GStandardModulesConstraints.TOKENIZER_MODULE,
-								GStandardModulesConstraints.TOKENIZER_COMPONENT),
-						"chunk-cache"),
+				GStandardDataFlowEndpoints.chunkCacheRef(),
 				flow.qualifiedId(index.getId())));
 		return flow;
 	}

@@ -17,6 +17,7 @@ import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
+import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.model.MetaEndpointType;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
@@ -83,7 +84,7 @@ public class GraphextractionProcessorMessagesReceiverFactoryComponent extends GA
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
 
 		DataEndpoint graph = new DataEndpoint();
-		graph.setId("knowledge-graph");
+		graph.setId(GStandardDataFlowEndpoints.KNOWLEDGE_GRAPH);
 		graph.setDescription("Knowledge graph of entities and relations extracted from ingested chunks");
 		graph.setProduct("Neo4j");
 		// setEndpoint sanitizes: any userinfo in the bolt URI is stripped, and the
@@ -114,10 +115,7 @@ public class GraphextractionProcessorMessagesReceiverFactoryComponent extends GA
 
 		flow.getTransformations().add(DataTransformationInfo.of("graph-extraction",
 				"Chunk text is analysed and its entities and relations written to the knowledge graph", extractor,
-				GDataFlowMetaInfos.qualifiedId(
-						new GeboComponentInfo(GStandardModulesConstraints.TOKENIZER_MODULE,
-								GStandardModulesConstraints.TOKENIZER_COMPONENT),
-						"chunk-cache"),
+				GStandardDataFlowEndpoints.chunkCacheRef(),
 				flow.qualifiedId(graph.getId())));
 		return flow;
 	}

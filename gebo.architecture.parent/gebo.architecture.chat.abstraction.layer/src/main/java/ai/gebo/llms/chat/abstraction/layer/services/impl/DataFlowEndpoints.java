@@ -12,13 +12,17 @@ package ai.gebo.llms.chat.abstraction.layer.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.ObjectProvider;
+
 import ai.gebo.application.messaging.model.DataEndpoint;
 import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
-import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
 import ai.gebo.application.messaging.model.MetaEndpointType;
+import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.rag.support.layer.services.IGFullTextSearchDocumentsCachedDao;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
@@ -27,7 +31,6 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
-import ai.gebo.model.base.GeboComponentInfo;
 
 /**
  * The endpoints the symbolic data-flow reporters (the chat pipeline, the agents
@@ -109,22 +112,54 @@ public final class DataFlowEndpoints {
 		return endpoint;
 	}
 
-	/** The vector store the vectorizator publishes; linked to when it exists. */
+	/** The vector store the vectorizator publishes. */
 	public static String vectorStoreRef() {
-		return GDataFlowMetaInfos.qualifiedId(new GeboComponentInfo(GStandardModulesConstraints.VECTORIZATOR_MODULE,
-				GStandardModulesConstraints.VECTORIZATION_COMPONENT), "vector-store");
+		return GStandardDataFlowEndpoints.vectorStoreRef();
 	}
 
-	/** The full-text index the full-text indexer publishes; linked to when it exists. */
+	/** The full-text index the full-text indexer publishes. */
 	public static String fullTextIndexRef() {
-		return GDataFlowMetaInfos.qualifiedId(new GeboComponentInfo(GStandardModulesConstraints.FULLTEXT_MODULE,
-				GStandardModulesConstraints.FULLTEXT_INDEXING_COMPONENT), "fulltext-index");
+		return GStandardDataFlowEndpoints.fullTextIndexRef();
 	}
 
-	/** The knowledge graph the graph extraction publishes; linked to when it exists. */
-	public static String graphStoreRef() {
-		return GDataFlowMetaInfos.qualifiedId(new GeboComponentInfo(GStandardModulesConstraints.KNOWLEDGE_GRAPH_MODULE,
-				GStandardModulesConstraints.KNOWLEDGE_GRAPH_COMPONENT), "graph-store");
+	/** The knowledge graph the graph extraction publishes. */
+	public static String knowledgeGraphRef() {
+		return GStandardDataFlowEndpoints.knowledgeGraphRef();
+	}
+
+	/**
+	 * The legs a knowledge-base search runs on this installation, as
+	 * {@code GDocumentsSearchServiceImpl} runs them: the semantic leg over the vector
+	 * store always, the lexical leg over the full-text index only when the full-text
+	 * search is deployed (OpenSearch, {@code ai.gebo.opensearch.enabled}), the graph
+	 * leg over the knowledge graph only when the graph search is (Neo4j,
+	 * {@code ai.gebo.neo4j.enabled}). Every reader of the knowledge bases - the chat
+	 * profiles, deep search, the agents networks and their tools - searches through
+	 * that service, so all of them read exactly these stores.
+	 *
+	 * @param fullText whether the full-text search is deployed
+	 * @param graph    whether the knowledge graph search is deployed
+	 */
+	public static record KnowledgeBaseSearchLegs(boolean fullText, boolean graph) {
+
+		/**
+		 * The legs deployed here, read from the same optional beans the search service
+		 * is given ({@code GeboRagSearchConfig}): present when the search runs the leg,
+		 * absent when the installation does not deploy it.
+		 */
+		public static KnowledgeBaseSearchLegs deployed(
+				ObjectProvider<IGFullTextSearchDocumentsCachedDao> fullTextSearchProvider,
+				ObjectProvider<IKnowledgeGraphSearchService> knowledgeGraphSearchProvider) {
+			return new KnowledgeBaseSearchLegs(available(fullTextSearchProvider), available(knowledgeGraphSearchProvider));
+		}
+
+		private static boolean available(ObjectProvider<?> provider) {
+			try {
+				return provider != null && provider.getIfAvailable() != null;
+			} catch (RuntimeException e) {
+				return false;
+			}
+		}
 	}
 
 	/** A transformation from a source endpoint to a destination one, with its engine. */

@@ -27,6 +27,7 @@ import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
+import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.model.MetaEndpointType;
@@ -128,10 +129,7 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 			flow.getTransformations()
 					.add(DataTransformationInfo.of("chunk-submission-" + model.getId(),
 							"Chunk text leaves this installation for the embedding model", engine,
-							GDataFlowMetaInfos.qualifiedId(
-									new GeboComponentInfo(GStandardModulesConstraints.TOKENIZER_MODULE,
-											GStandardModulesConstraints.TOKENIZER_COMPONENT),
-									"chunk-cache"),
+							GStandardDataFlowEndpoints.chunkCacheRef(),
 							flow.qualifiedId(model.getId())));
 		}
 
@@ -179,7 +177,7 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 		String collection = defaultEmbeddingModelCode();
 
 		DataEndpoint endpoint = new DataEndpoint();
-		endpoint.setId("vector-store");
+		endpoint.setId(GStandardDataFlowEndpoints.VECTOR_STORE);
 		endpoint.setDescription(collection != null ? "Vector store of embedded chunks (collection '" + collection + "')"
 				: "Vector store of embedded chunks");
 		endpoint.setProduct(configuration.getProduct().name());
