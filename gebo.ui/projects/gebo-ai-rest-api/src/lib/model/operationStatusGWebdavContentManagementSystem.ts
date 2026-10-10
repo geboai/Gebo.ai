@@ -15,6 +15,6 @@ import { GWebdavContentManagementSystem } from './gWebdavContentManagementSystem
 export interface OperationStatusGWebdavContentManagementSystem { 
     result?: GWebdavContentManagementSystem;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }
