@@ -31,8 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
-import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.tables.AbstractTableData;
+import ai.gebo.system.ingestion.DocumentTitles;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGIngestionHandlerConfigDao;
 import ai.gebo.system.ingestion.IGTableDataHandler;
@@ -82,34 +82,21 @@ public class GOdtIngestionHandlerImpl extends GAbstractConfiguredHandler {
 	 */
 	private static void enrichOdtMetadata(OdfTextDocument doc, Map<String, Object> meta) {
 		try {
-			String title = doc.getOfficeMetadata().getTitle();
-			if (title != null && !title.isEmpty()) {
-				meta.putIfAbsent(DocumentMetaInfos.TITLE, title);
-			}
-			String subject = doc.getOfficeMetadata().getSubject();
-			if (subject != null && !subject.isEmpty()) {
-				meta.putIfAbsent(DocumentMetaInfos.SUBTITLE, subject);
-			}
+			DocumentTitles.fromOdfDocument(doc, meta, "odt meta");
 
 			// Fallback to first headings if meta.xml values are absent
-			if (!meta.containsKey(DocumentMetaInfos.TITLE) || !meta.containsKey(DocumentMetaInfos.SUBTITLE)) {
+			if (!DocumentTitles.hasTitle(meta) || !DocumentTitles.hasSubtitle(meta)) {
 				OfficeTextElement textRoot = doc.getContentRoot();
 				OdfTextHeading heading = OdfElement.findFirstChildNode(OdfTextHeading.class, textRoot);
 				while (heading != null) {
 					String levelStr = heading.getAttribute("text:outline-level");
 					int level = levelStr != null ? Integer.parseInt(levelStr) : 1;
-					if (level == 1 && !meta.containsKey(DocumentMetaInfos.TITLE)) {
-						String txt = heading.getTextContent();
-						if (txt != null && !txt.isBlank()) {
-							meta.put(DocumentMetaInfos.TITLE, txt.trim());
-						}
-					} else if (level == 2 && !meta.containsKey(DocumentMetaInfos.SUBTITLE)) {
-						String txt = heading.getTextContent();
-						if (txt != null && !txt.isBlank()) {
-							meta.put(DocumentMetaInfos.SUBTITLE, txt.trim());
-						}
+					if (level == 1) {
+						DocumentTitles.putTitle(meta, heading.getTextContent(), "odt heading");
+					} else if (level == 2) {
+						DocumentTitles.putSubtitle(meta, heading.getTextContent(), "odt heading");
 					}
-					if (meta.containsKey(DocumentMetaInfos.TITLE) && meta.containsKey(DocumentMetaInfos.SUBTITLE)) {
+					if (DocumentTitles.hasTitle(meta) && DocumentTitles.hasSubtitle(meta)) {
 						break;
 					}
 					heading = OdfElement.findNextChildNode(OdfTextHeading.class, heading);

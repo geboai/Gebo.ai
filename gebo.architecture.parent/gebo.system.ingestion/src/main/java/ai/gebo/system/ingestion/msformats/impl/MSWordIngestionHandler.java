@@ -31,7 +31,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
-import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.system.ingestion.DocumentTitles;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGIngestionHandlerConfigDao;
 import ai.gebo.system.ingestion.impl.GAbstractConfiguredHandler;
@@ -71,12 +71,9 @@ public class MSWordIngestionHandler extends GAbstractConfiguredHandler {
 	private static void enrichDocxMetadata(XWPFDocument doc, Map<String, Object> metadata) {
 		POIXMLProperties.CoreProperties cp = doc.getProperties().getCoreProperties();
 		if (cp != null) {
-			if (cp.getTitle() != null && !cp.getTitle().isEmpty()) {
-				metadata.putIfAbsent(DocumentMetaInfos.TITLE, cp.getTitle());
-			}
-			if (cp.getSubject() != null && !cp.getSubject().isEmpty()) {
-				metadata.putIfAbsent(DocumentMetaInfos.SUBTITLE, cp.getSubject());
-			}
+			DocumentTitles.putTitle(metadata, cp.getTitle(), "docx properties");
+			DocumentTitles.putSubtitle(metadata, cp.getSubject(), "docx properties");
+			DocumentTitles.putAuthor(metadata, cp.getCreator(), "docx properties");
 		}
 		// fall‑back: cerca stile "Title" / "Subtitle" nelle prime righe
 		for (XWPFParagraph p : doc.getParagraphs()) {
@@ -84,12 +81,12 @@ public class MSWordIngestionHandler extends GAbstractConfiguredHandler {
 			if (style == null) {
 				continue;
 			}
-			if ("Title".equalsIgnoreCase(style) && !metadata.containsKey(DocumentMetaInfos.TITLE)) {
-				metadata.put(DocumentMetaInfos.TITLE, p.getText());
-			} else if ("Subtitle".equalsIgnoreCase(style) && !metadata.containsKey(DocumentMetaInfos.SUBTITLE)) {
-				metadata.put(DocumentMetaInfos.SUBTITLE, p.getText());
+			if ("Title".equalsIgnoreCase(style)) {
+				DocumentTitles.putTitle(metadata, p.getText(), "docx Title style");
+			} else if ("Subtitle".equalsIgnoreCase(style)) {
+				DocumentTitles.putSubtitle(metadata, p.getText(), "docx Subtitle style");
 			}
-			if (metadata.containsKey(DocumentMetaInfos.TITLE) && metadata.containsKey(DocumentMetaInfos.SUBTITLE)) {
+			if (DocumentTitles.hasTitle(metadata) && DocumentTitles.hasSubtitle(metadata)) {
 				break;
 			}
 		}
@@ -100,13 +97,9 @@ public class MSWordIngestionHandler extends GAbstractConfiguredHandler {
 	 */
 	private static void enrichDocMetadata(HWPFDocument doc, Map<String, Object> metadata) {
 		if (doc.getSummaryInformation() != null) {
-			if (doc.getSummaryInformation().getTitle() != null && !doc.getSummaryInformation().getTitle().isEmpty()) {
-				metadata.putIfAbsent(DocumentMetaInfos.TITLE, doc.getSummaryInformation().getTitle());
-			}
-			if (doc.getSummaryInformation().getSubject() != null
-					&& !doc.getSummaryInformation().getSubject().isEmpty()) {
-				metadata.putIfAbsent(DocumentMetaInfos.SUBTITLE, doc.getSummaryInformation().getSubject());
-			}
+			DocumentTitles.putTitle(metadata, doc.getSummaryInformation().getTitle(), "doc summary information");
+			DocumentTitles.putSubtitle(metadata, doc.getSummaryInformation().getSubject(), "doc summary information");
+			DocumentTitles.putAuthor(metadata, doc.getSummaryInformation().getAuthor(), "doc summary information");
 		}
 		// fall‑back: cerca paragrafo con stile "Title" / "Subtitle"
 		Range rng = doc.getRange();
@@ -116,12 +109,12 @@ public class MSWordIngestionHandler extends GAbstractConfiguredHandler {
 					: doc.getStyleSheet().getStyleDescription(p.getStyleIndex()).getName();
 			if (style == null)
 				continue;
-			if ("Title".equalsIgnoreCase(style) && !metadata.containsKey(DocumentMetaInfos.TITLE)) {
-				metadata.put(DocumentMetaInfos.TITLE, p.text());
-			} else if ("Subtitle".equalsIgnoreCase(style) && !metadata.containsKey(DocumentMetaInfos.SUBTITLE)) {
-				metadata.put(DocumentMetaInfos.SUBTITLE, p.text());
+			if ("Title".equalsIgnoreCase(style)) {
+				DocumentTitles.putTitle(metadata, p.text(), "doc Title style");
+			} else if ("Subtitle".equalsIgnoreCase(style)) {
+				DocumentTitles.putSubtitle(metadata, p.text(), "doc Subtitle style");
 			}
-			if (metadata.containsKey(DocumentMetaInfos.TITLE) && metadata.containsKey(DocumentMetaInfos.SUBTITLE)) {
+			if (DocumentTitles.hasTitle(metadata) && DocumentTitles.hasSubtitle(metadata)) {
 				break;
 			}
 		}

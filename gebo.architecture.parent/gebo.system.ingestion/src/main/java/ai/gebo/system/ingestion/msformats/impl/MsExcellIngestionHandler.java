@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.tables.AbstractTableData;
+import ai.gebo.system.ingestion.DocumentTitles;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGIngestionHandlerConfigDao;
 import ai.gebo.system.ingestion.IGTableDataHandler;
@@ -84,7 +85,7 @@ public class MsExcellIngestionHandler extends GAbstractConfiguredHandler {
 		try {
 			List<AbstractTableData> tableDatas = null;
 			enrichMetaData(reference, manageMetaInfo);
-			tableDatas = readExcelTables(reference, is);
+			tableDatas = readExcelTables(reference, is, manageMetaInfo);
 
 			Stream<Document> docstream = Stream.of();
 			for (AbstractTableData abstractTableData : tableDatas) {
@@ -125,17 +126,19 @@ public class MsExcellIngestionHandler extends GAbstractConfiguredHandler {
 	 * 
 	 * @param reference The document reference for the Excel file
 	 * @param is The input stream containing the Excel data
+	 * @param manageMetaInfo The metadata, given the title of the workbook
 	 * @return A list of table data objects representing each sheet
 	 * @throws EncryptedDocumentException If the document is encrypted
 	 * @throws IOException If there's an error reading the input stream
 	 */
-	private List<AbstractTableData> readExcelTables(GDocumentReference reference, InputStream is)
-			throws EncryptedDocumentException, IOException {
+	private List<AbstractTableData> readExcelTables(GDocumentReference reference, InputStream is,
+			Map<String, Object> manageMetaInfo) throws EncryptedDocumentException, IOException {
 		List<AbstractTableData> tables = new ArrayList<AbstractTableData>();
 		BufferedInputStream bis = new BufferedInputStream(is);
 		try {
 			// Create workbook from input stream
 			Workbook workbook = WorkbookFactory.create(bis);
+			DocumentTitles.fromWorkbook(workbook, manageMetaInfo);
 			int nsheets = workbook.getNumberOfSheets();
 			// Process each sheet in the workbook
 			for (int i = 0; i < nsheets; i++) {

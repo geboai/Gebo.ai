@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.document.model.GeboDocument;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.system.ingestion.DocumentTitles;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGIngestionHandlerConfigDao;
 import ai.gebo.system.ingestion.impl.GAbstractConfiguredHandler;
@@ -58,7 +59,8 @@ public class HtmlIngestionHandler extends GAbstractConfiguredHandler {
 
     /**
      * Processes HTML content into Document objects.
-     * Extracts text from the HTML body tag using JSoup and creates a Document with the extracted text.
+     * Extracts text from the HTML body tag using JSoup and creates a Document with the extracted text,
+     * the page's title and description in its metadata (see {@link DocumentTitles#fromHtml}).
      * 
      * @param reference Reference to the document being processed
      * @param is InputStream containing the HTML content
@@ -73,7 +75,9 @@ public class HtmlIngestionHandler extends GAbstractConfiguredHandler {
 		try {
 			enrichMetaData(reference, metadata);
 			List<Document> docs = new ArrayList<Document>();
-			String text = Jsoup.parse(is, "UTF-8", "").select("body").text();
+			final org.jsoup.nodes.Document page = Jsoup.parse(is, "UTF-8", "");
+			DocumentTitles.fromHtml(page, metadata);
+			String text = page.select("body").text();
 			docs.add(new Document(text, metadata));
 			return docs.stream();
 		} finally {
