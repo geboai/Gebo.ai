@@ -1,5 +1,7 @@
 package ai.gebo.architecture.agents.controllers;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.architecture.agents.model.AgentMountedTools;
 import ai.gebo.architecture.agents.model.AgentServiceDescriptor;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
@@ -204,6 +207,43 @@ public class GeboAgentsNetworkAdminController {
 					+ (configs != null ? configs.size() : 0) + " agent configuration(s)");
 		}
 		return configs;
+	}
+
+	/**
+	 * The tools each of the given agent configurations mounts on its agent's model,
+	 * as the agent mounts them when it runs: auto mounted (every registered tool but
+	 * the excluded ones) or the selected ones. Read by the network composer to show
+	 * the tools of each participant, also before the network is saved. A code with
+	 * no configuration, or a configuration with no agent service, mounts no tool.
+	 */
+	@PostMapping(value = "getAgentsMountedTools", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public List<AgentMountedTools> getAgentsMountedTools(@RequestBody @NotNull List<String> agentConfigCodes) {
+		IAgentConfigDao configDao = get(IAgentConfigDao.class);
+		IGAgentServiceRuntimeDao serviceDao = get(IGAgentServiceRuntimeDao.class);
+		List<AgentMountedTools> result = new ArrayList<>();
+		for (String code : new LinkedHashSet<>(agentConfigCodes)) {
+			if (code == null || code.isBlank()) {
+				continue;
+			}
+			GAgentConfig config = configDao.findByCode(code);
+			IGGenericAgentService service = config != null && config.getAgentServiceId() != null
+					? serviceDao.findByCode(config.getAgentServiceId())
+					: null;
+			AgentMountedTools mounted;
+			if (service != null) {
+				mounted = service.getMountedTools(config);
+			} else {
+				mounted = new AgentMountedTools();
+				mounted.setAgentConfigCode(code);
+				mounted.setMountMode(AgentMountedTools.MountMode.SELECTED);
+			}
+			result.add(mounted);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getAgentsMountedTools for " + agentConfigCodes.size() + " code(s) returned "
+					+ result.size() + " result(s)");
+		}
+		return result;
 	}
 
 	/**

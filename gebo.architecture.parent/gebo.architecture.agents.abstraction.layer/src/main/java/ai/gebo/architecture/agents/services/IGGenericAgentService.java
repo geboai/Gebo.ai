@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ai.gebo.architecture.agents.model.AgentCapabilities;
+import ai.gebo.architecture.agents.model.AgentMountedTools;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 
 public interface IGGenericAgentService {
@@ -30,5 +31,20 @@ public interface IGGenericAgentService {
 	 */
 	public default AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
 		return new AgentCapabilities(getDescription());
+	}
+
+	/**
+	 * The tools the given configuration mounts on this agent's model, as the agent
+	 * mounts them when it runs. The default implementation mounts none: an agent
+	 * that mounts the registered tools overrides it.
+	 *
+	 * @param agentConfig the configuration the tools are evaluated against
+	 */
+	public default AgentMountedTools getMountedTools(GAgentConfig agentConfig) {
+		AgentMountedTools mounted = new AgentMountedTools();
+		mounted.setAgentConfigCode(agentConfig != null ? agentConfig.getCode() : null);
+		mounted.setAgentServiceId(getId());
+		mounted.setMountMode(AgentMountedTools.MountMode.SELECTED);
+		return mounted;
 	}
 }
