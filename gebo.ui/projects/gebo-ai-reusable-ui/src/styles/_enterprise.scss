@@ -1229,6 +1229,16 @@ body:has(.p-dialog-mask, .p-drawer-mask) :is(
 
 /* --- A rule said in words ------------------------------------------------- */
 
+/* The sentence is a component, so it lands in its parent's layout as ONE flex item:
+   without laying its own children out, the parent's gap never falls between the words
+   and they run together ("Every weekon Mon"). */
+gebo-ai-schedule-sentence {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gebo-space-1);
+}
+
 .geboSentence__word {
   color: var(--gebo-text-strong);
   font-weight: var(--gebo-font-weight-semibold);
@@ -1537,6 +1547,8 @@ input.geboMinuteInput {
   display: grid;
   gap: 2px;
   margin: var(--gebo-space-2) 0;
+  /* a heat map, kept compact: 24 cells reading as a block, not a stretched table */
+  max-width: 380px;
 }
 
 .geboWeek__row {
@@ -1614,6 +1626,10 @@ input.geboMinuteInput {
 .geboEditor {
   display: grid;
   gap: var(--gebo-space-4);
+  /* The editor is a form, not a canvas. Left to fill a wide dialog it stretches the week
+     grid into a sparse table and throws each rule card's controls far from its text. */
+  max-width: 1180px;
+  margin: 0 auto;
 }
 
 .geboEditor__presets {
@@ -1624,6 +1640,11 @@ input.geboMinuteInput {
 }
 
 .geboEditor__aside {
+  /* Stays beside the rules rather than under them: it highlights the hours of whichever
+     rule is open, which is only useful while that rule is on screen. */
+  position: sticky;
+  top: 0;
+  max-width: 420px;
   padding: var(--gebo-space-3);
   border: 1px solid var(--gebo-border-subtle);
   border-radius: var(--gebo-radius-panel);
