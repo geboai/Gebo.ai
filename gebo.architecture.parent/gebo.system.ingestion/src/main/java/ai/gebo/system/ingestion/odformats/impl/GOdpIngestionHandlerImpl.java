@@ -33,7 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
-import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.system.ingestion.DocumentTitles;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGIngestionHandlerConfigDao;
 import ai.gebo.system.ingestion.IGTableDataHandler;
@@ -97,17 +97,10 @@ public class GOdpIngestionHandlerImpl extends GAbstractConfiguredHandler {
 	 */
 	private static void enrichOdpMetadata(OdfPresentationDocument doc, Map<String, Object> metadata) {
 		try {
-			String metaTitle = doc.getOfficeMetadata().getTitle();
-			if (metaTitle != null && !metaTitle.isEmpty()) {
-				metadata.putIfAbsent(DocumentMetaInfos.TITLE, metaTitle);
-			}
-			String metaSubject = doc.getOfficeMetadata().getSubject();
-			if (metaSubject != null && !metaSubject.isEmpty()) {
-				metadata.putIfAbsent(DocumentMetaInfos.SUBTITLE, metaSubject);
-			}
+			DocumentTitles.fromOdfDocument(doc, metadata, "odp meta");
 
 			// Fallback: first slide's title box
-			if (!metadata.containsKey("title")) {
+			if (!DocumentTitles.hasTitle(metadata)) {
 				OfficePresentationElement pres = doc.getContentRoot();
 				DrawPageElement slide = OdfElement.findFirstChildNode(DrawPageElement.class, pres);
 				if (slide != null) {
@@ -117,13 +110,11 @@ public class GOdpIngestionHandlerImpl extends GAbstractConfiguredHandler {
 						if (tb != null) {
 							OdfTextParagraph p = OdfElement.findFirstChildNode(OdfTextParagraph.class, tb);
 							if (p != null) {
-								String text = p.getTextContent();
-								if (text != null && !text.isBlank()) {
-									metadata.put(DocumentMetaInfos.TITLE, text.trim());
+								if (DocumentTitles.putTitle(metadata, p.getTextContent(), "odp first slide")) {
 									// look for subtitle – very next paragraph if any
 									OdfTextParagraph next = OdfElement.findNextChildNode(OdfTextParagraph.class, p);
-									if (next != null && !next.getTextContent().isBlank()) {
-										metadata.put(DocumentMetaInfos.SUBTITLE, next.getTextContent().trim());
+									if (next != null) {
+										DocumentTitles.putSubtitle(metadata, next.getTextContent(), "odp first slide");
 									}
 									break;
 								}
