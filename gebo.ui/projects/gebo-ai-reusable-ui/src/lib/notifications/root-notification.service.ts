@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 
 import { MessageService, ToastMessageOptions } from "primeng/api";
-import { forkJoin, map, Subscription } from "rxjs";
+import { forkJoin, map, Subscription, take } from "rxjs";
 import { GeboAITranslationService } from "../controls/field-translation-container/gebo-translation.service";
 import { ToastZIndexService } from "./toast-z-index.service";
 import { NotificationLayerEnum } from "./notification-layer";
@@ -44,7 +44,9 @@ export class GeboAIRootNotificationService {
     }
     public addMessages(moduleId: string, entityId: string, msg: GUserMessage[], layer: NotificationLayerEnum = "GLOBAL"): void {
         if (msg && msg.length) {
-            const observables = msg.map(x => this.geboAiTranslationService.translateMessage(moduleId, entityId, x.id, x).pipe(map(r => {
+            // one translation per message: the translation follows the language changes and
+            // never completes, which would keep the forkJoin below from ever emitting
+            const observables = msg.map(x => this.geboAiTranslationService.translateMessage(moduleId, entityId, x.id, x).pipe(take(1), map(r => {
                 const retMsg = r ? r : x;
                 const toast: ToastMessageOptions = {
                     detail: retMsg.detail,
