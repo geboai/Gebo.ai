@@ -1,0 +1,57 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+@switch (rule.kind) {
+  @case ('HOURLY') {
+    <span class="geboSentence__word" id="EveryHourWrd" gebo-ai-text>Every hour</span>
+    <span class="geboSentence__joiner" id="AtMinuteWrd" gebo-ai-text>at minute</span>
+    <span class="geboSentence__value">{{summary.minute}}</span>
+  }
+  @case ('DAILY') {
+    <span class="geboSentence__word" id="EveryDayWrd" gebo-ai-text>Every day</span>
+    @if (summary.times.length) {
+      <span class="geboSentence__joiner" id="DailyAtWrd" gebo-ai-text>at</span>
+      @for (time of summary.times; track $index) {
+        <span class="geboSentence__value">{{time}}</span>
+      }
+    }
+  }
+  @case ('WEEKLY') {
+    <span class="geboSentence__word" id="EveryWeekWrd" gebo-ai-text>Every week</span>
+    @if (summary.days.length) {
+      <span class="geboSentence__joiner" id="WeeklyOnWrd" gebo-ai-text>on</span>
+      @for (day of summary.days; track $index) {
+        <span class="geboSentence__value">{{day}}</span>
+      }
+    }
+    @if (summary.times.length) {
+      <span class="geboSentence__joiner" id="WeeklyAtWrd" gebo-ai-text>at</span>
+      @for (time of summary.times; track $index) {
+        <span class="geboSentence__value">{{time}}</span>
+      }
+    }
+  }
+  @case ('DATES') {
+    <span class="geboSentence__word" id="OnDatesWrd" gebo-ai-text>On set dates</span>
+    @for (date of summary.dates; track $index) {
+      <span class="geboSentence__value">{{date}}</span>
+    }
+  }
+}
+@if (showProblem && problem) {
+  <span class="geboSentence__problem">
+    @switch (problem) {
+      @case ('NO_TIMES') { <span id="NoTimeYetMsg" gebo-ai-text>no time set yet</span> }
+      @case ('NO_DAYS') { <span id="NoDayYetMsg" gebo-ai-text>no day set yet</span> }
+      @case ('NO_DATES') { <span id="NoDateYetMsg" gebo-ai-text>no date set yet</span> }
+    }
+  </span>
+}

@@ -11,53 +11,34 @@
 
 
 /**
- * @file content-reindex.module.ts
- * AI generated comments
- * 
- * This module provides components for scheduling content reindexing operations.
- * It imports various UI modules from PrimeNG and Angular and declares the scheduling
- * related components used for timing and schedule management in the application.
+ * @file content-reindex-schedule.module.ts
+ *
+ * The editor of the schedule on which a data source is re-checked for contents to ingest.
+ *
+ * Only GeboAIContentReindexScheduleComponent is exported: the other three components are the
+ * pieces it is drawn from (one rule as a card, one rule said in words, the week at a glance).
  */
 
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { BlockUIModule } from "primeng/blockui";
 import { ButtonModule } from "primeng/button";
-import { ChipModule } from "primeng/chip";
-import { DialogModule } from "primeng/dialog";
-import { PanelModule } from "primeng/panel";
-import { TimeSetComponent } from "./time-set.component";
-import { GeboAIPeriodsSchedulingBaseComponent } from "./periods-base.component";
-import { GeboAIContentReindexScheduleComponent } from "./content-reindex-schedule.component";
-
 import { DatePickerModule } from "primeng/datepicker";
+import { DialogModule } from "primeng/dialog";
 import { InputNumberModule } from "primeng/inputnumber";
-import { FieldsetModule } from "primeng/fieldset";
-import { SelectModule } from 'primeng/select';
-import { GEBO_AI_MODULE} from "../field-host-component-iface/field-host-component-iface";
+import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
-import { GeboBlockableContainerDirective } from "../../directives/blockable-container/blockable-container.directive";
+import { GeboAIContentReindexScheduleComponent } from "./content-reindex-schedule.component";
+import { GeboAIScheduleRuleCardComponent } from "./schedule-rule-card.component";
+import { GeboAIScheduleSentenceComponent } from "./schedule-sentence.component";
+import { GeboAIScheduleWeekGridComponent } from "./schedule-week-grid.component";
 
-/**
- * NgModule for content reindexing functionality.
- * 
- * This module encapsulates all components needed for the content reindexing feature.
- * It imports necessary UI modules from PrimeNG like calendar, buttons, dialogs, etc.,
- * and Angular's form handling modules.
- * 
- * The module declares three components:
- * - GeboAIPeriodsSchedulingBaseComponent: Base component for period scheduling
- * - TimeSetComponent: Component for setting specific times
- * - GeboAIContentReindexScheduleComponent: Main component for content reindexing schedule
- * 
- * Only the GeboAIContentReindexScheduleComponent is exported for use in other modules.
- */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, DialogModule, PanelModule, BlockUIModule, ChipModule, ButtonModule, SelectModule, DatePickerModule, InputNumberModule, FieldsetModule,GeboAIFieldTranslationContainerModule, GeboBlockableContainerDirective],
-    declarations: [GeboAIPeriodsSchedulingBaseComponent, TimeSetComponent, GeboAIContentReindexScheduleComponent],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, DialogModule, ButtonModule,
+        DatePickerModule, InputNumberModule, GeboAIFieldTranslationContainerModule],
+    declarations: [GeboAIScheduleSentenceComponent, GeboAIScheduleWeekGridComponent,
+        GeboAIScheduleRuleCardComponent, GeboAIContentReindexScheduleComponent],
     exports: [GeboAIContentReindexScheduleComponent],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIContentReindexModule", multi: false }]
-
 })
 export class GeboAIContentReindexModule { }

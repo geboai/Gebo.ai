@@ -1100,3 +1100,577 @@ body:has(.p-dialog-mask, .p-drawer-mask) :is(
     animation-iteration-count: 1;
   }
 }
+
+/* ===========================================================================
+   Content update checks scheduler (GeboAIContentReindexModule)
+
+   The scheduler is built from four components (field summary, rule card, rule
+   sentence, week grid) that share this vocabulary, and it restyles the inner
+   input of a PrimeNG datepicker through inputStyleClass. Both reasons put the
+   rules here rather than in per component stylesheets, next to the other
+   gebo* classes the dialogs already rely on.
+   =========================================================================== */
+
+/* --- The strip shown on the data source form ------------------------------ */
+
+.geboSchedule {
+  width: 100%;
+  padding: var(--gebo-space-3);
+  border: 1px solid var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-panel);
+  background: var(--gebo-white);
+}
+
+.geboSchedule--idle {
+  background: var(--gebo-surface-subtle);
+}
+
+.geboSchedule__top {
+  display: flex;
+  align-items: center;
+  gap: var(--gebo-space-3);
+}
+
+.geboSchedule__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--gebo-primary-50);
+  color: var(--gebo-primary-600);
+}
+
+.geboSchedule__badge--idle {
+  background: var(--gebo-surface-hover);
+  color: var(--gebo-text-subtle);
+}
+
+.geboSchedule__state {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.geboSchedule__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gebo-space-2);
+}
+
+.geboSchedule__pill {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--gebo-space-1);
+  padding: var(--gebo-space-1) var(--gebo-space-2);
+  border: 1px solid var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-control);
+  background: var(--gebo-surface-subtle);
+  font-size: var(--gebo-font-size-sm);
+}
+
+.geboSchedule__idleText {
+  color: var(--gebo-text-subtle);
+  font-size: var(--gebo-font-size-sm);
+}
+
+.geboSchedule__note {
+  display: block;
+  margin-top: var(--gebo-space-2);
+  color: var(--gebo-text-subtle);
+  font-size: var(--gebo-font-size-2xs);
+}
+
+/* --- The day at a glance -------------------------------------------------- */
+
+.geboRail {
+  margin-top: var(--gebo-space-3);
+}
+
+.geboRail__track {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 2px;
+}
+
+.geboRail__slot {
+  height: 0.625rem;
+  border-radius: 2px;
+  background: var(--gebo-surface-hover);
+}
+
+.geboRail__slot--on {
+  background: var(--gebo-primary-500);
+  box-shadow: 0 0 0 1px var(--gebo-primary-600) inset;
+}
+
+.geboRail__axis {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 2px;
+  margin-top: var(--gebo-space-1);
+}
+
+.geboRail__tick {
+  position: relative;
+  height: 0.875rem;
+}
+
+.geboRail__tickLabel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--gebo-text-subtle);
+  font-size: var(--gebo-font-size-2xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- A rule said in words ------------------------------------------------- */
+
+.geboSentence__word {
+  color: var(--gebo-text-strong);
+  font-weight: var(--gebo-font-weight-semibold);
+}
+
+.geboSentence__joiner {
+  color: var(--gebo-text-subtle);
+}
+
+.geboSentence__value {
+  display: inline-block;
+  padding: 0 0.375rem;
+  border: 1px solid var(--gebo-primary-100);
+  border-radius: var(--gebo-radius-control);
+  background: var(--gebo-primary-50);
+  color: var(--gebo-primary-700);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--gebo-font-weight-medium);
+}
+
+.geboSentence__problem {
+  color: var(--gebo-warning);
+  font-size: var(--gebo-font-size-xs);
+  font-style: italic;
+}
+
+/* --- One rule, as a card -------------------------------------------------- */
+
+.geboRule {
+  margin-bottom: var(--gebo-space-2);
+  border: 1px solid var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-panel);
+  background: var(--gebo-white);
+  overflow: hidden;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.geboRule--open {
+  border-color: var(--gebo-primary-300);
+  box-shadow: var(--gebo-shadow-overlay);
+}
+
+.geboRule--problem {
+  border-left: 3px solid var(--gebo-warning);
+}
+
+.geboRule__head {
+  display: flex;
+  align-items: center;
+}
+
+.geboRule__toggle {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--gebo-space-2);
+  min-width: 0;
+  padding: var(--gebo-space-3);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.geboRule__toggle:hover {
+  background: var(--gebo-surface-hover);
+}
+
+.geboRule__icon {
+  flex: 0 0 auto;
+  color: var(--gebo-primary-600);
+}
+
+.geboRule__sentence {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gebo-space-1);
+  min-width: 0;
+}
+
+.geboRule__chevron {
+  flex: 0 0 auto;
+  color: var(--gebo-text-subtle);
+  font-size: var(--gebo-font-size-xs);
+}
+
+.geboRule__tools {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  padding-right: var(--gebo-space-2);
+}
+
+.geboRule__body {
+  display: grid;
+  gap: var(--gebo-space-3);
+  padding: var(--gebo-space-3);
+  border-top: 1px dashed var(--gebo-border-subtle);
+  background: var(--gebo-surface-subtle);
+}
+
+.geboRule__field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--gebo-space-3);
+}
+
+.geboRule__label {
+  flex: 0 0 auto;
+  min-width: 6.5rem;
+  padding-top: 0.4rem;
+  color: var(--gebo-text-muted);
+  font-size: var(--gebo-font-size-xs);
+  font-weight: var(--gebo-font-weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.geboRule__inline {
+  flex: 1 1 16rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gebo-space-2);
+}
+
+/* --- Segmented choices ---------------------------------------------------- */
+
+.geboSegmented {
+  display: inline-flex;
+  border: 1px solid var(--gebo-border-strong);
+  border-radius: var(--gebo-radius-control);
+  background: var(--gebo-white);
+  overflow: hidden;
+}
+
+.geboSegmented--wrap {
+  flex-wrap: wrap;
+}
+
+.geboSegmented__option {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gebo-space-1);
+  padding: 0.4rem 0.7rem;
+  border: 0;
+  border-right: 1px solid var(--gebo-border-subtle);
+  background: transparent;
+  color: var(--gebo-text-muted);
+  font-family: inherit;
+  font-size: var(--gebo-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.geboSegmented__option:last-child {
+  border-right: 0;
+}
+
+.geboSegmented__option:hover {
+  background: var(--gebo-surface-hover);
+  color: var(--gebo-text-strong);
+}
+
+.geboSegmented__option--on,
+.geboSegmented__option--on:hover {
+  background: var(--gebo-primary-500);
+  color: var(--gebo-white);
+}
+
+/* --- Days of the week ----------------------------------------------------- */
+
+.geboDays {
+  display: inline-flex;
+  gap: var(--gebo-space-1);
+}
+
+.geboDays__day {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--gebo-border-strong);
+  border-radius: 50%;
+  background: var(--gebo-white);
+  color: var(--gebo-text-muted);
+  font-family: inherit;
+  font-size: var(--gebo-font-size-xs);
+  font-weight: var(--gebo-font-weight-semibold);
+  cursor: pointer;
+}
+
+.geboDays__day:hover {
+  background: var(--gebo-surface-hover);
+}
+
+.geboDays__day--on,
+.geboDays__day--on:hover {
+  border-color: var(--gebo-primary-600);
+  background: var(--gebo-primary-500);
+  color: var(--gebo-white);
+}
+
+/* --- Times and dates, as chips ------------------------------------------- */
+
+.geboChip {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--gebo-border-strong);
+  border-radius: var(--gebo-radius-control);
+  background: var(--gebo-white);
+  overflow: hidden;
+}
+
+.geboChip--past {
+  border-color: var(--gebo-warning);
+  background: var(--gebo-warning-bg);
+}
+
+.geboChip .p-datepicker,
+.geboChip .p-datepicker-input-icon-container {
+  border: 0;
+}
+
+input.geboChip__input {
+  width: 5.5rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+input.geboChip__input--wide {
+  width: 10.5rem;
+}
+
+input.geboChip__input:focus {
+  box-shadow: none;
+  outline: 2px solid var(--gebo-primary-400);
+  outline-offset: -2px;
+}
+
+.geboChip__drop {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.4rem;
+  border: 0;
+  border-left: 1px solid var(--gebo-border-subtle);
+  background: transparent;
+  color: var(--gebo-text-subtle);
+  font-size: var(--gebo-font-size-xs);
+  cursor: pointer;
+}
+
+.geboChip__drop:hover {
+  background: var(--gebo-danger-bg);
+  color: var(--gebo-danger);
+}
+
+.geboChipAdd {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gebo-space-1);
+  padding: 0.4rem 0.6rem;
+  border: 1px dashed var(--gebo-primary-300);
+  border-radius: var(--gebo-radius-control);
+  background: transparent;
+  color: var(--gebo-primary-600);
+  font-family: inherit;
+  font-size: var(--gebo-font-size-sm);
+  cursor: pointer;
+}
+
+.geboChipAdd:hover {
+  background: var(--gebo-primary-50);
+}
+
+.geboLink {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--gebo-primary-600);
+  font-family: inherit;
+  font-size: var(--gebo-font-size-xs);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.geboLink:hover {
+  color: var(--gebo-primary-800);
+}
+
+input.geboMinuteInput {
+  width: 5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- The week at a glance ------------------------------------------------- */
+
+.geboWeek {
+  display: grid;
+  gap: 2px;
+  margin: var(--gebo-space-2) 0;
+}
+
+.geboWeek__row {
+  display: flex;
+  align-items: center;
+  gap: var(--gebo-space-2);
+}
+
+.geboWeek__day {
+  flex: 0 0 2.5rem;
+  color: var(--gebo-text-subtle);
+  font-size: var(--gebo-font-size-2xs);
+  text-align: right;
+}
+
+.geboWeek__cells {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 2px;
+}
+
+.geboWeek__cell {
+  height: 0.75rem;
+  border-radius: 2px;
+  background: var(--gebo-surface-hover);
+  transition: background-color 0.12s ease;
+}
+
+.geboWeek__cell--on {
+  background: var(--gebo-primary-200);
+}
+
+.geboWeek__cell--hot {
+  background: var(--gebo-primary-600);
+}
+
+.geboWeek__tick {
+  position: relative;
+  height: 0.875rem;
+}
+
+.geboWeek__tickLabel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--gebo-text-subtle);
+  font-size: var(--gebo-font-size-2xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Remarks and editor layout ------------------------------------------- */
+
+.geboRemark {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gebo-space-2);
+  margin-top: var(--gebo-space-2);
+  padding: var(--gebo-space-2);
+  border-radius: var(--gebo-radius-control);
+  background: var(--gebo-info-bg);
+  color: var(--gebo-info);
+  font-size: var(--gebo-font-size-xs);
+}
+
+.geboRemark--warn {
+  background: var(--gebo-warning-bg);
+  color: var(--gebo-warning);
+}
+
+.geboRemark__amount {
+  font-variant-numeric: tabular-nums;
+}
+
+.geboEditor {
+  display: grid;
+  gap: var(--gebo-space-4);
+}
+
+.geboEditor__presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gebo-space-3);
+}
+
+.geboEditor__aside {
+  padding: var(--gebo-space-3);
+  border: 1px solid var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-panel);
+  background: var(--gebo-surface-subtle);
+}
+
+.geboEditor__idle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gebo-space-2);
+  padding: var(--gebo-space-6);
+  border: 1px dashed var(--gebo-border-strong);
+  border-radius: var(--gebo-radius-panel);
+  color: var(--gebo-text-subtle);
+  font-size: var(--gebo-font-size-sm);
+  text-align: center;
+}
+
+.geboEditor__add {
+  margin-top: var(--gebo-space-2);
+}
+
+.geboEditor__note {
+  display: block;
+  margin-top: var(--gebo-space-3);
+  color: var(--gebo-text-subtle);
+  font-size: var(--gebo-font-size-2xs);
+}
+
+.geboEditor__zone {
+  color: var(--gebo-text-muted);
+  font-family: var(--gebo-font-mono);
+  font-size: var(--gebo-font-size-2xs);
+}
+
+@media (max-width: 768px) {
+  .geboSchedule__top {
+    flex-wrap: wrap;
+  }
+
+  .geboRule__label {
+    min-width: 100%;
+    padding-top: 0;
+  }
+
+  .geboWeek__day {
+    flex-basis: 2rem;
+  }
+}

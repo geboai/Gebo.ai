@@ -3786,13 +3786,143 @@
   "GeboAIContentReindexModule": {
     "GeboAIContentReindexScheduleComponent": {
       "EditBtn": {
-        "help": "Edit scheduling"
+        "label": "Edit schedule",
+        "help": "Change when this source is re-checked"
+      },
+      "NotScheduledMsg": {
+        "label": "Not scheduled: this source is re-read only when it is published by hand"
+      },
+      "ServerZoneNote": {
+        "label": "Recurring times are resolved in the time zone of the server"
+      },
+      "ScheduleDialog": {
+        "label": "When should this source be re-checked?"
       },
       "ConfirmBtn": {
         "label": "Confirm"
       },
-      "AddBtn": {
-        "label": "+Add"
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "AddRuleBtn": {
+        "label": "Add a rule"
+      },
+      "NothingScheduledMsg": {
+        "label": "Nothing scheduled. This source is re-read only when it is published by hand."
+      },
+      "HowOftenLbl": {
+        "label": "How often"
+      },
+      "PresetNeverLbl": {
+        "label": "Never"
+      },
+      "PresetHourlyLbl": {
+        "label": "Every hour"
+      },
+      "PresetNightlyLbl": {
+        "label": "Nightly"
+      },
+      "PresetTwiceDailyLbl": {
+        "label": "Twice a day"
+      },
+      "PresetWeekdaysLbl": {
+        "label": "Working days"
+      },
+      "PresetWeeklyLbl": {
+        "label": "Once a week"
+      },
+      "EveryHourWrd": {
+        "label": "Every hour"
+      },
+      "AtMinuteWrd": {
+        "label": "at minute"
+      },
+      "EveryDayWrd": {
+        "label": "Every day"
+      },
+      "DailyAtWrd": {
+        "label": "at"
+      },
+      "EveryWeekWrd": {
+        "label": "Every week"
+      },
+      "WeeklyOnWrd": {
+        "label": "on"
+      },
+      "WeeklyAtWrd": {
+        "label": "at"
+      },
+      "OnDatesWrd": {
+        "label": "On set dates"
+      },
+      "NoTimeYetMsg": {
+        "label": "no time set yet"
+      },
+      "NoDayYetMsg": {
+        "label": "no day set yet"
+      },
+      "NoDateYetMsg": {
+        "label": "no date set yet"
+      },
+      "DuplicateRuleBtn": {
+        "help": "Add a copy of this rule"
+      },
+      "RemoveRuleBtn": {
+        "help": "Remove this rule"
+      },
+      "RepeatLbl": {
+        "label": "Repeat"
+      },
+      "KindHourlyLbl": {
+        "label": "Every hour"
+      },
+      "KindDailyLbl": {
+        "label": "Every day"
+      },
+      "KindWeeklyLbl": {
+        "label": "Every week"
+      },
+      "KindDatesLbl": {
+        "label": "On set dates"
+      },
+      "OnDaysLbl": {
+        "label": "On"
+      },
+      "WeekdaysShortcutLbl": {
+        "label": "Working days"
+      },
+      "AllDaysShortcutLbl": {
+        "label": "All days"
+      },
+      "AtTimesLbl": {
+        "label": "At"
+      },
+      "AddTimeLbl": {
+        "label": "Add a time"
+      },
+      "AtMinuteLbl": {
+        "label": "At minute"
+      },
+      "OnDatesLbl": {
+        "label": "On"
+      },
+      "AddDateLbl": {
+        "label": "Add a date"
+      },
+      "WeekAtAGlanceLbl": {
+        "label": "The week at a glance"
+      },
+      "HighFrequencyMsg": {
+        "label": "Every check re-reads the whole source. Checks per day:"
+      },
+      "OverlapMsg": {
+        "label": "Some rules fire at the very same moment. Checks that coincide:"
+      },
+      "PastDatesMsg": {
+        "label": "Some dates have already gone by and will never fire. Expired dates:"
+      },
+      "EditorZoneNote": {
+        "label": "Hourly, daily and weekly times are resolved in the time zone of the server. Set dates are absolute instants, picked in the time zone of this browser:"
       }
     }
   },
