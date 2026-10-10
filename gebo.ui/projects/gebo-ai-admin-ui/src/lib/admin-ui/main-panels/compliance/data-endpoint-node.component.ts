@@ -29,7 +29,9 @@ import { DataFlowEndpointNode } from "./compliance-data-flow.model";
     template: `
         <div class="node-card p-3 border-round shadow-2 flex flex-column gap-2 text-left relative"
           style="min-width: 240px; max-width: 280px; background-color: var(--surface-card, #ffffff);"
-          [style.border-top]="'4px solid ' + localityColor()">
+          [style.border-top]="'4px solid ' + localityColor()"
+          [style.outline]="node().data.reachedFrom ? '2px dashed var(--surface-500, #6b7280)' : null"
+          [style.outline-offset]="node().data.reachedFrom ? '3px' : null">
 
           <ng-diagram-port [side]="'left'" [type]="'target'" [id]="'port-left'"
             [style.pointer-events]="'none'"></ng-diagram-port>
@@ -114,6 +116,12 @@ import { DataFlowEndpointNode } from "./compliance-data-flow.model";
               <i class="pi pi-box"></i>
               <span class="font-semibold"> Reported by: </span>{{ node().data.ownerComponent }}
             </div>
+            @if (node().data.reachedFrom) {
+              <div class="mt-1" [title]="'Reported by another component: drawn here because the steps of ' + node().data.reachedFrom + ' read from it or write to it'">
+                <i class="pi pi-link"></i>
+                <span class="font-semibold"> Reached from: </span>{{ node().data.reachedFrom }}
+              </div>
+            }
           </div>
         </div>
         `

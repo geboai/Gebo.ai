@@ -170,6 +170,12 @@
         <span style="width: 1rem; height: 0.25rem; background: var(--surface-400, #9ca3af); display: inline-block;"></span>
         <span gebo-ai-text>Locality undetermined</span>
       </span>
+      @if (selectedTab !== allFlowsTab) {
+        <span class="flex align-items-center gap-2 text-sm">
+          <span style="width: 1rem; height: 0; border-top: 2px dashed var(--surface-500, #6b7280); display: inline-block;"></span>
+          <span id="ReachedFromLegendText" gebo-ai-text>Reported by another component</span>
+        </span>
+      }
       <span class="flex-1"></span>
       <p-button id="RefreshDataFlowBtn" gebo-ai-label (onClick)="refreshFromDialog()"
         [outlined]="true" size="small" icon="pi pi-refresh" label="Refresh"></p-button>
@@ -186,6 +192,22 @@
         </span>
       </div>
     } @else {
+      <!-- One tab per component reporting flows, besides every flow: only the drawing
+           is split, the register stays the same one. -->
+      <p-tabs id="DataFlowRegisterTabs" [value]="selectedTab" (valueChange)="selectTab($event)" [scrollable]="true">
+        <p-tablist>
+          <p-tab [value]="allFlowsTab">
+            <span id="AllFlowsTab" gebo-ai-text>All flows</span>
+            <span class="ml-2 text-xs text-muted-color">{{ endpoints.length + transformations.length }}</span>
+          </p-tab>
+          @for (tab of tabs; track tab.key) {
+            <p-tab [value]="tab.key" [title]="tab.key">
+              <span>{{ tab.label }}</span>
+              <span class="ml-2 text-xs text-muted-color">{{ tab.endpoints + tab.transformations }}</span>
+            </p-tab>
+          }
+        </p-tablist>
+      </p-tabs>
       <div style="flex: 1 1 auto; min-height: 0; width: 100%;">
         <!-- Mounted only once the dialog reports itself shown: the diagram measures
              its nodes from the DOM, so it must be created inside a container that

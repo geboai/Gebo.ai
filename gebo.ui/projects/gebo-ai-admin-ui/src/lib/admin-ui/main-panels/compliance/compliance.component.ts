@@ -14,7 +14,7 @@ import { initializeModel, NgDiagramNodeTemplateMap, NgDiagramConfig, provideNgDi
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 import { DataEndpointNodeComponent } from "./data-endpoint-node.component";
 import { DataTransformationNodeComponent } from "./data-transformation-node.component";
-import { DataFlowEndpointNode, DataFlowSummary, DataFlowTransformationNode } from "./compliance-data-flow.model";
+import { ALL_FLOWS_TAB, DataFlowEndpointNode, DataFlowSummary, DataFlowTab, DataFlowTransformationNode } from "./compliance-data-flow.model";
 
 /**
  * The Compliance admin panel.
@@ -69,6 +69,15 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
         endpoints: 0, transformations: 0, components: 0,
         externalEndpoints: 0, personalDataEndpoints: 0, retainingWithoutErasure: 0
     };
+
+    /**
+     * The register split by where its metadata come from: one tab per reporting
+     * component, besides the tab with every flow. Only the drawing is split - the
+     * register, its personal-data scope and its export stay the whole one.
+     */
+    protected tabs: DataFlowTab[] = [];
+    protected selectedTab: string = ALL_FLOWS_TAB;
+    protected readonly allFlowsTab = ALL_FLOWS_TAB;
 
     protected diagramModel: any;
     private lastLayoutNodes: { id: string; position: { x: number; y: number } }[] = [];
@@ -190,6 +199,7 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
         const endpoints: DataFlowEndpointNode[] = [];
         const transformations: DataFlowTransformationNode[] = [];
         const components = new Set<string>();
+        const tabs: DataFlowTab[] = [];
 
         for (const module of report?.modules || []) {
             for (const component of module.components || []) {
@@ -199,6 +209,14 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                 }
                 const ownerComponent = (module.messagingModuleId || "") + "." + (component.messagingSystemId || "");
                 components.add(ownerComponent);
+                if ((flow.dataEndpoints || []).length > 0 || (flow.transformations || []).length > 0) {
+                    tabs.push({
+                        key: ownerComponent,
+                        label: component.messagingSystemId || ownerComponent,
+                        endpoints: (flow.dataEndpoints || []).length,
+                        transformations: (flow.transformations || []).length
+                    });
+                }
 
                 for (const endpoint of flow.dataEndpoints || []) {
                     endpoints.push({
@@ -244,6 +262,22 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
         // sources flagged as holding personal data, and re-deriving it here would lose
         // what each step carries (a request, content a model only processes).
 
+        // A component is named by its own id; where two modules have a component of the
+        // same name both are named with their module too.
+        const sameName = new Map<string, number>();
+        tabs.forEach(tab => sameName.set(tab.label, (sameName.get(tab.label) || 0) + 1));
+        tabs.forEach(tab => {
+            if ((sameName.get(tab.label) || 0) > 1) {
+                tab.label = tab.key;
+            }
+        });
+        tabs.sort((a, b) => a.label.localeCompare(b.label));
+        this.tabs = tabs;
+        // a refresh keeps the tab open unless its component no longer reports
+        if (this.selectedTab !== ALL_FLOWS_TAB && !tabs.some(tab => tab.key === this.selectedTab)) {
+            this.selectedTab = ALL_FLOWS_TAB;
+        }
+
         this.endpoints = endpoints;
         this.transformations = transformations;
         this.summary = {
@@ -275,6 +309,49 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
     }
 
     /**
+     * What the selected tab draws: every flow, or what one component reports - its
+     * endpoints and its steps - with the endpoints of other components its steps
+     * read from or write to, marked as reached from it, so a flow crossing into
+     * another component does not stop at the edge of the tab.
+     */
+    private visibleFlows(): { endpoints: DataFlowEndpointNode[]; transformations: DataFlowTransformationNode[] } {
+        if (this.selectedTab === ALL_FLOWS_TAB) {
+            return { endpoints: this.endpoints, transformations: this.transformations };
+        }
+        const owner = this.selectedTab;
+        const transformations = this.transformations.filter(t => t.ownerComponent === owner);
+        const reached = new Set<string>();
+        transformations.forEach(t => {
+            reached.add(t.sourceId);
+            reached.add(t.destinationId);
+        });
+        const endpoints = this.endpoints
+            .filter(e => e.ownerComponent === owner || reached.has(e.qualifiedId))
+            .map(e => e.ownerComponent === owner ? e : { ...e, reachedFrom: owner });
+        return { endpoints, transformations };
+    }
+
+    /** Draws another tab: a fresh diagram mount, as when the dialog opens. */
+    protected selectTab(value: string | number | undefined): void {
+        const tab = value == null ? ALL_FLOWS_TAB : String(value);
+        if (tab === this.selectedTab) {
+            return;
+        }
+        this.selectedTab = tab;
+        this.rebuildChart();
+        // The diagram measures its nodes from the DOM: swapping every node under a
+        // mounted diagram lets a measurement pass look for nodes already gone, so it
+        // is mounted again on the new model and fitted once measured.
+        if (this.diagramMounted) {
+            this.diagramMounted = false;
+            setTimeout(() => {
+                this.diagramMounted = true;
+                this.fitDiagramToViewport();
+            });
+        }
+    }
+
+    /**
      * Lays the register out as source -> engine -> destination.
      *
      * Endpoints and transformations form one bipartite graph, so levels are
@@ -285,13 +362,18 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
      */
     protected rebuildChart(): void {
         runInInjectionContext(this.injector, () => {
-            if (this.endpoints.length === 0 && this.transformations.length === 0) {
+            const visible = this.visibleFlows();
+            if (visible.endpoints.length === 0 && visible.transformations.length === 0) {
                 this.diagramModel = initializeModel({ nodes: [], edges: [] });
                 this.lastLayoutNodes = [];
                 return;
             }
 
+            // reachability is the whole register's: a step is drawn when its source
+            // endpoint is reported anywhere, and on a component's tab that endpoint is
+            // drawn too
             const knownEndpoints = new Set(this.endpoints.map(e => e.qualifiedId));
+            const visibleEndpoints = new Set(visible.endpoints.map(e => e.qualifiedId));
 
             // A processing step is shown when it is REACHABLE - its source endpoint
             // exists in the running configuration. The backend only emits a step
@@ -303,18 +385,18 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
             // when that store is actually configured (its endpoint was reported): an
             // enabled step whose store is not yet set up still appears as part of the
             // workflow, but the graph never invents a store that does not exist.
-            const renderableTransformations = this.transformations.filter(t => knownEndpoints.has(t.sourceId));
+            const renderableTransformations = visible.transformations.filter(t => knownEndpoints.has(t.sourceId));
 
             const edgesRaw: { source: string; target: string }[] = [];
             for (const transformation of renderableTransformations) {
                 edgesRaw.push({ source: transformation.sourceId, target: transformation.qualifiedId });
-                if (knownEndpoints.has(transformation.destinationId)) {
+                if (visibleEndpoints.has(transformation.destinationId)) {
                     edgesRaw.push({ source: transformation.qualifiedId, target: transformation.destinationId });
                 }
             }
 
             const allIds = [
-                ...this.endpoints.map(e => e.qualifiedId),
+                ...visible.endpoints.map(e => e.qualifiedId),
                 ...renderableTransformations.map(t => t.qualifiedId)
             ];
             const targets = new Set(edgesRaw.map(e => e.target));
@@ -421,7 +503,7 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                 return { x: level * COL_WIDTH + 60, y };
             };
 
-            for (const endpoint of this.endpoints) {
+            for (const endpoint of visible.endpoints) {
                 nodes.push({
                     id: endpoint.qualifiedId,
                     position: positionOf(endpoint.qualifiedId),

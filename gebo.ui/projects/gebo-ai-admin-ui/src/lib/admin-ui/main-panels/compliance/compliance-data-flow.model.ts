@@ -41,6 +41,12 @@ export interface DataFlowEndpointNode {
     ownerComponent: string;
     /** The node this endpoint was reported from. */
     nodeId?: string;
+    /**
+     * Set only on a component's tab, on an endpoint another component reports but
+     * this component's steps read from or write to: drawn so the flow does not stop
+     * at the tab's edge, and marked as belonging elsewhere.
+     */
+    reachedFrom?: string;
 }
 
 /** An engine applied between two endpoints. */
@@ -65,3 +71,20 @@ export interface DataFlowSummary {
     /** Retaining endpoints (output === true) with no disposer component wired. */
     retainingWithoutErasure: number;
 }
+
+/**
+ * A tab of the data-flow register: every flow, or what one reporting component
+ * declares - the register split by where its metadata come from.
+ */
+export interface DataFlowTab {
+    /** {@link ALL_FLOWS_TAB}, or the reporting component (module.component). */
+    key: string;
+    label: string;
+    /** Endpoints the component reports. */
+    endpoints: number;
+    /** Steps the component reports. */
+    transformations: number;
+}
+
+/** The tab showing the whole register. */
+export const ALL_FLOWS_TAB = "__all__";
