@@ -36,11 +36,12 @@
             Endpoint locators never carry credentials: a credential is identified only by the code
             of the secret that guards it.
           </span>
-          <span class="text-muted-color" gebo-ai-text>
+          <span id="PersonalDataScopeText" class="text-muted-color" gebo-ai-text>
             "May carry personal data" marks a flow as in scope for a personal-data assessment - it is
             not an automated determination. Whether ingested content is personal or purely
-            business/company data is the data controller's call; a user's own query/session is always
-            treated as personal activity.
+            business/company data is the data controller's call: personal data start only from the
+            data sources flagged as holding them and follow the flow - to the stores they feed, the
+            chats and agents reading those stores, and the models and services these write to.
           </span>
         </div>
 

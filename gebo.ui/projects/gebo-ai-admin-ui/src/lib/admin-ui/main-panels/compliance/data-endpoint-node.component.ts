@@ -160,29 +160,20 @@ export class DataEndpointNodeComponent implements NgDiagramNodeTemplate<DataFlow
      * about what is actually known, and varies by endpoint kind.
      */
     protected personalDataLabel(): string {
-        const types = this.node().data.types || [];
-        if (types.includes("CHAT_SESSION")) {
-            // A user's query/session is that user's own activity - personal by
-            // construction, whatever its subject matter.
-            return "Personal data (user activity)";
-        }
         if (this.isModelOrSearch()) {
             return "May process personal data";
         }
+        // a store, or a chat/agents session reading one: marked only because the flow
+        // brings it the content of a data source flagged as holding personal data
         return "May contain personal data";
     }
 
     protected personalDataTitle(): string {
-        const types = this.node().data.types || [];
-        if (types.includes("CHAT_SESSION")) {
-            return "A user's query and session are that user's own activity - personal data by construction, "
-                + "independent of subject matter.";
-        }
-        const verb = this.isModelOrSearch() ? "processes" : "may retain";
-        return "This endpoint " + verb + " ingested content or query text. Whether that content actually contains "
-            + "personal data or is purely business/company data cannot be inferred from configuration - it is a "
-            + "determination for the data controller (DPO). Flagged here only to bring the flow into scope for that "
-            + "assessment.";
+        const verb = this.isModelOrSearch() ? "processes" : "may hold";
+        return "This endpoint " + verb + " content coming, along the flow, from a data source flagged as holding "
+            + "personal data. Whether that content actually contains personal data or is purely business/company "
+            + "data cannot be inferred from configuration - it is a determination for the data controller (DPO). "
+            + "Flagged here only to bring the flow into scope for that assessment.";
     }
 
     protected localityColor(): string {

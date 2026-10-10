@@ -28,6 +28,7 @@ import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
 import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.rag.support.layer.services.IGFullTextSearchDocumentsCachedDao;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
@@ -44,12 +45,13 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
 
 /**
- * Pins the read side the chat pipeline puts in the register: a profile's query, and
- * the deep search, read the knowledge stores the knowledge-base search reads on the
- * installation (the vector store always, the full-text index with OpenSearch, the
- * knowledge graph with Neo4j), whatever the profile's own flags say; the deep search
- * also reaches every enabled search service, plans with the utility model and answers
- * with the chat's own model.
+ * Pins the read side the chat pipeline puts in the register, every step in the
+ * direction the data travel: a profile's chat, and the deep search, read the
+ * knowledge stores the knowledge-base search reads on the installation (the vector
+ * store always, the full-text index with OpenSearch, the knowledge graph with Neo4j),
+ * whatever the profile's own flags say; the question they embed and the queries the
+ * deep search sends to the search sources are requests only; the models process what
+ * they are given; the deep search reads and chunks what the search sources find.
  */
 class GStandardChatPipelineDataFlowComponentTest {
 
@@ -115,6 +117,9 @@ class GStandardChatPipelineDataFlowComponentTest {
 		when(brave.getId()).thenReturn("brave");
 		when(brave.getProductId()).thenReturn("brave-search");
 		when(brave.isEnabled()).thenReturn(true);
+		SearchableSystemMetaData braveAccount = new SearchableSystemMetaData();
+		braveAccount.setCode("brave-account");
+		when(brave.getSearchableSystems()).thenReturn((List) List.of(braveAccount));
 		when(searchServices.getImplementations()).thenReturn((List) List.of(brave));
 
 		// a semantic only installation unless a test deploys the optional legs
@@ -128,10 +133,24 @@ class GStandardChatPipelineDataFlowComponentTest {
 				provider(fullTextSearch), provider(knowledgeGraphSearch)).getDataFlowMetaInfos();
 	}
 
+	private static final String BRAVE_SOURCE = GStandardDataFlowEndpoints.searchSourceRef("brave", "brave-account");
+
 	private static List<String> destinationsFrom(GDataFlowMetaInfos flow, String endpointId) {
 		String source = flow.qualifiedId(endpointId);
 		return flow.getTransformations().stream().filter(x -> source.equals(x.getDataSourceId()))
 				.map(DataTransformationInfo::getDataDestinationId).toList();
+	}
+
+	private static List<String> sourcesInto(GDataFlowMetaInfos flow, String endpointId) {
+		String destination = flow.qualifiedId(endpointId);
+		return flow.getTransformations().stream().filter(x -> destination.equals(x.getDataDestinationId()))
+				.map(DataTransformationInfo::getDataSourceId).toList();
+	}
+
+	private static DataTransformationInfo step(GDataFlowMetaInfos flow, String from, String to) {
+		return flow.getTransformations().stream()
+				.filter(x -> from.equals(x.getDataSourceId()) && to.equals(x.getDataDestinationId())).findFirst()
+				.orElseThrow();
 	}
 
 	@Test
@@ -139,15 +158,17 @@ class GStandardChatPipelineDataFlowComponentTest {
 		GDataFlowMetaInfos flow = flow();
 
 		assertNotNull(flow);
-		List<String> fromQuery = destinationsFrom(flow, "query-support");
-		List<String> fromDeepSearch = destinationsFrom(flow, "deep-search-query");
-		for (List<String> reached : List.of(fromQuery, fromDeepSearch)) {
-			assertFalse(reached.contains(GStandardDataFlowEndpoints.fullTextIndexRef()), String.valueOf(reached));
-			assertFalse(reached.contains(GStandardDataFlowEndpoints.knowledgeGraphRef()), String.valueOf(reached));
+		for (String reader : List.of("query-support", "deep-search-query")) {
+			List<String> read = sourcesInto(flow, reader);
+			assertTrue(read.contains(GStandardDataFlowEndpoints.vectorStoreRef()), reader + " " + read);
+			assertFalse(read.contains(GStandardDataFlowEndpoints.fullTextIndexRef()), reader + " " + read);
+			assertFalse(read.contains(GStandardDataFlowEndpoints.knowledgeGraphRef()), reader + " " + read);
 		}
-		// the profile's semantic leg goes through its embedding model
-		assertTrue(destinationsFrom(flow, "embedding-model-nomic").contains(GStandardDataFlowEndpoints.vectorStoreRef()));
-		assertTrue(fromDeepSearch.contains(GStandardDataFlowEndpoints.vectorStoreRef()), String.valueOf(fromDeepSearch));
+		// the question embedded is a request only, the answer is processed by the responder
+		assertEquals(DataTransformationInfo.Carried.REQUEST,
+				step(flow, flow.qualifiedId("query-support"), flow.qualifiedId("embedding-model-nomic")).getCarried());
+		assertEquals(DataTransformationInfo.Carried.PROCESSED,
+				step(flow, flow.qualifiedId("query-support"), flow.qualifiedId("chat-model-responder")).getCarried());
 	}
 
 	@Test
@@ -158,9 +179,9 @@ class GStandardChatPipelineDataFlowComponentTest {
 		GDataFlowMetaInfos flow = flow();
 
 		for (String reader : List.of("query-support", "deep-search-query")) {
-			List<String> reached = destinationsFrom(flow, reader);
-			assertTrue(reached.contains(GStandardDataFlowEndpoints.fullTextIndexRef()), reader + " " + reached);
-			assertTrue(reached.contains(GStandardDataFlowEndpoints.knowledgeGraphRef()), reader + " " + reached);
+			List<String> read = sourcesInto(flow, reader);
+			assertTrue(read.contains(GStandardDataFlowEndpoints.fullTextIndexRef()), reader + " " + read);
+			assertTrue(read.contains(GStandardDataFlowEndpoints.knowledgeGraphRef()), reader + " " + read);
 		}
 	}
 
@@ -172,9 +193,14 @@ class GStandardChatPipelineDataFlowComponentTest {
 		assertTrue(reached.contains(flow.qualifiedId("service-model-utility")), String.valueOf(reached));
 		assertTrue(reached.contains(flow.qualifiedId("chat-model-responder")), String.valueOf(reached));
 		assertTrue(reached.contains(flow.qualifiedId("embedding-model-nomic")), String.valueOf(reached));
-		assertTrue(reached.contains(flow.qualifiedId("web-search-brave")), String.valueOf(reached));
-		// the documents the search services return are chunked for the request
-		assertTrue(reached.contains(GStandardDataFlowEndpoints.chunkCacheRef()), String.valueOf(reached));
+		// the queries sent to the search source are requests only, its documents are read
+		assertEquals(DataTransformationInfo.Carried.REQUEST,
+				step(flow, flow.qualifiedId("deep-search-query"), BRAVE_SOURCE).getCarried());
+		assertTrue(sourcesInto(flow, "deep-search-query").contains(BRAVE_SOURCE));
+		// and chunked for the request
+		step(flow, BRAVE_SOURCE, GStandardDataFlowEndpoints.chunkCacheRef());
+		// the search sources are reported once, by the search sources component
+		assertTrue(flow.getDataEndpoints().stream().noneMatch(x -> x.getId().startsWith("search-")));
 		// no endpoint of the chat pipeline is personal data by itself
 		assertTrue(flow.getDataEndpoints().stream().noneMatch(x -> x.isPersonalData()));
 	}
@@ -185,9 +211,8 @@ class GStandardChatPipelineDataFlowComponentTest {
 
 		GDataFlowMetaInfos flow = flow();
 
-		List<String> reached = destinationsFrom(flow, "deep-search-query");
-		assertTrue(reached.contains(GStandardDataFlowEndpoints.vectorStoreRef()), String.valueOf(reached));
-		assertFalse(reached.contains(GStandardDataFlowEndpoints.chunkCacheRef()), String.valueOf(reached));
-		assertEquals(0, flow.getDataEndpoints().stream().filter(x -> x.getId().startsWith("web-search-")).count());
+		assertTrue(sourcesInto(flow, "deep-search-query").contains(GStandardDataFlowEndpoints.vectorStoreRef()));
+		assertTrue(flow.getTransformations().stream()
+				.noneMatch(x -> GStandardDataFlowEndpoints.chunkCacheRef().equals(x.getDataDestinationId())));
 	}
 }

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +29,15 @@ import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
 import ai.gebo.application.messaging.model.MetaEndpointType;
+import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
+import ai.gebo.architecture.agents.model.AgentMountedTools;
+import ai.gebo.architecture.agents.model.GAgentConfig;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.services.IAgentConfigDao;
+import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
+import ai.gebo.architecture.agents.services.IGGenericAgentService;
+import ai.gebo.architecture.search.service.INativeSearchService;
+import ai.gebo.llms.chat.abstraction.layer.services.impl.GSearchSourcesDataFlowComponent;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
@@ -37,16 +45,12 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.rag.support.layer.services.IGFullTextSearchDocumentsCachedDao;
-import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
-import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
-import ai.gebo.llms.agent.chat.service.impl.AgenticLoopPureChatReactiveAgentServiceImpl;
-import ai.gebo.llms.agent.standard.config.AgenticLoopAgentsInitialization;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.DataFlowEndpoints;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.DataFlowEndpoints.KnowledgeBaseSearchLegs;
 import ai.gebo.model.base.GeboComponentInfo;
@@ -59,21 +63,27 @@ import ai.gebo.security.services.RunAsWithReturn;
  * data flow into the compliance register.
  *
  * <p>
- * A network of agents can act as the chat responder: its finder agents are wired
- * to the internal knowledge-base search service (semantic over the vector store,
- * lexical over the full-text index) and to the external web-search services. Like
- * the chat pipeline, the network is a set of services rather than a broker
- * component, so this stand-in emitter exists only to report - for each configured
- * network - the query fan-out its finders perform: query -&gt; internal KB search
- * (vector store, full-text index) and query -&gt; each enabled external web-search
- * provider.
+ * Each configured network is reported member by member, as it runs: every member
+ * is a participant whose configuration ({@link IAgentConfigDao}) names the agent
+ * service running it ({@link IGAgentServiceRuntimeDao}). A member calling a chat
+ * model receives the network's messages there, the model being the one its service
+ * resolves ({@link IGGenericAgentService#resolveAgentChatModel}); the
+ * knowledge-base searcher reads the knowledge stores the knowledge-base search
+ * reads on this installation; a search-service searcher writes its queries to its
+ * search service and chunks the documents found for the request; the tools a member
+ * mounts ({@link IGGenericAgentService#getMountedTools}) reach what each tool source
+ * declares ({@link IGToolCallbackSource#getDataFlowTargets(String)}). A network
+ * adapting another one hands it its requests and gets its answers.
  * </p>
  *
  * <p>
- * The single agent networks ({@link #SINGLE_AGENT_NETWORKS}) have no finders: their
- * one agent sends the query to its chat model and operates the tools it mounts, so
- * they report what those tools reach, as each tool source declares it
- * ({@link IGToolCallbackSource#getDataFlowTargets(String)}).
+ * The network's query endpoint stands for the network's shared context, the steps
+ * reported in the direction the data travel: what the network reads (the knowledge
+ * stores, the platform data) reaches it, and from it the members' chat models and
+ * whatever the members write to (the search services, the tools' targets), since a
+ * model writes its tool arguments from what it has read. Models are reached and do
+ * not pass anything on: a model is shared by networks and keeps nothing between
+ * calls, so personal data never travel from one network to another through it.
  * </p>
  *
  * <p>
@@ -97,14 +107,8 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 	private final ObjectProvider<IGRankerModelRuntimeConfigurationDao> rankerModelsDaoProvider;
 	private final ObjectProvider<IGFullTextSearchDocumentsCachedDao> fullTextSearchProvider;
 	private final ObjectProvider<IKnowledgeGraphSearchService> knowledgeGraphSearchProvider;
-
-	/**
-	 * The single agent networks: their one agent mounts the tools itself (all of them,
-	 * the free chat one but the knowledge base ones), so their data flow is the one of
-	 * those tools, not the finders' fan-out of the multi agent networks.
-	 */
-	static final Set<String> SINGLE_AGENT_NETWORKS = Set.of(AgenticLoopAgentsInitialization.AGENTIC_LOOP_AGENTS_NETWORK,
-			AgenticLoopAgentsInitialization.AGENTIC_LOOP_PURE_CHAT_AGENTS_NETWORK);
+	private final ObjectProvider<IAgentConfigDao> agentConfigDaoProvider;
+	private final ObjectProvider<IGAgentServiceRuntimeDao> agentServicesDaoProvider;
 
 	public GAgentsNetworkDataFlowComponent(@Autowired ObjectProvider<IAgentsNetworkDao> agentsNetworkDaoProvider,
 			@Autowired ObjectProvider<ISearchServiceRepositoryPattern> searchServicesProvider,
@@ -114,7 +118,9 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			@Autowired ObjectProvider<IGEmbeddingModelRuntimeConfigurationDao> embeddingModelsDaoProvider,
 			@Autowired ObjectProvider<IGRankerModelRuntimeConfigurationDao> rankerModelsDaoProvider,
 			@Autowired ObjectProvider<IGFullTextSearchDocumentsCachedDao> fullTextSearchProvider,
-			@Autowired ObjectProvider<IKnowledgeGraphSearchService> knowledgeGraphSearchProvider) {
+			@Autowired ObjectProvider<IKnowledgeGraphSearchService> knowledgeGraphSearchProvider,
+			@Autowired ObjectProvider<IAgentConfigDao> agentConfigDaoProvider,
+			@Autowired ObjectProvider<IGAgentServiceRuntimeDao> agentServicesDaoProvider) {
 		this.agentsNetworkDaoProvider = agentsNetworkDaoProvider;
 		this.searchServicesProvider = searchServicesProvider;
 		this.systemUserServiceProvider = systemUserServiceProvider;
@@ -124,6 +130,8 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		this.rankerModelsDaoProvider = rankerModelsDaoProvider;
 		this.fullTextSearchProvider = fullTextSearchProvider;
 		this.knowledgeGraphSearchProvider = knowledgeGraphSearchProvider;
+		this.agentConfigDaoProvider = agentConfigDaoProvider;
+		this.agentServicesDaoProvider = agentServicesDaoProvider;
 	}
 
 	@Override
@@ -178,26 +186,27 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
 
-		List<ISearchService> webProviders = enabledWebSearchProviders();
+		// every enabled search service: the searcher agents search them
+		final List<ISearchService> searchServices = GSearchSourcesDataFlowComponent
+				.searchableServices(searchServicesProvider.getIfAvailable());
 		// the stores the knowledge-base search reads here: the vector store always, the
 		// full-text index and the knowledge graph only when deployed
 		final KnowledgeBaseSearchLegs legs = KnowledgeBaseSearchLegs.deployed(fullTextSearchProvider,
 				knowledgeGraphSearchProvider);
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Knowledge base search legs of this installation:" + legs);
+			LOGGER.debug("Knowledge base search legs of this installation:" + legs + ", enabled search service(s):"
+					+ searchServices.size());
 		}
-		// what each registered tool reaches, resolved once for the single agent networks
-		Map<String, List<ToolDataFlowTarget>> toolTargets = null;
+		// what each registered tool reaches, by tool name
+		final Map<String, List<ToolDataFlowTarget>> toolTargets = toolsDataFlowTargets();
+		final IAgentConfigDao agentConfigs = agentConfigDaoProvider.getIfAvailable();
+		final IGAgentServiceRuntimeDao agentServices = agentServicesDaoProvider.getIfAvailable();
 
 		for (GAgentsNetwork network : networks) {
 			if (network == null || network.getCode() == null) {
 				continue;
 			}
 			String code = network.getCode();
-			if (LOGGER.isDebugEnabled() && !SINGLE_AGENT_NETWORKS.contains(code)) {
-				LOGGER.debug("Reporting the query fan-out of network:" + code + " towards the internal knowledge base and "
-						+ webProviders.size() + " external web search provider(s)");
-			}
 
 			DataEndpoint query = new DataEndpoint();
 			query.setId("network-query-" + code);
@@ -210,39 +219,13 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			query.setLocality(DataEndpointLocality.LOCAL_DEPLOYMENT);
 			flow.getDataEndpoints().add(query);
 
-			if (SINGLE_AGENT_NETWORKS.contains(code)) {
-				if (toolTargets == null) {
-					toolTargets = toolsDataFlowTargets();
-				}
-				reportSingleAgent(flow, query, code, toolTargets, legs);
-				continue;
-			}
-
-			// Finder agents on the internal knowledge-base search service
-			// (InternalKnowledgeBaseSearchNetworkAgentService, through IGDocumentsSearchService):
-			// semantic over the vector store always, lexical over the full-text index and
-			// graph over the knowledge graph only when this installation deploys them.
-			link(flow, "kb-semantic", code, "Finder: semantic knowledge-base search", MetaEndpointType.CHAT_SESSION,
-					MetaEndpointType.VECTORIAL_DATABASE, flow.qualifiedId(query.getId()),
-					DataFlowEndpoints.vectorStoreRef());
-			if (legs.fullText()) {
-				link(flow, "kb-fulltext", code, "Finder: full-text knowledge-base search",
-						MetaEndpointType.CHAT_SESSION, MetaEndpointType.FULLTEXT_INDEX, flow.qualifiedId(query.getId()),
-						DataFlowEndpoints.fullTextIndexRef());
-			}
-			if (legs.graph()) {
-				link(flow, "kb-graph", code, "Finder: knowledge-graph knowledge-base search",
-						MetaEndpointType.CHAT_SESSION, MetaEndpointType.GRAPH_DATABASE, flow.qualifiedId(query.getId()),
-						DataFlowEndpoints.knowledgeGraphRef());
-			}
-
-			// Finder agents on the external web-search services.
-			for (ISearchService provider : webProviders) {
-				String providerEndpointId = "web-search-" + safe(provider.getId(), safe(provider.getProductId(), ""));
-				addUnique(flow, webProviderEndpoint(provider));
-				link(flow, "web-" + providerEndpointId, code, "Finder: external web search", MetaEndpointType.CHAT_SESSION,
-						MetaEndpointType.WEB_SEARCH, flow.qualifiedId(query.getId()), flow.qualifiedId(providerEndpointId));
-			}
+			// the members' configurations and tools are read under the platform's system
+			// identity, as the network is assembled outside any user request
+			final String queryId = flow.qualifiedId(query.getId());
+			asSystem(() -> {
+				reportNetwork(flow, network, queryId, searchServices, legs, toolTargets, agentConfigs, agentServices);
+				return null;
+			});
 		}
 
 		if (LOGGER.isDebugEnabled()) {
@@ -253,66 +236,229 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 	}
 
 	/**
-	 * A single agent network: the query goes to the agent's chat model and, through
-	 * the tools the agent mounts, to what each of them reaches: one endpoint per
-	 * target, linked once from the query with the tools reaching it.
+	 * One network, member by member, as described on the class: the members' chat
+	 * models, the searches of the searcher members, the targets of the tools the
+	 * members mount (one step per target, with the tools reaching it) and the network
+	 * an adapter member hands its requests to.
 	 */
-	void reportSingleAgent(GDataFlowMetaInfos flow, DataEndpoint query, String code,
-			Map<String, List<ToolDataFlowTarget>> toolTargets, KnowledgeBaseSearchLegs legs) {
-		final String queryId = flow.qualifiedId(query.getId());
-		final IGChatModelRuntimeConfigurationDao chatModelsDao = chatModelsDaoProvider.getIfAvailable();
-		final DataEndpoint agentModel = DataFlowEndpoints.chatModel("agent", defaultChatModel(chatModelsDao),
-				"Single agent chat model");
-		if (agentModel != null) {
-			DataFlowEndpoints.addUnique(flow, agentModel);
-			link(flow, "agent-model", code, "Single agent: reasoning, tool calls and answer on the query and the tools' results",
-					MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, queryId,
-					flow.qualifiedId(agentModel.getId()));
+	void reportNetwork(GDataFlowMetaInfos flow, GAgentsNetwork network, String queryId,
+			List<ISearchService> searchServices, KnowledgeBaseSearchLegs legs,
+			Map<String, List<ToolDataFlowTarget>> toolTargets, IAgentConfigDao agentConfigs,
+			IGAgentServiceRuntimeDao agentServices) {
+		final String code = network.getCode();
+		if (network.getAgents() == null || network.getAgents().isEmpty() || agentConfigs == null
+				|| agentServices == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Network:" + code + " has no member, or the agent configurations/services are not available:"
+						+ " no member reported");
+			}
+			return;
 		}
-		final boolean freeChat = AgenticLoopAgentsInitialization.AGENTIC_LOOP_PURE_CHAT_AGENTS_NETWORK.equals(code);
-		// endpoint reached -> its type, what is done there and the tools reaching it, in order
-		final Map<String, MetaEndpointType> types = new LinkedHashMap<>();
+		final IGChatModelRuntimeConfigurationDao chatModelsDao = chatModelsDaoProvider.getIfAvailable();
+		// endpoint reached by the members' tools -> the target, what is done there and
+		// the tools reaching it, in order
+		final Map<String, ResolvedTarget> targets = new LinkedHashMap<>();
 		final Map<String, String> descriptions = new LinkedHashMap<>();
 		final Map<String, List<String>> reachingTools = new LinkedHashMap<>();
-		for (Map.Entry<String, List<ToolDataFlowTarget>> tool : toolTargets.entrySet()) {
-			if (freeChat && AgenticLoopPureChatReactiveAgentServiceImpl.KNOWLEDGE_BASE_TOOLS.contains(tool.getKey())) {
+		int members = 0;
+		for (AgentNetworkParticipant participant : network.getAgents()) {
+			if (participant == null || participant.getAgentConfigCode() == null) {
 				continue;
 			}
-			for (ToolDataFlowTarget target : tool.getValue()) {
-				final ResolvedTarget resolved = resolve(flow, target, chatModelsDao, legs);
-				if (resolved == null) {
-					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Network:" + code + " tool:" + tool.getKey() + " target " + target.kind() + " ("
-								+ target.reference() + ") is not configured here, not reported");
-					}
+			final String member = participant.getNetworkAgentName();
+			final GAgentConfig config = agentConfigs.findByCode(participant.getAgentConfigCode());
+			if (config == null) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Network:" + code + " member:" + member + " has no configuration "
+							+ participant.getAgentConfigCode() + ", not reported");
+				}
+				continue;
+			}
+			members++;
+			final String key = code + "-" + member;
+			if (config.getAgentType() == GAgentConfig.AgentType.AGENTS_NETWORK
+					&& config.getAdaptedAgentNetworkCode() != null) {
+				// the adapted network is reported as a network of its own
+				final String adaptedId = flow.qualifiedId("network-query-" + config.getAdaptedAgentNetworkCode());
+				link(flow, "delegation", key,
+						"Agent " + member + ": requests handed to the network '" + config.getAdaptedAgentNetworkCode() + "'",
+						MetaEndpointType.CHAT_SESSION, MetaEndpointType.CHAT_SESSION, queryId, adaptedId);
+				link(flow, "delegation-answer", key,
+						"Agent " + member + ": answers of the network '" + config.getAdaptedAgentNetworkCode() + "'",
+						MetaEndpointType.CHAT_SESSION, MetaEndpointType.CHAT_SESSION, adaptedId, queryId);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Network:" + code + " member:" + member + " adapts the network:"
+							+ config.getAdaptedAgentNetworkCode());
+				}
+				continue;
+			}
+			final IGGenericAgentService service = config.getAgentServiceId() != null
+					? agentServices.findByCode(config.getAgentServiceId())
+					: null;
+			if (service == null) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Network:" + code + " member:" + member + " agent service " + config.getAgentServiceId()
+							+ " is not available here, not reported");
+				}
+				continue;
+			}
+			DataEndpoint model = null;
+			if (service.isCallingChatModel()) {
+				model = DataFlowEndpoints.chatModel("agent", service.resolveAgentChatModel(config), "Agent chat model");
+				if (model != null) {
+					addUnique(flow, model);
+					processed(flow, "agent-model", key, "Agent " + member + ": the network's messages to its chat model",
+							MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, queryId,
+							flow.qualifiedId(model.getId()));
+				}
+			}
+			reportSearch(flow, member, key, queryId, config.getAgentServiceId(), searchServices, legs);
+			if (!participant.isCanCallTools()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Network:" + code + " member:" + member + " is not allowed to call tools");
+				}
+				continue;
+			}
+			final AgentMountedTools mounted = service.getMountedTools(config);
+			final List<AgentMountedTools.MountedTool> tools = mounted != null && mounted.getTools() != null
+					? mounted.getTools()
+					: List.of();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Network:" + code + " member:" + member + " service:" + config.getAgentServiceId()
+						+ " model:" + (model != null ? model.getId() : null) + " mounts " + tools.size() + " tool(s)");
+			}
+			for (AgentMountedTools.MountedTool tool : tools) {
+				final List<ToolDataFlowTarget> declared = tool != null ? toolTargets.get(tool.getName()) : null;
+				if (declared == null) {
 					continue;
 				}
-				types.putIfAbsent(resolved.qualifiedId(), resolved.type());
-				// what is done there, the same for every tool reaching it (each tool's own
-				// wording is its source's, shown at TRACE)
-				descriptions.putIfAbsent(resolved.qualifiedId(), whatIsDoneAt(target.kind()));
-				if (LOGGER.isTraceEnabled()) {
-					LOGGER.trace("Network:" + code + " tool:" + tool.getKey() + " -> " + resolved.qualifiedId() + " : "
-							+ target.description());
-				}
-				final List<String> tools = reachingTools.computeIfAbsent(resolved.qualifiedId(), k -> new ArrayList<>());
-				if (!tools.contains(tool.getKey())) {
-					tools.add(tool.getKey());
+				for (ToolDataFlowTarget target : declared) {
+					final List<ResolvedTarget> resolvedTargets = resolve(flow, target, chatModelsDao, legs, searchServices);
+					if (resolvedTargets.isEmpty() && LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Network:" + code + " tool:" + tool.getName() + " target " + target.kind() + " ("
+								+ target.reference() + ") is not configured here, not reported");
+					}
+					for (ResolvedTarget resolved : resolvedTargets) {
+					targets.putIfAbsent(resolved.qualifiedId(), resolved);
+					// what is done there, the same for every tool reaching it (each tool's own
+					// wording is its source's, shown at TRACE)
+					descriptions.putIfAbsent(resolved.qualifiedId(), whatIsDoneAt(target.kind()));
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("Network:" + code + " member:" + member + " tool:" + tool.getName() + " -> "
+								+ resolved.qualifiedId() + " : " + target.description());
+					}
+					final List<String> reaching = reachingTools.computeIfAbsent(resolved.qualifiedId(),
+							k -> new ArrayList<>());
+					if (!reaching.contains(tool.getName())) {
+						reaching.add(tool.getName());
+					}
+					}
 				}
 			}
 		}
 		int index = 0;
 		for (Map.Entry<String, List<String>> reached : reachingTools.entrySet()) {
-			final String description = descriptions.get(reached.getKey());
-			link(flow, "tool", code + "-" + (index++),
-					description + " (tools: " + String.join(", ", reached.getValue()) + ")",
-					MetaEndpointType.CHAT_SESSION, types.get(reached.getKey()), queryId, reached.getKey());
+			final ResolvedTarget target = targets.get(reached.getKey());
+			final String description = descriptions.get(reached.getKey()) + " (tools: "
+					+ String.join(", ", reached.getValue()) + ")";
+			final String key = code + "-" + (index++);
+			if (target.writes()) {
+				// what the network's models write as the tool's arguments reaches the target
+				processed(flow, "tool", key, description, MetaEndpointType.CHAT_SESSION, target.type(), queryId,
+						reached.getKey());
+			}
+			if (target.reads()) {
+				// what the tool reads reaches the network
+				link(flow, "tool-read", key, description, target.type(), MetaEndpointType.CHAT_SESSION, reached.getKey(),
+						queryId);
+			}
 		}
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Reported single agent network:" + code + " towards its chat model:"
-					+ (agentModel != null ? agentModel.getId() : null) + " and " + reachingTools.size()
-					+ " endpoint(s) reached by its tools");
+			LOGGER.debug("Reported network:" + code + " with " + members + " member(s) and " + reachingTools.size()
+					+ " endpoint(s) reached by their tools");
 		}
+	}
+
+	/**
+	 * What a searcher member searches. The knowledge-base searcher
+	 * ({@link InternalKnowledgeBaseSearchNetworkAgentService}, through the
+	 * knowledge-base search) reads the knowledge stores deployed here, embedding the
+	 * queries it writes with the default embedding model. A search-service searcher -
+	 * its service id is the search service's product plus the searcher kind, as
+	 * {@code StandardAgentsInitialization} declares it - writes its queries to its
+	 * search service, and the documents found are chunked for the request
+	 * ({@code SearchResultsChunker}). Both rank what they find when a ranker is
+	 * configured ({@code GAbstractStandardDocumentsSearchAgentService}).
+	 */
+	private void reportSearch(GDataFlowMetaInfos flow, String member, String key, String queryId, String serviceId,
+			List<ISearchService> searchServices, KnowledgeBaseSearchLegs legs) {
+		if (serviceId == null) {
+			return;
+		}
+		if (InternalKnowledgeBaseSearchNetworkAgentService.INTERNAL_KNOWLEDGE_BASE_SEARCHER.equals(serviceId)) {
+			link(flow, "kb-semantic", key, "Agent " + member + ": semantic knowledge-base search",
+					MetaEndpointType.VECTORIAL_DATABASE, MetaEndpointType.CHAT_SESSION, DataFlowEndpoints.vectorStoreRef(),
+					queryId);
+			if (legs.fullText()) {
+				link(flow, "kb-fulltext", key, "Agent " + member + ": full-text knowledge-base search",
+						MetaEndpointType.FULLTEXT_INDEX, MetaEndpointType.CHAT_SESSION, DataFlowEndpoints.fullTextIndexRef(),
+						queryId);
+			}
+			if (legs.graph()) {
+				link(flow, "kb-graph", key, "Agent " + member + ": knowledge-graph knowledge-base search",
+						MetaEndpointType.GRAPH_DATABASE, MetaEndpointType.CHAT_SESSION,
+						DataFlowEndpoints.knowledgeGraphRef(), queryId);
+			}
+			final DataEndpoint embedding = DataFlowEndpoints.embeddingModel(defaultEmbeddingModel());
+			if (embedding != null) {
+				addUnique(flow, embedding);
+				processed(flow, "kb-embed", key, "Agent " + member + ": search queries embedded", MetaEndpointType.CHAT_SESSION,
+						MetaEndpointType.LLM_ENDPOINT, queryId, flow.qualifiedId(embedding.getId()));
+			}
+			reportRanking(flow, member, key, queryId);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Member:" + member + " searches the knowledge bases (legs:" + legs + ")");
+			}
+			return;
+		}
+		for (ISearchService service : searchServices) {
+			if (!serviceId.equals(searcherServiceId(service))) {
+				continue;
+			}
+			int index = 0;
+			for (GSearchSourcesDataFlowComponent.SearchSource source : GSearchSourcesDataFlowComponent.sourcesOf(service)) {
+				final String sourceKey = key + "-" + (index++);
+				processed(flow, "search", sourceKey, "Agent " + member + ": search queries written to " + service.getId(),
+						MetaEndpointType.CHAT_SESSION, source.type(), queryId, source.qualifiedId());
+				link(flow, "search-read", sourceKey, "Agent " + member + ": documents found by " + service.getId() + " read",
+						source.type(), MetaEndpointType.CHAT_SESSION, source.qualifiedId(), queryId);
+				link(flow, "search-chunking", sourceKey, "Agent " + member + ": documents found chunked for the request",
+						source.type(), MetaEndpointType.CHUNK, source.qualifiedId(), GStandardDataFlowEndpoints.chunkCacheRef());
+			}
+			reportRanking(flow, member, key, queryId);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Member:" + member + " searches the search service:" + service.getId());
+			}
+			return;
+		}
+	}
+
+	/** The searcher agent service id of a search service, as {@code StandardAgentsInitialization} declares it. */
+	static String searcherServiceId(ISearchService service) {
+		return service.getProductId() + (service instanceof INativeSearchService
+				? NativeDocumentsSearchNetworkAgentService.NATIVE_SEARCHER_AGENT
+				: DocumentsSearchNetworkAgentServiceWrapper.SEARCH_AGENT);
+	}
+
+	/** The documents a searcher finds, ranked by the ranker when one is configured. */
+	private void reportRanking(GDataFlowMetaInfos flow, String member, String key, String queryId) {
+		final DataEndpoint ranker = DataFlowEndpoints.rankerModel(rankerModelsDaoProvider.getIfAvailable());
+		if (ranker == null) {
+			return;
+		}
+		addUnique(flow, ranker);
+		processed(flow, "search-rank", key, "Agent " + member + ": documents found ranked against the query",
+				MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, queryId, flow.qualifiedId(ranker.getId()));
 	}
 
 	/** What the tools do at a target of the kind, as the register describes the link. */
@@ -343,83 +489,85 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		}
 	}
 
-	/** An endpoint a tool reaches: its qualified id in the register and its type. */
-	record ResolvedTarget(String qualifiedId, MetaEndpointType type) {
+	/**
+	 * An endpoint a tool reaches: its qualified id in the register, its type, whether
+	 * the tool reads it (its content reaches the network) and whether the tool writes to
+	 * it what the network's models give the tool as arguments.
+	 */
+	record ResolvedTarget(String qualifiedId, MetaEndpointType type, boolean reads, boolean writes) {
 	}
 
 	/**
-	 * The endpoint of a tool's target, added to the flow when this component owns it
-	 * (the knowledge stores are the indexers' own); null when it does not exist here
-	 * (no such model or service configured, or a knowledge store whose search leg this
-	 * installation does not deploy: a tool declares every store its search may read,
-	 * the search reads only the deployed ones).
+	 * The endpoints of a tool's target, added to the flow when this component owns them
+	 * (the knowledge stores are the indexers' own, the search sources the search
+	 * sources component's); none when the target does not exist here (no such model or
+	 * search service configured, or a knowledge store whose search leg this installation
+	 * does not deploy: a tool declares every store its search may read, the search reads
+	 * only the deployed ones). A search service is reached through each system it
+	 * searches: the queries written there, the documents found read.
 	 */
-	ResolvedTarget resolve(GDataFlowMetaInfos flow, ToolDataFlowTarget target,
-			IGChatModelRuntimeConfigurationDao chatModelsDao, KnowledgeBaseSearchLegs legs) {
+	List<ResolvedTarget> resolve(GDataFlowMetaInfos flow, ToolDataFlowTarget target,
+			IGChatModelRuntimeConfigurationDao chatModelsDao, KnowledgeBaseSearchLegs legs,
+			List<ISearchService> searchServices) {
 		if (target == null || target.kind() == null) {
-			return null;
+			return List.of();
 		}
 		switch (target.kind()) {
 		case KNOWLEDGE_BASE_VECTOR_STORE:
-			return new ResolvedTarget(DataFlowEndpoints.vectorStoreRef(), MetaEndpointType.VECTORIAL_DATABASE);
+			return List.of(new ResolvedTarget(DataFlowEndpoints.vectorStoreRef(), MetaEndpointType.VECTORIAL_DATABASE,
+					true, false));
 		case KNOWLEDGE_BASE_FULLTEXT_INDEX:
 			return legs.fullText()
-					? new ResolvedTarget(DataFlowEndpoints.fullTextIndexRef(), MetaEndpointType.FULLTEXT_INDEX)
-					: null;
+					? List.of(new ResolvedTarget(DataFlowEndpoints.fullTextIndexRef(), MetaEndpointType.FULLTEXT_INDEX,
+							true, false))
+					: List.of();
 		case KNOWLEDGE_BASE_GRAPH_STORE:
 			return legs.graph()
-					? new ResolvedTarget(DataFlowEndpoints.knowledgeGraphRef(), MetaEndpointType.GRAPH_DATABASE)
-					: null;
+					? List.of(new ResolvedTarget(DataFlowEndpoints.knowledgeGraphRef(), MetaEndpointType.GRAPH_DATABASE,
+							true, false))
+					: List.of();
 		case EMBEDDING_MODEL:
-			return own(flow, DataFlowEndpoints.embeddingModel(defaultEmbeddingModel()), MetaEndpointType.LLM_ENDPOINT);
+			return written(flow, DataFlowEndpoints.embeddingModel(defaultEmbeddingModel()), MetaEndpointType.LLM_ENDPOINT);
 		case RANKER_MODEL:
-			return own(flow, DataFlowEndpoints.rankerModel(rankerModelsDaoProvider.getIfAvailable()),
+			return written(flow, DataFlowEndpoints.rankerModel(rankerModelsDaoProvider.getIfAvailable()),
 					MetaEndpointType.LLM_ENDPOINT);
 		case SERVICE_MODEL:
-			return own(flow, DataFlowEndpoints.chatModel("service", DataFlowEndpoints.utilityModel(chatModelsDao),
+			return written(flow, DataFlowEndpoints.chatModel("service", DataFlowEndpoints.utilityModel(chatModelsDao),
 					"Internal services model"), MetaEndpointType.LLM_ENDPOINT);
 		case SEARCH_SERVICE: {
-			final ISearchService service = searchService(target.reference());
-			if (service == null) {
-				return null;
+			final List<ResolvedTarget> out = new ArrayList<>();
+			for (ISearchService service : searchServices) {
+				if (service.getId() != null && service.getId().equals(target.reference())) {
+					for (GSearchSourcesDataFlowComponent.SearchSource source : GSearchSourcesDataFlowComponent
+							.sourcesOf(service)) {
+						out.add(new ResolvedTarget(source.qualifiedId(), source.type(), true, true));
+					}
+				}
 			}
-			return service instanceof AbstractWebSearchServiceImpl
-					? own(flow, webProviderEndpoint(service), MetaEndpointType.WEB_SEARCH)
-					: own(flow, searchServiceEndpoint(service), MetaEndpointType.DOCUMENTS);
+			return out;
 		}
 		case INTERNET:
-			return own(flow, internetEndpoint(), MetaEndpointType.WEB_SEARCH);
+			return written(flow, internetEndpoint(), MetaEndpointType.WEB_SEARCH);
 		case MCP_SERVER:
-			return own(flow, mcpServerEndpoint(target), MetaEndpointType.WEB_SEARCH);
-		case PLATFORM_DATA:
-			return own(flow, platformDataEndpoint(target), MetaEndpointType.DATABASE);
+			return written(flow, mcpServerEndpoint(target), MetaEndpointType.WEB_SEARCH);
+		case PLATFORM_DATA: {
+			// the platform's own data are read, nothing is written there
+			final DataEndpoint platform = platformDataEndpoint(target);
+			DataFlowEndpoints.addUnique(flow, platform);
+			return List.of(new ResolvedTarget(flow.qualifiedId(platform.getId()), MetaEndpointType.DATABASE, true, false));
+		}
 		default:
-			return null;
+			return List.of();
 		}
 	}
 
-	private static ResolvedTarget own(GDataFlowMetaInfos flow, DataEndpoint endpoint, MetaEndpointType type) {
+	/** An endpoint this component owns that the tools write to, none when it is not configured. */
+	private static List<ResolvedTarget> written(GDataFlowMetaInfos flow, DataEndpoint endpoint, MetaEndpointType type) {
 		if (endpoint == null) {
-			return null;
+			return List.of();
 		}
 		DataFlowEndpoints.addUnique(flow, endpoint);
-		return new ResolvedTarget(flow.qualifiedId(endpoint.getId()), type);
-	}
-
-	/** A system searched through a non web search service: its documents are read. */
-	private static DataEndpoint searchServiceEndpoint(ISearchService service) {
-		String product = safe(service.getProductId(), safe(service.getId(), "search service"));
-		DataEndpoint endpoint = new DataEndpoint();
-		endpoint.setId("search-service-" + safe(service.getId(), product));
-		endpoint.setDescription(safe(service.getDescription(), product));
-		endpoint.setProduct(product);
-		endpoint.setEndpoint(product + ":" + safe(service.getId(), ""));
-		endpoint.setInput(true);
-		endpoint.setOutput(true);
-		endpoint.setTypes(list(MetaEndpointType.DOCUMENTS));
-		endpoint.setPersonalData(false);
-		endpoint.setLocality(DataEndpointLocality.EXTERNAL_PROVIDER);
-		return endpoint;
+		return List.of(new ResolvedTarget(flow.qualifiedId(endpoint.getId()), type, false, true));
 	}
 
 	/** Any internet page a tool reads from its URL: a transfer to third parties. */
@@ -529,36 +677,6 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		});
 	}
 
-	private ISearchService searchService(String id) {
-		final ISearchServiceRepositoryPattern searchServices = searchServicesProvider.getIfAvailable();
-		if (searchServices == null || id == null) {
-			return null;
-		}
-		try {
-			final List<ISearchService> all = searchServices.getImplementations();
-			if (all == null) {
-				return null;
-			}
-			for (ISearchService service : all) {
-				if (service != null && id.equals(service.getId())) {
-					return service;
-				}
-			}
-		} catch (RuntimeException e) {
-			LOGGER.warn("Cannot find the search service " + id + " for the data flow register", e);
-		}
-		return null;
-	}
-
-	private static IGConfigurableChatModel defaultChatModel(IGChatModelRuntimeConfigurationDao chatModelsDao) {
-		try {
-			return chatModelsDao != null ? chatModelsDao.defaultHandler() : null;
-		} catch (RuntimeException e) {
-			LOGGER.warn("Cannot read the default chat model for the data flow register", e);
-			return null;
-		}
-	}
-
 	private IGConfigurableEmbeddingModel defaultEmbeddingModel() {
 		final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao = embeddingModelsDaoProvider.getIfAvailable();
 		try {
@@ -569,64 +687,35 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		}
 	}
 
-	private List<ISearchService> enabledWebSearchProviders() {
-		ISearchServiceRepositoryPattern searchServices = searchServicesProvider.getIfAvailable();
-		if (searchServices == null) {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("No search service repository available, no external web search provider is reported");
-			}
-			return List.of();
-		}
-		try {
-			List<ISearchService> all = searchServices.getImplementations();
-			if (all == null) {
-				return List.of();
-			}
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Filtering " + all.size() + " registered search service(s) down to the enabled ones");
-			}
-			return all.stream().filter(s -> {
-				try {
-					return s != null && s.isEnabled();
-				} catch (Exception e) {
-					LOGGER.warn("Cannot tell whether search service {} is enabled, excluding it from the register",
-							s != null ? s.getId() : null, e);
-					return false;
-				}
-			}).toList();
-		} catch (RuntimeException e) {
-			LOGGER.warn("Cannot enumerate the registered search services for the data flow register", e);
-			return List.of();
-		}
-	}
-
-	private DataEndpoint webProviderEndpoint(ISearchService provider) {
-		String product = safe(provider.getProductId(), "web search");
-		DataEndpoint endpoint = new DataEndpoint();
-		endpoint.setId("web-search-" + safe(provider.getId(), product));
-		endpoint.setDescription(safe(provider.getDescription(), product));
-		endpoint.setProduct(product);
-		endpoint.setEndpoint(product + ":" + safe(provider.getId(), ""));
-		endpoint.setInput(true);
-		endpoint.setOutput(true);
-		endpoint.setTypes(list(MetaEndpointType.WEB_SEARCH));
-		endpoint.setPersonalData(false);
-		endpoint.setLocality(DataEndpointLocality.EXTERNAL_PROVIDER);
-		return endpoint;
-	}
-
 	private void link(GDataFlowMetaInfos flow, String kind, String key, String description, MetaEndpointType from,
 			MetaEndpointType to, String sourceQualifiedId, String destQualifiedId) {
+		add(flow, kind, key, description, from, to, sourceQualifiedId, destQualifiedId, DataTransformationInfo.Carried.CONTENT);
+	}
+
+	/**
+	 * A step whose destination processes what the network gives it and passes it to no
+	 * one else: a member's chat model, a model, a search source or a tool target given
+	 * the arguments the members' models write.
+	 */
+	private void processed(GDataFlowMetaInfos flow, String kind, String key, String description, MetaEndpointType from,
+			MetaEndpointType to, String sourceQualifiedId, String destQualifiedId) {
+		add(flow, kind, key, description, from, to, sourceQualifiedId, destQualifiedId,
+				DataTransformationInfo.Carried.PROCESSED);
+	}
+
+	private void add(GDataFlowMetaInfos flow, String kind, String key, String description, MetaEndpointType from,
+			MetaEndpointType to, String sourceQualifiedId, String destQualifiedId, DataTransformationInfo.Carried carried) {
 		DataTransformationMetaInfo engine = DataTransformationMetaInfo.of(kind + "-" + key, description, list(from),
 				list(to));
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("Data flow link " + kind + "-" + key + " : " + sourceQualifiedId + " -> " + destQualifiedId
-					+ " (" + from + " -> " + to + ")");
+					+ " (" + from + " -> " + to + ", " + carried + ")");
 		}
 		flow.getEngines().add(engine);
-		flow.getTransformations()
-				.add(DataTransformationInfo.of(kind + "-flow-" + key, description, engine, sourceQualifiedId,
-						destQualifiedId));
+		DataTransformationInfo step = DataTransformationInfo.of(kind + "-flow-" + key, description, engine,
+				sourceQualifiedId, destQualifiedId);
+		step.setCarried(carried);
+		flow.getTransformations().add(step);
 	}
 
 	private void addUnique(GDataFlowMetaInfos flow, DataEndpoint endpoint) {

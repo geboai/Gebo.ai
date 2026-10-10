@@ -5746,6 +5746,9 @@
       },
       "RefreshDataFlowBtn": {
         "label": "Refresh"
+      },
+      "PersonalDataScopeText": {
+        "label": "\"May carry personal data\" marks a flow as in scope for a personal-data assessment - it is not an automated determination. Whether ingested content is personal or purely business/company data is the data controller's call: personal data start only from the data sources flagged as holding them and follow the flow - to the stores they feed, the chats and agents reading those stores, and the models and services these write to."
       }
     }
   },

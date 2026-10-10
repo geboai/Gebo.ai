@@ -79,6 +79,17 @@ import ai.gebo.llms.chat.abstraction.layer.services.impl.DataFlowEndpoints.Knowl
  * </p>
  *
  * <p>
+ * Every step is reported in the direction the data travel: a retrieval from the
+ * store to the chat reading it, the chat's content to the models answering,
+ * ranking and analysing it. The user's question sent to the embedding model and the
+ * search queries sent to the search services are requests only
+ * ({@link DataFlowEndpoints#request}): they carry none of the content the chat has
+ * read, so personal data of a data source do not travel along them. The models
+ * process what they are given and pass it to no one else
+ * ({@link DataFlowEndpoints#processed}).
+ * </p>
+ *
+ * <p>
  * Every collaborator is resolved lazily at report time through an
  * {@code ObjectProvider}: the chat/LLM/search services form a dense dependency
  * web, and a symbolic reporter must never pull any of it into its own eager
@@ -215,17 +226,17 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 					"Responder chat model");
 			if (responder != null) {
 				addUnique(flow, responder);
-				link(flow, "answer", profileCode, "RAG answer generation (query + retrieved content)",
+				processed(flow, "answer", profileCode, "RAG answer generation (query + retrieved content)",
 						MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, flow.qualifiedId(query.getId()),
 						flow.qualifiedId(responder.getId()));
 			}
 			if (serviceModel != null) {
-				link(flow, "rewrite", profileCode, "Query rewriting / tool calls", MetaEndpointType.CHAT_SESSION,
+				processed(flow, "rewrite", profileCode, "Query rewriting / tool calls", MetaEndpointType.CHAT_SESSION,
 						MetaEndpointType.LLM_ENDPOINT, flow.qualifiedId(query.getId()),
 						flow.qualifiedId(serviceModel.getId()));
 			}
 			if (rankerModel != null) {
-				link(flow, "rerank", profileCode, "Reranking retrieved chunks", MetaEndpointType.CHAT_SESSION,
+				processed(flow, "rerank", profileCode, "Reranking retrieved chunks", MetaEndpointType.CHAT_SESSION,
 						MetaEndpointType.LLM_ENDPOINT, flow.qualifiedId(query.getId()),
 						flow.qualifiedId(rankerModel.getId()));
 			}
@@ -234,27 +245,27 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 			DataEndpoint embedding = describeEmbeddingModel(profile, embeddingModelsDao);
 			if (embedding != null) {
 				addUnique(flow, embedding);
-				link(flow, "embed", profileCode, "Query embedding", MetaEndpointType.CHAT_SESSION,
+				request(flow, "embed", profileCode, "Query embedding", MetaEndpointType.CHAT_SESSION,
 						MetaEndpointType.LLM_ENDPOINT, flow.qualifiedId(query.getId()),
 						flow.qualifiedId(embedding.getId()));
-				// Semantic retrieval reads the vector store the vectorizator owns.
-				link(flow, "semantic-retrieval", profileCode, "Semantic knowledge-base retrieval",
-						MetaEndpointType.LLM_ENDPOINT, MetaEndpointType.VECTORIAL_DATABASE,
-						flow.qualifiedId(embedding.getId()), vectorStoreRef());
 			}
+			// Semantic retrieval: the fragments the vector store returns reach the chat.
+			link(flow, "semantic-retrieval", profileCode, "Semantic knowledge-base retrieval",
+					MetaEndpointType.VECTORIAL_DATABASE, MetaEndpointType.CHAT_SESSION, vectorStoreRef(),
+					flow.qualifiedId(query.getId()));
 
 			// The lexical leg runs whenever the full-text search is deployed, whatever the
 			// profile says: GDocumentsSearchServiceImpl reads no profile flag for it.
 			if (legs.fullText()) {
 				link(flow, "keyword-retrieval", profileCode, "Full-text knowledge-base retrieval",
-						MetaEndpointType.CHAT_SESSION, MetaEndpointType.FULLTEXT_INDEX, flow.qualifiedId(query.getId()),
-						fullTextIndexRef());
+						MetaEndpointType.FULLTEXT_INDEX, MetaEndpointType.CHAT_SESSION, fullTextIndexRef(),
+						flow.qualifiedId(query.getId()));
 			}
 			// The graph leg runs whenever the knowledge graph search is deployed.
 			if (legs.graph()) {
 				link(flow, "graph-retrieval", profileCode, "Knowledge-graph knowledge-base retrieval",
-						MetaEndpointType.CHAT_SESSION, MetaEndpointType.GRAPH_DATABASE, flow.qualifiedId(query.getId()),
-						DataFlowEndpoints.knowledgeGraphRef());
+						MetaEndpointType.GRAPH_DATABASE, MetaEndpointType.CHAT_SESSION,
+						DataFlowEndpoints.knowledgeGraphRef(), flow.qualifiedId(query.getId()));
 			}
 			if (responder != null && !responders.contains(responder.getId())) {
 				responders.add(responder.getId());
@@ -274,7 +285,10 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 	 * the search services return being chunked in the chunk cache for the request and
 	 * disposed at its end; the utility model plans the searches and analyses what is
 	 * found, the ranker (when configured) ranks the knowledge-base fragments, and the
-	 * chat's own model, one of the profiles' responders, writes the answer.
+	 * chat's own model, one of the profiles' responders, writes the answer. The
+	 * knowledge bases and the search services are searched in parallel from the
+	 * user's request, so the queries reaching the embedding model and the search
+	 * services are requests only.
 	 */
 	private void addDeepSearch(GDataFlowMetaInfos flow, KnowledgeBaseSearchLegs legs, DataEndpoint serviceModel,
 			DataEndpoint rankerModel, List<String> responders, DataEndpoint embeddingModel) {
@@ -293,43 +307,37 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 		// the knowledge bases, searched as every other reader searches them
 		if (embeddingModel != null) {
 			addUnique(flow, embeddingModel);
-			link(flow, "deep-search-embed", "kb", "Deep search: knowledge-base queries embedding",
+			request(flow, "deep-search-embed", "kb", "Deep search: knowledge-base queries embedding",
 					MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, deepQueryId,
 					flow.qualifiedId(embeddingModel.getId()));
 		}
 		link(flow, "deep-search-semantic", "kb", "Deep search: semantic knowledge-base retrieval",
-				MetaEndpointType.CHAT_SESSION, MetaEndpointType.VECTORIAL_DATABASE, deepQueryId, vectorStoreRef());
+				MetaEndpointType.VECTORIAL_DATABASE, MetaEndpointType.CHAT_SESSION, vectorStoreRef(), deepQueryId);
 		if (legs.fullText()) {
 			link(flow, "deep-search-fulltext", "kb", "Deep search: full-text knowledge-base retrieval",
-					MetaEndpointType.CHAT_SESSION, MetaEndpointType.FULLTEXT_INDEX, deepQueryId, fullTextIndexRef());
+					MetaEndpointType.FULLTEXT_INDEX, MetaEndpointType.CHAT_SESSION, fullTextIndexRef(), deepQueryId);
 		}
 		if (legs.graph()) {
 			link(flow, "deep-search-graph", "kb", "Deep search: knowledge-graph knowledge-base retrieval",
-					MetaEndpointType.CHAT_SESSION, MetaEndpointType.GRAPH_DATABASE, deepQueryId,
-					DataFlowEndpoints.knowledgeGraphRef());
+					MetaEndpointType.GRAPH_DATABASE, MetaEndpointType.CHAT_SESSION, DataFlowEndpoints.knowledgeGraphRef(),
+					deepQueryId);
 		}
 		if (rankerModel != null) {
-			link(flow, "deep-search-rerank", "kb", "Deep search: ranking of the knowledge-base fragments found",
+			processed(flow, "deep-search-rerank", "kb", "Deep search: ranking of the knowledge-base fragments found",
 					MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, deepQueryId,
 					flow.qualifiedId(rankerModel.getId()));
 		}
 		if (serviceModel != null) {
-			link(flow, "deep-search-analysis", "service", "Deep search: searches planned and documents found analysed",
+			processed(flow, "deep-search-analysis", "service", "Deep search: searches planned and documents found analysed",
 					MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, deepQueryId,
 					flow.qualifiedId(serviceModel.getId()));
 		}
 		for (String responder : responders) {
-			link(flow, "deep-search-answer", responder, "Deep search: answer written by the chat's own model",
+			processed(flow, "deep-search-answer", responder, "Deep search: answer written by the chat's own model",
 					MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, deepQueryId,
 					flow.qualifiedId(responder));
 		}
 		final int searchServices = addDeepSearchProviders(flow, deepQueryId);
-		if (searchServices > 0) {
-			link(flow, "deep-search-chunking", "results",
-					"Deep search: documents read from the search services chunked for the request, disposed at its end",
-					MetaEndpointType.WEB_SEARCH, MetaEndpointType.CHUNK, deepQueryId,
-					GStandardDataFlowEndpoints.chunkCacheRef());
-		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Reported the deep search over the knowledge bases (legs:" + legs + "), " + searchServices
 					+ " search service(s) and " + responders.size() + " responder model(s)");
@@ -337,60 +345,31 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 	}
 
 	/**
-	 * Adds each enabled search service as an endpoint the deep-search query reaches,
-	 * using the same search-service repository the deep-search pipeline resolves its
-	 * sources from ({@code DynamicReactiveDataSourceServicesProviderImpl}).
+	 * Adds the search sources the deep search reaches: every system of every search
+	 * service someone can search, the same ones {@code DynamicReactiveDataSourceServicesProviderImpl}
+	 * wraps, reported once by {@link GSearchSourcesDataFlowComponent}. The query sent
+	 * there is a request only; the documents found are read by the deep search and
+	 * chunked for the request.
 	 *
-	 * @return how many enabled search services were added
+	 * @return how many search sources were linked
 	 */
 	private int addDeepSearchProviders(GDataFlowMetaInfos flow, String deepQueryId) {
-		ISearchServiceRepositoryPattern searchServices = searchServicesProvider.getIfAvailable();
-		if (searchServices == null) {
-			return 0;
-		}
-		List<ISearchService> services;
-		try {
-			services = searchServices.getImplementations();
-		} catch (RuntimeException e) {
-			LOGGER.warn("Cannot enumerate the search services for the data flow register", e);
-			return 0;
-		}
-		if (services == null) {
-			return 0;
-		}
 		int added = 0;
-		for (ISearchService service : services) {
-			if (service == null) {
-				continue;
+		for (ISearchService service : GSearchSourcesDataFlowComponent
+				.searchableServices(searchServicesProvider.getIfAvailable())) {
+			for (GSearchSourcesDataFlowComponent.SearchSource source : GSearchSourcesDataFlowComponent
+					.sourcesOf(service)) {
+				final String key = service.getId() + "-" + (added++);
+				request(flow, "deep-search", key, "Deep search: queries sent to " + service.getId(),
+						MetaEndpointType.CHAT_SESSION, source.type(), deepQueryId, source.qualifiedId());
+				link(flow, "deep-search-read", key, "Deep search: documents found by " + service.getId() + " read",
+						source.type(), MetaEndpointType.CHAT_SESSION, source.qualifiedId(), deepQueryId);
+				link(flow, "deep-search-chunking", key,
+						"Deep search: documents found by " + service.getId()
+								+ " chunked for the request, disposed at its end",
+						source.type(), MetaEndpointType.CHUNK, source.qualifiedId(),
+						GStandardDataFlowEndpoints.chunkCacheRef());
 			}
-			boolean enabled;
-			try {
-				enabled = service.isEnabled();
-			} catch (Exception e) {
-				enabled = false;
-			}
-			if (!enabled) {
-				continue;
-			}
-			added++;
-			String product = safe(service.getProductId(), "web search");
-			DataEndpoint provider = new DataEndpoint();
-			provider.setId("web-search-" + safe(service.getId(), product));
-			provider.setDescription(safe(service.getDescription(), product));
-			provider.setProduct(product);
-			provider.setEndpoint(product + ":" + safe(service.getId(), ""));
-			provider.setInput(true);
-			provider.setOutput(true);
-			provider.setTypes(list(MetaEndpointType.WEB_SEARCH));
-			provider.setPersonalData(false);
-			// A hosted web-search API is a third party; a self-hosted SearXNG is the
-			// local exception, but from here it is indistinguishable, so this errs
-			// towards flagging the transfer.
-			provider.setLocality(DataEndpointLocality.EXTERNAL_PROVIDER);
-			addUnique(flow, provider);
-			link(flow, "deep-search", provider.getId(), "Deep search (query sent to external provider)",
-					MetaEndpointType.CHAT_SESSION, MetaEndpointType.WEB_SEARCH, deepQueryId,
-					flow.qualifiedId(provider.getId()));
 		}
 		return added;
 	}
@@ -464,6 +443,16 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 		DataFlowEndpoints.link(flow, kind, key, description, from, to, sourceQualifiedId, destQualifiedId);
 	}
 
+	private void request(GDataFlowMetaInfos flow, String kind, String key, String description, MetaEndpointType from,
+			MetaEndpointType to, String sourceQualifiedId, String destQualifiedId) {
+		DataFlowEndpoints.request(flow, kind, key, description, from, to, sourceQualifiedId, destQualifiedId);
+	}
+
+	private void processed(GDataFlowMetaInfos flow, String kind, String key, String description, MetaEndpointType from,
+			MetaEndpointType to, String sourceQualifiedId, String destQualifiedId) {
+		DataFlowEndpoints.processed(flow, kind, key, description, from, to, sourceQualifiedId, destQualifiedId);
+	}
+
 	private void addUnique(GDataFlowMetaInfos flow, DataEndpoint endpoint) {
 		DataFlowEndpoints.addUnique(flow, endpoint);
 	}
@@ -482,10 +471,6 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 
 	private static boolean notEmpty(String s) {
 		return s != null && !s.trim().isEmpty();
-	}
-
-	private static String safe(String s, String fallback) {
-		return notEmpty(s) ? s : fallback;
 	}
 
 	private static List<MetaEndpointType> list(MetaEndpointType... types) {

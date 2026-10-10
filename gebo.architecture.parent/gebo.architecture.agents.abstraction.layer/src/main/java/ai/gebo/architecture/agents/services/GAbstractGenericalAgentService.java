@@ -434,6 +434,35 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		return excluded;
 	}
 
+	/**
+	 * The chat model an agent configuration names: the model referenced, else the one
+	 * configured for the use given, else the default one when the configuration asks
+	 * for it; null when it names none, the agent then running on the default model.
+	 * The one rule {@link #getAgentModel} runs with and the compliance data-flow
+	 * register reports with.
+	 */
+	public static IGConfigurableChatModel configuredChatModel(GAgentConfig agentConfig,
+			IGChatModelRuntimeConfigurationDao chatModelsDao) {
+		if (agentConfig == null || chatModelsDao == null) {
+			return null;
+		}
+		if (agentConfig.getChatModelReference() != null) {
+			return chatModelsDao.findByModelReference(agentConfig.getChatModelReference());
+		} else if (agentConfig.getUseChatModelWithUse() != null) {
+			return chatModelsDao.findByUsesOrGetDefault(agentConfig.getUseChatModelWithUse());
+		} else if (agentConfig.getUseDefaultChatModel() != null && agentConfig.getUseDefaultChatModel()) {
+			return chatModelsDao.defaultHandler();
+		}
+		return null;
+	}
+
+	/** The model {@link #getAgentModel} runs: the one the configuration names, else the default one. */
+	@Override
+	public IGConfigurableChatModel resolveAgentChatModel(GAgentConfig agentConfig) {
+		final IGConfigurableChatModel model = configuredChatModel(agentConfig, chatModelsDao);
+		return model != null ? model : chatModelsDao.defaultHandler();
+	}
+
 	protected IGConfigurableChatModel getAgentModel(GAgentConfig agentConfig, ToolCallsListener callBacksListener,
 			INotificationSink notificationSink, ReactiveIdentityUtil runAs) throws LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
@@ -442,14 +471,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 					+ (agentConfig != null ? agentConfig.getUseDefaultChatModel() : null) + " chatModelReference:"
 					+ (agentConfig != null ? agentConfig.getChatModelReference() : null));
 		}
-		IGConfigurableChatModel copiedModel = null;
-		if (agentConfig.getChatModelReference() != null) {
-			copiedModel = chatModelsDao.findByModelReference(agentConfig.getChatModelReference());
-		} else if (agentConfig.getUseChatModelWithUse() != null) {
-			copiedModel = chatModelsDao.findByUsesOrGetDefault(agentConfig.getUseChatModelWithUse());
-		} else if (agentConfig.getUseDefaultChatModel() != null && agentConfig.getUseDefaultChatModel()) {
-			copiedModel = chatModelsDao.defaultHandler();
-		}
+		IGConfigurableChatModel copiedModel = configuredChatModel(agentConfig, chatModelsDao);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Resolved base chat model for agent service id:" + getId() + " : "
 					+ (copiedModel != null ? copiedModel.getCode() : null));

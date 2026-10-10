@@ -98,9 +98,9 @@ public class GraphextractionProcessorMessagesReceiverFactoryComponent extends GA
 		graph.setPersonalData(false);
 		graph.setRetention("Until the source is deleted or re-indexed");
 		// Erased on deletion by GraphExtractionDisposerMessageReceiverImpl, which
-		// consumes the same GDeleted*/GInternalDeletion messages the knowledge-base
-		// and project controllers broadcast, so a deleted source is purged from the
-		// graph as it is from the vector store and the chunk store.
+		// receives the same GDeleted*/GInternalDeletion messages as the vectorizator's
+		// eraser (every deletion is sent to each store eraser by GStoreDisposers), so a
+		// deleted source is purged from the graph as it is from the vector store.
 		graph.setDisposer(new GeboComponentInfo(GStandardModulesConstraints.KNOWLEDGE_GRAPH_MODULE,
 				GStandardModulesConstraints.KNOWLEDGE_GRAPH_DISPOSE_COMPONENT));
 		if (neo4jUsername != null && !neo4jUsername.isEmpty()) {

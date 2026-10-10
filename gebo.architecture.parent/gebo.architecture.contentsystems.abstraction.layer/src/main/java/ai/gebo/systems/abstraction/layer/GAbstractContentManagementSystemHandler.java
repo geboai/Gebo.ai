@@ -42,6 +42,10 @@ import ai.gebo.application.messaging.model.DataEndpoint;
 import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
 import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.service.ISearchService;
+import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
+import ai.gebo.architecture.search.service.SearchSources;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
@@ -144,6 +148,12 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	// handler still reports its source endpoints, just without the connecting edges.
 	@Autowired
 	protected ObjectProvider<IWorkflowStatusHandlerRepositoryPattern> workflowStatusHandlerRepositoryProvider;
+
+	// The search services, to link a data source to the live search of its system.
+	// Resolved lazily for the same bean-cycle reason as the workflow repository above:
+	// the remote-filesystem search beans among them are built on content handlers.
+	@Autowired
+	protected ObjectProvider<ISearchServiceRepositoryPattern> searchServicesProvider;
 
 	// Message broker for system messaging
 	protected IGMessageBroker messageBroker = null;
@@ -892,8 +902,9 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 				continue;
 			}
 			String baseUri = null;
+			SystemIntegrationType system = null;
 			try {
-				SystemIntegrationType system = getSystem(endpoint);
+				system = getSystem(endpoint);
 				if (system != null) {
 					baseUri = system.getBaseUri();
 				}
@@ -915,6 +926,7 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 			source.setLocality(DataEndpointLocality.hintFromLocator(source.getEndpoint()));
 			flow.getDataEndpoints().add(source);
 			addWorkflowLinks(flow, source, endpoint);
+			addLiveSearchLinks(flow, source, system);
 		}
 		return flow.getDataEndpoints().isEmpty() ? null : flow;
 	}
@@ -1002,6 +1014,48 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 				GStandardDataFlowEndpoints.FULLTEXT_INDEX, MetaEndpointType.FULLTEXT_INDEX, "Full-text indexing");
 		addDownstreamLink(flow, endpoint, enabledSteps, chunkEndpointId, GStandardWorkflowStep.GRAPHEXTRACTION,
 				GStandardDataFlowEndpoints.KNOWLEDGE_GRAPH, MetaEndpointType.GRAPH_DATABASE, "Knowledge-graph extraction");
+	}
+
+	/**
+	 * Links a data source to the live search of its system: a search service searching
+	 * the system the data source is defined on (the remote-filesystem searches search the
+	 * systems their content handler is configured with) returns the content the data
+	 * source ingests, so a data source flagged as holding personal data makes that search
+	 * source hold them as well. Linked only when someone can search the system
+	 * ({@link SearchSources#searchable}), as the search sources component reports it.
+	 */
+	private void addLiveSearchLinks(GDataFlowMetaInfos flow, DataEndpoint source, SystemIntegrationType system) {
+		if (system == null || system.getCode() == null || searchServicesProvider == null) {
+			return;
+		}
+		final ISearchServiceRepositoryPattern searchServices = searchServicesProvider.getIfAvailable();
+		if (searchServices == null) {
+			return;
+		}
+		final String systemType = getHandledSystemType() != null ? getHandledSystemType().getCode() : null;
+		for (ISearchService service : SearchSources.searchable(searchServices)) {
+			for (SearchableSystemMetaData searched : SearchSources.systems(service)) {
+				if (!(searched.getSystemConfigurationReference() instanceof GContentManagementSystem configured)
+						|| !system.getCode().equals(configured.getCode()) || systemType == null
+						|| !systemType.equals(configured.getContentManagementSystemType())) {
+					continue;
+				}
+				final String searchSource = GStandardDataFlowEndpoints.searchSourceRef(service.getId(),
+						SearchSources.systemCode(searched));
+				DataTransformationMetaInfo engine = DataTransformationMetaInfo.of(
+						"live-search-" + service.getId() + "-" + source.getId(), "Live search of the system",
+						List.of(MetaEndpointType.DOCUMENTS), List.of(MetaEndpointType.DOCUMENTS));
+				flow.getEngines().add(engine);
+				flow.getTransformations().add(DataTransformationInfo.of(
+						"live-search-flow-" + service.getId() + "-" + source.getId(),
+						"The content of '" + source.getDescription() + "' is also searched live by " + service.getId(),
+						engine, flow.qualifiedId(source.getId()), searchSource));
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Data source:" + source.getId() + " on system:" + system.getCode()
+							+ " is searched live by:" + service.getId());
+				}
+			}
+		}
 	}
 
 	private void addDownstreamLink(GDataFlowMetaInfos flow, ProjectEndpointType endpoint, Set<String> enabledSteps,
