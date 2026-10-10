@@ -46,6 +46,16 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
     protected agentsList: AgentNetworkParticipant[] = [];
     /** The tools each agent configuration mounts, by configuration code. */
     private mountedTools = new Map<string, AgentMountedTools>();
+    /**
+     * The colour of each tool category in the graph. Only calm tones: red, orange
+     * and yellow are kept for errors and warnings.
+     */
+    private static readonly TOOL_CATEGORY_CLASSES = [
+        "bg-blue-50 text-blue-700", "bg-teal-50 text-teal-700", "bg-purple-50 text-purple-700",
+        "bg-cyan-50 text-cyan-700", "bg-indigo-50 text-indigo-700", "bg-bluegray-50 text-bluegray-700"
+    ];
+    /** The tool categories of the graph, in order: each takes the next colour. */
+    private toolCategories: string[] = [];
 
     public readonly: boolean = false;
     protected diagramModel: any;
@@ -202,6 +212,23 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         this.loadMountedTools();
     }
 
+    /**
+     * The colour classes of a tool category: the categories of the graph take the
+     * colours in turn, so they share one only past the number of colours.
+     */
+    public getToolCategoryClass(categoryCode: string | undefined): string {
+        const index = categoryCode ? this.toolCategories.indexOf(categoryCode) : -1;
+        const classes = GeboAIAgentsNetworkAdminComponent.TOOL_CATEGORY_CLASSES;
+        return index >= 0 ? classes[index % classes.length] : "surface-100 text-color";
+    }
+
+    private refreshToolCategories(): void {
+        const codes = new Set<string>();
+        this.mountedTools.forEach(mounted => [...(mounted.tools || []), ...(mounted.excludedTools || [])]
+            .forEach(tool => tool.categoryCode && codes.add(tool.categoryCode)));
+        this.toolCategories = [...codes].sort();
+    }
+
     /** The tools the given agent configuration mounts, once loaded. */
     public getMountedTools(code: string | undefined): AgentMountedTools | undefined {
         return code ? this.mountedTools.get(code) : undefined;
@@ -227,6 +254,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
                         this.mountedTools.set(mounted.agentConfigCode, mounted);
                     }
                 });
+                this.refreshToolCategories();
                 // the nodes show their tools on the next change detection, taller:
                 // fit again without moving the nodes the user placed
                 if (this.diagramModel && this.lastLayoutNodes.length > 0) {

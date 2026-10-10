@@ -152,12 +152,6 @@ export class AgentNodeComponent implements NgDiagramNodeTemplate<AgentNetworkPar
 
     /** The chips shown on the node; the rest open in the popover. */
     private static readonly VISIBLE_TOOLS = 6;
-    /** One colour per tool category, chosen by the category code. */
-    private static readonly CATEGORY_CLASSES = [
-        "bg-blue-50 text-blue-700", "bg-teal-50 text-teal-700", "bg-orange-50 text-orange-700",
-        "bg-purple-50 text-purple-700", "bg-pink-50 text-pink-700", "bg-cyan-50 text-cyan-700",
-        "bg-indigo-50 text-indigo-700", "bg-yellow-50 text-yellow-800"
-    ];
 
     constructor(@Inject(forwardRef(() => GeboAIAgentsNetworkAdminComponent)) protected parent: GeboAIAgentsNetworkAdminComponent) {}
 
@@ -194,13 +188,7 @@ export class AgentNodeComponent implements NgDiagramNodeTemplate<AgentNetworkPar
     }
 
     protected categoryClass(tool: MountedTool): string {
-        const code = tool.categoryCode || "";
-        let hash = 0;
-        for (let i = 0; i < code.length; i++) {
-            hash = (hash * 31 + code.charCodeAt(i)) | 0;
-        }
-        return code ? AgentNodeComponent.CATEGORY_CLASSES[Math.abs(hash) % AgentNodeComponent.CATEGORY_CLASSES.length]
-            : "surface-100 text-color";
+        return this.parent.getToolCategoryClass(tool.categoryCode);
     }
 
     protected toolTooltip(tool: MountedTool): string {
