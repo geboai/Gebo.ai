@@ -1,6 +1,6 @@
 import { afterNextRender, Component, DestroyRef, ElementRef, forwardRef, Injector, OnInit, runInInjectionContext, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AgenticChatDefaultNetworksAdminControllerService, GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GBaseObject, GAgentConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { AgenticChatDefaultNetworksAdminControllerService, GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GBaseObject, GAgentConfig, AgentMountedTools } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
@@ -44,6 +44,8 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
 
     protected availableAgents: GBaseObject[] = [];
     protected agentsList: AgentNetworkParticipant[] = [];
+    /** The tools each agent configuration mounts, by configuration code. */
+    private mountedTools = new Map<string, AgentMountedTools>();
 
     public readonly: boolean = false;
     protected diagramModel: any;
@@ -181,6 +183,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
             this.formGroup.get("choosableForPipelineTypes")?.enable({ emitEvent: false });
         }
         this.rebuildChart();
+        this.loadMountedTools();
     }
 
     override onNewData(actualValue: GAgentsNetwork): void {
@@ -196,6 +199,42 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
             this.formGroup.get("choosableForPipelineTypes")?.enable({ emitEvent: false });
         }
         this.rebuildChart();
+        this.loadMountedTools();
+    }
+
+    /** The tools the given agent configuration mounts, once loaded. */
+    public getMountedTools(code: string | undefined): AgentMountedTools | undefined {
+        return code ? this.mountedTools.get(code) : undefined;
+    }
+
+    /**
+     * Loads the tools mounted by the configurations of the network agents that are
+     * not known yet, or by the given configuration again after it was edited.
+     */
+    protected loadMountedTools(reloadCode?: string): void {
+        if (reloadCode) {
+            this.mountedTools.delete(reloadCode);
+        }
+        const codes = [...new Set(this.agentsList.map(a => a.agentConfigCode)
+            .filter((code): code is string => !!code && !this.mountedTools.has(code)))];
+        if (codes.length === 0) {
+            return;
+        }
+        this.service.getAgentsMountedTools(codes).subscribe({
+            next: (result) => {
+                (result || []).forEach(mounted => {
+                    if (mounted.agentConfigCode) {
+                        this.mountedTools.set(mounted.agentConfigCode, mounted);
+                    }
+                });
+                // the nodes show their tools on the next change detection, taller:
+                // fit again without moving the nodes the user placed
+                if (this.diagramModel && this.lastLayoutNodes.length > 0) {
+                    this.fitDiagramToViewport();
+                }
+            },
+            error: (error) => console.error("Cannot load the tools of the network agents", error)
+        });
     }
 
     public getAgentDescription(code: string): string {
@@ -290,9 +329,10 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
                 const idxInLevel = levelGroups.get(L)?.indexOf(name) || 0;
                 const totalInLevel = levelGroups.get(L)?.length || 1;
 
-                // X centered around 350px, Y spaced by 200px per level
-                const x = (idxInLevel - (totalInLevel - 1) / 2) * 280 + 350;
-                const y = L * 200 + 50;
+                // X centered around 350px, Y spaced by 280px per level (the nodes
+                // grow with the row of their tools)
+                const x = (idxInLevel - (totalInLevel - 1) / 2) * 320 + 350;
+                const y = L * 280 + 50;
 
                 nodes.push({
                     id: name,
@@ -412,6 +452,8 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
             target: { code: code },
             onActionPerformed: (event) => {
                 this.loadAvailableAgents(code);
+                // the edited configuration may mount other tools now
+                this.loadMountedTools(code);
             }
         });
     }
@@ -441,6 +483,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         this.formGroup.controls["agents"].setValue(this.agentsList);
         this.formGroup.controls["agents"].markAsDirty();
         this.rebuildChart();
+        this.loadMountedTools();
     }
 
     protected openAddParticipant(): void {
