@@ -10,6 +10,7 @@
 package ai.gebo.llms.agent.standardtools;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+import ai.gebo.llms.agent.standardtools.KnowledgeBaseDocumentChunksReader.ContentIdentity;
 import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
@@ -599,8 +601,9 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 			final Page<? extends GAbstractVirtualFilesystemObject> found = folders
 					? visibility.browseVisibleVirtualFolders(query, PageRequest.of(page, pageSize))
 					: visibility.browseVisibleDocuments(query, PageRequest.of(page, pageSize));
-			final List<VirtualFilesystemItem> items = found.getContent().stream().map(KnowledgeBaseBrowsingToolSource::item)
-					.toList();
+			final Map<String, ContentIdentity> identities = folders ? Map.of() : identities(found.getContent());
+			final List<VirtualFilesystemItem> items = found.getContent().stream()
+					.map(x -> item(x, identities.get(x.getCode()))).toList();
 			return fitted(items, page, pageSize, found.getTotalElements(), budget, tool);
 		} catch (RuntimeException e) {
 			LOGGER.error(tool + "(...) failed", e);
@@ -653,12 +656,13 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 				visibles.put(document.getUniqueId(), document);
 			}
 			final List<FoundDocumentItem> items = new ArrayList<>();
+			final Map<String, ContentIdentity> identities = identities(visibles.values());
 			for (KnowledgeBaseDocumentIdentitySearch.FoundDocument document : found) {
 				final GDocumentReference reference = visibles.get(document.uniqueId());
 				if (reference == null) {
 					continue;
 				}
-				final VirtualFilesystemItem item = item(reference);
+				final VirtualFilesystemItem item = item(reference, identities.get(reference.getCode()));
 				items.add(new FoundDocumentItem(item.uniqueId(), item.name(),
 						type == EmbedType.TITLE ? document.matched() : item.title(), document.matched(),
 						document.score(), item.code(), item.parentCode()));
@@ -837,10 +841,38 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 
 	/** A folder or a document as the tools list it. */
 	static VirtualFilesystemItem item(GAbstractVirtualFilesystemObject object) {
+		return item(object, null);
+	}
+
+	/**
+	 * A folder or a document as the tools list it: its title the one its content
+	 * source gives, else the one its contents tell (kept with its vectors, since a
+	 * publication replaces the reference with the source's).
+	 */
+	static VirtualFilesystemItem item(GAbstractVirtualFilesystemObject object, ContentIdentity identity) {
 		final Map<String, Object> meta = object.getCustomMetaInfos();
-		final Object title = meta != null ? meta.get(DocumentMetaInfos.TITLE) : null;
-		return new VirtualFilesystemItem(object.getUniqueId(), object.getName(), title != null ? title.toString() : null,
-				object.getDescription(), object.getCode(), object.getParentVirtualFolderCode(), meta);
+		final Object sourceTitle = meta != null ? meta.get(DocumentMetaInfos.TITLE) : null;
+		final String title = sourceTitle != null && !sourceTitle.toString().isBlank() ? sourceTitle.toString()
+				: (identity != null ? identity.title() : null);
+		return new VirtualFilesystemItem(object.getUniqueId(), object.getName(), title, object.getDescription(),
+				object.getCode(), object.getParentVirtualFolderCode(), meta);
+	}
+
+	/**
+	 * The titles and authors the contents of the documents tell, by code; none when
+	 * they cannot be read, the listing is not failed for them.
+	 */
+	private Map<String, ContentIdentity> identities(Collection<? extends GAbstractVirtualFilesystemObject> documents) {
+		if (documents == null || documents.isEmpty()) {
+			return Map.of();
+		}
+		try {
+			return chunksReader.getObject().identities(
+					documents.stream().map(GAbstractVirtualFilesystemObject::getCode).filter(x -> x != null).toList());
+		} catch (RuntimeException e) {
+			LOGGER.warn("Cannot read the titles the documents' contents tell: " + e.getMessage());
+			return Map.of();
+		}
 	}
 
 	/** A page of an in-memory list. */

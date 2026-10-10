@@ -337,6 +337,8 @@ public class GEmbedderImpl implements IGEmbedder {
 							vect.setFileNameVectorsId(fileNameIds);
 							vect.setTitleVectorsId(titleIds);
 							vect.setAuthorVectorsId(authorIds);
+							vect.setTitle(text(identityVectors.title()));
+							vect.setAuthor(text(identityVectors.author()));
 							vect.setLastestJobId(x.getPayload().getJobId());
 							vect.setLastVectorizedDate(now);
 						} else {
@@ -358,6 +360,8 @@ public class GEmbedderImpl implements IGEmbedder {
 							vect.setFileNameVectorsId(fileNameIds);
 							vect.setTitleVectorsId(titleIds);
 							vect.setAuthorVectorsId(authorIds);
+							vect.setTitle(text(identityVectors.title()));
+							vect.setAuthor(text(identityVectors.author()));
 							vect.setLastVectorizedDate(now);
 							vectorizedList.add(vect);
 						}
@@ -532,6 +536,11 @@ public class GEmbedderImpl implements IGEmbedder {
 	}
 
 	/** The id of the vector in a list, none without vector. */
+	/** The text a vector embeds, null without the vector. */
+	private static String text(Document vector) {
+		return vector != null ? vector.getText() : null;
+	}
+
 	private static List<String> ids(Document vector) {
 		final List<String> ids = new ArrayList<String>();
 		if (vector != null) {

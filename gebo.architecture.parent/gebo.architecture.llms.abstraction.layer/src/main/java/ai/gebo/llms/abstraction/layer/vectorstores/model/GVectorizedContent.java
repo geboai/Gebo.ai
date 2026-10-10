@@ -103,6 +103,19 @@ public class GVectorizedContent {
      * the document was vectorized before they existed.
      */
     private List<String> authorVectorsId = null;
+    /**
+     * The document's title, as its contents tell it (the text of its title vector);
+     * null when it has none, or was vectorized before it was kept. Kept here, and not
+     * on the document reference, because each publication replaces the reference
+     * with the one its content source gives, while this record changes only when the
+     * document is vectorized again.
+     */
+    private String title = null;
+    /**
+     * The document's author, as its contents tell it (the text of its author
+     * vector); null when it has none, or was vectorized before it was kept.
+     */
+    private String author = null;
     private Long fileSize = null;
     private Date modificationDate = null;
     private Date lastVectorizedDate = null;
