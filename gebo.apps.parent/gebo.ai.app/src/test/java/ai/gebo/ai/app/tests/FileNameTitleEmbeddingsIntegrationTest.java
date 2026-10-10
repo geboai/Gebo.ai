@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.document.MetadataMode;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -51,6 +52,7 @@ import ai.gebo.llms.agent.standardtools.KnowledgeBaseDocumentIdentitySearch;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseDocumentIdentitySearch.FoundDocument;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.EmbedType;
+import ai.gebo.ragsystem.content.vectorizator.impl.DocumentIdentityVectors;
 import ai.gebo.ragsystem.content.vectorizator.impl.FileNameTitleVectorsBackfill;
 import ai.gebo.workflows.compute.model.JobSummary;
 
@@ -156,6 +158,11 @@ public class FileNameTitleEmbeddingsIntegrationTest extends AbstractMongoOnlyBas
 			}
 		}
 		assertTrue(titled > 0, "Some documents of the corpus have a title");
+		// the file name, title and author vectors embed their text alone, not their metadata
+		final Map<String, Object> someMetadata = metadataOf(store, vectorized.get(0).getVectorsId().get(0));
+		final Document titleVector = DocumentIdentityVectors.vector(someMetadata, EmbedType.TITLE, "The Secret Doctrine");
+		assertEquals("The Secret Doctrine", titleVector.getFormattedContent(MetadataMode.EMBED));
+		assertEquals("The Secret Doctrine", titleVector.getFormattedContent(MetadataMode.ALL));
 		LOGGER.info("Documents with an author: " + authors.values());
 
 		// 2. the searches of contents never find a file name or title vector

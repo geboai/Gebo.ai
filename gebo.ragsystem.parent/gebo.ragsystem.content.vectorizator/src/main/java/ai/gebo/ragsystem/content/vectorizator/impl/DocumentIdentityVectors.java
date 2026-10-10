@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.document.ContentFormatter;
 import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
@@ -37,10 +38,22 @@ import lombok.experimental.UtilityClass;
  * its position and page are dropped, its token and byte lengths are those of the
  * text embedded. Their ids are new random UUIDs, as the vector stores need.
  * </p>
+ *
+ * <p>
+ * They embed their text alone: the embedding models format a document with its
+ * metadata ({@code MetadataMode.EMBED}), hundreds of tokens shared by every document
+ * of a knowledge base that would bury a name of a few words; the searches by file
+ * name, title or author embed the text searched alone too.
+ * </p>
  */
 @UtilityClass
 public class DocumentIdentityVectors {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DocumentIdentityVectors.class);
+
+	/** Formats a file name, title or author vector for any use as its text alone, without its metadata. */
+	public static final ContentFormatter TEXT_ONLY = (document, metadataMode) -> document.getText() != null
+			? document.getText()
+			: "";
 
 	/** The fields of the metadata telling a part of the contents, not the document. */
 	private static final List<String> CONTENT_PART_FIELDS = List.of(DocumentMetaInfos.GEBO_CHUNK_POSITION,
@@ -131,7 +144,9 @@ public class DocumentIdentityVectors {
 		metadata.put(DocumentMetaInfos.EMBED_TYPE, type.name());
 		metadata.put(DocumentMetaInfos.GEBO_TOKEN_LENGTH, ITokensCountable.stringsTokensSize(text));
 		metadata.put(DocumentMetaInfos.GEBO_BYTES_LENGTH, text.getBytes(StandardCharsets.UTF_8).length);
-		return new Document(UUID.randomUUID().toString(), text, metadata);
+		final Document vector = new Document(UUID.randomUUID().toString(), text, metadata);
+		vector.setContentFormatter(TEXT_ONLY);
+		return vector;
 	}
 
 	/** Marks the vectors of the contents as such. */
