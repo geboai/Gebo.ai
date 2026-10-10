@@ -43,7 +43,6 @@ import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.SecurityAuditTaxonomy;
-import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 import io.micrometer.observation.annotation.Observed;
 
 /**
@@ -506,8 +505,16 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 					? endpoint
 					: persistentObjectManager.update(endpoint);
 			processReschedule(GCentralizedProjectEndpoint.of(outdata));
-			GJobStatus job = jobQueueService.createNewAsyncJob(outdata, new NoContentConsumingSessionParam(),
-					GWorkflowType.STANDARD.name(), GStandardWorkflow.INGESTION.name());
+			// A publish reads the whole data source: no session parameter, as the job
+			// launcher and the scheduler send. A NoContentConsumingSessionParam here broke
+			// every handler typed on RemoteVirtualFileSystemContentConsumingSessionParam
+			// (uploads, filesystem, the remote virtual filesystems) with a
+			// ClassCastException, while those handlers read a null one as "no operation".
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Publishing data source " + outdata.getCode() + " with no session parameter");
+			}
+			GJobStatus job = jobQueueService.createNewAsyncJob(outdata, null, GWorkflowType.STANDARD.name(),
+					GStandardWorkflow.INGESTION.name());
 			return OperationStatus.of(job);
 		} catch (Throwable exc) {
 			LOGGER.error("Error publishing", exc);
