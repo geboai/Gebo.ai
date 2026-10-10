@@ -51,6 +51,7 @@ import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.ragsystem.content.vectorizator.DocumentAccessResult;
 import ai.gebo.ragsystem.content.vectorizator.IGEmbedder;
+import ai.gebo.ragsystem.content.vectorizator.impl.DocumentIdentityVectors.IdentityVectors;
 
 @Service
 public class GEmbedderImpl implements IGEmbedder {
@@ -133,8 +134,11 @@ public class GEmbedderImpl implements IGEmbedder {
 			if (!vectorsToDeleteForVectorStoreId.containsKey(x.getId().getVectorStoreId())) {
 				vectorsToDeleteForVectorStoreId.put(x.getId().getVectorStoreId(), new ArrayList<String>());
 			}
-			vectorsToDeleteForVectorStoreId.get(x.getId().getVectorStoreId()).addAll(x.getVectorsId());
+			// the contents', the file name's and the title's
+			vectorsToDeleteForVectorStoreId.get(x.getId().getVectorStoreId()).addAll(x.allVectorsId());
 			x.setVectorsId(new ArrayList<String>());
+			x.setFileNameVectorsId(null);
+			x.setTitleVectorsId(null);
 
 		});
 
@@ -189,6 +193,16 @@ public class GEmbedderImpl implements IGEmbedder {
 		Date now = new Date();
 		List<GUserMessage> allUserMessages = new ArrayList<GUserMessage>();
 
+		// The vectors of each document's file name and title, beside those of its
+		// contents, the same in every vector store
+		final Map<String, IdentityVectors> identityVectorsPerDocCode = new HashMap<String, IdentityVectors>();
+		for (GMessageEnvelope<GDocumentMessageFragmentPayload> x : messagesList) {
+			GDocumentMessageFragmentPayload payload = x.getPayload();
+			DocumentIdentityVectors.markContents(payload.getDocuments());
+			identityVectorsPerDocCode.put(payload.getDocumentReference().getCode(), DocumentIdentityVectors
+					.of(payload.getDocumentReference().getName(), payload.getDocuments()));
+		}
+
 		// Process documents for each token threshold group
 		for (Map.Entry<Integer, List<IGConfigurableEmbeddingModel>> entry : groupByEmbedSize.entrySet()) {
 			List<GUserMessage> userMessages = new ArrayList<GUserMessage>();
@@ -207,6 +221,16 @@ public class GEmbedderImpl implements IGEmbedder {
 					return y.getId();
 				}).toList());
 				tokenizeddocuments.addAll(enriched);
+				final IdentityVectors identityVectors = identityVectorsPerDocCode
+						.get(x.getPayload().getDocumentReference().getCode());
+				if (identityVectors != null) {
+					if (identityVectors.fileName() != null) {
+						tokenizeddocuments.add(identityVectors.fileName());
+					}
+					if (identityVectors.title() != null) {
+						tokenizeddocuments.add(identityVectors.title());
+					}
+				}
 
 				// Create success message for this document
 				String messageSummary = "Document: " + payload.getDocumentReference().getName()
@@ -287,6 +311,10 @@ public class GEmbedderImpl implements IGEmbedder {
 						List<String> newIds = newIdsPerDocCode.get(code);
 						if (newIds == null)
 							newIds = new ArrayList<String>();
+						final IdentityVectors identityVectors = identityVectorsPerDocCode.getOrDefault(code,
+								IdentityVectors.NONE);
+						final List<String> fileNameIds = ids(identityVectors.fileName());
+						final List<String> titleIds = ids(identityVectors.title());
 						List<GVectorizedContent> vectorizedList = vectorizedMap.get(code);
 						if (vectorizedList == null) {
 							vectorizedMap.put(code, vectorizedList = new ArrayList<GVectorizedContent>());
@@ -307,10 +335,10 @@ public class GEmbedderImpl implements IGEmbedder {
 							vect.setModificationDate(payload.getDocumentReference().getModificationDate());
 							vect.setParentProjectCode(payload.getDocumentReference().getParentProjectCode());
 							vect.setRootKnowledgebaseCode(payload.getDocumentReference().getRootKnowledgebaseCode());
-							if (vect.getVectorsId() != null) {
-								vectorsToBeDeleted.addAll(vect.getVectorsId());
-							}
+							vectorsToBeDeleted.addAll(vect.allVectorsId());
 							vect.setVectorsId(newIds);
+							vect.setFileNameVectorsId(fileNameIds);
+							vect.setTitleVectorsId(titleIds);
 							vect.setLastestJobId(x.getPayload().getJobId());
 							vect.setLastVectorizedDate(now);
 						} else {
@@ -329,6 +357,8 @@ public class GEmbedderImpl implements IGEmbedder {
 							vect.setProjectEndpointReference(
 									payload.getDocumentReference().getProjectEndpointReference());
 							vect.setVectorsId(newIds);
+							vect.setFileNameVectorsId(fileNameIds);
+							vect.setTitleVectorsId(titleIds);
 							vect.setLastVectorizedDate(now);
 							vectorizedList.add(vect);
 						}
@@ -500,6 +530,15 @@ public class GEmbedderImpl implements IGEmbedder {
 			emitter.send(msg);
 		}
 
+	}
+
+	/** The id of the vector in a list, none without vector. */
+	private static List<String> ids(Document vector) {
+		final List<String> ids = new ArrayList<String>();
+		if (vector != null) {
+			ids.add(vector.getId());
+		}
+		return ids;
 	}
 
 	private String getProcessingKey(GMessageEnvelope<? extends GAbstractContentMessageFragmentPayload> data) {

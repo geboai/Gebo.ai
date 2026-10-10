@@ -47,6 +47,8 @@ import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseDocumentChunksReader.DocumentChunks;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
+import ai.gebo.model.EmbedType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.architecture.ai.model.ITokensCountable;
@@ -79,10 +81,12 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	public static final String BROWSE_FOLDERS_TOOL = "browseKnowledgeBaseFolders";
 	public static final String BROWSE_DOCUMENTS_TOOL = "browseKnowledgeBaseDocuments";
 	public static final String DOCUMENT_CONTENTS_TOOL = "getKnowledgeBaseDocumentContents";
+	public static final String FIND_DOCUMENTS_BY_TITLE_TOOL = "findKnowledgeBaseDocumentsByTitle";
+	public static final String FIND_DOCUMENTS_BY_FILE_NAME_TOOL = "findKnowledgeBaseDocumentsByFileName";
 	/** Every tool of this source. */
 	public static final Set<String> TOOLS = Set.of(COUNT_DOCUMENTS_TOOL, BROWSE_KNOWLEDGE_BASES_TOOL,
 			BROWSE_PROJECTS_TOOL, BROWSE_PROJECT_ENDPOINTS_TOOL, BROWSE_FOLDERS_TOOL, BROWSE_DOCUMENTS_TOOL,
-			DOCUMENT_CONTENTS_TOOL);
+			DOCUMENT_CONTENTS_TOOL, FIND_DOCUMENTS_BY_TITLE_TOOL, FIND_DOCUMENTS_BY_FILE_NAME_TOOL);
 
 	/** Items in a page when the call does not say. */
 	public static final int DEFAULT_PAGE_SIZE = 50;
@@ -105,13 +109,26 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 			+ "(from the document lists, or the documentUniqueId of the fragments a search returned), "
 			+ "as far as the room left in the context allows.";
 
+	static final String FIND_DOCUMENTS_BY_TITLE_DESCRIPTION = "Finds the documents of the knowledge bases of this chat "
+			+ "whose title is similar in meaning to the text given, even when not worded the same (uniqueId, name, title, "
+			+ "similarity), the most similar first. Use their uniqueId to read them whole.";
+	static final String FIND_DOCUMENTS_BY_FILE_NAME_DESCRIPTION = "Finds the documents of the knowledge bases of this chat "
+			+ "whose file name is similar in meaning to the text given, even when not written the same (uniqueId, name, "
+			+ "similarity), the most similar first. Use their uniqueId to read them whole.";
+
 	private final ObjectProvider<IGKnowledgebaseVisibilityService> visibilityService;
 	private final ObjectProvider<KnowledgeBaseDocumentChunksReader> chunksReader;
+	private final ObjectProvider<KnowledgeBaseDocumentIdentitySearch> identitySearch;
+	private final ObjectProvider<GeboRagSearchConfig> ragSearchConfig;
 
 	public KnowledgeBaseBrowsingToolSource(ObjectProvider<IGKnowledgebaseVisibilityService> visibilityService,
-			ObjectProvider<KnowledgeBaseDocumentChunksReader> chunksReader) {
+			ObjectProvider<KnowledgeBaseDocumentChunksReader> chunksReader,
+			ObjectProvider<KnowledgeBaseDocumentIdentitySearch> identitySearch,
+			ObjectProvider<GeboRagSearchConfig> ragSearchConfig) {
 		this.visibilityService = visibilityService;
 		this.chunksReader = chunksReader;
+		this.identitySearch = identitySearch;
+		this.ragSearchConfig = ragSearchConfig;
 	}
 
 	// ----------------------------------------------------------------- parameters
@@ -182,6 +199,17 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	}
 
 	@Data
+	@JsonClassDescription("Which documents to find")
+	public static class FindDocumentsParam {
+		@JsonPropertyDescription("The text to compare the titles or file names with: the title, the file name, or words meaning them")
+		private String text;
+		@JsonPropertyDescription("Optional code of one knowledge base of the chat")
+		private String knowledgeBaseCode;
+		@JsonPropertyDescription("Optional number of documents to find, at most 200")
+		private Integer maxResults;
+	}
+
+	@Data
 	@JsonClassDescription("Which documents to read whole")
 	public static class DocumentContentsParam {
 		@JsonPropertyDescription("The uniqueIds of the documents")
@@ -209,6 +237,14 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	}
 
 	public record DocumentsCount(long total, Map<String, Long> byKnowledgeBase, String message) {
+	}
+
+	/**
+	 * A document found by its title or file name: the title or file name matched,
+	 * and how similar it is to the text searched (from 0 to 1).
+	 */
+	public record FoundDocumentItem(Long uniqueId, String name, String title, String matched, double similarity,
+			String code, String parentCode) {
 	}
 
 	public record DocumentContent(Long uniqueId, String name, String code, String content, boolean complete,
@@ -245,7 +281,9 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 				{ BROWSE_PROJECT_ENDPOINTS_TOOL, BROWSE_PROJECT_ENDPOINTS_DESCRIPTION },
 				{ BROWSE_FOLDERS_TOOL, BROWSE_FOLDERS_DESCRIPTION },
 				{ BROWSE_DOCUMENTS_TOOL, BROWSE_DOCUMENTS_DESCRIPTION },
-				{ DOCUMENT_CONTENTS_TOOL, DOCUMENT_CONTENTS_DESCRIPTION } }) {
+				{ DOCUMENT_CONTENTS_TOOL, DOCUMENT_CONTENTS_DESCRIPTION },
+				{ FIND_DOCUMENTS_BY_TITLE_TOOL, FIND_DOCUMENTS_BY_TITLE_DESCRIPTION },
+				{ FIND_DOCUMENTS_BY_FILE_NAME_TOOL, FIND_DOCUMENTS_BY_FILE_NAME_DESCRIPTION } }) {
 			final ToolReference reference = new ToolReference();
 			reference.setName(tool[0]);
 			reference.setDescription(tool[1]);
@@ -266,6 +304,12 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 					ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.KNOWLEDGE_BASE_VECTOR_STORE,
 							"Knowledge base documents read whole"),
 					ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.EMBEDDING_MODEL, "Document name embedded to read its chunks"));
+		}
+		if (FIND_DOCUMENTS_BY_TITLE_TOOL.equals(toolName) || FIND_DOCUMENTS_BY_FILE_NAME_TOOL.equals(toolName)) {
+			return List.of(
+					ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.KNOWLEDGE_BASE_VECTOR_STORE,
+							"Knowledge base documents found by their title or file name"),
+					ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.EMBEDDING_MODEL, "Text searched embedded"));
 		}
 		return TOOLS.contains(toolName)
 				? List.of(ToolDataFlowTarget.platformData("Knowledge bases catalogue",
@@ -308,6 +352,18 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 						ToolCallbackDeclarationUtil.chatKnowledgeBases(context), ToolsTokenBudget.from(context),
 						ToolsFoundDocuments.from(context)),
 				DOCUMENT_CONTENTS_TOOL, DOCUMENT_CONTENTS_DESCRIPTION, DocumentContentsParam.class, List.class));
+		callbacks.add(ToolCallbackDeclarationUtil.declare(
+				(BiFunction<FindDocumentsParam, ToolContext, ListPage>) (param, context) -> findDocuments(param,
+						EmbedType.TITLE, ToolCallbackDeclarationUtil.chatKnowledgeBases(context),
+						ToolsTokenBudget.from(context), ToolsFoundDocuments.from(context)),
+				FIND_DOCUMENTS_BY_TITLE_TOOL, FIND_DOCUMENTS_BY_TITLE_DESCRIPTION, FindDocumentsParam.class,
+				ListPage.class));
+		callbacks.add(ToolCallbackDeclarationUtil.declare(
+				(BiFunction<FindDocumentsParam, ToolContext, ListPage>) (param, context) -> findDocuments(param,
+						EmbedType.FILE_NAME, ToolCallbackDeclarationUtil.chatKnowledgeBases(context),
+						ToolsTokenBudget.from(context), ToolsFoundDocuments.from(context)),
+				FIND_DOCUMENTS_BY_FILE_NAME_TOOL, FIND_DOCUMENTS_BY_FILE_NAME_DESCRIPTION, FindDocumentsParam.class,
+				ListPage.class));
 		return callbacks;
 	}
 
@@ -535,6 +591,82 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 		} catch (RuntimeException e) {
 			LOGGER.error(tool + "(...) failed", e);
 			return failed(param, tool);
+		}
+	}
+
+	/**
+	 * The documents of the chat's knowledge bases whose title or file name (as the type
+	 * says) is the most similar in meaning to the text, the most similar first, among
+	 * those the user can read; their names shared with the calling agent when it
+	 * collects them (see {@link ToolsFoundDocuments#addListed}). As many as asked, at
+	 * most {@link #MAX_PAGE_SIZE}, else as many as a knowledge base search gives; as
+	 * similar as a knowledge base search asks.
+	 */
+	ListPage<FoundDocumentItem> findDocuments(FindDocumentsParam param, EmbedType type, List<String> chatKnowledgeBases,
+			ToolsTokenBudget budget, ToolsFoundDocuments collector) {
+		final String tool = type == EmbedType.TITLE ? FIND_DOCUMENTS_BY_TITLE_TOOL : FIND_DOCUMENTS_BY_FILE_NAME_TOOL;
+		final String what = type == EmbedType.TITLE ? "title" : "file name";
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin " + tool + "(" + param + ")");
+		}
+		if (param == null || !notBlank(param.getText())) {
+			return empty(null, "Give the text to compare the " + what + "s with.");
+		}
+		try {
+			final List<String> scope = scope(chatKnowledgeBases, param.getKnowledgeBaseCode());
+			if (scope.isEmpty()) {
+				return empty(null, noKnowledgeBaseMessage(param.getKnowledgeBaseCode()));
+			}
+			final GeboRagSearchConfig config = ragSearchConfig.getIfAvailable();
+			final int maxResults = param.getMaxResults() != null && param.getMaxResults() > 0
+					? Math.min(param.getMaxResults(), MAX_PAGE_SIZE)
+					: (config != null ? config.getDefaultTopK() : DEFAULT_PAGE_SIZE);
+			final double threshold = config != null ? config.getDefaultSimilarityThreshold() : 0.0;
+			final List<KnowledgeBaseDocumentIdentitySearch.FoundDocument> found = identitySearch.getObject()
+					.search(param.getText(), type, scope, maxResults, threshold);
+			if (found.isEmpty()) {
+				return empty(null, "No document of this chat's knowledge bases the user can read has a " + what
+						+ " similar to this text: try other words, or list the documents by a part of their name.");
+			}
+			final List<Long> uniqueIds = found.stream().map(KnowledgeBaseDocumentIdentitySearch.FoundDocument::uniqueId)
+					.toList();
+			final Map<Long, GDocumentReference> visibles = new LinkedHashMap<>();
+			for (GDocumentReference document : visibilityService.getObject()
+					.browseVisibleDocuments(VirtualFilesystemQuery.builder().knowledgeBaseCodes(scope).uniqueIds(uniqueIds)
+							.build(), PageRequest.of(0, uniqueIds.size()))
+					.getContent()) {
+				visibles.put(document.getUniqueId(), document);
+			}
+			final List<FoundDocumentItem> items = new ArrayList<>();
+			for (KnowledgeBaseDocumentIdentitySearch.FoundDocument document : found) {
+				final GDocumentReference reference = visibles.get(document.uniqueId());
+				if (reference == null) {
+					continue;
+				}
+				final VirtualFilesystemItem item = item(reference);
+				items.add(new FoundDocumentItem(item.uniqueId(), item.name(),
+						type == EmbedType.TITLE ? document.matched() : item.title(), document.matched(),
+						document.score(), item.code(), item.parentCode()));
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug(tool + "(...) " + found.size() + " found, " + items.size() + " the user can read");
+			}
+			if (items.isEmpty()) {
+				return empty(null, "No document of this chat's knowledge bases the user can read has a " + what
+						+ " similar to this text: try other words, or list the documents by a part of their name.");
+			}
+			final ListPage<FoundDocumentItem> page = fitted(items, 0, maxResults, items.size(), budget, tool);
+			if (collector != null && page.items() != null && !page.items().isEmpty()) {
+				final List<String> names = page.items().stream().map(FoundDocumentItem::name).toList();
+				collector.addListed(names);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug(tool + " shared " + names.size() + " found document name(s) with the calling agent's answer");
+				}
+			}
+			return page;
+		} catch (RuntimeException e) {
+			LOGGER.error(tool + "(...) failed", e);
+			return failed(null, tool);
 		}
 	}
 

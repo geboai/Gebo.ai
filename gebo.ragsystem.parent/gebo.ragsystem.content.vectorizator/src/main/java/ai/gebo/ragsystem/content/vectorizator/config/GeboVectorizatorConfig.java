@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.application.messaging.GAbstractMessageReceiverFactory.MessageReceiverFactoryConfig;
 import ai.gebo.application.messaging.GAbstractTimedOutMessageReceiverFactory.TimedOutMessageReceiverFactoryConfig;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * AI generated comments
@@ -36,6 +38,18 @@ public class GeboVectorizatorConfig {
 	
 	/** Configuration for the vectorization message receiver with timeout capabilities */
 	TimedOutMessageReceiverFactoryConfig vectorizatorReceiverConfig = new TimedOutMessageReceiverFactoryConfig();
+
+	/**
+	 * Whether, once started, the documents vectorized before the file name and title
+	 * vectors existed are given them (see FileNameTitleVectorsBackfill).
+	 */
+	@Getter
+	@Setter
+	boolean fileNameTitleBackfillEnabled = true;
+	/** How many documents the backfill gives their file name and title vectors at a time. */
+	@Getter
+	@Setter
+	int fileNameTitleBackfillBatchSize = 50;
 
 	/**
 	 * Default constructor that initializes the configuration objects with default values.

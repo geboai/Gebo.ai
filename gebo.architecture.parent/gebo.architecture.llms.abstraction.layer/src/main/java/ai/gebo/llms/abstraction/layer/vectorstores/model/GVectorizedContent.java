@@ -82,12 +82,43 @@ public class GVectorizedContent {
     @NotNull
     private GVectorizedContentId id = null;
     private String hash = null;
+    /** The ids of the vectors of the document's contents, in document order. */
     @NotNull
     private List<String> vectorsId = new ArrayList<String>();
+    /**
+     * The ids of the vectors of the document's file name (see
+     * {@link ai.gebo.model.EmbedType#FILE_NAME}); null when the document was vectorized
+     * before they existed.
+     */
+    private List<String> fileNameVectorsId = null;
+    /**
+     * The ids of the vectors of the document's title (see
+     * {@link ai.gebo.model.EmbedType#TITLE}), none when it has no title; null when the
+     * document was vectorized before they existed.
+     */
+    private List<String> titleVectorsId = null;
     private Long fileSize = null;
     private Date modificationDate = null;
     private Date lastVectorizedDate = null;
     private Boolean deleted = null;
     @HashIndexed
     private String lastestJobId=null;
+
+    /**
+     * Every vector of the document in its vector store: its contents', its file
+     * name's and its title's; what deleting the document deletes.
+     */
+    public List<String> allVectorsId() {
+        final List<String> all = new ArrayList<String>();
+        if (vectorsId != null) {
+            all.addAll(vectorsId);
+        }
+        if (fileNameVectorsId != null) {
+            all.addAll(fileNameVectorsId);
+        }
+        if (titleVectorsId != null) {
+            all.addAll(titleVectorsId);
+        }
+        return all;
+    }
 }

@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.vectorstores.EmbedTypeFilters;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGExtendedVectorStore;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent;
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
@@ -109,14 +110,18 @@ public class KnowledgeBaseDocumentChunksReader {
 		return DocumentChunks.NONE;
 	}
 
-	/** The document's chunks in one vector store, by uniqueId else by code, ordered. */
+	/**
+	 * The document's chunks in one vector store, by uniqueId else by code, ordered:
+	 * the vectors of its contents, not those of its file name and title.
+	 */
 	List<Document> chunks(IGExtendedVectorStore store, GDocumentReference document, List<String> vectorsId) {
 		final FilterExpressionBuilder filters = new FilterExpressionBuilder();
 		List<Document> found = List.of();
 		if (document.getUniqueId() != null) {
 			try {
 				found = search(store, document, vectorsId.size(),
-						filters.eq(DocumentMetaInfos.GEBO_UNIQUE_ID, document.getUniqueId()).build());
+						filters.and(filters.eq(DocumentMetaInfos.GEBO_UNIQUE_ID, document.getUniqueId()),
+								EmbedTypeFilters.contentsOnly()).build());
 			} catch (RuntimeException e) {
 				// an index created before the uniqueId was a filterable attribute
 				LOGGER.warn("Cannot filter the vector store by uniqueId " + document.getUniqueId()
@@ -128,7 +133,8 @@ public class KnowledgeBaseDocumentChunksReader {
 		}
 		if (found.isEmpty()) {
 			found = search(store, document, vectorsId.size(),
-					filters.eq(DocumentMetaInfos.CONTENT_CODE, document.getCode()).build());
+					filters.and(filters.eq(DocumentMetaInfos.CONTENT_CODE, document.getCode()),
+							EmbedTypeFilters.contentsOnly()).build());
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("chunks(...) code:" + document.getCode() + " by code: " + found.size() + " chunk(s)");
 			}

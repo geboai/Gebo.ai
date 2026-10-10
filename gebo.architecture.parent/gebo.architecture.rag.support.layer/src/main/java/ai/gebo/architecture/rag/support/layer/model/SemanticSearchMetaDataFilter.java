@@ -11,7 +11,9 @@ import org.springframework.ai.vectorstore.filter.Filter.Operand;
 import org.springframework.ai.vectorstore.filter.FilterExpressionBuilder;
 import org.springframework.ai.vectorstore.filter.FilterExpressionBuilder.Op;
 
+import ai.gebo.llms.abstraction.layer.vectorstores.EmbedTypeFilters;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.model.EmbedType;
 import lombok.ToString;
 @ToString
 public class SemanticSearchMetaDataFilter {
@@ -19,6 +21,11 @@ public class SemanticSearchMetaDataFilter {
 	private List<Integer> aclAliases = null;
 	private List<String> knowledgeBasesCodes = null;
 	private List<String> codesList = null;
+	/**
+	 * What the vectors searched embed (see {@link EmbedType}): null for the contents,
+	 * the vectors of file names and titles excluded.
+	 */
+	private EmbedType embedType = null;
 
 	public void add(String metaDataField, Op operand) {
 		if (!operandsMap.containsKey(metaDataField)) {
@@ -55,6 +62,8 @@ public class SemanticSearchMetaDataFilter {
 				allOperands.add(y);
 			});
 		});
+		// the contents only, unless file names or titles are searched
+		allOperands.add(EmbedTypeFilters.of(embedType));
 		FilterExpressionBuilder feb = new FilterExpressionBuilder();
 		Op currentOp = null;
 		for (Op op : allOperands) {
@@ -80,5 +89,13 @@ public class SemanticSearchMetaDataFilter {
 
 	public void setCodesList(List<String> codesList) {
 		this.codesList = codesList;
+	}
+
+	public EmbedType getEmbedType() {
+		return embedType;
+	}
+
+	public void setEmbedType(EmbedType embedType) {
+		this.embedType = embedType;
 	}
 }

@@ -44,6 +44,8 @@ Decide it for each request:
   - When many documents are needed (an analysis, a report, a comparison, a decision, an exhaustive
     answer), make a deep search of the knowledge base.
   - To list or count the documents, the projects or the folders, browse the knowledge base.
+  - To find a document by its title or its file name, even given approximately or in other
+    words, search the documents by title or by file name.
   - To read, summarise or quote a whole document, find it (by listing or searching) and read it
     whole by its uniqueId: do not rebuild it from search fragments.
 - Web and other sources: search them for current or external information; make a deep search of a
