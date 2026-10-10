@@ -20,6 +20,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellReference;
 
 import ai.gebo.model.tables.AbstractTableData;
 import ai.gebo.model.tables.TableColumnMetaData;
@@ -40,6 +41,8 @@ public class MsExcelTableData extends AbstractTableData {
 	public static final String BOOLEAN_TRUE_CELL_RENDER = "true";
 	/** String representation for empty or null cell values */
 	public static final String EMPTY_OR_NULL_CELL_RENDER = "NO VALUE";
+	/** The name of a column whose header cell is missing or empty, before its letter. */
+	public static final String UNNAMED_COLUMN_PREFIX = "Column ";
 
 	/**
 	 * Inner class that enables streaming of rows from the Excel sheet.
@@ -108,28 +111,37 @@ public class MsExcelTableData extends AbstractTableData {
 	@Override
 	public Stream<TableDataRow> streamRows() {
 		StreamSheetReader sheetGeneration = new StreamSheetReader();
-		return Stream.iterate(sheetGeneration.getActualRow(), x -> {
-			return sheetGeneration.existentRow();
-		}, x -> {
-			return sheetGeneration.getActualRow();
-		});
+		// one row per sheet row after the header, up to the first missing one: the
+		// condition is the row's own, checked before reading it (a condition on the
+		// reader, already past the row just read, left out the last row)
+		return Stream.iterate(1, x -> sheetGeneration.existentRow(), x -> x + 1)
+				.map(x -> sheetGeneration.getActualRow());
 	}
 
 	/**
-	 * Extracts column metadata from the header row.
-	 * 
+	 * Extracts column metadata from the header row, one column per column index
+	 * from the first one (A), as the rows are read: a header cell that is missing
+	 * or empty (e.g. A1 left blank above a column of row numbers) is named after
+	 * its column letter, so the values never shift under the next column's name.
+	 *
 	 * @param columnsRow The header row containing column names
 	 * @return List of TableColumnMetaData objects
 	 */
 	protected static List<TableColumnMetaData> extractColumnsMetaData(Row columnsRow) {
 		final List<TableColumnMetaData> columns = new ArrayList<TableColumnMetaData>();
-		columnsRow.forEach(cell -> {
-			Object readCell = readCell(cell);
+		final int lastCellNum = columnsRow.getLastCellNum();
+		for (int idx = 0; idx < lastCellNum; idx++) {
+			final Cell cell = columnsRow.getCell(idx);
+			Object readCell = cell != null ? readCell(cell) : EMPTY_OR_NULL_CELL_RENDER;
+			String name = readCell != null ? readCell.toString().trim() : "";
+			if (name.isEmpty() || EMPTY_OR_NULL_CELL_RENDER.equals(name)) {
+				name = UNNAMED_COLUMN_PREFIX + CellReference.convertNumToColString(idx);
+			}
 			TableColumnMetaData meta = new TableColumnMetaData();
-			meta.setColumnDescription(readCell.toString());
-			meta.setColumnName(readCell.toString());
+			meta.setColumnDescription(name);
+			meta.setColumnName(name);
 			columns.add(meta);
-		});
+		}
 		return columns;
 	}
 
