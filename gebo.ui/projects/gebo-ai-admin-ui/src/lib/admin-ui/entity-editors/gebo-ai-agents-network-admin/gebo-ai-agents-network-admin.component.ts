@@ -357,9 +357,10 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
                 const idxInLevel = levelGroups.get(L)?.indexOf(name) || 0;
                 const totalInLevel = levelGroups.get(L)?.length || 1;
 
-                // X centered around 350px, Y spaced by 280px per level (the nodes
-                // grow with the row of their tools)
-                const x = (idxInLevel - (totalInLevel - 1) / 2) * 320 + 350;
+                // X centered around 350px, 340px apart: the nodes are at most 300px
+                // wide, so the ones of a level never overlap. Y spaced by 280px per
+                // level (the nodes grow with the row of their tools)
+                const x = (idxInLevel - (totalInLevel - 1) / 2) * 340 + 350;
                 const y = L * 280 + 50;
 
                 nodes.push({

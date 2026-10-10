@@ -14,7 +14,7 @@ import { AgentMountedTools, AgentNetworkParticipant, MountedTool } from "@Gebo.a
     hostDirectives: [{ directive: NgDiagramNodeSelectedDirective, inputs: ["node"] }],
     template: `
         <div class="node-card p-3 border-round shadow-2 bg-paper flex flex-column gap-2 text-left relative cursor-pointer"
-          style="min-width: 220px; border-top: 4px solid var(--primary-color); background-color: var(--surface-card, #ffffff);"
+          style="min-width: 220px; max-width: 300px; border-top: 4px solid var(--primary-color); background-color: var(--surface-card, #ffffff);"
           [title]="parent.readonly ? 'Click to view this agent' : 'Click to edit this agent'"
           (pointerdown)="onPointerDown($event)"
           (pointerup)="onPointerUp($event)">
@@ -27,9 +27,10 @@ import { AgentMountedTools, AgentNetworkParticipant, MountedTool } from "@Gebo.a
           <ng-diagram-port [side]="'right'" [type]="'source'" [id]="'port-right'"
           [style.pointer-events]="parent.readonly ? 'none' : 'auto'"></ng-diagram-port>
         
-          <div class="flex justify-content-between align-items-center">
-            <span class="font-bold text-lg text-primary">{{node().data.networkAgentName}}</span>
-            <div class="flex gap-1">
+          <div class="flex justify-content-between align-items-center gap-1">
+            <span class="font-bold text-lg text-primary white-space-nowrap overflow-hidden text-overflow-ellipsis"
+              style="min-width: 0;" [title]="node().data.networkAgentName">{{node().data.networkAgentName}}</span>
+            <div class="flex gap-1 flex-shrink-0">
               @if (node().data.inputNode) {
                 <span class="p-1 border-round bg-green-100 text-green-700 text-xs font-semibold flex align-items-center gap-1" title="Input Node">
                   <i class="pi pi-sign-in"></i> IN
