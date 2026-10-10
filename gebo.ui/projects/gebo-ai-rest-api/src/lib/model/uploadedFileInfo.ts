@@ -19,5 +19,4 @@ export interface UploadedFileInfo {
     folder?: boolean;
     ingested?: boolean;
     documentCode?: string;
-    tracked?: boolean;
 }

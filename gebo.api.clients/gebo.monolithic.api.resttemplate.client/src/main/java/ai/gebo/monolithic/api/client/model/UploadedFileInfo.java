@@ -23,7 +23,7 @@ import java.util.Date;
  * UploadedFileInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T09:13:13.541713264+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
 
 public class UploadedFileInfo {
   @JsonProperty("name")
@@ -49,9 +49,6 @@ public class UploadedFileInfo {
 
   @JsonProperty("documentCode")
   private String documentCode = null;
-
-  @JsonProperty("tracked")
-  private Boolean tracked = null;
 
   public UploadedFileInfo name(String name) {
     this.name = name;
@@ -197,24 +194,6 @@ public class UploadedFileInfo {
     this.documentCode = documentCode;
   }
 
-  public UploadedFileInfo tracked(Boolean tracked) {
-    this.tracked = tracked;
-    return this;
-  }
-
-   /**
-   * Get tracked
-   * @return tracked
-  **/
-  @Schema(description = "")
-  public Boolean isTracked() {
-    return tracked;
-  }
-
-  public void setTracked(Boolean tracked) {
-    this.tracked = tracked;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -232,13 +211,12 @@ public class UploadedFileInfo {
         Objects.equals(this.modificationTime, uploadedFileInfo.modificationTime) &&
         Objects.equals(this.folder, uploadedFileInfo.folder) &&
         Objects.equals(this.ingested, uploadedFileInfo.ingested) &&
-        Objects.equals(this.documentCode, uploadedFileInfo.documentCode) &&
-        Objects.equals(this.tracked, uploadedFileInfo.tracked);
+        Objects.equals(this.documentCode, uploadedFileInfo.documentCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, absolutePath, extension, size, modificationTime, folder, ingested, documentCode, tracked);
+    return Objects.hash(name, absolutePath, extension, size, modificationTime, folder, ingested, documentCode);
   }
 
 
@@ -255,7 +233,6 @@ public class UploadedFileInfo {
     sb.append("    folder: ").append(toIndentedString(folder)).append("\n");
     sb.append("    ingested: ").append(toIndentedString(ingested)).append("\n");
     sb.append("    documentCode: ").append(toIndentedString(documentCode)).append("\n");
-    sb.append("    tracked: ").append(toIndentedString(tracked)).append("\n");
     sb.append("}");
     return sb.toString();
   }

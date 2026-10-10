@@ -7,7 +7,9 @@ import ai.gebo.monolithic.api.client.model.GUploadsContentManagementSystem;
 import ai.gebo.monolithic.api.client.model.GUploadsProjectEndpoint;
 import ai.gebo.monolithic.api.client.model.OperationStatusGJobStatus;
 import ai.gebo.monolithic.api.client.model.OperationStatusGUploadsProjectEndpoint;
+import ai.gebo.monolithic.api.client.model.OperationStatusUploadedFileNode;
 import ai.gebo.monolithic.api.client.model.UploadedFileInfo;
+import ai.gebo.monolithic.api.client.model.UploadedFileNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T09:13:13.541713264+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
 
 public class FileUploadsControllerApi {
     private ApiClient apiClient;
@@ -47,6 +49,58 @@ public class FileUploadsControllerApi {
         this.apiClient = apiClient;
     }
 
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param endpointCode  (required)
+     * @param folderPath  (required)
+     * @return OperationStatusUploadedFileNode
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusUploadedFileNode createUploadsFolder(String endpointCode, String folderPath) throws RestClientException {
+        return createUploadsFolderWithHttpInfo(endpointCode, folderPath).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param endpointCode  (required)
+     * @param folderPath  (required)
+     * @return ResponseEntity&lt;OperationStatusUploadedFileNode&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusUploadedFileNode> createUploadsFolderWithHttpInfo(String endpointCode, String folderPath) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'endpointCode' is set
+        if (endpointCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling createUploadsFolder");
+        }
+        // verify the required parameter 'folderPath' is set
+        if (folderPath == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'folderPath' when calling createUploadsFolder");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/createUploadsFolder").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "endpointCode", endpointCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "folderPath", folderPath));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusUploadedFileNode> returnType = new ParameterizedTypeReference<OperationStatusUploadedFileNode>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
     /**
      * 
      * 
@@ -440,6 +494,51 @@ public class FileUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<UploadedFileInfo>> returnType = new ParameterizedTypeReference<List<UploadedFileInfo>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param endpointCode  (required)
+     * @return UploadedFileNode
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public UploadedFileNode listUploadedFilesTree(String endpointCode) throws RestClientException {
+        return listUploadedFilesTreeWithHttpInfo(endpointCode).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param endpointCode  (required)
+     * @return ResponseEntity&lt;UploadedFileNode&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<UploadedFileNode> listUploadedFilesTreeWithHttpInfo(String endpointCode) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'endpointCode' is set
+        if (endpointCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling listUploadedFilesTree");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/listUploadedFilesTree").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "endpointCode", endpointCode));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<UploadedFileNode> returnType = new ParameterizedTypeReference<UploadedFileNode>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

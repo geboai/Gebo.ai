@@ -11,4 +11,3 @@ Name | Type | Description | Notes
 **folder** | **Boolean** |  |  [optional]
 **ingested** | **Boolean** |  |  [optional]
 **documentCode** | **String** |  |  [optional]
-**tracked** | **Boolean** |  |  [optional]

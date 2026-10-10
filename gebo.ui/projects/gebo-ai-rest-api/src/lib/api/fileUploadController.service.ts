@@ -96,18 +96,32 @@ export class FileUploadControllerService {
      * 
      * @param endpointCode 
      * @param files 
+     * @param folder 
+     * @param relativePaths 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public uploadToEndpointForm(endpointCode: string, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public uploadToEndpointForm(endpointCode: string, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public uploadToEndpointForm(endpointCode: string, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public uploadToEndpointForm(endpointCode: string, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public uploadToEndpointForm(endpointCode: string, files?: Array<Blob>, folder?: string, relativePaths?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public uploadToEndpointForm(endpointCode: string, files?: Array<Blob>, folder?: string, relativePaths?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public uploadToEndpointForm(endpointCode: string, files?: Array<Blob>, folder?: string, relativePaths?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public uploadToEndpointForm(endpointCode: string, files?: Array<Blob>, folder?: string, relativePaths?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (endpointCode === null || endpointCode === undefined) {
             throw new Error('Required parameter endpointCode was null or undefined when calling uploadToEndpoint.');
         }
 
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (folder !== undefined && folder !== null) {
+            queryParameters = queryParameters.set('folder', <any>folder);
+        }
+        if (relativePaths) {
+            relativePaths.forEach((element) => {
+                queryParameters = queryParameters.append('relativePaths[]', <any>element);
+            })
+        }
 
         let headers = this.defaultHeaders;
 
@@ -147,6 +161,7 @@ export class FileUploadControllerService {
         return this.httpClient.request<any>('post',`${this.basePath}/api/admin/FileUploadController/uploadToEndpoint/${encodeURIComponent(String(endpointCode))}`,
             {
                 body: convertFormParamsToString ? formParams.toString() : formParams,
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
