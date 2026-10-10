@@ -29,13 +29,14 @@ import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
-import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.model.MetaEndpointType;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.rag.support.layer.services.IGFullTextSearchDocumentsCachedDao;
 import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
@@ -47,6 +48,7 @@ import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfiguration
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopPureChatReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.standard.config.AgenticLoopAgentsInitialization;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.DataFlowEndpoints;
+import ai.gebo.llms.chat.abstraction.layer.services.impl.DataFlowEndpoints.KnowledgeBaseSearchLegs;
 import ai.gebo.model.base.GeboComponentInfo;
 import ai.gebo.security.services.IGeboSystemUserService;
 import ai.gebo.security.services.IdentityUtil;
@@ -93,6 +95,8 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 	private final ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModelsDaoProvider;
 	private final ObjectProvider<IGEmbeddingModelRuntimeConfigurationDao> embeddingModelsDaoProvider;
 	private final ObjectProvider<IGRankerModelRuntimeConfigurationDao> rankerModelsDaoProvider;
+	private final ObjectProvider<IGFullTextSearchDocumentsCachedDao> fullTextSearchProvider;
+	private final ObjectProvider<IKnowledgeGraphSearchService> knowledgeGraphSearchProvider;
 
 	/**
 	 * The single agent networks: their one agent mounts the tools itself (all of them,
@@ -108,7 +112,9 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			@Autowired ObjectProvider<IGToolCallbackSourceRepositoryPattern> toolSourcesProvider,
 			@Autowired ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModelsDaoProvider,
 			@Autowired ObjectProvider<IGEmbeddingModelRuntimeConfigurationDao> embeddingModelsDaoProvider,
-			@Autowired ObjectProvider<IGRankerModelRuntimeConfigurationDao> rankerModelsDaoProvider) {
+			@Autowired ObjectProvider<IGRankerModelRuntimeConfigurationDao> rankerModelsDaoProvider,
+			@Autowired ObjectProvider<IGFullTextSearchDocumentsCachedDao> fullTextSearchProvider,
+			@Autowired ObjectProvider<IKnowledgeGraphSearchService> knowledgeGraphSearchProvider) {
 		this.agentsNetworkDaoProvider = agentsNetworkDaoProvider;
 		this.searchServicesProvider = searchServicesProvider;
 		this.systemUserServiceProvider = systemUserServiceProvider;
@@ -116,6 +122,8 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		this.chatModelsDaoProvider = chatModelsDaoProvider;
 		this.embeddingModelsDaoProvider = embeddingModelsDaoProvider;
 		this.rankerModelsDaoProvider = rankerModelsDaoProvider;
+		this.fullTextSearchProvider = fullTextSearchProvider;
+		this.knowledgeGraphSearchProvider = knowledgeGraphSearchProvider;
 	}
 
 	@Override
@@ -171,6 +179,13 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
 
 		List<ISearchService> webProviders = enabledWebSearchProviders();
+		// the stores the knowledge-base search reads here: the vector store always, the
+		// full-text index and the knowledge graph only when deployed
+		final KnowledgeBaseSearchLegs legs = KnowledgeBaseSearchLegs.deployed(fullTextSearchProvider,
+				knowledgeGraphSearchProvider);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Knowledge base search legs of this installation:" + legs);
+		}
 		// what each registered tool reaches, resolved once for the single agent networks
 		Map<String, List<ToolDataFlowTarget>> toolTargets = null;
 
@@ -199,18 +214,27 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 				if (toolTargets == null) {
 					toolTargets = toolsDataFlowTargets();
 				}
-				reportSingleAgent(flow, query, code, toolTargets);
+				reportSingleAgent(flow, query, code, toolTargets, legs);
 				continue;
 			}
 
-			// Finder agents on the internal knowledge-base search service: semantic
-			// over the vector store, lexical over the full-text index. Both are drawn
-			// only when the store actually exists (the view drops edges to absent
-			// endpoints), keeping this faithful to what is configured.
+			// Finder agents on the internal knowledge-base search service
+			// (InternalKnowledgeBaseSearchNetworkAgentService, through IGDocumentsSearchService):
+			// semantic over the vector store always, lexical over the full-text index and
+			// graph over the knowledge graph only when this installation deploys them.
 			link(flow, "kb-semantic", code, "Finder: semantic knowledge-base search", MetaEndpointType.CHAT_SESSION,
-					MetaEndpointType.VECTORIAL_DATABASE, flow.qualifiedId(query.getId()), vectorStoreRef());
-			link(flow, "kb-fulltext", code, "Finder: full-text knowledge-base search", MetaEndpointType.CHAT_SESSION,
-					MetaEndpointType.FULLTEXT_INDEX, flow.qualifiedId(query.getId()), fullTextIndexRef());
+					MetaEndpointType.VECTORIAL_DATABASE, flow.qualifiedId(query.getId()),
+					DataFlowEndpoints.vectorStoreRef());
+			if (legs.fullText()) {
+				link(flow, "kb-fulltext", code, "Finder: full-text knowledge-base search",
+						MetaEndpointType.CHAT_SESSION, MetaEndpointType.FULLTEXT_INDEX, flow.qualifiedId(query.getId()),
+						DataFlowEndpoints.fullTextIndexRef());
+			}
+			if (legs.graph()) {
+				link(flow, "kb-graph", code, "Finder: knowledge-graph knowledge-base search",
+						MetaEndpointType.CHAT_SESSION, MetaEndpointType.GRAPH_DATABASE, flow.qualifiedId(query.getId()),
+						DataFlowEndpoints.knowledgeGraphRef());
+			}
 
 			// Finder agents on the external web-search services.
 			for (ISearchService provider : webProviders) {
@@ -234,7 +258,7 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 	 * target, linked once from the query with the tools reaching it.
 	 */
 	void reportSingleAgent(GDataFlowMetaInfos flow, DataEndpoint query, String code,
-			Map<String, List<ToolDataFlowTarget>> toolTargets) {
+			Map<String, List<ToolDataFlowTarget>> toolTargets, KnowledgeBaseSearchLegs legs) {
 		final String queryId = flow.qualifiedId(query.getId());
 		final IGChatModelRuntimeConfigurationDao chatModelsDao = chatModelsDaoProvider.getIfAvailable();
 		final DataEndpoint agentModel = DataFlowEndpoints.chatModel("agent", defaultChatModel(chatModelsDao),
@@ -255,7 +279,7 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 				continue;
 			}
 			for (ToolDataFlowTarget target : tool.getValue()) {
-				final ResolvedTarget resolved = resolve(flow, target, chatModelsDao);
+				final ResolvedTarget resolved = resolve(flow, target, chatModelsDao, legs);
 				if (resolved == null) {
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Network:" + code + " tool:" + tool.getKey() + " target " + target.kind() + " ("
@@ -326,10 +350,12 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 	/**
 	 * The endpoint of a tool's target, added to the flow when this component owns it
 	 * (the knowledge stores are the indexers' own); null when it does not exist here
-	 * (no such model or service configured).
+	 * (no such model or service configured, or a knowledge store whose search leg this
+	 * installation does not deploy: a tool declares every store its search may read,
+	 * the search reads only the deployed ones).
 	 */
 	ResolvedTarget resolve(GDataFlowMetaInfos flow, ToolDataFlowTarget target,
-			IGChatModelRuntimeConfigurationDao chatModelsDao) {
+			IGChatModelRuntimeConfigurationDao chatModelsDao, KnowledgeBaseSearchLegs legs) {
 		if (target == null || target.kind() == null) {
 			return null;
 		}
@@ -337,9 +363,13 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		case KNOWLEDGE_BASE_VECTOR_STORE:
 			return new ResolvedTarget(DataFlowEndpoints.vectorStoreRef(), MetaEndpointType.VECTORIAL_DATABASE);
 		case KNOWLEDGE_BASE_FULLTEXT_INDEX:
-			return new ResolvedTarget(DataFlowEndpoints.fullTextIndexRef(), MetaEndpointType.FULLTEXT_INDEX);
+			return legs.fullText()
+					? new ResolvedTarget(DataFlowEndpoints.fullTextIndexRef(), MetaEndpointType.FULLTEXT_INDEX)
+					: null;
 		case KNOWLEDGE_BASE_GRAPH_STORE:
-			return new ResolvedTarget(DataFlowEndpoints.graphStoreRef(), MetaEndpointType.GRAPH_DATABASE);
+			return legs.graph()
+					? new ResolvedTarget(DataFlowEndpoints.knowledgeGraphRef(), MetaEndpointType.GRAPH_DATABASE)
+					: null;
 		case EMBEDDING_MODEL:
 			return own(flow, DataFlowEndpoints.embeddingModel(defaultEmbeddingModel()), MetaEndpointType.LLM_ENDPOINT);
 		case RANKER_MODEL:
@@ -583,16 +613,6 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		endpoint.setPersonalData(false);
 		endpoint.setLocality(DataEndpointLocality.EXTERNAL_PROVIDER);
 		return endpoint;
-	}
-
-	private String vectorStoreRef() {
-		return GDataFlowMetaInfos.qualifiedId(new GeboComponentInfo(GStandardModulesConstraints.VECTORIZATOR_MODULE,
-				GStandardModulesConstraints.VECTORIZATION_COMPONENT), "vector-store");
-	}
-
-	private String fullTextIndexRef() {
-		return GDataFlowMetaInfos.qualifiedId(new GeboComponentInfo(GStandardModulesConstraints.FULLTEXT_MODULE,
-				GStandardModulesConstraints.FULLTEXT_INDEXING_COMPONENT), "fulltext-index");
 	}
 
 	private void link(GDataFlowMetaInfos flow, String kind, String key, String description, MetaEndpointType from,

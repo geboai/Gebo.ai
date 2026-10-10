@@ -41,6 +41,7 @@ import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.DataEndpoint;
 import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
+import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
@@ -983,7 +984,7 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 				.checkReceivingComponentPresent(tokenizer.getModuleId(), tokenizer.getComponentId())) {
 			return;
 		}
-		String chunkEndpointId = crossRef(tokenizer, "chunk-cache");
+		String chunkEndpointId = crossRef(tokenizer, GStandardDataFlowEndpoints.CHUNK_CACHE);
 		DataTransformationMetaInfo ingestEngine = DataTransformationMetaInfo.of("ingest-" + endpoint.getCode(),
 				"Document ingestion and chunking", List.of(MetaEndpointType.DOCUMENTS), List.of(MetaEndpointType.CHUNK));
 		flow.getEngines().add(ingestEngine);
@@ -996,11 +997,11 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 		// convention here; the component that owns it is taken from the workflow
 		// step's own target, not restated.
 		addDownstreamLink(flow, endpoint, enabledSteps, chunkEndpointId, GStandardWorkflowStep.EMBEDDING,
-				"vector-store", MetaEndpointType.VECTORIAL_DATABASE, "Embedding / semantic indexing");
+				GStandardDataFlowEndpoints.VECTOR_STORE, MetaEndpointType.VECTORIAL_DATABASE, "Embedding / semantic indexing");
 		addDownstreamLink(flow, endpoint, enabledSteps, chunkEndpointId, GStandardWorkflowStep.FULLTEXT_INDEXING,
-				"fulltext-index", MetaEndpointType.FULLTEXT_INDEX, "Full-text indexing");
+				GStandardDataFlowEndpoints.FULLTEXT_INDEX, MetaEndpointType.FULLTEXT_INDEX, "Full-text indexing");
 		addDownstreamLink(flow, endpoint, enabledSteps, chunkEndpointId, GStandardWorkflowStep.GRAPHEXTRACTION,
-				"graph-store", MetaEndpointType.GRAPH_DATABASE, "Knowledge-graph extraction");
+				GStandardDataFlowEndpoints.KNOWLEDGE_GRAPH, MetaEndpointType.GRAPH_DATABASE, "Knowledge-graph extraction");
 	}
 
 	private void addDownstreamLink(GDataFlowMetaInfos flow, ProjectEndpointType endpoint, Set<String> enabledSteps,

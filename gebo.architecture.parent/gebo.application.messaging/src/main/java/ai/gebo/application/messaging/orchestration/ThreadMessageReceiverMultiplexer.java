@@ -23,6 +23,7 @@ import ai.gebo.application.messaging.IGMessageReceiverFactory;
 import ai.gebo.application.messaging.IGTimedOutMessageReceiver;
 import ai.gebo.application.messaging.IGTimedOutMessageReceiverFactory;
 import ai.gebo.application.messaging.SystemComponentType;
+import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 
 /**
@@ -117,6 +118,25 @@ class ThreadMessageReceiverMultiplexer implements IGMessageReceiver {
 	public SystemComponentType getComponentType() {
 		// Retrieve the component type from the factory
 		return factory.getComponentType();
+	}
+
+	/**
+	 * The factory's data-flow report. The broker registers this multiplexer in the
+	 * factory's place, and the factory is the bean that knows the component's
+	 * stores: without delegating here the compliance register loses every receiver
+	 * factory that is not also registered as an emitter, the vectorizator and the
+	 * full-text indexer among them.
+	 */
+	@Override
+	public GDataFlowMetaInfos getDataFlowMetaInfos() {
+		final GDataFlowMetaInfos flow = factory.getDataFlowMetaInfos();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Data flow of receiver factory " + factory.getCompleteId() + ": "
+					+ (flow == null ? "none"
+							: flow.getDataEndpoints().size() + " endpoint(s), " + flow.getTransformations().size()
+									+ " transformation(s)"));
+		}
+		return flow;
 	}
 
 	/**

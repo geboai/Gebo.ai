@@ -16,6 +16,7 @@ import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
+import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.model.MetaEndpointType;
 import ai.gebo.architecture.documents.cache.config.GeboDocumentsCacheConfig;
@@ -80,7 +81,7 @@ public class DocumentChunkingMessagesReceiverFactoryComponent extends GAbstractT
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
 
-		DataEndpoint chunkStore = DataEndpoint.of("chunk-cache", "Chunk cache and chunking sessions", "MongoDB",
+		DataEndpoint chunkStore = DataEndpoint.of(GStandardDataFlowEndpoints.CHUNK_CACHE, "Chunk cache and chunking sessions", "MongoDB",
 				mongoConfig.getConnectionString(), MetaEndpointType.CHUNK, MetaEndpointType.DATABASE);
 		chunkStore.setOutput(true);
 		chunkStore.setLocality(DataEndpointLocality.hintFromLocator(chunkStore.getEndpoint()));

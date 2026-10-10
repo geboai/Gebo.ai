@@ -45,6 +45,8 @@ import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolDataFlowTarget.Kind;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.rag.support.layer.services.IGFullTextSearchDocumentsCachedDao;
 import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
@@ -64,8 +66,10 @@ import ai.gebo.security.services.IGeboSystemUserService;
 /**
  * Pins the register entries of the agents networks: the single agent networks report
  * their chat model and what their mounted tools reach (the free chat one without the
- * knowledge bases), the other networks keep the finders' fan-out. Personal data
- * reach them only from a data source an administrator flags.
+ * knowledge bases), the other networks keep the finders' fan-out. Both read only
+ * the knowledge stores whose search leg the installation deploys: the vector store
+ * always, the full-text index with OpenSearch, the knowledge graph with Neo4j.
+ * Personal data reach them only from a data source an administrator flags.
  */
 class GAgentsNetworkDataFlowComponentTest {
 
@@ -78,6 +82,10 @@ class GAgentsNetworkDataFlowComponentTest {
 	private IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
 	private IGRankerModelRuntimeConfigurationDao rankerModelsDao;
 	private ISearchServiceRepositoryPattern searchServices;
+	/** The full-text search, present on an installation deploying OpenSearch. */
+	private IGFullTextSearchDocumentsCachedDao fullTextSearch;
+	/** The knowledge graph search, present on an installation deploying Neo4j. */
+	private IKnowledgeGraphSearchService knowledgeGraphSearch;
 
 	@SuppressWarnings("unchecked")
 	private static <T> ObjectProvider<T> provider(T value) {
@@ -140,6 +148,8 @@ class GAgentsNetworkDataFlowComponentTest {
 		when(knowledgeBase.getDataFlowTargets(InternalKnowledgeBaseSearchToolSource.SEARCH_KNOWLEDGE_BASE_TOOL))
 				.thenReturn(List.of(ToolDataFlowTarget.of(Kind.EMBEDDING_MODEL, "query embedded"),
 						ToolDataFlowTarget.of(Kind.KNOWLEDGE_BASE_VECTOR_STORE, "semantic search"),
+						ToolDataFlowTarget.of(Kind.KNOWLEDGE_BASE_FULLTEXT_INDEX, "full-text search"),
+						ToolDataFlowTarget.of(Kind.KNOWLEDGE_BASE_GRAPH_STORE, "graph search"),
 						ToolDataFlowTarget.of(Kind.RANKER_MODEL, "contents ranked")));
 		IGToolCallbackSource others = mock(IGToolCallbackSource.class);
 		when(others.getId()).thenReturn("others");
@@ -156,12 +166,23 @@ class GAgentsNetworkDataFlowComponentTest {
 				"github", "MCP server github", "stdio:npx", null, "arguments sent")));
 		when(others.getDataFlowTargets("now")).thenReturn(List.of());
 		when(toolSources.getImplementations()).thenReturn(List.of(knowledgeBase, others));
+
+		// a semantic only installation unless a test deploys the optional legs
+		fullTextSearch = null;
+		knowledgeGraphSearch = null;
+	}
+
+	/** Deploys the full-text and the knowledge graph search, as OpenSearch and Neo4j do. */
+	private void deployAllSearchLegs() {
+		fullTextSearch = mock(IGFullTextSearchDocumentsCachedDao.class);
+		knowledgeGraphSearch = mock(IKnowledgeGraphSearchService.class);
 	}
 
 	private GAgentsNetworkDataFlowComponent component() {
 		return new GAgentsNetworkDataFlowComponent(provider(networksDao), provider(searchServices),
 				provider((IGeboSystemUserService) null), provider(toolSources), provider(chatModelsDao),
-				provider(embeddingModelsDao), provider(rankerModelsDao));
+				provider(embeddingModelsDao), provider(rankerModelsDao), provider(fullTextSearch),
+				provider(knowledgeGraphSearch));
 	}
 
 	private static DataEndpoint endpoint(GDataFlowMetaInfos flow, String id) {
@@ -186,8 +207,9 @@ class GAgentsNetworkDataFlowComponentTest {
 				DataFlowEndpoints.vectorStoreRef(), flow.qualifiedId("web-search-brave"),
 				flow.qualifiedId("internet-pages"), flow.qualifiedId("platform-data-platform-users-and-groups"),
 				flow.qualifiedId("mcp-server-github")), reached);
-		// no finders' fan-out: the full-text index is reached by no mounted tool here
+		// a semantic only installation: the knowledge base tool reads the vector store only
 		assertFalse(reached.contains(DataFlowEndpoints.fullTextIndexRef()));
+		assertFalse(reached.contains(DataFlowEndpoints.knowledgeGraphRef()));
 		// no ranker configured: no ranker endpoint, no link
 		assertTrue(flow.getDataEndpoints().stream().noneMatch(x -> x.getId().startsWith("ranker-model-")));
 
@@ -225,14 +247,42 @@ class GAgentsNetworkDataFlowComponentTest {
 	}
 
 	@Test
-	void multiAgentNetworksKeepTheFindersFanOut() {
+	void singleAgentKnowledgeBaseToolReadsEveryDeployedStore() {
+		deployAllSearchLegs();
+		when(networksDao.getConfigurations()).thenReturn(List.of(network(AGENTIC)));
+
+		GDataFlowMetaInfos flow = component().getDataFlowMetaInfos();
+
+		List<String> reached = destinationsFrom(flow, AGENTIC);
+		assertTrue(reached.contains(DataFlowEndpoints.vectorStoreRef()), String.valueOf(reached));
+		assertTrue(reached.contains(DataFlowEndpoints.fullTextIndexRef()), String.valueOf(reached));
+		// named as the graph extraction publishes it, so the edge reaches the store
+		assertEquals("knowledge-graph-module.knowledge-graph-component<->knowledge-graph",
+				DataFlowEndpoints.knowledgeGraphRef());
+		assertTrue(reached.contains(DataFlowEndpoints.knowledgeGraphRef()), String.valueOf(reached));
+	}
+
+	@Test
+	void multiAgentNetworksSearchOnlyTheVectorStoreOnASemanticOnlyInstallation() {
+		when(networksDao.getConfigurations()).thenReturn(List.of(network("MY_NETWORK")));
+
+		GDataFlowMetaInfos flow = component().getDataFlowMetaInfos();
+
+		assertEquals(List.of(DataFlowEndpoints.vectorStoreRef(), flow.qualifiedId("web-search-brave")),
+				destinationsFrom(flow, "MY_NETWORK"));
+		assertNull(endpoint(flow, "agent-model-gpt"));
+	}
+
+	@Test
+	void multiAgentNetworksSearchEveryDeployedStore() {
+		deployAllSearchLegs();
 		when(networksDao.getConfigurations()).thenReturn(List.of(network("MY_NETWORK")));
 
 		GDataFlowMetaInfos flow = component().getDataFlowMetaInfos();
 
 		assertEquals(List.of(DataFlowEndpoints.vectorStoreRef(), DataFlowEndpoints.fullTextIndexRef(),
-				flow.qualifiedId("web-search-brave")), destinationsFrom(flow, "MY_NETWORK"));
-		assertNull(endpoint(flow, "agent-model-gpt"));
+				DataFlowEndpoints.knowledgeGraphRef(), flow.qualifiedId("web-search-brave")),
+				destinationsFrom(flow, "MY_NETWORK"));
 	}
 
 	@Test
