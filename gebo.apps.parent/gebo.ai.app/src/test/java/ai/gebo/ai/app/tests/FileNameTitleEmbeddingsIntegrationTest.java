@@ -36,7 +36,10 @@ import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.architecture.contentsystems.abstraction.layer.test.TestProjectEndpoint;
 import ai.gebo.architecture.contentsystems.abstraction.layer.test.TestProjectEndpoint.TestEndpointType;
 import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
+import ai.gebo.core.impl.GCoreMessagesEmitterImpl;
+import ai.gebo.core.messages.GDeletedKnowledgeBasePayload;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.GProject;
@@ -75,6 +78,8 @@ public class FileNameTitleEmbeddingsIntegrationTest extends AbstractMongoOnlyBas
 	FileNameTitleVectorsBackfill backfill;
 	@Autowired
 	MongoTemplate mongoTemplate;
+	@Autowired
+	GCoreMessagesEmitterImpl coreEmitter;
 
 	private IGExtendedVectorStore store() {
 		final IGConfigurableEmbeddingModel model = embeddingModelRuntimeDao.findByCode(DEFAULT_TEST_EMBEDDING_MODEL_CODE);
@@ -204,7 +209,13 @@ public class FileNameTitleEmbeddingsIntegrationTest extends AbstractMongoOnlyBas
 				all.addAll(record.allVectorsId());
 			}
 		}
+		// as the knowledge base deletion does: the records, then the message telling
+		// the vectorizator to dispose of the knowledge base's vectors
+		final GKnowledgeBase deleted = persistentObjectManager.findById(GKnowledgeBase.class, knowledgeBase);
 		cleanPersistent(endpoint);
+		final GDeletedKnowledgeBasePayload deletion = new GDeletedKnowledgeBasePayload();
+		deletion.setKnowledgeBase(deleted);
+		coreEmitter.sendDeletingPayload(deletion);
 		int left = all.size();
 		for (int observation = 0; observation < SETTLE_MAX_OBSERVATIONS && left > 0; observation++) {
 			Thread.sleep(SETTLE_POLL_MILLIS);
