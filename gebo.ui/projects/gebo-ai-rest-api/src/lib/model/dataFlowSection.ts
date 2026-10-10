@@ -9,13 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { DataTransformationMetaInfo } from './dataTransformationMetaInfo';
 
-export interface DataTransformationInfo { 
-    id: string;
-    description: string;
-    transformationInfo: DataTransformationMetaInfo;
-    dataSourceId: string;
-    dataDestinationId: string;
-    section?: string;
+export interface DataFlowSection { 
+    id?: string;
+    description?: string;
 }

@@ -11,8 +11,11 @@ package ai.gebo.application.messaging;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
+import ai.gebo.application.messaging.model.DataFlowSection;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
 
 /**
@@ -36,5 +39,17 @@ class GDataFlowMetaInfosMergeTest {
 	void aReportWithoutANameTakesTheOtherOne() {
 		assertEquals("second", GDataFlowMetaInfos.merge(named(null), named("second")).getDescription());
 		assertEquals("second", GDataFlowMetaInfos.merge(named(" "), named("second")).getDescription());
+	}
+
+	@Test
+	void theSectionsOfBothReportsAreKeptOnce() {
+		GDataFlowMetaInfos first = named("first");
+		first.getSections().add(new DataFlowSection("a", "A"));
+		GDataFlowMetaInfos second = named("second");
+		second.getSections().add(new DataFlowSection("a", "A again"));
+		second.getSections().add(new DataFlowSection("b", "B"));
+
+		assertEquals(List.of(new DataFlowSection("a", "A"), new DataFlowSection("b", "B")),
+				GDataFlowMetaInfos.merge(first, second).getSections());
 	}
 }
