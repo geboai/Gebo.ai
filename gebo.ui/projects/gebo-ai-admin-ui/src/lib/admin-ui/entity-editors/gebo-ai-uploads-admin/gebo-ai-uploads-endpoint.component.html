@@ -45,8 +45,9 @@
 
           <p-tabs [value]="0" id="TabView" class="standardTabDialogueHeight">
             <p-tablist>
-              <p-tab [value]="0" gebo-ai-text>Settings</p-tab>
-              <p-tab [value]="1" gebo-ai-text [disabled]="!objectReference">Logs</p-tab>
+              <p-tab id="SettingsTab" [value]="0" gebo-ai-text>Settings</p-tab>
+              <p-tab id="UploadedFilesTab" [value]="1" gebo-ai-text>Uploaded files</p-tab>
+              <p-tab id="LogsTab" [value]="2" gebo-ai-text [disabled]="!objectReference">Logs</p-tab>
             </p-tablist>
             <p-tabpanels>
             <p-tabpanel [value]="0">
@@ -100,59 +101,6 @@
                       </gebo-ai-field>
                     </div>
 
-                    <div class="col-12">
-                      <gebo-ai-field id="contents" label="Files of this data source" help="The files this data source physically holds: open one to see it, add new ones at any time, sign the ones to remove. Removals are applied when you save; the corresponding contents leave the knowledge base at the next publish.">
-                        <div id="contents" gebo-ai-field-element>
-                          <div class="uploads-contents-summary">
-                            <span gebo-ai-text>Files:</span>&nbsp;<span>{{uploadedFilesCount}}</span>
-                            <p-fileUpload
-                              mode="basic"
-                              name="files[]"
-                              chooseIcon="pi pi-upload"
-                              [disabled]="formGroup.invalid || !canUploadContents || relatedBackendProcessingRunning===true"
-                              [url]="uploadUrl"
-                              [accept]="filesExtensionsFlatList"
-                              maxFileSize="100000000"
-                              [multiple]="true"
-                              method="post"
-                              (onBeforeUpload)="onBeforeUpload($event)"
-                              (onProgress)="onProgress($event)"
-                              (onUpload)="onBasicUploadAuto($event)"
-                              [auto]="true"
-                              chooseLabel="Add files"
-                              id="upload"
-                            ></p-fileUpload>
-                            <p-button id="RefreshContentsBtn" gebo-ai-label label="Refresh" [text]="true"
-                              icon="pi pi-refresh" severity="secondary"
-                              (onClick)="refreshUploadedFiles(); contentsSelector?.reload()"></p-button>
-                          </div>
-                          @if (hasContentsFolder) {
-                            <gebo-ai-vfilesystem-selector-component #contentsSelector
-                              [enableDeletion]="true"
-                              [enableView]="true"
-                              [canChooseFiles]="false"
-                              [canChooseFolders]="false"
-                              [readonly]="relatedBackendProcessingRunning===true"
-                              [loadRootsObservable]="loadRootsObservable"
-                              [browsePathObservable]="browsePathObservable"
-                              [reconstructNavigationCallback]="reconstructNavigationObservableCallback"
-                              (deletionsChange)="onContentsDeletionsChange($event)"
-                              (viewRequested)="onViewFile($event)"
-                            ></gebo-ai-vfilesystem-selector-component>
-                            @if (pendingDeletionNames.length) {
-                              <p-message id="PendingDeletionsMessage" severity="warn" styleClass="w-full mt-2">
-                                <span gebo-ai-text>Files signed for deletion are removed when you save, and leave the knowledge base at the next publish.</span>
-                              </p-message>
-                            }
-                          } @else {
-                            <p-message id="NoContentsFolderMessage" severity="info" styleClass="w-full">
-                              <span gebo-ai-text>Save this data source to browse and manage the files it holds.</span>
-                            </p-message>
-                          }
-                        </div>
-                      </gebo-ai-field>
-                    </div>
-
                       <div class="col-12">
                         <gebo-ai-field id="buildSystemsRefs" label="Configure build systems" help="List of build/packaging systems to inspect for meta information and additional artifacts infos (leave empty if no software code is contained)">
                           <gebo-ai-build-systems-chooser
@@ -170,7 +118,15 @@
                   </gebo-ai-field>
                 </div>
                     </div>
-                  </p-tabpanel><p-tabpanel [value]="1">
+                  </p-tabpanel>
+                <p-tabpanel [value]="1">
+                  <gebo-ai-uploads-files-component #filesManager
+                    [endpointCode]="contentsEndpointCode"
+                    [acceptedExtensions]="filesExtensionsList"
+                    [disabled]="relatedBackendProcessingRunning===true"
+                    (viewFile)="onViewFile($event)"></gebo-ai-uploads-files-component>
+                </p-tabpanel>
+                <p-tabpanel [value]="2">
                   <gebo-ai-log-table-component [jobType]="'CONTENTS_READING_VECTORIZING'" [endPointReference]="objectReference"
                   title="This upload files ingestion log"></gebo-ai-log-table-component>
                 </p-tabpanel></p-tabpanels>
