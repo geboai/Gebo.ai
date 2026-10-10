@@ -10,6 +10,7 @@
 package ai.gebo.llms.agent.standardtools;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +72,41 @@ public class KnowledgeBaseDocumentChunksReader {
 	 * default embedding model when the document is vectorized there, else of the
 	 * first other one; none when it is not vectorized (yet).
 	 */
+	/** A document's title and author, as its contents tell them; each null when unknown. */
+	public record ContentIdentity(String title, String author) {
+	}
+
+	/**
+	 * The title and the author of each of the documents, as their contents tell them,
+	 * by document code: kept with the vectors of each document (see
+	 * {@link GVectorizedContent#getTitle()}), the default embedding model's first; the
+	 * documents without either are left out. One query for all of them.
+	 */
+	public Map<String, ContentIdentity> identities(Collection<String> documentCodes) {
+		final Map<String, ContentIdentity> identities = new HashMap<>();
+		if (documentCodes == null || documentCodes.isEmpty()) {
+			return identities;
+		}
+		final IGConfigurableEmbeddingModel defaultModel = embeddingModels.getObject().defaultHandler();
+		final List<GVectorizedContent> vectorized;
+		try (var found = vectorizedContents.getObject().findByIdDocReferenceCodeIn(new ArrayList<>(documentCodes))) {
+			vectorized = new ArrayList<>(found.filter(v -> !Boolean.TRUE.equals(v.getDeleted()) && v.getId() != null
+					&& v.getId().getDocReferenceCode() != null && (v.getTitle() != null || v.getAuthor() != null))
+					.toList());
+		}
+		// the default embedding model first
+		vectorized.sort(Comparator.comparing((GVectorizedContent v) -> defaultModel == null
+				|| v.getId().getVectorStoreId() == null || !v.getId().getVectorStoreId().equals(defaultModel.getCode())));
+		for (GVectorizedContent entry : vectorized) {
+			identities.putIfAbsent(entry.getId().getDocReferenceCode(),
+					new ContentIdentity(entry.getTitle(), entry.getAuthor()));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("identities(...) of " + documentCodes.size() + " document(s): " + identities.size() + " known");
+		}
+		return identities;
+	}
+
 	public DocumentChunks read(GDocumentReference document) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin read(uniqueId:" + document.getUniqueId() + " code:" + document.getCode() + ")");

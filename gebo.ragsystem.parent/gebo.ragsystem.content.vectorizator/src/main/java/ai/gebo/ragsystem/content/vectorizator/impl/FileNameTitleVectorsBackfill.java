@@ -55,6 +55,13 @@ import lombok.ToString;
  * gave the document its own. A document whose metadata cannot be read stays
  * pending, for the next start.
  * </p>
+ *
+ * <p>
+ * The title and the author texts are kept beside their vectors' ids. A document
+ * whose title or author vectors are recorded without their text (vectorized or
+ * backfilled before the texts were kept) is given the texts alone, from the same
+ * metadata, adding no vector.
+ * </p>
  */
 @Component
 public class FileNameTitleVectorsBackfill {
@@ -62,6 +69,8 @@ public class FileNameTitleVectorsBackfill {
 	static final String FILE_NAME_VECTORS_ID = "fileNameVectorsId";
 	static final String TITLE_VECTORS_ID = "titleVectorsId";
 	static final String AUTHOR_VECTORS_ID = "authorVectorsId";
+	static final String TITLE = "title";
+	static final String AUTHOR = "author";
 	static final String VECTORS_ID = "vectorsId";
 	static final String VECTOR_STORE_ID = "_id.vectorStoreId";
 
@@ -148,7 +157,63 @@ public class FileNameTitleVectorsBackfill {
 		if (pendingAtStart > 0) {
 			LOGGER.info("File name and title vectors backfill of " + vectorStoreId + " ended: " + outcome);
 		}
+		backfillTexts(model);
 		return outcome;
+	}
+
+	/**
+	 * Gives the documents of the vector store whose title or author vectors are
+	 * recorded without their text the texts, from the metadata of their contents'
+	 * first vector; adds no vector.
+	 *
+	 * @return the number of documents given their texts
+	 */
+	int backfillTexts(IGConfigurableEmbeddingModel model) {
+		final String vectorStoreId = model.getCode();
+		final int batchSize = Math.max(1, config.getFileNameTitleBackfillBatchSize());
+		final long pendingAtStart = mongoTemplate.count(textsPending(vectorStoreId), GVectorizedContent.class);
+		if (pendingAtStart == 0) {
+			return 0;
+		}
+		LOGGER.info("Title and author texts backfill of " + vectorStoreId + ": " + pendingAtStart + " document(s) to do");
+		int done = 0, skipped = 0;
+		while (true) {
+			// the documents whose texts cannot be read are skipped, the others are done
+			final List<GVectorizedContent> batch = mongoTemplate
+					.find(textsPending(vectorStoreId).skip(skipped).limit(batchSize), GVectorizedContent.class);
+			if (batch.isEmpty()) {
+				break;
+			}
+			final Map<String, Map<String, Object>> metadataByFirstVector = metadata(model.getVectorStore(), batch);
+			for (GVectorizedContent record : batch) {
+				final Map<String, Object> metadata = record.getVectorsId() != null && !record.getVectorsId().isEmpty()
+						? metadataByFirstVector.get(record.getVectorsId().get(0))
+						: null;
+				final IdentityVectors identity = metadata != null ? DocumentIdentityVectors.ofContentMetadata(metadata)
+						: IdentityVectors.NONE;
+				final String title = hasIds(record.getTitleVectorsId()) ? text(identity.title()) : null;
+				final String author = hasIds(record.getAuthorVectorsId()) ? text(identity.author()) : null;
+				if ((hasIds(record.getTitleVectorsId()) && title == null)
+						|| (hasIds(record.getAuthorVectorsId()) && author == null)) {
+					skipped++;
+					continue;
+				}
+				// only if no vectorization changed the document meanwhile
+				final Query unchanged = new Query(
+						Criteria.where("_id").is(record.getId()).and(VECTORS_ID).is(record.getVectorsId()));
+				if (mongoTemplate.updateFirst(unchanged, new Update().set(TITLE, title).set(AUTHOR, author),
+						GVectorizedContent.class).getModifiedCount() > 0) {
+					done++;
+				} else {
+					// vectorized meanwhile: the vectorization gave it its texts, else it is
+					// skipped so the loop does not read it again
+					skipped++;
+				}
+			}
+		}
+		LOGGER.info("Title and author texts backfill of " + vectorStoreId + " ended: " + done + " done, " + skipped
+				+ " left without readable texts");
+		return done;
 	}
 
 	@ToString
@@ -204,7 +269,8 @@ public class FileNameTitleVectorsBackfill {
 			final long updated = mongoTemplate
 					.updateFirst(unchanged,
 							new Update().set(FILE_NAME_VECTORS_ID, fileNameIds).set(TITLE_VECTORS_ID, titleIds)
-									.set(AUTHOR_VECTORS_ID, authorIds),
+									.set(AUTHOR_VECTORS_ID, authorIds).set(TITLE, text(entry.getValue().title()))
+									.set(AUTHOR, text(entry.getValue().author())),
 							GVectorizedContent.class)
 					.getModifiedCount();
 			if (updated > 0) {
@@ -294,6 +360,26 @@ public class FileNameTitleVectorsBackfill {
 		// in a stable order, the documents left pending skipped by their count
 		return new Query(Criteria.where(VECTOR_STORE_ID).is(vectorStoreId).and(FILE_NAME_VECTORS_ID).is(null))
 				.with(Sort.by("_id"));
+	}
+
+	/**
+	 * The documents of the vector store whose title or author vectors are recorded
+	 * without their text.
+	 */
+	static Query textsPending(String vectorStoreId) {
+		return new Query(Criteria.where(VECTOR_STORE_ID).is(vectorStoreId).and("deleted").ne(true)
+				.orOperator(Criteria.where(TITLE_VECTORS_ID + ".0").exists(true).and(TITLE).is(null),
+						Criteria.where(AUTHOR_VECTORS_ID + ".0").exists(true).and(AUTHOR).is(null)))
+				.with(Sort.by("_id"));
+	}
+
+	private static boolean hasIds(List<String> ids) {
+		return ids != null && !ids.isEmpty();
+	}
+
+	/** The text a vector embeds, null without the vector. */
+	private static String text(Document vector) {
+		return vector != null ? vector.getText() : null;
 	}
 
 	private static List<String> ids(Document vector) {

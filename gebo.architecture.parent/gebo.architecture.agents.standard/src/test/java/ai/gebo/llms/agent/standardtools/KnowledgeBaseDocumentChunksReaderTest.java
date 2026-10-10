@@ -118,6 +118,29 @@ class KnowledgeBaseDocumentChunksReaderTest {
 	}
 
 	@Test
+	void theTitlesAndAuthorsOfManyDocumentsAreReadAtOnceTheDefaultModelsFirst() {
+		GVectorizedContent other = vectorization("embedding-other", List.of("x"), false);
+		other.setTitle("Title in the other store");
+		GVectorizedContent preferred = vectorization("embedding-default", List.of("c1"), null);
+		preferred.setTitle("UNIX Programmer's Manual");
+		preferred.setAuthor("K. Thompson");
+		GVectorizedContent deleted = vectorization("embedding-default", List.of("d"), true);
+		deleted.getId().setDocReferenceCode("doc-6");
+		deleted.setTitle("Deleted");
+		GVectorizedContent untitled = vectorization("embedding-default", List.of("u"), false);
+		untitled.getId().setDocReferenceCode("doc-7");
+		when(vectorized.findByIdDocReferenceCodeIn(List.of("doc-5", "doc-6", "doc-7")))
+				.thenReturn(java.util.stream.Stream.of(other, preferred, deleted, untitled));
+
+		Map<String, KnowledgeBaseDocumentChunksReader.ContentIdentity> identities = reader
+				.identities(List.of("doc-5", "doc-6", "doc-7"));
+
+		assertEquals(Map.of("doc-5",
+				new KnowledgeBaseDocumentChunksReader.ContentIdentity("UNIX Programmer's Manual", "K. Thompson")),
+				identities);
+	}
+
+	@Test
 	void theChunksAreFoundByUniqueIdInTheDefaultModelsStoreInDocumentOrder() {
 		when(vectorized.findByIdDocReferenceCode("doc-5")).thenReturn(List.of(
 				vectorization("embedding-other", List.of("x"), false),

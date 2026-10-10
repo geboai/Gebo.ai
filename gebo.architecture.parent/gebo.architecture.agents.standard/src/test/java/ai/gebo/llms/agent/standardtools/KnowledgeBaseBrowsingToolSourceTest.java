@@ -186,6 +186,38 @@ class KnowledgeBaseBrowsingToolSourceTest {
 	}
 
 	@Test
+	void documentsWithoutATitleFromTheirSourceAreListedWithTheOneTheirContentsTell() {
+		GDocumentReference untitled = document(4L, "doc-4", "v4man.pdf");
+		GDocumentReference titled = document(12L, "doc-12", "senses.pdf");
+		titled.setCustomMetaInfos(Map.of(DocumentMetaInfos.TITLE, "The twelve senses"));
+		GDocumentReference unknown = document(13L, "doc-13", "data.xlsx");
+		when(visibility.browseVisibleDocuments(any(VirtualFilesystemQuery.class), any(Pageable.class)))
+				.thenReturn(new PageImpl<>(List.of(untitled, titled, unknown), PageRequest.of(0, 50), 3));
+		when(reader.identities(any())).thenReturn(Map.of(
+				"doc-4", new KnowledgeBaseDocumentChunksReader.ContentIdentity("UNIX Programmer's Manual", "K. Thompson"),
+				"doc-12", new KnowledgeBaseDocumentChunksReader.ContentIdentity("Another title", null)));
+
+		ListPage<VirtualFilesystemItem> page = tools().browseDocuments(new BrowseVirtualFilesystemParam(),
+				chat("kb1"), null);
+
+		assertEquals("UNIX Programmer's Manual", page.items().get(0).title(), "the title the contents tell");
+		assertEquals("The twelve senses", page.items().get(1).title(), "the source's title comes first");
+		assertEquals(null, page.items().get(2).title(), "no title known");
+		// one lookup for the page
+		verify(reader).identities(List.of("doc-4", "doc-12", "doc-13"));
+	}
+
+	@Test
+	void foldersAreListedWithoutLookingUpContentTitles() {
+		when(visibility.browseVisibleVirtualFolders(any(VirtualFilesystemQuery.class), any(Pageable.class)))
+				.thenReturn(new PageImpl<>(List.of(), PageRequest.of(0, 50), 0));
+
+		tools().browseFolders(new BrowseVirtualFilesystemParam(), chat("kb1"), null);
+
+		verify(reader, never()).identities(any());
+	}
+
+	@Test
 	void aKnowledgeBaseOutsideTheChatIsNotBrowsed() {
 		BrowseVirtualFilesystemParam param = new BrowseVirtualFilesystemParam();
 		param.setKnowledgeBaseCode("other");

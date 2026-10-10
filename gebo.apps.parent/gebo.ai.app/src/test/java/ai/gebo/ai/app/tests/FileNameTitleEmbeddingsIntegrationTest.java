@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
@@ -48,6 +49,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGExtendedVectorStore;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorizedFragmentMetadata;
+import ai.gebo.llms.agent.standardtools.KnowledgeBaseDocumentChunksReader;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseDocumentIdentitySearch;
 import ai.gebo.llms.agent.standardtools.KnowledgeBaseDocumentIdentitySearch.FoundDocument;
 import ai.gebo.model.DocumentMetaInfos;
@@ -78,6 +80,8 @@ public class FileNameTitleEmbeddingsIntegrationTest extends AbstractMongoOnlyBas
 	KnowledgeBaseDocumentIdentitySearch identitySearch;
 	@Autowired
 	FileNameTitleVectorsBackfill backfill;
+	@Autowired
+	KnowledgeBaseDocumentChunksReader chunksReader;
 	@Autowired
 	MongoTemplate mongoTemplate;
 	@Autowired
@@ -146,6 +150,11 @@ public class FileNameTitleEmbeddingsIntegrationTest extends AbstractMongoOnlyBas
 				assertEquals(EmbedType.TITLE.name(), title.get(DocumentMetaInfos.EMBED_TYPE));
 				assertSameMetadata(content, title, code);
 				titles.put(references.get(code), content.get(DocumentMetaInfos.TITLE).toString());
+				// the title's text is kept with the vectors, for the listings
+				assertEquals(content.get(DocumentMetaInfos.TITLE).toString(), record.getTitle(),
+						"The title of " + code + " is kept");
+			} else {
+				assertNull(record.getTitle(), "No title kept for " + code);
 			}
 			// an author vector exactly when the document has an author
 			assertEquals(content.containsKey(DocumentMetaInfos.AUTHOR) ? 1 : 0, record.getAuthorVectorsId().size(),
@@ -155,6 +164,10 @@ public class FileNameTitleEmbeddingsIntegrationTest extends AbstractMongoOnlyBas
 				assertEquals(EmbedType.AUTHOR.name(), author.get(DocumentMetaInfos.EMBED_TYPE));
 				assertSameMetadata(content, author, code);
 				authors.put(references.get(code), content.get(DocumentMetaInfos.AUTHOR).toString());
+				assertEquals(content.get(DocumentMetaInfos.AUTHOR).toString(), record.getAuthor(),
+						"The author of " + code + " is kept");
+			} else {
+				assertNull(record.getAuthor(), "No author kept for " + code);
 			}
 		}
 		assertTrue(titled > 0, "Some documents of the corpus have a title");
@@ -221,6 +234,8 @@ public class FileNameTitleEmbeddingsIntegrationTest extends AbstractMongoOnlyBas
 				"The backfill gave the title vector back when there is a title");
 		assertEquals(legacy.getAuthorVectorsId().size(), backfilled.getAuthorVectorsId().size(),
 				"The backfill gave the author vector back when there is an author");
+		assertEquals(legacy.getTitle(), backfilled.getTitle(), "The backfill kept the title's text");
+		assertEquals(legacy.getAuthor(), backfilled.getAuthor(), "The backfill kept the author's text");
 		final Map<String, Object> legacyContent = metadataOf(store, backfilled.getVectorsId().get(0));
 		final Map<String, Object> backfilledName = metadataOf(store, backfilled.getFileNameVectorsId().get(0));
 		assertEquals(EmbedType.FILE_NAME.name(), backfilledName.get(DocumentMetaInfos.EMBED_TYPE));
@@ -230,6 +245,25 @@ public class FileNameTitleEmbeddingsIntegrationTest extends AbstractMongoOnlyBas
 					vectorizedContentRepository.findById(other.getId()).orElseThrow().getFileNameVectorsId(),
 					"The backfill leaves the documents done alone");
 		}
+
+		// 4b. a document vectorized when the title's text was not kept yet is given the
+		// texts alone by the backfill, without new vectors; the listings read them
+		final GVectorizedContent untexted = vectorized.stream()
+				.filter(x -> !x.getId().equals(legacy.getId()) && !x.getTitleVectorsId().isEmpty()).findFirst()
+				.orElseThrow(() -> new AssertionError("A titled document besides the legacy one"));
+		mongoTemplate.updateFirst(new Query(Criteria.where("_id").is(untexted.getId())),
+				new Update().unset("title").unset("author"), GVectorizedContent.class);
+		assertNull(vectorizedContentRepository.findById(untexted.getId()).orElseThrow().getTitle());
+		backfill.backfillAll();
+		final GVectorizedContent texted = vectorizedContentRepository.findById(untexted.getId()).orElseThrow();
+		assertEquals(untexted.getTitle(), texted.getTitle(), "The backfill gave the title's text back");
+		assertEquals(untexted.getAuthor(), texted.getAuthor(), "The backfill gave the author's text back");
+		assertEquals(untexted.getVectorsId(), texted.getVectorsId(), "The contents' vectors are the same");
+		assertEquals(untexted.getTitleVectorsId(), texted.getTitleVectorsId(), "No title vector added");
+		assertEquals(untexted.getFileNameVectorsId(), texted.getFileNameVectorsId(), "No file name vector added");
+		final String untextedCode = untexted.getId().getDocReferenceCode();
+		assertEquals(untexted.getTitle(), chunksReader.identities(List.of(untextedCode)).get(untextedCode).title(),
+				"The listings read the title the contents tell");
 
 		// 5. deleting the documents deletes all their vectors
 		final List<String> all = new ArrayList<>();
