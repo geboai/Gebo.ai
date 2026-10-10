@@ -32,6 +32,33 @@ public class GFullTextIngestionServiceImpl implements IGFullTextIngestionService
 	}
 
 	@Override
+	public long deleteByKnowledgeBase(String knowledgeBaseCode) throws FullTextException {
+		try {
+			return indexService.deleteByKnowledgeBase(knowledgeBaseCode);
+		} catch (OpenSearchException | IOException e) {
+			throw new FullTextException("Exception in deleteByKnowledgeBase", e);
+		}
+	}
+
+	@Override
+	public long deleteByProject(String projectCode) throws FullTextException {
+		try {
+			return indexService.deleteByProject(projectCode);
+		} catch (OpenSearchException | IOException e) {
+			throw new FullTextException("Exception in deleteByProject", e);
+		}
+	}
+
+	@Override
+	public long deleteByProjectEndpoint(String projectCode, String endpointCode) throws FullTextException {
+		try {
+			return indexService.deleteByProjectEndpoint(projectCode, endpointCode);
+		} catch (OpenSearchException | IOException e) {
+			throw new FullTextException("Exception in deleteByProjectEndpoint", e);
+		}
+	}
+
+	@Override
 	public void upsert(List<FullTextChunk> chunks) throws FullTextException {
 		try {
 			indexService.bulkUpsertChunks(chunks);

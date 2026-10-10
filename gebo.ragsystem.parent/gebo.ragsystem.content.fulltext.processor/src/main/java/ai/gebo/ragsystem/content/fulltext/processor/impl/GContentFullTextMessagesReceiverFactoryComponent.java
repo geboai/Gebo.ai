@@ -107,8 +107,11 @@ public class GContentFullTextMessagesReceiverFactoryComponent extends GAbstractT
 		// the sources carried.
 		index.setPersonalData(false);
 		// A lasting store: the indexed chunks stay searchable until the source is
-		// removed or re-indexed (then the erasure component prunes them).
+		// re-indexed (the indexer replaces a document's chunks) or deleted (then the
+		// full-text erasure component deletes them).
 		index.setRetention("Until the source is deleted or re-indexed");
+		index.setDisposer(new GeboComponentInfo(GStandardModulesConstraints.FULLTEXT_MODULE,
+				GStandardModulesConstraints.FULLTEXT_DISPOSE_COMPONENT));
 		if (openSearchConfig.getUsername() != null) {
 			// Named so an auditor can see the index is credential-guarded; the
 			// password itself is deliberately never carried.

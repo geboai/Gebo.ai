@@ -207,6 +207,64 @@ public class OpenSearchFullTextChunkIndexService {
 		}
 	}
 
+	/**
+	 * Deletes the chunks indexed with the given root knowledge base
+	 * ({@code knowledgebase_code}, from {@code DocumentMetaInfos.KNOWLEDGEBASE_CODE}).
+	 */
+	public long deleteByKnowledgeBase(String knowledgeBaseCode) throws OpenSearchException, IOException {
+		if (isBlank(knowledgeBaseCode)) {
+			return 0L;
+		}
+		return deleteByQuery(Query.of(q -> q.term(t -> t.field("knowledgebase_code").value(FieldValue.of(knowledgeBaseCode)))),
+				"knowledge base " + knowledgeBaseCode);
+	}
+
+	/**
+	 * Deletes the chunks indexed with the given parent project ({@code project_code},
+	 * from {@code DocumentMetaInfos.PROJECT_CODE}).
+	 */
+	public long deleteByProject(String projectCode) throws OpenSearchException, IOException {
+		if (isBlank(projectCode)) {
+			return 0L;
+		}
+		return deleteByQuery(Query.of(q -> q.term(t -> t.field("project_code").value(FieldValue.of(projectCode)))),
+				"project " + projectCode);
+	}
+
+	/**
+	 * Deletes the chunks of a data source: the ones of its parent project whose
+	 * content code descends from the data source's root item, whose code is
+	 * {@code <root knowledge base>/<project>/<data source>} (the chunks carry no data
+	 * source code of their own).
+	 */
+	public long deleteByProjectEndpoint(String projectCode, String endpointCode)
+			throws OpenSearchException, IOException {
+		if (isBlank(projectCode) || isBlank(endpointCode)) {
+			return 0L;
+		}
+		final String pattern = "*/" + wildcardLiteral(projectCode) + "/" + wildcardLiteral(endpointCode) + "/*";
+		return deleteByQuery(Query.of(q -> q.bool(b -> b
+				.filter(f -> f.term(t -> t.field("project_code").value(FieldValue.of(projectCode))))
+				.filter(f -> f.wildcard(w -> w.field("content_code").value(pattern))))),
+				"data source " + projectCode + "/" + endpointCode);
+	}
+
+	private long deleteByQuery(Query query, String scope) throws OpenSearchException, IOException {
+		DeleteByQueryRequest req = new DeleteByQueryRequest.Builder().index(indexName).query(query)
+				.conflicts(Conflicts.Proceed).refresh(Refresh.True).build();
+		DeleteByQueryResponse resp = client.deleteByQuery(req);
+		long deleted = resp.deleted() != null ? resp.deleted() : 0L;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("OpenSearch deleted {} chunk(s) of {} (index={})", deleted, scope, indexName);
+		}
+		return deleted;
+	}
+
+	/** A code matched literally inside a wildcard pattern: its wildcard characters escaped. */
+	static String wildcardLiteral(String code) {
+		return code.replace("\\", "\\\\").replace("*", "\\*").replace("?", "\\?");
+	}
+
 	private static void putStringFromMeta(Map<String, Object> dst, String dstField, Map<String, Object> meta,
 			String metaKey) {
 		Object v = meta.get(metaKey);

@@ -220,10 +220,12 @@ gebo:
         fulltextor_gebo_ai:
           fulltext-module:
             - fulltext-indexing-component
+            - fulltext-dispose-component
         # graphicator is the renamed graphsearch microservice (knowledge-graph host).
         graphicator_gebo_ai:
           knowledge-graph-module:
             - knowledge-graph-component
+            - knowledge-graph-dispose-component
         # tyr is the workflows/usage/jobs-tracking microservice. It does not implement
         # scheduler-module.scheduler-component or async-publishing-job-module's
         # async-publishing-job-component/job-status-notifier - those are pure

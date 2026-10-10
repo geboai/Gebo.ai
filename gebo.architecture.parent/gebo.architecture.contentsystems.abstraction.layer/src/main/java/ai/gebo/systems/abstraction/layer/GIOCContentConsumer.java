@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ai.gebo.application.messaging.GStoreDisposers;
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GInternalDeletionMessagePayload;
@@ -257,11 +258,10 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 					GInternalDeletionMessagePayload deletedDocumentPayload = new GInternalDeletionMessagePayload();
 					deletedDocumentPayload.setCodes4deletion(new ArrayList<String>(deletedDocsCodes.keySet()));
 					deletedDocumentPayload.setObjectsType(ObjectType.DOCUMENTREF);
-					GMessageEnvelope<GInternalDeletionMessagePayload> envelope = GMessageEnvelope
-							.newMessageFrom(this.dispatcher, deletedDocumentPayload);
-					envelope.setTargetModule(GStandardModulesConstraints.VECTORIZATOR_MODULE);
-					envelope.setTargetComponent(GStandardModulesConstraints.VECTORIZATION_DISPOSE_COMPONENT);
-					broker.accept(envelope);
+					// every store holding the documents' contents erases them: the vector
+					// store, the knowledge graph and the full-text index where deployed
+					GStoreDisposers.send(broker,
+							() -> GMessageEnvelope.newMessageFrom(this.dispatcher, deletedDocumentPayload));
 				}
 			} catch (Throwable th) {
 				LOGGER.error("Error in deletions check", th);

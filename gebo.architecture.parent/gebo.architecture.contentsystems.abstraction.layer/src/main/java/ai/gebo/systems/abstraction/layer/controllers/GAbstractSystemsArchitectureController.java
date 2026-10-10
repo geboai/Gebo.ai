@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.IGMessageEmitter;
+import ai.gebo.application.messaging.GStoreDisposers;
 import ai.gebo.application.messaging.IMessageEnvelopeFactory;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
@@ -244,11 +245,10 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 		message.setTargetComponent(GStandardModulesConstraints.MONGO_DISPOSE_DOCUMENTS_COMPONENT);
 		messageBroker.accept(message);
 
-		message = envelopeFactory.newMessageFrom(controllerEmitter,
-				newDeletedEndpointPayload(centralized, contentManagementSystemCode), userid);
-		message.setTargetModule(GStandardModulesConstraints.VECTORIZATOR_MODULE);
-		message.setTargetComponent(GStandardModulesConstraints.VECTORIZATION_DISPOSE_COMPONENT);
-		messageBroker.accept(message);
+		// every store holding the data source's contents erases them: the vector store,
+		// the knowledge graph and the full-text index where deployed
+		GStoreDisposers.send(messageBroker, () -> envelopeFactory.newMessageFrom(controllerEmitter,
+				newDeletedEndpointPayload(centralized, contentManagementSystemCode), userid));
 	}
 
 	/**
