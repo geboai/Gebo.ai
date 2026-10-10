@@ -58,12 +58,6 @@ public class UploadedFileInfo {
 	 */
 	public String documentCode = null;
 
-	/**
-	 * True when the file is listed in
-	 * {@link GUploadsProjectEndpoint#getUploadedContents()}, i.e. it was uploaded
-	 * through Gebo.ai rather than appearing in the folder by other means.
-	 */
-	public boolean tracked = false;
 
 	public UploadedFileInfo() {
 

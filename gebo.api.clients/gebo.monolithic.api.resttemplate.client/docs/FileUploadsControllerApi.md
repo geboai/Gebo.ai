@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**createUploadsFolder**](FileUploadsControllerApi.md#createUploadsFolder) | **POST** /api/admin/FileUploadsController/createUploadsFolder | 
 [**deleteUploadedFiles**](FileUploadsControllerApi.md#deleteUploadedFiles) | **POST** /api/admin/FileUploadsController/deleteUploadedFiles | 
 [**deleteUploadsEndpoint**](FileUploadsControllerApi.md#deleteUploadsEndpoint) | **POST** /api/admin/FileUploadsController/deleteUploadsEndpoint | 
 [**findUploadsEndpointsByProject**](FileUploadsControllerApi.md#findUploadsEndpointsByProject) | **GET** /api/admin/FileUploadsController/findUploadsEndpointsByProject | 
@@ -13,8 +14,54 @@ Method | HTTP request | Description
 [**getUploadsSystems**](FileUploadsControllerApi.md#getUploadsSystems) | **GET** /api/admin/FileUploadsController/getUploadsSystems | 
 [**insertUploadsEndpoint**](FileUploadsControllerApi.md#insertUploadsEndpoint) | **POST** /api/admin/FileUploadsController/insertUploadsEndpoint | 
 [**listUploadedFiles**](FileUploadsControllerApi.md#listUploadedFiles) | **GET** /api/admin/FileUploadsController/listUploadedFiles | 
+[**listUploadedFilesTree**](FileUploadsControllerApi.md#listUploadedFilesTree) | **GET** /api/admin/FileUploadsController/listUploadedFilesTree | 
 [**publishUploadsEndpoint**](FileUploadsControllerApi.md#publishUploadsEndpoint) | **POST** /api/admin/FileUploadsController/publishUploadsEndpoint | 
 [**updateUploadsEndpoint**](FileUploadsControllerApi.md#updateUploadsEndpoint) | **POST** /api/admin/FileUploadsController/updateUploadsEndpoint | 
+
+<a name="createUploadsFolder"></a>
+# **createUploadsFolder**
+> OperationStatusUploadedFileNode createUploadsFolder(endpointCode, folderPath)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.FileUploadsControllerApi;
+
+
+FileUploadsControllerApi apiInstance = new FileUploadsControllerApi();
+String endpointCode = "endpointCode_example"; // String | 
+String folderPath = "folderPath_example"; // String | 
+try {
+    OperationStatusUploadedFileNode result = apiInstance.createUploadsFolder(endpointCode, folderPath);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FileUploadsControllerApi#createUploadsFolder");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **endpointCode** | **String**|  |
+ **folderPath** | **String**|  |
+
+### Return type
+
+[**OperationStatusUploadedFileNode**](OperationStatusUploadedFileNode.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 <a name="deleteUploadedFiles"></a>
 # **deleteUploadedFiles**
@@ -386,6 +433,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**List&lt;UploadedFileInfo&gt;**](UploadedFileInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="listUploadedFilesTree"></a>
+# **listUploadedFilesTree**
+> UploadedFileNode listUploadedFilesTree(endpointCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.FileUploadsControllerApi;
+
+
+FileUploadsControllerApi apiInstance = new FileUploadsControllerApi();
+String endpointCode = "endpointCode_example"; // String | 
+try {
+    UploadedFileNode result = apiInstance.listUploadedFilesTree(endpointCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FileUploadsControllerApi#listUploadedFilesTree");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **endpointCode** | **String**|  |
+
+### Return type
+
+[**UploadedFileNode**](UploadedFileNode.md)
 
 ### Authorization
 

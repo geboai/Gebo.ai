@@ -106,8 +106,12 @@ public class FileUploadController {
 	 * immediately browsable and ingestable at the next publish.
 	 * </p>
 	 *
-	 * @param endpointCode The code of the target uploads data source
-	 * @param files        A list of multipart files to be uploaded
+	 * @param endpointCode  The code of the target uploads data source
+	 * @param files         A list of multipart files to be uploaded
+	 * @param folder        The folder of the data source receiving the files,
+	 *                      relative to its root; the root when missing
+	 * @param relativePaths The path of each file relative to that folder, in the
+	 *                      order of the files, when a whole folder is uploaded
 	 * @throws IOException                       If an error occurs during file
 	 *                                           processing
 	 * @throws GeboContentHandlerSystemException If the data source folder cannot be
@@ -117,9 +121,11 @@ public class FileUploadController {
 	 */
 	@PostMapping(value = "uploadToEndpoint/{endpointCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public void uploadToEndpoint(@PathVariable("endpointCode") String endpointCode,
-			@RequestParam("files[]") List<MultipartFile> files)
+			@RequestParam("files[]") List<MultipartFile> files,
+			@RequestParam(value = "folder", required = false) String folder,
+			@RequestParam(value = "relativePaths[]", required = false) List<String> relativePaths)
 			throws IOException, GeboContentHandlerSystemException, GeboPersistenceException {
-		fileUploadService.uploadToEndpoint(endpointCode, files);
+		fileUploadService.uploadToEndpoint(endpointCode, files, folder, relativePaths);
 	}
 
 }

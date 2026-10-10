@@ -27,7 +27,7 @@ import java.util.List;
  * GUploadsProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T09:13:13.541713264+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
 
 public class GUploadsProjectEndpoint {
   @JsonProperty("code")
@@ -151,9 +151,6 @@ public class GUploadsProjectEndpoint {
 
   @JsonProperty("uploadHandshakeCode")
   private String uploadHandshakeCode = null;
-
-  @JsonProperty("uploadedContents")
-  private List<String> uploadedContents = null;
 
   public GUploadsProjectEndpoint code(String code) {
     this.code = code;
@@ -547,32 +544,6 @@ public class GUploadsProjectEndpoint {
     this.uploadHandshakeCode = uploadHandshakeCode;
   }
 
-  public GUploadsProjectEndpoint uploadedContents(List<String> uploadedContents) {
-    this.uploadedContents = uploadedContents;
-    return this;
-  }
-
-  public GUploadsProjectEndpoint addUploadedContentsItem(String uploadedContentsItem) {
-    if (this.uploadedContents == null) {
-      this.uploadedContents = new ArrayList<>();
-    }
-    this.uploadedContents.add(uploadedContentsItem);
-    return this;
-  }
-
-   /**
-   * Get uploadedContents
-   * @return uploadedContents
-  **/
-  @Schema(description = "")
-  public List<String> getUploadedContents() {
-    return uploadedContents;
-  }
-
-  public void setUploadedContents(List<String> uploadedContents) {
-    this.uploadedContents = uploadedContents;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -602,13 +573,12 @@ public class GUploadsProjectEndpoint {
         Objects.equals(this.objectSpaceType, guploadsProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, guploadsProjectEndpoint.aclAliases) &&
         Objects.equals(this.personalData, guploadsProjectEndpoint.personalData) &&
-        Objects.equals(this.uploadHandshakeCode, guploadsProjectEndpoint.uploadHandshakeCode) &&
-        Objects.equals(this.uploadedContents, guploadsProjectEndpoint.uploadedContents);
+        Objects.equals(this.uploadHandshakeCode, guploadsProjectEndpoint.uploadHandshakeCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, uploadHandshakeCode, uploadedContents);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, uploadHandshakeCode);
   }
 
 
@@ -637,7 +607,6 @@ public class GUploadsProjectEndpoint {
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    uploadHandshakeCode: ").append(toIndentedString(uploadHandshakeCode)).append("\n");
-    sb.append("    uploadedContents: ").append(toIndentedString(uploadedContents)).append("\n");
     sb.append("}");
     return sb.toString();
   }

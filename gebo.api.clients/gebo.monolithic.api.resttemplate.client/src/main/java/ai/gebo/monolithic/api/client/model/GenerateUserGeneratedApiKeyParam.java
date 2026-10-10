@@ -23,7 +23,7 @@ import java.util.Date;
  * GenerateUserGeneratedApiKeyParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T09:13:13.541713264+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
 
 public class GenerateUserGeneratedApiKeyParam {
   @JsonProperty("description")

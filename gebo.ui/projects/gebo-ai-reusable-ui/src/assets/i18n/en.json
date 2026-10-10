@@ -3686,6 +3686,74 @@
       "personalData": {
         "label": "Contains personal data",
         "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
+      },
+      "UploadedFilesTab": {
+        "label": "Uploaded files"
+      }
+    },
+    "GeboAIUploadsFilesComponent": {
+      "SaveBeforeAddingFiles": {
+        "label": "Save this data source before adding files: they go into its folder, which exists once it is saved."
+      },
+      "BrowseFilesBtn": {
+        "label": "Browse files"
+      },
+      "BrowseFolderBtn": {
+        "label": "Browse a folder"
+      },
+      "UploadIntoLabel": {
+        "label": "Upload into"
+      },
+      "DropHereLabel": {
+        "label": "Drop files or folders here"
+      },
+      "OrLabel": {
+        "label": "or"
+      },
+      "ClickToBrowseLink": {
+        "label": "click to browse"
+      },
+      "OrFolderLabel": {
+        "label": "or"
+      },
+      "ChooseFolderLink": {
+        "label": "choose a folder"
+      },
+      "FilesOfDataSourceLabel": {
+        "label": "Files of this data source"
+      },
+      "FilesCountLabel": {
+        "label": "files"
+      },
+      "PublishedCountLabel": {
+        "label": "published"
+      },
+      "NewRootFolderBtn": {
+        "label": "New folder"
+      },
+      "RefreshFilesBtn": {
+        "label": "Refresh"
+      },
+      "NameHeader": {
+        "label": "Name"
+      },
+      "SizeHeader": {
+        "label": "Size"
+      },
+      "ModifiedHeader": {
+        "label": "Modified"
+      },
+      "StatusHeader": {
+        "label": "Status"
+      },
+      "EmptyFolderLabel": {
+        "label": "Empty"
+      },
+      "NoFilesYet": {
+        "label": "No files yet: drop some in the area above."
+      },
+      "NewFolderInsideLabel": {
+        "label": "Inside"
       }
     }
   },

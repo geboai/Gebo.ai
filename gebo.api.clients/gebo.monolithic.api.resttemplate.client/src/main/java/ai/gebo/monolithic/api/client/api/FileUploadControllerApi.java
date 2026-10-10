@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T09:13:13.541713264+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
 
 public class FileUploadControllerApi {
     private ApiClient apiClient;
@@ -87,10 +87,12 @@ public class FileUploadControllerApi {
      * <p><b>200</b> - OK
      * @param endpointCode  (required)
      * @param files  (optional)
+     * @param folder  (optional)
+     * @param relativePaths  (optional)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void uploadToEndpoint(String endpointCode, List<File> files) throws RestClientException {
-        uploadToEndpointWithHttpInfo(endpointCode, files);
+    public void uploadToEndpoint(String endpointCode, List<File> files, String folder, List<String> relativePaths) throws RestClientException {
+        uploadToEndpointWithHttpInfo(endpointCode, files, folder, relativePaths);
     }
 
     /**
@@ -99,10 +101,12 @@ public class FileUploadControllerApi {
      * <p><b>200</b> - OK
      * @param endpointCode  (required)
      * @param files  (optional)
+     * @param folder  (optional)
+     * @param relativePaths  (optional)
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> uploadToEndpointWithHttpInfo(String endpointCode, List<File> files) throws RestClientException {
+    public ResponseEntity<Void> uploadToEndpointWithHttpInfo(String endpointCode, List<File> files, String folder, List<String> relativePaths) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'endpointCode' is set
         if (endpointCode == null) {
@@ -116,6 +120,8 @@ public class FileUploadControllerApi {
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "folder", folder));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(ApiClient.CollectionFormat.valueOf("multi".toUpperCase()), "relativePaths[]", relativePaths));
         if (files != null)
             formParams.add("files[]", files);
 

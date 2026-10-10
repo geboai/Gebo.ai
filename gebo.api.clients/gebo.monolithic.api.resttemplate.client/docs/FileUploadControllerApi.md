@@ -49,7 +49,7 @@ No authorization required
 
 <a name="uploadToEndpoint"></a>
 # **uploadToEndpoint**
-> uploadToEndpoint(endpointCode, files)
+> uploadToEndpoint(endpointCode, files, folder, relativePaths)
 
 
 
@@ -63,8 +63,10 @@ No authorization required
 FileUploadControllerApi apiInstance = new FileUploadControllerApi();
 String endpointCode = "endpointCode_example"; // String | 
 List<File> files = Arrays.asList(new File("/path/to/file")); // List<File> | 
+String folder = "folder_example"; // String | 
+List<String> relativePaths = Arrays.asList("relativePaths_example"); // List<String> | 
 try {
-    apiInstance.uploadToEndpoint(endpointCode, files);
+    apiInstance.uploadToEndpoint(endpointCode, files, folder, relativePaths);
 } catch (ApiException e) {
     System.err.println("Exception when calling FileUploadControllerApi#uploadToEndpoint");
     e.printStackTrace();
@@ -77,6 +79,8 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **endpointCode** | **String**|  |
  **files** | [**List&lt;File&gt;**](File.md)|  | [optional]
+ **folder** | **String**|  | [optional]
+ **relativePaths** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 

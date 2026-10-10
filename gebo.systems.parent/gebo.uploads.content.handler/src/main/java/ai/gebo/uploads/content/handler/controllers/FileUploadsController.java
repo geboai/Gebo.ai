@@ -46,6 +46,7 @@ import ai.gebo.uploads.content.handler.GUploadsContentManagementSystem;
 import ai.gebo.uploads.content.handler.GUploadsProjectEndpoint;
 import ai.gebo.uploads.content.handler.IGUploadsContentManagementSystemHandler;
 import ai.gebo.uploads.content.handler.UploadedFileInfo;
+import ai.gebo.uploads.content.handler.UploadedFileNode;
 import ai.gebo.uploads.content.handler.impl.GUploadsContentManagementSystemHandlerImpl.GSingletonUploadsConfigurationDao;
 import ai.gebo.uploads.content.handler.service.UploadsSystemsManagementServiceImpl;
 
@@ -265,6 +266,35 @@ public class FileUploadsController
 	public List<UploadedFileInfo> listUploadedFiles(@RequestParam("endpointCode") String endpointCode)
 			throws GeboContentHandlerSystemException, IOException {
 		return uploadsService.listUploadedFiles(endpointCode);
+	}
+
+	/**
+	 * The tree of the files and folders an uploads data source holds, each file
+	 * told published when it is already part of the knowledge base.
+	 *
+	 * @param endpointCode code of the uploads data source
+	 * @return the root of the tree, the data source folder
+	 * @throws GeboContentHandlerSystemException if the data source folder cannot be
+	 *                                           resolved
+	 * @throws IOException                       if the folder cannot be read
+	 */
+	@GetMapping(value = "listUploadedFilesTree", produces = MediaType.APPLICATION_JSON_VALUE)
+	public UploadedFileNode listUploadedFilesTree(@RequestParam("endpointCode") String endpointCode)
+			throws GeboContentHandlerSystemException, IOException {
+		return uploadsService.listUploadedFilesTree(endpointCode);
+	}
+
+	/**
+	 * Creates a folder in an uploads data source, to upload files into.
+	 *
+	 * @param endpointCode code of the uploads data source
+	 * @param folderPath   the folder to create, relative to the data source root
+	 * @return operation status carrying the created folder and the user messages
+	 */
+	@PostMapping(value = "createUploadsFolder", produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<UploadedFileNode> createUploadsFolder(@RequestParam("endpointCode") String endpointCode,
+			@RequestParam("folderPath") String folderPath) {
+		return uploadsService.createFolder(endpointCode, folderPath);
 	}
 
 	/**

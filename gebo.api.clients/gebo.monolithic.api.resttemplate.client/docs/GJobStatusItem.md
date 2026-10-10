@@ -3,15 +3,15 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**workflowType** | **String** |  |  [optional]
-**workflowId** | **String** |  |  [optional]
 **description** | **String** |  |  [optional]
 **error** | **Boolean** |  |  [optional]
 **code** | **String** |  |  [optional]
+**workflowType** | **String** |  |  [optional]
+**workflowId** | **String** |  |  [optional]
 **projectEndpointReference** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  |  [optional]
 **startDateTime** | [**Date**](Date.md) |  |  [optional]
-**endDateTime** | [**Date**](Date.md) |  |  [optional]
 **finished** | **Boolean** |  |  [optional]
+**endDateTime** | [**Date**](Date.md) |  |  [optional]
 **jobType** | [**JobTypeEnum**](#JobTypeEnum) |  |  [optional]
 **processing** | **Boolean** |  |  [optional]
 
