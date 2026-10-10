@@ -176,6 +176,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+		flow.setDescription("Chat and deep search");
 
 		// The stores a knowledge-base search reads here: the vector store always, the
 		// full-text index and the knowledge graph only when deployed.

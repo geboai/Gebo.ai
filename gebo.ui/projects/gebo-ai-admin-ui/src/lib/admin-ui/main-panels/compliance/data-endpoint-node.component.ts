@@ -114,7 +114,7 @@ import { DataFlowEndpointNode } from "./compliance-data-flow.model";
             }
             <div class="mt-1" [title]="node().data.ownerComponent">
               <i class="pi pi-box"></i>
-              <span class="font-semibold"> Reported by: </span>{{ node().data.ownerComponent }}
+              <span class="font-semibold"> Reported by: </span>{{ node().data.ownerDescription || node().data.ownerComponent }}
             </div>
             @if (node().data.reachedFrom) {
               <div class="mt-1" [title]="'Reported by another component: drawn here because the steps of ' + node().data.reachedFrom + ' read from it or write to it'">

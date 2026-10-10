@@ -208,11 +208,14 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                     continue;
                 }
                 const ownerComponent = (module.messagingModuleId || "") + "." + (component.messagingSystemId || "");
+                // the name the component reports (the system type it serves, the
+                // workflow step it runs...); the ids stay the identity
+                const ownerDescription = flow.description?.trim() || undefined;
                 components.add(ownerComponent);
                 if ((flow.dataEndpoints || []).length > 0 || (flow.transformations || []).length > 0) {
                     tabs.push({
                         key: ownerComponent,
-                        label: component.messagingSystemId || ownerComponent,
+                        label: ownerDescription || component.messagingSystemId || ownerComponent,
                         endpoints: (flow.dataEndpoints || []).length,
                         transformations: (flow.transformations || []).length
                     });
@@ -236,6 +239,7 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                             ? (endpoint.disposer.messagingModuleId || "") + "." + (endpoint.disposer.messagingComponentId || "")
                             : undefined,
                         ownerComponent: ownerComponent,
+                        ownerDescription: ownerDescription,
                         nodeId: report?.nodeId
                     });
                 }
@@ -251,7 +255,8 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                         // point at an endpoint owned by a different component.
                         sourceId: transformation.dataSourceId,
                         destinationId: transformation.dataDestinationId,
-                        ownerComponent: ownerComponent
+                        ownerComponent: ownerComponent,
+                        ownerDescription: ownerDescription
                     });
                 }
             }
@@ -262,13 +267,12 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
         // sources flagged as holding personal data, and re-deriving it here would lose
         // what each step carries (a request, content a model only processes).
 
-        // A component is named by its own id; where two modules have a component of the
-        // same name both are named with their module too.
+        // Where two components report the same name, each is told apart by its id.
         const sameName = new Map<string, number>();
         tabs.forEach(tab => sameName.set(tab.label, (sameName.get(tab.label) || 0) + 1));
         tabs.forEach(tab => {
             if ((sameName.get(tab.label) || 0) > 1) {
-                tab.label = tab.key;
+                tab.label = tab.label + " (" + tab.key + ")";
             }
         });
         tabs.sort((a, b) => a.label.localeCompare(b.label));
@@ -319,6 +323,7 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
             return { endpoints: this.endpoints, transformations: this.transformations };
         }
         const owner = this.selectedTab;
+        const ownerLabel = this.tabs.find(tab => tab.key === owner)?.label || owner;
         const transformations = this.transformations.filter(t => t.ownerComponent === owner);
         const reached = new Set<string>();
         transformations.forEach(t => {
@@ -327,7 +332,7 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
         });
         const endpoints = this.endpoints
             .filter(e => e.ownerComponent === owner || reached.has(e.qualifiedId))
-            .map(e => e.ownerComponent === owner ? e : { ...e, reachedFrom: owner });
+            .map(e => e.ownerComponent === owner ? e : { ...e, reachedFrom: ownerLabel });
         return { endpoints, transformations };
     }
 

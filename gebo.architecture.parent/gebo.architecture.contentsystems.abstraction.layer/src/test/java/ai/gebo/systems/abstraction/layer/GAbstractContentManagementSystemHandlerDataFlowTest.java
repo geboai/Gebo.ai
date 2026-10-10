@@ -83,6 +83,7 @@ class GAbstractContentManagementSystemHandlerDataFlowTest {
 						mock(IGDocumentReferenceIngestionHandler.class)).defaultAnswer(CALLS_REAL_METHODS));
 		GContentManagementSystemType jiraType = new GContentManagementSystemType();
 		jiraType.setCode("jira");
+		jiraType.setDescription("Atlassian jira");
 		doReturn(jiraType).when(handler).getHandledSystemType();
 		doReturn("jira-module").when(handler).getMessagingModuleId();
 		doReturn("jira-handler").when(handler).getMessagingSystemId();
@@ -157,5 +158,10 @@ class GAbstractContentManagementSystemHandlerDataFlowTest {
 
 		assertEquals(1, flow.getDataEndpoints().size());
 		assertFalse(flow.getTransformations().stream().anyMatch(x -> x.getId().startsWith("live-search-flow-")));
+	}
+
+	@Test
+	void theReportIsNamedByTheSystemTypeTheHandlerServes() {
+		assertEquals("Atlassian jira", handler.getDataFlowMetaInfos().getDescription());
 	}
 }

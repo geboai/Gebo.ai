@@ -896,6 +896,8 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 		}
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+		// named for the reader by the system type this handler serves
+		flow.setDescription(getHandledSystemType() != null ? getHandledSystemType().getDescription() : null);
 		String product = getHandledSystemType() != null ? getHandledSystemType().getCode() : "content source";
 		for (ProjectEndpointType endpoint : endpoints) {
 			if (endpoint == null || endpoint.getCode() == null) {

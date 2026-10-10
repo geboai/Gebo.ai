@@ -185,6 +185,7 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+		flow.setDescription("Agents networks");
 
 		// every enabled search service: the searcher agents search them
 		final List<ISearchService> searchServices = GSearchSourcesDataFlowComponent

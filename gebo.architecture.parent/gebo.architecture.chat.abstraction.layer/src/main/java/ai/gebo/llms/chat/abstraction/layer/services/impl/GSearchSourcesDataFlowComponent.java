@@ -97,6 +97,7 @@ public class GSearchSourcesDataFlowComponent implements IGMessageEmitter {
 	public GDataFlowMetaInfos getDataFlowMetaInfos() {
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+		flow.setDescription("Live search sources");
 		final List<ISearchService> services = searchableServices(searchServicesProvider.getIfAvailable());
 		for (ISearchService service : services) {
 			for (SearchableSystemMetaData system : SearchSources.systems(service)) {

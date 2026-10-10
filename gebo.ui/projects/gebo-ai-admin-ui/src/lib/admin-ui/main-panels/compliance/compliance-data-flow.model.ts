@@ -39,6 +39,8 @@ export interface DataFlowEndpointNode {
     disposer?: string;
     /** The messaging component that reported this endpoint. */
     ownerComponent: string;
+    /** How the register names that component, when it reports a name. */
+    ownerDescription?: string;
     /** The node this endpoint was reported from. */
     nodeId?: string;
     /**
@@ -59,6 +61,8 @@ export interface DataFlowTransformationNode {
     sourceId: string;
     destinationId: string;
     ownerComponent: string;
+    /** How the register names that component, when it reports a name. */
+    ownerDescription?: string;
 }
 
 /** Counts driving the summary strip above the graph. */
@@ -79,6 +83,7 @@ export interface DataFlowSummary {
 export interface DataFlowTab {
     /** {@link ALL_FLOWS_TAB}, or the reporting component (module.component). */
     key: string;
+    /** The name the component reports, else its messaging id. */
     label: string;
     /** Endpoints the component reports. */
     endpoints: number;
