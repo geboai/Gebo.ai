@@ -51,6 +51,7 @@ import ai.gebo.uploads.content.handler.GUploadsProjectEndpoint;
 import ai.gebo.uploads.content.handler.IGUploadsContentManagementSystemHandler;
 import ai.gebo.uploads.content.handler.TmpUploadedContents;
 import ai.gebo.uploads.content.handler.UploadedFileInfo;
+import ai.gebo.uploads.content.handler.UploadedFileNode;
 import ai.gebo.uploads.content.handler.repositories.TmpUploadedContentsRepository;
 
 /**
@@ -66,8 +67,9 @@ import ai.gebo.uploads.content.handler.repositories.TmpUploadedContentsRepositor
  * reach the endpoint folder either through the handshake staging area (used
  * while the endpoint has no code yet, i.e. during creation) or directly
  * ({@link #uploadToEndpoint(String, List)}) once the endpoint exists. Removals
- * ({@link #deleteUploadedFiles(String, List)}) only touch the filesystem and the
- * tracked contents list: the knowledge base is reconciled by the standard
+ * ({@link #deleteUploadedFiles(String, List)}) only touch the filesystem, which is
+ * what the ingestion reads (the folder of the data source, walked whole): the
+ * knowledge base is reconciled by the standard
  * ingestion pipeline, whose {@code checkUpdatedOrDeleted} step marks documents
  * whose file disappeared as deleted and hands their codes to the vectorization
  * dispose component. Deleting therefore takes full effect at the next publish of
@@ -163,8 +165,7 @@ public class UploadsSystemsManagementServiceImpl {
 	 *
 	 * @param endpointCode code of the target uploads endpoint.
 	 * @param files        files to store.
-	 * @return the updated endpoint, with the new names tracked in its uploaded
-	 *         contents.
+	 * @return the endpoint.
 	 * @throws IOException                       If there's an error during file
 	 *                                           operations
 	 * @throws GeboContentHandlerSystemException If the endpoint folder cannot be
@@ -173,23 +174,71 @@ public class UploadsSystemsManagementServiceImpl {
 	 */
 	public GUploadsProjectEndpoint uploadToEndpoint(String endpointCode, List<MultipartFile> files)
 			throws IOException, GeboContentHandlerSystemException, GeboPersistenceException {
+		return uploadToEndpoint(endpointCode, files, null, null);
+	}
+
+	/**
+	 * Adds files to an uploads data source that already exists, into one of its
+	 * folders, keeping the folders they come from when a whole folder is uploaded.
+	 *
+	 * <p>
+	 * Every path comes from the browser: the target folder and each file's path
+	 * must resolve inside the folder of the data source, a file's path being
+	 * relative and without "." or ".." parts; a file whose path does not is
+	 * skipped. The missing folders are created.
+	 * </p>
+	 *
+	 * @param endpointCode  code of the uploads endpoint.
+	 * @param files         the uploaded files.
+	 * @param targetFolder  the folder receiving the files, relative to the data
+	 *                      source folder (absolute paths inside it are accepted
+	 *                      too); its root when null or blank.
+	 * @param relativePaths the path of each file, relative to the target folder, in
+	 *                      the order of the files (the folders a whole folder
+	 *                      upload keeps); the file name when missing.
+	 * @return the updated endpoint.
+	 * @throws IOException                       If a file cannot be written
+	 * @throws GeboContentHandlerSystemException If the target folder is not one of
+	 *                                           the data source
+	 * @throws GeboPersistenceException          If the endpoint cannot be updated
+	 */
+	public GUploadsProjectEndpoint uploadToEndpoint(String endpointCode, List<MultipartFile> files,
+			String targetFolder, List<String> relativePaths)
+			throws IOException, GeboContentHandlerSystemException, GeboPersistenceException {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		GUploadsProjectEndpoint endpoint = findEndpoint(endpointCode);
 		try {
 			Path folder = resolveContentsFolder(endpoint, true);
-			List<String> added = new ArrayList<String>();
-			for (MultipartFile entry : files) {
-				String fileName = safeFileName(entry.getOriginalFilename());
-				if (fileName == null)
+			Path target = resolveTargetFolder(folder, targetFolder);
+			if (target == null)
+				throw new GeboContentHandlerSystemException(
+						"The folder " + targetFolder + " is not part of the data source " + endpointCode);
+			Files.createDirectories(target);
+			final List<String> added = new ArrayList<String>();
+			for (int i = 0; i < files.size(); i++) {
+				MultipartFile entry = files.get(i);
+				String path = relativePaths != null && i < relativePaths.size() && relativePaths.get(i) != null
+						&& !relativePaths.get(i).isBlank() ? relativePaths.get(i) : entry.getOriginalFilename();
+				Path relative = safeRelativePath(path);
+				if (relative == null) {
+					LOGGER.warn("Upload to " + endpointCode + ": the path " + path + " is not accepted, skipped");
 					continue;
-				copy(entry, folder.resolve(fileName));
-				added.add(fileName);
+				}
+				Path destination = target.resolve(relative).toAbsolutePath().normalize();
+				if (!destination.startsWith(target) || destination.equals(target)) {
+					LOGGER.warn("Upload to " + endpointCode + ": the path " + path + " leaves the folder, skipped");
+					continue;
+				}
+				Files.createDirectories(destination.getParent());
+				copy(entry, destination);
+				final Path fromRoot = folder.relativize(destination);
+				added.add(fromRoot.toString().replace(File.separatorChar, '/'));
 			}
-			GUploadsProjectEndpoint updated = trackContents(endpoint, added, List.of());
+			GUploadsProjectEndpoint updated = endpoint;
 			logContentEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_CONTENT_UPLOAD, endpoint, added,
 					SecurityAuditTaxonomy.Outcome.SUCCESS);
 			return updated;
-		} catch (RuntimeException | IOException | GeboContentHandlerSystemException | GeboPersistenceException e) {
+		} catch (RuntimeException | IOException | GeboContentHandlerSystemException e) {
 			logContentEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_CONTENT_UPLOAD, endpoint, List.of(),
 					SecurityAuditTaxonomy.Outcome.FAILURE);
 			throw e;
@@ -211,9 +260,6 @@ public class UploadsSystemsManagementServiceImpl {
 		GUploadsProjectEndpoint endpoint = findEndpoint(endpointCode);
 		Path folder = resolveContentsFolder(endpoint, false);
 		final TreeMap<String, UploadedFileInfo> listing = new TreeMap<String, UploadedFileInfo>();
-		final Set<String> tracked = endpoint.getUploadedContents() != null
-				? new LinkedHashSet<String>(endpoint.getUploadedContents())
-				: Set.of();
 		if (folder != null && Files.exists(folder) && Files.isDirectory(folder) && Files.isReadable(folder)) {
 			try (Stream<Path> paths = Files.list(folder)) {
 				paths.forEach(entry -> {
@@ -226,7 +272,6 @@ public class UploadsSystemsManagementServiceImpl {
 					int lastDot = info.name.lastIndexOf(".");
 					info.extension = lastDot >= 0 ? info.name.substring(lastDot).toLowerCase(Locale.ROOT) : null;
 					info.folder = Files.isDirectory(entry);
-					info.tracked = tracked.contains(info.name);
 					File file = entry.toFile();
 					info.size = file.length();
 					info.modificationTime = file.lastModified() > 0 ? new Date(file.lastModified()) : null;
@@ -261,10 +306,138 @@ public class UploadsSystemsManagementServiceImpl {
 	}
 
 	/**
+	 * The tree of the files and folders physically present in the persistent folder
+	 * of an uploads endpoint, each file told published when a not deleted document
+	 * reference exists for it (for a zip file: for one of the files it holds).
+	 *
+	 * @param endpointCode code of the uploads endpoint.
+	 * @return the root of the tree: the data source folder, its entries as children.
+	 * @throws GeboContentHandlerSystemException If the endpoint folder cannot be
+	 *                                           resolved
+	 * @throws IOException                       If the folder cannot be read
+	 */
+	public UploadedFileNode listUploadedFilesTree(String endpointCode)
+			throws GeboContentHandlerSystemException, IOException {
+		GUploadsProjectEndpoint endpoint = findEndpoint(endpointCode);
+		Path folder = resolveContentsFolder(endpoint, false);
+		// the documents of the data source by the file they come from
+		final Map<String, String> documentByPath = new HashMap<String, String>();
+		final Map<String, String> documentByArchive = new HashMap<String, String>();
+		try (Stream<GDocumentReference> documents = documentReferenceRepository.findByProjectEndpoint(endpoint)) {
+			documents.forEach(doc -> {
+				if (doc.getDeleted() != null && doc.getDeleted())
+					return;
+				if (doc.getAbsolutePath() != null) {
+					documentByPath.putIfAbsent(normalized(doc.getAbsolutePath()), doc.getCode());
+				}
+				if (doc.getAbsoluteArchivePath() != null) {
+					documentByArchive.putIfAbsent(normalized(doc.getAbsoluteArchivePath()), doc.getCode());
+				}
+			});
+		}
+		UploadedFileNode root = new UploadedFileNode();
+		root.name = "";
+		root.relativePath = "";
+		root.folder = true;
+		if (folder != null && Files.isDirectory(folder) && Files.isReadable(folder)) {
+			fillFolder(root, folder, folder, documentByPath, documentByArchive);
+		}
+		return root;
+	}
+
+	private void fillFolder(UploadedFileNode node, Path directory, Path root, Map<String, String> documentByPath,
+			Map<String, String> documentByArchive) throws IOException {
+		final List<Path> entries;
+		try (Stream<Path> listed = Files.list(directory)) {
+			entries = listed.sorted((a, b) -> {
+				final boolean aFolder = Files.isDirectory(a), bFolder = Files.isDirectory(b);
+				return aFolder != bFolder ? (aFolder ? -1 : 1)
+						: a.getFileName().toString().compareToIgnoreCase(b.getFileName().toString());
+			}).toList();
+		}
+		for (Path entry : entries) {
+			if (entry.getFileName() == null || Files.isSymbolicLink(entry))
+				continue;
+			UploadedFileNode child = new UploadedFileNode();
+			child.name = entry.getFileName().toString();
+			child.relativePath = root.relativize(entry).toString().replace(File.separatorChar, '/');
+			child.folder = Files.isDirectory(entry);
+			File file = entry.toFile();
+			child.modificationTime = file.lastModified() > 0 ? new Date(file.lastModified()) : null;
+			if (child.folder) {
+				fillFolder(child, entry, root, documentByPath, documentByArchive);
+			} else {
+				int lastDot = child.name.lastIndexOf(".");
+				child.extension = lastDot >= 0 ? child.name.substring(lastDot).toLowerCase(Locale.ROOT) : null;
+				child.size = file.length();
+				child.filesCount = 1;
+				final String path = normalized(entry.toAbsolutePath().toString());
+				child.documentCode = documentByPath.containsKey(path) ? documentByPath.get(path)
+						: documentByArchive.get(path);
+				child.published = child.documentCode != null;
+				child.publishedFilesCount = child.published ? 1 : 0;
+			}
+			node.children.add(child);
+			node.size += child.size;
+			node.filesCount += child.filesCount;
+			node.publishedFilesCount += child.publishedFilesCount;
+		}
+	}
+
+	private static String normalized(String path) {
+		try {
+			return Path.of(path).toAbsolutePath().normalize().toString();
+		} catch (Throwable invalidPath) {
+			return path;
+		}
+	}
+
+	/**
+	 * Creates a folder in the persistent folder of an uploads endpoint, with the
+	 * missing ones above it.
+	 *
+	 * @param endpointCode code of the uploads endpoint.
+	 * @param folderPath   the folder to create, relative to the data source folder,
+	 *                     without "." or ".." parts.
+	 * @return the outcome, with the user messages.
+	 */
+	public OperationStatus<UploadedFileNode> createFolder(String endpointCode, String folderPath) {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		GUploadsProjectEndpoint endpoint = null;
+		try {
+			endpoint = findEndpoint(endpointCode);
+			Path folder = resolveContentsFolder(endpoint, true);
+			Path relative = safeRelativePath(folderPath);
+			Path target = relative != null ? folder.resolve(relative).toAbsolutePath().normalize() : null;
+			if (target == null || !target.startsWith(folder) || target.equals(folder)) {
+				return OperationStatus.ofError("Cannot create the folder",
+						"The folder " + folderPath + " is not a valid folder of this data source");
+			}
+			if (Files.exists(target) && !Files.isDirectory(target)) {
+				return OperationStatus.ofError("Cannot create the folder",
+						"A file named " + target.getFileName() + " already exists there");
+			}
+			Files.createDirectories(target);
+			UploadedFileNode created = new UploadedFileNode();
+			created.name = target.getFileName().toString();
+			created.relativePath = folder.relativize(target).toString().replace(File.separatorChar, '/');
+			created.folder = true;
+			logContentEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_CONTENT_UPLOAD, endpoint,
+					List.of(created.relativePath), SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return OperationStatus.of(created, List.of());
+		} catch (Throwable exc) {
+			LOGGER.error("Error creating the folder " + folderPath + " of:" + endpointCode, exc);
+			logContentEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_CONTENT_UPLOAD, endpoint, List.of(),
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			return OperationStatus.of(exc);
+		}
+	}
+
+	/**
 	 * Removes files from the persistent folder of an uploads endpoint.
 	 *
 	 * <p>
-	 * Only the filesystem and the tracked contents list are touched here: the
+	 * Only the filesystem is touched here: the
 	 * documents already ingested from the removed files are reconciled by the next
 	 * publish, when the ingestion pipeline detects the missing paths, flags the
 	 * documents as deleted and asks the vectorization module to dispose of their
@@ -297,27 +470,26 @@ public class UploadsSystemsManagementServiceImpl {
 								"The entry is not part of the contents of this data source"));
 						continue;
 					}
-					// Only the leaf name is tracked in the uploaded contents list, nested entries
-					// were never tracked there in the first place.
-					String trackedName = target.getFileName().toString();
+					// named by its path in the data source, for the messages and the audit
+					String removedName = folder.relativize(target).toString().replace(File.separatorChar, '/');
 					try {
 						if (Files.isDirectory(target)) {
 							deleteRecursively(target);
-							removed.add(trackedName);
+							removed.add(removedName);
 						} else if (Files.deleteIfExists(target)) {
-							removed.add(trackedName);
+							removed.add(removedName);
 						} else {
 							// Already gone on disk: still untrack it, the state the admin asked for is the
 							// one we end up with.
-							removed.add(trackedName);
+							removed.add(removedName);
 						}
 					} catch (IOException ioException) {
 						LOGGER.error("Error deleting uploaded content:" + target, ioException);
-						messages.add(GUserMessage.errorMessage("Cannot delete " + trackedName, ioException));
+						messages.add(GUserMessage.errorMessage("Cannot delete " + removedName, ioException));
 					}
 				}
 			}
-			GUploadsProjectEndpoint updated = trackContents(endpoint, List.of(), removed);
+			GUploadsProjectEndpoint updated = endpoint;
 			logContentEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_CONTENT_DELETE, endpoint, removed,
 					SecurityAuditTaxonomy.Outcome.SUCCESS);
 			if (!removed.isEmpty()) {
@@ -430,20 +602,6 @@ public class UploadsSystemsManagementServiceImpl {
 		return endpoint;
 	}
 
-	/**
-	 * Keeps {@link GUploadsProjectEndpoint#getUploadedContents()} aligned with what
-	 * the folder holds after an addition or a removal, preserving insertion order
-	 * and never duplicating a name.
-	 */
-	private GUploadsProjectEndpoint trackContents(GUploadsProjectEndpoint endpoint, List<String> added,
-			List<String> removed) throws GeboPersistenceException {
-		Set<String> contents = new LinkedHashSet<String>(
-				endpoint.getUploadedContents() != null ? endpoint.getUploadedContents() : List.of());
-		contents.addAll(added);
-		contents.removeAll(removed);
-		endpoint.setUploadedContents(new ArrayList<String>(contents));
-		return persistentObjectManager.update(endpoint);
-	}
 
 	/**
 	 * Resolves an entry the caller asked to delete against the contents folder of
@@ -531,6 +689,42 @@ public class UploadsSystemsManagementServiceImpl {
 	}
 
 	/**
+	 * The folder an upload targets: the data source folder when none is given, else
+	 * the given one when it resolves inside the data source folder.
+	 */
+	private Path resolveTargetFolder(Path folder, String targetFolder) {
+		if (targetFolder == null || targetFolder.isBlank() || "/".equals(targetFolder.trim()))
+			return folder;
+		Path target = resolveContainedEntry(folder, targetFolder);
+		return target != null && (!Files.exists(target) || Files.isDirectory(target)) ? target : null;
+	}
+
+	/**
+	 * A path coming from the browser, accepted only when it is relative and made of
+	 * plain names ("/" or "\\" separated, none being "." or ".."), so it can never
+	 * address a location outside the folder it is resolved against.
+	 *
+	 * @param path the candidate path.
+	 * @return the path, or {@code null} when it is not accepted.
+	 */
+	static Path safeRelativePath(String path) {
+		if (path == null)
+			return null;
+		final String trimmed = path.trim().replace('\\', '/');
+		if (trimmed.isEmpty() || trimmed.startsWith("/") || trimmed.contains(":"))
+			return null;
+		Path relative = null;
+		for (String part : trimmed.split("/")) {
+			if (part.isEmpty())
+				continue;
+			if (".".equals(part) || "..".equals(part) || part.isBlank())
+				return null;
+			relative = relative == null ? Path.of(part) : relative.resolve(part);
+		}
+		return relative;
+	}
+
+	/**
 	 * Rejects anything that is not a simple file name, so an upload or a deletion
 	 * can never address a location outside the endpoint folder.
 	 *
@@ -559,9 +753,9 @@ public class UploadsSystemsManagementServiceImpl {
 	 * <p>
 	 * Contrary to the original behaviour this runs whenever a handshake code is
 	 * present, not only when the endpoint has no contents yet: an endpoint whose
-	 * files were already uploaded can receive further batches. The staged names are
-	 * merged into the tracked contents and the handshake code is cleared once
-	 * consumed, so the same code is never applied twice.
+	 * files were already uploaded can receive further batches. The staged files are
+	 * moved into the folder of the data source and the handshake code is cleared
+	 * once consumed, so the same code is never applied twice.
 	 * </p>
 	 *
 	 * @param endpoint The endpoint associated with the upload
@@ -597,7 +791,7 @@ public class UploadsSystemsManagementServiceImpl {
 				// The handshake code is consumed here: leaving it on the endpoint would make a
 				// later save re-apply a staging area that no longer exists.
 				endpoint.setUploadHandshakeCode(null);
-				returned = trackContents(endpoint, staged, List.of());
+				returned = persistentObjectManager.update(endpoint);
 				for (File file : toRemove) {
 					file.delete();
 				}
