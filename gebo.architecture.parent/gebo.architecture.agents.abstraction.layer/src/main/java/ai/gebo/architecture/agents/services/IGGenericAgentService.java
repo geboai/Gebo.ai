@@ -6,6 +6,7 @@ import java.util.Optional;
 import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentMountedTools;
 import ai.gebo.architecture.agents.model.GAgentConfig;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 
 public interface IGGenericAgentService {
 	public String getId();
@@ -31,6 +32,27 @@ public interface IGGenericAgentService {
 	 */
 	public default AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
 		return new AgentCapabilities(getDescription());
+	}
+
+	/**
+	 * Whether the agent sends what it receives to a chat model when it runs, the one
+	 * its configuration resolves ({@code GAbstractGenericalAgentService#configuredChatModel}).
+	 * True for every agent but the ones only moving data between their peers, as the
+	 * chat input adapter: the compliance data-flow register reports the model of the
+	 * agents calling one.
+	 */
+	public default boolean isCallingChatModel() {
+		return true;
+	}
+
+	/**
+	 * The chat model this agent runs with the given configuration, resolved by the
+	 * same rule the agent applies when it runs; null when it cannot tell.
+	 *
+	 * @param agentConfig the configuration the model is resolved for
+	 */
+	public default IGConfigurableChatModel resolveAgentChatModel(GAgentConfig agentConfig) {
+		return null;
 	}
 
 	/**

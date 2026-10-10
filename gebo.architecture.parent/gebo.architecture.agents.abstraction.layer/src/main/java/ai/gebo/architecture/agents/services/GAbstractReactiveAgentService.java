@@ -88,6 +88,28 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 		return null;
 	}
 
+	/**
+	 * The model a reactive agent's configuration names: the default one when it asks
+	 * for it, else the model referenced; null when it names none. A use given in the
+	 * configuration ({@code useChatModelWithUse}) is not read here.
+	 */
+	private IGConfigurableChatModel reactiveConfiguredChatModel(GAgentConfig agentConfig) {
+		if (agentConfig.getUseDefaultChatModel() != null && agentConfig.getUseDefaultChatModel()) {
+			return chatModelsDao.defaultHandler();
+		}
+		return chatModelsDao.findByModelReference(agentConfig.getChatModelReference());
+	}
+
+	/** The model {@link #execute} runs: the one the configuration names, else the default one. */
+	@Override
+	public IGConfigurableChatModel resolveAgentChatModel(GAgentConfig agentConfig) {
+		if (agentConfig == null) {
+			return chatModelsDao.defaultHandler();
+		}
+		final IGConfigurableChatModel model = reactiveConfiguredChatModel(agentConfig);
+		return model != null ? model : chatModelsDao.defaultHandler();
+	}
+
 	@Override
 	public Flux<IGPartialOperation<ResponseType>> execute(IChatRequestContext chatRequestContext,
 			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
@@ -101,12 +123,7 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 					+ (agentConfig != null ? agentConfig.getCode() : null) + " useDefaultChatModel:"
 					+ (agentConfig != null ? agentConfig.getUseDefaultChatModel() : null));
 		}
-		IGConfigurableChatModel copiedModel = null;
-		if (agentConfig.getUseDefaultChatModel() != null && agentConfig.getUseDefaultChatModel()) {
-			copiedModel = chatModelsDao.defaultHandler();
-		} else {
-			copiedModel = chatModelsDao.findByModelReference(agentConfig.getChatModelReference());
-		}
+		IGConfigurableChatModel copiedModel = reactiveConfiguredChatModel(agentConfig);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Reactive agent id:" + getId() + " resolved base chat model:"
 					+ (copiedModel != null ? copiedModel.getCode() : null));

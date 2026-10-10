@@ -172,6 +172,36 @@ public final class DataFlowEndpoints {
 				sourceQualifiedId, destQualifiedId));
 	}
 
+	/**
+	 * A step carrying only a request from a source endpoint to a destination one, with
+	 * its engine: the user's question embedded, a search query sent to a search
+	 * service. Personal data do not travel along it
+	 * ({@link DataTransformationInfo.Carried#REQUEST}).
+	 */
+	public static void request(GDataFlowMetaInfos flow, String kind, String key, String description,
+			MetaEndpointType from, MetaEndpointType to, String sourceQualifiedId, String destQualifiedId) {
+		DataTransformationMetaInfo engine = DataTransformationMetaInfo.of(kind + "-" + key, description, list(from),
+				list(to));
+		flow.getEngines().add(engine);
+		flow.getTransformations().add(DataTransformationInfo.request(kind + "-flow-" + key, description, engine,
+				sourceQualifiedId, destQualifiedId));
+	}
+
+	/**
+	 * A step whose destination processes the content and passes it to no one else, with
+	 * its engine: a chat's content to the model answering, ranking or analysing it, a
+	 * model's tool arguments to a web search provider or an MCP server
+	 * ({@link DataTransformationInfo.Carried#PROCESSED}).
+	 */
+	public static void processed(GDataFlowMetaInfos flow, String kind, String key, String description,
+			MetaEndpointType from, MetaEndpointType to, String sourceQualifiedId, String destQualifiedId) {
+		DataTransformationMetaInfo engine = DataTransformationMetaInfo.of(kind + "-" + key, description, list(from),
+				list(to));
+		flow.getEngines().add(engine);
+		flow.getTransformations().add(DataTransformationInfo.processed(kind + "-flow-" + key, description, engine,
+				sourceQualifiedId, destQualifiedId));
+	}
+
 	/** Adds the endpoint unless one with its id is already there. */
 	public static void addUnique(GDataFlowMetaInfos flow, DataEndpoint endpoint) {
 		for (DataEndpoint existing : flow.getDataEndpoints()) {

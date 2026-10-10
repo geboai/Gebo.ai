@@ -48,6 +48,32 @@ public class DataTransformationInfo {
 	/** Qualified id of the endpoint the transformed data is written to. */
 	@NotNull
 	private String dataDestinationId = null;
+	/**
+	 * What reaches the destination of the step, which decides how personal data
+	 * travel along it (see {@link DataFlowPersonalDataPropagation}).
+	 */
+	public static enum Carried {
+		/**
+		 * The content the source holds reaches the destination, which keeps it or passes
+		 * it on: a store fed by a data source, a chat reading a store.
+		 */
+		CONTENT,
+		/**
+		 * The content the source holds reaches the destination, which processes it and
+		 * passes it to no one else: a model given a prompt, a web search provider or an
+		 * MCP server given the arguments a model wrote. Shared by many chats and agents,
+		 * it never carries the content of one of them to another.
+		 */
+		PROCESSED,
+		/**
+		 * Only a request travels - the user's question to be embedded, a search query
+		 * sent to a search service - and none of the content the source holds.
+		 */
+		REQUEST
+	}
+
+	/** What reaches the destination, the content the source holds by default. */
+	private Carried carried = Carried.CONTENT;
 
 	/**
 	 * Creates one edge of the flow graph.
@@ -66,6 +92,39 @@ public class DataTransformationInfo {
 		info.setTransformationInfo(engine);
 		info.setDataSourceId(dataSourceId);
 		info.setDataDestinationId(dataDestinationId);
+		return info;
+	}
+
+	/**
+	 * Creates a step carrying only a request ({@link Carried#REQUEST}).
+	 *
+	 * @param id                the id, unique within the reporting component's report
+	 * @param description       what this particular flow is
+	 * @param engine            the engine applied
+	 * @param dataSourceId      qualified id of the endpoint the request starts from
+	 * @param dataDestinationId qualified id of the endpoint the request is sent to
+	 */
+	public static DataTransformationInfo request(String id, String description, DataTransformationMetaInfo engine,
+			String dataSourceId, String dataDestinationId) {
+		DataTransformationInfo info = of(id, description, engine, dataSourceId, dataDestinationId);
+		info.setCarried(Carried.REQUEST);
+		return info;
+	}
+
+	/**
+	 * Creates a step whose destination processes the content and passes it to no one
+	 * else ({@link Carried#PROCESSED}).
+	 *
+	 * @param id                the id, unique within the reporting component's report
+	 * @param description       what this particular flow is
+	 * @param engine            the engine applied
+	 * @param dataSourceId      qualified id of the endpoint the content is read from
+	 * @param dataDestinationId qualified id of the endpoint processing it
+	 */
+	public static DataTransformationInfo processed(String id, String description, DataTransformationMetaInfo engine,
+			String dataSourceId, String dataDestinationId) {
+		DataTransformationInfo info = of(id, description, engine, dataSourceId, dataDestinationId);
+		info.setCarried(Carried.PROCESSED);
 		return info;
 	}
 }

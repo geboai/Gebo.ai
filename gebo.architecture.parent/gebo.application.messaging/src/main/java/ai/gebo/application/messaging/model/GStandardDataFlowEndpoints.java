@@ -34,6 +34,14 @@ public final class GStandardDataFlowEndpoints {
 	/** The graph extraction's knowledge graph, deployed with Neo4j only. */
 	public static final String KNOWLEDGE_GRAPH = "knowledge-graph";
 
+	/**
+	 * The symbolic component reporting the search sources - every system a search
+	 * service searches (a configured Jira, Confluence or SharePoint system searched
+	 * live, a web search account) - once, for every reader pointing to them.
+	 */
+	public static final String SEARCH_SOURCES_MODULE = "search-sources-module";
+	public static final String SEARCH_SOURCES_COMPONENT = "search-sources";
+
 	private GStandardDataFlowEndpoints() {
 	}
 
@@ -53,6 +61,23 @@ public final class GStandardDataFlowEndpoints {
 	public static String fullTextIndexRef() {
 		return GDataFlowMetaInfos.qualifiedId(new GeboComponentInfo(GStandardModulesConstraints.FULLTEXT_MODULE,
 				GStandardModulesConstraints.FULLTEXT_INDEXING_COMPONENT), FULLTEXT_INDEX);
+	}
+
+	/**
+	 * The local id of a search source: one system searched by one search service.
+	 *
+	 * @param searchServiceId the search service's id
+	 * @param systemCode      the code of the system it searches (for a system searched
+	 *                        live, the configured system's own code)
+	 */
+	public static String searchSourceId(String searchServiceId, String systemCode) {
+		return "search-" + searchServiceId + "-" + systemCode;
+	}
+
+	/** A search source, qualified with the search sources component owning it. */
+	public static String searchSourceRef(String searchServiceId, String systemCode) {
+		return GDataFlowMetaInfos.qualifiedId(new GeboComponentInfo(SEARCH_SOURCES_MODULE, SEARCH_SOURCES_COMPONENT),
+				searchSourceId(searchServiceId, systemCode));
 	}
 
 	/** The knowledge graph, qualified with the graph extraction component owning it. */
