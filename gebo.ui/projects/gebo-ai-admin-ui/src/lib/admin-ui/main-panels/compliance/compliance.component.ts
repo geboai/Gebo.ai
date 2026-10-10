@@ -8,13 +8,13 @@
  */
 
 import { afterNextRender, Component, ElementRef, Injector, OnInit, runInInjectionContext, ViewChild } from "@angular/core";
-import { DataFlowMetaInfoControllerService, GDataFlowReport } from "@Gebo.ai/gebo-ai-rest-api";
+import { DataEndpointAccess, DataFlowMetaInfoControllerService, GDataFlowReport } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { initializeModel, NgDiagramNodeTemplateMap, NgDiagramConfig, provideNgDiagram, NgDiagramViewportService } from "ng-diagram";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 import { DataEndpointNodeComponent } from "./data-endpoint-node.component";
 import { DataTransformationNodeComponent } from "./data-transformation-node.component";
-import { ALL_FLOWS_TAB, DataFlowEndpointNode, DataFlowSummary, DataFlowTab, DataFlowTransformationNode } from "./compliance-data-flow.model";
+import { AccessRuleView, ALL_FLOWS_TAB, DataFlowEndpointNode, DataFlowSummary, DataFlowTab, DataFlowTransformationNode } from "./compliance-data-flow.model";
 
 /**
  * The Compliance admin panel.
@@ -78,6 +78,18 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
     protected tabs: DataFlowTab[] = [];
     protected selectedTab: string = ALL_FLOWS_TAB;
     protected readonly allFlowsTab = ALL_FLOWS_TAB;
+
+    /**
+     * The access model in force system-wide (GROUP_BASED: users and groups;
+     * ACL_BASED: ACL entries), which says which lists of an access rule apply.
+     */
+    protected contentAccessPolicy?: string;
+    /** Group descriptions by code, for the groups the access rules name. */
+    private groupDescriptions: { [code: string]: string } = {};
+    /** The endpoint the access dialog shows, and that dialog's visibility. */
+    protected accessNode?: DataFlowEndpointNode;
+    protected accessRules: AccessRuleView[] = [];
+    protected showAccessDialog: boolean = false;
 
     protected diagramModel: any;
     private lastLayoutNodes: { id: string; position: { x: number; y: number } }[] = [];
@@ -240,7 +252,8 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                             : undefined,
                         ownerComponent: ownerComponent,
                         ownerDescription: ownerDescription,
-                        nodeId: report?.nodeId
+                        nodeId: report?.nodeId,
+                        access: endpoint.access && endpoint.access.length > 0 ? endpoint.access : undefined
                     });
                 }
 
@@ -282,6 +295,8 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
             this.selectedTab = ALL_FLOWS_TAB;
         }
 
+        this.contentAccessPolicy = report?.contentAccessPolicy;
+        this.groupDescriptions = report?.groupDescriptions || {};
         this.endpoints = endpoints;
         this.transformations = transformations;
         this.summary = {
@@ -295,6 +310,70 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
             // configs are admin-managed, so they are not an Art. 17 concern.
             retainingWithoutErasure: endpoints.filter(e => this.isRetainingStore(e) && !e.disposer).length
         };
+    }
+
+    /** Opens the dialog listing who may reach what an endpoint stands for. */
+    public openAccess(node: DataFlowEndpointNode): void {
+        this.accessNode = node;
+        this.accessRules = (node.access || []).map(rule => this.accessView(rule));
+        this.showAccessDialog = true;
+    }
+
+    /**
+     * An access rule as the access model in force applies it. A users/groups rule
+     * (chat profile, model, deep search) reads its lists in either model; a content
+     * rule (knowledge base, project, network of agents) reads its lists in the
+     * users/groups model and its ACL entries for its grant in the ACL model - the
+     * lists counting too for a READ; a documents rule reads ACL entries in the ACL
+     * model only. Mirrors GSecurityServiceImpl.isCanAccess / filterCanDoAction.
+     */
+    private accessView(rule: DataEndpointAccess): AccessRuleView {
+        const acl = this.contentAccessPolicy === "ACL_BASED";
+        const grant = rule.grant || "READ";
+        let mode: AccessRuleView["mode"];
+        switch (rule.mechanism) {
+            case "ACL_ONLY":
+                mode = acl ? "ACL" : "NOT_APPLIED";
+                break;
+            case "CONTENT":
+                mode = acl ? (grant === "READ" ? "ACL_AND_LISTS" : "ACL") : "LISTS";
+                break;
+            default:
+                mode = "LISTS";
+        }
+        const lists = mode === "LISTS" || mode === "ACL_AND_LISTS";
+        const entries = mode === "ACL" || mode === "ACL_AND_LISTS"
+            ? (rule.aclEntries || []).filter(entry => entry.grant === grant)
+            : [];
+        return {
+            grantedBy: rule.grantedBy || "",
+            scope: rule.scope || "",
+            note: rule.note,
+            mode: mode,
+            everyone: (lists && rule.accessibleToAll === true)
+                || entries.some(entry => entry.principal === ComplianceComponent.EVERYONE_PRINCIPAL),
+            users: lists ? (rule.users || []) : [],
+            groups: lists ? (rule.groups || []).map(code => this.groupLabel(code)) : [],
+            acl: entries.filter(entry => entry.principal !== ComplianceComponent.EVERYONE_PRINCIPAL)
+                .map(entry => this.principalLabel(entry.principal || "") + " (" + entry.grant + ")"),
+            administrators: rule.administrators !== false
+        };
+    }
+
+    /** The ACL principal everyone holds - IAclGrantedAccess.EVERYONE_ACL_UNIQUE_ID. */
+    private static readonly EVERYONE_PRINCIPAL = "everyone:everyone@gebo.ai";
+
+    private groupLabel(code: string): string {
+        const description = this.groupDescriptions[code];
+        return description && description !== code ? description + " (" + code + ")" : code;
+    }
+
+    /** An ACL principal - user:<username> or group:<code> - for a reader. */
+    private principalLabel(principal: string): string {
+        if (principal.startsWith("group:")) {
+            return this.groupLabel(principal.substring("group:".length));
+        }
+        return principal.startsWith("user:") ? principal.substring("user:".length) : principal;
     }
 
     /** Mirrors the backend's GDataFlowMetaInfos.qualifiedId(...) convention. */

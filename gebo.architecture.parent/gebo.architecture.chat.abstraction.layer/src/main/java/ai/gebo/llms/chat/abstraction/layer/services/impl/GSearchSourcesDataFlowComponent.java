@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.DataEndpoint;
+import ai.gebo.application.messaging.model.DataEndpointAccess;
 import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
 import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
@@ -31,6 +32,10 @@ import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.architecture.search.service.SearchSources;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
+import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
+import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
+import ai.gebo.llms.deepsearch.service.impl.GExternalSearchSecurityServiceImpl;
+import ai.gebo.llms.deepsearch.service.impl.GExternalSearchSecurityServiceImpl.AccessRule;
 import ai.gebo.model.base.GeboComponentInfo;
 
 /**
@@ -67,6 +72,11 @@ public class GSearchSourcesDataFlowComponent implements IGMessageEmitter {
 
 	private final ObjectProvider<ISearchServiceRepositoryPattern> searchServicesProvider;
 
+	// The deep search configuration, deciding who may search each source. Field
+	// injected and optional: without it the sources are reported with no access.
+	@Autowired(required = false)
+	ObjectProvider<IGDeepSearchConfigProvider> deepSearchConfigProvider;
+
 	public GSearchSourcesDataFlowComponent(
 			@Autowired ObjectProvider<ISearchServiceRepositoryPattern> searchServicesProvider) {
 		this.searchServicesProvider = searchServicesProvider;
@@ -99,9 +109,14 @@ public class GSearchSourcesDataFlowComponent implements IGMessageEmitter {
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
 		flow.setDescription("Live search sources");
 		final List<ISearchService> services = searchableServices(searchServicesProvider.getIfAvailable());
+		final DeepSearchConfig deepSearchConfig = deepSearchConfig();
 		for (ISearchService service : services) {
+			final List<DataEndpointAccess> access = deepSearchConfig != null ? access(service, deepSearchConfig)
+					: null;
 			for (SearchableSystemMetaData system : SearchSources.systems(service)) {
-				flow.getDataEndpoints().add(endpoint(service, system));
+				DataEndpoint endpoint = endpoint(service, system);
+				endpoint.setAccess(access);
+				flow.getDataEndpoints().add(endpoint);
 			}
 		}
 		if (LOGGER.isDebugEnabled()) {
@@ -109,6 +124,64 @@ public class GSearchSourcesDataFlowComponent implements IGMessageEmitter {
 					+ " searchable search service(s)");
 		}
 		return flow.getDataEndpoints().isEmpty() ? null : flow;
+	}
+
+	/** The deep search configuration, null when it cannot be read here. */
+	private DeepSearchConfig deepSearchConfig() {
+		final IGDeepSearchConfigProvider provider = deepSearchConfigProvider != null
+				? deepSearchConfigProvider.getIfAvailable()
+				: null;
+		if (provider == null) {
+			return null;
+		}
+		try {
+			return provider.get();
+		} catch (RuntimeException e) {
+			LOGGER.error("Cannot read the deep search configuration for the search sources' access", e);
+			return null;
+		}
+	}
+
+	/**
+	 * Who may search the systems of a search service, by the same rule a search is
+	 * allowed by ({@link GExternalSearchSecurityServiceImpl#accessRule}) - in deep
+	 * search, by the search agents and by the search tools alike: the users
+	 * and groups of its row of the per data source grid, or of the configuration for
+	 * every source, else the default. One rule for every system of the service: the
+	 * grid has one row per service.
+	 */
+	static List<DataEndpointAccess> access(ISearchService service, DeepSearchConfig deepSearchConfig) {
+		final AccessRule rule = GExternalSearchSecurityServiceImpl.accessRule(deepSearchConfig, service.getId());
+		// deep search, the search agents and the search tools all check it
+		final String scope = "Searching it in deep search, with the search agents and with the search tools";
+		final DataEndpointAccess access;
+		switch (rule.origin()) {
+		case PER_DATA_SOURCE:
+			access = DataEndpointAccess.of(rule.governing(), "Deep search settings - access to '" + service.getId() + "'", scope,
+					DataEndpointAccess.Mechanism.USERS_GROUPS);
+			break;
+		case EVERY_SOURCE:
+			access = DataEndpointAccess.of(rule.governing(), "Deep search settings - access to every external source", scope,
+					DataEndpointAccess.Mechanism.USERS_GROUPS);
+			break;
+		default:
+			access = new DataEndpointAccess();
+			access.setGrantedBy("Deep search settings - default for external sources");
+			access.setScope(scope);
+			access.setMechanism(DataEndpointAccess.Mechanism.USERS_GROUPS);
+			access.setAccessibleToAll(rule.openByDefault());
+			access.setNote(rule.openByDefault()
+					? "No users or groups are given access to it, so it is open to every user "
+							+ "(externalSourceSearchEnabledByDefault)."
+					: "No users or groups are given access to it and external sources are closed by default: "
+							+ "only administrators can search it.");
+			break;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Search service " + service.getId() + " access: " + rule.origin() + " open by default:"
+					+ rule.openByDefault());
+		}
+		return new ArrayList<DataEndpointAccess>(List.of(access));
 	}
 
 	/** The search services someone can search (see {@link SearchSources#searchable}). */

@@ -95,6 +95,14 @@ public class DataEndpoint {
 	private GeboComponentInfo disposer = null;
 
 	/**
+	 * Who may reach what this endpoint stands for: the access rules configured on
+	 * the platform objects it is built from (the knowledge base and the project of a
+	 * data source, a chat profile, a model, the deep search access...). Null when it
+	 * stands for nothing users are granted access to (a store, an external provider).
+	 */
+	private List<DataEndpointAccess> access = null;
+
+	/**
 	 * Creates an endpoint with the fields every reporting component has to supply.
 	 *
 	 * <p>

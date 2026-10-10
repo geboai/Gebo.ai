@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.ObjectProvider;
 
 import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.application.messaging.model.DataEndpointAccess;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
 import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
@@ -36,6 +37,8 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
+import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
@@ -50,6 +53,7 @@ import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
  */
 class GAbstractContentManagementSystemHandlerDataFlowTest {
 
+	private IGProjectEndpointRuntimeConfigurationDao<GProjectEndpoint> endpoints;
 	private GAbstractContentManagementSystemHandler<GContentManagementSystem, GProjectEndpoint, ?> handler;
 	private ISearchServiceRepositoryPattern searchServices;
 	private GContentManagementSystem jiraProd;
@@ -73,8 +77,7 @@ class GAbstractContentManagementSystemHandlerDataFlowTest {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@BeforeEach
 	void setUp() throws Exception {
-		IGProjectEndpointRuntimeConfigurationDao<GProjectEndpoint> endpoints = mock(
-				IGProjectEndpointRuntimeConfigurationDao.class);
+		endpoints = mock(IGProjectEndpointRuntimeConfigurationDao.class);
 		handler = mock(GAbstractContentManagementSystemHandler.class,
 				withSettings().useConstructor(mock(IGBuildSystemHandlerRepositoryPattern.class),
 						mock(IGDocumentReferenceFactory.class), mock(IGContentManagementSystemConfigurationDao.class),
@@ -163,5 +166,40 @@ class GAbstractContentManagementSystemHandlerDataFlowTest {
 	@Test
 	void theReportIsNamedByTheSystemTypeTheHandlerServes() {
 		assertEquals("Atlassian jira", handler.getDataFlowMetaInfos().getDescription());
+	}
+
+	@Test
+	void aDataSourceIsReachedAsItsKnowledgeBaseItsProjectAndItsDocumentsGrant() throws Exception {
+		GProjectEndpoint payroll = new GProjectEndpoint();
+		payroll.setCode("payroll");
+		payroll.setDescription("Payroll");
+		payroll.setParentProjectCode("hr-docs");
+		payroll.setAclAliases(List.of(7));
+		when(endpoints.getConfigurations()).thenReturn(List.of(payroll));
+		GProject project = new GProject();
+		project.setCode("hr-docs");
+		project.setDescription("HR documents");
+		project.setRootKnowledgeBaseCode("company");
+		project.setAccessibleUsers(List.of("anna@example.com"));
+		GKnowledgeBase knowledgeBase = new GKnowledgeBase();
+		knowledgeBase.setCode("company");
+		knowledgeBase.setDescription("Company");
+		knowledgeBase.setAccessibleGroups(List.of("hr"));
+		knowledgeBase.setAclAliases(List.of(3));
+		IGKnowledgeBaseHierarchyLookupService lookup = mock(IGKnowledgeBaseHierarchyLookupService.class);
+		when(lookup.findProjectByCode("hr-docs")).thenReturn(project);
+		when(lookup.findKnowledgeBaseByCode("company")).thenReturn(knowledgeBase);
+		handler.knowledgeBaseHierarchyLookupService = lookup;
+
+		List<DataEndpointAccess> access = handler.getDataFlowMetaInfos().getDataEndpoints().get(0).getAccess();
+
+		assertEquals(List.of("Knowledge base 'Company'", "Project 'HR documents'", "Data source 'Payroll'"),
+				access.stream().map(DataEndpointAccess::getGrantedBy).toList());
+		assertEquals(List.of("hr"), access.get(0).getGroups());
+		assertEquals(List.of(3), access.get(0).getAclAliases());
+		assertEquals(DataEndpointAccess.Mechanism.CONTENT, access.get(0).getMechanism());
+		assertEquals(List.of("anna@example.com"), access.get(1).getUsers());
+		assertEquals(DataEndpointAccess.Mechanism.ACL_ONLY, access.get(2).getMechanism());
+		assertEquals(List.of(7), access.get(2).getAclAliases());
 	}
 }

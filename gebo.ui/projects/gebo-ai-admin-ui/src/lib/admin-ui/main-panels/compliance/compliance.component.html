@@ -222,3 +222,88 @@
     }
   </div>
 </p-dialog>
+
+<!-- Who may reach what a register endpoint stands for, as the access model in force
+     (users and groups, or ACL entries - ai.gebo.security.useAcl) applies its rules. -->
+<p-dialog id="DataFlowAccessDialog" [(visible)]="showAccessDialog" [modal]="true" [draggable]="false"
+  [style]="{ width: '44rem', maxWidth: '95vw' }">
+
+  <ng-template pTemplate="header">
+    <div class="flex flex-column">
+      <span id="AccessDialogTitle" class="text-xl font-bold" gebo-ai-text>Who can access it</span>
+      <span class="text-sm text-muted-color">{{ accessNode?.description }}</span>
+    </div>
+  </ng-template>
+
+  <div class="flex flex-column gap-3">
+    <div class="text-sm">
+      @if (contentAccessPolicy === 'ACL_BASED') {
+        <span id="AccessModelAclText" gebo-ai-text>Access model of this installation: ACL entries.</span>
+      } @else if (contentAccessPolicy === 'GROUP_BASED') {
+        <span id="AccessModelGroupsText" gebo-ai-text>Access model of this installation: users and groups.</span>
+      } @else {
+        <span id="AccessModelUnknownText" gebo-ai-text>The access model of this installation could not be read.</span>
+      }
+    </div>
+
+    @for (rule of accessRules; track $index) {
+      <div class="border-1 surface-border border-round p-3 flex flex-column gap-2">
+        <div class="flex flex-column gap-1">
+          <span class="font-bold">{{ rule.grantedBy }}</span>
+          <span class="text-sm text-muted-color">{{ rule.scope }}</span>
+        </div>
+
+        @if (rule.mode === 'NOT_APPLIED') {
+          <span id="AccessNotAppliedText" class="text-sm" gebo-ai-text>Not applied: it holds ACL entries, which the users and groups model does not read.</span>
+        } @else {
+          @if (rule.everyone) {
+            <span class="inline-flex align-items-center gap-2 font-semibold text-green-700">
+              <i class="pi pi-globe"></i><span id="AccessEveryoneText" gebo-ai-text>Every user</span>
+            </span>
+          }
+          @if (rule.acl.length > 0) {
+            <div class="flex flex-column gap-1">
+              <span id="AccessAclLabel" class="text-xs font-semibold text-muted-color" gebo-ai-text>ACL entries</span>
+              <div class="flex flex-wrap gap-1">
+                @for (entry of rule.acl; track entry) {
+                  <span class="p-1 border-round surface-200 text-sm" style="overflow-wrap: anywhere;">{{ entry }}</span>
+                }
+              </div>
+            </div>
+          }
+          @if (rule.users.length > 0) {
+            <div class="flex flex-column gap-1">
+              <span id="AccessUsersLabel" class="text-xs font-semibold text-muted-color" gebo-ai-text>Users</span>
+              <div class="flex flex-wrap gap-1">
+                @for (user of rule.users; track user) {
+                  <span class="p-1 border-round surface-200 text-sm" style="overflow-wrap: anywhere;"><i class="pi pi-user text-xs"></i> {{ user }}</span>
+                }
+              </div>
+            </div>
+          }
+          @if (rule.groups.length > 0) {
+            <div class="flex flex-column gap-1">
+              <span id="AccessGroupsLabel" class="text-xs font-semibold text-muted-color" gebo-ai-text>Groups</span>
+              <div class="flex flex-wrap gap-1">
+                @for (group of rule.groups; track group) {
+                  <span class="p-1 border-round surface-200 text-sm" style="overflow-wrap: anywhere;"><i class="pi pi-users text-xs"></i> {{ group }}</span>
+                }
+              </div>
+            </div>
+          }
+          @if (!rule.everyone && rule.acl.length === 0 && rule.users.length === 0 && rule.groups.length === 0) {
+            <span id="AccessNobodyText" class="text-sm" gebo-ai-text>Nobody is listed: only administrators.</span>
+          }
+          @if (rule.mode === 'ACL_AND_LISTS') {
+            <span id="AccessListsAlsoText" class="text-xs text-muted-color" gebo-ai-text>To read it, its users and groups are allowed too, besides its ACL entries.</span>
+          }
+        }
+        @if (rule.note) {
+          <span class="text-xs text-muted-color">{{ rule.note }}</span>
+        }
+      </div>
+    }
+
+    <span id="AccessAdministratorsText" class="text-xs text-muted-color" gebo-ai-text>Administrators can always access it.</span>
+  </div>
+</p-dialog>

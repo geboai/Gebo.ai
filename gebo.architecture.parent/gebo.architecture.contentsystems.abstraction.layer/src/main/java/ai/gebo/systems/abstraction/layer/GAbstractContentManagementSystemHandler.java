@@ -21,6 +21,7 @@ import java.nio.file.attribute.FileTime;
 import java.security.Provider.Service;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Map;
@@ -39,6 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.DataEndpoint;
+import ai.gebo.application.messaging.model.DataEndpointAccess;
 import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
 import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
@@ -76,6 +78,7 @@ import ai.gebo.document.model.GeboDocument;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
 import ai.gebo.knlowledgebase.model.contents.GDependencyTree;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.contents.GSoftwareArtifact;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
@@ -899,6 +902,8 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 		// named for the reader by the system type this handler serves
 		flow.setDescription(getHandledSystemType() != null ? getHandledSystemType().getDescription() : null);
 		String product = getHandledSystemType() != null ? getHandledSystemType().getCode() : "content source";
+		// projects and knowledge bases already looked up for this report, by code
+		final Map<String, Object> hierarchy = new HashMap<String, Object>();
 		for (ProjectEndpointType endpoint : endpoints) {
 			if (endpoint == null || endpoint.getCode() == null) {
 				continue;
@@ -929,8 +934,85 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 			flow.getDataEndpoints().add(source);
 			addWorkflowLinks(flow, source, endpoint);
 			addLiveSearchLinks(flow, source, system);
+			source.setAccess(dataSourceAccess(endpoint, source, hierarchy));
 		}
 		return flow.getDataEndpoints().isEmpty() ? null : flow;
+	}
+
+	/**
+	 * Who may reach the documents of a data source, as the platform checks it:
+	 * retrieving them in chat and search is granted by its knowledge base, browsing
+	 * them by its project (both a READ, {@code filterCanDoAction}), and in the ACL
+	 * model each document by the ACL entries it carries, which the data source sets
+	 * on the root folder of what it ingests.
+	 *
+	 * @param endpoint  the data source
+	 * @param source    its register endpoint
+	 * @param hierarchy projects and knowledge bases already looked up, by code
+	 * @return the access rules, never null
+	 */
+	private List<DataEndpointAccess> dataSourceAccess(ProjectEndpointType endpoint, DataEndpoint source,
+			Map<String, Object> hierarchy) {
+		final List<DataEndpointAccess> rules = new ArrayList<DataEndpointAccess>();
+		final GProject project = (GProject) lookup(hierarchy, "project:" + endpoint.getParentProjectCode(),
+				() -> knowledgeBaseHierarchyLookupService.findProjectByCode(endpoint.getParentProjectCode()));
+		final String kbCode = project != null ? project.getRootKnowledgeBaseCode() : null;
+		final GKnowledgeBase knowledgeBase = (GKnowledgeBase) lookup(hierarchy, "kb:" + kbCode,
+				() -> knowledgeBaseHierarchyLookupService.findKnowledgeBaseByCode(kbCode));
+		if (knowledgeBase != null) {
+			rules.add(DataEndpointAccess
+					.of(knowledgeBase, "Knowledge base '" + nameOf(knowledgeBase.getDescription(), kbCode) + "'",
+							"Retrieving its documents in chat and search", DataEndpointAccess.Mechanism.CONTENT)
+					.withAclAliases(knowledgeBase.getAclAliases()));
+		}
+		if (project != null) {
+			rules.add(DataEndpointAccess
+					.of(project, "Project '" + nameOf(project.getDescription(), project.getCode()) + "'",
+							"Browsing its documents", DataEndpointAccess.Mechanism.CONTENT)
+					.withAclAliases(project.getAclAliases()));
+		}
+		final DataEndpointAccess documents = new DataEndpointAccess();
+		documents.setGrantedBy("Data source '" + source.getDescription() + "'");
+		documents.setScope("Retrieving each of its documents");
+		documents.setMechanism(DataEndpointAccess.Mechanism.ACL_ONLY);
+		documents.setNote("Set on the root folder of what it ingests; a connector can set its own entries "
+				+ "on the folders it reads from the source system.");
+		documents.withAclAliases(endpoint.getAclAliases());
+		rules.add(documents);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Data source " + endpoint.getCode() + " access: knowledge base=" + kbCode + " found="
+					+ (knowledgeBase != null) + " project=" + endpoint.getParentProjectCode() + " found="
+					+ (project != null) + " document ACL aliases="
+					+ (endpoint.getAclAliases() != null ? endpoint.getAclAliases().size() : 0));
+		}
+		return rules;
+	}
+
+	/** A lookup throwing the platform's persistence exception. */
+	private static interface HierarchyLookup {
+		Object find() throws GeboPersistenceException;
+	}
+
+	/** A project or knowledge base, looked up once per report; null when missing or unreadable. */
+	private Object lookup(Map<String, Object> hierarchy, String key, HierarchyLookup lookup) {
+		if (knowledgeBaseHierarchyLookupService == null || key.endsWith(":null")) {
+			return null;
+		}
+		if (hierarchy.containsKey(key)) {
+			return hierarchy.get(key);
+		}
+		Object found = null;
+		try {
+			found = lookup.find();
+		} catch (GeboPersistenceException | RuntimeException e) {
+			LOGGER.error("Cannot read " + key + " for the access of a data-flow source", e);
+		}
+		hierarchy.put(key, found);
+		return found;
+	}
+
+	private static String nameOf(String description, String code) {
+		return description != null && !description.isBlank() ? description : code;
 	}
 
 	/**

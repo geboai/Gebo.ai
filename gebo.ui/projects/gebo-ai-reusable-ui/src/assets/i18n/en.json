@@ -5755,6 +5755,42 @@
       },
       "ReachedFromLegendText": {
         "label": "Reported by another component"
+      },
+      "AccessDialogTitle": {
+        "label": "Who can access it"
+      },
+      "AccessModelAclText": {
+        "label": "Access model of this installation: ACL entries."
+      },
+      "AccessModelGroupsText": {
+        "label": "Access model of this installation: users and groups."
+      },
+      "AccessModelUnknownText": {
+        "label": "The access model of this installation could not be read."
+      },
+      "AccessNotAppliedText": {
+        "label": "Not applied: it holds ACL entries, which the users and groups model does not read."
+      },
+      "AccessEveryoneText": {
+        "label": "Every user"
+      },
+      "AccessAclLabel": {
+        "label": "ACL entries"
+      },
+      "AccessUsersLabel": {
+        "label": "Users"
+      },
+      "AccessGroupsLabel": {
+        "label": "Groups"
+      },
+      "AccessNobodyText": {
+        "label": "Nobody is listed: only administrators."
+      },
+      "AccessListsAlsoText": {
+        "label": "To read it, its users and groups are allowed too, besides its ACL entries."
+      },
+      "AccessAdministratorsText": {
+        "label": "Administrators can always access it."
       }
     }
   },

@@ -9,12 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GModuleMetaInfo } from './gModuleMetaInfo';
 
-export interface GDataFlowReport { 
-    nodeId?: string;
-    collectedAt?: Date;
-    modules?: Array<GModuleMetaInfo>;
-    contentAccessPolicy?: string;
-    groupDescriptions?: { [key: string]: string; };
+export interface AclEntry { 
+    principal?: string;
+    grant?: string;
 }

@@ -15,6 +15,8 @@
  * report -> module -> component -> flow nesting on every change detection pass.
  */
 
+import { DataEndpointAccess } from "@Gebo.ai/gebo-ai-rest-api";
+
 /** How far data travels to reach an endpoint - mirrors the backend enum. */
 export type DataFlowLocality = "LOCAL_DEPLOYMENT" | "SAME_NETWORK" | "EXTERNAL_PROVIDER";
 
@@ -49,6 +51,11 @@ export interface DataFlowEndpointNode {
      * at the tab's edge, and marked as belonging elsewhere.
      */
     reachedFrom?: string;
+    /**
+     * Who may reach what the endpoint stands for: the access rules configured on
+     * the objects it is built from (knowledge base, project, chat profile...).
+     */
+    access?: DataEndpointAccess[];
 }
 
 /** An engine applied between two endpoints. */
@@ -89,6 +96,27 @@ export interface DataFlowTab {
     endpoints: number;
     /** Steps the component reports. */
     transformations: number;
+}
+
+/**
+ * One access rule as the access model in force applies it:
+ * - LISTS: its users and groups decide;
+ * - ACL: its ACL entries decide;
+ * - ACL_AND_LISTS: its ACL entries, its users and groups allowing too (a READ);
+ * - NOT_APPLIED: it holds ACL entries the users/groups model does not read.
+ */
+export interface AccessRuleView {
+    grantedBy: string;
+    scope: string;
+    note?: string;
+    mode: "LISTS" | "ACL" | "ACL_AND_LISTS" | "NOT_APPLIED";
+    everyone: boolean;
+    users: string[];
+    /** Group descriptions with their code. */
+    groups: string[];
+    /** ACL entries as "who (grant)". */
+    acl: string[];
+    administrators: boolean;
 }
 
 /** The tab showing the whole register. */

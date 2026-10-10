@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.beans.factory.ObjectProvider;
 
 import ai.gebo.application.messaging.model.DataEndpoint;
+import ai.gebo.application.messaging.model.DataEndpointAccess;
 import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
@@ -31,6 +32,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
+import ai.gebo.model.IGObjectWithSecurity;
 
 /**
  * The endpoints the symbolic data-flow reporters (the chat pipeline, the agents
@@ -47,9 +49,18 @@ public final class DataFlowEndpoints {
 		if (model == null || model.getConfig() == null) {
 			return null;
 		}
-		return modelEndpoint(kind + "-model-" + model.getCode(),
+		DataEndpoint endpoint = modelEndpoint(kind + "-model-" + model.getCode(),
 				describeModel(description, model.getDescription(), model.getConfig()), model.getConfig(),
 				"chat model");
+		// a chat model's users/groups decide who is offered it for a direct chat, in
+		// either access model; a profile or an agent calling it is granted by its own
+		if (model.getConfig() instanceof IGObjectWithSecurity secured) {
+			DataEndpointAccess access = DataEndpointAccess.of(secured, "Chat model '" + model.getCode() + "'",
+					"Picking this model for a direct chat", DataEndpointAccess.Mechanism.USERS_GROUPS);
+			access.setNote("A chat profile or an agent using this model is granted by its own access.");
+			endpoint.setAccess(new ArrayList<DataEndpointAccess>(List.of(access)));
+		}
+		return endpoint;
 	}
 
 	/** An embedding model as an LLM endpoint, null when it has no configuration. */

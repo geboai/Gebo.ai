@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { DataEndpointAccess } from './dataEndpointAccess';
 import { GeboComponentInfo } from './geboComponentInfo';
 
 export interface DataEndpoint { 
@@ -24,6 +25,7 @@ export interface DataEndpoint {
     personalData?: boolean;
     retention?: string;
     disposer?: GeboComponentInfo;
+    access?: Array<DataEndpointAccess>;
 }
 export namespace DataEndpoint {
     export type TypesEnum = 'DOCUMENTS' | 'DATABASE' | 'VECTORIAL_DATABASE' | 'GRAPH_DATABASE' | 'CHUNK' | 'FULLTEXT_INDEX' | 'LLM_ENDPOINT' | 'OBJECT_STORAGE' | 'MESSAGE_BROKER' | 'WEB_SEARCH' | 'LOCAL_FILESYSTEM' | 'CHAT_SESSION';

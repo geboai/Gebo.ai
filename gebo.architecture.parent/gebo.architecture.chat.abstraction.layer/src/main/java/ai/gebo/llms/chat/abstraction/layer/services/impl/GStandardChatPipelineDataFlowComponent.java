@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.DataEndpoint;
+import ai.gebo.application.messaging.model.DataEndpointAccess;
 import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
@@ -220,6 +221,11 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 			query.setTypes(list(MetaEndpointType.CHAT_SESSION));
 			query.setPersonalData(false);
 			query.setLocality(DataEndpointLocality.LOCAL_DEPLOYMENT);
+			// who may chat with the profile: its users/groups in either access model
+			// (isCanAccess), the profile carrying no ACL entries
+			query.setAccess(new ArrayList<DataEndpointAccess>(List.of(DataEndpointAccess.of(profile,
+					"Chat profile '" + profileCode + "'", "Chatting with this profile",
+					DataEndpointAccess.Mechanism.USERS_GROUPS))));
 			flow.getDataEndpoints().add(query);
 
 			// Responder (CHAT) model - gets the query plus retrieved KB content.

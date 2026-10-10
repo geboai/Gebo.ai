@@ -11,7 +11,9 @@ package ai.gebo.application.messaging.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lombok.Data;
 
@@ -49,6 +51,16 @@ public class GDataFlowReport {
 	 * are omitted rather than sent as empty entries.
 	 */
 	private List<GModuleMetaInfo> modules = new ArrayList<GModuleMetaInfo>();
+
+	/**
+	 * The access model in force system-wide ({@code ai.gebo.security.useAcl}), which
+	 * says which lists of the endpoints' access rules apply: {@code GROUP_BASED}
+	 * (users/groups) or {@code ACL_BASED}. Null when it cannot be read on this node.
+	 */
+	private String contentAccessPolicy = null;
+
+	/** The description of each group the access rules name, by group code. */
+	private Map<String, String> groupDescriptions = new HashMap<String, String>();
 
 	public GDataFlowReport() {
 	}
