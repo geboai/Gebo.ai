@@ -119,20 +119,8 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 		}
 		// this agent's own tool calls, forwarded to the user request's recorder
 		final ToolCallsListener callBacksListener = agentToolCallsListener(chatRequestContext);
-		List<String> allFunctions = agentConfig.getEnabledFunctions();
-		if (agentConfig.getSubscribeAllTools() != null && agentConfig.getSubscribeAllTools()) {
-			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
-			if (toolsList != null) {
-				// Honor the auto-mount exclusions (see AgentsToolsAutoMountingConfig) so tools
-				// kept out of automatic mounting are not subscribed by reactive agents either.
-				allFunctions = filterAutoMountedTools(
-						toolsList.stream().map(x -> x.getToolDefinition().name()).toList());
-			}
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Reactive agent id:" + getId() + " subscribes ALL tools, resolved "
-						+ (allFunctions != null ? allFunctions.size() : 0) + " function(s) after auto-mount exclusions");
-			}
-		}
+		List<String> allFunctions = resolveMountedToolNames(agentConfig,
+				Boolean.TRUE.equals(agentConfig.getSubscribeAllTools()) ? toolsRepositoryPattern.getTools() : null);
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("Reactive agent id:" + getId() + " enabled function names: " + allFunctions);
 			LOGGER.trace("<REACTIVE_AGENT_REQUEST agent=" + getId() + ">");
