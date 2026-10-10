@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.system.ingestion.DocumentTitles;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGIngestionHandlerConfigDao;
 import ai.gebo.system.ingestion.IGTableDataHandler;
@@ -69,13 +70,16 @@ public class GOdsIngestionHandlerImpl extends GAbstractConfiguredHandler {
 	 * Reads tables from an ODS file input stream.
 	 * 
 	 * @param is The input stream containing the ODS file
+	 * @param manageMetaInfo The metadata, given the title of the spreadsheet
 	 * @return List of extracted table data objects
 	 * @throws GeboIngestionException If there is an error reading the spreadsheet
 	 */
-	private static List<OpenDocumentTableData> readTables(InputStream is) throws GeboIngestionException {
+	private static List<OpenDocumentTableData> readTables(InputStream is, Map<String, Object> manageMetaInfo)
+			throws GeboIngestionException {
 		ArrayList<OpenDocumentTableData> docs = new ArrayList<OpenDocumentTableData>();
 		try {
 			OdfSpreadsheetDocument odfSpreadSheet = OdfSpreadsheetDocument.loadDocument(is);
+			DocumentTitles.fromOdfDocument(odfSpreadSheet, manageMetaInfo, "ods meta");
 			OfficeSpreadsheetElement root = odfSpreadSheet.getContentRoot();
 			List<TableTableElement> tables = odfSpreadSheet.getTables();
 			for (TableTableElement tableTableElement : tables) {
@@ -104,7 +108,7 @@ public class GOdsIngestionHandlerImpl extends GAbstractConfiguredHandler {
 		Stream<Document> stream = Stream.of();
 		try {
 			enrichMetaData(reference, manageMetaInfo);
-			List<OpenDocumentTableData> tables = readTables(is);
+			List<OpenDocumentTableData> tables = readTables(is, manageMetaInfo);
 			for (OpenDocumentTableData oftTableData : tables) {
 				Stream<Document> thisData = tableRenderer.handleContent(oftTableData, manageMetaInfo);
 				stream = Stream.concat(stream, thisData);

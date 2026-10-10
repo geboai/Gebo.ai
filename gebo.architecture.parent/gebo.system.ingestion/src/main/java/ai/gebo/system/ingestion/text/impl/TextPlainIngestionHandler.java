@@ -26,6 +26,7 @@ import org.springframework.util.FileCopyUtils;
 import ai.gebo.document.model.GeboDocument;
 import ai.gebo.document.model.GeboTextDocumentFragment;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.system.ingestion.DocumentTitles;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGIngestionHandlerConfigDao;
 import ai.gebo.system.ingestion.impl.GAbstractConfiguredHandler;
@@ -39,6 +40,7 @@ import ai.gebo.system.ingestion.impl.GAbstractConfiguredHandler;
  */
 @Service
 public class TextPlainIngestionHandler extends GAbstractConfiguredHandler {
+	static final String MARKDOWN_CONTENT_TYPE = "text/markdown";
 
 	/**
 	 * Constructs a new TextPlainIngestionHandler with the provided configuration DAO.
@@ -61,7 +63,8 @@ public class TextPlainIngestionHandler extends GAbstractConfiguredHandler {
 
 	/**
 	 * Processes the content from the input stream and converts it to Document objects.
-	 * Reads the entire input stream as a string and creates a document with the given metadata.
+	 * Reads the entire input stream as a string and creates a document with the given metadata,
+	 * with the title of a markdown text.
 	 * 
 	 * @param reference The document reference metadata
 	 * @param is The input stream containing the text content
@@ -78,7 +81,11 @@ public class TextPlainIngestionHandler extends GAbstractConfiguredHandler {
 			FileCopyUtils.copy(is, bos);
 			bos.flush();
 			enrichMetaData(reference, metadata);
-			Document document = new Document(bos.toString(), metadata);
+			final String text = bos.toString();
+			if (isMarkdown(reference)) {
+				DocumentTitles.fromMarkdown(text, metadata);
+			}
+			Document document = new Document(text, metadata);
 			return List.of(document).stream();
 		} finally {
 			try {
@@ -87,6 +94,13 @@ public class TextPlainIngestionHandler extends GAbstractConfiguredHandler {
 				// Silently ignore any errors when closing the stream
 			}
 		}
+	}
+
+	/** Whether the text is markdown, which tells its title (see {@link DocumentTitles#fromMarkdown}). */
+	static boolean isMarkdown(GDocumentReference reference) {
+		final String extension = reference.getExtension() != null ? reference.getExtension().toLowerCase() : "";
+		return extension.equals(".md") || extension.equals("md") || extension.equals(".markdown")
+				|| extension.equals("markdown") || MARKDOWN_CONTENT_TYPE.equalsIgnoreCase(reference.getContentType());
 	}
 
 	/**

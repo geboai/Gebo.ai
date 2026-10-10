@@ -28,6 +28,7 @@ import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.system.ingestion.DocumentTitles;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGIngestionHandlerConfigDao;
 import ai.gebo.system.ingestion.impl.GAbstractConfiguredHandler;
@@ -41,6 +42,8 @@ import ai.gebo.system.ingestion.impl.GAbstractConfiguredHandler;
  */
 @Service
 public class PdfIngestionHandler extends GAbstractConfiguredHandler {
+    /** The title and the subject in the PDF document information dictionary. */
+    static final String PDF_INFO_TITLE = "Title", PDF_INFO_SUBJECT = "Subject";
     private final PdfIngestionConfig config;
 
     /**
@@ -74,20 +77,15 @@ public class PdfIngestionHandler extends GAbstractConfiguredHandler {
      * @param meta The metadata map to be enriched
      * @throws IOException If there's an error reading the PDF
      */
-    private static void enrichPdfMetadata(PdfReader reader, Map<String, Object> meta) throws IOException {
+    static void enrichPdfMetadata(PdfReader reader, Map<String, Object> meta) throws IOException {
         Map<String, String> info = reader.getInfo();
         if (info != null) {
-            String title = info.get(DocumentMetaInfos.TITLE);
-            if (title != null && !title.isBlank()) {
-                meta.putIfAbsent(DocumentMetaInfos.TITLE, title.trim());
-            }
-            String subject = info.get("Subject");
-            if (subject != null && !subject.isBlank()) {
-                meta.putIfAbsent(DocumentMetaInfos.SUBTITLE, subject.trim());
-            }
+            // the keys of the document information dictionary, as the PDF names them
+            DocumentTitles.putTitle(meta, DocumentTitles.pdfInfoTitle(info.get(PDF_INFO_TITLE)), "pdf info");
+            DocumentTitles.putSubtitle(meta, info.get(PDF_INFO_SUBJECT), "pdf info");
         }
         // Fallback: use first (and second) non‑empty line(s) of page 1
-        if (!meta.containsKey(DocumentMetaInfos.TITLE) || !meta.containsKey(DocumentMetaInfos.SUBTITLE)) {
+        if (!DocumentTitles.hasTitle(meta) || !DocumentTitles.hasSubtitle(meta)) {
             String pageOne = PdfTextExtractor.getTextFromPage(reader, 1);
             if (pageOne != null) {
                 String[] lines = pageOne.split("\r?\n");
@@ -99,11 +97,11 @@ public class PdfIngestionHandler extends GAbstractConfiguredHandler {
                             break;
                     }
                 }
-                if (!meta.containsKey(DocumentMetaInfos.TITLE) && nonEmpty.size() >= 1) {
-                    meta.put(DocumentMetaInfos.TITLE, nonEmpty.get(0));
+                if (nonEmpty.size() >= 1) {
+                    DocumentTitles.putTitle(meta, nonEmpty.get(0), "pdf first page");
                 }
-                if (!meta.containsKey(DocumentMetaInfos.SUBTITLE) && nonEmpty.size() >= 2) {
-                    meta.put(DocumentMetaInfos.SUBTITLE, nonEmpty.get(1));
+                if (nonEmpty.size() >= 2) {
+                    DocumentTitles.putSubtitle(meta, nonEmpty.get(1), "pdf first page");
                 }
             }
         }
