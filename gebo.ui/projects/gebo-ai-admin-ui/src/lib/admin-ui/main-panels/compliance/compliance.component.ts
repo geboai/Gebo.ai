@@ -224,10 +224,37 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                 // workflow step it runs...); the ids stay the identity
                 const ownerDescription = flow.description?.trim() || undefined;
                 components.add(ownerComponent);
-                if ((flow.dataEndpoints || []).length > 0 || (flow.transformations || []).length > 0) {
+                const componentLabel = ownerDescription || component.messagingSystemId || ownerComponent;
+                const sections = (flow.sections || []).filter(section => !!section?.id);
+                if (sections.length > 0) {
+                    // a report drawn in parts (each network of agents): a tab per part,
+                    // named by it; what belongs to no part keeps the component's own tab
+                    for (const section of sections) {
+                        tabs.push({
+                            key: ownerComponent + ComplianceComponent.SECTION_SEPARATOR + section.id,
+                            owner: ownerComponent,
+                            section: section.id!,
+                            label: section.description?.trim() || section.id!,
+                            group: componentLabel,
+                            endpoints: (flow.dataEndpoints || []).filter(e => e.section === section.id).length,
+                            transformations: (flow.transformations || []).filter(t => t.section === section.id).length
+                        });
+                    }
+                    const unsectioned = (flow.transformations || []).filter(t => !t.section).length;
+                    if (unsectioned > 0) {
+                        tabs.push({
+                            key: ownerComponent, owner: ownerComponent, section: "", label: componentLabel,
+                            group: componentLabel,
+                            endpoints: (flow.dataEndpoints || []).filter(e => !e.section).length,
+                            transformations: unsectioned
+                        });
+                    }
+                } else if ((flow.dataEndpoints || []).length > 0 || (flow.transformations || []).length > 0) {
                     tabs.push({
                         key: ownerComponent,
-                        label: ownerDescription || component.messagingSystemId || ownerComponent,
+                        owner: ownerComponent,
+                        label: componentLabel,
+                        group: componentLabel,
                         endpoints: (flow.dataEndpoints || []).length,
                         transformations: (flow.transformations || []).length
                     });
@@ -253,7 +280,8 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                         ownerComponent: ownerComponent,
                         ownerDescription: ownerDescription,
                         nodeId: report?.nodeId,
-                        access: endpoint.access && endpoint.access.length > 0 ? endpoint.access : undefined
+                        access: endpoint.access && endpoint.access.length > 0 ? endpoint.access : undefined,
+                        section: endpoint.section || undefined
                     });
                 }
 
@@ -269,7 +297,8 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                         sourceId: transformation.dataSourceId,
                         destinationId: transformation.dataDestinationId,
                         ownerComponent: ownerComponent,
-                        ownerDescription: ownerDescription
+                        ownerDescription: ownerDescription,
+                        section: transformation.section || undefined
                     });
                 }
             }
@@ -280,15 +309,16 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
         // sources flagged as holding personal data, and re-deriving it here would lose
         // what each step carries (a request, content a model only processes).
 
-        // Where two components report the same name, each is told apart by its id.
+        // Where two tabs report the same name, each is told apart by its id.
         const sameName = new Map<string, number>();
         tabs.forEach(tab => sameName.set(tab.label, (sameName.get(tab.label) || 0) + 1));
         tabs.forEach(tab => {
             if ((sameName.get(tab.label) || 0) > 1) {
-                tab.label = tab.label + " (" + tab.key + ")";
+                tab.label = tab.label + " (" + (tab.section || tab.key) + ")";
             }
         });
-        tabs.sort((a, b) => a.label.localeCompare(b.label));
+        // the tabs of one component (its networks of agents) sit together
+        tabs.sort((a, b) => a.group.localeCompare(b.group) || a.label.localeCompare(b.label));
         this.tabs = tabs;
         // a refresh keeps the tab open unless its component no longer reports
         if (this.selectedTab !== ALL_FLOWS_TAB && !tabs.some(tab => tab.key === this.selectedTab)) {
@@ -376,6 +406,9 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
         return principal.startsWith("user:") ? principal.substring("user:".length) : principal;
     }
 
+    /** Separates a component from a part of its report in a tab key. */
+    private static readonly SECTION_SEPARATOR = "#";
+
     /** Mirrors the backend's GDataFlowMetaInfos.qualifiedId(...) convention. */
     private qualify(ownerComponent: string, localId: string): string {
         return ownerComponent + "<->" + localId;
@@ -395,24 +428,41 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
      * What the selected tab draws: every flow, or what one component reports - its
      * endpoints and its steps - with the endpoints of other components its steps
      * read from or write to, marked as reached from it, so a flow crossing into
-     * another component does not stop at the edge of the tab.
+     * another component does not stop at the edge of the tab. A tab drawing one part
+     * of a report (a network of agents) takes that part's endpoints and steps, the
+     * component's shared endpoints its steps reach, and marks as reached what
+     * belongs to another part or component (the network it delegates to).
      */
     private visibleFlows(): { endpoints: DataFlowEndpointNode[]; transformations: DataFlowTransformationNode[] } {
         if (this.selectedTab === ALL_FLOWS_TAB) {
             return { endpoints: this.endpoints, transformations: this.transformations };
         }
-        const owner = this.selectedTab;
-        const ownerLabel = this.tabs.find(tab => tab.key === owner)?.label || owner;
-        const transformations = this.transformations.filter(t => t.ownerComponent === owner);
+        const tab = this.tabs.find(candidate => candidate.key === this.selectedTab);
+        const owner = tab?.owner || this.selectedTab;
+        const section = tab?.section;
+        const label = tab?.label || owner;
+        const inTab = (ownerComponent: string, itemSection?: string) =>
+            ownerComponent === owner && (section === undefined || (itemSection || "") === section);
+        const transformations = this.transformations.filter(t => inTab(t.ownerComponent, t.section));
         const reached = new Set<string>();
         transformations.forEach(t => {
             reached.add(t.sourceId);
             reached.add(t.destinationId);
         });
         const endpoints = this.endpoints
-            .filter(e => e.ownerComponent === owner || reached.has(e.qualifiedId))
-            .map(e => e.ownerComponent === owner ? e : { ...e, reachedFrom: ownerLabel });
+            .filter(e => inTab(e.ownerComponent, e.section) || reached.has(e.qualifiedId))
+            .map(e => {
+                // the component's shared endpoints belong to each of its parts
+                const own = e.ownerComponent === owner && (section === undefined || !e.section || e.section === section);
+                return own ? e : { ...e, reachedFrom: label };
+            });
         return { endpoints, transformations };
+    }
+
+    /** The whole name of the part of a report the selected tab draws (a network of agents). */
+    protected selectedSectionDescription(): string | undefined {
+        const tab = this.tabs.find(candidate => candidate.key === this.selectedTab);
+        return tab?.section ? tab.label : undefined;
     }
 
     /** Draws another tab: a fresh diagram mount, as when the dialog opens. */

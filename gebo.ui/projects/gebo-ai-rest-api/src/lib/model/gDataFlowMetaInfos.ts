@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { DataEndpoint } from './dataEndpoint';
+import { DataFlowSection } from './dataFlowSection';
 import { DataTransformationInfo } from './dataTransformationInfo';
 import { DataTransformationMetaInfo } from './dataTransformationMetaInfo';
 import { GeboComponentInfo } from './geboComponentInfo';
@@ -17,6 +18,7 @@ import { GeboComponentInfo } from './geboComponentInfo';
 export interface GDataFlowMetaInfos { 
     component?: GeboComponentInfo;
     description?: string;
+    sections?: Array<DataFlowSection>;
     dataEndpoints?: Array<DataEndpoint>;
     engines?: Array<DataTransformationMetaInfo>;
     transformations?: Array<DataTransformationInfo>;

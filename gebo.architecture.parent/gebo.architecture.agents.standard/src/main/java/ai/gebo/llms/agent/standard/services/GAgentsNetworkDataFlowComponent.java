@@ -25,6 +25,7 @@ import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.DataEndpoint;
 import ai.gebo.application.messaging.model.DataEndpointAccess;
+import ai.gebo.application.messaging.model.DataFlowSection;
 import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
@@ -209,10 +210,15 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 				continue;
 			}
 			String code = network.getCode();
+			// each network is a section of this report, drawn on its own tab and named by
+			// its description
+			final String name = nameOf(network);
+			flow.getSections().add(new DataFlowSection(code, name));
 
 			DataEndpoint query = new DataEndpoint();
 			query.setId("network-query-" + code);
-			query.setDescription("Agent-network query - '" + code + "'");
+			query.setDescription("Agent-network query - '" + name + "'");
+			query.setSection(code);
 			query.setProduct("Network of agents");
 			query.setEndpoint("agents-network", code, null, null);
 			query.setInput(true);
@@ -222,7 +228,7 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			// who may use the network: checked as an EXECUTE when it is offered as an MCP
 			// tool (filterCanDoAction), so its ACL entries in the ACL model
 			DataEndpointAccess access = DataEndpointAccess
-					.of(network, "Network of agents '" + code + "'", "Using it as an MCP tool",
+					.of(network, "Network of agents '" + name + "'", "Using it as an MCP tool",
 							DataEndpointAccess.Mechanism.CONTENT)
 					.withAclAliases(network.getAclAliases());
 			access.setGrant("EXECUTE");
@@ -232,10 +238,20 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			// the members' configurations and tools are read under the platform's system
 			// identity, as the network is assembled outside any user request
 			final String queryId = flow.qualifiedId(query.getId());
+			final int stepsBefore = flow.getTransformations().size();
 			asSystem(() -> {
 				reportNetwork(flow, network, queryId, searchServices, legs, toolTargets, agentConfigs, agentServices);
 				return null;
 			});
+			// the network's steps are its own; the endpoints they reach (models, stores,
+			// tool targets, the networks it delegates to) are shared and stay unsectioned
+			for (int i = stepsBefore; i < flow.getTransformations().size(); i++) {
+				flow.getTransformations().get(i).setSection(code);
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Network:" + code + " reported as the section '" + name + "' with "
+						+ (flow.getTransformations().size() - stepsBefore) + " step(s)");
+			}
 		}
 
 		if (LOGGER.isDebugEnabled()) {
@@ -735,6 +751,11 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			}
 		}
 		flow.getDataEndpoints().add(endpoint);
+	}
+
+	/** A network as the register names it: its description, else its code. */
+	static String nameOf(GAgentsNetwork network) {
+		return safe(network.getDescription(), network.getCode());
 	}
 
 	private static String safe(String s, String fallback) {

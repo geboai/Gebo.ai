@@ -76,6 +76,12 @@ public class DataTransformationInfo {
 	private Carried carried = Carried.CONTENT;
 
 	/**
+	 * The section of its report it belongs to ({@link GDataFlowMetaInfos#getSections()}),
+	 * null when the report has none.
+	 */
+	private String section = null;
+
+	/**
 	 * Creates one edge of the flow graph.
 	 *
 	 * @param id                the id, unique within the reporting component's report

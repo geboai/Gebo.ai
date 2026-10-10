@@ -43,6 +43,8 @@ export interface DataFlowEndpointNode {
     ownerComponent: string;
     /** How the register names that component, when it reports a name. */
     ownerDescription?: string;
+    /** The part of its component's report it belongs to (a network of agents), if any. */
+    section?: string;
     /** The node this endpoint was reported from. */
     nodeId?: string;
     /**
@@ -70,6 +72,8 @@ export interface DataFlowTransformationNode {
     ownerComponent: string;
     /** How the register names that component, when it reports a name. */
     ownerDescription?: string;
+    /** The part of its component's report it belongs to (a network of agents), if any. */
+    section?: string;
 }
 
 /** Counts driving the summary strip above the graph. */
@@ -88,10 +92,22 @@ export interface DataFlowSummary {
  * declares - the register split by where its metadata come from.
  */
 export interface DataFlowTab {
-    /** {@link ALL_FLOWS_TAB}, or the reporting component (module.component). */
+    /**
+     * {@link ALL_FLOWS_TAB}, the reporting component (module.component), or one part
+     * of its report (module.component#section) when it reports its parts apart.
+     */
     key: string;
-    /** The name the component reports, else its messaging id. */
+    /** The reporting component. */
+    owner: string;
+    /**
+     * The part of the report the tab draws: its id; "" for what belongs to no part of
+     * a report drawn in parts; undefined for a report drawn as one.
+     */
+    section?: string;
+    /** The name the part or the component reports, else its id. */
     label: string;
+    /** The component's name: tabs of the same component sit together. */
+    group: string;
     /** Endpoints the component reports. */
     endpoints: number;
     /** Steps the component reports. */

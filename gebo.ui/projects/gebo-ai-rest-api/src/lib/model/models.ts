@@ -60,6 +60,7 @@ export * from './createProviderDealRequest';
 export * from './customTemplateParamsRequestBody';
 export * from './dataEndpoint';
 export * from './dataEndpointAccess';
+export * from './dataFlowSection';
 export * from './dataPage';
 export * from './dataTransformationInfo';
 export * from './dataTransformationMetaInfo';

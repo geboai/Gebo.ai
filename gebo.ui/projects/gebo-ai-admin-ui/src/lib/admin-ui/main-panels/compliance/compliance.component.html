@@ -201,13 +201,18 @@
             <span class="ml-2 text-xs text-muted-color">{{ endpoints.length + transformations.length }}</span>
           </p-tab>
           @for (tab of tabs; track tab.key) {
-            <p-tab [value]="tab.key" [title]="tab.key">
-              <span>{{ tab.label }}</span>
+            <!-- a name can be a whole sentence (a network of agents' description): cut
+                 short here, whole in the tooltip and above the diagram -->
+            <p-tab [value]="tab.key" [title]="tab.label + ' - ' + tab.key">
+              <span style="display: inline-block; max-width: 18rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">{{ tab.label }}</span>
               <span class="ml-2 text-xs text-muted-color">{{ tab.endpoints + tab.transformations }}</span>
             </p-tab>
           }
         </p-tablist>
       </p-tabs>
+      @if (selectedSectionDescription(); as description) {
+        <div class="text-sm text-muted-color px-2" style="max-width: 70rem;">{{ description }}</div>
+      }
       <div style="flex: 1 1 auto; min-height: 0; width: 100%;">
         <!-- Mounted only once the dialog reports itself shown: the diagram measures
              its nodes from the DOM, so it must be created inside a container that

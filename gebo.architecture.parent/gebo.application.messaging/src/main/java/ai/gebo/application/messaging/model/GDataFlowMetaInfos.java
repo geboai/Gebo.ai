@@ -66,6 +66,14 @@ public class GDataFlowMetaInfos {
 	 */
 	private String description = null;
 
+	/**
+	 * The parts of this report that stand on their own - the networks of agents of the
+	 * agents component - each drawn on its own tab; empty for a report drawn as one.
+	 * The endpoints and steps of a part name it ({@link DataEndpoint#getSection()},
+	 * {@link DataTransformationInfo#getSection()}).
+	 */
+	private List<DataFlowSection> sections = new ArrayList<DataFlowSection>();
+
 	List<DataEndpoint> dataEndpoints = new ArrayList<DataEndpoint>();
 	List<DataTransformationMetaInfo> engines = new ArrayList<DataTransformationMetaInfo>();
 	List<DataTransformationInfo> transformations = new ArrayList<DataTransformationInfo>();
@@ -140,6 +148,7 @@ public class GDataFlowMetaInfos {
 		merged.setDescription(first.getDescription() != null && !first.getDescription().isBlank()
 				? first.getDescription()
 				: second.getDescription());
+		merged.setSections(mergeById(first.getSections(), second.getSections(), DataFlowSection::getId));
 		merged.setDataEndpoints(mergeById(first.getDataEndpoints(), second.getDataEndpoints(), DataEndpoint::getId));
 		merged.setEngines(mergeById(first.getEngines(), second.getEngines(), DataTransformationMetaInfo::getId));
 		merged.setTransformations(

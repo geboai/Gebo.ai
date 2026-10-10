@@ -103,6 +103,12 @@ public class DataEndpoint {
 	private List<DataEndpointAccess> access = null;
 
 	/**
+	 * The section of its report it belongs to ({@link GDataFlowMetaInfos#getSections()}),
+	 * null when it is shared by them or the report has none.
+	 */
+	private String section = null;
+
+	/**
 	 * Creates an endpoint with the fields every reporting component has to supply.
 	 *
 	 * <p>

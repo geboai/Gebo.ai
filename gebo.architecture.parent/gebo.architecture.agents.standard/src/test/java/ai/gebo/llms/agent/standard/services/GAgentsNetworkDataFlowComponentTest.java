@@ -32,6 +32,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import ai.gebo.application.messaging.model.ComponentMetaInfo;
 import ai.gebo.application.messaging.model.DataEndpoint;
 import ai.gebo.application.messaging.model.DataEndpointLocality;
+import ai.gebo.application.messaging.model.DataFlowSection;
 import ai.gebo.application.messaging.model.DataFlowPersonalDataPropagation;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
@@ -465,5 +466,24 @@ class GAgentsNetworkDataFlowComponentTest {
 		assertFalse(endpoint(flow, "network-query-" + FREE_CHAT).isPersonalData());
 		// the platform's data are only read
 		assertFalse(endpoint(flow, "platform-data-platform-users-and-groups").isPersonalData());
+	}
+
+	@Test
+	void eachNetworkIsASectionNamedByItsDescriptionWithItsOwnSteps() {
+		GAgentsNetwork agentic = network(AGENTIC, "adapter-config", "agentic-config");
+		agentic.setDescription("Agentic loop");
+		GDataFlowMetaInfos flow = flowOf(agentic, network(FREE_CHAT, "adapter-config", "free-config"));
+
+		assertEquals(List.of(new DataFlowSection(AGENTIC, "Agentic loop"), new DataFlowSection(FREE_CHAT, FREE_CHAT)),
+				flow.getSections(), "named by the description, else by the code");
+		assertEquals(AGENTIC, endpoint(flow, "network-query-" + AGENTIC).getSection());
+		assertEquals("Agent-network query - 'Agentic loop'", endpoint(flow, "network-query-" + AGENTIC).getDescription());
+		assertEquals(FREE_CHAT, endpoint(flow, "network-query-" + FREE_CHAT).getSection());
+		String agenticQuery = flow.qualifiedId("network-query-" + AGENTIC);
+		assertTrue(flow.getTransformations().stream().filter(x -> agenticQuery.equals(x.getDataSourceId()))
+				.allMatch(x -> AGENTIC.equals(x.getSection())));
+		assertTrue(flow.getTransformations().stream().allMatch(x -> x.getSection() != null), "every step is a network's");
+		// the model both networks call is shared by them
+		assertNull(endpoint(flow, "agent-model-gpt").getSection());
 	}
 }
