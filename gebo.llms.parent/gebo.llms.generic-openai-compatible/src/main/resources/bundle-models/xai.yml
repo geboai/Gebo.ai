@@ -5,6 +5,52 @@
 # Rules: the first one covering a model applies, so specific models come before family
 # patterns ("*" stands for any characters); unset fields are unknown.
 ai.gebo.models.providers.xai:
+  # The chat lookup reads /v1/language-models, which gives no context length: the windows
+  # come from docs.x.ai/developers/models (fetched 2026-10-11: 500k for grok 4.5 to 4.7,
+  # 1M for grok-4.3 and the grok-4.20 models) and grok-4.3's own page ("Context window:
+  # 1,000,000 tokens", "Function calling: Yes").
+  modelsInfo:
+    - providerId: xai
+      modelId: grok-4.7
+      chatModel: true
+      embeddingModel: false
+      contextLength: 500000
+      supportsReasoning: true
+      informativeUrl: https://docs.x.ai/developers/models
+    - providerId: xai
+      modelId: grok-4.6
+      chatModel: true
+      embeddingModel: false
+      contextLength: 500000
+      supportsReasoning: true
+      informativeUrl: https://docs.x.ai/developers/models
+    - providerId: xai
+      modelId: grok-4.5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 500000
+      supportsReasoning: true
+      informativeUrl: https://docs.x.ai/developers/models
+    - providerId: xai
+      modelId: grok-4.3
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      supportsFunctionCalls: true
+      supportsReasoning: true
+      informativeUrl: https://docs.x.ai/developers/models/grok-4.3
+    - providerId: xai
+      modelId: grok-4.20-0309-reasoning
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      informativeUrl: https://docs.x.ai/developers/models
+    - providerId: xai
+      modelId: grok-4.20-0309-non-reasoning
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      informativeUrl: https://docs.x.ai/developers/models
   parameterRules:
     # xAI - docs.x.ai/developers/model-capabilities/text/reasoning, 2026-10-11: "Reasoning
     # cannot be disabled" (no effort none); presencePenalty, frequencyPenalty and stop are

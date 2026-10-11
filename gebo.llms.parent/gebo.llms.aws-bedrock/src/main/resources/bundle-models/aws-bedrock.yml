@@ -1,13 +1,20 @@
 # The aws-bedrock piece of the models library: what Gebo knows of this provider's models
 # (modelsInfo) and what they accept in a request (parameterRules), bound by
 # BedrockModelsLibrary under ai.gebo.models.providers.aws-bedrock.
-# No entry yet: the models and their lifecycle (legacy, end of life) come from the Bedrock foundation models lookup.
-# An entry goes under the key below, for example:
-#
-# ai.gebo.models.providers.aws-bedrock:
-#   parameterRules:
-#     - providerId: aws-bedrock
-#       models: ["some-model-*"]
-#       sampling: REJECTED
-#       reasoningEfforts: [none, low, high]
-#       source: the provider page the rule was read on, and when
+# The models and their lifecycle (legacy, end of life) come from the Bedrock foundation
+# models lookup; ListFoundationModels gives no context, output or capability data.
+# Rules: the first one covering a model applies; "*" stands for any characters.
+ai.gebo.models.providers.aws-bedrock:
+  parameterRules:
+    # Claude on Bedrock - Anthropic's thinking page (platform.claude.com/docs/en/build-
+    # with-claude/thinking, 2026-10-11): on these models "non-default temperature, top_p,
+    # or top_k values return a 400 error on every request, regardless of whether thinking
+    # is used". The Bedrock chat handler sends the temperature, so without this rule every
+    # call failed. The leading "*" also covers the cross-region profile ids (us., eu.,
+    # au., jp., global.) the profile-only models are invoked by.
+    - providerId: aws-bedrock
+      models: ["*anthropic.claude-fable-5*", "*anthropic.claude-mythos-5*", "*anthropic.claude-mythos-preview*",
+        "*anthropic.claude-opus-5*", "*anthropic.claude-opus-4-8*", "*anthropic.claude-opus-4-7*",
+        "*anthropic.claude-sonnet-5*", "*anthropic.claude-haiku-5-5*"]
+      sampling: REJECTED
+      source: platform.claude.com/docs/en/build-with-claude/thinking, 2026-10-11

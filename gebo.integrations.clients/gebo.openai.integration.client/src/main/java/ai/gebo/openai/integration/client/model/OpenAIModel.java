@@ -23,7 +23,9 @@ public class OpenAIModel extends OpenAIObject{
     // Fields some OpenAI compatible providers add to the model object (Groq, ...)
     private Integer context_window=null, max_completion_tokens=null;
     private Boolean active=null;
-    
+    // The window vLLM serves a base model with (its ModelCard, absent on LoRA adapters)
+    private Integer max_model_len=null;
+
 	public OpenAIModel() {
 		
 	}
@@ -63,6 +65,12 @@ public class OpenAIModel extends OpenAIObject{
 	}
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+	public Integer getMax_model_len() {
+		return max_model_len;
+	}
+	public void setMax_model_len(Integer max_model_len) {
+		this.max_model_len = max_model_len;
 	}
 
 }

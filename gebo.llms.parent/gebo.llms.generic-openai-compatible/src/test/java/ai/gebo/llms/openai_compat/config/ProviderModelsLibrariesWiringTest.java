@@ -46,13 +46,13 @@ class ProviderModelsLibrariesWiringTest {
 					assertThat(context.getBean(VllmModelsLibrary.class).getModelsInfo()).isEmpty();
 					IGModelsLibraryDao library = context.getBean(IGModelsLibraryDao.class);
 					assertThat(context.getBean(GroqModelsLibrary.class).getParameterRules()).hasSize(2);
-					assertThat(context.getBean(NvidiaModelsLibrary.class).getModelsInfo()).hasSize(10);
+					assertThat(context.getBean(NvidiaModelsLibrary.class).getModelsInfo()).hasSize(4);
 					assertThat(library.findParameterRules("groq", "openai/gpt-oss-20b").getReasoningEfforts())
 							.containsExactly("low", "medium", "high");
 					assertThat(library.findParameterRules("xai", "grok-4.3").acceptsEffort("none")).isTrue();
 					assertThat(library.findParameterRules("openrouter.ai", "google/gemini-3.1-flash-tts-preview")
 							.getSpeechFormat()).isEqualTo("pcm");
-					assertThat(library.findByProviderIdAndModelId("nvidia", "bigcode/starcoder2-7b")).isNotNull();
+					assertThat(library.findByProviderIdAndModelId("nvidia", "bigcode/starcoder2-15b")).isNotNull();
 				});
 	}
 }

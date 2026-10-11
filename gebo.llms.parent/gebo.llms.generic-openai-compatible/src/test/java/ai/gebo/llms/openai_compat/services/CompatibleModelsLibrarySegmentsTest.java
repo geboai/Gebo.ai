@@ -52,7 +52,7 @@ class CompatibleModelsLibrarySegmentsTest {
 		assertTrue(library.findParameterRules("xai", "grok-4.3").acceptsEffort("none"));
 		assertTrue(library.findParameterRules("nvidia", "nvidia/nemotron-3-super-120b-a12b").acceptsEffort("none"));
 		assertEquals("passage", library.findParameterRules("nvidia", "nvidia/nemotron-3-embed-1b").getDocumentInputType());
-		assertNotNull(library.findByProviderIdAndModelId("nvidia", "bigcode/starcoder2-7b"), "nvidia's models info");
+		assertNotNull(library.findByProviderIdAndModelId("nvidia", "bigcode/starcoder2-15b"), "nvidia's models info");
 		assertEquals("pcm",
 				library.findParameterRules("openrouter.ai", "google/gemini-3.1-flash-tts-preview").getSpeechFormat());
 	}

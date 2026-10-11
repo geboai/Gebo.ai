@@ -47,6 +47,7 @@ import ai.gebo.llms.openai.model.GOpenAITranscriptModelConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
 import ai.gebo.openai.integration.client.model.OpenAIModel;
+import ai.gebo.llms.openai.api.utils.impl.GOpenAIApiUtilImpl;
 
 /**
  * AI generated comments
@@ -210,6 +211,9 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 				GOpenAITranscriptModelChoice choice = new GOpenAITranscriptModelChoice();
 				choice.setCode(model.getId());
 				choice.setDescription(model.getId());
+				// the shutdown date OpenAI publishes for the model, said in its description
+				choice.setMetaInfos(GOpenAIApiUtilImpl.liveMetaInfos(model, "openai"));
+				GOpenAIApiUtilImpl.describe(choice);
 				choice.setInformativeUrl(MODELS_DOC_URL);
 				choices.add(choice);
 			}

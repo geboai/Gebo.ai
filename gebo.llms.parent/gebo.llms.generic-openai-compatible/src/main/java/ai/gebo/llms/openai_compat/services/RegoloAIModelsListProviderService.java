@@ -50,8 +50,13 @@ public class RegoloAIModelsListProviderService implements IGModelsListProvider {
 	private static final String AUDIO_SPEECH = "audio_speech";
 	private static final String AUDIO_TRANSCRIPTION = "audio_transcription";
 	private static final String REGOLO_AI_MODELS_INFO_URL = "https://api.regolo.ai/v1/model/info";
-	/** LiteLLM expresses every model_info cost in USD. */
-	private static final String LITELLM_CURRENCY = "USD";
+	/**
+	 * The currency of the model_info costs: LiteLLM's own convention is USD, but Regolo's
+	 * catalog says "The per-token prices are in EUR per single token"
+	 * (docs.regolo.ai/models/catalog, 2026-10-11 - its own example reads them as dollars,
+	 * the explicit statement and the EUR default of the regolo.ai types agree on EUR).
+	 */
+	private static final String LITELLM_CURRENCY = "EUR";
 	final IGModelChoiceMetaInfoEnricherService enricherService;
 	final RestTemplateWrapperService restTemplateWrapper;
 

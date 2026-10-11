@@ -5,16 +5,10 @@
 # Rules: the first one covering a model applies, so specific models come before family
 # patterns ("*" stands for any characters); unset fields are unknown.
 ai.gebo.models.providers.nvidia:
+  # Only models integrate.api.nvidia.com/v1/models still lists (checked 2026-10-11, 80
+  # models; its entries carry id, object, created and owned_by only): llama-3.1-405b,
+  # jamba-1.5-mini, bge-m3, baichuan2-13b and starcoder2-7b were dropped with the models.
   modelsInfo:
-    - providerId: nvidia
-      modelId: meta/llama-3.1-405b-instruct
-      chatModel: true
-      embeddingModel: false
-      contextLength: 128000
-      maxOutputToken: 16384
-      tokenizingThreashold:
-      description: meta/llama-3.1-405b-instruct meta flagship model
-      informativeUrl: https://build.nvidia.com/meta/llama-3_1-405b-instruct/modelcard
     - providerId: nvidia
       modelId: 01-ai/yi-large
       chatModel: true
@@ -43,52 +37,7 @@ ai.gebo.models.providers.nvidia:
       description:
       informativeUrl:
     - providerId: nvidia
-      modelId: ai21labs/jamba-1.5-mini-instruct
-      chatModel: true
-      embeddingModel: false
-      contextLength:
-      maxOutputToken:
-      tokenizingThreashold:
-      description:
-      informativeUrl:
-    - providerId: nvidia
-      modelId: baai/bge-m3
-      chatModel: true
-      embeddingModel: false
-      contextLength:
-      maxOutputToken:
-      tokenizingThreashold:
-      description:
-      informativeUrl:
-    - providerId: nvidia
-      modelId: baichuan-inc/baichuan2-13b-chat
-      chatModel: true
-      embeddingModel: false
-      contextLength:
-      maxOutputToken:
-      tokenizingThreashold:
-      description:
-      informativeUrl:
-    - providerId: nvidia
       modelId: bigcode/starcoder2-15b
-      chatModel: true
-      embeddingModel: false
-      contextLength:
-      maxOutputToken:
-      tokenizingThreashold:
-      description:
-      informativeUrl:
-    - providerId: nvidia
-      modelId: bigcode/starcoder2-7b
-      chatModel: true
-      embeddingModel: false
-      contextLength:
-      maxOutputToken:
-      tokenizingThreashold:
-      description:
-      informativeUrl:
-    - providerId: nvidia
-      modelId: bigcode/starcoder2-7b
       chatModel: true
       embeddingModel: false
       contextLength:

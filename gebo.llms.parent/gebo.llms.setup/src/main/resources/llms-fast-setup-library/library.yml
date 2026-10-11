@@ -510,11 +510,13 @@ ai.gebo.llms.vendors.setup.config:
           choices:
             # The default is the cheapest model here that stays reliable once tools are
             # in play, which is what a chat pipeline spends most of its calls on: glm
-            # 5.3 flash costs 0.09/0.30 per million in and out, carries a 1.3M context
-            # and scores above the other flash-class models on the agentic benchmarks.
+            # 5.3 flash is among the cheapest (its price comes from openrouter.ai's models
+            # api) and scores above the other flash-class models on the agentic benchmarks.
+            # Context 1048576 per openrouter.ai/api/v1/models, checked 2026-10-11; its
+            # reasoning is mandatory there, efforts max, high and low.
             - code: z-ai/glm-5.3-flash
               description: Z.ai GLM 5.3 Flash
-              contextWindow: 1310720
+              contextWindow: 1048576
               uses: CHAT
               defaultChoice: true
             # Kept as an option but no longer the default: gpt-oss-120b is unreliable at
@@ -610,6 +612,90 @@ ai.gebo.llms.vendors.setup.config:
               description: Deepgram Aura 2
             - code: hexgrad/kokoro-82m
               description: Kokoro 82M (8 languages)
+
+    # llmax.ai - llmax.ai/models (2026-10-11): llmax-all-round (Essential plan, 262144
+    # context), llmax-smart (Smart plan) and llmax-best (Pro plan, 1M), each "tool calling,
+    # vision, reasoning" supported; a key reaches the models of its plan only, so the
+    # preset is the Essential one and the lookup offers what the key reaches. No
+    # embeddings.
+    - vendorInfo:
+        vendorId: llmax
+        name: llmax.ai
+        description: llmax.ai AI provider (EU, subscription)
+        acquireKeyUrl: https://llmax.ai/docs/quickstart
+        requiresApiKey: true
+        requiresCustomUrl: false
+        webSite: https://llmax.ai
+        apiKeySecretContext: llmax
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-llmax
+          doModelsLookup: true
+          choices:
+            - code: llmax-all-round
+              description: llmax all round (Essential plan)
+              contextWindow: 262144
+              uses: CHAT , INTERNAL_SERVICES
+              defaultChoice: true
+            - code: llmax-smart
+              description: llmax smart (Smart plan)
+              uses: CHAT
+            - code: llmax-best
+              description: llmax best (Pro plan)
+              contextWindow: 1000000
+              uses: CHAT
+
+    # Profundo AI - profundoai.com/models (2026-10-11): "Every plan includes all models";
+    # tool use is stated for glm-5.3 and glm-5.2 (128K), glm-5.3-flash is the fast tier.
+    # profundoai.com/docs: tools, parallel tool calls, response_format and reasoning_effort
+    # are accepted "where the model allows"; no embeddings.
+    - vendorInfo:
+        vendorId: profundoai
+        name: Profundo AI
+        description: Profundo AI provider (subscription)
+        acquireKeyUrl: https://profundoai.com/docs
+        requiresApiKey: true
+        requiresCustomUrl: false
+        webSite: https://profundoai.com
+        apiKeySecretContext: profundoai
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-profundoai
+          doModelsLookup: true
+          choices:
+            - code: glm-5.3
+              description: Z.ai GLM 5.3
+              contextWindow: 128000
+              uses: CHAT
+              defaultChoice: true
+            - code: glm-5.2
+              description: Z.ai GLM 5.2
+              contextWindow: 128000
+              uses: CHAT
+            - code: glm-5.3-flash
+              description: Z.ai GLM 5.3 Flash
+              contextWindow: 128000
+              uses: INTERNAL_SERVICES
+
+    # ONNX transformers - the embedding model that runs inside Gebo itself (Spring AI's
+    # default ONNX model, docs.spring.io/spring-ai/reference/api/embeddings/onnx.html):
+    # no key, no server, so a setup without any provider for embeddings still has one.
+    - vendorInfo:
+        vendorId: onnx-transformers
+        name: ONNX local embeddings
+        description: Local embedding model running inside Gebo (no provider needed)
+        requiresApiKey: false
+        requiresCustomUrl: false
+        webSite: https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
+        apiKeySecretContext: onnx-transformers
+      presets:
+        - type: EMBEDDING
+          serviceHandler: embedding-onnx-transformers
+          doModelsLookup: true
+          choices:
+            - code: sentence-transformers/all-MiniLM-L6-v2
+              description: all-MiniLM-L6-v2 (local, 384 dimensions)
+              defaultChoice: true
 
     - vendorInfo:
         vendorId: ollama

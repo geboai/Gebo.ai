@@ -50,5 +50,34 @@ class OpenAIModelsLibrarySegmentTest {
 		assertFalse(library.findParameterRules("openai", "gpt-5-mini").knowsEfforts(), "the family rule");
 		assertEquals(Sampling.REJECTED, library.findParameterRules("openai", "o4-mini").getSampling());
 		assertNull(library.findParameterRules("openai", "gpt-4.1"), "gpt-4.1 takes sampling: no rule");
+
+		// the current models' limits, which /v1/models does not give
+		assertEquals(1050000, library.findByProviderIdAndModelId("openai", "gpt-6.1-sol").getContextLength());
+		assertEquals(Boolean.FALSE, library.findByProviderIdAndModelId("openai", "gpt-6.1-sol").getSupportsFunctionCalls(),
+				"tools only through the Responses api");
+		assertEquals(32768, library.findByProviderIdAndModelId("openai", "gpt-4.1-mini").getMaxOutputToken());
+		assertNull(library.findByProviderIdAndModelId("openai", "gpt-6-luna").getSupportsFunctionCalls(),
+				"tools on Chat Completions only at effort none: unset");
+	}
+
+	@Test
+	void theModelObjectTellsItsShutdownAndTheWindowACompatibleServerReports() {
+		ai.gebo.openai.integration.client.model.OpenAIModel shutting = new ai.gebo.openai.integration.client.model.OpenAIModel();
+		shutting.setId("gpt-4o-mini-tts");
+		shutting.setShutdown_date("2027-01-06");
+		ai.gebo.llms.models.metainfos.ModelMetaInfo meta = ai.gebo.llms.openai.api.utils.impl.GOpenAIApiUtilImpl
+				.liveMetaInfos(shutting, "openai");
+		assertEquals(Boolean.TRUE, meta.getDeprecated());
+		assertEquals("2027-01-06", meta.getRetirementDate());
+
+		ai.gebo.openai.integration.client.model.OpenAIModel vllm = new ai.gebo.openai.integration.client.model.OpenAIModel();
+		vllm.setId("Qwen/Qwen3.8-27B");
+		vllm.setMax_model_len(131072);
+		assertEquals(131072, ai.gebo.llms.openai.api.utils.impl.GOpenAIApiUtilImpl.liveMetaInfos(vllm, "vllm")
+				.getContextLength(), "vLLM's max_model_len");
+
+		ai.gebo.openai.integration.client.model.OpenAIModel bare = new ai.gebo.openai.integration.client.model.OpenAIModel();
+		bare.setId("gpt-4.1");
+		assertNull(ai.gebo.llms.openai.api.utils.impl.GOpenAIApiUtilImpl.liveMetaInfos(bare, "openai"));
 	}
 }
