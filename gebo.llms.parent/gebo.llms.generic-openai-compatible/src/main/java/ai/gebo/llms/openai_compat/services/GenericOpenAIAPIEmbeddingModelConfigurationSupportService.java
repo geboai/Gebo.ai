@@ -11,7 +11,10 @@ package ai.gebo.llms.openai_compat.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.MetadataMode;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.openai.OpenAiEmbeddingModel;
 import org.springframework.ai.openai.OpenAiEmbeddingOptions;
@@ -31,7 +34,9 @@ import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
+import ai.gebo.llms.models.metainfos.ModelParameterRules;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelChoice;
@@ -73,6 +78,8 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 	final ModelRuntimeConfigureHandler configureHandler;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the embedding models are read from, may be null. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Constructor initializing the service with required dependencies.
@@ -91,7 +98,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 			ModelsListProviderProxyService modelsListProxyService,
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
 			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern,
-			ObservationRegistry observationRegistry) {
+			ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
 		this.type = type;
 		this.secretService = secretService;
 		this.functionsRepo = functionsRepo;
@@ -102,6 +109,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 		this.configureHandler = configureHandler;
 		this.llmTypeFiltrerRepoPattern = llmTypeFiltrerRepoPattern;
 		this.observationRegistry = observationRegistry;
+		this.modelsLibrary = modelsLibrary;
 	}
 
 	/**
@@ -110,7 +118,8 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 	 * implementation.
 	 */
 	class GenericOpenAIConfigurableEmbeddingModel
-			extends GAbstractConfigurableEmbeddingModel<GenericOpenAIAPIEmbeddingModelConfig, OpenAiEmbeddingModel> {
+			extends GAbstractConfigurableEmbeddingModel<GenericOpenAIAPIEmbeddingModelConfig, EmbeddingModel> {
+		private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 		/**
 		 * Constructor initializing the embedding model with a vector store factory
@@ -127,11 +136,12 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 		 *
 		 * @param config The configuration for the embedding model
 		 * @param type   The type of embedding model
-		 * @return Configured OpenAiEmbeddingModel
+		 * @return Configured OpenAiEmbeddingModel, wrapped to send an input_type with every
+		 *         request where the model's parameter rules give one
 		 * @throws LLMConfigException If configuration fails
 		 */
 		@Override
-		protected OpenAiEmbeddingModel configureModel(GenericOpenAIAPIEmbeddingModelConfig config,
+		protected EmbeddingModel configureModel(GenericOpenAIAPIEmbeddingModelConfig config,
 				GEmbeddingModelType type) throws LLMConfigException {
 			String apiKey = null;
 			String user = null;
@@ -178,6 +188,20 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 					.observationRegistry(observationRegistry)
 					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(clientsProvider))
 					.build();
+			// The asymmetric retrieval models take an input_type with every request, one
+			// for the documents stored and one for the search queries.
+			final String modelCode = config.getChoosedModel() != null ? config.getChoosedModel().getCode() : null;
+			final ModelParameterRules rules = modelsLibrary != null && modelCode != null
+					? modelsLibrary.findParameterRules(type.getProviderId(), modelCode)
+					: null;
+			if (rules != null && rules.sendsInputTypes()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Embedding model {} ({}) sends input_type {} for queries and {} for documents",
+							config.getCode(), modelCode, rules.getQueryInputType(), rules.getDocumentInputType());
+				}
+				return new InputTypeEmbeddingModel(model, rules.getQueryInputType(), rules.getDocumentInputType(),
+						MetadataMode.EMBED);
+			}
 			return model;
 		}
 

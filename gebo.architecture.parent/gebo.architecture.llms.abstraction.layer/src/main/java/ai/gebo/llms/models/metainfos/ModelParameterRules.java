@@ -56,6 +56,16 @@ public class ModelParameterRules {
 	 * when unknown.
 	 */
 	private List<String> reasoningEfforts = new ArrayList<>();
+	/**
+	 * The input_type an embedding model takes with a search query (e.g. "query"); null
+	 * when it takes none. Set together with {@link #documentInputType}.
+	 */
+	private String queryInputType = null;
+	/**
+	 * The input_type an embedding model takes with the documents it embeds to store
+	 * (e.g. "passage"); null when it takes none.
+	 */
+	private String documentInputType = null;
 	/** Where the rule comes from: the provider page it was read on, and when. */
 	private String source = null;
 
@@ -154,6 +164,28 @@ public class ModelParameterRules {
 		this.reasoningEfforts = reasoningEfforts;
 	}
 
+	/** Whether an embedding model takes an input_type for queries and for documents. */
+	public boolean sendsInputTypes() {
+		return queryInputType != null && !queryInputType.isBlank() && documentInputType != null
+				&& !documentInputType.isBlank();
+	}
+
+	public String getQueryInputType() {
+		return queryInputType;
+	}
+
+	public void setQueryInputType(String queryInputType) {
+		this.queryInputType = queryInputType;
+	}
+
+	public String getDocumentInputType() {
+		return documentInputType;
+	}
+
+	public void setDocumentInputType(String documentInputType) {
+		this.documentInputType = documentInputType;
+	}
+
 	public String getSource() {
 		return source;
 	}
@@ -165,6 +197,7 @@ public class ModelParameterRules {
 	@Override
 	public String toString() {
 		return "ModelParameterRules[providerId=" + providerId + ", models=" + models + ", sampling=" + sampling
-				+ ", reasoningEfforts=" + reasoningEfforts + "]";
+				+ ", reasoningEfforts=" + reasoningEfforts + ", queryInputType=" + queryInputType
+				+ ", documentInputType=" + documentInputType + "]";
 	}
 }

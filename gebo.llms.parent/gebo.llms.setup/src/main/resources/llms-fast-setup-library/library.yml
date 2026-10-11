@@ -380,12 +380,17 @@ ai.gebo.llms.vendors.setup.config:
             - code: openai/gpt-oss-20b
               description: OpenAI Gpt OSS 20b
               uses: INTERNAL_SERVICES
-        # No EMBEDDING preset for now: nvidia/nemotron-3-embed-1b and
-        # nvidia/llama-3.2-nv-embedqa-1b-v1 require an input_type (query or passage) on
-        # every request, which the embedding-nvidia handler does not send yet, so a model
-        # created from them fails. Leaving the codes without a default is not enough: the
-        # easy wizard preselects the first choice of a type that has no default.
-        # Restore them, nemotron-3-embed-1b as the default, once input_type is sent.
+        - type: EMBEDDING
+          serviceHandler: embedding-nvidia
+          doModelsLookup: true
+          choices:
+            # Both take an input_type with every request (query or passage), which the
+            # embedding handler sends from the models library's parameter rules.
+            - code: nvidia/nemotron-3-embed-1b
+              description: NVIDIA Nemotron 3 Embed 1B
+              defaultChoice: true
+            - code: nvidia/llama-3.2-nv-embedqa-1b-v1
+              description: NVIDIA Llama 3.2 NV EmbedQA 1B
     - vendorInfo:
         vendorId: mistral.ai
         name: Mistral.ai

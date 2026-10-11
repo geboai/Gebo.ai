@@ -250,3 +250,11 @@ ai.gebo.models.bundle.library:
       sampling: ACCEPTED
       reasoningEfforts: [none, low, high]
       source: docs.api.nvidia.com/nim/reference/nvidia-nemotron-3-super-120b-a12b-infer, 2026-10-11
+    # NVIDIA embedding - the asymmetric retrieval models need an input_type with every
+    # request: "passage" when indexing, "query" when querying (they "operate in passage or
+    # query mode").
+    - providerId: nvidia
+      models: ["nvidia/nemotron-3-embed-1b", "nvidia/llama-3.2-nv-embedqa-1b-v1"]
+      queryInputType: query
+      documentInputType: passage
+      source: docs.api.nvidia.com/nim/reference nemotron-3-embed-1b and llama-3_2-nv-embedqa-1b-v1, 2026-10-11

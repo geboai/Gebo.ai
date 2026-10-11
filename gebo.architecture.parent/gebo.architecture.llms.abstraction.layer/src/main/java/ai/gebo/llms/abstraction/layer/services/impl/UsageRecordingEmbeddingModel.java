@@ -1,17 +1,22 @@
 package ai.gebo.llms.abstraction.layer.services.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.embedding.BatchingStrategy;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.embedding.EmbeddingOptions;
 import org.springframework.ai.embedding.EmbeddingRequest;
 import org.springframework.ai.embedding.EmbeddingResponse;
 
 import ai.gebo.model.ModelType;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
+import ai.gebo.llms.abstraction.layer.services.IGRoleAwareEmbeddingModel;
 
 /**
  * An {@link EmbeddingModel} that records the usage of every call it forwards to the
@@ -87,6 +92,47 @@ public class UsageRecordingEmbeddingModel implements EmbeddingModel {
 				? response.getMetadata().getUsage()
 				: null);
 		return response;
+	}
+
+	/**
+	 * A search query: embedded as one when the provider model tells queries from
+	 * documents ({@link IGRoleAwareEmbeddingModel}), through {@link #call(EmbeddingRequest)}
+	 * so it is recorded as before; any other model takes the interface default.
+	 */
+	@Override
+	public float[] embed(String text) {
+		if (delegate instanceof IGRoleAwareEmbeddingModel roles) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Embedding a search query with model=" + codeOf(config.get()));
+			}
+			return call(roles.forQuery(new EmbeddingRequest(List.of(text), EmbeddingOptions.builder().build())))
+					.getResults().get(0).getOutput();
+		}
+		return EmbeddingModel.super.embed(text);
+	}
+
+	/**
+	 * Documents to store: embedded as such when the provider model tells queries from
+	 * documents, batch by batch through {@link #call(EmbeddingRequest)} as the interface
+	 * default does; any other model takes the interface default.
+	 */
+	@Override
+	public List<float[]> embed(List<Document> documents, EmbeddingOptions options, BatchingStrategy batchingStrategy) {
+		if (!(delegate instanceof IGRoleAwareEmbeddingModel roles)) {
+			return EmbeddingModel.super.embed(documents, options, batchingStrategy);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Embedding " + documents.size() + " document(s) to store with model=" + codeOf(config.get()));
+		}
+		final List<float[]> embeddings = new ArrayList<>(documents.size());
+		for (List<Document> batch : batchingStrategy.batch(documents)) {
+			final List<String> texts = batch.stream().map(this::getEmbeddingContent).toList();
+			final EmbeddingResponse response = call(roles.forDocuments(new EmbeddingRequest(texts, options)));
+			for (int i = 0; i < batch.size(); i++) {
+				embeddings.add(response.getResults().get(i).getOutput());
+			}
+		}
+		return embeddings;
 	}
 
 	@Override

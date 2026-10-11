@@ -137,7 +137,7 @@ public class GenericOpenAIProvidersAssembler {
 			for (GenericOpenAIEmbeddingModelTypeConfig pc : config.getEmbeddingModelProviders()) {
 				GenericOpenAIAPIEmbeddingModelConfigurationSupportService provider = new GenericOpenAIAPIEmbeddingModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, functionsRepo, storeFactoryProvider, modelsListProxyService,
-						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern, observationRegistry);
+						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern, observationRegistry, modelsLibrary);
 				embeddingModelProvidersRepo.addImplementation(provider);
 			}
 		}
