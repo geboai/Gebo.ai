@@ -96,25 +96,22 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chatgpt-OpenAI
           doModelsLookup: true
           choices:
-            # The current flagships (developers.openai.com models page, 2026-10); their
-            # limits come from the models library and the lookup, not from here.
-            - code: gpt-6.1-sol
-              description: GPT 6.1 Sol
-              uses: CHAT
-              defaultChoice: true
-            - code: gpt-6-astra
-              description: GPT 6 Astra (most capable)
-              uses: CHAT
-            - code: gpt-5
-              description: Gpt 5
-              contextWindow: 400000
-              uses: CHAT
+            # Only models that work with what the setup sends today are preset: every chat
+            # model it creates gets temperature 0, and the OpenAI handler calls Chat
+            # Completions. gpt-5 rejects sampling parameters, the gpt-6 family takes them only
+            # at reasoning effort none, and gpt-6.1-sol and gpt-6-astra call tools only
+            # through the Responses API, so they are not preset until the request follows
+            # each model's rules. They stay listed by the lookup.
             - code: gpt-4.1
               description: Gpt 4.1
               contextWindow: 1000000
               uses: CHAT
-            - code: gpt-6-luna
-              description: GPT 6 Luna (efficient, high volume)
+              defaultChoice: true
+            # Non reasoning, calls tools and takes temperature 0 (developers.openai.com,
+            # 2026-10): 1047576 tokens of context.
+            - code: gpt-4.1-mini
+              description: Gpt 4.1 mini
+              contextWindow: 1047576
               uses: INTERNAL_SERVICES
         - type: EMBEDDING
           serviceHandler: embedding-OpenAI
@@ -151,15 +148,19 @@ ai.gebo.llms.vendors.setup.config:
           doModelsLookup: true
           choices:
             # gpt-4o-transcribe, gpt-4o-mini-transcribe and whisper-1 shut down on 2027-02-26.
+            # The OpenAI transcript handler asks for a text response: whisper-1 gives it,
+            # gpt-4o-transcribe and gpt-4o-mini-transcribe answer json only, and OpenAI does
+            # not document the formats of gpt-transcribe. whisper-1 is the default until the
+            # handler asks for json, the format the transcription api answers by default.
+            - code: whisper-1
+              description: Whisper 1
+              defaultChoice: true
             - code: gpt-transcribe
               description: GPT Transcribe (speech to text)
-              defaultChoice: true
             - code: gpt-4o-transcribe
               description: GPT-4o Transcribe (speech to text)
             - code: gpt-4o-mini-transcribe
               description: GPT-4o mini Transcribe
-            - code: whisper-1
-              description: Whisper 1
     - vendorInfo:
         vendorId: anthropic
         name: Anthropic
@@ -183,9 +184,13 @@ ai.gebo.llms.vendors.setup.config:
               description: Claude Sonnet 5.5
               defaultChoice: true
             # Thinking adaptively, steered by an effort level like the rest of the lineup.
+            # An internal services model should spend few tokens thinking: LOW_THINKING is
+            # sent as effort low when the Models API lists it for the model, else the model
+            # thinks adaptively at its own effort.
             - code: claude-haiku-5-5
               uses: INTERNAL_SERVICES
               description: Claude Haiku 5.5
+              thinking: LOW_THINKING
             - code: claude-opus-5-5
               description: Claude Opus 5.5
               uses: CHAT
@@ -373,16 +378,12 @@ ai.gebo.llms.vendors.setup.config:
             - code: openai/gpt-oss-20b
               description: OpenAI Gpt OSS 20b
               uses: INTERNAL_SERVICES
-
-        - type: EMBEDDING
-          serviceHandler: embedding-nvidia
-          doModelsLookup: true
-          choices:
-            - code: nvidia/nemotron-3-embed-1b
-              description: NVIDIA Nemotron 3 Embed 1B
-              defaultChoice: true
-            - code: nvidia/llama-3.2-nv-embedqa-1b-v1
-              description: NVIDIA Llama 3.2 NV EmbedQA 1B
+        # No EMBEDDING preset for now: nvidia/nemotron-3-embed-1b and
+        # nvidia/llama-3.2-nv-embedqa-1b-v1 require an input_type (query or passage) on
+        # every request, which the embedding-nvidia handler does not send yet, so a model
+        # created from them fails. Leaving the codes without a default is not enough: the
+        # easy wizard preselects the first choice of a type that has no default.
+        # Restore them, nemotron-3-embed-1b as the default, once input_type is sent.
     - vendorInfo:
         vendorId: mistral.ai
         name: Mistral.ai
@@ -443,23 +444,32 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chatmodel-groq
           doModelsLookup: true
           choices:
-            - code: llama-3.3-70b-versatile
-              description: Meta Llama 3.3 70b versatile
+            # Groq shut down llama-3.3-70b-versatile and llama-3.1-8b-instant on 2026-08-16,
+            # naming gpt-oss-120b and gpt-oss-20b as their replacements, and groq/compound on
+            # 2026-09-21 (console.groq.com/docs/deprecations); its models page still lists
+            # the two llama models, for the enterprise tier only.
+            # The default is not gpt-oss-120b, which has reported tool call failures:
+            # qwen3.8-27b calls tools, in parallel too (console.groq.com/docs/tool-use,
+            # 2026-10). Groq lists it as a preview model; the setup checks it against the
+            # live models list.
+            - code: qwen/qwen3.8-27b
+              description: Qwen 3.8 27b
               contextWindow: 131072
               uses: CHAT
               defaultChoice: true
+            # Kept as an option but not the default: unreliable at tool calls.
             - code: openai/gpt-oss-120b
               description: OpenAI Gpt OSS 120b
               contextWindow: 131072
               uses: CHAT
-            - code: groq/compound
-              description: Groq Compound (agentic system with built in tools)
-              contextWindow: 131072
-              uses: CHAT
-            - code: llama-3.1-8b-instant
-              description: Meta Llama 3.1 8b instant
+            # gpt-oss cannot stop reasoning: LOW_THINKING is sent as reasoning_effort "low",
+            # one of the low, medium and high Groq accepts for it, so an internal call does
+            # not spend its output on reasoning (as regolo.ai's gpt-oss-20b did).
+            - code: openai/gpt-oss-20b
+              description: OpenAI Gpt OSS 20b
               contextWindow: 131072
               uses: INTERNAL_SERVICES
+              thinking: LOW_THINKING
         # doModelsLookup=false: the transcript handler has no models list for groq, so
         # its lookup would answer with the OpenAI whisper-1 suggestion and every code
         # below would be rejected as unavailable. The preset codes are trusted instead.
@@ -506,9 +516,12 @@ ai.gebo.llms.vendors.setup.config:
               description: DeepSeek V4 Flash
               contextWindow: 1048576
               uses: CHAT
+            # LOW_THINKING is sent as reasoning_effort "low", which openrouter.ai documents
+            # among its request parameters: the same choice as regolo.ai's gpt-oss-20b.
             - code: openai/gpt-oss-20b
               description: OpenAI Gpt OSS 20b
               uses: INTERNAL_SERVICES
+              thinking: LOW_THINKING
         - type: EMBEDDING
           serviceHandler: embedding-openrouter.ai
           choices:
