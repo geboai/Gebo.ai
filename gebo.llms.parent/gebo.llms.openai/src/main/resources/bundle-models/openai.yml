@@ -1,0 +1,122 @@
+# The openai segment of the models library: what Gebo knows of this provider's models
+# (modelsInfo) and what they accept in a request (parameterRules). The abstraction layer
+# collects every provider library bean; this one binds ai.gebo.models.providers.openai.
+# A rule applies to its providerId only.
+# Rules: the first one covering a model applies, so specific models come before family
+# patterns ("*" stands for any characters); unset fields are unknown.
+ai.gebo.models.providers.openai:
+  modelsInfo:
+    - providerId: openai
+      modelId: gpt-4o
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: GPT-4o openai flagship model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4o
+    - providerId: openai
+      modelId: gpt-4o-2024-05-13
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: GPT-4o 2024-05-13 openai flagship model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4o
+    - providerId: openai
+      modelId: gpt-4o-2024-08-06
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: GPT-4o 2024-08-06 openai flagship model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4o
+    - providerId: openai
+      modelId: gpt-4.1
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1047576
+      maxOutputToken: 32768
+      tokenizingThreashold:
+      description: GPT-4.1 model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4.1
+    - providerId: openai
+      modelId: gpt-4o-mini
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: GPT-4o-mini openai flagship model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4o-mini
+    - providerId: openai
+      modelId: gpt-4o-mini-2024-07-18
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: GPT-4o mini 2024-07-18 openai flagship model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4o-mini
+    - providerId: openai
+      modelId: text-embedding-3-large
+      chatModel: false
+      embeddingModel: true
+      contextLength: 8191
+      maxOutputToken:
+      tokenizingThreashold: 8191
+      description: text-embedding-3-large openai embedding model
+      informativeUrl:
+    - providerId: openai
+      modelId: text-embedding-3-small
+      chatModel: false
+      embeddingModel: true
+      contextLength: 8191
+      maxOutputToken:
+      tokenizingThreashold: 8191
+      description: text-embedding-3-small openai embedding model
+      informativeUrl:
+    - providerId: openai
+      modelId: text-embedding-ada-002
+      chatModel: false
+      embeddingModel: true
+      contextLength: 8191
+      maxOutputToken:
+      tokenizingThreashold: 8191
+      description: text-embedding-ada-002 openai embedding model
+      informativeUrl:
+  parameterRules:
+    # OpenAI - every model below answered "400: Unsupported value: 'temperature' does not
+    # support 0.0 with this model. Only the default (1) value is supported." at its
+    # default effort, tested 2026-10-11. The latest-model guide: "When reasoning effort
+    # is not none, remove temperature, top_p, and top_logprobs".
+    - providerId: openai
+      models: ["gpt-6.1-sol*", "gpt-6-astra*"]
+      sampling: REJECTED
+      reasoningEfforts: [low, medium, high, xhigh, max]
+      source: developers.openai.com/api/docs/models/gpt-6.1-sol and gpt-6-astra (no effort none), 2026-10-11
+    - providerId: openai
+      models: ["gpt-6-sol*", "gpt-6-luna*"]
+      sampling: WITHOUT_REASONING
+      reasoningEfforts: [none, low, medium, high, xhigh, max]
+      source: developers.openai.com/api/docs/models/gpt-6-sol and gpt-6-luna, 2026-10-11
+    - providerId: openai
+      models: ["gpt-5.5*"]
+      sampling: REJECTED
+      reasoningEfforts: [none, low, medium, high, xhigh]
+      source: developers.openai.com/api/docs/models/gpt-5.5 (sampling at effort none not documented), 2026-10-11
+    - providerId: openai
+      models: ["gpt-5"]
+      sampling: REJECTED
+      reasoningEfforts: [minimal, low, medium, high]
+      source: developers.openai.com/api/docs/models/gpt-5, 2026-10-11
+    - providerId: openai
+      models: ["gpt-5*"]
+      sampling: REJECTED
+      source: temperature refused by gpt-5 and gpt-5.5, tested 2026-10-11
+    - providerId: openai
+      models: ["o1*", "o3*", "o4*"]
+      sampling: REJECTED
+      source: temperature refused by o3 and o4-mini, tested 2026-10-11

@@ -1,147 +1,105 @@
 /**
- * This Source Code is subject to the terms of the 
+ * This Source Code is subject to the terms of the
  * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
  * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
+ * Copyright (c) 2025+ Gebo.ai
  */
- 
- 
- 
 
 package ai.gebo.llms.models.metainfos.impl;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.llms.models.metainfos.GProviderModelsLibrary;
 import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.models.metainfos.ModelParameterRules;
-import ai.gebo.llms.models.metainfos.config.ModelsLibraryBundleConfig;
 import ai.gebo.llms.models.metainfos.config.ModelsLibraryConfig;
 
 /**
- * AI generated comments Implementation of the IGModelsLibraryDao interface.
- * Provides functionality to search model metadata by model ID or provider and
- * model ID.
+ * The models library: the installation's entries ({@code ai.gebo.models.library}) first,
+ * then the pieces the provider modules declare ({@link GProviderModelsLibrary} beans),
+ * each found by provider and model id, or by model id alone for the models information.
  */
 @Service
 @Scope("singleton")
 public class GModelsLibraryDaoImpl implements IGModelsLibraryDao {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GModelsLibraryDaoImpl.class);
-	// Configuration holding information about the models.
-	ModelsLibraryConfig config = null;
+	/** The installation's library, searched first. */
+	private final ModelsLibraryConfig config;
+	/** The libraries of the provider modules on the classpath. */
+	private final List<GProviderModelsLibrary> providers;
 
-	// Configuration holding bundled information about the models.
-	ModelsLibraryBundleConfig bundle = null;
-
-	/**
-	 * Constructor for GModelsLibraryDaoImpl.
-	 * 
-	 * @param config Configuration for model library.
-	 * @param bundle Bundled configuration for model library.
-	 */
-	public GModelsLibraryDaoImpl(ModelsLibraryConfig config, ModelsLibraryBundleConfig bundle) {
-		this.config = config;
-		this.bundle = bundle;
-		
+	@Autowired
+	public GModelsLibraryDaoImpl(ModelsLibraryConfig config, ObjectProvider<GProviderModelsLibrary> providers) {
+		this(config, providers.orderedStream().toList());
 	}
 
-	
+	public GModelsLibraryDaoImpl(ModelsLibraryConfig config, List<GProviderModelsLibrary> providers) {
+		this.config = config;
+		this.providers = providers != null ? List.copyOf(providers) : List.of();
+		LOGGER.info("Models library: " + this.providers.size() + " provider librar(y/ies), "
+				+ this.providers.stream().mapToInt(p -> sizeOf(p.getModelsInfo())).sum() + " model(s), "
+				+ this.providers.stream().mapToInt(p -> sizeOf(p.getParameterRules())).sum() + " parameter rule(s)");
+		if (LOGGER.isDebugEnabled()) {
+			this.providers.forEach(p -> LOGGER.debug("Provider models library " + p.getClass().getName() + ": "
+					+ sizeOf(p.getModelsInfo()) + " model(s), " + sizeOf(p.getParameterRules()) + " rule(s)"));
+		}
+	}
 
-	/**
-	 * Finds a ModelMetaInfo by model ID.
-	 * 
-	 * @param modelId The ID of the model.
-	 * @return The ModelMetaInfo object if found, otherwise null.
-	 */
+	private static int sizeOf(List<?> list) {
+		return list != null ? list.size() : 0;
+	}
+
+	/** The installation's entries, then every provider library's, in order. */
+	private <T> List<T> all(Function<ModelsLibraryConfig, List<T>> installation,
+			Function<GProviderModelsLibrary, List<T>> provider) {
+		final List<T> all = new ArrayList<>();
+		if (config != null && installation.apply(config) != null)
+			all.addAll(installation.apply(config));
+		for (GProviderModelsLibrary library : providers) {
+			if (provider.apply(library) != null)
+				all.addAll(provider.apply(library));
+		}
+		return all;
+	}
+
+	private ModelMetaInfo firstModel(Predicate<ModelMetaInfo> matching) {
+		return all(ModelsLibraryConfig::getModelsInfo, GProviderModelsLibrary::getModelsInfo).stream()
+				.filter(Objects::nonNull).filter(matching).findFirst().orElse(null);
+	}
+
 	@Override
 	public ModelMetaInfo findByModelId(String modelId) {
-		// Check if configurations are properly initialized and not null.
-		if (config == null || config.getModelsInfo() == null || bundle == null || bundle.getModelsInfo() == null)
-			return null;
-		Optional<ModelMetaInfo> optional = null;
-
-		// Search in config's model information.
-		if (config != null && config.getModelsInfo() != null) {
-			optional = config.getModelsInfo().stream().filter(x -> {
-				return x.getModelId() != null && x.getModelId().equals(modelId);
-			}).findFirst();
-		}
-
-		// If not found in config, search in bundle's model information.
-		if ((optional == null || optional.isEmpty()) && (bundle != null && bundle.getModelsInfo() != null)) {
-			optional = bundle.getModelsInfo().stream().filter(x -> {
-				return x.getModelId() != null && x.getModelId().equals(modelId);
-			}).findFirst();
-		}
-
-		// Return the found model meta information or null if not found.
-		return optional.isPresent() ? optional.get() : null;
+		return firstModel(x -> x.getModelId() != null && x.getModelId().equals(modelId));
 	}
 
-	/**
-	 * Finds a ModelMetaInfo by provider ID and model ID.
-	 * 
-	 * @param providerId The ID of the provider.
-	 * @param modelId    The ID of the model.
-	 * @return The ModelMetaInfo object if found, otherwise null.
-	 */
+	@Override
+	public ModelMetaInfo findByProviderIdAndModelId(String providerId, String modelId) {
+		return firstModel(x -> x.getProviderId() != null && x.getProviderId().equals(providerId)
+				&& x.getModelId() != null && x.getModelId().equals(modelId));
+	}
+
 	@Override
 	public ModelParameterRules findParameterRules(String providerId, String modelId) {
-		ModelParameterRules found = firstCovering(config != null ? config.getParameterRules() : null, providerId,
-				modelId);
-		if (found == null) {
-			found = firstCovering(bundle != null ? bundle.getParameterRules() : null, providerId, modelId);
-		}
+		final ModelParameterRules found = all(ModelsLibraryConfig::getParameterRules,
+				GProviderModelsLibrary::getParameterRules).stream().filter(Objects::nonNull)
+				.filter(rule -> rule.covers(providerId, modelId)).findFirst().orElse(null);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("findParameterRules(" + providerId + ", " + modelId + ") => " + found);
 		}
 		return found;
 	}
-
-	private static ModelParameterRules firstCovering(List<ModelParameterRules> rules, String providerId,
-			String modelId) {
-		if (rules == null)
-			return null;
-		for (ModelParameterRules rule : rules) {
-			if (rule != null && rule.covers(providerId, modelId))
-				return rule;
-		}
-		return null;
-	}
-
-	@Override
-	public ModelMetaInfo findByProviderIdAndModelId(String providerId, String modelId) {
-		// Check if configurations are properly initialized and not null.
-		if (config == null || config.getModelsInfo() == null || bundle == null || bundle.getModelsInfo() == null)
-			return null;
-		Optional<ModelMetaInfo> optional = null;
-
-		// Search in config's model information.
-		if (config != null && config.getModelsInfo() != null) {
-			optional = config.getModelsInfo().stream().filter(x -> {
-				return x.getProviderId() != null && x.getProviderId().equals(providerId) && x.getModelId() != null
-						&& x.getModelId().equals(modelId);
-			}).findFirst();
-		}
-
-		// If not found in config, search in bundle's model information.
-		if ((optional == null || optional.isEmpty()) && (bundle != null && bundle.getModelsInfo() != null)) {
-			optional = bundle.getModelsInfo().stream().filter(x -> {
-				return x.getProviderId() != null && x.getProviderId().equals(providerId) && x.getModelId() != null
-						&& x.getModelId().equals(modelId);
-			}).findFirst();
-		}
-
-		// Return the found model meta information or null if not found.
-		return optional.isPresent() ? optional.get() : null;
-	}
-
 }

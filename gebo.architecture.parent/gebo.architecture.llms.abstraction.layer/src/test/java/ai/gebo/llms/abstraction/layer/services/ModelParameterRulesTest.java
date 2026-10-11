@@ -32,7 +32,7 @@ import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.ChatModelConfigOptions;
 import ai.gebo.llms.models.metainfos.ModelParameterRules;
 import ai.gebo.llms.models.metainfos.ModelParameterRules.Sampling;
-import ai.gebo.llms.models.metainfos.config.ModelsLibraryBundleConfig;
+import ai.gebo.llms.models.metainfos.GProviderModelsLibrary;
 import ai.gebo.llms.models.metainfos.config.ModelsLibraryConfig;
 import ai.gebo.llms.models.metainfos.impl.GModelsLibraryDaoImpl;
 import io.micrometer.observation.ObservationRegistry;
@@ -94,9 +94,9 @@ class ModelParameterRulesTest {
 			List<ModelParameterRules> bundled) {
 		ModelsLibraryConfig config = new ModelsLibraryConfig();
 		config.setParameterRules(installation);
-		ModelsLibraryBundleConfig bundle = new ModelsLibraryBundleConfig();
-		bundle.setParameterRules(bundled);
-		return new GModelsLibraryDaoImpl(config, bundle);
+		GProviderModelsLibrary provider = new GProviderModelsLibrary();
+		provider.setParameterRules(bundled);
+		return new GModelsLibraryDaoImpl(config, List.of(provider));
 	}
 
 	private static GModelsLibraryDaoImpl openAiLibrary() {

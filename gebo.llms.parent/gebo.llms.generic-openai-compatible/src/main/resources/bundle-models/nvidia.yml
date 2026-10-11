@@ -1,0 +1,113 @@
+# The nvidia segment of the models library: what Gebo knows of this provider's models
+# (modelsInfo) and what they accept in a request (parameterRules). The abstraction layer
+# collects every provider library bean; this one binds ai.gebo.models.providers.nvidia.
+# A rule applies to its providerId only.
+# Rules: the first one covering a model applies, so specific models come before family
+# patterns ("*" stands for any characters); unset fields are unknown.
+ai.gebo.models.providers.nvidia:
+  modelsInfo:
+    - providerId: nvidia
+      modelId: meta/llama-3.1-405b-instruct
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: meta/llama-3.1-405b-instruct meta flagship model
+      informativeUrl: https://build.nvidia.com/meta/llama-3_1-405b-instruct/modelcard
+    - providerId: nvidia
+      modelId: 01-ai/yi-large
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: nvidia
+      modelId: adept/fuyu-8b
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: nvidia
+      modelId: ai21labs/jamba-1.5-large-instruct
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: nvidia
+      modelId: ai21labs/jamba-1.5-mini-instruct
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: nvidia
+      modelId: baai/bge-m3
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: nvidia
+      modelId: baichuan-inc/baichuan2-13b-chat
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: nvidia
+      modelId: bigcode/starcoder2-15b
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: nvidia
+      modelId: bigcode/starcoder2-7b
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: nvidia
+      modelId: bigcode/starcoder2-7b
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+  parameterRules:
+    # NVIDIA - reasoning_effort "none" disables the reasoning, "high" is the default.
+    - providerId: nvidia
+      models: ["nvidia/nemotron-3-super-120b-a12b"]
+      sampling: ACCEPTED
+      reasoningEfforts: [none, low, high]
+      source: docs.api.nvidia.com/nim/reference/nvidia-nemotron-3-super-120b-a12b-infer, 2026-10-11
+    # NVIDIA embedding - the asymmetric retrieval models need an input_type with every
+    # request: "passage" when indexing, "query" when querying (they "operate in passage or
+    # query mode").
+    - providerId: nvidia
+      models: ["nvidia/nemotron-3-embed-1b", "nvidia/llama-3.2-nv-embedqa-1b-v1"]
+      queryInputType: query
+      documentInputType: passage
+      source: docs.api.nvidia.com/nim/reference nemotron-3-embed-1b and llama-3_2-nv-embedqa-1b-v1, 2026-10-11

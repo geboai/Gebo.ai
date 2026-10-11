@@ -13,10 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * What a provider accepts in a chat request to some of its models: the sampling
  * parameters and the reasoning efforts. Read from the models library
- * ({@code parameterRules} of {@code bundle-models/models.yml}, or of
+ * ({@code parameterRules} of the {@code bundle-models/<providerId>.yml} segment the module
+ * implementing the provider ships, or of
  * {@code ai.gebo.models.library} for an installation) every time a chat model builds
  * its requests, so a change of the library reaches the models already configured at
  * their next start.
@@ -27,6 +31,8 @@ import java.util.regex.Pattern;
  * What a rule leaves unset is unknown, and the request is made as it would be without
  * the rule.
  */
+@Getter
+@Setter
 public class ModelParameterRules {
 
 	/** Whether the model takes the sampling parameters, temperature and top_p. */
@@ -137,74 +143,10 @@ public class ModelParameterRules {
 		}
 	}
 
-	public String getProviderId() {
-		return providerId;
-	}
-
-	public void setProviderId(String providerId) {
-		this.providerId = providerId;
-	}
-
-	public List<String> getModels() {
-		return models;
-	}
-
-	public void setModels(List<String> models) {
-		this.models = models;
-	}
-
-	public Sampling getSampling() {
-		return sampling;
-	}
-
-	public void setSampling(Sampling sampling) {
-		this.sampling = sampling;
-	}
-
-	public List<String> getReasoningEfforts() {
-		return reasoningEfforts;
-	}
-
-	public void setReasoningEfforts(List<String> reasoningEfforts) {
-		this.reasoningEfforts = reasoningEfforts;
-	}
-
 	/** Whether an embedding model takes an input_type for queries and for documents. */
 	public boolean sendsInputTypes() {
 		return queryInputType != null && !queryInputType.isBlank() && documentInputType != null
 				&& !documentInputType.isBlank();
-	}
-
-	public String getQueryInputType() {
-		return queryInputType;
-	}
-
-	public void setQueryInputType(String queryInputType) {
-		this.queryInputType = queryInputType;
-	}
-
-	public String getDocumentInputType() {
-		return documentInputType;
-	}
-
-	public void setDocumentInputType(String documentInputType) {
-		this.documentInputType = documentInputType;
-	}
-
-	public String getSpeechFormat() {
-		return speechFormat;
-	}
-
-	public void setSpeechFormat(String speechFormat) {
-		this.speechFormat = speechFormat;
-	}
-
-	public String getSource() {
-		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
 	}
 
 	@Override

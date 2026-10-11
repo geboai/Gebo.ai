@@ -1,0 +1,25 @@
+# The xai segment of the models library: what Gebo knows of this provider's models
+# (modelsInfo) and what they accept in a request (parameterRules). The abstraction layer
+# collects every provider library bean; this one binds ai.gebo.models.providers.xai.
+# A rule applies to its providerId only.
+# Rules: the first one covering a model applies, so specific models come before family
+# patterns ("*" stands for any characters); unset fields are unknown.
+ai.gebo.models.providers.xai:
+  parameterRules:
+    # xAI - docs.x.ai/developers/model-capabilities/text/reasoning, 2026-10-11: "Reasoning
+    # cannot be disabled" (no effort none); presencePenalty, frequencyPenalty and stop are
+    # refused by the reasoning models (Gebo sends none of them).
+    - providerId: xai
+      models: ["grok-4.7*", "grok-4.6*"]
+      reasoningEfforts: [low, medium, high, xhigh]
+      source: docs.x.ai/developers/model-capabilities/text/reasoning, 2026-10-11
+    - providerId: xai
+      models: ["grok-4.5*"]
+      reasoningEfforts: [low, medium, high]
+      source: docs.x.ai/developers/model-capabilities/text/reasoning, 2026-10-11
+    # xAI grok-4.3 - its own model page: reasoning efforts none, low, medium, high, xhigh,
+    # low by default; so unlike grok 4.5 to 4.7 its reasoning can be turned off.
+    - providerId: xai
+      models: ["grok-4.3*"]
+      reasoningEfforts: [none, low, medium, high, xhigh]
+      source: docs.x.ai/developers/models/grok-4.3, 2026-10-11

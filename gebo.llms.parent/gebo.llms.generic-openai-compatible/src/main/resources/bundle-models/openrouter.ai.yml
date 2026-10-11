@@ -1,0 +1,15 @@
+# The openrouter.ai segment of the models library: what Gebo knows of this provider's models
+# (modelsInfo) and what they accept in a request (parameterRules). The abstraction layer
+# collects every provider library bean; this one binds ai.gebo.models.providers.openrouter.
+# A rule applies to its providerId only.
+# Rules: the first one covering a model applies, so specific models come before family
+# patterns ("*" stands for any characters); unset fields are unknown.
+ai.gebo.models.providers.openrouter:
+  parameterRules:
+    # OpenRouter speech - Gemini TTS answers pcm only: asked for mp3 it answered
+    # "400 Gemini TTS only supports response_format="pcm". Got "mp3"." (tested against a
+    # live key, see the openrouter.ai TTS presets). Its pcm is wrapped in a WAV header.
+    - providerId: openrouter.ai
+      models: ["google/gemini-*tts*"]
+      speechFormat: pcm
+      source: live 400 from openrouter.ai, recorded in the setup library presets
