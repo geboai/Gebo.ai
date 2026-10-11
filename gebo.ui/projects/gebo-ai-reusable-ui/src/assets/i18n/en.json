@@ -5183,6 +5183,69 @@
       },
       "ChatEnableFunctions": {
         "label": "Enable all function calls for this chat model"
+      },
+      "ClassChatRetires": {
+        "label": "The provider retires this model on"
+      },
+      "ClassChatDeprecated": {
+        "label": "The provider has deprecated this model"
+      },
+      "ClassChatReplacement": {
+        "label": "It suggests in its place"
+      },
+      "ClassEmbeddingRetires": {
+        "label": "The provider retires this model on"
+      },
+      "ClassEmbeddingDeprecated": {
+        "label": "The provider has deprecated this model"
+      },
+      "ClassEmbeddingReplacement": {
+        "label": "It suggests in its place"
+      },
+      "ClassServiceRetires": {
+        "label": "The provider retires this model on"
+      },
+      "ClassServiceDeprecated": {
+        "label": "The provider has deprecated this model"
+      },
+      "ClassServiceReplacement": {
+        "label": "It suggests in its place"
+      },
+      "ClassRankingRetires": {
+        "label": "The provider retires this model on"
+      },
+      "ClassRankingDeprecated": {
+        "label": "The provider has deprecated this model"
+      },
+      "ClassRankingReplacement": {
+        "label": "It suggests in its place"
+      },
+      "ClassTranscriptRetires": {
+        "label": "The provider retires this model on"
+      },
+      "ClassTranscriptDeprecated": {
+        "label": "The provider has deprecated this model"
+      },
+      "ClassTranscriptReplacement": {
+        "label": "It suggests in its place"
+      },
+      "ClassTtsRetires": {
+        "label": "The provider retires this model on"
+      },
+      "ClassTtsDeprecated": {
+        "label": "The provider has deprecated this model"
+      },
+      "ClassTtsReplacement": {
+        "label": "It suggests in its place"
+      },
+      "ClassImagesRetires": {
+        "label": "The provider retires this model on"
+      },
+      "ClassImagesDeprecated": {
+        "label": "The provider has deprecated this model"
+      },
+      "ClassImagesReplacement": {
+        "label": "It suggests in its place"
       }
     },
     "LLMSEasySummaryStepComponent": {

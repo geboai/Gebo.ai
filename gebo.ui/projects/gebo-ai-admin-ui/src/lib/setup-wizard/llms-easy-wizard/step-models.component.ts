@@ -19,7 +19,7 @@
  */
 import { Component, Input } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
-import { CLASS_TEXT, ModelClassDecision } from "./model-classes";
+import { CLASS_TEXT, ModelChoiceOption, ModelClassDecision } from "./model-classes";
 
 @Component({
     selector: "gebo-ai-llms-easy-models-step",
@@ -34,6 +34,16 @@ export class LLMSEasyModelsStepComponent {
     @Input() decisions: ModelClassDecision[] = [];
     @Input() lookupsRunning: number = 0;
     protected readonly CLASS_TEXT = CLASS_TEXT;
+
+    /**
+     * The chosen model when its provider deprecated it or set the date it retires it, so the row
+     * warns before the model is set; undefined otherwise.
+     */
+    protected chosenRetiring(decision: ModelClassDecision): ModelChoiceOption | undefined {
+        const chosen = decision.choices.find(c => c.code && decision.chosenCode
+            && c.code.toLowerCase() === decision.chosenCode.toLowerCase());
+        return chosen && (chosen.deprecated || chosen.retirementDate) ? chosen : undefined;
+    }
 
     /** Opening "Modify" on an already configured class also arms it for the apply. */
     protected onModifyToggled(decision: ModelClassDecision): void {

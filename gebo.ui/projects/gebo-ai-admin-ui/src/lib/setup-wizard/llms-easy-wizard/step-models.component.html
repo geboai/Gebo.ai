@@ -37,6 +37,20 @@
                 <geboai-editable-listbox-component [data]="decision.choices"
                   [(ngModel)]="decision.chosenCode" [ngModelOptions]="{standalone:true}" class="mt-2">
                 </geboai-editable-listbox-component>
+                @if (chosenRetiring(decision); as retiring) {
+                  <div class="gebo-status-meta mt-1">
+                    @if (retiring.retirementDate) {
+                      <span [id]="decision.descriptor.fieldId + 'Retires'" gebo-ai-text>The provider retires this model on</span>
+                      {{ retiring.retirementDate }}
+                    } @else {
+                      <span [id]="decision.descriptor.fieldId + 'Deprecated'" gebo-ai-text>The provider has deprecated this model</span>
+                    }
+                    @if (retiring.replacementModel) {
+                      <span [id]="decision.descriptor.fieldId + 'Replacement'" gebo-ai-text>It suggests in its place</span>
+                      {{ retiring.replacementModel }}
+                    }
+                  </div>
+                }
               }
             } @else {
               <div class="flex align-items-center gap-2 mt-2">
@@ -47,6 +61,20 @@
                 <geboai-editable-listbox-component [data]="decision.choices"
                   [(ngModel)]="decision.chosenCode" [ngModelOptions]="{standalone:true}" class="mt-2">
                 </geboai-editable-listbox-component>
+                @if (chosenRetiring(decision); as retiring) {
+                  <div class="gebo-status-meta mt-1">
+                    @if (retiring.retirementDate) {
+                      <span [id]="decision.descriptor.fieldId + 'Retires'" gebo-ai-text>The provider retires this model on</span>
+                      {{ retiring.retirementDate }}
+                    } @else {
+                      <span [id]="decision.descriptor.fieldId + 'Deprecated'" gebo-ai-text>The provider has deprecated this model</span>
+                    }
+                    @if (retiring.replacementModel) {
+                      <span [id]="decision.descriptor.fieldId + 'Replacement'" gebo-ai-text>It suggests in its place</span>
+                      {{ retiring.replacementModel }}
+                    }
+                  </div>
+                }
               }
             }
           }
