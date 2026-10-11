@@ -29,6 +29,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -37,6 +38,8 @@ public class MistralModelsLookupService {
 	final IGeboSecretsAccessService secretService;
 	final RestTemplateWrapperService restTemplateWrapperService;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
+	/** Fills what a model card leaves unknown from the models library (MistralModelsLibrary). */
+	final IGModelChoiceMetaInfoEnricherService enricherService;
 	private final static String MISTRAL_MODELS_URL = "https://api.mistral.ai/v1/models";
 
 	private HttpHeaders createHeader(GBaseModelConfig config) throws LLMConfigException {
@@ -98,6 +101,9 @@ public class MistralModelsLookupService {
 						choice.setModelCard(filtered);
 						fill(choice, filtered, true);
 						choice.setSupportsFunctionCalls(choice.getMetaInfos().getSupportsFunctionCalls());
+						// the card's values win, the library fills what it does not tell
+						enricherService.enrichChatModelMetaInfos(
+								MistralChatModelConfigurationSupportService.type.getProviderId(), choice, x -> null);
 						return choice;
 					}).toList());
 		}
@@ -116,6 +122,8 @@ public class MistralModelsLookupService {
 						GMistralEmbeddingModelChoice choice = new GMistralEmbeddingModelChoice();
 						choice.setModelCard(filtered);
 						fill(choice, filtered, false);
+						enricherService.enrichEmbeddingModelMetaInfos(
+								MistralEmbeddingModelConfigurationSupportService.type.getProviderId(), choice, x -> null);
 						return choice;
 					}).toList());
 		}

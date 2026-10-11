@@ -1,13 +1,25 @@
 # The anthropic piece of the models library: what Gebo knows of this provider's models
 # (modelsInfo) and what they accept in a request (parameterRules), bound by
 # AnthropicModelsLibrary under ai.gebo.models.providers.anthropic.
-# No entry yet: its models, their context and the thinking they take come from the Anthropic Models API when the models are looked up.
-# An entry goes under the key below, for example:
-#
-# ai.gebo.models.providers.anthropic:
-#   parameterRules:
-#     - providerId: anthropic
-#       models: ["some-model-*"]
-#       sampling: REJECTED
-#       reasoningEfforts: [none, low, high]
-#       source: the provider page the rule was read on, and when
+# The models, their context and the thinking they take come from the Anthropic Models API
+# when the models are looked up; these rules matter when it cannot be read.
+# Rules: the first one covering a model applies; "*" stands for any characters.
+ai.gebo.models.providers.anthropic:
+  parameterRules:
+    # platform.claude.com/docs/en/build-with-claude/thinking (2026-10-11): Fable 5.1,
+    # Mythos 5.1, Fable 5, Mythos 5, Opus 5.5 and Mythos Preview "reject thinking: {type:
+    # disabled}. Thinking can't be turned off on these models"; Sonnet 5.5 rejects it too
+    # (its lowest setting is between_tools). On all of them non-default temperature,
+    # top_p or top_k "return a 400 error on every request". Efforts from the effort page:
+    # xhigh and max on these, max but no xhigh on Mythos Preview. No "none" in the list:
+    # no thinking is not sent as disabled to them.
+    - providerId: anthropic
+      models: ["claude-fable-5*", "claude-mythos-5*", "claude-opus-5-5*", "claude-sonnet-5-5*"]
+      sampling: REJECTED
+      reasoningEfforts: [low, medium, high, xhigh, max]
+      source: platform.claude.com/docs/en/build-with-claude/thinking and /effort, 2026-10-11
+    - providerId: anthropic
+      models: ["claude-mythos-preview*"]
+      sampling: REJECTED
+      reasoningEfforts: [low, medium, high, max]
+      source: platform.claude.com/docs/en/build-with-claude/thinking and /effort, 2026-10-11

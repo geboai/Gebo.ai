@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.onxx_transformers_embedding.model.GONNXTransformersEmbeddingModelChoice;
 import ai.gebo.llms.onxx_transformers_embedding.model.GONNXTransformersEmbeddingModelConfig;
@@ -32,8 +33,11 @@ public class ONNXTransformersModelsLookupService {
 	/** The model spring-ai-transformers bundles and the embedding model runs */
 	public static final String BUNDLED_MODEL = "sentence-transformers/all-MiniLM-L6-v2";
 
-	public ONNXTransformersModelsLookupService() {
+	/** Fills what the bundled model's entry leaves unknown from OnnxTransformersModelsLibrary. */
+	private final IGModelChoiceMetaInfoEnricherService enricherService;
 
+	public ONNXTransformersModelsLookupService(IGModelChoiceMetaInfoEnricherService enricherService) {
+		this.enricherService = enricherService;
 	}
 
 	public OperationStatus<List<GONNXTransformersEmbeddingModelChoice>> getEmbeddingModels(
@@ -50,6 +54,9 @@ public class ONNXTransformersModelsLookupService {
 		meta.setDescription(choice.getDescription());
 		meta.setInformativeUrl(choice.getInformativeUrl());
 		choice.setMetaInfos(meta);
+		if (enricherService != null) {
+			enricherService.enrichEmbeddingModelMetaInfos(meta.getProviderId(), choice, x -> null);
+		}
 		return OperationStatus.of(List.of(choice));
 	}
 }

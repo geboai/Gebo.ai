@@ -32,6 +32,7 @@ import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
@@ -94,6 +95,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 	final ObservationRegistry observationRegistry;
 	/** The library the parameter rules of the chat models are read from. */
 	final IGModelsLibraryDao modelsLibrary;
+	/** Fills what the Vertex models api leaves unknown (retirement dates) from GoogleVertexModelsLibrary. */
+	final IGModelChoiceMetaInfoEnricherService enricherService;
 
 	/**
 	 * Inner class that handles the configuration and initialization of Google
@@ -238,8 +241,14 @@ public class GoogleVertexChatModelConfigurationSupportService
 			for (com.google.genai.types.Model model : client.models
 					.list(com.google.genai.types.ListModelsConfig.builder().queryBase(true).pageSize(100).build())) {
 				GGoogleVertexChatModelChoice choice = toChoice(model);
-				if (choice != null)
+				if (choice != null) {
+					// the api's values win, the library fills what it does not tell
+					enricherService.enrichChatModelMetaInfos(type.getProviderId(), choice, x -> null);
 					live.add(choice);
+				}
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Vertex AI listed {} Gemini chat models", live.size());
 			}
 			if (!live.isEmpty())
 				return OperationStatus.of(distinctByCode(live));

@@ -32,6 +32,7 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
+import ai.gebo.llms.models.metainfos.ModelParameterRules;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
@@ -176,7 +177,19 @@ public class AnthropicChatModelConfigurationSupportService
 				if (support == null && modelCode != null) {
 					support = modelsService.getThinkingSupport(apiKey, config.getBaseUrl(), modelCode);
 				}
-				ThinkingRequest thinking = thinkingRequest(config.getThinking(), support, modelCode);
+				ChatModelThinkingOption option = config.getThinking();
+				// Without the Models API's word, no thinking is sent as disabled only to a model
+				// the parameter rules do not list without "none": the current models refuse
+				// disabled with a 400, and left at their default they think adaptively.
+				if (support == null && option == ChatModelThinkingOption.NO_THINKING
+						&& !acceptsEffort(ModelParameterRules.NO_REASONING_EFFORT)) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Chat model {} ({}) asks for no thinking, which its parameter rules say it refuses:"
+								+ " it is left at the provider default", config.getCode(), modelCode);
+					}
+					option = null;
+				}
+				ThinkingRequest thinking = thinkingRequest(option, support, modelCode);
 				if (thinking == null && config.getThinking() != null) {
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Chat model {} asks for thinking {} but {} cannot express it: the model is left"
