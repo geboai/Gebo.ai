@@ -37,10 +37,8 @@ public class GenericOpenAIAPIRankerModelConfigurationSupportService extends
 	public OperationStatus<List<GenericOpenAIAPIRankerModelChoice>> getRawModelChoices(
 			GenericOpenAIAPIRankerModelConfig config) {
 		OperationStatus<List<GenericOpenAIAPIRankerModelChoice>> result = null;
-		OpenAIApiConfig providerConfig = OpenAIApiConfig.of(config, false);
-		providerConfig.setProviderId(type.getProviderId());
-		if (providerConfig.getBasePath() == null)
-			providerConfig.setBasePath(type.getBaseUrl());
+		OpenAIApiConfig providerConfig = ProviderModelsLookup.apiConfigOf(config, type.getProviderId(),
+				type.getBaseUrl());
 		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
 			result = this.modelsListProxyService.geModels(type.getModelsListProvider(), config,
 					GenericOpenAIAPIRankerModelChoice.class, type);
