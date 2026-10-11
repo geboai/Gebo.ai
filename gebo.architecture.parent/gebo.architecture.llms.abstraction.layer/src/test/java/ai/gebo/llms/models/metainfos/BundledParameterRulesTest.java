@@ -70,5 +70,10 @@ class BundledParameterRulesTest {
 		assertNull(library.findParameterRules("openrouter.ai", "openai/gpt-oss-20b"),
 				"the groq rule is groq's only");
 		assertFalse(library.findParameterRules("openai", "gpt-6.1-sol").getSource().isBlank());
+
+		assertFalse(library.findParameterRules("xai", "grok-4.7").acceptsEffort("none"),
+				"grok reasoning cannot be disabled");
+		assertNull(library.findParameterRules("xai", "grok-4.3"), "grok-4.3 is not on the xAI page");
+		assertTrue(library.findParameterRules("nvidia", "nvidia/nemotron-3-super-120b-a12b").acceptsEffort("none"));
 	}
 }

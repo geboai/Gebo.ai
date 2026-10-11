@@ -233,3 +233,20 @@ ai.gebo.models.bundle.library:
       sampling: ACCEPTED
       reasoningEfforts: [none, default, low, medium, high]
       source: console.groq.com/docs/reasoning, 2026-10-11
+    # xAI - docs.x.ai/developers/model-capabilities/text/reasoning, 2026-10-11: "Reasoning
+    # cannot be disabled" (no effort none); presencePenalty, frequencyPenalty and stop are
+    # refused by the reasoning models (Gebo sends none of them).
+    - providerId: xai
+      models: ["grok-4.7*", "grok-4.6*"]
+      reasoningEfforts: [low, medium, high, xhigh]
+      source: docs.x.ai/developers/model-capabilities/text/reasoning, 2026-10-11
+    - providerId: xai
+      models: ["grok-4.5*"]
+      reasoningEfforts: [low, medium, high]
+      source: docs.x.ai/developers/model-capabilities/text/reasoning, 2026-10-11
+    # NVIDIA - reasoning_effort "none" disables the reasoning, "high" is the default.
+    - providerId: nvidia
+      models: ["nvidia/nemotron-3-super-120b-a12b"]
+      sampling: ACCEPTED
+      reasoningEfforts: [none, low, high]
+      source: docs.api.nvidia.com/nim/reference/nvidia-nemotron-3-super-120b-a12b-infer, 2026-10-11
