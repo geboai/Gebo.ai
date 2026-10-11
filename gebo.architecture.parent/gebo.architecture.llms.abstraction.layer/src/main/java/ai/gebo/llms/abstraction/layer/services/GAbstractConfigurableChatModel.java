@@ -354,6 +354,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		return null;
 	}
 
+	/**
+	 * Whether the model takes a reasoning effort value, as the provider spells it: true
+	 * unless its parameter rules list its efforts without this one.
+	 */
+	protected boolean acceptsEffort(String effort) {
+		return parameterRules == null || !parameterRules.knowsEfforts() || parameterRules.acceptsEffort(effort);
+	}
+
 	@Override
 	public List<ToolCallback> wrapTools(ReactiveIdentityUtil runAs, ToolCallsListener toolCallListener) {
 		return wrapToolsClosingResults(runAs, toolCallListener, null);

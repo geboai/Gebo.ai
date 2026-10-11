@@ -10,6 +10,7 @@
 package ai.gebo.llms.ollama.services;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,29 +149,70 @@ public class OllamaChatModelConfigurationSupportService
 			if (config.getTemperature() != null) {
 				builder = builder.temperature(config.getTemperature());
 			}
-			// AUTO sends no think at all: it means the model's default ("null: use the model
-			// default" in Ollama's thinking docs), as it does for every other provider - it
-			// used to ask every model to think.
+			// think is "for thinking models" (Ollama's api): a model whose /api/show
+			// capabilities lack "thinking" gets no think at all. AUTO sends none either: it
+			// means the model's default ("null: use the model default"), as it does for every
+			// other provider - it used to ask every model to think. A level the model lists
+			// in its thinking values (gpt-oss: low, medium, high) is sent as that level,
+			// otherwise thinking is just switched on.
 			if (config.getThinking() != null) {
-				switch (config.getThinking()) {
-				case NO_THINKING: {
-					builder.disableThinking();
-				}
-					break;
-				case AUTO:
-					break;
-				default: {
-					builder.enableThinking();
-				}
-				}
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Chat model {} configured with thinking {}", config.getCode(), config.getThinking());
+				final Map<String, Object> details = config.getChoosedModel() != null
+						? config.getChoosedModel().getModelDetails()
+						: null;
+				final Boolean thinks = thinkingCapability(details);
+				if (Boolean.FALSE.equals(thinks)) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Chat model {} asks for thinking {} but its model does not think: no think sent",
+								config.getCode(), config.getThinking());
+					}
+				} else {
+					switch (config.getThinking()) {
+					case NO_THINKING:
+						builder.disableThinking();
+						break;
+					case AUTO:
+						break;
+					case LOW_THINKING:
+						if (thinkingLevels(details).contains("low"))
+							builder.thinkLow();
+						else
+							builder.enableThinking();
+						break;
+					case MEDIUM_THINKING:
+						if (thinkingLevels(details).contains("medium"))
+							builder.thinkMedium();
+						else
+							builder.enableThinking();
+						break;
+					case HIGH_THINKING:
+						if (thinkingLevels(details).contains("high"))
+							builder.thinkHigh();
+						else
+							builder.enableThinking();
+						break;
+					default:
+						builder.enableThinking();
+					}
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Chat model {} configured with thinking {} (model thinks: {}, levels: {})",
+								config.getCode(), config.getThinking(), thinks, thinkingLevels(details));
+					}
 				}
 			}
 			// The output limit set on the model, sent as num_predict: Ollama ignored it. Only
 			// a limit the configuration gives - no default of ours.
 			if (config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
 				builder = builder.numPredict(config.getMaxGeneratedTokens());
+			}
+			// The context window set on the model, sent as num_ctx: without it the server
+			// runs its own default (4k below 24 GiB of VRAM, Ollama's docs), whatever window
+			// Gebo budgets the prompts with. Only a window the configuration sets: the model's
+			// maximum from /api/show is not sent, it sets the memory the server allocates.
+			if (config.getContextLength() != null && config.getContextLength() > 0) {
+				builder = builder.numCtx(config.getContextLength());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model {} sends num_ctx {}", config.getCode(), config.getContextLength());
+				}
 			}
 			// Configure topP if specified
 			if (config.getTopP() != null && config.getTopP() > 0) {
@@ -274,6 +316,29 @@ public class OllamaChatModelConfigurationSupportService
 				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
+	}
+
+	/**
+	 * Whether the model thinks, from the capabilities its /api/show reported; null when
+	 * they are unknown.
+	 */
+	static Boolean thinkingCapability(Map<String, Object> details) {
+		if (details != null && details.get("capabilities") instanceof List<?> capabilities) {
+			return capabilities.contains("thinking");
+		}
+		return null;
+	}
+
+	/**
+	 * The named thinking levels the model lists in its /api/show thinking values; empty
+	 * when it lists none, booleans being no levels.
+	 */
+	static List<String> thinkingLevels(Map<String, Object> details) {
+		if (details != null && details.get("thinking") instanceof Map<?, ?> thinking
+				&& thinking.get("values") instanceof List<?> values) {
+			return values.stream().filter(String.class::isInstance).map(String.class::cast).toList();
+		}
+		return List.of();
 	}
 
 	/**

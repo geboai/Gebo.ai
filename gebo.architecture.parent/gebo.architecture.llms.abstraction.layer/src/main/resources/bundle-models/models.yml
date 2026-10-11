@@ -265,3 +265,20 @@ ai.gebo.models.bundle.library:
       models: ["google/gemini-*tts*"]
       speechFormat: pcm
       source: live 400 from openrouter.ai, recorded in the setup library presets
+    # xAI grok-4.3 - its own model page: reasoning efforts none, low, medium, high, xhigh,
+    # low by default; so unlike grok 4.5 to 4.7 its reasoning can be turned off.
+    - providerId: xai
+      models: ["grok-4.3*"]
+      reasoningEfforts: [none, low, medium, high, xhigh]
+      source: docs.x.ai/developers/models/grok-4.3, 2026-10-11
+    # Mistral - docs.mistral.ai/capabilities/reasoning: the models with adjustable reasoning
+    # take high or none, zai-glm-5-3 takes low, high and max (no none). The other Mistral
+    # models get no reasoning_effort unless their model card says they reason.
+    - providerId: mistralai
+      models: ["mistral-small-latest", "mistral-medium-3-5*", "mistral-large-4-0*"]
+      reasoningEfforts: [high, none]
+      source: docs.mistral.ai/capabilities/reasoning, 2026-10-11
+    - providerId: mistralai
+      models: ["zai-glm-5-3*"]
+      reasoningEfforts: [low, high, max]
+      source: docs.mistral.ai/capabilities/reasoning, 2026-10-11

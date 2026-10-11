@@ -162,23 +162,38 @@ public class MistralChatModelConfigurationSupportService
 			// api can express. NONE, on the other hand, it can, which makes this one of
 			// the few providers where NO_THINKING is honoured rather than approximated.
 			// AUTO sends nothing: it means leaving the provider default alone.
+			// Only a model whose card says it reasons (capabilities.reasoning of Mistral's
+			// models api) gets a reasoning_effort: the others do not take the parameter. And
+			// where the model's parameter rules list its efforts, NONE and HIGH are sent only
+			// when listed (zai-glm-5-3 takes low, high and max, no none).
 			if (config.getThinking() != null) {
-				switch (config.getThinking()) {
-				case NO_THINKING: {
-					builder = builder.reasoningEffort(MistralAiApi.ChatCompletionRequest.ReasoningEffort.NONE);
+				final Boolean reasons = config.getChoosedModel() != null
+						&& config.getChoosedModel().getMetaInfos() != null
+								? config.getChoosedModel().getMetaInfos().getSupportsReasoning()
+								: null;
+				MistralAiApi.ChatCompletionRequest.ReasoningEffort effort = null;
+				if (!Boolean.FALSE.equals(reasons)) {
+					switch (config.getThinking()) {
+					case NO_THINKING:
+						if (acceptsEffort("none"))
+							effort = MistralAiApi.ChatCompletionRequest.ReasoningEffort.NONE;
+						break;
+					case LOW_THINKING:
+					case MEDIUM_THINKING:
+					case HIGH_THINKING:
+						if (acceptsEffort("high"))
+							effort = MistralAiApi.ChatCompletionRequest.ReasoningEffort.HIGH;
+						break;
+					default:
+						break;
+					}
 				}
-					break;
-				case LOW_THINKING:
-				case MEDIUM_THINKING:
-				case HIGH_THINKING: {
-					builder = builder.reasoningEffort(MistralAiApi.ChatCompletionRequest.ReasoningEffort.HIGH);
-				}
-					break;
-				default:
-					break;
+				if (effort != null) {
+					builder = builder.reasoningEffort(effort);
 				}
 				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Chat model {} configured with thinking {}", config.getCode(), config.getThinking());
+					LOGGER.debug("Chat model {} configured with thinking {} as reasoning effort {} (model reasons: {})",
+							config.getCode(), config.getThinking(), effort, reasons);
 				}
 			}
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {

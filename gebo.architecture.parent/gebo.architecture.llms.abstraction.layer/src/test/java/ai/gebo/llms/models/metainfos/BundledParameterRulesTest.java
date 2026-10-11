@@ -73,7 +73,10 @@ class BundledParameterRulesTest {
 
 		assertFalse(library.findParameterRules("xai", "grok-4.7").acceptsEffort("none"),
 				"grok reasoning cannot be disabled");
-		assertNull(library.findParameterRules("xai", "grok-4.3"), "grok-4.3 is not on the xAI page");
+		assertTrue(library.findParameterRules("xai", "grok-4.3").acceptsEffort("none"), "grok-4.3 can stop reasoning");
+		assertFalse(library.findParameterRules("mistralai", "zai-glm-5-3").acceptsEffort("none"));
+		assertTrue(library.findParameterRules("mistralai", "mistral-small-latest").acceptsEffort("high"));
+		assertNull(library.findParameterRules("mistralai", "ministral-8b-latest"), "undocumented: no rule");
 		assertTrue(library.findParameterRules("nvidia", "nvidia/nemotron-3-super-120b-a12b").acceptsEffort("none"));
 		assertEquals("passage", library.findParameterRules("nvidia", "nvidia/nemotron-3-embed-1b").getDocumentInputType());
 		assertEquals("pcm",
