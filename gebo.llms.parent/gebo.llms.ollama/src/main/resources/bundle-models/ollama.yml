@@ -1,0 +1,13 @@
+# The ollama piece of the models library: what Gebo knows of this provider's models
+# (modelsInfo) and what they accept in a request (parameterRules), bound by
+# OllamaModelsLibrary under ai.gebo.models.providers.ollama.
+# No entry yet: each model's capabilities (tools, vision, thinking) and context length come from the server's /api/show.
+# An entry goes under the key below, for example:
+#
+# ai.gebo.models.providers.ollama:
+#   parameterRules:
+#     - providerId: ollama
+#       models: ["some-model-*"]
+#       sampling: REJECTED
+#       reasoningEfforts: [none, low, high]
+#       source: the provider page the rule was read on, and when

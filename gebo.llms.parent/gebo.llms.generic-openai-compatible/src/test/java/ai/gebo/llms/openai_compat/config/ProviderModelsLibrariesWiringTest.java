@@ -36,9 +36,14 @@ class ProviderModelsLibrariesWiringTest {
 		new ApplicationContextRunner()
 				.withUserConfiguration(Enabling.class, ModelsLibraryConfig.class, NvidiaModelsLibrary.class,
 						GroqModelsLibrary.class, XaiModelsLibrary.class, OpenRouterModelsLibrary.class,
-						GModelsLibraryDaoImpl.class)
+						RegoloModelsLibrary.class, GenericOpenAIModelsLibrary.class, VllmModelsLibrary.class,
+						SubconsciousModelsLibrary.class, AwanllmModelsLibrary.class, LlmaxModelsLibrary.class,
+						CheapestInferenceModelsLibrary.class, ProfundoaiModelsLibrary.class, GModelsLibraryDaoImpl.class)
 				.run(context -> {
 					assertThat(context).hasNotFailed();
+					// a provider with no entry yet: its yml is comments only, its library empty
+					assertThat(context.getBean(RegoloModelsLibrary.class).getParameterRules()).isEmpty();
+					assertThat(context.getBean(VllmModelsLibrary.class).getModelsInfo()).isEmpty();
 					IGModelsLibraryDao library = context.getBean(IGModelsLibraryDao.class);
 					assertThat(context.getBean(GroqModelsLibrary.class).getParameterRules()).hasSize(2);
 					assertThat(context.getBean(NvidiaModelsLibrary.class).getModelsInfo()).hasSize(10);
