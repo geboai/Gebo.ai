@@ -148,17 +148,29 @@ public class OllamaChatModelConfigurationSupportService
 			if (config.getTemperature() != null) {
 				builder = builder.temperature(config.getTemperature());
 			}
+			// AUTO sends no think at all: it means the model's default ("null: use the model
+			// default" in Ollama's thinking docs), as it does for every other provider - it
+			// used to ask every model to think.
 			if (config.getThinking() != null) {
 				switch (config.getThinking()) {
 				case NO_THINKING: {
 					builder.disableThinking();
 				}
 					break;
+				case AUTO:
+					break;
 				default: {
 					builder.enableThinking();
 				}
 				}
-
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model {} configured with thinking {}", config.getCode(), config.getThinking());
+				}
+			}
+			// The output limit set on the model, sent as num_predict: Ollama ignored it. Only
+			// a limit the configuration gives - no default of ours.
+			if (config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
+				builder = builder.numPredict(config.getMaxGeneratedTokens());
 			}
 			// Configure topP if specified
 			if (config.getTopP() != null && config.getTopP() > 0) {
