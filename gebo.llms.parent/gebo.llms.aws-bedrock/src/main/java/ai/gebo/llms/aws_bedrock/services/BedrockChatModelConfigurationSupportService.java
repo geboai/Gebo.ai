@@ -132,18 +132,42 @@ public class BedrockChatModelConfigurationSupportService
 			// The builder defaults asyncReadTimeout and socketTimeout to 30s and
 			// connectionTimeout to 5s, which cut long streamed generations well before
 			// the configured response timeout.
-			return BedrockProxyChatModel.builder()
+			java.time.Duration requestTimeout = BedrockClientCustomizer
+					.requestTimeout(serviceClientsProviderFactory.get(type.getCode()));
+			java.time.Duration connectTimeout = BedrockClientCustomizer
+					.connectTimeout(serviceClientsProviderFactory.get(type.getCode()));
+			BedrockProxyChatModel.Builder modelBuilder = BedrockProxyChatModel.builder()
 					.credentialsProvider(credentials)
 					.region(region)
-					.timeout(BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())))
-					.asyncReadTimeout(BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())))
-					.socketTimeout(BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())))
-					.connectionTimeout(BedrockClientCustomizer.connectTimeout(serviceClientsProviderFactory.get(type.getCode())))
-					.connectionAcquisitionTimeout(BedrockClientCustomizer.connectTimeout(serviceClientsProviderFactory.get(type.getCode())))
+					.timeout(requestTimeout)
+					.asyncReadTimeout(requestTimeout)
+					.socketTimeout(requestTimeout)
+					.connectionTimeout(connectTimeout)
+					.connectionAcquisitionTimeout(connectTimeout)
 					.options(options)
 					.toolCallingManager(toolCallingManager)
-					.observationRegistry(observationRegistry)
-					.build();
+					.observationRegistry(observationRegistry);
+			// The thinking the configuration asks for, on the models whose efforts the
+			// parameter rules know (Claude): Spring AI's options cannot carry it, the
+			// model's own clients add it to each request (BedrockClaudeThinking)
+			String effort = parameterRules != null && parameterRules.knowsEfforts()
+					? reasoningEffortFor(config.getThinking())
+					: null;
+			if (effort != null) {
+				software.amazon.awssdk.core.document.Document thinking = BedrockClaudeThinking.fields(effort);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model {} thinking {} sent as {}", config.getCode(), config.getThinking(), thinking);
+				}
+				modelBuilder
+						.bedrockRuntimeClient(BedrockClaudeThinking.syncClient(credentials, region, requestTimeout,
+								connectTimeout, thinking))
+						.bedrockRuntimeAsyncClient(BedrockClaudeThinking.asyncClient(credentials, region,
+								requestTimeout, connectTimeout, thinking));
+			} else if (config.getThinking() != null && LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat model {} thinking {}: nothing sent, the model's rules list no matching effort",
+						config.getCode(), config.getThinking());
+			}
+			return modelBuilder.build();
 		}
 
 		@Override

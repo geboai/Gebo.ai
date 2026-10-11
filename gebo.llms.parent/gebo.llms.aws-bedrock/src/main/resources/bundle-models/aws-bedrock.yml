@@ -9,12 +9,42 @@ ai.gebo.models.providers.aws-bedrock:
     # Claude on Bedrock - Anthropic's thinking page (platform.claude.com/docs/en/build-
     # with-claude/thinking, 2026-10-11): on these models "non-default temperature, top_p,
     # or top_k values return a 400 error on every request, regardless of whether thinking
-    # is used". The Bedrock chat handler sends the temperature, so without this rule every
-    # call failed. The leading "*" also covers the cross-region profile ids (us., eu.,
-    # au., jp., global.) the profile-only models are invoked by.
+    # is used". The Bedrock chat handler sends the temperature, so without these rules
+    # every call failed. The leading "*" also covers the cross-region profile ids (us.,
+    # eu., au., jp., global.) the profile-only models are invoked by.
+    # The efforts (output_config.effort, sent with thinking adaptive) and "none"
+    # (thinking disabled) from Bedrock's adaptive thinking page
+    # (docs.aws.amazon.com/bedrock/latest/userguide/claude-messages-adaptive-thinking.html)
+    # and the model cards, 2026-10-11: Fable/Mythos 5.x take adaptive thinking only,
+    # Opus 5.5 and Sonnet 5.5 cannot turn it off, Haiku 5.5, Opus 5 and Sonnet 5 can;
+    # xhigh is Opus 5 / Haiku 5.5 (and the 5.5 lineup) only, max not on Sonnet 5; Mythos
+    # Preview takes max but no xhigh. Specific models first.
     - providerId: aws-bedrock
-      models: ["*anthropic.claude-fable-5*", "*anthropic.claude-mythos-5*", "*anthropic.claude-mythos-preview*",
-        "*anthropic.claude-opus-5*", "*anthropic.claude-opus-4-8*", "*anthropic.claude-opus-4-7*",
-        "*anthropic.claude-sonnet-5*", "*anthropic.claude-haiku-5-5*"]
+      models: ["*anthropic.claude-mythos-preview*"]
+      sampling: REJECTED
+      reasoningEfforts: [low, medium, high, max]
+      source: platform.claude.com/docs/en/build-with-claude/thinking and /effort, 2026-10-11
+    - providerId: aws-bedrock
+      models: ["*anthropic.claude-fable-5*", "*anthropic.claude-mythos-5*"]
+      sampling: REJECTED
+      reasoningEfforts: [low, medium, high, xhigh, max]
+      source: docs.aws.amazon.com/bedrock/latest/userguide/claude-messages-adaptive-thinking.html, 2026-10-11
+    - providerId: aws-bedrock
+      models: ["*anthropic.claude-opus-5-5*", "*anthropic.claude-sonnet-5-5*"]
+      sampling: REJECTED
+      reasoningEfforts: [low, medium, high, xhigh, max]
+      source: the Bedrock model cards of Claude Opus 5.5 and Sonnet 5.5, 2026-10-11
+    - providerId: aws-bedrock
+      models: ["*anthropic.claude-haiku-5-5*", "*anthropic.claude-opus-5*"]
+      sampling: REJECTED
+      reasoningEfforts: [none, low, medium, high, xhigh, max]
+      source: docs.aws.amazon.com/bedrock/latest/userguide/claude-messages-adaptive-thinking.html, 2026-10-11
+    - providerId: aws-bedrock
+      models: ["*anthropic.claude-sonnet-5*"]
+      sampling: REJECTED
+      reasoningEfforts: [none, low, medium, high]
+      source: docs.aws.amazon.com/bedrock/latest/userguide/claude-messages-adaptive-thinking.html, 2026-10-11
+    - providerId: aws-bedrock
+      models: ["*anthropic.claude-opus-4-8*", "*anthropic.claude-opus-4-7*"]
       sampling: REJECTED
       source: platform.claude.com/docs/en/build-with-claude/thinking, 2026-10-11
