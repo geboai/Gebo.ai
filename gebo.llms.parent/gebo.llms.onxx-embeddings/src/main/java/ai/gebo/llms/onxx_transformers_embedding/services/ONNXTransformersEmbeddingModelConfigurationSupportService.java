@@ -10,10 +10,9 @@
 package ai.gebo.llms.onxx_transformers_embedding.services;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.MetadataMode;
 import org.springframework.ai.transformers.TransformersEmbeddingModel;
 import org.springframework.stereotype.Service;
@@ -77,6 +76,7 @@ public class ONNXTransformersEmbeddingModelConfigurationSupportService implement
 	 */
 	class OllamaConfigurableEmbeddingModel extends
 			GAbstractConfigurableEmbeddingModel<GONNXTransformersEmbeddingModelConfig, TransformersEmbeddingModel> {
+		private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 		/**
 		 * Constructor that initializes the model with a vector store factory provider
@@ -104,63 +104,41 @@ public class ONNXTransformersEmbeddingModelConfigurationSupportService implement
 		}
 
 		/**
-		 * Determines the tokenization threshold based on the model configuration
-		 * 
+		 * Determines the tokenization threshold: the optimal tokenization parameter of
+		 * the chosen model when set, else its context length; the model this provider
+		 * runs is the bundled one, so a choice telling neither (saved before the models
+		 * library knew it) gets the bundled model's input limit. The
+		 * "embedding_length" it used to look for is no input size, and no ONNX choice
+		 * carries it.
+		 *
 		 * @return The tokenization threshold value
 		 */
 		@Override
 		public int getTokenizationThreshold() {
-			int defaultValue = 512;
-			if (config.getChoosedModel() != null) {
-				if (config.getChoosedModel().getOptimalTokenizationParam() != null) {
-					defaultValue = config.getChoosedModel().getOptimalTokenizationParam();
-				} else {
-					Integer value = findParamEndingWith(config.getChoosedModel(), "embedding_length");
-					if (value != null) {
-						defaultValue = value;
-					}
-				}
+			int threshold = tokenizationThreshold(config.getChoosedModel());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Embedding model {} tokenization threshold {}", config.getCode(), threshold);
 			}
-			return defaultValue;
-		}
-
-		/**
-		 * Finds a parameter in the model details where the key ends with the specified
-		 * name
-		 * 
-		 * @param choosedModel  The chosen model configuration
-		 * @param endingKeyName The ending of the key to look for
-		 * @return The parameter value as an Integer, or null if not found
-		 */
-		private Integer findParamEndingWith(GONNXTransformersEmbeddingModelChoice choosedModel, String endingKeyName) {
-			Map<String, Object> details = choosedModel.getModelDetails();
-			return findParamEndingWith(details, endingKeyName);
-		}
-
-		/**
-		 * Recursively searches a map for a key ending with the specified string
-		 * 
-		 * @param details       The map to search
-		 * @param endingKeyName The ending of the key to look for
-		 * @return The parameter value as an Integer, or null if not found
-		 */
-		private Integer findParamEndingWith(Map<String, Object> details, String endingKeyName) {
-			Set<Entry<String, Object>> set = details.entrySet();
-			for (Entry<String, Object> entry : set) {
-				String key = entry.getKey();
-				if (key.toLowerCase().endsWith(endingKeyName.toLowerCase())) {
-					Object value = entry.getValue();
-					if (value instanceof Number) {
-						return new Integer(((Number) value).intValue());
-					}
-				}
-				if (entry.getValue() instanceof Map) {
-					return findParamEndingWith(((Map) entry.getValue()), endingKeyName);
-				}
-			}
-			return null;
+			return threshold;
 		}
 	};
+
+	/**
+	 * The input limit of the bundled all-MiniLM-L6-v2: its model card says "input text
+	 * longer than 256 word pieces is truncated".
+	 */
+	static final int BUNDLED_MODEL_INPUT_LIMIT = 256;
+
+	/** The tokenization threshold a choice tells, the bundled model's input limit otherwise. */
+	static int tokenizationThreshold(GONNXTransformersEmbeddingModelChoice choice) {
+		if (choice != null) {
+			if (choice.getOptimalTokenizationParam() != null)
+				return choice.getOptimalTokenizationParam();
+			if (choice.getContextLength() != null)
+				return choice.getContextLength();
+		}
+		return BUNDLED_MODEL_INPUT_LIMIT;
+	}
 
 	/**
 	 * Gets the model type for ONNX Transformers embedding

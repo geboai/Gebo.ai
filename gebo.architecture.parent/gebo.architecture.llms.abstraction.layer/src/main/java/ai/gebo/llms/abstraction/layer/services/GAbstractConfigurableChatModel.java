@@ -233,9 +233,17 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		// routing, query rewriting) do not vary run to run - where the model takes a
 		// temperature at all: the reasoning models refusing the sampling parameters fail
 		// every request carrying one. An explicit temperature in the configuration is kept,
-		// and sent where the model's parameter rules allow it.
+		// and sent where the model's parameter rules allow it. A model whose provider
+		// recommends its default temperature (Gemini 3) is left at it.
 		if (config != null && config.getTemperature() == null && samplingAllowed(config)) {
-			config.setTemperature(0.0d);
+			if (parameterRules != null && parameterRules.keepsProviderDefaultSampling()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model code=" + config.getCode()
+							+ " has no temperature set and its parameter rules keep the provider default: none is sent");
+				}
+			} else {
+				config.setTemperature(0.0d);
+			}
 		}
 		this.config = config;
 		final ModelConfig requestConfig = requestConfig(config);
@@ -254,21 +262,48 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 * null when the library is absent, the model unknown or no rule covers it.
 	 */
 	protected ModelParameterRules parameterRulesOf(ModelConfig config, GChatModelType type) {
-		if (modelsLibrary == null || config == null || config.getChoosedModel() == null || type == null)
+		if (config == null || config.getChoosedModel() == null || type == null)
 			return null;
 		final String modelId = config.getChoosedModel().getCode();
+		ModelParameterRules live = null;
 		try {
-			final ModelParameterRules rules = modelsLibrary.findParameterRules(type.getProviderId(), modelId);
+			live = liveParameterRules(config, type);
+		} catch (RuntimeException e) {
+			LOGGER.error("Cannot read what the models api told of chat model code=" + config.getCode()
+					+ ", the models library rules apply alone", e);
+		}
+		if (modelsLibrary == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat model code=" + config.getCode() + " model=" + modelId
+						+ " no models library, live parameter rules: " + live);
+			}
+			return live;
+		}
+		try {
+			final ModelParameterRules library = modelsLibrary.findParameterRules(type.getProviderId(), modelId);
+			final ModelParameterRules rules = ModelParameterRules.merge(live, library);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Chat model code=" + config.getCode() + " model=" + modelId + " provider="
-						+ type.getProviderId() + " parameter rules: " + rules);
+						+ type.getProviderId() + " parameter rules: " + rules + " (live: " + live + ", library: "
+						+ library + ")");
 			}
 			return rules;
 		} catch (RuntimeException e) {
 			LOGGER.error("Cannot read the parameter rules of chat model code=" + config.getCode()
-					+ ", its requests are made without them", e);
-			return null;
+					+ ", its requests are made without the library ones", e);
+			return live;
 		}
+	}
+
+	/**
+	 * The parameter rules the provider's models api told for the chosen model, kept on
+	 * the choice when the model was listed (e.g. the efforts and parameters OpenRouter
+	 * publishes per model); null when the provider tells none, the default. They win
+	 * over the models library where they say something, see
+	 * {@link ModelParameterRules#merge(ModelParameterRules, ModelParameterRules)}.
+	 */
+	protected ModelParameterRules liveParameterRules(ModelConfig config, GChatModelType type) {
+		return null;
 	}
 
 	/**

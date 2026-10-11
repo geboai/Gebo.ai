@@ -41,5 +41,9 @@ class GoogleVertexModelsLibrarySegmentTest {
 		assertEquals("2026-11-19",
 				library.findByProviderIdAndModelId("google-vertex", "gemini-3.6-flash").getRetirementDate());
 		assertNull(library.findByProviderIdAndModelId("google-vertex", "gemini-3.8-flash"), "no retirement announced");
+		assertEquals(ai.gebo.llms.models.metainfos.ModelParameterRules.Sampling.PROVIDER_DEFAULT,
+				library.findParameterRules("google-vertex", "gemini-3.8-flash").getSampling(),
+				"Gemini 3 keeps Google's temperature 1.0");
+		assertNull(library.findParameterRules("google-vertex", "gemini-2.5-flash"));
 	}
 }

@@ -150,6 +150,17 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		public static final String CHATMODEL_VLLM = "chatmodel-vllm";
 
 		/**
+		 * The efforts and sampling the models list told of the chosen model, where the
+		 * provider publishes them per model (OpenRouter); null otherwise.
+		 */
+		@Override
+		protected ai.gebo.llms.models.metainfos.ModelParameterRules liveParameterRules(
+				GenericOpenAIAPIChatModelConfig config, GChatModelType type) {
+			return OpenRouterLiveParameterRules.of(config.getChoosedModel().getNativeModelMetaInfos(),
+					type.getProviderId());
+		}
+
+		/**
 		 * Configures the OpenAI-compatible chat model with the provided configuration
 		 * 
 		 * @param config The configuration to apply to the model

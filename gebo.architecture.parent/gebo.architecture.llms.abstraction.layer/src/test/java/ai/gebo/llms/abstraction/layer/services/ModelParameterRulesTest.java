@@ -214,6 +214,67 @@ class ModelParameterRulesTest {
 	}
 
 	@Test
+	void aModelKeepingTheProviderDefaultGetsNoDeterministicTemperature() throws Exception {
+		GModelsLibraryDaoImpl library = library(List.of(),
+				List.of(rule("google-vertex", List.of("gemini-3*"), Sampling.PROVIDER_DEFAULT, List.of())));
+
+		RecordingModel unset = new RecordingModel(library);
+		unset.initialize(config("gemini-3.8-flash", null, null), type("google-vertex"));
+		assertNull(unset.getConfig().getTemperature(), "left at the provider default");
+		assertNull(unset.lastRequestConfig().getTemperature());
+
+		RecordingModel set = new RecordingModel(library);
+		set.initialize(config("gemini-3.8-flash", 0.4d, null), type("google-vertex"));
+		assertEquals(0.4d, set.lastRequestConfig().getTemperature(), "a temperature set is sent");
+
+		RecordingModel older = new RecordingModel(library);
+		older.initialize(config("gemini-2.5-flash", null, null), type("google-vertex"));
+		assertEquals(0.0d, older.lastRequestConfig().getTemperature(), "no rule: as before");
+	}
+
+	/** A model whose models api told its rules, as OpenRouter does per model. */
+	static class LiveRulesModel extends RecordingModel {
+		final ModelParameterRules live;
+
+		LiveRulesModel(GModelsLibraryDaoImpl library, ModelParameterRules live) {
+			super(library);
+			this.live = live;
+		}
+
+		@Override
+		protected ModelParameterRules liveParameterRules(GBaseChatModelConfig config, GChatModelType type) {
+			return live;
+		}
+	}
+
+	@Test
+	void whatTheModelsApiToldWinsOverTheLibrary() throws Exception {
+		GModelsLibraryDaoImpl library = library(List.of(), List.of(rule("openrouter.ai", List.of("google/gemini-3*"),
+				Sampling.PROVIDER_DEFAULT, List.of("none", "low", "high"))));
+		ModelParameterRules mandatory = rule("openrouter.ai", List.of("google/gemini-3.8-flash"), null,
+				List.of("high", "medium", "low"));
+
+		LiveRulesModel model = new LiveRulesModel(library, mandatory);
+		model.initialize(config("google/gemini-3.8-flash", null, ChatModelThinkingOption.NO_THINKING),
+				type("openrouter.ai"));
+		assertNull(model.reasoningEffortFor(ChatModelThinkingOption.NO_THINKING), "the live efforts lack none");
+		assertEquals("medium", model.reasoningEffortFor(ChatModelThinkingOption.MEDIUM_THINKING));
+		assertNull(model.lastRequestConfig().getTemperature(), "the library's provider default still applies");
+
+		ModelParameterRules batch = rule("openrouter.ai", List.of("google/gemini-3.8-flash:batch"), Sampling.REJECTED,
+				List.of());
+		LiveRulesModel refusing = new LiveRulesModel(library, batch);
+		refusing.initialize(config("google/gemini-3.8-flash:batch", 0.5d, null), type("openrouter.ai"));
+		assertNull(refusing.lastRequestConfig().getTemperature(), "the api says it takes no temperature");
+		assertEquals("low", refusing.reasoningEffortFor(ChatModelThinkingOption.LOW_THINKING),
+				"no live efforts: the library's");
+
+		LiveRulesModel noLibrary = new LiveRulesModel(null, batch);
+		noLibrary.initialize(config("google/gemini-3.8-flash:batch", 0.5d, null), type("openrouter.ai"));
+		assertNull(noLibrary.lastRequestConfig().getTemperature());
+	}
+
+	@Test
 	void anAgentsTemperatureNeverReachesAModelRefusingIt() throws Exception {
 		RecordingModel model = new RecordingModel(openAiLibrary());
 		model.initialize(config("gpt-6.1-sol", null, null), type("openai"));

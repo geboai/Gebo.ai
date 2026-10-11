@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.MetadataMode;
 import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.ollama.api.OllamaApi;
@@ -79,6 +81,7 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 	 */
 	class OllamaConfigurableEmbeddingModel
 			extends GAbstractConfigurableEmbeddingModel<GOllamaEmbeddingModelConfig, OllamaEmbeddingModel> {
+		private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 		/**
 		 * Constructor for the Ollama configurable embedding model.
@@ -124,66 +127,67 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 		}
 
 		/**
-		 * Returns the tokenization threshold for the configured model. Uses the optimal
-		 * tokenization parameter from the model if available, otherwise tries to find a
-		 * parameter ending with "embedding_length". Falls back to a default value of
-		 * 512 if no specific value is found.
+		 * Returns the tokenization threshold for the configured model: the optimal
+		 * tokenization parameter when set, otherwise the input window the model
+		 * reports (/api/show model_info {@code <arch>.context_length}). The
+		 * {@code <arch>.embedding_length} it used to read is the size of the vectors,
+		 * not of the input. Falls back to 512 when nothing is known.
 		 *
 		 * @return The tokenization threshold value
 		 */
 		@Override
 		public int getTokenizationThreshold() {
-			int defaultValue = 512;
-			if (config.getChoosedModel() != null) {
-				if (config.getChoosedModel().getOptimalTokenizationParam() != null) {
-					defaultValue = config.getChoosedModel().getOptimalTokenizationParam();
-				} else {
-					Integer value = findParamEndingWith(config.getChoosedModel(), "embedding_length");
-					if (value != null) {
-						defaultValue = value;
-					}
-				}
+			Integer value = tokenizationThreshold(config.getChoosedModel());
+			int threshold = value != null ? value : 512;
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Embedding model {} tokenization threshold {}{}", config.getCode(), threshold,
+						value == null ? " (default, the model reports no input window)" : "");
 			}
-			return defaultValue;
-		}
-
-		/**
-		 * Helper method to find a parameter ending with the specified name in the model
-		 * details.
-		 *
-		 * @param choosedModel  The model choice containing details to search
-		 * @param endingKeyName The suffix to match in parameter names
-		 * @return The parameter value as Integer, or null if not found
-		 */
-		private Integer findParamEndingWith(GOllamaEmbeddingModelChoice choosedModel, String endingKeyName) {
-			Map<String, Object> details = choosedModel.getModelDetails();
-			return findParamEndingWith(details, endingKeyName);
-		}
-
-		/**
-		 * Recursively searches a map for a key ending with the specified name.
-		 *
-		 * @param details       The map to search
-		 * @param endingKeyName The suffix to match in key names
-		 * @return The parameter value as Integer, or null if not found
-		 */
-		private Integer findParamEndingWith(Map<String, Object> details, String endingKeyName) {
-			Set<Entry<String, Object>> set = details.entrySet();
-			for (Entry<String, Object> entry : set) {
-				String key = entry.getKey();
-				if (key.toLowerCase().endsWith(endingKeyName.toLowerCase())) {
-					Object value = entry.getValue();
-					if (value instanceof Number) {
-						return new Integer(((Number) value).intValue());
-					}
-				}
-				if (entry.getValue() instanceof Map) {
-					return findParamEndingWith(((Map) entry.getValue()), endingKeyName);
-				}
-			}
-			return null;
+			return threshold;
 		}
 	};
+
+	/**
+	 * The tokenization threshold a model choice tells: its optimal tokenization
+	 * parameter, else its context length, else the context length in its /api/show
+	 * details (persisted choices without meta infos); null when none is known.
+	 */
+	static Integer tokenizationThreshold(GOllamaEmbeddingModelChoice choice) {
+		if (choice == null)
+			return null;
+		if (choice.getOptimalTokenizationParam() != null)
+			return choice.getOptimalTokenizationParam();
+		if (choice.getContextLength() != null)
+			return choice.getContextLength();
+		if (choice.getMetaInfos() != null && choice.getMetaInfos().getContextLength() != null)
+			return choice.getMetaInfos().getContextLength();
+		return findParamEndingWith(choice.getModelDetails(), "context_length");
+	}
+
+	/**
+	 * Searches a map, and the maps it holds, for a numeric value whose key ends with
+	 * the given name; the stored /api/show keys have their dots turned into dashes.
+	 */
+	static Integer findParamEndingWith(Map<String, Object> details, String endingKeyName) {
+		if (details == null)
+			return null;
+		Set<Entry<String, Object>> set = details.entrySet();
+		for (Entry<String, Object> entry : set) {
+			String key = entry.getKey();
+			if (key != null && key.toLowerCase().endsWith(endingKeyName.toLowerCase())
+					&& entry.getValue() instanceof Number number) {
+				return number.intValue();
+			}
+		}
+		for (Entry<String, Object> entry : set) {
+			if (entry.getValue() instanceof Map nested) {
+				Integer value = findParamEndingWith(nested, endingKeyName);
+				if (value != null)
+					return value;
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Returns the embedding model type for Ollama.

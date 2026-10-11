@@ -13,3 +13,12 @@ ai.gebo.models.providers.openrouter:
       models: ["google/gemini-*tts*"]
       speechFormat: pcm
       source: live 400 from openrouter.ai, recorded in the setup library presets
+    # Gemini 3 through OpenRouter: Google strongly recommends keeping its default
+    # temperature 1.0, lower ones may loop or degrade reasoning
+    # (docs.cloud.google.com/vertex-ai/generative-ai/docs/start/get-started-with-gemini-3,
+    # 2026-10-11); a model with no temperature set is left at it. The efforts come live
+    # from the models endpoint (reasoning.supported_efforts), not from here.
+    - providerId: openrouter.ai
+      models: ["google/gemini-3*"]
+      sampling: PROVIDER_DEFAULT
+      source: docs.cloud.google.com/vertex-ai/generative-ai/docs/start/get-started-with-gemini-3, 2026-10-11

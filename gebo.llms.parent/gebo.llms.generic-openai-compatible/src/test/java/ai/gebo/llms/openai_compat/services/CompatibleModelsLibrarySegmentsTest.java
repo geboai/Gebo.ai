@@ -55,5 +55,8 @@ class CompatibleModelsLibrarySegmentsTest {
 		assertNotNull(library.findByProviderIdAndModelId("nvidia", "bigcode/starcoder2-15b"), "nvidia's models info");
 		assertEquals("pcm",
 				library.findParameterRules("openrouter.ai", "google/gemini-3.1-flash-tts-preview").getSpeechFormat());
+		assertEquals(ai.gebo.llms.models.metainfos.ModelParameterRules.Sampling.PROVIDER_DEFAULT,
+				library.findParameterRules("openrouter.ai", "google/gemini-3.8-flash").getSampling());
+		assertNull(library.findParameterRules("openrouter.ai", "google/gemini-2.5-flash"));
 	}
 }

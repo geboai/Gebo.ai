@@ -6,6 +6,16 @@
 # docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions (2026-10-11).
 # Only the chat models with an announced date are listed; "or later" dates are not.
 ai.gebo.models.providers.google-vertex:
+  parameterRules:
+    # docs.cloud.google.com/vertex-ai/generative-ai/docs/start/get-started-with-gemini-3
+    # (2026-10-11): "For Gemini 3, it is strongly recommended to keep the temperature
+    # parameter at its default value of 1.0"; lower values "may lead to unexpected
+    # behavior" (looping, degraded reasoning). A model with no temperature set is left at
+    # it instead of Gebo's 0; a temperature set on the model is still sent.
+    - providerId: google-vertex
+      models: ["gemini-3*"]
+      sampling: PROVIDER_DEFAULT
+      source: docs.cloud.google.com/vertex-ai/generative-ai/docs/start/get-started-with-gemini-3, 2026-10-11
   modelsInfo:
     - providerId: google-vertex
       modelId: gemini-2.5-pro

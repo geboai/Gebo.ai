@@ -45,7 +45,13 @@ public class ModelParameterRules {
 		 * Taken only with the reasoning turned off, its effort {@code none}; refused
 		 * otherwise.
 		 */
-		WITHOUT_REASONING
+		WITHOUT_REASONING,
+		/**
+		 * Taken, but the provider recommends its own default (Gemini 3: lower
+		 * temperatures may loop or degrade reasoning): a configuration setting none
+		 * sends none, instead of Gebo's deterministic 0; one setting it is sent.
+		 */
+		PROVIDER_DEFAULT
 	}
 
 	/** The effort value that turns the reasoning off. */
@@ -134,6 +140,7 @@ public class ModelParameterRules {
 			return true;
 		switch (sampling) {
 		case ACCEPTED:
+		case PROVIDER_DEFAULT:
 			return true;
 		case WITHOUT_REASONING:
 			return reasoningOff;
@@ -141,6 +148,41 @@ public class ModelParameterRules {
 		default:
 			return false;
 		}
+	}
+
+	/**
+	 * Whether a configuration without a temperature is to be left at the provider's
+	 * default rather than given Gebo's deterministic 0.
+	 */
+	public boolean keepsProviderDefaultSampling() {
+		return sampling == Sampling.PROVIDER_DEFAULT;
+	}
+
+	/**
+	 * The rules of a model from what its provider's models api told (live) and from the
+	 * models library: the live efforts win when known, a live REJECTED sampling wins (the
+	 * api says the model takes no temperature), any other sampling is the library's when
+	 * it has one; the embedding and speech fields are the library's. Either may be null.
+	 */
+	public static ModelParameterRules merge(ModelParameterRules live, ModelParameterRules library) {
+		if (live == null)
+			return library;
+		if (library == null)
+			return live;
+		final ModelParameterRules merged = new ModelParameterRules();
+		merged.providerId = library.providerId != null ? library.providerId : live.providerId;
+		merged.models = new ArrayList<>(library.models != null ? library.models : live.models);
+		if (live.sampling == Sampling.REJECTED || library.sampling == null)
+			merged.sampling = live.sampling;
+		else
+			merged.sampling = library.sampling;
+		merged.reasoningEfforts = new ArrayList<>(live.knowsEfforts() ? live.reasoningEfforts
+				: library.reasoningEfforts != null ? library.reasoningEfforts : List.of());
+		merged.queryInputType = library.queryInputType;
+		merged.documentInputType = library.documentInputType;
+		merged.speechFormat = library.speechFormat;
+		merged.source = live.source + "; " + library.source;
+		return merged;
 	}
 
 	/** Whether an embedding model takes an input_type for queries and for documents. */
