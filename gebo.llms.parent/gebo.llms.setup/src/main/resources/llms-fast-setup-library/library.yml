@@ -590,9 +590,9 @@ ai.gebo.llms.vendors.setup.config:
             # while the generic text to speech handler asks every provider for mp3:
             # tested against a live key it answers
             #   400 Gemini TTS only supports response_format="pcm". Got "mp3".
-            # and the call fails. It stays listed for the day the handler negotiates the
-            # format per model, and the default is the widest-reaching voice that does
-            # answer in mp3, verified end to end on this installation.
+            # and the call fails. The handler now asks it for pcm (the models library's
+            # parameter rules) and wraps the samples in a WAV header; the default stays the
+            # widest-reaching voice verified end to end in mp3 on this installation.
             - code: minimax/speech-2.8-hd
               description: MiniMax Speech 2.8 HD (multilanguage)
               defaultChoice: true
@@ -601,7 +601,7 @@ ai.gebo.llms.vendors.setup.config:
             - code: microsoft/mai-voice-2
               description: Microsoft MAI Voice 2 (15 languages)
             - code: google/gemini-3.1-flash-tts-preview
-              description: Google Gemini 3.1 Flash TTS (70+ languages, needs pcm support)
+              description: Google Gemini 3.1 Flash TTS (70+ languages)
             - code: deepgram/aura-2
               description: Deepgram Aura 2
             - code: hexgrad/kokoro-82m

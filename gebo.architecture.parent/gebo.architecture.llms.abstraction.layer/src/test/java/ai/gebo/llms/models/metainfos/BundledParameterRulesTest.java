@@ -75,5 +75,8 @@ class BundledParameterRulesTest {
 				"grok reasoning cannot be disabled");
 		assertNull(library.findParameterRules("xai", "grok-4.3"), "grok-4.3 is not on the xAI page");
 		assertTrue(library.findParameterRules("nvidia", "nvidia/nemotron-3-super-120b-a12b").acceptsEffort("none"));
+		assertEquals("passage", library.findParameterRules("nvidia", "nvidia/nemotron-3-embed-1b").getDocumentInputType());
+		assertEquals("pcm",
+				library.findParameterRules("openrouter.ai", "google/gemini-3.1-flash-tts-preview").getSpeechFormat());
 	}
 }

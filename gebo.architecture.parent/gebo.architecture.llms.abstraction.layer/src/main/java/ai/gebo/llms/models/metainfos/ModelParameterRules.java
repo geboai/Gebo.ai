@@ -66,6 +66,11 @@ public class ModelParameterRules {
 	 * (e.g. "passage"); null when it takes none.
 	 */
 	private String documentInputType = null;
+	/**
+	 * The only audio format a speech model answers in (e.g. "pcm"); null when it takes the
+	 * mp3 asked by default.
+	 */
+	private String speechFormat = null;
 	/** Where the rule comes from: the provider page it was read on, and when. */
 	private String source = null;
 
@@ -186,6 +191,14 @@ public class ModelParameterRules {
 		this.documentInputType = documentInputType;
 	}
 
+	public String getSpeechFormat() {
+		return speechFormat;
+	}
+
+	public void setSpeechFormat(String speechFormat) {
+		this.speechFormat = speechFormat;
+	}
+
 	public String getSource() {
 		return source;
 	}
@@ -198,6 +211,6 @@ public class ModelParameterRules {
 	public String toString() {
 		return "ModelParameterRules[providerId=" + providerId + ", models=" + models + ", sampling=" + sampling
 				+ ", reasoningEfforts=" + reasoningEfforts + ", queryInputType=" + queryInputType
-				+ ", documentInputType=" + documentInputType + "]";
+				+ ", documentInputType=" + documentInputType + ", speechFormat=" + speechFormat + "]";
 	}
 }

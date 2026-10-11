@@ -258,3 +258,10 @@ ai.gebo.models.bundle.library:
       queryInputType: query
       documentInputType: passage
       source: docs.api.nvidia.com/nim/reference nemotron-3-embed-1b and llama-3_2-nv-embedqa-1b-v1, 2026-10-11
+    # OpenRouter speech - Gemini TTS answers pcm only: asked for mp3 it answered
+    # "400 Gemini TTS only supports response_format="pcm". Got "mp3"." (tested against a
+    # live key, see the openrouter.ai TTS presets). Its pcm is wrapped in a WAV header.
+    - providerId: openrouter.ai
+      models: ["google/gemini-*tts*"]
+      speechFormat: pcm
+      source: live 400 from openrouter.ai, recorded in the setup library presets

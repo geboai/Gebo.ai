@@ -153,7 +153,7 @@ public class GenericOpenAIProvidersAssembler {
 			for (GenericOpenAITextToSpeechModelType pc : config.getTextToSpeechModelProviders()) {
 				GenericOpenAIAPITextToSpeechModelConfigurationSupportService service = new GenericOpenAIAPITextToSpeechModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, modelsListProxyService, serviceClientsProviderFactory,
-						configureHandler);
+						configureHandler, modelsLibrary);
 				textToSpeechProvidersRepo.addImplementation(service);
 			}
 		}
