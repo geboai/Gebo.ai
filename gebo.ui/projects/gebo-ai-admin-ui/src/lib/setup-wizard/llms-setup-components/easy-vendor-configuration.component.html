@@ -26,7 +26,7 @@
       </gebo-ai-field>
     </div>
     <div class="col-12">
-      <gebo-ai-api-key-component formControlName="secretId" [contextCode]="secretContext"
+      <gebo-ai-api-key-component formControlName="secretId" [contextCode]="secretContext" [secretType]="vendorSetupMetaInfos?.parentModel?.secretType"
         [apiKeyDescription]="secretDescription" [backendValidation]="validateCredentials"
       [backendValidationOnChange]="true"></gebo-ai-api-key-component>
     </div>

@@ -68,4 +68,25 @@ class PresetChoiceDefaultsTest {
 				.filter(p -> p.getChoices() != null).flatMap(p -> p.getChoices().stream())
 				.allMatch(c -> c.getTemperature() == null), "no preset writes a temperature");
 	}
+
+	@Test
+	void theCloudVendorsDeclareTheCredentialsTheyTake() throws Exception {
+		StandardEnvironment environment = new StandardEnvironment();
+		environment.getPropertySources().addFirst(new GeboYamlPropertySourceFactory().createPropertySource(null,
+				new EncodedResource(new ClassPathResource("llms-fast-setup-library/library.yml"))));
+		LLMSVendorsSetupConfig library = Binder.get(environment)
+				.bind("ai.gebo.llms.vendors.setup.config", LLMSVendorsSetupConfig.class).get();
+
+		LLMSVendor bedrock = library.getVendors().stream()
+				.filter(v -> "aws-bedrock".equals(v.getVendorInfo().getVendorId())).findFirst().orElseThrow();
+		assertEquals(ai.gebo.secrets.model.GeboSecretType.AWS_CONNECTION, bedrock.getVendorInfo().getSecretType());
+		assertEquals("aws-bedrock", bedrock.getVendorInfo().getApiKeySecretContext(), "the model editors' context");
+		LLMSVendor vertex = library.getVendors().stream()
+				.filter(v -> "google-vertex".equals(v.getVendorInfo().getVendorId())).findFirst().orElseThrow();
+		assertEquals(ai.gebo.secrets.model.GeboSecretType.GOOGLE_CLOUD_JSON_CREDENTIALS,
+				vertex.getVendorInfo().getSecretType());
+		assertTrue(library.getVendors().stream().filter(v -> "openai".equals(v.getVendorInfo().getVendorId()))
+				.allMatch(v -> v.getVendorInfo().getSecretType() == ai.gebo.secrets.model.GeboSecretType.TOKEN),
+				"an api key vendor keeps TOKEN");
+	}
 }

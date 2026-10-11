@@ -32,7 +32,41 @@
             </gebo-ai-field>
           </div>
         }
-        @if (view==='FULL' || useExistingOrNew==='NEW') {
+        @if ((view==='FULL' || useExistingOrNew==='NEW') && actualSecretType==='AWS_CONNECTION') {
+          <div class="col-4">
+            <gebo-ai-field id="NewAwsAccessKeyId" label="AWS access key id"
+              help="The access key id of the AWS credentials used to access the provider services"
+              [required]="secretFormGroup.controls['useExistingOrNew'].value==='NEW'">
+              <input pInputText type="text" gebo-ai-field-element formControlName="awsAccessKeyId">
+            </gebo-ai-field>
+          </div>
+          <div class="col-4">
+            <gebo-ai-field id="NewAwsSecretAccessKey" label="AWS secret access key"
+              help="The secret access key of the AWS credentials"
+              [required]="secretFormGroup.controls['useExistingOrNew'].value==='NEW'">
+              <input pInputText type="password" gebo-ai-field-element formControlName="awsSecretAccessKey">
+            </gebo-ai-field>
+          </div>
+          <div class="col-3">
+            <gebo-ai-field id="NewAwsRegion" label="AWS region"
+              help="The AWS region the provider services are called in"
+              [required]="secretFormGroup.controls['useExistingOrNew'].value==='NEW'">
+              <p-select [options]="awsRegions" optionLabel="label" optionValue="value" [filter]="true"
+                formControlName="awsRegion" gebo-ai-field-element styleClass="w-full"></p-select>
+            </gebo-ai-field>
+          </div>
+        }
+        @if ((view==='FULL' || useExistingOrNew==='NEW') && actualSecretType==='GOOGLE_CLOUD_JSON_CREDENTIALS') {
+          <div class="col-11">
+            <gebo-ai-field id="NewGoogleJsonContent" label="Service account key (JSON)"
+              help="Paste the JSON key of the Google Cloud service account used to access the provider services"
+              [required]="secretFormGroup.controls['useExistingOrNew'].value==='NEW'">
+              <textarea pTextarea rows="6" gebo-ai-field-element formControlName="googleJsonContent"
+                class="w-full"></textarea>
+            </gebo-ai-field>
+          </div>
+        }
+        @if ((view==='FULL' || useExistingOrNew==='NEW') && actualSecretType==='TOKEN') {
           <div class="col-3">
             <gebo-ai-field id="NewUserName" label="User name" help="User name used to access provider services"
               [required]="secretFormGroup.controls['useExistingOrNew'].value==='NEW'">
@@ -40,7 +74,7 @@
             </gebo-ai-field>
           </div>
         }
-        @if (view==='FULL' || useExistingOrNew==='NEW') {
+        @if ((view==='FULL' || useExistingOrNew==='NEW') && actualSecretType==='TOKEN') {
           <div class="col-8">
             <gebo-ai-field id="NewApiKey" label="New api key"
               help="Insert a new api key to be used with this provider"
