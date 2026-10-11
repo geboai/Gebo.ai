@@ -71,6 +71,9 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 	private static final Logger LOGGER_DEALS = LoggerFactory
 			.getLogger(GAbstractClusteredModelRuntimeConfigurationDao.class);
 
+	/** The test calls of the models users set, logged under the runtime DAO's own category. */
+	private final Logger LOGGER_TEST_CALLS = LoggerFactory.getLogger(getClass());
+
 	protected GAbstractClusteredModelRuntimeConfigurationDao(List<IFacetype> staticConfigs,
 			IGDynamicConfigurationSource<IFacetype> dynamic) {
 		super(staticConfigs, dynamic);
@@ -156,20 +159,68 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 		});
 	}
 
+	/**
+	 * Adds the model a user sets and makes its test call
+	 * ({@link IGConfigurableModel#testCall()}) before anything else hears of it: a model
+	 * the provider refuses is removed again and the error reported, so it is neither
+	 * associated with a provider deal nor sent to the other instances.
+	 */
 	@Override
 	public void addRuntimeByConfigClustered(ModelConfig config) throws LLMConfigException {
 		addRuntimeByConfig(config);
+		IFacetype added = findByCode(config.getCode());
+		if (added != null) {
+			try {
+				added.testCall();
+			} catch (LLMConfigException | RuntimeException e) {
+				if (LOGGER_TEST_CALLS.isDebugEnabled()) {
+					LOGGER_TEST_CALLS.debug("Model code=" + config.getCode() + " failed its test call, it is removed");
+				}
+				try {
+					deleteByCode(config.getCode());
+				} catch (Throwable th) {
+					LOGGER_TEST_CALLS.error("Cannot remove the model code=" + config.getCode()
+							+ " that failed its test call", th);
+				}
+				throw e;
+			}
+		}
 		ensureProviderDeal(config);
 		if (clusterSynchronizer != null) {
 			clusterSynchronizer.broadcastAdd(getClusterCategory(), config);
 		}
 	}
 
+	/**
+	 * Reconfigures the model a user changes and makes its test call
+	 * ({@link IGConfigurableModel#testCall()}): a change the provider refuses is undone -
+	 * the model goes back to the configuration it had - and the error reported, so it
+	 * is neither saved by the caller nor sent to the other instances.
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void reconfigureByConfigClustered(ModelConfig config) throws LLMConfigException {
 		IFacetype handler = findByCode(config.getCode());
 		if (handler != null) {
+			final ModelConfig previous = (ModelConfig) handler.getConfig();
 			handler.reconfigure(config);
+			try {
+				handler.testCall();
+			} catch (LLMConfigException | RuntimeException e) {
+				if (LOGGER_TEST_CALLS.isDebugEnabled()) {
+					LOGGER_TEST_CALLS.debug("Model code=" + config.getCode()
+							+ " failed its test call, it goes back to its previous configuration");
+				}
+				if (previous != null) {
+					try {
+						handler.reconfigure(previous);
+					} catch (Throwable th) {
+						LOGGER_TEST_CALLS.error("Cannot bring the model code=" + config.getCode()
+								+ " back to its previous configuration after a failed test call", th);
+					}
+				}
+				throw e;
+			}
 		}
 		ensureProviderDeal(config);
 		if (clusterSynchronizer != null) {

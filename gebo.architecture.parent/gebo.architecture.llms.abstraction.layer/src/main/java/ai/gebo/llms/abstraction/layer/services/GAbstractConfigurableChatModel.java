@@ -311,6 +311,76 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	}
 
+	/** What {@link #testCall()} asks: answerable in one word by any model. */
+	static final String TEST_CALL_PROMPT = "Reply with the single word OK.";
+
+	/**
+	 * Sends the provider one user message through this model as it is configured: its
+	 * sampling, thinking level, output limit and the definitions of the tools it enables
+	 * go with it, as with every request it makes, so the provider judges the request the
+	 * model will really send. No tool can run: in Spring AI 2.0.1 a provider's chat model
+	 * only declares the tools - the chat client runs them, and this call does not go
+	 * through it - so a tool call in the answer is an answer like any other. The call is
+	 * recorded in the usage, as any other.
+	 */
+	@Override
+	public void testCall() throws LLMConfigException {
+		final long start = System.currentTimeMillis();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin testCall() model code=" + getCode() + " model=" + safeGetModelCode() + " type="
+					+ (type != null ? type.getCode() : null) + " temperature="
+					+ (config != null ? config.getTemperature() : null) + " thinking="
+					+ (config != null ? config.getThinking() : null) + " tools="
+					+ (config != null && config.getEnabledFunctions() != null ? config.getEnabledFunctions().size()
+							: 0));
+		}
+		final ChatResponse response;
+		try {
+			response = doWithChatModel(chatModel -> chatModel.call(new Prompt(new UserMessage(TEST_CALL_PROMPT))));
+		} catch (RuntimeException e) {
+			// the stack is logged by whoever set the model, with the message this carries
+			LOGGER.warn("Chat model code=" + getCode() + " model=" + safeGetModelCode() + " refused the test call: "
+					+ innermostMessage(e));
+			throw new LLMConfigException("The chat model " + safeGetModelCode() + " (" + getCode()
+					+ ") refused a test call: " + innermostMessage(e), e);
+		}
+		if (response == null) {
+			LOGGER.warn("Chat model code=" + getCode() + " model=" + safeGetModelCode()
+					+ " answered the test call with no response");
+			throw new LLMConfigException("The chat model " + safeGetModelCode() + " (" + getCode()
+					+ ") answered a test call with no response");
+		}
+		final Generation result = response.getResult();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End testCall() model code=" + getCode() + " answered in "
+					+ (System.currentTimeMillis() - start) + "ms, finish reason="
+					+ (result != null && result.getMetadata() != null ? result.getMetadata().getFinishReason() : null)
+					+ " tool calls="
+					+ (result != null && result.getOutput() != null && result.getOutput().hasToolCalls()
+							? result.getOutput().getToolCalls().size()
+							: 0));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("testCall() model code=" + getCode() + " answer: "
+					+ (result != null && result.getOutput() != null ? result.getOutput().getText() : null));
+		}
+	}
+
+	/**
+	 * The message of the deepest cause that has one: the provider's own words, which the
+	 * wrappers around them (retries, Spring AI) tend to bury.
+	 */
+	static String innermostMessage(Throwable error) {
+		String message = null;
+		final java.util.Set<Throwable> seen = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
+		for (Throwable cause = error; cause != null && seen.add(cause); cause = cause.getCause()) {
+			if (cause.getMessage() != null && !cause.getMessage().isBlank()) {
+				message = cause.getMessage();
+			}
+		}
+		return message != null ? message : error.getClass().getSimpleName();
+	}
+
 	/**
 	 * Retrieves metadata for the chat model choice.
 	 * 
