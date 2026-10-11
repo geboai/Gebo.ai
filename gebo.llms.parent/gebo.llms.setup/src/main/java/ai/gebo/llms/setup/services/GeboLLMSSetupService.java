@@ -825,8 +825,11 @@ public class GeboLLMSSetupService {
 			if (choice.getMaxGeneratedTokens() != null) {
 				md.setMaxGeneratedTokens(choice.getMaxGeneratedTokens());
 			}
-			if (choice.getThinking() != null) {
-				md.setThinking(choice.getThinking());
+			if (choice.thinkingFor(md.getUses()) != null) {
+				md.setThinking(choice.thinkingFor(md.getUses()));
+			}
+			if (choice.getTemperature() != null) {
+				md.setTemperature(choice.getTemperature());
 			}
 		});
 		return md;
@@ -1012,7 +1015,8 @@ public class GeboLLMSSetupService {
 	private void applyPresetDefaults(LLMCreateModelData config) {
 		if (config.getType() == null || config.getServiceHandler() == null || config.getModelCode() == null)
 			return;
-		if (config.getContextWindow() != null && config.getMaxGeneratedTokens() != null && config.getThinking() != null)
+		if (config.getContextWindow() != null && config.getMaxGeneratedTokens() != null && config.getThinking() != null
+				&& config.getTemperature() != null)
 			return;
 		vendorsSetupConfig.getVendors().stream()
 				.flatMap(vendor -> vendor.getPresets().stream())
@@ -1028,14 +1032,18 @@ public class GeboLLMSSetupService {
 					if (config.getMaxGeneratedTokens() == null && choice.getMaxGeneratedTokens() != null) {
 						config.setMaxGeneratedTokens(choice.getMaxGeneratedTokens());
 					}
-					if (config.getThinking() == null && choice.getThinking() != null) {
-						config.setThinking(choice.getThinking());
+					if (config.getThinking() == null && choice.thinkingFor(config.getUses()) != null) {
+						config.setThinking(choice.thinkingFor(config.getUses()));
+					}
+					if (config.getTemperature() == null && choice.getTemperature() != null) {
+						config.setTemperature(choice.getTemperature());
 					}
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug(
-								"Model '{}' on {} takes the setup library defaults contextWindow={} maxGeneratedTokens={} thinking={}",
-								config.getModelCode(), config.getServiceHandler(), config.getContextWindow(),
-								config.getMaxGeneratedTokens(), config.getThinking());
+								"Model '{}' on {} for {} takes the setup library defaults contextWindow={} maxGeneratedTokens={} thinking={} temperature={}",
+								config.getModelCode(), config.getServiceHandler(), config.getUses(),
+								config.getContextWindow(), config.getMaxGeneratedTokens(), config.getThinking(),
+								config.getTemperature());
 					}
 				});
 	}
@@ -1062,11 +1070,13 @@ public class GeboLLMSSetupService {
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
 					configuration.setAccessibleToAll(true);
 					configuration.setForUses(config.getUses());
-					// Deterministic by default: every chat model the easy setup creates - the
-					// default chat model and the INTERNAL_SERVICES (service) model alike - is
-					// persisted with temperature 0, so judgement oriented internal calls (the
-					// ranking irrelevance filter, routing, query rewriting) do not vary run to run.
-					configuration.setTemperature(0.0d);
+					// No temperature is written unless the preset or the caller gives one: the
+					// chat model decides it from the model's parameter rules when it starts -
+					// temperature 0, deterministic, where the model takes one (the ranking
+					// irrelevance filter, routing and query rewriting then do not vary run to
+					// run), none where the model refuses the sampling parameters, which the
+					// reasoning models do. Written here, a 0 broke those models on every call.
+					configuration.setTemperature(config.getTemperature());
 					if (config.getContextWindow() != null) {
 						configuration.setContextLength(config.getContextWindow());
 					}

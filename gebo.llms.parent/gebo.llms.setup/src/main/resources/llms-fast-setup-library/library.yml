@@ -148,19 +148,17 @@ ai.gebo.llms.vendors.setup.config:
           doModelsLookup: true
           choices:
             # gpt-4o-transcribe, gpt-4o-mini-transcribe and whisper-1 shut down on 2027-02-26.
-            # The OpenAI transcript handler asks for a text response: whisper-1 gives it,
-            # gpt-4o-transcribe and gpt-4o-mini-transcribe answer json only, and OpenAI does
-            # not document the formats of gpt-transcribe. whisper-1 is the default until the
-            # handler asks for json, the format the transcription api answers by default.
-            - code: whisper-1
-              description: Whisper 1
-              defaultChoice: true
+            # The OpenAI transcript handler asks for json, which every one of these answers
+            # (gpt-4o-transcribe and gpt-4o-mini-transcribe answer json only).
             - code: gpt-transcribe
               description: GPT Transcribe (speech to text)
+              defaultChoice: true
             - code: gpt-4o-transcribe
               description: GPT-4o Transcribe (speech to text)
             - code: gpt-4o-mini-transcribe
               description: GPT-4o mini Transcribe
+            - code: whisper-1
+              description: Whisper 1
     - vendorInfo:
         vendorId: anthropic
         name: Anthropic
@@ -303,10 +301,14 @@ ai.gebo.llms.vendors.setup.config:
           choices:
             # deepseek-chat and deepseek-reasoner were discontinued on 2026-07-24: thinking
             # is now a setting of the model (the thinking option), not a model of its own.
+            # Thinking for chat (its default), not for the internal services: their calls
+            # (ranking filter, routing, query rewriting) are short judgements, and DeepSeek
+            # takes thinking disabled on this model.
             - code: deepseek-flash
               description: DeepSeek V4.1 Flash
               uses: CHAT , INTERNAL_SERVICES
               defaultChoice: true
+              internalServicesThinking: NO_THINKING
             - code: deepseek-v4-pro
               description: DeepSeek V4 Pro
               uses: CHAT

@@ -19,6 +19,8 @@ import java.util.List;
 
 import com.openai.models.audio.AudioResponseFormat;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.audio.transcription.AudioTranscriptionPrompt;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
@@ -90,6 +92,7 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 	 */
 	public class OpenAIConfigurableTranscriptModel
 			extends GAbstractConfigurableTranscriptModel<GOpenAITranscriptModelConfig, OpenAiAudioTranscriptionModel> {
+		private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 		/**
 		 * Processes the audio from an input stream and returns the transcribed text
@@ -147,7 +150,14 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 
 			String modelName = config.getChoosedModel() != null && config.getChoosedModel().getCode() != null
 					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "whisper-1";
-			builder.apiKey(apiKey.getApiKey()).responseFormat(AudioResponseFormat.TEXT).temperature(0f).model(modelName);
+			// json, not text: gpt-4o-transcribe and gpt-4o-mini-transcribe answer json only, json
+			// is the format the transcription api answers by default, and Spring AI reads the
+			// text out of it (the OpenAI compatible transcript handler asks for json too).
+			builder.apiKey(apiKey.getApiKey()).responseFormat(AudioResponseFormat.JSON).temperature(0f).model(modelName);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Transcript model {} ({}) configured with response format json", config.getCode(),
+						modelName);
+			}
 			builder.timeout(OpenAiClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())));
 			OpenAiAudioTranscriptionOptions options = builder.build();
 			OpenAiAudioTranscriptionModel model = OpenAiAudioTranscriptionModel.builder()
