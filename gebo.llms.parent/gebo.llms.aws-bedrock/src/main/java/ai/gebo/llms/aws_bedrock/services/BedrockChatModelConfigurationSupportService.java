@@ -34,6 +34,7 @@ import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.aws_bedrock.model.GBedrockChatModelChoice;
 import ai.gebo.llms.aws_bedrock.model.GBedrockChatModelConfig;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
@@ -75,14 +76,16 @@ public class BedrockChatModelConfigurationSupportService
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	class BedrockConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GBedrockChatModelConfig, BedrockProxyChatModel> {
 
 		public BedrockConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		}
 
 		@Override
@@ -151,7 +154,7 @@ public class BedrockChatModelConfigurationSupportService
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 			return new BedrockConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 	}
 
@@ -164,7 +167,7 @@ public class BedrockChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GBedrockChatModelConfig> create(GBedrockChatModelConfig config)
 			throws LLMConfigException {
 		BedrockConfigurableChatModel model = new BedrockConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
 	}

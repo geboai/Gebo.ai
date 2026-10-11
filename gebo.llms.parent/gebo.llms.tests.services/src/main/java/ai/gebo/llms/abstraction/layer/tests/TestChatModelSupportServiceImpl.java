@@ -26,6 +26,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportSe
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
@@ -53,6 +54,8 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	final IGToolCallbackSourceRepositoryPattern toolCallbacksRepository;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Inner class representing a test implementation of the configurable chat
@@ -63,8 +66,8 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 
 		public TestConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 
 		}
 
@@ -88,7 +91,7 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
 			return new TestConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 
 	};
@@ -152,7 +155,7 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	public IGConfigurableChatModel<TestChatModelConfiguration> create(TestChatModelConfiguration config)
 			throws LLMConfigException {
 		TestConfigurableChatModel out = new TestConfigurableChatModel(documentContentRenderProvider,
-				toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		out.initialize(config, type);
 		return out;
 	}

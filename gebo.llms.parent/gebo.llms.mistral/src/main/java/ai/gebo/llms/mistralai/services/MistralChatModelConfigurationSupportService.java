@@ -43,6 +43,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
@@ -85,6 +86,8 @@ public class MistralChatModelConfigurationSupportService
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Inner class that implements the configuration and creation of Mistral AI chat
@@ -95,8 +98,8 @@ public class MistralChatModelConfigurationSupportService
 
 		public MistralConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 
 		}
 
@@ -238,7 +241,7 @@ public class MistralChatModelConfigurationSupportService
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
 			return new MistralConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 	};
 
@@ -272,7 +275,7 @@ public class MistralChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GMistralChatModelConfig> create(GMistralChatModelConfig config)
 			throws LLMConfigException {
 		MistralConfigurableChatModel model = new MistralConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
 	}

@@ -12,6 +12,7 @@
 
 package ai.gebo.llms.models.metainfos.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
+import ai.gebo.llms.models.metainfos.ModelParameterRules;
 import ai.gebo.llms.models.metainfos.config.ModelsLibraryBundleConfig;
 import ai.gebo.llms.models.metainfos.config.ModelsLibraryConfig;
 
@@ -91,6 +93,30 @@ public class GModelsLibraryDaoImpl implements IGModelsLibraryDao {
 	 * @param modelId    The ID of the model.
 	 * @return The ModelMetaInfo object if found, otherwise null.
 	 */
+	@Override
+	public ModelParameterRules findParameterRules(String providerId, String modelId) {
+		ModelParameterRules found = firstCovering(config != null ? config.getParameterRules() : null, providerId,
+				modelId);
+		if (found == null) {
+			found = firstCovering(bundle != null ? bundle.getParameterRules() : null, providerId, modelId);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("findParameterRules(" + providerId + ", " + modelId + ") => " + found);
+		}
+		return found;
+	}
+
+	private static ModelParameterRules firstCovering(List<ModelParameterRules> rules, String providerId,
+			String modelId) {
+		if (rules == null)
+			return null;
+		for (ModelParameterRules rule : rules) {
+			if (rule != null && rule.covers(providerId, modelId))
+				return rule;
+		}
+		return null;
+	}
+
 	@Override
 	public ModelMetaInfo findByProviderIdAndModelId(String providerId, String modelId) {
 		// Check if configurations are properly initialized and not null.

@@ -52,6 +52,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
@@ -80,6 +81,8 @@ public class OpenAIChatModelConfigurationSupportService
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Implementation of a configurable chat model for OpenAI. This class handles
@@ -89,8 +92,8 @@ public class OpenAIChatModelConfigurationSupportService
 
 		public OpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 
 		}
 
@@ -159,24 +162,25 @@ public class OpenAIChatModelConfigurationSupportService
 							+ " without tools: " + config.getEnabledFunctions());
 				}
 			}
+			// max_completion_tokens, not max_tokens: OpenAI deprecated max_tokens in its
+			// favour, and the reasoning models refuse it (the openai-java SDK documents it as
+			// "not compatible with o-series models"); max_completion_tokens bounds the
+			// reasoning tokens too, on every model.
 			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
-				builder.maxTokens(config.getMaxGeneratedTokens());
+				builder.maxCompletionTokens(config.getMaxGeneratedTokens());
 			}
-			if (config.getThinking() != null) {
-				switch (config.getThinking()) {
-				case LOW_THINKING: {
-					builder.reasoningEffort("low");
-				}
-					break;
-				case MEDIUM_THINKING: {
-					builder.reasoningEffort("medium");
-				}
-					break;
-				case HIGH_THINKING: {
-					builder.reasoningEffort("high");
-				}
-					break;
-				}
+			// The effort among the ones the model's parameter rules list: no thinking is
+			// sent as none where the model takes it, an effort the model refuses leaves its
+			// default (see GAbstractConfigurableChatModel.reasoningEffortFor).
+			final String effort = reasoningEffortFor(config.getThinking());
+			if (effort != null) {
+				builder.reasoningEffort(effort);
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat model {} ({}) configured with thinking {} as reasoning effort {}, temperature {},"
+						+ " max completion tokens {}", config.getCode(),
+						config.getChoosedModel() != null ? config.getChoosedModel().getCode() : null,
+						config.getThinking(), effort, config.getTemperature(), config.getMaxGeneratedTokens());
 			}
 			if (user != null) {
 				builder = builder.user(user);
@@ -221,7 +225,7 @@ public class OpenAIChatModelConfigurationSupportService
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
 			return new OpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 	};
 
@@ -246,7 +250,7 @@ public class OpenAIChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GOpenAIChatModelConfig> create(GOpenAIChatModelConfig config)
 			throws LLMConfigException {
 		OpenAIConfigurableChatModel model = new OpenAIConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
 	}

@@ -175,3 +175,61 @@ ai.gebo.models.bundle.library:
       tokenizingThreashold:
       description:
       informativeUrl:
+  # What a provider accepts in a chat request to its models (ModelParameterRules), read
+  # by every chat model when it builds its requests. A rule names one provider and the
+  # model ids it covers, "*" standing for any characters; the first rule covering a model
+  # applies, so the specific models come before the family patterns. An installation's
+  # rules (ai.gebo.models.library.parameterRules) come before these.
+  #   sampling: ACCEPTED, REJECTED (temperature and top_p are never sent), or
+  #     WITHOUT_REASONING (sent only when the thinking is off, as reasoning effort none);
+  #     unset is unknown and they are sent as configured.
+  #   reasoningEfforts: the reasoning_effort values the models accept; a thinking level
+  #     the model does not list is not sent, leaving its default; "none" turns the
+  #     thinking off. Unset is unknown and low, medium and high are sent as asked.
+  # Omitting a parameter is the safe side: a family pattern refuses sampling where one
+  # of its models may take it.
+  parameterRules:
+    # OpenAI - every model below answered "400: Unsupported value: 'temperature' does not
+    # support 0.0 with this model. Only the default (1) value is supported." at its
+    # default effort, tested 2026-10-11. The latest-model guide: "When reasoning effort
+    # is not none, remove temperature, top_p, and top_logprobs".
+    - providerId: openai
+      models: ["gpt-6.1-sol*", "gpt-6-astra*"]
+      sampling: REJECTED
+      reasoningEfforts: [low, medium, high, xhigh, max]
+      source: developers.openai.com/api/docs/models/gpt-6.1-sol and gpt-6-astra (no effort none), 2026-10-11
+    - providerId: openai
+      models: ["gpt-6-sol*", "gpt-6-luna*"]
+      sampling: WITHOUT_REASONING
+      reasoningEfforts: [none, low, medium, high, xhigh, max]
+      source: developers.openai.com/api/docs/models/gpt-6-sol and gpt-6-luna, 2026-10-11
+    - providerId: openai
+      models: ["gpt-5.5*"]
+      sampling: REJECTED
+      reasoningEfforts: [none, low, medium, high, xhigh]
+      source: developers.openai.com/api/docs/models/gpt-5.5 (sampling at effort none not documented), 2026-10-11
+    - providerId: openai
+      models: ["gpt-5"]
+      sampling: REJECTED
+      reasoningEfforts: [minimal, low, medium, high]
+      source: developers.openai.com/api/docs/models/gpt-5, 2026-10-11
+    - providerId: openai
+      models: ["gpt-5*"]
+      sampling: REJECTED
+      source: temperature refused by gpt-5 and gpt-5.5, tested 2026-10-11
+    - providerId: openai
+      models: ["o1*", "o3*", "o4*"]
+      sampling: REJECTED
+      source: temperature refused by o3 and o4-mini, tested 2026-10-11
+    # Groq - console.groq.com/docs/reasoning, 2026-10-11: temperature 0.0 to 2.0 on its
+    # reasoning models.
+    - providerId: groq
+      models: ["openai/gpt-oss-*"]
+      sampling: ACCEPTED
+      reasoningEfforts: [low, medium, high]
+      source: console.groq.com/docs/reasoning, 2026-10-11
+    - providerId: groq
+      models: ["qwen/qwen3.8-27b"]
+      sampling: ACCEPTED
+      reasoningEfforts: [none, default, low, medium, high]
+      source: console.groq.com/docs/reasoning, 2026-10-11

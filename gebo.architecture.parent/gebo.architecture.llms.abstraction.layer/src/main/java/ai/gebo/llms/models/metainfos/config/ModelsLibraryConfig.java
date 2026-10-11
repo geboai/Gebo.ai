@@ -19,6 +19,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
+import ai.gebo.llms.models.metainfos.ModelParameterRules;
 
 /**
  * Gebo.ai comment agent
@@ -35,6 +36,9 @@ public class ModelsLibraryConfig {
 	 * List to store metadata information about models.
 	 */
 	private List<ModelMetaInfo> modelsInfo = new ArrayList<ModelMetaInfo>();
+
+	/** The parameter rules of an installation, taking precedence over the bundled ones (see {@link ModelParameterRules}). */
+	private List<ModelParameterRules> parameterRules = new ArrayList<ModelParameterRules>();
 
 	/**
 	 * Default constructor for ModelsLibraryConfig.
@@ -59,4 +63,12 @@ public class ModelsLibraryConfig {
 		this.modelsInfo = modelsInfo;
 	}
 
+
+	public List<ModelParameterRules> getParameterRules() {
+		return parameterRules;
+	}
+
+	public void setParameterRules(List<ModelParameterRules> parameterRules) {
+		this.parameterRules = parameterRules;
+	}
 }

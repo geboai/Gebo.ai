@@ -43,6 +43,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.el.MethodNotFoundException;
 import lombok.AllArgsConstructor;
@@ -98,6 +99,8 @@ public class DeepseekChatModelConfigurationSupportService
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Implementation of configurable chat model for DeepSeek Note: The class is
@@ -109,8 +112,8 @@ public class DeepseekChatModelConfigurationSupportService
 
 		public DeepseekConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 
 		    }
 
@@ -240,7 +243,7 @@ public class DeepseekChatModelConfigurationSupportService
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
 			return new DeepseekConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 	};
 
@@ -275,7 +278,7 @@ public class DeepseekChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GDeepseekChatModelConfig> create(GDeepseekChatModelConfig config)
 			throws LLMConfigException {
 		DeepseekConfigurableChatModel model = new DeepseekConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
 	}

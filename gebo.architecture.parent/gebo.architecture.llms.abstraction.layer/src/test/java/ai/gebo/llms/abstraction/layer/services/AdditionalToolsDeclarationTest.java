@@ -44,7 +44,7 @@ class AdditionalToolsDeclarationTest {
 		final IChatModelUsageAdvisorFactory usage;
 
 		DeclaringModel(IGToolCallbackSourceRepositoryPattern repository, IChatModelUsageAdvisorFactory usage) {
-			super(null, repository, usage, ObservationRegistry.NOOP);
+			super(null, repository, usage, ObservationRegistry.NOOP, null);
 			this.repository = repository;
 			this.usage = usage;
 		}

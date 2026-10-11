@@ -21,6 +21,7 @@ import org.springframework.context.annotation.PropertySource;
 
 import ai.gebo.architecture.utils.GeboYamlPropertySourceFactory;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
+import ai.gebo.llms.models.metainfos.ModelParameterRules;
 
 /**
  * Gebo.ai comment agent
@@ -34,6 +35,9 @@ public class ModelsLibraryBundleConfig {
     
     // List to hold model metadata information
     private List<ModelMetaInfo> modelsInfo = new ArrayList<ModelMetaInfo>();
+
+	/** The parameter rules of the bundled models library (see {@link ModelParameterRules}). */
+	private List<ModelParameterRules> parameterRules = new ArrayList<ModelParameterRules>();
 
     /**
      * Default constructor
@@ -59,4 +63,12 @@ public class ModelsLibraryBundleConfig {
     public void setModelsInfo(List<ModelMetaInfo> modelsInfo) {
         this.modelsInfo = modelsInfo;
     }
+
+	public List<ModelParameterRules> getParameterRules() {
+		return parameterRules;
+	}
+
+	public void setParameterRules(List<ModelParameterRules> parameterRules) {
+		this.parameterRules = parameterRules;
+	}
 }

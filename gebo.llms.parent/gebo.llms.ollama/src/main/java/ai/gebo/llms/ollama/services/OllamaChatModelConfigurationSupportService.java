@@ -43,6 +43,7 @@ import ai.gebo.llms.ollama.model.GOllamaChatModelChoice;
 import ai.gebo.llms.ollama.model.GOllamaChatModelConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.el.MethodNotFoundException;
 import lombok.AllArgsConstructor;
@@ -100,6 +101,8 @@ public class OllamaChatModelConfigurationSupportService
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Inner class that implements the configurable chat model for Ollama
@@ -108,8 +111,8 @@ public class OllamaChatModelConfigurationSupportService
 
 		public OllamaConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 
 		}
 
@@ -223,7 +226,7 @@ public class OllamaChatModelConfigurationSupportService
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
 			return new OllamaConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 	};
 
@@ -256,7 +259,7 @@ public class OllamaChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GOllamaChatModelConfig> create(GOllamaChatModelConfig config)
 			throws LLMConfigException {
 		OllamaConfigurableChatModel model = new OllamaConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
 	}

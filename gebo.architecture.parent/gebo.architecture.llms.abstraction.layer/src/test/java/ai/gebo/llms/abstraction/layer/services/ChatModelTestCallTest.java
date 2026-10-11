@@ -48,7 +48,7 @@ class ChatModelTestCallTest {
 	static class ScriptedModel extends GAbstractConfigurableChatModel<GBaseChatModelConfig, ChatModel> {
 
 		ScriptedModel(ChatModel provider) {
-			super(null, null, recordingAsIs(), ObservationRegistry.NOOP);
+			super(null, null, recordingAsIs(), ObservationRegistry.NOOP, null);
 			this.model = provider;
 			this.config = new GBaseChatModelConfig();
 			this.config.setCode("chat-test-model");

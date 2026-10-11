@@ -38,6 +38,7 @@ import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexChatModelChoice;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexChatModelConfig;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
@@ -91,6 +92,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Inner class that handles the configuration and initialization of Google
@@ -101,8 +104,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 
 		public GoogleVertexConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 
 		}
 
@@ -186,7 +189,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
 			return new GoogleVertexConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 	};
 
@@ -211,7 +214,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GGoogleVertexChatModelConfig> create(GGoogleVertexChatModelConfig config)
 			throws LLMConfigException {
 		GoogleVertexConfigurableChatModel model = new GoogleVertexConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
 	}
