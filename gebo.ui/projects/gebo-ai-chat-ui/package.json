@@ -1,6 +1,6 @@
 {
   "name": "@Gebo.ai/chat-ui",
-  "version": "1.0.4.0-SNAPSHOT",
+  "version": "1.0.4.0",
   "peerDependencies": {
     "@angular/common": "^21.2.20",
     "@angular/core": "^21.2.20",
