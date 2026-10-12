@@ -1,13 +1,9 @@
 <div class="chat-input-shell">
-  <gebo-ai-chat-stream-events-display [routingChoiceSelector]="routingChoiceSelector" [streaming]="streaming"
-    [actualPipelineRoutingOption]="runningPipelineRouting">
-
-  </gebo-ai-chat-stream-events-display>
-
   <form [formGroup]="formGroup" (submit)="onSubmit()">
 
     @if (ragsystem && !disableFilesBrowsers) {
       <gebo-ai-choose-documents-panel-component [interactionDisabled]="loading"
+        [displaySelectedList]="false"
         [maxDisplayedDocuments]="3" [knowledgeBaseCodes]="knowledgeBaseCodes"
         [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
         [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
@@ -32,7 +28,7 @@
         </p-contextMenu>
       </div>
       <textarea rows="5" pTextarea class="chat-input-shell__frame-input" placeholder="Write a message for the chat bot"
-        formControlName="query" [autoResize]="true" [required]="true" (keydown.enter)="onSubmit()">
+        formControlName="query" [autoResize]="true" [required]="true" (keydown.enter)="onEnterKey($event)">
       </textarea>
 
       <div class="chat-input-shell__frame-buttons button-right">
@@ -55,6 +51,12 @@
       </div>
 
     </div>
+    @if (pendingSend) {
+      <div class="chat-input-shell__pending" role="status">
+        <i class="pi pi-clock" aria-hidden="true"></i>
+        <span id="PendingSendHint" gebo-ai-text>The message will be sent as soon as the chat is ready…</span>
+      </div>
+    }
     <div class="chat-input-shell__frame_chip card flex items-center gap-2 flex-wrap">
       @if (choosedPipelineRoutingChip) {
         <p-chip #actualRoutingChoiceChip [icon]="choosedPipelineRoutingChip.icon"

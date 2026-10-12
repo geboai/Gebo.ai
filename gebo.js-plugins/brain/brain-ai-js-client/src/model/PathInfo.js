@@ -39,42 +39,78 @@ export default class PathInfo {
     if (data) {
       obj = obj || new PathInfo();
       if (data.hasOwnProperty('absolutePath'))
-        obj.absolutePath = ApiClient.convertToType(data['absolutePath'], Object);
+        obj.absolutePath = ApiClient.convertToType(data['absolutePath'], 'String');
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('folder'))
-        obj.folder = ApiClient.convertToType(data['folder'], Object);
+        obj.folder = ApiClient.convertToType(data['folder'], 'Boolean');
       if (data.hasOwnProperty('metaType'))
-        obj.metaType = ApiClient.convertToType(data['metaType'], Object);
+        obj.metaType = ApiClient.convertToType(data['metaType'], 'String');
       if (data.hasOwnProperty('iconKey'))
-        obj.iconKey = ApiClient.convertToType(data['iconKey'], Object);
+        obj.iconKey = ApiClient.convertToType(data['iconKey'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} absolutePath
+ * @member {String} absolutePath
  */
 PathInfo.prototype.absolutePath = undefined;
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 PathInfo.prototype.name = undefined;
 
 /**
- * @member {Object} folder
+ * @member {Boolean} folder
  */
 PathInfo.prototype.folder = undefined;
 
 /**
- * @member {Object} metaType
+ * Allowed values for the <code>metaType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+PathInfo.MetaTypeEnum = {
+  /**
+   * value: "WEB_PAGE"
+   * @const
+   */
+  WEB_PAGE: "WEB_PAGE",
+
+  /**
+   * value: "FILE"
+   * @const
+   */
+  FILE: "FILE",
+
+  /**
+   * value: "FOLDER"
+   * @const
+   */
+  FOLDER: "FOLDER",
+
+  /**
+   * value: "DEVICE"
+   * @const
+   */
+  DEVICE: "DEVICE",
+
+  /**
+   * value: "UNKNOWN"
+   * @const
+   */
+  UNKNOWN: "UNKNOWN"
+};
+/**
+ * @member {module:model/PathInfo.MetaTypeEnum} metaType
  */
 PathInfo.prototype.metaType = undefined;
 
 /**
- * @member {Object} iconKey
+ * @member {String} iconKey
  */
 PathInfo.prototype.iconKey = undefined;
 

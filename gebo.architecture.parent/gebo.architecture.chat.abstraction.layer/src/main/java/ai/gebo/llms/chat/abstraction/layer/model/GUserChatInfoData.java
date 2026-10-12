@@ -10,6 +10,7 @@ public class GUserChatInfoData implements GUserChatInfo {
 	private String code, username, description, contextCode, chatProfileCode, chatModelCode;
 	private Date chatCreationDateTime;
 	private Boolean ragChat = null;
+	private String pipelineCode = null;
 
 	public GUserChatInfoData() {
 	}
@@ -23,6 +24,7 @@ public class GUserChatInfoData implements GUserChatInfo {
 		this.chatModelCode = info.getChatModelCode();
 		this.chatCreationDateTime = info.getChatCreationDateTime();
 		this.ragChat = info.getRagChat();
+		this.pipelineCode = info.getPipelineCode();
 	}
 
 	public GUserChatInfoData(GUserChatSession info) {
@@ -34,6 +36,7 @@ public class GUserChatInfoData implements GUserChatInfo {
 		this.chatModelCode = info.getChatModelCode();
 		this.chatCreationDateTime = info.getChatCreationDateTime();
 		this.ragChat = info.getRagChat();
+		this.pipelineCode = info.getPipelineCode();
 	}
 
 }

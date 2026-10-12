@@ -42,7 +42,7 @@ export default class HasRunningJobs {
       if (data.hasOwnProperty('endpoint'))
         obj.endpoint = GObjectRefGProjectEndpoint.constructFromObject(data['endpoint']);
       if (data.hasOwnProperty('hasRunningJobs'))
-        obj.hasRunningJobs = ApiClient.convertToType(data['hasRunningJobs'], Object);
+        obj.hasRunningJobs = ApiClient.convertToType(data['hasRunningJobs'], 'Boolean');
     }
     return obj;
   }
@@ -54,7 +54,7 @@ export default class HasRunningJobs {
 HasRunningJobs.prototype.endpoint = undefined;
 
 /**
- * @member {Object} hasRunningJobs
+ * @member {Boolean} hasRunningJobs
  */
 HasRunningJobs.prototype.hasRunningJobs = undefined;
 

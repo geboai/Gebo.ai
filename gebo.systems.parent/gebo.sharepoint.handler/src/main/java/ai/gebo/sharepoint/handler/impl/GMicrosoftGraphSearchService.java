@@ -23,6 +23,7 @@ import com.microsoft.graph.search.query.QueryPostResponse;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
@@ -99,6 +100,12 @@ public class GMicrosoftGraphSearchService extends
 
 		}
 		return List.of();
+	}
+
+	/** The Graph client retries a failed search itself (the SDK's retry handler), as many times as asked. */
+	@Override
+	public boolean appliesRetries() {
+		return true;
 	}
 
 	@Override
@@ -182,9 +189,19 @@ public class GMicrosoftGraphSearchService extends
 	@Override
 	public List<SearchResult> nativeSearch(SharePointSearchFilter query, SearchableSystemMetaData system,
 			int nEntryLimit) throws IOException, SearchServiceException {
+		return nativeSearch(query, system, nEntryLimit, null);
+	}
+
+	/**
+	 * Searches natively with a Graph client whose timeouts and retries are the call
+	 * parameters', when given (see {@link #appliesRetries()}).
+	 */
+	@Override
+	public List<SearchResult> nativeSearch(SharePointSearchFilter query, SearchableSystemMetaData system,
+			int nEntryLimit, SearchCallParameters parameters) throws IOException, SearchServiceException {
 		try {
 			if (system.getSystemConfigurationReference() instanceof GSharepointContentManagementSystem shsystem) {
-				GraphServiceClient graphClient = this.msGraphConnectionFactory.getServiceClient(shsystem);
+				GraphServiceClient graphClient = this.msGraphConnectionFactory.getServiceClient(shsystem, parameters);
 				String kqlQueryString = SharePointKqlTranslator.createKqlQueryString(query);
 				com.microsoft.graph.models.SearchQuery searchQuery = new com.microsoft.graph.models.SearchQuery();
 				searchQuery.setQueryString(kqlQueryString);

@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import ComponentMetaInfo from './ComponentMetaInfo';
 
 /**
  * The GModuleMetaInfo model module.
@@ -39,21 +40,21 @@ export default class GModuleMetaInfo {
     if (data) {
       obj = obj || new GModuleMetaInfo();
       if (data.hasOwnProperty('messagingModuleId'))
-        obj.messagingModuleId = ApiClient.convertToType(data['messagingModuleId'], Object);
+        obj.messagingModuleId = ApiClient.convertToType(data['messagingModuleId'], 'String');
       if (data.hasOwnProperty('components'))
-        obj.components = ApiClient.convertToType(data['components'], Object);
+        obj.components = ApiClient.convertToType(data['components'], [ComponentMetaInfo]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} messagingModuleId
+ * @member {String} messagingModuleId
  */
 GModuleMetaInfo.prototype.messagingModuleId = undefined;
 
 /**
- * @member {Object} components
+ * @member {Array.<module:model/ComponentMetaInfo>} components
  */
 GModuleMetaInfo.prototype.components = undefined;
 

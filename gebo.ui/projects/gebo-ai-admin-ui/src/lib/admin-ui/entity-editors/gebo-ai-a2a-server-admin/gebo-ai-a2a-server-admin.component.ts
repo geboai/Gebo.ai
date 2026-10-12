@@ -118,25 +118,25 @@ export class GeboAIA2AServerAdminComponent extends BaseEntityEditingComponent<A2
     }
 
     override findByCode(code: string): Observable<A2AServerConfig | null> {
-        return this.service.findByCode1(code).pipe(map(r => r.result || null));
+        return this.service.findByCodeA2AServer(code).pipe(map(r => r.result || null));
     }
 
     override save(value: any): Observable<A2AServerConfig> {
-        return this.service.update1(value).pipe(map(r => {
+        return this.service.updateA2AServer(value).pipe(map(r => {
             this.updateLastOperationStatus(r);
             return r.result ? r.result : value;
         }));
     }
 
     override insert(value: any): Observable<A2AServerConfig> {
-        return this.service.insert(value).pipe(map(r => {
+        return this.service.insertA2AServer(value).pipe(map(r => {
             this.updateLastOperationStatus(r);
             return r.result ? r.result : value;
         }));
     }
 
     override delete(value: A2AServerConfig): Observable<boolean> {
-        return this.service._delete(value.code as string).pipe(map(r => {
+        return this.service.deleteA2AServer(value.code as string).pipe(map(r => {
             this.assignBackendMessages(r.messages);
             return true;
         }));

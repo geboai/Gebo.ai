@@ -46,6 +46,8 @@ export default class GeboSshKeySecretContent {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new GeboSshKeySecretContent();
+      if (data.hasOwnProperty('readOnly'))
+        obj.readOnly = ApiClient.convertToType(data['readOnly'], 'Boolean');
       if (data.hasOwnProperty('email'))
         obj.email = ApiClient.convertToType(data['email'], 'String');
       if (data.hasOwnProperty('key'))
@@ -58,6 +60,11 @@ export default class GeboSshKeySecretContent {
     return obj;
   }
 }
+
+/**
+ * @member {Boolean} readOnly
+ */
+GeboSshKeySecretContent.prototype.readOnly = undefined;
 
 /**
  * @member {String} email

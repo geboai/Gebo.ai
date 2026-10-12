@@ -15,6 +15,7 @@ import java.util.Map;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.mongodb.core.index.HashIndexed;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 
 import ai.gebo.acl.GAclEntry;
@@ -40,6 +41,15 @@ public abstract class GAbstractVirtualFilesystemObject extends GBaseVersionableO
 	 */
 	@HashIndexed
 	private String parentVirtualFolderCode = null;
+
+	/**
+	 * A short number identifying the object among all the folders and documents of
+	 * the platform: numbered from one sequence when the object is first saved (see
+	 * VirtualFilesystemUniqueIdCallback), given at startup to the objects saved before
+	 * it existed. The tools refer to folders and documents by it.
+	 */
+	@Indexed(sparse = true)
+	private Long uniqueId = null;
 
 	/**
 	 * The absolute path of the filesystem object.

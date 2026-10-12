@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import AclOwnerParam from './AclOwnerParam';
 
 /**
  * The SetMcpServerAclsParam model module.
@@ -24,8 +25,8 @@ export default class SetMcpServerAclsParam {
    * Constructs a new <code>SetMcpServerAclsParam</code>.
    * @alias module:model/SetMcpServerAclsParam
    * @class
-   * @param code {Object} 
-   * @param owners {Object} 
+   * @param code {String} 
+   * @param owners {Array.<module:model/AclOwnerParam>} 
    */
   constructor(code, owners) {
     this.code = code;
@@ -43,21 +44,21 @@ export default class SetMcpServerAclsParam {
     if (data) {
       obj = obj || new SetMcpServerAclsParam();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('owners'))
-        obj.owners = ApiClient.convertToType(data['owners'], Object);
+        obj.owners = ApiClient.convertToType(data['owners'], [AclOwnerParam]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 SetMcpServerAclsParam.prototype.code = undefined;
 
 /**
- * @member {Object} owners
+ * @member {Array.<module:model/AclOwnerParam>} owners
  */
 SetMcpServerAclsParam.prototype.owners = undefined;
 

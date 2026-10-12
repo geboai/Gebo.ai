@@ -22,14 +22,14 @@
     </div>
     @if (choosableDataSources && choosableDataSources.length) {
       <p-fieldset id="DataSourceChoicesArea" gebo-ai-label
-        legend="Choosed systems" class="col-12">
+        legend="Selected systems" class="col-12">
         <p-selectbutton [options]="choosableDataSources" formControlName="deepSearchDataSources" [multiple]="true"
           optionLabel="description" optionValue="code" />
         </p-fieldset>
       }
       @if (choosableKnowledgeBases && choosableKnowledgeBases.length) {
         <p-fieldset id="KnowledgeBaseChoicesArea"
-          gebo-ai-label legend="Choosed knowledge bases" class="col-12">
+          gebo-ai-label legend="Selected knowledge bases" class="col-12">
           <p-selectbutton [options]="choosableKnowledgeBases" formControlName="knowledgeBases" [multiple]="true"
             optionLabel="description" optionValue="code" />
           </p-fieldset>

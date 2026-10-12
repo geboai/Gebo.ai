@@ -39,35 +39,59 @@ export default class RagQueryOptions {
     if (data) {
       obj = obj || new RagQueryOptions();
       if (data.hasOwnProperty('topK'))
-        obj.topK = ApiClient.convertToType(data['topK'], Object);
+        obj.topK = ApiClient.convertToType(data['topK'], 'Number');
       if (data.hasOwnProperty('similarityThreashold'))
-        obj.similarityThreashold = ApiClient.convertToType(data['similarityThreashold'], Object);
+        obj.similarityThreashold = ApiClient.convertToType(data['similarityThreashold'], 'Number');
       if (data.hasOwnProperty('maxTokens'))
-        obj.maxTokens = ApiClient.convertToType(data['maxTokens'], Object);
+        obj.maxTokens = ApiClient.convertToType(data['maxTokens'], 'Number');
       if (data.hasOwnProperty('completeness'))
-        obj.completeness = ApiClient.convertToType(data['completeness'], Object);
+        obj.completeness = ApiClient.convertToType(data['completeness'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} topK
+ * @member {Number} topK
  */
 RagQueryOptions.prototype.topK = undefined;
 
 /**
- * @member {Object} similarityThreashold
+ * @member {Number} similarityThreashold
  */
 RagQueryOptions.prototype.similarityThreashold = undefined;
 
 /**
- * @member {Object} maxTokens
+ * @member {Number} maxTokens
  */
 RagQueryOptions.prototype.maxTokens = undefined;
 
 /**
- * @member {Object} completeness
+ * Allowed values for the <code>completeness</code> property.
+ * @enum {String}
+ * @readonly
+ */
+RagQueryOptions.CompletenessEnum = {
+  /**
+   * value: "STRICT_QUERY_RELATED"
+   * @const
+   */
+  STRICT_QUERY_RELATED: "STRICT_QUERY_RELATED",
+
+  /**
+   * value: "FULL_DOCUMENTS"
+   * @const
+   */
+  FULL_DOCUMENTS: "FULL_DOCUMENTS",
+
+  /**
+   * value: "MAX_TOKENS"
+   * @const
+   */
+  MAX_TOKENS: "MAX_TOKENS"
+};
+/**
+ * @member {module:model/RagQueryOptions.CompletenessEnum} completeness
  */
 RagQueryOptions.prototype.completeness = undefined;
 

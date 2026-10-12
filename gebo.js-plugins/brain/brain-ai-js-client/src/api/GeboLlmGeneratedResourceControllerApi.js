@@ -36,8 +36,8 @@ export default class GeboLlmGeneratedResourceControllerApi {
 
 
     /**
-     * @param {Object} userSessionCode 
-     * @param {Object} generatedResourceCode 
+     * @param {String} userSessionCode 
+     * @param {String} generatedResourceCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
     serveLLMGeneratedContentWithHttpInfo(userSessionCode, generatedResourceCode) {

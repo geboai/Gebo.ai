@@ -126,18 +126,23 @@ class SharedContextWindowingLoopTest {
 
 	@Test
 	@Timeout(60)
-	void aContributionLargerThanTheBudgetGetsItsOwnWindowAndTheNextOneIsStillReached() {
+	void aContributionLargerThanTheBudgetIsSplitAcrossWindowsAndTheNextOneIsStillReached() {
 		final AgentsCollaborationSessionContext session = new AgentsCollaborationSessionContext();
-		addResponse(session, "huge", marker(0) + " " + "lorem ipsum ".repeat(4000));
+		addResponse(session, "huge", marker(0) + " " + "lorem ipsum ".repeat(4000) + marker(9));
 		addResponse(session, "small", marker(1) + " a short follow up");
 
-		// Before the fix this call never returned: the oversized contribution produced an
-		// empty window, so the cursor stayed put and the do/while paged for ever.
 		final List<Map<String, Object>> windows = window(session, 3000);
 
-		assertEquals(2, windows.size(), "the oversized contribution travels alone, the small one follows");
-		assertEquals(1, windowsCarrying(windows, marker(0)), "the oversized contribution must still be rendered");
+		// The oversized contribution is split in consecutive parts, each in a window of
+		// its own, so that no window overflows and none of its content is lost.
+		assertTrue(windows.size() > 2, "the oversized contribution spans several windows, was " + windows.size());
+		assertEquals(1, windowsCarrying(windows, marker(0)), "its beginning is in its first part");
+		assertEquals(1, windowsCarrying(windows, marker(9)), "its end is in its last part, nothing is lost");
 		assertEquals(1, windowsCarrying(windows, marker(1)), "the contribution after it must still be reached");
+		for (Map<String, Object> w : windows) {
+			assertTrue(ai.gebo.architecture.ai.model.ITokensCountable.stringsTokensSize(w.get(SHARED_CONTEXT).toString()) <= 3000,
+					"no window over the budget");
+		}
 	}
 
 	@Test
@@ -148,10 +153,11 @@ class SharedContextWindowingLoopTest {
 		addResponse(session, "b", marker(1) + " second");
 
 		// A negative budget is what a large prompt on a small-context model produces.
-		// It must degrade to one contribution per window, never to an endless loop.
+		// The shared context keeps its minimum, so small contributions still travel,
+		// and the paging still ends.
 		final List<Map<String, Object>> windows = window(session, -50);
 
-		assertEquals(2, windows.size(), "one contribution per window when the budget is already spent");
+		assertEquals(1, windows.size(), "the small contributions fit the minimum shared context");
 		assertEquals(1, windowsCarrying(windows, marker(0)));
 		assertEquals(1, windowsCarrying(windows, marker(1)));
 	}

@@ -8,20 +8,20 @@
 * Copyright (c) 2025+ Gebo.ai
 */
 -->
-<p-tabs [value]="0" (valueChange)="activatedIndex($event)" class="geboFullHeight">
+<p-tabs [value]="0" (valueChange)="activatedIndex($event)" class="gebo-full-height-tabs">
   <p-tablist>
-    <p-tab [value]="0" gebo-ai-text>Dashboard</p-tab>
-    <p-tab [value]="1" gebo-ai-text>LLMs configurations</p-tab>
-    <p-tab [value]="2" gebo-ai-text>Users and groups</p-tab>
-    <p-tab [value]="3" gebo-ai-text>Gebo.ai modules config</p-tab>
+    <p-tab id="DashboardTab" [value]="0" gebo-ai-text>Dashboard</p-tab>
+    <p-tab id="LLMSTab" [value]="1" gebo-ai-text>LLMs configurations</p-tab>
+    <p-tab id="UsersGroupTab" [value]="2" gebo-ai-text>Users and groups</p-tab>
     @if (false) {
-      <p-tab [value]="4" gebo-ai-text>Build/packaging systems</p-tab>
+      <p-tab id="BuildPackageSystems" [value]="4" gebo-ai-text>Build/packaging systems</p-tab>
     }
-    <p-tab [value]="5" gebo-ai-text>Knowledge bases &amp; projects</p-tab>
-    <p-tab [value]="6" gebo-ai-text>Rag chat profiles/Model prompts</p-tab>
-    <p-tab [value]="7" gebo-ai-text>Agents/Networks of agents</p-tab>
-    <p-tab [value]="8" gebo-ai-text>Logs</p-tab>
-    <p-tab [value]="9" gebo-ai-text>Compliance</p-tab>
+    <p-tab id="KnowledgeBaseTab" [value]="5" gebo-ai-text>Knowledge bases &amp; projects</p-tab>
+    <p-tab id="RagChatProfilesTab" [value]="6" gebo-ai-text>Rag chat profiles</p-tab>
+    <p-tab id="PromptsTab" [value]="10" gebo-ai-text>Prompts</p-tab>
+    <p-tab id="AgentsNetworksTab" [value]="7" gebo-ai-text>Agents/Networks of agents</p-tab>
+    <p-tab id="LogsTab" [value]="8" gebo-ai-text>Logs</p-tab>
+    <p-tab id="ComplianceTab" [value]="9" gebo-ai-text>Compliance</p-tab>
   </p-tablist>
   <p-tabpanels>
 
@@ -34,9 +34,6 @@
   <p-tabpanel [value]="2">
     <users-management-component id="childs" #child2></users-management-component>
   </p-tabpanel>
-  <p-tabpanel [value]="3">
-    <systems-component id="childs" #child3></systems-component>
-  </p-tabpanel>
   @if (false) {
     <p-tabpanel [value]="4">
       <build-packaging-systems-component id="childs" #child4></build-packaging-systems-component>
@@ -48,6 +45,9 @@
 
   <p-tabpanel [value]="6">
     <chat-profiles-component id="childs" #child6></chat-profiles-component>
+  </p-tabpanel>
+  <p-tabpanel [value]="10">
+    <prompts-panel-component id="childs" #child10></prompts-panel-component>
   </p-tabpanel>
   <p-tabpanel [value]="7">
     <agent-networks-component id="childs" #child7></agent-networks-component>

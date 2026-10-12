@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import AdditionalContent from './AdditionalContent';
 import CalledFunction from './CalledFunction';
 import ChatModelRequestContextWindowStats from './ChatModelRequestContextWindowStats';
 import GResponseDocumentRef from './GResponseDocumentRef';
@@ -78,6 +79,8 @@ export default class GeboChatResponse {
         obj.pipelineParams = ApiClient.convertToType(data['pipelineParams'], {'String': Object});
       if (data.hasOwnProperty('deepSearchRequestId'))
         obj.deepSearchRequestId = ApiClient.convertToType(data['deepSearchRequestId'], 'String');
+      if (data.hasOwnProperty('additionalContents'))
+        obj.additionalContents = ApiClient.convertToType(data['additionalContents'], [AdditionalContent]);
     }
     return obj;
   }
@@ -167,4 +170,9 @@ GeboChatResponse.prototype.pipelineParams = undefined;
  * @member {String} deepSearchRequestId
  */
 GeboChatResponse.prototype.deepSearchRequestId = undefined;
+
+/**
+ * @member {Array.<module:model/AdditionalContent>} additionalContents
+ */
+GeboChatResponse.prototype.additionalContents = undefined;
 

@@ -1,0 +1,9 @@
+# BrainClient.OperationStatusGMistralChatModelConfig
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**result** | [**GMistralChatModelConfig**](GMistralChatModelConfig.md) |  | [optional] 
+**messages** | [**[GUserMessage]**](GUserMessage.md) |  | [optional] 
+**hasErrorMessages** | **Boolean** |  | [optional] 
+**hasWarnMessages** | **Boolean** |  | [optional] 

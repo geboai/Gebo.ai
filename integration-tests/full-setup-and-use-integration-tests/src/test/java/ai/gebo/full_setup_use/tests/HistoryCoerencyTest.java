@@ -10,8 +10,11 @@ import ai.gebo.architecture.integration.tests.AbstractVendorSetupAndUseTest;
 import ai.gebo.architecture.integration.tests.model.TestGeboSystemInfo;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.app.Main;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresConfig;
 
 @SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@RequiresConfig(value = AbstractVendorSetupAndUseTest.FULL_SETUP_ENVIRONMENT_JSON_STRING,
+		description = "JSON with the admin account, the LLM vendor and its API key")
 public class HistoryCoerencyTest extends AbstractVendorSetupAndUseTest {
 
 	public void historyCoerencyTest() throws DatabindException, JacksonException, InterruptedException {

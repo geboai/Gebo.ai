@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**getAgentConfigs**](GeboAgentsNetworkAdminControllerApi.md#getAgentConfigs) | **GET** /api/admin/GeboAgentsNetworkAdminController/getAgentConfigs | 
 [**getAgentConfigsByServiceId**](GeboAgentsNetworkAdminControllerApi.md#getAgentConfigsByServiceId) | **GET** /api/admin/GeboAgentsNetworkAdminController/getAgentConfigsByServiceId | 
 [**getAgentServices**](GeboAgentsNetworkAdminControllerApi.md#getAgentServices) | **GET** /api/admin/GeboAgentsNetworkAdminController/getAgentServices | 
+[**getAgentsMountedTools**](GeboAgentsNetworkAdminControllerApi.md#getAgentsMountedTools) | **POST** /api/admin/GeboAgentsNetworkAdminController/getAgentsMountedTools | 
 [**getAgentsNetwork**](GeboAgentsNetworkAdminControllerApi.md#getAgentsNetwork) | **GET** /api/admin/GeboAgentsNetworkAdminController/getAgentsNetwork | 
 [**getAgentsNetworkByCode**](GeboAgentsNetworkAdminControllerApi.md#getAgentsNetworkByCode) | **GET** /api/admin/GeboAgentsNetworkAdminController/getAgentsNetworkByCode | 
 [**getCompatibleNextServices**](GeboAgentsNetworkAdminControllerApi.md#getCompatibleNextServices) | **GET** /api/admin/GeboAgentsNetworkAdminController/getCompatibleNextServices | 
@@ -179,6 +180,49 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getAgentsMountedTools"></a>
+# **getAgentsMountedTools**
+> List&lt;AgentMountedTools&gt; getAgentsMountedTools(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboAgentsNetworkAdminControllerApi;
+
+
+GeboAgentsNetworkAdminControllerApi apiInstance = new GeboAgentsNetworkAdminControllerApi();
+List<String> body = Arrays.asList("body_example"); // List<String> | 
+try {
+    List<AgentMountedTools> result = apiInstance.getAgentsMountedTools(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAgentsNetworkAdminControllerApi#getAgentsMountedTools");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  |
+
+### Return type
+
+[**List&lt;AgentMountedTools&gt;**](AgentMountedTools.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 <a name="getAgentsNetwork"></a>

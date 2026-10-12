@@ -4,5 +4,5 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** |  | 
-**knowledgeBaseCodes** | **[String]** |  | 
+**knowledgeBaseCodes** | **[String]** |  | [optional] 
 **page** | [**DataPage**](DataPage.md) |  | 

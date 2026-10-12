@@ -3,8 +3,8 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GeboCoreAnalisysControllerService } from './api/geboCoreAnalisysController.service';
-import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorStoreConfigurationController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 
 @NgModule({
@@ -12,8 +12,8 @@ import { InternalMessagingTopologyControllerService } from './api/internalMessag
   declarations: [],
   exports:      [],
   providers: [
+    GeboAngularFormGroupMetaInfoControllerService,
     GeboCoreAnalisysControllerService,
-    GeboVectorStoreConfigurationControllerService,
     InternalMessagingTopologyControllerService ]
 })
 export class ApiModule {

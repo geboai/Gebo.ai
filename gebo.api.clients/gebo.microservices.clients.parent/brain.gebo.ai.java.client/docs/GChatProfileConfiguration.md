@@ -25,3 +25,4 @@ Name | Type | Description | Notes
 **otherSearchSimilarityThreshold** | **Double** |  |  [optional]
 **manualThreasholdsConfiguration** | **Boolean** |  |  [optional]
 **useAlsoKeywordSearch** | **Boolean** |  |  [optional]
+**defaultChatNetworkOfAgents** | **String** |  |  [optional]

@@ -40,96 +40,96 @@ export default class GBaseChatModelConfig {
     if (data) {
       obj = obj || new GBaseChatModelConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('modelTypeCode'))
-        obj.modelTypeCode = ApiClient.convertToType(data['modelTypeCode'], Object);
+        obj.modelTypeCode = ApiClient.convertToType(data['modelTypeCode'], 'String');
       if (data.hasOwnProperty('defaultModel'))
-        obj.defaultModel = ApiClient.convertToType(data['defaultModel'], Object);
+        obj.defaultModel = ApiClient.convertToType(data['defaultModel'], 'Boolean');
       if (data.hasOwnProperty('apiSecretCode'))
-        obj.apiSecretCode = ApiClient.convertToType(data['apiSecretCode'], Object);
+        obj.apiSecretCode = ApiClient.convertToType(data['apiSecretCode'], 'String');
       if (data.hasOwnProperty('choosedModel'))
         obj.choosedModel = GBaseChatModelChoice.constructFromObject(data['choosedModel']);
       if (data.hasOwnProperty('baseUrl'))
-        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], Object);
+        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], 'String');
       if (data.hasOwnProperty('contextLength'))
-        obj.contextLength = ApiClient.convertToType(data['contextLength'], Object);
+        obj.contextLength = ApiClient.convertToType(data['contextLength'], 'Number');
       if (data.hasOwnProperty('topP'))
-        obj.topP = ApiClient.convertToType(data['topP'], Object);
+        obj.topP = ApiClient.convertToType(data['topP'], 'Number');
       if (data.hasOwnProperty('accessibleGroups'))
-        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], Object);
+        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], ['String']);
       if (data.hasOwnProperty('accessibleUsers'))
-        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], Object);
+        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], ['String']);
       if (data.hasOwnProperty('accessibleToAll'))
-        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], Object);
+        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], 'Boolean');
       if (data.hasOwnProperty('enabledFunctions'))
-        obj.enabledFunctions = ApiClient.convertToType(data['enabledFunctions'], Object);
+        obj.enabledFunctions = ApiClient.convertToType(data['enabledFunctions'], ['String']);
       if (data.hasOwnProperty('temperature'))
-        obj.temperature = ApiClient.convertToType(data['temperature'], Object);
+        obj.temperature = ApiClient.convertToType(data['temperature'], 'Number');
       if (data.hasOwnProperty('forUses'))
-        obj.forUses = ApiClient.convertToType(data['forUses'], Object);
+        obj.forUses = ApiClient.convertToType(data['forUses'], ['String']);
       if (data.hasOwnProperty('features'))
-        obj.features = ApiClient.convertToType(data['features'], Object);
+        obj.features = ApiClient.convertToType(data['features'], ['String']);
       if (data.hasOwnProperty('thinking'))
-        obj.thinking = ApiClient.convertToType(data['thinking'], Object);
+        obj.thinking = ApiClient.convertToType(data['thinking'], 'String');
       if (data.hasOwnProperty('maxGeneratedTokens'))
-        obj.maxGeneratedTokens = ApiClient.convertToType(data['maxGeneratedTokens'], Object);
+        obj.maxGeneratedTokens = ApiClient.convertToType(data['maxGeneratedTokens'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GBaseChatModelConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GBaseChatModelConfig.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GBaseChatModelConfig.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GBaseChatModelConfig.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GBaseChatModelConfig.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GBaseChatModelConfig.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} modelTypeCode
+ * @member {String} modelTypeCode
  */
 GBaseChatModelConfig.prototype.modelTypeCode = undefined;
 
 /**
- * @member {Object} defaultModel
+ * @member {Boolean} defaultModel
  */
 GBaseChatModelConfig.prototype.defaultModel = undefined;
 
 /**
- * @member {Object} apiSecretCode
+ * @member {String} apiSecretCode
  */
 GBaseChatModelConfig.prototype.apiSecretCode = undefined;
 
@@ -139,62 +139,152 @@ GBaseChatModelConfig.prototype.apiSecretCode = undefined;
 GBaseChatModelConfig.prototype.choosedModel = undefined;
 
 /**
- * @member {Object} baseUrl
+ * @member {String} baseUrl
  */
 GBaseChatModelConfig.prototype.baseUrl = undefined;
 
 /**
- * @member {Object} contextLength
+ * @member {Number} contextLength
  */
 GBaseChatModelConfig.prototype.contextLength = undefined;
 
 /**
- * @member {Object} topP
+ * @member {Number} topP
  */
 GBaseChatModelConfig.prototype.topP = undefined;
 
 /**
- * @member {Object} accessibleGroups
+ * @member {Array.<String>} accessibleGroups
  */
 GBaseChatModelConfig.prototype.accessibleGroups = undefined;
 
 /**
- * @member {Object} accessibleUsers
+ * @member {Array.<String>} accessibleUsers
  */
 GBaseChatModelConfig.prototype.accessibleUsers = undefined;
 
 /**
- * @member {Object} accessibleToAll
+ * @member {Boolean} accessibleToAll
  */
 GBaseChatModelConfig.prototype.accessibleToAll = undefined;
 
 /**
- * @member {Object} enabledFunctions
+ * @member {Array.<String>} enabledFunctions
  */
 GBaseChatModelConfig.prototype.enabledFunctions = undefined;
 
 /**
- * @member {Object} temperature
+ * @member {Number} temperature
  */
 GBaseChatModelConfig.prototype.temperature = undefined;
 
 /**
- * @member {Object} forUses
+ * Allowed values for the <code>forUses</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GBaseChatModelConfig.ForUsesEnum = {
+  /**
+   * value: "CHAT"
+   * @const
+   */
+  CHAT: "CHAT",
+
+  /**
+   * value: "INTERNAL_SERVICES"
+   * @const
+   */
+  INTERNAL_SERVICES: "INTERNAL_SERVICES"
+};
+/**
+ * @member {Array.<module:model/GBaseChatModelConfig.ForUsesEnum>} forUses
  */
 GBaseChatModelConfig.prototype.forUses = undefined;
 
 /**
- * @member {Object} features
+ * Allowed values for the <code>features</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GBaseChatModelConfig.FeaturesEnum = {
+  /**
+   * value: "CHAT"
+   * @const
+   */
+  CHAT: "CHAT",
+
+  /**
+   * value: "REASONING"
+   * @const
+   */
+  REASONING: "REASONING",
+
+  /**
+   * value: "STRUCTURED_OUTPUT"
+   * @const
+   */
+  STRUCTURED_OUTPUT: "STRUCTURED_OUTPUT",
+
+  /**
+   * value: "MULTIMEDIA"
+   * @const
+   */
+  MULTIMEDIA: "MULTIMEDIA",
+
+  /**
+   * value: "FUNCTION_CALLING"
+   * @const
+   */
+  FUNCTION_CALLING: "FUNCTION_CALLING"
+};
+/**
+ * @member {Array.<module:model/GBaseChatModelConfig.FeaturesEnum>} features
  */
 GBaseChatModelConfig.prototype.features = undefined;
 
 /**
- * @member {Object} thinking
+ * Allowed values for the <code>thinking</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GBaseChatModelConfig.ThinkingEnum = {
+  /**
+   * value: "NO_THINKING"
+   * @const
+   */
+  NO_THINKING: "NO_THINKING",
+
+  /**
+   * value: "LOW_THINKING"
+   * @const
+   */
+  LOW_THINKING: "LOW_THINKING",
+
+  /**
+   * value: "MEDIUM_THINKING"
+   * @const
+   */
+  MEDIUM_THINKING: "MEDIUM_THINKING",
+
+  /**
+   * value: "HIGH_THINKING"
+   * @const
+   */
+  HIGH_THINKING: "HIGH_THINKING",
+
+  /**
+   * value: "AUTO"
+   * @const
+   */
+  AUTO: "AUTO"
+};
+/**
+ * @member {module:model/GBaseChatModelConfig.ThinkingEnum} thinking
  */
 GBaseChatModelConfig.prototype.thinking = undefined;
 
 /**
- * @member {Object} maxGeneratedTokens
+ * @member {Number} maxGeneratedTokens
  */
 GBaseChatModelConfig.prototype.maxGeneratedTokens = undefined;
 

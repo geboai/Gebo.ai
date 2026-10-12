@@ -31,6 +31,7 @@ import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsParametersCacheConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -45,6 +46,7 @@ import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
 import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
+import ai.gebo.llms.chat.pipelines.service.IGUserRequestIntentClassifier;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
@@ -75,11 +77,13 @@ import lombok.ToString;
 @Component
 @AllArgsConstructor
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingService
-		implements IRoutingChatPipelineStepService {
+		implements IRoutingChatPipelineStepService, IGUserRequestIntentClassifier {
 
 	public static final String PIPELINE_EXECUTOR_SUGGESTION = "pipelineExecutorSuggestion";
 	private static final String SCANNING_HUGE_FILE_WITH_LLMS = "Scanning huge file with llms";
 	private static final String RUNNING_HEAVY_CHAT_WITH_DOCUMENTS = "RUNNING_HEAVY_CHAT_WITH_DOCUMENTS";
+	private static final String ANSWERING_FROM_YOUR_DOCUMENTS = "Answering from your selected documents";
+	private static final String CHATTING_WITH_YOUR_DOCUMENTS = "CHATTING_WITH_YOUR_DOCUMENTS";
 	private static final String EXECUTING_YOUR_CHOOSED_AGENT = "Executing your choosed agent";
 	private static final String USER_CHOOSED_AGENT = "USER_CHOOSED_AGENT";
 	private static final String CHOOSED_AGENTIC_FLOW_ANSWERING_AGENT_RUNNING = "Choosed agentic flow, answering agent running";
@@ -94,6 +98,13 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private static final String REWRITTEN_QUERY_FIELD = REWRITTEN_QUERY_TEMPLATE_PARAM;
 	static final String DEEP_SEARCHED_SYSTEMS = "deepSearchedSystems";
 	private static final String DELIVERABLE_FIELD = DELIVERABLE_TEMPLATE_PARAM;
+	/** The request understanding's field telling whether the user asked to search. */
+	static final String SEARCH_REQUESTED_FIELD = "searchRequested";
+	/**
+	 * The request understanding's field naming the language the latest user message
+	 * explicitly asks the answers in: kept on the chat until the user asks for another.
+	 */
+	static final String USER_REQUIRED_LANGUAGE_FIELD = "userRequiredLanguage";
 	private static final String INTENT_SELECTION_CRITERIA = "selection-criteria: ";
 	private static final String INTENT_TYPE = "intent-type: ";
 	private static final String END_DELIVERABLE_TYPES_CATALOG = "END_DELIVERABLE_TYPES_CATALOG";
@@ -149,6 +160,24 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		private final DeliverableIntent userIntent;
 	}
 
+	/**
+	 * The same rewrite and deliverable classification this router runs first, for the
+	 * routers that do not decide the route with the model (e.g. the open-chat one).
+	 */
+	@Override
+	public DeliverableIntent classifyUserRequest(ChatPipelineExecutionRuntimeData runtimeData,
+			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			throws ChatPipelineException {
+		try {
+			String latestInteractions = RoutingPromptUtil.latestInteractionsPromptPart(
+					runtimeData.getRequestResources().getChathistory().getLatestEntries().getInteractions());
+			return doRequestRewriteAndUserIntent(runtimeData, emitter, chatModel, serviceModel, latestInteractions)
+					.getUserIntent();
+		} catch (GeboChatSessionLifecycleException | IOException | LLMConfigException e) {
+			throw new ChatPipelineException("Cannot classify the user request", e);
+		}
+	}
+
 	private RewriteAndUserIntent doRequestRewriteAndUserIntent(ChatPipelineExecutionRuntimeData runtimeData,
 			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
 			String latestInteractions) throws GeboChatSessionLifecycleException, IOException, LLMConfigException {
@@ -162,7 +191,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
 		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
 		Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
-				List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD));
+				List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD, SEARCH_REQUESTED_FIELD, USER_REQUIRED_LANGUAGE_FIELD));
+		// an output with neither field is asked once more by callLLMRepeatableFieldEntryOutput
 		List<String> rewrittenQuery = data.get(REWRITTEN_QUERY_FIELD);
 		List<String> deliverable = data.get(DELIVERABLE_FIELD);
 		String rewrited_query = rewrittenQuery != null && !rewrittenQuery.isEmpty() ? rewrittenQuery.get(0) : null;
@@ -205,6 +235,60 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 					"**********************************************************************************************");
 		}
 		runtimeData.getRequestResources().getCurrentRequest().setUserIntent(userIntent);
+		final boolean searchRequested = searchRequested(data.get(SEARCH_REQUESTED_FIELD));
+		final boolean searchForbidden = searchForbidden(data.get(SEARCH_REQUESTED_FIELD));
+		runtimeData.getRequestResources().getCurrentRequest().setSearchRequested(searchRequested);
+		runtimeData.getRequestResources().getCurrentRequest().setSearchForbidden(searchForbidden);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Search requested:" + searchRequested + " search forbidden:" + searchForbidden);
+		}
+		// a language the user explicitly asks the answers in wins over the one the message
+		// is written in (detected when the request entered the pipelines): asked in this
+		// message it is kept on the chat, until the user asks for another one
+		final GeboChatRequest currentRequest = runtimeData.getRequestResources().getCurrentRequest();
+		final String reportedLanguage = userRequiredLanguage(data.get(USER_REQUIRED_LANGUAGE_FIELD));
+		// asked only when the message names it: a model may report the language the message
+		// is written in, which the detected language already gives
+		final String askedLanguage = reportedLanguage != null && AskedLanguage.namedIn(reportedLanguage, query)
+				? reportedLanguage
+				: null;
+		if (reportedLanguage != null && askedLanguage == null && LOGGER.isDebugEnabled()) {
+			LOGGER.debug("User required language " + reportedLanguage
+					+ " reported by the request understanding is named nowhere in the message: not kept");
+		}
+		final String keptLanguage = chatSessionLifecycleService.getUserRequiredLanguage(currentRequest);
+		if (askedLanguage != null && !askedLanguage.equalsIgnoreCase(String.valueOf(keptLanguage))) {
+			chatSessionLifecycleService.setUserRequiredLanguage(currentRequest, askedLanguage);
+		}
+		// the chat keeps the language it started in: its first trusted detection, never
+		// changed by a later one (a short or misdetected message, or none detected, does
+		// not switch it); only a language the user asks for wins over it
+		final String detectedLanguage = currentRequest.getUserLanguage();
+		String chatLanguage = chatSessionLifecycleService.getChatLanguage(currentRequest);
+		if (chatLanguage == null && detectedLanguage != null) {
+			chatLanguage = detectedLanguage;
+			chatSessionLifecycleService.setChatLanguage(currentRequest, chatLanguage);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat language set by the first trusted detection: " + chatLanguage);
+			}
+		}
+		final String answerLanguage = chatLanguage(askedLanguage, keptLanguage, chatLanguage, detectedLanguage);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Answer language:" + answerLanguage + " (asked:" + askedLanguage + " kept:" + keptLanguage
+					+ " chat:" + chatLanguage + " detected:" + detectedLanguage + ")");
+		}
+		if (answerLanguage != null) {
+			runtimeData.getRequestResources().getCurrentRequest().setUserLanguage(answerLanguage);
+			if (runtimeData.getMinimalChatContext() != null
+					&& runtimeData.getMinimalChatContext().getCurrentRequest() != null) {
+				runtimeData.getMinimalChatContext().getCurrentRequest().setUserLanguage(answerLanguage);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("User required language asked in the message:" + askedLanguage + " kept on the chat:"
+					+ keptLanguage + ", the request's now:"
+					+ runtimeData.getRequestResources().getCurrentRequest().getUserLanguage());
+		}
 		return new RewriteAndUserIntent(rewrited_query, userIntent);
 	}
 
@@ -267,7 +351,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			params.putAll(cachedParams);
 			int usedTokens = tokensLength(latestInteractions, params.toString(), rewrited_query)
 					+ _prompt.getTokensSize();
-			int remainingContext = (int) (((double) (serviceModel.getContextLength() - usedTokens)) * 0.8d);
+			// the tokens budget's share of what the context leaves (ai.gebo.llms.tokens-budget.factor)
+			int remainingContext = (int) (((double) (serviceModel.getContextLength() - usedTokens))
+					* BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
 			final int documentsTokenBudget = Math.min(remainingContext,
 					this.chatPipelinesConfig.getMaxRoutingDecisionDocumentsTokenBudget());
 			IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
@@ -410,14 +496,36 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 					serviceModel, latestInteractions);
 			String rewrited_query = firstDecision.getRewrited_query();
 
-			// if actual resource has chat with documents or uploads with more than actual
-			// tokens budget than doing a deep search ONLY on
-			// Documents being in requests
+			// Ground the answer on the documents the user selected or uploaded ON THIS
+			// TURN: route to the dedicated CHAT_WITH_FILES service, which keeps small
+			// documents in context and deep-searches only the huge ones, and never
+			// launches an independent web/agent search. This used to be gated on a
+			// token-size threshold, so a small forced document (e.g. a single web page)
+			// fell through to the free router and got augmented with an unwanted web
+			// search. It is keyed on the current request rather than the accumulated
+			// session chat-with state, so a later turn - for instance one that explicitly
+			// asks for a deep search - is not hijacked by documents chatted with earlier
+			// in the same session. The threshold now only decides whether to warn the
+			// user that the forced documents are large enough for a heavy scan.
+			GeboChatRequest currentRequest = runtimeData.getRequestResources().getCurrentRequest();
 			int forcedDocumentsTotal = runtimeData.getRequestResources().getChatWithDocuments().getTokensSize()
 					+ runtimeData.getRequestResources().getUploadedDocuments().getTokensSize();
 			int threasholdForForcedDeepSearch = getChatWithDocsAndUploadedSizeTriggersDeepSearchThreashold(chatModel);
-			if (forcedDocumentsTotal >= threasholdForForcedDeepSearch) {
-				rd = createKnowledgeBaseSearchHeavyDocumentsFixedRoute(emitter, runtimeData);
+			if (requestCarriesForcedDocuments(currentRequest)) {
+				boolean heavy = forcedDocumentsTotal >= threasholdForForcedDeepSearch;
+				rd = createChatWithForcedDocumentsFixedRoute(emitter, heavy);
+			} else if (firstDecision.getUserIntent() == DeliverableIntent.IMAGE_GENERATION
+					&& isImageGenerationAvailable()) {
+				// The first step already decided this one: an explicit request for a new image
+				// has a single destination, so it goes there instead of being handed to
+				// doDecideRoute, which would ask the model again and can answer with something
+				// else entirely. The availability test is repeated rather than trusted from the
+				// intent step because an image model can be removed between the two.
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("User intent is {}: routing straight to the image generation service",
+							DeliverableIntent.IMAGE_GENERATION.name());
+				}
+				rd = createImageGenerationFixedRoute(emitter);
 			} else {
 				if (runtimeData.getRequestResources().getCurrentRequest() != null
 						&& runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId() != null
@@ -500,6 +608,63 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		private final String motivation;
 	}
 
+	/** Whether the request understanding said the user asked to search: true, yes or 1. */
+	static boolean searchRequested(List<String> values) {
+		if (values == null || values.isEmpty() || values.get(0) == null) {
+			return false;
+		}
+		final String value = values.get(0).trim().toLowerCase();
+		return value.startsWith("true") || value.startsWith("yes") || value.equals("1");
+	}
+
+	/**
+	 * Whether the request understanding said the user asked to answer without searching:
+	 * the field's value never.
+	 */
+	static boolean searchForbidden(List<String> values) {
+		if (values == null || values.isEmpty() || values.get(0) == null) {
+			return false;
+		}
+		return values.get(0).trim().toLowerCase().startsWith("never");
+	}
+
+	/**
+	 * The language of a request's answer: the one the user asks for in this message, else
+	 * the one asked earlier and kept on the chat, else the chat's own (its first trusted
+	 * detection), else this message's detection (none of the others known); null when
+	 * nothing is known (the prompts then ask for the language of the request).
+	 */
+	static String chatLanguage(String asked, String kept, String chat, String detected) {
+		if (asked != null) {
+			return asked;
+		}
+		if (kept != null) {
+			return kept;
+		}
+		return chat != null ? chat : detected;
+	}
+
+	/**
+	 * The language the request understanding said the user explicitly asks the answers
+	 * in, as a capitalized English name ("English"); null when the user asks for none.
+	 */
+	static String userRequiredLanguage(List<String> values) {
+		if (values == null || values.isEmpty() || values.get(0) == null) {
+			return null;
+		}
+		final String lower = values.get(0).trim().toLowerCase();
+		if (lower.startsWith("none") || lower.startsWith("null") || lower.startsWith("no ") || lower.equals("no")
+				|| lower.startsWith("not ") || lower.startsWith("n/a")) {
+			return null;
+		}
+		// the name only: the words before any comment, without punctuation
+		final String value = values.get(0).trim().replaceAll("[^\\p{L} ].*$", "").trim();
+		if (value.isEmpty()) {
+			return null;
+		}
+		return Character.toUpperCase(value.charAt(0)) + value.substring(1);
+	}
+
 	private RespondingWith parseDecision(String decision) {
 		TreeMap<Integer, RespondingWith> ordered = new TreeMap<Integer, RespondingWith>();
 		String tolower = decision.toLowerCase();
@@ -514,10 +679,79 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		return _decision;
 	}
 
-	private RoutingDecision createKnowledgeBaseSearchHeavyDocumentsFixedRoute(ISinkUIEmitter emitter,
-			ChatPipelineExecutionRuntimeData runtimeData) {
-		notifyUser(emitter, RUNNING_HEAVY_CHAT_WITH_DOCUMENTS, SCANNING_HUGE_FILE_WITH_LLMS, null, 3000l,
+	/**
+	 * The route an explicit request for a new image takes, without asking the model a
+	 * second time where to go.
+	 *
+	 * <p>
+	 * IMAGE_GENERATION is the one deliverable whose destination the first step already
+	 * settles: the catalog describes it as the user having EXPLICITLY asked to generate,
+	 * create, draw, render or design a NEW image, and there is exactly one service that
+	 * produces one. Left to {@link #doDecideRoute} the question is put to the model a
+	 * second time, with the intent demoted to a hint among the routing parameters, and an
+	 * answer that is already known can come back as a knowledge base search instead - the
+	 * user asks for a picture and gets a document lookup. That second call is also paid
+	 * for, in latency and tokens, to re-derive what the first one decided.
+	 * </p>
+	 *
+	 * <p>
+	 * The decision is the same object {@link #decideStepsChain} builds for
+	 * IMAGE_GENERATION_RESPONSE, so nothing downstream sees a new shape.
+	 * </p>
+	 */
+	private RoutingDecision createImageGenerationFixedRoute(ISinkUIEmitter emitter) {
+		notifyUser(emitter, CHOOSED_AGENTIC_FLOW, CHOOSED_AGENTIC_FLOW_ANSWERING_AGENT_RUNNING, null, 2000l,
 				NotificationType.INFO);
+		return new RoutingDecision(
+				List.of(DefaultImageGenerationStreamingOutputChatPipelineServiceImpl.IMAGE_GENERATION_STREAMING_SERVICE),
+				new IChatPipelineStepRuntimeData() {
+
+					@Override
+					public String getStepId() {
+
+						return DefaultRoutingChatPipelineStepServiceImpl.this.getStepId();
+					}
+
+					@Override
+					public List<IStepContribution> getContextEnrichingContribution() {
+						return List.of();
+					}
+
+					@Override
+					public Map<String, Object> getEnvironmentContributions() {
+
+						return Map.of();
+					}
+				}, RespondingWith.IMAGE_GENERATION_RESPONSE.name(), Map.of());
+	}
+
+	/**
+	 * Whether the current request explicitly carries documents to chat with - rich
+	 * refs, plain knowledge-base codes, or freshly uploaded files. This is deliberately
+	 * scoped to the request and not to the accumulated session chat-with state, so
+	 * grounding follows the user's per-turn selection rather than sticking for the rest
+	 * of the conversation.
+	 */
+	private boolean requestCarriesForcedDocuments(GeboChatRequest request) {
+		if (request == null) {
+			return false;
+		}
+		boolean refs = request.getForcedDocumentsRef() != null && !request.getForcedDocumentsRef().isEmpty();
+		boolean codes = request.getForcedRequestDocuments() != null && !request.getForcedRequestDocuments().isEmpty();
+		boolean uploads = request.getUserUploadedContents() != null && !request.getUserUploadedContents().isEmpty();
+		return refs || codes || uploads;
+	}
+
+	private RoutingDecision createChatWithForcedDocumentsFixedRoute(ISinkUIEmitter emitter, boolean heavy) {
+		// The same grounded CHAT_WITH_FILES route serves both sizes; only the user-facing
+		// notice differs, so a small selection is not announced as a huge-file scan.
+		if (heavy) {
+			notifyUser(emitter, RUNNING_HEAVY_CHAT_WITH_DOCUMENTS, SCANNING_HUGE_FILE_WITH_LLMS, null, 3000l,
+					NotificationType.INFO);
+		} else {
+			notifyUser(emitter, CHATTING_WITH_YOUR_DOCUMENTS, ANSWERING_FROM_YOUR_DOCUMENTS, null, 3000l,
+					NotificationType.INFO);
+		}
 		RoutingDecision rd = new RoutingDecision(
 				List.of(DefaultChatWithFilesStreamingOutputPipelineServiceImpl.DEFAULT_CHAT_WITH_DOCS_STREAMING),
 				new IChatPipelineStepRuntimeData() {
@@ -612,9 +846,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 
 		case CHAT_WITH_FILES: {
 			return List.of(DefaultChatWithFilesStreamingOutputPipelineServiceImpl.DEFAULT_CHAT_WITH_DOCS_STREAMING);
-		}
-		case PURE_SEARCH: {
-			return List.of(DefaultPipelineStreamingPureSearchPipelineStepServiceImpl.PURE_SEARCH_STREAMING_SERVICE);
 		}
 		case DELEGATED_AGENT: {
 			return List.of(DefaultPipelineStreamingDelegatedStepServiceImpl.DEFAULT_CHAT_PIPELINE_STEP_SERVICE);

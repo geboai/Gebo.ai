@@ -19,6 +19,8 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GInternalDeletionMessagePayload;
@@ -51,6 +53,7 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceSnapshotRepository;
 import ai.gebo.knowledgebase.repositories.VirtualFolderRepository;
+import ai.gebo.knowledgebase.repositories.uniqueid.VirtualFilesystemUniqueIds;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseVersionableObject;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator.SendEvaluationPolicy;
@@ -83,6 +86,13 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 	protected final DocumentReferenceSnapshotRepository documentsReferenceSnapshotRepository;
 	protected final DocumentReferenceRepository documentReferenceRepository;
 	protected final VirtualFolderRepository virtualFolderRepository;
+	/** Gives the documents found their uniqueId before they are sent on, null when absent. */
+	protected VirtualFilesystemUniqueIds uniqueIds = null;
+
+	@Autowired(required = false)
+	public void setUniqueIds(VirtualFilesystemUniqueIds uniqueIds) {
+		this.uniqueIds = uniqueIds;
+	}
 	protected final IWorkflowRouter workflowRouter;
 
 	/**
@@ -273,7 +283,7 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 
 		final IGContentConsumer documentSenderConsumerWrapper = new GIOCContentConsumer<SystemIntegrationType, ProjectEndpointType,ContentConsumingSessionParamType>(
 				enrichers, jobStatus, evaluator, handler, endpoint, workflowRouter, this, userMessagesConsumer,
-				errorConsumer, documentConsumer, broker, documentReferenceRepository, virtualFolderRepository);
+				errorConsumer, documentConsumer, broker, documentReferenceRepository, virtualFolderRepository, uniqueIds);
 
 		return new Consumers(documentSenderConsumerWrapper, userMessagesConsumer, errorConsumer);
 	}

@@ -11,7 +11,14 @@ package ai.gebo.core.controllers;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.IntFunction;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,10 +28,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.application.messaging.GeboCurrentApplication;
 import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.acl.GAclEntry;
+import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.application.messaging.model.ComponentMetaInfo;
+import ai.gebo.application.messaging.model.DataEndpointAccess;
+import ai.gebo.application.messaging.model.DataFlowAccessResolution;
 import ai.gebo.application.messaging.model.DataFlowPersonalDataPropagation;
 import ai.gebo.application.messaging.model.GDataFlowReport;
 import ai.gebo.application.messaging.model.GModuleMetaInfo;
+import ai.gebo.security.model.UsersGroup;
+import ai.gebo.security.services.IGSecurityDirectory;
+import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;
 
 /**
@@ -71,8 +85,15 @@ import lombok.AllArgsConstructor;
 @RequestMapping("api/admin/DataFlowMetaInfoController")
 @AllArgsConstructor
 public class DataFlowMetaInfoController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(DataFlowMetaInfoController.class);
 
 	private final IGMessageBroker messageBroker;
+	// the access model in force, the ACL aliases store and the users directory, to
+	// complete the endpoints' access rules; each optional, so the register still
+	// answers on a node without one of them
+	private final ObjectProvider<IGSecurityService> securityServiceProvider;
+	private final ObjectProvider<IAclAliasesDao> aclAliasesDaoProvider;
+	private final ObjectProvider<IGSecurityDirectory> securityDirectoryProvider;
 
 	/**
 	 * This node's data-flow configuration: the locally hosted modules, each pruned
@@ -110,7 +131,59 @@ public class DataFlowMetaInfoController {
 		// personal-data source flows into as personal data too, so the transitive
 		// scope is answered here once rather than re-derived by each consumer.
 		DataFlowPersonalDataPropagation.apply(report);
+		DataFlowAccessResolution.apply(report, contentAccessPolicy(), aclDecoder(), groupNames());
 		return report;
+	}
+
+	/** The access model in force system-wide, null when it cannot be read here. */
+	private String contentAccessPolicy() {
+		try {
+			IGSecurityService securityService = securityServiceProvider.getIfAvailable();
+			return securityService != null ? securityService.getPlatformContentAccessPolicy().name() : null;
+		} catch (RuntimeException e) {
+			LOGGER.error("Cannot read the access model for the data-flow register", e);
+			return null;
+		}
+	}
+
+	/** Decodes an ACL alias into its entry, null when no ACL store is reachable here. */
+	private IntFunction<DataEndpointAccess.AclEntry> aclDecoder() {
+		final IAclAliasesDao aliases = aclAliasesDaoProvider.getIfAvailable();
+		if (aliases == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No ACL aliases store on this node: the register's ACL aliases stay undecoded");
+			}
+			return null;
+		}
+		return alias -> {
+			try {
+				GAclEntry entry = aliases.findAcl(alias);
+				return entry != null ? new DataEndpointAccess.AclEntry(entry.getAclGrantedUniqueId(),
+						entry.getGrant() != null ? entry.getGrant().name() : null) : null;
+			} catch (RuntimeException e) {
+				LOGGER.error("Cannot decode the ACL alias " + alias + " for the data-flow register", e);
+				return null;
+			}
+		};
+	}
+
+	/** The description of every group, by code; empty when the directory cannot be read here. */
+	private Map<String, String> groupNames() {
+		final Map<String, String> names = new HashMap<String, String>();
+		try {
+			IGSecurityDirectory directory = securityDirectoryProvider.getIfAvailable();
+			List<UsersGroup> groups = directory != null ? directory.findAllGroups() : null;
+			if (groups != null) {
+				for (UsersGroup group : groups) {
+					if (group != null && group.getCode() != null) {
+						names.put(group.getCode(), group.getDescription());
+					}
+				}
+			}
+		} catch (RuntimeException e) {
+			LOGGER.error("Cannot read the groups for the data-flow register", e);
+		}
+		return names;
 	}
 
 	private String nodeId() {

@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from "../ApiClient";
+import GeboContentProcessRow from '../model/GeboContentProcessRow';
 import GeboKnowledgeBaseSetupStatus from '../model/GeboKnowledgeBaseSetupStatus';
 
 /**
@@ -80,7 +81,7 @@ export default class GeboFastKnowledgeBaseSetupControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GeboContentProcessRow>} and HTTP response
      */
     getContentProcessRowsWithHttpInfo() {
       
@@ -102,7 +103,7 @@ export default class GeboFastKnowledgeBaseSetupControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GeboContentProcessRow];
 
       return this.apiClient.callApi(
         '/api/admin/GeboFastKnowledgeBaseSetupController/getContentProcessRows', 'GET',
@@ -112,7 +113,7 @@ export default class GeboFastKnowledgeBaseSetupControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GeboContentProcessRow>}
      */
     getContentProcessRows() {
       return this.getContentProcessRowsWithHttpInfo()

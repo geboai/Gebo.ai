@@ -78,6 +78,8 @@ export default class GUserspaceProjectEndpoint {
         obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], 'String');
       if (data.hasOwnProperty('aclAliases'))
         obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
+      if (data.hasOwnProperty('personalData'))
+        obj.personalData = ApiClient.convertToType(data['personalData'], 'Boolean');
       if (data.hasOwnProperty('username'))
         obj.username = ApiClient.convertToType(data['username'], 'String');
     }
@@ -210,6 +212,11 @@ GUserspaceProjectEndpoint.prototype.objectSpaceType = undefined;
  * @member {Array.<Number>} aclAliases
  */
 GUserspaceProjectEndpoint.prototype.aclAliases = undefined;
+
+/**
+ * @member {Boolean} personalData
+ */
+GUserspaceProjectEndpoint.prototype.personalData = undefined;
 
 /**
  * @member {String} username

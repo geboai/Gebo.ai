@@ -12,6 +12,7 @@ package ai.gebo.systems.abstraction.layer.impl;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -80,7 +81,40 @@ public class GContentDispatchingEvaluatorImpl implements IGContentDispatchingEva
 	 */
 	@Override
 	public void evaluateContentHandshake(GContentEmbeddingHandshakePayload handshake) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Ingestion acknowledged for content:" + handshake.getContentCode() + " hash:"
+					+ handshake.getHash() + " modificationDate:" + handshake.getModificationDate() + " fileSize:"
+					+ handshake.getFileSize() + " processed:" + handshake.getProcessed());
+		}
 		chRepository.save(ContentHandshakeData.of(handshake));
+	}
+
+	/**
+	 * The newest acknowledgement first by when it was received (the ones stored
+	 * before it was recorded have none), then by the content's modification date.
+	 */
+	private static final Comparator<ContentHandshakeData> NEWEST_LAST = Comparator
+			.comparing(ContentHandshakeData::getReceivedDate, Comparator.nullsFirst(Comparator.naturalOrder()))
+			.thenComparing(ContentHandshakeData::getModificationDate,
+					Comparator.nullsFirst(Comparator.naturalOrder()));
+
+	@Override
+	public ContentHandshakeData lastIngested(String contentCode) {
+		if (contentCode == null) {
+			return null;
+		}
+		ContentHandshakeData last = null;
+		try (Stream<ContentHandshakeData> acks = chRepository.findByContentCode(contentCode)) {
+			last = acks.filter(x -> x.getProcessed() != null && x.getProcessed()).max(NEWEST_LAST).orElse(null);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("lastIngested(" + contentCode + ") => "
+					+ (last != null
+							? "hash:" + last.getHash() + " modificationDate:" + last.getModificationDate()
+									+ " fileSize:" + last.getFileSize()
+							: "never ingested"));
+		}
+		return last;
 	}
 
 	/**

@@ -74,6 +74,8 @@ export default class GKnowledgeBase {
         obj.acl = ApiClient.convertToType(data['acl'], [GAclEntry]);
       if (data.hasOwnProperty('aclAliases'))
         obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
+      if (data.hasOwnProperty('readonly'))
+        obj.readonly = ApiClient.convertToType(data['readonly'], 'Boolean');
     }
     return obj;
   }
@@ -181,4 +183,9 @@ GKnowledgeBase.prototype.acl = undefined;
  * @member {Array.<Number>} aclAliases
  */
 GKnowledgeBase.prototype.aclAliases = undefined;
+
+/**
+ * @member {Boolean} readonly
+ */
+GKnowledgeBase.prototype.readonly = undefined;
 

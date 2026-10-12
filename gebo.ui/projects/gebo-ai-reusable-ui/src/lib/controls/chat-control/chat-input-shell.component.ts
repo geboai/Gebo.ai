@@ -6,10 +6,10 @@ import { findMatchingTranlations, UIExistingText } from '../field-translation-co
 import { MenuItem } from 'primeng/api';
 
 import { IGeboChatMessage } from '../../services/gebo-chat-message';
-import { GeboAIChatStreamEventsDisplayComponent } from './chat-stream-events-display.component';
 import { PipelineRoutingOption } from './pipeline-routing-option';
 import { Chip } from 'primeng/chip';
 import { timer } from 'rxjs';
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from '../field-host-component-iface/field-host-component-iface';
 function sameStringsIgnoreOrder(a: string[], b: string[]): boolean {
   if (a.length !== b.length) {
     return false;
@@ -67,7 +67,11 @@ const chatWithFilesPipelineOption: PipelineRoutingOption = {
   selector: 'gebo-ai-chat-input-shell',
   templateUrl: './chat-input-shell.component.html',
   styleUrls: ['./chat-input-shell.component.scss'],
-  standalone: false
+  standalone: false,
+  providers: [
+    { provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },
+    { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIChatInputShellComponent"), multi: false }
+  ]
 })
 export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
 
@@ -82,6 +86,12 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
    * file(s)" menu entry is hidden.
    */
   @Input() disableFilesBrowsers: boolean = false;
+  /**
+   * True when the host holds selected external-search results to chat with. These
+   * are not part of the form, so they must be signalled explicitly to keep the
+   * "chat with documents" modality active.
+   */
+  @Input() hasExternalChatWithDocs: boolean = false;
   @Input() chatUserInfos?: GeboChatUserInfo;
   @Input() knowledgeBaseCodes?: string[] = undefined;
 
@@ -113,8 +123,14 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   @Output() deepsearchChatResponse: EventEmitter<GeboChatResponse> = new EventEmitter();
   @Output() nextRoutingChoice: EventEmitter<PipelineRoutingOption> = new EventEmitter();
   @Output() stopReactiveChat: EventEmitter<string | undefined> = new EventEmitter();
-  @ViewChild(GeboAIChatStreamEventsDisplayComponent) streamNotificationsComponent!: GeboAIChatStreamEventsDisplayComponent;
+  // the route the running answer goes through, shown by the stream events in the answer
+  @Output() runningPipelineRoutingChange: EventEmitter<PipelineRoutingOption | undefined> = new EventEmitter();
   @ViewChild("actualRoutingChoiceChip") chip!: Chip;
+  /**
+   * A message the user sent while the chat was busy (loading, or still answering):
+   * it is kept and sent as soon as the chat is ready, instead of being dropped.
+   */
+  protected pendingSend: boolean = false;
   private staticBehaviorsMenuItems: MenuItem[] = [{
     id: "UploadFileMenuItem",
     icon: "pi pi-cloud-upload",
@@ -293,6 +309,14 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
 
   }
   ngOnChanges(changes: SimpleChanges): void {
+    if ((changes["loading"] || changes["streaming"]) && this.pendingSend && !this.loading && !this.streaming) {
+      // after the change detection that ended the busy state, with the text the input holds then
+      timer(0).subscribe(() => {
+        if (this.pendingSend && !this.loading && !this.streaming) {
+          this.onSendClick();
+        }
+      });
+    }
     if (this.formGroup && changes["formGroup"]) {
       this.formGroup.valueChanges.subscribe({
         next: (req: GeboChatRequest) => {
@@ -304,6 +328,12 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
               hasDocuments = true;
             }
             if (req.userUploadedContents && req.userUploadedContents.length) {
+              hasDocuments = true;
+            }
+            // Selected external-search results are "chat with" documents too, but they
+            // live outside the form (they cannot be addressed by a code), so factor
+            // their presence in explicitly to avoid reverting the modality.
+            if (this.hasExternalChatWithDocs) {
               hasDocuments = true;
             }
             if (!hasDocuments && this.defaultPipelineRouting) {
@@ -392,13 +422,31 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
     this.onSendClick();
   }
 
-  onSendClick() {
-    if (this.formGroup?.invalid || this.loading) {
+  /** Enter sends the message, Shift+Enter writes a new line. */
+  onEnterKey(event: Event) {
+    const keyboardEvent = event as KeyboardEvent;
+    if (keyboardEvent.shiftKey || keyboardEvent.isComposing) {
       return;
     }
+    // the new line of the key must not land in the input the sending clears
+    event.preventDefault();
+    this.onSubmit();
+  }
+
+  onSendClick() {
+    if (this.formGroup?.invalid) {
+      this.pendingSend = false;
+      return;
+    }
+    if (this.loading || this.streaming) {
+      // sent as soon as the chat is ready (see ngOnChanges)
+      this.pendingSend = true;
+      return;
+    }
+    this.pendingSend = false;
     //set the pipeline route visualizzation that will be runned
     this.runningPipelineRouting = this.choosedPipelineRoutingChip;
-    this.streamNotificationsComponent.clearUI();
+    this.runningPipelineRoutingChange.emit(this.runningPipelineRouting);
     this.messageSubmit.emit();
     //set a timer, and in 3 seconds go back to agenti chat
     timer(3000).subscribe({
@@ -424,9 +472,9 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
       //Check if the pipeline routing choosed is different from the one displayed
       if (pipelineRouterDecisionCode !== "WAITING" && pipelineRouterDecisionCode !== this.runningPipelineRouting?.chatPipelineProcessId) {
         this.runningPipelineRouting = this.findMatchingRoutingOption(pipelineRouterDecisionCode, parameters);
+        this.runningPipelineRoutingChange.emit(this.runningPipelineRouting);
       }
     }
-    this.streamNotificationsComponent.onMessage(recvd);
   }
 
   onNewSessionCreatedOnUploadInternal(evt: any) {

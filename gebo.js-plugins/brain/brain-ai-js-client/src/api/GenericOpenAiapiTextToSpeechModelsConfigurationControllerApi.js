@@ -14,6 +14,7 @@
  */
 import ApiClient from "../ApiClient";
 import GenericOpenAIAPITextToSpeechModelConfig from '../model/GenericOpenAIAPITextToSpeechModelConfig';
+import GenericOpenAITextToSpeechModelType from '../model/GenericOpenAITextToSpeechModelType';
 import OperationStatusBoolean from '../model/OperationStatusBoolean';
 import OperationStatusGenericOpenAIAPITextToSpeechModelConfig from '../model/OperationStatusGenericOpenAIAPITextToSpeechModelConfig';
 import OperationStatusListGenericOpenAIAPITextToSpeechModelChoice from '../model/OperationStatusListGenericOpenAIAPITextToSpeechModelChoice';
@@ -89,7 +90,7 @@ export default class GenericOpenAiapiTextToSpeechModelsConfigurationControllerAp
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GenericOpenAIAPITextToSpeechModelConfig} and HTTP response
      */
     findGenericOpenAIAPITextToSpeechModelConfigByCodeWithHttpInfo(code) {
@@ -187,7 +188,7 @@ export default class GenericOpenAiapiTextToSpeechModelsConfigurationControllerAp
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GenericOpenAIAPITextToSpeechModelConfig>} and HTTP response
      */
     getGenericOpenAITextToSpeechModelConfigsWithHttpInfo() {
       
@@ -209,7 +210,7 @@ export default class GenericOpenAiapiTextToSpeechModelsConfigurationControllerAp
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GenericOpenAIAPITextToSpeechModelConfig];
 
       return this.apiClient.callApi(
         '/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/getGenericOpenAITextToSpeechModelConfigs', 'GET',
@@ -219,7 +220,7 @@ export default class GenericOpenAiapiTextToSpeechModelsConfigurationControllerAp
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GenericOpenAIAPITextToSpeechModelConfig>}
      */
     getGenericOpenAITextToSpeechModelConfigs() {
       return this.getGenericOpenAITextToSpeechModelConfigsWithHttpInfo()
@@ -230,7 +231,7 @@ export default class GenericOpenAiapiTextToSpeechModelsConfigurationControllerAp
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GenericOpenAITextToSpeechModelType>} and HTTP response
      */
     getGenericOpenAITextToSpeechModelTypesWithHttpInfo() {
       
@@ -252,7 +253,7 @@ export default class GenericOpenAiapiTextToSpeechModelsConfigurationControllerAp
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GenericOpenAITextToSpeechModelType];
 
       return this.apiClient.callApi(
         '/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/getGenericOpenAITextToSpeechModelTypes', 'GET',
@@ -262,7 +263,7 @@ export default class GenericOpenAiapiTextToSpeechModelsConfigurationControllerAp
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GenericOpenAITextToSpeechModelType>}
      */
     getGenericOpenAITextToSpeechModelTypes() {
       return this.getGenericOpenAITextToSpeechModelTypesWithHttpInfo()

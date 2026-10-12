@@ -39,7 +39,7 @@ export default class JobLauncherControllerApi {
 
 
     /**
-     * @param {Object} jobCode 
+     * @param {String} jobCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
     abortJobWithHttpInfo(jobCode) {

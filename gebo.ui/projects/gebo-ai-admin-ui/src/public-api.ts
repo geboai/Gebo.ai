@@ -29,6 +29,7 @@ export * from "./lib/setup-wizard/gebo-setup-wizards.service";
 
 // Export the setup wizards module containing all components related to the setup process
 export * from "./lib/setup-wizard/setup-wizards.module";
+export * from "./lib/setup-wizard/setup-wizard-groups";
 
 // Export the setup wizards routing module for navigation within the setup wizard flow
 export * from "./lib/setup-wizard/setup-wizards-routing.module";
@@ -43,7 +44,6 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-sharepoint-admin/gebo-ai-sh
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-system-fast.component";
 export * from "./lib/setup-wizard/llms-setup-wizard.component";
 export * from "./lib/setup-wizard/setup-wizards.component";
-export * from "./lib/setup-wizard/vectorstore-wizard.component";
 export * from "./lib/setup-wizard/work-folder-wizard.component";
 export * from "./lib/setup-wizard/agent-setup-wizard.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generic-openai-api-ranker-admin.component";
@@ -56,9 +56,10 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generi
 export * from "./lib/admin-ui/gebo-ai-standard-modules-injections.module";
 export * from "./lib/admin-ui/main-panels/build-packaging-systems/build-packaging-systems.component";
 export * from "./lib/admin-ui/main-panels/chat-profiles/chat-profiles.component";
-export * from "./lib/admin-ui/main-panels/company-systems/systems.component";
+export * from "./lib/admin-ui/main-panels/prompts-panel/prompts-panel.component";
 export * from "./lib/admin-ui/main-panels/knowledge-bases/knowledge-bases.component";
 export * from "./lib/admin-ui/main-panels/llms-systems/llms-systems.component";
+export * from "./lib/setup-wizard/provider-deals/provider-deals-wizard.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-git-admin/gebo-ai-git-system-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-git-admin/gebo-ai-git-endpoint-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-knowledgebase-admin/gebo-ai-knowledgebase-admin.component";
@@ -91,8 +92,6 @@ export * from "./lib/admin-ui/entity-editors/controls/prompt-wizard/prompt-wizar
 export * from "./lib/admin-ui/entity-editors/controls/advanced-settings-chatmodel-group/advanced-settings-chatmodel-group.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-uploads-admin/gebo-ai-uploads-endpoint.component";
 export * from "./lib/admin-ui/main-panels/ancestor-panel/ancestor-admin-panel.component";
-export * from "./lib/admin-ui/entity-editors/gebo-ai-filesystems-admin/gebo-ai-shared-filesystems.component";
-export * from "./lib/admin-ui/entity-editors/gebo-ai-filesystems-admin/gebo-ai-filesystem-share-reference-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-google-search-admin/gebo-ai-google-search-account.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-anthropic-chatmodel-admin.component";
 export * from "./lib/admin-ui/main-panels/gebo-dashboard/gebo-dashboard.component";
@@ -110,6 +109,7 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-google
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-mistralai-chatmodel-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-mistralai-embedmodel-admin.component";
 export * from "./lib/admin-ui/entity-editors/controls/standard-chat-model-settings/standard-chat-model-settings.component";
+export * from "./lib/admin-ui/entity-editors/controls/chat-model-role/chat-model-role.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-sharepoint-admin/gebo-ai-sharepoint-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-sharepoint-admin/gebo-ai-sharepoint-system-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-aws-s3-admin/gebo-ai-aws-s3-endpoint.component";

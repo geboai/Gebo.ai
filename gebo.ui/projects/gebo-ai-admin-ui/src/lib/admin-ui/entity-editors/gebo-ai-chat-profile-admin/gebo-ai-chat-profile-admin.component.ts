@@ -19,7 +19,7 @@
 
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ChatModelsControllerService, EmbeddingModelsControllersService, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GKnowledgeBase, KnowledgeBaseControllerService, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { AgenticChatDefaultNetworksAdminControllerService, ChatModelsControllerService, EmbeddingModelsControllersService, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GKnowledgeBase, KnowledgeBaseControllerService, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
@@ -104,7 +104,8 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
         disableMultiHopRag: new FormControl(),
         otherSearchSimilarityThreshold: new FormControl(),
         manualThreasholdsConfiguration: new FormControl(),
-        useAlsoKeywordSearch: new FormControl()
+        useAlsoKeywordSearch: new FormControl(),
+        defaultChatNetworkOfAgents: new FormControl()
     });
 
     /** Available chat models to choose from */
@@ -118,6 +119,12 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
 
     /** The default embedding model configuration */
     defaultEmbeddingModel: any = {};
+
+    /** Whether the agents, and so the choice of the network of agents, are enabled */
+    agenticChatNetworksEnabled: boolean = false;
+
+    /** The networks of agents the chats of a profile can be handed to (the RAG pipeline ones) */
+    chatNetworksOfAgents: { value: string, description?: string, suggestedPurpose?: string }[] = [];
 
     /** All available knowledge bases */
     allKnowledgeBaseData: GKnowledgeBase[] = [];
@@ -137,6 +144,7 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
         private embeddingModels: EmbeddingModelsControllersService,
         private knowledgeBaseController: KnowledgeBaseControllerService,
         private promptTemplatesControllerService: PromptTemplatesControllerService,
+        private chatNetworksService: AgenticChatDefaultNetworksAdminControllerService,
         confirmService: ConfirmationService,
         geboUIActionRoutingService: GeboUIActionRoutingService,
         outputForwardingService?: GeboUIOutputForwardingService) {
@@ -254,6 +262,22 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
      */
     override ngOnInit(): void {
         super.ngOnInit();
+        // The network of agents tab exists only while the agents are enabled.
+        this.chatNetworksService.isAgenticChatNetworksEnabled().subscribe({
+            next: (enabled) => {
+                this.agenticChatNetworksEnabled = enabled === true;
+                if (!this.agenticChatNetworksEnabled) return;
+                this.chatNetworksService.getChoosableChatNetworksOfAgents("RAG_PIPELINE").subscribe({
+                    next: (networks) => {
+                        this.chatNetworksOfAgents = (networks ?? []).map(x => ({
+                            value: x.code ?? "",
+                            description: x.description,
+                            suggestedPurpose: x.suggestedPurpose
+                        }));
+                    }
+                });
+            }
+        });
         this.loadingRelatedBackend = true;
         forkJoin(this.geboChatModels.getRuntimeConfiguredChatModels(), this.embeddingModels.getRuntimeConfiguredEmbeddingModels(), this.knowledgeBaseController.getKnowledgeBases()).subscribe({
             next: (v) => {

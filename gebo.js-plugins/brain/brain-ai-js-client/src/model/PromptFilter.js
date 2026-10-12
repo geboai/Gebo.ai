@@ -39,35 +39,35 @@ export default class PromptFilter {
     if (data) {
       obj = obj || new PromptFilter();
       if (data.hasOwnProperty('modelUse'))
-        obj.modelUse = ApiClient.convertToType(data['modelUse'], Object);
+        obj.modelUse = ApiClient.convertToType(data['modelUse'], 'String');
       if (data.hasOwnProperty('langCode'))
-        obj.langCode = ApiClient.convertToType(data['langCode'], Object);
+        obj.langCode = ApiClient.convertToType(data['langCode'], 'String');
       if (data.hasOwnProperty('modelProvider'))
-        obj.modelProvider = ApiClient.convertToType(data['modelProvider'], Object);
+        obj.modelProvider = ApiClient.convertToType(data['modelProvider'], 'String');
       if (data.hasOwnProperty('modelCode'))
-        obj.modelCode = ApiClient.convertToType(data['modelCode'], Object);
+        obj.modelCode = ApiClient.convertToType(data['modelCode'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} modelUse
+ * @member {String} modelUse
  */
 PromptFilter.prototype.modelUse = undefined;
 
 /**
- * @member {Object} langCode
+ * @member {String} langCode
  */
 PromptFilter.prototype.langCode = undefined;
 
 /**
- * @member {Object} modelProvider
+ * @member {String} modelProvider
  */
 PromptFilter.prototype.modelProvider = undefined;
 
 /**
- * @member {Object} modelCode
+ * @member {String} modelCode
  */
 PromptFilter.prototype.modelCode = undefined;
 

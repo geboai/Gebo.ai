@@ -205,6 +205,33 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 	protected static ObjectMapper mapper = new ObjectMapper();
 
 	/**
+	 * System property that narrows the integration perimeter down to MongoDB
+	 * alone: Neo4j and OpenSearch are then neither started nor enabled.
+	 *
+	 * A test class opts in from a STATIC INITIALIZER, which the JVM runs when the
+	 * class is loaded - that is before JUnit asks Spring to build the context, so
+	 * before {@link #containersProperties(DynamicPropertyRegistry)} reads it. The
+	 * surefire configuration of the test modules runs every test class in its own
+	 * fork ({@code reuseForks=false}), so one class opting in cannot influence
+	 * another.
+	 *
+	 * It exists for the single-dependency installation scenario: a Gebo.ai that
+	 * only has MongoDB next to it, doing retrieval with the embedded
+	 * {@code VectorStoreProduct.LOCAL} store. See
+	 * {@code AbstractGeboMonolithicMongoOnlyIntegrationTests}.
+	 */
+	public static final String MONGO_ONLY_PERIMETER_PROPERTY = "gebo.tests.perimeter.mongoOnly";
+
+	/**
+	 * Whether this test run keeps Neo4j and OpenSearch out of the perimeter.
+	 *
+	 * @return true when only MongoDB must be started
+	 */
+	protected static boolean isMongoOnlyPerimeter() {
+		return Boolean.parseBoolean(System.getProperty(MONGO_ONLY_PERIMETER_PROPERTY, "false"));
+	}
+
+	/**
 	 * Configures the dynamic properties for the test containers.
 	 * 
 	 * @param registry the registry to update with container properties.
@@ -212,8 +239,6 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 	@DynamicPropertySource
 	public static void containersProperties(DynamicPropertyRegistry registry) {
 		mongoDBContainer.start();
-		neo4jContainer.start();
-		opensearch.start();
 		// Spring Boot 4.x moved the MongoDB connection properties from spring.data.mongodb.*
 		// to spring.mongodb.* (DataMongoProperties no longer carries host/port/uri; they
 		// now live on MongoProperties bound to "spring.mongodb"). The app's real Mongo
@@ -228,7 +253,19 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 		registry.add("ai.gebo.mongodb.enabled", () -> true);
 		registry.add("ai.gebo.mongodb.connectionString", mongoDBContainer::getConnectionString);
 
-		String boltUrl = neo4jContainer.getBoltUrl();
+		if (isMongoOnlyPerimeter()) {
+			// Neither container is started, and both switches go off so that no bean
+			// of the graph or of the full text stack is registered at all - they are
+			// @ConditionalOnProperty on exactly these two keys. Leaving them on while
+			// nothing listens would only move the failure to the first query.
+			registry.add("ai.gebo.neo4j.enabled", () -> false);
+			registry.add("ai.gebo.opensearch.enabled", () -> false);
+			return;
+		}
+
+		neo4jContainer.start();
+		opensearch.start();
+		registry.add("ai.gebo.neo4j.enabled", () -> true);
 		registry.add("spring.neo4j.uri", neo4jContainer::getBoltUrl);
 
 		registry.add("ai.gebo.opensearch.enabled", () -> true);

@@ -3,9 +3,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  | [optional] 
-**description** | **Object** |  | [optional] 
-**absolutePath** | **Object** |  | [optional] 
-**uri** | **Object** |  | [optional] 
-**dateModified** | **Object** |  | [optional] 
-**iconKey** | **Object** |  | [optional] 
+**code** | **String** |  | [optional] 
+**description** | **String** |  | [optional] 
+**absolutePath** | **String** |  | [optional] 
+**uri** | **String** |  | [optional] 
+**dateModified** | **Date** |  | [optional] 
+**iconKey** | **String** |  | [optional] 

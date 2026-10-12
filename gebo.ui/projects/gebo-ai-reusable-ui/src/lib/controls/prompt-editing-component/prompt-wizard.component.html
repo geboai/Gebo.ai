@@ -44,7 +44,7 @@
         <div class="grid">
             <div class="col-12">
                 <gebo-ai-field id="modelCode" label="Chat model to use" [required]="true"
-                    help="Choose the chat model you whant to ask the prompt template generation">
+                    help="Choose the chat model you want to ask the prompt template generation">
                     <geboai-editable-listbox-component formControlName="modelCode" placeholder="Select a chat model"
                         [data]="chatModels" gebo-ai-field-element [required]="true">
                     </geboai-editable-listbox-component>
@@ -52,7 +52,7 @@
             </div>
             <div class="col-12">
                 <gebo-ai-field id="query" label="Prompt template request" [required]="true"
-                    help="Specify in 2nd person wich is the objective that the AI will support the user">
+                    help="Specify in 2nd person which is the objective that the AI will support the user">
                     <textarea rows="5" cols="250" [required]="true" pTextarea formControlName="query"
                         gebo-ai-field-element></textarea>
                 </gebo-ai-field>

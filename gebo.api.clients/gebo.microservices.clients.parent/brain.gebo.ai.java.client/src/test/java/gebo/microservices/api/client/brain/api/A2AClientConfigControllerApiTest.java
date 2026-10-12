@@ -41,9 +41,9 @@ public class A2AClientConfigControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void delete1Test() {
+    public void deleteA2AClientConfigTest() {
         A2ARemoteAgentConfig body = null;
-        OperationStatusBoolean response = api.delete1(body);
+        OperationStatusBoolean response = api.deleteA2AClientConfig(body);
 
         // TODO: test validations
     }
@@ -56,9 +56,9 @@ public class A2AClientConfigControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findByCode2Test() {
+    public void findByCodeA2AClientConfigTest() {
         String code = null;
-        OperationStatusA2ARemoteAgentConfig response = api.findByCode2(code);
+        OperationStatusA2ARemoteAgentConfig response = api.findByCodeA2AClientConfig(code);
 
         // TODO: test validations
     }
@@ -71,9 +71,9 @@ public class A2AClientConfigControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void insert1Test() {
+    public void insertA2AClientConfigTest() {
         A2ARemoteAgentConfig body = null;
-        OperationStatusA2ARemoteAgentConfig response = api.insert1(body);
+        OperationStatusA2ARemoteAgentConfig response = api.insertA2AClientConfig(body);
 
         // TODO: test validations
     }
@@ -86,10 +86,10 @@ public class A2AClientConfigControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void listTest() {
+    public void listA2AClientConfigTest() {
         Integer page = null;
         Integer size = null;
-        PageA2ARemoteAgentConfig response = api.list(page, size);
+        PageA2ARemoteAgentConfig response = api.listA2AClientConfig(page, size);
 
         // TODO: test validations
     }
@@ -102,9 +102,9 @@ public class A2AClientConfigControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void testAndDiscovery1Test() {
+    public void testAndDiscoveryA2AClientConfigTest() {
         A2ARemoteAgentConfig body = null;
-        OperationStatusA2ARemoteAgentConfig response = api.testAndDiscovery1(body);
+        OperationStatusA2ARemoteAgentConfig response = api.testAndDiscoveryA2AClientConfig(body);
 
         // TODO: test validations
     }
@@ -117,9 +117,9 @@ public class A2AClientConfigControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void update1Test() {
+    public void updateA2AClientConfigTest() {
         A2ARemoteAgentConfig body = null;
-        OperationStatusA2ARemoteAgentConfig response = api.update1(body);
+        OperationStatusA2ARemoteAgentConfig response = api.updateA2AClientConfig(body);
 
         // TODO: test validations
     }

@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GModelPricingConditions } from './gModelPricingConditions';
 import { ModelMetaInfo } from './modelMetaInfo';
 
 export interface GenericOpenAIAPIRankerModelChoice { 
@@ -25,4 +26,5 @@ export interface GenericOpenAIAPIRankerModelChoice {
     informativeUrl?: string;
     contextLength?: number;
     nativeModelMetaInfos?: any;
+    pricingConditions?: GModelPricingConditions;
 }

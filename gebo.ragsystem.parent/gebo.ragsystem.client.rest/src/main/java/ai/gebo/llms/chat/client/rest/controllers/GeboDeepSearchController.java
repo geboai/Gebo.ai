@@ -6,11 +6,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import ai.gebo.model.base.GBaseObject;
 import lombok.AllArgsConstructor;
 
+@PreAuthorize("hasAnyRole('USER','ADMIN','APPLICATION')")
 @RestController
 @RequestMapping(path = "api/users/GeboDeepSearchController")
 @AllArgsConstructor

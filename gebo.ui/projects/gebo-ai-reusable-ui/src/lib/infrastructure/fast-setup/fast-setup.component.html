@@ -58,7 +58,7 @@
                 passwords do not match
               </span>
 
-              <span
+              <span id="PasswordTooShort"
                 [hidden]="!(formGroup.controls['password'].value && formGroup.controls['password'].value.length<8)"
                 gebo-ai-text>
                 must be at least 8 characters long

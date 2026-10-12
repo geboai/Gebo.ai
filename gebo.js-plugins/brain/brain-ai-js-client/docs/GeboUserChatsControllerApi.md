@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**changeChatDescription**](GeboUserChatsControllerApi.md#changeChatDescription) | **POST** /api/users/GeboUserChatsController/changeChatDescription | 
 [**createCleanChatByChatProfileCode**](GeboUserChatsControllerApi.md#createCleanChatByChatProfileCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByChatProfileCode | 
+[**createCleanChatByDefaultModel**](GeboUserChatsControllerApi.md#createCleanChatByDefaultModel) | **GET** /api/users/GeboUserChatsController/createCleanChatByDefaultModel | 
 [**createCleanChatByModelCode**](GeboUserChatsControllerApi.md#createCleanChatByModelCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByModelCode | 
 [**deleteChat**](GeboUserChatsControllerApi.md#deleteChat) | **DELETE** /api/users/GeboUserChatsController/deleteChat | 
 [**exportResponse2file**](GeboUserChatsControllerApi.md#exportResponse2file) | **GET** /api/users/GeboUserChatsController/exportResponse2file | 
@@ -13,6 +14,7 @@ Method | HTTP request | Description
 [**getChatInfosByCode**](GeboUserChatsControllerApi.md#getChatInfosByCode) | **GET** /api/users/GeboUserChatsController/getChatInfosByCode | 
 [**getChatInfosByQbe**](GeboUserChatsControllerApi.md#getChatInfosByQbe) | **POST** /api/users/GeboUserChatsController/getChatInfosByQbe | 
 [**getMyChats**](GeboUserChatsControllerApi.md#getMyChats) | **GET** /api/users/GeboUserChatsController/getMyChats | 
+[**getMyChatsByContextCode**](GeboUserChatsControllerApi.md#getMyChatsByContextCode) | **GET** /api/users/GeboUserChatsController/getMyChatsByContextCode | 
 [**getMyChatsPaged**](GeboUserChatsControllerApi.md#getMyChatsPaged) | **GET** /api/users/GeboUserChatsController/getMyChatsPaged | 
 [**getUIConfig**](GeboUserChatsControllerApi.md#getUIConfig) | **GET** /api/users/GeboUserChatsController/getUIConfig | 
 [**isMinimalLLMSSetupDone**](GeboUserChatsControllerApi.md#isMinimalLLMSSetupDone) | **GET** /api/users/GeboUserChatsController/isMinimalLLMSSetupDone | 
@@ -60,7 +62,7 @@ No authorization required
 
 <a name="createCleanChatByChatProfileCode"></a>
 # **createCleanChatByChatProfileCode**
-> GUserChatInfo createCleanChatByChatProfileCode(chatProfileCode)
+> GUserChatInfo createCleanChatByChatProfileCode(chatProfileCode, opts)
 
 
 
@@ -69,9 +71,12 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboUserChatsControllerApi();
-let chatProfileCode = null; // Object | 
-
-apiInstance.createCleanChatByChatProfileCode(chatProfileCode).then((data) => {
+let chatProfileCode = "chatProfileCode_example"; // String | 
+let opts = { 
+  'contextCode': "contextCode_example", // String | 
+  'pipelineCode': "pipelineCode_example" // String | 
+};
+apiInstance.createCleanChatByChatProfileCode(chatProfileCode, opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
@@ -83,7 +88,50 @@ apiInstance.createCleanChatByChatProfileCode(chatProfileCode).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | [**Object**](.md)|  | 
+ **chatProfileCode** | **String**|  | 
+ **contextCode** | **String**|  | [optional] 
+ **pipelineCode** | **String**|  | [optional] 
+
+### Return type
+
+[**GUserChatInfo**](GUserChatInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="createCleanChatByDefaultModel"></a>
+# **createCleanChatByDefaultModel**
+> GUserChatInfo createCleanChatByDefaultModel(opts)
+
+
+
+### Example
+```javascript
+import {BrainClient} from 'gebo.brain.client.js';
+
+let apiInstance = new BrainClient.GeboUserChatsControllerApi();
+let opts = { 
+  'pipelineCode': "pipelineCode_example" // String | 
+};
+apiInstance.createCleanChatByDefaultModel(opts).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **pipelineCode** | **String**|  | [optional] 
 
 ### Return type
 
@@ -100,7 +148,7 @@ No authorization required
 
 <a name="createCleanChatByModelCode"></a>
 # **createCleanChatByModelCode**
-> GUserChatInfo createCleanChatByModelCode(modelCode)
+> GUserChatInfo createCleanChatByModelCode(modelCode, opts)
 
 
 
@@ -109,9 +157,11 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboUserChatsControllerApi();
-let modelCode = null; // Object | 
-
-apiInstance.createCleanChatByModelCode(modelCode).then((data) => {
+let modelCode = "modelCode_example"; // String | 
+let opts = { 
+  'pipelineCode': "pipelineCode_example" // String | 
+};
+apiInstance.createCleanChatByModelCode(modelCode, opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
@@ -123,7 +173,8 @@ apiInstance.createCleanChatByModelCode(modelCode).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelCode** | [**Object**](.md)|  | 
+ **modelCode** | **String**|  | 
+ **pipelineCode** | **String**|  | [optional] 
 
 ### Return type
 
@@ -149,7 +200,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboUserChatsControllerApi();
-let userChatContextCode = null; // Object | 
+let userChatContextCode = "userChatContextCode_example"; // String | 
 
 apiInstance.deleteChat(userChatContextCode).then(() => {
   console.log('API called successfully.');
@@ -163,7 +214,7 @@ apiInstance.deleteChat(userChatContextCode).then(() => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userChatContextCode** | [**Object**](.md)|  | 
+ **userChatContextCode** | **String**|  | 
 
 ### Return type
 
@@ -189,9 +240,9 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboUserChatsControllerApi();
-let userContextCode = null; // Object | 
-let responseId = null; // Object | 
-let format = null; // Object | 
+let userContextCode = "userContextCode_example"; // String | 
+let responseId = "responseId_example"; // String | 
+let format = "format_example"; // String | 
 
 apiInstance.exportResponse2file(userContextCode, responseId, format).then(() => {
   console.log('API called successfully.');
@@ -205,9 +256,9 @@ apiInstance.exportResponse2file(userContextCode, responseId, format).then(() => 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userContextCode** | [**Object**](.md)|  | 
- **responseId** | [**Object**](.md)|  | 
- **format** | [**Object**](.md)|  | 
+ **userContextCode** | **String**|  | 
+ **responseId** | **String**|  | 
+ **format** | **String**|  | 
 
 ### Return type
 
@@ -233,7 +284,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboUserChatsControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.getChatHistory(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -247,7 +298,7 @@ apiInstance.getChatHistory(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -273,7 +324,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboUserChatsControllerApi();
-let id = null; // Object | 
+let id = "id_example"; // String | 
 
 apiInstance.getChatInfosByCode(id).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -287,7 +338,7 @@ apiInstance.getChatInfosByCode(id).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | [**Object**](.md)|  | 
+ **id** | **String**|  | 
 
 ### Return type
 
@@ -344,7 +395,7 @@ No authorization required
 
 <a name="getMyChats"></a>
 # **getMyChats**
-> Object getMyChats()
+> [GUserChatInfo] getMyChats()
 
 
 
@@ -366,7 +417,47 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GUserChatInfo]**](GUserChatInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getMyChatsByContextCode"></a>
+# **getMyChatsByContextCode**
+> [GUserChatInfo] getMyChatsByContextCode(contextCode)
+
+
+
+### Example
+```javascript
+import {BrainClient} from 'gebo.brain.client.js';
+
+let apiInstance = new BrainClient.GeboUserChatsControllerApi();
+let contextCode = "contextCode_example"; // String | 
+
+apiInstance.getMyChatsByContextCode(contextCode).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **contextCode** | **String**|  | 
+
+### Return type
+
+[**[GUserChatInfo]**](GUserChatInfo.md)
 
 ### Authorization
 
@@ -388,8 +479,8 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboUserChatsControllerApi();
-let page = null; // Object | 
-let pageSize = null; // Object | 
+let page = 56; // Number | 
+let pageSize = 56; // Number | 
 
 apiInstance.getMyChatsPaged(page, pageSize).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -403,8 +494,8 @@ apiInstance.getMyChatsPaged(page, pageSize).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | [**Object**](.md)|  | 
- **pageSize** | [**Object**](.md)|  | 
+ **page** | **Number**|  | 
+ **pageSize** | **Number**|  | 
 
 ### Return type
 
@@ -456,7 +547,7 @@ No authorization required
 
 <a name="isMinimalLLMSSetupDone"></a>
 # **isMinimalLLMSSetupDone**
-> Object isMinimalLLMSSetupDone()
+> &#x27;Boolean&#x27; isMinimalLLMSSetupDone()
 
 
 
@@ -478,7 +569,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**&#x27;Boolean&#x27;**
 
 ### Authorization
 
@@ -500,7 +591,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboUserChatsControllerApi();
-let userChatContextCode = null; // Object | 
+let userChatContextCode = "userChatContextCode_example"; // String | 
 
 apiInstance.suggestChatDescription(userChatContextCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -514,7 +605,7 @@ apiInstance.suggestChatDescription(userChatContextCode).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userChatContextCode** | [**Object**](.md)|  | 
+ **userChatContextCode** | **String**|  | 
 
 ### Return type
 

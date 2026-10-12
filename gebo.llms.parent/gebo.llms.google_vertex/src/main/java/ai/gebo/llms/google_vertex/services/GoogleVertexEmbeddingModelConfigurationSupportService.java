@@ -13,12 +13,10 @@ import java.util.List;
 
 import org.springframework.ai.vertexai.embedding.VertexAiEmbeddingConnectionDetails;
 import org.springframework.ai.vertexai.embedding.text.VertexAiTextEmbeddingModel;
-import org.springframework.ai.vertexai.embedding.text.VertexAiTextEmbeddingModelName;
 import org.springframework.ai.vertexai.embedding.text.VertexAiTextEmbeddingOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -56,13 +54,30 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 		type.setCode("embedding-google-vertex");
 		type.setDescription("Google vertex embedding models");
 		type.setModelConfigurationClass(GGoogleVertexEmbeddingModelConfig.class.getName());
+		type.setProviderId("google-vertex");
 	}
 
 	/**
-	 * List of available Google Vertex embedding model choices.
+	 * The text embedding models this provider offers: the ones the Vertex embeddings page
+	 * lists for the predict API the text embedding model calls
+	 * (docs.cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings,
+	 * 2026-10-11: 768 dimensions, 2048 tokens, five texts per request). Spring AI's
+	 * {@code VertexAiTextEmbeddingModelName} still names text-embedding-004, which the page
+	 * no longer lists; the gemini-embedding models take a single text per request there,
+	 * which the batched text embedding requests do not respect, so they are not offered.
 	 */
-	static final List<GGoogleVertexEmbeddingModelChoice> choices = GBaseModelChoice
-			.of(GGoogleVertexEmbeddingModelChoice.class, VertexAiTextEmbeddingModelName.values());
+	static final List<GGoogleVertexEmbeddingModelChoice> choices = List.of(
+			choice("text-multilingual-embedding-002", "Text multilingual embedding 002 (768 dimensions, 2048 tokens)"),
+			choice("text-embedding-005", "Text embedding 005, English and code (768 dimensions, 2048 tokens)"));
+
+	static GGoogleVertexEmbeddingModelChoice choice(String code, String description) {
+		GGoogleVertexEmbeddingModelChoice choice = new GGoogleVertexEmbeddingModelChoice();
+		choice.setCode(code);
+		choice.setDescription(description);
+		choice.setContextLength(2048);
+		choice.setInformativeUrl("https://docs.cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings");
+		return choice;
+	}
 
 	/**
 	 * Provider for vector store factories.

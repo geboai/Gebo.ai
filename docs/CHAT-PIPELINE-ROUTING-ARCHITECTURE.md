@@ -141,7 +141,7 @@ default menu entry deliberately sends no route so that §3.3 runs. Per-data-sour
 search items differ from each other only by the `deepSearchedSystems` pipeline
 parameter, not by their route.
 
-`TOOLS_USE_RESPONSE`, `PURE_SEARCH` and `PURE_LLM_RESPONSE` have **no menu item** —
+`TOOLS_USE_RESPONSE` and `PURE_LLM_RESPONSE` have **no menu item** —
 they are reachable only as LLM-router outcomes, i.e. only when the agents network is
 disabled.
 
@@ -161,7 +161,6 @@ The office plugin ships its own provider,
 | `DEEP_SEARCH_RESPONSE` | `default-deepsearch-streaming` | `DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl` |
 | `TOOLS_USE_RESPONSE` | `default-tool-using-streaming` | `DefaultToolUsingStreamingOutputChatPipelineServiceImpl` |
 | `CHAT_WITH_FILES` | `default-chat-with-docs-streaming` | `DefaultChatWithFilesStreamingOutputPipelineServiceImpl` |
-| `PURE_SEARCH` | `PURE_SEARCH_STREAMING_SERVICE` | `DefaultPipelineStreamingPureSearchPipelineStepServiceImpl` |
 | `DELEGATED_AGENT` | `DEFAULT_CHAT_PIPELINE_SERVICE` | `DefaultPipelineStreamingDelegatedStepServiceImpl` |
 | `IMAGE_GENERATION_RESPONSE` | `IMAGE_GENERATION_STREAMING_SERVICE` | `DefaultImageGenerationStreamingOutputChatPipelineServiceImpl` |
 | `PURE_LLM_RESPONSE` *(and `default:`)* | `default-streaming-output` | `DefaultStreamingOutputChatPipelineServiceImpl` |
@@ -199,9 +198,11 @@ inert when the network is off.
 
 Consequence: **setting `ai.gebo.agents.standard.enabled=false` is the supported way to
 run the default pipeline on the LLM router.** Any configuration that depends on the
-standard agents must back off with it — see `OfficeAgentsInitialization`, which lists
-both `ai.gebo.officeplugin.enabled` and `ai.gebo.agents.standard.enabled` in one
-`@ConditionalOnProperty` for exactly this reason.
+standard agents must back off with it. The worked example is `OfficeAgentsInitialization`,
+which lists both `ai.gebo.officeplugin.enabled` and `ai.gebo.agents.standard.enabled` in
+one `@ConditionalOnProperty` for exactly this reason; it now lives in the pro platform
+(`ai.gebo.pro.architecture.parent/gebo.architecture.office-plugin-pipeline`), so the rule
+holds across both reactors and any new dependent network must follow it.
 
 ---
 
@@ -255,6 +256,39 @@ adding it to the `doDecideRoute(..)` guard** — see invariant 1.
 | `…/chat/abstraction/layer/llmexchange/model/GeboTemplatedChatRequest.java` | carries `chatPipelineProcessId` |
 | `…/chat/abstraction/layer/llmexchange/model/DeliverableIntent.java` | user-intent taxonomy used by the router branch |
 | `gebo.architecture.parent/gebo.architecture.agents.standard/src/main/java/ai/gebo/llms/agent/standard/config/StandardAgentsInitialization.java` | publishes the `DEFAULT_PIPELINE_SERVICE` bean |
-| `gebo.architecture.parent/gebo.architecture.office-plugin-pipeline/src/main/java/ai/gebo/officeplugin/pipeline/config/OfficeAgentsInitialization.java` | office network; must back off with the standard agents |
-| `gebo.architecture.parent/gebo.architecture.office-plugin-pipeline/src/main/java/ai/gebo/officeplugin/pipeline/ui/OfficeAssistantPipelineUserMenuProviderService.java` | office chat menu |
+| _(pro)_ `ai.gebo.pro.architecture.parent/gebo.architecture.office-plugin-pipeline/…/config/OfficeAgentsInitialization.java` | office network; must back off with the standard agents — in the **Gebo.ai.pro** repository |
+| _(pro)_ `ai.gebo.pro.architecture.parent/gebo.architecture.office-plugin-pipeline/…/ui/OfficeAssistantPipelineUserMenuProviderService.java` | office chat menu — in the **Gebo.ai.pro** repository |
 | `gebo.ui/projects/gebo-ai-reusable-ui/src/lib/controls/chat-control/chat-input-shell.component.ts` | renders the menu, sets `chatPipelineProcessId` |
+
+---
+
+## 10. The `open-chat` pipeline — pure chat, no internal-KB RAG
+
+Module `gebo.architecture.parent/gebo.architecture.open-chat-pipeline`, gated by
+`ai.gebo.openchat.enabled` (default `true`, `matchIfMissing`), selected with
+`pipelineCode=open-chat`. It is a second pipeline built on the office precedent, for a
+"pure chat" experience that **never retrieves the internal knowledge base**: no RAG,
+no `IKB_SYSTEM` deep search. It can still search **external** systems and chat over
+**uploaded / picked files**, and its default experience is a **KB-free network of
+agents** that answers freely.
+
+| Key | Value |
+| --- | --- |
+| Pipeline id | `open-chat` (`OpenChatConstants.OPEN_CHAT_PIPELINE`) |
+| Input step | reuses `default-input-step` (`DefaultInputChatPipelineStepServiceImpl`) |
+| Router step | `open-chat-routing-step` — `OpenChatRoutingStepService` (programmatic, no LLM) |
+| Network step | `open-chat-network-streaming-step` — `OpenChatAgentsNetworkStreamingStepService` |
+| Agents network | `OPEN_CHAT_AGENTS_NETWORK`, built by `OpenChatAgentsInitialization` via `StandardAgentsInitialization.createChatAgentsNetwork(..., null)` — the **`null` internal-KB config drops the internal-KB searcher node** |
+| Menu provider | `OpenChatPipelineUserMenuProviderService` (Agentic chat + external Web search; **no** R.a.g. / internal-KB items) |
+| Prompts | `OpenChatPromptsLibraryConfig` + `resources/open-chat-prompt-library/*` — free-response coordinator + answer-writer prompts that deliberately drop the evidence/citation/deliverable-format discipline of the standard network |
+| Network gate | requires **both** `ai.gebo.openchat.enabled` and `ai.gebo.agents.standard.enabled` (same back-off contract as `OfficeAgentsInitialization`) |
+
+Router decision (`OpenChatRoutingStepService.execute`), in order: (1) forced
+heavy-documents guard → `CHAT_WITH_FILES` (same resource guard as §3.1); (2) non-blank
+`chatPipelineProcessId` → `RespondingWith.valueOf(..)` whitelisted to
+`PURE_LLM_RESPONSE` / `DEEP_SEARCH_RESPONSE` / `CHAT_WITH_FILES` (`RAG_LLM_RESPONSE` and
+anything else degrade to `PURE_LLM_RESPONSE`); (3) blank → the open-chat network, else
+`PURE_LLM_RESPONSE` when the network is disabled. For any deep-search route it forces
+`deepSearchedSystems` to the enabled **external (non-`IKB_SYSTEM`)** sources and never
+leaves it empty (an empty list would make the shared deep-search handler fall back to
+the internal KB — see §5 / `DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl`).

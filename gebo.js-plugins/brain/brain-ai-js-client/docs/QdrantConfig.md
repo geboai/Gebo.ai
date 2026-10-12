@@ -3,13 +3,13 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  | [optional] 
-**description** | **Object** |  | [optional] 
-**userModified** | **Object** |  | [optional] 
-**userCreated** | **Object** |  | [optional] 
-**dateModified** | **Object** |  | [optional] 
-**dateCreated** | **Object** |  | [optional] 
-**host** | **Object** |  | [optional] 
-**port** | **Object** |  | [optional] 
-**apiKey** | **Object** |  | [optional] 
-**tls** | **Object** |  | [optional] 
+**code** | **String** |  | [optional] 
+**description** | **String** |  | [optional] 
+**userModified** | **String** |  | [optional] 
+**userCreated** | **String** |  | [optional] 
+**dateModified** | **Date** |  | [optional] 
+**dateCreated** | **Date** |  | [optional] 
+**host** | **String** |  | [optional] 
+**port** | **Number** |  | [optional] 
+**apiKey** | **String** |  | [optional] 
+**tls** | **Boolean** |  | [optional] 

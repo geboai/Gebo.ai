@@ -36,7 +36,7 @@
     </div>
 
     @if (editingNodeValues.length) {
-      <p-fieldset id="ChoosedElementsArea" gebo-ai-label legend="Choosed elements" [toggleable]="true">
+      <p-fieldset id="ChoosedElementsArea" gebo-ai-label legend="Selected elements" [toggleable]="true">
         <div class="vfs-selector-chips">
           @for (p of editingNodeValues; track p.uniqueCode) {
             <p-chip [label]="(p.path?''+p.path.name:p.root.description)"

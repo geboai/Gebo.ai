@@ -37,6 +37,7 @@ import ai.gebo.llms.abstraction.layer.model.GRankerModelType;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
+import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai.api.utils.OpenAIApiException;
@@ -231,6 +232,9 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 
 				List<ChatModelChoiceType> list = new ArrayList<ChatModelChoiceType>();
 				for (OpenAIModel openAIModel : filteredModels) {
+					// A provider flagging a model inactive (Groq) does not serve it
+					if (Boolean.FALSE.equals(openAIModel.getActive()))
+						continue;
 					ChatModelChoiceType entry = type.newInstance();
 					entry.setCode(openAIModel.getId());
 					if (openAIModel.getMetaInfos() != null) {
@@ -239,7 +243,11 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 						entry.setContextLength(openAIModel.getMetaInfos().getContextLength());
 
 					} else {
-
+						ModelMetaInfo live = liveMetaInfos(openAIModel, config.getProviderId());
+						if (live != null) {
+							entry.setMetaInfos(live);
+							entry.setContextLength(live.getContextLength());
+						}
 					}
 					if (entry.getDescription() == null) {
 						entry.setDescription(openAIModel.getId());
@@ -247,6 +255,9 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 					list.add(entry);
 				}
 				this.enricherService.enrichChatModelMetaInfos(config.getProviderId(), list, defaultMetainfoFactory);
+				for (ChatModelChoiceType entry : list) {
+					describe(entry);
+				}
 				return list;
 			} catch (Throwable e) {
 				throwed.add(e);
@@ -296,7 +307,14 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 						entry.setContextLength(openAIModel.getMetaInfos().getContextLength());
 						entry.setOptimalTokenizationParam(openAIModel.getMetaInfos().getTokenizingThreashold());
 					} else {
-
+						// as for chat models: the shutdown date, the window a compatible
+						// server reports
+						ModelMetaInfo live = liveMetaInfos(openAIModel, config.getProviderId());
+						if (live != null) {
+							live.setEmbeddingModel(true);
+							entry.setMetaInfos(live);
+							entry.setContextLength(live.getContextLength());
+						}
 					}
 					if (entry.getDescription() == null) {
 						entry.setDescription(openAIModel.getId());
@@ -319,8 +337,76 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 	public <ModelChoice extends GBaseRankerModelChoice, RankerConfigType extends GBaseRankerModelConfig<ModelChoice>, RankerTypeClass extends GRankerModelType> OperationStatus<List<ModelChoice>> getRankerModels(
 			Class<ModelChoice> class1, OpenAIApiConfig providerConfig, RankerConfigType config,
 			Function<ModelChoice, ModelMetaInfo> defaultMetainfoFactory, RankerTypeClass type) {
-		// TODO Auto-generated method stub
-		return null;
+		// The models the server lists, as for chat and embedding models: an OpenAI
+		// compatible reranking server (vLLM, a generic one) serves its reranker models
+		// there. The caller keeps those named as rerankers. A null answer used to end
+		// the lookup of every such provider with a NullPointerException.
+		final List<Throwable> throwed = new ArrayList<>();
+		OperationStatus<List<ModelChoice>> returnValue = doWithRemoteSystem(apiKey -> {
+			OpenAIApiConfig apiconfig = new OpenAIApiConfig(providerConfig);
+			apiconfig.setApiKey(apiKey);
+			if (config.getBaseUrl() != null) {
+				apiconfig.setBasePath(config.getBaseUrl());
+			}
+			try {
+				List<ModelChoice> list = new ArrayList<ModelChoice>();
+				for (OpenAIModel openAIModel : getModels(apiconfig)) {
+					if (Boolean.FALSE.equals(openAIModel.getActive()))
+						continue;
+					ModelChoice entry = class1.newInstance();
+					entry.setCode(openAIModel.getId());
+					entry.setDescription(openAIModel.getId());
+					list.add(entry);
+				}
+				return list;
+			} catch (Throwable e) {
+				throwed.add(e);
+				return List.of();
+			}
+		}, config.getApiSecretCode(), providerConfig.isApiKeyMandatory());
+		return throwed.isEmpty() ? returnValue : OperationStatus.of(throwed.get(0));
 	}
 
+
+	/**
+	 * What the model object tells beyond its id: the shutdown date OpenAI publishes,
+	 * the context window and output limit some compatible providers add (Groq's
+	 * context_window, vLLM's max_model_len). Null when it tells none of them, the models
+	 * library then describes the model alone.
+	 */
+	public static ModelMetaInfo liveMetaInfos(OpenAIModel model, String providerId) {
+		boolean shutdown = model.getShutdown_date() != null && !model.getShutdown_date().isBlank();
+		final Integer contextLength = model.getContext_window() != null ? model.getContext_window()
+				: model.getMax_model_len();
+		if (!shutdown && contextLength == null && model.getMax_completion_tokens() == null)
+			return null;
+		ModelMetaInfo meta = new ModelMetaInfo();
+		meta.setProviderId(providerId);
+		meta.setModelId(model.getId());
+		meta.setContextLength(contextLength);
+		meta.setMaxOutputToken(model.getMax_completion_tokens());
+		if (shutdown) {
+			meta.setDeprecated(true);
+			meta.setRetirementDate(model.getShutdown_date());
+		}
+		return meta;
+	}
+
+	/**
+	 * A choice still described by its bare id takes the description the models
+	 * library has for it; a model with an announced shutdown says when.
+	 */
+	public static void describe(GBaseModelChoice entry) {
+		ModelMetaInfo meta = entry.getMetaInfos();
+		if (meta == null)
+			return;
+		if (entry.getCode() != null && entry.getCode().equals(entry.getDescription()) && meta.getDescription() != null
+				&& !meta.getDescription().isBlank()) {
+			entry.setDescription(meta.getDescription());
+		}
+		if (meta.getRetirementDate() != null && entry.getDescription() != null
+				&& !entry.getDescription().contains("shuts down")) {
+			entry.setDescription(entry.getDescription() + " (shuts down " + meta.getRetirementDate() + ")");
+		}
+	}
 }

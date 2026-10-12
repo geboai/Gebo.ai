@@ -70,13 +70,13 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restAggregate(body: AggregateRequestBodyMicrosoftResultsExtractionData, observe?: 'body', reportProgress?: boolean): Observable<MicrosoftResultsExtractionData>;
-    public restAggregate(body: AggregateRequestBodyMicrosoftResultsExtractionData, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MicrosoftResultsExtractionData>>;
-    public restAggregate(body: AggregateRequestBodyMicrosoftResultsExtractionData, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MicrosoftResultsExtractionData>>;
-    public restAggregate(body: AggregateRequestBodyMicrosoftResultsExtractionData, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restAggregateSharePoint(body: AggregateRequestBodyMicrosoftResultsExtractionData, observe?: 'body', reportProgress?: boolean): Observable<MicrosoftResultsExtractionData>;
+    public restAggregateSharePoint(body: AggregateRequestBodyMicrosoftResultsExtractionData, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MicrosoftResultsExtractionData>>;
+    public restAggregateSharePoint(body: AggregateRequestBodyMicrosoftResultsExtractionData, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MicrosoftResultsExtractionData>>;
+    public restAggregateSharePoint(body: AggregateRequestBodyMicrosoftResultsExtractionData, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restAggregate.');
+            throw new Error('Required parameter body was null or undefined when calling restAggregateSharePoint.');
         }
 
         let headers = this.defaultHeaders;
@@ -117,13 +117,13 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restCreateCustomTemplateParamsMap(body: CustomTemplateParamsRequestBody, observe?: 'body', reportProgress?: boolean): Observable<{ [key: string]: any; }>;
-    public restCreateCustomTemplateParamsMap(body: CustomTemplateParamsRequestBody, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{ [key: string]: any; }>>;
-    public restCreateCustomTemplateParamsMap(body: CustomTemplateParamsRequestBody, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{ [key: string]: any; }>>;
-    public restCreateCustomTemplateParamsMap(body: CustomTemplateParamsRequestBody, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restCreateCustomTemplateParamsMapSharePoint(body: CustomTemplateParamsRequestBody, observe?: 'body', reportProgress?: boolean): Observable<{ [key: string]: any; }>;
+    public restCreateCustomTemplateParamsMapSharePoint(body: CustomTemplateParamsRequestBody, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{ [key: string]: any; }>>;
+    public restCreateCustomTemplateParamsMapSharePoint(body: CustomTemplateParamsRequestBody, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{ [key: string]: any; }>>;
+    public restCreateCustomTemplateParamsMapSharePoint(body: CustomTemplateParamsRequestBody, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restCreateCustomTemplateParamsMap.');
+            throw new Error('Required parameter body was null or undefined when calling restCreateCustomTemplateParamsMapSharePoint.');
         }
 
         let headers = this.defaultHeaders;
@@ -165,17 +165,17 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restExtractRelatedAnalisysReferences(body: MicrosoftResultsExtractionData, systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchResultAnalisysOutcome>;
-    public restExtractRelatedAnalisysReferences(body: MicrosoftResultsExtractionData, systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchResultAnalisysOutcome>>;
-    public restExtractRelatedAnalisysReferences(body: MicrosoftResultsExtractionData, systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchResultAnalisysOutcome>>;
-    public restExtractRelatedAnalisysReferences(body: MicrosoftResultsExtractionData, systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restExtractRelatedAnalisysReferencesSharePoint(body: MicrosoftResultsExtractionData, systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchResultAnalisysOutcome>;
+    public restExtractRelatedAnalisysReferencesSharePoint(body: MicrosoftResultsExtractionData, systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchResultAnalisysOutcome>>;
+    public restExtractRelatedAnalisysReferencesSharePoint(body: MicrosoftResultsExtractionData, systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchResultAnalisysOutcome>>;
+    public restExtractRelatedAnalisysReferencesSharePoint(body: MicrosoftResultsExtractionData, systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restExtractRelatedAnalisysReferences.');
+            throw new Error('Required parameter body was null or undefined when calling restExtractRelatedAnalisysReferencesSharePoint.');
         }
 
         if (systemId === null || systemId === undefined) {
-            throw new Error('Required parameter systemId was null or undefined when calling restExtractRelatedAnalisysReferences.');
+            throw new Error('Required parameter systemId was null or undefined when calling restExtractRelatedAnalisysReferencesSharePoint.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -222,13 +222,13 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restFindSystemById(systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
-    public restFindSystemById(systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
-    public restFindSystemById(systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
-    public restFindSystemById(systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restFindSystemByIdSharePoint(systemId: string, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
+    public restFindSystemByIdSharePoint(systemId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
+    public restFindSystemByIdSharePoint(systemId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
+    public restFindSystemByIdSharePoint(systemId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (systemId === null || systemId === undefined) {
-            throw new Error('Required parameter systemId was null or undefined when calling restFindSystemById.');
+            throw new Error('Required parameter systemId was null or undefined when calling restFindSystemByIdSharePoint.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -269,13 +269,13 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restFindSystemBySearchResult(body: SearchResult, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
-    public restFindSystemBySearchResult(body: SearchResult, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
-    public restFindSystemBySearchResult(body: SearchResult, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
-    public restFindSystemBySearchResult(body: SearchResult, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restFindSystemBySearchResultSharePoint(body: SearchResult, observe?: 'body', reportProgress?: boolean): Observable<SearchableSystemMetaData>;
+    public restFindSystemBySearchResultSharePoint(body: SearchResult, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchableSystemMetaData>>;
+    public restFindSystemBySearchResultSharePoint(body: SearchResult, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchableSystemMetaData>>;
+    public restFindSystemBySearchResultSharePoint(body: SearchResult, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restFindSystemBySearchResult.');
+            throw new Error('Required parameter body was null or undefined when calling restFindSystemBySearchResultSharePoint.');
         }
 
         let headers = this.defaultHeaders;
@@ -316,10 +316,10 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetCachedCatalogues(systemConfigurationCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
-    public restGetCachedCatalogues(systemConfigurationCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
-    public restGetCachedCatalogues(systemConfigurationCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
-    public restGetCachedCatalogues(systemConfigurationCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetCachedCataloguesSharePoint(systemConfigurationCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
+    public restGetCachedCataloguesSharePoint(systemConfigurationCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
+    public restGetCachedCataloguesSharePoint(systemConfigurationCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
+    public restGetCachedCataloguesSharePoint(systemConfigurationCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -360,13 +360,13 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetCataloguesListSample(configurationCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
-    public restGetCataloguesListSample(configurationCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
-    public restGetCataloguesListSample(configurationCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
-    public restGetCataloguesListSample(configurationCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetCataloguesListSampleSharePoint(configurationCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CatalogueSample>>;
+    public restGetCataloguesListSampleSharePoint(configurationCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CatalogueSample>>>;
+    public restGetCataloguesListSampleSharePoint(configurationCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CatalogueSample>>>;
+    public restGetCataloguesListSampleSharePoint(configurationCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (configurationCode === null || configurationCode === undefined) {
-            throw new Error('Required parameter configurationCode was null or undefined when calling restGetCataloguesListSample.');
+            throw new Error('Required parameter configurationCode was null or undefined when calling restGetCataloguesListSampleSharePoint.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -406,10 +406,10 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetDescription(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetDescription(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetDescription(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetDescription(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetDescriptionSharePoint(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetDescriptionSharePoint(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetDescriptionSharePoint(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetDescriptionSharePoint(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -442,10 +442,10 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetId(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetId(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetIdSharePoint(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetIdSharePoint(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetIdSharePoint(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetIdSharePoint(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -478,10 +478,10 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetMessagingModuleId(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetMessagingModuleId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetMessagingModuleId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetMessagingModuleId(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetMessagingModuleIdSharePoint(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetMessagingModuleIdSharePoint(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetMessagingModuleIdSharePoint(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetMessagingModuleIdSharePoint(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -514,10 +514,10 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetNativePromptTemplateUseCode(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetNativePromptTemplateUseCode(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetNativePromptTemplateUseCode(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetNativePromptTemplateUseCode(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetNativePromptTemplateUseCodeSharePoint(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetNativePromptTemplateUseCodeSharePoint(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetNativePromptTemplateUseCodeSharePoint(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetNativePromptTemplateUseCodeSharePoint(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -550,10 +550,10 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetProductId(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetProductId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetProductId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetProductId(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetProductIdSharePoint(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetProductIdSharePoint(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetProductIdSharePoint(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetProductIdSharePoint(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -586,10 +586,10 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetQueriesGenerationPromptUseCode(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public restGetQueriesGenerationPromptUseCode(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public restGetQueriesGenerationPromptUseCode(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public restGetQueriesGenerationPromptUseCode(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetQueriesGenerationPromptUseCodeSharePoint(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public restGetQueriesGenerationPromptUseCodeSharePoint(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public restGetQueriesGenerationPromptUseCodeSharePoint(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public restGetQueriesGenerationPromptUseCodeSharePoint(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -622,10 +622,10 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restGetSearchableSystems(observe?: 'body', reportProgress?: boolean): Observable<Array<SearchableSystemMetaData>>;
-    public restGetSearchableSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchableSystemMetaData>>>;
-    public restGetSearchableSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchableSystemMetaData>>>;
-    public restGetSearchableSystems(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restGetSearchableSystemsSharePoint(observe?: 'body', reportProgress?: boolean): Observable<Array<SearchableSystemMetaData>>;
+    public restGetSearchableSystemsSharePoint(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchableSystemMetaData>>>;
+    public restGetSearchableSystemsSharePoint(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchableSystemMetaData>>>;
+    public restGetSearchableSystemsSharePoint(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -658,10 +658,10 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restIsEnabled(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
-    public restIsEnabled(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
-    public restIsEnabled(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
-    public restIsEnabled(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restIsEnabledSharePoint(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public restIsEnabledSharePoint(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public restIsEnabledSharePoint(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
+    public restIsEnabledSharePoint(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -697,21 +697,21 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restNativeSearch(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
-    public restNativeSearch(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
-    public restNativeSearch(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
-    public restNativeSearch(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restNativeSearchSharePoint(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
+    public restNativeSearchSharePoint(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
+    public restNativeSearchSharePoint(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
+    public restNativeSearchSharePoint(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restNativeSearch.');
+            throw new Error('Required parameter body was null or undefined when calling restNativeSearchSharePoint.');
         }
 
         if (systemId === null || systemId === undefined) {
-            throw new Error('Required parameter systemId was null or undefined when calling restNativeSearch.');
+            throw new Error('Required parameter systemId was null or undefined when calling restNativeSearchSharePoint.');
         }
 
         if (nEntryLimit === null || nEntryLimit === undefined) {
-            throw new Error('Required parameter nEntryLimit was null or undefined when calling restNativeSearch.');
+            throw new Error('Required parameter nEntryLimit was null or undefined when calling restNativeSearchSharePoint.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -763,21 +763,21 @@ export class SharePointSearchServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restSearch(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
-    public restSearch(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
-    public restSearch(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
-    public restSearch(body: SearchQuery, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restSearchSharePoint(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
+    public restSearchSharePoint(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
+    public restSearchSharePoint(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
+    public restSearchSharePoint(body: SearchQuery, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling restSearch.');
+            throw new Error('Required parameter body was null or undefined when calling restSearchSharePoint.');
         }
 
         if (systemId === null || systemId === undefined) {
-            throw new Error('Required parameter systemId was null or undefined when calling restSearch.');
+            throw new Error('Required parameter systemId was null or undefined when calling restSearchSharePoint.');
         }
 
         if (nEntryLimit === null || nEntryLimit === undefined) {
-            throw new Error('Required parameter nEntryLimit was null or undefined when calling restSearch.');
+            throw new Error('Required parameter nEntryLimit was null or undefined when calling restSearchSharePoint.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});

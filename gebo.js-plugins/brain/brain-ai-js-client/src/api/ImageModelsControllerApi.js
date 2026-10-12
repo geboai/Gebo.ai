@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from "../ApiClient";
+import ConfigurationEntryGBaseImageModelConfig from '../model/ConfigurationEntryGBaseImageModelConfig';
+import GImageModelType from '../model/GImageModelType';
 
 /**
 * ImageModelsController service.
@@ -36,7 +38,7 @@ export default class ImageModelsControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GImageModelType>} and HTTP response
      */
     getImageModelTypesWithHttpInfo() {
       
@@ -58,7 +60,7 @@ export default class ImageModelsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GImageModelType];
 
       return this.apiClient.callApi(
         '/api/admin/ImageModelsController/getImageModelTypes', 'GET',
@@ -68,7 +70,7 @@ export default class ImageModelsControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GImageModelType>}
      */
     getImageModelTypes() {
       return this.getImageModelTypesWithHttpInfo()
@@ -80,8 +82,8 @@ export default class ImageModelsControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ConfigurationEntryGBaseImageModelConfig>} and HTTP response
      */
     getRuntimeConfiguredImageModelsWithHttpInfo(opts) {
       opts = opts || {};
@@ -103,7 +105,7 @@ export default class ImageModelsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [ConfigurationEntryGBaseImageModelConfig];
 
       return this.apiClient.callApi(
         '/api/admin/ImageModelsController/getRuntimeConfiguredImageModels', 'GET',
@@ -114,8 +116,8 @@ export default class ImageModelsControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ConfigurationEntryGBaseImageModelConfig>}
      */
     getRuntimeConfiguredImageModels(opts) {
       return this.getRuntimeConfiguredImageModelsWithHttpInfo(opts)

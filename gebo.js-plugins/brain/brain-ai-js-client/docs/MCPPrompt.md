@@ -3,10 +3,10 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**accessibleGroups** | **Object** |  | [optional] 
-**accessibleUsers** | **Object** |  | [optional] 
-**accessibleToAll** | **Object** |  | [optional] 
-**aclAliases** | **Object** |  | [optional] 
-**name** | **Object** |  | [optional] 
-**deletedOnMCPServer** | **Object** |  | [optional] 
-**addedOnMCPServer** | **Object** |  | [optional] 
+**accessibleGroups** | **[String]** |  | [optional] 
+**accessibleUsers** | **[String]** |  | [optional] 
+**accessibleToAll** | **Boolean** |  | [optional] 
+**aclAliases** | **[Number]** |  | [optional] 
+**name** | **String** |  | [optional] 
+**deletedOnMCPServer** | **Boolean** |  | [optional] 
+**addedOnMCPServer** | **Boolean** |  | [optional] 

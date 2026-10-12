@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost:13001/brain*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**delete**](GeboA2AServerAdminControllerApi.md#delete) | **DELETE** /api/admin/GeboA2AServerAdminController/deleteA2AServer | 
-[**findAll1**](GeboA2AServerAdminControllerApi.md#findAll1) | **GET** /api/admin/GeboA2AServerAdminController/findAll | 
-[**findByCode1**](GeboA2AServerAdminControllerApi.md#findByCode1) | **GET** /api/admin/GeboA2AServerAdminController/findByCode | 
-[**insert**](GeboA2AServerAdminControllerApi.md#insert) | **POST** /api/admin/GeboA2AServerAdminController/insertA2AServer | 
-[**update**](GeboA2AServerAdminControllerApi.md#update) | **POST** /api/admin/GeboA2AServerAdminController/updateA2AServer | 
+[**deleteA2AServer**](GeboA2AServerAdminControllerApi.md#deleteA2AServer) | **DELETE** /api/admin/GeboA2AServerAdminController/deleteA2AServer | 
+[**findAllA2AServer**](GeboA2AServerAdminControllerApi.md#findAllA2AServer) | **GET** /api/admin/GeboA2AServerAdminController/findAll | 
+[**findByCodeA2AServer**](GeboA2AServerAdminControllerApi.md#findByCodeA2AServer) | **GET** /api/admin/GeboA2AServerAdminController/findByCode | 
+[**insertA2AServer**](GeboA2AServerAdminControllerApi.md#insertA2AServer) | **POST** /api/admin/GeboA2AServerAdminController/insertA2AServer | 
+[**updateA2AServer**](GeboA2AServerAdminControllerApi.md#updateA2AServer) | **POST** /api/admin/GeboA2AServerAdminController/updateA2AServer | 
 
-<a name="delete"></a>
-# **delete**
-> OperationStatusBoolean delete(code)
+<a name="deleteA2AServer"></a>
+# **deleteA2AServer**
+> OperationStatusBoolean deleteA2AServer(code)
 
 
 
@@ -26,10 +26,10 @@ Method | HTTP request | Description
 GeboA2AServerAdminControllerApi apiInstance = new GeboA2AServerAdminControllerApi();
 String code = "code_example"; // String | 
 try {
-    OperationStatusBoolean result = apiInstance.delete(code);
+    OperationStatusBoolean result = apiInstance.deleteA2AServer(code);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GeboA2AServerAdminControllerApi#delete");
+    System.err.println("Exception when calling GeboA2AServerAdminControllerApi#deleteA2AServer");
     e.printStackTrace();
 }
 ```
@@ -53,9 +53,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="findAll1"></a>
-# **findAll1**
-> List&lt;A2AServerConfig&gt; findAll1()
+<a name="findAllA2AServer"></a>
+# **findAllA2AServer**
+> List&lt;A2AServerConfig&gt; findAllA2AServer()
 
 
 
@@ -68,10 +68,10 @@ No authorization required
 
 GeboA2AServerAdminControllerApi apiInstance = new GeboA2AServerAdminControllerApi();
 try {
-    List<A2AServerConfig> result = apiInstance.findAll1();
+    List<A2AServerConfig> result = apiInstance.findAllA2AServer();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GeboA2AServerAdminControllerApi#findAll1");
+    System.err.println("Exception when calling GeboA2AServerAdminControllerApi#findAllA2AServer");
     e.printStackTrace();
 }
 ```
@@ -92,9 +92,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="findByCode1"></a>
-# **findByCode1**
-> OperationStatusA2AServerConfig findByCode1(code)
+<a name="findByCodeA2AServer"></a>
+# **findByCodeA2AServer**
+> OperationStatusA2AServerConfig findByCodeA2AServer(code)
 
 
 
@@ -108,10 +108,10 @@ No authorization required
 GeboA2AServerAdminControllerApi apiInstance = new GeboA2AServerAdminControllerApi();
 String code = "code_example"; // String | 
 try {
-    OperationStatusA2AServerConfig result = apiInstance.findByCode1(code);
+    OperationStatusA2AServerConfig result = apiInstance.findByCodeA2AServer(code);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GeboA2AServerAdminControllerApi#findByCode1");
+    System.err.println("Exception when calling GeboA2AServerAdminControllerApi#findByCodeA2AServer");
     e.printStackTrace();
 }
 ```
@@ -135,9 +135,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="insert"></a>
-# **insert**
-> OperationStatusA2AServerConfig insert(body)
+<a name="insertA2AServer"></a>
+# **insertA2AServer**
+> OperationStatusA2AServerConfig insertA2AServer(body)
 
 
 
@@ -151,10 +151,10 @@ No authorization required
 GeboA2AServerAdminControllerApi apiInstance = new GeboA2AServerAdminControllerApi();
 A2AServerConfig body = new A2AServerConfig(); // A2AServerConfig | 
 try {
-    OperationStatusA2AServerConfig result = apiInstance.insert(body);
+    OperationStatusA2AServerConfig result = apiInstance.insertA2AServer(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GeboA2AServerAdminControllerApi#insert");
+    System.err.println("Exception when calling GeboA2AServerAdminControllerApi#insertA2AServer");
     e.printStackTrace();
 }
 ```
@@ -178,9 +178,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="update"></a>
-# **update**
-> OperationStatusA2AServerConfig update(body)
+<a name="updateA2AServer"></a>
+# **updateA2AServer**
+> OperationStatusA2AServerConfig updateA2AServer(body)
 
 
 
@@ -194,10 +194,10 @@ No authorization required
 GeboA2AServerAdminControllerApi apiInstance = new GeboA2AServerAdminControllerApi();
 A2AServerConfig body = new A2AServerConfig(); // A2AServerConfig | 
 try {
-    OperationStatusA2AServerConfig result = apiInstance.update(body);
+    OperationStatusA2AServerConfig result = apiInstance.updateA2AServer(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GeboA2AServerAdminControllerApi#update");
+    System.err.println("Exception when calling GeboA2AServerAdminControllerApi#updateA2AServer");
     e.printStackTrace();
 }
 ```

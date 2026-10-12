@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="getAllFileTypes"></a>
 # **getAllFileTypes**
-> Object getAllFileTypes()
+> [IngestionFileType] getAllFileTypes()
 
 
 
@@ -32,7 +32,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[IngestionFileType]**](IngestionFileType.md)
 
 ### Authorization
 
@@ -54,7 +54,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.IngestionFileTypesLibraryControllerApi();
-let extension = null; // Object | 
+let extension = "extension_example"; // String | 
 
 apiInstance.getIngestionFileTypeByExtension(extension).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -68,7 +68,7 @@ apiInstance.getIngestionFileTypeByExtension(extension).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **extension** | [**Object**](.md)|  | 
+ **extension** | **String**|  | 
 
 ### Return type
 
@@ -85,7 +85,7 @@ No authorization required
 
 <a name="getIngestionReadingModules"></a>
 # **getIngestionReadingModules**
-> Object getIngestionReadingModules()
+> [IngestionHandlerConfig] getIngestionReadingModules()
 
 
 
@@ -107,7 +107,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[IngestionHandlerConfig]**](IngestionHandlerConfig.md)
 
 ### Authorization
 

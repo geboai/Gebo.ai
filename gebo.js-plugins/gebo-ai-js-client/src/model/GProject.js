@@ -70,6 +70,8 @@ export default class GProject {
         obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
       if (data.hasOwnProperty('parentProjectCode'))
         obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], 'String');
+      if (data.hasOwnProperty('readonly'))
+        obj.readonly = ApiClient.convertToType(data['readonly'], 'Boolean');
     }
     return obj;
   }
@@ -172,4 +174,9 @@ GProject.prototype.aclAliases = undefined;
  * @member {String} parentProjectCode
  */
 GProject.prototype.parentProjectCode = undefined;
+
+/**
+ * @member {Boolean} readonly
+ */
+GProject.prototype.readonly = undefined;
 

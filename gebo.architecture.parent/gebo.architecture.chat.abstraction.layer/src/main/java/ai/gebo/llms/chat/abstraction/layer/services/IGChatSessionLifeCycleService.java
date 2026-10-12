@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.services;
 
+import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import java.io.IOException;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
@@ -82,8 +84,56 @@ public interface IGChatSessionLifeCycleService {
 
 	public void endRequest(GeboChatRequest request, GeboChatResponse response) throws GeboChatSessionLifecycleException;
 
+	// Called when a request's processing is over, however it ended: it no longer blocks new requests
+	// of its chat, and is forgotten shortly after unless endRequest saves it first.
+	public void releaseRequest(GeboChatRequest request);
+
+	/**
+	 * Resolves knowledge-base document codes into the rich {@link GResponseDocumentRef}
+	 * incarnation used by the chat request's {@code forcedDocumentsRef}. This lets the
+	 * UI keep its document pickers working purely with codes while the chat control
+	 * converts them to the ref type at submit time (external search results, which
+	 * cannot be addressed by a code, are carried whole by the client instead).
+	 */
+	public List<GResponseDocumentRef> resolveResponseDocumentRefs(List<String> codes);
+
+	/**
+	 * The chat profile of the request's chat session.
+	 *
+	 * @return the profile, null for a chat without one (a free chat)
+	 */
+	public GChatProfileConfiguration getSessionChatProfile(GeboChatRequest request)
+			throws GeboChatSessionLifecycleException;
+
 	public List<GKnowledgeBase> getSessionAvailableKnowledgeBases(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException;
+
+	/**
+	 * The language the user explicitly asked the answers of the request's chat in,
+	 * null when none.
+	 */
+	public default String getUserRequiredLanguage(GeboChatRequest request)
+			throws GeboChatSessionLifecycleException {
+		return null;
+	}
+
+	/** Keeps on the request's chat the language the user explicitly asked its answers in. */
+	public default void setUserRequiredLanguage(GeboChatRequest request, String language)
+			throws GeboChatSessionLifecycleException {
+	}
+
+	/**
+	 * The language the request's chat is held in: set by the first trusted detection of
+	 * a user's message, null when none was detected yet.
+	 */
+	public default String getChatLanguage(GeboChatRequest request) throws GeboChatSessionLifecycleException {
+		return null;
+	}
+
+	/** Keeps on the request's chat the language it is held in. */
+	public default void setChatLanguage(GeboChatRequest request, String language)
+			throws GeboChatSessionLifecycleException {
+	}
 
 	public IGConfigurableChatModel getSessionChatModel(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException;
@@ -91,7 +141,20 @@ public interface IGChatSessionLifeCycleService {
 	public void chatRequestCompleted(GeboChatRequest request, IGConfigurableChatModel targetChatModel)
 			throws GeboChatSessionLifecycleException, LLMConfigException, IOException;
 
-	public GUserChatInfo createCleanChatByModel(IGConfigurableChatModel chatModel) throws GeboPersistenceException;
+	public default GUserChatInfo createCleanChatByModel(IGConfigurableChatModel chatModel)
+			throws GeboPersistenceException {
+		return createCleanChatByModel(chatModel, null);
+	}
+
+	/**
+	 * Creates a clean model-based chat (no chat profile, no RAG), optionally pinning
+	 * the chat pipeline the session runs through. A {@code null} pipelineCode uses the
+	 * default pipeline; a non-null value (e.g. {@code "open-chat"}) is persisted on the
+	 * session so it reopens through that pipeline. This is the path a pipeline-only
+	 * chat takes: it needs only a model, not a chat profile (profiles are for RAG).
+	 */
+	public GUserChatInfo createCleanChatByModel(IGConfigurableChatModel chatModel, String pipelineCode)
+			throws GeboPersistenceException;
 
 	public default GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode)
 			throws GeboPersistenceException {
@@ -103,10 +166,40 @@ public interface IGChatSessionLifeCycleService {
 	 * context code (e.g. the office document the chat assists). A {@code null}
 	 * contextCode creates an unbound chat, as the single-argument overload does.
 	 */
-	public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode)
+	public default GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode)
+			throws GeboPersistenceException {
+		return createCleanChatByChatProfileCode(chatProfileCode, contextCode, null);
+	}
+
+	/**
+	 * Creates a clean chat for the given chat profile, additionally pinning the chat
+	 * pipeline the session runs through. A {@code null} pipelineCode uses the default
+	 * pipeline (identical to the two-argument overload); a non-null value (e.g.
+	 * {@code "open-chat"}) is persisted on the session so it reopens through that
+	 * pipeline.
+	 */
+	public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode,
+			String pipelineCode) throws GeboPersistenceException;
+
+	public default GUserChatInfo createCleanChatByModelCode(String modelCode) throws GeboPersistenceException {
+		return createCleanChatByModelCode(modelCode, null);
+	}
+
+	/**
+	 * Creates a clean model-based chat by model code, optionally pinning the chat
+	 * pipeline (e.g. {@code "open-chat"}) the session reopens through. No chat profile
+	 * is involved.
+	 */
+	public GUserChatInfo createCleanChatByModelCode(String modelCode, String pipelineCode)
 			throws GeboPersistenceException;
 
-	public GUserChatInfo createCleanChatByModelCode(String modelCode) throws GeboPersistenceException;
+	/**
+	 * Creates a clean model-based chat on the system default chat model, pinned to the
+	 * given pipeline (e.g. {@code "open-chat"}). Used by pipeline-only chats where the
+	 * user does not pick a model: the open-chat network of agents runs on the default
+	 * chat model anyway, so the session simply adopts it.
+	 */
+	public GUserChatInfo createCleanChatByDefaultModel(String pipelineCode) throws GeboPersistenceException;
 
 	public GUserChatInfo suggestChatDescription(String id) throws GeboChatSessionLifecycleException;
 
@@ -117,6 +210,10 @@ public interface IGChatSessionLifeCycleService {
 
 	public List<IGConfigurableEmbeddingModel> getSessionEmbeddingModels(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException;
+
+	// New chat holding the history of sessionCode up to and including the exchange of requestId.
+	public GUserChatInfo branchChatSession(String sessionCode, String requestId)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException;
 
 	
 

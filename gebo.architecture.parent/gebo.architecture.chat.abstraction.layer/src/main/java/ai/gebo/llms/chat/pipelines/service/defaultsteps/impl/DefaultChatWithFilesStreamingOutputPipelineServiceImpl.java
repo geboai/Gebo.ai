@@ -1,9 +1,12 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -38,6 +41,7 @@ public class DefaultChatWithFilesStreamingOutputPipelineServiceImpl implements I
 	private final IGPromptConfigDao promptsDao;
 	private final IGChatService chatService;
 	private final IGHugeFilesDeepSearch hugeFilesDeepSearch;
+	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -70,7 +74,13 @@ public class DefaultChatWithFilesStreamingOutputPipelineServiceImpl implements I
 		GPromptTemplateConfig prompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_WITH_DOCUMENTS_PROMPT);
 		double fullRequestSize = runtimeData.getRequestResources().getTokensSize() + prompt.getTokensSize();
-		if (contextWindow >= 0.8 * fullRequestSize) {
+		// the request fits when it takes the tokens budget's share of the context window at most
+		// (ai.gebo.llms.tokens-budget.factor)
+		if (fullRequestSize <= BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF * contextWindow) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("execute(...) the request of " + (long) fullRequestSize + " (tok) fits the context of "
+						+ (long) contextWindow + " (tok): answered with all its documents");
+			}
 			return chatService.streamChat(prompt, Map.of(), runtimeData.getRequestResources(),
 					runtimeData.getChatResponse(), chatModel);
 		} else {
@@ -80,10 +90,22 @@ public class DefaultChatWithFilesStreamingOutputPipelineServiceImpl implements I
 					runtimeData.getRequestResources().getChathistory(),
 					runtimeData.getRequestResources().getCurrentRequest(),
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
+			// the same request: its rules, feedback notes, tool calls recorder and knowledge bases
+			resources.copyRequestValuesFrom(runtimeData.getRequestResources());
 			double minimizedContextRequestSize = ITokensCountable.tokensSize(prompt, resources);
-			if (contextWindow > 0.8 * minimizedContextRequestSize) {
+			if (minimizedContextRequestSize <= BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF * contextWindow) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("execute(...) the request of " + (long) fullRequestSize + " (tok) does not fit the context of "
+							+ (long) contextWindow + " (tok), with the selected documents only, "
+							+ (long) minimizedContextRequestSize + " (tok), it does");
+				}
 				return chatService.streamChat(prompt, Map.of(), resources, runtimeData.getChatResponse(), chatModel);
 			} else {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("execute(...) the selected documents, " + (long) minimizedContextRequestSize
+							+ " (tok), do not fit the context of " + (long) contextWindow
+							+ " (tok): they are analysed in pieces");
+				}
 				try {
 					return hugeFilesDeepSearch.streamChatWithHugeFiles(runtimeData, sinkUIEmitter, chatModel,
 							serviceModel);

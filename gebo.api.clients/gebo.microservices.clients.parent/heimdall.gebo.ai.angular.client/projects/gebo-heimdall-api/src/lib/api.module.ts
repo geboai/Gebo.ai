@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { AclAliasesClusterControllerService } from './api/aclAliasesClusterController.service';
 import { AuthControllerService } from './api/authController.service';
 import { AuthProvidersControllerService } from './api/authProvidersController.service';
-import { GeboAdvancedSetupStatusControllerService } from './api/geboAdvancedSetupStatusController.service';
+import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GeboFastInstallationSetupControllerService } from './api/geboFastInstallationSetupController.service';
 import { GeboFastWorkFolderSetupControllerService } from './api/geboFastWorkFolderSetupController.service';
 import { GeneratedAdminApiKeyControllerService } from './api/generatedAdminApiKeyController.service';
@@ -18,6 +18,8 @@ import { SecretsClusterControllerService } from './api/secretsClusterController.
 import { SecretsControllerService } from './api/secretsController.service';
 import { SecurityDirectoryClusterControllerService } from './api/securityDirectoryClusterController.service';
 import { SecurityHeaderDataCompletionControllerService } from './api/securityHeaderDataCompletionController.service';
+import { SystemMessagesAdminControllerService } from './api/systemMessagesAdminController.service';
+import { SystemMessagesControllerService } from './api/systemMessagesController.service';
 import { TokenRenewControllerService } from './api/tokenRenewController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserWorkflowsControllerService } from './api/userWorkflowsController.service';
@@ -32,7 +34,7 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
     AclAliasesClusterControllerService,
     AuthControllerService,
     AuthProvidersControllerService,
-    GeboAdvancedSetupStatusControllerService,
+    GeboAngularFormGroupMetaInfoControllerService,
     GeboFastInstallationSetupControllerService,
     GeboFastWorkFolderSetupControllerService,
     GeneratedAdminApiKeyControllerService,
@@ -44,6 +46,8 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
     SecretsControllerService,
     SecurityDirectoryClusterControllerService,
     SecurityHeaderDataCompletionControllerService,
+    SystemMessagesAdminControllerService,
+    SystemMessagesControllerService,
     TokenRenewControllerService,
     UserControllerService,
     UserWorkflowsControllerService,

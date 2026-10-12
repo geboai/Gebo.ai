@@ -41,9 +41,9 @@ export default class GeboChatMessageEnvelope {
       if (data.hasOwnProperty('content'))
         obj.content = ApiClient.convertToType(data['content'], Object);
       if (data.hasOwnProperty('lastMessage'))
-        obj.lastMessage = ApiClient.convertToType(data['lastMessage'], Object);
+        obj.lastMessage = ApiClient.convertToType(data['lastMessage'], 'Boolean');
       if (data.hasOwnProperty('contentObjectType'))
-        obj.contentObjectType = ApiClient.convertToType(data['contentObjectType'], Object);
+        obj.contentObjectType = ApiClient.convertToType(data['contentObjectType'], 'String');
     }
     return obj;
   }
@@ -55,12 +55,12 @@ export default class GeboChatMessageEnvelope {
 GeboChatMessageEnvelope.prototype.content = undefined;
 
 /**
- * @member {Object} lastMessage
+ * @member {Boolean} lastMessage
  */
 GeboChatMessageEnvelope.prototype.lastMessage = undefined;
 
 /**
- * @member {Object} contentObjectType
+ * @member {String} contentObjectType
  */
 GeboChatMessageEnvelope.prototype.contentObjectType = undefined;
 

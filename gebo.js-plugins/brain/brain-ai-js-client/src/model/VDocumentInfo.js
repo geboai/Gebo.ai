@@ -40,38 +40,38 @@ export default class VDocumentInfo {
     if (data) {
       obj = obj || new VDocumentInfo();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('parentFolderCode'))
-        obj.parentFolderCode = ApiClient.convertToType(data['parentFolderCode'], Object);
+        obj.parentFolderCode = ApiClient.convertToType(data['parentFolderCode'], 'String');
       if (data.hasOwnProperty('endpointRef'))
         obj.endpointRef = GObjectRefGProjectEndpoint.constructFromObject(data['endpointRef']);
       if (data.hasOwnProperty('creationDate'))
-        obj.creationDate = ApiClient.convertToType(data['creationDate'], Object);
+        obj.creationDate = ApiClient.convertToType(data['creationDate'], 'Date');
       if (data.hasOwnProperty('modificationDate'))
-        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], Object);
+        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], 'Date');
       if (data.hasOwnProperty('extension'))
-        obj.extension = ApiClient.convertToType(data['extension'], Object);
+        obj.extension = ApiClient.convertToType(data['extension'], 'String');
       if (data.hasOwnProperty('contentType'))
-        obj.contentType = ApiClient.convertToType(data['contentType'], Object);
+        obj.contentType = ApiClient.convertToType(data['contentType'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 VDocumentInfo.prototype.code = undefined;
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 VDocumentInfo.prototype.name = undefined;
 
 /**
- * @member {Object} parentFolderCode
+ * @member {String} parentFolderCode
  */
 VDocumentInfo.prototype.parentFolderCode = undefined;
 
@@ -81,22 +81,22 @@ VDocumentInfo.prototype.parentFolderCode = undefined;
 VDocumentInfo.prototype.endpointRef = undefined;
 
 /**
- * @member {Object} creationDate
+ * @member {Date} creationDate
  */
 VDocumentInfo.prototype.creationDate = undefined;
 
 /**
- * @member {Object} modificationDate
+ * @member {Date} modificationDate
  */
 VDocumentInfo.prototype.modificationDate = undefined;
 
 /**
- * @member {Object} extension
+ * @member {String} extension
  */
 VDocumentInfo.prototype.extension = undefined;
 
 /**
- * @member {Object} contentType
+ * @member {String} contentType
  */
 VDocumentInfo.prototype.contentType = undefined;
 

@@ -15,6 +15,7 @@ import java.util.Map;
 
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.CatalogueSample;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
@@ -44,7 +45,12 @@ public abstract class BaseNativeSearchController<CustomSearchResultExtractionDat
 
 	protected List<SearchResult> nativeSearch(NativeSearchDataStructure query, SearchableSystemMetaData system,
 			int nEntryLimit) throws IOException, SearchServiceException {
-		return nativeSearchService.nativeSearch(query, system, nEntryLimit);
+		return nativeSearchService.nativeSearch(query, system, nEntryLimit, searchCallParameters());
+	}
+
+	protected List<SearchResult> nativeSearch(NativeSearchDataStructure query, SearchableSystemMetaData system,
+			int nEntryLimit, SearchCallParameters parameters) throws IOException, SearchServiceException {
+		return nativeSearchService.nativeSearch(query, system, nEntryLimit, parameters);
 	}
 
 	protected Class<NativeSearchDataStructure> getNativeSearchDataStructureType() {

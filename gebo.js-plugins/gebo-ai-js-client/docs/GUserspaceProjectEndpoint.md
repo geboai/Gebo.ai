@@ -21,6 +21,7 @@ Name | Type | Description | Notes
 **synchroStrategy** | **String** |  | [optional] 
 **objectSpaceType** | **String** |  | [optional] 
 **aclAliases** | **[Number]** |  | [optional] 
+**personalData** | **Boolean** |  | [optional] 
 **username** | **String** |  | 
 
 <a name="SynchroStrategyEnum"></a>

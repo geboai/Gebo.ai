@@ -39,28 +39,28 @@ export default class GoogleSearchRequest {
     if (data) {
       obj = obj || new GoogleSearchRequest();
       if (data.hasOwnProperty('language'))
-        obj.language = ApiClient.convertToType(data['language'], Object);
+        obj.language = ApiClient.convertToType(data['language'], 'String');
       if (data.hasOwnProperty('query'))
-        obj.query = ApiClient.convertToType(data['query'], Object);
+        obj.query = ApiClient.convertToType(data['query'], 'String');
       if (data.hasOwnProperty('topN'))
-        obj.topN = ApiClient.convertToType(data['topN'], Object);
+        obj.topN = ApiClient.convertToType(data['topN'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} language
+ * @member {String} language
  */
 GoogleSearchRequest.prototype.language = undefined;
 
 /**
- * @member {Object} query
+ * @member {String} query
  */
 GoogleSearchRequest.prototype.query = undefined;
 
 /**
- * @member {Object} topN
+ * @member {Number} topN
  */
 GoogleSearchRequest.prototype.topN = undefined;
 

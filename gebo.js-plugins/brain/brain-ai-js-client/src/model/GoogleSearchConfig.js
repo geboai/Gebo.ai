@@ -39,28 +39,28 @@ export default class GoogleSearchConfig {
     if (data) {
       obj = obj || new GoogleSearchConfig();
       if (data.hasOwnProperty('apiKey'))
-        obj.apiKey = ApiClient.convertToType(data['apiKey'], Object);
+        obj.apiKey = ApiClient.convertToType(data['apiKey'], 'String');
       if (data.hasOwnProperty('customSearchEngineId'))
-        obj.customSearchEngineId = ApiClient.convertToType(data['customSearchEngineId'], Object);
+        obj.customSearchEngineId = ApiClient.convertToType(data['customSearchEngineId'], 'String');
       if (data.hasOwnProperty('enabled'))
-        obj.enabled = ApiClient.convertToType(data['enabled'], Object);
+        obj.enabled = ApiClient.convertToType(data['enabled'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} apiKey
+ * @member {String} apiKey
  */
 GoogleSearchConfig.prototype.apiKey = undefined;
 
 /**
- * @member {Object} customSearchEngineId
+ * @member {String} customSearchEngineId
  */
 GoogleSearchConfig.prototype.customSearchEngineId = undefined;
 
 /**
- * @member {Object} enabled
+ * @member {Boolean} enabled
  */
 GoogleSearchConfig.prototype.enabled = undefined;
 

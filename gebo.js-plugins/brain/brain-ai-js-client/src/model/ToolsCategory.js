@@ -39,28 +39,28 @@ export default class ToolsCategory {
     if (data) {
       obj = obj || new ToolsCategory();
       if (data.hasOwnProperty('knowledgeBaseRelative'))
-        obj.knowledgeBaseRelative = ApiClient.convertToType(data['knowledgeBaseRelative'], Object);
+        obj.knowledgeBaseRelative = ApiClient.convertToType(data['knowledgeBaseRelative'], 'Boolean');
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} knowledgeBaseRelative
+ * @member {Boolean} knowledgeBaseRelative
  */
 ToolsCategory.prototype.knowledgeBaseRelative = undefined;
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 ToolsCategory.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 ToolsCategory.prototype.description = undefined;
 

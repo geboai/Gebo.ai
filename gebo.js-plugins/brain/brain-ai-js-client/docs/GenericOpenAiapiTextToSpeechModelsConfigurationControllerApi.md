@@ -63,7 +63,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findGenericOpenAIAPITextToSpeechModelConfigByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -77,7 +77,7 @@ apiInstance.findGenericOpenAIAPITextToSpeechModelConfigByCode(code).then((data) 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -134,7 +134,7 @@ No authorization required
 
 <a name="getGenericOpenAITextToSpeechModelConfigs"></a>
 # **getGenericOpenAITextToSpeechModelConfigs**
-> Object getGenericOpenAITextToSpeechModelConfigs()
+> [GenericOpenAIAPITextToSpeechModelConfig] getGenericOpenAITextToSpeechModelConfigs()
 
 
 
@@ -156,7 +156,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GenericOpenAIAPITextToSpeechModelConfig]**](GenericOpenAIAPITextToSpeechModelConfig.md)
 
 ### Authorization
 
@@ -169,7 +169,7 @@ No authorization required
 
 <a name="getGenericOpenAITextToSpeechModelTypes"></a>
 # **getGenericOpenAITextToSpeechModelTypes**
-> Object getGenericOpenAITextToSpeechModelTypes()
+> [GenericOpenAITextToSpeechModelType] getGenericOpenAITextToSpeechModelTypes()
 
 
 
@@ -191,7 +191,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GenericOpenAITextToSpeechModelType]**](GenericOpenAITextToSpeechModelType.md)
 
 ### Authorization
 

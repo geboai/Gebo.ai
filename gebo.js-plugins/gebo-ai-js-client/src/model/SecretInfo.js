@@ -46,6 +46,8 @@ export default class SecretInfo {
         obj.secretType = ApiClient.convertToType(data['secretType'], 'String');
       if (data.hasOwnProperty('contextCode'))
         obj.contextCode = ApiClient.convertToType(data['contextCode'], 'String');
+      if (data.hasOwnProperty('readOnly'))
+        obj.readOnly = ApiClient.convertToType(data['readOnly'], 'Boolean');
     }
     return obj;
   }
@@ -130,4 +132,9 @@ SecretInfo.prototype.secretType = undefined;
  * @member {String} contextCode
  */
 SecretInfo.prototype.contextCode = undefined;
+
+/**
+ * @member {Boolean} readOnly
+ */
+SecretInfo.prototype.readOnly = undefined;
 

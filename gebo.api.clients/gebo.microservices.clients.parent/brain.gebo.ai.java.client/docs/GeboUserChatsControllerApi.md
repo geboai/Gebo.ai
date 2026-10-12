@@ -4,11 +4,14 @@ All URIs are relative to *http://localhost:13001/brain*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**branchChat**](GeboUserChatsControllerApi.md#branchChat) | **POST** /api/users/GeboUserChatsController/branchChat | 
 [**changeChatDescription**](GeboUserChatsControllerApi.md#changeChatDescription) | **POST** /api/users/GeboUserChatsController/changeChatDescription | 
 [**createCleanChatByChatProfileCode**](GeboUserChatsControllerApi.md#createCleanChatByChatProfileCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByChatProfileCode | 
+[**createCleanChatByDefaultModel**](GeboUserChatsControllerApi.md#createCleanChatByDefaultModel) | **GET** /api/users/GeboUserChatsController/createCleanChatByDefaultModel | 
 [**createCleanChatByModelCode**](GeboUserChatsControllerApi.md#createCleanChatByModelCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByModelCode | 
 [**deleteChat**](GeboUserChatsControllerApi.md#deleteChat) | **DELETE** /api/users/GeboUserChatsController/deleteChat | 
 [**exportResponse2file**](GeboUserChatsControllerApi.md#exportResponse2file) | **GET** /api/users/GeboUserChatsController/exportResponse2file | 
+[**getAnswerFeedbacks**](GeboUserChatsControllerApi.md#getAnswerFeedbacks) | **GET** /api/users/GeboUserChatsController/getAnswerFeedbacks | 
 [**getChatHistory**](GeboUserChatsControllerApi.md#getChatHistory) | **GET** /api/users/GeboUserChatsController/getChatHistory | 
 [**getChatInfosByCode**](GeboUserChatsControllerApi.md#getChatInfosByCode) | **GET** /api/users/GeboUserChatsController/getChatInfosByCode | 
 [**getChatInfosByQbe**](GeboUserChatsControllerApi.md#getChatInfosByQbe) | **POST** /api/users/GeboUserChatsController/getChatInfosByQbe | 
@@ -17,7 +20,54 @@ Method | HTTP request | Description
 [**getMyChatsPaged**](GeboUserChatsControllerApi.md#getMyChatsPaged) | **GET** /api/users/GeboUserChatsController/getMyChatsPaged | 
 [**getUIConfig**](GeboUserChatsControllerApi.md#getUIConfig) | **GET** /api/users/GeboUserChatsController/getUIConfig | 
 [**isMinimalLLMSSetupDone**](GeboUserChatsControllerApi.md#isMinimalLLMSSetupDone) | **GET** /api/users/GeboUserChatsController/isMinimalLLMSSetupDone | 
+[**removeAnswerFeedback**](GeboUserChatsControllerApi.md#removeAnswerFeedback) | **DELETE** /api/users/GeboUserChatsController/removeAnswerFeedback | 
+[**setAnswerFeedback**](GeboUserChatsControllerApi.md#setAnswerFeedback) | **POST** /api/users/GeboUserChatsController/setAnswerFeedback | 
 [**suggestChatDescription**](GeboUserChatsControllerApi.md#suggestChatDescription) | **GET** /api/users/GeboUserChatsController/suggestChatDescription | 
+
+<a name="branchChat"></a>
+# **branchChat**
+> GUserChatInfo branchChat(userChatContextCode, requestId)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboUserChatsControllerApi;
+
+
+GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
+String userChatContextCode = "userChatContextCode_example"; // String | 
+String requestId = "requestId_example"; // String | 
+try {
+    GUserChatInfo result = apiInstance.branchChat(userChatContextCode, requestId);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatsControllerApi#branchChat");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userChatContextCode** | **String**|  |
+ **requestId** | **String**|  |
+
+### Return type
+
+[**GUserChatInfo**](GUserChatInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 <a name="changeChatDescription"></a>
 # **changeChatDescription**
@@ -64,7 +114,7 @@ No authorization required
 
 <a name="createCleanChatByChatProfileCode"></a>
 # **createCleanChatByChatProfileCode**
-> GUserChatInfo createCleanChatByChatProfileCode(chatProfileCode, contextCode)
+> GUserChatInfo createCleanChatByChatProfileCode(chatProfileCode, contextCode, pipelineCode)
 
 
 
@@ -78,8 +128,9 @@ No authorization required
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
 String chatProfileCode = "chatProfileCode_example"; // String | 
 String contextCode = "contextCode_example"; // String | 
+String pipelineCode = "pipelineCode_example"; // String | 
 try {
-    GUserChatInfo result = apiInstance.createCleanChatByChatProfileCode(chatProfileCode, contextCode);
+    GUserChatInfo result = apiInstance.createCleanChatByChatProfileCode(chatProfileCode, contextCode, pipelineCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboUserChatsControllerApi#createCleanChatByChatProfileCode");
@@ -93,6 +144,50 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **chatProfileCode** | **String**|  |
  **contextCode** | **String**|  | [optional]
+ **pipelineCode** | **String**|  | [optional]
+
+### Return type
+
+[**GUserChatInfo**](GUserChatInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="createCleanChatByDefaultModel"></a>
+# **createCleanChatByDefaultModel**
+> GUserChatInfo createCleanChatByDefaultModel(pipelineCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboUserChatsControllerApi;
+
+
+GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
+String pipelineCode = "pipelineCode_example"; // String | 
+try {
+    GUserChatInfo result = apiInstance.createCleanChatByDefaultModel(pipelineCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatsControllerApi#createCleanChatByDefaultModel");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **pipelineCode** | **String**|  | [optional]
 
 ### Return type
 
@@ -109,7 +204,7 @@ No authorization required
 
 <a name="createCleanChatByModelCode"></a>
 # **createCleanChatByModelCode**
-> GUserChatInfo createCleanChatByModelCode(modelCode)
+> GUserChatInfo createCleanChatByModelCode(modelCode, pipelineCode)
 
 
 
@@ -122,8 +217,9 @@ No authorization required
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
 String modelCode = "modelCode_example"; // String | 
+String pipelineCode = "pipelineCode_example"; // String | 
 try {
-    GUserChatInfo result = apiInstance.createCleanChatByModelCode(modelCode);
+    GUserChatInfo result = apiInstance.createCleanChatByModelCode(modelCode, pipelineCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboUserChatsControllerApi#createCleanChatByModelCode");
@@ -136,6 +232,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **modelCode** | **String**|  |
+ **pipelineCode** | **String**|  | [optional]
 
 ### Return type
 
@@ -237,6 +334,49 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
+
+<a name="getAnswerFeedbacks"></a>
+# **getAnswerFeedbacks**
+> List&lt;GChatAnswerFeedback&gt; getAnswerFeedbacks(userChatContextCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboUserChatsControllerApi;
+
+
+GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
+String userChatContextCode = "userChatContextCode_example"; // String | 
+try {
+    List<GChatAnswerFeedback> result = apiInstance.getAnswerFeedbacks(userChatContextCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatsControllerApi#getAnswerFeedbacks");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userChatContextCode** | **String**|  |
+
+### Return type
+
+[**List&lt;GChatAnswerFeedback&gt;**](GChatAnswerFeedback.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 <a name="getChatHistory"></a>
 # **getChatHistory**
@@ -570,6 +710,93 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="removeAnswerFeedback"></a>
+# **removeAnswerFeedback**
+> removeAnswerFeedback(userChatContextCode, requestId)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboUserChatsControllerApi;
+
+
+GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
+String userChatContextCode = "userChatContextCode_example"; // String | 
+String requestId = "requestId_example"; // String | 
+try {
+    apiInstance.removeAnswerFeedback(userChatContextCode, requestId);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatsControllerApi#removeAnswerFeedback");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userChatContextCode** | **String**|  |
+ **requestId** | **String**|  |
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+<a name="setAnswerFeedback"></a>
+# **setAnswerFeedback**
+> GChatAnswerFeedback setAnswerFeedback(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboUserChatsControllerApi;
+
+
+GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
+AnswerFeedbackRequest body = new AnswerFeedbackRequest(); // AnswerFeedbackRequest | 
+try {
+    GChatAnswerFeedback result = apiInstance.setAnswerFeedback(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatsControllerApi#setAnswerFeedback");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**AnswerFeedbackRequest**](AnswerFeedbackRequest.md)|  |
+
+### Return type
+
+[**GChatAnswerFeedback**](GChatAnswerFeedback.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 <a name="suggestChatDescription"></a>

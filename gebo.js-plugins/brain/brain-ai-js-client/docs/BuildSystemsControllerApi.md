@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getBuildSystemConfigs"></a>
 # **getBuildSystemConfigs**
-> Object getBuildSystemConfigs(buildSystemTypeCode)
+> [GBuildSystem] getBuildSystemConfigs(buildSystemTypeCode)
 
 
 
@@ -18,7 +18,7 @@ Method | HTTP request | Description
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.BuildSystemsControllerApi();
-let buildSystemTypeCode = null; // Object | 
+let buildSystemTypeCode = "buildSystemTypeCode_example"; // String | 
 
 apiInstance.getBuildSystemConfigs(buildSystemTypeCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -32,11 +32,11 @@ apiInstance.getBuildSystemConfigs(buildSystemTypeCode).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **buildSystemTypeCode** | [**Object**](.md)|  | 
+ **buildSystemTypeCode** | **String**|  | 
 
 ### Return type
 
-**Object**
+[**[GBuildSystem]**](GBuildSystem.md)
 
 ### Authorization
 
@@ -49,7 +49,7 @@ No authorization required
 
 <a name="getBuildSystemTypes"></a>
 # **getBuildSystemTypes**
-> Object getBuildSystemTypes()
+> [GBuildSystemType] getBuildSystemTypes()
 
 
 
@@ -71,7 +71,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GBuildSystemType]**](GBuildSystemType.md)
 
 ### Authorization
 

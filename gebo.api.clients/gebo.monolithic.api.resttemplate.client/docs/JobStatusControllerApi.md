@@ -6,7 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**getJobStatus**](JobStatusControllerApi.md#getJobStatus) | **GET** /api/admin/JobStatusController/getJobStatus | 
 [**getJobSummary**](JobStatusControllerApi.md#getJobSummary) | **GET** /api/admin/JobStatusController/getJobSummary | 
-[**getJobsEntriesForProjectEndpoint1**](JobStatusControllerApi.md#getJobsEntriesForProjectEndpoint1) | **POST** /api/admin/JobStatusController/getJobsEntriesForProjectEndpoint | 
+[**getJobsEntriesForProjectEndpointJobStatus**](JobStatusControllerApi.md#getJobsEntriesForProjectEndpointJobStatus) | **POST** /api/admin/JobStatusController/getJobsEntriesForProjectEndpoint | 
 
 <a name="getJobStatus"></a>
 # **getJobStatus**
@@ -94,9 +94,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="getJobsEntriesForProjectEndpoint1"></a>
-# **getJobsEntriesForProjectEndpoint1**
-> PagedModelGJobStatusItem getJobsEntriesForProjectEndpoint1(body)
+<a name="getJobsEntriesForProjectEndpointJobStatus"></a>
+# **getJobsEntriesForProjectEndpointJobStatus**
+> PagedModelGJobStatusItem getJobsEntriesForProjectEndpointJobStatus(body)
 
 
 
@@ -110,10 +110,10 @@ No authorization required
 JobStatusControllerApi apiInstance = new JobStatusControllerApi();
 JobsEntriesForProjectEndpointFilter body = new JobsEntriesForProjectEndpointFilter(); // JobsEntriesForProjectEndpointFilter | 
 try {
-    PagedModelGJobStatusItem result = apiInstance.getJobsEntriesForProjectEndpoint1(body);
+    PagedModelGJobStatusItem result = apiInstance.getJobsEntriesForProjectEndpointJobStatus(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling JobStatusControllerApi#getJobsEntriesForProjectEndpoint1");
+    System.err.println("Exception when calling JobStatusControllerApi#getJobsEntriesForProjectEndpointJobStatus");
     e.printStackTrace();
 }
 ```

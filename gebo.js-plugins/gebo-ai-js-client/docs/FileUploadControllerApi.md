@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**getHandShakeCode**](FileUploadControllerApi.md#getHandShakeCode) | **GET** /api/admin/FileUploadController/getHandShakeCode | 
 [**upload1**](FileUploadControllerApi.md#upload1) | **POST** /api/admin/FileUploadController/upload/{handShakeCode} | 
+[**uploadToEndpoint**](FileUploadControllerApi.md#uploadToEndpoint) | **POST** /api/admin/FileUploadController/uploadToEndpoint/{endpointCode} | 
 
 <a name="getHandShakeCode"></a>
 # **getHandShakeCode**
@@ -70,6 +71,49 @@ apiInstance.upload1(handShakeCode, opts).then(() => {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **handShakeCode** | **String**|  | 
+ **files** | [**[Blob]**](Blob.md)|  | [optional] 
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
+ - **Accept**: Not defined
+
+<a name="uploadToEndpoint"></a>
+# **uploadToEndpoint**
+> uploadToEndpoint(endpointCode, opts)
+
+
+
+### Example
+```javascript
+import {GeboAiClient} from 'gebo.ai.client.js';
+
+let apiInstance = new GeboAiClient.FileUploadControllerApi();
+let endpointCode = "endpointCode_example"; // String | 
+let opts = { 
+  'files': ["QmFzZTY0IGV4YW1wbGU="] // [Blob] | 
+};
+apiInstance.uploadToEndpoint(endpointCode, opts).then(() => {
+  console.log('API called successfully.');
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **endpointCode** | **String**|  | 
  **files** | [**[Blob]**](Blob.md)|  | [optional] 
 
 ### Return type

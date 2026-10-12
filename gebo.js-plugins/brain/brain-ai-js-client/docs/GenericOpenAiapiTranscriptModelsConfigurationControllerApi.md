@@ -63,7 +63,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GenericOpenAiapiTranscriptModelsConfigurationControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findGenericOpenAIAPITranscriptModelConfigByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -77,7 +77,7 @@ apiInstance.findGenericOpenAIAPITranscriptModelConfigByCode(code).then((data) =>
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -134,7 +134,7 @@ No authorization required
 
 <a name="getGenericOpenAITranscriptModelConfigs"></a>
 # **getGenericOpenAITranscriptModelConfigs**
-> Object getGenericOpenAITranscriptModelConfigs()
+> [GenericOpenAIAPITranscriptModelConfig] getGenericOpenAITranscriptModelConfigs()
 
 
 
@@ -156,7 +156,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GenericOpenAIAPITranscriptModelConfig]**](GenericOpenAIAPITranscriptModelConfig.md)
 
 ### Authorization
 
@@ -169,7 +169,7 @@ No authorization required
 
 <a name="getGenericOpenAITranscriptModelTypes"></a>
 # **getGenericOpenAITranscriptModelTypes**
-> Object getGenericOpenAITranscriptModelTypes()
+> [GenericOpenAITranscriptModelType] getGenericOpenAITranscriptModelTypes()
 
 
 
@@ -191,7 +191,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GenericOpenAITranscriptModelType]**](GenericOpenAITranscriptModelType.md)
 
 ### Authorization
 

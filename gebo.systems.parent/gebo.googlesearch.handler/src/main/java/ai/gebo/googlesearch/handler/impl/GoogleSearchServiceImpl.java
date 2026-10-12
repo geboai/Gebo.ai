@@ -15,10 +15,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
@@ -44,6 +47,7 @@ import lombok.AllArgsConstructor;
 @Component
 @AllArgsConstructor
 public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl<WebSearchQueryObject> {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GoogleSearchServiceImpl.class);
 	private static final String GOOGLE = "google";
 	public static final String GOOGLE_SEARCH_SERVICE = "google-search-service";
 	private final GoogleSearchConfigDaoImpl googleConfigDao;
@@ -96,16 +100,31 @@ public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl<WebSea
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException {
+		return search(query, system, nEntryLimit, null);
+	}
+
+	/** Searches with an HTTP client whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException {
+		final GoogleSearchApi api = parameters != null ? googleSearchApi.using(parameters) : googleSearchApi;
 		List<GoogleSearchConfig> configs = googleConfigDao.getConfigurations();
 		if (configs.isEmpty())
 			return List.of();
 		GoogleSearchConfig config = configs.get(0);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin search(...) google search topN:" + nEntryLimit);
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Google search query: " + query.getQueryText());
+		}
+		final long start = System.currentTimeMillis();
 		GoogleSearchRequest searchQuery = new GoogleSearchRequest();
 		searchQuery.setQuery(query.getQueryText());
 		searchQuery.setTopN(nEntryLimit);
 		List<SearchResult> out = new ArrayList<SearchResult>();
 		try {
-			GoogleSearchResults data = googleSearchApi.search(config.getApiKey(), config.getCustomSearchEngineId(),
+			GoogleSearchResults data = api.search(config.getApiKey(), config.getCustomSearchEngineId(),
 					searchQuery);
 			if (data != null && data.getItems() != null) {
 				for (GoogleSearchResultItem item : data.getItems()) {
@@ -133,8 +152,17 @@ public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl<WebSea
 		} catch (RestClientException | MalformedURLException | UnsupportedEncodingException | URISyntaxException e) {
 			throw new IOException("Cannot run google search", e);
 		}
-
-		return out;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End search(...) google search returned " + out.size() + " result(s) in "
+					+ (System.currentTimeMillis() - start) + " ms");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			for (SearchResult result : out) {
+				LOGGER.trace("Google search result: " + result.getResultReference().getUri() + " - "
+						+ result.getResultReference().getTitle());
+			}
+		}
+		return withSizes(out);
 
 	}
 

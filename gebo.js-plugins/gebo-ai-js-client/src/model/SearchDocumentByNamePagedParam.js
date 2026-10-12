@@ -26,12 +26,10 @@ export default class SearchDocumentByNamePagedParam {
    * @alias module:model/SearchDocumentByNamePagedParam
    * @class
    * @param name {String} 
-   * @param knowledgeBaseCodes {Array.<String>} 
    * @param page {module:model/DataPage} 
    */
-  constructor(name, knowledgeBaseCodes, page) {
+  constructor(name, page) {
     this.name = name;
-    this.knowledgeBaseCodes = knowledgeBaseCodes;
     this.page = page;
   }
 

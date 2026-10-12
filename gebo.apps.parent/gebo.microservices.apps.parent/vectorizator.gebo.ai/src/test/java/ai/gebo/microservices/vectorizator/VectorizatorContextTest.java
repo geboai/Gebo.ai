@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.ApplicationContext;
@@ -142,9 +143,27 @@ class VectorizatorContextTest {
 					return List.of();
 				}
 
+				/**
+				 * Returns one instance for every queried service, instead of an
+				 * empty list.
+				 * <p>
+				 * This is what keeps the test fast. An empty list can never satisfy
+				 * DiscoveryClientClusterTopologyProvider's "non-empty AND unchanged
+				 * since the previous poll" condition, so the provider used to
+				 * exhaust its whole retry budget - 24 polls, 10s apart - on the main
+				 * thread before every one of these contexts could finish starting,
+				 * putting ~240s on each of the four participant services' tests and
+				 * most of the runtime of the whole microservices suite. One instance
+				 * satisfies it on the second poll instead.
+				 * <p>
+				 * It is also the more faithful stub: in a deployment discovery does
+				 * resolve the participants. Nothing here asserts on the member list -
+				 * seedsModelsReplicationFromLiveDiscovery asserts the provider TYPE,
+				 * which is what the wiring bug this test exists for would break.
+				 */
 				@Override
 				public List<ServiceInstance> getInstances(String serviceId) {
-					return List.of();
+					return List.of(new DefaultServiceInstance(serviceId + "-1", serviceId, "127.0.0.1", 0, false));
 				}
 			};
 		}

@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	<!--
+		Log destination, IDENTICAL in shape to the monolith's
+		(gebo.apps.parent/gebo.ai.app/src/main/resources/logback-spring.xml):
+		everything hangs off GEBO_LOG_BASE, so the DESTINATION is a deployment
+		decision and no path is hardcoded here.
+
+		  container (jib `docker` profile, WORKDIR /opt/gebo.ai)
+		      unset -> "logs" resolves against the working directory, i.e.
+		      /opt/gebo.ai/logs - the directory geboai/platform creates and the
+		      one the image declares as a VOLUME and compose mounts a named
+		      volume over. Same layout the monolithic image uses.
+		  native install (deb/rpm, as jpackage's -DGEBO_LOG_BASE does)
+		      -DGEBO_LOG_BASE=/var/log/gebo-ai
+
+		Boot's org/springframework/boot/logging/logback/base.xml is deliberately
+		NOT included - the monolith does not include it either. Its FILE appender
+		writes to ${LOG_FILE}, which defaults to ${java.io.tmpdir}/spring.log,
+		so including it sent this service's main log to /tmp/spring.log instead of
+		${LOGS} - off the declared logs volume entirely. On the filesystem service
+		that is worse than untidy: it is the only service that bind-mounts the
+		HOST's /tmp (for the integration tests' shared folder), so it inherited a
+		host-owned /tmp/spring.log it could not append to (fs.protected_regular),
+		logback failed to configure, and the container crash-looped at startup.
+		Defining the appenders here is what keeps every service's log on its own
+		volume.
+
+		LEVELS are not set here on purpose: they come from logging.level.* in the
+		shared config overlay (dockers/gebo.microservices/config/application.yml),
+		which Spring applies after this file and would override anything set here.
+	-->
 	<property name="LOGS" value="${GEBO_LOG_BASE:-logs}" />
 	<property name="SECURITY_LOG_RETENTION_DAYS" value="${SECURITY_LOG_RETENTION_DAYS:-365}" />
 	<property name="SECURITY_LOG_TOTAL_SIZE_CAP" value="${SECURITY_LOG_TOTAL_SIZE_CAP:-10GB}" />
@@ -34,6 +63,54 @@
 			<totalSizeCap>${SECURITY_LOG_TOTAL_SIZE_CAP}</totalSizeCap>
 		</rollingPolicy>
 	</appender>
+	<!--
+		Console stays: `docker logs <service>` / `kubectl logs` is the first
+		thing anyone reaches for on a cluster, and the otel collector scrapes
+		stdout. traceId/spanId are in the pattern because these services are
+		traced (MANAGEMENT_TRACING_SAMPLING_PROBABILITY in compose), so a line
+		here can be tied to the same request on another service.
+	-->
+	<appender name="Console"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%date [%thread] %-5level %logger{36}:%line [%X{traceId:-},%X{spanId:-}] - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+	<!--
+		One file per service, named after the service, so a deployment that points
+		several services at ONE log directory (a shared host path, a single
+		GEBO_LOG_BASE) still gets one file each instead of every service fighting
+		over the same handle.
+	-->
+	<appender name="RollingFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGS}/ai.gebo.brain.app.log</file>
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%date [%thread] %-5level %logger{36}:%line [%X{traceId:-},%X{spanId:-}] - %msg%n
+			</Pattern>
+		</encoder>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily and when the file reaches 100 MegaBytes -->
+			<fileNamePattern>${LOGS}/archived/ai.gebo.brain.app-%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	<root level="INFO">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</root>
+	<logger name="ai.gebo" level="INFO" additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
 	<logger name="security-log" level="INFO" additivity="false">
 		<appender-ref ref="SecurityLog" />
 	</logger>

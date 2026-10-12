@@ -1,0 +1,13 @@
+# The llmax piece of the models library: what Gebo knows of this provider's models
+# (modelsInfo) and what they accept in a request (parameterRules), bound by
+# LlmaxModelsLibrary under ai.gebo.models.providers.llmax.
+# No entry yet: nothing is known of its models yet beyond what the models lookup returns.
+# An entry goes under the key below, for example:
+#
+# ai.gebo.models.providers.llmax:
+#   parameterRules:
+#     - providerId: llmax
+#       models: ["some-model-*"]
+#       sampling: REJECTED
+#       reasoningEfforts: [none, low, high]
+#       source: the provider page the rule was read on, and when

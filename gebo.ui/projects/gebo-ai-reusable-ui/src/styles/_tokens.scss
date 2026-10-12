@@ -67,6 +67,10 @@
   --gebo-dialog-header-height: 3rem;
   --gebo-shell-header-height: 4.5rem;
   --gebo-page-gutter: 1.5rem;
+  /* Vertical room a routed page actually gets inside .gebo-app-content: the
+     viewport minus the shell header and the content gutters. Full-height
+     surfaces size themselves against this instead of guessing an offset. */
+  --gebo-shell-content-height: calc(100vh - var(--gebo-shell-header-height) - (2 * var(--gebo-page-gutter)));
   --gebo-dialog-viewport-gutter: 2rem;
   --gebo-z-sticky: 20;
   --gebo-z-floating: 30;

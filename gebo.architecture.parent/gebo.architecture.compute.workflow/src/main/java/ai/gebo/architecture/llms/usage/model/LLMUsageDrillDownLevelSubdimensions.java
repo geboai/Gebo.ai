@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class LLMUsageDrillDownLevelSubdimensions {
 	private List<String> providerId;
+	private List<String> modelTypeCode;
 	private List<String> username;
 	private List<String> model;
 	private List<String> callerStack;

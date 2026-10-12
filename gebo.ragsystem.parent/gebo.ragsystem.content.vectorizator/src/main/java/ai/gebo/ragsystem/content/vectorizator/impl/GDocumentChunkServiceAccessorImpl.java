@@ -110,6 +110,10 @@ public class GDocumentChunkServiceAccessorImpl implements IGDocumentChunkService
 			payload.setKnowledgeBase(envelope.getPayload().getKnowledgeBase());
 			payload.setProject(envelope.getPayload().getProject());
 			payload.setDocuments(fragments);
+			// the ingestion is acknowledged to the content handler with the hash of the text
+			// indexed (set by the chunker)
+			payload.setRequiresEmbeddingHandshake(envelope.getPayload().getRequiresEmbeddingHandshake());
+			payload.setHash(envelope.getPayload().getHash());
 			// Create a message envelope for each fragment
 			GMessageEnvelope<GDocumentMessageFragmentPayload> message = new GMessageEnvelope<GDocumentMessageFragmentPayload>();
 			message.setPayload(payload);

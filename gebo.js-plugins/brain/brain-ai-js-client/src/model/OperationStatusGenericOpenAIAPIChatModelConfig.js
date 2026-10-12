@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GUserMessage from './GUserMessage';
 import GenericOpenAIAPIChatModelConfig from './GenericOpenAIAPIChatModelConfig';
 
 /**
@@ -42,11 +43,11 @@ export default class OperationStatusGenericOpenAIAPIChatModelConfig {
       if (data.hasOwnProperty('result'))
         obj.result = GenericOpenAIAPIChatModelConfig.constructFromObject(data['result']);
       if (data.hasOwnProperty('messages'))
-        obj.messages = ApiClient.convertToType(data['messages'], Object);
+        obj.messages = ApiClient.convertToType(data['messages'], [GUserMessage]);
       if (data.hasOwnProperty('hasErrorMessages'))
-        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], Object);
+        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], 'Boolean');
       if (data.hasOwnProperty('hasWarnMessages'))
-        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], Object);
+        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], 'Boolean');
     }
     return obj;
   }
@@ -58,17 +59,17 @@ export default class OperationStatusGenericOpenAIAPIChatModelConfig {
 OperationStatusGenericOpenAIAPIChatModelConfig.prototype.result = undefined;
 
 /**
- * @member {Object} messages
+ * @member {Array.<module:model/GUserMessage>} messages
  */
 OperationStatusGenericOpenAIAPIChatModelConfig.prototype.messages = undefined;
 
 /**
- * @member {Object} hasErrorMessages
+ * @member {Boolean} hasErrorMessages
  */
 OperationStatusGenericOpenAIAPIChatModelConfig.prototype.hasErrorMessages = undefined;
 
 /**
- * @member {Object} hasWarnMessages
+ * @member {Boolean} hasWarnMessages
  */
 OperationStatusGenericOpenAIAPIChatModelConfig.prototype.hasWarnMessages = undefined;
 

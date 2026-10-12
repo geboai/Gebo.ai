@@ -31,8 +31,8 @@ export interface GResponseDocumentRef {
     references?: Array<DocInternalRef>;
     ntokensRelevant?: number;
     ntotalContentTokens?: number;
-    nbytesRelevant?: number;
     shortCode?: string;
+    nbytesRelevant?: number;
 }
 export namespace GResponseDocumentRef {
     export type ReferenceTypeEnum = 'FILE' | 'WEB';

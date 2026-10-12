@@ -122,6 +122,7 @@ public class GChatModelRuntimeConfigurationDaoImpl
 	 */
 	@Override
 	public void add(IGConfigurableChatModel element) {
+		attachProviderDealPricing(element);
 		this.staticConfigs.add(element);
 	}
 
@@ -151,6 +152,7 @@ public class GChatModelRuntimeConfigurationDaoImpl
 			}
 			IGConfigurableChatModel chatModel = handler.create(config);
 			LOGGER.info("Initialized chatModel successfully");
+			attachProviderDealPricing(chatModel);
 			this.staticConfigs.add(chatModel);
 		}
 	}

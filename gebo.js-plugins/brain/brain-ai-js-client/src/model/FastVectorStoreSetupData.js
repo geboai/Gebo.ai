@@ -26,7 +26,7 @@ export default class FastVectorStoreSetupData {
    * Constructs a new <code>FastVectorStoreSetupData</code>.
    * @alias module:model/FastVectorStoreSetupData
    * @class
-   * @param product {Object} 
+   * @param product {module:model/FastVectorStoreSetupData.ProductEnum} 
    */
   constructor(product) {
     this.product = product;
@@ -43,7 +43,7 @@ export default class FastVectorStoreSetupData {
     if (data) {
       obj = obj || new FastVectorStoreSetupData();
       if (data.hasOwnProperty('product'))
-        obj.product = ApiClient.convertToType(data['product'], Object);
+        obj.product = ApiClient.convertToType(data['product'], 'String');
       if (data.hasOwnProperty('qdrantConfig'))
         obj.qdrantConfig = QdrantConfig.constructFromObject(data['qdrantConfig']);
       if (data.hasOwnProperty('redisConfig'))
@@ -54,7 +54,37 @@ export default class FastVectorStoreSetupData {
 }
 
 /**
- * @member {Object} product
+ * Allowed values for the <code>product</code> property.
+ * @enum {String}
+ * @readonly
+ */
+FastVectorStoreSetupData.ProductEnum = {
+  /**
+   * value: "MONGO"
+   * @const
+   */
+  MONGO: "MONGO",
+
+  /**
+   * value: "QDRANT"
+   * @const
+   */
+  QDRANT: "QDRANT",
+
+  /**
+   * value: "REDIS"
+   * @const
+   */
+  REDIS: "REDIS",
+
+  /**
+   * value: "TEST"
+   * @const
+   */
+  TEST: "TEST"
+};
+/**
+ * @member {module:model/FastVectorStoreSetupData.ProductEnum} product
  */
 FastVectorStoreSetupData.prototype.product = undefined;
 

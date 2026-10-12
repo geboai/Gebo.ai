@@ -15,6 +15,7 @@ package ai.gebo.monolithic.api.client.model;
 import java.util.Objects;
 import java.util.Arrays;
 import ai.gebo.monolithic.api.client.model.AdditionalContent;
+import ai.gebo.monolithic.api.client.model.GResponseDocumentRef;
 import ai.gebo.monolithic.api.client.model.GeboRagRequestCustomConfig;
 import ai.gebo.monolithic.api.client.model.UserUploadedContent;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,7 +28,7 @@ import java.util.List;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -63,6 +64,9 @@ public class GeboChatRequest {
   @JsonProperty("forcedRequestDocuments")
   private List<String> forcedRequestDocuments = null;
 
+  @JsonProperty("forcedDocumentsRef")
+  private List<GResponseDocumentRef> forcedDocumentsRef = null;
+
   @JsonProperty("userUploadedContents")
   private List<UserUploadedContent> userUploadedContents = null;
 
@@ -77,7 +81,6 @@ public class GeboChatRequest {
     HOWTO("HOWTO"),
     DECISION("DECISION"),
     SUMMARY("SUMMARY"),
-    PURE_SEARCH("PURE_SEARCH"),
     ANALISYS("ANALISYS"),
     IMAGE_GENERATION("IMAGE_GENERATION"),
     UNKNOWN("UNKNOWN");
@@ -108,6 +111,15 @@ public class GeboChatRequest {
 
   }  @JsonProperty("userIntent")
   private UserIntentEnum userIntent = null;
+
+  @JsonProperty("searchRequested")
+  private Boolean searchRequested = null;
+
+  @JsonProperty("searchForbidden")
+  private Boolean searchForbidden = null;
+
+  @JsonProperty("userLanguage")
+  private String userLanguage = null;
 
   @JsonProperty("additionalContents")
   private List<AdditionalContent> additionalContents = null;
@@ -329,6 +341,32 @@ public class GeboChatRequest {
     this.forcedRequestDocuments = forcedRequestDocuments;
   }
 
+  public GeboChatRequest forcedDocumentsRef(List<GResponseDocumentRef> forcedDocumentsRef) {
+    this.forcedDocumentsRef = forcedDocumentsRef;
+    return this;
+  }
+
+  public GeboChatRequest addForcedDocumentsRefItem(GResponseDocumentRef forcedDocumentsRefItem) {
+    if (this.forcedDocumentsRef == null) {
+      this.forcedDocumentsRef = new ArrayList<>();
+    }
+    this.forcedDocumentsRef.add(forcedDocumentsRefItem);
+    return this;
+  }
+
+   /**
+   * Get forcedDocumentsRef
+   * @return forcedDocumentsRef
+  **/
+  @Schema(description = "")
+  public List<GResponseDocumentRef> getForcedDocumentsRef() {
+    return forcedDocumentsRef;
+  }
+
+  public void setForcedDocumentsRef(List<GResponseDocumentRef> forcedDocumentsRef) {
+    this.forcedDocumentsRef = forcedDocumentsRef;
+  }
+
   public GeboChatRequest userUploadedContents(List<UserUploadedContent> userUploadedContents) {
     this.userUploadedContents = userUploadedContents;
     return this;
@@ -399,6 +437,60 @@ public class GeboChatRequest {
     this.userIntent = userIntent;
   }
 
+  public GeboChatRequest searchRequested(Boolean searchRequested) {
+    this.searchRequested = searchRequested;
+    return this;
+  }
+
+   /**
+   * Get searchRequested
+   * @return searchRequested
+  **/
+  @Schema(description = "")
+  public Boolean isSearchRequested() {
+    return searchRequested;
+  }
+
+  public void setSearchRequested(Boolean searchRequested) {
+    this.searchRequested = searchRequested;
+  }
+
+  public GeboChatRequest searchForbidden(Boolean searchForbidden) {
+    this.searchForbidden = searchForbidden;
+    return this;
+  }
+
+   /**
+   * Get searchForbidden
+   * @return searchForbidden
+  **/
+  @Schema(description = "")
+  public Boolean isSearchForbidden() {
+    return searchForbidden;
+  }
+
+  public void setSearchForbidden(Boolean searchForbidden) {
+    this.searchForbidden = searchForbidden;
+  }
+
+  public GeboChatRequest userLanguage(String userLanguage) {
+    this.userLanguage = userLanguage;
+    return this;
+  }
+
+   /**
+   * Get userLanguage
+   * @return userLanguage
+  **/
+  @Schema(description = "")
+  public String getUserLanguage() {
+    return userLanguage;
+  }
+
+  public void setUserLanguage(String userLanguage) {
+    this.userLanguage = userLanguage;
+  }
+
   public GeboChatRequest additionalContents(List<AdditionalContent> additionalContents) {
     this.additionalContents = additionalContents;
     return this;
@@ -464,16 +556,20 @@ public class GeboChatRequest {
         Objects.equals(this.choosedKnowledgeBases, geboChatRequest.choosedKnowledgeBases) &&
         Objects.equals(this.chatPipelineProcessId, geboChatRequest.chatPipelineProcessId) &&
         Objects.equals(this.forcedRequestDocuments, geboChatRequest.forcedRequestDocuments) &&
+        Objects.equals(this.forcedDocumentsRef, geboChatRequest.forcedDocumentsRef) &&
         Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents) &&
         Objects.equals(this.deepSearchDataSources, geboChatRequest.deepSearchDataSources) &&
         Objects.equals(this.userIntent, geboChatRequest.userIntent) &&
+        Objects.equals(this.searchRequested, geboChatRequest.searchRequested) &&
+        Objects.equals(this.searchForbidden, geboChatRequest.searchForbidden) &&
+        Objects.equals(this.userLanguage, geboChatRequest.userLanguage) &&
         Objects.equals(this.additionalContents, geboChatRequest.additionalContents) &&
         Objects.equals(this.tokensSize, geboChatRequest.tokensSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, userIntent, additionalContents, tokensSize);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, forcedDocumentsRef, userUploadedContents, deepSearchDataSources, userIntent, searchRequested, searchForbidden, userLanguage, additionalContents, tokensSize);
   }
 
 
@@ -493,9 +589,13 @@ public class GeboChatRequest {
     sb.append("    choosedKnowledgeBases: ").append(toIndentedString(choosedKnowledgeBases)).append("\n");
     sb.append("    chatPipelineProcessId: ").append(toIndentedString(chatPipelineProcessId)).append("\n");
     sb.append("    forcedRequestDocuments: ").append(toIndentedString(forcedRequestDocuments)).append("\n");
+    sb.append("    forcedDocumentsRef: ").append(toIndentedString(forcedDocumentsRef)).append("\n");
     sb.append("    userUploadedContents: ").append(toIndentedString(userUploadedContents)).append("\n");
     sb.append("    deepSearchDataSources: ").append(toIndentedString(deepSearchDataSources)).append("\n");
     sb.append("    userIntent: ").append(toIndentedString(userIntent)).append("\n");
+    sb.append("    searchRequested: ").append(toIndentedString(searchRequested)).append("\n");
+    sb.append("    searchForbidden: ").append(toIndentedString(searchForbidden)).append("\n");
+    sb.append("    userLanguage: ").append(toIndentedString(userLanguage)).append("\n");
     sb.append("    additionalContents: ").append(toIndentedString(additionalContents)).append("\n");
     sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("}");

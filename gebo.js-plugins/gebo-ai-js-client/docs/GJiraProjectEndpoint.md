@@ -21,6 +21,7 @@ Name | Type | Description | Notes
 **synchroStrategy** | **String** |  | [optional] 
 **objectSpaceType** | **String** |  | [optional] 
 **aclAliases** | **[Number]** |  | [optional] 
+**personalData** | **Boolean** |  | [optional] 
 **paths** | [**[VFilesystemReference]**](VFilesystemReference.md) |  | [optional] 
 **jiraSystemCode** | **String** |  | [optional] 
 

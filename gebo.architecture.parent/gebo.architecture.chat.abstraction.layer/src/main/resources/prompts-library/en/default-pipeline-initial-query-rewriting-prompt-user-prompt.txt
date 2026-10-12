@@ -8,3 +8,8 @@ INPUTS:
  
  
  - ACTUAL DATE AND TIME: {actualTimestamp}
+
+- searchRequested for the latest user question: true when it asks to search, find or verify, or asks what the knowledge base, the documents, the web or a system say or contain (the answer must come from those sources); never when it asks to answer without searching; false otherwise.
+
+- userRequiredLanguage for the latest user question: the language it names for the answer, named in
+English; none when it names none, whatever language it is written in.

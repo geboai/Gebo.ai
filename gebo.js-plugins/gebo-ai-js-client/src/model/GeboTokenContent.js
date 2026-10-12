@@ -42,6 +42,8 @@ export default class GeboTokenContent {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new GeboTokenContent();
+      if (data.hasOwnProperty('readOnly'))
+        obj.readOnly = ApiClient.convertToType(data['readOnly'], 'Boolean');
       if (data.hasOwnProperty('token'))
         obj.token = ApiClient.convertToType(data['token'], 'String');
       if (data.hasOwnProperty('user'))
@@ -50,6 +52,11 @@ export default class GeboTokenContent {
     return obj;
   }
 }
+
+/**
+ * @member {Boolean} readOnly
+ */
+GeboTokenContent.prototype.readOnly = undefined;
 
 /**
  * @member {String} token

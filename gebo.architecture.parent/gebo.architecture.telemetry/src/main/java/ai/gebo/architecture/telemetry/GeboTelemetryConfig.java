@@ -26,6 +26,23 @@ import io.micrometer.observation.aop.ObservedAspect;
  * ({@code monolithic}/{@code microservices}), and registers the
  * {@link ObservedAspect} that makes the {@code @Observed} annotation active
  * anywhere in the codebase.
+ * <p>
+ * Gebo does not declare its own {@link ObservationRegistry}: it uses the one Spring
+ * Boot auto-configures, which every LLM model configuration support service injects
+ * and hands to the Spring AI models it builds (chat, embedding, image). That registry
+ * is meant to be extended, not replaced, by any module deployed alongside:
+ * <ul>
+ * <li>publish {@code ObservationHandler} beans (e.g. one typed on Spring AI's
+ * {@code ChatModelObservationContext} or {@code EmbeddingModelObservationContext})
+ * to receive every model call;</li>
+ * <li>publish {@code ObservationRegistryCustomizer}, {@code ObservationPredicate},
+ * {@code ObservationFilter} or {@code GlobalObservationConvention} beans to shape
+ * what is observed and how it is tagged.</li>
+ * </ul>
+ * Spring Boot applies all of them to the registry whichever module publishes them.
+ * Replacing the registry itself is also possible, since the auto-configured one
+ * backs off when another {@link ObservationRegistry} bean exists, and the beans
+ * above are applied to the replacement too.
  */
 @Configuration
 public class GeboTelemetryConfig {

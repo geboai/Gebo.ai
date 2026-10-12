@@ -21,8 +21,8 @@ Name | Type | Description | Notes
 **references** | [**List&lt;DocInternalRef&gt;**](DocInternalRef.md) |  |  [optional]
 **ntokensRelevant** | **Long** |  |  [optional]
 **ntotalContentTokens** | **Long** |  |  [optional]
-**nbytesRelevant** | **Long** |  |  [optional]
 **shortCode** | **String** |  |  [optional]
+**nbytesRelevant** | **Long** |  |  [optional]
 
 <a name="ReferenceTypeEnum"></a>
 ## Enum: ReferenceTypeEnum

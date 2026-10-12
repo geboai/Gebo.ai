@@ -70,10 +70,10 @@ Please follow the [installation](#installation) instruction and execute the foll
 ```javascript
 var BrainClient = require('gebo.brain.client.js');
 
-var api = new BrainClient.AnthropicChatModelsConfigurationControllerApi()
-var body = new BrainClient.GAnthropicChatModelConfig(); // {GAnthropicChatModelConfig} 
+var api = new BrainClient.A2AClientConfigControllerApi()
+var body = new BrainClient.A2ARemoteAgentConfig(); // {A2ARemoteAgentConfig} 
 
-api.deleteAnthropicChatModelConfig(body).then(function(data) {
+api.delete1(body).then(function(data) {
   console.log('API called successfully. Returned data: ' + data);
 }, function(error) {
   console.error(error);
@@ -87,11 +87,54 @@ All URIs are relative to *http://localhost:13001/brain*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*BrainClient.A2AClientConfigControllerApi* | [**delete1**](docs/A2AClientConfigControllerApi.md#delete1) | **DELETE** /api/admin/A2AClientConfigController/deleteA2AAgent | 
+*BrainClient.A2AClientConfigControllerApi* | [**findByCode2**](docs/A2AClientConfigControllerApi.md#findByCode2) | **GET** /api/admin/A2AClientConfigController/findByCode | 
+*BrainClient.A2AClientConfigControllerApi* | [**insert1**](docs/A2AClientConfigControllerApi.md#insert1) | **POST** /api/admin/A2AClientConfigController/insertA2AAgent | 
+*BrainClient.A2AClientConfigControllerApi* | [**list**](docs/A2AClientConfigControllerApi.md#list) | **GET** /api/admin/A2AClientConfigController/list | 
+*BrainClient.A2AClientConfigControllerApi* | [**testAndDiscovery1**](docs/A2AClientConfigControllerApi.md#testAndDiscovery1) | **POST** /api/admin/A2AClientConfigController/testAndDiscovery | 
+*BrainClient.A2AClientConfigControllerApi* | [**update1**](docs/A2AClientConfigControllerApi.md#update1) | **POST** /api/admin/A2AClientConfigController/updateA2AAgent | 
 *BrainClient.AnthropicChatModelsConfigurationControllerApi* | [**deleteAnthropicChatModelConfig**](docs/AnthropicChatModelsConfigurationControllerApi.md#deleteAnthropicChatModelConfig) | **POST** /api/admin/AnthropicChatModelsConfigurationController/deleteAnthropicChatModelConfig | 
 *BrainClient.AnthropicChatModelsConfigurationControllerApi* | [**findAnthropicChatModelConfigByCode**](docs/AnthropicChatModelsConfigurationControllerApi.md#findAnthropicChatModelConfigByCode) | **GET** /api/admin/AnthropicChatModelsConfigurationController/findAnthropicChatModelConfigByCode | 
 *BrainClient.AnthropicChatModelsConfigurationControllerApi* | [**getAnthropicChatModels**](docs/AnthropicChatModelsConfigurationControllerApi.md#getAnthropicChatModels) | **POST** /api/admin/AnthropicChatModelsConfigurationController/getAnthropicModels | 
 *BrainClient.AnthropicChatModelsConfigurationControllerApi* | [**insertAnthropicChatModelConfig**](docs/AnthropicChatModelsConfigurationControllerApi.md#insertAnthropicChatModelConfig) | **POST** /api/admin/AnthropicChatModelsConfigurationController/insertAnthropicChatModelConfig | 
 *BrainClient.AnthropicChatModelsConfigurationControllerApi* | [**updateAnthropicChatModelConfig**](docs/AnthropicChatModelsConfigurationControllerApi.md#updateAnthropicChatModelConfig) | **POST** /api/admin/AnthropicChatModelsConfigurationController/updateAnthropicChatModelConfig | 
+*BrainClient.BedrockChatModelsConfigurationControllerApi* | [**deleteBedrockChatModelConfig**](docs/BedrockChatModelsConfigurationControllerApi.md#deleteBedrockChatModelConfig) | **POST** /api/admin/BedrockChatModelsConfigurationController/deleteBedrockChatModelConfig | 
+*BrainClient.BedrockChatModelsConfigurationControllerApi* | [**findBedrockChatModelConfigByCode**](docs/BedrockChatModelsConfigurationControllerApi.md#findBedrockChatModelConfigByCode) | **GET** /api/admin/BedrockChatModelsConfigurationController/findBedrockChatModelConfigByCode | 
+*BrainClient.BedrockChatModelsConfigurationControllerApi* | [**getBedrockChatModels**](docs/BedrockChatModelsConfigurationControllerApi.md#getBedrockChatModels) | **POST** /api/admin/BedrockChatModelsConfigurationController/getBedrockChatModels | 
+*BrainClient.BedrockChatModelsConfigurationControllerApi* | [**insertBedrockChatModelConfig**](docs/BedrockChatModelsConfigurationControllerApi.md#insertBedrockChatModelConfig) | **POST** /api/admin/BedrockChatModelsConfigurationController/insertBedrockChatModelConfig | 
+*BrainClient.BedrockChatModelsConfigurationControllerApi* | [**updateBedrockChatModelConfig**](docs/BedrockChatModelsConfigurationControllerApi.md#updateBedrockChatModelConfig) | **POST** /api/admin/BedrockChatModelsConfigurationController/updateBedrockChatModelConfig | 
+*BrainClient.BedrockEmbeddingModelsConfigurationControllerApi* | [**deleteBedrockEmbeddingModelConfig**](docs/BedrockEmbeddingModelsConfigurationControllerApi.md#deleteBedrockEmbeddingModelConfig) | **POST** /api/admin/BedrockEmbeddingModelsConfigurationController/deleteBedrockEmbeddingModelConfig | 
+*BrainClient.BedrockEmbeddingModelsConfigurationControllerApi* | [**findBedrockEmbeddingModelConfigByCode**](docs/BedrockEmbeddingModelsConfigurationControllerApi.md#findBedrockEmbeddingModelConfigByCode) | **GET** /api/admin/BedrockEmbeddingModelsConfigurationController/findBedrockEmbeddingModelConfigByCode | 
+*BrainClient.BedrockEmbeddingModelsConfigurationControllerApi* | [**getBedrockEmbeddingModels**](docs/BedrockEmbeddingModelsConfigurationControllerApi.md#getBedrockEmbeddingModels) | **POST** /api/admin/BedrockEmbeddingModelsConfigurationController/getBedrockEmbeddingModels | 
+*BrainClient.BedrockEmbeddingModelsConfigurationControllerApi* | [**insertBedrockEmbeddingModelConfig**](docs/BedrockEmbeddingModelsConfigurationControllerApi.md#insertBedrockEmbeddingModelConfig) | **POST** /api/admin/BedrockEmbeddingModelsConfigurationController/insertBedrockEmbeddingModelConfig | 
+*BrainClient.BedrockEmbeddingModelsConfigurationControllerApi* | [**updateBedrockEmbeddingModelConfig**](docs/BedrockEmbeddingModelsConfigurationControllerApi.md#updateBedrockEmbeddingModelConfig) | **POST** /api/admin/BedrockEmbeddingModelsConfigurationController/updateBedrockEmbeddingModelConfig | 
+*BrainClient.BedrockImageModelsConfigurationControllerApi* | [**deleteBedrockImageModelConfig**](docs/BedrockImageModelsConfigurationControllerApi.md#deleteBedrockImageModelConfig) | **POST** /api/admin/BedrockImageModelsConfigurationController/deleteBedrockImageModelConfig | 
+*BrainClient.BedrockImageModelsConfigurationControllerApi* | [**findBedrockImageModelConfigByCode**](docs/BedrockImageModelsConfigurationControllerApi.md#findBedrockImageModelConfigByCode) | **GET** /api/admin/BedrockImageModelsConfigurationController/findBedrockImageModelConfigByCode | 
+*BrainClient.BedrockImageModelsConfigurationControllerApi* | [**getBedrockImageModels**](docs/BedrockImageModelsConfigurationControllerApi.md#getBedrockImageModels) | **POST** /api/admin/BedrockImageModelsConfigurationController/getBedrockImageModels | 
+*BrainClient.BedrockImageModelsConfigurationControllerApi* | [**insertBedrockImageModelConfig**](docs/BedrockImageModelsConfigurationControllerApi.md#insertBedrockImageModelConfig) | **POST** /api/admin/BedrockImageModelsConfigurationController/insertBedrockImageModelConfig | 
+*BrainClient.BedrockImageModelsConfigurationControllerApi* | [**updateBedrockImageModelConfig**](docs/BedrockImageModelsConfigurationControllerApi.md#updateBedrockImageModelConfig) | **POST** /api/admin/BedrockImageModelsConfigurationController/updateBedrockImageModelConfig | 
+*BrainClient.BedrockRankerModelsConfigurationControllerApi* | [**deleteBedrockRankerModelConfig**](docs/BedrockRankerModelsConfigurationControllerApi.md#deleteBedrockRankerModelConfig) | **POST** /api/admin/BedrockRankerModelsConfigurationController/deleteBedrockRankerModelConfig | 
+*BrainClient.BedrockRankerModelsConfigurationControllerApi* | [**findBedrockRankerModelConfigByCode**](docs/BedrockRankerModelsConfigurationControllerApi.md#findBedrockRankerModelConfigByCode) | **GET** /api/admin/BedrockRankerModelsConfigurationController/findBedrockRankerModelConfigByCode | 
+*BrainClient.BedrockRankerModelsConfigurationControllerApi* | [**getBedrockRankerModels**](docs/BedrockRankerModelsConfigurationControllerApi.md#getBedrockRankerModels) | **POST** /api/admin/BedrockRankerModelsConfigurationController/getBedrockRankerModels | 
+*BrainClient.BedrockRankerModelsConfigurationControllerApi* | [**insertBedrockRankerModelConfig**](docs/BedrockRankerModelsConfigurationControllerApi.md#insertBedrockRankerModelConfig) | **POST** /api/admin/BedrockRankerModelsConfigurationController/insertBedrockRankerModelConfig | 
+*BrainClient.BedrockRankerModelsConfigurationControllerApi* | [**updateBedrockRankerModelConfig**](docs/BedrockRankerModelsConfigurationControllerApi.md#updateBedrockRankerModelConfig) | **POST** /api/admin/BedrockRankerModelsConfigurationController/updateBedrockRankerModelConfig | 
+*BrainClient.BedrockTextToSpeechModelsConfigurationControllerApi* | [**deleteBedrockTextToSpeechModelConfig**](docs/BedrockTextToSpeechModelsConfigurationControllerApi.md#deleteBedrockTextToSpeechModelConfig) | **POST** /api/admin/BedrockTextToSpeechModelsConfigurationController/deleteBedrockTextToSpeechModelConfig | 
+*BrainClient.BedrockTextToSpeechModelsConfigurationControllerApi* | [**findBedrockTextToSpeechModelConfigByCode**](docs/BedrockTextToSpeechModelsConfigurationControllerApi.md#findBedrockTextToSpeechModelConfigByCode) | **GET** /api/admin/BedrockTextToSpeechModelsConfigurationController/findBedrockTextToSpeechModelConfigByCode | 
+*BrainClient.BedrockTextToSpeechModelsConfigurationControllerApi* | [**getBedrockTextToSpeechModels**](docs/BedrockTextToSpeechModelsConfigurationControllerApi.md#getBedrockTextToSpeechModels) | **POST** /api/admin/BedrockTextToSpeechModelsConfigurationController/getBedrockTextToSpeechModels | 
+*BrainClient.BedrockTextToSpeechModelsConfigurationControllerApi* | [**insertBedrockTextToSpeechModelConfig**](docs/BedrockTextToSpeechModelsConfigurationControllerApi.md#insertBedrockTextToSpeechModelConfig) | **POST** /api/admin/BedrockTextToSpeechModelsConfigurationController/insertBedrockTextToSpeechModelConfig | 
+*BrainClient.BedrockTextToSpeechModelsConfigurationControllerApi* | [**updateBedrockTextToSpeechModelConfig**](docs/BedrockTextToSpeechModelsConfigurationControllerApi.md#updateBedrockTextToSpeechModelConfig) | **POST** /api/admin/BedrockTextToSpeechModelsConfigurationController/updateBedrockTextToSpeechModelConfig | 
+*BrainClient.BedrockTranscriptModelsConfigurationControllerApi* | [**deleteBedrockTranscriptModelConfig**](docs/BedrockTranscriptModelsConfigurationControllerApi.md#deleteBedrockTranscriptModelConfig) | **POST** /api/admin/BedrockTranscriptModelsConfigurationController/deleteBedrockTranscriptModelConfig | 
+*BrainClient.BedrockTranscriptModelsConfigurationControllerApi* | [**findBedrockTranscriptModelConfigByCode**](docs/BedrockTranscriptModelsConfigurationControllerApi.md#findBedrockTranscriptModelConfigByCode) | **GET** /api/admin/BedrockTranscriptModelsConfigurationController/findBedrockTranscriptModelConfigByCode | 
+*BrainClient.BedrockTranscriptModelsConfigurationControllerApi* | [**getBedrockTranscriptModels**](docs/BedrockTranscriptModelsConfigurationControllerApi.md#getBedrockTranscriptModels) | **POST** /api/admin/BedrockTranscriptModelsConfigurationController/getBedrockTranscriptModels | 
+*BrainClient.BedrockTranscriptModelsConfigurationControllerApi* | [**insertBedrockTranscriptModelConfig**](docs/BedrockTranscriptModelsConfigurationControllerApi.md#insertBedrockTranscriptModelConfig) | **POST** /api/admin/BedrockTranscriptModelsConfigurationController/insertBedrockTranscriptModelConfig | 
+*BrainClient.BedrockTranscriptModelsConfigurationControllerApi* | [**updateBedrockTranscriptModelConfig**](docs/BedrockTranscriptModelsConfigurationControllerApi.md#updateBedrockTranscriptModelConfig) | **POST** /api/admin/BedrockTranscriptModelsConfigurationController/updateBedrockTranscriptModelConfig | 
+*BrainClient.BraveSearchConfigurationControllerApi* | [**deleteGBraveSearchApiCredentials**](docs/BraveSearchConfigurationControllerApi.md#deleteGBraveSearchApiCredentials) | **POST** /api/admin/BraveSearchConfigurationController/deleteGBraveSearchApiCredentials | 
+*BrainClient.BraveSearchConfigurationControllerApi* | [**fastInsertBraveSearchApiCredentials**](docs/BraveSearchConfigurationControllerApi.md#fastInsertBraveSearchApiCredentials) | **POST** /api/admin/BraveSearchConfigurationController/fastInsertBraveSearchApiCredentials | 
+*BrainClient.BraveSearchConfigurationControllerApi* | [**getBraveSearchApiCredentials**](docs/BraveSearchConfigurationControllerApi.md#getBraveSearchApiCredentials) | **GET** /api/admin/BraveSearchConfigurationController/getBraveSearchApiCredentials | 
+*BrainClient.BraveSearchConfigurationControllerApi* | [**getBraveSearchStatus**](docs/BraveSearchConfigurationControllerApi.md#getBraveSearchStatus) | **GET** /api/admin/BraveSearchConfigurationController/getBraveSearchStatus | 
+*BrainClient.BraveSearchConfigurationControllerApi* | [**insertGBraveSearchApiCredentials**](docs/BraveSearchConfigurationControllerApi.md#insertGBraveSearchApiCredentials) | **POST** /api/admin/BraveSearchConfigurationController/insertGBraveSearchApiCredentials | 
+*BrainClient.BraveSearchConfigurationControllerApi* | [**searchGBraveSearchApiCredentialsByCode**](docs/BraveSearchConfigurationControllerApi.md#searchGBraveSearchApiCredentialsByCode) | **GET** /api/admin/BraveSearchConfigurationController/searchGBraveSearchApiCredentialsByCode | 
+*BrainClient.BraveSearchConfigurationControllerApi* | [**updateGBraveSearchApiCredentials**](docs/BraveSearchConfigurationControllerApi.md#updateGBraveSearchApiCredentials) | **POST** /api/admin/BraveSearchConfigurationController/updateGBraveSearchApiCredentials | 
 *BrainClient.BuildSystemsControllerApi* | [**getBuildSystemConfigs**](docs/BuildSystemsControllerApi.md#getBuildSystemConfigs) | **GET** /api/admin/BuildSystemsController/getBuildSystemConfigs | 
 *BrainClient.BuildSystemsControllerApi* | [**getBuildSystemTypes**](docs/BuildSystemsControllerApi.md#getBuildSystemTypes) | **GET** /api/admin/BuildSystemsController/getBuildSystemTypes | 
 *BrainClient.ChatModelsControllerApi* | [**getChatModelTypes**](docs/ChatModelsControllerApi.md#getChatModelTypes) | **GET** /api/admin/ChatModelsController/getChatModelTypes | 
@@ -112,6 +155,12 @@ Class | Method | HTTP request | Description
 *BrainClient.ContentMetaInfosControllerApi* | [**searchByDocumentName**](docs/ContentMetaInfosControllerApi.md#searchByDocumentName) | **POST** /api/users/ContentMetaInfosController/searchByDocumentName | 
 *BrainClient.ContentMetaInfosControllerApi* | [**searchByDocumentNamePaged**](docs/ContentMetaInfosControllerApi.md#searchByDocumentNamePaged) | **POST** /api/users/ContentMetaInfosController/searchByDocumentNamePaged | 
 *BrainClient.ContentsResetControllerApi* | [**resetContentsIngestion**](docs/ContentsResetControllerApi.md#resetContentsIngestion) | **POST** /api/admin/ContentsResetController/resetContentsIngestion | 
+*BrainClient.DataFlowMetaInfoControllerApi* | [**getLocalDataFlow**](docs/DataFlowMetaInfoControllerApi.md#getLocalDataFlow) | **GET** /api/admin/DataFlowMetaInfoController/getLocalDataFlow | 
+*BrainClient.DeepseekChatModelsConfigurationControllerApi* | [**deleteDeepseekChatModelConfig**](docs/DeepseekChatModelsConfigurationControllerApi.md#deleteDeepseekChatModelConfig) | **POST** /api/admin/DeepseekChatModelsConfigurationController/deleteDeepseekChatModelConfig | 
+*BrainClient.DeepseekChatModelsConfigurationControllerApi* | [**findDeepseekChatModelConfigByCode**](docs/DeepseekChatModelsConfigurationControllerApi.md#findDeepseekChatModelConfigByCode) | **GET** /api/admin/DeepseekChatModelsConfigurationController/findDeepseekChatModelConfigByCode | 
+*BrainClient.DeepseekChatModelsConfigurationControllerApi* | [**getDeepseekChatModels**](docs/DeepseekChatModelsConfigurationControllerApi.md#getDeepseekChatModels) | **POST** /api/admin/DeepseekChatModelsConfigurationController/getDeepseekModels | 
+*BrainClient.DeepseekChatModelsConfigurationControllerApi* | [**insertDeepseekChatModelConfig**](docs/DeepseekChatModelsConfigurationControllerApi.md#insertDeepseekChatModelConfig) | **POST** /api/admin/DeepseekChatModelsConfigurationController/insertDeepseekChatModelConfig | 
+*BrainClient.DeepseekChatModelsConfigurationControllerApi* | [**updateDeepseekChatModelConfig**](docs/DeepseekChatModelsConfigurationControllerApi.md#updateDeepseekChatModelConfig) | **POST** /api/admin/DeepseekChatModelsConfigurationController/updateDeepseekChatModelConfig | 
 *BrainClient.DocumentContentStreamerControllerApi* | [**streamDocumentReference**](docs/DocumentContentStreamerControllerApi.md#streamDocumentReference) | **POST** /api/users/DocumentContentStreamerController/streamDocumentReference | 
 *BrainClient.DocumentContentStreamerControllerApi* | [**streamSearchResult**](docs/DocumentContentStreamerControllerApi.md#streamSearchResult) | **POST** /api/users/DocumentContentStreamerController/streamSearchResult | 
 *BrainClient.EmbeddingModelsControllersApi* | [**getEmbeddingModelTypes**](docs/EmbeddingModelsControllersApi.md#getEmbeddingModelTypes) | **GET** /api/admin/EmbeddingModelsControllers/getEmbeddingModelTypes | 
@@ -120,6 +169,11 @@ Class | Method | HTTP request | Description
 *BrainClient.FunctionsLookupControllerApi* | [**getAllFunctionsTree**](docs/FunctionsLookupControllerApi.md#getAllFunctionsTree) | **GET** /api/admin/FunctionsLookupController/getAllFunctionsTree | 
 *BrainClient.FunctionsLookupControllerApi* | [**getAllLocalFunctions**](docs/FunctionsLookupControllerApi.md#getAllLocalFunctions) | **GET** /api/admin/FunctionsLookupController/getAllLocalFunctions | 
 *BrainClient.FunctionsLookupControllerApi* | [**getAllLocalFunctionsTree**](docs/FunctionsLookupControllerApi.md#getAllLocalFunctionsTree) | **GET** /api/admin/FunctionsLookupController/getAllLocalFunctionsTree | 
+*BrainClient.GeboA2AServerAdminControllerApi* | [**callDelete**](docs/GeboA2AServerAdminControllerApi.md#callDelete) | **DELETE** /api/admin/GeboA2AServerAdminController/deleteA2AServer | 
+*BrainClient.GeboA2AServerAdminControllerApi* | [**findAll1**](docs/GeboA2AServerAdminControllerApi.md#findAll1) | **GET** /api/admin/GeboA2AServerAdminController/findAll | 
+*BrainClient.GeboA2AServerAdminControllerApi* | [**findByCode1**](docs/GeboA2AServerAdminControllerApi.md#findByCode1) | **GET** /api/admin/GeboA2AServerAdminController/findByCode | 
+*BrainClient.GeboA2AServerAdminControllerApi* | [**insert**](docs/GeboA2AServerAdminControllerApi.md#insert) | **POST** /api/admin/GeboA2AServerAdminController/insertA2AServer | 
+*BrainClient.GeboA2AServerAdminControllerApi* | [**update**](docs/GeboA2AServerAdminControllerApi.md#update) | **POST** /api/admin/GeboA2AServerAdminController/updateA2AServer | 
 *BrainClient.GeboAdminChatProfilesConfigurationControllerApi* | [**deleteChatProfile**](docs/GeboAdminChatProfilesConfigurationControllerApi.md#deleteChatProfile) | **POST** /api/admin/GeboAdminChatProfilesConfigurationController/deleteChatProfile | 
 *BrainClient.GeboAdminChatProfilesConfigurationControllerApi* | [**findChatProfileConfigurationByCode**](docs/GeboAdminChatProfilesConfigurationControllerApi.md#findChatProfileConfigurationByCode) | **GET** /api/admin/GeboAdminChatProfilesConfigurationController/findChatProfileConfigurationByCode | 
 *BrainClient.GeboAdminChatProfilesConfigurationControllerApi* | [**getAllChatProfileConfiguration**](docs/GeboAdminChatProfilesConfigurationControllerApi.md#getAllChatProfileConfiguration) | **POST** /api/admin/GeboAdminChatProfilesConfigurationController/getAllChatProfileConfiguration | 
@@ -130,14 +184,15 @@ Class | Method | HTTP request | Description
 *BrainClient.GeboAdminPromptUseInfoControllerApi* | [**findByCode**](docs/GeboAdminPromptUseInfoControllerApi.md#findByCode) | **GET** /api/admin/GeboAdminPromptUseController/findByCode | 
 *BrainClient.GeboAdminPromptUseInfoControllerApi* | [**findByModule**](docs/GeboAdminPromptUseInfoControllerApi.md#findByModule) | **GET** /api/admin/GeboAdminPromptUseController/findByModule | 
 *BrainClient.GeboAdminPromptsControllerApi* | [**deletePromptConfig**](docs/GeboAdminPromptsControllerApi.md#deletePromptConfig) | **POST** /api/admin/GeboAdminPromptsController/deletePromptConfig | 
+*BrainClient.GeboAdminPromptsControllerApi* | [**findGPromptUseInfoByUseCode**](docs/GeboAdminPromptsControllerApi.md#findGPromptUseInfoByUseCode) | **GET** /api/admin/GeboAdminPromptsController/findGPromptUseInfoByUseCode | 
 *BrainClient.GeboAdminPromptsControllerApi* | [**findPromptConfigByCode**](docs/GeboAdminPromptsControllerApi.md#findPromptConfigByCode) | **GET** /api/admin/GeboAdminPromptsController/findPromptConfigByCode | 
+*BrainClient.GeboAdminPromptsControllerApi* | [**getAllPromptConfigsLightList**](docs/GeboAdminPromptsControllerApi.md#getAllPromptConfigsLightList) | **GET** /api/admin/GeboAdminPromptsController/getAllPromptConfigsLightList | 
 *BrainClient.GeboAdminPromptsControllerApi* | [**getPromptCategories**](docs/GeboAdminPromptsControllerApi.md#getPromptCategories) | **GET** /api/admin/GeboAdminPromptsController/getPromptCategories | 
 *BrainClient.GeboAdminPromptsControllerApi* | [**getPromptConfigByFilter**](docs/GeboAdminPromptsControllerApi.md#getPromptConfigByFilter) | **POST** /api/admin/GeboAdminPromptsController/getPromptConfigByFilter | 
 *BrainClient.GeboAdminPromptsControllerApi* | [**insertPromptConfig**](docs/GeboAdminPromptsControllerApi.md#insertPromptConfig) | **POST** /api/admin/GeboAdminPromptsController/insertPromptConfig | 
+*BrainClient.GeboAdminPromptsControllerApi* | [**isPromptTemplateEditingEnabled**](docs/GeboAdminPromptsControllerApi.md#isPromptTemplateEditingEnabled) | **GET** /api/admin/GeboAdminPromptsController/isPromptTemplateEditingEnabled | 
 *BrainClient.GeboAdminPromptsControllerApi* | [**updatePromptConfig**](docs/GeboAdminPromptsControllerApi.md#updatePromptConfig) | **POST** /api/admin/GeboAdminPromptsController/updatePromptConfig | 
 *BrainClient.GeboAdminRagAutotuneControllerApi* | [**getLatestComputedVectorStores**](docs/GeboAdminRagAutotuneControllerApi.md#getLatestComputedVectorStores) | **GET** /api/admin/GeboAdminRagAutotuneController/getLatestComputedVectorStores | 
-*BrainClient.GeboAdvancedSetupStatusControllerApi* | [**getFirstKnowledgeBaseSetupStatus**](docs/GeboAdvancedSetupStatusControllerApi.md#getFirstKnowledgeBaseSetupStatus) | **GET** /api/admin/GeboAdvancedSetupStatusController/getFirstKnowledgeBaseSetupStatus | 
-*BrainClient.GeboAdvancedSetupStatusControllerApi* | [**getMinimalContentsSetupStatus**](docs/GeboAdvancedSetupStatusControllerApi.md#getMinimalContentsSetupStatus) | **GET** /api/admin/GeboAdvancedSetupStatusController/getMinimalContentsSetupStatus | 
 *BrainClient.GeboAgentAdminControllerApi* | [**deleteAgent**](docs/GeboAgentAdminControllerApi.md#deleteAgent) | **DELETE** /api/admin/GeboAgentAdminController/deleteAgent | 
 *BrainClient.GeboAgentAdminControllerApi* | [**getAgentByCode**](docs/GeboAgentAdminControllerApi.md#getAgentByCode) | **GET** /api/admin/GeboAgentAdminController/getAgentByCode | 
 *BrainClient.GeboAgentAdminControllerApi* | [**getAgents**](docs/GeboAgentAdminControllerApi.md#getAgents) | **GET** /api/admin/GeboAgentAdminController/getAgents | 
@@ -205,12 +260,14 @@ Class | Method | HTTP request | Description
 *BrainClient.GeboMcpServerUserControllerApi* | [**findAccessibleMcpServerByCode**](docs/GeboMcpServerUserControllerApi.md#findAccessibleMcpServerByCode) | **GET** /api/user/GeboMCPServerUserController/findAccessibleMcpServerByCode | 
 *BrainClient.GeboMcpServerUserControllerApi* | [**getUsersCanAccessMcpServersList**](docs/GeboMcpServerUserControllerApi.md#getUsersCanAccessMcpServersList) | **GET** /api/user/GeboMCPServerUserController/getUsersCanAccessMcpServersList | 
 *BrainClient.GeboMcpServerUserControllerApi* | [**listAccessibleMcpServers**](docs/GeboMcpServerUserControllerApi.md#listAccessibleMcpServers) | **GET** /api/user/GeboMCPServerUserController/listAccessibleMcpServers | 
+*BrainClient.GeboNeo4jModuleSetupControllerApi* | [**getNeo4jModuleSetupConfig**](docs/GeboNeo4jModuleSetupControllerApi.md#getNeo4jModuleSetupConfig) | **GET** /api/admin/GeboNeo4jModuleSetupController | 
 *BrainClient.GeboRagChatControllerApi* | [**getChatModelUserInfoByChatProfileCode**](docs/GeboRagChatControllerApi.md#getChatModelUserInfoByChatProfileCode) | **GET** /api/users/GeboChatController/getChatModelUserInfoByChatProfileCode | 
 *BrainClient.GeboRagChatControllerApi* | [**getChatProfileModelMetaInfos**](docs/GeboRagChatControllerApi.md#getChatProfileModelMetaInfos) | **GET** /api/users/GeboChatController/getChatProfileModelMetaInfos | 
 *BrainClient.GeboRagChatControllerApi* | [**getChatProfiles**](docs/GeboRagChatControllerApi.md#getChatProfiles) | **GET** /api/users/GeboChatController/profiles | 
 *BrainClient.GeboRagChatControllerApi* | [**getProfileProviderModelCapabilities**](docs/GeboRagChatControllerApi.md#getProfileProviderModelCapabilities) | **GET** /api/users/GeboChatController/getProfileProviderModelCapabilities | 
 *BrainClient.GeboRagChatControllerApi* | [**getVisibleKnowledgeBasesByProfileCode**](docs/GeboRagChatControllerApi.md#getVisibleKnowledgeBasesByProfileCode) | **GET** /api/users/GeboChatController/getVisibleKnowledgeBasesByProfileCode | 
 *BrainClient.GeboRagChatControllerApi* | [**ragChat**](docs/GeboRagChatControllerApi.md#ragChat) | **POST** /api/users/GeboChatController/ragChat | 
+*BrainClient.GeboRagChatControllerApi* | [**resolveForcedDocumentsRef**](docs/GeboRagChatControllerApi.md#resolveForcedDocumentsRef) | **POST** /api/users/GeboChatController/resolveForcedDocumentsRef | 
 *BrainClient.GeboRagChatControllerApi* | [**streamRagResponse**](docs/GeboRagChatControllerApi.md#streamRagResponse) | **POST** /api/users/GeboChatController/streamRagResponse | 
 *BrainClient.GeboTextToSpeechControllerApi* | [**isEnabled1**](docs/GeboTextToSpeechControllerApi.md#isEnabled1) | **GET** /api/users/GeboTextToSpeechController/isEnabled | 
 *BrainClient.GeboTextToSpeechControllerApi* | [**speechText**](docs/GeboTextToSpeechControllerApi.md#speechText) | **POST** /api/users/GeboTextToSpeechController/speechText | 
@@ -221,6 +278,7 @@ Class | Method | HTTP request | Description
 *BrainClient.GeboUserChatUploadsControllerApi* | [**serveContent**](docs/GeboUserChatUploadsControllerApi.md#serveContent) | **GET** /api/users/GeboUserChatUploadsController/serveContent/{userSessionCode}/{uploadedContentId} | 
 *BrainClient.GeboUserChatsControllerApi* | [**changeChatDescription**](docs/GeboUserChatsControllerApi.md#changeChatDescription) | **POST** /api/users/GeboUserChatsController/changeChatDescription | 
 *BrainClient.GeboUserChatsControllerApi* | [**createCleanChatByChatProfileCode**](docs/GeboUserChatsControllerApi.md#createCleanChatByChatProfileCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByChatProfileCode | 
+*BrainClient.GeboUserChatsControllerApi* | [**createCleanChatByDefaultModel**](docs/GeboUserChatsControllerApi.md#createCleanChatByDefaultModel) | **GET** /api/users/GeboUserChatsController/createCleanChatByDefaultModel | 
 *BrainClient.GeboUserChatsControllerApi* | [**createCleanChatByModelCode**](docs/GeboUserChatsControllerApi.md#createCleanChatByModelCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByModelCode | 
 *BrainClient.GeboUserChatsControllerApi* | [**deleteChat**](docs/GeboUserChatsControllerApi.md#deleteChat) | **DELETE** /api/users/GeboUserChatsController/deleteChat | 
 *BrainClient.GeboUserChatsControllerApi* | [**exportResponse2file**](docs/GeboUserChatsControllerApi.md#exportResponse2file) | **GET** /api/users/GeboUserChatsController/exportResponse2file | 
@@ -228,13 +286,12 @@ Class | Method | HTTP request | Description
 *BrainClient.GeboUserChatsControllerApi* | [**getChatInfosByCode**](docs/GeboUserChatsControllerApi.md#getChatInfosByCode) | **GET** /api/users/GeboUserChatsController/getChatInfosByCode | 
 *BrainClient.GeboUserChatsControllerApi* | [**getChatInfosByQbe**](docs/GeboUserChatsControllerApi.md#getChatInfosByQbe) | **POST** /api/users/GeboUserChatsController/getChatInfosByQbe | 
 *BrainClient.GeboUserChatsControllerApi* | [**getMyChats**](docs/GeboUserChatsControllerApi.md#getMyChats) | **GET** /api/users/GeboUserChatsController/getMyChats | 
+*BrainClient.GeboUserChatsControllerApi* | [**getMyChatsByContextCode**](docs/GeboUserChatsControllerApi.md#getMyChatsByContextCode) | **GET** /api/users/GeboUserChatsController/getMyChatsByContextCode | 
 *BrainClient.GeboUserChatsControllerApi* | [**getMyChatsPaged**](docs/GeboUserChatsControllerApi.md#getMyChatsPaged) | **GET** /api/users/GeboUserChatsController/getMyChatsPaged | 
 *BrainClient.GeboUserChatsControllerApi* | [**getUIConfig**](docs/GeboUserChatsControllerApi.md#getUIConfig) | **GET** /api/users/GeboUserChatsController/getUIConfig | 
 *BrainClient.GeboUserChatsControllerApi* | [**isMinimalLLMSSetupDone**](docs/GeboUserChatsControllerApi.md#isMinimalLLMSSetupDone) | **GET** /api/users/GeboUserChatsController/isMinimalLLMSSetupDone | 
 *BrainClient.GeboUserChatsControllerApi* | [**suggestChatDescription**](docs/GeboUserChatsControllerApi.md#suggestChatDescription) | **GET** /api/users/GeboUserChatsController/suggestChatDescription | 
 *BrainClient.GeboUserKnowledgeBaseSemanticSearchControllerApi* | [**semanticSearch**](docs/GeboUserKnowledgeBaseSemanticSearchControllerApi.md#semanticSearch) | **POST** /api/users/GeboUserKnowledgeBaseSemanticSearchController/semanticSearch | 
-*BrainClient.GeboVectorStoreConfigurationControllerApi* | [**getActualVectorStoreConfiguration**](docs/GeboVectorStoreConfigurationControllerApi.md#getActualVectorStoreConfiguration) | **GET** /api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration | 
-*BrainClient.GeboVectorStoreConfigurationControllerApi* | [**vectorStoreConfigurationApplyAndSave**](docs/GeboVectorStoreConfigurationControllerApi.md#vectorStoreConfigurationApplyAndSave) | **POST** /api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave | 
 *BrainClient.GenericOpenAiRankerModelsConfigurationControllerApi* | [**deleteGenericOpenAIAPIRankerModelConfig**](docs/GenericOpenAiRankerModelsConfigurationControllerApi.md#deleteGenericOpenAIAPIRankerModelConfig) | **POST** /api/admin/GenerigOpenAIRankerModelsConfigurationController/deleteGenericOpenAIAPIRankerModelConfig | 
 *BrainClient.GenericOpenAiRankerModelsConfigurationControllerApi* | [**findGenericOpenAIAPIRankerModelConfigByCode**](docs/GenericOpenAiRankerModelsConfigurationControllerApi.md#findGenericOpenAIAPIRankerModelConfigByCode) | **GET** /api/admin/GenerigOpenAIRankerModelsConfigurationController/findGenericOpenAIAPIRankerModelConfigByCode | 
 *BrainClient.GenericOpenAiRankerModelsConfigurationControllerApi* | [**getGenericOpenAIAPIRankerModels**](docs/GenericOpenAiRankerModelsConfigurationControllerApi.md#getGenericOpenAIAPIRankerModels) | **POST** /api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIAPIRankerModels | 
@@ -284,6 +341,16 @@ Class | Method | HTTP request | Description
 *BrainClient.GoogleSearchConfigurationControllerApi* | [**searchGGoogleSearchApiCredentialsByCode**](docs/GoogleSearchConfigurationControllerApi.md#searchGGoogleSearchApiCredentialsByCode) | **GET** /api/admin/GoogleSearchConfigurationController/searchGGoogleSearchApiCredentialsByCode | 
 *BrainClient.GoogleSearchConfigurationControllerApi* | [**updateGGoogleSearchApiCredentials**](docs/GoogleSearchConfigurationControllerApi.md#updateGGoogleSearchApiCredentials) | **POST** /api/admin/GoogleSearchConfigurationController/updateGGoogleSearchApiCredentials | 
 *BrainClient.GoogleSearchControllerApi* | [**googleSearch**](docs/GoogleSearchControllerApi.md#googleSearch) | **POST** /api/users/GoogleSearchController/googleSearch | 
+*BrainClient.GoogleVertexChatModelsConfigurationControllerApi* | [**deleteGoogleVertexChatModelConfig**](docs/GoogleVertexChatModelsConfigurationControllerApi.md#deleteGoogleVertexChatModelConfig) | **POST** /api/admin/GoogleVertexModelsConfigurationController/deleteGoogleVertexChatModelConfig | 
+*BrainClient.GoogleVertexChatModelsConfigurationControllerApi* | [**findGoogleVertexChatModelConfigByCode**](docs/GoogleVertexChatModelsConfigurationControllerApi.md#findGoogleVertexChatModelConfigByCode) | **GET** /api/admin/GoogleVertexModelsConfigurationController/findGoogleVertexChatModelConfigByCode | 
+*BrainClient.GoogleVertexChatModelsConfigurationControllerApi* | [**getGoogleVertexChatModels**](docs/GoogleVertexChatModelsConfigurationControllerApi.md#getGoogleVertexChatModels) | **POST** /api/admin/GoogleVertexModelsConfigurationController/getGoogleVertexChatModels | 
+*BrainClient.GoogleVertexChatModelsConfigurationControllerApi* | [**insertGoogleVertexChatModelConfig**](docs/GoogleVertexChatModelsConfigurationControllerApi.md#insertGoogleVertexChatModelConfig) | **POST** /api/admin/GoogleVertexModelsConfigurationController/insertGoogleVertexChatModelConfig | 
+*BrainClient.GoogleVertexChatModelsConfigurationControllerApi* | [**updateGoogleVertexChatModelConfig**](docs/GoogleVertexChatModelsConfigurationControllerApi.md#updateGoogleVertexChatModelConfig) | **POST** /api/admin/GoogleVertexModelsConfigurationController/updateGoogleVertexChatModelConfig | 
+*BrainClient.GoogleVertexEmbeddingModelsConfigurationControllerApi* | [**deleteGoogleVertexEmbeddingModelConfig**](docs/GoogleVertexEmbeddingModelsConfigurationControllerApi.md#deleteGoogleVertexEmbeddingModelConfig) | **POST** /api/admin/GoogleVertexEmbeddingModelsConfigurationController/deleteGoogleVertexEmbeddingModelConfig | 
+*BrainClient.GoogleVertexEmbeddingModelsConfigurationControllerApi* | [**findGoogleVertexEmbeddingModelConfigByCode**](docs/GoogleVertexEmbeddingModelsConfigurationControllerApi.md#findGoogleVertexEmbeddingModelConfigByCode) | **GET** /api/admin/GoogleVertexEmbeddingModelsConfigurationController/findGoogleVertexEmbeddingModelConfigByCode | 
+*BrainClient.GoogleVertexEmbeddingModelsConfigurationControllerApi* | [**getGoogleVertexEmbeddingModels**](docs/GoogleVertexEmbeddingModelsConfigurationControllerApi.md#getGoogleVertexEmbeddingModels) | **POST** /api/admin/GoogleVertexEmbeddingModelsConfigurationController/getGoogleVertexEmbeddingModels | 
+*BrainClient.GoogleVertexEmbeddingModelsConfigurationControllerApi* | [**insertGoogleVertexEmbeddingModelConfig**](docs/GoogleVertexEmbeddingModelsConfigurationControllerApi.md#insertGoogleVertexEmbeddingModelConfig) | **POST** /api/admin/GoogleVertexEmbeddingModelsConfigurationController/insertGoogleVertexEmbeddingModelConfig | 
+*BrainClient.GoogleVertexEmbeddingModelsConfigurationControllerApi* | [**updateGoogleVertexEmbeddingModelConfig**](docs/GoogleVertexEmbeddingModelsConfigurationControllerApi.md#updateGoogleVertexEmbeddingModelConfig) | **POST** /api/admin/GoogleVertexEmbeddingModelsConfigurationController/updateGoogleVertexEmbeddingModelConfig | 
 *BrainClient.ImageModelsControllerApi* | [**getImageModelTypes**](docs/ImageModelsControllerApi.md#getImageModelTypes) | **GET** /api/admin/ImageModelsController/getImageModelTypes | 
 *BrainClient.ImageModelsControllerApi* | [**getRuntimeConfiguredImageModels**](docs/ImageModelsControllerApi.md#getRuntimeConfiguredImageModels) | **GET** /api/admin/ImageModelsController/getRuntimeConfiguredImageModels | 
 *BrainClient.IngestionFileTypesLibraryControllerApi* | [**getAllFileTypes**](docs/IngestionFileTypesLibraryControllerApi.md#getAllFileTypes) | **GET** /api/users/IngestionFileTypesLibraryController/getAllFileTypes | 
@@ -302,6 +369,7 @@ Class | Method | HTTP request | Description
 *BrainClient.KnowledgeBaseControllerApi* | [**updateKnowledgeBase**](docs/KnowledgeBaseControllerApi.md#updateKnowledgeBase) | **POST** /api/admin/KnowledgeBaseController/updateKnowledgeBase | 
 *BrainClient.LogViewControllerApi* | [**deleteJobStatus**](docs/LogViewControllerApi.md#deleteJobStatus) | **POST** /api/admin/LogViewController/deleteJobStatus | 
 *BrainClient.LogViewControllerApi* | [**getJobMessagesPaged**](docs/LogViewControllerApi.md#getJobMessagesPaged) | **POST** /api/admin/LogViewController/getJobMessagesPaged | 
+*BrainClient.LogViewControllerApi* | [**getJobsEntries**](docs/LogViewControllerApi.md#getJobsEntries) | **POST** /api/admin/LogViewController/getJobsEntries | 
 *BrainClient.LogViewControllerApi* | [**getJobsEntriesForClassName**](docs/LogViewControllerApi.md#getJobsEntriesForClassName) | **POST** /api/admin/LogViewController/getJobsEntriesForClassName | 
 *BrainClient.LogViewControllerApi* | [**getJobsEntriesForJobType**](docs/LogViewControllerApi.md#getJobsEntriesForJobType) | **POST** /api/admin/LogViewController/getJobsEntriesForJobType | 
 *BrainClient.LogViewControllerApi* | [**getJobsEntriesForProjectEndpoint**](docs/LogViewControllerApi.md#getJobsEntriesForProjectEndpoint) | **POST** /api/admin/LogViewController/getJobsEntriesForProjectEndpoint | 
@@ -312,6 +380,26 @@ Class | Method | HTTP request | Description
 *BrainClient.McpClientConfigControllerApi* | [**listMCPClientConfig**](docs/McpClientConfigControllerApi.md#listMCPClientConfig) | **POST** /api/admin/McpClientConfigController/listMCPClientConfig | 
 *BrainClient.McpClientConfigControllerApi* | [**testAndDiscovery**](docs/McpClientConfigControllerApi.md#testAndDiscovery) | **POST** /api/admin/McpClientConfigController/testAndDiscovery | 
 *BrainClient.McpClientConfigControllerApi* | [**updateMCPClientConfig**](docs/McpClientConfigControllerApi.md#updateMCPClientConfig) | **POST** /api/admin/McpClientConfigController/updateMCPClientConfig | 
+*BrainClient.MistralAiChatModelsConfigurationControllerApi* | [**deleteMistralAIChatModelConfig**](docs/MistralAiChatModelsConfigurationControllerApi.md#deleteMistralAIChatModelConfig) | **POST** /api/admin/MistralAIChatModelsConfigurationController/deleteMistralAIChatModelConfig | 
+*BrainClient.MistralAiChatModelsConfigurationControllerApi* | [**findMistralAIChatModelConfigByCode**](docs/MistralAiChatModelsConfigurationControllerApi.md#findMistralAIChatModelConfigByCode) | **GET** /api/admin/MistralAIChatModelsConfigurationController/findMistralAIChatModelConfigByCode | 
+*BrainClient.MistralAiChatModelsConfigurationControllerApi* | [**getMistralAIChatModels**](docs/MistralAiChatModelsConfigurationControllerApi.md#getMistralAIChatModels) | **POST** /api/admin/MistralAIChatModelsConfigurationController/getMistralAIChatModels | 
+*BrainClient.MistralAiChatModelsConfigurationControllerApi* | [**insertMistralAIChatModelConfig**](docs/MistralAiChatModelsConfigurationControllerApi.md#insertMistralAIChatModelConfig) | **POST** /api/admin/MistralAIChatModelsConfigurationController/insertMistralAIChatModelConfig | 
+*BrainClient.MistralAiChatModelsConfigurationControllerApi* | [**updateMistralAIChatModelConfig**](docs/MistralAiChatModelsConfigurationControllerApi.md#updateMistralAIChatModelConfig) | **POST** /api/admin/MistralAIChatModelsConfigurationController/updateMistralAIChatModelConfig | 
+*BrainClient.MistralAiEmbeddingModelsConfigurationControllerApi* | [**deleteMistralAIEmbeddingModelConfig**](docs/MistralAiEmbeddingModelsConfigurationControllerApi.md#deleteMistralAIEmbeddingModelConfig) | **POST** /api/admin/MistralAIEmbeddingModelsConfigurationController/deleteMistralAIEmbeddingModelConfig | 
+*BrainClient.MistralAiEmbeddingModelsConfigurationControllerApi* | [**findMistralAIEmbeddingModelConfigByCode**](docs/MistralAiEmbeddingModelsConfigurationControllerApi.md#findMistralAIEmbeddingModelConfigByCode) | **GET** /api/admin/MistralAIEmbeddingModelsConfigurationController/findMistralAIEmbeddingModelConfigByCode | 
+*BrainClient.MistralAiEmbeddingModelsConfigurationControllerApi* | [**getMistralAIEmbeddingModels**](docs/MistralAiEmbeddingModelsConfigurationControllerApi.md#getMistralAIEmbeddingModels) | **POST** /api/admin/MistralAIEmbeddingModelsConfigurationController/getMistralAIEmbeddingModels | 
+*BrainClient.MistralAiEmbeddingModelsConfigurationControllerApi* | [**insertMistralAIEmbeddingModelConfig**](docs/MistralAiEmbeddingModelsConfigurationControllerApi.md#insertMistralAIEmbeddingModelConfig) | **POST** /api/admin/MistralAIEmbeddingModelsConfigurationController/insertMistralAIEmbeddingModelConfig | 
+*BrainClient.MistralAiEmbeddingModelsConfigurationControllerApi* | [**updateMistralAIEmbeddingModelConfig**](docs/MistralAiEmbeddingModelsConfigurationControllerApi.md#updateMistralAIEmbeddingModelConfig) | **POST** /api/admin/MistralAIEmbeddingModelsConfigurationController/updateMistralAIEmbeddingModelConfig | 
+*BrainClient.OllamaChatModelsConfigurationControllerApi* | [**deleteOllamaChatModelConfig**](docs/OllamaChatModelsConfigurationControllerApi.md#deleteOllamaChatModelConfig) | **POST** /api/admin/OllamaChatModelsConfigurationController/deleteOllamaChatModelConfig | 
+*BrainClient.OllamaChatModelsConfigurationControllerApi* | [**findOllamaChatModelConfigByCode**](docs/OllamaChatModelsConfigurationControllerApi.md#findOllamaChatModelConfigByCode) | **GET** /api/admin/OllamaChatModelsConfigurationController/findOllamaChatModelConfigByCode | 
+*BrainClient.OllamaChatModelsConfigurationControllerApi* | [**getOllamaChatModels**](docs/OllamaChatModelsConfigurationControllerApi.md#getOllamaChatModels) | **POST** /api/admin/OllamaChatModelsConfigurationController/getOllamaModels | 
+*BrainClient.OllamaChatModelsConfigurationControllerApi* | [**insertOllamaChatModelConfig**](docs/OllamaChatModelsConfigurationControllerApi.md#insertOllamaChatModelConfig) | **POST** /api/admin/OllamaChatModelsConfigurationController/insertOllamaChatModelConfig | 
+*BrainClient.OllamaChatModelsConfigurationControllerApi* | [**updateOllamaChatModelConfig**](docs/OllamaChatModelsConfigurationControllerApi.md#updateOllamaChatModelConfig) | **POST** /api/admin/OllamaChatModelsConfigurationController/updateOllamaChatModelConfig | 
+*BrainClient.OllamaEmbeddingModelsConfigurationControllerApi* | [**deleteOllamaEmbeddingModelConfig**](docs/OllamaEmbeddingModelsConfigurationControllerApi.md#deleteOllamaEmbeddingModelConfig) | **POST** /api/admin/OllamaEmbeddingModelsConfigurationController/deleteOllamaEmbeddingModelConfig | 
+*BrainClient.OllamaEmbeddingModelsConfigurationControllerApi* | [**findOllamaEmbeddingModelConfigByCode**](docs/OllamaEmbeddingModelsConfigurationControllerApi.md#findOllamaEmbeddingModelConfigByCode) | **GET** /api/admin/OllamaEmbeddingModelsConfigurationController/findOllamaEmbeddingModelConfigByCode | 
+*BrainClient.OllamaEmbeddingModelsConfigurationControllerApi* | [**getOllamaEmbeddingModels**](docs/OllamaEmbeddingModelsConfigurationControllerApi.md#getOllamaEmbeddingModels) | **POST** /api/admin/OllamaEmbeddingModelsConfigurationController/getOllamaEmbeddingModels | 
+*BrainClient.OllamaEmbeddingModelsConfigurationControllerApi* | [**insertOllamaEmbeddingModelConfig**](docs/OllamaEmbeddingModelsConfigurationControllerApi.md#insertOllamaEmbeddingModelConfig) | **POST** /api/admin/OllamaEmbeddingModelsConfigurationController/insertOllamaEmbeddingModelConfig | 
+*BrainClient.OllamaEmbeddingModelsConfigurationControllerApi* | [**updateOllamaEmbeddingModelConfig**](docs/OllamaEmbeddingModelsConfigurationControllerApi.md#updateOllamaEmbeddingModelConfig) | **POST** /api/admin/OllamaEmbeddingModelsConfigurationController/updateOllamaEmbeddingModelConfig | 
 *BrainClient.OnnxTransformersEmbeddingModelsConfigurationControllerApi* | [**deleteONNXTransformersEmbeddingModelConfig**](docs/OnnxTransformersEmbeddingModelsConfigurationControllerApi.md#deleteONNXTransformersEmbeddingModelConfig) | **POST** /api/admin/ONNXTransformersEmbeddingModelsConfigurationController/deleteONNXTransformersEmbeddingModelConfig | 
 *BrainClient.OnnxTransformersEmbeddingModelsConfigurationControllerApi* | [**findONNXTransformersEmbeddingModelConfigByCode**](docs/OnnxTransformersEmbeddingModelsConfigurationControllerApi.md#findONNXTransformersEmbeddingModelConfigByCode) | **GET** /api/admin/ONNXTransformersEmbeddingModelsConfigurationController/findONNXTransformersEmbeddingModelConfigByCode | 
 *BrainClient.OnnxTransformersEmbeddingModelsConfigurationControllerApi* | [**getONNXTransformersEmbeddingModels**](docs/OnnxTransformersEmbeddingModelsConfigurationControllerApi.md#getONNXTransformersEmbeddingModels) | **POST** /api/admin/ONNXTransformersEmbeddingModelsConfigurationController/getONNXTransformersEmbeddingModels | 
@@ -361,6 +449,27 @@ Class | Method | HTTP request | Description
 *BrainClient.PromptTemplatesControllerApi* | [**getDefaultPromptForChatModelReference**](docs/PromptTemplatesControllerApi.md#getDefaultPromptForChatModelReference) | **POST** /api/admin/PromptTemplatesController/getDefaultPromptForChatModelReference | 
 *BrainClient.RankerModelsControllerApi* | [**getRankerModelTypes**](docs/RankerModelsControllerApi.md#getRankerModelTypes) | **GET** /api/admin/RankerModelsController/getRankerModelTypes | 
 *BrainClient.RankerModelsControllerApi* | [**getRuntimeConfiguredRankerModels**](docs/RankerModelsControllerApi.md#getRuntimeConfiguredRankerModels) | **GET** /api/admin/RankerModelsController/getRuntimeConfiguredRankerModels | 
+*BrainClient.SearxngSearchConfigurationControllerApi* | [**deleteGSearxngSearchApiCredentials**](docs/SearxngSearchConfigurationControllerApi.md#deleteGSearxngSearchApiCredentials) | **POST** /api/admin/SearxngSearchConfigurationController/deleteGSearxngSearchApiCredentials | 
+*BrainClient.SearxngSearchConfigurationControllerApi* | [**fastInsertSearxngSearchApiCredentials**](docs/SearxngSearchConfigurationControllerApi.md#fastInsertSearxngSearchApiCredentials) | **POST** /api/admin/SearxngSearchConfigurationController/fastInsertSearxngSearchApiCredentials | 
+*BrainClient.SearxngSearchConfigurationControllerApi* | [**getSearxngSearchApiCredentials**](docs/SearxngSearchConfigurationControllerApi.md#getSearxngSearchApiCredentials) | **GET** /api/admin/SearxngSearchConfigurationController/getSearxngSearchApiCredentials | 
+*BrainClient.SearxngSearchConfigurationControllerApi* | [**getSearxngSearchStatus**](docs/SearxngSearchConfigurationControllerApi.md#getSearxngSearchStatus) | **GET** /api/admin/SearxngSearchConfigurationController/getSearxngSearchStatus | 
+*BrainClient.SearxngSearchConfigurationControllerApi* | [**insertGSearxngSearchApiCredentials**](docs/SearxngSearchConfigurationControllerApi.md#insertGSearxngSearchApiCredentials) | **POST** /api/admin/SearxngSearchConfigurationController/insertGSearxngSearchApiCredentials | 
+*BrainClient.SearxngSearchConfigurationControllerApi* | [**searchGSearxngSearchApiCredentialsByCode**](docs/SearxngSearchConfigurationControllerApi.md#searchGSearxngSearchApiCredentialsByCode) | **GET** /api/admin/SearxngSearchConfigurationController/searchGSearxngSearchApiCredentialsByCode | 
+*BrainClient.SearxngSearchConfigurationControllerApi* | [**updateGSearxngSearchApiCredentials**](docs/SearxngSearchConfigurationControllerApi.md#updateGSearxngSearchApiCredentials) | **POST** /api/admin/SearxngSearchConfigurationController/updateGSearxngSearchApiCredentials | 
+*BrainClient.SerpapiSearchConfigurationControllerApi* | [**deleteGSerpapiSearchApiCredentials**](docs/SerpapiSearchConfigurationControllerApi.md#deleteGSerpapiSearchApiCredentials) | **POST** /api/admin/SerpapiSearchConfigurationController/deleteGSerpapiSearchApiCredentials | 
+*BrainClient.SerpapiSearchConfigurationControllerApi* | [**fastInsertSerpapiSearchApiCredentials**](docs/SerpapiSearchConfigurationControllerApi.md#fastInsertSerpapiSearchApiCredentials) | **POST** /api/admin/SerpapiSearchConfigurationController/fastInsertSerpapiSearchApiCredentials | 
+*BrainClient.SerpapiSearchConfigurationControllerApi* | [**getSerpapiSearchApiCredentials**](docs/SerpapiSearchConfigurationControllerApi.md#getSerpapiSearchApiCredentials) | **GET** /api/admin/SerpapiSearchConfigurationController/getSerpapiSearchApiCredentials | 
+*BrainClient.SerpapiSearchConfigurationControllerApi* | [**getSerpapiSearchStatus**](docs/SerpapiSearchConfigurationControllerApi.md#getSerpapiSearchStatus) | **GET** /api/admin/SerpapiSearchConfigurationController/getSerpapiSearchStatus | 
+*BrainClient.SerpapiSearchConfigurationControllerApi* | [**insertGSerpapiSearchApiCredentials**](docs/SerpapiSearchConfigurationControllerApi.md#insertGSerpapiSearchApiCredentials) | **POST** /api/admin/SerpapiSearchConfigurationController/insertGSerpapiSearchApiCredentials | 
+*BrainClient.SerpapiSearchConfigurationControllerApi* | [**searchGSerpapiSearchApiCredentialsByCode**](docs/SerpapiSearchConfigurationControllerApi.md#searchGSerpapiSearchApiCredentialsByCode) | **GET** /api/admin/SerpapiSearchConfigurationController/searchGSerpapiSearchApiCredentialsByCode | 
+*BrainClient.SerpapiSearchConfigurationControllerApi* | [**updateGSerpapiSearchApiCredentials**](docs/SerpapiSearchConfigurationControllerApi.md#updateGSerpapiSearchApiCredentials) | **POST** /api/admin/SerpapiSearchConfigurationController/updateGSerpapiSearchApiCredentials | 
+*BrainClient.TavilySearchConfigurationControllerApi* | [**deleteGTavilySearchApiCredentials**](docs/TavilySearchConfigurationControllerApi.md#deleteGTavilySearchApiCredentials) | **POST** /api/admin/TavilySearchConfigurationController/deleteGTavilySearchApiCredentials | 
+*BrainClient.TavilySearchConfigurationControllerApi* | [**fastInsertTavilySearchApiCredentials**](docs/TavilySearchConfigurationControllerApi.md#fastInsertTavilySearchApiCredentials) | **POST** /api/admin/TavilySearchConfigurationController/fastInsertTavilySearchApiCredentials | 
+*BrainClient.TavilySearchConfigurationControllerApi* | [**getTavilySearchApiCredentials**](docs/TavilySearchConfigurationControllerApi.md#getTavilySearchApiCredentials) | **GET** /api/admin/TavilySearchConfigurationController/getTavilySearchApiCredentials | 
+*BrainClient.TavilySearchConfigurationControllerApi* | [**getTavilySearchStatus**](docs/TavilySearchConfigurationControllerApi.md#getTavilySearchStatus) | **GET** /api/admin/TavilySearchConfigurationController/getTavilySearchStatus | 
+*BrainClient.TavilySearchConfigurationControllerApi* | [**insertGTavilySearchApiCredentials**](docs/TavilySearchConfigurationControllerApi.md#insertGTavilySearchApiCredentials) | **POST** /api/admin/TavilySearchConfigurationController/insertGTavilySearchApiCredentials | 
+*BrainClient.TavilySearchConfigurationControllerApi* | [**searchGTavilySearchApiCredentialsByCode**](docs/TavilySearchConfigurationControllerApi.md#searchGTavilySearchApiCredentialsByCode) | **GET** /api/admin/TavilySearchConfigurationController/searchGTavilySearchApiCredentialsByCode | 
+*BrainClient.TavilySearchConfigurationControllerApi* | [**updateGTavilySearchApiCredentials**](docs/TavilySearchConfigurationControllerApi.md#updateGTavilySearchApiCredentials) | **POST** /api/admin/TavilySearchConfigurationController/updateGTavilySearchApiCredentials | 
 *BrainClient.TextToSpeechModelsControllerApi* | [**getRuntimeConfiguredTextToSpeechModels**](docs/TextToSpeechModelsControllerApi.md#getRuntimeConfiguredTextToSpeechModels) | **GET** /api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels | 
 *BrainClient.TextToSpeechModelsControllerApi* | [**getTextToSpeechModelTypes**](docs/TextToSpeechModelsControllerApi.md#getTextToSpeechModelTypes) | **GET** /api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes | 
 *BrainClient.TranscriptModelsControllerApi* | [**getRuntimeConfiguredTranscriptModels**](docs/TranscriptModelsControllerApi.md#getRuntimeConfiguredTranscriptModels) | **GET** /api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels | 
@@ -373,10 +482,16 @@ Class | Method | HTTP request | Description
 
 ## Documentation for Models
 
+ - [BrainClient.A2AExportedAgent](docs/A2AExportedAgent.md)
+ - [BrainClient.A2ARemoteAgentConfig](docs/A2ARemoteAgentConfig.md)
+ - [BrainClient.A2ARemoteSkill](docs/A2ARemoteSkill.md)
+ - [BrainClient.A2AServerConfig](docs/A2AServerConfig.md)
  - [BrainClient.AclOwnerParam](docs/AclOwnerParam.md)
+ - [BrainClient.AdditionalContent](docs/AdditionalContent.md)
  - [BrainClient.AgentNetworkParticipant](docs/AgentNetworkParticipant.md)
  - [BrainClient.AgentServiceDescriptor](docs/AgentServiceDescriptor.md)
  - [BrainClient.AutotuneVectorStoreInfo](docs/AutotuneVectorStoreInfo.md)
+ - [BrainClient.BraveSearchConfig](docs/BraveSearchConfig.md)
  - [BrainClient.BrowseParam](docs/BrowseParam.md)
  - [BrainClient.BuildSystemRef](docs/BuildSystemRef.md)
  - [BrainClient.CalledFunction](docs/CalledFunction.md)
@@ -400,7 +515,10 @@ Class | Method | HTTP request | Description
  - [BrainClient.ConfigurationEntryGBaseTranscriptModelConfig](docs/ConfigurationEntryGBaseTranscriptModelConfig.md)
  - [BrainClient.ContentMetaInfo](docs/ContentMetaInfo.md)
  - [BrainClient.ContentObject](docs/ContentObject.md)
+ - [BrainClient.DataEndpoint](docs/DataEndpoint.md)
  - [BrainClient.DataPage](docs/DataPage.md)
+ - [BrainClient.DataTransformationInfo](docs/DataTransformationInfo.md)
+ - [BrainClient.DataTransformationMetaInfo](docs/DataTransformationMetaInfo.md)
  - [BrainClient.DeepSearchConfig](docs/DeepSearchConfig.md)
  - [BrainClient.DeepSearchDataSourceAccess](docs/DeepSearchDataSourceAccess.md)
  - [BrainClient.DefaultPromptForChatModelParam](docs/DefaultPromptForChatModelParam.md)
@@ -430,6 +548,19 @@ Class | Method | HTTP request | Description
  - [BrainClient.GBaseTextToSpeachModelConfig](docs/GBaseTextToSpeachModelConfig.md)
  - [BrainClient.GBaseTranscriptModelChoice](docs/GBaseTranscriptModelChoice.md)
  - [BrainClient.GBaseTranscriptModelConfig](docs/GBaseTranscriptModelConfig.md)
+ - [BrainClient.GBedrockChatModelChoice](docs/GBedrockChatModelChoice.md)
+ - [BrainClient.GBedrockChatModelConfig](docs/GBedrockChatModelConfig.md)
+ - [BrainClient.GBedrockEmbeddingModelChoice](docs/GBedrockEmbeddingModelChoice.md)
+ - [BrainClient.GBedrockEmbeddingModelConfig](docs/GBedrockEmbeddingModelConfig.md)
+ - [BrainClient.GBedrockImageModelChoice](docs/GBedrockImageModelChoice.md)
+ - [BrainClient.GBedrockImageModelConfig](docs/GBedrockImageModelConfig.md)
+ - [BrainClient.GBedrockRankerModelChoice](docs/GBedrockRankerModelChoice.md)
+ - [BrainClient.GBedrockRankerModelConfig](docs/GBedrockRankerModelConfig.md)
+ - [BrainClient.GBedrockTextToSpeechModelChoice](docs/GBedrockTextToSpeechModelChoice.md)
+ - [BrainClient.GBedrockTextToSpeechModelConfig](docs/GBedrockTextToSpeechModelConfig.md)
+ - [BrainClient.GBedrockTranscriptModelChoice](docs/GBedrockTranscriptModelChoice.md)
+ - [BrainClient.GBedrockTranscriptModelConfig](docs/GBedrockTranscriptModelConfig.md)
+ - [BrainClient.GBraveSearchApiCredentials](docs/GBraveSearchApiCredentials.md)
  - [BrainClient.GBuildSystem](docs/GBuildSystem.md)
  - [BrainClient.GBuildSystemType](docs/GBuildSystemType.md)
  - [BrainClient.GCentralizedProjectEndpoint](docs/GCentralizedProjectEndpoint.md)
@@ -437,17 +568,29 @@ Class | Method | HTTP request | Description
  - [BrainClient.GChatProfileConfiguration](docs/GChatProfileConfiguration.md)
  - [BrainClient.GContentManagementSystem](docs/GContentManagementSystem.md)
  - [BrainClient.GContentManagementSystemType](docs/GContentManagementSystemType.md)
+ - [BrainClient.GDataFlowMetaInfos](docs/GDataFlowMetaInfos.md)
+ - [BrainClient.GDataFlowReport](docs/GDataFlowReport.md)
+ - [BrainClient.GDeepseekChatModelChoice](docs/GDeepseekChatModelChoice.md)
+ - [BrainClient.GDeepseekChatModelConfig](docs/GDeepseekChatModelConfig.md)
  - [BrainClient.GDocumentAttributeValue](docs/GDocumentAttributeValue.md)
  - [BrainClient.GDocumentReference](docs/GDocumentReference.md)
  - [BrainClient.GDocumentReferenceStreamRequest](docs/GDocumentReferenceStreamRequest.md)
  - [BrainClient.GEmbeddingModelType](docs/GEmbeddingModelType.md)
  - [BrainClient.GGoogleSearchApiCredentials](docs/GGoogleSearchApiCredentials.md)
+ - [BrainClient.GGoogleVertexChatModelChoice](docs/GGoogleVertexChatModelChoice.md)
+ - [BrainClient.GGoogleVertexChatModelConfig](docs/GGoogleVertexChatModelConfig.md)
+ - [BrainClient.GGoogleVertexEmbeddingModelChoice](docs/GGoogleVertexEmbeddingModelChoice.md)
+ - [BrainClient.GGoogleVertexEmbeddingModelConfig](docs/GGoogleVertexEmbeddingModelConfig.md)
  - [BrainClient.GImageModelType](docs/GImageModelType.md)
  - [BrainClient.GJobStatus](docs/GJobStatus.md)
  - [BrainClient.GJobStatusItem](docs/GJobStatusItem.md)
  - [BrainClient.GKnowledgeBase](docs/GKnowledgeBase.md)
  - [BrainClient.GLookupEntry](docs/GLookupEntry.md)
  - [BrainClient.GLookupEntryRefGBaseChatModelConfig](docs/GLookupEntryRefGBaseChatModelConfig.md)
+ - [BrainClient.GMistralChatModelChoice](docs/GMistralChatModelChoice.md)
+ - [BrainClient.GMistralChatModelConfig](docs/GMistralChatModelConfig.md)
+ - [BrainClient.GMistralEmbeddingModelChoice](docs/GMistralEmbeddingModelChoice.md)
+ - [BrainClient.GMistralEmbeddingModelConfig](docs/GMistralEmbeddingModelConfig.md)
  - [BrainClient.GModuleMetaInfo](docs/GModuleMetaInfo.md)
  - [BrainClient.GONNXTransformersEmbeddingModelChoice](docs/GONNXTransformersEmbeddingModelChoice.md)
  - [BrainClient.GONNXTransformersEmbeddingModelConfig](docs/GONNXTransformersEmbeddingModelConfig.md)
@@ -460,6 +603,10 @@ Class | Method | HTTP request | Description
  - [BrainClient.GObjectRefGBaseTextToSpeachModelConfig](docs/GObjectRefGBaseTextToSpeachModelConfig.md)
  - [BrainClient.GObjectRefGBaseTranscriptModelConfig](docs/GObjectRefGBaseTranscriptModelConfig.md)
  - [BrainClient.GObjectRefGProjectEndpoint](docs/GObjectRefGProjectEndpoint.md)
+ - [BrainClient.GOllamaChatModelChoice](docs/GOllamaChatModelChoice.md)
+ - [BrainClient.GOllamaChatModelConfig](docs/GOllamaChatModelConfig.md)
+ - [BrainClient.GOllamaEmbeddingModelChoice](docs/GOllamaEmbeddingModelChoice.md)
+ - [BrainClient.GOllamaEmbeddingModelConfig](docs/GOllamaEmbeddingModelConfig.md)
  - [BrainClient.GOpenAIChatModelChoice](docs/GOpenAIChatModelChoice.md)
  - [BrainClient.GOpenAIChatModelConfig](docs/GOpenAIChatModelConfig.md)
  - [BrainClient.GOpenAIEmbeddingModelChoice](docs/GOpenAIEmbeddingModelChoice.md)
@@ -474,9 +621,13 @@ Class | Method | HTTP request | Description
  - [BrainClient.GProjectEndpoint](docs/GProjectEndpoint.md)
  - [BrainClient.GPromptPlaceholderInfo](docs/GPromptPlaceholderInfo.md)
  - [BrainClient.GPromptTemplateConfig](docs/GPromptTemplateConfig.md)
+ - [BrainClient.GPromptTemplateLightView](docs/GPromptTemplateLightView.md)
  - [BrainClient.GPromptUseInfo](docs/GPromptUseInfo.md)
  - [BrainClient.GRankerModelType](docs/GRankerModelType.md)
  - [BrainClient.GResponseDocumentRef](docs/GResponseDocumentRef.md)
+ - [BrainClient.GSearxngSearchApiCredentials](docs/GSearxngSearchApiCredentials.md)
+ - [BrainClient.GSerpapiSearchApiCredentials](docs/GSerpapiSearchApiCredentials.md)
+ - [BrainClient.GTavilySearchApiCredentials](docs/GTavilySearchApiCredentials.md)
  - [BrainClient.GTextToSpeechModelType](docs/GTextToSpeechModelType.md)
  - [BrainClient.GTranscriptModelType](docs/GTranscriptModelType.md)
  - [BrainClient.GUserChatInfo](docs/GUserChatInfo.md)
@@ -493,7 +644,7 @@ Class | Method | HTTP request | Description
  - [BrainClient.GeboMCPAgentTool](docs/GeboMCPAgentTool.md)
  - [BrainClient.GeboMCPAgentsNetworkTool](docs/GeboMCPAgentsNetworkTool.md)
  - [BrainClient.GeboMCPServerConfig](docs/GeboMCPServerConfig.md)
- - [BrainClient.GeboMongoVectorStoreConfig](docs/GeboMongoVectorStoreConfig.md)
+ - [BrainClient.GeboNeo4jModuleConfigDto](docs/GeboNeo4jModuleConfigDto.md)
  - [BrainClient.GeboRagRequestCustomConfig](docs/GeboRagRequestCustomConfig.md)
  - [BrainClient.GeboTemplatedChatResponse](docs/GeboTemplatedChatResponse.md)
  - [BrainClient.GeboWorkingMemoryWindowOccupation](docs/GeboWorkingMemoryWindowOccupation.md)
@@ -523,6 +674,7 @@ Class | Method | HTTP request | Description
  - [BrainClient.HasRunningJobs](docs/HasRunningJobs.md)
  - [BrainClient.IngestionFileType](docs/IngestionFileType.md)
  - [BrainClient.IngestionHandlerConfig](docs/IngestionHandlerConfig.md)
+ - [BrainClient.JobsEntriesFilter](docs/JobsEntriesFilter.md)
  - [BrainClient.JobsEntriesForClassNameFilter](docs/JobsEntriesForClassNameFilter.md)
  - [BrainClient.JobsEntriesForJobType](docs/JobsEntriesForJobType.md)
  - [BrainClient.JobsEntriesForProjectEndpointFilter](docs/JobsEntriesForProjectEndpointFilter.md)
@@ -544,21 +696,36 @@ Class | Method | HTTP request | Description
  - [BrainClient.MCPPrompt](docs/MCPPrompt.md)
  - [BrainClient.MCPResource](docs/MCPResource.md)
  - [BrainClient.MCPTool](docs/MCPTool.md)
+ - [BrainClient.MistralBaseModelCard](docs/MistralBaseModelCard.md)
+ - [BrainClient.MistralModelCapabilities](docs/MistralModelCapabilities.md)
  - [BrainClient.ModelMetaInfo](docs/ModelMetaInfo.md)
  - [BrainClient.ModelProviderCapabilities](docs/ModelProviderCapabilities.md)
- - [BrainClient.MongoConfig](docs/MongoConfig.md)
+ - [BrainClient.OperationStatusA2ARemoteAgentConfig](docs/OperationStatusA2ARemoteAgentConfig.md)
+ - [BrainClient.OperationStatusA2AServerConfig](docs/OperationStatusA2AServerConfig.md)
  - [BrainClient.OperationStatusBoolean](docs/OperationStatusBoolean.md)
  - [BrainClient.OperationStatusComponentVectorStoreStatus](docs/OperationStatusComponentVectorStoreStatus.md)
  - [BrainClient.OperationStatusGAgentsNetwork](docs/OperationStatusGAgentsNetwork.md)
  - [BrainClient.OperationStatusGAnthropicChatModelConfig](docs/OperationStatusGAnthropicChatModelConfig.md)
+ - [BrainClient.OperationStatusGBedrockChatModelConfig](docs/OperationStatusGBedrockChatModelConfig.md)
+ - [BrainClient.OperationStatusGBedrockEmbeddingModelConfig](docs/OperationStatusGBedrockEmbeddingModelConfig.md)
+ - [BrainClient.OperationStatusGBedrockImageModelConfig](docs/OperationStatusGBedrockImageModelConfig.md)
+ - [BrainClient.OperationStatusGBedrockRankerModelConfig](docs/OperationStatusGBedrockRankerModelConfig.md)
+ - [BrainClient.OperationStatusGBedrockTextToSpeechModelConfig](docs/OperationStatusGBedrockTextToSpeechModelConfig.md)
+ - [BrainClient.OperationStatusGBedrockTranscriptModelConfig](docs/OperationStatusGBedrockTranscriptModelConfig.md)
+ - [BrainClient.OperationStatusGDeepseekChatModelConfig](docs/OperationStatusGDeepseekChatModelConfig.md)
+ - [BrainClient.OperationStatusGGoogleVertexChatModelConfig](docs/OperationStatusGGoogleVertexChatModelConfig.md)
+ - [BrainClient.OperationStatusGGoogleVertexEmbeddingModelConfig](docs/OperationStatusGGoogleVertexEmbeddingModelConfig.md)
  - [BrainClient.OperationStatusGJobStatus](docs/OperationStatusGJobStatus.md)
+ - [BrainClient.OperationStatusGMistralChatModelConfig](docs/OperationStatusGMistralChatModelConfig.md)
+ - [BrainClient.OperationStatusGMistralEmbeddingModelConfig](docs/OperationStatusGMistralEmbeddingModelConfig.md)
  - [BrainClient.OperationStatusGONNXTransformersEmbeddingModelConfig](docs/OperationStatusGONNXTransformersEmbeddingModelConfig.md)
+ - [BrainClient.OperationStatusGOllamaChatModelConfig](docs/OperationStatusGOllamaChatModelConfig.md)
+ - [BrainClient.OperationStatusGOllamaEmbeddingModelConfig](docs/OperationStatusGOllamaEmbeddingModelConfig.md)
  - [BrainClient.OperationStatusGOpenAIChatModelConfig](docs/OperationStatusGOpenAIChatModelConfig.md)
  - [BrainClient.OperationStatusGOpenAIEmbeddingModelConfig](docs/OperationStatusGOpenAIEmbeddingModelConfig.md)
  - [BrainClient.OperationStatusGOpenAIImageModelConfig](docs/OperationStatusGOpenAIImageModelConfig.md)
  - [BrainClient.OperationStatusGOpenAITextToSpeechModelConfig](docs/OperationStatusGOpenAITextToSpeechModelConfig.md)
  - [BrainClient.OperationStatusGOpenAITranscriptModelConfig](docs/OperationStatusGOpenAITranscriptModelConfig.md)
- - [BrainClient.OperationStatusGeboMongoVectorStoreConfig](docs/OperationStatusGeboMongoVectorStoreConfig.md)
  - [BrainClient.OperationStatusGenericOpenAIAPIChatModelConfig](docs/OperationStatusGenericOpenAIAPIChatModelConfig.md)
  - [BrainClient.OperationStatusGenericOpenAIAPIEmbeddingModelConfig](docs/OperationStatusGenericOpenAIAPIEmbeddingModelConfig.md)
  - [BrainClient.OperationStatusGenericOpenAIAPIImageModelConfig](docs/OperationStatusGenericOpenAIAPIImageModelConfig.md)
@@ -569,7 +736,20 @@ Class | Method | HTTP request | Description
  - [BrainClient.OperationStatusListGAnthropicChatModelChoice](docs/OperationStatusListGAnthropicChatModelChoice.md)
  - [BrainClient.OperationStatusListGBaseModelChoice](docs/OperationStatusListGBaseModelChoice.md)
  - [BrainClient.OperationStatusListGBaseModelConfig](docs/OperationStatusListGBaseModelConfig.md)
+ - [BrainClient.OperationStatusListGBedrockChatModelChoice](docs/OperationStatusListGBedrockChatModelChoice.md)
+ - [BrainClient.OperationStatusListGBedrockEmbeddingModelChoice](docs/OperationStatusListGBedrockEmbeddingModelChoice.md)
+ - [BrainClient.OperationStatusListGBedrockImageModelChoice](docs/OperationStatusListGBedrockImageModelChoice.md)
+ - [BrainClient.OperationStatusListGBedrockRankerModelChoice](docs/OperationStatusListGBedrockRankerModelChoice.md)
+ - [BrainClient.OperationStatusListGBedrockTextToSpeechModelChoice](docs/OperationStatusListGBedrockTextToSpeechModelChoice.md)
+ - [BrainClient.OperationStatusListGBedrockTranscriptModelChoice](docs/OperationStatusListGBedrockTranscriptModelChoice.md)
+ - [BrainClient.OperationStatusListGDeepseekChatModelChoice](docs/OperationStatusListGDeepseekChatModelChoice.md)
+ - [BrainClient.OperationStatusListGGoogleVertexChatModelChoice](docs/OperationStatusListGGoogleVertexChatModelChoice.md)
+ - [BrainClient.OperationStatusListGGoogleVertexEmbeddingModelChoice](docs/OperationStatusListGGoogleVertexEmbeddingModelChoice.md)
+ - [BrainClient.OperationStatusListGMistralChatModelChoice](docs/OperationStatusListGMistralChatModelChoice.md)
+ - [BrainClient.OperationStatusListGMistralEmbeddingModelChoice](docs/OperationStatusListGMistralEmbeddingModelChoice.md)
  - [BrainClient.OperationStatusListGONNXTransformersEmbeddingModelChoice](docs/OperationStatusListGONNXTransformersEmbeddingModelChoice.md)
+ - [BrainClient.OperationStatusListGOllamaChatModelChoice](docs/OperationStatusListGOllamaChatModelChoice.md)
+ - [BrainClient.OperationStatusListGOllamaEmbeddingModelChoice](docs/OperationStatusListGOllamaEmbeddingModelChoice.md)
  - [BrainClient.OperationStatusListGOpenAIChatModelChoice](docs/OperationStatusListGOpenAIChatModelChoice.md)
  - [BrainClient.OperationStatusListGOpenAIEmbeddingModelChoice](docs/OperationStatusListGOpenAIEmbeddingModelChoice.md)
  - [BrainClient.OperationStatusListGOpenAIImageModelChoice](docs/OperationStatusListGOpenAIImageModelChoice.md)
@@ -589,6 +769,7 @@ Class | Method | HTTP request | Description
  - [BrainClient.OperationStatusSecretInfo](docs/OperationStatusSecretInfo.md)
  - [BrainClient.OptimizedThreashold](docs/OptimizedThreashold.md)
  - [BrainClient.Order](docs/Order.md)
+ - [BrainClient.PageA2ARemoteAgentConfig](docs/PageA2ARemoteAgentConfig.md)
  - [BrainClient.PageDocumentReferenceView](docs/PageDocumentReferenceView.md)
  - [BrainClient.PageGChatProfileConfiguration](docs/PageGChatProfileConfiguration.md)
  - [BrainClient.PageGJobStatusItem](docs/PageGJobStatusItem.md)
@@ -618,14 +799,17 @@ Class | Method | HTTP request | Description
  - [BrainClient.SearchResult](docs/SearchResult.md)
  - [BrainClient.SearchResultReference](docs/SearchResultReference.md)
  - [BrainClient.SearchResultStreamRequest](docs/SearchResultStreamRequest.md)
+ - [BrainClient.SearxngSearchConfig](docs/SearxngSearchConfig.md)
  - [BrainClient.SecretInfo](docs/SecretInfo.md)
  - [BrainClient.SemanticQueryParam](docs/SemanticQueryParam.md)
+ - [BrainClient.SerpapiSearchConfig](docs/SerpapiSearchConfig.md)
  - [BrainClient.ServerSentEventString](docs/ServerSentEventString.md)
  - [BrainClient.SetMcpServerAclsParam](docs/SetMcpServerAclsParam.md)
  - [BrainClient.SortObject](docs/SortObject.md)
  - [BrainClient.SpecialFile](docs/SpecialFile.md)
  - [BrainClient.SpeechRequest](docs/SpeechRequest.md)
  - [BrainClient.SystemInfos](docs/SystemInfos.md)
+ - [BrainClient.TavilySearchConfig](docs/TavilySearchConfig.md)
  - [BrainClient.ThreasholdAutotuneProcessResult](docs/ThreasholdAutotuneProcessResult.md)
  - [BrainClient.ToolCategoriesTree](docs/ToolCategoriesTree.md)
  - [BrainClient.ToolReference](docs/ToolReference.md)

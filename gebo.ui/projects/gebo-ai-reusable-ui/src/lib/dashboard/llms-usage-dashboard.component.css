@@ -57,3 +57,97 @@ label {
 :host ::ng-deep .p-button {
     border-radius: 6px;
 }
+
+/* Active filters: what the charts show, between the filters and the charts */
+.active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--gebo-space-2, 0.5rem);
+    margin-bottom: var(--gebo-space-2, 0.5rem);
+    padding: var(--gebo-space-2, 0.5rem) var(--gebo-space-3, 0.75rem);
+    border: 1px solid var(--surface-border);
+    border-left: 3px solid var(--primary-color);
+    border-radius: 6px;
+    background-color: var(--surface-ground, var(--surface-b));
+}
+
+.active-filters__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-color-secondary);
+}
+
+.active-filters__title .pi {
+    color: var(--primary-color);
+}
+
+.active-filters__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.3rem 0.2rem 0.65rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 999px;
+    background-color: var(--surface-card);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.active-filters__chip-label {
+    color: var(--text-color-secondary);
+}
+
+.active-filters__chip-label::after {
+    content: ":";
+}
+
+.active-filters__chip-value {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.active-filters__chip-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-color-secondary);
+    cursor: pointer;
+}
+
+.active-filters__chip-remove .pi {
+    font-size: 0.65rem;
+}
+
+.active-filters__chip-remove:hover:not(:disabled) {
+    background-color: var(--surface-hover, rgba(0, 0, 0, 0.06));
+    color: var(--text-color);
+}
+
+.active-filters__chip-remove:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 1px;
+}
+
+.active-filters__all {
+    font-size: 0.85rem;
+    color: var(--text-color-secondary);
+}
+
+.active-filters__pending {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--orange-600, #c2410c);
+}

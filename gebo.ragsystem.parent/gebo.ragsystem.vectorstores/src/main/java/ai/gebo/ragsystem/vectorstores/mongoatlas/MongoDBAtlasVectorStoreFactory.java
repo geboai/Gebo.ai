@@ -68,6 +68,9 @@ public class MongoDBAtlasVectorStoreFactory implements IGVectorStoreFactory {
 		builder = builder.collectionName(vectorStoreName);
 		// builder=builder.batchingStrategy(Defaultbatch)
 		MongoDBAtlasVectorStore vectorStore = builder.build();
+		// creates the search index when missing, else adds the metadata filter fields it lacks
+		MongoDBAtlasSearchIndexReconciler.reconcile(mongoTemplate, embeddingModel, vectorStoreName, vectorStoreIndex,
+				embeddingPath, DocumentMetaInfos.ALL_ATTRIBUTES);
 		
 		// Wrap the store in the extended interface wrapper
 		return GExtendedVectorStoreWrapper.of(vectorStore);

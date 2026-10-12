@@ -51,7 +51,7 @@ export default class GeboContentProcessRow {
       if (data.hasOwnProperty('endpointObjectRef'))
         obj.endpointObjectRef = GObjectRefGProjectEndpoint.constructFromObject(data['endpointObjectRef']);
       if (data.hasOwnProperty('contentsCount'))
-        obj.contentsCount = ApiClient.convertToType(data['contentsCount'], Object);
+        obj.contentsCount = ApiClient.convertToType(data['contentsCount'], 'Number');
     }
     return obj;
   }
@@ -78,7 +78,7 @@ GeboContentProcessRow.prototype.endpoint = undefined;
 GeboContentProcessRow.prototype.endpointObjectRef = undefined;
 
 /**
- * @member {Object} contentsCount
+ * @member {Number} contentsCount
  */
 GeboContentProcessRow.prototype.contentsCount = undefined;
 

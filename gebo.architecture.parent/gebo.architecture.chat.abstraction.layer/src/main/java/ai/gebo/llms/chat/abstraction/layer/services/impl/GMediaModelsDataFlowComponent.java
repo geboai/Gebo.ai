@@ -99,6 +99,7 @@ public class GMediaModelsDataFlowComponent implements IGMessageEmitter {
 	public GDataFlowMetaInfos getDataFlowMetaInfos() {
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+		flow.setDescription("Speech, transcription and image models");
 
 		boolean any = false;
 		any |= addMediaFlow(flow, "transcript", "Audio transcription request (user speech)", "Speech-to-text model",

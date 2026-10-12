@@ -76,6 +76,8 @@ export default class GIntegrationProjectEndpoint {
         obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], 'String');
       if (data.hasOwnProperty('aclAliases'))
         obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
+      if (data.hasOwnProperty('personalData'))
+        obj.personalData = ApiClient.convertToType(data['personalData'], 'Boolean');
       if (data.hasOwnProperty('allowedApplicationUsers'))
         obj.allowedApplicationUsers = ApiClient.convertToType(data['allowedApplicationUsers'], ['String']);
     }
@@ -208,6 +210,11 @@ GIntegrationProjectEndpoint.prototype.objectSpaceType = undefined;
  * @member {Array.<Number>} aclAliases
  */
 GIntegrationProjectEndpoint.prototype.aclAliases = undefined;
+
+/**
+ * @member {Boolean} personalData
+ */
+GIntegrationProjectEndpoint.prototype.personalData = undefined;
 
 /**
  * @member {Array.<String>} allowedApplicationUsers

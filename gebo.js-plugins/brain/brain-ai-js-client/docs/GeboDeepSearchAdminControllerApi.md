@@ -55,7 +55,7 @@ No authorization required
 
 <a name="getConfigurableDataSources"></a>
 # **getConfigurableDataSources**
-> Object getConfigurableDataSources()
+> [GBaseObject] getConfigurableDataSources()
 
 
 
@@ -77,7 +77,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GBaseObject]**](GBaseObject.md)
 
 ### Authorization
 
@@ -90,7 +90,7 @@ No authorization required
 
 <a name="getDeepSeachConfigs"></a>
 # **getDeepSeachConfigs**
-> Object getDeepSeachConfigs()
+> [DeepSearchConfig] getDeepSeachConfigs()
 
 
 
@@ -112,7 +112,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[DeepSearchConfig]**](DeepSearchConfig.md)
 
 ### Authorization
 

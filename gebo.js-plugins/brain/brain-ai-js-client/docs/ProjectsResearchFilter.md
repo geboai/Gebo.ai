@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**rootKnowledgeBaseCode** | **Object** |  | [optional] 
-**parentProjectCode** | **Object** |  | [optional] 
+**rootKnowledgeBaseCode** | **String** |  | [optional] 
+**parentProjectCode** | **String** |  | [optional] 

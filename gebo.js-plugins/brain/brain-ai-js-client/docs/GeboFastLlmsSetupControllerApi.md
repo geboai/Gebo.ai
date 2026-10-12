@@ -103,7 +103,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboFastLlmsSetupControllerApi();
-let body = null; // Object | 
+let body = [new BrainClient.LLMCreateModelData()]; // [LLMCreateModelData] | 
 
 apiInstance.createLLMS(body).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -117,7 +117,7 @@ apiInstance.createLLMS(body).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  | 
+ **body** | [**[LLMCreateModelData]**](LLMCreateModelData.md)|  | 
 
 ### Return type
 

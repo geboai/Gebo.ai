@@ -58,7 +58,6 @@ export class GeboAiAdminComponent implements OnInit {
   /** References to the child ancestor panel components for controlling their behavior */
   @ViewChild("child1") child1?: AncestorPanelComponent;
   @ViewChild("child2") child2?: AncestorPanelComponent;
-  @ViewChild("child3") child3?: AncestorPanelComponent;
   @ViewChild("child4") child4?: AncestorPanelComponent;
   @ViewChild("child5") child5?: AncestorPanelComponent;
   @ViewChild("child6") child6?: AncestorPanelComponent;
@@ -67,6 +66,8 @@ export class GeboAiAdminComponent implements OnInit {
   // is selected: it reports live configuration, so a cached first render would go
   // stale as soon as an administrator changes an endpoint elsewhere in this UI.
   @ViewChild("child9") child9?: AncestorPanelComponent;
+  // Prompt templates panel, activated by tab value 10 (see activatedIndex()).
+  @ViewChild("child10") child10?: AncestorPanelComponent;
 
   /** Current authenticated user information */
   user?: UserInfo;

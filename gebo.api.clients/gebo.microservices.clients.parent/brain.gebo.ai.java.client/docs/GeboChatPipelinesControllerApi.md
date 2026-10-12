@@ -172,7 +172,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | **String**|  |
+ **chatProfileCode** | **String**|  | [optional]
  **pipelineCode** | **String**|  | [optional]
 
 ### Return type

@@ -39,56 +39,56 @@ export default class AgentServiceDescriptor {
     if (data) {
       obj = obj || new AgentServiceDescriptor();
       if (data.hasOwnProperty('serviceId'))
-        obj.serviceId = ApiClient.convertToType(data['serviceId'], Object);
+        obj.serviceId = ApiClient.convertToType(data['serviceId'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('inputType'))
-        obj.inputType = ApiClient.convertToType(data['inputType'], Object);
+        obj.inputType = ApiClient.convertToType(data['inputType'], 'String');
       if (data.hasOwnProperty('outputType'))
-        obj.outputType = ApiClient.convertToType(data['outputType'], Object);
+        obj.outputType = ApiClient.convertToType(data['outputType'], 'String');
       if (data.hasOwnProperty('networkAgent'))
-        obj.networkAgent = ApiClient.convertToType(data['networkAgent'], Object);
+        obj.networkAgent = ApiClient.convertToType(data['networkAgent'], 'Boolean');
       if (data.hasOwnProperty('routingAgent'))
-        obj.routingAgent = ApiClient.convertToType(data['routingAgent'], Object);
+        obj.routingAgent = ApiClient.convertToType(data['routingAgent'], 'Boolean');
       if (data.hasOwnProperty('networkAdapter'))
-        obj.networkAdapter = ApiClient.convertToType(data['networkAdapter'], Object);
+        obj.networkAdapter = ApiClient.convertToType(data['networkAdapter'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} serviceId
+ * @member {String} serviceId
  */
 AgentServiceDescriptor.prototype.serviceId = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 AgentServiceDescriptor.prototype.description = undefined;
 
 /**
- * @member {Object} inputType
+ * @member {String} inputType
  */
 AgentServiceDescriptor.prototype.inputType = undefined;
 
 /**
- * @member {Object} outputType
+ * @member {String} outputType
  */
 AgentServiceDescriptor.prototype.outputType = undefined;
 
 /**
- * @member {Object} networkAgent
+ * @member {Boolean} networkAgent
  */
 AgentServiceDescriptor.prototype.networkAgent = undefined;
 
 /**
- * @member {Object} routingAgent
+ * @member {Boolean} routingAgent
  */
 AgentServiceDescriptor.prototype.routingAgent = undefined;
 
 /**
- * @member {Object} networkAdapter
+ * @member {Boolean} networkAdapter
  */
 AgentServiceDescriptor.prototype.networkAdapter = undefined;
 

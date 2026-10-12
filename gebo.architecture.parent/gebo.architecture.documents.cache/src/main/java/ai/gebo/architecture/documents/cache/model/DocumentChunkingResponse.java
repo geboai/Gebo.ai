@@ -17,5 +17,10 @@ public class DocumentChunkingResponse {
 	private boolean empty;
 	private boolean error;
 	private GUserMessage errorMessage = null;
+	/**
+	 * The hash of the document's whole extracted text the chunks were made from, null
+	 * when unknown (a sample, or chunks recorded before it was).
+	 */
+	private String contentHash = null;
 
 }

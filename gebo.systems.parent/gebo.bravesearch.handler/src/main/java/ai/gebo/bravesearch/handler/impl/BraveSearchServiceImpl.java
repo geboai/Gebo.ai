@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
@@ -131,22 +132,38 @@ public class BraveSearchServiceImpl extends AbstractWebSearchServiceImpl<BraveNa
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
+		return search(query, system, nEntryLimit, null);
+	}
+
+	/** Searches with an HTTP client whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
+		final BraveSearchApi api = parameters != null ? braveSearchApi.using(parameters) : braveSearchApi;
 		String apiKey = resolveApiKey();
 		if (apiKey == null)
 			return List.of();
 		List<SearchResult> resultsList = new ArrayList<SearchResult>();
 		try {
-			mapInto(this.braveSearchApi.callApi(apiKey, query.getQueryText(), nEntryLimit), resultsList);
+			mapInto(api.callApi(apiKey, query.getQueryText(), nEntryLimit), resultsList);
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing brave searches", e);
 		}
-		return resultsList;
+		return withSizes(resultsList);
 	}
 
 	/** Native path: LLM chose the queries AND the Brave options. */
 	@Override
 	public List<SearchResult> nativeSearch(BraveNativeSearchQuery query, SearchableSystemMetaData system,
 			int nEntryLimit) throws IOException, SearchServiceException {
+		return nativeSearch(query, system, nEntryLimit, null);
+	}
+
+	/** Searches natively with an HTTP client whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> nativeSearch(BraveNativeSearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
+		final BraveSearchApi api = parameters != null ? braveSearchApi.using(parameters) : braveSearchApi;
 		if (query == null || query.getSearchedTexts() == null || query.getSearchedTexts().isEmpty())
 			return List.of();
 		String apiKey = resolveApiKey();
@@ -157,13 +174,13 @@ public class BraveSearchServiceImpl extends AbstractWebSearchServiceImpl<BraveNa
 			for (String text : query.getSearchedTexts()) {
 				if (text == null || text.isBlank())
 					continue;
-				mapInto(this.braveSearchApi.callApi(apiKey, text, nEntryLimit, query.getFreshness(), query.getCountry(),
+				mapInto(api.callApi(apiKey, text, nEntryLimit, query.getFreshness(), query.getCountry(),
 						query.getSafesearch()), resultsList);
 			}
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing brave searches", e);
 		}
-		return resultsList;
+		return withSizes(resultsList);
 	}
 
 	@Override

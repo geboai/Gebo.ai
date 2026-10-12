@@ -3,10 +3,19 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  | [optional] 
-**description** | **Object** |  | [optional] 
-**userModified** | **Object** |  | [optional] 
-**userCreated** | **Object** |  | [optional] 
-**dateModified** | **Object** |  | [optional] 
-**dateCreated** | **Object** |  | [optional] 
-**capabilities** | **Object** |  | [optional] 
+**code** | **String** |  | [optional] 
+**description** | **String** |  | [optional] 
+**userModified** | **String** |  | [optional] 
+**userCreated** | **String** |  | [optional] 
+**dateModified** | **Date** |  | [optional] 
+**dateCreated** | **Date** |  | [optional] 
+**capabilities** | **[String]** |  | [optional] 
+
+<a name="[CapabilitiesEnum]"></a>
+## Enum: [CapabilitiesEnum]
+
+* `TICKETS_MANAGEMENT` (value: `"TICKETS_MANAGEMENT"`)
+* `DOCUMENTS_MANAGEMENT` (value: `"DOCUMENTS_MANAGEMENT"`)
+* `SOURCE_MANAGEMENT` (value: `"SOURCE_MANAGEMENT"`)
+* `ARTIFACTS_REPOSITORY_MANAGEMENT` (value: `"ARTIFACTS_REPOSITORY_MANAGEMENT"`)
+

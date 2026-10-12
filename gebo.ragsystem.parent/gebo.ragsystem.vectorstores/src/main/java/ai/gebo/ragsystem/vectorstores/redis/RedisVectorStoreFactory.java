@@ -39,6 +39,8 @@ import redis.clients.jedis.search.Schema.FieldType;
  * allowing for the creation of Redis-backed vector stores for embeddings.
  */
 public class RedisVectorStoreFactory implements IGVectorStoreFactory<RedisConfig> {
+	/** The name of the search index of the vector stores. */
+	static final String INDEX_NAME = "geboidx";
 	/** The Redis configuration containing connection details */
 	final RedisConfig redisConfig;
 
@@ -86,7 +88,7 @@ public class RedisVectorStoreFactory implements IGVectorStoreFactory<RedisConfig
 		builder=builder.prefix(embeddingConfiguration.getCode());
 		builder=builder.contentFieldName("gebocontent");
 		builder=builder.embeddingFieldName("geboembedding");
-		builder=builder.indexName("geboidx");
+		builder=builder.indexName(INDEX_NAME);
 		builder=builder.metadataFields(metas.toArray(new MetadataField[0]));
 		builder=builder.batchingStrategy(new TokenCountBatchingStrategy());
 		builder=builder.initializeSchema(true);
@@ -94,7 +96,8 @@ public class RedisVectorStoreFactory implements IGVectorStoreFactory<RedisConfig
 		
 		// Build the Redis vector store
 		final RedisVectorStore redisVectorStore = builder.build();
-		// redisVectorStore.afterPropertiesSet();
+		// creates the index when missing, else adds the metadata fields it lacks
+		RedisMetadataFieldsReconciler.reconcile(jedisClient, redisVectorStore, INDEX_NAME, allMetas);
 		
 		// Wrap the Redis vector store to make it compatible with the IGExtendedVectorStore interface
 		final GExtendedVectorStoreWrapper<RedisVectorStore> wrapper = new GExtendedVectorStoreWrapper<RedisVectorStore>(

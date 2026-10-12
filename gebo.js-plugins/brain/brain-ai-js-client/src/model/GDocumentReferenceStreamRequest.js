@@ -25,7 +25,7 @@ export default class GDocumentReferenceStreamRequest {
    * Constructs a new <code>GDocumentReferenceStreamRequest</code>.
    * @alias module:model/GDocumentReferenceStreamRequest
    * @class
-   * @param streamingPurpose {Object} 
+   * @param streamingPurpose {module:model/GDocumentReferenceStreamRequest.StreamingPurposeEnum} 
    * @param reference {module:model/GDocumentReference} 
    */
   constructor(streamingPurpose, reference) {
@@ -44,7 +44,7 @@ export default class GDocumentReferenceStreamRequest {
     if (data) {
       obj = obj || new GDocumentReferenceStreamRequest();
       if (data.hasOwnProperty('streamingPurpose'))
-        obj.streamingPurpose = ApiClient.convertToType(data['streamingPurpose'], Object);
+        obj.streamingPurpose = ApiClient.convertToType(data['streamingPurpose'], 'String');
       if (data.hasOwnProperty('reference'))
         obj.reference = GDocumentReference.constructFromObject(data['reference']);
     }
@@ -53,7 +53,25 @@ export default class GDocumentReferenceStreamRequest {
 }
 
 /**
- * @member {Object} streamingPurpose
+ * Allowed values for the <code>streamingPurpose</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GDocumentReferenceStreamRequest.StreamingPurposeEnum = {
+  /**
+   * value: "SERVING"
+   * @const
+   */
+  SERVING: "SERVING",
+
+  /**
+   * value: "INGESTING"
+   * @const
+   */
+  INGESTING: "INGESTING"
+};
+/**
+ * @member {module:model/GDocumentReferenceStreamRequest.StreamingPurposeEnum} streamingPurpose
  */
 GDocumentReferenceStreamRequest.prototype.streamingPurpose = undefined;
 

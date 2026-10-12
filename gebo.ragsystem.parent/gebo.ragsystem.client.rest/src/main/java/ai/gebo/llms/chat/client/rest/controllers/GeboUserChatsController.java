@@ -35,11 +35,16 @@ import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatAnswerFeedbackRating;
+import ai.gebo.llms.chat.abstraction.layer.model.GChatAnswerFeedback;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatAnswerFeedbackService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGResponseToFileService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
+import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
+import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
 import ai.gebo.llms.chat.client.rest.config.GeboChatUIConfig;
 import ai.gebo.llms.chat.client.rest.model.ChatUIOptions;
 import ai.gebo.model.base.GBaseObject;
@@ -55,6 +60,7 @@ import lombok.AllArgsConstructor;
  * and deleting chat contexts. Provides endpoints for listing, searching, and
  * managing user chat histories.
  */
+@PreAuthorize("hasAnyRole('USER','ADMIN','APPLICATION')")
 @RestController
 @RequestMapping(path = "api/users/GeboUserChatsController")
 @AllArgsConstructor
@@ -70,6 +76,19 @@ public class GeboUserChatsController {
 	final IGResponseToFileService response2fileService;
 	final IGChatModelRuntimeConfigurationDao chatModelRuntimeDao;
 	final IGEmbeddingModelRuntimeConfigurationDao embeddingModelRuntimeDao;
+	final ChatPipelinesConfiguration chatPipelinesConfiguration;
+	final IChatPipelineStepServiceRepositoryPattern pipelineStepsRepository;
+	final IGChatAnswerFeedbackService answerFeedbackService;
+
+	/** Pipeline code of the open-chat pipeline (mirrors OpenChatConstants.OPEN_CHAT_PIPELINE). */
+	private static final String OPEN_CHAT_PIPELINE = "open-chat";
+	/**
+	 * Streaming step of the open-chat network of agents (mirrors
+	 * OpenChatConstants.OPEN_CHAT_NETWORK_STREAMING_STEP). It is registered only when
+	 * both {@code ai.gebo.openchat.enabled} and {@code ai.gebo.agents.standard.enabled}
+	 * are on, so its presence confirms the open-chat network of agents can run.
+	 */
+	private static final String OPEN_CHAT_NETWORK_STREAMING_STEP = "open-chat-network-streaming-step";
 
 	/**
 	 * Parameter class for filtering chat information using Query By Example
@@ -204,6 +223,7 @@ public class GeboUserChatsController {
 		Optional<GUserChatSession> data = repository.findById(entry.getCode());
 		if (data.isPresent()) {
 			GUserChatSession uc = data.get();
+			securityService.checkBeingCreator(uc);
 			uc.setDescription(entry.getDescription());
 			repository.save(uc);
 			return GLookupEntry.of(uc);
@@ -213,22 +233,62 @@ public class GeboUserChatsController {
 
 	@GetMapping(value = "createCleanChatByModelCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GUserChatInfo createCleanChatByModelCode(
-			@RequestParam(value = "modelCode", required = true) String modelCode) throws GeboPersistenceException {
-		return this.sessionLifeCycleService.createCleanChatByModelCode(modelCode);
+			@RequestParam(value = "modelCode", required = true) String modelCode,
+			@RequestParam(value = "pipelineCode", required = false) String pipelineCode)
+			throws GeboPersistenceException {
+		return this.sessionLifeCycleService.createCleanChatByModelCode(modelCode, pipelineCode);
+	}
+
+	@GetMapping(value = "createCleanChatByDefaultModel", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo createCleanChatByDefaultModel(
+			@RequestParam(value = "pipelineCode", required = false) String pipelineCode)
+			throws GeboPersistenceException {
+		return this.sessionLifeCycleService.createCleanChatByDefaultModel(pipelineCode);
 	}
 
 	@GetMapping(value = "createCleanChatByChatProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GUserChatInfo createCleanChatByChatProfileCode(
 			@RequestParam(value = "chatProfileCode", required = true) String chatProfileCode,
-			@RequestParam(value = "contextCode", required = false) String contextCode)
+			@RequestParam(value = "contextCode", required = false) String contextCode,
+			@RequestParam(value = "pipelineCode", required = false) String pipelineCode)
 			throws GeboPersistenceException {
-		return this.sessionLifeCycleService.createCleanChatByChatProfileCode(chatProfileCode, contextCode);
+		return this.sessionLifeCycleService.createCleanChatByChatProfileCode(chatProfileCode, contextCode, pipelineCode);
 	}
 
 	@DeleteMapping("deleteChat")
 	public void deleteChat(@RequestParam("userChatContextCode") String userChatContextCode)
 			throws GeboChatSessionLifecycleException {
 		this.sessionLifeCycleService.removeChatSession(userChatContextCode);
+	}
+
+	@PostMapping(value = "branchChat", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo branchChat(@RequestParam("userChatContextCode") String userChatContextCode,
+			@RequestParam("requestId") String requestId)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException {
+		return this.sessionLifeCycleService.branchChatSession(userChatContextCode, requestId);
+	}
+
+	public static record AnswerFeedbackRequest(String userChatContextCode, String requestId,
+			ChatAnswerFeedbackRating rating, String comment) {
+	}
+
+	@PostMapping(value = "setAnswerFeedback", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public GChatAnswerFeedback setAnswerFeedback(@RequestBody AnswerFeedbackRequest feedback)
+			throws GeboChatSessionLifecycleException {
+		return this.answerFeedbackService.setFeedback(feedback.userChatContextCode(), feedback.requestId(),
+				feedback.rating(), feedback.comment());
+	}
+
+	@DeleteMapping("removeAnswerFeedback")
+	public void removeAnswerFeedback(@RequestParam("userChatContextCode") String userChatContextCode,
+			@RequestParam("requestId") String requestId) throws GeboChatSessionLifecycleException {
+		this.answerFeedbackService.removeFeedback(userChatContextCode, requestId);
+	}
+
+	@GetMapping(value = "getAnswerFeedbacks", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GChatAnswerFeedback> getAnswerFeedbacks(@RequestParam("userChatContextCode") String userChatContextCode)
+			throws GeboChatSessionLifecycleException {
+		return this.answerFeedbackService.getChatFeedbacks(userChatContextCode);
 	}
 
 	@GetMapping(value = "suggestChatDescription", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -239,7 +299,27 @@ public class GeboUserChatsController {
 
 	@GetMapping(value = "getUIConfig", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ChatUIOptions getUIConfig() {
-		return new ChatUIOptions(uiConfig);
+		ChatUIOptions options = new ChatUIOptions(uiConfig);
+		options.setOpenChatAvailable(isOpenChatAvailable());
+		return options;
+	}
+
+	/**
+	 * @return true when the open-chat experience can actually run: the open-chat
+	 *         pipeline is registered AND its network-of-agents streaming step is
+	 *         present. The step is registered only when {@code ai.gebo.openchat.enabled}
+	 *         and {@code ai.gebo.agents.standard.enabled} are both on (it reuses the
+	 *         standard/default agents network), so this single presence check also
+	 *         covers the agents-network conditions.
+	 */
+	private boolean isOpenChatAvailable() {
+		boolean pipelineRegistered = chatPipelinesConfiguration != null
+				&& chatPipelinesConfiguration.getPipelines() != null
+				&& chatPipelinesConfiguration.getPipelines().stream()
+						.anyMatch(p -> OPEN_CHAT_PIPELINE.equals(p.getCode()));
+		boolean networkRunning = pipelineStepsRepository != null
+				&& pipelineStepsRepository.findByCode(OPEN_CHAT_NETWORK_STREAMING_STEP) != null;
+		return pipelineRegistered && networkRunning;
 	}
 
 	/**
@@ -252,7 +332,6 @@ public class GeboUserChatsController {
 	 *         configured, false otherwise
 	 */
 	@GetMapping(value = "isMinimalLLMSSetupDone", produces = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasAnyRole('USER','ADMIN')")
 	public boolean isMinimalLLMSSetupDone() {
 		return !chatModelRuntimeDao.getConfigurations().isEmpty()
 				&& !embeddingModelRuntimeDao.getConfigurations().isEmpty();

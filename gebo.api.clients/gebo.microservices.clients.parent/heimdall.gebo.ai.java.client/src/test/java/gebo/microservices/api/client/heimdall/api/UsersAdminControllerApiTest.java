@@ -62,9 +62,9 @@ public class UsersAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void deleteGroup1Test() {
+    public void deleteGroupTest() {
         UsersGroup body = null;
-        api.deleteGroup1(body);
+        api.deleteGroup(body);
 
         // TODO: test validations
     }
@@ -77,9 +77,9 @@ public class UsersAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void deleteUser1Test() {
+    public void deleteUserTest() {
         EditableUser body = null;
-        api.deleteUser1(body);
+        api.deleteUser(body);
 
         // TODO: test validations
     }
@@ -92,9 +92,9 @@ public class UsersAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findGroupByCode1Test() {
+    public void findGroupByCodeTest() {
         String code = null;
-        UsersGroup response = api.findGroupByCode1(code);
+        UsersGroup response = api.findGroupByCode(code);
 
         // TODO: test validations
     }
@@ -107,9 +107,9 @@ public class UsersAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findUserByQbe2Test() {
+    public void findUserByQbeTest() {
         FindUserByQbeParam body = null;
-        PageUserInfos response = api.findUserByQbe2(body);
+        PageUserInfos response = api.findUserByQbe(body);
 
         // TODO: test validations
     }
@@ -122,9 +122,9 @@ public class UsersAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findUserByUsername2Test() {
+    public void findUserByUsernameTest() {
         String email = null;
-        EditableUser response = api.findUserByUsername2(email);
+        EditableUser response = api.findUserByUsername(email);
 
         // TODO: test validations
     }
@@ -137,9 +137,9 @@ public class UsersAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findUsersGroupByQbe1Test() {
+    public void findUsersGroupByQbeTest() {
         FindUsersGroupParam body = null;
-        PageUsersGroup response = api.findUsersGroupByQbe1(body);
+        PageUsersGroup response = api.findUsersGroupByQbe(body);
 
         // TODO: test validations
     }
@@ -152,8 +152,8 @@ public class UsersAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void getAllGroups1Test() {
-        List<UsersGroup> response = api.getAllGroups1();
+    public void getAllGroupsTest() {
+        List<UsersGroup> response = api.getAllGroups();
 
         // TODO: test validations
     }
@@ -166,8 +166,8 @@ public class UsersAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void getAllUsers1Test() {
-        List<UserInfos> response = api.getAllUsers1();
+    public void getAllUsersTest() {
+        List<UserInfos> response = api.getAllUsers();
 
         // TODO: test validations
     }
@@ -180,9 +180,9 @@ public class UsersAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void insertGroup1Test() {
+    public void insertGroupTest() {
         UsersGroup body = null;
-        UsersGroup response = api.insertGroup1(body);
+        UsersGroup response = api.insertGroup(body);
 
         // TODO: test validations
     }
@@ -195,9 +195,9 @@ public class UsersAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void insertUser1Test() {
+    public void insertUserTest() {
         InsertUserParam body = null;
-        EditableUser response = api.insertUser1(body);
+        EditableUser response = api.insertUser(body);
 
         // TODO: test validations
     }
@@ -210,9 +210,9 @@ public class UsersAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void updateGroup1Test() {
+    public void updateGroupTest() {
         UsersGroup body = null;
-        UsersGroup response = api.updateGroup1(body);
+        UsersGroup response = api.updateGroup(body);
 
         // TODO: test validations
     }
@@ -225,9 +225,9 @@ public class UsersAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void updateUser1Test() {
+    public void updateUserTest() {
         EditableUser body = null;
-        EditableUser response = api.updateUser1(body);
+        EditableUser response = api.updateUser(body);
 
         // TODO: test validations
     }

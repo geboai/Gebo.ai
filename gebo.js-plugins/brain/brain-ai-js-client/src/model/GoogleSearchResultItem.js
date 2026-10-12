@@ -39,56 +39,56 @@ export default class GoogleSearchResultItem {
     if (data) {
       obj = obj || new GoogleSearchResultItem();
       if (data.hasOwnProperty('kind'))
-        obj.kind = ApiClient.convertToType(data['kind'], Object);
+        obj.kind = ApiClient.convertToType(data['kind'], 'String');
       if (data.hasOwnProperty('title'))
-        obj.title = ApiClient.convertToType(data['title'], Object);
+        obj.title = ApiClient.convertToType(data['title'], 'String');
       if (data.hasOwnProperty('htmlTitle'))
-        obj.htmlTitle = ApiClient.convertToType(data['htmlTitle'], Object);
+        obj.htmlTitle = ApiClient.convertToType(data['htmlTitle'], 'String');
       if (data.hasOwnProperty('link'))
-        obj.link = ApiClient.convertToType(data['link'], Object);
+        obj.link = ApiClient.convertToType(data['link'], 'String');
       if (data.hasOwnProperty('displayLink'))
-        obj.displayLink = ApiClient.convertToType(data['displayLink'], Object);
+        obj.displayLink = ApiClient.convertToType(data['displayLink'], 'String');
       if (data.hasOwnProperty('snippet'))
-        obj.snippet = ApiClient.convertToType(data['snippet'], Object);
+        obj.snippet = ApiClient.convertToType(data['snippet'], 'String');
       if (data.hasOwnProperty('htmlSnippet'))
-        obj.htmlSnippet = ApiClient.convertToType(data['htmlSnippet'], Object);
+        obj.htmlSnippet = ApiClient.convertToType(data['htmlSnippet'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} kind
+ * @member {String} kind
  */
 GoogleSearchResultItem.prototype.kind = undefined;
 
 /**
- * @member {Object} title
+ * @member {String} title
  */
 GoogleSearchResultItem.prototype.title = undefined;
 
 /**
- * @member {Object} htmlTitle
+ * @member {String} htmlTitle
  */
 GoogleSearchResultItem.prototype.htmlTitle = undefined;
 
 /**
- * @member {Object} link
+ * @member {String} link
  */
 GoogleSearchResultItem.prototype.link = undefined;
 
 /**
- * @member {Object} displayLink
+ * @member {String} displayLink
  */
 GoogleSearchResultItem.prototype.displayLink = undefined;
 
 /**
- * @member {Object} snippet
+ * @member {String} snippet
  */
 GoogleSearchResultItem.prototype.snippet = undefined;
 
 /**
- * @member {Object} htmlSnippet
+ * @member {String} htmlSnippet
  */
 GoogleSearchResultItem.prototype.htmlSnippet = undefined;
 

@@ -24,15 +24,48 @@ import lombok.Data;
  */
 @Data
 public class LLMUsageDetailPayload extends GBaseMessagePayload {
+	/**
+	 * The real provider of the model called, e.g. "openai". A payload sent before
+	 * {@link #modelTypeCode} existed carries the model type code here instead.
+	 */
 	private String providerId;
+	/**
+	 * The code of the model type called, e.g. "chatgpt-OpenAI"; null in a payload sent
+	 * before it existed.
+	 */
+	private String modelTypeCode;
 	private String username;
 	private String model;
 	private String callerStack;
 	private ModelType modelType;
-	private long latency;
+	/**
+	 * Response time of the call in milliseconds: from the request being issued to the
+	 * response being complete, a streamed response included, with any tool calling
+	 * round trips performed inside the call.
+	 */
+	private long responseTime;
+	/**
+	 * Time to first token in milliseconds: from the request being issued to the first
+	 * chunk carrying generated content. Measured only for streamed chat calls, null
+	 * otherwise.
+	 */
+	private Long timeToFirstToken;
+	/**
+	 * Cost of the call in {@link #currencyCode}, from the model's pricing conditions;
+	 * null when the model has no pay per use price.
+	 */
+	private Double cost;
+	/** ISO 4217 currency of {@link #cost}. */
+	private String currencyCode;
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;
+	/**
+	 * The API secret code the call went through, the pseudo key "__no-api-key__" for a
+	 * model without one: it attributes the traffic to the provider deal covering the
+	 * key. Null in the records written before it existed.
+	 */
+	private String apiSecretCode;
 	private long usageTimestamp;
 	private LLMCallOutcome outcome;
 }

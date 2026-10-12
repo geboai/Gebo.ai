@@ -23,7 +23,7 @@ Method | HTTP request | Description
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboMcpServerAdminControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.deleteMcpServer(code).then(() => {
   console.log('API called successfully.');
@@ -37,7 +37,7 @@ apiInstance.deleteMcpServer(code).then(() => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -63,7 +63,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboMcpServerAdminControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findMcpServerByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -77,7 +77,7 @@ apiInstance.findMcpServerByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -94,7 +94,7 @@ No authorization required
 
 <a name="getAllMcpServers"></a>
 # **getAllMcpServers**
-> Object getAllMcpServers()
+> [GeboMCPServerConfig] getAllMcpServers()
 
 
 
@@ -116,7 +116,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GeboMCPServerConfig]**](GeboMCPServerConfig.md)
 
 ### Authorization
 

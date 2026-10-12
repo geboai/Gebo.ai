@@ -21,6 +21,7 @@ Name | Type | Description | Notes
 **synchroStrategy** | **String** |  | [optional] 
 **objectSpaceType** | **String** |  | [optional] 
 **aclAliases** | **[Number]** |  | [optional] 
+**personalData** | **Boolean** |  | [optional] 
 **remoteProjectReference** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  | [optional] 
 
 <a name="SynchroStrategyEnum"></a>

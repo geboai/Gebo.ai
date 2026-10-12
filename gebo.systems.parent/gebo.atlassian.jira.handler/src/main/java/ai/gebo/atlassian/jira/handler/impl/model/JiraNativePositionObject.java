@@ -11,8 +11,13 @@ package ai.gebo.atlassian.jira.handler.impl.model;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.HashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ai.gebo.atlassian.jira.handler.impl.GJiraRemoteVirtualFilesystemConsumingServiceImpl;
 import ai.gebo.atlassian.jira.handler.impl.JiraNavigationUtil;
@@ -150,6 +155,52 @@ public class JiraNativePositionObject extends AbstractNativePositionObject {
 		return this.resourceModificationTime;
 	}
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(JiraNativePositionObject.class);
+
+	/** The issue field telling when the issue was last updated. */
+	static final String ISSUE_FIELD_UPDATED = "updated";
+
+	/** Jira's date-time, its offset written without a colon (e.g. +0000). */
+	private static final DateTimeFormatter JIRA_DATE_TIME = DateTimeFormatter
+			.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
+	/**
+	 * A date of an issue field as Jira gives it: a string, ISO-8601 or Jira's own
+	 * (an offset with no colon), or a date already converted. Best effort: null when
+	 * it is none of them or can not be read, never an exception (an issue with no
+	 * date is read again at each ingestion and compared by its text).
+	 */
+	static Date jiraDate(Object value) {
+		try {
+			if (value == null || value instanceof Date) {
+				return (Date) value;
+			}
+			if (value instanceof OffsetDateTime offsetDateTime) {
+				return Date.from(offsetDateTime.toInstant());
+			}
+			if (value instanceof String text && !text.isBlank()) {
+				try {
+					return Date.from(OffsetDateTime.parse(text).toInstant());
+				} catch (DateTimeParseException e) {
+				}
+				try {
+					return Date.from(OffsetDateTime.parse(text, JIRA_DATE_TIME).toInstant());
+				} catch (DateTimeParseException e) {
+				}
+				return Date.from(Instant.parse(text));
+			}
+		} catch (RuntimeException e) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Jira date not readable:" + value + " (" + e.getMessage() + "): none used");
+			}
+			return null;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Jira date of an unexpected type:" + value.getClass().getName() + ": none used");
+		}
+		return null;
+	}
+
 	/**
 	 * Converts an ISO-8601 date string to a Date object.
 	 * 
@@ -269,6 +320,11 @@ public class JiraNativePositionObject extends AbstractNativePositionObject {
 		this.resourceContentType = ISSUE_CONTENT_TYPE;
 		Object field = issueAsResource.getFields() != null ? issueAsResource.getFields().get("name") : null;
 		this.name = JiraNavigationUtil.getName(issueAsResource);
+		// when the issue was last updated in Jira: what tells a re-ingestion the issue
+		// changed (the issue has no size)
+		this.resourceModificationTime = issueAsResource.getFields() != null
+				? jiraDate(issueAsResource.getFields().get(ISSUE_FIELD_UPDATED))
+				: null;
 		resourceReferenceMetaInfos.put(GJiraRemoteVirtualFilesystemConsumingServiceImpl.ISSUE_CONTENT_REFERENCE,
 				issueAsResource.getKey());
 		resourceReferenceMetaInfos.put(GJiraRemoteVirtualFilesystemConsumingServiceImpl.JIRA_OBJECT_TYPE,

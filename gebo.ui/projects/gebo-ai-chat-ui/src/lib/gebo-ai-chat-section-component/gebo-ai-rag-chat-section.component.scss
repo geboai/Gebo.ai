@@ -1,7 +1,38 @@
+/**
+ * The chats drawer, sized mobile-first.
+ *
+ * It used to carry PrimeFlex's `w-30rem`, a flat 480px. That is a desktop
+ * sidebar width: on a 390px phone the panel hung ~90px off the right edge and
+ * every chat title in it was clipped mid-word, with no horizontal scroll to
+ * reach them. PrimeFlex 4 has no responsive `w-*` variants, so the width has to
+ * come from a media query rather than a utility class.
+ *
+ * Below PrimeFlex's `sm` breakpoint the drawer takes the viewport; at and above
+ * it the original 30rem sidebar is restored unchanged, so the web app's desktop
+ * layout is exactly as before.
+ */
+:host ::ng-deep .gebo-ai-chat-section__drawer {
+  inline-size: 100vw;
+  max-inline-size: 100%;
+
+  @media screen and (min-width: 576px) {
+    inline-size: 30rem;
+  }
+}
+
 .gebo-ai-rag-chat-section {
+  &__drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gebo-space-2, 0.5rem);
+    inline-size: 100%;
+  }
+
   &__brand {
     display: block;
-    width: 10rem;
+    /* Shrink with the drawer instead of forcing it wider than the screen. */
+    width: min(10rem, 55%);
     height: auto;
   }
 

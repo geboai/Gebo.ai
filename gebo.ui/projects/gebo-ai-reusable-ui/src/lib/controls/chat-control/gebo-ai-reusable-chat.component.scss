@@ -138,6 +138,19 @@
     border-top: 1px solid var(--gebo-border-subtle, #e5e7eb);
     background-color: var(--gebo-white, #fff);
   }
+  &__external-refs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 0.25rem 0.75rem 0.35rem;
+  }
+  &__external-refs-label {
+    font-size: var(--gebo-font-size-2xs, 0.6875rem);
+    color: var(--gebo-text-subtle, #6b7280);
+    margin-right: 0.25rem;
+  }
   &__disclaimer {
     display: flex;
     align-items: flex-start;
@@ -187,5 +200,50 @@
     > * {
       pointer-events: auto;
     }
+  }
+}
+
+.gebo-ai-reusable-chat__interaction-feedback {
+  display: inline-flex;
+  gap: 0.125rem;
+  margin-left: 0.5rem;
+  padding-left: 0.5rem;
+  border-left: 1px solid var(--gebo-border-subtle, #e5e7eb);
+}
+
+.gebo-ai-reusable-chat__feedback-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;  padding-top: 0.25rem;
+}
+
+.gebo-ai-reusable-chat__feedback-comment {
+  width: 100%;
+}
+
+.gebo-ai-reusable-chat__feedback-dialog-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.gebo-ai-reusable-chat__branch-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+// the reasoning while it streams, in the answer's place until the answer starts
+.gebo-ai-reusable-chat__interaction-thinking {
+  margin: 4px 0 8px 0;
+  &-label {
+    font-weight: 400;
+    font-size: 10px;
+    color: #94a3b8;
+  }
+  &-text {
+    font-size: 13px;
+    line-height: 1.5em;
+    color: #64748b;
+    white-space: pre-wrap;
   }
 }

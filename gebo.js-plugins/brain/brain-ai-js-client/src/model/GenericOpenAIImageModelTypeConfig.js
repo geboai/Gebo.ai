@@ -39,84 +39,84 @@ export default class GenericOpenAIImageModelTypeConfig {
     if (data) {
       obj = obj || new GenericOpenAIImageModelTypeConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('modelConfigurationClass'))
-        obj.modelConfigurationClass = ApiClient.convertToType(data['modelConfigurationClass'], Object);
+        obj.modelConfigurationClass = ApiClient.convertToType(data['modelConfigurationClass'], 'String');
       if (data.hasOwnProperty('baseUrl'))
-        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], Object);
+        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], 'String');
       if (data.hasOwnProperty('modelsListProvider'))
-        obj.modelsListProvider = ApiClient.convertToType(data['modelsListProvider'], Object);
+        obj.modelsListProvider = ApiClient.convertToType(data['modelsListProvider'], 'String');
       if (data.hasOwnProperty('providerId'))
-        obj.providerId = ApiClient.convertToType(data['providerId'], Object);
+        obj.providerId = ApiClient.convertToType(data['providerId'], 'String');
       if (data.hasOwnProperty('optionalAuthentication'))
-        obj.optionalAuthentication = ApiClient.convertToType(data['optionalAuthentication'], Object);
+        obj.optionalAuthentication = ApiClient.convertToType(data['optionalAuthentication'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GenericOpenAIImageModelTypeConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GenericOpenAIImageModelTypeConfig.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GenericOpenAIImageModelTypeConfig.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GenericOpenAIImageModelTypeConfig.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GenericOpenAIImageModelTypeConfig.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GenericOpenAIImageModelTypeConfig.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} modelConfigurationClass
+ * @member {String} modelConfigurationClass
  */
 GenericOpenAIImageModelTypeConfig.prototype.modelConfigurationClass = undefined;
 
 /**
- * @member {Object} baseUrl
+ * @member {String} baseUrl
  */
 GenericOpenAIImageModelTypeConfig.prototype.baseUrl = undefined;
 
 /**
- * @member {Object} modelsListProvider
+ * @member {String} modelsListProvider
  */
 GenericOpenAIImageModelTypeConfig.prototype.modelsListProvider = undefined;
 
 /**
- * @member {Object} providerId
+ * @member {String} providerId
  */
 GenericOpenAIImageModelTypeConfig.prototype.providerId = undefined;
 
 /**
- * @member {Object} optionalAuthentication
+ * @member {Boolean} optionalAuthentication
  */
 GenericOpenAIImageModelTypeConfig.prototype.optionalAuthentication = undefined;
 

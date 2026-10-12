@@ -46,10 +46,10 @@ export default class Order {
         obj.ignoreCase = ApiClient.convertToType(data['ignoreCase'], 'Boolean');
       if (data.hasOwnProperty('nullHandling'))
         obj.nullHandling = ApiClient.convertToType(data['nullHandling'], 'String');
-      if (data.hasOwnProperty('descending'))
-        obj.descending = ApiClient.convertToType(data['descending'], 'Boolean');
       if (data.hasOwnProperty('ascending'))
         obj.ascending = ApiClient.convertToType(data['ascending'], 'Boolean');
+      if (data.hasOwnProperty('descending'))
+        obj.descending = ApiClient.convertToType(data['descending'], 'Boolean');
     }
     return obj;
   }
@@ -118,12 +118,12 @@ Order.NullHandlingEnum = {
 Order.prototype.nullHandling = undefined;
 
 /**
- * @member {Boolean} descending
- */
-Order.prototype.descending = undefined;
-
-/**
  * @member {Boolean} ascending
  */
 Order.prototype.ascending = undefined;
+
+/**
+ * @member {Boolean} descending
+ */
+Order.prototype.descending = undefined;
 

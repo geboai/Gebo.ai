@@ -26,7 +26,7 @@ export default class DefaultPromptForChatModelParam {
    * @alias module:model/DefaultPromptForChatModelParam
    * @class
    * @param chatModelConfig {module:model/GBaseChatModelConfig} 
-   * @param ragPrompt {Object} 
+   * @param ragPrompt {Boolean} 
    */
   constructor(chatModelConfig, ragPrompt) {
     this.chatModelConfig = chatModelConfig;
@@ -46,7 +46,7 @@ export default class DefaultPromptForChatModelParam {
       if (data.hasOwnProperty('chatModelConfig'))
         obj.chatModelConfig = GBaseChatModelConfig.constructFromObject(data['chatModelConfig']);
       if (data.hasOwnProperty('ragPrompt'))
-        obj.ragPrompt = ApiClient.convertToType(data['ragPrompt'], Object);
+        obj.ragPrompt = ApiClient.convertToType(data['ragPrompt'], 'Boolean');
     }
     return obj;
   }
@@ -58,7 +58,7 @@ export default class DefaultPromptForChatModelParam {
 DefaultPromptForChatModelParam.prototype.chatModelConfig = undefined;
 
 /**
- * @member {Object} ragPrompt
+ * @member {Boolean} ragPrompt
  */
 DefaultPromptForChatModelParam.prototype.ragPrompt = undefined;
 

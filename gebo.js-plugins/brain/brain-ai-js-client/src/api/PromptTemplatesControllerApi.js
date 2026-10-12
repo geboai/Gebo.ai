@@ -39,7 +39,7 @@ export default class PromptTemplatesControllerApi {
 
 
     /**
-     * @param {Object} ragPrompt 
+     * @param {Boolean} ragPrompt 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GPromptTemplateConfig} and HTTP response
      */
     getDefaultPromptWithHttpInfo(ragPrompt) {

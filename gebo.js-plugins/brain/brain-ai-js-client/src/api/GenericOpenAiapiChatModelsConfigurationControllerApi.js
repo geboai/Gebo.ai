@@ -14,6 +14,7 @@
  */
 import ApiClient from "../ApiClient";
 import GenericOpenAIAPIChatModelConfig from '../model/GenericOpenAIAPIChatModelConfig';
+import GenericOpenAIChatModelTypeConfig from '../model/GenericOpenAIChatModelTypeConfig';
 import OperationStatusBoolean from '../model/OperationStatusBoolean';
 import OperationStatusGenericOpenAIAPIChatModelConfig from '../model/OperationStatusGenericOpenAIAPIChatModelConfig';
 import OperationStatusListGenericOpenAIAPIChatModelChoice from '../model/OperationStatusListGenericOpenAIAPIChatModelChoice';
@@ -89,7 +90,7 @@ export default class GenericOpenAiapiChatModelsConfigurationControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GenericOpenAIAPIChatModelConfig} and HTTP response
      */
     findGenericOpenAIAPIChatModelConfigByCodeWithHttpInfo(code) {
@@ -187,7 +188,7 @@ export default class GenericOpenAiapiChatModelsConfigurationControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GenericOpenAIChatModelTypeConfig>} and HTTP response
      */
     getGenericOpenAIChatModelTypesWithHttpInfo() {
       
@@ -209,7 +210,7 @@ export default class GenericOpenAiapiChatModelsConfigurationControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GenericOpenAIChatModelTypeConfig];
 
       return this.apiClient.callApi(
         '/api/admin/GenericOpenAIAPIChatModelsConfigurationController/getGenericOpenAIChatModelTypes', 'GET',
@@ -219,7 +220,7 @@ export default class GenericOpenAiapiChatModelsConfigurationControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GenericOpenAIChatModelTypeConfig>}
      */
     getGenericOpenAIChatModelTypes() {
       return this.getGenericOpenAIChatModelTypesWithHttpInfo()

@@ -9,11 +9,12 @@ Your job is to update the consolidated report so that:
 - it is coherent, non-contradictory and well organized,
 - it integrates any truly new information from the partial contribution,
 - it keeps track of all document titles/names.
-- never ever display fragmentId in your response because they are completely useless for the user.
+- never ever display a fragmentId in your response, outside the quotation patterns (see QUOTATIONS).
 
 REQUIRED OUTCOME RULE: 
 
-1) important: always respond with user's language (deducted from its question).
+1) important: always respond with user's language: {userLanguage}; the words inside a quotation pattern stay
+   in their original language (see QUOTATIONS).
 2) regulate level of details, output length and completeness according to the user required outcome: {agentDeliverableCompleteness}.
 3) url completion rule: output only received completely well-formed, absolute url like: [http|https]://[<server>|<server>:<port>]/<path> as links, do not truncate them, do not output invented urls/links or relative urls, do not invent url from codes, do not invent url from document codes, do not invent url  from fragment ids.
 4) Ground fact on evidence contained in documents or in the consolidated reports received. 
@@ -90,6 +91,20 @@ Examples:
 
 `Enterprise AI Adoption: Market Trends and Risks`, ACME Research Portal, ACME Publishing, 2026, report.
 
+QUOTATIONS:
+
+The partial contributions and the consolidated report quote the documents only in this form:
+⟦Q<number>|<exact words>⟧ (or ⟦q:<id>|<exact words>⟧). Each was checked against its document.
+- Keep every quotation you use exactly as you receive it, character by character: never translate, shorten,
+  merge or rewrite one, never change its id or number, never write a new one.
+- When you receive the documents themselves (each starting with "fragmentId: ") instead of partial
+  contributions, quote the key sentences (one to three) of each document you use in this form:
+  ⟦q:<fragmentId>|<the exact words of that document>⟧, <fragmentId> being the id written after "fragmentId: "
+  in the document the words come from, the words copied exactly as it writes them, in its own language;
+  two pieces of the same document may be joined by … .
+- Never put quotation marks (" “ ” « ») around any other words: anything else is a summary.
+- The patterns are turned into standard citations before the text is shown.
+
 TASK:
 1. If the current report is empty, create a new report based on the partial contribution.
 2. Otherwise:
@@ -97,9 +112,22 @@ TASK:
    - integrate new key points that are not already present,
    - refine or correct previous points if the new contribution has better or more precise information,
    - update the list of evidence document titles/names (de-duplicated).
-   - never ever display fragmentId in your response because they are completely useless for the user.
+   - never ever display a fragmentId in your response, outside the quotation patterns (see QUOTATIONS).
    
 3. Keep the report concise and avoid repeating the same points.
 4. The report must directly answer the user question as best as possible with the available information.
 5. organize the extracted information into:
    - a list of text blocks splitted by topics coherent with the question, each of them has a title, paragraphs with detailed informations, and includes references with hypertext links (if provided) that support the information at the bottom
+
+VERDICT:
+After the report, evaluate whether the report you wrote is enough to answer the user question completely and correctly,
+at the level of detail of the user required outcome, without needing any further document.
+Then write, as the very last line of your output and alone on its line, EXACTLY ONE of:
+
+<DEEP-SEARCH-VERDICT complete="true"/>
+
+<DEEP-SEARCH-VERDICT complete="false" missing="short description of each missing aspect, separated by semicolons"/>
+
+Use complete="true" ONLY when every part of the question is answered with evidence from the documents or the consolidated report.
+If anything is partial, uncertain or missing, use complete="false" and name what is missing.
+The verdict line is removed before the report is shown: never mention it in the report.

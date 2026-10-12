@@ -26,9 +26,11 @@ import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
+import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.model.MetaEndpointType;
+import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
 import ai.gebo.architecture.opensearch.config.OpenSearchConfig;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.messages.GDocumentReferencePayload;
@@ -89,9 +91,10 @@ public class GContentFullTextMessagesReceiverFactoryComponent extends GAbstractT
 		}
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+		flow.setDescription(GStandardWorkflowStep.FULLTEXT_INDEXING.getDescription());
 
 		DataEndpoint index = new DataEndpoint();
-		index.setId("fulltext-index");
+		index.setId(GStandardDataFlowEndpoints.FULLTEXT_INDEX);
 		// Name the actual index the chunks land in - the store name an auditor needs
 		// to locate the retained data (see OpenSearchFullTextChunkIndexService).
 		index.setDescription("Full-text index of ingested chunks (index 'kb_chunks')");
@@ -106,8 +109,11 @@ public class GContentFullTextMessagesReceiverFactoryComponent extends GAbstractT
 		// the sources carried.
 		index.setPersonalData(false);
 		// A lasting store: the indexed chunks stay searchable until the source is
-		// removed or re-indexed (then the erasure component prunes them).
+		// re-indexed (the indexer replaces a document's chunks) or deleted (then the
+		// full-text erasure component deletes them).
 		index.setRetention("Until the source is deleted or re-indexed");
+		index.setDisposer(new GeboComponentInfo(GStandardModulesConstraints.FULLTEXT_MODULE,
+				GStandardModulesConstraints.FULLTEXT_DISPOSE_COMPONENT));
 		if (openSearchConfig.getUsername() != null) {
 			// Named so an auditor can see the index is credential-guarded; the
 			// password itself is deliberately never carried.
@@ -122,10 +128,7 @@ public class GContentFullTextMessagesReceiverFactoryComponent extends GAbstractT
 
 		flow.getTransformations().add(DataTransformationInfo.of("fulltext-indexing",
 				"Chunks are indexed into OpenSearch and retained", indexer,
-				GDataFlowMetaInfos.qualifiedId(
-						new GeboComponentInfo(GStandardModulesConstraints.TOKENIZER_MODULE,
-								GStandardModulesConstraints.TOKENIZER_COMPONENT),
-						"chunk-cache"),
+				GStandardDataFlowEndpoints.chunkCacheRef(),
 				flow.qualifiedId(index.getId())));
 		return flow;
 	}

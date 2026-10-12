@@ -1,24 +1,35 @@
 package ai.gebo.architecture.search.service;
 
+import java.io.Closeable;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.http.Header;
-import org.apache.http.HttpResponse;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClients;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import ai.gebo.architecture.search.config.WebResultSizeProbeConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchResultsLoading;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchServiceException;
@@ -40,6 +51,7 @@ import ai.gebo.model.base.TypedInputStream;
  */
 public abstract class AbstractWebSearchServiceImpl<N extends INativeQueryObject>
 		implements INativeSearchService<WebSearchResultsExtractionData, N> {
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * Generic, provider-agnostic description for every web-search provider. The
@@ -63,9 +75,39 @@ public abstract class AbstractWebSearchServiceImpl<N extends INativeQueryObject>
 	protected int SocketTimeout = 20000;
 	protected int ConnectTimeout = 10000;
 
+	/** The size probe settings; the defaults when none is configured. */
+	private WebResultSizeProbeConfig sizeProbeConfig = null;
+
+	@Autowired(required = false)
+	public void setSizeProbeConfig(WebResultSizeProbeConfig sizeProbeConfig) {
+		this.sizeProbeConfig = sizeProbeConfig;
+	}
+
+	/**
+	 * The results of a search, their size filled where their server declares it (see
+	 * {@link WebResultSizeProbe}): best effort, the results are returned whatever the
+	 * probe gives. Every web searcher returns its results through it.
+	 */
+	protected List<SearchResult> withSizes(List<SearchResult> results) {
+		try {
+			new WebResultSizeProbe(sizeProbeConfig).fillSizes(results);
+		} catch (Throwable th) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("withSizes(...) search:" + getId() + " results returned without sizes: " + th);
+			}
+		}
+		return results;
+	}
+
 	@Override
 	public String getDescription() {
 		return WEB_SEARCH_DESCRIPTION;
+	}
+
+	/** The pages found are on sites of the open network: loaded as such. */
+	@Override
+	public SearchResultsLoading resultsLoading() {
+		return SearchResultsLoading.OPEN_NETWORK;
 	}
 
 	protected String tryArgueContentType(String link) {
@@ -134,34 +176,78 @@ public abstract class AbstractWebSearchServiceImpl<N extends INativeQueryObject>
 		return WebSearchResultsExtractionData.class;
 	}
 
+	/**
+	 * Downloads the page of a search result. Only a 2xx answer with a body is the
+	 * page: anything else is an empty html content. The content type comes from the
+	 * answer when the site declares it, otherwise it is guessed from the link, as
+	 * sites may omit it. The returned stream owns the HTTP connection and releases
+	 * it when closed.
+	 */
 	@Override
 	public TypedInputStream loadSearchResult(SearchResult result) throws IOException {
-		HttpGet request = createGetRequestFor(result);
-		CloseableHttpClient client = createClient();
-		final HttpResponse response = client.execute(request);
-		int responseCode = response.getStatusLine().getStatusCode();
+		return load(result, createClient());
+	}
 
-		if (responseCode >= 200 && responseCode < 400) {
-			String encoding = getEncoding(response);
-			String contentType = "text/html";
-			if (response.getEntity() != null && response.getEntity().getContentType() != null) {
-				contentType = response.getEntity().getContentType().getValue();
-				if (contentType != null) {
-					int idx = 0;
-					if ((idx = contentType.trim().indexOf(";")) > 0) {
-						contentType = contentType.substring(0, idx);
-					}
-				}
-			}
-			encoding = "UTF-8";
+	/**
+	 * Downloads the result page with a client whose timeouts and retries are the call
+	 * parameters' (the Apache client's own retries of a failed request become theirs).
+	 */
+	@Override
+	public TypedInputStream loadSearchResult(SearchResult result, SearchCallParameters parameters)
+			throws IOException {
+		return load(result, parameters != null ? createClient(parameters) : createClient());
+	}
 
-			return TypedInputStream.of(response.getEntity().getContent(), contentType, tryArgueExtension(result));
-
-		} else {
-			return TypedInputStream.of(InputStream.nullInputStream(), "text/html", ".html");
-
+	private TypedInputStream load(SearchResult result, CloseableHttpClient httpClient) throws IOException {
+		final String uri = result.getResultReference() != null ? result.getResultReference().getUri() : null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin loadSearchResult(...) uri=" + uri);
 		}
+		HttpGet request = createGetRequestFor(result);
+		CloseableHttpClient client = httpClient;
+		CloseableHttpResponse response = null;
+		try {
+			response = client.execute(request);
+			final int responseCode = response.getStatusLine().getStatusCode();
+			final HttpEntity entity = response.getEntity();
+			if (responseCode >= 200 && responseCode < 300 && entity != null) {
+				final String contentType = contentTypeOf(entity, uri != null ? tryArgueContentType(uri) : null);
+				final InputStream content = new ConnectionReleasingInputStream(entity.getContent(), response, client);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("End loadSearchResult(...) uri=" + uri + " status=" + responseCode + " contentType="
+							+ contentType + (entity.getContentType() == null ? " (not declared, guessed)" : ""));
+				}
+				// The stream now owns the connection.
+				response = null;
+				client = null;
+				return TypedInputStream.of(content, contentType, tryArgueExtension(result));
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End loadSearchResult(...) uri=" + uri + " status=" + responseCode + " body="
+						+ (entity != null) + ", no page content");
+			}
+			return TypedInputStream.of(InputStream.nullInputStream(), DEFAULT_CONTENT_TYPE, ".html");
+		} finally {
+			closeQuietly(response, uri);
+			closeQuietly(client, uri);
+		}
+	}
 
+	/**
+	 * The media type the entity declares, without its parameters (charset,
+	 * boundary...), or the fallback when it declares none.
+	 */
+	static String contentTypeOf(HttpEntity entity, String fallback) {
+		final Header header = entity != null ? entity.getContentType() : null;
+		String value = header != null ? header.getValue() : null;
+		if (value != null) {
+			final int parameters = value.indexOf(';');
+			value = (parameters >= 0 ? value.substring(0, parameters) : value).trim();
+		}
+		if (value == null || value.isEmpty()) {
+			return fallback != null ? fallback : DEFAULT_CONTENT_TYPE;
+		}
+		return value.toLowerCase(Locale.ROOT);
 	}
 
 	private String tryArgueExtension(SearchResult result) {
@@ -169,24 +255,45 @@ public abstract class AbstractWebSearchServiceImpl<N extends INativeQueryObject>
 		return url == null ? null : tryArgueExtension(url);
 	}
 
-	private String getEncoding(HttpResponse response) {
-		Header contentType = response.getFirstHeader("content-type");
-		String encoding = "UTF-8";
-		if (contentType.getValue() != null) {
-			int encodingOffset = contentType.getValue().indexOf("charset");
-			if (encodingOffset >= 0) {
-				String remaining = contentType.getValue().substring(encodingOffset);
-				char buffer[] = remaining.toCharArray();
-				for (int index = 0; index < buffer.length; index++) {
-					char ch = buffer[index];
-					if (Character.isLetter(ch)) {
-						encoding = new String(buffer, index, buffer.length - index);
-					}
+	private void closeQuietly(Closeable closeable, String uri) {
+		if (closeable == null) {
+			return;
+		}
+		try {
+			closeable.close();
+		} catch (IOException e) {
+			LOGGER.warn("Cannot release the connection of the search result uri=" + uri, e);
+		}
+	}
+
+	/**
+	 * The page content, releasing the HTTP response and client once read.
+	 */
+	static final class ConnectionReleasingInputStream extends FilterInputStream {
+		private final Closeable response;
+		private final Closeable client;
+
+		ConnectionReleasingInputStream(InputStream content, Closeable response, Closeable client) {
+			super(content);
+			this.response = response;
+			this.client = client;
+		}
+
+		@Override
+		public void close() throws IOException {
+			try {
+				super.close();
+			} finally {
+				try {
+					response.close();
+				} finally {
+					client.close();
 				}
 			}
 		}
-		return encoding;
 	}
+
+	private static final String DEFAULT_CONTENT_TYPE = "text/html";
 
 	public AbstractWebSearchServiceImpl() {
 		super();
@@ -221,6 +328,19 @@ public abstract class AbstractWebSearchServiceImpl<N extends INativeQueryObject>
 				.setDefaultCookieStore(cookieStore).build();
 
 		return httpClient;
+	}
+
+	/** A client whose connect and socket timeouts, and retries, are the call parameters'. */
+	private CloseableHttpClient createClient(SearchCallParameters parameters) {
+		RequestConfig globalConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.BEST_MATCH)
+				.setSocketTimeout(parameters.readTimeoutMillis()).setConnectTimeout(parameters.connectTimeoutMillis())
+				.build();
+		CookieStore cookieStore = new BasicCookieStore();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("createClient(...) for a search result download, parameters:" + parameters);
+		}
+		return HttpClients.custom().setDefaultRequestConfig(globalConfig).setDefaultCookieStore(cookieStore)
+				.setRetryHandler(new DefaultHttpRequestRetryHandler(parameters.retries(), false)).build();
 	}
 
 	private HttpGet createGetRequestFor(SearchResult result) throws UnsupportedEncodingException {

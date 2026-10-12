@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.apps</groupId>
 		<artifactId>gebo.apps.parent</artifactId>
-		<version>1.0.3.0</version>
+		<version>1.0.4.0</version>
 	</parent>
 	<artifactId>gebo.apps.monolithic.starter</artifactId>
 	<dependencies>
@@ -175,6 +175,12 @@
 			<artifactId>gebo.architecture.security.controllers</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- System messages shown to the logged-in users, routed by role. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.system.messages.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
@@ -198,7 +204,7 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.office-plugin-pipeline</artifactId>
+			<artifactId>gebo.architecture.open-chat-pipeline</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -219,6 +225,19 @@
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.mcp-clients</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- McpClientConfigController was split out of the base mcp-clients module
+		     (which the mcpclient content-handler microservice also pulls); the
+		     monolith serves everything, so it keeps the controller here. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.mcp-clients.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo</groupId>
+			<artifactId>gebo.system.ingestion.controllers</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

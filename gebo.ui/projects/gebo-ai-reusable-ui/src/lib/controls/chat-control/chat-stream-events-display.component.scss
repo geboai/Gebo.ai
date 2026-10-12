@@ -1,15 +1,11 @@
-.deep-search {
-  &__label {
-    font-weight: 400;
-    font-size: 10px;
-    color: #94a3b8;
-  }
-}
-.pure-search {
-  &__label {
-    font-weight: 400;
-    font-size: 10px;
-    color: #94a3b8;
+// plain italic text in the answer, like the reasoning above it
+.gebo-ai-chat-stream-events {
+  margin: 4px 0 8px 0;
+  &__text {
+    font-size: 13px;
+    line-height: 1.5em;
+    font-style: italic;
+    color: #64748b;
   }
 }
 .INFO {

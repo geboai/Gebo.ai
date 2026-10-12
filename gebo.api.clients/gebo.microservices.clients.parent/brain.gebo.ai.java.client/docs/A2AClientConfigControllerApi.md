@@ -4,16 +4,16 @@ All URIs are relative to *http://localhost:13001/brain*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**delete1**](A2AClientConfigControllerApi.md#delete1) | **DELETE** /api/admin/A2AClientConfigController/deleteA2AAgent | 
-[**findByCode2**](A2AClientConfigControllerApi.md#findByCode2) | **GET** /api/admin/A2AClientConfigController/findByCode | 
-[**insert1**](A2AClientConfigControllerApi.md#insert1) | **POST** /api/admin/A2AClientConfigController/insertA2AAgent | 
-[**list**](A2AClientConfigControllerApi.md#list) | **GET** /api/admin/A2AClientConfigController/list | 
-[**testAndDiscovery1**](A2AClientConfigControllerApi.md#testAndDiscovery1) | **POST** /api/admin/A2AClientConfigController/testAndDiscovery | 
-[**update1**](A2AClientConfigControllerApi.md#update1) | **POST** /api/admin/A2AClientConfigController/updateA2AAgent | 
+[**deleteA2AClientConfig**](A2AClientConfigControllerApi.md#deleteA2AClientConfig) | **DELETE** /api/admin/A2AClientConfigController/deleteA2AAgent | 
+[**findByCodeA2AClientConfig**](A2AClientConfigControllerApi.md#findByCodeA2AClientConfig) | **GET** /api/admin/A2AClientConfigController/findByCode | 
+[**insertA2AClientConfig**](A2AClientConfigControllerApi.md#insertA2AClientConfig) | **POST** /api/admin/A2AClientConfigController/insertA2AAgent | 
+[**listA2AClientConfig**](A2AClientConfigControllerApi.md#listA2AClientConfig) | **GET** /api/admin/A2AClientConfigController/list | 
+[**testAndDiscoveryA2AClientConfig**](A2AClientConfigControllerApi.md#testAndDiscoveryA2AClientConfig) | **POST** /api/admin/A2AClientConfigController/testAndDiscovery | 
+[**updateA2AClientConfig**](A2AClientConfigControllerApi.md#updateA2AClientConfig) | **POST** /api/admin/A2AClientConfigController/updateA2AAgent | 
 
-<a name="delete1"></a>
-# **delete1**
-> OperationStatusBoolean delete1(body)
+<a name="deleteA2AClientConfig"></a>
+# **deleteA2AClientConfig**
+> OperationStatusBoolean deleteA2AClientConfig(body)
 
 
 
@@ -27,10 +27,10 @@ Method | HTTP request | Description
 A2AClientConfigControllerApi apiInstance = new A2AClientConfigControllerApi();
 A2ARemoteAgentConfig body = new A2ARemoteAgentConfig(); // A2ARemoteAgentConfig | 
 try {
-    OperationStatusBoolean result = apiInstance.delete1(body);
+    OperationStatusBoolean result = apiInstance.deleteA2AClientConfig(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling A2AClientConfigControllerApi#delete1");
+    System.err.println("Exception when calling A2AClientConfigControllerApi#deleteA2AClientConfig");
     e.printStackTrace();
 }
 ```
@@ -54,9 +54,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="findByCode2"></a>
-# **findByCode2**
-> OperationStatusA2ARemoteAgentConfig findByCode2(code)
+<a name="findByCodeA2AClientConfig"></a>
+# **findByCodeA2AClientConfig**
+> OperationStatusA2ARemoteAgentConfig findByCodeA2AClientConfig(code)
 
 
 
@@ -70,10 +70,10 @@ No authorization required
 A2AClientConfigControllerApi apiInstance = new A2AClientConfigControllerApi();
 String code = "code_example"; // String | 
 try {
-    OperationStatusA2ARemoteAgentConfig result = apiInstance.findByCode2(code);
+    OperationStatusA2ARemoteAgentConfig result = apiInstance.findByCodeA2AClientConfig(code);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling A2AClientConfigControllerApi#findByCode2");
+    System.err.println("Exception when calling A2AClientConfigControllerApi#findByCodeA2AClientConfig");
     e.printStackTrace();
 }
 ```
@@ -97,9 +97,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="insert1"></a>
-# **insert1**
-> OperationStatusA2ARemoteAgentConfig insert1(body)
+<a name="insertA2AClientConfig"></a>
+# **insertA2AClientConfig**
+> OperationStatusA2ARemoteAgentConfig insertA2AClientConfig(body)
 
 
 
@@ -113,10 +113,10 @@ No authorization required
 A2AClientConfigControllerApi apiInstance = new A2AClientConfigControllerApi();
 A2ARemoteAgentConfig body = new A2ARemoteAgentConfig(); // A2ARemoteAgentConfig | 
 try {
-    OperationStatusA2ARemoteAgentConfig result = apiInstance.insert1(body);
+    OperationStatusA2ARemoteAgentConfig result = apiInstance.insertA2AClientConfig(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling A2AClientConfigControllerApi#insert1");
+    System.err.println("Exception when calling A2AClientConfigControllerApi#insertA2AClientConfig");
     e.printStackTrace();
 }
 ```
@@ -140,9 +140,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="list"></a>
-# **list**
-> PageA2ARemoteAgentConfig list(page, size)
+<a name="listA2AClientConfig"></a>
+# **listA2AClientConfig**
+> PageA2ARemoteAgentConfig listA2AClientConfig(page, size)
 
 
 
@@ -157,10 +157,10 @@ A2AClientConfigControllerApi apiInstance = new A2AClientConfigControllerApi();
 Integer page = 0; // Integer | 
 Integer size = 20; // Integer | 
 try {
-    PageA2ARemoteAgentConfig result = apiInstance.list(page, size);
+    PageA2ARemoteAgentConfig result = apiInstance.listA2AClientConfig(page, size);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling A2AClientConfigControllerApi#list");
+    System.err.println("Exception when calling A2AClientConfigControllerApi#listA2AClientConfig");
     e.printStackTrace();
 }
 ```
@@ -185,9 +185,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="testAndDiscovery1"></a>
-# **testAndDiscovery1**
-> OperationStatusA2ARemoteAgentConfig testAndDiscovery1(body)
+<a name="testAndDiscoveryA2AClientConfig"></a>
+# **testAndDiscoveryA2AClientConfig**
+> OperationStatusA2ARemoteAgentConfig testAndDiscoveryA2AClientConfig(body)
 
 
 
@@ -201,10 +201,10 @@ No authorization required
 A2AClientConfigControllerApi apiInstance = new A2AClientConfigControllerApi();
 A2ARemoteAgentConfig body = new A2ARemoteAgentConfig(); // A2ARemoteAgentConfig | 
 try {
-    OperationStatusA2ARemoteAgentConfig result = apiInstance.testAndDiscovery1(body);
+    OperationStatusA2ARemoteAgentConfig result = apiInstance.testAndDiscoveryA2AClientConfig(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling A2AClientConfigControllerApi#testAndDiscovery1");
+    System.err.println("Exception when calling A2AClientConfigControllerApi#testAndDiscoveryA2AClientConfig");
     e.printStackTrace();
 }
 ```
@@ -228,9 +228,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="update1"></a>
-# **update1**
-> OperationStatusA2ARemoteAgentConfig update1(body)
+<a name="updateA2AClientConfig"></a>
+# **updateA2AClientConfig**
+> OperationStatusA2ARemoteAgentConfig updateA2AClientConfig(body)
 
 
 
@@ -244,10 +244,10 @@ No authorization required
 A2AClientConfigControllerApi apiInstance = new A2AClientConfigControllerApi();
 A2ARemoteAgentConfig body = new A2ARemoteAgentConfig(); // A2ARemoteAgentConfig | 
 try {
-    OperationStatusA2ARemoteAgentConfig result = apiInstance.update1(body);
+    OperationStatusA2ARemoteAgentConfig result = apiInstance.updateA2AClientConfig(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling A2AClientConfigControllerApi#update1");
+    System.err.println("Exception when calling A2AClientConfigControllerApi#updateA2AClientConfig");
     e.printStackTrace();
 }
 ```

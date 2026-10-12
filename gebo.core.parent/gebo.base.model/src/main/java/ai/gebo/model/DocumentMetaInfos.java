@@ -24,6 +24,8 @@ public class DocumentMetaInfos {
 	public static final String CONTENT_PAGE = "CONTENT_PAGE";
 	public static final String SUBTITLE = "SUBTITLE";
 	public static final String TITLE = "TITLE";
+	/** The author of a document, as its file tells it. */
+	public static final String AUTHOR = "AUTHOR";
 	public static final String CONTENT_EXTENSION = "CONTENT_EXTENSION";
 	public static final String CONTENT_ORIGINAL_URL = "CONTENT_ORIGINAL_URL";
 	public static final String CONTENT_TYPE = "Content-type";
@@ -49,7 +51,15 @@ public class DocumentMetaInfos {
 	public static final String GEBO_CHUNK_POSITION = "GEBO_CHUNK_POSITION";
 	public static final String GEBO_CHUNKS_COUNT = "GEBO_CHUNKS_COUNT";
 	public static final String GEBO_ACL_ALIASES = "GEBO_ACL_ALIASES";
+	/** The uniqueId of the document reference a content comes from. */
+	public static final String GEBO_UNIQUE_ID = "GEBO_UNIQUE_ID";
 	public static final String CATEGORIES = "CATEGORIES";
+	/**
+	 * What a vector embeds (see {@link EmbedType}): a part of the document's contents,
+	 * its file name, its title or its author. The vectors of the contents written
+	 * before the other ones existed have none.
+	 */
+	public static final String EMBED_TYPE = "EMBED_TYPE";
 	public static final String GEBO_EXTERNAL_SEARCH_RESULT_JSON = "GEBO_SEARCH_RESULT_JSON";
 	/**
 	 * A list of all attribute constants defined in this class. This list provides
@@ -61,6 +71,6 @@ public class DocumentMetaInfos {
 			GEBO_FILE_FULLPATH, GEBO_ARCHIVE_FULLPATH, GEBO_ARCHIVE_INTERNALPATH, GEBO_FILE_ARCHETYPEID,
 			GEBO_FILE_RELATIVE_PATH, GEBO_TOKEN_LENGTH, GEBO_BYTES_LENGTH, GEBO_EMBEDDING_METADATA, GEBO_REFERENCE_TYPE,
 			GEBO_CHUNK_POSITION, LANGUAGE, LANGUAGE_CONFIDENCE, GEBO_CHUNKS_COUNT, GEBO_ACL_ALIASES,
-			GEBO_EXTERNAL_SEARCH_RESULT_JSON, CATEGORIES);
+			GEBO_EXTERNAL_SEARCH_RESULT_JSON, CATEGORIES, GEBO_UNIQUE_ID, EMBED_TYPE);
 
 }

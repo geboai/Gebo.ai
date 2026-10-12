@@ -25,6 +25,7 @@ export interface GUserChatSession {
     chatProfileCode?: string;
     modelReference?: GObjectRefGBaseChatModelConfig;
     ragChat?: boolean;
+    pipelineCode?: string;
     chatMemoryId?: string;
     interactions?: Array<ChatInteractions>;
     chatModelCode?: string;

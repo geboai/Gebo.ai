@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateLibraryReference;
+import ai.gebo.architecture.ai.model.GPromptUseInfo;
 import ai.gebo.architecture.ai.service.IGStaticPromptUseInfoProvider;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import ai.gebo.architecture.ai.service.PromptTemplateProvidersImplementation;
@@ -26,7 +27,20 @@ public class StandardAgentsPromptsLibraryConfig {
 	public static final String COORDINATOR_AGENT_PROMPT = "controller-coordinator-agent-prompt";
 	public static final String REPORT_AND_ANSWER_WRITER_AGENT_PROMPT = "report-answer-writer-agent-prompt";
 	public static final String TOOL_CALLING_AGENT_PROMPT = "tool-calling-agent-prompt";
+	/** The main loop of the single agent operating the tools (the agentic chat). */
+	public static final String DEFAULT_CHAT_AGENT_PROMPT = "default-chat-agent-prompt";
+	/**
+	 * The main loop of the single agent operating the tools in the chats without
+	 * knowledge base: it is told the chat has none.
+	 */
+	public static final String PURE_CHAT_AGENT_PROMPT = "pure-chat-agent-prompt";
+	/**
+	 * The report writer's evidence extraction calls, when a cycle's evidence does not
+	 * fit one writing call.
+	 */
+	public static final String REPORT_EVIDENCE_EXTRACTOR_PROMPT = "report-evidence-extractor-prompt";
 	private List<GPromptTemplateLibraryReference> library = null;
+	private List<GPromptUseInfo> uses = null;
 
 	@Bean
 	public IGStaticPromptsProvider standardAgentsPromptsProvider(GeboOverriddenPromptsLibrary overridenLibrary) {
@@ -36,14 +50,14 @@ public class StandardAgentsPromptsLibraryConfig {
 					+ (overridenLibrary.getLibrary() != null ? overridenLibrary.getLibrary().size() : 0)
 					+ " override(s)");
 		}
-		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary());
+		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary(), uses);
 	}
 
 	@Bean
 	public IGStaticPromptUseInfoProvider standardAgentsPromptsUseInfoProvider(
 			GeboOverriddenPromptsLibrary overridenLibrary) {
 
-		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary());
+		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary(), uses);
 	}
 
 }

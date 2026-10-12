@@ -1,7 +1,7 @@
 import { afterNextRender, Component, DestroyRef, ElementRef, forwardRef, Injector, OnInit, runInInjectionContext, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GBaseObject, GAgentConfig } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType } from "@Gebo.ai/reusable-ui";
+import { AgenticChatDefaultNetworksAdminControllerService, GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GBaseObject, GAgentConfig, AgentMountedTools } from "@Gebo.ai/gebo-ai-rest-api";
+import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { initializeModel, NgDiagramNodeTemplateMap, NgDiagramConfig, provideNgDiagram, NgDiagramViewportService } from "ng-diagram";
@@ -32,9 +32,10 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         dateCreated: new FormControl(),
         maxLoopIteration: new FormControl(),
         scenarioDescription: new FormControl(),
+        suggestedPurpose: new FormControl(),
         agents: new FormControl(),
         readOnly: new FormControl(),
-        defaultUserInteractionNetwork: new FormControl(),
+        choosableForPipelineTypes: new FormControl(),
         accessibleToAll: new FormControl(),
         accessibleUsers: new FormControl(),
         accessibleGroups: new FormControl(),
@@ -43,6 +44,18 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
 
     protected availableAgents: GBaseObject[] = [];
     protected agentsList: AgentNetworkParticipant[] = [];
+    /** The tools each agent configuration mounts, by configuration code. */
+    private mountedTools = new Map<string, AgentMountedTools>();
+    /**
+     * The colour of each tool category in the graph. Only calm tones: red, orange
+     * and yellow are kept for errors and warnings.
+     */
+    private static readonly TOOL_CATEGORY_CLASSES = [
+        "bg-blue-50 text-blue-700", "bg-teal-50 text-teal-700", "bg-purple-50 text-purple-700",
+        "bg-cyan-50 text-cyan-700", "bg-indigo-50 text-indigo-700", "bg-bluegray-50 text-bluegray-700"
+    ];
+    /** The tool categories of the graph, in order: each takes the next colour. */
+    private toolCategories: string[] = [];
 
     public readonly: boolean = false;
     protected diagramModel: any;
@@ -80,6 +93,16 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         { label: "Deny List", value: "DENY_LIST" }
     ];
 
+    /** The kinds of chat a network can be chosen for. */
+    /** Whether the agents are enabled: the chat choice fields exist only then. */
+    protected agenticChatNetworksEnabled: boolean = false;
+
+    /** The kinds of chat a network can be chosen for; the labels are translated on init. */
+    protected pipelineTypeOptions: { id: string, label: string, value: string }[] = [
+        { id: "RagPipelineOption", label: "Agentic chat with knowledge bases", value: "RAG_PIPELINE" },
+        { id: "PureChatPipelineOption", label: "Free chat", value: "PURE_CHAT_PIPELINE" }
+    ];
+
     protected participantFormGroup = new FormGroup({
         networkAgentName: new FormControl("", Validators.required),
         agentConfigCode: new FormControl("", Validators.required),
@@ -103,6 +126,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         private service: GeboAgentsNetworkAdminControllerService,
         private agentsService: GeboAgentAdminControllerService,
         private viewportService: NgDiagramViewportService,
+        private chatNetworksService: AgenticChatDefaultNetworksAdminControllerService,
         destroyRef: DestroyRef
     ) {
         super(injector, geboFormGroupsService, myConfirmationService, actionsRouter, outputForwardingService);
@@ -115,11 +139,11 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
                 if (this.readonly) {
                     this.participantFormGroup.disable();
                     this.formGroup.get("maxLoopIteration")?.disable({ emitEvent: false });
-                    this.formGroup.get("defaultUserInteractionNetwork")?.disable({ emitEvent: false });
+                    this.formGroup.get("choosableForPipelineTypes")?.disable({ emitEvent: false });
                 } else {
                     this.participantFormGroup.enable();
                     this.formGroup.get("maxLoopIteration")?.enable({ emitEvent: false });
-                    this.formGroup.get("defaultUserInteractionNetwork")?.enable({ emitEvent: false });
+                    this.formGroup.get("choosableForPipelineTypes")?.enable({ emitEvent: false });
                 }
                 this.rebuildChart();
             }
@@ -134,6 +158,10 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
 
     override ngOnInit(): void {
         super.ngOnInit();
+        this.chatNetworksService.isAgenticChatNetworksEnabled()
+            .subscribe(enabled => this.agenticChatNetworksEnabled = enabled === true);
+        this.myInjector.get(GeboAITranslationService).translateMenuItems("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork",
+            this.pipelineTypeOptions).subscribe(items => this.pipelineTypeOptions = [...items] as { id: string, label: string, value: string }[]);
         this.loadAvailableAgents();
     }
 
@@ -158,13 +186,14 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         if (this.readonly) {
             this.participantFormGroup.disable();
             this.formGroup.get("maxLoopIteration")?.disable({ emitEvent: false });
-            this.formGroup.get("defaultUserInteractionNetwork")?.disable({ emitEvent: false });
+            this.formGroup.get("choosableForPipelineTypes")?.disable({ emitEvent: false });
         } else {
             this.participantFormGroup.enable();
             this.formGroup.get("maxLoopIteration")?.enable({ emitEvent: false });
-            this.formGroup.get("defaultUserInteractionNetwork")?.enable({ emitEvent: false });
+            this.formGroup.get("choosableForPipelineTypes")?.enable({ emitEvent: false });
         }
         this.rebuildChart();
+        this.loadMountedTools();
     }
 
     override onNewData(actualValue: GAgentsNetwork): void {
@@ -173,13 +202,67 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         if (this.readonly) {
             this.participantFormGroup.disable();
             this.formGroup.get("maxLoopIteration")?.disable({ emitEvent: false });
-            this.formGroup.get("defaultUserInteractionNetwork")?.disable({ emitEvent: false });
+            this.formGroup.get("choosableForPipelineTypes")?.disable({ emitEvent: false });
         } else {
             this.participantFormGroup.enable();
             this.formGroup.get("maxLoopIteration")?.enable({ emitEvent: false });
-            this.formGroup.get("defaultUserInteractionNetwork")?.enable({ emitEvent: false });
+            this.formGroup.get("choosableForPipelineTypes")?.enable({ emitEvent: false });
         }
         this.rebuildChart();
+        this.loadMountedTools();
+    }
+
+    /**
+     * The colour classes of a tool category: the categories of the graph take the
+     * colours in turn, so they share one only past the number of colours.
+     */
+    public getToolCategoryClass(categoryCode: string | undefined): string {
+        const index = categoryCode ? this.toolCategories.indexOf(categoryCode) : -1;
+        const classes = GeboAIAgentsNetworkAdminComponent.TOOL_CATEGORY_CLASSES;
+        return index >= 0 ? classes[index % classes.length] : "surface-100 text-color";
+    }
+
+    private refreshToolCategories(): void {
+        const codes = new Set<string>();
+        this.mountedTools.forEach(mounted => [...(mounted.tools || []), ...(mounted.excludedTools || [])]
+            .forEach(tool => tool.categoryCode && codes.add(tool.categoryCode)));
+        this.toolCategories = [...codes].sort();
+    }
+
+    /** The tools the given agent configuration mounts, once loaded. */
+    public getMountedTools(code: string | undefined): AgentMountedTools | undefined {
+        return code ? this.mountedTools.get(code) : undefined;
+    }
+
+    /**
+     * Loads the tools mounted by the configurations of the network agents that are
+     * not known yet, or by the given configuration again after it was edited.
+     */
+    protected loadMountedTools(reloadCode?: string): void {
+        if (reloadCode) {
+            this.mountedTools.delete(reloadCode);
+        }
+        const codes = [...new Set(this.agentsList.map(a => a.agentConfigCode)
+            .filter((code): code is string => !!code && !this.mountedTools.has(code)))];
+        if (codes.length === 0) {
+            return;
+        }
+        this.service.getAgentsMountedTools(codes).subscribe({
+            next: (result) => {
+                (result || []).forEach(mounted => {
+                    if (mounted.agentConfigCode) {
+                        this.mountedTools.set(mounted.agentConfigCode, mounted);
+                    }
+                });
+                this.refreshToolCategories();
+                // the nodes show their tools on the next change detection, taller:
+                // fit again without moving the nodes the user placed
+                if (this.diagramModel && this.lastLayoutNodes.length > 0) {
+                    this.fitDiagramToViewport();
+                }
+            },
+            error: (error) => console.error("Cannot load the tools of the network agents", error)
+        });
     }
 
     public getAgentDescription(code: string): string {
@@ -274,9 +357,11 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
                 const idxInLevel = levelGroups.get(L)?.indexOf(name) || 0;
                 const totalInLevel = levelGroups.get(L)?.length || 1;
 
-                // X centered around 350px, Y spaced by 200px per level
-                const x = (idxInLevel - (totalInLevel - 1) / 2) * 280 + 350;
-                const y = L * 200 + 50;
+                // X centered around 350px, 340px apart: the nodes are at most 300px
+                // wide, so the ones of a level never overlap. Y spaced by 280px per
+                // level (the nodes grow with the row of their tools)
+                const x = (idxInLevel - (totalInLevel - 1) / 2) * 340 + 350;
+                const y = L * 280 + 50;
 
                 nodes.push({
                     id: name,
@@ -396,6 +481,8 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
             target: { code: code },
             onActionPerformed: (event) => {
                 this.loadAvailableAgents(code);
+                // the edited configuration may mount other tools now
+                this.loadMountedTools(code);
             }
         });
     }
@@ -425,6 +512,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         this.formGroup.controls["agents"].setValue(this.agentsList);
         this.formGroup.controls["agents"].markAsDirty();
         this.rebuildChart();
+        this.loadMountedTools();
     }
 
     protected openAddParticipant(): void {

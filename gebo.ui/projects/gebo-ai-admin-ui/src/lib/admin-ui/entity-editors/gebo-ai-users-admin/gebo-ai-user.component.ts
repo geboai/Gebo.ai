@@ -245,7 +245,7 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
     doDelete(): void {
         this.confirmService.confirm({
             header: "Delete operation",
-            message: "Are you shure you want to delete this user?",
+            message: "Are you sure you want to delete this user?",
             accept: () => {
                 this.doPhisicalDelete();
             }

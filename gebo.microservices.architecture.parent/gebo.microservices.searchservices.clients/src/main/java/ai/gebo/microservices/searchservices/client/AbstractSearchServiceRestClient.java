@@ -11,9 +11,12 @@ package ai.gebo.microservices.searchservices.client;
 
 import java.io.IOException;
 import java.net.URI;
+import java.time.Duration;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
 import org.slf4j.Logger;
@@ -32,6 +35,7 @@ import ai.gebo.architecture.documents.access.StreamingPurpose;
 import ai.gebo.architecture.search.controller.AggregateRequestBody;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.CatalogueSample;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -42,6 +46,7 @@ import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.microservices.searchservices.client.config.GeboSearchServicesClientsProperties.Endpoint;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.model.base.TypedInputStream;
+import reactor.core.publisher.Mono;
 
 /**
  * Topology-aware REST client base for a per-connector {@link ISearchService}
@@ -61,6 +66,14 @@ import ai.gebo.model.base.TypedInputStream;
  * extraction {@code Class}, and {@link #loadSearchResult(SearchResult)} streams
  * through the chunker's cache ({@link IGDocumentContentStreamer}) rather than a
  * dedicated search endpoint. Everything else is a remote call.
+ * </p>
+ *
+ * <p>
+ * A search given its call parameters sends them to the connector microservice, which
+ * applies them in the connector's own client software (the retries only when this
+ * client says the connector applies them, otherwise the caller tries the whole call
+ * again), and waits for the answer at most the connect and the read timeouts for each
+ * attempt the microservice makes.
  * </p>
  *
  * @param <C> the connector's extraction data type
@@ -193,14 +206,48 @@ public abstract class AbstractSearchServiceRestClient<C extends BaseSearchResult
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
+		return search(query, system, nEntryLimit, null);
+	}
+
+	@Override
+	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
 		String systemId = system != null ? system.getCode() : null;
 		return call("search",
-				() -> webClient.post()
-						.uri(uri("search", Map.of("systemId", String.valueOf(systemId), "nEntryLimit",
-								String.valueOf(nEntryLimit))))
+				() -> withinTimeouts(webClient.post()
+						.uri(uri("search", searchParams(systemId, nEntryLimit, parameters)))
 						.headers(this::applyCallerToken).contentType(MediaType.APPLICATION_JSON)
-						.accept(MediaType.APPLICATION_JSON).bodyValue(query).retrieve().bodyToMono(SEARCH_RESULT_LIST)
-						.block());
+						.accept(MediaType.APPLICATION_JSON).bodyValue(query).retrieve().bodyToMono(SEARCH_RESULT_LIST),
+						parameters).block());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * By default not: the connector microservice is sent no retries, and its caller
+	 * tries the whole call again. The client of a connector whose search service
+	 * retries itself says so.
+	 * </p>
+	 */
+	@Override
+	public boolean appliesRetries() {
+		return false;
+	}
+
+	/**
+	 * Downloads the content through the documents cache like
+	 * {@link #loadSearchResult(SearchResult)}: the content integration's clients keep
+	 * their own settings, so the call parameters do not apply.
+	 */
+	@Override
+	public TypedInputStream loadSearchResult(SearchResult result, SearchCallParameters parameters)
+			throws IOException, SearchServiceException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("loadSearchResult(...) for search microservice '{}' through the documents cache, "
+					+ "the call parameters {} do not apply", microserviceId, parameters);
+		}
+		return loadSearchResult(result);
 	}
 
 	@Override
@@ -281,6 +328,42 @@ public abstract class AbstractSearchServiceRestClient<C extends BaseSearchResult
 		return baseUrl.orElseThrow(() -> new IllegalStateException("Cannot resolve the base url of the search "
 				+ "microservice '" + microserviceId + "': it is not a member of the topology and has no 'direct' "
 				+ "entry (gebo.microservices.topology.url.direct)."));
+	}
+
+	/**
+	 * The request parameters of a search: the system, the entries, and the call
+	 * parameters when given (the retries only when the connector applies them).
+	 */
+	protected Map<String, String> searchParams(String systemId, int nEntryLimit, SearchCallParameters parameters) {
+		final Map<String, String> params = new LinkedHashMap<>();
+		params.put("systemId", String.valueOf(systemId));
+		params.put("nEntryLimit", String.valueOf(nEntryLimit));
+		if (parameters != null) {
+			params.put(SearchCallParameters.CONNECT_TIMEOUT_MILLIS_PARAM,
+					String.valueOf(parameters.connectTimeoutMillis()));
+			params.put(SearchCallParameters.READ_TIMEOUT_MILLIS_PARAM, String.valueOf(parameters.readTimeoutMillis()));
+			params.put(SearchCallParameters.RETRIES_PARAM, String.valueOf(appliesRetries() ? parameters.retries() : 0));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Search on microservice '{}' with params {}", microserviceId, params);
+		}
+		return params;
+	}
+
+	/**
+	 * The answer waited at most the connect and the read timeouts of the call
+	 * parameters, when given, for each attempt the connector microservice makes (a
+	 * timeout per call: the connector of the shared web client is not changed); with
+	 * no answer by then the call fails with a {@link TimeoutException}.
+	 */
+	protected <T> Mono<T> withinTimeouts(Mono<T> answer, SearchCallParameters parameters) {
+		if (parameters == null) {
+			return answer;
+		}
+		final int remoteAttempts = 1 + (appliesRetries() ? parameters.retries() : 0);
+		final Duration wait = parameters.connectTimeout().plus(parameters.readTimeout()).multipliedBy(remoteAttempts);
+		return answer.timeout(wait).doOnError(TimeoutException.class, e -> LOGGER
+				.warn("Search microservice '{}' gave no answer within {} s", microserviceId, wait.toSeconds()));
 	}
 
 	protected <T> T call(String operation, Supplier<T> remoteCall) throws SearchServiceException {

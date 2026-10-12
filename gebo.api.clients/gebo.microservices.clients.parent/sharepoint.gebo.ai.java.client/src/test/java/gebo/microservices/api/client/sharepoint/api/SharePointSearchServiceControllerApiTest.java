@@ -46,9 +46,9 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restAggregateTest() {
+    public void restAggregateSharePointTest() {
         AggregateRequestBodyMicrosoftResultsExtractionData body = null;
-        MicrosoftResultsExtractionData response = api.restAggregate(body);
+        MicrosoftResultsExtractionData response = api.restAggregateSharePoint(body);
 
         // TODO: test validations
     }
@@ -61,9 +61,9 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restCreateCustomTemplateParamsMapTest() {
+    public void restCreateCustomTemplateParamsMapSharePointTest() {
         CustomTemplateParamsRequestBody body = null;
-        Map<String, Object> response = api.restCreateCustomTemplateParamsMap(body);
+        Map<String, Object> response = api.restCreateCustomTemplateParamsMapSharePoint(body);
 
         // TODO: test validations
     }
@@ -76,10 +76,10 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restExtractRelatedAnalisysReferencesTest() {
+    public void restExtractRelatedAnalisysReferencesSharePointTest() {
         MicrosoftResultsExtractionData body = null;
         String systemId = null;
-        SearchResultAnalisysOutcome response = api.restExtractRelatedAnalisysReferences(body, systemId);
+        SearchResultAnalisysOutcome response = api.restExtractRelatedAnalisysReferencesSharePoint(body, systemId);
 
         // TODO: test validations
     }
@@ -92,9 +92,9 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restFindSystemByIdTest() {
+    public void restFindSystemByIdSharePointTest() {
         String systemId = null;
-        SearchableSystemMetaData response = api.restFindSystemById(systemId);
+        SearchableSystemMetaData response = api.restFindSystemByIdSharePoint(systemId);
 
         // TODO: test validations
     }
@@ -107,9 +107,9 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restFindSystemBySearchResultTest() {
+    public void restFindSystemBySearchResultSharePointTest() {
         SearchResult body = null;
-        SearchableSystemMetaData response = api.restFindSystemBySearchResult(body);
+        SearchableSystemMetaData response = api.restFindSystemBySearchResultSharePoint(body);
 
         // TODO: test validations
     }
@@ -122,9 +122,9 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetCachedCataloguesTest() {
+    public void restGetCachedCataloguesSharePointTest() {
         String systemConfigurationCode = null;
-        List<CatalogueSample> response = api.restGetCachedCatalogues(systemConfigurationCode);
+        List<CatalogueSample> response = api.restGetCachedCataloguesSharePoint(systemConfigurationCode);
 
         // TODO: test validations
     }
@@ -137,9 +137,9 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetCataloguesListSampleTest() {
+    public void restGetCataloguesListSampleSharePointTest() {
         String configurationCode = null;
-        List<CatalogueSample> response = api.restGetCataloguesListSample(configurationCode);
+        List<CatalogueSample> response = api.restGetCataloguesListSampleSharePoint(configurationCode);
 
         // TODO: test validations
     }
@@ -152,8 +152,8 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetDescriptionTest() {
-        String response = api.restGetDescription();
+    public void restGetDescriptionSharePointTest() {
+        String response = api.restGetDescriptionSharePoint();
 
         // TODO: test validations
     }
@@ -166,8 +166,8 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetIdTest() {
-        String response = api.restGetId();
+    public void restGetIdSharePointTest() {
+        String response = api.restGetIdSharePoint();
 
         // TODO: test validations
     }
@@ -180,8 +180,8 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetMessagingModuleIdTest() {
-        String response = api.restGetMessagingModuleId();
+    public void restGetMessagingModuleIdSharePointTest() {
+        String response = api.restGetMessagingModuleIdSharePoint();
 
         // TODO: test validations
     }
@@ -194,8 +194,8 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetNativePromptTemplateUseCodeTest() {
-        String response = api.restGetNativePromptTemplateUseCode();
+    public void restGetNativePromptTemplateUseCodeSharePointTest() {
+        String response = api.restGetNativePromptTemplateUseCodeSharePoint();
 
         // TODO: test validations
     }
@@ -208,8 +208,8 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetProductIdTest() {
-        String response = api.restGetProductId();
+    public void restGetProductIdSharePointTest() {
+        String response = api.restGetProductIdSharePoint();
 
         // TODO: test validations
     }
@@ -222,8 +222,8 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetQueriesGenerationPromptUseCodeTest() {
-        String response = api.restGetQueriesGenerationPromptUseCode();
+    public void restGetQueriesGenerationPromptUseCodeSharePointTest() {
+        String response = api.restGetQueriesGenerationPromptUseCodeSharePoint();
 
         // TODO: test validations
     }
@@ -236,8 +236,8 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetSearchableSystemsTest() {
-        List<SearchableSystemMetaData> response = api.restGetSearchableSystems();
+    public void restGetSearchableSystemsSharePointTest() {
+        List<SearchableSystemMetaData> response = api.restGetSearchableSystemsSharePoint();
 
         // TODO: test validations
     }
@@ -250,8 +250,8 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restIsEnabledTest() {
-        Boolean response = api.restIsEnabled();
+    public void restIsEnabledSharePointTest() {
+        Boolean response = api.restIsEnabledSharePoint();
 
         // TODO: test validations
     }
@@ -264,11 +264,11 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restNativeSearchTest() {
+    public void restNativeSearchSharePointTest() {
         SharePointSearchFilter body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restNativeSearch(body, systemId, nEntryLimit);
+        List<SearchResult> response = api.restNativeSearchSharePoint(body, systemId, nEntryLimit);
 
         // TODO: test validations
     }
@@ -281,11 +281,11 @@ public class SharePointSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restSearchTest() {
+    public void restSearchSharePointTest() {
         SearchQuery body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restSearch(body, systemId, nEntryLimit);
+        List<SearchResult> response = api.restSearchSharePoint(body, systemId, nEntryLimit);
 
         // TODO: test validations
     }

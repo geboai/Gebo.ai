@@ -65,6 +65,9 @@ import gebo.microservices.api.client.tyr.model.ComputedWorkflowResult;
 import gebo.microservices.api.client.tyr.model.JobSummary;
 import ai.gebo.microservices_cluster_setup_use.tests.model.RegisteredInteractionTestModel;
 import ai.gebo.microservices_cluster_setup_use.tests.model.RegisteredInteractionTestSession;
+import ai.gebo.architecture.integration.tests.preconditions.IntegrationTestConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresEndpoint;
 
 /**
  * Shared driver for the microservices-cluster setup-and-use integration tests.
@@ -112,11 +115,32 @@ import ai.gebo.microservices_cluster_setup_use.tests.model.RegisteredInteraction
  * Subclasses differ only in the registered session they replay and in how they
  * verify the routing decision, exactly like the monolith test siblings.
  */
+@RequiresConfig(value = AbstractMicroservicesClusterSetupUseChatTest.FULL_SETUP_ENVIRONMENT_JSON_STRING,
+		description = "JSON with the admin account, the LLM vendor and its API key")
+@RequiresEndpoint(name = "heimdall", url = "${" + AbstractMicroservicesClusterSetupUseChatTest.HEIMDALL_URL + ":"
+		+ AbstractMicroservicesClusterSetupUseChatTest.DEFAULT_HEIMDALL_URL + "}")
+@RequiresEndpoint(name = "brain", url = "${" + AbstractMicroservicesClusterSetupUseChatTest.BRAIN_URL + ":"
+		+ AbstractMicroservicesClusterSetupUseChatTest.DEFAULT_BRAIN_URL + "}")
+@RequiresEndpoint(name = "filesystem", url = "${" + AbstractMicroservicesClusterSetupUseChatTest.FILESYSTEM_URL + ":"
+		+ AbstractMicroservicesClusterSetupUseChatTest.DEFAULT_FILESYSTEM_URL + "}")
+@RequiresEndpoint(name = "tyr", url = "${" + AbstractMicroservicesClusterSetupUseChatTest.TYR_URL + ":"
+		+ AbstractMicroservicesClusterSetupUseChatTest.DEFAULT_TYR_URL + "}")
 public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 	private static final String filesIndex = "/test_files/index.json";
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	protected static final ObjectMapper objectMapper = new ObjectMapper();
 	protected static final String FULL_SETUP_ENVIRONMENT_JSON_STRING = "FullSetupSecret";
+
+	// The cluster is started outside the test (manage-cluster profile or by hand),
+	// so its services are checked as external endpoints.
+	static final String HEIMDALL_URL = "gebo.cluster.heimdall.url";
+	static final String DEFAULT_HEIMDALL_URL = "http://localhost:13018/heimdall";
+	static final String BRAIN_URL = "gebo.cluster.brain.url";
+	static final String DEFAULT_BRAIN_URL = "http://localhost:13001/brain";
+	static final String FILESYSTEM_URL = "gebo.cluster.filesystem.url";
+	static final String DEFAULT_FILESYSTEM_URL = "http://localhost:13006/filesystem";
+	static final String TYR_URL = "gebo.cluster.tyr.url";
+	static final String DEFAULT_TYR_URL = "http://localhost:13019/tyr";
 
 	protected static String heimdallUrl;
 	protected static String brainUrl;
@@ -125,10 +149,10 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 
 	@BeforeAll
 	protected static void resolveClusterUrls() {
-		heimdallUrl = System.getProperty("gebo.cluster.heimdall.url", "http://localhost:13018/heimdall");
-		brainUrl = System.getProperty("gebo.cluster.brain.url", "http://localhost:13001/brain");
-		filesystemUrl = System.getProperty("gebo.cluster.filesystem.url", "http://localhost:13006/filesystem");
-		tyrUrl = System.getProperty("gebo.cluster.tyr.url", "http://localhost:13019/tyr");
+		heimdallUrl = IntegrationTestConfig.get(HEIMDALL_URL, DEFAULT_HEIMDALL_URL);
+		brainUrl = IntegrationTestConfig.get(BRAIN_URL, DEFAULT_BRAIN_URL);
+		filesystemUrl = IntegrationTestConfig.get(FILESYSTEM_URL, DEFAULT_FILESYSTEM_URL);
+		tyrUrl = IntegrationTestConfig.get(TYR_URL, DEFAULT_TYR_URL);
 	}
 
 	@Data
@@ -201,8 +225,8 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 	}
 
 	protected SecurityHeaderData executeSystemSetupBySecret() throws IOException {
-		String jsonSetup = System.getProperty(FULL_SETUP_ENVIRONMENT_JSON_STRING);
-		assertFalse(jsonSetup == null || jsonSetup.trim().isEmpty(), "The system property "
+		String jsonSetup = IntegrationTestConfig.get(FULL_SETUP_ENVIRONMENT_JSON_STRING);
+		assertFalse(jsonSetup == null || jsonSetup.trim().isEmpty(), "The configuration value "
 				+ FULL_SETUP_ENVIRONMENT_JSON_STRING + " must contain a valid json setup configuration");
 		Map<String, Object> setup = objectMapper.readValue(jsonSetup, Map.class);
 		@SuppressWarnings("unchecked")
@@ -223,14 +247,14 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 		setupData.setPassword(password);
 		setupData.setPasswordC(password);
 		OperationStatusBoolean setupResult = fastSetup.createSetup(setupData);
-		assertFalse(Boolean.TRUE.equals(setupResult.getHasErrorMessages()), "The setup cannot return errors");
+		assertFalse(Boolean.TRUE.equals(setupResult.isHasErrorMessages()), "The setup cannot return errors");
 
 		AuthControllerApi authController = new AuthControllerApi(heimdall);
 		LoginRequest login = new LoginRequest();
 		login.setUsername(username);
 		login.setPassword(password);
 		OperationStatusAuthResponse authResult = authController.authenticateUser(login);
-		assertFalse(Boolean.TRUE.equals(authResult.getHasErrorMessages()), "The login cannot return errors");
+		assertFalse(Boolean.TRUE.equals(authResult.isHasErrorMessages()), "The login cannot return errors");
 		AuthResponse currentAuth = authResult.getResult();
 		SecurityHeaderData header = currentAuth.getSecurityHeaderData();
 		assertNotNull(header.getToken(), "The security header token cannot be null");
@@ -274,7 +298,7 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 		List<LLMModelPresetChoice> chatChoices = objectMapper.convertValue(chatPresets.getChoices(),
 				objectMapper.getTypeFactory().constructCollectionType(List.class, LLMModelPresetChoice.class));
 		for (LLMModelPresetChoice chatChoice : chatChoices) {
-			if (Boolean.TRUE.equals(chatChoice.getDefaultChoice())) {
+			if (Boolean.TRUE.equals(chatChoice.isDefaultChoice())) {
 				autoConfigureData.setDefaultChatModel(chatChoice.getCode());
 			}
 			String usesStr = chatChoice.getUses() == null ? "" : String.valueOf(chatChoice.getUses());
@@ -285,7 +309,7 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 		List<LLMModelPresetChoice> embeddingChoices = objectMapper.convertValue(embeddingPresets.getChoices(),
 				objectMapper.getTypeFactory().constructCollectionType(List.class, LLMModelPresetChoice.class));
 		for (LLMModelPresetChoice embedChoice : embeddingChoices) {
-			if (Boolean.TRUE.equals(embedChoice.getDefaultChoice())) {
+			if (Boolean.TRUE.equals(embedChoice.isDefaultChoice())) {
 				autoConfigureData.setEmbeddingModel(embedChoice.getCode());
 			}
 		}
@@ -294,7 +318,7 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 		assertNotNull(autoConfigureData.getInternalServicesModel(), "internalServicesModel must be set");
 
 		OperationStatusListGBaseModelConfig llmCreation = llmSetupApi.createLLMByAutoconfigure(autoConfigureData);
-		assertFalse(Boolean.TRUE.equals(llmCreation.getHasErrorMessages()),
+		assertFalse(Boolean.TRUE.equals(llmCreation.isHasErrorMessages()),
 				"The vendor " + vendorId + " cannot be setup correctly");
 		renew(header);
 		LOGGER.info("End system setup against heimdall@{}", heimdallUrl);
@@ -367,7 +391,7 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 			reference.setRoot(new gebo.microservices.api.client.filesystem.model.GVirtualFilesystemRoot());
 			reference.getRoot().setAbsolutePath(folder.toAbsolutePath().toString());
 			reference.getPath().setAbsolutePath(folder.toAbsolutePath().toString());
-			reference.getPath().setMetaType("FOLDER");
+			reference.getPath().setMetaType(PathInfo.MetaTypeEnum.FOLDER);
 			reference.getPath().setName(folder.getFileName().toString());
 			reference.getPath().setFolder(true);
 			shareReference.setReference(reference);
@@ -397,7 +421,7 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 			// different class in a different package/module) - the two only share a name.
 			ref.setClassName("ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint");
 			OperationStatusGJobStatus launchedJob = jobLauncherApi.createJob(ref);
-			assertFalse(Boolean.TRUE.equals(launchedJob.getHasErrorMessages()),
+			assertFalse(Boolean.TRUE.equals(launchedJob.isHasErrorMessages()),
 					"The job launch cannot return errors");
 			renew(header);
 
@@ -419,13 +443,13 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 				assertNotNull(summary, "Job summary cannot be null");
 				assertNotNull(summary.getWorkflowStatus(), "Job workflow status cannot be null");
 				workflowStatus = summary.getWorkflowStatus();
-				LOGGER.info("Job {} finished={} hasErrors={}", summary.getCode(), workflowStatus.getFinished(),
-						workflowStatus.getHasErrors());
+				LOGGER.info("Job {} finished={} hasErrors={}", summary.getCode(), workflowStatus.isFinished(),
+						workflowStatus.isHasErrors());
 				renew(header);
 				currentTime = System.currentTimeMillis();
-			} while (!Boolean.TRUE.equals(workflowStatus.getFinished())
+			} while (!Boolean.TRUE.equals(workflowStatus.isFinished())
 					&& ((currentTime - initialTime) <= maxIterationTime));
-			assertTrue(Boolean.TRUE.equals(workflowStatus.getFinished()),
+			assertTrue(Boolean.TRUE.equals(workflowStatus.isFinished()),
 					"The publication job has to be finished within the timeout");
 
 			RegisteredInteractionTestSession registeredTestSession = loadJsonDataModel(registeredSessionResource,

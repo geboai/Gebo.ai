@@ -27,7 +27,7 @@ import java.util.List;
  * GUserChatSession
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
 
 public class GUserChatSession {
   @JsonProperty("code")
@@ -66,6 +66,9 @@ public class GUserChatSession {
   @JsonProperty("ragChat")
   private Boolean ragChat = null;
 
+  @JsonProperty("pipelineCode")
+  private String pipelineCode = null;
+
   @JsonProperty("chatMemoryId")
   private String chatMemoryId = null;
 
@@ -77,6 +80,12 @@ public class GUserChatSession {
 
   @JsonProperty("choosedKnowledgeBases")
   private List<String> choosedKnowledgeBases = null;
+
+  @JsonProperty("userRequiredLanguage")
+  private String userRequiredLanguage = null;
+
+  @JsonProperty("chatLanguage")
+  private String chatLanguage = null;
 
   public GUserChatSession code(String code) {
     this.code = code;
@@ -294,6 +303,24 @@ public class GUserChatSession {
     this.ragChat = ragChat;
   }
 
+  public GUserChatSession pipelineCode(String pipelineCode) {
+    this.pipelineCode = pipelineCode;
+    return this;
+  }
+
+   /**
+   * Get pipelineCode
+   * @return pipelineCode
+  **/
+  @Schema(description = "")
+  public String getPipelineCode() {
+    return pipelineCode;
+  }
+
+  public void setPipelineCode(String pipelineCode) {
+    this.pipelineCode = pipelineCode;
+  }
+
   public GUserChatSession chatMemoryId(String chatMemoryId) {
     this.chatMemoryId = chatMemoryId;
     return this;
@@ -382,6 +409,42 @@ public class GUserChatSession {
     this.choosedKnowledgeBases = choosedKnowledgeBases;
   }
 
+  public GUserChatSession userRequiredLanguage(String userRequiredLanguage) {
+    this.userRequiredLanguage = userRequiredLanguage;
+    return this;
+  }
+
+   /**
+   * Get userRequiredLanguage
+   * @return userRequiredLanguage
+  **/
+  @Schema(description = "")
+  public String getUserRequiredLanguage() {
+    return userRequiredLanguage;
+  }
+
+  public void setUserRequiredLanguage(String userRequiredLanguage) {
+    this.userRequiredLanguage = userRequiredLanguage;
+  }
+
+  public GUserChatSession chatLanguage(String chatLanguage) {
+    this.chatLanguage = chatLanguage;
+    return this;
+  }
+
+   /**
+   * Get chatLanguage
+   * @return chatLanguage
+  **/
+  @Schema(description = "")
+  public String getChatLanguage() {
+    return chatLanguage;
+  }
+
+  public void setChatLanguage(String chatLanguage) {
+    this.chatLanguage = chatLanguage;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -404,15 +467,18 @@ public class GUserChatSession {
         Objects.equals(this.chatProfileCode, guserChatSession.chatProfileCode) &&
         Objects.equals(this.modelReference, guserChatSession.modelReference) &&
         Objects.equals(this.ragChat, guserChatSession.ragChat) &&
+        Objects.equals(this.pipelineCode, guserChatSession.pipelineCode) &&
         Objects.equals(this.chatMemoryId, guserChatSession.chatMemoryId) &&
         Objects.equals(this.interactions, guserChatSession.interactions) &&
         Objects.equals(this.chatModelCode, guserChatSession.chatModelCode) &&
-        Objects.equals(this.choosedKnowledgeBases, guserChatSession.choosedKnowledgeBases);
+        Objects.equals(this.choosedKnowledgeBases, guserChatSession.choosedKnowledgeBases) &&
+        Objects.equals(this.userRequiredLanguage, guserChatSession.userRequiredLanguage) &&
+        Objects.equals(this.chatLanguage, guserChatSession.chatLanguage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, contextCode, chatProfileCode, modelReference, ragChat, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, contextCode, chatProfileCode, modelReference, ragChat, pipelineCode, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases, userRequiredLanguage, chatLanguage);
   }
 
 
@@ -433,10 +499,13 @@ public class GUserChatSession {
     sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("    modelReference: ").append(toIndentedString(modelReference)).append("\n");
     sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");
+    sb.append("    pipelineCode: ").append(toIndentedString(pipelineCode)).append("\n");
     sb.append("    chatMemoryId: ").append(toIndentedString(chatMemoryId)).append("\n");
     sb.append("    interactions: ").append(toIndentedString(interactions)).append("\n");
     sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
     sb.append("    choosedKnowledgeBases: ").append(toIndentedString(choosedKnowledgeBases)).append("\n");
+    sb.append("    userRequiredLanguage: ").append(toIndentedString(userRequiredLanguage)).append("\n");
+    sb.append("    chatLanguage: ").append(toIndentedString(chatLanguage)).append("\n");
     sb.append("}");
     return sb.toString();
   }

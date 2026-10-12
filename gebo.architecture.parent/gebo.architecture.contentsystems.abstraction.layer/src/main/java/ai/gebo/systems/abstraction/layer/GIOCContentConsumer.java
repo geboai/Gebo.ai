@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ai.gebo.application.messaging.GStoreDisposers;
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GInternalDeletionMessagePayload;
@@ -37,10 +38,12 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.knowledgebase.repositories.VirtualFolderRepository;
+import ai.gebo.knowledgebase.repositories.uniqueid.VirtualFilesystemUniqueIds;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseVersionableObject;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator.SendEvaluationPolicy;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory.EnricherMappers;
+import ai.gebo.systems.abstraction.layer.model.ContentHandshakeData;
 
 /********************************************************************************************************************
  * Consumer that implements the IOC on the infrastructure via content system
@@ -66,6 +69,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 	private final IGMessageBroker broker;
 	private final DocumentReferenceRepository documentReferenceRepository;
 	private final VirtualFolderRepository virtualFolderRepository;
+	private final VirtualFilesystemUniqueIds uniqueIds;
 	private long batchDocumentInput = 0l, batchSentToNextStep = 0l, batchDocumentsProcessingErrors = 0l,
 			batchDocumentsProcessed = 0l, batchDiscardedInput = 0l;
 	private final WorkflowContext workflowContext;
@@ -76,7 +80,8 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			GIOCModuleContentsDispatcher<SystemIntegrationType, ProjectEndpointType, ContentConsumingSessionParamType> dispatcher,
 			IGUserMessagesConsumer userMessagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
 			IGContentConsumer documentConsumer, IGMessageBroker broker,
-			DocumentReferenceRepository documentReferenceRepository, VirtualFolderRepository virtualFolderRepository) {
+			DocumentReferenceRepository documentReferenceRepository, VirtualFolderRepository virtualFolderRepository,
+			VirtualFilesystemUniqueIds uniqueIds) {
 		this.enrichers = enrich;
 		this.jobStatus = jobStatus;
 		this.evaluator = evaluator;
@@ -90,6 +95,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 		this.broker = broker;
 		this.documentReferenceRepository = documentReferenceRepository;
 		this.virtualFolderRepository = virtualFolderRepository;
+		this.uniqueIds = uniqueIds;
 		this.workflowContext = new WorkflowContext(jobStatus.getKnowledgeBaseCode(), jobStatus.getProjectCode(),
 				jobStatus.getProjectEndpointReference());
 	}
@@ -104,6 +110,15 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 		if (t != null && t instanceof GAbstractVirtualFilesystemObject) {
 			GAbstractVirtualFilesystemObject jobObject = (GAbstractVirtualFilesystemObject) t;
 			jobObject.setLastesJobId(jobStatus.getCode());
+			// the uniqueId set before the document is sent on to its ingestion, so the
+			// contents ingested carry it (the save would set it only afterwards)
+			if (uniqueIds != null) {
+				try {
+					uniqueIds.ensureUniqueId(jobObject);
+				} catch (RuntimeException e) {
+					LOGGER.warn("Cannot give a uniqueId to:" + jobObject.getCode() + ", it gets one when saved", e);
+				}
+			}
 		}
 		if (t instanceof GDocumentReference) {
 			GDocumentReference docref = (GDocumentReference) t;
@@ -137,6 +152,14 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 						payload.setEndPoint(GCentralizedProjectEndpoint.of(endpoint));
 						payload.setFragmentType(MessageFragmentType.SINGLE_FRAGMENT);
 						payload.setRequiresEmbeddingHandshake(true);
+						// what the document was when last ingested: the chunker reads it again
+						// only if it changed since
+						ContentHandshakeData lastIngested = evaluator.lastIngested(docref.getCode());
+						if (lastIngested != null) {
+							payload.setLastIngestedHash(lastIngested.getHash());
+							payload.setLastIngestedModificationDate(lastIngested.getModificationDate());
+							payload.setLastIngestedFileSize(lastIngested.getFileSize());
+						}
 						payload.setJobId(jobStatus.getCode());
 						enrichers.getContentPayloadMapper().apply(payload);
 						WorkflowMessageContext messageContext = new WorkflowMessageContext(workflowContext, payload);
@@ -235,11 +258,10 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 					GInternalDeletionMessagePayload deletedDocumentPayload = new GInternalDeletionMessagePayload();
 					deletedDocumentPayload.setCodes4deletion(new ArrayList<String>(deletedDocsCodes.keySet()));
 					deletedDocumentPayload.setObjectsType(ObjectType.DOCUMENTREF);
-					GMessageEnvelope<GInternalDeletionMessagePayload> envelope = GMessageEnvelope
-							.newMessageFrom(this.dispatcher, deletedDocumentPayload);
-					envelope.setTargetModule(GStandardModulesConstraints.VECTORIZATOR_MODULE);
-					envelope.setTargetComponent(GStandardModulesConstraints.VECTORIZATION_DISPOSE_COMPONENT);
-					broker.accept(envelope);
+					// every store holding the documents' contents erases them: the vector
+					// store, the knowledge graph and the full-text index where deployed
+					GStoreDisposers.send(broker,
+							() -> GMessageEnvelope.newMessageFrom(this.dispatcher, deletedDocumentPayload));
 				}
 			} catch (Throwable th) {
 				LOGGER.error("Error in deletions check", th);

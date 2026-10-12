@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getRankerModelTypes"></a>
 # **getRankerModelTypes**
-> Object getRankerModelTypes()
+> [GRankerModelType] getRankerModelTypes()
 
 
 
@@ -31,7 +31,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GRankerModelType]**](GRankerModelType.md)
 
 ### Authorization
 
@@ -44,7 +44,7 @@ No authorization required
 
 <a name="getRuntimeConfiguredRankerModels"></a>
 # **getRuntimeConfiguredRankerModels**
-> Object getRuntimeConfiguredRankerModels(opts)
+> [ConfigurationEntryGBaseRankerModelConfig] getRuntimeConfiguredRankerModels(opts)
 
 
 
@@ -54,7 +54,7 @@ import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.RankerModelsControllerApi();
 let opts = { 
-  'modelTypeCode': null // Object | 
+  'modelTypeCode': "modelTypeCode_example" // String | 
 };
 apiInstance.getRuntimeConfiguredRankerModels(opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -68,11 +68,11 @@ apiInstance.getRuntimeConfiguredRankerModels(opts).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional] 
+ **modelTypeCode** | **String**|  | [optional] 
 
 ### Return type
 
-**Object**
+[**[ConfigurationEntryGBaseRankerModelConfig]**](ConfigurationEntryGBaseRankerModelConfig.md)
 
 ### Authorization
 

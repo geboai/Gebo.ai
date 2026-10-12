@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**resetEntries** | **Object** |  | [optional] 
-**deletedAll** | **Object** |  | [optional] 
+**resetEntries** | **Number** |  | [optional] 
+**deletedAll** | **Boolean** |  | [optional] 

@@ -13,8 +13,12 @@
  *
  */
 import ApiClient from '../ApiClient';
+import CalledFunction from './CalledFunction';
 import ChatModelRequestContextWindowStats from './ChatModelRequestContextWindowStats';
+import GResponseDocumentRef from './GResponseDocumentRef';
+import GUserMessage from './GUserMessage';
 import GeboWorkingMemoryWindowOccupation from './GeboWorkingMemoryWindowOccupation';
+import LLMGeneratedResource from './LLMGeneratedResource';
 
 /**
  * The GeboTemplatedChatResponse model module.
@@ -41,61 +45,61 @@ export default class GeboTemplatedChatResponse {
     if (data) {
       obj = obj || new GeboTemplatedChatResponse();
       if (data.hasOwnProperty('id'))
-        obj.id = ApiClient.convertToType(data['id'], Object);
+        obj.id = ApiClient.convertToType(data['id'], 'String');
       if (data.hasOwnProperty('userChatContextCode'))
-        obj.userChatContextCode = ApiClient.convertToType(data['userChatContextCode'], Object);
+        obj.userChatContextCode = ApiClient.convertToType(data['userChatContextCode'], 'String');
       if (data.hasOwnProperty('usedChatModelCode'))
-        obj.usedChatModelCode = ApiClient.convertToType(data['usedChatModelCode'], Object);
+        obj.usedChatModelCode = ApiClient.convertToType(data['usedChatModelCode'], 'String');
       if (data.hasOwnProperty('usedChatModelProvider'))
-        obj.usedChatModelProvider = ApiClient.convertToType(data['usedChatModelProvider'], Object);
+        obj.usedChatModelProvider = ApiClient.convertToType(data['usedChatModelProvider'], 'String');
       if (data.hasOwnProperty('queryResponse'))
         obj.queryResponse = ApiClient.convertToType(data['queryResponse'], Object);
       if (data.hasOwnProperty('windowOccupation'))
         obj.windowOccupation = GeboWorkingMemoryWindowOccupation.constructFromObject(data['windowOccupation']);
       if (data.hasOwnProperty('query'))
-        obj.query = ApiClient.convertToType(data['query'], Object);
+        obj.query = ApiClient.convertToType(data['query'], 'String');
       if (data.hasOwnProperty('thinkingOutputs'))
-        obj.thinkingOutputs = ApiClient.convertToType(data['thinkingOutputs'], Object);
+        obj.thinkingOutputs = ApiClient.convertToType(data['thinkingOutputs'], ['String']);
       if (data.hasOwnProperty('backendMessages'))
-        obj.backendMessages = ApiClient.convertToType(data['backendMessages'], Object);
+        obj.backendMessages = ApiClient.convertToType(data['backendMessages'], [GUserMessage]);
       if (data.hasOwnProperty('forcedDocumentsRef'))
-        obj.forcedDocumentsRef = ApiClient.convertToType(data['forcedDocumentsRef'], Object);
+        obj.forcedDocumentsRef = ApiClient.convertToType(data['forcedDocumentsRef'], [GResponseDocumentRef]);
       if (data.hasOwnProperty('documentsRef'))
-        obj.documentsRef = ApiClient.convertToType(data['documentsRef'], Object);
+        obj.documentsRef = ApiClient.convertToType(data['documentsRef'], [GResponseDocumentRef]);
       if (data.hasOwnProperty('calledFunctions'))
-        obj.calledFunctions = ApiClient.convertToType(data['calledFunctions'], Object);
+        obj.calledFunctions = ApiClient.convertToType(data['calledFunctions'], [CalledFunction]);
       if (data.hasOwnProperty('contextWindowStats'))
         obj.contextWindowStats = ChatModelRequestContextWindowStats.constructFromObject(data['contextWindowStats']);
       if (data.hasOwnProperty('generatedResources'))
-        obj.generatedResources = ApiClient.convertToType(data['generatedResources'], Object);
+        obj.generatedResources = ApiClient.convertToType(data['generatedResources'], [LLMGeneratedResource]);
       if (data.hasOwnProperty('pipelineRouterDecisionCode'))
-        obj.pipelineRouterDecisionCode = ApiClient.convertToType(data['pipelineRouterDecisionCode'], Object);
+        obj.pipelineRouterDecisionCode = ApiClient.convertToType(data['pipelineRouterDecisionCode'], 'String');
       if (data.hasOwnProperty('pipelineParams'))
-        obj.pipelineParams = ApiClient.convertToType(data['pipelineParams'], Object);
+        obj.pipelineParams = ApiClient.convertToType(data['pipelineParams'], {'String': Object});
       if (data.hasOwnProperty('deepSearchRequestId'))
-        obj.deepSearchRequestId = ApiClient.convertToType(data['deepSearchRequestId'], Object);
+        obj.deepSearchRequestId = ApiClient.convertToType(data['deepSearchRequestId'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} id
+ * @member {String} id
  */
 GeboTemplatedChatResponse.prototype.id = undefined;
 
 /**
- * @member {Object} userChatContextCode
+ * @member {String} userChatContextCode
  */
 GeboTemplatedChatResponse.prototype.userChatContextCode = undefined;
 
 /**
- * @member {Object} usedChatModelCode
+ * @member {String} usedChatModelCode
  */
 GeboTemplatedChatResponse.prototype.usedChatModelCode = undefined;
 
 /**
- * @member {Object} usedChatModelProvider
+ * @member {String} usedChatModelProvider
  */
 GeboTemplatedChatResponse.prototype.usedChatModelProvider = undefined;
 
@@ -110,32 +114,32 @@ GeboTemplatedChatResponse.prototype.queryResponse = undefined;
 GeboTemplatedChatResponse.prototype.windowOccupation = undefined;
 
 /**
- * @member {Object} query
+ * @member {String} query
  */
 GeboTemplatedChatResponse.prototype.query = undefined;
 
 /**
- * @member {Object} thinkingOutputs
+ * @member {Array.<String>} thinkingOutputs
  */
 GeboTemplatedChatResponse.prototype.thinkingOutputs = undefined;
 
 /**
- * @member {Object} backendMessages
+ * @member {Array.<module:model/GUserMessage>} backendMessages
  */
 GeboTemplatedChatResponse.prototype.backendMessages = undefined;
 
 /**
- * @member {Object} forcedDocumentsRef
+ * @member {Array.<module:model/GResponseDocumentRef>} forcedDocumentsRef
  */
 GeboTemplatedChatResponse.prototype.forcedDocumentsRef = undefined;
 
 /**
- * @member {Object} documentsRef
+ * @member {Array.<module:model/GResponseDocumentRef>} documentsRef
  */
 GeboTemplatedChatResponse.prototype.documentsRef = undefined;
 
 /**
- * @member {Object} calledFunctions
+ * @member {Array.<module:model/CalledFunction>} calledFunctions
  */
 GeboTemplatedChatResponse.prototype.calledFunctions = undefined;
 
@@ -145,22 +149,22 @@ GeboTemplatedChatResponse.prototype.calledFunctions = undefined;
 GeboTemplatedChatResponse.prototype.contextWindowStats = undefined;
 
 /**
- * @member {Object} generatedResources
+ * @member {Array.<module:model/LLMGeneratedResource>} generatedResources
  */
 GeboTemplatedChatResponse.prototype.generatedResources = undefined;
 
 /**
- * @member {Object} pipelineRouterDecisionCode
+ * @member {String} pipelineRouterDecisionCode
  */
 GeboTemplatedChatResponse.prototype.pipelineRouterDecisionCode = undefined;
 
 /**
- * @member {Object} pipelineParams
+ * @member {Object.<String, Object>} pipelineParams
  */
 GeboTemplatedChatResponse.prototype.pipelineParams = undefined;
 
 /**
- * @member {Object} deepSearchRequestId
+ * @member {String} deepSearchRequestId
  */
 GeboTemplatedChatResponse.prototype.deepSearchRequestId = undefined;
 

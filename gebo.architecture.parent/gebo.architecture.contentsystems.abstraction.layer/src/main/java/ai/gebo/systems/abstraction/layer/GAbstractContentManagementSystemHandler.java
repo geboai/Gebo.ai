@@ -21,6 +21,7 @@ import java.nio.file.attribute.FileTime;
 import java.security.Provider.Service;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Map;
@@ -39,8 +40,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.DataEndpoint;
+import ai.gebo.application.messaging.model.DataEndpointAccess;
 import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
+import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.service.ISearchService;
+import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
+import ai.gebo.architecture.search.service.SearchSources;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
@@ -71,6 +78,7 @@ import ai.gebo.document.model.GeboDocument;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
 import ai.gebo.knlowledgebase.model.contents.GDependencyTree;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.contents.GSoftwareArtifact;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
@@ -143,6 +151,12 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	// handler still reports its source endpoints, just without the connecting edges.
 	@Autowired
 	protected ObjectProvider<IWorkflowStatusHandlerRepositoryPattern> workflowStatusHandlerRepositoryProvider;
+
+	// The search services, to link a data source to the live search of its system.
+	// Resolved lazily for the same bean-cycle reason as the workflow repository above:
+	// the remote-filesystem search beans among them are built on content handlers.
+	@Autowired
+	protected ObjectProvider<ISearchServiceRepositoryPattern> searchServicesProvider;
 
 	// Message broker for system messaging
 	protected IGMessageBroker messageBroker = null;
@@ -885,14 +899,19 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 		}
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+		// named for the reader by the system type this handler serves
+		flow.setDescription(getHandledSystemType() != null ? getHandledSystemType().getDescription() : null);
 		String product = getHandledSystemType() != null ? getHandledSystemType().getCode() : "content source";
+		// projects and knowledge bases already looked up for this report, by code
+		final Map<String, Object> hierarchy = new HashMap<String, Object>();
 		for (ProjectEndpointType endpoint : endpoints) {
 			if (endpoint == null || endpoint.getCode() == null) {
 				continue;
 			}
 			String baseUri = null;
+			SystemIntegrationType system = null;
 			try {
-				SystemIntegrationType system = getSystem(endpoint);
+				system = getSystem(endpoint);
 				if (system != null) {
 					baseUri = system.getBaseUri();
 				}
@@ -914,8 +933,86 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 			source.setLocality(DataEndpointLocality.hintFromLocator(source.getEndpoint()));
 			flow.getDataEndpoints().add(source);
 			addWorkflowLinks(flow, source, endpoint);
+			addLiveSearchLinks(flow, source, system);
+			source.setAccess(dataSourceAccess(endpoint, source, hierarchy));
 		}
 		return flow.getDataEndpoints().isEmpty() ? null : flow;
+	}
+
+	/**
+	 * Who may reach the documents of a data source, as the platform checks it:
+	 * retrieving them in chat and search is granted by its knowledge base, browsing
+	 * them by its project (both a READ, {@code filterCanDoAction}), and in the ACL
+	 * model each document by the ACL entries it carries, which the data source sets
+	 * on the root folder of what it ingests.
+	 *
+	 * @param endpoint  the data source
+	 * @param source    its register endpoint
+	 * @param hierarchy projects and knowledge bases already looked up, by code
+	 * @return the access rules, never null
+	 */
+	private List<DataEndpointAccess> dataSourceAccess(ProjectEndpointType endpoint, DataEndpoint source,
+			Map<String, Object> hierarchy) {
+		final List<DataEndpointAccess> rules = new ArrayList<DataEndpointAccess>();
+		final GProject project = (GProject) lookup(hierarchy, "project:" + endpoint.getParentProjectCode(),
+				() -> knowledgeBaseHierarchyLookupService.findProjectByCode(endpoint.getParentProjectCode()));
+		final String kbCode = project != null ? project.getRootKnowledgeBaseCode() : null;
+		final GKnowledgeBase knowledgeBase = (GKnowledgeBase) lookup(hierarchy, "kb:" + kbCode,
+				() -> knowledgeBaseHierarchyLookupService.findKnowledgeBaseByCode(kbCode));
+		if (knowledgeBase != null) {
+			rules.add(DataEndpointAccess
+					.of(knowledgeBase, "Knowledge base '" + nameOf(knowledgeBase.getDescription(), kbCode) + "'",
+							"Retrieving its documents in chat and search", DataEndpointAccess.Mechanism.CONTENT)
+					.withAclAliases(knowledgeBase.getAclAliases()));
+		}
+		if (project != null) {
+			rules.add(DataEndpointAccess
+					.of(project, "Project '" + nameOf(project.getDescription(), project.getCode()) + "'",
+							"Browsing its documents", DataEndpointAccess.Mechanism.CONTENT)
+					.withAclAliases(project.getAclAliases()));
+		}
+		final DataEndpointAccess documents = new DataEndpointAccess();
+		documents.setGrantedBy("Data source '" + source.getDescription() + "'");
+		documents.setScope("Retrieving each of its documents");
+		documents.setMechanism(DataEndpointAccess.Mechanism.ACL_ONLY);
+		documents.setNote("Set on the root folder of what it ingests; a connector can set its own entries "
+				+ "on the folders it reads from the source system.");
+		documents.withAclAliases(endpoint.getAclAliases());
+		rules.add(documents);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Data source " + endpoint.getCode() + " access: knowledge base=" + kbCode + " found="
+					+ (knowledgeBase != null) + " project=" + endpoint.getParentProjectCode() + " found="
+					+ (project != null) + " document ACL aliases="
+					+ (endpoint.getAclAliases() != null ? endpoint.getAclAliases().size() : 0));
+		}
+		return rules;
+	}
+
+	/** A lookup throwing the platform's persistence exception. */
+	private static interface HierarchyLookup {
+		Object find() throws GeboPersistenceException;
+	}
+
+	/** A project or knowledge base, looked up once per report; null when missing or unreadable. */
+	private Object lookup(Map<String, Object> hierarchy, String key, HierarchyLookup lookup) {
+		if (knowledgeBaseHierarchyLookupService == null || key.endsWith(":null")) {
+			return null;
+		}
+		if (hierarchy.containsKey(key)) {
+			return hierarchy.get(key);
+		}
+		Object found = null;
+		try {
+			found = lookup.find();
+		} catch (GeboPersistenceException | RuntimeException e) {
+			LOGGER.error("Cannot read " + key + " for the access of a data-flow source", e);
+		}
+		hierarchy.put(key, found);
+		return found;
+	}
+
+	private static String nameOf(String description, String code) {
+		return description != null && !description.isBlank() ? description : code;
 	}
 
 	/**
@@ -983,7 +1080,7 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 				.checkReceivingComponentPresent(tokenizer.getModuleId(), tokenizer.getComponentId())) {
 			return;
 		}
-		String chunkEndpointId = crossRef(tokenizer, "chunk-cache");
+		String chunkEndpointId = crossRef(tokenizer, GStandardDataFlowEndpoints.CHUNK_CACHE);
 		DataTransformationMetaInfo ingestEngine = DataTransformationMetaInfo.of("ingest-" + endpoint.getCode(),
 				"Document ingestion and chunking", List.of(MetaEndpointType.DOCUMENTS), List.of(MetaEndpointType.CHUNK));
 		flow.getEngines().add(ingestEngine);
@@ -996,11 +1093,53 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 		// convention here; the component that owns it is taken from the workflow
 		// step's own target, not restated.
 		addDownstreamLink(flow, endpoint, enabledSteps, chunkEndpointId, GStandardWorkflowStep.EMBEDDING,
-				"vector-store", MetaEndpointType.VECTORIAL_DATABASE, "Embedding / semantic indexing");
+				GStandardDataFlowEndpoints.VECTOR_STORE, MetaEndpointType.VECTORIAL_DATABASE, "Embedding / semantic indexing");
 		addDownstreamLink(flow, endpoint, enabledSteps, chunkEndpointId, GStandardWorkflowStep.FULLTEXT_INDEXING,
-				"fulltext-index", MetaEndpointType.FULLTEXT_INDEX, "Full-text indexing");
+				GStandardDataFlowEndpoints.FULLTEXT_INDEX, MetaEndpointType.FULLTEXT_INDEX, "Full-text indexing");
 		addDownstreamLink(flow, endpoint, enabledSteps, chunkEndpointId, GStandardWorkflowStep.GRAPHEXTRACTION,
-				"graph-store", MetaEndpointType.GRAPH_DATABASE, "Knowledge-graph extraction");
+				GStandardDataFlowEndpoints.KNOWLEDGE_GRAPH, MetaEndpointType.GRAPH_DATABASE, "Knowledge-graph extraction");
+	}
+
+	/**
+	 * Links a data source to the live search of its system: a search service searching
+	 * the system the data source is defined on (the remote-filesystem searches search the
+	 * systems their content handler is configured with) returns the content the data
+	 * source ingests, so a data source flagged as holding personal data makes that search
+	 * source hold them as well. Linked only when someone can search the system
+	 * ({@link SearchSources#searchable}), as the search sources component reports it.
+	 */
+	private void addLiveSearchLinks(GDataFlowMetaInfos flow, DataEndpoint source, SystemIntegrationType system) {
+		if (system == null || system.getCode() == null || searchServicesProvider == null) {
+			return;
+		}
+		final ISearchServiceRepositoryPattern searchServices = searchServicesProvider.getIfAvailable();
+		if (searchServices == null) {
+			return;
+		}
+		final String systemType = getHandledSystemType() != null ? getHandledSystemType().getCode() : null;
+		for (ISearchService service : SearchSources.searchable(searchServices)) {
+			for (SearchableSystemMetaData searched : SearchSources.systems(service)) {
+				if (!(searched.getSystemConfigurationReference() instanceof GContentManagementSystem configured)
+						|| !system.getCode().equals(configured.getCode()) || systemType == null
+						|| !systemType.equals(configured.getContentManagementSystemType())) {
+					continue;
+				}
+				final String searchSource = GStandardDataFlowEndpoints.searchSourceRef(service.getId(),
+						SearchSources.systemCode(searched));
+				DataTransformationMetaInfo engine = DataTransformationMetaInfo.of(
+						"live-search-" + service.getId() + "-" + source.getId(), "Live search of the system",
+						List.of(MetaEndpointType.DOCUMENTS), List.of(MetaEndpointType.DOCUMENTS));
+				flow.getEngines().add(engine);
+				flow.getTransformations().add(DataTransformationInfo.of(
+						"live-search-flow-" + service.getId() + "-" + source.getId(),
+						"The content of '" + source.getDescription() + "' is also searched live by " + service.getId(),
+						engine, flow.qualifiedId(source.getId()), searchSource));
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Data source:" + source.getId() + " on system:" + system.getCode()
+							+ " is searched live by:" + service.getId());
+				}
+			}
+		}
 	}
 
 	private void addDownstreamLink(GDataFlowMetaInfos flow, ProjectEndpointType endpoint, Set<String> enabledSteps,

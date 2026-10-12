@@ -1,0 +1,83 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+<div class="flex flex-column gap-3">
+  <div id="AgenticChatNetworksHint" gebo-ai-text class="text-sm text-600">
+    Choose the network of agents each kind of chat is handed to. The choice overrides the default of the
+    application configuration; a chat profile can still choose its own network for its chats.
+  </div>
+  @if (loading) {
+    <i class="pi pi-spin pi-spinner"></i>
+  }
+  @for (message of messages; track $index) {
+    <p-message [severity]="message.severity" styleClass="w-full">{{ message.summary }}: {{ message.detail }}</p-message>
+  }
+  @for (pipeline of pipelines; track pipeline.pipelineType) {
+    <p-panel>
+      <ng-template #header pTemplate="header">
+        @switch (pipeline.pipelineType) {
+          @case ("RAG_PIPELINE") {
+            <span id="RagPipelineTitle" gebo-ai-text class="font-semibold">Agentic chat with knowledge bases</span>
+          }
+          @case ("PURE_CHAT_PIPELINE") {
+            <span id="PureChatPipelineTitle" gebo-ai-text class="font-semibold">Free chat</span>
+          }
+        }
+      </ng-template>
+      <div class="flex flex-column gap-2">
+        @switch (pipeline.pipelineType) {
+          @case ("RAG_PIPELINE") {
+            <span id="RagPipelineDescription" gebo-ai-text class="text-sm text-600">The chats with a chat profile and its knowledge bases, unless the chat profile chooses its own network.</span>
+          }
+          @case ("PURE_CHAT_PIPELINE") {
+            <span id="PureChatPipelineDescription" gebo-ai-text class="text-sm text-600">The free chats, without chat profile nor internal knowledge base.</span>
+          }
+        }
+        <div class="flex flex-column gap-2">
+          @for (option of pipeline.options; track option.value) {
+            <div class="flex align-items-start gap-2 p-2 border-1 border-round surface-border"
+              [class.surface-100]="pipeline.chosen === option.value">
+              <p-radioButton [inputId]="pipeline.pipelineType + '_' + option.value" [name]="pipeline.pipelineType"
+                [value]="option.value" [(ngModel)]="pipeline.chosen" class="mt-1"></p-radioButton>
+              <label [for]="pipeline.pipelineType + '_' + option.value" class="flex flex-column gap-1 cursor-pointer">
+                <span class="font-semibold">{{ option.description ?? option.value }}</span>
+                @if (option.suggestedPurpose) {
+                  <span class="text-sm">{{ option.suggestedPurpose }}</span>
+                }
+                <span class="text-xs text-500">{{ option.value }}</span>
+              </label>
+            </div>
+          } @empty {
+            <span id="NoChoosableChatNetworks" gebo-ai-text class="text-sm text-500">No network of agents can be chosen for this kind of chat.</span>
+          }
+        </div>
+        <div class="flex flex-wrap gap-2 align-items-center">
+          <p-button id="SaveChatNetworkBtn" gebo-ai-label label="Save" icon="pi pi-save" [outlined]="true"
+            [disabled]="!pipeline.chosen || pipeline.chosen === pipeline.info?.defaultChatNetworkOfAgents"
+            (onClick)="save(pipeline)"></p-button>
+          @if (pipeline.info?.defaultChatNetworkOfAgents) {
+            <p-button id="ResetChatNetworkBtn" gebo-ai-label label="Use the configured default" icon="pi pi-undo"
+              severity="secondary" [outlined]="true" (onClick)="reset(pipeline)"></p-button>
+          }
+        </div>
+        <div class="text-xs text-500">
+          <span id="ConfiguredChatNetworkLabel" gebo-ai-text>Default of the application configuration:</span>
+          {{ networkLabel(pipeline, pipeline.info?.configuredDefaultChatNetworkOfAgents) }}
+          &nbsp;·&nbsp;
+          <span id="EffectiveChatNetworkLabel" gebo-ai-text>Now in use:</span>
+          {{ networkLabel(pipeline, pipeline.info?.effectiveChatNetworkOfAgents) }}
+          @if (pipeline.info?.defaultChatNetworkOfAgents) {
+            <span id="ChosenChatNetworkLabel" gebo-ai-text>(chosen here)</span>
+          }
+        </div>
+      </div>
+    </p-panel>
+  }
+</div>

@@ -22,11 +22,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMUsageAggregationBucket
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
 
 public class LLMUsageAggregationBucket {
   @JsonProperty("providerId")
   private String providerId = null;
+
+  @JsonProperty("modelTypeCode")
+  private String modelTypeCode = null;
 
   @JsonProperty("username")
   private String username = null;
@@ -96,14 +99,35 @@ public class LLMUsageAggregationBucket {
   @JsonProperty("nrRequests")
   private Long nrRequests = null;
 
-  @JsonProperty("latencyMin")
-  private Long latencyMin = null;
+  @JsonProperty("responseTimeMin")
+  private Long responseTimeMin = null;
 
-  @JsonProperty("latencyMax")
-  private Long latencyMax = null;
+  @JsonProperty("responseTimeMax")
+  private Long responseTimeMax = null;
 
-  @JsonProperty("latencyAvg")
-  private Long latencyAvg = null;
+  @JsonProperty("responseTimeAvg")
+  private Long responseTimeAvg = null;
+
+  @JsonProperty("timeToFirstTokenMin")
+  private Long timeToFirstTokenMin = null;
+
+  @JsonProperty("timeToFirstTokenMax")
+  private Long timeToFirstTokenMax = null;
+
+  @JsonProperty("timeToFirstTokenAvg")
+  private Long timeToFirstTokenAvg = null;
+
+  @JsonProperty("timeToFirstTokenSamples")
+  private Long timeToFirstTokenSamples = null;
+
+  @JsonProperty("cost")
+  private Double cost = null;
+
+  @JsonProperty("currencyCode")
+  private String currencyCode = null;
+
+  @JsonProperty("costSamples")
+  private Long costSamples = null;
 
   public LLMUsageAggregationBucket providerId(String providerId) {
     this.providerId = providerId;
@@ -121,6 +145,24 @@ public class LLMUsageAggregationBucket {
 
   public void setProviderId(String providerId) {
     this.providerId = providerId;
+  }
+
+  public LLMUsageAggregationBucket modelTypeCode(String modelTypeCode) {
+    this.modelTypeCode = modelTypeCode;
+    return this;
+  }
+
+   /**
+   * Get modelTypeCode
+   * @return modelTypeCode
+  **/
+  @Schema(description = "")
+  public String getModelTypeCode() {
+    return modelTypeCode;
+  }
+
+  public void setModelTypeCode(String modelTypeCode) {
+    this.modelTypeCode = modelTypeCode;
   }
 
   public LLMUsageAggregationBucket username(String username) {
@@ -321,58 +363,184 @@ public class LLMUsageAggregationBucket {
     this.nrRequests = nrRequests;
   }
 
-  public LLMUsageAggregationBucket latencyMin(Long latencyMin) {
-    this.latencyMin = latencyMin;
+  public LLMUsageAggregationBucket responseTimeMin(Long responseTimeMin) {
+    this.responseTimeMin = responseTimeMin;
     return this;
   }
 
    /**
-   * Get latencyMin
-   * @return latencyMin
+   * Get responseTimeMin
+   * @return responseTimeMin
   **/
   @Schema(description = "")
-  public Long getLatencyMin() {
-    return latencyMin;
+  public Long getResponseTimeMin() {
+    return responseTimeMin;
   }
 
-  public void setLatencyMin(Long latencyMin) {
-    this.latencyMin = latencyMin;
+  public void setResponseTimeMin(Long responseTimeMin) {
+    this.responseTimeMin = responseTimeMin;
   }
 
-  public LLMUsageAggregationBucket latencyMax(Long latencyMax) {
-    this.latencyMax = latencyMax;
+  public LLMUsageAggregationBucket responseTimeMax(Long responseTimeMax) {
+    this.responseTimeMax = responseTimeMax;
     return this;
   }
 
    /**
-   * Get latencyMax
-   * @return latencyMax
+   * Get responseTimeMax
+   * @return responseTimeMax
   **/
   @Schema(description = "")
-  public Long getLatencyMax() {
-    return latencyMax;
+  public Long getResponseTimeMax() {
+    return responseTimeMax;
   }
 
-  public void setLatencyMax(Long latencyMax) {
-    this.latencyMax = latencyMax;
+  public void setResponseTimeMax(Long responseTimeMax) {
+    this.responseTimeMax = responseTimeMax;
   }
 
-  public LLMUsageAggregationBucket latencyAvg(Long latencyAvg) {
-    this.latencyAvg = latencyAvg;
+  public LLMUsageAggregationBucket responseTimeAvg(Long responseTimeAvg) {
+    this.responseTimeAvg = responseTimeAvg;
     return this;
   }
 
    /**
-   * Get latencyAvg
-   * @return latencyAvg
+   * Get responseTimeAvg
+   * @return responseTimeAvg
   **/
   @Schema(description = "")
-  public Long getLatencyAvg() {
-    return latencyAvg;
+  public Long getResponseTimeAvg() {
+    return responseTimeAvg;
   }
 
-  public void setLatencyAvg(Long latencyAvg) {
-    this.latencyAvg = latencyAvg;
+  public void setResponseTimeAvg(Long responseTimeAvg) {
+    this.responseTimeAvg = responseTimeAvg;
+  }
+
+  public LLMUsageAggregationBucket timeToFirstTokenMin(Long timeToFirstTokenMin) {
+    this.timeToFirstTokenMin = timeToFirstTokenMin;
+    return this;
+  }
+
+   /**
+   * Get timeToFirstTokenMin
+   * @return timeToFirstTokenMin
+  **/
+  @Schema(description = "")
+  public Long getTimeToFirstTokenMin() {
+    return timeToFirstTokenMin;
+  }
+
+  public void setTimeToFirstTokenMin(Long timeToFirstTokenMin) {
+    this.timeToFirstTokenMin = timeToFirstTokenMin;
+  }
+
+  public LLMUsageAggregationBucket timeToFirstTokenMax(Long timeToFirstTokenMax) {
+    this.timeToFirstTokenMax = timeToFirstTokenMax;
+    return this;
+  }
+
+   /**
+   * Get timeToFirstTokenMax
+   * @return timeToFirstTokenMax
+  **/
+  @Schema(description = "")
+  public Long getTimeToFirstTokenMax() {
+    return timeToFirstTokenMax;
+  }
+
+  public void setTimeToFirstTokenMax(Long timeToFirstTokenMax) {
+    this.timeToFirstTokenMax = timeToFirstTokenMax;
+  }
+
+  public LLMUsageAggregationBucket timeToFirstTokenAvg(Long timeToFirstTokenAvg) {
+    this.timeToFirstTokenAvg = timeToFirstTokenAvg;
+    return this;
+  }
+
+   /**
+   * Get timeToFirstTokenAvg
+   * @return timeToFirstTokenAvg
+  **/
+  @Schema(description = "")
+  public Long getTimeToFirstTokenAvg() {
+    return timeToFirstTokenAvg;
+  }
+
+  public void setTimeToFirstTokenAvg(Long timeToFirstTokenAvg) {
+    this.timeToFirstTokenAvg = timeToFirstTokenAvg;
+  }
+
+  public LLMUsageAggregationBucket timeToFirstTokenSamples(Long timeToFirstTokenSamples) {
+    this.timeToFirstTokenSamples = timeToFirstTokenSamples;
+    return this;
+  }
+
+   /**
+   * Get timeToFirstTokenSamples
+   * @return timeToFirstTokenSamples
+  **/
+  @Schema(description = "")
+  public Long getTimeToFirstTokenSamples() {
+    return timeToFirstTokenSamples;
+  }
+
+  public void setTimeToFirstTokenSamples(Long timeToFirstTokenSamples) {
+    this.timeToFirstTokenSamples = timeToFirstTokenSamples;
+  }
+
+  public LLMUsageAggregationBucket cost(Double cost) {
+    this.cost = cost;
+    return this;
+  }
+
+   /**
+   * Get cost
+   * @return cost
+  **/
+  @Schema(description = "")
+  public Double getCost() {
+    return cost;
+  }
+
+  public void setCost(Double cost) {
+    this.cost = cost;
+  }
+
+  public LLMUsageAggregationBucket currencyCode(String currencyCode) {
+    this.currencyCode = currencyCode;
+    return this;
+  }
+
+   /**
+   * Get currencyCode
+   * @return currencyCode
+  **/
+  @Schema(description = "")
+  public String getCurrencyCode() {
+    return currencyCode;
+  }
+
+  public void setCurrencyCode(String currencyCode) {
+    this.currencyCode = currencyCode;
+  }
+
+  public LLMUsageAggregationBucket costSamples(Long costSamples) {
+    this.costSamples = costSamples;
+    return this;
+  }
+
+   /**
+   * Get costSamples
+   * @return costSamples
+  **/
+  @Schema(description = "")
+  public Long getCostSamples() {
+    return costSamples;
+  }
+
+  public void setCostSamples(Long costSamples) {
+    this.costSamples = costSamples;
   }
 
 
@@ -386,6 +554,7 @@ public class LLMUsageAggregationBucket {
     }
     LLMUsageAggregationBucket llMUsageAggregationBucket = (LLMUsageAggregationBucket) o;
     return Objects.equals(this.providerId, llMUsageAggregationBucket.providerId) &&
+        Objects.equals(this.modelTypeCode, llMUsageAggregationBucket.modelTypeCode) &&
         Objects.equals(this.username, llMUsageAggregationBucket.username) &&
         Objects.equals(this.model, llMUsageAggregationBucket.model) &&
         Objects.equals(this.callerStack, llMUsageAggregationBucket.callerStack) &&
@@ -397,14 +566,21 @@ public class LLMUsageAggregationBucket {
         Objects.equals(this.outputToken, llMUsageAggregationBucket.outputToken) &&
         Objects.equals(this.totalToken, llMUsageAggregationBucket.totalToken) &&
         Objects.equals(this.nrRequests, llMUsageAggregationBucket.nrRequests) &&
-        Objects.equals(this.latencyMin, llMUsageAggregationBucket.latencyMin) &&
-        Objects.equals(this.latencyMax, llMUsageAggregationBucket.latencyMax) &&
-        Objects.equals(this.latencyAvg, llMUsageAggregationBucket.latencyAvg);
+        Objects.equals(this.responseTimeMin, llMUsageAggregationBucket.responseTimeMin) &&
+        Objects.equals(this.responseTimeMax, llMUsageAggregationBucket.responseTimeMax) &&
+        Objects.equals(this.responseTimeAvg, llMUsageAggregationBucket.responseTimeAvg) &&
+        Objects.equals(this.timeToFirstTokenMin, llMUsageAggregationBucket.timeToFirstTokenMin) &&
+        Objects.equals(this.timeToFirstTokenMax, llMUsageAggregationBucket.timeToFirstTokenMax) &&
+        Objects.equals(this.timeToFirstTokenAvg, llMUsageAggregationBucket.timeToFirstTokenAvg) &&
+        Objects.equals(this.timeToFirstTokenSamples, llMUsageAggregationBucket.timeToFirstTokenSamples) &&
+        Objects.equals(this.cost, llMUsageAggregationBucket.cost) &&
+        Objects.equals(this.currencyCode, llMUsageAggregationBucket.currencyCode) &&
+        Objects.equals(this.costSamples, llMUsageAggregationBucket.costSamples);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(providerId, username, model, callerStack, modelType, year, month, day, inputToken, outputToken, totalToken, nrRequests, latencyMin, latencyMax, latencyAvg);
+    return Objects.hash(providerId, modelTypeCode, username, model, callerStack, modelType, year, month, day, inputToken, outputToken, totalToken, nrRequests, responseTimeMin, responseTimeMax, responseTimeAvg, timeToFirstTokenMin, timeToFirstTokenMax, timeToFirstTokenAvg, timeToFirstTokenSamples, cost, currencyCode, costSamples);
   }
 
 
@@ -414,6 +590,7 @@ public class LLMUsageAggregationBucket {
     sb.append("class LLMUsageAggregationBucket {\n");
     
     sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
+    sb.append("    modelTypeCode: ").append(toIndentedString(modelTypeCode)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    model: ").append(toIndentedString(model)).append("\n");
     sb.append("    callerStack: ").append(toIndentedString(callerStack)).append("\n");
@@ -425,9 +602,16 @@ public class LLMUsageAggregationBucket {
     sb.append("    outputToken: ").append(toIndentedString(outputToken)).append("\n");
     sb.append("    totalToken: ").append(toIndentedString(totalToken)).append("\n");
     sb.append("    nrRequests: ").append(toIndentedString(nrRequests)).append("\n");
-    sb.append("    latencyMin: ").append(toIndentedString(latencyMin)).append("\n");
-    sb.append("    latencyMax: ").append(toIndentedString(latencyMax)).append("\n");
-    sb.append("    latencyAvg: ").append(toIndentedString(latencyAvg)).append("\n");
+    sb.append("    responseTimeMin: ").append(toIndentedString(responseTimeMin)).append("\n");
+    sb.append("    responseTimeMax: ").append(toIndentedString(responseTimeMax)).append("\n");
+    sb.append("    responseTimeAvg: ").append(toIndentedString(responseTimeAvg)).append("\n");
+    sb.append("    timeToFirstTokenMin: ").append(toIndentedString(timeToFirstTokenMin)).append("\n");
+    sb.append("    timeToFirstTokenMax: ").append(toIndentedString(timeToFirstTokenMax)).append("\n");
+    sb.append("    timeToFirstTokenAvg: ").append(toIndentedString(timeToFirstTokenAvg)).append("\n");
+    sb.append("    timeToFirstTokenSamples: ").append(toIndentedString(timeToFirstTokenSamples)).append("\n");
+    sb.append("    cost: ").append(toIndentedString(cost)).append("\n");
+    sb.append("    currencyCode: ").append(toIndentedString(currencyCode)).append("\n");
+    sb.append("    costSamples: ").append(toIndentedString(costSamples)).append("\n");
     sb.append("}");
     return sb.toString();
   }

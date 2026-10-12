@@ -62,13 +62,13 @@ export class UserspaceUploadControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public uploadForm(userspaceFolderCode: string, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public uploadForm(userspaceFolderCode: string, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public uploadForm(userspaceFolderCode: string, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public uploadForm(userspaceFolderCode: string, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public uploadUserspaceForm(userspaceFolderCode: string, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public uploadUserspaceForm(userspaceFolderCode: string, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public uploadUserspaceForm(userspaceFolderCode: string, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public uploadUserspaceForm(userspaceFolderCode: string, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userspaceFolderCode === null || userspaceFolderCode === undefined) {
-            throw new Error('Required parameter userspaceFolderCode was null or undefined when calling upload.');
+            throw new Error('Required parameter userspaceFolderCode was null or undefined when calling uploadUserspace.');
         }
 
 

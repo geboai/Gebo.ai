@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import LLMSSetupConfiguration from './LLMSSetupConfiguration';
 
 /**
  * The LLMSSetupConfigurationData model module.
@@ -39,70 +40,70 @@ export default class LLMSSetupConfigurationData {
     if (data) {
       obj = obj || new LLMSSetupConfigurationData();
       if (data.hasOwnProperty('configurations'))
-        obj.configurations = ApiClient.convertToType(data['configurations'], Object);
+        obj.configurations = ApiClient.convertToType(data['configurations'], [LLMSSetupConfiguration]);
       if (data.hasOwnProperty('canRunAutoconfigure'))
-        obj.canRunAutoconfigure = ApiClient.convertToType(data['canRunAutoconfigure'], Object);
+        obj.canRunAutoconfigure = ApiClient.convertToType(data['canRunAutoconfigure'], 'Boolean');
       if (data.hasOwnProperty('embeddingModelExists'))
-        obj.embeddingModelExists = ApiClient.convertToType(data['embeddingModelExists'], Object);
+        obj.embeddingModelExists = ApiClient.convertToType(data['embeddingModelExists'], 'Boolean');
       if (data.hasOwnProperty('defaultChatModelExists'))
-        obj.defaultChatModelExists = ApiClient.convertToType(data['defaultChatModelExists'], Object);
+        obj.defaultChatModelExists = ApiClient.convertToType(data['defaultChatModelExists'], 'Boolean');
       if (data.hasOwnProperty('internalServicesChatModelExists'))
-        obj.internalServicesChatModelExists = ApiClient.convertToType(data['internalServicesChatModelExists'], Object);
+        obj.internalServicesChatModelExists = ApiClient.convertToType(data['internalServicesChatModelExists'], 'Boolean');
       if (data.hasOwnProperty('rankerModelExists'))
-        obj.rankerModelExists = ApiClient.convertToType(data['rankerModelExists'], Object);
+        obj.rankerModelExists = ApiClient.convertToType(data['rankerModelExists'], 'Boolean');
       if (data.hasOwnProperty('imagesModelExists'))
-        obj.imagesModelExists = ApiClient.convertToType(data['imagesModelExists'], Object);
+        obj.imagesModelExists = ApiClient.convertToType(data['imagesModelExists'], 'Boolean');
       if (data.hasOwnProperty('ttsModelExists'))
-        obj.ttsModelExists = ApiClient.convertToType(data['ttsModelExists'], Object);
+        obj.ttsModelExists = ApiClient.convertToType(data['ttsModelExists'], 'Boolean');
       if (data.hasOwnProperty('transcriptModelExists'))
-        obj.transcriptModelExists = ApiClient.convertToType(data['transcriptModelExists'], Object);
+        obj.transcriptModelExists = ApiClient.convertToType(data['transcriptModelExists'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} configurations
+ * @member {Array.<module:model/LLMSSetupConfiguration>} configurations
  */
 LLMSSetupConfigurationData.prototype.configurations = undefined;
 
 /**
- * @member {Object} canRunAutoconfigure
+ * @member {Boolean} canRunAutoconfigure
  */
 LLMSSetupConfigurationData.prototype.canRunAutoconfigure = undefined;
 
 /**
- * @member {Object} embeddingModelExists
+ * @member {Boolean} embeddingModelExists
  */
 LLMSSetupConfigurationData.prototype.embeddingModelExists = undefined;
 
 /**
- * @member {Object} defaultChatModelExists
+ * @member {Boolean} defaultChatModelExists
  */
 LLMSSetupConfigurationData.prototype.defaultChatModelExists = undefined;
 
 /**
- * @member {Object} internalServicesChatModelExists
+ * @member {Boolean} internalServicesChatModelExists
  */
 LLMSSetupConfigurationData.prototype.internalServicesChatModelExists = undefined;
 
 /**
- * @member {Object} rankerModelExists
+ * @member {Boolean} rankerModelExists
  */
 LLMSSetupConfigurationData.prototype.rankerModelExists = undefined;
 
 /**
- * @member {Object} imagesModelExists
+ * @member {Boolean} imagesModelExists
  */
 LLMSSetupConfigurationData.prototype.imagesModelExists = undefined;
 
 /**
- * @member {Object} ttsModelExists
+ * @member {Boolean} ttsModelExists
  */
 LLMSSetupConfigurationData.prototype.ttsModelExists = undefined;
 
 /**
- * @member {Object} transcriptModelExists
+ * @member {Boolean} transcriptModelExists
  */
 LLMSSetupConfigurationData.prototype.transcriptModelExists = undefined;
 

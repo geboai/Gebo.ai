@@ -71,6 +71,7 @@ import ai.gebo.llms.setup.model.LLMSSetupConfigurationData.LLMSSetupConfiguratio
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.model.base.GObjectRef;
+import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
@@ -683,6 +684,16 @@ public class GeboLLMSSetupService {
 			if (secretId != null && secretId.trim().length() > 0) {
 
 			} else {
+				// Only an api key vendor gets its credentials made here from the key typed in;
+				// one taking another kind of secret (AWS, Google) needs it picked or created
+				List<GeboSecretType> secretTypes = vendorData.getVendorInfo().getSecretTypes();
+				if (secretTypes != null && !secretTypes.isEmpty() && !secretTypes.contains(GeboSecretType.TOKEN)) {
+					LOGGER.warn("Autoconfigure of vendor " + autoconfiguredata.getVendorId()
+							+ " without a secret: it takes " + secretTypes + ", not an api key");
+					return OperationStatus.ofError("Credentials required",
+							vendorData.getVendorInfo().getName() + " needs credentials of kind " + secretTypes
+									+ ": choose or create them");
+				}
 				GeboTokenContent geboToken = new GeboTokenContent();
 				geboToken.setToken(autoconfiguredata.getNewApiSecret());
 				geboToken.setUser(autoconfiguredata.getNewUserName());
@@ -825,8 +836,11 @@ public class GeboLLMSSetupService {
 			if (choice.getMaxGeneratedTokens() != null) {
 				md.setMaxGeneratedTokens(choice.getMaxGeneratedTokens());
 			}
-			if (choice.getThinking() != null) {
-				md.setThinking(choice.getThinking());
+			if (choice.thinkingFor(md.getUses()) != null) {
+				md.setThinking(choice.thinkingFor(md.getUses()));
+			}
+			if (choice.getTemperature() != null) {
+				md.setTemperature(choice.getTemperature());
 			}
 		});
 		return md;
@@ -987,11 +1001,70 @@ public class GeboLLMSSetupService {
 		}
 	}
 
+	/**
+	 * Fills the generation settings the setup library defines for the requested model
+	 * when the caller did not send them.
+	 *
+	 * <p>
+	 * The context window, the generation cap and the thinking level belong to the preset
+	 * choice in library.yml, not to whoever is asking for the model: a client that knows
+	 * which model to create does not necessarily know how that model is meant to be run.
+	 * {@link #createChatModel} resolves them for the autoconfigure flow and the startup
+	 * initialization does the same, but this entry point used to take them only from the
+	 * request - so the guided wizard, which builds its own {@code LLMCreateModelData} and
+	 * sends no generation settings, created chat models with no thinking level and no
+	 * generation cap at all, whatever the library declared for them.
+	 * </p>
+	 *
+	 * <p>
+	 * Only null fields are filled, so a caller that does state a value keeps it: the
+	 * library provides the default, it does not override a decision.
+	 * </p>
+	 *
+	 * @param config the requested model, modified in place
+	 */
+	private void applyPresetDefaults(LLMCreateModelData config) {
+		if (config.getType() == null || config.getServiceHandler() == null || config.getModelCode() == null)
+			return;
+		if (config.getContextWindow() != null && config.getMaxGeneratedTokens() != null && config.getThinking() != null
+				&& config.getTemperature() != null)
+			return;
+		vendorsSetupConfig.getVendors().stream()
+				.flatMap(vendor -> vendor.getPresets().stream())
+				.filter(preset -> preset.getType() == config.getType()
+						&& config.getServiceHandler().equals(preset.getServiceHandler()))
+				.flatMap(preset -> preset.getChoices().stream())
+				.filter(choice -> config.getModelCode().equals(choice.getCode()))
+				.findFirst()
+				.ifPresent(choice -> {
+					if (config.getContextWindow() == null && choice.getContextWindow() != null) {
+						config.setContextWindow(choice.getContextWindow());
+					}
+					if (config.getMaxGeneratedTokens() == null && choice.getMaxGeneratedTokens() != null) {
+						config.setMaxGeneratedTokens(choice.getMaxGeneratedTokens());
+					}
+					if (config.getThinking() == null && choice.thinkingFor(config.getUses()) != null) {
+						config.setThinking(choice.thinkingFor(config.getUses()));
+					}
+					if (config.getTemperature() == null && choice.getTemperature() != null) {
+						config.setTemperature(choice.getTemperature());
+					}
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug(
+								"Model '{}' on {} for {} takes the setup library defaults contextWindow={} maxGeneratedTokens={} thinking={} temperature={}",
+								config.getModelCode(), config.getServiceHandler(), config.getUses(),
+								config.getContextWindow(), config.getMaxGeneratedTokens(), config.getThinking(),
+								config.getTemperature());
+					}
+				});
+	}
+
 	public OperationStatus<LLMSModelsCreationResult> createLLMS(List<LLMCreateModelData> configs) {
 
 		LLMSModelsCreationResult result = new LLMSModelsCreationResult();
 		List<OperationStatus<GBaseModelConfig>> operationsOutput = new ArrayList<>();
 		for (LLMCreateModelData config : configs) {
+			applyPresetDefaults(config);
 			// The guided flows (easy tab / suggested presets) gate by existence in the UI,
 			// so they never resend an already-configured kind. The expert Advanced tab may
 			// deliberately add extra models and override the default, so the requested
@@ -1008,11 +1081,13 @@ public class GeboLLMSSetupService {
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
 					configuration.setAccessibleToAll(true);
 					configuration.setForUses(config.getUses());
-					// Deterministic by default: every chat model the easy setup creates - the
-					// default chat model and the INTERNAL_SERVICES (service) model alike - is
-					// persisted with temperature 0, so judgement oriented internal calls (the
-					// ranking irrelevance filter, routing, query rewriting) do not vary run to run.
-					configuration.setTemperature(0.0d);
+					// No temperature is written unless the preset or the caller gives one: the
+					// chat model decides it from the model's parameter rules when it starts -
+					// temperature 0, deterministic, where the model takes one (the ranking
+					// irrelevance filter, routing and query rewriting then do not vary run to
+					// run), none where the model refuses the sampling parameters, which the
+					// reasoning models do. Written here, a 0 broke those models on every call.
+					configuration.setTemperature(config.getTemperature());
 					if (config.getContextWindow() != null) {
 						configuration.setContextLength(config.getContextWindow());
 					}

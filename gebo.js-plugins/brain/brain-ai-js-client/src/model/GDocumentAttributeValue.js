@@ -39,7 +39,7 @@ export default class GDocumentAttributeValue {
     if (data) {
       obj = obj || new GDocumentAttributeValue();
       if (data.hasOwnProperty('attributeCode'))
-        obj.attributeCode = ApiClient.convertToType(data['attributeCode'], Object);
+        obj.attributeCode = ApiClient.convertToType(data['attributeCode'], 'String');
       if (data.hasOwnProperty('attributeValue'))
         obj.attributeValue = ApiClient.convertToType(data['attributeValue'], Object);
     }
@@ -48,7 +48,7 @@ export default class GDocumentAttributeValue {
 }
 
 /**
- * @member {Object} attributeCode
+ * @member {String} attributeCode
  */
 GDocumentAttributeValue.prototype.attributeCode = undefined;
 

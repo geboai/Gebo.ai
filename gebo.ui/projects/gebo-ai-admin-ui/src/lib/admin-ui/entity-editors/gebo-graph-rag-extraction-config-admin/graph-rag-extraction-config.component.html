@@ -39,8 +39,8 @@
         <div class="col-12" style="vertical-align: top;">
           <p-tabs [value]="0">
             <p-tablist>
-              <p-tab [value]="0" gebo-ai-text>General infos/contents settings</p-tab>
-              <p-tab [value]="1" gebo-ai-text>LLms settings</p-tab>
+              <p-tab id="graphRagConfigUI_ContextSettings" [value]="0" gebo-ai-text>General infos/contents settings</p-tab>
+              <p-tab id="graphRagConfigUI_LLMSSettings" [value]="1" gebo-ai-text>LLms settings</p-tab>
             </p-tablist>
             <p-tabpanels>
             <p-tabpanel [value]="0">
@@ -76,9 +76,9 @@
                     <div class="grid"
                       >
                       <div class="col-3">
-                                    <gebo-ai-field id="processEveryDocument" label="Apply graph rag to all files" help="The graph rag algoritms will be applied to all file this will enhance the
+                                    <gebo-ai-field id="processEveryDocument" label="Apply graph rag to all files" help="The graph rag algorithms will be applied to all file this will enhance the
                                             details of
-                                            analisys that the system is capable of but will high the cost and time
+                                            analysis that the system is capable of but will high the cost and time
                                             required to process
                                             documents">
                           <p-checkbox formControlName="processEveryDocument" [trueValue]="true"

@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**created** | **Object** |  | [optional] 
-**unresolved** | **Object** |  | [optional] 
+**created** | [**[GBaseModelConfig]**](GBaseModelConfig.md) |  | [optional] 
+**unresolved** | [**[LLMUnresolvedModel]**](LLMUnresolvedModel.md) |  | [optional] 

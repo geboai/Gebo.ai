@@ -1,0 +1,153 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+<div class="geboRule" [class.geboRule--open]="expanded" [class.geboRule--problem]="problem">
+
+  <!-- Collapsed line: the rule stated as a sentence -->
+  <div class="geboRule__head">
+    <button type="button" class="geboRule__toggle" (click)="toggle()" [attr.aria-expanded]="expanded">
+      <i class="geboRule__icon pi" [ngClass]="kindIcon"></i>
+
+      <span class="geboRule__sentence">
+        <gebo-ai-schedule-sentence [rule]="rule" [locale]="locale"></gebo-ai-schedule-sentence>
+      </span>
+
+      <i class="geboRule__chevron pi" [ngClass]="expanded?'pi-chevron-up':'pi-chevron-down'"></i>
+    </button>
+
+    <span class="geboRule__tools">
+      <p-button id="DuplicateRuleBtn" gebo-ai-label title="Add a copy of this rule" icon="pi pi-clone"
+        [text]="true" [rounded]="true" severity="secondary" size="small"
+      (onClick)="duplicate.emit()"></p-button>
+      <p-button id="RemoveRuleBtn" gebo-ai-label title="Remove this rule" icon="pi pi-trash"
+        [text]="true" [rounded]="true" severity="danger" size="small"
+      (onClick)="remove.emit()"></p-button>
+    </span>
+  </div>
+
+  <!-- Expanded editor -->
+  @if (expanded) {
+    <div class="geboRule__body">
+
+      <!-- Frequency -->
+      <div class="geboRule__field">
+        <span class="geboRule__label" id="RepeatLbl" gebo-ai-text>Repeat</span>
+        <div class="geboSegmented" role="group">
+          <button type="button" class="geboSegmented__option" [class.geboSegmented__option--on]="rule.kind==='HOURLY'"
+            [attr.aria-pressed]="rule.kind==='HOURLY'" (click)="chooseKind('HOURLY')">
+            <i class="pi pi-stopwatch"></i><span id="KindHourlyLbl" gebo-ai-text>Every hour</span>
+          </button>
+          <button type="button" class="geboSegmented__option" [class.geboSegmented__option--on]="rule.kind==='DAILY'"
+            [attr.aria-pressed]="rule.kind==='DAILY'" (click)="chooseKind('DAILY')">
+            <i class="pi pi-sun"></i><span id="KindDailyLbl" gebo-ai-text>Every day</span>
+          </button>
+          <button type="button" class="geboSegmented__option" [class.geboSegmented__option--on]="rule.kind==='WEEKLY'"
+            [attr.aria-pressed]="rule.kind==='WEEKLY'" (click)="chooseKind('WEEKLY')">
+            <i class="pi pi-calendar"></i><span id="KindWeeklyLbl" gebo-ai-text>Every week</span>
+          </button>
+          <button type="button" class="geboSegmented__option" [class.geboSegmented__option--on]="rule.kind==='DATES'"
+            [attr.aria-pressed]="rule.kind==='DATES'" (click)="chooseKind('DATES')">
+            <i class="pi pi-calendar-clock"></i><span id="KindDatesLbl" gebo-ai-text>On set dates</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Days of the week -->
+      @if (rule.kind==='WEEKLY') {
+        <div class="geboRule__field">
+          <span class="geboRule__label" id="OnDaysLbl" gebo-ai-text>On</span>
+          <div class="geboRule__inline">
+            <div class="geboDays" role="group">
+              @for (name of dayNames; track $index) {
+                <button type="button" class="geboDays__day" [class.geboDays__day--on]="hasDay($index)"
+                  [attr.aria-pressed]="hasDay($index)" [attr.aria-label]="dayNamesLong[$index]"
+                  [title]="dayNamesLong[$index]" (click)="toggleDay($index)">{{name}}</button>
+              }
+            </div>
+            <button type="button" class="geboLink" (click)="selectWeekdays()">
+              <span id="WeekdaysShortcutLbl" gebo-ai-text>Working days</span>
+            </button>
+            <button type="button" class="geboLink" (click)="selectEveryDay()">
+              <span id="AllDaysShortcutLbl" gebo-ai-text>All days</span>
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- Times of day -->
+      @if (rule.kind==='DAILY' || rule.kind==='WEEKLY') {
+        <div class="geboRule__field">
+          <span class="geboRule__label" id="AtTimesLbl" gebo-ai-text>At</span>
+          <div class="geboRule__inline">
+            @for (time of rule.times; track $index) {
+              <span class="geboChip">
+                <p-datepicker [timeOnly]="true" [showIcon]="false" appendTo="body" size="small"
+                  inputStyleClass="geboChip__input" [ngModel]="timeValues[$index]"
+                  (ngModelChange)="setTime($index, $event)" [ngModelOptions]="{standalone:true}"
+                [attr.aria-label]="timeLabel(time)"></p-datepicker>
+                <button type="button" class="geboChip__drop" (click)="removeTime($index)"
+                  [attr.aria-label]="timeLabel(time)">
+                  <i class="pi pi-times"></i>
+                </button>
+              </span>
+            }
+            <button type="button" class="geboChipAdd" (click)="addTime()">
+              <i class="pi pi-plus"></i><span id="AddTimeLbl" gebo-ai-text>Add a time</span>
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- Minute of the hour -->
+      @if (rule.kind==='HOURLY') {
+        <div class="geboRule__field">
+          <span class="geboRule__label" id="AtMinuteLbl" gebo-ai-text>At minute</span>
+          <div class="geboRule__inline">
+            <div class="geboSegmented" role="group">
+              @for (minute of quickMinutes; track minute) {
+                <button type="button" class="geboSegmented__option" [class.geboSegmented__option--on]="rule.minute===minute"
+                [attr.aria-pressed]="rule.minute===minute" (click)="setMinute(minute)">{{minuteLabel(minute)}}</button>
+              }
+            </div>
+            <p-inputNumber [ngModel]="rule.minute" (ngModelChange)="setMinute($event)"
+              [ngModelOptions]="{standalone:true}" [min]="0" [max]="59" [showButtons]="true"
+            inputStyleClass="geboMinuteInput"></p-inputNumber>
+          </div>
+        </div>
+      }
+
+      <!-- Absolute dates -->
+      @if (rule.kind==='DATES') {
+        <div class="geboRule__field">
+          <span class="geboRule__label" id="OnDatesLbl" gebo-ai-text>On</span>
+          <div class="geboRule__inline">
+            @for (date of rule.dates; track $index) {
+              <span class="geboChip" [class.geboChip--past]="isPast(date)">
+                <p-datepicker [showTime]="true" [showIcon]="false" appendTo="body" size="small"
+                  inputStyleClass="geboChip__input geboChip__input--wide" [ngModel]="dateValues[$index]"
+                  (ngModelChange)="setDate($index, $event)" [ngModelOptions]="{standalone:true}"
+                [attr.aria-label]="dateLabel(date)"></p-datepicker>
+                <button type="button" class="geboChip__drop" (click)="removeDate($index)"
+                  [attr.aria-label]="dateLabel(date)">
+                  <i class="pi pi-times"></i>
+                </button>
+              </span>
+            }
+            <button type="button" class="geboChipAdd" (click)="addDate()">
+              <i class="pi pi-plus"></i><span id="AddDateLbl" gebo-ai-text>Add a date</span>
+            </button>
+          </div>
+        </div>
+      }
+
+    </div>
+  }
+</div>

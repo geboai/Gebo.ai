@@ -14,10 +14,12 @@
  */
 import ApiClient from "../ApiClient";
 import GBaseChatModelChoice from '../model/GBaseChatModelChoice';
+import GBaseObject from '../model/GBaseObject';
 import GeboChatRequest from '../model/GeboChatRequest';
 import GeboChatResponse from '../model/GeboChatResponse';
 import GeboChatUserInfo from '../model/GeboChatUserInfo';
 import ModelProviderCapabilities from '../model/ModelProviderCapabilities';
+import ServerSentEventString from '../model/ServerSentEventString';
 
 /**
 * GeboChatController service.
@@ -90,7 +92,7 @@ export default class GeboChatControllerApi {
 
 
     /**
-     * @param {Object} modelCode 
+     * @param {String} modelCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GBaseChatModelChoice} and HTTP response
      */
     getChatModelMetaInfosWithHttpInfo(modelCode) {
@@ -139,7 +141,7 @@ export default class GeboChatControllerApi {
 
 
     /**
-     * @param {Object} modelCode 
+     * @param {String} modelCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GeboChatUserInfo} and HTTP response
      */
     getChatModelUserInfoWithHttpInfo(modelCode) {
@@ -188,7 +190,7 @@ export default class GeboChatControllerApi {
 
 
     /**
-     * @param {Object} modelCode 
+     * @param {String} modelCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ModelProviderCapabilities} and HTTP response
      */
     getProviderCapabilitiesWithHttpInfo(modelCode) {
@@ -237,7 +239,7 @@ export default class GeboChatControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GBaseObject>} and HTTP response
      */
     getVisibleKnowledgeBasesWithHttpInfo() {
       
@@ -259,7 +261,7 @@ export default class GeboChatControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GBaseObject];
 
       return this.apiClient.callApi(
         '/api/users/GeboDirectModelChatController/getVisibleKnowledgeBases', 'GET',
@@ -269,7 +271,7 @@ export default class GeboChatControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GBaseObject>}
      */
     getVisibleKnowledgeBases() {
       return this.getVisibleKnowledgeBasesWithHttpInfo()
@@ -281,7 +283,7 @@ export default class GeboChatControllerApi {
 
     /**
      * @param {module:model/GeboChatRequest} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ServerSentEventString>} and HTTP response
      */
     streamResponseWithHttpInfo(body) {
       
@@ -307,7 +309,7 @@ export default class GeboChatControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['text/event-stream'];
-      let returnType = Object;
+      let returnType = [ServerSentEventString];
 
       return this.apiClient.callApi(
         '/api/users/GeboDirectModelChatController/streamResponse', 'POST',
@@ -318,7 +320,7 @@ export default class GeboChatControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ServerSentEventString>}
      */
     streamResponse(body) {
       return this.streamResponseWithHttpInfo(body)

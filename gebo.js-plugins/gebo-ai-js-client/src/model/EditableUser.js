@@ -62,6 +62,8 @@ export default class EditableUser {
         obj.authProvider = ApiClient.convertToType(data['authProvider'], 'String');
       if (data.hasOwnProperty('langCode'))
         obj.langCode = ApiClient.convertToType(data['langCode'], 'String');
+      if (data.hasOwnProperty('customInfos'))
+        obj.customInfos = ApiClient.convertToType(data['customInfos'], {'String': Object});
     }
     return obj;
   }
@@ -129,6 +131,18 @@ EditableUser.AuthProviderEnum = {
   awsCognito: "aws_cognito",
 
   /**
+   * value: "aws_identity_center"
+   * @const
+   */
+  awsIdentityCenter: "aws_identity_center",
+
+  /**
+   * value: "keycloak"
+   * @const
+   */
+  keycloak: "keycloak",
+
+  /**
    * value: "oauth2_generic"
    * @const
    */
@@ -149,4 +163,9 @@ EditableUser.prototype.authProvider = undefined;
  * @member {String} langCode
  */
 EditableUser.prototype.langCode = undefined;
+
+/**
+ * @member {Object.<String, Object>} customInfos
+ */
+EditableUser.prototype.customInfos = undefined;
 

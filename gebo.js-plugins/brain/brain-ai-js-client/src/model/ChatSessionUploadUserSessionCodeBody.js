@@ -24,7 +24,7 @@ export default class ChatSessionUploadUserSessionCodeBody {
    * Constructs a new <code>ChatSessionUploadUserSessionCodeBody</code>.
    * @alias module:model/ChatSessionUploadUserSessionCodeBody
    * @class
-   * @param files {Object} 
+   * @param files {Array.<Blob>} 
    */
   constructor(files) {
     this.files = files;
@@ -41,14 +41,14 @@ export default class ChatSessionUploadUserSessionCodeBody {
     if (data) {
       obj = obj || new ChatSessionUploadUserSessionCodeBody();
       if (data.hasOwnProperty('files[]'))
-        obj.files = ApiClient.convertToType(data['files[]'], Object);
+        obj.files = ApiClient.convertToType(data['files[]'], ['Blob']);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} files
+ * @member {Array.<Blob>} files
  */
 ChatSessionUploadUserSessionCodeBody.prototype.files = undefined;
 

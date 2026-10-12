@@ -24,11 +24,11 @@ export default class LLMSVendorInfo {
    * Constructs a new <code>LLMSVendorInfo</code>.
    * @alias module:model/LLMSVendorInfo
    * @class
-   * @param vendorId {Object} 
-   * @param description {Object} 
-   * @param name {Object} 
-   * @param webSite {Object} 
-   * @param apiKeySecretContext {Object} 
+   * @param vendorId {String} 
+   * @param description {String} 
+   * @param name {String} 
+   * @param webSite {String} 
+   * @param apiKeySecretContext {String} 
    */
   constructor(vendorId, description, name, webSite, apiKeySecretContext) {
     this.vendorId = vendorId;
@@ -49,98 +49,218 @@ export default class LLMSVendorInfo {
     if (data) {
       obj = obj || new LLMSVendorInfo();
       if (data.hasOwnProperty('vendorId'))
-        obj.vendorId = ApiClient.convertToType(data['vendorId'], Object);
+        obj.vendorId = ApiClient.convertToType(data['vendorId'], 'String');
       if (data.hasOwnProperty('requiresCustomUrl'))
-        obj.requiresCustomUrl = ApiClient.convertToType(data['requiresCustomUrl'], Object);
+        obj.requiresCustomUrl = ApiClient.convertToType(data['requiresCustomUrl'], 'Boolean');
       if (data.hasOwnProperty('defaultCustomUrl'))
-        obj.defaultCustomUrl = ApiClient.convertToType(data['defaultCustomUrl'], Object);
+        obj.defaultCustomUrl = ApiClient.convertToType(data['defaultCustomUrl'], 'String');
       if (data.hasOwnProperty('requiresApiKey'))
-        obj.requiresApiKey = ApiClient.convertToType(data['requiresApiKey'], Object);
+        obj.requiresApiKey = ApiClient.convertToType(data['requiresApiKey'], 'Boolean');
       if (data.hasOwnProperty('secretType'))
-        obj.secretType = ApiClient.convertToType(data['secretType'], Object);
+        obj.secretType = ApiClient.convertToType(data['secretType'], 'String');
       if (data.hasOwnProperty('authProvider'))
-        obj.authProvider = ApiClient.convertToType(data['authProvider'], Object);
+        obj.authProvider = ApiClient.convertToType(data['authProvider'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('webSite'))
-        obj.webSite = ApiClient.convertToType(data['webSite'], Object);
+        obj.webSite = ApiClient.convertToType(data['webSite'], 'String');
       if (data.hasOwnProperty('acquireKeyUrl'))
-        obj.acquireKeyUrl = ApiClient.convertToType(data['acquireKeyUrl'], Object);
+        obj.acquireKeyUrl = ApiClient.convertToType(data['acquireKeyUrl'], 'String');
       if (data.hasOwnProperty('apiKeySecretContext'))
-        obj.apiKeySecretContext = ApiClient.convertToType(data['apiKeySecretContext'], Object);
+        obj.apiKeySecretContext = ApiClient.convertToType(data['apiKeySecretContext'], 'String');
       if (data.hasOwnProperty('minContextWindow'))
-        obj.minContextWindow = ApiClient.convertToType(data['minContextWindow'], Object);
+        obj.minContextWindow = ApiClient.convertToType(data['minContextWindow'], 'Number');
       if (data.hasOwnProperty('supportsAutoconfig'))
-        obj.supportsAutoconfig = ApiClient.convertToType(data['supportsAutoconfig'], Object);
+        obj.supportsAutoconfig = ApiClient.convertToType(data['supportsAutoconfig'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} vendorId
+ * @member {String} vendorId
  */
 LLMSVendorInfo.prototype.vendorId = undefined;
 
 /**
- * @member {Object} requiresCustomUrl
+ * @member {Boolean} requiresCustomUrl
  */
 LLMSVendorInfo.prototype.requiresCustomUrl = undefined;
 
 /**
- * @member {Object} defaultCustomUrl
+ * @member {String} defaultCustomUrl
  */
 LLMSVendorInfo.prototype.defaultCustomUrl = undefined;
 
 /**
- * @member {Object} requiresApiKey
+ * @member {Boolean} requiresApiKey
  */
 LLMSVendorInfo.prototype.requiresApiKey = undefined;
 
 /**
- * @member {Object} secretType
+ * Allowed values for the <code>secretType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LLMSVendorInfo.SecretTypeEnum = {
+  /**
+   * value: "USERNAME_PASSWORD"
+   * @const
+   */
+  USERNAME_PASSWORD: "USERNAME_PASSWORD",
+
+  /**
+   * value: "TOKEN"
+   * @const
+   */
+  TOKEN: "TOKEN",
+
+  /**
+   * value: "SSH_KEY"
+   * @const
+   */
+  SSH_KEY: "SSH_KEY",
+
+  /**
+   * value: "CUSTOM_SECRET"
+   * @const
+   */
+  CUSTOM_SECRET: "CUSTOM_SECRET",
+
+  /**
+   * value: "OAUTH2_STANDARD"
+   * @const
+   */
+  oAUTH2STANDARD: "OAUTH2_STANDARD",
+
+  /**
+   * value: "OAUTH2_GOOGLE"
+   * @const
+   */
+  oAUTH2GOOGLE: "OAUTH2_GOOGLE",
+
+  /**
+   * value: "GOOGLE_CLOUD_JSON_CREDENTIALS"
+   * @const
+   */
+  GOOGLE_CLOUD_JSON_CREDENTIALS: "GOOGLE_CLOUD_JSON_CREDENTIALS",
+
+  /**
+   * value: "OAUTH2_AUTHORIZED_CLIENT"
+   * @const
+   */
+  oAUTH2AUTHORIZEDCLIENT: "OAUTH2_AUTHORIZED_CLIENT",
+
+  /**
+   * value: "AWS_CONNECTION"
+   * @const
+   */
+  AWS_CONNECTION: "AWS_CONNECTION"
+};
+/**
+ * @member {module:model/LLMSVendorInfo.SecretTypeEnum} secretType
  */
 LLMSVendorInfo.prototype.secretType = undefined;
 
 /**
- * @member {Object} authProvider
+ * Allowed values for the <code>authProvider</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LLMSVendorInfo.AuthProviderEnum = {
+  /**
+   * value: "local"
+   * @const
+   */
+  local: "local",
+
+  /**
+   * value: "google"
+   * @const
+   */
+  google: "google",
+
+  /**
+   * value: "microsoft"
+   * @const
+   */
+  microsoft: "microsoft",
+
+  /**
+   * value: "microsoft_multitenant"
+   * @const
+   */
+  microsoftMultitenant: "microsoft_multitenant",
+
+  /**
+   * value: "aws_cognito"
+   * @const
+   */
+  awsCognito: "aws_cognito",
+
+  /**
+   * value: "aws_identity_center"
+   * @const
+   */
+  awsIdentityCenter: "aws_identity_center",
+
+  /**
+   * value: "keycloak"
+   * @const
+   */
+  keycloak: "keycloak",
+
+  /**
+   * value: "oauth2_generic"
+   * @const
+   */
+  oauth2Generic: "oauth2_generic",
+
+  /**
+   * value: "ldap"
+   * @const
+   */
+  ldap: "ldap"
+};
+/**
+ * @member {module:model/LLMSVendorInfo.AuthProviderEnum} authProvider
  */
 LLMSVendorInfo.prototype.authProvider = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 LLMSVendorInfo.prototype.description = undefined;
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 LLMSVendorInfo.prototype.name = undefined;
 
 /**
- * @member {Object} webSite
+ * @member {String} webSite
  */
 LLMSVendorInfo.prototype.webSite = undefined;
 
 /**
- * @member {Object} acquireKeyUrl
+ * @member {String} acquireKeyUrl
  */
 LLMSVendorInfo.prototype.acquireKeyUrl = undefined;
 
 /**
- * @member {Object} apiKeySecretContext
+ * @member {String} apiKeySecretContext
  */
 LLMSVendorInfo.prototype.apiKeySecretContext = undefined;
 
 /**
- * @member {Object} minContextWindow
+ * @member {Number} minContextWindow
  */
 LLMSVendorInfo.prototype.minContextWindow = undefined;
 
 /**
- * @member {Object} supportsAutoconfig
+ * @member {Boolean} supportsAutoconfig
  */
 LLMSVendorInfo.prototype.supportsAutoconfig = undefined;
 

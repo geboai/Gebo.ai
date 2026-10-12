@@ -11,8 +11,7 @@ public class GenericOpenAIImageModelTypeConfig extends GImageModelType {
 	private String baseUrl = null;
 	/** Provider for the list of available models */
 	private String modelsListProvider = null;
-	/** Identifier for the service provider */
-	private String providerId = null;
+	// providerId is inherited from GModelType and bound from providers.yml.
 	/** Flag indicating whether authentication is optional */
 	private boolean optionalAuthentication = false;
 

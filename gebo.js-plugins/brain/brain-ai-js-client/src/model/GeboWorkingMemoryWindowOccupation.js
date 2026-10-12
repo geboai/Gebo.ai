@@ -39,49 +39,49 @@ export default class GeboWorkingMemoryWindowOccupation {
     if (data) {
       obj = obj || new GeboWorkingMemoryWindowOccupation();
       if (data.hasOwnProperty('historyTokens'))
-        obj.historyTokens = ApiClient.convertToType(data['historyTokens'], Object);
+        obj.historyTokens = ApiClient.convertToType(data['historyTokens'], 'Number');
       if (data.hasOwnProperty('documentsTokens'))
-        obj.documentsTokens = ApiClient.convertToType(data['documentsTokens'], Object);
+        obj.documentsTokens = ApiClient.convertToType(data['documentsTokens'], 'Number');
       if (data.hasOwnProperty('queryTokens'))
-        obj.queryTokens = ApiClient.convertToType(data['queryTokens'], Object);
+        obj.queryTokens = ApiClient.convertToType(data['queryTokens'], 'Number');
       if (data.hasOwnProperty('historyPercentage'))
-        obj.historyPercentage = ApiClient.convertToType(data['historyPercentage'], Object);
+        obj.historyPercentage = ApiClient.convertToType(data['historyPercentage'], 'Number');
       if (data.hasOwnProperty('documentsPercentage'))
-        obj.documentsPercentage = ApiClient.convertToType(data['documentsPercentage'], Object);
+        obj.documentsPercentage = ApiClient.convertToType(data['documentsPercentage'], 'Number');
       if (data.hasOwnProperty('totalWindowUsePercentage'))
-        obj.totalWindowUsePercentage = ApiClient.convertToType(data['totalWindowUsePercentage'], Object);
+        obj.totalWindowUsePercentage = ApiClient.convertToType(data['totalWindowUsePercentage'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} historyTokens
+ * @member {Number} historyTokens
  */
 GeboWorkingMemoryWindowOccupation.prototype.historyTokens = undefined;
 
 /**
- * @member {Object} documentsTokens
+ * @member {Number} documentsTokens
  */
 GeboWorkingMemoryWindowOccupation.prototype.documentsTokens = undefined;
 
 /**
- * @member {Object} queryTokens
+ * @member {Number} queryTokens
  */
 GeboWorkingMemoryWindowOccupation.prototype.queryTokens = undefined;
 
 /**
- * @member {Object} historyPercentage
+ * @member {Number} historyPercentage
  */
 GeboWorkingMemoryWindowOccupation.prototype.historyPercentage = undefined;
 
 /**
- * @member {Object} documentsPercentage
+ * @member {Number} documentsPercentage
  */
 GeboWorkingMemoryWindowOccupation.prototype.documentsPercentage = undefined;
 
 /**
- * @member {Object} totalWindowUsePercentage
+ * @member {Number} totalWindowUsePercentage
  */
 GeboWorkingMemoryWindowOccupation.prototype.totalWindowUsePercentage = undefined;
 

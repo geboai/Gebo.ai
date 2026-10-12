@@ -16,8 +16,10 @@ import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
+import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.model.MetaEndpointType;
+import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
 import ai.gebo.architecture.documents.cache.config.GeboDocumentsCacheConfig;
 import ai.gebo.architecture.documents.cache.messaging.IDocumentChunkingMessagesReceiverFactoryComponent;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
@@ -79,19 +81,22 @@ public class DocumentChunkingMessagesReceiverFactoryComponent extends GAbstractT
 		}
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+		flow.setDescription(GStandardWorkflowStep.TOKENIZATION.getDescription());
 
-		DataEndpoint chunkStore = DataEndpoint.of("chunk-cache", "Chunk cache and chunking sessions", "MongoDB",
+		DataEndpoint chunkStore = DataEndpoint.of(GStandardDataFlowEndpoints.CHUNK_CACHE, "Chunk cache and chunking sessions", "MongoDB",
 				mongoConfig.getConnectionString(), MetaEndpointType.CHUNK, MetaEndpointType.DATABASE);
 		chunkStore.setOutput(true);
 		chunkStore.setLocality(DataEndpointLocality.hintFromLocator(chunkStore.getEndpoint()));
 		// Chunks are verbatim extracts of whatever was ingested, so they inherit the
 		// personal-data status of the sources rather than having one of their own.
 		chunkStore.setPersonalData(false);
-		// Chunks are retained only for the duration of the ingestion workflow, or as
-		// an internal cache: the dispose-chunking-session-for-jobs receiver removes
-		// them at end of job unless this node is configured to keep them cached.
+		// The chunks (content) are kept while a living chunking session uses them: the
+		// dispose-chunking-session-for-jobs receiver disposes the job's session at its end,
+		// and the files go after the grace period unless another living session reuses
+		// them. The records (document, version, chunking parameters: no content) are kept
+		// for the retention, so a late read can produce the chunks again.
 		chunkStore.setRetention(
-				"Only during workflow execution, or as an internal cache - disposed at end of the ingestion job by dispose-chunking-session-for-jobs unless kept as a cache");
+				"Chunk contents while a chunking session uses them, plus the grace period (ai.gebo.documents-cache.orphans.grace-seconds) after the last one is disposed (at the end of the ingestion job, by dispose-chunking-session-for-jobs); their metadata without content (document, version, chunking parameters) for the retention (ai.gebo.documents-cache.orphans.retention-days, 2 days by default)");
 		chunkStore.setDisposer(new GeboComponentInfo(GStandardModulesConstraints.TOKENIZER_MODULE,
 				ChunkingSessionDisposerReceiverFactory.DISPOSE_CHUNKING_SESSION_FOR_JOBS));
 		flow.getDataEndpoints().add(chunkStore);

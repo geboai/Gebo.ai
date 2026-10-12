@@ -61,7 +61,7 @@ No authorization required
 
 <a name="findChildProjects"></a>
 # **findChildProjects**
-> Object findChildProjects(knowledgeBaseCode, parentProjectCode)
+> [GProject] findChildProjects(knowledgeBaseCode, parentProjectCode)
 
 
 
@@ -70,8 +70,8 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.ProjectsControllerApi();
-let knowledgeBaseCode = null; // Object | 
-let parentProjectCode = null; // Object | 
+let knowledgeBaseCode = "knowledgeBaseCode_example"; // String | 
+let parentProjectCode = "parentProjectCode_example"; // String | 
 
 apiInstance.findChildProjects(knowledgeBaseCode, parentProjectCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -85,12 +85,12 @@ apiInstance.findChildProjects(knowledgeBaseCode, parentProjectCode).then((data) 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **knowledgeBaseCode** | [**Object**](.md)|  | 
- **parentProjectCode** | [**Object**](.md)|  | 
+ **knowledgeBaseCode** | **String**|  | 
+ **parentProjectCode** | **String**|  | 
 
 ### Return type
 
-**Object**
+[**[GProject]**](GProject.md)
 
 ### Authorization
 
@@ -103,7 +103,7 @@ No authorization required
 
 <a name="findOtherKnowledgeBaseIncludableProjects"></a>
 # **findOtherKnowledgeBaseIncludableProjects**
-> Object findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode, actualSelectedProjects)
+> [GProject] findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode, actualSelectedProjects)
 
 
 
@@ -112,8 +112,8 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.ProjectsControllerApi();
-let knowledgeBaseCode = null; // Object | 
-let actualSelectedProjects = null; // Object | 
+let knowledgeBaseCode = "knowledgeBaseCode_example"; // String | 
+let actualSelectedProjects = ["actualSelectedProjects_example"]; // [String] | 
 
 apiInstance.findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode, actualSelectedProjects).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -127,12 +127,12 @@ apiInstance.findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode, actualSe
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **knowledgeBaseCode** | [**Object**](.md)|  | 
- **actualSelectedProjects** | [**Object**](.md)|  | 
+ **knowledgeBaseCode** | **String**|  | 
+ **actualSelectedProjects** | [**[String]**](String.md)|  | 
 
 ### Return type
 
-**Object**
+[**[GProject]**](GProject.md)
 
 ### Authorization
 
@@ -154,7 +154,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.ProjectsControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findProjectByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -168,7 +168,7 @@ apiInstance.findProjectByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -185,7 +185,7 @@ No authorization required
 
 <a name="findRootProjects"></a>
 # **findRootProjects**
-> Object findRootProjects(knowledgeBaseCode)
+> [GProject] findRootProjects(knowledgeBaseCode)
 
 
 
@@ -194,7 +194,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.ProjectsControllerApi();
-let knowledgeBaseCode = null; // Object | 
+let knowledgeBaseCode = "knowledgeBaseCode_example"; // String | 
 
 apiInstance.findRootProjects(knowledgeBaseCode).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -208,11 +208,11 @@ apiInstance.findRootProjects(knowledgeBaseCode).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **knowledgeBaseCode** | [**Object**](.md)|  | 
+ **knowledgeBaseCode** | **String**|  | 
 
 ### Return type
 
-**Object**
+[**[GProject]**](GProject.md)
 
 ### Authorization
 
@@ -225,7 +225,7 @@ No authorization required
 
 <a name="getChildDocuments"></a>
 # **getChildDocuments**
-> Object getChildDocuments(body)
+> [VDocumentInfo] getChildDocuments(body)
 
 
 
@@ -252,7 +252,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**[VDocumentInfo]**](VDocumentInfo.md)
 
 ### Authorization
 
@@ -265,7 +265,7 @@ No authorization required
 
 <a name="getChildFolders"></a>
 # **getChildFolders**
-> Object getChildFolders(body)
+> [VFolderInfo] getChildFolders(body)
 
 
 
@@ -292,7 +292,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**[VFolderInfo]**](VFolderInfo.md)
 
 ### Authorization
 
@@ -305,7 +305,7 @@ No authorization required
 
 <a name="getProjects"></a>
 # **getProjects**
-> Object getProjects()
+> [GProject] getProjects()
 
 
 
@@ -327,7 +327,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GProject]**](GProject.md)
 
 ### Authorization
 
@@ -340,7 +340,7 @@ No authorization required
 
 <a name="getRootDocuments"></a>
 # **getRootDocuments**
-> Object getRootDocuments(body)
+> [VDocumentInfo] getRootDocuments(body)
 
 
 
@@ -367,7 +367,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**[VDocumentInfo]**](VDocumentInfo.md)
 
 ### Authorization
 
@@ -380,7 +380,7 @@ No authorization required
 
 <a name="getRootFolders"></a>
 # **getRootFolders**
-> Object getRootFolders(body)
+> [VFolderInfo] getRootFolders(body)
 
 
 
@@ -407,7 +407,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**[VFolderInfo]**](VFolderInfo.md)
 
 ### Authorization
 
@@ -460,7 +460,7 @@ No authorization required
 
 <a name="searchProjects"></a>
 # **searchProjects**
-> Object searchProjects(body)
+> [GProject] searchProjects(body)
 
 
 
@@ -487,7 +487,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**[GProject]**](GProject.md)
 
 ### Authorization
 
@@ -500,7 +500,7 @@ No authorization required
 
 <a name="searchProjectsByQbe"></a>
 # **searchProjectsByQbe**
-> Object searchProjectsByQbe(body)
+> [GProject] searchProjectsByQbe(body)
 
 
 
@@ -527,7 +527,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**[GProject]**](GProject.md)
 
 ### Authorization
 

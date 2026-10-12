@@ -78,7 +78,7 @@ class SimilaritySearchService {
 			result.knowledgeBases.put(metaData.getRootKnowledgebaseCode(), true);
 			AIDocumentFragment fragment = new AIDocumentFragment(x, metaData);
 			fragment.setRankIndex(index); // Assign a rank index to the fragment
-			item.getFragments().add(fragment);
+			item.addFragmentIfAbsent(fragment);
 			index++;
 
 		}

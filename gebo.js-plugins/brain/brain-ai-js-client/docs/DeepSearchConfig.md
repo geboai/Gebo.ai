@@ -3,22 +3,29 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  | [optional] 
-**description** | **Object** |  | [optional] 
-**userModified** | **Object** |  | [optional] 
-**userCreated** | **Object** |  | [optional] 
-**dateModified** | **Object** |  | [optional] 
-**dateCreated** | **Object** |  | [optional] 
-**searchType** | **Object** |  | 
+**code** | **String** |  | [optional] 
+**description** | **String** |  | [optional] 
+**userModified** | **String** |  | [optional] 
+**userCreated** | **String** |  | [optional] 
+**dateModified** | **Date** |  | [optional] 
+**dateCreated** | **Date** |  | [optional] 
+**searchType** | **String** |  | 
 **ragQueryOptions** | [**RagQueryOptions**](RagQueryOptions.md) |  | [optional] 
-**firstHopSimilarityThreashold** | **Object** |  | [optional] 
-**secondHopSimilarityThreashold** | **Object** |  | [optional] 
-**graphRagTopN** | **Object** |  | [optional] 
-**tokensLimit** | **Object** |  | [optional] 
-**manualThreasholdsConfiguration** | **Object** |  | [optional] 
-**defaultConfig** | **Object** |  | [optional] 
-**accessibleGroups** | **Object** |  | [optional] 
-**accessibleUsers** | **Object** |  | [optional] 
-**accessibleToAll** | **Object** |  | [optional] 
-**dataSourcesAccesses** | **Object** |  | [optional] 
-**perDataSourceConfigured** | **Object** |  | [optional] 
+**firstHopSimilarityThreashold** | **Number** |  | [optional] 
+**secondHopSimilarityThreashold** | **Number** |  | [optional] 
+**graphRagTopN** | **Number** |  | [optional] 
+**tokensLimit** | **Number** |  | [optional] 
+**manualThreasholdsConfiguration** | **Boolean** |  | [optional] 
+**defaultConfig** | **Boolean** |  | [optional] 
+**accessibleGroups** | **[String]** |  | [optional] 
+**accessibleUsers** | **[String]** |  | [optional] 
+**accessibleToAll** | **Boolean** |  | [optional] 
+**dataSourcesAccesses** | [**[DeepSearchDataSourceAccess]**](DeepSearchDataSourceAccess.md) |  | [optional] 
+**perDataSourceConfigured** | **Boolean** |  | [optional] 
+
+<a name="SearchTypeEnum"></a>
+## Enum: SearchTypeEnum
+
+* `SINGLE_HOP` (value: `"SINGLE_HOP"`)
+* `MULTI_HOP` (value: `"MULTI_HOP"`)
+

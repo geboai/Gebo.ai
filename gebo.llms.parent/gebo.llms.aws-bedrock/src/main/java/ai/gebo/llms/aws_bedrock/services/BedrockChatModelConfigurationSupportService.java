@@ -34,6 +34,7 @@ import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.aws_bedrock.model.GBedrockChatModelChoice;
 import ai.gebo.llms.aws_bedrock.model.GBedrockChatModelConfig;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
@@ -59,6 +60,7 @@ public class BedrockChatModelConfigurationSupportService
 		type.setCode("chat-aws-bedrock");
 		type.setDescription("Chat models hosted on AWS Bedrock (Converse API)");
 		type.setModelConfigurationClass(GBedrockChatModelConfig.class.getName());
+		type.setProviderId("aws-bedrock");
 	}
 
 	final BedrockCredentialsResolver credentialsResolver;
@@ -74,14 +76,16 @@ public class BedrockChatModelConfigurationSupportService
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	class BedrockConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GBedrockChatModelConfig, BedrockProxyChatModel> {
 
 		public BedrockConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		}
 
 		@Override
@@ -128,18 +132,42 @@ public class BedrockChatModelConfigurationSupportService
 			// The builder defaults asyncReadTimeout and socketTimeout to 30s and
 			// connectionTimeout to 5s, which cut long streamed generations well before
 			// the configured response timeout.
-			return BedrockProxyChatModel.builder()
+			java.time.Duration requestTimeout = BedrockClientCustomizer
+					.requestTimeout(serviceClientsProviderFactory.get(type.getCode()));
+			java.time.Duration connectTimeout = BedrockClientCustomizer
+					.connectTimeout(serviceClientsProviderFactory.get(type.getCode()));
+			BedrockProxyChatModel.Builder modelBuilder = BedrockProxyChatModel.builder()
 					.credentialsProvider(credentials)
 					.region(region)
-					.timeout(BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())))
-					.asyncReadTimeout(BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())))
-					.socketTimeout(BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())))
-					.connectionTimeout(BedrockClientCustomizer.connectTimeout(serviceClientsProviderFactory.get(type.getCode())))
-					.connectionAcquisitionTimeout(BedrockClientCustomizer.connectTimeout(serviceClientsProviderFactory.get(type.getCode())))
+					.timeout(requestTimeout)
+					.asyncReadTimeout(requestTimeout)
+					.socketTimeout(requestTimeout)
+					.connectionTimeout(connectTimeout)
+					.connectionAcquisitionTimeout(connectTimeout)
 					.options(options)
 					.toolCallingManager(toolCallingManager)
-					.observationRegistry(observationRegistry)
-					.build();
+					.observationRegistry(observationRegistry);
+			// The thinking the configuration asks for, on the models whose efforts the
+			// parameter rules know (Claude): Spring AI's options cannot carry it, the
+			// model's own clients add it to each request (BedrockClaudeThinking)
+			String effort = parameterRules != null && parameterRules.knowsEfforts()
+					? reasoningEffortFor(config.getThinking())
+					: null;
+			if (effort != null) {
+				software.amazon.awssdk.core.document.Document thinking = BedrockClaudeThinking.fields(effort);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model {} thinking {} sent as {}", config.getCode(), config.getThinking(), thinking);
+				}
+				modelBuilder
+						.bedrockRuntimeClient(BedrockClaudeThinking.syncClient(credentials, region, requestTimeout,
+								connectTimeout, thinking))
+						.bedrockRuntimeAsyncClient(BedrockClaudeThinking.asyncClient(credentials, region,
+								requestTimeout, connectTimeout, thinking));
+			} else if (config.getThinking() != null && LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat model {} thinking {}: nothing sent, the model's rules list no matching effort",
+						config.getCode(), config.getThinking());
+			}
+			return modelBuilder.build();
 		}
 
 		@Override
@@ -150,7 +178,7 @@ public class BedrockChatModelConfigurationSupportService
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 			return new BedrockConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 	}
 
@@ -163,7 +191,7 @@ public class BedrockChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GBedrockChatModelConfig> create(GBedrockChatModelConfig config)
 			throws LLMConfigException {
 		BedrockConfigurableChatModel model = new BedrockConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
 	}

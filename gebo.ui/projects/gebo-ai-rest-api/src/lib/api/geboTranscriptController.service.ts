@@ -61,10 +61,10 @@ export class GeboTranscriptControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public isEnabled(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
-    public isEnabled(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
-    public isEnabled(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
-    public isEnabled(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public isEnabledTranscript(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public isEnabledTranscript(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public isEnabledTranscript(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
+    public isEnabledTranscript(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 

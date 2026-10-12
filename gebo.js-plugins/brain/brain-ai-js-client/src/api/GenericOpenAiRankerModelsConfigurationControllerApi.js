@@ -14,6 +14,7 @@
  */
 import ApiClient from "../ApiClient";
 import GenericOpenAIAPIRankerModelConfig from '../model/GenericOpenAIAPIRankerModelConfig';
+import GenericOpenAIRankerModelTypeConfig from '../model/GenericOpenAIRankerModelTypeConfig';
 import OperationStatusBoolean from '../model/OperationStatusBoolean';
 import OperationStatusGenericOpenAIAPIRankerModelConfig from '../model/OperationStatusGenericOpenAIAPIRankerModelConfig';
 import OperationStatusListGenericOpenAIAPIRankerModelChoice from '../model/OperationStatusListGenericOpenAIAPIRankerModelChoice';
@@ -89,7 +90,7 @@ export default class GenericOpenAiRankerModelsConfigurationControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GenericOpenAIAPIRankerModelConfig} and HTTP response
      */
     findGenericOpenAIAPIRankerModelConfigByCodeWithHttpInfo(code) {
@@ -187,7 +188,7 @@ export default class GenericOpenAiRankerModelsConfigurationControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GenericOpenAIAPIRankerModelConfig>} and HTTP response
      */
     getGenericOpenAIRankerModelConfigsWithHttpInfo() {
       
@@ -209,7 +210,7 @@ export default class GenericOpenAiRankerModelsConfigurationControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GenericOpenAIAPIRankerModelConfig];
 
       return this.apiClient.callApi(
         '/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIRankerModelConfigs', 'GET',
@@ -219,7 +220,7 @@ export default class GenericOpenAiRankerModelsConfigurationControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GenericOpenAIAPIRankerModelConfig>}
      */
     getGenericOpenAIRankerModelConfigs() {
       return this.getGenericOpenAIRankerModelConfigsWithHttpInfo()
@@ -230,7 +231,7 @@ export default class GenericOpenAiRankerModelsConfigurationControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GenericOpenAIRankerModelTypeConfig>} and HTTP response
      */
     getGenericOpenAIRankerModelTypesWithHttpInfo() {
       
@@ -252,7 +253,7 @@ export default class GenericOpenAiRankerModelsConfigurationControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GenericOpenAIRankerModelTypeConfig];
 
       return this.apiClient.callApi(
         '/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIRankerModelTypes', 'GET',
@@ -262,7 +263,7 @@ export default class GenericOpenAiRankerModelsConfigurationControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GenericOpenAIRankerModelTypeConfig>}
      */
     getGenericOpenAIRankerModelTypes() {
       return this.getGenericOpenAIRankerModelTypesWithHttpInfo()

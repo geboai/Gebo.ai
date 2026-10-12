@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**topK** | **Object** |  | [optional] 
-**similarityThreashold** | **Object** |  | [optional] 
-**historyFillWindowWeight** | **Object** |  | [optional] 
-**documentsFillWindowWeight** | **Object** |  | [optional] 
+**topK** | **Number** |  | [optional] 
+**similarityThreashold** | **Number** |  | [optional] 
+**historyFillWindowWeight** | **Number** |  | [optional] 
+**documentsFillWindowWeight** | **Number** |  | [optional] 

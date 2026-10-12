@@ -3,23 +3,30 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**referenceType** | **Object** |  | [optional] 
-**uuid** | **Object** |  | [optional] 
-**documentCode** | **Object** |  | [optional] 
-**description** | **Object** |  | [optional] 
-**contentType** | **Object** |  | [optional] 
-**extension** | **Object** |  | [optional] 
-**knowledgeBaseCode** | **Object** |  | [optional] 
-**projectCode** | **Object** |  | [optional] 
-**geboTreatAs** | **Object** |  | [optional] 
-**geboFileTypeDescription** | **Object** |  | [optional] 
-**geboFileTypeId** | **Object** |  | [optional] 
-**name** | **Object** |  | [optional] 
-**knowledgeBaseDocument** | **Object** |  | [optional] 
+**referenceType** | **String** |  | [optional] 
+**uuid** | **String** |  | [optional] 
+**documentCode** | **String** |  | [optional] 
+**description** | **String** |  | [optional] 
+**contentType** | **String** |  | [optional] 
+**extension** | **String** |  | [optional] 
+**knowledgeBaseCode** | **String** |  | [optional] 
+**projectCode** | **String** |  | [optional] 
+**geboTreatAs** | **String** |  | [optional] 
+**geboFileTypeDescription** | **String** |  | [optional] 
+**geboFileTypeId** | **String** |  | [optional] 
+**name** | **String** |  | [optional] 
+**knowledgeBaseDocument** | **Boolean** |  | [optional] 
 **nestedSearchResult** | [**SearchResult**](SearchResult.md) |  | [optional] 
-**loadPercentage** | **Object** |  | [optional] 
-**references** | **Object** |  | [optional] 
-**ntokensRelevant** | **Object** |  | [optional] 
-**nbytesRelevant** | **Object** |  | [optional] 
-**shortCode** | **Object** |  | [optional] 
-**ntotalContentTokens** | **Object** |  | [optional] 
+**loadPercentage** | **Number** |  | [optional] 
+**references** | [**[DocInternalRef]**](DocInternalRef.md) |  | [optional] 
+**ntokensRelevant** | **Number** |  | [optional] 
+**ntotalContentTokens** | **Number** |  | [optional] 
+**nbytesRelevant** | **Number** |  | [optional] 
+**shortCode** | **String** |  | [optional] 
+
+<a name="ReferenceTypeEnum"></a>
+## Enum: ReferenceTypeEnum
+
+* `FILE` (value: `"FILE"`)
+* `WEB` (value: `"WEB"`)
+

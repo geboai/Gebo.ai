@@ -48,7 +48,7 @@ public class GeboDefaultLlmsServiceClientsProviderConfig {
     @Data
     public static class WebClientConfig {
         long connectTimeout = 30000;  // Timeout in milliseconds to establish the TCP connection
-        long responseTimeout = 80000; // Timeout in milliseconds to wait for a web client response
+        long responseTimeout = 240000; // Timeout in milliseconds to wait for a web client response (4 minutes)
     }
 
     // Instance of RetryConfig with default configuration values

@@ -55,11 +55,28 @@
 }
 
 .gebo-app-content {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    min-height: calc(100vh - var(--gebo-shell-header-height, 4.5rem));
+    min-height: var(--gebo-shell-content-height);
     margin: 0;
     padding: var(--gebo-page-gutter, 1.5rem);
     background: var(--gebo-white, #fff);
+}
+
+/* router-outlet is only an anchor: the routed component is inserted as its
+   sibling. Left as a flex item it would still take a line box, so the routed
+   page would start one text line below the gutter. */
+.gebo-app-content > router-outlet {
+    display: none;
+}
+
+/* The routed page is the only real child; let it own the whole content box so
+   pages that size themselves against --gebo-shell-content-height (the admin
+   console tabs, the chat surface) actually get that height to grow into. */
+.gebo-app-content > *:not(router-outlet) {
+    flex: 1 1 auto;
+    min-height: 0;
 }
 
 .version-display {
@@ -92,7 +109,13 @@
     }
 
     .gebo-app-content {
-        padding: 1rem;
+        /* The gutter shrinks here, so the usable height grows with it. A custom
+           property resolves its own var() references on the element that
+           declares it, so --gebo-shell-content-height has to be restated here
+           rather than picking up the narrower gutter through inheritance. */
+        --gebo-page-gutter: 1rem;
+        --gebo-shell-content-height: calc(100vh - var(--gebo-shell-header-height) - (2 * var(--gebo-page-gutter)));
+        padding: var(--gebo-page-gutter);
     }
 }
 
@@ -110,7 +133,10 @@
     }
 
     .gebo-app-content {
-        min-height: calc(100vh - 7rem);
-        padding: 0.75rem;
+        /* The header wraps onto two rows below this breakpoint, so the routed
+           page sits under a taller band than --gebo-shell-header-height. */
+        --gebo-page-gutter: 0.75rem;
+        --gebo-shell-content-height: calc(100vh - 7rem - (2 * var(--gebo-page-gutter)));
+        padding: var(--gebo-page-gutter);
     }
 }

@@ -39,77 +39,77 @@ export default class QdrantConfig {
     if (data) {
       obj = obj || new QdrantConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('host'))
-        obj.host = ApiClient.convertToType(data['host'], Object);
+        obj.host = ApiClient.convertToType(data['host'], 'String');
       if (data.hasOwnProperty('port'))
-        obj.port = ApiClient.convertToType(data['port'], Object);
+        obj.port = ApiClient.convertToType(data['port'], 'Number');
       if (data.hasOwnProperty('apiKey'))
-        obj.apiKey = ApiClient.convertToType(data['apiKey'], Object);
+        obj.apiKey = ApiClient.convertToType(data['apiKey'], 'String');
       if (data.hasOwnProperty('tls'))
-        obj.tls = ApiClient.convertToType(data['tls'], Object);
+        obj.tls = ApiClient.convertToType(data['tls'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 QdrantConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 QdrantConfig.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 QdrantConfig.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 QdrantConfig.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 QdrantConfig.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 QdrantConfig.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} host
+ * @member {String} host
  */
 QdrantConfig.prototype.host = undefined;
 
 /**
- * @member {Object} port
+ * @member {Number} port
  */
 QdrantConfig.prototype.port = undefined;
 
 /**
- * @member {Object} apiKey
+ * @member {String} apiKey
  */
 QdrantConfig.prototype.apiKey = undefined;
 
 /**
- * @member {Object} tls
+ * @member {Boolean} tls
  */
 QdrantConfig.prototype.tls = undefined;
 

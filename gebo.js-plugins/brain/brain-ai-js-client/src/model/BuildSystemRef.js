@@ -39,21 +39,21 @@ export default class BuildSystemRef {
     if (data) {
       obj = obj || new BuildSystemRef();
       if (data.hasOwnProperty('buildSystemTypeCode'))
-        obj.buildSystemTypeCode = ApiClient.convertToType(data['buildSystemTypeCode'], Object);
+        obj.buildSystemTypeCode = ApiClient.convertToType(data['buildSystemTypeCode'], 'String');
       if (data.hasOwnProperty('buildSystemConfigCode'))
-        obj.buildSystemConfigCode = ApiClient.convertToType(data['buildSystemConfigCode'], Object);
+        obj.buildSystemConfigCode = ApiClient.convertToType(data['buildSystemConfigCode'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} buildSystemTypeCode
+ * @member {String} buildSystemTypeCode
  */
 BuildSystemRef.prototype.buildSystemTypeCode = undefined;
 
 /**
- * @member {Object} buildSystemConfigCode
+ * @member {String} buildSystemConfigCode
  */
 BuildSystemRef.prototype.buildSystemConfigCode = undefined;
 

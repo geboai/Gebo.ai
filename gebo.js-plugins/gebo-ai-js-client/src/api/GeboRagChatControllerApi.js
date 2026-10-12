@@ -16,6 +16,7 @@ import ApiClient from "../ApiClient";
 import GBaseChatModelChoice from '../model/GBaseChatModelChoice';
 import GBaseObject from '../model/GBaseObject';
 import GChatProfileConfiguration from '../model/GChatProfileConfiguration';
+import GResponseDocumentRef from '../model/GResponseDocumentRef';
 import GeboChatRequest from '../model/GeboChatRequest';
 import GeboChatResponse from '../model/GeboChatResponse';
 import GeboChatUserInfo from '../model/GeboChatUserInfo';
@@ -325,6 +326,55 @@ export default class GeboRagChatControllerApi {
      */
     ragChat(body) {
       return this.ragChatWithHttpInfo(body)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
+     * @param {Array.<String>} body 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GResponseDocumentRef>} and HTTP response
+     */
+    resolveForcedDocumentsRefWithHttpInfo(body) {
+      
+      let postBody = body;
+      // verify the required parameter 'body' is set
+      if (body === undefined || body === null) {
+        throw new Error("Missing the required parameter 'body' when calling resolveForcedDocumentsRef");
+      }
+
+      let pathParams = {
+        
+      };
+      let queryParams = {
+        
+      };
+      let headerParams = {
+        
+      };
+      let formParams = {
+        
+      };
+
+      let authNames = [];
+      let contentTypes = ['application/json'];
+      let accepts = ['application/json'];
+      let returnType = [GResponseDocumentRef];
+
+      return this.apiClient.callApi(
+        '/api/users/GeboChatController/resolveForcedDocumentsRef', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * @param {<&vendorExtensions.x-jsdoc-type>} body 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GResponseDocumentRef>}
+     */
+    resolveForcedDocumentsRef(body) {
+      return this.resolveForcedDocumentsRefWithHttpInfo(body)
         .then(function(response_and_data) {
           return response_and_data.data;
         });

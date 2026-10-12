@@ -47,6 +47,7 @@ public class BedrockImageModelConfigurationSupportService
 		type.setCode("image-generation-aws-bedrock");
 		type.setDescription("Image generation models hosted on AWS Bedrock");
 		type.setModelConfigurationClass(GBedrockImageModelConfig.class.getName());
+		type.setProviderId("aws-bedrock");
 	}
 
 	final BedrockCredentialsResolver credentialsResolver;

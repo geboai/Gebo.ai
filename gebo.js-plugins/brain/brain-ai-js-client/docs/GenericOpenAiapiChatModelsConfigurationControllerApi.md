@@ -62,7 +62,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GenericOpenAiapiChatModelsConfigurationControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findGenericOpenAIAPIChatModelConfigByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -76,7 +76,7 @@ apiInstance.findGenericOpenAIAPIChatModelConfigByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -133,7 +133,7 @@ No authorization required
 
 <a name="getGenericOpenAIChatModelTypes"></a>
 # **getGenericOpenAIChatModelTypes**
-> Object getGenericOpenAIChatModelTypes()
+> [GenericOpenAIChatModelTypeConfig] getGenericOpenAIChatModelTypes()
 
 
 
@@ -155,7 +155,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GenericOpenAIChatModelTypeConfig]**](GenericOpenAIChatModelTypeConfig.md)
 
 ### Authorization
 

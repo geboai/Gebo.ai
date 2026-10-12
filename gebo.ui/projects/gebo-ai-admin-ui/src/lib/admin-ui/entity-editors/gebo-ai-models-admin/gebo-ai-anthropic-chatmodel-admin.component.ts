@@ -30,7 +30,7 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
 /**
  * Component responsible for managing Anthropic chat model configurations.
  * Extends BaseEntityEditingComponent to provide CRUD functionality for GAnthropicChatModelConfig entities.
- * This component displays a form for editing model settings like temperature, top-p, context length,
+ * This component displays a form for editing model settings like context length,
  * and manages API connections through secret keys.
  */
 @Component({
@@ -64,8 +64,6 @@ export class GeboAIAnthropicChatModelAdminComponent extends BaseEntityEditingCom
         defaultModel: new FormControl(),
         choosedModel: new FormControl(),
         apiSecretCode: new FormControl(),
-        temperature: new FormControl(),
-        topP: new FormControl(),
         contextLength: new FormControl(),
         accessibleGroups: new FormControl(),
         accessibleUsers: new FormControl(),

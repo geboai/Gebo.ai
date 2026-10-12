@@ -63,7 +63,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.KnowledgeBaseControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findKnowledgeBaseByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -77,7 +77,7 @@ apiInstance.findKnowledgeBaseByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -94,7 +94,7 @@ No authorization required
 
 <a name="findKnowledgeBasesByQbe"></a>
 # **findKnowledgeBasesByQbe**
-> Object findKnowledgeBasesByQbe(body)
+> [GKnowledgeBase] findKnowledgeBasesByQbe(body)
 
 
 
@@ -121,7 +121,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**[GKnowledgeBase]**](GKnowledgeBase.md)
 
 ### Authorization
 
@@ -134,7 +134,7 @@ No authorization required
 
 <a name="getChildKnowledgeBases"></a>
 # **getChildKnowledgeBases**
-> Object getChildKnowledgeBases(code)
+> [GKnowledgeBase] getChildKnowledgeBases(code)
 
 
 
@@ -143,7 +143,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.KnowledgeBaseControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.getChildKnowledgeBases(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -157,11 +157,11 @@ apiInstance.getChildKnowledgeBases(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
-**Object**
+[**[GKnowledgeBase]**](GKnowledgeBase.md)
 
 ### Authorization
 
@@ -174,7 +174,7 @@ No authorization required
 
 <a name="getKnowledgeBases"></a>
 # **getKnowledgeBases**
-> Object getKnowledgeBases()
+> [GKnowledgeBase] getKnowledgeBases()
 
 
 
@@ -196,7 +196,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GKnowledgeBase]**](GKnowledgeBase.md)
 
 ### Authorization
 

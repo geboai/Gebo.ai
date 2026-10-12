@@ -39,28 +39,28 @@ export default class GObjectRefGBaseModelConfig {
     if (data) {
       obj = obj || new GObjectRefGBaseModelConfig();
       if (data.hasOwnProperty('className'))
-        obj.className = ApiClient.convertToType(data['className'], Object);
+        obj.className = ApiClient.convertToType(data['className'], 'String');
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} className
+ * @member {String} className
  */
 GObjectRefGBaseModelConfig.prototype.className = undefined;
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GObjectRefGBaseModelConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GObjectRefGBaseModelConfig.prototype.description = undefined;
 

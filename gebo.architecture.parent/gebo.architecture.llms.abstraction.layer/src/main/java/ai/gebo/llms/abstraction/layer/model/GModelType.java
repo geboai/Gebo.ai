@@ -26,6 +26,20 @@ public class GModelType extends GBaseObject {
     private String modelConfigurationClass = null;
 
     /**
+     * The real provider behind this model type, e.g. "openai", "anthropic",
+     * "regolo.ai": the same for every model type (chat, embedding, ...) of that
+     * provider, unlike the type code, which is specific to the model type.
+     */
+    private String providerId = null;
+
+    /**
+     * ISO 4217 code of the currency the provider prices its models in, e.g. "EUR":
+     * the default currency of the provider's prices, which the admin can change.
+     * Null for USD, the default when the provider declares none.
+     */
+    private String defaultCurrencyCode = null;
+
+    /**
      * Default constructor for GModelType.
      */
     public GModelType() {
@@ -48,5 +62,23 @@ public class GModelType extends GBaseObject {
      */
     public void setModelConfigurationClass(String modelConfigurationClass) {
         this.modelConfigurationClass = modelConfigurationClass;
+    }
+
+    /** @return the real provider behind this model type, see {@link #providerId}. */
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+    }
+
+    /** @return the provider's price currency, see {@link #defaultCurrencyCode}. */
+    public String getDefaultCurrencyCode() {
+        return defaultCurrencyCode;
+    }
+
+    public void setDefaultCurrencyCode(String defaultCurrencyCode) {
+        this.defaultCurrencyCode = defaultCurrencyCode;
     }
 }

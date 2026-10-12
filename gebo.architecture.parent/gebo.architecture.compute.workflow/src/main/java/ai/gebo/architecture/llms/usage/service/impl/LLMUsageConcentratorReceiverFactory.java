@@ -2,6 +2,8 @@ package ai.gebo.architecture.llms.usage.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +28,7 @@ import ai.gebo.core.messages.LLMUsageDetailPayload;
 @Component
 @Scope("singleton")
 public class LLMUsageConcentratorReceiverFactory extends GAbstractMessageReceiverFactory {
+	private static final Logger LOGGER = LoggerFactory.getLogger(LLMUsageConcentratorReceiverFactory.class);
 	private final IGRuntimeBinder runtimeBinder;
 	public static final MessageReceiverFactoryConfig factoryConfig = new MessageReceiverFactoryConfig();
 
@@ -40,7 +43,20 @@ public class LLMUsageConcentratorReceiverFactory extends GAbstractMessageReceive
 		public void accept(GMessageEnvelope t) {
 			if (t.getPayload() instanceof LLMUsageDetailPayload payload) {
 				LLMUsageDetailRepository usageRepo = runtimeBinder.getImplementationOf(LLMUsageDetailRepository.class);
-				usageRepo.insert(toEntity(payload));
+				LLMUsageDetail detail = toEntity(payload);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Storing usage detail modelType=" + detail.getModelType() + " provider="
+							+ detail.getProviderId() + " modelTypeCode=" + detail.getModelTypeCode() + " model=" + detail.getModel() + " user=" + detail.getUsername()
+							+ " outcome=" + detail.getOutcome() + " responseTime=" + detail.getResponseTime()
+							+ "ms timeToFirstToken=" + detail.getTimeToFirstToken() + " tokens="
+							+ detail.getInputToken() + "/" + detail.getOutputToken() + "/" + detail.getTotalToken());
+				}
+				if (detail.getModelType() == null) {
+					LOGGER.warn("Usage detail received without a model type from provider=" + detail.getProviderId()
+							+ " model=" + detail.getModel() + ": it will be consolidated as "
+							+ LLMUsageDailyAggregationServiceImpl.LEGACY_MODEL_TYPE);
+				}
+				usageRepo.insert(detail);
 			} else {
 				throw new IllegalStateException("This receiver cannot handle payload type:" + t.getPayloadType());
 			}
@@ -48,16 +64,26 @@ public class LLMUsageConcentratorReceiverFactory extends GAbstractMessageReceive
 
 		private LLMUsageDetail toEntity(LLMUsageDetailPayload payload) {
 			LLMUsageDetail detail = new LLMUsageDetail();
-			detail.setProviderId(payload.getProviderId());
+			if (payload.getModelTypeCode() != null) {
+				detail.setProviderId(payload.getProviderId());
+				detail.setModelTypeCode(payload.getModelTypeCode());
+			} else {
+				// Sent by an emitter older than the provider id: its providerId is the type code.
+				detail.setModelTypeCode(payload.getProviderId());
+			}
 			detail.setUsername(payload.getUsername());
 			detail.setModel(payload.getModel());
 			detail.setCallerStack(payload.getCallerStack());
 			detail.setModelType(payload.getModelType());
-			detail.setLatency(payload.getLatency());
+			detail.setResponseTime(payload.getResponseTime());
+			detail.setTimeToFirstToken(payload.getTimeToFirstToken());
+			detail.setCost(payload.getCost());
+			detail.setCurrencyCode(payload.getCurrencyCode());
 			detail.setInputToken(payload.getInputToken());
 			detail.setOutputToken(payload.getOutputToken());
 			detail.setTotalToken(payload.getTotalToken());
 			detail.setOutcome(payload.getOutcome());
+			detail.setApiSecretCode(payload.getApiSecretCode());
 			detail.setTimestamp(payload.getUsageTimestamp());
 			return detail;
 		}

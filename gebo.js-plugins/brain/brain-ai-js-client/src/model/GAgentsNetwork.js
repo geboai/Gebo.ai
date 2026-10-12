@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import AgentNetworkParticipant from './AgentNetworkParticipant';
 
 /**
  * The GAgentsNetwork model module.
@@ -24,9 +25,9 @@ export default class GAgentsNetwork {
    * Constructs a new <code>GAgentsNetwork</code>.
    * @alias module:model/GAgentsNetwork
    * @class
-   * @param agentsNetworkServiceFactoryId {Object} 
-   * @param scenarioDescription {Object} 
-   * @param agents {Object} 
+   * @param agentsNetworkServiceFactoryId {String} 
+   * @param scenarioDescription {String} 
+   * @param agents {Array.<module:model/AgentNetworkParticipant>} 
    */
   constructor(agentsNetworkServiceFactoryId, scenarioDescription, agents) {
     this.agentsNetworkServiceFactoryId = agentsNetworkServiceFactoryId;
@@ -45,119 +46,119 @@ export default class GAgentsNetwork {
     if (data) {
       obj = obj || new GAgentsNetwork();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('maxLoopIteration'))
-        obj.maxLoopIteration = ApiClient.convertToType(data['maxLoopIteration'], Object);
+        obj.maxLoopIteration = ApiClient.convertToType(data['maxLoopIteration'], 'Number');
       if (data.hasOwnProperty('accessibleToAll'))
-        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], Object);
+        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], 'Boolean');
       if (data.hasOwnProperty('accessibleUsers'))
-        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], Object);
+        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], ['String']);
       if (data.hasOwnProperty('accessibleGroups'))
-        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], Object);
+        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], ['String']);
       if (data.hasOwnProperty('aclAliases'))
-        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], Object);
+        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
       if (data.hasOwnProperty('agentsNetworkServiceFactoryId'))
-        obj.agentsNetworkServiceFactoryId = ApiClient.convertToType(data['agentsNetworkServiceFactoryId'], Object);
+        obj.agentsNetworkServiceFactoryId = ApiClient.convertToType(data['agentsNetworkServiceFactoryId'], 'String');
       if (data.hasOwnProperty('scenarioDescription'))
-        obj.scenarioDescription = ApiClient.convertToType(data['scenarioDescription'], Object);
+        obj.scenarioDescription = ApiClient.convertToType(data['scenarioDescription'], 'String');
       if (data.hasOwnProperty('agents'))
-        obj.agents = ApiClient.convertToType(data['agents'], Object);
+        obj.agents = ApiClient.convertToType(data['agents'], [AgentNetworkParticipant]);
       if (data.hasOwnProperty('readOnly'))
-        obj.readOnly = ApiClient.convertToType(data['readOnly'], Object);
+        obj.readOnly = ApiClient.convertToType(data['readOnly'], 'Boolean');
       if (data.hasOwnProperty('defaultUserInteractionNetwork'))
-        obj.defaultUserInteractionNetwork = ApiClient.convertToType(data['defaultUserInteractionNetwork'], Object);
+        obj.defaultUserInteractionNetwork = ApiClient.convertToType(data['defaultUserInteractionNetwork'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GAgentsNetwork.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GAgentsNetwork.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GAgentsNetwork.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GAgentsNetwork.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GAgentsNetwork.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GAgentsNetwork.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} maxLoopIteration
+ * @member {Number} maxLoopIteration
  */
 GAgentsNetwork.prototype.maxLoopIteration = undefined;
 
 /**
- * @member {Object} accessibleToAll
+ * @member {Boolean} accessibleToAll
  */
 GAgentsNetwork.prototype.accessibleToAll = undefined;
 
 /**
- * @member {Object} accessibleUsers
+ * @member {Array.<String>} accessibleUsers
  */
 GAgentsNetwork.prototype.accessibleUsers = undefined;
 
 /**
- * @member {Object} accessibleGroups
+ * @member {Array.<String>} accessibleGroups
  */
 GAgentsNetwork.prototype.accessibleGroups = undefined;
 
 /**
- * @member {Object} aclAliases
+ * @member {Array.<Number>} aclAliases
  */
 GAgentsNetwork.prototype.aclAliases = undefined;
 
 /**
- * @member {Object} agentsNetworkServiceFactoryId
+ * @member {String} agentsNetworkServiceFactoryId
  */
 GAgentsNetwork.prototype.agentsNetworkServiceFactoryId = undefined;
 
 /**
- * @member {Object} scenarioDescription
+ * @member {String} scenarioDescription
  */
 GAgentsNetwork.prototype.scenarioDescription = undefined;
 
 /**
- * @member {Object} agents
+ * @member {Array.<module:model/AgentNetworkParticipant>} agents
  */
 GAgentsNetwork.prototype.agents = undefined;
 
 /**
- * @member {Object} readOnly
+ * @member {Boolean} readOnly
  */
 GAgentsNetwork.prototype.readOnly = undefined;
 
 /**
- * @member {Object} defaultUserInteractionNetwork
+ * @member {Boolean} defaultUserInteractionNetwork
  */
 GAgentsNetwork.prototype.defaultUserInteractionNetwork = undefined;
 

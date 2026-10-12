@@ -1,0 +1,13 @@
+# The deepseek piece of the models library: what Gebo knows of this provider's models
+# (modelsInfo) and what they accept in a request (parameterRules), bound by
+# DeepseekModelsLibrary under ai.gebo.models.providers.deepseek.
+# No entry yet: the reasoning levels each model accepts come from its models api, kept on the model choice.
+# An entry goes under the key below, for example:
+#
+# ai.gebo.models.providers.deepseek:
+#   parameterRules:
+#     - providerId: deepseek
+#       models: ["some-model-*"]
+#       sampling: REJECTED
+#       reasoningEfforts: [none, low, high]
+#       source: the provider page the rule was read on, and when

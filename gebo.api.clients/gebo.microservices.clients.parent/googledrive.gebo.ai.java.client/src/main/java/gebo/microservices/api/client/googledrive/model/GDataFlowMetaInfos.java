@@ -28,7 +28,7 @@ import java.util.List;
  * GDataFlowMetaInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.115295867+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:40.609668083+02:00[Europe/Rome]")
 
 public class GDataFlowMetaInfos {
   @JsonProperty("component")

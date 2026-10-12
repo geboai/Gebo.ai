@@ -27,8 +27,7 @@ public class GenericOpenAIChatModelTypeConfig extends GChatModelType {
 	private String baseUrl = null;
 	/** The provider name for the models list */
 	private String modelsListProvider = null;
-	/** The ID of the provider */
-	private String providerId = null;
+	// providerId is inherited from GModelType and bound from providers.yml.
 	/** Flag indicating whether authentication is optional */
 	private boolean optionalAuthentication = false;
 	private boolean applyThinkingMarkupHandling = false;

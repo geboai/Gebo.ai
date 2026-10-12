@@ -13,7 +13,10 @@
  *
  */
 import ApiClient from "../ApiClient";
+import AgentServiceDescriptor from '../model/AgentServiceDescriptor';
+import GAgentConfig from '../model/GAgentConfig';
 import GAgentsNetwork from '../model/GAgentsNetwork';
+import GBaseObject from '../model/GBaseObject';
 import OperationStatusGAgentsNetwork from '../model/OperationStatusGAgentsNetwork';
 
 /**
@@ -87,7 +90,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GBaseObject>} and HTTP response
      */
     getAgentConfigsWithHttpInfo() {
       
@@ -109,7 +112,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GBaseObject];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAgentsNetworkAdminController/getAgentConfigs', 'GET',
@@ -119,7 +122,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GBaseObject>}
      */
     getAgentConfigs() {
       return this.getAgentConfigsWithHttpInfo()
@@ -130,8 +133,8 @@ export default class GeboAgentsNetworkAdminControllerApi {
 
 
     /**
-     * @param {Object} serviceId 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} serviceId 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GAgentConfig>} and HTTP response
      */
     getAgentConfigsByServiceIdWithHttpInfo(serviceId) {
       
@@ -157,7 +160,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GAgentConfig];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAgentsNetworkAdminController/getAgentConfigsByServiceId', 'GET',
@@ -168,7 +171,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} serviceId 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GAgentConfig>}
      */
     getAgentConfigsByServiceId(serviceId) {
       return this.getAgentConfigsByServiceIdWithHttpInfo(serviceId)
@@ -179,7 +182,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/AgentServiceDescriptor>} and HTTP response
      */
     getAgentServicesWithHttpInfo() {
       
@@ -201,7 +204,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [AgentServiceDescriptor];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAgentsNetworkAdminController/getAgentServices', 'GET',
@@ -211,7 +214,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/AgentServiceDescriptor>}
      */
     getAgentServices() {
       return this.getAgentServicesWithHttpInfo()
@@ -222,7 +225,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GBaseObject>} and HTTP response
      */
     getAgentsNetworkWithHttpInfo() {
       
@@ -244,7 +247,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GBaseObject];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAgentsNetworkAdminController/getAgentsNetwork', 'GET',
@@ -254,7 +257,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GBaseObject>}
      */
     getAgentsNetwork() {
       return this.getAgentsNetworkWithHttpInfo()
@@ -265,7 +268,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GAgentsNetwork} and HTTP response
      */
     getAgentsNetworkByCodeWithHttpInfo(code) {
@@ -314,8 +317,8 @@ export default class GeboAgentsNetworkAdminControllerApi {
 
 
     /**
-     * @param {Object} serviceId 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} serviceId 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/AgentServiceDescriptor>} and HTTP response
      */
     getCompatibleNextServicesWithHttpInfo(serviceId) {
       
@@ -341,7 +344,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [AgentServiceDescriptor];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAgentsNetworkAdminController/getCompatibleNextServices', 'GET',
@@ -352,7 +355,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} serviceId 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/AgentServiceDescriptor>}
      */
     getCompatibleNextServices(serviceId) {
       return this.getCompatibleNextServicesWithHttpInfo(serviceId)
@@ -363,8 +366,8 @@ export default class GeboAgentsNetworkAdminControllerApi {
 
 
     /**
-     * @param {Object} serviceId 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} serviceId 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/AgentServiceDescriptor>} and HTTP response
      */
     getCompatiblePreviousServicesWithHttpInfo(serviceId) {
       
@@ -390,7 +393,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [AgentServiceDescriptor];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAgentsNetworkAdminController/getCompatiblePreviousServices', 'GET',
@@ -401,7 +404,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} serviceId 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/AgentServiceDescriptor>}
      */
     getCompatiblePreviousServices(serviceId) {
       return this.getCompatiblePreviousServicesWithHttpInfo(serviceId)
@@ -412,7 +415,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/AgentServiceDescriptor>} and HTTP response
      */
     getNetworkAdapterServicesWithHttpInfo() {
       
@@ -434,7 +437,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [AgentServiceDescriptor];
 
       return this.apiClient.callApi(
         '/api/admin/GeboAgentsNetworkAdminController/getNetworkAdapterServices', 'GET',
@@ -444,7 +447,7 @@ export default class GeboAgentsNetworkAdminControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/AgentServiceDescriptor>}
      */
     getNetworkAdapterServices() {
       return this.getNetworkAdapterServicesWithHttpInfo()

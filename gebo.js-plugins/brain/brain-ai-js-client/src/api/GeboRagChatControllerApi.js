@@ -14,10 +14,14 @@
  */
 import ApiClient from "../ApiClient";
 import GBaseChatModelChoice from '../model/GBaseChatModelChoice';
+import GBaseObject from '../model/GBaseObject';
+import GChatProfileConfiguration from '../model/GChatProfileConfiguration';
+import GResponseDocumentRef from '../model/GResponseDocumentRef';
 import GeboChatRequest from '../model/GeboChatRequest';
 import GeboChatResponse from '../model/GeboChatResponse';
 import GeboChatUserInfo from '../model/GeboChatUserInfo';
 import ModelProviderCapabilities from '../model/ModelProviderCapabilities';
+import ServerSentEventString from '../model/ServerSentEventString';
 
 /**
 * GeboRagChatController service.
@@ -41,7 +45,7 @@ export default class GeboRagChatControllerApi {
 
 
     /**
-     * @param {Object} chatProfileCode 
+     * @param {String} chatProfileCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GeboChatUserInfo} and HTTP response
      */
     getChatModelUserInfoByChatProfileCodeWithHttpInfo(chatProfileCode) {
@@ -90,7 +94,7 @@ export default class GeboRagChatControllerApi {
 
 
     /**
-     * @param {Object} chatProfileCode 
+     * @param {String} chatProfileCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GBaseChatModelChoice} and HTTP response
      */
     getChatProfileModelMetaInfosWithHttpInfo(chatProfileCode) {
@@ -139,7 +143,7 @@ export default class GeboRagChatControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GChatProfileConfiguration>} and HTTP response
      */
     getChatProfilesWithHttpInfo() {
       
@@ -161,7 +165,7 @@ export default class GeboRagChatControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['*/*'];
-      let returnType = Object;
+      let returnType = [GChatProfileConfiguration];
 
       return this.apiClient.callApi(
         '/api/users/GeboChatController/profiles', 'GET',
@@ -171,7 +175,7 @@ export default class GeboRagChatControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GChatProfileConfiguration>}
      */
     getChatProfiles() {
       return this.getChatProfilesWithHttpInfo()
@@ -182,7 +186,7 @@ export default class GeboRagChatControllerApi {
 
 
     /**
-     * @param {Object} chatProfileCode 
+     * @param {String} chatProfileCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ModelProviderCapabilities} and HTTP response
      */
     getProfileProviderModelCapabilitiesWithHttpInfo(chatProfileCode) {
@@ -231,8 +235,8 @@ export default class GeboRagChatControllerApi {
 
 
     /**
-     * @param {Object} profileCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} profileCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GBaseObject>} and HTTP response
      */
     getVisibleKnowledgeBasesByProfileCodeWithHttpInfo(profileCode) {
       
@@ -258,7 +262,7 @@ export default class GeboRagChatControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GBaseObject];
 
       return this.apiClient.callApi(
         '/api/users/GeboChatController/getVisibleKnowledgeBasesByProfileCode', 'GET',
@@ -269,7 +273,7 @@ export default class GeboRagChatControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} profileCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GBaseObject>}
      */
     getVisibleKnowledgeBasesByProfileCode(profileCode) {
       return this.getVisibleKnowledgeBasesByProfileCodeWithHttpInfo(profileCode)
@@ -329,8 +333,57 @@ export default class GeboRagChatControllerApi {
 
 
     /**
+     * @param {Array.<String>} body 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GResponseDocumentRef>} and HTTP response
+     */
+    resolveForcedDocumentsRefWithHttpInfo(body) {
+      
+      let postBody = body;
+      // verify the required parameter 'body' is set
+      if (body === undefined || body === null) {
+        throw new Error("Missing the required parameter 'body' when calling resolveForcedDocumentsRef");
+      }
+
+      let pathParams = {
+        
+      };
+      let queryParams = {
+        
+      };
+      let headerParams = {
+        
+      };
+      let formParams = {
+        
+      };
+
+      let authNames = [];
+      let contentTypes = ['application/json'];
+      let accepts = ['application/json'];
+      let returnType = [GResponseDocumentRef];
+
+      return this.apiClient.callApi(
+        '/api/users/GeboChatController/resolveForcedDocumentsRef', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * @param {<&vendorExtensions.x-jsdoc-type>} body 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GResponseDocumentRef>}
+     */
+    resolveForcedDocumentsRef(body) {
+      return this.resolveForcedDocumentsRefWithHttpInfo(body)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
      * @param {module:model/GeboChatRequest} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ServerSentEventString>} and HTTP response
      */
     streamRagResponseWithHttpInfo(body) {
       
@@ -356,7 +409,7 @@ export default class GeboRagChatControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['text/event-stream'];
-      let returnType = Object;
+      let returnType = [ServerSentEventString];
 
       return this.apiClient.callApi(
         '/api/users/GeboChatController/streamRagResponse', 'POST',
@@ -367,7 +420,7 @@ export default class GeboRagChatControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ServerSentEventString>}
      */
     streamRagResponse(body) {
       return this.streamRagResponseWithHttpInfo(body)

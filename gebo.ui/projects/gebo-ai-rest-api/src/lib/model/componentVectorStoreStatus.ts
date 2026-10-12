@@ -19,11 +19,12 @@ export interface ComponentVectorStoreStatus {
     redisConfig?: RedisConfig;
 }
 export namespace ComponentVectorStoreStatus {
-    export type ProductEnum = 'MONGO' | 'QDRANT' | 'REDIS' | 'TEST';
+    export type ProductEnum = 'MONGO' | 'QDRANT' | 'REDIS' | 'LOCAL' | 'TEST';
     export const ProductEnum = {
         MONGO: 'MONGO' as ProductEnum,
         QDRANT: 'QDRANT' as ProductEnum,
         REDIS: 'REDIS' as ProductEnum,
+        LOCAL: 'LOCAL' as ProductEnum,
         TEST: 'TEST' as ProductEnum
     };
 }

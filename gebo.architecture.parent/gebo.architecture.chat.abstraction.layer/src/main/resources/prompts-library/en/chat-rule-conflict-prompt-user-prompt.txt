@@ -1,0 +1,4 @@
+Existing rules:
+{documents}
+
+New rule: {question}

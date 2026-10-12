@@ -1,0 +1,13 @@
+# The generic-openai piece of the models library: what Gebo knows of this provider's models
+# (modelsInfo) and what they accept in a request (parameterRules), bound by
+# GenericOpenAIModelsLibrary under ai.gebo.models.providers.generic-openai.
+# No entry yet: the models depend on the server it is pointed at; an installation adds their entries in ai.gebo.models.library.
+# An entry goes under the key below, for example:
+#
+# ai.gebo.models.providers.generic-openai:
+#   parameterRules:
+#     - providerId: generic-openai
+#       models: ["some-model-*"]
+#       sampling: REJECTED
+#       reasoningEfforts: [none, low, high]
+#       source: the provider page the rule was read on, and when

@@ -38,20 +38,25 @@ export default class UserInfos {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new UserInfos();
-      if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('username'))
         obj.username = ApiClient.convertToType(data['username'], 'String');
+      if (data.hasOwnProperty('name'))
+        obj.name = ApiClient.convertToType(data['name'], 'String');
+      if (data.hasOwnProperty('roles'))
+        obj.roles = ApiClient.convertToType(data['roles'], ['String']);
       if (data.hasOwnProperty('disabled'))
         obj.disabled = ApiClient.convertToType(data['disabled'], 'Boolean');
       if (data.hasOwnProperty('sourname'))
         obj.sourname = ApiClient.convertToType(data['sourname'], 'String');
-      if (data.hasOwnProperty('roles'))
-        obj.roles = ApiClient.convertToType(data['roles'], ['String']);
     }
     return obj;
   }
 }
+
+/**
+ * @member {String} username
+ */
+UserInfos.prototype.username = undefined;
 
 /**
  * @member {String} name
@@ -59,9 +64,9 @@ export default class UserInfos {
 UserInfos.prototype.name = undefined;
 
 /**
- * @member {String} username
+ * @member {Array.<String>} roles
  */
-UserInfos.prototype.username = undefined;
+UserInfos.prototype.roles = undefined;
 
 /**
  * @member {Boolean} disabled
@@ -72,9 +77,4 @@ UserInfos.prototype.disabled = undefined;
  * @member {String} sourname
  */
 UserInfos.prototype.sourname = undefined;
-
-/**
- * @member {Array.<String>} roles
- */
-UserInfos.prototype.roles = undefined;
 

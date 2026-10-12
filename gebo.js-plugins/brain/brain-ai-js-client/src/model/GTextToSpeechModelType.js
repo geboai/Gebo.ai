@@ -39,56 +39,56 @@ export default class GTextToSpeechModelType {
     if (data) {
       obj = obj || new GTextToSpeechModelType();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('modelConfigurationClass'))
-        obj.modelConfigurationClass = ApiClient.convertToType(data['modelConfigurationClass'], Object);
+        obj.modelConfigurationClass = ApiClient.convertToType(data['modelConfigurationClass'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GTextToSpeechModelType.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GTextToSpeechModelType.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GTextToSpeechModelType.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GTextToSpeechModelType.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GTextToSpeechModelType.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GTextToSpeechModelType.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} modelConfigurationClass
+ * @member {String} modelConfigurationClass
  */
 GTextToSpeechModelType.prototype.modelConfigurationClass = undefined;
 

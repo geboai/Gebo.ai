@@ -15,7 +15,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.architecture.ai.model.ContextContentRequired;
+import ai.gebo.architecture.ai.model.GPromptPlaceholderInfo;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.model.GPromptUseInfo;
+import ai.gebo.architecture.ai.service.IGStaticPromptUseInfoProvider;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import lombok.Data;
 
@@ -27,7 +30,7 @@ import lombok.Data;
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.serpapisearch")
 @Data
-public class SerpapiSearchHandlerConfig implements IGStaticPromptsProvider {
+public class SerpapiSearchHandlerConfig implements IGStaticPromptsProvider, IGStaticPromptUseInfoProvider {
 
 	public static final String SERPAPI_SEARCH_QUERY_EXTRACTION_PROMPT = "serpapi-search-query-extraction-prompt";
 
@@ -61,5 +64,25 @@ public class SerpapiSearchHandlerConfig implements IGStaticPromptsProvider {
 	@Override
 	public List<GPromptTemplateConfig> promptsList() {
 		return List.of(prompt);
+	}
+
+	@Override
+	public List<GPromptUseInfo> uses() {
+		GPromptUseInfo info = new GPromptUseInfo();
+		info.setCode(SERPAPI_SEARCH_QUERY_EXTRACTION_PROMPT);
+		info.setDescription(
+				"Plans a native SerpApi query (search strings plus optional engine/country/language/recency options) from the user's question and the consolidated knowledge gathered so far.");
+		info.setModule("serpapisearch");
+		GPromptPlaceholderInfo consolidated = new GPromptPlaceholderInfo();
+		consolidated.setPlaceholder("consolidated");
+		consolidated.setDescription("The knowledge consolidated so far for this request (can be empty).");
+		GPromptPlaceholderInfo format = new GPromptPlaceholderInfo();
+		format.setPlaceholder("format");
+		format.setDescription("The structured-output format/schema instructions the native query object must comply with.");
+		GPromptPlaceholderInfo question = new GPromptPlaceholderInfo();
+		question.setPlaceholder("question");
+		question.setDescription("The user's current question or request text.");
+		info.setPlaceholders(List.of(consolidated, format, question));
+		return List.of(info);
 	}
 }

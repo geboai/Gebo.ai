@@ -88,11 +88,30 @@ public class DiscoveryClientClusterTopologyProvider implements IGModelsReplicati
 	 * of every topology member, and a retry budget generous enough to outlast a
 	 * slow participant's registration rather than one merely long enough to dodge a
 	 * momentary empty read.
+	 * <p>
+	 * <b>What was actually measured, which limits what the budget can buy.</b> On
+	 * the docker-compose cluster the loop never observes a registration made after
+	 * it starts: the list returned by {@link DiscoveryClient#getInstances(String)}
+	 * stays at whatever the Eureka client held when it initialised, for the whole
+	 * loop. On a cold start all three participants registered with the right VIPs
+	 * about 100s in, and the local Eureka cache logged them being added
+	 * ("Added instance ...:brain_gebo_ai:13001 to the existing apps in region
+	 * null") - yet all 24 polls still read an empty list and the member ended
+	 * isolated after 240s, starting in 296s. Disabling delta fetching
+	 * ({@code eureka.client.disable-delta=true}) changed nothing. The same service
+	 * restarted against an already-populated registry converged on its SECOND poll
+	 * and started in 20s.
+	 * <p>
+	 * So on a cold cluster the retries are dead time before an outcome that is
+	 * identical to the one the first poll already implied; the budget only pays for
+	 * itself when the registry is populated at discovery-client init (a rolling
+	 * restart), where two polls suffice. Both knobs are therefore configuration
+	 * ({@code gebo.models.replication.discovery-attempts} /
+	 * {@code ...discovery-retry-interval-millis}) rather than constants, so a
+	 * deployment that measures differently can raise them and one that does not
+	 * want to pay the startup delay can cut them - see the microservices compose
+	 * overlay, which does exactly that.
 	 */
-	private static final int MAX_DISCOVERY_ATTEMPTS = 24;
-
-	/** Delay between snapshot retries. 24 attempts * 10s = up to 240s. */
-	private static final long RETRY_DELAY_MILLIS = 10000L;
 
 	private final DiscoveryClient discoveryClient;
 	private final GeboModelsReplicationParticipants participants;
@@ -120,35 +139,15 @@ public class DiscoveryClientClusterTopologyProvider implements IGModelsReplicati
 	@Override
 	public GModelsReplicationClusterTopology getModelsReplicationClusterTopology() {
 		String instanceName = GeboMicroservice.normalizeName(localApplicationName);
-		List<String> memberList = new ArrayList<>();
-		List<String> previous = null;
-		for (int attempt = 1; attempt <= MAX_DISCOVERY_ATTEMPTS; attempt++) {
-			memberList = resolveMembers();
-			// Non-empty AND unchanged since the previous poll: a single non-empty read is
-			// not enough on its own - a peer that is slower to register than this one would
-			// otherwise be silently left out of a list accepted on the very first sighting
-			// of any member at all. Requiring one stable repeat gives stragglers one more
-			// retry interval to show up before this snapshot is taken as final.
-			if (!memberList.isEmpty() && memberList.equals(previous)) {
-				break;
-			}
-			previous = memberList;
-			if (attempt < MAX_DISCOVERY_ATTEMPTS) {
-				LOGGER.info(
-						"Service discovery member snapshot for '{}' not yet stable (attempt {}/{}, members so far={}); "
-								+ "retrying in {} ms - peers routinely still be starting up.",
-						instanceName, attempt, MAX_DISCOVERY_ATTEMPTS, memberList, RETRY_DELAY_MILLIS);
-				sleep(RETRY_DELAY_MILLIS);
-			}
-		}
+		List<String> initialMembers = resolveMembers();
 
-		if (memberList.isEmpty()) {
-			LOGGER.warn("Service discovery still reports no instance of any topology member after {} attempts: '{}' "
-					+ "will start an ISOLATED single-member cache and merge once it meets the others. Is the "
-					+ "registry reachable?", MAX_DISCOVERY_ATTEMPTS, instanceName);
+		if (initialMembers.isEmpty()) {
+			LOGGER.info("Service discovery reports no instance of any models-replication participant yet for '{}'; "
+					+ "starting anyway - discovery is re-asked on every Hazelcast join and merge cycle, so peers "
+					+ "are picked up as they register.", instanceName);
 		} else {
 			LOGGER.info("Replication cluster seeded from discovery for '{}': cluster='{}', port={}, members={}",
-					instanceName, properties.getClusterName(), properties.getPort(), memberList);
+					instanceName, properties.getClusterName(), properties.getPort(), initialMembers);
 		}
 
 		return GModelsReplicationClusterTopology.builder()
@@ -156,7 +155,11 @@ public class DiscoveryClientClusterTopologyProvider implements IGModelsReplicati
 				.instanceName(instanceName)
 				.port(properties.getPort())
 				.portAutoIncrement(properties.isPortAutoIncrement())
-				.members(memberList)
+				.members(initialMembers)
+				// The live resolver is the point: it is re-asked by Hazelcast on every
+				// join attempt and merge cycle, so this snapshot being empty is no
+				// longer terminal and no startup wait is needed to avoid it.
+				.liveMembers(this::resolveMembers)
 				.build();
 	}
 
@@ -187,13 +190,5 @@ public class DiscoveryClientClusterTopologyProvider implements IGModelsReplicati
 		}
 
 		return new ArrayList<>(members);
-	}
-
-	private static void sleep(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
 	}
 }

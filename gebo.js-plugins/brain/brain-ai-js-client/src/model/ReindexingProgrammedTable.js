@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import ReindexingTime from './ReindexingTime';
 
 /**
  * The ReindexingProgrammedTable model module.
@@ -24,7 +25,7 @@ export default class ReindexingProgrammedTable {
    * Constructs a new <code>ReindexingProgrammedTable</code>.
    * @alias module:model/ReindexingProgrammedTable
    * @class
-   * @param frequency {Object} 
+   * @param frequency {module:model/ReindexingProgrammedTable.FrequencyEnum} 
    */
   constructor(frequency) {
     this.frequency = frequency;
@@ -41,21 +42,69 @@ export default class ReindexingProgrammedTable {
     if (data) {
       obj = obj || new ReindexingProgrammedTable();
       if (data.hasOwnProperty('frequency'))
-        obj.frequency = ApiClient.convertToType(data['frequency'], Object);
+        obj.frequency = ApiClient.convertToType(data['frequency'], 'String');
       if (data.hasOwnProperty('times'))
-        obj.times = ApiClient.convertToType(data['times'], Object);
+        obj.times = ApiClient.convertToType(data['times'], [ReindexingTime]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} frequency
+ * Allowed values for the <code>frequency</code> property.
+ * @enum {String}
+ * @readonly
+ */
+ReindexingProgrammedTable.FrequencyEnum = {
+  /**
+   * value: "DAILY"
+   * @const
+   */
+  DAILY: "DAILY",
+
+  /**
+   * value: "MONTHLY"
+   * @const
+   */
+  MONTHLY: "MONTHLY",
+
+  /**
+   * value: "WEEKLY"
+   * @const
+   */
+  WEEKLY: "WEEKLY",
+
+  /**
+   * value: "HOURLY"
+   * @const
+   */
+  HOURLY: "HOURLY",
+
+  /**
+   * value: "YEARLY"
+   * @const
+   */
+  YEARLY: "YEARLY",
+
+  /**
+   * value: "ON_CHANGES"
+   * @const
+   */
+  ON_CHANGES: "ON_CHANGES",
+
+  /**
+   * value: "DATES"
+   * @const
+   */
+  DATES: "DATES"
+};
+/**
+ * @member {module:model/ReindexingProgrammedTable.FrequencyEnum} frequency
  */
 ReindexingProgrammedTable.prototype.frequency = undefined;
 
 /**
- * @member {Object} times
+ * @member {Array.<module:model/ReindexingTime>} times
  */
 ReindexingProgrammedTable.prototype.times = undefined;
 

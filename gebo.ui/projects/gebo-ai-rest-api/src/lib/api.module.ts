@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { A2AClientConfigControllerService } from './api/a2AClientConfigController.service';
+import { AgenticChatDefaultNetworksAdminControllerService } from './api/agenticChatDefaultNetworksAdminController.service';
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
 import { AuthControllerService } from './api/authController.service';
 import { AuthProvidersControllerService } from './api/authProvidersController.service';
@@ -38,16 +39,17 @@ import { FileUploadsControllerService } from './api/fileUploadsController.servic
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
 import { GeboA2AServerAdminControllerService } from './api/geboA2AServerAdminController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
+import { GeboAdminChatRulesControllerService } from './api/geboAdminChatRulesController.service';
 import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
 import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsController.service';
 import { GeboAdminRagAutotuneControllerService } from './api/geboAdminRagAutotuneController.service';
-import { GeboAdvancedSetupStatusControllerService } from './api/geboAdvancedSetupStatusController.service';
 import { GeboAgentAdminControllerService } from './api/geboAgentAdminController.service';
 import { GeboAgentsNetworkAdminControllerService } from './api/geboAgentsNetworkAdminController.service';
 import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GeboChatControllerService } from './api/geboChatController.service';
 import { GeboChatPipelinesControllerService } from './api/geboChatPipelinesController.service';
 import { GeboChatProfileLookupControllerService } from './api/geboChatProfileLookupController.service';
+import { GeboChatRulesControllerService } from './api/geboChatRulesController.service';
 import { GeboCoreAnalisysControllerService } from './api/geboCoreAnalisysController.service';
 import { GeboDeepSearchAdminControllerService } from './api/geboDeepSearchAdminController.service';
 import { GeboDeepSearchControllerService } from './api/geboDeepSearchController.service';
@@ -68,7 +70,6 @@ import { GeboTranscriptControllerService } from './api/geboTranscriptController.
 import { GeboUserChatUploadsControllerService } from './api/geboUserChatUploadsController.service';
 import { GeboUserChatsControllerService } from './api/geboUserChatsController.service';
 import { GeboUserKnowledgeBaseSemanticSearchControllerService } from './api/geboUserKnowledgeBaseSemanticSearchController.service';
-import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorStoreConfigurationController.service';
 import { GeneratedAdminApiKeyControllerService } from './api/generatedAdminApiKeyController.service';
 import { GeneratedUserApiKeyControllerService } from './api/generatedUserApiKeyController.service';
 import { GenericOpenAiRankerModelsConfigurationControllerService } from './api/genericOpenAiRankerModelsConfigurationController.service';
@@ -119,6 +120,7 @@ import { OpenAiTextToSpeechModelsConfigurationControllerService } from './api/op
 import { OpenAiTranscriptModelsConfigurationControllerService } from './api/openAiTranscriptModelsConfigurationController.service';
 import { ProjectsControllerService } from './api/projectsController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
+import { ProviderDealsControllerService } from './api/providerDealsController.service';
 import { RankerModelsControllerService } from './api/rankerModelsController.service';
 import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
 import { SearxngSearchConfigurationControllerService } from './api/searxngSearchConfigurationController.service';
@@ -128,6 +130,8 @@ import { SerpapiSearchConfigurationControllerService } from './api/serpapiSearch
 import { SharePointSearchServiceControllerService } from './api/sharePointSearchServiceController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
+import { SystemMessagesAdminControllerService } from './api/systemMessagesAdminController.service';
+import { SystemMessagesControllerService } from './api/systemMessagesController.service';
 import { TavilySearchConfigurationControllerService } from './api/tavilySearchConfigurationController.service';
 import { TextToSpeechModelsControllerService } from './api/textToSpeechModelsController.service';
 import { TokenRenewControllerService } from './api/tokenRenewController.service';
@@ -150,6 +154,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
   exports:      [],
   providers: [
     A2AClientConfigControllerService,
+    AgenticChatDefaultNetworksAdminControllerService,
     AnthropicChatModelsConfigurationControllerService,
     AuthControllerService,
     AuthProvidersControllerService,
@@ -184,16 +189,17 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     FunctionsLookupControllerService,
     GeboA2AServerAdminControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
+    GeboAdminChatRulesControllerService,
     GeboAdminPromptUseInfoControllerService,
     GeboAdminPromptsControllerService,
     GeboAdminRagAutotuneControllerService,
-    GeboAdvancedSetupStatusControllerService,
     GeboAgentAdminControllerService,
     GeboAgentsNetworkAdminControllerService,
     GeboAngularFormGroupMetaInfoControllerService,
     GeboChatControllerService,
     GeboChatPipelinesControllerService,
     GeboChatProfileLookupControllerService,
+    GeboChatRulesControllerService,
     GeboCoreAnalisysControllerService,
     GeboDeepSearchAdminControllerService,
     GeboDeepSearchControllerService,
@@ -214,7 +220,6 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GeboUserChatUploadsControllerService,
     GeboUserChatsControllerService,
     GeboUserKnowledgeBaseSemanticSearchControllerService,
-    GeboVectorStoreConfigurationControllerService,
     GeneratedAdminApiKeyControllerService,
     GeneratedUserApiKeyControllerService,
     GenericOpenAiRankerModelsConfigurationControllerService,
@@ -265,6 +270,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     OpenAiTranscriptModelsConfigurationControllerService,
     ProjectsControllerService,
     PromptTemplatesControllerService,
+    ProviderDealsControllerService,
     RankerModelsControllerService,
     ReindexingFrequencyOptionsControllerService,
     SearxngSearchConfigurationControllerService,
@@ -274,6 +280,8 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     SharePointSearchServiceControllerService,
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,
+    SystemMessagesAdminControllerService,
+    SystemMessagesControllerService,
     TavilySearchConfigurationControllerService,
     TextToSpeechModelsControllerService,
     TokenRenewControllerService,

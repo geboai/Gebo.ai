@@ -41,81 +41,81 @@ export default class GChatProfileConfiguration {
     if (data) {
       obj = obj || new GChatProfileConfiguration();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('embeddingModelReference'))
         obj.embeddingModelReference = GObjectRefGBaseEmbeddingModelConfig.constructFromObject(data['embeddingModelReference']);
       if (data.hasOwnProperty('chatModelReference'))
         obj.chatModelReference = GObjectRefGBaseChatModelConfig.constructFromObject(data['chatModelReference']);
       if (data.hasOwnProperty('enabledFunctions'))
-        obj.enabledFunctions = ApiClient.convertToType(data['enabledFunctions'], Object);
+        obj.enabledFunctions = ApiClient.convertToType(data['enabledFunctions'], ['String']);
       if (data.hasOwnProperty('accessibleGroups'))
-        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], Object);
+        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], ['String']);
       if (data.hasOwnProperty('accessibleUsers'))
-        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], Object);
+        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], ['String']);
       if (data.hasOwnProperty('accessibleToAll'))
-        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], Object);
+        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], 'Boolean');
       if (data.hasOwnProperty('userChoosesKnowledgeBases'))
-        obj.userChoosesKnowledgeBases = ApiClient.convertToType(data['userChoosesKnowledgeBases'], Object);
+        obj.userChoosesKnowledgeBases = ApiClient.convertToType(data['userChoosesKnowledgeBases'], 'Boolean');
       if (data.hasOwnProperty('topK'))
-        obj.topK = ApiClient.convertToType(data['topK'], Object);
+        obj.topK = ApiClient.convertToType(data['topK'], 'Number');
       if (data.hasOwnProperty('similaritySearchThreshold'))
-        obj.similaritySearchThreshold = ApiClient.convertToType(data['similaritySearchThreshold'], Object);
+        obj.similaritySearchThreshold = ApiClient.convertToType(data['similaritySearchThreshold'], 'Number');
       if (data.hasOwnProperty('knowledgeBaseCodes'))
-        obj.knowledgeBaseCodes = ApiClient.convertToType(data['knowledgeBaseCodes'], Object);
+        obj.knowledgeBaseCodes = ApiClient.convertToType(data['knowledgeBaseCodes'], ['String']);
       if (data.hasOwnProperty('forcedRequestDocuments'))
-        obj.forcedRequestDocuments = ApiClient.convertToType(data['forcedRequestDocuments'], Object);
+        obj.forcedRequestDocuments = ApiClient.convertToType(data['forcedRequestDocuments'], ['String']);
       if (data.hasOwnProperty('forcedRequestDocumentsReadonly'))
-        obj.forcedRequestDocumentsReadonly = ApiClient.convertToType(data['forcedRequestDocumentsReadonly'], Object);
+        obj.forcedRequestDocumentsReadonly = ApiClient.convertToType(data['forcedRequestDocumentsReadonly'], 'Boolean');
       if (data.hasOwnProperty('disableMultiHopRag'))
-        obj.disableMultiHopRag = ApiClient.convertToType(data['disableMultiHopRag'], Object);
+        obj.disableMultiHopRag = ApiClient.convertToType(data['disableMultiHopRag'], 'Boolean');
       if (data.hasOwnProperty('otherSearchSimilarityThreshold'))
-        obj.otherSearchSimilarityThreshold = ApiClient.convertToType(data['otherSearchSimilarityThreshold'], Object);
+        obj.otherSearchSimilarityThreshold = ApiClient.convertToType(data['otherSearchSimilarityThreshold'], 'Number');
       if (data.hasOwnProperty('manualThreasholdsConfiguration'))
-        obj.manualThreasholdsConfiguration = ApiClient.convertToType(data['manualThreasholdsConfiguration'], Object);
+        obj.manualThreasholdsConfiguration = ApiClient.convertToType(data['manualThreasholdsConfiguration'], 'Boolean');
       if (data.hasOwnProperty('useAlsoKeywordSearch'))
-        obj.useAlsoKeywordSearch = ApiClient.convertToType(data['useAlsoKeywordSearch'], Object);
+        obj.useAlsoKeywordSearch = ApiClient.convertToType(data['useAlsoKeywordSearch'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GChatProfileConfiguration.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GChatProfileConfiguration.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GChatProfileConfiguration.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GChatProfileConfiguration.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GChatProfileConfiguration.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GChatProfileConfiguration.prototype.dateCreated = undefined;
 
@@ -130,72 +130,72 @@ GChatProfileConfiguration.prototype.embeddingModelReference = undefined;
 GChatProfileConfiguration.prototype.chatModelReference = undefined;
 
 /**
- * @member {Object} enabledFunctions
+ * @member {Array.<String>} enabledFunctions
  */
 GChatProfileConfiguration.prototype.enabledFunctions = undefined;
 
 /**
- * @member {Object} accessibleGroups
+ * @member {Array.<String>} accessibleGroups
  */
 GChatProfileConfiguration.prototype.accessibleGroups = undefined;
 
 /**
- * @member {Object} accessibleUsers
+ * @member {Array.<String>} accessibleUsers
  */
 GChatProfileConfiguration.prototype.accessibleUsers = undefined;
 
 /**
- * @member {Object} accessibleToAll
+ * @member {Boolean} accessibleToAll
  */
 GChatProfileConfiguration.prototype.accessibleToAll = undefined;
 
 /**
- * @member {Object} userChoosesKnowledgeBases
+ * @member {Boolean} userChoosesKnowledgeBases
  */
 GChatProfileConfiguration.prototype.userChoosesKnowledgeBases = undefined;
 
 /**
- * @member {Object} topK
+ * @member {Number} topK
  */
 GChatProfileConfiguration.prototype.topK = undefined;
 
 /**
- * @member {Object} similaritySearchThreshold
+ * @member {Number} similaritySearchThreshold
  */
 GChatProfileConfiguration.prototype.similaritySearchThreshold = undefined;
 
 /**
- * @member {Object} knowledgeBaseCodes
+ * @member {Array.<String>} knowledgeBaseCodes
  */
 GChatProfileConfiguration.prototype.knowledgeBaseCodes = undefined;
 
 /**
- * @member {Object} forcedRequestDocuments
+ * @member {Array.<String>} forcedRequestDocuments
  */
 GChatProfileConfiguration.prototype.forcedRequestDocuments = undefined;
 
 /**
- * @member {Object} forcedRequestDocumentsReadonly
+ * @member {Boolean} forcedRequestDocumentsReadonly
  */
 GChatProfileConfiguration.prototype.forcedRequestDocumentsReadonly = undefined;
 
 /**
- * @member {Object} disableMultiHopRag
+ * @member {Boolean} disableMultiHopRag
  */
 GChatProfileConfiguration.prototype.disableMultiHopRag = undefined;
 
 /**
- * @member {Object} otherSearchSimilarityThreshold
+ * @member {Number} otherSearchSimilarityThreshold
  */
 GChatProfileConfiguration.prototype.otherSearchSimilarityThreshold = undefined;
 
 /**
- * @member {Object} manualThreasholdsConfiguration
+ * @member {Boolean} manualThreasholdsConfiguration
  */
 GChatProfileConfiguration.prototype.manualThreasholdsConfiguration = undefined;
 
 /**
- * @member {Object} useAlsoKeywordSearch
+ * @member {Boolean} useAlsoKeywordSearch
  */
 GChatProfileConfiguration.prototype.useAlsoKeywordSearch = undefined;
 

@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GUserMessage from './GUserMessage';
+import GenericOpenAIAPIImageModelChoice from './GenericOpenAIAPIImageModelChoice';
 
 /**
  * The OperationStatusListGenericOpenAIAPIImageModelChoice model module.
@@ -39,35 +41,35 @@ export default class OperationStatusListGenericOpenAIAPIImageModelChoice {
     if (data) {
       obj = obj || new OperationStatusListGenericOpenAIAPIImageModelChoice();
       if (data.hasOwnProperty('result'))
-        obj.result = ApiClient.convertToType(data['result'], Object);
+        obj.result = ApiClient.convertToType(data['result'], [GenericOpenAIAPIImageModelChoice]);
       if (data.hasOwnProperty('messages'))
-        obj.messages = ApiClient.convertToType(data['messages'], Object);
+        obj.messages = ApiClient.convertToType(data['messages'], [GUserMessage]);
       if (data.hasOwnProperty('hasErrorMessages'))
-        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], Object);
+        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], 'Boolean');
       if (data.hasOwnProperty('hasWarnMessages'))
-        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], Object);
+        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} result
+ * @member {Array.<module:model/GenericOpenAIAPIImageModelChoice>} result
  */
 OperationStatusListGenericOpenAIAPIImageModelChoice.prototype.result = undefined;
 
 /**
- * @member {Object} messages
+ * @member {Array.<module:model/GUserMessage>} messages
  */
 OperationStatusListGenericOpenAIAPIImageModelChoice.prototype.messages = undefined;
 
 /**
- * @member {Object} hasErrorMessages
+ * @member {Boolean} hasErrorMessages
  */
 OperationStatusListGenericOpenAIAPIImageModelChoice.prototype.hasErrorMessages = undefined;
 
 /**
- * @member {Object} hasWarnMessages
+ * @member {Boolean} hasWarnMessages
  */
 OperationStatusListGenericOpenAIAPIImageModelChoice.prototype.hasWarnMessages = undefined;
 

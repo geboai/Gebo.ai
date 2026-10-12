@@ -23,7 +23,7 @@ import java.util.Date;
  * GVirtualFilesystemRoot
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:53.845611079+02:00[Europe/Rome]")
 
 public class GVirtualFilesystemRoot {
   @JsonProperty("code")

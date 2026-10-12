@@ -187,6 +187,18 @@ public class GResponseDocumentRef implements Serializable {
 	}
 
 	/**
+	 * A copy of this reference without its internal references (the fragments it was
+	 * found by): what is kept of the documents an answer rested on with the chat's
+	 * history.
+	 */
+	public GResponseDocumentRef withoutReferences() {
+		final GResponseDocumentRef copy = new GResponseDocumentRef();
+		org.springframework.beans.BeanUtils.copyProperties(this, copy, "references");
+		copy.setReferences(new ArrayList<DocInternalRef>());
+		return copy;
+	}
+
+	/**
 	 * Gets the short code derived from the document code. Extracts the substring
 	 * after the last '/' character.
 	 * 

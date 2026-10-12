@@ -19,7 +19,7 @@ Method | HTTP request | Description
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.PromptTemplatesControllerApi();
-let ragPrompt = null; // Object | 
+let ragPrompt = true; // Boolean | 
 
 apiInstance.getDefaultPrompt(ragPrompt).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -33,7 +33,7 @@ apiInstance.getDefaultPrompt(ragPrompt).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ragPrompt** | [**Object**](.md)|  | 
+ **ragPrompt** | **Boolean**|  | 
 
 ### Return type
 

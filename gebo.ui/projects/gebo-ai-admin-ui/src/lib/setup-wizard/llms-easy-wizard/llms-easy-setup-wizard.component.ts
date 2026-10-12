@@ -318,7 +318,14 @@ export class LLMSEasySetupWizardComponent extends BaseWizardSectionComponent {
         const library = this.selectedVendor?.libraryModel.find(p => p.type === decision.descriptor.type)?.choices ?? [];
         const described: ModelChoiceOption[] = models.map(model => {
             const lib = library.find(x => x.code && model.code && x.code.toLowerCase() === (model.code as string).toLowerCase());
-            return { code: model.code, description: lib?.description || model.description || model.code, fromPreset: lib ? true : false };
+            // the provider's own word on the model's lifecycle, shown under the chosen model
+            const lifecycle = model.metaInfos;
+            return {
+                code: model.code, description: lib?.description || model.description || model.code, fromPreset: lib ? true : false,
+                deprecated: lifecycle?.deprecated === true,
+                retirementDate: lifecycle?.retirementDate || undefined,
+                replacementModel: lifecycle?.replacementModel || undefined
+            };
         });
         return [...described.filter(x => x.fromPreset), ...described.filter(x => !x.fromPreset)];
     }

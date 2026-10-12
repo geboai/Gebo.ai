@@ -12,6 +12,7 @@ ai.gebo.llms.generic.config:
 
     - code: chatmodel-regolo.ai
       providerId: regolo.ai
+      defaultCurrencyCode: EUR
       description: Regolo.ai chat models
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
@@ -40,6 +41,44 @@ ai.gebo.llms.generic.config:
       description: VLLM hosted chat model
       applyThinkingMarkupHandling: true
       baseUrl:
+
+    # The providers below are chat/reasoning-only OpenAI-compatible gateways added as
+    # bare model types (no fast-setup preset in gebo.llms.setup). Each exposes a plain
+    # GET /v1/models, so the generic lookup (no modelsListProvider) already populates the
+    # model dropdown - none needs a custom IGModelsListProvider. That endpoint returns
+    # only model ids though (no context_length), so the context window stays a per-model
+    # value the admin sets on the config through the CRUD controller.
+    # Some of these chat models also accept image input (vision); that is a chat
+    # capability, not a separate image-generation modality, so no imageModelProviders
+    # row is added. None documents embeddings, TTS, STT or image generation.
+    # The baseUrl is the UNVERSIONED host on purpose: the chat client appends
+    # /v1/chat/completions and the models reader appends v1/models, so a /v1 suffix here
+    # would produce /v1/v1/... (same convention as nvidia, x.ai and regolo above).
+    - code: chatmodel-subconscious
+      providerId: subconscious
+      description: Subconscious.dev chat model (US, flat subscription)
+      baseUrl: https://api.subconscious.dev
+
+    - code: chatmodel-awanllm
+      providerId: awanllm
+      description: Awan LLM chat model (flat subscription)
+      baseUrl: https://api.awanllm.com
+
+    - code: chatmodel-llmax
+      providerId: llmax
+      description: llmax.ai chat model (EU, flat subscription)
+      # /v1/models lists the stable aliases - llmax-all-round / llmax-smart / llmax-best.
+      baseUrl: https://run.llmax.ai
+
+    - code: chatmodel-cheapestinference
+      providerId: cheapestinference
+      description: CheapestInference chat model (US, flat subscription)
+      baseUrl: https://api.cheapestinference.com
+
+    - code: chatmodel-profundoai
+      providerId: profundoai
+      description: Profundo AI chat model (flat subscription)
+      baseUrl: https://api.profundoai.com
   embeddingModelProviders:
     #  Nvidia seems do not give embedding services
     - code: embedding-nvidia
@@ -49,6 +88,7 @@ ai.gebo.llms.generic.config:
 
     - code: embedding-regolo.ai
       providerId: regolo.ai
+      defaultCurrencyCode: EUR
       description: Regolo.ai embedding model
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
@@ -62,10 +102,9 @@ ai.gebo.llms.generic.config:
       baseUrl: https://openrouter.ai/api/v1/
       modelsListProvider: openrouter-ai-models-list
 
-    - code: embedding-groq
-      providerId: groq
-      description: Groq embedding model
-      baseUrl: https://api.groq.com/openai
+    # Groq has no embedding provider on purpose: embeddings are not part of its
+    # documented api surface and its models list carries no embedding model, so the
+    # handler could only ever offer an empty list.
 
     - code: embedding-xai
       providerId: xai
@@ -85,6 +124,7 @@ ai.gebo.llms.generic.config:
   imageModelProviders:
     - code: images-regolo.ai
       providerId: regolo.ai
+      defaultCurrencyCode: EUR
       description: Regolo.ai image generation model
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
@@ -101,6 +141,7 @@ ai.gebo.llms.generic.config:
   textToSpeechModelProviders:
     - code: tts-regolo.ai
       providerId: regolo.ai
+      defaultCurrencyCode: EUR
       description: Regolo.ai text to speech model
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
@@ -116,6 +157,7 @@ ai.gebo.llms.generic.config:
   transcriptModelProviders:
     - code: transcript-regolo.ai
       providerId: regolo.ai
+      defaultCurrencyCode: EUR
       description: Regolo.ai transcript model
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
@@ -128,9 +170,21 @@ ai.gebo.llms.generic.config:
       baseUrl: https://openrouter.ai/api/v1/
       modelsListProvider: openrouter-ai-models-list
 
+    - code: transcript-groq
+      providerId: groq
+      description: Groq transcript model
+      # Versioned, unlike the groq chat url above: the chat client appends
+      # v1/chat/completions itself, while the transcription one appends only
+      # audio/transcriptions - and groq answers the unversioned path with a 404.
+      # No modelsListProvider: only the chat client reads groq's models endpoint, so the
+      # transcript choices come from the setup library preset, which declares
+      # doModelsLookup=false for that reason.
+      baseUrl: https://api.groq.com/openai/v1/
+
   rankerModelProviders:
     - code: ranker-regolo.ai
       providerId: regolo.ai
+      defaultCurrencyCode: EUR
       description: Regolo.ai ranker model
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list

@@ -39,49 +39,49 @@ export default class GeboKnowledgeBaseSetupStatus {
     if (data) {
       obj = obj || new GeboKnowledgeBaseSetupStatus();
       if (data.hasOwnProperty('isSetup'))
-        obj.isSetup = ApiClient.convertToType(data['isSetup'], Object);
+        obj.isSetup = ApiClient.convertToType(data['isSetup'], 'Boolean');
       if (data.hasOwnProperty('knowledgeBases'))
-        obj.knowledgeBases = ApiClient.convertToType(data['knowledgeBases'], Object);
+        obj.knowledgeBases = ApiClient.convertToType(data['knowledgeBases'], 'Number');
       if (data.hasOwnProperty('projects'))
-        obj.projects = ApiClient.convertToType(data['projects'], Object);
+        obj.projects = ApiClient.convertToType(data['projects'], 'Number');
       if (data.hasOwnProperty('endpoints'))
-        obj.endpoints = ApiClient.convertToType(data['endpoints'], Object);
+        obj.endpoints = ApiClient.convertToType(data['endpoints'], 'Number');
       if (data.hasOwnProperty('endpointsPublished'))
-        obj.endpointsPublished = ApiClient.convertToType(data['endpointsPublished'], Object);
+        obj.endpointsPublished = ApiClient.convertToType(data['endpointsPublished'], 'Number');
       if (data.hasOwnProperty('documentReferences'))
-        obj.documentReferences = ApiClient.convertToType(data['documentReferences'], Object);
+        obj.documentReferences = ApiClient.convertToType(data['documentReferences'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} isSetup
+ * @member {Boolean} isSetup
  */
 GeboKnowledgeBaseSetupStatus.prototype.isSetup = undefined;
 
 /**
- * @member {Object} knowledgeBases
+ * @member {Number} knowledgeBases
  */
 GeboKnowledgeBaseSetupStatus.prototype.knowledgeBases = undefined;
 
 /**
- * @member {Object} projects
+ * @member {Number} projects
  */
 GeboKnowledgeBaseSetupStatus.prototype.projects = undefined;
 
 /**
- * @member {Object} endpoints
+ * @member {Number} endpoints
  */
 GeboKnowledgeBaseSetupStatus.prototype.endpoints = undefined;
 
 /**
- * @member {Object} endpointsPublished
+ * @member {Number} endpointsPublished
  */
 GeboKnowledgeBaseSetupStatus.prototype.endpointsPublished = undefined;
 
 /**
- * @member {Object} documentReferences
+ * @member {Number} documentReferences
  */
 GeboKnowledgeBaseSetupStatus.prototype.documentReferences = undefined;
 

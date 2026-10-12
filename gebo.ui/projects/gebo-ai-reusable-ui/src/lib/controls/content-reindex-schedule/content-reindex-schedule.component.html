@@ -9,87 +9,178 @@
 */
 -->
 
+<!-- ====================== What the data source form shows ====================== -->
+<div class="geboSchedule" [class.geboSchedule--idle]="unscheduled">
 
+  <div class="geboSchedule__top">
+    <span class="geboSchedule__badge" [class.geboSchedule__badge--idle]="unscheduled">
+      <i class="pi" [ngClass]="unscheduled?'pi-pause':'pi-history'"></i>
+    </span>
 
-
-<p-dialog [maximizable]="true" [visible]="mode==='EDITING'" [modal]="true" header="Content updates scheduling"
-  styleClass="gebo-entity-dialog" (visibleChange)="abandonEdit()">
-  @if (mode==='EDITING') {
-    <p-panel [formGroup]="formGroup" [showHeader]="false">
-      <div class="geboLargeButtonsBar" style="vertical-align: baseline;">
-        <div class="grid">
-          <div class="col-3">
-            <p-button id="ConfirmBtn" gebo-ai-label label="Confirm" icon="pi pi-check" [outlined]="true"
-              (onClick)="confirmEditedValues()" [disabled]="formGroup.invalid" styleClass="w-full"
-            severity="success"></p-button>
-          </div>
-        </div>
-      </div>
-      <div class="grid" style="width:100%">
-        @if (unscheduledPeriods && unscheduledPeriods.length) {
-          <div class="col-4">
-            <p-select styleClass="w-full" [options]="unscheduledPeriods" optionLabel="description"
-              optionValue="code" formControlName="newFrequency" class="col-12"
-            [style]="{width:'100%'}"></p-select>
-          </div>
-        }
-        @if (unscheduledPeriods && unscheduledPeriods.length) {
-          <div class="col-2">
-            <p-button id="AddBtn" gebo-ai-label label="+Add" icon="pi pi-calendar" [outlined]="true"
-              [disabled]="(!formGroup.controls['newFrequency'].value)" (onClick)="addScheduling()"
-            styleClass="w-full"></p-button>
-          </div>
-        }
-        @if (unscheduledPeriods && unscheduledPeriods.length) {
-          <div class="col-6">
-          </div>
-        }
-        <div class="col-12 grid">
-          @for (table of editedValue; track table) {
-            <div class="col-12">
-              @if (table.frequency==='DAILY') {
-                <gebo-ai-periods-component [frequency]="table.frequency" [timeMetaInfos]="timeMetaInfos"
-                  class="col-12 w-full"
-                formControlName="daily"></gebo-ai-periods-component>
-              }
-              @if (table.frequency==='WEEKLY') {
-                <gebo-ai-periods-component [frequency]="table.frequency" [timeMetaInfos]="timeMetaInfos"
-                  class="col-12 w-full"
-                formControlName="weekly"></gebo-ai-periods-component>
-              }
-              @if (table.frequency==='HOURLY') {
-                <gebo-ai-periods-component [frequency]="table.frequency" [timeMetaInfos]="timeMetaInfos"
-                  class="col-12 w-full"
-                formControlName="hours"></gebo-ai-periods-component>
-              }
-              @if (table.frequency==='MONTHLY') {
-                <gebo-ai-periods-component [frequency]="table.frequency" [timeMetaInfos]="timeMetaInfos"
-                  class="col-12 w-full"
-                formControlName="monthly"></gebo-ai-periods-component>
-              }
-              @if (table.frequency==='DATES') {
-                <gebo-ai-periods-component [frequency]="table.frequency" [timeMetaInfos]="timeMetaInfos"
-                  class="col-12 w-full"
-                formControlName="dates"></gebo-ai-periods-component>
-              }
-            </div>
+    <div class="geboSchedule__state">
+      @if (unscheduled) {
+        <span class="geboSchedule__idleText" id="NotScheduledMsg" gebo-ai-text>
+          Not scheduled: this source is re-read only when it is published by hand
+        </span>
+      } @else {
+        <div class="geboSchedule__pills">
+          @for (rule of rules; track rule.id) {
+            <span class="geboSchedule__pill">
+              <gebo-ai-schedule-sentence [rule]="rule" [locale]="locale"
+              [showProblem]="false"></gebo-ai-schedule-sentence>
+            </span>
           }
-          <div class="col-12" style="height: 100%;"></div>
         </div>
-        <div class="col-12" style="min-height: 50px;">
-        </div>
-      </div>
-    </p-panel>
-  }
-</p-dialog>
-<div #reindexScheduleBox="geboBlockableContainer" geboBlockableContainer style="width: 100%; border: solid #C0C0C0 1px;">
-  <p-blockUI [target]="reindexScheduleBox" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
-  </p-blockUI>
-  <p-button id="EditBtn" gebo-ai-label title="Edit scheduling" (onClick)="enterEdit()" [outlined]="true"
-  icon="pi pi-pen-to-square"></p-button>
+      }
+    </div>
 
-  @for (t of displayTimes; track t) {
-    <p-chip icon="pi pi-calendar" [label]="t"></p-chip>
+    <p-button id="EditBtn" gebo-ai-label label="Edit schedule" title="Change when this source is re-checked"
+      icon="pi pi-pen-to-square" [outlined]="true" [disabled]="disabled"
+    (onClick)="enterEdit()"></p-button>
+  </div>
+
+  <!-- The day at a glance: one segment per hour, lit where a check runs -->
+  @if (!unscheduled) {
+    <div class="geboRail" aria-hidden="true">
+      <div class="geboRail__track">
+        @for (hour of hours; track hour) {
+          <span class="geboRail__slot" [class.geboRail__slot--on]="isLit(hour)"></span>
+        }
+      </div>
+      <div class="geboRail__axis">
+        @for (hour of hours; track hour) {
+          <span class="geboRail__tick">
+            @if (isRailTick(hour)) {
+              <span class="geboRail__tickLabel">{{railLabel(hour)}}</span>
+            }
+          </span>
+        }
+      </div>
+    </div>
+    <small class="geboSchedule__note" id="ServerZoneNote" gebo-ai-text>
+      Recurring times are resolved in the time zone of the server
+    </small>
   }
 </div>
+
+<!-- ============================== The editor ============================== -->
+<p-dialog id="ScheduleDialog" gebo-ai-label header="When should this source be re-checked?"
+  [visible]="mode==='EDITING'" [modal]="true" [maximizable]="true" styleClass="gebo-entity-dialog"
+  (visibleChange)="onDialogVisibleChange($event)">
+
+  @if (mode==='EDITING') {
+    <div class="geboLargeButtonsBar" style="vertical-align: baseline;">
+      <div class="grid">
+        <div class="col-3">
+          <p-button id="ConfirmBtn" gebo-ai-label label="Confirm" icon="pi pi-check" [outlined]="true"
+          (onClick)="confirmEdit()" [disabled]="!canConfirm" styleClass="w-full" severity="success"></p-button>
+        </div>
+        <div class="col-3">
+          <p-button id="CancelBtn" gebo-ai-label label="Cancel" icon="pi pi-times" [outlined]="true"
+          (onClick)="cancelEdit()" styleClass="w-full" severity="contrast"></p-button>
+        </div>
+      </div>
+    </div>
+
+    <div class="geboDialogContent geboEditor">
+
+      <!-- One click for the usual answers -->
+      <div class="geboEditor__presets">
+        <span class="geboRule__label" id="HowOftenLbl" gebo-ai-text>How often</span>
+        <div class="geboSegmented geboSegmented--wrap" role="group">
+          <button type="button" class="geboSegmented__option" [class.geboSegmented__option--on]="draftIsEmpty"
+            [attr.aria-pressed]="draftIsEmpty" (click)="applyNever()">
+            <i class="pi pi-pause"></i><span id="PresetNeverLbl" gebo-ai-text>Never</span>
+          </button>
+          <button type="button" class="geboSegmented__option" [class.geboSegmented__option--on]="selectedPreset==='HOURLY'"
+            [attr.aria-pressed]="selectedPreset==='HOURLY'" (click)="applyPreset('HOURLY')">
+            <i class="pi pi-stopwatch"></i><span id="PresetHourlyLbl" gebo-ai-text>Every hour</span>
+          </button>
+          <button type="button" class="geboSegmented__option" [class.geboSegmented__option--on]="selectedPreset==='NIGHTLY'"
+            [attr.aria-pressed]="selectedPreset==='NIGHTLY'" (click)="applyPreset('NIGHTLY')">
+            <i class="pi pi-moon"></i><span id="PresetNightlyLbl" gebo-ai-text>Nightly</span>
+          </button>
+          <button type="button" class="geboSegmented__option" [class.geboSegmented__option--on]="selectedPreset==='TWICE_DAILY'"
+            [attr.aria-pressed]="selectedPreset==='TWICE_DAILY'" (click)="applyPreset('TWICE_DAILY')">
+            <i class="pi pi-sync"></i><span id="PresetTwiceDailyLbl" gebo-ai-text>Twice a day</span>
+          </button>
+          <button type="button" class="geboSegmented__option" [class.geboSegmented__option--on]="selectedPreset==='WEEKDAYS'"
+            [attr.aria-pressed]="selectedPreset==='WEEKDAYS'" (click)="applyPreset('WEEKDAYS')">
+            <i class="pi pi-briefcase"></i><span id="PresetWeekdaysLbl" gebo-ai-text>Working days</span>
+          </button>
+          <button type="button" class="geboSegmented__option" [class.geboSegmented__option--on]="selectedPreset==='WEEKLY'"
+            [attr.aria-pressed]="selectedPreset==='WEEKLY'" (click)="applyPreset('WEEKLY')">
+            <i class="pi pi-calendar"></i><span id="PresetWeeklyLbl" gebo-ai-text>Once a week</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid geboEditor__panes">
+
+        <!-- The rules, which are what gets saved -->
+        <div class="col-12 lg:col-7">
+          @if (draftIsEmpty) {
+            <div class="geboEditor__idle">
+              <i class="pi pi-moon"></i>
+              <span id="NothingScheduledMsg" gebo-ai-text>
+                Nothing scheduled. This source is re-read only when it is published by hand.
+              </span>
+            </div>
+          }
+
+          @for (rule of draftRules; track rule.id; let i = $index) {
+            <gebo-ai-schedule-rule-card [rule]="rule" [locale]="locale" [expanded]="isExpanded(rule)"
+              (ruleChange)="updateRule(i, $event)" (expandedChange)="setExpanded(rule, $event)"
+            (remove)="removeRule(i)" (duplicate)="duplicateRule(i)"></gebo-ai-schedule-rule-card>
+          }
+
+          <div class="geboEditor__add">
+            <p-button id="AddRuleBtn" gebo-ai-label label="Add a rule" icon="pi pi-plus" [outlined]="true"
+            severity="secondary" (onClick)="addRule()"></p-button>
+          </div>
+        </div>
+
+        <!-- A picture of those rules -->
+        <div class="col-12 lg:col-5">
+          <div class="geboEditor__aside">
+            <span class="geboRule__label" id="WeekAtAGlanceLbl" gebo-ai-text>The week at a glance</span>
+            <gebo-ai-schedule-week-grid [cells]="editedCells" [highlight]="highlightedCells"
+            [locale]="locale"></gebo-ai-schedule-week-grid>
+
+            @for (remark of remarks; track remark.code) {
+              <div class="geboRemark" [class.geboRemark--warn]="remark.code!=='OVERLAP'">
+                <i class="pi pi-exclamation-triangle"></i>
+                <span class="geboRemark__text">
+                  @switch (remark.code) {
+                    @case ('HIGH_FREQUENCY') {
+                      <span id="HighFrequencyMsg" gebo-ai-text>
+                        Every check re-reads the whole source. Checks per day:
+                      </span>
+                    }
+                    @case ('OVERLAP') {
+                      <span id="OverlapMsg" gebo-ai-text>
+                        Some rules fire at the very same moment. Checks that coincide:
+                      </span>
+                    }
+                    @case ('PAST_DATES') {
+                      <span id="PastDatesMsg" gebo-ai-text>
+                        Some dates have already gone by and will never fire. Expired dates:
+                      </span>
+                    }
+                  }
+                  <strong class="geboRemark__amount">{{remark.amount}}</strong>
+                </span>
+              </div>
+            }
+
+            <small class="geboEditor__note" id="EditorZoneNote" gebo-ai-text>
+              Hourly, daily and weekly times are resolved in the time zone of the server. Set dates are
+              absolute instants, picked in the time zone of this browser:
+            </small>
+            <small class="geboEditor__zone">{{timeZone}}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</p-dialog>

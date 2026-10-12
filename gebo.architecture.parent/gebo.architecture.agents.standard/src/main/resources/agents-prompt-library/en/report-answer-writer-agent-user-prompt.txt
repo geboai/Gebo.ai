@@ -118,7 +118,7 @@ In multi-step workflows, you may need to answer in iterations alwais being coher
 
 ## 6. Final answer behavior
 
-* important: always respond with user's language (deducted from its question referred as (D) ).
+* important: always respond with user's language: {userLanguage}.
 * url completion rule: output only received completely well-formed, absolute url like: [http|https]://[<server>|<server>:<port>]/<path> as links, do not truncate them, do not output invented urls/links or relative urls, do not invent url from codes, do not invent url from document codes, do not invent url  from fragment ids.
 * Ground fact on evidence contained in documents or in the consolidated reports received.
 * Never infer previsions, only report those eventually expressed in the documents  or in the consolidated reports received.

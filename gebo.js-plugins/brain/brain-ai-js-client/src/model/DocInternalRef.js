@@ -39,21 +39,21 @@ export default class DocInternalRef {
     if (data) {
       obj = obj || new DocInternalRef();
       if (data.hasOwnProperty('id'))
-        obj.id = ApiClient.convertToType(data['id'], Object);
+        obj.id = ApiClient.convertToType(data['id'], 'String');
       if (data.hasOwnProperty('page'))
-        obj.page = ApiClient.convertToType(data['page'], Object);
+        obj.page = ApiClient.convertToType(data['page'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} id
+ * @member {String} id
  */
 DocInternalRef.prototype.id = undefined;
 
 /**
- * @member {Object} page
+ * @member {String} page
  */
 DocInternalRef.prototype.page = undefined;
 

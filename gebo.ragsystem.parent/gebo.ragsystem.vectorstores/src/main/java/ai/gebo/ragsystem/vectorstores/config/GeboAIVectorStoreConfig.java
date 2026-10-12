@@ -17,13 +17,14 @@ import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorStoreProduct;
 import ai.gebo.ragsystem.vectorstores.mongoatlas.model.MongoConfig;
+import ai.gebo.ragsystem.vectorstores.local.model.LocalConfig;
 import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.redis.model.RedisConfig;
 
 /**
  * Configuration class for vector store settings in the Gebo AI RAG system.
  * This class maps properties from the application configuration with the prefix "ai.gebo.vectorstore".
- * It provides configuration options for different vector store implementations such as Qdrant, Lucene, Redis, and MongoDB.
+ * It provides configuration options for different vector store implementations such as Qdrant, the embedded LOCAL store, Redis, and MongoDB.
  * 
  * AI generated comments
  */
@@ -39,6 +40,12 @@ public class GeboAIVectorStoreConfig {
 	RedisConfig redis = null;
 	/** Configuration properties for MongoDB vector store */
 	MongoConfig mongoConfig=null;
+	/**
+	 * Configuration properties for the embedded vector store. It stays optional:
+	 * the LOCAL product works with no block at all, because every setting of
+	 * LocalConfig already has a usable default.
+	 */
+	LocalConfig local = null;
 	
 	/**
 	 * Default constructor for GeboAIVectorStoreConfig
@@ -111,6 +118,22 @@ public class GeboAIVectorStoreConfig {
 	 */
 	public void setMongoConfig(MongoConfig mongoConfig) {
 		this.mongoConfig = mongoConfig;
+	}
+
+	/**
+	 * Gets the embedded vector store configuration
+	 * @return the configuration, null when the yml carries no local block
+	 */
+	public LocalConfig getLocal() {
+		return local;
+	}
+
+	/**
+	 * Sets the embedded vector store configuration
+	 * @param local the configuration object
+	 */
+	public void setLocal(LocalConfig local) {
+		this.local = local;
 	}
 
 }

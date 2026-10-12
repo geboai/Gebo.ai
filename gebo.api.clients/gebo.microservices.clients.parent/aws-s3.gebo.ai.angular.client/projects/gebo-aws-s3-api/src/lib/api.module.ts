@@ -7,8 +7,8 @@ import { AwsS3BrowsingControllerService } from './api/awsS3BrowsingController.se
 import { AwsS3SystemsControllerService } from './api/awsS3SystemsController.service';
 import { ContentsResetControllerService } from './api/contentsResetController.service';
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
+import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
-import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 
@@ -21,8 +21,8 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
     AwsS3SystemsControllerService,
     ContentsResetControllerService,
     DocumentContentStreamerControllerService,
+    GeboAngularFormGroupMetaInfoControllerService,
     GenericalPublisherControllerService,
-    IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService,
     JobLauncherControllerService ]
 })

@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**deleteUploadedFiles**](FileUploadsControllerApi.md#deleteUploadedFiles) | **POST** /api/admin/FileUploadsController/deleteUploadedFiles | 
 [**deleteUploadsEndpoint**](FileUploadsControllerApi.md#deleteUploadsEndpoint) | **POST** /api/admin/FileUploadsController/deleteUploadsEndpoint | 
 [**findUploadsEndpointsByProject**](FileUploadsControllerApi.md#findUploadsEndpointsByProject) | **GET** /api/admin/FileUploadsController/findUploadsEndpointsByProject | 
 [**findUploadsEndpointsByQbe**](FileUploadsControllerApi.md#findUploadsEndpointsByQbe) | **POST** /api/admin/FileUploadsController/findUploadsEndpointsByQbe | 
@@ -11,8 +12,51 @@ Method | HTTP request | Description
 [**getUploadableFilesExtensions**](FileUploadsControllerApi.md#getUploadableFilesExtensions) | **GET** /api/admin/FileUploadsController/getUploadableFilesExtensions | 
 [**getUploadsSystems**](FileUploadsControllerApi.md#getUploadsSystems) | **GET** /api/admin/FileUploadsController/getUploadsSystems | 
 [**insertUploadsEndpoint**](FileUploadsControllerApi.md#insertUploadsEndpoint) | **POST** /api/admin/FileUploadsController/insertUploadsEndpoint | 
+[**listUploadedFiles**](FileUploadsControllerApi.md#listUploadedFiles) | **GET** /api/admin/FileUploadsController/listUploadedFiles | 
 [**publishUploadsEndpoint**](FileUploadsControllerApi.md#publishUploadsEndpoint) | **POST** /api/admin/FileUploadsController/publishUploadsEndpoint | 
 [**updateUploadsEndpoint**](FileUploadsControllerApi.md#updateUploadsEndpoint) | **POST** /api/admin/FileUploadsController/updateUploadsEndpoint | 
+
+<a name="deleteUploadedFiles"></a>
+# **deleteUploadedFiles**
+> OperationStatusGUploadsProjectEndpoint deleteUploadedFiles(body, endpointCode)
+
+
+
+### Example
+```javascript
+import {GeboAiClient} from 'gebo.ai.client.js';
+
+let apiInstance = new GeboAiClient.FileUploadsControllerApi();
+let body = ["body_example"]; // [String] | 
+let endpointCode = "endpointCode_example"; // String | 
+
+apiInstance.deleteUploadedFiles(body, endpointCode).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**[String]**](String.md)|  | 
+ **endpointCode** | **String**|  | 
+
+### Return type
+
+[**OperationStatusGUploadsProjectEndpoint**](OperationStatusGUploadsProjectEndpoint.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 <a name="deleteUploadsEndpoint"></a>
 # **deleteUploadsEndpoint**
@@ -283,6 +327,46 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="listUploadedFiles"></a>
+# **listUploadedFiles**
+> [UploadedFileInfo] listUploadedFiles(endpointCode)
+
+
+
+### Example
+```javascript
+import {GeboAiClient} from 'gebo.ai.client.js';
+
+let apiInstance = new GeboAiClient.FileUploadsControllerApi();
+let endpointCode = "endpointCode_example"; // String | 
+
+apiInstance.listUploadedFiles(endpointCode).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **endpointCode** | **String**|  | 
+
+### Return type
+
+[**[UploadedFileInfo]**](UploadedFileInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 <a name="publishUploadsEndpoint"></a>

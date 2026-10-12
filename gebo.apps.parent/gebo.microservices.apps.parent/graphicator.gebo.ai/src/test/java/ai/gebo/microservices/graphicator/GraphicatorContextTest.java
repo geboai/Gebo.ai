@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.ApplicationContext;
@@ -26,10 +27,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.containers.Neo4jContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import ai.gebo.architecture.environment.EnvironmentHolder;
+import ai.gebo.architecture.graphrag.services.impl.Neo4jDdlRunner;
 import ai.gebo.microservices.acl.client.RestAclAliasesDao;
 import ai.gebo.microservices.security.client.RestSecurityDirectory;
 import ai.gebo.microservices.secrets.client.GeboSecretsAccessServiceRestClient;
@@ -60,14 +63,52 @@ import ai.gebo.secrets.services.IGeboSecretsAccessService;
  * the fix, with no error, just a less-accurate cluster view.
  * </p>
  *
+ * <h2>The stores, and why Neo4j is a CONTAINER here and not a switch</h2>
+ * <p>
+ * graphicator shares both of its stores, owning neither:
+ * </p>
+ * <ul>
+ * <li><b>Mongo</b> - database {@code brain-gebo}, shared with brain and
+ * vectorizator: it writes graph data against the knowledge base brain owns.</li>
+ * <li><b>Neo4j</b> - shared with brain, which READS the graph graphicator
+ * writes.</li>
+ * </ul>
+ * <p>
+ * GraphRAG is optional deployment-wide ({@code ai.gebo.neo4j.enabled}), and
+ * {@link ai.gebo.microservices.brain.BrainContextTest} covers brain with it OFF -
+ * because brain has a whole job left without a graph. graphicator does not:
+ * turning GraphRAG off does not make graphicator leaner, it makes graphicator
+ * pointless, so the lean topology is the one where this service is simply NOT
+ * DEPLOYED. There is therefore only one topology worth testing here, the full
+ * one, and it needs a real graph store - so this test brings one up rather than
+ * switching the subsystem off.
+ * </p>
+ * <p>
+ * It genuinely has to be live: with GraphRAG on, {@link Neo4jDdlRunner} executes
+ * the knowledge-model DDL as an {@code ApplicationRunner} DURING STARTUP, so an
+ * unreachable Neo4j does not degrade graphicator, it stops the context loading.
+ * That is also why graphicator's compose entry is one of only two that add
+ * {@code neo4j} to {@code depends_on}.
+ * </p>
+ *
  * Gebo.ai comment agent
  */
 @Testcontainers
 @SpringBootTest(classes = { GraphicatorApplication.class, GraphicatorContextTest.DiscoveryStubConfig.class })
 class GraphicatorContextTest {
 
+	private static final String NEO4J_PASSWORD = "neo4jmaster";
+
 	@Container
 	static MongoDBContainer mongo = new MongoDBContainer("mongo:7.0").withExposedPorts(27017);
+
+	/**
+	 * The shared graph store - same image the compose stack runs, same admin
+	 * password graphicator's {@code application.yml} defaults to, so the connection
+	 * under test is the one a deployment actually uses.
+	 */
+	@Container
+	static Neo4jContainer<?> neo4j = new Neo4jContainer<>("neo4j:5").withAdminPassword(NEO4J_PASSWORD);
 
 	static {
 		try {
@@ -89,6 +130,13 @@ class GraphicatorContextTest {
 		registry.add("eureka.client.enabled", () -> false);
 		registry.add("eureka.client.register-with-eureka", () -> false);
 		registry.add("eureka.client.fetch-registry", () -> false);
+		// GraphRAG on (graphicator's shipped default, restated so this test does not
+		// silently change meaning if the default moves) pointed at the container
+		// instead of the localhost:7687 the application.yml falls back to.
+		registry.add("ai.gebo.neo4j.enabled", () -> true);
+		registry.add("spring.neo4j.uri", neo4j::getBoltUrl);
+		registry.add("spring.neo4j.authentication.username", () -> "neo4j");
+		registry.add("spring.neo4j.authentication.password", () -> NEO4J_PASSWORD);
 	}
 
 	@Autowired
@@ -125,6 +173,17 @@ class GraphicatorContextTest {
 				.isInstanceOf(DiscoveryClientClusterTopologyProvider.class);
 	}
 
+	/**
+	 * Reaching this assertion at all is the point: the runner already executed the
+	 * knowledge-model DDL against the container during startup, because the context
+	 * could not have loaded otherwise. This is the write side of the graph brain
+	 * reads.
+	 */
+	@Test
+	void runsTheGraphDdlAtStartup() {
+		assertThat(context.getBean(Neo4jDdlRunner.class)).isNotNull();
+	}
+
 	@TestConfiguration
 	static class DiscoveryStubConfig {
 
@@ -142,9 +201,27 @@ class GraphicatorContextTest {
 					return List.of();
 				}
 
+				/**
+				 * Returns one instance for every queried service, instead of an
+				 * empty list.
+				 * <p>
+				 * This is what keeps the test fast. An empty list can never satisfy
+				 * DiscoveryClientClusterTopologyProvider's "non-empty AND unchanged
+				 * since the previous poll" condition, so the provider used to
+				 * exhaust its whole retry budget - 24 polls, 10s apart - on the main
+				 * thread before every one of these contexts could finish starting,
+				 * putting ~240s on each of the four participant services' tests and
+				 * most of the runtime of the whole microservices suite. One instance
+				 * satisfies it on the second poll instead.
+				 * <p>
+				 * It is also the more faithful stub: in a deployment discovery does
+				 * resolve the participants. Nothing here asserts on the member list -
+				 * seedsModelsReplicationFromLiveDiscovery asserts the provider TYPE,
+				 * which is what the wiring bug this test exists for would break.
+				 */
 				@Override
 				public List<ServiceInstance> getInstances(String serviceId) {
-					return List.of();
+					return List.of(new DefaultServiceInstance(serviceId + "-1", serviceId, "127.0.0.1", 0, false));
 				}
 			};
 		}

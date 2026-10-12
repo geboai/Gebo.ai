@@ -39,35 +39,35 @@ export default class ToolReference {
     if (data) {
       obj = obj || new ToolReference();
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userUIfunctionDescription'))
-        obj.userUIfunctionDescription = ApiClient.convertToType(data['userUIfunctionDescription'], Object);
+        obj.userUIfunctionDescription = ApiClient.convertToType(data['userUIfunctionDescription'], 'String');
       if (data.hasOwnProperty('inputSchema'))
-        obj.inputSchema = ApiClient.convertToType(data['inputSchema'], Object);
+        obj.inputSchema = ApiClient.convertToType(data['inputSchema'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 ToolReference.prototype.name = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 ToolReference.prototype.description = undefined;
 
 /**
- * @member {Object} userUIfunctionDescription
+ * @member {String} userUIfunctionDescription
  */
 ToolReference.prototype.userUIfunctionDescription = undefined;
 
 /**
- * @member {Object} inputSchema
+ * @member {String} inputSchema
  */
 ToolReference.prototype.inputSchema = undefined;
 

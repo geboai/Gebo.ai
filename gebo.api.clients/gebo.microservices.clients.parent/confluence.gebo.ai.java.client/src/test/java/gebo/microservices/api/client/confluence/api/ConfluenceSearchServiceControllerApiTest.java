@@ -46,9 +46,9 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restAggregateTest() {
+    public void restAggregateConfluenceTest() {
         AggregateRequestBodyConfluenceResultsExtractionData body = null;
-        ConfluenceResultsExtractionData response = api.restAggregate(body);
+        ConfluenceResultsExtractionData response = api.restAggregateConfluence(body);
 
         // TODO: test validations
     }
@@ -61,9 +61,9 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restCreateCustomTemplateParamsMapTest() {
+    public void restCreateCustomTemplateParamsMapConfluenceTest() {
         CustomTemplateParamsRequestBody body = null;
-        Map<String, Object> response = api.restCreateCustomTemplateParamsMap(body);
+        Map<String, Object> response = api.restCreateCustomTemplateParamsMapConfluence(body);
 
         // TODO: test validations
     }
@@ -76,10 +76,10 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restExtractRelatedAnalisysReferencesTest() {
+    public void restExtractRelatedAnalisysReferencesConfluenceTest() {
         ConfluenceResultsExtractionData body = null;
         String systemId = null;
-        SearchResultAnalisysOutcome response = api.restExtractRelatedAnalisysReferences(body, systemId);
+        SearchResultAnalisysOutcome response = api.restExtractRelatedAnalisysReferencesConfluence(body, systemId);
 
         // TODO: test validations
     }
@@ -92,9 +92,9 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restFindSystemByIdTest() {
+    public void restFindSystemByIdConfluenceTest() {
         String systemId = null;
-        SearchableSystemMetaData response = api.restFindSystemById(systemId);
+        SearchableSystemMetaData response = api.restFindSystemByIdConfluence(systemId);
 
         // TODO: test validations
     }
@@ -107,9 +107,9 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restFindSystemBySearchResultTest() {
+    public void restFindSystemBySearchResultConfluenceTest() {
         SearchResult body = null;
-        SearchableSystemMetaData response = api.restFindSystemBySearchResult(body);
+        SearchableSystemMetaData response = api.restFindSystemBySearchResultConfluence(body);
 
         // TODO: test validations
     }
@@ -122,9 +122,9 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetCachedCataloguesTest() {
+    public void restGetCachedCataloguesConfluenceTest() {
         String systemConfigurationCode = null;
-        List<CatalogueSample> response = api.restGetCachedCatalogues(systemConfigurationCode);
+        List<CatalogueSample> response = api.restGetCachedCataloguesConfluence(systemConfigurationCode);
 
         // TODO: test validations
     }
@@ -137,9 +137,9 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetCataloguesListSampleTest() {
+    public void restGetCataloguesListSampleConfluenceTest() {
         String configurationCode = null;
-        List<CatalogueSample> response = api.restGetCataloguesListSample(configurationCode);
+        List<CatalogueSample> response = api.restGetCataloguesListSampleConfluence(configurationCode);
 
         // TODO: test validations
     }
@@ -152,8 +152,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetDescriptionTest() {
-        String response = api.restGetDescription();
+    public void restGetDescriptionConfluenceTest() {
+        String response = api.restGetDescriptionConfluence();
 
         // TODO: test validations
     }
@@ -166,8 +166,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetIdTest() {
-        String response = api.restGetId();
+    public void restGetIdConfluenceTest() {
+        String response = api.restGetIdConfluence();
 
         // TODO: test validations
     }
@@ -180,8 +180,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetMessagingModuleIdTest() {
-        String response = api.restGetMessagingModuleId();
+    public void restGetMessagingModuleIdConfluenceTest() {
+        String response = api.restGetMessagingModuleIdConfluence();
 
         // TODO: test validations
     }
@@ -194,8 +194,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetNativePromptTemplateUseCodeTest() {
-        String response = api.restGetNativePromptTemplateUseCode();
+    public void restGetNativePromptTemplateUseCodeConfluenceTest() {
+        String response = api.restGetNativePromptTemplateUseCodeConfluence();
 
         // TODO: test validations
     }
@@ -208,8 +208,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetProductIdTest() {
-        String response = api.restGetProductId();
+    public void restGetProductIdConfluenceTest() {
+        String response = api.restGetProductIdConfluence();
 
         // TODO: test validations
     }
@@ -222,8 +222,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetQueriesGenerationPromptUseCodeTest() {
-        String response = api.restGetQueriesGenerationPromptUseCode();
+    public void restGetQueriesGenerationPromptUseCodeConfluenceTest() {
+        String response = api.restGetQueriesGenerationPromptUseCodeConfluence();
 
         // TODO: test validations
     }
@@ -236,8 +236,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restGetSearchableSystemsTest() {
-        List<SearchableSystemMetaData> response = api.restGetSearchableSystems();
+    public void restGetSearchableSystemsConfluenceTest() {
+        List<SearchableSystemMetaData> response = api.restGetSearchableSystemsConfluence();
 
         // TODO: test validations
     }
@@ -250,8 +250,8 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restIsEnabledTest() {
-        Boolean response = api.restIsEnabled();
+    public void restIsEnabledConfluenceTest() {
+        Boolean response = api.restIsEnabledConfluence();
 
         // TODO: test validations
     }
@@ -264,11 +264,11 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restNativeSearchTest() {
+    public void restNativeSearchConfluenceTest() {
         ConfluenceContentSearchFilter body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restNativeSearch(body, systemId, nEntryLimit);
+        List<SearchResult> response = api.restNativeSearchConfluence(body, systemId, nEntryLimit);
 
         // TODO: test validations
     }
@@ -281,11 +281,11 @@ public class ConfluenceSearchServiceControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void restSearchTest() {
+    public void restSearchConfluenceTest() {
         SearchQuery body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restSearch(body, systemId, nEntryLimit);
+        List<SearchResult> response = api.restSearchConfluence(body, systemId, nEntryLimit);
 
         // TODO: test validations
     }

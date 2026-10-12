@@ -14,7 +14,7 @@ ai.gebo.agents.prompts.library:
     userReference: /agents-prompt-library/en/report-answer-writer-agent-user-prompt.txt
     agentPrompt: true
     agentId: ChatAgentService
-    chatHistory: NOT_REQUIRED
+    chatHistory: REQUIRED
     contextDocuments: NOT_REQUIRED
     toolsCalling: NOT_REQUIRED
   - promptUse: tool-calling-agent-prompt
@@ -26,3 +26,169 @@ ai.gebo.agents.prompts.library:
     chatHistory: NOT_REQUIRED
     contextDocuments: NOT_REQUIRED
     toolsCalling: REQUIRED
+  - promptUse: report-evidence-extractor-prompt
+    langCode: en
+    systemReference: /agents-prompt-library/en/report-evidence-extractor-system-prompt.txt
+    userReference: /agents-prompt-library/en/report-evidence-extractor-user-prompt.txt
+    chatHistory: NOT_REQUIRED
+    contextDocuments: NOT_REQUIRED
+    toolsCalling: NOT_REQUIRED
+  - promptUse: default-chat-agent-prompt
+    langCode: en
+    agentId: ChatAgentService
+    agentPrompt: true
+    systemReference: /agents-prompt-library/en/default-chat-agent-system-prompt.txt
+    userReference: /agents-prompt-library/en/default-chat-agent-user-prompt.txt
+    toolsResultsReference: /agents-prompt-library/en/default-chat-agent-tools-results-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: REQUIRED
+    toolsCalling: REQUIRED
+    description: Default Chat Agent prompt
+  - promptUse: pure-chat-agent-prompt
+    langCode: en
+    agentId: ChatAgentService
+    agentPrompt: true
+    systemReference: /agents-prompt-library/en/pure-chat-agent-system-prompt.txt
+    userReference: /agents-prompt-library/en/pure-chat-agent-user-prompt.txt
+    toolsResultsReference: /agents-prompt-library/en/pure-chat-agent-tools-results-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: REQUIRED
+    toolsCalling: REQUIRED
+    description: Chat Agent prompt for the chats without knowledge base
+ai.gebo.agents.prompts.uses:
+  - code: default-chat-agent-prompt
+    description: Main loop prompt for the default single-agent chat agent (ChatAgentService), driving its iterate-until-done control loop.
+    module: agents-standard
+    placeholders:
+      - placeholder: AGENT_CONTROL_CONTINUE_PROMPT_PARAM
+        description: The control token the agent must emit to signal it needs another loop iteration.
+      - placeholder: AGENT_CONTROL_FINISHED_PROMPT_PARAM
+        description: The control token the agent must emit to signal its work is complete.
+      - placeholder: CURRENT_ITERATION
+        description: The current iteration number of the agent's control loop.
+      - placeholder: MAX_ITERATIONS
+        description: The maximum number of iterations allowed for the agent's control loop.
+      - placeholder: AGENT_SESSION_STORY
+        description: Narrative reconstruction of the agent session's turns so far.
+      - placeholder: REQUIRED_AGENT_COMPLETENESS
+        description: The kind of deliverable the user asked for (e.g. QA, HOWTO, ANALISYS), driving the depth of the agent's searches and of its answer.
+      - placeholder: DELIVERABLE_FORMATTING_RULES
+        description: Formatting rules the answer must follow for that kind of deliverable.
+      - placeholder: question
+        description: The user's current question or request text.
+      - placeholder: RULES_TO_FOLLOW
+        description: The rules the user or the administrators set for the answers of this chat, one per line, or none.
+      - placeholder: userLanguage
+        description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
+      - placeholder: documents
+        description: The documents of the chat request (chosen or uploaded by the user, or found for it), between BEGIN_CONTEXT and END_CONTEXT; empty when there are none.
+      - placeholder: EARLIER_ANSWERS_DOCUMENTS
+        description: For each earlier answer of the chat that had some, the request it answered, the documents it rested on (read then) and the ones it named from a list of the tools (only listed); "none" when no answer had any.
+  - code: pure-chat-agent-prompt
+    description: Main loop prompt of the single-agent chat agent of the chats without knowledge base (AgenticLoopPureChatNetworkAgentService), driving its iterate-until-done control loop; like default-chat-agent-prompt, it also tells the agent that the chat has no knowledge base.
+    module: agents-standard
+    placeholders:
+      - placeholder: AGENT_CONTROL_CONTINUE_PROMPT_PARAM
+        description: The control token the agent must emit to signal it needs another loop iteration.
+      - placeholder: AGENT_CONTROL_FINISHED_PROMPT_PARAM
+        description: The control token the agent must emit to signal its work is complete.
+      - placeholder: CURRENT_ITERATION
+        description: The current iteration number of the agent's control loop.
+      - placeholder: MAX_ITERATIONS
+        description: The maximum number of iterations allowed for the agent's control loop.
+      - placeholder: AGENT_SESSION_STORY
+        description: Narrative reconstruction of the agent session's turns so far.
+      - placeholder: REQUIRED_AGENT_COMPLETENESS
+        description: The kind of deliverable the user asked for (e.g. QA, HOWTO, ANALISYS), driving the depth of the agent's searches and of its answer.
+      - placeholder: DELIVERABLE_FORMATTING_RULES
+        description: Formatting rules the answer must follow for that kind of deliverable.
+      - placeholder: question
+        description: The user's current question or request text.
+      - placeholder: RULES_TO_FOLLOW
+        description: The rules the user or the administrators set for the answers of this chat, one per line, or none.
+      - placeholder: userLanguage
+        description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
+      - placeholder: documents
+        description: The documents of the chat request (chosen or uploaded by the user, or found for it), between BEGIN_CONTEXT and END_CONTEXT; empty when there are none.
+      - placeholder: EARLIER_ANSWERS_DOCUMENTS
+        description: For each earlier answer of the chat that had some, the request it answered, the documents it rested on (read then) and the ones it named from a list of the tools (only listed); "none" when no answer had any.
+  - code: controller-coordinator-agent-prompt
+    description: Main loop prompt for the network's coordinator/controller agent, which turns the user's request into a routing plan dispatching the other agents in the network.
+    module: agents-standard
+    placeholders:
+      - placeholder: AGENT_IDENTITY
+        description: Description of this agent's persona, role, and capabilities within the network.
+      - placeholder: format
+        description: The structured-output format/schema instructions the routing plan must comply with.
+      - placeholder: CURRENT_CONTROLLER_CYCLE
+        description: The current coordinator cycle number in the network's iteration protocol.
+      - placeholder: MAX_CONTROLLER_CYCLES
+        description: The maximum number of coordinator cycles allowed before the plan must finalize.
+      - placeholder: REQUIRED_AGENT_COMPLETENESS
+        description: The completeness level required for the deliverable (e.g. QA, HOWTO, ANALISYS), driving how deep the routing plan must go.
+      - placeholder: AGENT_COMUNICATION_CAPABILITY
+        description: Description of which peer agents this agent is allowed to address and how.
+      - placeholder: INPUT
+        description: The actual task input this agent turn must act on.
+      - placeholder: NETWORK_AGENTS_CAPABILITIES
+        description: Catalog describing what each peer agent in the network can do.
+      - placeholder: NETWORK_SCENARY
+        description: Description of the overall multi-agent network scenario this agent operates in.
+      - placeholder: PRIVATE_CONTEXT
+        description: This agent's own private working context/memory, not shared with other agents.
+      - placeholder: question
+        description: The user's original question or request driving the network.
+      - placeholder: SHARED_CONTEXT
+        description: The context/evidence shared across all agents in the network so far.
+  - code: report-answer-writer-agent-prompt
+    description: Main loop prompt for the writer/reporter agent, which produces the single user-facing answer from the evidence gathered by the other agents in the network.
+    module: agents-standard
+    placeholders:
+      - placeholder: AGENT_COMUNICATION_CAPABILITY
+        description: Description of which peer agents this agent is allowed to address and how.
+      - placeholder: AGENT_IDENTITY
+        description: Description of this agent's persona, role, and capabilities within the network.
+      - placeholder: NETWORK_SCENARY
+        description: Description of the overall multi-agent network scenario this agent operates in.
+      - placeholder: DELIVERABLE_FORMATTING_RULES
+        description: Formatting rules the final user-facing deliverable must follow.
+      - placeholder: INPUT
+        description: The writing instruction this agent turn must act on.
+      - placeholder: PRIVATE_CONTEXT
+        description: This agent's own private working context/memory, not shared with other agents.
+      - placeholder: question
+        description: The user's original question or request driving the network.
+      - placeholder: REQUIRED_AGENT_COMPLETENESS
+        description: The completeness level required for the deliverable (e.g. QA, HOWTO, ANALISYS), driving how deep the answer must go.
+      - placeholder: SHARED_CONTEXT
+        description: The evidence gathered by the other agents in the network, to be turned into the final answer.
+      - placeholder: userLanguage
+        description: The language the answer is written in, named in English (e.g. English, Italian) as detected on the user's message; "the language of the user's current request" when it could not be detected.
+  - code: tool-calling-agent-prompt
+    description: Main loop prompt for the generic string-to-string tool-calling agent, which executes tool calls on behalf of the network.
+    module: agents-standard
+    placeholders:
+      - placeholder: AGENT_COMUNICATION_CAPABILITY
+        description: Description of which peer agents this agent is allowed to address and how.
+      - placeholder: AGENT_IDENTITY
+        description: Description of this agent's persona, role, and capabilities within the network.
+      - placeholder: NETWORK_SCENARY
+        description: Description of the overall multi-agent network scenario this agent operates in.
+      - placeholder: INPUT
+        description: The tool-calling instruction this agent turn must act on.
+      - placeholder: PRIVATE_CONTEXT
+        description: This agent's own private working context/memory, not shared with other agents.
+      - placeholder: SHARED_CONTEXT
+        description: The context/evidence shared across all agents in the network so far.
+  - code: report-evidence-extractor-prompt
+    description: Prompt of the report writer's evidence extraction calls, used when the evidence of a cycle does not fit one writing call - each part of the evidence, and then each group of extractions, is reduced to a flat list of the relevant facts and concepts with their sources, from which the writer then writes the answer.
+    module: agents-standard
+    placeholders:
+      - placeholder: question
+        description: The user's original question or request driving the network.
+      - placeholder: INPUT
+        description: The writing instruction the report writer received for this turn.
+      - placeholder: REQUIRED_AGENT_COMPLETENESS
+        description: The completeness level required for the deliverable (e.g. QA, HOWTO, ANALISYS), driving how many facts to extract.
+      - placeholder: SHARED_CONTEXT
+        description: The part of the evidence to extract from, or the facts already extracted from earlier parts to merge.

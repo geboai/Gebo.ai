@@ -16,6 +16,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.PartialOperationStatus;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
+import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkCrudService;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
@@ -182,14 +183,20 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 					"The network '" + network.getCode() + "' is read-only and cannot be deleted"));
 			return reject(messages);
 		}
+		final IGAgenticChatDefaultNetworkOfAgentsService defaults = runtimeBinder
+				.getImplementationOf(IGAgenticChatDefaultNetworkOfAgentsService.class);
+		final List<String> defaultFor = defaults == null ? List.of()
+				: defaults.getAgenticChatDefaultNetworks().stream()
+						.filter(x -> existing.getCode().equals(x.getDefaultChatNetworkOfAgents()))
+						.map(x -> String.valueOf(x.getPipelineType())).toList();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("delete(...) network code:" + existing.getCode() + " readOnly:" + existing.getReadOnly()
-					+ " defaultUserInteractionNetwork:" + existing.getDefaultUserInteractionNetwork());
+					+ " system default for:" + defaultFor);
 		}
-		if (Boolean.TRUE.equals(existing.getDefaultUserInteractionNetwork())) {
-			messages.add(GUserMessage.warnMessage("Deleting the default chat network",
-					"Network '" + network.getCode() + "' is the default user-interaction network; deleting it may"
-							+ " disable the default agentic chat experience"));
+		if (!defaultFor.isEmpty()) {
+			messages.add(GUserMessage.warnMessage("Deleting a default chat network",
+					"Network '" + network.getCode() + "' is the system default chat network of agents for "
+							+ defaultFor + "; once deleted the configured default applies"));
 		}
 		try {
 			dao.delete(existing);

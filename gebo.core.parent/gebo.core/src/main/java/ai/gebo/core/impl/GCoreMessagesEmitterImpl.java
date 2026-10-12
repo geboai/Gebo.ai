@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.application.messaging.GStoreDisposers;
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.IGMessagePayloadType;
@@ -105,7 +106,7 @@ public class GCoreMessagesEmitterImpl implements IGMessageEmitter {
 	public void sendDeletingPayload(GDeletedProjectPayload payload) {
 		this.sendDeletingPayloadToResourceDisposeComponents(payload);
 		this.sendDeletingPayloadToCoreMongoDocuments(payload);
-		this.sendDeletingPayloadToVectorizator(payload);
+		this.sendDeletingPayloadToStoreDisposers(payload);
 	}
 
 	/**
@@ -122,7 +123,7 @@ public class GCoreMessagesEmitterImpl implements IGMessageEmitter {
 			this.sendDeletingPayloadToResourceDisposeComponents(projectPayload);
 		});
 		this.sendDeletingPayloadToCoreMongoDocuments(payload);
-		this.sendDeletingPayloadToVectorizator(payload);
+		this.sendDeletingPayloadToStoreDisposers(payload);
 		projectsRepo.deleteByRootKnowledgeBaseCode(payload.getKnowledgeBase().getCode());
 	}
 
@@ -157,15 +158,14 @@ public class GCoreMessagesEmitterImpl implements IGMessageEmitter {
 	}
 
 	/**
-	 * Sends a deletion payload to vectorizator components for further processing.
+	 * Sends a deletion payload to the erasure component of every store holding the
+	 * deleted contents: the vector store, the knowledge graph and the full-text index
+	 * where deployed ({@link GStoreDisposers}).
 	 * 
 	 * @param payload generic message payload to emit.
 	 */
-	protected void sendDeletingPayloadToVectorizator(IGMessagePayloadType payload) {
+	protected void sendDeletingPayloadToStoreDisposers(IGMessagePayloadType payload) {
 		String user = securityService.getCurrentUser().getUsername(); // Retrieve current user's username.
-		GMessageEnvelope msg = envelopeFactory.newMessageFrom(this, payload, user);
-		msg.setTargetModule(GStandardModulesConstraints.VECTORIZATOR_MODULE);
-		msg.setTargetComponent(GStandardModulesConstraints.VECTORIZATION_DISPOSE_COMPONENT);
-		broker.accept(msg);
+		GStoreDisposers.send(broker, () -> envelopeFactory.newMessageFrom(this, payload, user));
 	}
 }

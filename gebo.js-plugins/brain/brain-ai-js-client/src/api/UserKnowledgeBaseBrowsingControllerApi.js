@@ -14,9 +14,12 @@
  */
 import ApiClient from "../ApiClient";
 import BrowseParam from '../model/BrowseParam';
+import GBaseObject from '../model/GBaseObject';
+import GKnowledgeBase from '../model/GKnowledgeBase';
 import OperationStatusListGVirtualFilesystemRoot from '../model/OperationStatusListGVirtualFilesystemRoot';
 import OperationStatusListPathInfo from '../model/OperationStatusListPathInfo';
 import OperationStatusListVirtualFilesystemNavigationTreeStatus from '../model/OperationStatusListVirtualFilesystemNavigationTreeStatus';
+import VFilesystemReference from '../model/VFilesystemReference';
 
 /**
 * UserKnowledgeBaseBrowsingController service.
@@ -41,7 +44,7 @@ export default class UserKnowledgeBaseBrowsingControllerApi {
 
     /**
      * @param {module:model/BrowseParam} body 
-     * @param {Object} codes 
+     * @param {Array.<String>} codes 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/OperationStatusListPathInfo} and HTTP response
      */
     browseKnowledgeBasePathWithHttpInfo(body, codes) {
@@ -60,7 +63,7 @@ export default class UserKnowledgeBaseBrowsingControllerApi {
         
       };
       let queryParams = {
-        'codes': codes
+        'codes': this.apiClient.buildCollectionParam(codes, 'multi')
       };
       let headerParams = {
         
@@ -95,7 +98,7 @@ export default class UserKnowledgeBaseBrowsingControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GBaseObject>} and HTTP response
      */
     getAccessibleRootKnowledgeBasesWithHttpInfo() {
       
@@ -117,7 +120,7 @@ export default class UserKnowledgeBaseBrowsingControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GBaseObject];
 
       return this.apiClient.callApi(
         '/api/user/UserKnowledgeBaseBrowsingController/getAccessibleRootKnowledgeBases', 'GET',
@@ -127,7 +130,7 @@ export default class UserKnowledgeBaseBrowsingControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GBaseObject>}
      */
     getAccessibleRootKnowledgeBases() {
       return this.getAccessibleRootKnowledgeBasesWithHttpInfo()
@@ -138,8 +141,8 @@ export default class UserKnowledgeBaseBrowsingControllerApi {
 
 
     /**
-     * @param {Object} body 
-     * @param {Object} codes 
+     * @param {Array.<module:model/VFilesystemReference>} body 
+     * @param {Array.<String>} codes 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/OperationStatusListVirtualFilesystemNavigationTreeStatus} and HTTP response
      */
     getKnowledgeBaseNavigationStatusWithHttpInfo(body, codes) {
@@ -158,7 +161,7 @@ export default class UserKnowledgeBaseBrowsingControllerApi {
         
       };
       let queryParams = {
-        'codes': codes
+        'codes': this.apiClient.buildCollectionParam(codes, 'multi')
       };
       let headerParams = {
         
@@ -193,7 +196,7 @@ export default class UserKnowledgeBaseBrowsingControllerApi {
 
 
     /**
-     * @param {Object} codes 
+     * @param {Array.<String>} codes 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/OperationStatusListGVirtualFilesystemRoot} and HTTP response
      */
     getKnowledgeBaseRootsWithHttpInfo(codes) {
@@ -208,7 +211,7 @@ export default class UserKnowledgeBaseBrowsingControllerApi {
         
       };
       let queryParams = {
-        'codes': codes
+        'codes': this.apiClient.buildCollectionParam(codes, 'multi')
       };
       let headerParams = {
         
@@ -242,8 +245,8 @@ export default class UserKnowledgeBaseBrowsingControllerApi {
 
 
     /**
-     * @param {Object} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {Array.<String>} body 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GKnowledgeBase>} and HTTP response
      */
     getVisibleKnowledgeBaseByCodesWithHttpInfo(body) {
       
@@ -269,7 +272,7 @@ export default class UserKnowledgeBaseBrowsingControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GKnowledgeBase];
 
       return this.apiClient.callApi(
         '/api/user/UserKnowledgeBaseBrowsingController/getVisibleKnowledgeBaseByCodes', 'POST',
@@ -280,7 +283,7 @@ export default class UserKnowledgeBaseBrowsingControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GKnowledgeBase>}
      */
     getVisibleKnowledgeBaseByCodes(body) {
       return this.getVisibleKnowledgeBaseByCodesWithHttpInfo(body)

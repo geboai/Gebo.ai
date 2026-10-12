@@ -39,105 +39,105 @@ export default class UserAccessibleMcpServerView {
     if (data) {
       obj = obj || new UserAccessibleMcpServerView();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('enabled'))
-        obj.enabled = ApiClient.convertToType(data['enabled'], Object);
+        obj.enabled = ApiClient.convertToType(data['enabled'], 'Boolean');
       if (data.hasOwnProperty('shareAllPersonallyVisible'))
-        obj.shareAllPersonallyVisible = ApiClient.convertToType(data['shareAllPersonallyVisible'], Object);
+        obj.shareAllPersonallyVisible = ApiClient.convertToType(data['shareAllPersonallyVisible'], 'Boolean');
       if (data.hasOwnProperty('exportedUniqueRelativeUrl'))
-        obj.exportedUniqueRelativeUrl = ApiClient.convertToType(data['exportedUniqueRelativeUrl'], Object);
+        obj.exportedUniqueRelativeUrl = ApiClient.convertToType(data['exportedUniqueRelativeUrl'], 'String');
       if (data.hasOwnProperty('endpointPath'))
-        obj.endpointPath = ApiClient.convertToType(data['endpointPath'], Object);
+        obj.endpointPath = ApiClient.convertToType(data['endpointPath'], 'String');
       if (data.hasOwnProperty('transportType'))
-        obj.transportType = ApiClient.convertToType(data['transportType'], Object);
+        obj.transportType = ApiClient.convertToType(data['transportType'], 'String');
       if (data.hasOwnProperty('tools'))
-        obj.tools = ApiClient.convertToType(data['tools'], Object);
+        obj.tools = ApiClient.convertToType(data['tools'], ['String']);
       if (data.hasOwnProperty('resources'))
-        obj.resources = ApiClient.convertToType(data['resources'], Object);
+        obj.resources = ApiClient.convertToType(data['resources'], ['String']);
       if (data.hasOwnProperty('prompts'))
-        obj.prompts = ApiClient.convertToType(data['prompts'], Object);
+        obj.prompts = ApiClient.convertToType(data['prompts'], ['String']);
       if (data.hasOwnProperty('toolsCount'))
-        obj.toolsCount = ApiClient.convertToType(data['toolsCount'], Object);
+        obj.toolsCount = ApiClient.convertToType(data['toolsCount'], 'Number');
       if (data.hasOwnProperty('resourcesCount'))
-        obj.resourcesCount = ApiClient.convertToType(data['resourcesCount'], Object);
+        obj.resourcesCount = ApiClient.convertToType(data['resourcesCount'], 'Number');
       if (data.hasOwnProperty('promptsCount'))
-        obj.promptsCount = ApiClient.convertToType(data['promptsCount'], Object);
+        obj.promptsCount = ApiClient.convertToType(data['promptsCount'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 UserAccessibleMcpServerView.prototype.code = undefined;
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 UserAccessibleMcpServerView.prototype.name = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 UserAccessibleMcpServerView.prototype.description = undefined;
 
 /**
- * @member {Object} enabled
+ * @member {Boolean} enabled
  */
 UserAccessibleMcpServerView.prototype.enabled = undefined;
 
 /**
- * @member {Object} shareAllPersonallyVisible
+ * @member {Boolean} shareAllPersonallyVisible
  */
 UserAccessibleMcpServerView.prototype.shareAllPersonallyVisible = undefined;
 
 /**
- * @member {Object} exportedUniqueRelativeUrl
+ * @member {String} exportedUniqueRelativeUrl
  */
 UserAccessibleMcpServerView.prototype.exportedUniqueRelativeUrl = undefined;
 
 /**
- * @member {Object} endpointPath
+ * @member {String} endpointPath
  */
 UserAccessibleMcpServerView.prototype.endpointPath = undefined;
 
 /**
- * @member {Object} transportType
+ * @member {String} transportType
  */
 UserAccessibleMcpServerView.prototype.transportType = undefined;
 
 /**
- * @member {Object} tools
+ * @member {Array.<String>} tools
  */
 UserAccessibleMcpServerView.prototype.tools = undefined;
 
 /**
- * @member {Object} resources
+ * @member {Array.<String>} resources
  */
 UserAccessibleMcpServerView.prototype.resources = undefined;
 
 /**
- * @member {Object} prompts
+ * @member {Array.<String>} prompts
  */
 UserAccessibleMcpServerView.prototype.prompts = undefined;
 
 /**
- * @member {Object} toolsCount
+ * @member {Number} toolsCount
  */
 UserAccessibleMcpServerView.prototype.toolsCount = undefined;
 
 /**
- * @member {Object} resourcesCount
+ * @member {Number} resourcesCount
  */
 UserAccessibleMcpServerView.prototype.resourcesCount = undefined;
 
 /**
- * @member {Object} promptsCount
+ * @member {Number} promptsCount
  */
 UserAccessibleMcpServerView.prototype.promptsCount = undefined;
 

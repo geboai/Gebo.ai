@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
 
 public class FileUploadControllerApi {
     private ApiClient apiClient;
@@ -85,37 +85,43 @@ public class FileUploadControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @param handShakeCode  (required)
+     * @param endpointCode  (required)
      * @param files  (optional)
+     * @param folder  (optional)
+     * @param relativePaths  (optional)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void upload1(String handShakeCode, List<File> files) throws RestClientException {
-        upload1WithHttpInfo(handShakeCode, files);
+    public void uploadToEndpoint(String endpointCode, List<File> files, String folder, List<String> relativePaths) throws RestClientException {
+        uploadToEndpointWithHttpInfo(endpointCode, files, folder, relativePaths);
     }
 
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @param handShakeCode  (required)
+     * @param endpointCode  (required)
      * @param files  (optional)
+     * @param folder  (optional)
+     * @param relativePaths  (optional)
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> upload1WithHttpInfo(String handShakeCode, List<File> files) throws RestClientException {
+    public ResponseEntity<Void> uploadToEndpointWithHttpInfo(String endpointCode, List<File> files, String folder, List<String> relativePaths) throws RestClientException {
         Object postBody = null;
-        // verify the required parameter 'handShakeCode' is set
-        if (handShakeCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'handShakeCode' when calling upload1");
+        // verify the required parameter 'endpointCode' is set
+        if (endpointCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling uploadToEndpoint");
         }
         // create path and map variables
         final Map<String, Object> uriVariables = new HashMap<String, Object>();
-        uriVariables.put("handShakeCode", handShakeCode);
-        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadController/upload/{handShakeCode}").buildAndExpand(uriVariables).toUriString();
+        uriVariables.put("endpointCode", endpointCode);
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadController/uploadToEndpoint/{endpointCode}").buildAndExpand(uriVariables).toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "folder", folder));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(ApiClient.CollectionFormat.valueOf("multi".toUpperCase()), "relativePaths[]", relativePaths));
         if (files != null)
             formParams.add("files[]", files);
 
@@ -135,33 +141,33 @@ public class FileUploadControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @param endpointCode  (required)
+     * @param handShakeCode  (required)
      * @param files  (optional)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void uploadToEndpoint(String endpointCode, List<File> files) throws RestClientException {
-        uploadToEndpointWithHttpInfo(endpointCode, files);
+    public void uploadUploadsEndpoint(String handShakeCode, List<File> files) throws RestClientException {
+        uploadUploadsEndpointWithHttpInfo(handShakeCode, files);
     }
 
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @param endpointCode  (required)
+     * @param handShakeCode  (required)
      * @param files  (optional)
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> uploadToEndpointWithHttpInfo(String endpointCode, List<File> files) throws RestClientException {
+    public ResponseEntity<Void> uploadUploadsEndpointWithHttpInfo(String handShakeCode, List<File> files) throws RestClientException {
         Object postBody = null;
-        // verify the required parameter 'endpointCode' is set
-        if (endpointCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling uploadToEndpoint");
+        // verify the required parameter 'handShakeCode' is set
+        if (handShakeCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'handShakeCode' when calling uploadUploadsEndpoint");
         }
         // create path and map variables
         final Map<String, Object> uriVariables = new HashMap<String, Object>();
-        uriVariables.put("endpointCode", endpointCode);
-        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadController/uploadToEndpoint/{endpointCode}").buildAndExpand(uriVariables).toUriString();
+        uriVariables.put("handShakeCode", handShakeCode);
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadController/upload/{handShakeCode}").buildAndExpand(uriVariables).toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();

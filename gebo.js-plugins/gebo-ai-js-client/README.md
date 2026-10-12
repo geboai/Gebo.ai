@@ -70,10 +70,10 @@ Please follow the [installation](#installation) instruction and execute the foll
 ```javascript
 var GeboAiClient = require('gebo.ai.client.js');
 
-var api = new GeboAiClient.AnthropicChatModelsConfigurationControllerApi()
-var body = new GeboAiClient.GAnthropicChatModelConfig(); // {GAnthropicChatModelConfig} 
+var api = new GeboAiClient.A2AClientConfigControllerApi()
+var body = new GeboAiClient.A2ARemoteAgentConfig(); // {A2ARemoteAgentConfig} 
 
-api.deleteAnthropicChatModelConfig(body).then(function(data) {
+api.delete1(body).then(function(data) {
   console.log('API called successfully. Returned data: ' + data);
 }, function(error) {
   console.error(error);
@@ -87,6 +87,12 @@ All URIs are relative to *http://localhost:12999*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*GeboAiClient.A2AClientConfigControllerApi* | [**delete1**](docs/A2AClientConfigControllerApi.md#delete1) | **DELETE** /api/admin/A2AClientConfigController/deleteA2AAgent | 
+*GeboAiClient.A2AClientConfigControllerApi* | [**findByCode2**](docs/A2AClientConfigControllerApi.md#findByCode2) | **GET** /api/admin/A2AClientConfigController/findByCode | 
+*GeboAiClient.A2AClientConfigControllerApi* | [**insert1**](docs/A2AClientConfigControllerApi.md#insert1) | **POST** /api/admin/A2AClientConfigController/insertA2AAgent | 
+*GeboAiClient.A2AClientConfigControllerApi* | [**list**](docs/A2AClientConfigControllerApi.md#list) | **GET** /api/admin/A2AClientConfigController/list | 
+*GeboAiClient.A2AClientConfigControllerApi* | [**testAndDiscovery1**](docs/A2AClientConfigControllerApi.md#testAndDiscovery1) | **POST** /api/admin/A2AClientConfigController/testAndDiscovery | 
+*GeboAiClient.A2AClientConfigControllerApi* | [**update2**](docs/A2AClientConfigControllerApi.md#update2) | **POST** /api/admin/A2AClientConfigController/updateA2AAgent | 
 *GeboAiClient.AnthropicChatModelsConfigurationControllerApi* | [**deleteAnthropicChatModelConfig**](docs/AnthropicChatModelsConfigurationControllerApi.md#deleteAnthropicChatModelConfig) | **POST** /api/admin/AnthropicChatModelsConfigurationController/deleteAnthropicChatModelConfig | 
 *GeboAiClient.AnthropicChatModelsConfigurationControllerApi* | [**findAnthropicChatModelConfigByCode**](docs/AnthropicChatModelsConfigurationControllerApi.md#findAnthropicChatModelConfigByCode) | **GET** /api/admin/AnthropicChatModelsConfigurationController/findAnthropicChatModelConfigByCode | 
 *GeboAiClient.AnthropicChatModelsConfigurationControllerApi* | [**getAnthropicChatModels**](docs/AnthropicChatModelsConfigurationControllerApi.md#getAnthropicChatModels) | **POST** /api/admin/AnthropicChatModelsConfigurationController/getAnthropicModels | 
@@ -142,6 +148,13 @@ Class | Method | HTTP request | Description
 *GeboAiClient.BedrockTranscriptModelsConfigurationControllerApi* | [**getBedrockTranscriptModels**](docs/BedrockTranscriptModelsConfigurationControllerApi.md#getBedrockTranscriptModels) | **POST** /api/admin/BedrockTranscriptModelsConfigurationController/getBedrockTranscriptModels | 
 *GeboAiClient.BedrockTranscriptModelsConfigurationControllerApi* | [**insertBedrockTranscriptModelConfig**](docs/BedrockTranscriptModelsConfigurationControllerApi.md#insertBedrockTranscriptModelConfig) | **POST** /api/admin/BedrockTranscriptModelsConfigurationController/insertBedrockTranscriptModelConfig | 
 *GeboAiClient.BedrockTranscriptModelsConfigurationControllerApi* | [**updateBedrockTranscriptModelConfig**](docs/BedrockTranscriptModelsConfigurationControllerApi.md#updateBedrockTranscriptModelConfig) | **POST** /api/admin/BedrockTranscriptModelsConfigurationController/updateBedrockTranscriptModelConfig | 
+*GeboAiClient.BraveSearchConfigurationControllerApi* | [**deleteGBraveSearchApiCredentials**](docs/BraveSearchConfigurationControllerApi.md#deleteGBraveSearchApiCredentials) | **POST** /api/admin/BraveSearchConfigurationController/deleteGBraveSearchApiCredentials | 
+*GeboAiClient.BraveSearchConfigurationControllerApi* | [**fastInsertBraveSearchApiCredentials**](docs/BraveSearchConfigurationControllerApi.md#fastInsertBraveSearchApiCredentials) | **POST** /api/admin/BraveSearchConfigurationController/fastInsertBraveSearchApiCredentials | 
+*GeboAiClient.BraveSearchConfigurationControllerApi* | [**getBraveSearchApiCredentials**](docs/BraveSearchConfigurationControllerApi.md#getBraveSearchApiCredentials) | **GET** /api/admin/BraveSearchConfigurationController/getBraveSearchApiCredentials | 
+*GeboAiClient.BraveSearchConfigurationControllerApi* | [**getBraveSearchStatus**](docs/BraveSearchConfigurationControllerApi.md#getBraveSearchStatus) | **GET** /api/admin/BraveSearchConfigurationController/getBraveSearchStatus | 
+*GeboAiClient.BraveSearchConfigurationControllerApi* | [**insertGBraveSearchApiCredentials**](docs/BraveSearchConfigurationControllerApi.md#insertGBraveSearchApiCredentials) | **POST** /api/admin/BraveSearchConfigurationController/insertGBraveSearchApiCredentials | 
+*GeboAiClient.BraveSearchConfigurationControllerApi* | [**searchGBraveSearchApiCredentialsByCode**](docs/BraveSearchConfigurationControllerApi.md#searchGBraveSearchApiCredentialsByCode) | **GET** /api/admin/BraveSearchConfigurationController/searchGBraveSearchApiCredentialsByCode | 
+*GeboAiClient.BraveSearchConfigurationControllerApi* | [**updateGBraveSearchApiCredentials**](docs/BraveSearchConfigurationControllerApi.md#updateGBraveSearchApiCredentials) | **POST** /api/admin/BraveSearchConfigurationController/updateGBraveSearchApiCredentials | 
 *GeboAiClient.BuildSystemsControllerApi* | [**getBuildSystemConfigs**](docs/BuildSystemsControllerApi.md#getBuildSystemConfigs) | **GET** /api/admin/BuildSystemsController/getBuildSystemConfigs | 
 *GeboAiClient.BuildSystemsControllerApi* | [**getBuildSystemTypes**](docs/BuildSystemsControllerApi.md#getBuildSystemTypes) | **GET** /api/admin/BuildSystemsController/getBuildSystemTypes | 
 *GeboAiClient.ChatModelsControllerApi* | [**getChatModelTypes**](docs/ChatModelsControllerApi.md#getChatModelTypes) | **GET** /api/admin/ChatModelsController/getChatModelTypes | 
@@ -149,6 +162,7 @@ Class | Method | HTTP request | Description
 *GeboAiClient.ChatModelsLookupControllerApi* | [**getChatModelTypesLookup**](docs/ChatModelsLookupControllerApi.md#getChatModelTypesLookup) | **GET** /api/users/ChatModelsLookupController/getChatModelTypesLookup | 
 *GeboAiClient.ChatModelsLookupControllerApi* | [**getDefaultChatModel**](docs/ChatModelsLookupControllerApi.md#getDefaultChatModel) | **GET** /api/users/ChatModelsLookupController/getDefaultChatModel | 
 *GeboAiClient.ChatModelsLookupControllerApi* | [**getRuntimeConfiguredChatModelsLookup**](docs/ChatModelsLookupControllerApi.md#getRuntimeConfiguredChatModelsLookup) | **GET** /api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup | 
+*GeboAiClient.ClientsTopologyProviderControllerApi* | [**getClientsTopology**](docs/ClientsTopologyProviderControllerApi.md#getClientsTopology) | **GET** /public/ClientsTopologyProviderController | 
 *GeboAiClient.CompanySystemsControllerApi* | [**getContentSystem**](docs/CompanySystemsControllerApi.md#getContentSystem) | **GET** /api/admin/CompanySystemsController/getContentSystem | 
 *GeboAiClient.CompanySystemsControllerApi* | [**getContentSystemType**](docs/CompanySystemsControllerApi.md#getContentSystemType) | **GET** /api/admin/CompanySystemsController/getContentSystemType | 
 *GeboAiClient.CompanySystemsControllerApi* | [**getContentSystemTypes**](docs/CompanySystemsControllerApi.md#getContentSystemTypes) | **GET** /api/admin/CompanySystemsController/getContentSystemTypes() | 
@@ -197,6 +211,7 @@ Class | Method | HTTP request | Description
 *GeboAiClient.ContentMetaInfosControllerApi* | [**searchByDocumentName**](docs/ContentMetaInfosControllerApi.md#searchByDocumentName) | **POST** /api/users/ContentMetaInfosController/searchByDocumentName | 
 *GeboAiClient.ContentMetaInfosControllerApi* | [**searchByDocumentNamePaged**](docs/ContentMetaInfosControllerApi.md#searchByDocumentNamePaged) | **POST** /api/users/ContentMetaInfosController/searchByDocumentNamePaged | 
 *GeboAiClient.ContentsResetControllerApi* | [**resetContentsIngestion**](docs/ContentsResetControllerApi.md#resetContentsIngestion) | **POST** /api/admin/ContentsResetController/resetContentsIngestion | 
+*GeboAiClient.DataFlowMetaInfoControllerApi* | [**getLocalDataFlow**](docs/DataFlowMetaInfoControllerApi.md#getLocalDataFlow) | **GET** /api/admin/DataFlowMetaInfoController/getLocalDataFlow | 
 *GeboAiClient.DeepseekChatModelsConfigurationControllerApi* | [**deleteDeepseekChatModelConfig**](docs/DeepseekChatModelsConfigurationControllerApi.md#deleteDeepseekChatModelConfig) | **POST** /api/admin/DeepseekChatModelsConfigurationController/deleteDeepseekChatModelConfig | 
 *GeboAiClient.DeepseekChatModelsConfigurationControllerApi* | [**findDeepseekChatModelConfigByCode**](docs/DeepseekChatModelsConfigurationControllerApi.md#findDeepseekChatModelConfigByCode) | **GET** /api/admin/DeepseekChatModelsConfigurationController/findDeepseekChatModelConfigByCode | 
 *GeboAiClient.DeepseekChatModelsConfigurationControllerApi* | [**getDeepseekChatModels**](docs/DeepseekChatModelsConfigurationControllerApi.md#getDeepseekChatModels) | **POST** /api/admin/DeepseekChatModelsConfigurationController/getDeepseekModels | 
@@ -228,6 +243,8 @@ Class | Method | HTTP request | Description
 *GeboAiClient.FileSystemsControllerApi* | [**updateFilesystemEndpoint**](docs/FileSystemsControllerApi.md#updateFilesystemEndpoint) | **POST** /api/admin/FileSystemsController/updateFilesystemEndpoint | 
 *GeboAiClient.FileUploadControllerApi* | [**getHandShakeCode**](docs/FileUploadControllerApi.md#getHandShakeCode) | **GET** /api/admin/FileUploadController/getHandShakeCode | 
 *GeboAiClient.FileUploadControllerApi* | [**upload1**](docs/FileUploadControllerApi.md#upload1) | **POST** /api/admin/FileUploadController/upload/{handShakeCode} | 
+*GeboAiClient.FileUploadControllerApi* | [**uploadToEndpoint**](docs/FileUploadControllerApi.md#uploadToEndpoint) | **POST** /api/admin/FileUploadController/uploadToEndpoint/{endpointCode} | 
+*GeboAiClient.FileUploadsControllerApi* | [**deleteUploadedFiles**](docs/FileUploadsControllerApi.md#deleteUploadedFiles) | **POST** /api/admin/FileUploadsController/deleteUploadedFiles | 
 *GeboAiClient.FileUploadsControllerApi* | [**deleteUploadsEndpoint**](docs/FileUploadsControllerApi.md#deleteUploadsEndpoint) | **POST** /api/admin/FileUploadsController/deleteUploadsEndpoint | 
 *GeboAiClient.FileUploadsControllerApi* | [**findUploadsEndpointsByProject**](docs/FileUploadsControllerApi.md#findUploadsEndpointsByProject) | **GET** /api/admin/FileUploadsController/findUploadsEndpointsByProject | 
 *GeboAiClient.FileUploadsControllerApi* | [**findUploadsEndpointsByQbe**](docs/FileUploadsControllerApi.md#findUploadsEndpointsByQbe) | **POST** /api/admin/FileUploadsController/findUploadsEndpointsByQbe | 
@@ -235,12 +252,18 @@ Class | Method | HTTP request | Description
 *GeboAiClient.FileUploadsControllerApi* | [**getUploadableFilesExtensions**](docs/FileUploadsControllerApi.md#getUploadableFilesExtensions) | **GET** /api/admin/FileUploadsController/getUploadableFilesExtensions | 
 *GeboAiClient.FileUploadsControllerApi* | [**getUploadsSystems**](docs/FileUploadsControllerApi.md#getUploadsSystems) | **GET** /api/admin/FileUploadsController/getUploadsSystems | 
 *GeboAiClient.FileUploadsControllerApi* | [**insertUploadsEndpoint**](docs/FileUploadsControllerApi.md#insertUploadsEndpoint) | **POST** /api/admin/FileUploadsController/insertUploadsEndpoint | 
+*GeboAiClient.FileUploadsControllerApi* | [**listUploadedFiles**](docs/FileUploadsControllerApi.md#listUploadedFiles) | **GET** /api/admin/FileUploadsController/listUploadedFiles | 
 *GeboAiClient.FileUploadsControllerApi* | [**publishUploadsEndpoint**](docs/FileUploadsControllerApi.md#publishUploadsEndpoint) | **POST** /api/admin/FileUploadsController/publishUploadsEndpoint | 
 *GeboAiClient.FileUploadsControllerApi* | [**updateUploadsEndpoint**](docs/FileUploadsControllerApi.md#updateUploadsEndpoint) | **POST** /api/admin/FileUploadsController/updateUploadsEndpoint | 
 *GeboAiClient.FunctionsLookupControllerApi* | [**getAllFunctions**](docs/FunctionsLookupControllerApi.md#getAllFunctions) | **GET** /api/admin/FunctionsLookupController/getAllFunctions | 
 *GeboAiClient.FunctionsLookupControllerApi* | [**getAllFunctionsTree**](docs/FunctionsLookupControllerApi.md#getAllFunctionsTree) | **GET** /api/admin/FunctionsLookupController/getAllFunctionsTree | 
 *GeboAiClient.FunctionsLookupControllerApi* | [**getAllLocalFunctions**](docs/FunctionsLookupControllerApi.md#getAllLocalFunctions) | **GET** /api/admin/FunctionsLookupController/getAllLocalFunctions | 
 *GeboAiClient.FunctionsLookupControllerApi* | [**getAllLocalFunctionsTree**](docs/FunctionsLookupControllerApi.md#getAllLocalFunctionsTree) | **GET** /api/admin/FunctionsLookupController/getAllLocalFunctionsTree | 
+*GeboAiClient.GeboA2AServerAdminControllerApi* | [**callDelete**](docs/GeboA2AServerAdminControllerApi.md#callDelete) | **DELETE** /api/admin/GeboA2AServerAdminController/deleteA2AServer | 
+*GeboAiClient.GeboA2AServerAdminControllerApi* | [**findAll1**](docs/GeboA2AServerAdminControllerApi.md#findAll1) | **GET** /api/admin/GeboA2AServerAdminController/findAll | 
+*GeboAiClient.GeboA2AServerAdminControllerApi* | [**findByCode1**](docs/GeboA2AServerAdminControllerApi.md#findByCode1) | **GET** /api/admin/GeboA2AServerAdminController/findByCode | 
+*GeboAiClient.GeboA2AServerAdminControllerApi* | [**insert**](docs/GeboA2AServerAdminControllerApi.md#insert) | **POST** /api/admin/GeboA2AServerAdminController/insertA2AServer | 
+*GeboAiClient.GeboA2AServerAdminControllerApi* | [**update1**](docs/GeboA2AServerAdminControllerApi.md#update1) | **POST** /api/admin/GeboA2AServerAdminController/updateA2AServer | 
 *GeboAiClient.GeboAdminChatProfilesConfigurationControllerApi* | [**deleteChatProfile**](docs/GeboAdminChatProfilesConfigurationControllerApi.md#deleteChatProfile) | **POST** /api/admin/GeboAdminChatProfilesConfigurationController/deleteChatProfile | 
 *GeboAiClient.GeboAdminChatProfilesConfigurationControllerApi* | [**findChatProfileConfigurationByCode**](docs/GeboAdminChatProfilesConfigurationControllerApi.md#findChatProfileConfigurationByCode) | **GET** /api/admin/GeboAdminChatProfilesConfigurationController/findChatProfileConfigurationByCode | 
 *GeboAiClient.GeboAdminChatProfilesConfigurationControllerApi* | [**getAllChatProfileConfiguration**](docs/GeboAdminChatProfilesConfigurationControllerApi.md#getAllChatProfileConfiguration) | **POST** /api/admin/GeboAdminChatProfilesConfigurationController/getAllChatProfileConfiguration | 
@@ -251,14 +274,15 @@ Class | Method | HTTP request | Description
 *GeboAiClient.GeboAdminPromptUseInfoControllerApi* | [**findByCode**](docs/GeboAdminPromptUseInfoControllerApi.md#findByCode) | **GET** /api/admin/GeboAdminPromptUseController/findByCode | 
 *GeboAiClient.GeboAdminPromptUseInfoControllerApi* | [**findByModule**](docs/GeboAdminPromptUseInfoControllerApi.md#findByModule) | **GET** /api/admin/GeboAdminPromptUseController/findByModule | 
 *GeboAiClient.GeboAdminPromptsControllerApi* | [**deletePromptConfig**](docs/GeboAdminPromptsControllerApi.md#deletePromptConfig) | **POST** /api/admin/GeboAdminPromptsController/deletePromptConfig | 
+*GeboAiClient.GeboAdminPromptsControllerApi* | [**findGPromptUseInfoByUseCode**](docs/GeboAdminPromptsControllerApi.md#findGPromptUseInfoByUseCode) | **GET** /api/admin/GeboAdminPromptsController/findGPromptUseInfoByUseCode | 
 *GeboAiClient.GeboAdminPromptsControllerApi* | [**findPromptConfigByCode**](docs/GeboAdminPromptsControllerApi.md#findPromptConfigByCode) | **GET** /api/admin/GeboAdminPromptsController/findPromptConfigByCode | 
+*GeboAiClient.GeboAdminPromptsControllerApi* | [**getAllPromptConfigsLightList**](docs/GeboAdminPromptsControllerApi.md#getAllPromptConfigsLightList) | **GET** /api/admin/GeboAdminPromptsController/getAllPromptConfigsLightList | 
 *GeboAiClient.GeboAdminPromptsControllerApi* | [**getPromptCategories**](docs/GeboAdminPromptsControllerApi.md#getPromptCategories) | **GET** /api/admin/GeboAdminPromptsController/getPromptCategories | 
 *GeboAiClient.GeboAdminPromptsControllerApi* | [**getPromptConfigByFilter**](docs/GeboAdminPromptsControllerApi.md#getPromptConfigByFilter) | **POST** /api/admin/GeboAdminPromptsController/getPromptConfigByFilter | 
 *GeboAiClient.GeboAdminPromptsControllerApi* | [**insertPromptConfig**](docs/GeboAdminPromptsControllerApi.md#insertPromptConfig) | **POST** /api/admin/GeboAdminPromptsController/insertPromptConfig | 
+*GeboAiClient.GeboAdminPromptsControllerApi* | [**isPromptTemplateEditingEnabled**](docs/GeboAdminPromptsControllerApi.md#isPromptTemplateEditingEnabled) | **GET** /api/admin/GeboAdminPromptsController/isPromptTemplateEditingEnabled | 
 *GeboAiClient.GeboAdminPromptsControllerApi* | [**updatePromptConfig**](docs/GeboAdminPromptsControllerApi.md#updatePromptConfig) | **POST** /api/admin/GeboAdminPromptsController/updatePromptConfig | 
 *GeboAiClient.GeboAdminRagAutotuneControllerApi* | [**getLatestComputedVectorStores**](docs/GeboAdminRagAutotuneControllerApi.md#getLatestComputedVectorStores) | **GET** /api/admin/GeboAdminRagAutotuneController/getLatestComputedVectorStores | 
-*GeboAiClient.GeboAdvancedSetupStatusControllerApi* | [**getFirstKnowledgeBaseSetupStatus**](docs/GeboAdvancedSetupStatusControllerApi.md#getFirstKnowledgeBaseSetupStatus) | **GET** /api/admin/GeboAdvancedSetupStatusController/getFirstKnowledgeBaseSetupStatus | 
-*GeboAiClient.GeboAdvancedSetupStatusControllerApi* | [**getMinimalContentsSetupStatus**](docs/GeboAdvancedSetupStatusControllerApi.md#getMinimalContentsSetupStatus) | **GET** /api/admin/GeboAdvancedSetupStatusController/getMinimalContentsSetupStatus | 
 *GeboAiClient.GeboAgentAdminControllerApi* | [**deleteAgent**](docs/GeboAgentAdminControllerApi.md#deleteAgent) | **DELETE** /api/admin/GeboAgentAdminController/deleteAgent | 
 *GeboAiClient.GeboAgentAdminControllerApi* | [**getAgentByCode**](docs/GeboAgentAdminControllerApi.md#getAgentByCode) | **GET** /api/admin/GeboAgentAdminController/getAgentByCode | 
 *GeboAiClient.GeboAgentAdminControllerApi* | [**getAgents**](docs/GeboAgentAdminControllerApi.md#getAgents) | **GET** /api/admin/GeboAgentAdminController/getAgents | 
@@ -345,6 +369,7 @@ Class | Method | HTTP request | Description
 *GeboAiClient.GeboRagChatControllerApi* | [**getProfileProviderModelCapabilities**](docs/GeboRagChatControllerApi.md#getProfileProviderModelCapabilities) | **GET** /api/users/GeboChatController/getProfileProviderModelCapabilities | 
 *GeboAiClient.GeboRagChatControllerApi* | [**getVisibleKnowledgeBasesByProfileCode**](docs/GeboRagChatControllerApi.md#getVisibleKnowledgeBasesByProfileCode) | **GET** /api/users/GeboChatController/getVisibleKnowledgeBasesByProfileCode | 
 *GeboAiClient.GeboRagChatControllerApi* | [**ragChat**](docs/GeboRagChatControllerApi.md#ragChat) | **POST** /api/users/GeboChatController/ragChat | 
+*GeboAiClient.GeboRagChatControllerApi* | [**resolveForcedDocumentsRef**](docs/GeboRagChatControllerApi.md#resolveForcedDocumentsRef) | **POST** /api/users/GeboChatController/resolveForcedDocumentsRef | 
 *GeboAiClient.GeboRagChatControllerApi* | [**streamRagResponse**](docs/GeboRagChatControllerApi.md#streamRagResponse) | **POST** /api/users/GeboChatController/streamRagResponse | 
 *GeboAiClient.GeboTextToSpeechControllerApi* | [**isEnabled1**](docs/GeboTextToSpeechControllerApi.md#isEnabled1) | **GET** /api/users/GeboTextToSpeechController/isEnabled | 
 *GeboAiClient.GeboTextToSpeechControllerApi* | [**speechText**](docs/GeboTextToSpeechControllerApi.md#speechText) | **POST** /api/users/GeboTextToSpeechController/speechText | 
@@ -355,6 +380,7 @@ Class | Method | HTTP request | Description
 *GeboAiClient.GeboUserChatUploadsControllerApi* | [**serveContent**](docs/GeboUserChatUploadsControllerApi.md#serveContent) | **GET** /api/users/GeboUserChatUploadsController/serveContent/{userSessionCode}/{uploadedContentId} | 
 *GeboAiClient.GeboUserChatsControllerApi* | [**changeChatDescription**](docs/GeboUserChatsControllerApi.md#changeChatDescription) | **POST** /api/users/GeboUserChatsController/changeChatDescription | 
 *GeboAiClient.GeboUserChatsControllerApi* | [**createCleanChatByChatProfileCode**](docs/GeboUserChatsControllerApi.md#createCleanChatByChatProfileCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByChatProfileCode | 
+*GeboAiClient.GeboUserChatsControllerApi* | [**createCleanChatByDefaultModel**](docs/GeboUserChatsControllerApi.md#createCleanChatByDefaultModel) | **GET** /api/users/GeboUserChatsController/createCleanChatByDefaultModel | 
 *GeboAiClient.GeboUserChatsControllerApi* | [**createCleanChatByModelCode**](docs/GeboUserChatsControllerApi.md#createCleanChatByModelCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByModelCode | 
 *GeboAiClient.GeboUserChatsControllerApi* | [**deleteChat**](docs/GeboUserChatsControllerApi.md#deleteChat) | **DELETE** /api/users/GeboUserChatsController/deleteChat | 
 *GeboAiClient.GeboUserChatsControllerApi* | [**exportResponse2file**](docs/GeboUserChatsControllerApi.md#exportResponse2file) | **GET** /api/users/GeboUserChatsController/exportResponse2file | 
@@ -362,13 +388,12 @@ Class | Method | HTTP request | Description
 *GeboAiClient.GeboUserChatsControllerApi* | [**getChatInfosByCode**](docs/GeboUserChatsControllerApi.md#getChatInfosByCode) | **GET** /api/users/GeboUserChatsController/getChatInfosByCode | 
 *GeboAiClient.GeboUserChatsControllerApi* | [**getChatInfosByQbe**](docs/GeboUserChatsControllerApi.md#getChatInfosByQbe) | **POST** /api/users/GeboUserChatsController/getChatInfosByQbe | 
 *GeboAiClient.GeboUserChatsControllerApi* | [**getMyChats**](docs/GeboUserChatsControllerApi.md#getMyChats) | **GET** /api/users/GeboUserChatsController/getMyChats | 
+*GeboAiClient.GeboUserChatsControllerApi* | [**getMyChatsByContextCode**](docs/GeboUserChatsControllerApi.md#getMyChatsByContextCode) | **GET** /api/users/GeboUserChatsController/getMyChatsByContextCode | 
 *GeboAiClient.GeboUserChatsControllerApi* | [**getMyChatsPaged**](docs/GeboUserChatsControllerApi.md#getMyChatsPaged) | **GET** /api/users/GeboUserChatsController/getMyChatsPaged | 
 *GeboAiClient.GeboUserChatsControllerApi* | [**getUIConfig**](docs/GeboUserChatsControllerApi.md#getUIConfig) | **GET** /api/users/GeboUserChatsController/getUIConfig | 
 *GeboAiClient.GeboUserChatsControllerApi* | [**isMinimalLLMSSetupDone**](docs/GeboUserChatsControllerApi.md#isMinimalLLMSSetupDone) | **GET** /api/users/GeboUserChatsController/isMinimalLLMSSetupDone | 
 *GeboAiClient.GeboUserChatsControllerApi* | [**suggestChatDescription**](docs/GeboUserChatsControllerApi.md#suggestChatDescription) | **GET** /api/users/GeboUserChatsController/suggestChatDescription | 
 *GeboAiClient.GeboUserKnowledgeBaseSemanticSearchControllerApi* | [**semanticSearch**](docs/GeboUserKnowledgeBaseSemanticSearchControllerApi.md#semanticSearch) | **POST** /api/users/GeboUserKnowledgeBaseSemanticSearchController/semanticSearch | 
-*GeboAiClient.GeboVectorStoreConfigurationControllerApi* | [**getActualVectorStoreConfiguration**](docs/GeboVectorStoreConfigurationControllerApi.md#getActualVectorStoreConfiguration) | **GET** /api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration | 
-*GeboAiClient.GeboVectorStoreConfigurationControllerApi* | [**vectorStoreConfigurationApplyAndSave**](docs/GeboVectorStoreConfigurationControllerApi.md#vectorStoreConfigurationApplyAndSave) | **POST** /api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave | 
 *GeboAiClient.GeneratedAdminApiKeyControllerApi* | [**deleteAdminGeneratedApiKey**](docs/GeneratedAdminApiKeyControllerApi.md#deleteAdminGeneratedApiKey) | **POST** /api/admin/GeneratedAdminApiKeyController/deleteAdminGeneratedApiKey | 
 *GeboAiClient.GeneratedAdminApiKeyControllerApi* | [**generateAdminGeneratedApiKey**](docs/GeneratedAdminApiKeyControllerApi.md#generateAdminGeneratedApiKey) | **POST** /api/admin/GeneratedAdminApiKeyController/generateAdminGeneratedApiKey | 
 *GeboAiClient.GeneratedAdminApiKeyControllerApi* | [**getAdminGeneratedApiKeyPagedList**](docs/GeneratedAdminApiKeyControllerApi.md#getAdminGeneratedApiKeyPagedList) | **POST** /api/admin/GeneratedAdminApiKeyController/getAdminGeneratedApiKeyPagedList | 
@@ -559,6 +584,7 @@ Class | Method | HTTP request | Description
 *GeboAiClient.LlmsUsageUserLevelControllerApi* | [**userDrillDown**](docs/LlmsUsageUserLevelControllerApi.md#userDrillDown) | **POST** /api/users/LLMSUsageUserLevelController/drillDown | 
 *GeboAiClient.LogViewControllerApi* | [**deleteJobStatus**](docs/LogViewControllerApi.md#deleteJobStatus) | **POST** /api/admin/LogViewController/deleteJobStatus | 
 *GeboAiClient.LogViewControllerApi* | [**getJobMessagesPaged**](docs/LogViewControllerApi.md#getJobMessagesPaged) | **POST** /api/admin/LogViewController/getJobMessagesPaged | 
+*GeboAiClient.LogViewControllerApi* | [**getJobsEntries**](docs/LogViewControllerApi.md#getJobsEntries) | **POST** /api/admin/LogViewController/getJobsEntries | 
 *GeboAiClient.LogViewControllerApi* | [**getJobsEntriesForClassName**](docs/LogViewControllerApi.md#getJobsEntriesForClassName) | **POST** /api/admin/LogViewController/getJobsEntriesForClassName | 
 *GeboAiClient.LogViewControllerApi* | [**getJobsEntriesForJobType**](docs/LogViewControllerApi.md#getJobsEntriesForJobType) | **POST** /api/admin/LogViewController/getJobsEntriesForJobType | 
 *GeboAiClient.LogViewControllerApi* | [**getJobsEntriesForProjectEndpoint**](docs/LogViewControllerApi.md#getJobsEntriesForProjectEndpoint) | **POST** /api/admin/LogViewController/getJobsEntriesForProjectEndpoint | 
@@ -658,6 +684,13 @@ Class | Method | HTTP request | Description
 *GeboAiClient.ReindexingFrequencyOptionsControllerApi* | [**displayTimeValues**](docs/ReindexingFrequencyOptionsControllerApi.md#displayTimeValues) | **POST** /api/users/ReindexingFrequencyOptionsController/displayTimeValues | 
 *GeboAiClient.ReindexingFrequencyOptionsControllerApi* | [**getAllTimeStructureMetaInfos**](docs/ReindexingFrequencyOptionsControllerApi.md#getAllTimeStructureMetaInfos) | **GET** /api/users/ReindexingFrequencyOptionsController/getAllTimeStructureMetaInfos | 
 *GeboAiClient.ReindexingFrequencyOptionsControllerApi* | [**getTimeStructureMetaInfo**](docs/ReindexingFrequencyOptionsControllerApi.md#getTimeStructureMetaInfo) | **GET** /api/users/ReindexingFrequencyOptionsController/getTimeStructureMetaInfo | 
+*GeboAiClient.SearxngSearchConfigurationControllerApi* | [**deleteGSearxngSearchApiCredentials**](docs/SearxngSearchConfigurationControllerApi.md#deleteGSearxngSearchApiCredentials) | **POST** /api/admin/SearxngSearchConfigurationController/deleteGSearxngSearchApiCredentials | 
+*GeboAiClient.SearxngSearchConfigurationControllerApi* | [**fastInsertSearxngSearchApiCredentials**](docs/SearxngSearchConfigurationControllerApi.md#fastInsertSearxngSearchApiCredentials) | **POST** /api/admin/SearxngSearchConfigurationController/fastInsertSearxngSearchApiCredentials | 
+*GeboAiClient.SearxngSearchConfigurationControllerApi* | [**getSearxngSearchApiCredentials**](docs/SearxngSearchConfigurationControllerApi.md#getSearxngSearchApiCredentials) | **GET** /api/admin/SearxngSearchConfigurationController/getSearxngSearchApiCredentials | 
+*GeboAiClient.SearxngSearchConfigurationControllerApi* | [**getSearxngSearchStatus**](docs/SearxngSearchConfigurationControllerApi.md#getSearxngSearchStatus) | **GET** /api/admin/SearxngSearchConfigurationController/getSearxngSearchStatus | 
+*GeboAiClient.SearxngSearchConfigurationControllerApi* | [**insertGSearxngSearchApiCredentials**](docs/SearxngSearchConfigurationControllerApi.md#insertGSearxngSearchApiCredentials) | **POST** /api/admin/SearxngSearchConfigurationController/insertGSearxngSearchApiCredentials | 
+*GeboAiClient.SearxngSearchConfigurationControllerApi* | [**searchGSearxngSearchApiCredentialsByCode**](docs/SearxngSearchConfigurationControllerApi.md#searchGSearxngSearchApiCredentialsByCode) | **GET** /api/admin/SearxngSearchConfigurationController/searchGSearxngSearchApiCredentialsByCode | 
+*GeboAiClient.SearxngSearchConfigurationControllerApi* | [**updateGSearxngSearchApiCredentials**](docs/SearxngSearchConfigurationControllerApi.md#updateGSearxngSearchApiCredentials) | **POST** /api/admin/SearxngSearchConfigurationController/updateGSearxngSearchApiCredentials | 
 *GeboAiClient.SecretsControllerApi* | [**createAWSConnectionSecret**](docs/SecretsControllerApi.md#createAWSConnectionSecret) | **POST** /api/admin/SecretsController/createAWSConnectionSecret | 
 *GeboAiClient.SecretsControllerApi* | [**createCustomSecret**](docs/SecretsControllerApi.md#createCustomSecret) | **POST** /api/admin/SecretsController/createCustomSecret | 
 *GeboAiClient.SecretsControllerApi* | [**createGoogleJsonCredentialsSecret**](docs/SecretsControllerApi.md#createGoogleJsonCredentialsSecret) | **POST** /api/admin/SecretsController/createGoogleJsonCredentialsSecret | 
@@ -668,6 +701,14 @@ Class | Method | HTTP request | Description
 *GeboAiClient.SecretsControllerApi* | [**createUsernamePasswordSecret**](docs/SecretsControllerApi.md#createUsernamePasswordSecret) | **POST** /api/admin/SecretsController/createUsernamePasswordSecret | 
 *GeboAiClient.SecretsControllerApi* | [**deleteSecret**](docs/SecretsControllerApi.md#deleteSecret) | **DELETE** /api/admin/SecretsController/deleteSecret | 
 *GeboAiClient.SecretsControllerApi* | [**getSecretsByContextCode**](docs/SecretsControllerApi.md#getSecretsByContextCode) | **GET** /api/admin/SecretsController/getSecretsByContextCode | 
+*GeboAiClient.SecurityHeaderDataCompletionControllerApi* | [**complete**](docs/SecurityHeaderDataCompletionControllerApi.md#complete) | **GET** /api/users/SecurityHeaderDataCompletionController/complete | 
+*GeboAiClient.SerpapiSearchConfigurationControllerApi* | [**deleteGSerpapiSearchApiCredentials**](docs/SerpapiSearchConfigurationControllerApi.md#deleteGSerpapiSearchApiCredentials) | **POST** /api/admin/SerpapiSearchConfigurationController/deleteGSerpapiSearchApiCredentials | 
+*GeboAiClient.SerpapiSearchConfigurationControllerApi* | [**fastInsertSerpapiSearchApiCredentials**](docs/SerpapiSearchConfigurationControllerApi.md#fastInsertSerpapiSearchApiCredentials) | **POST** /api/admin/SerpapiSearchConfigurationController/fastInsertSerpapiSearchApiCredentials | 
+*GeboAiClient.SerpapiSearchConfigurationControllerApi* | [**getSerpapiSearchApiCredentials**](docs/SerpapiSearchConfigurationControllerApi.md#getSerpapiSearchApiCredentials) | **GET** /api/admin/SerpapiSearchConfigurationController/getSerpapiSearchApiCredentials | 
+*GeboAiClient.SerpapiSearchConfigurationControllerApi* | [**getSerpapiSearchStatus**](docs/SerpapiSearchConfigurationControllerApi.md#getSerpapiSearchStatus) | **GET** /api/admin/SerpapiSearchConfigurationController/getSerpapiSearchStatus | 
+*GeboAiClient.SerpapiSearchConfigurationControllerApi* | [**insertGSerpapiSearchApiCredentials**](docs/SerpapiSearchConfigurationControllerApi.md#insertGSerpapiSearchApiCredentials) | **POST** /api/admin/SerpapiSearchConfigurationController/insertGSerpapiSearchApiCredentials | 
+*GeboAiClient.SerpapiSearchConfigurationControllerApi* | [**searchGSerpapiSearchApiCredentialsByCode**](docs/SerpapiSearchConfigurationControllerApi.md#searchGSerpapiSearchApiCredentialsByCode) | **GET** /api/admin/SerpapiSearchConfigurationController/searchGSerpapiSearchApiCredentialsByCode | 
+*GeboAiClient.SerpapiSearchConfigurationControllerApi* | [**updateGSerpapiSearchApiCredentials**](docs/SerpapiSearchConfigurationControllerApi.md#updateGSerpapiSearchApiCredentials) | **POST** /api/admin/SerpapiSearchConfigurationController/updateGSerpapiSearchApiCredentials | 
 *GeboAiClient.SharePointSearchServiceControllerApi* | [**restAggregate**](docs/SharePointSearchServiceControllerApi.md#restAggregate) | **POST** /api/users/SharePointSearchServiceController/aggregate | 
 *GeboAiClient.SharePointSearchServiceControllerApi* | [**restCreateCustomTemplateParamsMap**](docs/SharePointSearchServiceControllerApi.md#restCreateCustomTemplateParamsMap) | **POST** /api/users/SharePointSearchServiceController/createCustomTemplateParamsMap | 
 *GeboAiClient.SharePointSearchServiceControllerApi* | [**restExtractRelatedAnalisysReferences**](docs/SharePointSearchServiceControllerApi.md#restExtractRelatedAnalisysReferences) | **POST** /api/users/SharePointSearchServiceController/extractRelatedAnalisysReferences | 
@@ -703,6 +744,13 @@ Class | Method | HTTP request | Description
 *GeboAiClient.SharepointSystemsControllerApi* | [**testSharepointSystem**](docs/SharepointSystemsControllerApi.md#testSharepointSystem) | **POST** /api/admin/SharepointSystemsController/testSharepointSystem | 
 *GeboAiClient.SharepointSystemsControllerApi* | [**updateSharepointEndpoint**](docs/SharepointSystemsControllerApi.md#updateSharepointEndpoint) | **POST** /api/admin/SharepointSystemsController/updateSharepointEndpoint | 
 *GeboAiClient.SharepointSystemsControllerApi* | [**updateSharepointSystem**](docs/SharepointSystemsControllerApi.md#updateSharepointSystem) | **POST** /api/admin/SharepointSystemsController/updateSharepointSystem | 
+*GeboAiClient.TavilySearchConfigurationControllerApi* | [**deleteGTavilySearchApiCredentials**](docs/TavilySearchConfigurationControllerApi.md#deleteGTavilySearchApiCredentials) | **POST** /api/admin/TavilySearchConfigurationController/deleteGTavilySearchApiCredentials | 
+*GeboAiClient.TavilySearchConfigurationControllerApi* | [**fastInsertTavilySearchApiCredentials**](docs/TavilySearchConfigurationControllerApi.md#fastInsertTavilySearchApiCredentials) | **POST** /api/admin/TavilySearchConfigurationController/fastInsertTavilySearchApiCredentials | 
+*GeboAiClient.TavilySearchConfigurationControllerApi* | [**getTavilySearchApiCredentials**](docs/TavilySearchConfigurationControllerApi.md#getTavilySearchApiCredentials) | **GET** /api/admin/TavilySearchConfigurationController/getTavilySearchApiCredentials | 
+*GeboAiClient.TavilySearchConfigurationControllerApi* | [**getTavilySearchStatus**](docs/TavilySearchConfigurationControllerApi.md#getTavilySearchStatus) | **GET** /api/admin/TavilySearchConfigurationController/getTavilySearchStatus | 
+*GeboAiClient.TavilySearchConfigurationControllerApi* | [**insertGTavilySearchApiCredentials**](docs/TavilySearchConfigurationControllerApi.md#insertGTavilySearchApiCredentials) | **POST** /api/admin/TavilySearchConfigurationController/insertGTavilySearchApiCredentials | 
+*GeboAiClient.TavilySearchConfigurationControllerApi* | [**searchGTavilySearchApiCredentialsByCode**](docs/TavilySearchConfigurationControllerApi.md#searchGTavilySearchApiCredentialsByCode) | **GET** /api/admin/TavilySearchConfigurationController/searchGTavilySearchApiCredentialsByCode | 
+*GeboAiClient.TavilySearchConfigurationControllerApi* | [**updateGTavilySearchApiCredentials**](docs/TavilySearchConfigurationControllerApi.md#updateGTavilySearchApiCredentials) | **POST** /api/admin/TavilySearchConfigurationController/updateGTavilySearchApiCredentials | 
 *GeboAiClient.TextToSpeechModelsControllerApi* | [**getRuntimeConfiguredTextToSpeechModels**](docs/TextToSpeechModelsControllerApi.md#getRuntimeConfiguredTextToSpeechModels) | **GET** /api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels | 
 *GeboAiClient.TextToSpeechModelsControllerApi* | [**getTextToSpeechModelTypes**](docs/TextToSpeechModelsControllerApi.md#getTextToSpeechModelTypes) | **GET** /api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes | 
 *GeboAiClient.TokenRenewControllerApi* | [**renew**](docs/TokenRenewControllerApi.md#renew) | **GET** /api/users/TokenRenewController/renew | 
@@ -711,6 +759,10 @@ Class | Method | HTTP request | Description
 *GeboAiClient.UiTextResourcesControllerApi* | [**getI18n**](docs/UiTextResourcesControllerApi.md#getI18n) | **GET** /public/UITextResourcesController | 
 *GeboAiClient.UiTextResourcesControllerApi* | [**getUiTextResourcesModule**](docs/UiTextResourcesControllerApi.md#getUiTextResourcesModule) | **GET** /public/UITextResourcesController/getUiTextResourcesModule | 
 *GeboAiClient.UiTextResourcesControllerApi* | [**updateUIExistingTexts**](docs/UiTextResourcesControllerApi.md#updateUIExistingTexts) | **POST** /public/UITextResourcesController/updateUIExistingTexts | 
+*GeboAiClient.UploadsBrowsingControllerApi* | [**browseUploadsEndpointPath**](docs/UploadsBrowsingControllerApi.md#browseUploadsEndpointPath) | **POST** /api/admin/UploadsBrowsingController/browseUploadsEndpointPath | 
+*GeboAiClient.UploadsBrowsingControllerApi* | [**getUploadsEndpointNavigationStatus**](docs/UploadsBrowsingControllerApi.md#getUploadsEndpointNavigationStatus) | **POST** /api/admin/UploadsBrowsingController/getUploadsEndpointNavigationStatus | 
+*GeboAiClient.UploadsBrowsingControllerApi* | [**getUploadsEndpointRoots**](docs/UploadsBrowsingControllerApi.md#getUploadsEndpointRoots) | **GET** /api/admin/UploadsBrowsingController/getUploadsEndpointRoots | 
+*GeboAiClient.UploadsBrowsingControllerApi* | [**serveUploadsEndpointFile**](docs/UploadsBrowsingControllerApi.md#serveUploadsEndpointFile) | **GET** /api/admin/UploadsBrowsingController/serveUploadsEndpointFile | 
 *GeboAiClient.UserControllerApi* | [**changePassword**](docs/UserControllerApi.md#changePassword) | **POST** /api/users/ActualUserController/changePassword | 
 *GeboAiClient.UserControllerApi* | [**getCurrentUser**](docs/UserControllerApi.md#getCurrentUser) | **GET** /api/users/ActualUserController/me | 
 *GeboAiClient.UserControllerApi* | [**getMyGroups**](docs/UserControllerApi.md#getMyGroups) | **GET** /api/users/ActualUserController/getMyGroups | 
@@ -776,7 +828,12 @@ Class | Method | HTTP request | Description
 
 ## Documentation for Models
 
+ - [GeboAiClient.A2AExportedAgent](docs/A2AExportedAgent.md)
+ - [GeboAiClient.A2ARemoteAgentConfig](docs/A2ARemoteAgentConfig.md)
+ - [GeboAiClient.A2ARemoteSkill](docs/A2ARemoteSkill.md)
+ - [GeboAiClient.A2AServerConfig](docs/A2AServerConfig.md)
  - [GeboAiClient.AclOwnerParam](docs/AclOwnerParam.md)
+ - [GeboAiClient.AdditionalContent](docs/AdditionalContent.md)
  - [GeboAiClient.AgentNetworkParticipant](docs/AgentNetworkParticipant.md)
  - [GeboAiClient.AgentServiceDescriptor](docs/AgentServiceDescriptor.md)
  - [GeboAiClient.AggregateRequestBodyConfluenceResultsExtractionData](docs/AggregateRequestBodyConfluenceResultsExtractionData.md)
@@ -786,6 +843,7 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.AuthProviderDto](docs/AuthProviderDto.md)
  - [GeboAiClient.AuthResponse](docs/AuthResponse.md)
  - [GeboAiClient.AutotuneVectorStoreInfo](docs/AutotuneVectorStoreInfo.md)
+ - [GeboAiClient.BraveSearchConfig](docs/BraveSearchConfig.md)
  - [GeboAiClient.BrowseParam](docs/BrowseParam.md)
  - [GeboAiClient.BuildSystemRef](docs/BuildSystemRef.md)
  - [GeboAiClient.CalledFunction](docs/CalledFunction.md)
@@ -804,6 +862,7 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.ChildVirtualFSParam](docs/ChildVirtualFSParam.md)
  - [GeboAiClient.ComponentEnabledStatus](docs/ComponentEnabledStatus.md)
  - [GeboAiClient.ComponentLLMSStatus](docs/ComponentLLMSStatus.md)
+ - [GeboAiClient.ComponentMetaInfo](docs/ComponentMetaInfo.md)
  - [GeboAiClient.ComponentSetupStatus](docs/ComponentSetupStatus.md)
  - [GeboAiClient.ComponentVectorStoreStatus](docs/ComponentVectorStoreStatus.md)
  - [GeboAiClient.ComputedWorkflowResult](docs/ComputedWorkflowResult.md)
@@ -822,7 +881,10 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.ContentMetaInfo](docs/ContentMetaInfo.md)
  - [GeboAiClient.ContentObject](docs/ContentObject.md)
  - [GeboAiClient.CustomTemplateParamsRequestBody](docs/CustomTemplateParamsRequestBody.md)
+ - [GeboAiClient.DataEndpoint](docs/DataEndpoint.md)
  - [GeboAiClient.DataPage](docs/DataPage.md)
+ - [GeboAiClient.DataTransformationInfo](docs/DataTransformationInfo.md)
+ - [GeboAiClient.DataTransformationMetaInfo](docs/DataTransformationMetaInfo.md)
  - [GeboAiClient.DeepSearchConfig](docs/DeepSearchConfig.md)
  - [GeboAiClient.DeepSearchDataSourceAccess](docs/DeepSearchDataSourceAccess.md)
  - [GeboAiClient.DefaultPromptForChatModelParam](docs/DefaultPromptForChatModelParam.md)
@@ -881,6 +943,7 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.GBedrockTextToSpeechModelConfig](docs/GBedrockTextToSpeechModelConfig.md)
  - [GeboAiClient.GBedrockTranscriptModelChoice](docs/GBedrockTranscriptModelChoice.md)
  - [GeboAiClient.GBedrockTranscriptModelConfig](docs/GBedrockTranscriptModelConfig.md)
+ - [GeboAiClient.GBraveSearchApiCredentials](docs/GBraveSearchApiCredentials.md)
  - [GeboAiClient.GBuildSystem](docs/GBuildSystem.md)
  - [GeboAiClient.GBuildSystemType](docs/GBuildSystemType.md)
  - [GeboAiClient.GCentralizedProjectEndpoint](docs/GCentralizedProjectEndpoint.md)
@@ -892,6 +955,8 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.GContentManagementSystemType](docs/GContentManagementSystemType.md)
  - [GeboAiClient.GContentSelectionFilter](docs/GContentSelectionFilter.md)
  - [GeboAiClient.GContentSelectionFilterCriteria](docs/GContentSelectionFilterCriteria.md)
+ - [GeboAiClient.GDataFlowMetaInfos](docs/GDataFlowMetaInfos.md)
+ - [GeboAiClient.GDataFlowReport](docs/GDataFlowReport.md)
  - [GeboAiClient.GDeepseekChatModelChoice](docs/GDeepseekChatModelChoice.md)
  - [GeboAiClient.GDeepseekChatModelConfig](docs/GDeepseekChatModelConfig.md)
  - [GeboAiClient.GDocumentAttributeValue](docs/GDocumentAttributeValue.md)
@@ -923,6 +988,7 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.GMistralChatModelConfig](docs/GMistralChatModelConfig.md)
  - [GeboAiClient.GMistralEmbeddingModelChoice](docs/GMistralEmbeddingModelChoice.md)
  - [GeboAiClient.GMistralEmbeddingModelConfig](docs/GMistralEmbeddingModelConfig.md)
+ - [GeboAiClient.GModuleMetaInfo](docs/GModuleMetaInfo.md)
  - [GeboAiClient.GONNXTransformersEmbeddingModelChoice](docs/GONNXTransformersEmbeddingModelChoice.md)
  - [GeboAiClient.GONNXTransformersEmbeddingModelConfig](docs/GONNXTransformersEmbeddingModelConfig.md)
  - [GeboAiClient.GObjectRef](docs/GObjectRef.md)
@@ -955,14 +1021,18 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.GProjectEndpoint](docs/GProjectEndpoint.md)
  - [GeboAiClient.GPromptPlaceholderInfo](docs/GPromptPlaceholderInfo.md)
  - [GeboAiClient.GPromptTemplateConfig](docs/GPromptTemplateConfig.md)
+ - [GeboAiClient.GPromptTemplateLightView](docs/GPromptTemplateLightView.md)
  - [GeboAiClient.GPromptUseInfo](docs/GPromptUseInfo.md)
  - [GeboAiClient.GRankerModelType](docs/GRankerModelType.md)
  - [GeboAiClient.GResponseDocumentRef](docs/GResponseDocumentRef.md)
+ - [GeboAiClient.GSearxngSearchApiCredentials](docs/GSearxngSearchApiCredentials.md)
+ - [GeboAiClient.GSerpapiSearchApiCredentials](docs/GSerpapiSearchApiCredentials.md)
  - [GeboAiClient.GSharepointContentManagementSystem](docs/GSharepointContentManagementSystem.md)
  - [GeboAiClient.GSharepointProjectEndpoint](docs/GSharepointProjectEndpoint.md)
  - [GeboAiClient.GStatsHolder](docs/GStatsHolder.md)
  - [GeboAiClient.GStatsLabelValue](docs/GStatsLabelValue.md)
  - [GeboAiClient.GStatsLine](docs/GStatsLine.md)
+ - [GeboAiClient.GTavilySearchApiCredentials](docs/GTavilySearchApiCredentials.md)
  - [GeboAiClient.GTextToSpeechModelType](docs/GTextToSpeechModelType.md)
  - [GeboAiClient.GTranscriptModelType](docs/GTranscriptModelType.md)
  - [GeboAiClient.GUploadsContentManagementSystem](docs/GUploadsContentManagementSystem.md)
@@ -980,6 +1050,7 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.GeboChatRequest](docs/GeboChatRequest.md)
  - [GeboAiClient.GeboChatResponse](docs/GeboChatResponse.md)
  - [GeboAiClient.GeboChatUserInfo](docs/GeboChatUserInfo.md)
+ - [GeboAiClient.GeboClientsTopologyInfo](docs/GeboClientsTopologyInfo.md)
  - [GeboAiClient.GeboComponentInfo](docs/GeboComponentInfo.md)
  - [GeboAiClient.GeboContentProcessRow](docs/GeboContentProcessRow.md)
  - [GeboAiClient.GeboCustomSecretContent](docs/GeboCustomSecretContent.md)
@@ -993,10 +1064,10 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.GeboMCPServerConfig](docs/GeboMCPServerConfig.md)
  - [GeboAiClient.GeboMediaDocumentFragment](docs/GeboMediaDocumentFragment.md)
  - [GeboAiClient.GeboModuleInfo](docs/GeboModuleInfo.md)
- - [GeboAiClient.GeboMongoVectorStoreConfig](docs/GeboMongoVectorStoreConfig.md)
  - [GeboAiClient.GeboNeo4jModuleConfigDto](docs/GeboNeo4jModuleConfigDto.md)
  - [GeboAiClient.GeboOauth2SecretContent](docs/GeboOauth2SecretContent.md)
  - [GeboAiClient.GeboRagRequestCustomConfig](docs/GeboRagRequestCustomConfig.md)
+ - [GeboAiClient.GeboServiceWebContextInfo](docs/GeboServiceWebContextInfo.md)
  - [GeboAiClient.GeboSshKeySecretContent](docs/GeboSshKeySecretContent.md)
  - [GeboAiClient.GeboTemplatedChatResponse](docs/GeboTemplatedChatResponse.md)
  - [GeboAiClient.GeboTextDocumentFragment](docs/GeboTextDocumentFragment.md)
@@ -1051,6 +1122,7 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.JobTicket](docs/JobTicket.md)
  - [GeboAiClient.JobWorkflowStepSummary](docs/JobWorkflowStepSummary.md)
  - [GeboAiClient.JobWorkflowStepSummaryTimeSlotStats](docs/JobWorkflowStepSummaryTimeSlotStats.md)
+ - [GeboAiClient.JobsEntriesFilter](docs/JobsEntriesFilter.md)
  - [GeboAiClient.JobsEntriesForClassNameFilter](docs/JobsEntriesForClassNameFilter.md)
  - [GeboAiClient.JobsEntriesForJobType](docs/JobsEntriesForJobType.md)
  - [GeboAiClient.JobsEntriesForProjectEndpointFilter](docs/JobsEntriesForProjectEndpointFilter.md)
@@ -1084,13 +1156,14 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.ModelMetaInfo](docs/ModelMetaInfo.md)
  - [GeboAiClient.ModelProviderCapabilities](docs/ModelProviderCapabilities.md)
  - [GeboAiClient.ModuleIntegrationAddress](docs/ModuleIntegrationAddress.md)
- - [GeboAiClient.MongoConfig](docs/MongoConfig.md)
  - [GeboAiClient.Oauth2ClientAuthorizativeInfo](docs/Oauth2ClientAuthorizativeInfo.md)
  - [GeboAiClient.Oauth2ClientConfig](docs/Oauth2ClientConfig.md)
  - [GeboAiClient.Oauth2CustomAttribute](docs/Oauth2CustomAttribute.md)
  - [GeboAiClient.Oauth2ModuleStatus](docs/Oauth2ModuleStatus.md)
  - [GeboAiClient.Oauth2ProviderConfig](docs/Oauth2ProviderConfig.md)
  - [GeboAiClient.Oauth2ProviderModifiableData](docs/Oauth2ProviderModifiableData.md)
+ - [GeboAiClient.OperationStatusA2ARemoteAgentConfig](docs/OperationStatusA2ARemoteAgentConfig.md)
+ - [GeboAiClient.OperationStatusA2AServerConfig](docs/OperationStatusA2AServerConfig.md)
  - [GeboAiClient.OperationStatusAuthResponse](docs/OperationStatusAuthResponse.md)
  - [GeboAiClient.OperationStatusBoolean](docs/OperationStatusBoolean.md)
  - [GeboAiClient.OperationStatusComponentVectorStoreStatus](docs/OperationStatusComponentVectorStoreStatus.md)
@@ -1123,8 +1196,8 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.OperationStatusGOpenAITextToSpeechModelConfig](docs/OperationStatusGOpenAITextToSpeechModelConfig.md)
  - [GeboAiClient.OperationStatusGOpenAITranscriptModelConfig](docs/OperationStatusGOpenAITranscriptModelConfig.md)
  - [GeboAiClient.OperationStatusGSharepointContentManagementSystem](docs/OperationStatusGSharepointContentManagementSystem.md)
+ - [GeboAiClient.OperationStatusGUploadsProjectEndpoint](docs/OperationStatusGUploadsProjectEndpoint.md)
  - [GeboAiClient.OperationStatusGWebdavContentManagementSystem](docs/OperationStatusGWebdavContentManagementSystem.md)
- - [GeboAiClient.OperationStatusGeboMongoVectorStoreConfig](docs/OperationStatusGeboMongoVectorStoreConfig.md)
  - [GeboAiClient.OperationStatusGenericOpenAIAPIChatModelConfig](docs/OperationStatusGenericOpenAIAPIChatModelConfig.md)
  - [GeboAiClient.OperationStatusGenericOpenAIAPIEmbeddingModelConfig](docs/OperationStatusGenericOpenAIAPIEmbeddingModelConfig.md)
  - [GeboAiClient.OperationStatusGenericOpenAIAPIImageModelConfig](docs/OperationStatusGenericOpenAIAPIImageModelConfig.md)
@@ -1172,6 +1245,7 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.OptimizedThreashold](docs/OptimizedThreashold.md)
  - [GeboAiClient.Order](docs/Order.md)
  - [GeboAiClient.PageMetadata](docs/PageMetadata.md)
+ - [GeboAiClient.PagedModelA2ARemoteAgentConfig](docs/PagedModelA2ARemoteAgentConfig.md)
  - [GeboAiClient.PagedModelDocumentReferenceView](docs/PagedModelDocumentReferenceView.md)
  - [GeboAiClient.PagedModelGChatProfileConfiguration](docs/PagedModelGChatProfileConfiguration.md)
  - [GeboAiClient.PagedModelGJobStatusItem](docs/PagedModelGJobStatusItem.md)
@@ -1209,6 +1283,7 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.SearchResultReference](docs/SearchResultReference.md)
  - [GeboAiClient.SearchResultStreamRequest](docs/SearchResultStreamRequest.md)
  - [GeboAiClient.SearchableSystemMetaData](docs/SearchableSystemMetaData.md)
+ - [GeboAiClient.SearxngSearchConfig](docs/SearxngSearchConfig.md)
  - [GeboAiClient.SecretInfo](docs/SecretInfo.md)
  - [GeboAiClient.SecretWrapperGeboAwsConnectionCredentials](docs/SecretWrapperGeboAwsConnectionCredentials.md)
  - [GeboAiClient.SecretWrapperGeboCustomSecretContent](docs/SecretWrapperGeboCustomSecretContent.md)
@@ -1220,6 +1295,7 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.SecretWrapperGeboUsernamePasswordContent](docs/SecretWrapperGeboUsernamePasswordContent.md)
  - [GeboAiClient.SecurityHeaderData](docs/SecurityHeaderData.md)
  - [GeboAiClient.SemanticQueryParam](docs/SemanticQueryParam.md)
+ - [GeboAiClient.SerpapiSearchConfig](docs/SerpapiSearchConfig.md)
  - [GeboAiClient.ServerSentEventString](docs/ServerSentEventString.md)
  - [GeboAiClient.SetMcpServerAclsParam](docs/SetMcpServerAclsParam.md)
  - [GeboAiClient.SharePointContentAttributeFilter](docs/SharePointContentAttributeFilter.md)
@@ -1234,6 +1310,7 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.StartGooglWorkspaceAccessRespose](docs/StartGooglWorkspaceAccessRespose.md)
  - [GeboAiClient.StartWorkflowData](docs/StartWorkflowData.md)
  - [GeboAiClient.SystemInfos](docs/SystemInfos.md)
+ - [GeboAiClient.TavilySearchConfig](docs/TavilySearchConfig.md)
  - [GeboAiClient.ThreasholdAutotuneProcessResult](docs/ThreasholdAutotuneProcessResult.md)
  - [GeboAiClient.ToolCategoriesTree](docs/ToolCategoriesTree.md)
  - [GeboAiClient.ToolReference](docs/ToolReference.md)
@@ -1243,7 +1320,9 @@ Class | Method | HTTP request | Description
  - [GeboAiClient.UIExistingText](docs/UIExistingText.md)
  - [GeboAiClient.UiTextResourcesModule](docs/UiTextResourcesModule.md)
  - [GeboAiClient.UploadHandShakeCodeBody](docs/UploadHandShakeCodeBody.md)
+ - [GeboAiClient.UploadToEndpointEndpointCodeBody](docs/UploadToEndpointEndpointCodeBody.md)
  - [GeboAiClient.UploadUserspaceFolderCodeBody](docs/UploadUserspaceFolderCodeBody.md)
+ - [GeboAiClient.UploadedFileInfo](docs/UploadedFileInfo.md)
  - [GeboAiClient.UserAccessibleMcpServerView](docs/UserAccessibleMcpServerView.md)
  - [GeboAiClient.UserChangePasswordWithTicket](docs/UserChangePasswordWithTicket.md)
  - [GeboAiClient.UserChatHistory](docs/UserChatHistory.md)

@@ -24,7 +24,7 @@ import java.util.List;
  * DataTransformationMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:28.382074718+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:22:02.816924017+02:00[Europe/Rome]")
 
 public class DataTransformationMetaInfo {
   @JsonProperty("id")

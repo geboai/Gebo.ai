@@ -37,9 +37,9 @@ export default class GeboUserChatUploadsControllerApi {
 
 
     /**
-     * @param {Object} userSessionCode 
+     * @param {String} userSessionCode 
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.files 
+     * @param {Array.<Blob>} opts.files 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/OperationStatusListUserUploadedContent} and HTTP response
      */
     chatSessionUploadWithHttpInfo(userSessionCode, opts) {
@@ -60,7 +60,7 @@ export default class GeboUserChatUploadsControllerApi {
         
       };
       let formParams = {
-        'files[]': opts['files']
+        'files[]': this.apiClient.buildCollectionParam(opts['files'], 'multi')
       };
 
       let authNames = [];
@@ -78,7 +78,7 @@ export default class GeboUserChatUploadsControllerApi {
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} userSessionCode 
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.files 
+     * @param {Array.<Blob>} opts.files 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/OperationStatusListUserUploadedContent}
      */
     chatSessionUpload(userSessionCode, opts) {
@@ -133,8 +133,8 @@ export default class GeboUserChatUploadsControllerApi {
 
 
     /**
-     * @param {Object} userSessionCode 
-     * @param {Object} uploadedContentId 
+     * @param {String} userSessionCode 
+     * @param {String} uploadedContentId 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
     serveContentWithHttpInfo(userSessionCode, uploadedContentId) {

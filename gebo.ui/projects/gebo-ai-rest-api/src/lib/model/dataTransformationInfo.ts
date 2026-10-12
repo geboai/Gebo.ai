@@ -17,4 +17,5 @@ export interface DataTransformationInfo {
     transformationInfo: DataTransformationMetaInfo;
     dataSourceId: string;
     dataDestinationId: string;
+    section?: string;
 }

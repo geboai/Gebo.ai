@@ -103,9 +103,9 @@ public class LogViewControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void getJobsEntriesForProjectEndpointTest() {
+    public void getJobsEntriesForProjectEndpointLogViewTest() {
         JobsEntriesForProjectEndpointFilter body = null;
-        PagedModelGJobStatusItem response = api.getJobsEntriesForProjectEndpoint(body);
+        PagedModelGJobStatusItem response = api.getJobsEntriesForProjectEndpointLogView(body);
 
         // TODO: test validations
     }

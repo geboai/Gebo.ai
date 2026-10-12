@@ -15,6 +15,7 @@
 import ApiClient from "../ApiClient";
 import ContentMetaInfo from '../model/ContentMetaInfo';
 import ContentObject from '../model/ContentObject';
+import DocumentReferenceView from '../model/DocumentReferenceView';
 import PageDocumentReferenceView from '../model/PageDocumentReferenceView';
 import SearchDocumentByNamePagedParam from '../model/SearchDocumentByNamePagedParam';
 import SearchDocumentByNameParam from '../model/SearchDocumentByNameParam';
@@ -41,8 +42,8 @@ export default class ContentMetaInfosControllerApi {
 
 
     /**
-     * @param {Object} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {Array.<String>} body 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/DocumentReferenceView>} and HTTP response
      */
     findDocumentReferenceViewByCodeWithHttpInfo(body) {
       
@@ -68,7 +69,7 @@ export default class ContentMetaInfosControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [DocumentReferenceView];
 
       return this.apiClient.callApi(
         '/api/users/ContentMetaInfosController/findDocumentReferenceViewByCode', 'POST',
@@ -79,7 +80,7 @@ export default class ContentMetaInfosControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/DocumentReferenceView>}
      */
     findDocumentReferenceViewByCode(body) {
       return this.findDocumentReferenceViewByCodeWithHttpInfo(body)
@@ -90,7 +91,7 @@ export default class ContentMetaInfosControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ContentMetaInfo} and HTTP response
      */
     getContentMetaInfosWithHttpInfo(code) {
@@ -139,7 +140,7 @@ export default class ContentMetaInfosControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ContentObject} and HTTP response
      */
     getContentObjectWithHttpInfo(code) {
@@ -189,7 +190,7 @@ export default class ContentMetaInfosControllerApi {
 
     /**
      * @param {module:model/SearchDocumentByNameParam} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/DocumentReferenceView>} and HTTP response
      */
     searchByDocumentNameWithHttpInfo(body) {
       
@@ -215,7 +216,7 @@ export default class ContentMetaInfosControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [DocumentReferenceView];
 
       return this.apiClient.callApi(
         '/api/users/ContentMetaInfosController/searchByDocumentName', 'POST',
@@ -226,7 +227,7 @@ export default class ContentMetaInfosControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/DocumentReferenceView>}
      */
     searchByDocumentName(body) {
       return this.searchByDocumentNameWithHttpInfo(body)

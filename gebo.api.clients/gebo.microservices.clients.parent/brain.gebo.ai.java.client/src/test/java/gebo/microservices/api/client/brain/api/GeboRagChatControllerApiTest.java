@@ -15,6 +15,7 @@ package gebo.microservices.api.client.brain.api;
 import gebo.microservices.api.client.brain.model.GBaseChatModelChoice;
 import gebo.microservices.api.client.brain.model.GBaseObject;
 import gebo.microservices.api.client.brain.model.GChatProfileConfiguration;
+import gebo.microservices.api.client.brain.model.GResponseDocumentRef;
 import gebo.microservices.api.client.brain.model.GeboChatRequest;
 import gebo.microservices.api.client.brain.model.GeboChatResponse;
 import gebo.microservices.api.client.brain.model.GeboChatUserInfo;
@@ -122,6 +123,21 @@ public class GeboRagChatControllerApiTest {
     public void ragChatTest() {
         GeboChatRequest body = null;
         GeboChatResponse response = api.ragChat(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void resolveForcedDocumentsRefTest() {
+        List<String> body = null;
+        List<GResponseDocumentRef> response = api.resolveForcedDocumentsRef(body);
 
         // TODO: test validations
     }

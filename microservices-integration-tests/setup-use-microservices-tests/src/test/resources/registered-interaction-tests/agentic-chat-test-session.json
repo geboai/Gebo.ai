@@ -3,7 +3,7 @@
 		"description": "Agentic chat: a simple question answerable from the internal knowledge base, delegated to the default network of agents (controller + internal-kb searcher + report writer)",
 		"request": {
 			"id": "AGENTIC-233243-UY9",
-			"query": "Chi e' l'arrogante nella pistis sophia?"
+			"query": "Chi è Yaldabaoth nell'Apocrifo di Giovanni e cosa dichiara ai suoi demoni?"
 		},
 		"responseTestCriteria": {
 			"checkNotEmptyDocumentsList": false,
@@ -16,7 +16,7 @@
 		"description": "Agentic chat: a follow-up exploring the gnostic tradition, still delegated to the network of agents and reusing the previous chat context",
 		"request": {
 			"id": "AGENTIC-233243-UXX",
-			"query": "Parlami delle interazioni tra Gesu e Maria Maddalena nella tradizione Gnostica ricercando nella knowledge base interna"
+			"query": "Parlami delle interazioni tra Gesù e Maria Maddalena (Myriam) nel Vangelo di Maria, ricercando nella knowledge base interna"
 		},
 		"responseTestCriteria": {
 			"checkNotEmptyDocumentsList": false
@@ -26,7 +26,7 @@
 		"description": "Agentic chat: a report-style request that makes the controller coordinate the searchers and the report writer",
 		"request": {
 			"id": "AGENTIC-233243-UY1",
-			"query": "Fai un report dettagliato di tutti gli eventi in cui Maria risponde ai discepoli al posto di Gesu nella tradizione Gnostica"
+			"query": "Fai un report dettagliato degli episodi del Vangelo di Maria in cui Myriam parla ai discepoli al posto del Maestro, e di come reagiscono Simon Pietro e Andrea"
 		},
 		"responseTestCriteria": {
 			"checkNotEmptyDocumentsList": false

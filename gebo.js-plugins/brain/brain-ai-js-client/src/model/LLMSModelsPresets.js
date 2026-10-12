@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import LLMModelPresetChoice from './LLMModelPresetChoice';
 
 /**
  * The LLMSModelsPresets model module.
@@ -24,8 +25,8 @@ export default class LLMSModelsPresets {
    * Constructs a new <code>LLMSModelsPresets</code>.
    * @alias module:model/LLMSModelsPresets
    * @class
-   * @param type {Object} 
-   * @param serviceHandler {Object} 
+   * @param type {module:model/LLMSModelsPresets.TypeEnum} 
+   * @param serviceHandler {String} 
    */
   constructor(type, serviceHandler) {
     this.type = type;
@@ -43,35 +44,77 @@ export default class LLMSModelsPresets {
     if (data) {
       obj = obj || new LLMSModelsPresets();
       if (data.hasOwnProperty('doModelsLookup'))
-        obj.doModelsLookup = ApiClient.convertToType(data['doModelsLookup'], Object);
+        obj.doModelsLookup = ApiClient.convertToType(data['doModelsLookup'], 'Boolean');
       if (data.hasOwnProperty('type'))
-        obj.type = ApiClient.convertToType(data['type'], Object);
+        obj.type = ApiClient.convertToType(data['type'], 'String');
       if (data.hasOwnProperty('serviceHandler'))
-        obj.serviceHandler = ApiClient.convertToType(data['serviceHandler'], Object);
+        obj.serviceHandler = ApiClient.convertToType(data['serviceHandler'], 'String');
       if (data.hasOwnProperty('choices'))
-        obj.choices = ApiClient.convertToType(data['choices'], Object);
+        obj.choices = ApiClient.convertToType(data['choices'], [LLMModelPresetChoice]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} doModelsLookup
+ * @member {Boolean} doModelsLookup
  */
 LLMSModelsPresets.prototype.doModelsLookup = undefined;
 
 /**
- * @member {Object} type
+ * Allowed values for the <code>type</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LLMSModelsPresets.TypeEnum = {
+  /**
+   * value: "CHAT"
+   * @const
+   */
+  CHAT: "CHAT",
+
+  /**
+   * value: "EMBEDDING"
+   * @const
+   */
+  EMBEDDING: "EMBEDDING",
+
+  /**
+   * value: "RANKING"
+   * @const
+   */
+  RANKING: "RANKING",
+
+  /**
+   * value: "IMAGESGEN"
+   * @const
+   */
+  IMAGESGEN: "IMAGESGEN",
+
+  /**
+   * value: "TTS"
+   * @const
+   */
+  TTS: "TTS",
+
+  /**
+   * value: "TRANSCRIPT"
+   * @const
+   */
+  TRANSCRIPT: "TRANSCRIPT"
+};
+/**
+ * @member {module:model/LLMSModelsPresets.TypeEnum} type
  */
 LLMSModelsPresets.prototype.type = undefined;
 
 /**
- * @member {Object} serviceHandler
+ * @member {String} serviceHandler
  */
 LLMSModelsPresets.prototype.serviceHandler = undefined;
 
 /**
- * @member {Object} choices
+ * @member {Array.<module:model/LLMModelPresetChoice>} choices
  */
 LLMSModelsPresets.prototype.choices = undefined;
 

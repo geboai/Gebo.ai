@@ -65,9 +65,9 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
-	// itself) so newSecurityEvent()'s caller-stack capture points at the two
-	// call(...) overloads - the real invocation entry points - not at this
-	// shared helper. Metadata-only: model/provider/outcome/latency, never the
+	// itself) so newSecurityEvent()'s caller-stack capture points at the
+	// rank(...) and rankAndRemoveIrrelevant(...) overloads - the real invocation entry
+	// points - not at this shared helper (nor at rankWithModel(...)). Metadata-only: model/provider/outcome/latency, never the
 	// documents or query text being ranked.
 	private void logRankerEvent(SecurityEvent event, IGConfigurableRankerModel rankerModel, long startMillis,
 			String outcome) {
@@ -104,27 +104,14 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 	}
 
 	@Override
-	public AIDocumentsSet call(AIDocumentsSet input, String query, int topK) throws LLMConfigException {
+	public AIDocumentsSet rankAndRemoveIrrelevant(AIDocumentsSet input, String query, int topK) throws LLMConfigException {
 		final int nFragments = input.countFragments();
 		if (nFragments <= 0)
 			return input;
 
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
-		long startMillis = System.currentTimeMillis();
-		IGConfigurableRankerModel rankerModel = rankerModelDao.defaultHandler();
-		try {
-			if (rankerModel == null)
-				throw new LLMConfigException(
-						"No ranker model configured, call first isRankerConfigured() to check if there is one");
-			RankingInput _input = new RankingInput(query, input.aiDocumentsList(), topK);
-			RankingOutput out = rankerModel.getRankerModel().call(_input);
-			List<Document> documents = out.getRanked().stream().map(x -> x.getDocument()).toList();
-			logRankerEvent(event, rankerModel, startMillis, SecurityAuditTaxonomy.Outcome.SUCCESS);
-			return AIDocumentsSet.from(discardIrrelevantDocuments(documents, query));
-		} catch (RuntimeException | LLMConfigException e) {
-			logRankerEvent(event, rankerModel, startMillis, SecurityAuditTaxonomy.Outcome.FAILURE);
-			throw e;
-		}
+		List<Document> documents = rankWithModel(input.aiDocumentsList(), query, topK, event);
+		return AIDocumentsSet.from(discardIrrelevantDocuments(documents, query));
 	}
 
 	@Override
@@ -134,23 +121,63 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 	}
 
 	@Override
-	public List<Document> call(List<Document> input, String query, int topK) throws LLMConfigException {
+	public List<Document> rankAndRemoveIrrelevant(List<Document> input, String query, int topK) throws LLMConfigException {
 		final int nFragments = input.size();
 		if (nFragments <= 0)
 			return input;
 
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		List<Document> documents = rankWithModel(input, query, topK, event);
+		return discardIrrelevantDocuments(documents, query);
+	}
+
+	@Override
+	public AIDocumentsSet rank(AIDocumentsSet input, String query, int topK) throws LLMConfigException {
+		final int nFragments = input.countFragments();
+		if (nFragments <= 0)
+			return input;
+
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return AIDocumentsSet.from(rankWithModel(input.aiDocumentsList(), query, topK, event));
+	}
+
+	@Override
+	public List<Document> rank(List<Document> input, String query, int topK) throws LLMConfigException {
+		final int nFragments = input.size();
+		if (nFragments <= 0)
+			return input;
+
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return rankWithModel(input, query, topK, event);
+	}
+
+	/**
+	 * First relevance stage, shared by every entry point: the default ranker model
+	 * orders the fragments by relevance to the query and keeps the best {@code topK}.
+	 * Takes the entry point's SecurityEvent (see logRankerEvent) and logs the ranker
+	 * invocation on it, failure included.
+	 */
+	private List<Document> rankWithModel(List<Document> input, String query, int topK, SecurityEvent event)
+			throws LLMConfigException {
 		long startMillis = System.currentTimeMillis();
 		IGConfigurableRankerModel rankerModel = rankerModelDao.defaultHandler();
 		try {
 			if (rankerModel == null)
 				throw new LLMConfigException(
 						"No ranker model configured, call first isRankerConfigured() to check if there is one");
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Begin rankWithModel(...) " + input.size() + " fragment(s) topK:" + topK + " ranker:"
+						+ rankerModel.getCode());
+			}
 			RankingInput _input = new RankingInput(query, input, topK);
 			RankingOutput out = rankerModel.getRankerModel().call(_input);
 			List<Document> documents = out.getRanked().stream().map(x -> x.getDocument()).toList();
 			logRankerEvent(event, rankerModel, startMillis, SecurityAuditTaxonomy.Outcome.SUCCESS);
-			return discardIrrelevantDocuments(documents, query);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End rankWithModel(...) " + documents.size() + " of " + input.size()
+						+ " fragment(s) ranked in " + (System.currentTimeMillis() - startMillis) + " ms");
+			}
+			return documents;
 		} catch (RuntimeException | LLMConfigException e) {
 			logRankerEvent(event, rankerModel, startMillis, SecurityAuditTaxonomy.Outcome.FAILURE);
 			throw e;

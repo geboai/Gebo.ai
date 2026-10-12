@@ -40,82 +40,82 @@ export default class GONNXTransformersEmbeddingModelChoice {
     if (data) {
       obj = obj || new GONNXTransformersEmbeddingModelChoice();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('creationDate'))
-        obj.creationDate = ApiClient.convertToType(data['creationDate'], Object);
+        obj.creationDate = ApiClient.convertToType(data['creationDate'], 'Date');
       if (data.hasOwnProperty('modificationDate'))
-        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], Object);
+        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], 'Date');
       if (data.hasOwnProperty('version'))
-        obj.version = ApiClient.convertToType(data['version'], Object);
+        obj.version = ApiClient.convertToType(data['version'], 'String');
       if (data.hasOwnProperty('metaInfos'))
         obj.metaInfos = ModelMetaInfo.constructFromObject(data['metaInfos']);
       if (data.hasOwnProperty('informativeUrl'))
-        obj.informativeUrl = ApiClient.convertToType(data['informativeUrl'], Object);
+        obj.informativeUrl = ApiClient.convertToType(data['informativeUrl'], 'String');
       if (data.hasOwnProperty('contextLength'))
-        obj.contextLength = ApiClient.convertToType(data['contextLength'], Object);
+        obj.contextLength = ApiClient.convertToType(data['contextLength'], 'Number');
       if (data.hasOwnProperty('nativeModelMetaInfos'))
         obj.nativeModelMetaInfos = ApiClient.convertToType(data['nativeModelMetaInfos'], Object);
       if (data.hasOwnProperty('optimalTokenizationParam'))
-        obj.optimalTokenizationParam = ApiClient.convertToType(data['optimalTokenizationParam'], Object);
+        obj.optimalTokenizationParam = ApiClient.convertToType(data['optimalTokenizationParam'], 'Number');
       if (data.hasOwnProperty('modelDetails'))
-        obj.modelDetails = ApiClient.convertToType(data['modelDetails'], Object);
+        obj.modelDetails = ApiClient.convertToType(data['modelDetails'], {'String': Object});
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GONNXTransformersEmbeddingModelChoice.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GONNXTransformersEmbeddingModelChoice.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GONNXTransformersEmbeddingModelChoice.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GONNXTransformersEmbeddingModelChoice.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GONNXTransformersEmbeddingModelChoice.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GONNXTransformersEmbeddingModelChoice.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} creationDate
+ * @member {Date} creationDate
  */
 GONNXTransformersEmbeddingModelChoice.prototype.creationDate = undefined;
 
 /**
- * @member {Object} modificationDate
+ * @member {Date} modificationDate
  */
 GONNXTransformersEmbeddingModelChoice.prototype.modificationDate = undefined;
 
 /**
- * @member {Object} version
+ * @member {String} version
  */
 GONNXTransformersEmbeddingModelChoice.prototype.version = undefined;
 
@@ -125,12 +125,12 @@ GONNXTransformersEmbeddingModelChoice.prototype.version = undefined;
 GONNXTransformersEmbeddingModelChoice.prototype.metaInfos = undefined;
 
 /**
- * @member {Object} informativeUrl
+ * @member {String} informativeUrl
  */
 GONNXTransformersEmbeddingModelChoice.prototype.informativeUrl = undefined;
 
 /**
- * @member {Object} contextLength
+ * @member {Number} contextLength
  */
 GONNXTransformersEmbeddingModelChoice.prototype.contextLength = undefined;
 
@@ -140,12 +140,12 @@ GONNXTransformersEmbeddingModelChoice.prototype.contextLength = undefined;
 GONNXTransformersEmbeddingModelChoice.prototype.nativeModelMetaInfos = undefined;
 
 /**
- * @member {Object} optimalTokenizationParam
+ * @member {Number} optimalTokenizationParam
  */
 GONNXTransformersEmbeddingModelChoice.prototype.optimalTokenizationParam = undefined;
 
 /**
- * @member {Object} modelDetails
+ * @member {Object.<String, Object>} modelDetails
  */
 GONNXTransformersEmbeddingModelChoice.prototype.modelDetails = undefined;
 

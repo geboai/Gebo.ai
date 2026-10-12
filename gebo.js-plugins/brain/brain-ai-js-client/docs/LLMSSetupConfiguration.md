@@ -4,5 +4,5 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **parentModel** | [**LLMSVendorInfo**](LLMSVendorInfo.md) |  | 
-**libraryModel** | **Object** |  | 
-**runtimeConfigs** | **Object** |  | [optional] 
+**libraryModel** | [**[LLMSModelsPresets]**](LLMSModelsPresets.md) |  | 
+**runtimeConfigs** | [**[LLMExistingConfiguration]**](LLMExistingConfiguration.md) |  | [optional] 

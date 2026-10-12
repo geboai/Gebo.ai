@@ -42,6 +42,15 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 	private String systemPromptTemplate = null;
 	@NotNull
 	private String userPromptTemplate = null;
+	/**
+	 * Optional: the text closing every tool result of the model calls made with this
+	 * prompt. The tool calling loop puts the tools' results after the user message, so
+	 * when tools run they, not the user message, are the last text the model reads
+	 * before answering; what must hold after them (e.g. the answer's language) goes
+	 * here. Rendered with the parameters of the user prompt; null or blank: nothing
+	 * is added.
+	 */
+	private String toolsResultsPromptTemplate = null;
 	@NotNull
 	private ContextContentRequired chatHistory = null;
 	@NotNull
@@ -190,7 +199,8 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 
 	public int getTokensSize() {
 
-		return ITokensCountable.stringsTokensSize(userPromptTemplate, systemPromptTemplate);
+		return ITokensCountable.stringsTokensSize(userPromptTemplate, systemPromptTemplate,
+				toolsResultsPromptTemplate);
 	}
 
 	public void setTokensSize(int tokensLength) {
@@ -215,9 +225,18 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 		invalidatePlaceholders();
 	}
 
+	public String getToolsResultsPromptTemplate() {
+		return toolsResultsPromptTemplate;
+	}
+
+	public void setToolsResultsPromptTemplate(String toolsResultsPromptTemplate) {
+		this.toolsResultsPromptTemplate = toolsResultsPromptTemplate;
+		invalidatePlaceholders();
+	}
+
 	/**
-	 * Returns the placeholders ({placeholder} tokens) contained in the system and
-	 * user prompt templates. The map is lazily (re)computed from the current
+	 * Returns the placeholders ({placeholder} tokens) contained in the system, user
+	 * and tools results prompt templates. The map is lazily (re)computed from the current
 	 * template contents and returned as an unmodifiable view, so it is maintained
 	 * by this object at runtime but cannot be mutated by the calling code.
 	 *
@@ -239,6 +258,7 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 		Map<String, Boolean> found = new LinkedHashMap<>();
 		collectPlaceholders(systemPromptTemplate, found);
 		collectPlaceholders(userPromptTemplate, found);
+		collectPlaceholders(toolsResultsPromptTemplate, found);
 		return found;
 	}
 

@@ -1,0 +1,59 @@
+# The google-vertex piece of the models library: what Gebo knows of this provider's models
+# (modelsInfo) and what they accept in a request (parameterRules), bound by
+# GoogleVertexModelsLibrary under ai.gebo.models.providers.google-vertex.
+# The Vertex models api gives the limits and the thinking support; it tells nothing of
+# the lifecycle, so the retirement dates come from
+# docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions (2026-10-11).
+# Only the chat models with an announced date are listed; "or later" dates are not.
+ai.gebo.models.providers.google-vertex:
+  parameterRules:
+    # docs.cloud.google.com/vertex-ai/generative-ai/docs/start/get-started-with-gemini-3
+    # (2026-10-11): "For Gemini 3, it is strongly recommended to keep the temperature
+    # parameter at its default value of 1.0"; lower values "may lead to unexpected
+    # behavior" (looping, degraded reasoning). A model with no temperature set is left at
+    # it instead of Gebo's 0; a temperature set on the model is still sent.
+    - providerId: google-vertex
+      models: ["gemini-3*"]
+      sampling: PROVIDER_DEFAULT
+      source: docs.cloud.google.com/vertex-ai/generative-ai/docs/start/get-started-with-gemini-3, 2026-10-11
+  modelsInfo:
+    - providerId: google-vertex
+      modelId: gemini-2.5-pro
+      chatModel: true
+      embeddingModel: false
+      deprecated: true
+      retirementDate: "2026-10-20"
+      replacementModel: gemini-3.8-flash
+      informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
+    - providerId: google-vertex
+      modelId: gemini-2.5-flash
+      chatModel: true
+      embeddingModel: false
+      deprecated: true
+      retirementDate: "2026-10-20"
+      replacementModel: gemini-3.8-flash
+      informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
+    - providerId: google-vertex
+      modelId: gemini-2.5-flash-lite
+      chatModel: true
+      embeddingModel: false
+      deprecated: true
+      retirementDate: "2026-10-20"
+      replacementModel: gemini-3.1-flash-lite
+      informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
+    - providerId: google-vertex
+      modelId: gemini-3.6-flash
+      chatModel: true
+      embeddingModel: false
+      deprecated: true
+      retirementDate: "2026-11-19"
+      replacementModel: gemini-3.8-flash
+      informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
+    - providerId: google-vertex
+      modelId: gemini-3.7-flash
+      chatModel: true
+      embeddingModel: false
+      deprecated: true
+      retirementDate: "2027-01-28"
+      replacementModel: gemini-3.8-flash
+      informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions

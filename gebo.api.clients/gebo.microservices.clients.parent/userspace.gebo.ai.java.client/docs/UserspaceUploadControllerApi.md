@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost:13008/userspace*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**upload**](UserspaceUploadControllerApi.md#upload) | **POST** /api/user/UserspaceUploadController/upload/{userspaceFolderCode} | 
+[**uploadUserspace**](UserspaceUploadControllerApi.md#uploadUserspace) | **POST** /api/user/UserspaceUploadController/upload/{userspaceFolderCode} | 
 
-<a name="upload"></a>
-# **upload**
-> upload(userspaceFolderCode, files)
+<a name="uploadUserspace"></a>
+# **uploadUserspace**
+> uploadUserspace(userspaceFolderCode, files)
 
 
 
@@ -23,9 +23,9 @@ UserspaceUploadControllerApi apiInstance = new UserspaceUploadControllerApi();
 String userspaceFolderCode = "userspaceFolderCode_example"; // String | 
 List<File> files = Arrays.asList(new File("/path/to/file")); // List<File> | 
 try {
-    apiInstance.upload(userspaceFolderCode, files);
+    apiInstance.uploadUserspace(userspaceFolderCode, files);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UserspaceUploadControllerApi#upload");
+    System.err.println("Exception when calling UserspaceUploadControllerApi#uploadUserspace");
     e.printStackTrace();
 }
 ```

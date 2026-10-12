@@ -8,8 +8,8 @@ import { ConfluenceSearchServiceControllerService } from './api/confluenceSearch
 import { ConfluenceSystemsControllerService } from './api/confluenceSystemsController.service';
 import { ContentsResetControllerService } from './api/contentsResetController.service';
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
+import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
-import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 
@@ -23,8 +23,8 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
     ConfluenceSystemsControllerService,
     ContentsResetControllerService,
     DocumentContentStreamerControllerService,
+    GeboAngularFormGroupMetaInfoControllerService,
     GenericalPublisherControllerService,
-    IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService,
     JobLauncherControllerService ]
 })

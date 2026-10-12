@@ -3,6 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**readOnly** | **Boolean** |  | [optional] 
 **providerName** | **String** |  | 
 **clientId** | **String** |  | 
 **secret** | **String** |  | 

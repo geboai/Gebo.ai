@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
@@ -131,16 +132,24 @@ public class TavilySearchServiceImpl extends AbstractWebSearchServiceImpl<Tavily
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
+		return search(query, system, nEntryLimit, null);
+	}
+
+	/** Searches with an HTTP client whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
+		final TavilySearchApi api = parameters != null ? tavilySearchApi.using(parameters) : tavilySearchApi;
 		String apiKey = resolveApiKey();
 		if (apiKey == null)
 			return List.of();
 		List<SearchResult> resultsList = new ArrayList<SearchResult>();
 		try {
-			mapInto(this.tavilySearchApi.callApi(apiKey, query.getQueryText(), nEntryLimit), resultsList);
+			mapInto(api.callApi(apiKey, query.getQueryText(), nEntryLimit), resultsList);
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing tavily searches", e);
 		}
-		return resultsList;
+		return withSizes(resultsList);
 	}
 
 	/**
@@ -150,6 +159,14 @@ public class TavilySearchServiceImpl extends AbstractWebSearchServiceImpl<Tavily
 	@Override
 	public List<SearchResult> nativeSearch(TavilyNativeSearchQuery query, SearchableSystemMetaData system,
 			int nEntryLimit) throws IOException, SearchServiceException {
+		return nativeSearch(query, system, nEntryLimit, null);
+	}
+
+	/** Searches natively with an HTTP client whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> nativeSearch(TavilyNativeSearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
+		final TavilySearchApi api = parameters != null ? tavilySearchApi.using(parameters) : tavilySearchApi;
 		if (query == null || query.getSearchedTexts() == null || query.getSearchedTexts().isEmpty())
 			return List.of();
 		String apiKey = resolveApiKey();
@@ -160,13 +177,13 @@ public class TavilySearchServiceImpl extends AbstractWebSearchServiceImpl<Tavily
 			for (String text : query.getSearchedTexts()) {
 				if (text == null || text.isBlank())
 					continue;
-				mapInto(this.tavilySearchApi.callApi(apiKey, text, nEntryLimit, query.getSearchDepth(),
+				mapInto(api.callApi(apiKey, text, nEntryLimit, query.getSearchDepth(),
 						query.getTopic(), query.getTimeRange()), resultsList);
 			}
 		} catch (GeboRestIntegrationException e) {
 			throw new SearchServiceException("Error accessing tavily searches", e);
 		}
-		return resultsList;
+		return withSizes(resultsList);
 	}
 
 	@Override

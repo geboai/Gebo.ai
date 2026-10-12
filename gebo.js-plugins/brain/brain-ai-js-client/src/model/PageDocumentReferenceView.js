@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import DocumentReferenceView from './DocumentReferenceView';
 import PageableObject from './PageableObject';
 import SortObject from './SortObject';
 
@@ -41,64 +42,69 @@ export default class PageDocumentReferenceView {
     if (data) {
       obj = obj || new PageDocumentReferenceView();
       if (data.hasOwnProperty('totalPages'))
-        obj.totalPages = ApiClient.convertToType(data['totalPages'], Object);
+        obj.totalPages = ApiClient.convertToType(data['totalPages'], 'Number');
       if (data.hasOwnProperty('totalElements'))
-        obj.totalElements = ApiClient.convertToType(data['totalElements'], Object);
+        obj.totalElements = ApiClient.convertToType(data['totalElements'], 'Number');
+      if (data.hasOwnProperty('pageable'))
+        obj.pageable = PageableObject.constructFromObject(data['pageable']);
       if (data.hasOwnProperty('first'))
-        obj.first = ApiClient.convertToType(data['first'], Object);
+        obj.first = ApiClient.convertToType(data['first'], 'Boolean');
       if (data.hasOwnProperty('last'))
-        obj.last = ApiClient.convertToType(data['last'], Object);
+        obj.last = ApiClient.convertToType(data['last'], 'Boolean');
       if (data.hasOwnProperty('size'))
-        obj.size = ApiClient.convertToType(data['size'], Object);
+        obj.size = ApiClient.convertToType(data['size'], 'Number');
       if (data.hasOwnProperty('content'))
-        obj.content = ApiClient.convertToType(data['content'], Object);
+        obj.content = ApiClient.convertToType(data['content'], [DocumentReferenceView]);
       if (data.hasOwnProperty('number'))
-        obj._number = ApiClient.convertToType(data['number'], Object);
+        obj._number = ApiClient.convertToType(data['number'], 'Number');
       if (data.hasOwnProperty('sort'))
         obj.sort = SortObject.constructFromObject(data['sort']);
       if (data.hasOwnProperty('numberOfElements'))
-        obj.numberOfElements = ApiClient.convertToType(data['numberOfElements'], Object);
-      if (data.hasOwnProperty('pageable'))
-        obj.pageable = PageableObject.constructFromObject(data['pageable']);
+        obj.numberOfElements = ApiClient.convertToType(data['numberOfElements'], 'Number');
       if (data.hasOwnProperty('empty'))
-        obj.empty = ApiClient.convertToType(data['empty'], Object);
+        obj.empty = ApiClient.convertToType(data['empty'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} totalPages
+ * @member {Number} totalPages
  */
 PageDocumentReferenceView.prototype.totalPages = undefined;
 
 /**
- * @member {Object} totalElements
+ * @member {Number} totalElements
  */
 PageDocumentReferenceView.prototype.totalElements = undefined;
 
 /**
- * @member {Object} first
+ * @member {module:model/PageableObject} pageable
+ */
+PageDocumentReferenceView.prototype.pageable = undefined;
+
+/**
+ * @member {Boolean} first
  */
 PageDocumentReferenceView.prototype.first = undefined;
 
 /**
- * @member {Object} last
+ * @member {Boolean} last
  */
 PageDocumentReferenceView.prototype.last = undefined;
 
 /**
- * @member {Object} size
+ * @member {Number} size
  */
 PageDocumentReferenceView.prototype.size = undefined;
 
 /**
- * @member {Object} content
+ * @member {Array.<module:model/DocumentReferenceView>} content
  */
 PageDocumentReferenceView.prototype.content = undefined;
 
 /**
- * @member {Object} _number
+ * @member {Number} _number
  */
 PageDocumentReferenceView.prototype._number = undefined;
 
@@ -108,17 +114,12 @@ PageDocumentReferenceView.prototype._number = undefined;
 PageDocumentReferenceView.prototype.sort = undefined;
 
 /**
- * @member {Object} numberOfElements
+ * @member {Number} numberOfElements
  */
 PageDocumentReferenceView.prototype.numberOfElements = undefined;
 
 /**
- * @member {module:model/PageableObject} pageable
- */
-PageDocumentReferenceView.prototype.pageable = undefined;
-
-/**
- * @member {Object} empty
+ * @member {Boolean} empty
  */
 PageDocumentReferenceView.prototype.empty = undefined;
 

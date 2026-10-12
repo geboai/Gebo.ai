@@ -20,14 +20,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.util.json.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.knlowledgebase.model.contents.GDependencyTree;
 import ai.gebo.knlowledgebase.model.contents.GSoftwareArtifact;
@@ -90,30 +90,21 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
     ToolCallback createSearchArtifactInfos() {
         BiFunction<GSoftwareArtifactSearchParameters, ToolContext, ArtifactsList> thisFunction = (x, c) -> {
             ArtifactsList alist = new ArtifactsList();
-            KBContext contextVisibility = LLMtInteractionContextThreadLocal.Context.get();
+            // the knowledge bases of the chat the tool is called for (none outside a chat)
+            final List<String> chatKnowledgeBases = ToolCallbackDeclarationUtil.chatKnowledgeBases(c);
             
             try {
-                CalledFunction cf = new CalledFunction();
-                cf.setFunctionName(GET_ARTIFACTS_INFORMATION);
-                cf.setFunctionDescription(GET_ARTIFACTS_INFORMATION_DESCRIPTION);
-                cf.setParamsDescription(x.toParametersList());
                 
-                // Add called function to context visibility if the context is not null or empty
-                if (contextVisibility != null && contextVisibility.getKnowledgeBasesCodes() != null
-                        && !contextVisibility.getKnowledgeBasesCodes().isEmpty()) {
+                // the chat knowledge bases scope the search
+                if (!chatKnowledgeBases.isEmpty()) {
 
-                    contextVisibility.getCalledFunctions().add(cf);
-                    alist.addAll(searcherService.findSoftwareArtifacts(x, contextVisibility.getKnowledgeBasesCodes()));
+                    alist.addAll(searcherService.findSoftwareArtifacts(x, chatKnowledgeBases));
                 }
                 
-                // Add function call to context
-                if (c != null) {
-                    ToolCallbackDeclarationUtil.addCallToContext(c, cf);
-                }
             } catch (Throwable th) {
                 LOGGER.error("Error in " + GET_ARTIFACTS_INFORMATION, th);
             }
-            return alist;
+            return inRoom(alist, c, GET_ARTIFACTS_INFORMATION);
         };
         return ToolCallbackDeclarationUtil.declare(thisFunction, GET_ARTIFACTS_INFORMATION,
                 GET_ARTIFACTS_INFORMATION_DESCRIPTION, GSoftwareArtifactSearchParameters.class, ArtifactsList.class);
@@ -127,26 +118,20 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
         BiFunction<GSoftwareArtifactSearchParameters, ToolContext, ArtifactsList> thisFunction = (
                 GSoftwareArtifactSearchParameters x, ToolContext c) -> {
             ArtifactsList out = new ArtifactsList();
-            KBContext contextVisibility = LLMtInteractionContextThreadLocal.Context.get();
+            // the knowledge bases of the chat the tool is called for (none outside a chat)
+            final List<String> chatKnowledgeBases = ToolCallbackDeclarationUtil.chatKnowledgeBases(c);
             
             try {
-                CalledFunction cf = new CalledFunction();
-                cf.setFunctionName(GET_ALL_SOFTWARE_ARTIFACTS_LIST);
-                cf.setFunctionDescription(GET_ALL_SOFTWARE_ARTIFACTS_LIST_DESCRIPTION);
-                cf.setParamsDescription(x.toParametersList());
                 
-                // Add called function to context visibility if the context is not null or empty
-                if (contextVisibility != null && contextVisibility.getKnowledgeBasesCodes() != null
-                        && !contextVisibility.getKnowledgeBasesCodes().isEmpty()) {
+                // the chat knowledge bases scope the search
+                if (!chatKnowledgeBases.isEmpty()) {
 
-                    contextVisibility.getCalledFunctions().add(cf);
-                    out.addAll(searcherService.findAllArtifacts(x, contextVisibility.getKnowledgeBasesCodes()));
+                    out.addAll(searcherService.findAllArtifacts(x, chatKnowledgeBases));
                 }
-                ToolCallbackDeclarationUtil.addCallToContext(c, cf);
             } catch (Throwable th) {
                 LOGGER.error("Error in " + GET_ALL_SOFTWARE_ARTIFACTS_LIST, th);
             }
-            return out;
+            return inRoom(out, c, GET_ALL_SOFTWARE_ARTIFACTS_LIST);
         };
         return ToolCallbackDeclarationUtil.declare(thisFunction, GET_ALL_SOFTWARE_ARTIFACTS_LIST,
                 GET_ALL_SOFTWARE_ARTIFACTS_LIST_DESCRIPTION, GSoftwareArtifactSearchParameters.class,
@@ -160,27 +145,21 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
     ToolCallback createSearchArtifactDependingFromInfos() {
         BiFunction<GSoftwareArtifactSearchParameters, ToolContext, ArtifactsList> thisFunction = (x, c) -> {
             ArtifactsList out = new ArtifactsList();
-            KBContext contextVisibility = LLMtInteractionContextThreadLocal.Context.get();
+            // the knowledge bases of the chat the tool is called for (none outside a chat)
+            final List<String> chatKnowledgeBases = ToolCallbackDeclarationUtil.chatKnowledgeBases(c);
             
             try {
-                CalledFunction cf = new CalledFunction();
-                cf.setFunctionName(GET_ARTIFACTS_DEPENDING_FROM);
-                cf.setFunctionDescription(GET_ARTIFACTS_DEPENDING_FROM_DESCRIPTION);
-                cf.setParamsDescription(x.toParametersList());
                 
-                // Add called function to context visibility if the context is not null or empty
-                if (contextVisibility != null && contextVisibility.getKnowledgeBasesCodes() != null
-                        && !contextVisibility.getKnowledgeBasesCodes().isEmpty()) {
+                // the chat knowledge bases scope the search
+                if (!chatKnowledgeBases.isEmpty()) {
 
-                    contextVisibility.getCalledFunctions().add(cf);
                     out.addAll(searcherService.findAllArtifactsDependingFrom(x,
-                            contextVisibility.getKnowledgeBasesCodes()));
+                            chatKnowledgeBases));
                 }
-                ToolCallbackDeclarationUtil.addCallToContext(c, cf);
             } catch (Throwable th) {
                 LOGGER.error("Error in " + GET_ARTIFACTS_DEPENDING_FROM, th);
             }
-            return out;
+            return inRoom(out, c, GET_ARTIFACTS_DEPENDING_FROM);
         };
         return ToolCallbackDeclarationUtil.declare(thisFunction, GET_ARTIFACTS_DEPENDING_FROM,
                 GET_ARTIFACTS_DEPENDING_FROM_DESCRIPTION, GSoftwareArtifactSearchParameters.class, ArtifactsList.class);
@@ -193,21 +172,15 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
     ToolCallback createSearchFullArtifactDependenciesInfos() {
         BiFunction<GSoftwareArtifactSearchParameters, ToolContext, GDependencyTree> thisFunction = (x, c) -> {
 
-            KBContext contextVisibility = LLMtInteractionContextThreadLocal.Context.get();
+            // the knowledge bases of the chat the tool is called for (none outside a chat)
+            final List<String> chatKnowledgeBases = ToolCallbackDeclarationUtil.chatKnowledgeBases(c);
             try {
-                CalledFunction cf = new CalledFunction();
-                cf.setFunctionName(GET_FULL_ARTIFACT_DEPENDENCIES_INFOS);
-                cf.setFunctionDescription(GET_FULL_ARTIFACT_DEPENDENCIES_DESCRIPTION);
-                cf.setParamsDescription(x.toParametersList());
                 
-                // Add called function to context visibility if the context is not null or empty
-                if (contextVisibility != null && contextVisibility.getKnowledgeBasesCodes() != null
-                        && !contextVisibility.getKnowledgeBasesCodes().isEmpty()) {
+                // the chat knowledge bases scope the search
+                if (!chatKnowledgeBases.isEmpty()) {
 
-                    contextVisibility.getCalledFunctions().add(cf);
-                    return searcherService.findFullDependenciesTree(x, contextVisibility.getKnowledgeBasesCodes());
+                    return searcherService.findFullDependenciesTree(x, chatKnowledgeBases);
                 }
-                ToolCallbackDeclarationUtil.addCallToContext(c, cf);
             } catch (Throwable th) {
                 LOGGER.error("Error in " + GET_FULL_ARTIFACT_DEPENDENCIES_INFOS, th);
             }
@@ -223,6 +196,25 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
      * Retrieves all tool callbacks provided by this factory.
      * @return a list of tool callbacks.
      */
+    /**
+     * The artifacts found that fit the room the model call has left to its tools'
+     * results (see {@link ToolsTokenBudget}), whole and in order; all of them when the
+     * model call has no room set.
+     */
+    static ArtifactsList inRoom(ArtifactsList found, ToolContext context, String toolName) {
+        final ToolsTokenBudget budget = ToolsTokenBudget.from(context);
+        if (budget == null || found.isEmpty()) {
+            return found;
+        }
+        final ArtifactsList kept = new ArtifactsList();
+        kept.addAll(ToolsTokenBudget.fitItems(found, budget.left(), JsonParser::toJson));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(toolName + " returns " + kept.size() + " of " + found.size() + " artifact(s) in a room of "
+                    + budget.left() + " (tok)");
+        }
+        return kept;
+    }
+
     @Override
     public List<ToolCallback> getToolCallbacks() {
         List<ToolCallback> functions = new ArrayList<ToolCallback>();
@@ -237,6 +229,16 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
      * Gets the category of tools that this factory provides.
      * @return the tools category.
      */
+    /** The software artifacts tools read the artifacts catalogue of the knowledge bases. */
+    @Override
+    public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
+        return GET_ARTIFACTS_INFORMATION.equals(toolName) || GET_ALL_SOFTWARE_ARTIFACTS_LIST.equals(toolName)
+                || GET_ARTIFACTS_DEPENDING_FROM.equals(toolName) || GET_FULL_ARTIFACT_DEPENDENCIES_INFOS.equals(toolName)
+                        ? List.of(ToolDataFlowTarget.platformData("Software artifacts catalogue",
+                                toolName + ": software artifacts and dependencies read"))
+                        : List.of();
+    }
+
     @Override
     public ToolsCategory getToolCategory() {
         return ToolsCategory.SOFTWARE_ARTIFACTS_SEARCHES;

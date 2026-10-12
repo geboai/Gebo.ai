@@ -40,76 +40,76 @@ export default class GenericOpenAIAPITextToSpeechModelConfig {
     if (data) {
       obj = obj || new GenericOpenAIAPITextToSpeechModelConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('modelTypeCode'))
-        obj.modelTypeCode = ApiClient.convertToType(data['modelTypeCode'], Object);
+        obj.modelTypeCode = ApiClient.convertToType(data['modelTypeCode'], 'String');
       if (data.hasOwnProperty('defaultModel'))
-        obj.defaultModel = ApiClient.convertToType(data['defaultModel'], Object);
+        obj.defaultModel = ApiClient.convertToType(data['defaultModel'], 'Boolean');
       if (data.hasOwnProperty('apiSecretCode'))
-        obj.apiSecretCode = ApiClient.convertToType(data['apiSecretCode'], Object);
+        obj.apiSecretCode = ApiClient.convertToType(data['apiSecretCode'], 'String');
       if (data.hasOwnProperty('choosedModel'))
         obj.choosedModel = GenericOpenAIAPITextToSpeechModelChoice.constructFromObject(data['choosedModel']);
       if (data.hasOwnProperty('baseUrl'))
-        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], Object);
+        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], 'String');
       if (data.hasOwnProperty('contextLength'))
-        obj.contextLength = ApiClient.convertToType(data['contextLength'], Object);
+        obj.contextLength = ApiClient.convertToType(data['contextLength'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GenericOpenAIAPITextToSpeechModelConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GenericOpenAIAPITextToSpeechModelConfig.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GenericOpenAIAPITextToSpeechModelConfig.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GenericOpenAIAPITextToSpeechModelConfig.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GenericOpenAIAPITextToSpeechModelConfig.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GenericOpenAIAPITextToSpeechModelConfig.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} modelTypeCode
+ * @member {String} modelTypeCode
  */
 GenericOpenAIAPITextToSpeechModelConfig.prototype.modelTypeCode = undefined;
 
 /**
- * @member {Object} defaultModel
+ * @member {Boolean} defaultModel
  */
 GenericOpenAIAPITextToSpeechModelConfig.prototype.defaultModel = undefined;
 
 /**
- * @member {Object} apiSecretCode
+ * @member {String} apiSecretCode
  */
 GenericOpenAIAPITextToSpeechModelConfig.prototype.apiSecretCode = undefined;
 
@@ -119,12 +119,12 @@ GenericOpenAIAPITextToSpeechModelConfig.prototype.apiSecretCode = undefined;
 GenericOpenAIAPITextToSpeechModelConfig.prototype.choosedModel = undefined;
 
 /**
- * @member {Object} baseUrl
+ * @member {String} baseUrl
  */
 GenericOpenAIAPITextToSpeechModelConfig.prototype.baseUrl = undefined;
 
 /**
- * @member {Object} contextLength
+ * @member {Number} contextLength
  */
 GenericOpenAIAPITextToSpeechModelConfig.prototype.contextLength = undefined;
 

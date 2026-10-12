@@ -203,7 +203,7 @@ public class SecretsClusterController {
 	 * @throws GeboCryptSecretException if there is no such secret
 	 */
 	@GetMapping(value = "getSecretContentById", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GeboSecretContentEnvelope getSecretContentById(@RequestParam("id") String id, HttpServletRequest request)
+	public GeboSecretContentEnvelope infrastructureGetSecretContentById(@RequestParam("id") String id, HttpServletRequest request)
 			throws GeboCryptSecretException {
 		ClusterParticipantsGuard.check(participants, request);
 		if (isServedOutsideTheRepository(id)) {
@@ -226,14 +226,14 @@ public class SecretsClusterController {
 	 * @return the secret's metadata, or {@code null} if there is no such secret
 	 */
 	@GetMapping(value = "getSecretInfoById", produces = MediaType.APPLICATION_JSON_VALUE)
-	public SecretInfo getSecretInfoById(@RequestParam("code") String code, HttpServletRequest request)
+	public SecretInfo infrastructureGetSecretInfoById(@RequestParam("code") String code, HttpServletRequest request)
 			throws GeboCryptSecretException {
 		ClusterParticipantsGuard.check(participants, request);
 		return secretsService.getSecretInfoById(code);
 	}
 
 	@GetMapping(value = "getSecretInfoByContextCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<SecretInfo> getSecretInfoByContextCode(@RequestParam("contextCode") String contextCode,
+	public List<SecretInfo> infrastructureGetSecretInfoByContextCode(@RequestParam("contextCode") String contextCode,
 			HttpServletRequest request) throws GeboCryptSecretException {
 		ClusterParticipantsGuard.check(participants, request);
 		return secretsService.getSecretInfoByContextCode(contextCode);
@@ -255,7 +255,7 @@ public class SecretsClusterController {
 	 */
 	@PostMapping(value = "storeSecret", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.TEXT_PLAIN_VALUE)
-	public String storeSecret(@RequestBody @Valid @NotNull GeboSecretStoreRequest storeRequest,
+	public String infrastructureStoreSecret(@RequestBody @Valid @NotNull GeboSecretStoreRequest storeRequest,
 			HttpServletRequest request) throws GeboCryptSecretException {
 		ClusterParticipantsGuard.check(participants, request);
 		String secretId = storeRequest.getSecretId();
@@ -279,7 +279,7 @@ public class SecretsClusterController {
 	 * {@code secretId} is the code of the secret to update.
 	 */
 	@PostMapping(value = "updateSecret", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void updateSecret(@RequestBody @Valid @NotNull GeboSecretStoreRequest storeRequest,
+	public void infrastructureUpdateSecret(@RequestBody @Valid @NotNull GeboSecretStoreRequest storeRequest,
 			HttpServletRequest request) throws GeboCryptSecretException {
 		ClusterParticipantsGuard.check(participants, request);
 		checkCodeNotConfigured(storeRequest.getSecretId());
@@ -296,7 +296,7 @@ public class SecretsClusterController {
 	}
 
 	@DeleteMapping("deleteSecret")
-	public void deleteSecret(@RequestParam("code") String code, HttpServletRequest request)
+	public void infrastructureDeleteSecret(@RequestParam("code") String code, HttpServletRequest request)
 			throws GeboCryptSecretException {
 		ClusterParticipantsGuard.check(participants, request);
 		secretsService.deleteSecret(code);
@@ -313,7 +313,7 @@ public class SecretsClusterController {
 	 * </p>
 	 */
 	@GetMapping(value = "getAllSecretsId", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getAllSecretsId(HttpServletRequest request) {
+	public List<String> infrastructureGetAllSecretsId(HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return secretsService.getAllSecretsId();
 	}

@@ -39,35 +39,35 @@ export default class GeboRagRequestCustomConfig {
     if (data) {
       obj = obj || new GeboRagRequestCustomConfig();
       if (data.hasOwnProperty('topK'))
-        obj.topK = ApiClient.convertToType(data['topK'], Object);
+        obj.topK = ApiClient.convertToType(data['topK'], 'Number');
       if (data.hasOwnProperty('similarityThreashold'))
-        obj.similarityThreashold = ApiClient.convertToType(data['similarityThreashold'], Object);
+        obj.similarityThreashold = ApiClient.convertToType(data['similarityThreashold'], 'Number');
       if (data.hasOwnProperty('historyFillWindowWeight'))
-        obj.historyFillWindowWeight = ApiClient.convertToType(data['historyFillWindowWeight'], Object);
+        obj.historyFillWindowWeight = ApiClient.convertToType(data['historyFillWindowWeight'], 'Number');
       if (data.hasOwnProperty('documentsFillWindowWeight'))
-        obj.documentsFillWindowWeight = ApiClient.convertToType(data['documentsFillWindowWeight'], Object);
+        obj.documentsFillWindowWeight = ApiClient.convertToType(data['documentsFillWindowWeight'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} topK
+ * @member {Number} topK
  */
 GeboRagRequestCustomConfig.prototype.topK = undefined;
 
 /**
- * @member {Object} similarityThreashold
+ * @member {Number} similarityThreashold
  */
 GeboRagRequestCustomConfig.prototype.similarityThreashold = undefined;
 
 /**
- * @member {Object} historyFillWindowWeight
+ * @member {Number} historyFillWindowWeight
  */
 GeboRagRequestCustomConfig.prototype.historyFillWindowWeight = undefined;
 
 /**
- * @member {Object} documentsFillWindowWeight
+ * @member {Number} documentsFillWindowWeight
  */
 GeboRagRequestCustomConfig.prototype.documentsFillWindowWeight = undefined;
 

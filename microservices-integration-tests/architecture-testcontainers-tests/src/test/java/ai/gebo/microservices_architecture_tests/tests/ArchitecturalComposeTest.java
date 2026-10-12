@@ -69,6 +69,10 @@ import gebo.microservices.api.client.tyr.model.DataPage;
 import gebo.microservices.api.client.tyr.model.JobSummary;
 import gebo.microservices.api.client.tyr.model.JobsEntriesForProjectEndpointFilter;
 import gebo.microservices.api.client.tyr.model.PageGJobStatusItem;
+import ai.gebo.architecture.integration.tests.preconditions.IntegrationTestConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresDocker;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresLocalDockerImage;
 
 /**
  * Testcontainers-managed architectural test: a deliberately narrow 5-service
@@ -108,17 +112,34 @@ import gebo.microservices.api.client.tyr.model.PageGJobStatusItem;
  * </p>
  */
 @Testcontainers
+@RequiresDocker
+@RequiresLocalDockerImage(value = { ArchitecturalComposeTest.GEBO_IMAGE + "eureka" + ArchitecturalComposeTest.GEBO_TAG,
+		ArchitecturalComposeTest.GEBO_IMAGE + "heimdall" + ArchitecturalComposeTest.GEBO_TAG,
+		ArchitecturalComposeTest.GEBO_IMAGE + "brain" + ArchitecturalComposeTest.GEBO_TAG,
+		ArchitecturalComposeTest.GEBO_IMAGE + "vectorizator" + ArchitecturalComposeTest.GEBO_TAG,
+		ArchitecturalComposeTest.GEBO_IMAGE + "tyr" + ArchitecturalComposeTest.GEBO_TAG,
+		ArchitecturalComposeTest.GEBO_IMAGE + "filesystem" + ArchitecturalComposeTest.GEBO_TAG },
+		hint = "build the service images with -P docker,swagger-on (and docker load them), or pass -D"
+				+ ArchitecturalComposeTest.GEBO_IMAGE_VERSION_PROPERTY + "=<a tag that is present>")
+@RequiresConfig(value = ArchitecturalComposeTest.FULL_SETUP_ENVIRONMENT_JSON_STRING,
+		description = "JSON with the admin account, the LLM vendor and its API key")
 public class ArchitecturalComposeTest {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArchitecturalComposeTest.class);
 	private static final ObjectMapper objectMapper = new ObjectMapper();
-	private static final String FULL_SETUP_ENVIRONMENT_JSON_STRING = "FullSetupSecret";
+	static final String FULL_SETUP_ENVIRONMENT_JSON_STRING = "FullSetupSecret";
 
 	/**
 	 * Matches {@code dockers/gebo.microservices/.env}'s GEBO_VERSION - overridable
 	 * with {@code -Dgebo.image.version=...} if a different tag was built/loaded.
 	 */
-	private static final String GEBO_IMAGE_VERSION = System.getProperty("gebo.image.version", "1.0.2.2-SNAPSHOT");
+	static final String GEBO_IMAGE_VERSION_PROPERTY = "gebo.image.version";
+	static final String DEFAULT_GEBO_IMAGE_VERSION = "1.0.2.2-SNAPSHOT";
+	private static final String GEBO_IMAGE_VERSION = IntegrationTestConfig.get(GEBO_IMAGE_VERSION_PROPERTY,
+			DEFAULT_GEBO_IMAGE_VERSION);
+	// Image name parts as docker-compose.yml spells them, for the preconditions above.
+	static final String GEBO_IMAGE = "geboai/";
+	static final String GEBO_TAG = ".gebo.ai:${" + GEBO_IMAGE_VERSION_PROPERTY + ":" + DEFAULT_GEBO_IMAGE_VERSION + "}";
 
 	private static final File COMPOSE_FILE = resolveComposeFile();
 	private static final File DEBUG_LOGGING_OVERRIDE_FILE = resolveDebugLoggingOverrideFile();
@@ -286,7 +307,7 @@ public class ArchitecturalComposeTest {
 	 * the latter being what vectorizator needs to actually process the job below.
 	 */
 	private SecurityHeaderData executeSystemSetupBySecret() throws IOException {
-		String jsonSetup = System.getProperty(FULL_SETUP_ENVIRONMENT_JSON_STRING);
+		String jsonSetup = IntegrationTestConfig.get(FULL_SETUP_ENVIRONMENT_JSON_STRING);
 		assertFalse(jsonSetup == null || jsonSetup.trim().isEmpty(), "The system property "
 				+ FULL_SETUP_ENVIRONMENT_JSON_STRING + " must contain a valid json setup configuration");
 		Map<String, Object> setup = objectMapper.readValue(jsonSetup, Map.class);
@@ -308,14 +329,14 @@ public class ArchitecturalComposeTest {
 		setupData.setPassword(password);
 		setupData.setPasswordC(password);
 		OperationStatusBoolean setupResult = fastSetup.createSetup(setupData);
-		assertFalse(Boolean.TRUE.equals(setupResult.getHasErrorMessages()), "The setup cannot return errors");
+		assertFalse(Boolean.TRUE.equals(setupResult.isHasErrorMessages()), "The setup cannot return errors");
 
 		AuthControllerApi authController = new AuthControllerApi(heimdall);
 		LoginRequest login = new LoginRequest();
 		login.setUsername(username);
 		login.setPassword(password);
 		OperationStatusAuthResponse authResult = authController.authenticateUser(login);
-		assertFalse(Boolean.TRUE.equals(authResult.getHasErrorMessages()), "The login cannot return errors");
+		assertFalse(Boolean.TRUE.equals(authResult.isHasErrorMessages()), "The login cannot return errors");
 		AuthResponse currentAuth = authResult.getResult();
 		SecurityHeaderData header = currentAuth.getSecurityHeaderData();
 		assertNotNull(header.getToken(), "The security header token cannot be null");
@@ -359,7 +380,7 @@ public class ArchitecturalComposeTest {
 		List<LLMModelPresetChoice> chatChoices = objectMapper.convertValue(chatPresets.getChoices(),
 				objectMapper.getTypeFactory().constructCollectionType(List.class, LLMModelPresetChoice.class));
 		for (LLMModelPresetChoice chatChoice : chatChoices) {
-			if (Boolean.TRUE.equals(chatChoice.getDefaultChoice())) {
+			if (Boolean.TRUE.equals(chatChoice.isDefaultChoice())) {
 				autoConfigureData.setDefaultChatModel(chatChoice.getCode());
 			}
 			String usesStr = chatChoice.getUses() == null ? "" : String.valueOf(chatChoice.getUses());
@@ -370,7 +391,7 @@ public class ArchitecturalComposeTest {
 		List<LLMModelPresetChoice> embeddingChoices = objectMapper.convertValue(embeddingPresets.getChoices(),
 				objectMapper.getTypeFactory().constructCollectionType(List.class, LLMModelPresetChoice.class));
 		for (LLMModelPresetChoice embedChoice : embeddingChoices) {
-			if (Boolean.TRUE.equals(embedChoice.getDefaultChoice())) {
+			if (Boolean.TRUE.equals(embedChoice.isDefaultChoice())) {
 				autoConfigureData.setEmbeddingModel(embedChoice.getCode());
 			}
 		}
@@ -379,7 +400,7 @@ public class ArchitecturalComposeTest {
 		assertNotNull(autoConfigureData.getInternalServicesModel(), "internalServicesModel must be set");
 
 		OperationStatusListGBaseModelConfig llmCreation = llmSetupApi.createLLMByAutoconfigure(autoConfigureData);
-		assertFalse(Boolean.TRUE.equals(llmCreation.getHasErrorMessages()),
+		assertFalse(Boolean.TRUE.equals(llmCreation.isHasErrorMessages()),
 				"The vendor " + vendorId + " cannot be setup correctly");
 		renew(header);
 		LOGGER.info("End system setup against heimdall@{}", heimdallUrl);
@@ -425,7 +446,7 @@ public class ArchitecturalComposeTest {
 			reference.setRoot(new GVirtualFilesystemRoot());
 			reference.getRoot().setAbsolutePath(folder.toAbsolutePath().toString());
 			reference.getPath().setAbsolutePath(folder.toAbsolutePath().toString());
-			reference.getPath().setMetaType("FOLDER");
+			reference.getPath().setMetaType(PathInfo.MetaTypeEnum.FOLDER);
 			reference.getPath().setName(folder.getFileName().toString());
 			reference.getPath().setFolder(true);
 			shareReference.setReference(reference);
@@ -450,7 +471,7 @@ public class ArchitecturalComposeTest {
 			time.setCreatedTime(System.currentTimeMillis());
 			time.setTimeComponent(List.of(scheduledAt));
 			ReindexingProgrammedTable table = new ReindexingProgrammedTable();
-			table.setFrequency("DATES");
+			table.setFrequency(ReindexingProgrammedTable.FrequencyEnum.DATES);
 			table.setTimes(List.of(time));
 			inserted.setProgrammedTables(List.of(table));
 			inserted.setSynchPeriodically(true);
@@ -477,14 +498,14 @@ public class ArchitecturalComposeTest {
 			do {
 				JobsEntriesForProjectEndpointFilter filter = new JobsEntriesForProjectEndpointFilter();
 				filter.setEndpointRef(ref);
-				filter.setJobType("CONTENTS_READING_VECTORIZING");
+				filter.setJobType(JobsEntriesForProjectEndpointFilter.JobTypeEnum.CONTENTS_READING_VECTORIZING);
 				DataPage page = new DataPage();
 				page.setPage(0);
 				page.setPageSize(10);
 				page.setSort(List.of());
 				filter.setPage(page);
 				JobStatusControllerApi jobStatusApi = new JobStatusControllerApi(tyrClient(header));
-				PageGJobStatusItem result = jobStatusApi.getJobsEntriesForProjectEndpoint(filter);
+				PageGJobStatusItem result = jobStatusApi.getJobsEntriesForProjectEndpointJobStatus(filter);
 				List<Map<String, Object>> content = objectMapper.convertValue(result.getContent(),
 						objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class));
 				LOGGER.info("On cycle=>{} jobs found for endpoint so far: {}", nCycles,
@@ -518,16 +539,16 @@ public class ArchitecturalComposeTest {
 				assertNotNull(summary, "Job summary cannot be null");
 				assertNotNull(summary.getWorkflowStatus(), "Job workflow status cannot be null");
 				workflowStatus = summary.getWorkflowStatus();
-				LOGGER.info("Job {} finished={} hasErrors={}", summary.getCode(), workflowStatus.getFinished(),
-						workflowStatus.getHasErrors());
+				LOGGER.info("Job {} finished={} hasErrors={}", summary.getCode(), workflowStatus.isFinished(),
+						workflowStatus.isHasErrors());
 				renew(header);
 				currentTime = System.currentTimeMillis();
-			} while (!Boolean.TRUE.equals(workflowStatus.getFinished())
+			} while (!Boolean.TRUE.equals(workflowStatus.isFinished())
 					&& ((currentTime - initialTime) <= maxIterationTime));
 
-			assertTrue(Boolean.TRUE.equals(workflowStatus.getFinished()),
+			assertTrue(Boolean.TRUE.equals(workflowStatus.isFinished()),
 					"The publication job (including vectorizator's embedding step) has to finish within the timeout");
-			assertFalse(Boolean.TRUE.equals(workflowStatus.getHasErrors()),
+			assertFalse(Boolean.TRUE.equals(workflowStatus.isHasErrors()),
 					"The publication job must not have finished with errors");
 		} finally {
 			if (folder != null) {

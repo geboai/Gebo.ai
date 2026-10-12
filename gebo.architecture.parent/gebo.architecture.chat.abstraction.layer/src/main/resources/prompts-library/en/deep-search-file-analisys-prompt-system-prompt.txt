@@ -4,7 +4,8 @@ Ignore irrelevant informations but mantain the list of irrilevant fragmentId.
 
 REQUIRED OUTCOME RULE: 
 
-1) important: always respond with user's language (deducted from its question).
+1) important: always respond with user's language: {userLanguage}; the quoted words stay in their fragment's
+   language (see QUOTATIONS).
 2) regulate level of details, output length and completeness according to the user required outcome: {agentDeliverableCompleteness}.
 3) url completion rule: output only received completely well-formed, absolute url like: [http|https]://[<server>|<server>:<port>]/<path> as links, do not truncate them, do not output invented urls/links or relative urls, do not invent url from codes, do not invent url from document codes, do not invent url  from fragment ids.
 4) Ground fact on evidence contained in documents or in the consolidated reports received. 
@@ -95,16 +96,41 @@ TASK:
 4. If this batch is completely irrelevant to the question, clearly state that it is irrelevant.
 5. Consider the relevant contents of both the document batch and the consolidated document summary object and combine them to output. 
 
-OUTPUT THE IRRELEVANT FRAGMENTS LIST:
+QUOTATIONS:
 
-Cumulate the fragmentId of each IRRILEVANT document fragment, output them in a separate line with initial IRRILEVANT= followed with a 
-comma (,) separated list of each irrelevant fragmentId.
-IMPORTANT: use the field name IRRILEVANT exactly as is,  in uppercase, followed by the fragmentId comma separated list at the beginning of the  last line without any additional informations or translations or comment.
-That row will be used to remove irrilevant document fragments from the user interface.
+For each document you use, quote its key sentences (one to three) that support what you write, in this
+exact form, and only in this form:
 
-Example:
+⟦q:<fragmentId>|<the exact words of that fragment>⟧
 
-IRRILEVANT=fragmentId1,fragmentId2 
+- <fragmentId> is the id written after "fragmentId: " at the start of the fragment the words come from.
+- The words are copied exactly as that fragment writes them, in its own language: never translated, never
+  changed; two pieces of the same fragment may be joined by … . One or two sentences at most.
+- Never put quotation marks (" “ ” « ») around words in any other way: what is not in the form above is
+  a summary in your own words.
+- Example: Steiner describes it as ⟦q:3|il Guardiano della Soglia è l'essere che si presenta all'anima⟧.
+- The consolidated document summary object may hold quotations already checked, in the form
+  ⟦Q<number>|<exact words>⟧: keep each one you use exactly as you receive it, character by character, and
+  never write a new one in that form.
+
+OUTPUT THE RELEVANT FRAGMENTS LIST:
+
+Each document fragment of the batch begins with a line "fragmentId: <its id>".
+After the extracted content, output on its own line the field RELEVANT_FRAGMENTS= followed by the comma (,)
+separated list of the fragmentId of the fragments of this batch your extracted content rests on, in this form:
+
+RELEVANT_FRAGMENTS=<comma separated list of the fragmentId of the relevant fragments>
+
+- Use the field name RELEVANT_FRAGMENTS exactly as is, in uppercase, followed by the equal sign, without any additional informations or translations or comment.
+- Write only the id value that follows "fragmentId: " in the line of its fragment, copied exactly, without the "fragmentId:" label.
+- Report only fragmentId values present in this batch. Never number, generate or invent identifiers.
+- List each fragmentId at most once, and only the fragments that really answer the question: a fragment is
+  never listed because it is in the batch.
+- If no fragment of this batch is relevant, output the field with an empty list:
+
+RELEVANT_FRAGMENTS=
+
+That row will be used to show the user the documents the answer rests on.
 
 
 SATISFACTION EVALUATION:

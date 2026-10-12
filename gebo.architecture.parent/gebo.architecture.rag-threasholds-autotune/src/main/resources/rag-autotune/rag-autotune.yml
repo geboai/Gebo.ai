@@ -12,3 +12,18 @@ ai.gebo.rag-threashold-autotune.prompts:
           userReference: /rag-autotune/en/in-topic-query-generator-user-prompt.txt
           chatHistory: NOT_REQUIRED
           contextDocuments: NOT_REQUIRED
+    uses:
+        - code: rag-autotune-rating
+          description: Rates, as a strict retrieval judge, how relevant each retrieved chunk is to a query, used to auto-tune RAG relevance thresholds.
+          module: rag-threasholds-autotune
+          placeholders:
+              - placeholder: documents
+                description: The batch of document chunks (id + text) to be rated for relevance against the query.
+              - placeholder: question
+                description: The query the chunks are being rated against.
+        - code: in-topic-query-generator
+          description: Generates synthetic, realistic in-topic queries for a batch of document chunks, used to build evaluation data for auto-tuning RAG relevance thresholds.
+          module: rag-threasholds-autotune
+          placeholders:
+              - placeholder: documents
+                description: The batch of document chunks (id + text) to generate a synthetic in-topic query for.

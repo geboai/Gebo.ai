@@ -48,7 +48,8 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Aggregate
 					+ (agentConfig != null ? agentConfig.getCode() : null) + " agentRoleCode:"
 					+ (agentConfig != null ? agentConfig.getAgentRoleCode() : null));
 		}
-		final ToolCallsListener callBacksListener = new ToolCallsListener();
+		// this agent's own tool calls, forwarded to the user request's recorder
+		final ToolCallsListener callBacksListener = agentToolCallsListener(chatRequestContext);
 		final int maxLoop = agentConfig.getMaxLoopIterations() != null && agentConfig.getMaxLoopIterations() > 0
 				? agentConfig.getMaxLoopIterations()
 				: 4;

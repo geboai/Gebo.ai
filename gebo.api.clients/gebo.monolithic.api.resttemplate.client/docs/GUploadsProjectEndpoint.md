@@ -23,7 +23,6 @@ Name | Type | Description | Notes
 **aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **personalData** | **Boolean** |  |  [optional]
 **uploadHandshakeCode** | **String** |  |  [optional]
-**uploadedContents** | **List&lt;String&gt;** |  |  [optional]
 
 <a name="SynchroStrategyEnum"></a>
 ## Enum: SynchroStrategyEnum

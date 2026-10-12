@@ -20,9 +20,9 @@ export interface GJobStatusItem {
     error?: boolean;
     startDateTime?: Date;
     endDateTime?: Date;
-    jobType?: GJobStatusItem.JobTypeEnum;
     processing?: boolean;
     finished?: boolean;
+    jobType?: GJobStatusItem.JobTypeEnum;
 }
 export namespace GJobStatusItem {
     export type JobTypeEnum = 'CONTENTS_READING' | 'VECTORIZING_CONTENTS' | 'CONTENTS_READING_VECTORIZING';

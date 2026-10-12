@@ -13,6 +13,15 @@ import org.opensearch.client.opensearch._types.query_dsl.TextQueryType;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.FieldAndFormat;
 import org.opensearch.client.json.JsonData;
+import org.opensearch.client.json.JsonpMapper;
+import jakarta.json.stream.JsonGenerator;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonNumber;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonString;
+import jakarta.json.JsonValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +29,18 @@ import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
 import ai.gebo.architecture.fulltext.model.FullTextChunk;
 import ai.gebo.architecture.fulltext.model.FullTextChunkSearchHit;
 import ai.gebo.architecture.fulltext.model.FullTextDocument;
+import ai.gebo.architecture.opensearch.config.OpenSearchIndexBootstrapConfig;
 import ai.gebo.model.DocumentMetaInfos;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @ConditionalOnProperty(prefix = "ai.gebo.opensearch", name = "enabled", havingValue = "true")
 @Service
 public class OpenSearchFullTextChunkSearchService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(OpenSearchFullTextChunkSearchService.class);
 
 	private final OpenSearchClient client;
 	private final String indexName = "kb_chunks";
@@ -107,8 +119,7 @@ public class OpenSearchFullTextChunkSearchService {
 			sb.size(topK);
 		}
 
-		SearchResponse<Map> resp = client.search(sb.build(), Map.class);
-		return flattenHits(resp, filter);
+		return runSearch(sb, finalQuery, filter, qs.size() + " quer(ies) OR-ed", topK);
 	}
 
 	/**
@@ -166,16 +177,82 @@ public class OpenSearchFullTextChunkSearchService {
 			sb.size(topK);
 		}
 
-		SearchResponse<Map> resp = client.search(sb.build(), Map.class);
-
 		// Convert hits (also include inner_hits if collapse is enabled)
-		return flattenHits(resp, filter);
+		return runSearch(sb, finalQuery, filter, "1 query", topK);
 	}
 
-	private Query buildMainQuery(String q) {
-		return Query.of(qq -> qq.multiMatch(mm -> mm.query(q).fields("content^4", "document_title^2", "meta.*^0.5")
-				.operator(org.opensearch.client.opensearch._types.query_dsl.Operator.And)
-				.type(org.opensearch.client.opensearch._types.query_dsl.TextQueryType.BestFields)));
+	/**
+	 * Runs the search, logging the call at DEBUG and the query sent and the hits at
+	 * TRACE: most of a query's words must match (see buildMainQuery), so a query with no
+	 * hit is told apart from an index with nothing for these filters.
+	 */
+	private List<FullTextChunkSearchHit> runSearch(SearchRequest.Builder sb, Query finalQuery,
+			FullTextSearchMetaDataFilter filter, String what, int topK) throws OpenSearchException, IOException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin search(...) index:" + indexName + " " + what + " topK:" + topK + " knowledge bases:"
+					+ (filter != null ? filter.getKnowledgebaseCodes() : null) + " collapseByDocument:"
+					+ (filter != null && filter.isCollapseByDocument()));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<FULLTEXT_QUERY index=" + indexName + ">");
+			LOGGER.trace(toJson(finalQuery));
+			LOGGER.trace("</FULLTEXT_QUERY>");
+		}
+		final long start = System.currentTimeMillis();
+		final SearchResponse<Map> resp = client.search(sb.build(), Map.class);
+		final List<FullTextChunkSearchHit> hits = flattenHits(resp, filter);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End search(...) index:" + indexName + " " + what + " returned " + hits.size() + " chunk(s) in "
+					+ (System.currentTimeMillis() - start) + " ms");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			for (FullTextChunkSearchHit hit : hits) {
+				LOGGER.trace("Full-text hit score:" + hit.getScore() + " chunk:"
+						+ (hit.getChunk() != null ? hit.getChunk().getId() + " "
+								+ (hit.getChunk().getDocument() != null ? hit.getChunk().getDocument().getTitle() : null)
+								: null)
+						+ " highlight:" + hit.getHighlight());
+			}
+		}
+		return hits;
+	}
+
+	/** The query as OpenSearch receives it, for the TRACE log. */
+	private String toJson(Query query) {
+		try {
+			final JsonpMapper mapper = client._transport().jsonpMapper();
+			final StringWriter writer = new StringWriter();
+			try (JsonGenerator generator = mapper.jsonProvider().createGenerator(writer)) {
+				query.serialize(generator, mapper);
+			}
+			return writer.toString();
+		} catch (RuntimeException e) {
+			return String.valueOf(query);
+		}
+	}
+
+	/**
+	 * How many of a query's words a passage must have: all of them up to two words, three
+	 * quarters of them above (OpenSearch's minimum_should_match).
+	 */
+	static final String MINIMUM_WORDS_MATCHING = "2<75%";
+
+	/**
+	 * A query's passages: its words as written, weighed first; the same words without
+	 * their accents ("Svabhavat" finds "Svâbhâvat"), weighed less; the words close
+	 * together as in the passage, weighed more.
+	 */
+	static Query buildMainQuery(String q) {
+		final Query asWritten = Query.of(qq -> qq.multiMatch(mm -> mm.query(q)
+				.fields("content^4", "document_title^2", "meta.*^0.5").type(TextQueryType.BestFields)
+				.minimumShouldMatch(MINIMUM_WORDS_MATCHING)));
+		final Query folded = Query.of(qq -> qq.multiMatch(mm -> mm.query(q)
+				.fields("content." + OpenSearchIndexBootstrapConfig.FOLDED_SUBFIELD + "^2",
+						"document_title." + OpenSearchIndexBootstrapConfig.FOLDED_SUBFIELD)
+				.type(TextQueryType.BestFields).minimumShouldMatch(MINIMUM_WORDS_MATCHING)));
+		final Query near = Query.of(qq -> qq.matchPhrase(mp -> mp
+				.field("content." + OpenSearchIndexBootstrapConfig.FOLDED_SUBFIELD).query(q).slop(2).boost(2f)));
+		return Query.of(qq -> qq.bool(b -> b.should(asWritten, folded, near).minimumShouldMatch("1")));
 	}
 
 	private List<Query> buildFilters(FullTextSearchMetaDataFilter f) {
@@ -323,9 +400,10 @@ public class OpenSearchFullTextChunkSearchService {
 			return null;
 		}
 
-		// JsonData -> Map (uses the client JSON mapper internally)
+		// JsonData -> Map: the map holds jakarta.json values (a JsonString prints with its
+		// quotes, a JsonNumber is no Number), turned into plain Java values
 		@SuppressWarnings("unchecked")
-		Map<String, Object> src = (Map<String, Object>) srcData.to(Map.class);
+		Map<String, Object> src = (Map<String, Object>) plain(srcData.to(Map.class));
 
 		FullTextChunk chunk = fromSource(src);
 
@@ -447,6 +525,46 @@ public class OpenSearchFullTextChunkSearchService {
 			return object.toString();
 		}
 
+	}
+
+	/**
+	 * The given value with every jakarta.json value in it turned into the plain Java
+	 * one (String, Integer/Long/Double, Boolean, null, Map, List), as the source of a
+	 * main hit is read.
+	 */
+	static Object plain(Object value) {
+		if (value instanceof JsonString s) {
+			return s.getString();
+		}
+		if (value instanceof JsonNumber n) {
+			if (!n.isIntegral()) {
+				return n.doubleValue();
+			}
+			return n.bigIntegerValue().bitLength() < 32 ? (Object) n.intValue() : (Object) n.longValue();
+		}
+		if (value instanceof JsonObject o) {
+			Map<String, Object> out = new LinkedHashMap<>();
+			o.forEach((k, v) -> out.put(k, plain(v)));
+			return out;
+		}
+		if (value instanceof JsonArray a) {
+			List<Object> out = new ArrayList<>();
+			a.forEach(v -> out.add(plain(v)));
+			return out;
+		}
+		if (value instanceof JsonValue v) {
+			return switch (v.getValueType()) {
+			case TRUE -> Boolean.TRUE;
+			case FALSE -> Boolean.FALSE;
+			default -> null;
+			};
+		}
+		if (value instanceof Map<?, ?> m) {
+			Map<Object, Object> out = new LinkedHashMap<>();
+			m.forEach((k, v) -> out.put(k, plain(v)));
+			return out;
+		}
+		return value;
 	}
 
 	private static void putBack(Map<String, Object> meta, String key, Object value) {

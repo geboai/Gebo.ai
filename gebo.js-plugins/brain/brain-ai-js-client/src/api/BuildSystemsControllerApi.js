@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from "../ApiClient";
+import GBuildSystem from '../model/GBuildSystem';
+import GBuildSystemType from '../model/GBuildSystemType';
 
 /**
 * BuildSystemsController service.
@@ -36,8 +38,8 @@ export default class BuildSystemsControllerApi {
 
 
     /**
-     * @param {Object} buildSystemTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} buildSystemTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GBuildSystem>} and HTTP response
      */
     getBuildSystemConfigsWithHttpInfo(buildSystemTypeCode) {
       
@@ -63,7 +65,7 @@ export default class BuildSystemsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GBuildSystem];
 
       return this.apiClient.callApi(
         '/api/admin/BuildSystemsController/getBuildSystemConfigs', 'GET',
@@ -74,7 +76,7 @@ export default class BuildSystemsControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} buildSystemTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GBuildSystem>}
      */
     getBuildSystemConfigs(buildSystemTypeCode) {
       return this.getBuildSystemConfigsWithHttpInfo(buildSystemTypeCode)
@@ -85,7 +87,7 @@ export default class BuildSystemsControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GBuildSystemType>} and HTTP response
      */
     getBuildSystemTypesWithHttpInfo() {
       
@@ -107,7 +109,7 @@ export default class BuildSystemsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GBuildSystemType];
 
       return this.apiClient.callApi(
         '/api/admin/BuildSystemsController/getBuildSystemTypes', 'GET',
@@ -117,7 +119,7 @@ export default class BuildSystemsControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GBuildSystemType>}
      */
     getBuildSystemTypes() {
       return this.getBuildSystemTypesWithHttpInfo()

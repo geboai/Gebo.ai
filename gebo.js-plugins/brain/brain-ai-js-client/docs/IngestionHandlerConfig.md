@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **Object** |  | [optional] 
-**fileTypes** | **Object** |  | [optional] 
+**id** | **String** |  | [optional] 
+**fileTypes** | [**[IngestionFileType]**](IngestionFileType.md) |  | [optional] 

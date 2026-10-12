@@ -85,8 +85,8 @@ public class FileSystemsControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void getFileSystemSystemTypes1Test() {
-        List<GContentManagementSystemType> response = api.getFileSystemSystemTypes1();
+    public void getFileSystemSystemTypesTest() {
+        List<GContentManagementSystemType> response = api.getFileSystemSystemTypes();
 
         // TODO: test validations
     }

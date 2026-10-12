@@ -38,7 +38,7 @@ export default class GeboUserKnowledgeBaseSemanticSearchControllerApi {
 
     /**
      * @param {module:model/SemanticQueryParam} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<'String'>} and HTTP response
      */
     semanticSearchWithHttpInfo(body) {
       
@@ -64,7 +64,7 @@ export default class GeboUserKnowledgeBaseSemanticSearchControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = ['String'];
 
       return this.apiClient.callApi(
         '/api/users/GeboUserKnowledgeBaseSemanticSearchController/semanticSearch', 'POST',
@@ -75,7 +75,7 @@ export default class GeboUserKnowledgeBaseSemanticSearchControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<'String'>}
      */
     semanticSearch(body) {
       return this.semanticSearchWithHttpInfo(body)

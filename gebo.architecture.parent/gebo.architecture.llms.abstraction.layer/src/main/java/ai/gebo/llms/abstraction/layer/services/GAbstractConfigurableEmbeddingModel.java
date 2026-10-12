@@ -9,12 +9,16 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
+
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.VectorStore;
 
 import io.micrometer.observation.ObservationRegistry;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
+import ai.gebo.llms.abstraction.layer.services.impl.LLMUsageRecorder;
+import ai.gebo.llms.abstraction.layer.services.impl.UsageRecordingEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.vectorstores.GAccountingExtendedVectorStoreAdapter;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGExtendedVectorStore;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactory;
@@ -29,7 +33,28 @@ import ai.gebo.llms.abstraction.layer.vectorstores.model.EmbeddingTrafficInfo;
  * @param <EmbeddingModelType> The type of the embedding model.
  */
 public abstract class GAbstractConfigurableEmbeddingModel<ModelConfig extends GBaseEmbeddingModelConfig, EmbeddingModelType extends EmbeddingModel>
-		implements IGConfigurableEmbeddingModel<ModelConfig> {
+		implements IGConfigurableEmbeddingModel<ModelConfig>, IGProviderDealPricedModel {
+
+	/**
+	 * Prices this model by its provider deal; attached by the runtime DAO, null
+	 * leaving it priced by the provider API only.
+	 */
+	private volatile IGProviderDealService providerDealService = null;
+
+	@Override
+	public void setProviderDealService(IGProviderDealService providerDealService) {
+		this.providerDealService = providerDealService;
+	}
+
+	/**
+	 * The price the provider deal covering this model's API key gives to its
+	 * model code, else the provider API's one; read from an in-memory snapshot.
+	 */
+	@Override
+	public GModelPricingConditions getPricingConditions() {
+		return IGProviderDealPricedModel.dealOrProviderApiPricing(providerDealService, this);
+	}
+
 
 	// Configuration of the embedding model.
 	protected ModelConfig config = null;
@@ -39,6 +64,14 @@ public abstract class GAbstractConfigurableEmbeddingModel<ModelConfig extends GB
 
 	// The instantiated embedding model.
 	protected EmbeddingModelType model = null;
+
+	// The provider model wrapped so that every call through it is recorded as usage:
+	// what the vector store embeds with and what getEmbeddingModel() hands out.
+	protected UsageRecordingEmbeddingModel recordingModel = null;
+
+	// Attached by the runtime DAO once the model is created; null leaves the calls
+	// unrecorded.
+	private volatile LLMUsageRecorder usageRecorder = null;
 
 	// Adapter for vector store accounting.
 	protected GAccountingExtendedVectorStoreAdapter vectorStore = null;
@@ -90,6 +123,8 @@ public abstract class GAbstractConfigurableEmbeddingModel<ModelConfig extends GB
 		this.config = config;
 		this.type = type;
 		this.model = this.configureModel(config, type);
+		this.recordingModel = new UsageRecordingEmbeddingModel(this.model, () -> this.config,
+				() -> this.usageRecorder, this::getPricingConditions, this::getProviderId);
 		this.storeFactory = this.vectorStoreFactoryProvider.get();
 
 		// Close existing vector store if any
@@ -103,7 +138,16 @@ public abstract class GAbstractConfigurableEmbeddingModel<ModelConfig extends GB
 		}
 
 		// Create and assign a new vector store adapter
-		this.vectorStore = new GAccountingExtendedVectorStoreAdapter(this.storeFactory.create(config, model));
+		this.vectorStore = new GAccountingExtendedVectorStoreAdapter(this.storeFactory.create(config, recordingModel));
+	}
+
+	/**
+	 * Attaches the recorder the embedding calls are accounted with. Called by the
+	 * runtime DAO right after creating the model; the recording wrapper reads it on
+	 * every call, so it applies to the vector store already built by initialize().
+	 */
+	public void setUsageRecorder(LLMUsageRecorder usageRecorder) {
+		this.usageRecorder = usageRecorder;
 	}
 
 	/**
@@ -134,7 +178,7 @@ public abstract class GAbstractConfigurableEmbeddingModel<ModelConfig extends GB
 
 	@Override
 	public EmbeddingModel getEmbeddingModel() {
-		return model;
+		return recordingModel != null ? recordingModel : model;
 	}
 
 	@Override

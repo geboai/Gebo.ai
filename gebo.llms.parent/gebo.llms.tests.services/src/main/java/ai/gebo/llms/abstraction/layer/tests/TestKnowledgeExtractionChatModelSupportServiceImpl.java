@@ -27,6 +27,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportSe
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
@@ -54,6 +55,8 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 	final IGToolCallbackSourceRepositoryPattern toolCallbacksRepository;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Inner class representing a test implementation of the configurable chat
@@ -64,8 +67,8 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 
 		public TestConfigurableKnowledgeExtractionChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 
 		}
 
@@ -103,7 +106,7 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
 			return new TestConfigurableKnowledgeExtractionChatModel(rendererFactory, toolCallbacksRepository,
-					usageAdvisorFactory, observationRegistry);
+					usageAdvisorFactory, observationRegistry, modelsLibrary);
 		}
 
 	};
@@ -113,6 +116,7 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 	 */
 	static {
 		type.setCode(TEST_CONFIGURABLE_KNOWLEDGE_EXTRACTION_CHAT_MODEL_SERVICE);
+		type.setProviderId("test");
 		model.setCode(TEST_KNOWLEDGE_EXTRACTION_MODEL_001);
 
 	}
@@ -167,7 +171,7 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 	public IGConfigurableChatModel<TestKnowledgeExtractionModelConfiguration> create(
 			TestKnowledgeExtractionModelConfiguration config) throws LLMConfigException {
 		TestConfigurableKnowledgeExtractionChatModel out = new TestConfigurableKnowledgeExtractionChatModel(
-				documentsRenderProvider, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				documentsRenderProvider, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		out.initialize(config, type);
 		return out;
 	}

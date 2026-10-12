@@ -40,9 +40,9 @@ export default class JobsEntriesForClassNameFilter {
     if (data) {
       obj = obj || new JobsEntriesForClassNameFilter();
       if (data.hasOwnProperty('className'))
-        obj.className = ApiClient.convertToType(data['className'], Object);
+        obj.className = ApiClient.convertToType(data['className'], 'String');
       if (data.hasOwnProperty('jobType'))
-        obj.jobType = ApiClient.convertToType(data['jobType'], Object);
+        obj.jobType = ApiClient.convertToType(data['jobType'], 'String');
       if (data.hasOwnProperty('page'))
         obj.page = DataPage.constructFromObject(data['page']);
     }
@@ -51,12 +51,36 @@ export default class JobsEntriesForClassNameFilter {
 }
 
 /**
- * @member {Object} className
+ * @member {String} className
  */
 JobsEntriesForClassNameFilter.prototype.className = undefined;
 
 /**
- * @member {Object} jobType
+ * Allowed values for the <code>jobType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+JobsEntriesForClassNameFilter.JobTypeEnum = {
+  /**
+   * value: "CONTENTS_READING"
+   * @const
+   */
+  CONTENTS_READING: "CONTENTS_READING",
+
+  /**
+   * value: "VECTORIZING_CONTENTS"
+   * @const
+   */
+  VECTORIZING_CONTENTS: "VECTORIZING_CONTENTS",
+
+  /**
+   * value: "CONTENTS_READING_VECTORIZING"
+   * @const
+   */
+  CONTENTS_READING_VECTORIZING: "CONTENTS_READING_VECTORIZING"
+};
+/**
+ * @member {module:model/JobsEntriesForClassNameFilter.JobTypeEnum} jobType
  */
 JobsEntriesForClassNameFilter.prototype.jobType = undefined;
 

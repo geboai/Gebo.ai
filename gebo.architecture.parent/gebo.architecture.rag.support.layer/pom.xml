@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.3.0</version>
+		<version>1.0.4.0</version>
 	</parent>
 	<artifactId>gebo.architecture.rag.support.layer</artifactId>
 	<dependencies>
@@ -25,6 +25,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.search.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>ai.gebo</groupId>
 			<artifactId>gebo.system.ingestion</artifactId>
 			<version>${project.version}</version>
@@ -38,6 +43,11 @@
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

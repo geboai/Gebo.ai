@@ -3,19 +3,19 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  | [optional] 
-**description** | **Object** |  | [optional] 
-**userModified** | **Object** |  | [optional] 
-**userCreated** | **Object** |  | [optional] 
-**dateModified** | **Object** |  | [optional] 
-**dateCreated** | **Object** |  | [optional] 
-**maxLoopIteration** | **Object** |  | [optional] 
-**accessibleToAll** | **Object** |  | [optional] 
-**accessibleUsers** | **Object** |  | [optional] 
-**accessibleGroups** | **Object** |  | [optional] 
-**aclAliases** | **Object** |  | [optional] 
-**agentsNetworkServiceFactoryId** | **Object** |  | 
-**scenarioDescription** | **Object** |  | 
-**agents** | **Object** |  | 
-**readOnly** | **Object** |  | [optional] 
-**defaultUserInteractionNetwork** | **Object** |  | [optional] 
+**code** | **String** |  | [optional] 
+**description** | **String** |  | [optional] 
+**userModified** | **String** |  | [optional] 
+**userCreated** | **String** |  | [optional] 
+**dateModified** | **Date** |  | [optional] 
+**dateCreated** | **Date** |  | [optional] 
+**maxLoopIteration** | **Number** |  | [optional] 
+**accessibleToAll** | **Boolean** |  | [optional] 
+**accessibleUsers** | **[String]** |  | [optional] 
+**accessibleGroups** | **[String]** |  | [optional] 
+**aclAliases** | **[Number]** |  | [optional] 
+**agentsNetworkServiceFactoryId** | **String** |  | 
+**scenarioDescription** | **String** |  | 
+**agents** | [**[AgentNetworkParticipant]**](AgentNetworkParticipant.md) |  | 
+**readOnly** | **Boolean** |  | [optional] 
+**defaultUserInteractionNetwork** | **Boolean** |  | [optional] 

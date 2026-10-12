@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getChatModelTypes"></a>
 # **getChatModelTypes**
-> Object getChatModelTypes()
+> [GChatModelType] getChatModelTypes()
 
 
 
@@ -31,7 +31,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GChatModelType]**](GChatModelType.md)
 
 ### Authorization
 
@@ -44,7 +44,7 @@ No authorization required
 
 <a name="getRuntimeConfiguredChatModels"></a>
 # **getRuntimeConfiguredChatModels**
-> Object getRuntimeConfiguredChatModels(opts)
+> [ConfigurationEntryGBaseChatModelConfig] getRuntimeConfiguredChatModels(opts)
 
 
 
@@ -54,7 +54,7 @@ import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.ChatModelsControllerApi();
 let opts = { 
-  'modelTypeCode': null // Object | 
+  'modelTypeCode': "modelTypeCode_example" // String | 
 };
 apiInstance.getRuntimeConfiguredChatModels(opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -68,11 +68,11 @@ apiInstance.getRuntimeConfiguredChatModels(opts).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional] 
+ **modelTypeCode** | **String**|  | [optional] 
 
 ### Return type
 
-**Object**
+[**[ConfigurationEntryGBaseChatModelConfig]**](ConfigurationEntryGBaseChatModelConfig.md)
 
 ### Authorization
 

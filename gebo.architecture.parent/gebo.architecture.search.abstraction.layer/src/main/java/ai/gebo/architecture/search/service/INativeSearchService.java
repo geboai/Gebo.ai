@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchResult;
@@ -15,6 +16,16 @@ public interface INativeSearchService<CustomSearchResultExtractionDataType exten
 		extends ISearchService<CustomSearchResultExtractionDataType> {
 	public List<SearchResult> nativeSearch(NativeSearchDataStructure query, SearchableSystemMetaData system,
 			int nEntryLimit) throws IOException, SearchServiceException;
+
+	/**
+	 * Searches natively applying the call parameters (timeouts, retries) in the
+	 * service's own client software where it can, only for this search: by default a
+	 * search without them.
+	 */
+	public default List<SearchResult> nativeSearch(NativeSearchDataStructure query, SearchableSystemMetaData system,
+			int nEntryLimit, SearchCallParameters parameters) throws IOException, SearchServiceException {
+		return nativeSearch(query, system, nEntryLimit);
+	}
 
 	public Class<NativeSearchDataStructure> getNativeSearchDataStructureType();
 

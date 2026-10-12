@@ -64,6 +64,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
+import ai.gebo.llms.abstraction.layer.vectorstores.EmbedTypeFilters;
 import ai.gebo.model.DocumentMetaInfos;
 
 @Component
@@ -385,6 +386,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 				builder.query(candidate.getText());
 				builder.topK(probeTopK);
 				builder.similarityThresholdAll();
+				builder.filterExpression(EmbedTypeFilters.CONTENTS_ONLY);
 				final List<Document> neighbours = vectorStore.similaritySearch(builder.build());
 				final Set<String> reachedDocuments = new HashSet<String>();
 				int reachedFragments = 0;
@@ -553,8 +555,8 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			LOGGER.info("Autoune with sample: \"" + query + "\" threashold:" + samples.getDefaultThreashold());
 			try {
 				Builder builder = SearchRequest.builder();
-				builder.filterExpression(
-						DocumentMetaInfos.GEBO_TOKEN_LENGTH + ">" + config.getSampleFragmentsMinTokenLength());
+				builder.filterExpression(EmbedTypeFilters.contentsOnly(
+						DocumentMetaInfos.GEBO_TOKEN_LENGTH + ">" + config.getSampleFragmentsMinTokenLength()));
 				builder.topK(wanted);
 				builder.similarityThreshold(samples.getDefaultThreashold());
 				builder.query(query);
@@ -618,8 +620,9 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			final String fileName = fileNameOf(docCode);
 			try {
 				Builder builder = SearchRequest.builder();
-				builder.filterExpression(DocumentMetaInfos.GEBO_FILE_NAME + " == '" + fileName + "' && "
-						+ DocumentMetaInfos.GEBO_TOKEN_LENGTH + " > " + config.getSampleFragmentsMinTokenLength());
+				builder.filterExpression(EmbedTypeFilters.contentsOnly(DocumentMetaInfos.GEBO_FILE_NAME + " == '"
+						+ fileName + "' && " + DocumentMetaInfos.GEBO_TOKEN_LENGTH + " > "
+						+ config.getSampleFragmentsMinTokenLength()));
 				builder.topK(perDocument);
 				builder.similarityThresholdAll();
 				builder.query(fileName);
@@ -865,6 +868,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			builder.query(question.text);
 			builder.topK(topK);
 			builder.similarityThreshold(threashold);
+			builder.filterExpression(EmbedTypeFilters.CONTENTS_ONLY);
 			SearchRequest request = builder.build();
 			final List<Document> retrieved = vectorStore.similaritySearch(request);
 			if (!retrieved.isEmpty()) {
@@ -1017,6 +1021,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 		builder.query(question.text);
 		builder.similarityThreshold(threashold);
 		builder.topK(topK);
+		builder.filterExpression(EmbedTypeFilters.CONTENTS_ONLY);
 		SearchRequest request = builder.build();
 		qr.relatedDocuments = vectorStore.similaritySearch(request);
 		return qr;

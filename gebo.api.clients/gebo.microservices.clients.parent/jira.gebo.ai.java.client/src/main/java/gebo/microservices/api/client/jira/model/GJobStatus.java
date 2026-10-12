@@ -25,7 +25,7 @@ import java.util.Date;
  * GJobStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:34.676208947+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:49.407478858+02:00[Europe/Rome]")
 
 public class GJobStatus {
   @JsonProperty("code")

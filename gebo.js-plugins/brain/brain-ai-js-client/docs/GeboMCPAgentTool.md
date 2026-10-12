@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**agentConfigCode** | **Object** |  | 
-**networkConfigCode** | **Object** |  | 
-**toolName** | **Object** |  | 
+**agentConfigCode** | **String** |  | 
+**networkConfigCode** | **String** |  | 
+**toolName** | **String** |  | 

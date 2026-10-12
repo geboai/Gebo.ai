@@ -39,28 +39,28 @@ export default class CalledFunction {
     if (data) {
       obj = obj || new CalledFunction();
       if (data.hasOwnProperty('functionName'))
-        obj.functionName = ApiClient.convertToType(data['functionName'], Object);
+        obj.functionName = ApiClient.convertToType(data['functionName'], 'String');
       if (data.hasOwnProperty('functionDescription'))
-        obj.functionDescription = ApiClient.convertToType(data['functionDescription'], Object);
+        obj.functionDescription = ApiClient.convertToType(data['functionDescription'], 'String');
       if (data.hasOwnProperty('paramsDescription'))
-        obj.paramsDescription = ApiClient.convertToType(data['paramsDescription'], Object);
+        obj.paramsDescription = ApiClient.convertToType(data['paramsDescription'], ['String']);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} functionName
+ * @member {String} functionName
  */
 CalledFunction.prototype.functionName = undefined;
 
 /**
- * @member {Object} functionDescription
+ * @member {String} functionDescription
  */
 CalledFunction.prototype.functionDescription = undefined;
 
 /**
- * @member {Object} paramsDescription
+ * @member {Array.<String>} paramsDescription
  */
 CalledFunction.prototype.paramsDescription = undefined;
 

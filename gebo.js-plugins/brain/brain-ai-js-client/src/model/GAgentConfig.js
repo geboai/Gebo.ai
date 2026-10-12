@@ -26,9 +26,9 @@ export default class GAgentConfig {
    * Constructs a new <code>GAgentConfig</code>.
    * @alias module:model/GAgentConfig
    * @class
-   * @param agentServiceId {Object} 
-   * @param agentRoleCode {Object} 
-   * @param maxLoopIterations {Object} 
+   * @param agentServiceId {String} 
+   * @param agentRoleCode {String} 
+   * @param maxLoopIterations {Number} 
    */
   constructor(agentServiceId, agentRoleCode, maxLoopIterations) {
     this.agentServiceId = agentServiceId;
@@ -47,118 +47,136 @@ export default class GAgentConfig {
     if (data) {
       obj = obj || new GAgentConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('agentType'))
-        obj.agentType = ApiClient.convertToType(data['agentType'], Object);
+        obj.agentType = ApiClient.convertToType(data['agentType'], 'String');
       if (data.hasOwnProperty('adaptedAgentNetworkCode'))
-        obj.adaptedAgentNetworkCode = ApiClient.convertToType(data['adaptedAgentNetworkCode'], Object);
+        obj.adaptedAgentNetworkCode = ApiClient.convertToType(data['adaptedAgentNetworkCode'], 'String');
       if (data.hasOwnProperty('agentNetworkServiceCode'))
-        obj.agentNetworkServiceCode = ApiClient.convertToType(data['agentNetworkServiceCode'], Object);
+        obj.agentNetworkServiceCode = ApiClient.convertToType(data['agentNetworkServiceCode'], 'String');
       if (data.hasOwnProperty('agentServiceId'))
-        obj.agentServiceId = ApiClient.convertToType(data['agentServiceId'], Object);
+        obj.agentServiceId = ApiClient.convertToType(data['agentServiceId'], 'String');
       if (data.hasOwnProperty('mainLoopPromptUseCode'))
-        obj.mainLoopPromptUseCode = ApiClient.convertToType(data['mainLoopPromptUseCode'], Object);
+        obj.mainLoopPromptUseCode = ApiClient.convertToType(data['mainLoopPromptUseCode'], 'String');
       if (data.hasOwnProperty('customLoopPrompt'))
         obj.customLoopPrompt = GPromptTemplateConfig.constructFromObject(data['customLoopPrompt']);
       if (data.hasOwnProperty('subscribeAllTools'))
-        obj.subscribeAllTools = ApiClient.convertToType(data['subscribeAllTools'], Object);
+        obj.subscribeAllTools = ApiClient.convertToType(data['subscribeAllTools'], 'Boolean');
       if (data.hasOwnProperty('agentRoleCode'))
-        obj.agentRoleCode = ApiClient.convertToType(data['agentRoleCode'], Object);
+        obj.agentRoleCode = ApiClient.convertToType(data['agentRoleCode'], 'String');
       if (data.hasOwnProperty('useDefaultChatModel'))
-        obj.useDefaultChatModel = ApiClient.convertToType(data['useDefaultChatModel'], Object);
+        obj.useDefaultChatModel = ApiClient.convertToType(data['useDefaultChatModel'], 'Boolean');
       if (data.hasOwnProperty('useChatModelWithUse'))
-        obj.useChatModelWithUse = ApiClient.convertToType(data['useChatModelWithUse'], Object);
+        obj.useChatModelWithUse = ApiClient.convertToType(data['useChatModelWithUse'], 'String');
       if (data.hasOwnProperty('chatModelReference'))
         obj.chatModelReference = GObjectRefGBaseChatModelConfig.constructFromObject(data['chatModelReference']);
       if (data.hasOwnProperty('maxLoopIterations'))
-        obj.maxLoopIterations = ApiClient.convertToType(data['maxLoopIterations'], Object);
+        obj.maxLoopIterations = ApiClient.convertToType(data['maxLoopIterations'], 'Number');
       if (data.hasOwnProperty('aclAliases'))
-        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], Object);
+        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
       if (data.hasOwnProperty('defaultConfiguration'))
-        obj.defaultConfiguration = ApiClient.convertToType(data['defaultConfiguration'], Object);
+        obj.defaultConfiguration = ApiClient.convertToType(data['defaultConfiguration'], 'Boolean');
       if (data.hasOwnProperty('topP'))
-        obj.topP = ApiClient.convertToType(data['topP'], Object);
+        obj.topP = ApiClient.convertToType(data['topP'], 'Number');
       if (data.hasOwnProperty('temperature'))
-        obj.temperature = ApiClient.convertToType(data['temperature'], Object);
+        obj.temperature = ApiClient.convertToType(data['temperature'], 'Number');
       if (data.hasOwnProperty('thinking'))
-        obj.thinking = ApiClient.convertToType(data['thinking'], Object);
+        obj.thinking = ApiClient.convertToType(data['thinking'], 'String');
       if (data.hasOwnProperty('readOnly'))
-        obj.readOnly = ApiClient.convertToType(data['readOnly'], Object);
+        obj.readOnly = ApiClient.convertToType(data['readOnly'], 'Boolean');
       if (data.hasOwnProperty('accessibleGroups'))
-        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], Object);
+        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], ['String']);
       if (data.hasOwnProperty('accessibleUsers'))
-        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], Object);
+        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], ['String']);
       if (data.hasOwnProperty('accessibleToAll'))
-        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], Object);
+        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], 'Boolean');
       if (data.hasOwnProperty('enabledFunctions'))
-        obj.enabledFunctions = ApiClient.convertToType(data['enabledFunctions'], Object);
+        obj.enabledFunctions = ApiClient.convertToType(data['enabledFunctions'], ['String']);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GAgentConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GAgentConfig.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GAgentConfig.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GAgentConfig.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GAgentConfig.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GAgentConfig.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} agentType
+ * Allowed values for the <code>agentType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GAgentConfig.AgentTypeEnum = {
+  /**
+   * value: "AGENT"
+   * @const
+   */
+  AGENT: "AGENT",
+
+  /**
+   * value: "AGENTS_NETWORK"
+   * @const
+   */
+  AGENTS_NETWORK: "AGENTS_NETWORK"
+};
+/**
+ * @member {module:model/GAgentConfig.AgentTypeEnum} agentType
  */
 GAgentConfig.prototype.agentType = undefined;
 
 /**
- * @member {Object} adaptedAgentNetworkCode
+ * @member {String} adaptedAgentNetworkCode
  */
 GAgentConfig.prototype.adaptedAgentNetworkCode = undefined;
 
 /**
- * @member {Object} agentNetworkServiceCode
+ * @member {String} agentNetworkServiceCode
  */
 GAgentConfig.prototype.agentNetworkServiceCode = undefined;
 
 /**
- * @member {Object} agentServiceId
+ * @member {String} agentServiceId
  */
 GAgentConfig.prototype.agentServiceId = undefined;
 
 /**
- * @member {Object} mainLoopPromptUseCode
+ * @member {String} mainLoopPromptUseCode
  */
 GAgentConfig.prototype.mainLoopPromptUseCode = undefined;
 
@@ -168,22 +186,40 @@ GAgentConfig.prototype.mainLoopPromptUseCode = undefined;
 GAgentConfig.prototype.customLoopPrompt = undefined;
 
 /**
- * @member {Object} subscribeAllTools
+ * @member {Boolean} subscribeAllTools
  */
 GAgentConfig.prototype.subscribeAllTools = undefined;
 
 /**
- * @member {Object} agentRoleCode
+ * @member {String} agentRoleCode
  */
 GAgentConfig.prototype.agentRoleCode = undefined;
 
 /**
- * @member {Object} useDefaultChatModel
+ * @member {Boolean} useDefaultChatModel
  */
 GAgentConfig.prototype.useDefaultChatModel = undefined;
 
 /**
- * @member {Object} useChatModelWithUse
+ * Allowed values for the <code>useChatModelWithUse</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GAgentConfig.UseChatModelWithUseEnum = {
+  /**
+   * value: "CHAT"
+   * @const
+   */
+  CHAT: "CHAT",
+
+  /**
+   * value: "INTERNAL_SERVICES"
+   * @const
+   */
+  INTERNAL_SERVICES: "INTERNAL_SERVICES"
+};
+/**
+ * @member {module:model/GAgentConfig.UseChatModelWithUseEnum} useChatModelWithUse
  */
 GAgentConfig.prototype.useChatModelWithUse = undefined;
 
@@ -193,57 +229,93 @@ GAgentConfig.prototype.useChatModelWithUse = undefined;
 GAgentConfig.prototype.chatModelReference = undefined;
 
 /**
- * @member {Object} maxLoopIterations
+ * @member {Number} maxLoopIterations
  */
 GAgentConfig.prototype.maxLoopIterations = undefined;
 
 /**
- * @member {Object} aclAliases
+ * @member {Array.<Number>} aclAliases
  */
 GAgentConfig.prototype.aclAliases = undefined;
 
 /**
- * @member {Object} defaultConfiguration
+ * @member {Boolean} defaultConfiguration
  */
 GAgentConfig.prototype.defaultConfiguration = undefined;
 
 /**
- * @member {Object} topP
+ * @member {Number} topP
  */
 GAgentConfig.prototype.topP = undefined;
 
 /**
- * @member {Object} temperature
+ * @member {Number} temperature
  */
 GAgentConfig.prototype.temperature = undefined;
 
 /**
- * @member {Object} thinking
+ * Allowed values for the <code>thinking</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GAgentConfig.ThinkingEnum = {
+  /**
+   * value: "NO_THINKING"
+   * @const
+   */
+  NO_THINKING: "NO_THINKING",
+
+  /**
+   * value: "LOW_THINKING"
+   * @const
+   */
+  LOW_THINKING: "LOW_THINKING",
+
+  /**
+   * value: "MEDIUM_THINKING"
+   * @const
+   */
+  MEDIUM_THINKING: "MEDIUM_THINKING",
+
+  /**
+   * value: "HIGH_THINKING"
+   * @const
+   */
+  HIGH_THINKING: "HIGH_THINKING",
+
+  /**
+   * value: "AUTO"
+   * @const
+   */
+  AUTO: "AUTO"
+};
+/**
+ * @member {module:model/GAgentConfig.ThinkingEnum} thinking
  */
 GAgentConfig.prototype.thinking = undefined;
 
 /**
- * @member {Object} readOnly
+ * @member {Boolean} readOnly
  */
 GAgentConfig.prototype.readOnly = undefined;
 
 /**
- * @member {Object} accessibleGroups
+ * @member {Array.<String>} accessibleGroups
  */
 GAgentConfig.prototype.accessibleGroups = undefined;
 
 /**
- * @member {Object} accessibleUsers
+ * @member {Array.<String>} accessibleUsers
  */
 GAgentConfig.prototype.accessibleUsers = undefined;
 
 /**
- * @member {Object} accessibleToAll
+ * @member {Boolean} accessibleToAll
  */
 GAgentConfig.prototype.accessibleToAll = undefined;
 
 /**
- * @member {Object} enabledFunctions
+ * @member {Array.<String>} enabledFunctions
  */
 GAgentConfig.prototype.enabledFunctions = undefined;
 

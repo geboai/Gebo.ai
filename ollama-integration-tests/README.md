@@ -25,6 +25,15 @@ mvn install                                   # repository root, once
 mvn -f ollama-integration-tests/pom.xml test  # then this suite
 ```
 
+**The suite is currently `@Disabled`** (no Ollama environment to run it in);
+remove the annotation from `OllamaSetupAndIntegrationTest` to run it.
+
+Both prerequisites are checked before the suite boots anything
+(`OllamaModelsAvailable` asks the server which models are pulled). When one is
+missing the test is skipped with the exact `ollama pull` to run; add
+`-DtestWhatIsConfigured=false` to fail instead — see
+[Missing configuration](../integration-tests/README.md#missing-configuration-skipped-or-failed-on-request).
+
 ## Environment overrides
 
 Defaults live in `ollama-integration-tests/src/test/resources/application.yml`.

@@ -14,6 +14,7 @@
  */
 import ApiClient from "../ApiClient";
 import IngestionFileType from '../model/IngestionFileType';
+import IngestionHandlerConfig from '../model/IngestionHandlerConfig';
 
 /**
 * IngestionFileTypesLibraryController service.
@@ -37,7 +38,7 @@ export default class IngestionFileTypesLibraryControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/IngestionFileType>} and HTTP response
      */
     getAllFileTypesWithHttpInfo() {
       
@@ -59,7 +60,7 @@ export default class IngestionFileTypesLibraryControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [IngestionFileType];
 
       return this.apiClient.callApi(
         '/api/users/IngestionFileTypesLibraryController/getAllFileTypes', 'GET',
@@ -69,7 +70,7 @@ export default class IngestionFileTypesLibraryControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/IngestionFileType>}
      */
     getAllFileTypes() {
       return this.getAllFileTypesWithHttpInfo()
@@ -80,7 +81,7 @@ export default class IngestionFileTypesLibraryControllerApi {
 
 
     /**
-     * @param {Object} extension 
+     * @param {String} extension 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/IngestionFileType} and HTTP response
      */
     getIngestionFileTypeByExtensionWithHttpInfo(extension) {
@@ -129,7 +130,7 @@ export default class IngestionFileTypesLibraryControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/IngestionHandlerConfig>} and HTTP response
      */
     getIngestionReadingModulesWithHttpInfo() {
       
@@ -151,7 +152,7 @@ export default class IngestionFileTypesLibraryControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [IngestionHandlerConfig];
 
       return this.apiClient.callApi(
         '/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules', 'GET',
@@ -161,7 +162,7 @@ export default class IngestionFileTypesLibraryControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/IngestionHandlerConfig>}
      */
     getIngestionReadingModules() {
       return this.getIngestionReadingModulesWithHttpInfo()

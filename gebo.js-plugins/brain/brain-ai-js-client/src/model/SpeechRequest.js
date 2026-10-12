@@ -24,7 +24,7 @@ export default class SpeechRequest {
    * Constructs a new <code>SpeechRequest</code>.
    * @alias module:model/SpeechRequest
    * @class
-   * @param text {Object} 
+   * @param text {String} 
    */
   constructor(text) {
     this.text = text;
@@ -41,14 +41,14 @@ export default class SpeechRequest {
     if (data) {
       obj = obj || new SpeechRequest();
       if (data.hasOwnProperty('text'))
-        obj.text = ApiClient.convertToType(data['text'], Object);
+        obj.text = ApiClient.convertToType(data['text'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} text
+ * @member {String} text
  */
 SpeechRequest.prototype.text = undefined;
 

@@ -63,7 +63,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboAgentAdminControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.getAgentByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -77,7 +77,7 @@ apiInstance.getAgentByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 
@@ -94,7 +94,7 @@ No authorization required
 
 <a name="getAgents"></a>
 # **getAgents**
-> Object getAgents()
+> [GBaseObject] getAgents()
 
 
 
@@ -116,7 +116,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GBaseObject]**](GBaseObject.md)
 
 ### Authorization
 
@@ -129,7 +129,7 @@ No authorization required
 
 <a name="getAgentsChoices"></a>
 # **getAgentsChoices**
-> Object getAgentsChoices()
+> [GBaseObject] getAgentsChoices()
 
 
 
@@ -151,7 +151,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GBaseObject]**](GBaseObject.md)
 
 ### Authorization
 
@@ -164,7 +164,7 @@ No authorization required
 
 <a name="getPromptTemplatesByAgentId"></a>
 # **getPromptTemplatesByAgentId**
-> Object getPromptTemplatesByAgentId(agentId)
+> [GPromptTemplateConfig] getPromptTemplatesByAgentId(agentId)
 
 
 
@@ -173,7 +173,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.GeboAgentAdminControllerApi();
-let agentId = null; // Object | 
+let agentId = "agentId_example"; // String | 
 
 apiInstance.getPromptTemplatesByAgentId(agentId).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -187,11 +187,11 @@ apiInstance.getPromptTemplatesByAgentId(agentId).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **agentId** | [**Object**](.md)|  | 
+ **agentId** | **String**|  | 
 
 ### Return type
 
-**Object**
+[**[GPromptTemplateConfig]**](GPromptTemplateConfig.md)
 
 ### Authorization
 

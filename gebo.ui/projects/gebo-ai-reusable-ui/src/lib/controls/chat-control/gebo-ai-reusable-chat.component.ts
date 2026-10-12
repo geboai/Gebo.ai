@@ -19,13 +19,13 @@
  * text-to-speech, and chat history management.
  */
 
-import { HttpClient } from "@angular/common/http";
-import { Component, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { AdditionalContent, BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
+import { AdditionalContent, AnswerFeedbackRequest, BASE_PATH, CalledFunction, GBaseChatModelChoice, GChatAnswerFeedback, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
-import { forkJoin, Observable } from "rxjs";
+import { forkJoin, map, Observable, of } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 import { AgenticChatRequestBody, ReactiveRagChatService } from "./reactive-chat.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
@@ -34,12 +34,14 @@ import { IGeboChatMessage } from "../../services/gebo-chat-message";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
 import { ExtendedConfirmation, GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 import { GeboAIChatInputShellComponent } from "./chat-input-shell.component";
+import { GeboAIChatStreamEventsDisplayComponent } from "./chat-stream-events-display.component";
 import { PipelineRoutingOption } from "./pipeline-routing-option";
 const loading_vocal_answer: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER", severity: "info", summary: "Loading vocal answer" };
 const loading_vocal_answer_received: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER_RECEIVED", severity: "info", summary: "Vocal answer received" };
 const your_speech_is_uploading: ToastMessageOptions = { id: "YOUR_SPEECH_IS_UPLOADING", severity: "info", summary: "Your speech is uploading" };
 const chat_history_loaded: ToastMessageOptions = { id: "CHAT_HISTORY_LOADED", summary: "Chat history loaded", detail: "Chat history loaded successfully", severity: "success" };
 const clean_chat_loaded: ToastMessageOptions = { id: "NEW_CHAT_LOADED", summary: "New chat loaded", detail: "New chat loaded successfully", severity: "success" };
+const chat_branched: ToastMessageOptions = { id: "CHAT_BRANCHED", summary: "Chat branched", detail: "The conversation continues in a new chat, starting from the chosen answer", severity: "success" };
 const fileExportLoaded: ToastMessageOptions = { id: "fileExportLoaded", summary: "File exported", detail: "Go to browser downloads section", severity: "succcess" };
 /**
  * Interface representing a single chat interaction between the user and the AI,
@@ -51,6 +53,9 @@ interface GeboChatInteraction {
     loading?: boolean;
     pipelineRouterDecisionCode?: string;
     streamingModelName?: string;
+    // The reasoning the model writes before its answer, as it streams: accumulated and shown in
+    // the answer's place until the answer starts, never part of the answer.
+    streamingThinking?: string;
 };
 
 /**
@@ -81,6 +86,21 @@ const wheelLineHeight: number = 40;
  */
 const scrollHostCacheMillis: number = 250;
 /**
+ * The streamed text of an answer is added to it at most once in this time: every
+ * addition re-renders the whole markdown answer (highlighting, diagrams) and scrolls,
+ * which done for every chunk freezes the page on long answers
+ */
+const streamedTextBatchMillis: number = 100;
+/**
+ * How long the chat keeps following an answer after it ended, so its final rendering
+ * (markdown, diagrams, the found documents) is brought into view as well
+ */
+const followAnswerGraceMillis: number = 1500;
+/**
+ * Pixels from the bottom of the chat still counted as being at its end
+ */
+const followAnswerSlackPx: number = 24;
+/**
  * Component that provides a reusable chat interface for Gebo.ai models.
  * Supports both standard chat and RAG-enabled conversations, with features like
  * streaming responses, speech recognition, and voice output. Manages chat history
@@ -99,7 +119,7 @@ const scrollHostCacheMillis: number = 250;
     ],
     standalone: false
 })
-export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFieldHost {
+export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy, GeboAIFieldHost {
 
 
 
@@ -164,6 +184,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Map tracking which interactions have their full document list expanded
      */
     public expandedInteractionsDocs: Map<string, boolean> = new Map();
+    /** The called functions whose parameters are shown, as "<request id>#<function index>". */
+    public expandedCalledFunctions: Set<string> = new Set();
+    /** The interactions whose list of called functions is open, by request id: closed at first. */
+    public expandedCalledFunctionLists: Set<string> = new Set();
+    /** The parameters of each called function, parsed once. */
+    private calledFunctionParamsCache: WeakMap<CalledFunction, { name: string, value: string }[]> = new WeakMap();
 
     /**
      * Flag indicating if a chat response is currently streaming
@@ -286,7 +312,13 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     @Output() addedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
     @Output() updatedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
+    /**
+     * Emitted with the new chat created by branching this one from one of its answers
+     */
+    @Output() branchedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
     @ViewChild(GeboAIChatInputShellComponent) chatInputShell!: GeboAIChatInputShellComponent;
+    // shown in the last answer, between its reasoning and its text, while it streams
+    @ViewChild(GeboAIChatStreamEventsDisplayComponent) streamEventsDisplay?: GeboAIChatStreamEventsDisplayComponent;
     /**
      * Configuration options for Mermaid diagrams
      */
@@ -310,6 +342,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         additionalContents: new FormControl([])
     });
     protected currentPipelineRoutingOption?: PipelineRoutingOption;
+    protected runningPipelineRouting?: PipelineRoutingOption;
     /**
      * Form group for chat information
      */
@@ -341,6 +374,19 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     private scrollHost?: HTMLElement;
     private scrollHostResolvedAt: number = 0;
     /**
+     * From the question sent until shortly after its answer ended, the chat keeps its end
+     * in view while the reasoning, the stream events and the answer grow. Scrolling up
+     * away from the end pauses it, scrolling back down to the end resumes it.
+     */
+    private followAnswer: boolean = false;
+    private scrolledAwayFromAnswer: boolean = false;
+    private lastChatScrollTop: number = 0;
+    private followAnswerEndTimer?: ReturnType<typeof setTimeout>;
+    private chatBodyResizeObserver?: ResizeObserver;
+    private readonly chatScrollListener = (event: Event) => this.onChatScroll(event);
+    @ViewChild("chatBody") chatBody?: ElementRef<HTMLElement>;
+    private readonly ngZone: NgZone = inject(NgZone);
+    /**
      * Metadata about the current chat model
      */
     public modelMetaInfos?: GBaseChatModelChoice;
@@ -361,9 +407,32 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     private docSelectedMap: Map<string, boolean> = new Map();
 
     /**
+     * When true, the user may "chat with" external-search results (a retrieved
+     * GResponseDocumentRef carrying a nestedSearchResult) as if they were internal
+     * documents. Fed from the backend ai.gebo.chatui.chatWithExternalFiles option.
+     */
+    @Input() chatWithExternalFiles: boolean = true;
+
+    /**
+     * External-search results the user picked to "chat with". Unlike internal
+     * documents (tracked as plain codes in the forcedRequestDocuments control) these
+     * cannot be addressed by a code, so their whole GResponseDocumentRef - including
+     * its nestedSearchResult - is carried here and merged into the request's
+     * forcedDocumentsRef at submit time.
+     */
+    private selectedExternalRefs: GResponseDocumentRef[] = [];
+
+    /**
      * Flag to control visibility of the description change dialog
      */
     protected changeDescriptionDialogOpened: boolean = false;
+    // The user's rating of each answer, by request id
+    protected answerFeedbacks: Map<string, GChatAnswerFeedback> = new Map<string, GChatAnswerFeedback>();
+    protected feedbackDialogOpened: boolean = false;
+    protected feedbackRequestId?: string;
+    protected feedbackFormGroup: FormGroup = new FormGroup({ comment: new FormControl<string | null>(null) });
+    protected savingFeedback: boolean = false;
+    protected branching: boolean = false;
 
     /**
      * Constructor - injects all required services
@@ -388,6 +457,81 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 this.userChatContextCode = userChatContextCode;
             }
         });
+    }
+
+    ngAfterViewInit(): void {
+        this.ngZone.runOutsideAngular(() => {
+            // scroll events do not bubble: the capture phase sees the chat's container too
+            window.document.addEventListener("scroll", this.chatScrollListener, { capture: true, passive: true });
+            if (this.chatBody && typeof ResizeObserver !== "undefined") {
+                // the body grows once rendered, so its end is measured after the new content is laid out
+                this.chatBodyResizeObserver = new ResizeObserver(() => {
+                    if (this.followAnswer && !this.scrolledAwayFromAnswer) {
+                        this.ngZone.run(() => this.scrollToBottom());
+                    }
+                    // a shrinking body pulls the view up by itself, its scroll event arriving
+                    // after more content may have been added: that is not the user leaving the end
+                    this.lastChatScrollTop = this.scrollPosition().position;
+                });
+                this.chatBodyResizeObserver.observe(this.chatBody.nativeElement);
+            }
+        });
+    }
+
+    ngOnDestroy(): void {
+        window.document.removeEventListener("scroll", this.chatScrollListener, { capture: true });
+        this.chatBodyResizeObserver?.disconnect();
+        if (this.followAnswerEndTimer !== undefined) {
+            clearTimeout(this.followAnswerEndTimer);
+        }
+    }
+
+    private startFollowingAnswer(): void {
+        if (this.followAnswerEndTimer !== undefined) {
+            clearTimeout(this.followAnswerEndTimer);
+            this.followAnswerEndTimer = undefined;
+        }
+        this.followAnswer = true;
+        this.scrolledAwayFromAnswer = false;
+        this.lastChatScrollTop = this.scrollPosition().position;
+    }
+
+    private stopFollowingAnswer(): void {
+        if (this.followAnswerEndTimer !== undefined) {
+            clearTimeout(this.followAnswerEndTimer);
+        }
+        this.followAnswerEndTimer = setTimeout(() => {
+            this.followAnswerEndTimer = undefined;
+            this.followAnswer = false;
+        }, followAnswerGraceMillis);
+    }
+
+    /**
+     * Pauses following when the user scrolls up away from the end (keys, scrollbar), resumes
+     * it back at the end. Following only scrolls down, and the view pulled up by a shrinking
+     * answer is taken as the new starting point (see ngAfterViewInit), so neither reads as
+     * the user leaving.
+     */
+    private onChatScroll(event: Event): void {
+        if (!this.followAnswer) {
+            return;
+        }
+        const scrollHost: HTMLElement | undefined = this.resolveScrollHost();
+        const target: EventTarget | null = event.target;
+        const fromChatScroller: boolean = scrollHost
+            ? target === scrollHost
+            : (target === window.document || target === window.document.documentElement || target === window.document.body);
+        if (!fromChatScroller) {
+            return;
+        }
+        const { position, maxPosition } = this.scrollPosition();
+        const atEnd: boolean = (maxPosition - position) <= followAnswerSlackPx;
+        if (atEnd) {
+            this.scrolledAwayFromAnswer = false;
+        } else if (position < this.lastChatScrollTop) {
+            this.scrolledAwayFromAnswer = true;
+        }
+        this.lastChatScrollTop = position;
     }
 
     @HostListener('window:scroll')
@@ -422,6 +566,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             window.scrollBy(0, delta);
         }
         event.preventDefault();
+        if (delta < 0 && this.followAnswer) {
+            // going back up to read: an answer still growing must not pull the view down again
+            this.scrolledAwayFromAnswer = true;
+        }
         this.updateScrollButtons();
     }
 
@@ -449,13 +597,21 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Refreshes the visibility of the up/down buttons against the current scroll position
      */
     private updateScrollButtons(): void {
+        const { position, maxPosition } = this.scrollPosition();
+        this.showTopButton = position > scrollStart;
+        this.showBottomButton = (maxPosition - position) > scrollStart;
+    }
+
+    /**
+     * Where the chat is scrolled to, and how far it can be scrolled
+     */
+    private scrollPosition(): { position: number, maxPosition: number } {
         const scrollHost: HTMLElement | undefined = this.resolveScrollHost();
         const position: number = scrollHost ? scrollHost.scrollTop : window.scrollY;
         const maxPosition: number = scrollHost
             ? (scrollHost.scrollHeight - scrollHost.clientHeight)
             : (window.document.body.scrollHeight - window.innerHeight);
-        this.showTopButton = position > scrollStart;
-        this.showBottomButton = (maxPosition - position) > scrollStart;
+        return { position, maxPosition };
     }
 
     /**
@@ -535,8 +691,100 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * @returns True if the document is selected
      */
     public isChoosed(dr: GResponseDocumentRef): boolean {
+        if (dr.nestedSearchResult) {
+            return this.isExternalRefChosen(dr);
+        }
         if (!dr.documentCode) return false;
-        return (dr.documentCode ? true : false) && this.docSelectedMap.get(dr.documentCode) === true;
+        return this.docSelectedMap.get(dr.documentCode) === true;
+    }
+
+    /**
+     * Identity of an external ref: its uuid when present, else its document code.
+     */
+    private externalRefKey(dr: GResponseDocumentRef): string | undefined {
+        return dr.uuid ? dr.uuid : dr.documentCode;
+    }
+
+    private isExternalRefChosen(dr: GResponseDocumentRef): boolean {
+        const key = this.externalRefKey(dr);
+        if (!key) return false;
+        return this.selectedExternalRefs.some(x => this.externalRefKey(x) === key);
+    }
+
+    /**
+     * The external-search results the user picked to chat with, shown as removable
+     * chips distinct from the internal knowledge-base documents (which live in the
+     * document picker panel, tracked as codes).
+     */
+    public get chosenExternalRefs(): GResponseDocumentRef[] {
+        return this.selectedExternalRefs;
+    }
+
+    /**
+     * Display label for an external ref chip.
+     */
+    public externalRefLabel(dr: GResponseDocumentRef): string {
+        return dr.name ? dr.name : dr.shortCode ? dr.shortCode : dr.documentCode ? dr.documentCode : "";
+    }
+
+    /**
+     * Removes a previously-selected external-search result from the chat-with list.
+     */
+    public removeExternalRef(dr: GResponseDocumentRef): void {
+        const key = this.externalRefKey(dr);
+        if (!key) {
+            return;
+        }
+        this.selectedExternalRefs = this.selectedExternalRefs.filter(x => this.externalRefKey(x) !== key);
+    }
+
+    /**
+     * Knowledge-base refs resolved from the picker's forcedRequestDocuments codes, kept
+     * in sync so the unified "documents to chat with" control can show knowledge-base and
+     * external documents together as GResponseDocumentRef.
+     */
+    private internalChatDocs: GResponseDocumentRef[] = [];
+
+    /**
+     * The unified list of documents chosen to chat with: knowledge-base documents
+     * (resolved from the picker codes) plus external-search results. Rendered by the
+     * gebo-ai-selected-chat-documents control - the choose-documents-panel keeps only the
+     * knowledge-base selection role.
+     */
+    public get selectedChatDocuments(): GResponseDocumentRef[] {
+        return [...this.internalChatDocs, ...this.selectedExternalRefs];
+    }
+
+    /**
+     * Removes one document from the chat-with list, routing to the right store: an
+     * external result leaves selectedExternalRefs; a knowledge-base document leaves the
+     * forcedRequestDocuments codes (whose valueChanges re-resolves internalChatDocs).
+     */
+    public onRemoveChatDocument(dr: GResponseDocumentRef): void {
+        if (dr.nestedSearchResult) {
+            this.removeExternalRef(dr);
+            return;
+        }
+        const codes: string[] = this.formGroup.controls["forcedRequestDocuments"].value || [];
+        this.formGroup.controls["forcedRequestDocuments"].setValue(codes.filter(c => c !== dr.documentCode));
+    }
+
+    /** Clears every document chosen to chat with (knowledge-base and external). */
+    public onClearChatDocuments(): void {
+        this.selectedExternalRefs = [];
+        this.formGroup.controls["forcedRequestDocuments"].setValue([]);
+    }
+
+    /** Resolves the picker's document codes into refs for the unified display. */
+    private refreshInternalChatDocs(codes?: string[] | null): void {
+        if (!codes || codes.length === 0) {
+            this.internalChatDocs = [];
+            return;
+        }
+        this.ragChatService.resolveForcedDocumentsRef(codes).subscribe({
+            next: (refs) => { this.internalChatDocs = refs ?? []; },
+            error: () => { this.internalChatDocs = []; }
+        });
     }
 
     /**
@@ -545,6 +793,19 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * @param dr Document reference to add
      */
     public addToChoosed(dr: GResponseDocumentRef): void {
+        if (dr.nestedSearchResult) {
+            // External search result: carry the whole ref - a document code cannot
+            // address it - and only when the feature is enabled (the backend enforces
+            // the same gate, this just keeps the UI honest).
+            if (!this.chatWithExternalFiles) {
+                return;
+            }
+            if (!this.isExternalRefChosen(dr)) {
+                this.selectedExternalRefs.push(dr);
+                this.chatInputShell.switchToChatWithDocuments();
+            }
+            return;
+        }
         let actualChoosed: string[] = this.formGroup.controls["forcedRequestDocuments"].value;
         if (!actualChoosed) {
             actualChoosed = [];
@@ -555,6 +816,110 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.chatInputShell.switchToChatWithDocuments();
         }
     }
+    private loadAnswerFeedbacks(userChatContextCode: string): void {
+        this.userChatControllerService.getAnswerFeedbacks(userChatContextCode).subscribe({
+            next: (feedbacks) => {
+                // The auth interceptor turns http errors into values: only arrays are feedbacks
+                this.answerFeedbacks.clear();
+                if (Array.isArray(feedbacks)) {
+                    feedbacks.forEach(f => this.answerFeedbacks.set(f.requestId, f));
+                }
+            }
+        });
+    }
+
+    /**
+     * The rating the user gave to the answer of this interaction, if any
+     */
+    public ratingOf(interaction: GeboChatInteraction): GChatAnswerFeedback.RatingEnum | undefined {
+        const requestId = interaction?.request?.id;
+        return requestId ? this.answerFeedbacks.get(requestId)?.rating : undefined;
+    }
+
+    /**
+     * Thumbs up / down: clicking the current rating again removes it; a negative
+     * rating asks for an optional comment first.
+     */
+    public rateAnswer(interaction: GeboChatInteraction, rating: GChatAnswerFeedback.RatingEnum): void {
+        const requestId = interaction?.request?.id;
+        const chatCode = this.userChatContextCode;
+        if (!requestId || !chatCode || this.savingFeedback) {
+            return;
+        }
+        if (this.ratingOf(interaction) === rating) {
+            this.savingFeedback = true;
+            this.userChatControllerService.removeAnswerFeedback(chatCode, requestId).subscribe({
+                next: (result: any) => {
+                    if (!(result instanceof HttpErrorResponse)) {
+                        this.answerFeedbacks.delete(requestId);
+                    }
+                },
+                complete: () => this.savingFeedback = false,
+                error: () => this.savingFeedback = false
+            });
+            return;
+        }
+        if (rating === GChatAnswerFeedback.RatingEnum.NEGATIVE) {
+            this.feedbackRequestId = requestId;
+            this.feedbackFormGroup.controls["comment"].setValue(this.answerFeedbacks.get(requestId)?.comment ?? null);
+            this.feedbackDialogOpened = true;
+            return;
+        }
+        this.saveFeedback(chatCode, requestId, rating, undefined);
+    }
+
+    public saveNegativeFeedback(): void {
+        if (this.userChatContextCode && this.feedbackRequestId) {
+            const comment: string | null = this.feedbackFormGroup.controls["comment"].value;
+            this.saveFeedback(this.userChatContextCode, this.feedbackRequestId, GChatAnswerFeedback.RatingEnum.NEGATIVE,
+                comment && comment.trim().length > 0 ? comment.trim() : undefined);
+        }
+        this.closeFeedbackDialog();
+    }
+
+    public closeFeedbackDialog(): void {
+        this.feedbackDialogOpened = false;
+        this.feedbackRequestId = undefined;
+    }
+
+    private saveFeedback(chatCode: string, requestId: string, rating: GChatAnswerFeedback.RatingEnum, comment: string | undefined): void {
+        const request: AnswerFeedbackRequest = { userChatContextCode: chatCode, requestId: requestId, rating: rating, comment: comment };
+        this.savingFeedback = true;
+        this.userChatControllerService.setAnswerFeedback(request).subscribe({
+            next: (saved) => {
+                if (saved?.requestId) {
+                    this.answerFeedbacks.set(saved.requestId, saved);
+                }
+            },
+            complete: () => this.savingFeedback = false,
+            error: () => this.savingFeedback = false
+        });
+    }
+
+    /**
+     * Creates a new chat holding this chat up to and including this answer, and hands it to the host
+     */
+    public branchFrom(interaction: GeboChatInteraction): void {
+        const requestId = interaction?.request?.id;
+        const chatCode = this.userChatContextCode;
+        if (!requestId || !chatCode || this.branching) {
+            return;
+        }
+        this.branching = true;
+        this.userChatControllerService.branchChat(chatCode, requestId).subscribe({
+            next: (branch) => {
+                if (branch?.code) {
+                    // straight to the root service: the host navigates to the branch and may
+                    // destroy this component before its notifications input is processed
+                    this.messageService.addMessage("GeboAIChatControlModule", entityId, chat_branched);
+                    this.branchedChatAction.emit(branch);
+                }
+            },
+            complete: () => this.branching = false,
+            error: () => this.branching = false
+        });
+    }
+
     public exportResponse(userContextCode: string | undefined, responseId: string | undefined, format: string) {
         if (!userContextCode || !responseId) {
             console.error("Cannot export response: userContextCode or responseId is missing", { userContextCode, responseId });
@@ -655,10 +1020,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.loadChatHistory();
 
         }
-        //here we load the proper menu for the actual chat pipeline
-        if (menu2BeReloaded === true && this.chatInfo?.chatProfileCode) {
+        //here we load the proper menu for the actual chat pipeline. A pipeline-only
+        //chat (a pipelineId with no chat profile - profiles are a RAG concept) still
+        //has a menu to load, so the presence of a pipelineId is enough on its own.
+        if (menu2BeReloaded === true && (this.chatInfo?.chatProfileCode || this.pipelineId)) {
             this.loadingChatMenu = true;
-            this.geboChatPipelineService.getPersonalPipelinesChatMenu(this.chatInfo.chatProfileCode, this.pipelineId).subscribe({
+            this.geboChatPipelineService.getPersonalPipelinesChatMenu(this.chatInfo?.chatProfileCode, this.pipelineId).subscribe({
                 next: (menu) => {
                     this.chatPipelinesMenu = menu;
                     this.loadingChatMenu = false;
@@ -694,6 +1061,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     this.chatInfoFormGroup.patchValue({ code: value.code, description: value.description });
                     this.lastInteractionMessages = this.interactions && this.interactions?.length > 0 ? [chat_history_loaded] : [clean_chat_loaded];
                     this.scrollToBottom();
+                    if (value?.code && this.interactions.length > 0) {
+                        this.loadAnswerFeedbacks(value.code);
+                    } else {
+                        this.answerFeedbacks.clear();
+                    }
 
                 },
                 complete: () => {
@@ -718,6 +1090,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     this.docSelectedMap.set(x, true);
                 });
             }
+            // Keep the unified "documents to chat with" display in sync with the picker.
+            this.refreshInternalChatDocs(selectedDocuments);
         });
     }
 
@@ -749,6 +1123,88 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     public isInteractionDocsExpanded(interactionId?: string): boolean {
         if (!interactionId) return false;
         return this.expandedInteractionsDocs.get(interactionId) || false;
+    }
+
+    /**
+     * Opens or closes the list of the functions called while answering an interaction
+     * @param interactionId The ID of the interaction request
+     */
+    public toggleCalledFunctionsList(interactionId: string | undefined): void {
+        if (!interactionId) return;
+        if (this.expandedCalledFunctionLists.has(interactionId)) {
+            this.expandedCalledFunctionLists.delete(interactionId);
+        } else {
+            this.expandedCalledFunctionLists.add(interactionId);
+        }
+    }
+
+    /**
+     * Checks if the list of the functions called while answering an interaction is open
+     * @param interactionId The ID of the interaction request
+     */
+    public isCalledFunctionsListExpanded(interactionId: string | undefined): boolean {
+        return !!interactionId && this.expandedCalledFunctionLists.has(interactionId);
+    }
+
+    /**
+     * Shows or hides the parameters of a function called while answering an interaction
+     * @param interactionId The ID of the interaction request
+     * @param index The position of the called function in the response
+     */
+    public toggleCalledFunctionParams(interactionId: string | undefined, index: number): void {
+        if (!interactionId) return;
+        const key = interactionId + "#" + index;
+        if (this.expandedCalledFunctions.has(key)) {
+            this.expandedCalledFunctions.delete(key);
+        } else {
+            this.expandedCalledFunctions.add(key);
+        }
+    }
+
+    /**
+     * Checks if the parameters of a called function are shown
+     * @param interactionId The ID of the interaction request
+     * @param index The position of the called function in the response
+     */
+    public isCalledFunctionParamsExpanded(interactionId: string | undefined, index: number): boolean {
+        return !!interactionId && this.expandedCalledFunctions.has(interactionId + "#" + index);
+    }
+
+    /**
+     * The parameters a function was called with, attribute by attribute: the call input
+     * is the JSON object the model wrote; anything else is shown as it is.
+     */
+    public calledFunctionParams(calledFunction: CalledFunction): { name: string, value: string }[] {
+        const cached = this.calledFunctionParamsCache.get(calledFunction);
+        if (cached) return cached;
+        const params: { name: string, value: string }[] = [];
+        for (const raw of calledFunction?.paramsDescription || []) {
+            let parsed: any = undefined;
+            try {
+                parsed = JSON.parse(raw);
+            } catch {
+                parsed = undefined;
+            }
+            if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+                for (const [name, value] of Object.entries(parsed)) {
+                    params.push({ name: name, value: this.calledFunctionParamText(value) });
+                }
+            } else {
+                params.push({ name: "", value: raw });
+            }
+        }
+        this.calledFunctionParamsCache.set(calledFunction, params);
+        return params;
+    }
+
+    private calledFunctionParamText(value: any): string {
+        if (value === null || value === undefined) return "";
+        if (typeof value === "string") return value;
+        if (Array.isArray(value) && value.every(item => item === null || typeof item !== "object")) {
+            return value.join(", ");
+        }
+        if (typeof value === "object") return JSON.stringify(value, null, 2);
+        return String(value);
     }
 
     /**
@@ -788,7 +1244,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         const confirmation: ExtendedConfirmation = {
             id: "DELETE_CHAT_ACTION",
             header: "Delete chat action",
-            message: "Are you shure you whant to delete this chat?",
+            message: "Are you sure you whant to delete this chat?",
             accept: () => {
                 this.geboUserChatsControllerService.deleteChat(actualChat.code).subscribe({
                     next: (value) => {
@@ -886,20 +1342,22 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                         }
                         this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
 
+                        // the query is not reset here: sendMessage cleared it, and what the user
+                        // typed while waiting is the next message
                         const dataUpdate: any = {
                             chatProfileCode: r.chatProfileCode,
                             chatModelCode: r.chatModelCode,
-                            userChatContextCode: response.userChatContextCode,
-                            query: null
+                            userChatContextCode: response.userChatContextCode
                         };
                         this.formGroup.patchValue(dataUpdate);
-                        this.scrollToBottom();
+                        this.stopFollowingAnswer();
                         this.loadingChatResponse = false;
                         if (doSpeach === true) {
                             this.speechPlay(response.queryResponse);
                         }
                     },
                     error: (error) => {
+                        this.stopFollowingAnswer();
                         this.loadingChatResponse = false;
                     },
                     complete: () => {
@@ -975,21 +1433,24 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 // when present, or an empty array when nothing was produced, so the host can
                 // react to both cases (show/hide a suggestion).
                 this.outputAdditionalContents.emit(response.additionalContents ?? []);
+                // the query is not reset here: sendMessage cleared it, and what the user
+                // typed while the answer streamed is the next message
                 const dataUpdate: any = {
                     chatProfileCode: r.chatProfileCode,
                     chatModelCode: r.chatModelCode,
                     userChatContextCode: response.userChatContextCode,
-                    query: null,
                     chatPipelineProcessId: null,
                     forcedRequestDocuments: []
                 };
                 this.formGroup.patchValue(dataUpdate);
+                // The chat-with selection is per-request: reset the external refs too,
+                // mirroring the forcedRequestDocuments reset above.
+                this.selectedExternalRefs = [];
                 if (doSpeach === true && lastMessage === true && response.queryResponse) {
                     this.speechPlay(response.queryResponse);
                 }
             }
         }
-        setTimeout(() => this.scrollToBottom(), 10);
     }
 
     private callReactiveChat(r: GeboChatRequest, doSpeach: boolean): void {
@@ -1005,6 +1466,26 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             pipelineRouterDecisionCode: this.currentPipelineRouterDecisionCode
         };
         this.interactions.push(interaction);
+        // the streamed text waiting to be added to the answer (see streamedTextBatchMillis)
+        let pendingText: string = "";
+        let flushTimer: ReturnType<typeof setTimeout> | undefined = undefined;
+        const flushText = () => {
+            if (flushTimer !== undefined) {
+                clearTimeout(flushTimer);
+                flushTimer = undefined;
+            }
+            if (!pendingText) return;
+            if (interaction.response) {
+                interaction.response.queryResponse = (interaction.response.queryResponse || "") + pendingText;
+            }
+            pendingText = "";
+        };
+        const appendText = (text: string) => {
+            pendingText += text;
+            if (flushTimer === undefined) {
+                flushTimer = setTimeout(flushText, streamedTextBatchMillis);
+            }
+        };
         const messageCallback = (msg: IGeboChatMessage | string) => {
             if (!msg) return;
             this.loadingChatResponse = false;
@@ -1035,6 +1516,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 }
 
                 this.chatInputShell.onStreamMessage(recvd);
+                this.streamEventsDisplay?.onMessage(recvd);
                 if (recvd && recvd.contentObjectType) {
                     switch (recvd.contentObjectType) {
                         case "GUserMessage": {
@@ -1063,6 +1545,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                                     try {
                                         const parsed = JSON.parse(recvd.content);
                                         if (parsed && (parsed.queryResponse !== undefined || parsed.userChatContextCode !== undefined || parsed.usedChatModelCode !== undefined)) {
+                                            flushText();
                                             this.handleGeboChatResponse(interaction, parsed, r, suggestChatDescription, doSpeach, recvd.lastMessage);
                                             isJson = true;
                                         }
@@ -1072,27 +1555,39 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                                 }
 
                                 if (!isJson) {
-                                    interaction.response.queryResponse += recvd.content;
-                                    setTimeout(() => this.scrollToBottom(), 10);
+                                    appendText(recvd.content);
                                 }
                             }
                         } break;
                         case "GeboChatResponse": {
+                            flushText();
                             this.handleGeboChatResponse(interaction, recvd.content, r, suggestChatDescription, doSpeach, recvd.lastMessage);
+                        } break;
+                        case "GThinkingEvent": {
+                            if (recvd.content?.completed) {
+                                // the reasoning ended: the answer takes its place
+                                interaction.streamingThinking = undefined;
+                            } else if (recvd.content?.text) {
+                                interaction.streamingThinking = (interaction.streamingThinking ?? "") + recvd.content.text;
+                            }
                         } break;
                     }
                 }
                 if (recvd.lastMessage === true) {
+                    interaction.streamingThinking = undefined;
+                    flushText();
                     interaction.loading = false;
                     this.chatStreaming = false;
+                    this.stopFollowingAnswer();
                 }
             } catch (e) {
                 console.error("Exception :", e);
             }
-            console.log("Received chat word: " + msg);
         };
         const errorCallBack = (error: any) => {
+            flushText();
             this.chatStreaming = false;
+            this.stopFollowingAnswer();
             this.chatStreamingErrorOccurred = true;
             console.error("Exception in receiving data", error);
 
@@ -1103,7 +1598,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         this.chatStreamingErrorOccurred = false;
 
         const onCompleteCallback = () => {
+            flushText();
             this.chatStreaming = false;
+            this.stopFollowingAnswer();
             this.loadingChatResponse = false;
             if (interaction) {
                 interaction.loading = false;
@@ -1161,11 +1658,45 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         // this.loadingSearchResult = true;
         this.formGroup.controls["query"].setValue(null);
         this.formGroup.controls["userUploadedContents"].setValue([]);
+        // Resolve the picker's internal document codes into rich refs on the backend
+        // and merge the externally-selected search-result refs, so the request carries
+        // a uniform forcedDocumentsRef. The pickers themselves keep working with codes.
+        this.resolveForcedDocumentsRef(qry.forcedRequestDocuments).subscribe({
+            next: (refs) => {
+                qry.forcedDocumentsRef = refs;
+                this.dispatchMessage(qry, doSpeach);
+            },
+            error: () => {
+                // On lookup failure, still send the external refs; the backend falls
+                // back to forcedRequestDocuments (codes) for the internal documents.
+                qry.forcedDocumentsRef = [...this.selectedExternalRefs];
+                this.dispatchMessage(qry, doSpeach);
+            }
+        });
+    }
+
+    private dispatchMessage(qry: GeboChatRequest, doSpeach: boolean): void {
+        this.startFollowingAnswer();
         if (this.useRestOnly === true) {
             this.callRestChat(qry, doSpeach);
         } else {
             this.callReactiveChat(qry, doSpeach);
         }
+    }
+
+    /**
+     * Builds the request's forcedDocumentsRef: the picker's internal document codes
+     * resolved to GResponseDocumentRef via the backend, plus the whole external refs
+     * the user selected from retrieved search results.
+     */
+    private resolveForcedDocumentsRef(codes?: string[]): Observable<GResponseDocumentRef[]> {
+        const external = [...this.selectedExternalRefs];
+        if (!codes || codes.length === 0) {
+            return of(external);
+        }
+        return this.ragChatService.resolveForcedDocumentsRef(codes).pipe(
+            map(internal => [...(internal ?? []), ...external])
+        );
     }
     /**
      * Sends a text-to-speech request and plays the audio

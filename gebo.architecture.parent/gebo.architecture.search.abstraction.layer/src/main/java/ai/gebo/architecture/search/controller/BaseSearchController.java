@@ -12,8 +12,14 @@ package ai.gebo.architecture.search.controller;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.CatalogueSample;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -35,10 +41,40 @@ import ai.gebo.model.base.TypedInputStream;
  */
 public abstract class BaseSearchController<CustomSearchResultExtractionDataType extends BaseSearchResultsExtractionDataType> {
 
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	protected final ISearchService<CustomSearchResultExtractionDataType> searchService;
 
 	protected BaseSearchController(ISearchService<CustomSearchResultExtractionDataType> searchService) {
 		this.searchService = searchService;
+	}
+
+	private SearchCallsConfig searchCallsConfig = null;
+
+	/** The timeouts and retries of this node's search calls (see {@link SearchCallsConfig}). */
+	@Autowired(required = false)
+	public void setSearchCallsConfig(SearchCallsConfig searchCallsConfig) {
+		this.searchCallsConfig = searchCallsConfig;
+	}
+
+	/** The parameters this node searches and downloads search results with. */
+	protected SearchCallParameters searchCallParameters() {
+		return SearchCallParameters.of(searchCallsConfig);
+	}
+
+	/**
+	 * The parameters a remote caller searches with: those it sent (see
+	 * {@link SearchCallParameters#CONNECT_TIMEOUT_MILLIS_PARAM} and the others), this
+	 * node's for those it did not send.
+	 */
+	protected SearchCallParameters searchCallParameters(Integer connectTimeoutMillis, Integer readTimeoutMillis,
+			Integer retries) {
+		final SearchCallParameters parameters = searchCallParameters().overriddenBy(connectTimeoutMillis,
+				readTimeoutMillis, retries);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("searchCallParameters(...) sent connect:" + connectTimeoutMillis + " ms read:"
+					+ readTimeoutMillis + " ms retries:" + retries + " applied:" + parameters);
+		}
+		return parameters;
 	}
 
 	protected boolean isEnabled() throws SearchServiceException {
@@ -83,16 +119,21 @@ public abstract class BaseSearchController<CustomSearchResultExtractionDataType 
 
 	protected List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
-		return searchService.search(query, system, nEntryLimit);
+		return searchService.search(query, system, nEntryLimit, searchCallParameters());
 	}
 
 	protected List<SearchResult> search(SearchQuery query, String systemId, int nEntryLimit)
 			throws IOException, SearchServiceException {
-		return searchService.search(query, systemId, nEntryLimit);
+		return searchService.search(query, systemId, nEntryLimit, searchCallParameters());
+	}
+
+	protected List<SearchResult> search(SearchQuery query, String systemId, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
+		return searchService.search(query, systemId, nEntryLimit, parameters);
 	}
 
 	protected TypedInputStream loadSearchResult(SearchResult result) throws IOException, SearchServiceException {
-		return searchService.loadSearchResult(result);
+		return searchService.loadSearchResult(result, searchCallParameters());
 	}
 
 	protected Class<CustomSearchResultExtractionDataType> getCustomResultsAggregationDataType()

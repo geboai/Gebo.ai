@@ -12,3 +12,20 @@ ai.gebo.confluence:
           userReference: /confluence-prompts-library/en/confluence-native-query-extraction-prompt-user-prompt.txt
           chatHistory: REQUIRED
           contextDocuments: NOT_REQUIRED
+      uses:
+        - code: confluence-standard-query-extraction-prompt
+          description: Extracts a set of plain-text, operator-free search strings from the user's question, for generic (non-CQL) full-text search against Confluence.
+          module: confluence
+          placeholders:
+            - placeholder: format
+              description: The structured-output format/schema instructions the extracted search filter must comply with.
+            - placeholder: question
+              description: The user's current question or request text.
+        - code: confluence-native-query-extraction-prompt
+          description: Generates a structured Confluence CQL search filter (as JSON) from the user's question and the available Confluence spaces, later translated server-side into a native CQL query.
+          module: confluence
+          placeholders:
+            - placeholder: confluenceSpaces
+              description: Catalog of the Confluence spaces available to be searched.
+            - placeholder: question
+              description: The user's current question or request text.

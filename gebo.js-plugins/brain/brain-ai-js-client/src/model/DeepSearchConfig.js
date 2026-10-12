@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import DeepSearchDataSourceAccess from './DeepSearchDataSourceAccess';
 import RagQueryOptions from './RagQueryOptions';
 
 /**
@@ -25,7 +26,7 @@ export default class DeepSearchConfig {
    * Constructs a new <code>DeepSearchConfig</code>.
    * @alias module:model/DeepSearchConfig
    * @class
-   * @param searchType {Object} 
+   * @param searchType {module:model/DeepSearchConfig.SearchTypeEnum} 
    */
   constructor(searchType) {
     this.searchType = searchType;
@@ -42,80 +43,98 @@ export default class DeepSearchConfig {
     if (data) {
       obj = obj || new DeepSearchConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('searchType'))
-        obj.searchType = ApiClient.convertToType(data['searchType'], Object);
+        obj.searchType = ApiClient.convertToType(data['searchType'], 'String');
       if (data.hasOwnProperty('ragQueryOptions'))
         obj.ragQueryOptions = RagQueryOptions.constructFromObject(data['ragQueryOptions']);
       if (data.hasOwnProperty('firstHopSimilarityThreashold'))
-        obj.firstHopSimilarityThreashold = ApiClient.convertToType(data['firstHopSimilarityThreashold'], Object);
+        obj.firstHopSimilarityThreashold = ApiClient.convertToType(data['firstHopSimilarityThreashold'], 'Number');
       if (data.hasOwnProperty('secondHopSimilarityThreashold'))
-        obj.secondHopSimilarityThreashold = ApiClient.convertToType(data['secondHopSimilarityThreashold'], Object);
+        obj.secondHopSimilarityThreashold = ApiClient.convertToType(data['secondHopSimilarityThreashold'], 'Number');
       if (data.hasOwnProperty('graphRagTopN'))
-        obj.graphRagTopN = ApiClient.convertToType(data['graphRagTopN'], Object);
+        obj.graphRagTopN = ApiClient.convertToType(data['graphRagTopN'], 'Number');
       if (data.hasOwnProperty('tokensLimit'))
-        obj.tokensLimit = ApiClient.convertToType(data['tokensLimit'], Object);
+        obj.tokensLimit = ApiClient.convertToType(data['tokensLimit'], 'Number');
       if (data.hasOwnProperty('manualThreasholdsConfiguration'))
-        obj.manualThreasholdsConfiguration = ApiClient.convertToType(data['manualThreasholdsConfiguration'], Object);
+        obj.manualThreasholdsConfiguration = ApiClient.convertToType(data['manualThreasholdsConfiguration'], 'Boolean');
       if (data.hasOwnProperty('defaultConfig'))
-        obj.defaultConfig = ApiClient.convertToType(data['defaultConfig'], Object);
+        obj.defaultConfig = ApiClient.convertToType(data['defaultConfig'], 'Boolean');
       if (data.hasOwnProperty('accessibleGroups'))
-        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], Object);
+        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], ['String']);
       if (data.hasOwnProperty('accessibleUsers'))
-        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], Object);
+        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], ['String']);
       if (data.hasOwnProperty('accessibleToAll'))
-        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], Object);
+        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], 'Boolean');
       if (data.hasOwnProperty('dataSourcesAccesses'))
-        obj.dataSourcesAccesses = ApiClient.convertToType(data['dataSourcesAccesses'], Object);
+        obj.dataSourcesAccesses = ApiClient.convertToType(data['dataSourcesAccesses'], [DeepSearchDataSourceAccess]);
       if (data.hasOwnProperty('perDataSourceConfigured'))
-        obj.perDataSourceConfigured = ApiClient.convertToType(data['perDataSourceConfigured'], Object);
+        obj.perDataSourceConfigured = ApiClient.convertToType(data['perDataSourceConfigured'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 DeepSearchConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 DeepSearchConfig.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 DeepSearchConfig.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 DeepSearchConfig.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 DeepSearchConfig.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 DeepSearchConfig.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} searchType
+ * Allowed values for the <code>searchType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+DeepSearchConfig.SearchTypeEnum = {
+  /**
+   * value: "SINGLE_HOP"
+   * @const
+   */
+  SINGLE_HOP: "SINGLE_HOP",
+
+  /**
+   * value: "MULTI_HOP"
+   * @const
+   */
+  MULTI_HOP: "MULTI_HOP"
+};
+/**
+ * @member {module:model/DeepSearchConfig.SearchTypeEnum} searchType
  */
 DeepSearchConfig.prototype.searchType = undefined;
 
@@ -125,57 +144,57 @@ DeepSearchConfig.prototype.searchType = undefined;
 DeepSearchConfig.prototype.ragQueryOptions = undefined;
 
 /**
- * @member {Object} firstHopSimilarityThreashold
+ * @member {Number} firstHopSimilarityThreashold
  */
 DeepSearchConfig.prototype.firstHopSimilarityThreashold = undefined;
 
 /**
- * @member {Object} secondHopSimilarityThreashold
+ * @member {Number} secondHopSimilarityThreashold
  */
 DeepSearchConfig.prototype.secondHopSimilarityThreashold = undefined;
 
 /**
- * @member {Object} graphRagTopN
+ * @member {Number} graphRagTopN
  */
 DeepSearchConfig.prototype.graphRagTopN = undefined;
 
 /**
- * @member {Object} tokensLimit
+ * @member {Number} tokensLimit
  */
 DeepSearchConfig.prototype.tokensLimit = undefined;
 
 /**
- * @member {Object} manualThreasholdsConfiguration
+ * @member {Boolean} manualThreasholdsConfiguration
  */
 DeepSearchConfig.prototype.manualThreasholdsConfiguration = undefined;
 
 /**
- * @member {Object} defaultConfig
+ * @member {Boolean} defaultConfig
  */
 DeepSearchConfig.prototype.defaultConfig = undefined;
 
 /**
- * @member {Object} accessibleGroups
+ * @member {Array.<String>} accessibleGroups
  */
 DeepSearchConfig.prototype.accessibleGroups = undefined;
 
 /**
- * @member {Object} accessibleUsers
+ * @member {Array.<String>} accessibleUsers
  */
 DeepSearchConfig.prototype.accessibleUsers = undefined;
 
 /**
- * @member {Object} accessibleToAll
+ * @member {Boolean} accessibleToAll
  */
 DeepSearchConfig.prototype.accessibleToAll = undefined;
 
 /**
- * @member {Object} dataSourcesAccesses
+ * @member {Array.<module:model/DeepSearchDataSourceAccess>} dataSourcesAccesses
  */
 DeepSearchConfig.prototype.dataSourcesAccesses = undefined;
 
 /**
- * @member {Object} perDataSourceConfigured
+ * @member {Boolean} perDataSourceConfigured
  */
 DeepSearchConfig.prototype.perDataSourceConfigured = undefined;
 

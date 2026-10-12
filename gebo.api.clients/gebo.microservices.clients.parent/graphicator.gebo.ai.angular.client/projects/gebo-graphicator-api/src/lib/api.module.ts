@@ -3,9 +3,8 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
-import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorStoreConfigurationController.service';
+import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GraphRagConfigurationControllerService } from './api/graphRagConfigurationController.service';
-import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 
 @NgModule({
@@ -13,9 +12,8 @@ import { InternalMessagingTopologyControllerService } from './api/internalMessag
   declarations: [],
   exports:      [],
   providers: [
-    GeboVectorStoreConfigurationControllerService,
+    GeboAngularFormGroupMetaInfoControllerService,
     GraphRagConfigurationControllerService,
-    IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService ]
 })
 export class ApiModule {

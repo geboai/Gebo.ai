@@ -11,7 +11,10 @@ import lombok.Data;
  */
 @Data
 public class LLMUsageDrillDownLevel {
+	/** The real provider, e.g. "openai". */
 	private String providerId;
+	/** The model type code, e.g. "chatgpt-OpenAI": one model type of a provider. */
+	private String modelTypeCode;
 	private String username;
 	private String model;
 	private String callerStack;

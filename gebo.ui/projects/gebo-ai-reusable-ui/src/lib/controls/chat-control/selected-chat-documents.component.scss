@@ -1,0 +1,21 @@
+.gebo-ai-selected-chat-documents {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 0.25rem 0.75rem 0.35rem;
+
+  &__label {
+    font-size: var(--gebo-font-size-2xs, 0.6875rem);
+    color: var(--gebo-text-subtle, #6b7280);
+    margin-right: 0.25rem;
+  }
+
+  &__item {
+    display: inline-flex;
+    align-items: center;
+    list-style: none;
+    break-after: avoid;
+  }
+}

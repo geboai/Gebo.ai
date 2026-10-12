@@ -71,11 +71,11 @@ public class IntegrationInputControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void spoolDocumentTest() {
+    public void spoolDocumentEnvelopeTest() {
         IntegrationDocumentEnvelop body = null;
         String endpointCode = null;
         String relativePath = null;
-        JobTicket response = api.spoolDocument(body, endpointCode, relativePath);
+        JobTicket response = api.spoolDocumentEnvelope(body, endpointCode, relativePath);
 
         // TODO: test validations
     }
@@ -88,11 +88,11 @@ public class IntegrationInputControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void spoolDocument1Test() {
+    public void spoolDocumentFileTest() {
         File file = null;
         String endpointCode = null;
         String relativePath = null;
-        JobTicket response = api.spoolDocument1(file, endpointCode, relativePath);
+        JobTicket response = api.spoolDocumentFile(file, endpointCode, relativePath);
 
         // TODO: test validations
     }

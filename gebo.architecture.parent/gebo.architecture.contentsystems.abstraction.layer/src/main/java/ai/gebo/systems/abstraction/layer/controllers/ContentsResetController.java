@@ -100,63 +100,65 @@ public class ContentsResetController {
     }
 
     /**
-     * Endpoint to reset content ingestion based on the provided request.
+     * Resets the ingestion of the contents of a knowledge base, a project or an
+     * endpoint (all contents when none is given): their ingestion
+     * acknowledgements are deleted, so the next ingestion reads, chunks and
+     * indexes every document again. The document references are kept: a
+     * document's uniqueId lives only on its stored reference (see
+     * VirtualFilesystemUniqueIds), and the next ingestion gives it back to the
+     * document found.
      *
-     * @param request The request containing information for resetting content.
-     * @return A response object containing the result of the reset operation.
+     * @param request the contents whose ingestion is reset
+     * @return how many documents were reset, or that all were
      */
     @PostMapping(value = "resetContentsIngestion", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResetContentResponse resetContentsIngestion(@RequestBody ResetContentRequest request) {
         LOGGER.info("Begin resetContentsIngestion(" + request + ")");
         final ResetContentResponse r = new ResetContentResponse();
 
-        // Check if any identifying information is provided in the request
         if (request.knowledgeBaseCode == null && request.projectCode == null && request.projectEndpoint == null) {
-            // If none, delete all entries from both repositories
+            // no scope: every acknowledgement
             handshakeRepository.deleteAll();
-            documentRepository.deleteAll();
             r.deletedAll = true;
         } else {
-            Stream<GDocumentReference> stream = null;
-            // Determine the stream based on the available request data
-            if (request.projectEndpoint != null) {
-                stream = documentRepository.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCode(
-                        request.projectEndpoint.getClassName(), request.projectEndpoint.getCode());
-            } else if (request.projectCode != null) {
-                stream = documentRepository.findByParentProjectCode(request.projectCode);
-            } else if (request.knowledgeBaseCode != null) {
-                stream = documentRepository.findByRootKnowledgebaseCode(request.knowledgeBaseCode);
+            final List<String> codes = new ArrayList<String>();
+            try (Stream<GDocumentReference> stream = scope(request)) {
+                stream.forEach(x -> {
+                    codes.add(x.getCode());
+                    r.resetEntries++;
+                    // deleted 100 documents at a time
+                    if (codes.size() == 100) {
+                        deleteAcknowledgements(codes);
+                        codes.clear();
+                    }
+                });
             }
-
-            List<String> ids = new ArrayList<String>();
-
-            // Process each document reference, collecting their IDs for reset
-            stream.forEach(x -> {
-                ids.add(x.getCode());
-                r.resetEntries++;
-                // Perform batch deletion every 100 entries
-                if ((ids.size() % 100) == 0) {
-                    handshakeRepository.deleteByContentCodeIn(ids);
-                    ids.clear();
-                }
-            });
-
-            // Delete any remaining entries
-            if (!ids.isEmpty()) {
-                handshakeRepository.deleteByContentCodeIn(ids);
-            }
-
-            // Remove document references based on the provided request data
-            if (request.projectEndpoint != null) {
-                documentRepository.deleteByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCode(
-                        request.projectEndpoint.getClassName(), request.projectEndpoint.getCode());
-            } else if (request.projectCode != null) {
-                documentRepository.deleteByParentProjectCode(request.projectCode);
-            } else if (request.knowledgeBaseCode != null) {
-                documentRepository.deleteByRootKnowledgebaseCode(request.knowledgeBaseCode);
+            if (!codes.isEmpty()) {
+                deleteAcknowledgements(codes);
             }
         }
         LOGGER.info("End resetContentsIngestion(" + request + ") =>" + r);
         return r;
+    }
+
+    /** The document references of the request's scope, the narrowest given. */
+    private Stream<GDocumentReference> scope(ResetContentRequest request) {
+        if (request.projectEndpoint != null) {
+            return documentRepository.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCode(
+                    request.projectEndpoint.getClassName(), request.projectEndpoint.getCode());
+        } else if (request.projectCode != null) {
+            return documentRepository.findByParentProjectCode(request.projectCode);
+        }
+        return documentRepository.findByRootKnowledgebaseCode(request.knowledgeBaseCode);
+    }
+
+    private void deleteAcknowledgements(List<String> codes) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Deleting the ingestion acknowledgements of " + codes.size() + " document(s)");
+        }
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("Ingestion acknowledgements deleted of: " + codes);
+        }
+        handshakeRepository.deleteByContentCodeIn(new ArrayList<String>(codes));
     }
 }

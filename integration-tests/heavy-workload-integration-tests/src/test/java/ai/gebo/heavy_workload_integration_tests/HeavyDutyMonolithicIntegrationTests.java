@@ -32,8 +32,13 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.monolithic.app.Main;
+import ai.gebo.architecture.integration.tests.preconditions.IntegrationTestConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresDirectories;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresDocker;
 
 @SpringBootTest(classes = Main.class)
+@RequiresDocker
+@RequiresDirectories(HeavyDutyMonolithicIntegrationTests.GEBO_VECTORIZABLE_FOLDERS)
 public class HeavyDutyMonolithicIntegrationTests extends AbstractGeboMonolithicIntegrationTestsWithFakeLLMS {
 	static final Logger LOGGER = LoggerFactory.getLogger(HeavyDutyMonolithicIntegrationTests.class);
 	static final String GEBO_VECTORIZABLE_FOLDERS = "GEBO_VECTORIZABLE_FOLDERS";
@@ -61,12 +66,12 @@ public class HeavyDutyMonolithicIntegrationTests extends AbstractGeboMonolithicI
 	@Test
 	public void testHeavyDutyParallelEmbeddingFlow()
 			throws InstantiationException, IllegalAccessException, GeboPersistenceException {
-		String folders = System.getenv(GEBO_VECTORIZABLE_FOLDERS);
-		if (folders == null)
-			folders = System.getProperty(GEBO_VECTORIZABLE_FOLDERS);
+		// @RequiresDirectories has already checked these; the throws below only guard
+		// against the configuration changing under a running suite, and replace the
+		// silent returns that used to report this test as passed without running it.
+		String folders = IntegrationTestConfig.get(GEBO_VECTORIZABLE_FOLDERS);
 		if (folders == null) {
-			LOGGER.error(GEBO_VECTORIZABLE_FOLDERS + " variable not present for heavy tests");
-			return;
+			throw new IllegalStateException(GEBO_VECTORIZABLE_FOLDERS + " variable not present for heavy tests");
 		}
 		StringTokenizer tokanizer = new StringTokenizer(folders, File.pathSeparator);
 		List<String> pathsList = new ArrayList<String>();
@@ -74,8 +79,7 @@ public class HeavyDutyMonolithicIntegrationTests extends AbstractGeboMonolithicI
 			pathsList.add(tokanizer.nextToken());
 		}
 		if (pathsList.isEmpty()) {
-			LOGGER.error(GEBO_VECTORIZABLE_FOLDERS + " is " + folders + " no paths in list");
-			return;
+			throw new IllegalStateException(GEBO_VECTORIZABLE_FOLDERS + " is " + folders + " no paths in list");
 		}
 		List<GFilesystemProjectEndpoint> endpoints = new ArrayList<GFilesystemProjectEndpoint>();
 		for (String path : pathsList) {
@@ -88,9 +92,8 @@ public class HeavyDutyMonolithicIntegrationTests extends AbstractGeboMonolithicI
 				endpoint = persistentObjectManager.update(endpoint);
 				endpoints.add(endpoint);
 			} else {
-				LOGGER.error(GEBO_VECTORIZABLE_FOLDERS + " is " + folders + " but the path " + path
+				throw new IllegalStateException(GEBO_VECTORIZABLE_FOLDERS + " is " + folders + " but the path " + path
 						+ " does not exist or is not a directory");
-				return;
 			}
 		}
 		List<TesterRunnable> testRunnables = endpoints.stream().map(x -> {

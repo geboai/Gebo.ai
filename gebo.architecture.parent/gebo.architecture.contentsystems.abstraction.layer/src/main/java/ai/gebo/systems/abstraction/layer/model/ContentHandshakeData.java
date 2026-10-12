@@ -21,6 +21,8 @@ import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.core.messages.GContentEmbeddingHandshakePayload;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Gebo.ai comment agent
@@ -51,6 +53,16 @@ public class ContentHandshakeData implements Serializable {
 	/** Flag indicating whether the content has been processed */
 	private Boolean processed = null;
 
+	/** The size of the content when it was ingested */
+	@Getter
+	@Setter
+	private Long fileSize = null;
+
+	/** When this content handler received the acknowledgement */
+	@Getter
+	@Setter
+	private Date receivedDate = null;
+
 	/** 
 	 * Default constructor 
 	 * Initializes a new instance of ContentHandshakeData.
@@ -70,6 +82,12 @@ public class ContentHandshakeData implements Serializable {
 		creationdDate = h.getCreationdDate();
 		hash = h.getHash();
 		processed = h.getProcessed();
+		fileSize = h.getFileSize();
+		receivedDate = new Date();
+	}
+
+	public void setReceivedDate(Date receivedDate) {
+		this.receivedDate = receivedDate;
 	}
 
 	/**

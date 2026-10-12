@@ -27,8 +27,7 @@ public class GenericOpenAIEmbeddingModelTypeConfig extends GEmbeddingModelType {
 	private String baseUrl = null;
 	/** Provider for the list of available models */
 	private String modelsListProvider = null;
-	/** Identifier for the service provider */
-	private String providerId=null;
+	// providerId is inherited from GModelType and bound from providers.yml.
 	/** Flag indicating whether authentication is optional */
 	private boolean optionalAuthentication=false;
 	
@@ -73,24 +72,6 @@ public class GenericOpenAIEmbeddingModelTypeConfig extends GEmbeddingModelType {
 	 */
 	public void setModelsListProvider(String modelsListProvider) {
 		this.modelsListProvider = modelsListProvider;
-	}
-
-	/**
-	 * Gets the provider identifier.
-	 * 
-	 * @return the provider ID string
-	 */
-	public String getProviderId() {
-		return providerId;
-	}
-
-	/**
-	 * Sets the provider identifier.
-	 * 
-	 * @param providerId the provider ID to set
-	 */
-	public void setProviderId(String providerId) {
-		this.providerId = providerId;
 	}
 
 	/**

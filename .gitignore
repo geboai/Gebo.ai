@@ -29,3 +29,4 @@ ui-exports/
 **/node_modules/
 **/dist/
 **/.angular/
+*~

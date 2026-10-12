@@ -23,7 +23,7 @@ import java.util.Date;
  * GUserChatInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
 
 public class GUserChatInfo {
   @JsonProperty("username")
@@ -43,6 +43,9 @@ public class GUserChatInfo {
 
   @JsonProperty("chatModelCode")
   private String chatModelCode = null;
+
+  @JsonProperty("pipelineCode")
+  private String pipelineCode = null;
 
   @JsonProperty("ragChat")
   private Boolean ragChat = null;
@@ -158,6 +161,24 @@ public class GUserChatInfo {
     this.chatModelCode = chatModelCode;
   }
 
+  public GUserChatInfo pipelineCode(String pipelineCode) {
+    this.pipelineCode = pipelineCode;
+    return this;
+  }
+
+   /**
+   * Get pipelineCode
+   * @return pipelineCode
+  **/
+  @Schema(description = "")
+  public String getPipelineCode() {
+    return pipelineCode;
+  }
+
+  public void setPipelineCode(String pipelineCode) {
+    this.pipelineCode = pipelineCode;
+  }
+
   public GUserChatInfo ragChat(Boolean ragChat) {
     this.ragChat = ragChat;
     return this;
@@ -210,13 +231,14 @@ public class GUserChatInfo {
         Objects.equals(this.contextCode, guserChatInfo.contextCode) &&
         Objects.equals(this.chatProfileCode, guserChatInfo.chatProfileCode) &&
         Objects.equals(this.chatModelCode, guserChatInfo.chatModelCode) &&
+        Objects.equals(this.pipelineCode, guserChatInfo.pipelineCode) &&
         Objects.equals(this.ragChat, guserChatInfo.ragChat) &&
         Objects.equals(this.chatCreationDateTime, guserChatInfo.chatCreationDateTime);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, description, code, contextCode, chatProfileCode, chatModelCode, ragChat, chatCreationDateTime);
+    return Objects.hash(username, description, code, contextCode, chatProfileCode, chatModelCode, pipelineCode, ragChat, chatCreationDateTime);
   }
 
 
@@ -231,6 +253,7 @@ public class GUserChatInfo {
     sb.append("    contextCode: ").append(toIndentedString(contextCode)).append("\n");
     sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
+    sb.append("    pipelineCode: ").append(toIndentedString(pipelineCode)).append("\n");
     sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");
     sb.append("    chatCreationDateTime: ").append(toIndentedString(chatCreationDateTime)).append("\n");
     sb.append("}");

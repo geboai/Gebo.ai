@@ -10,35 +10,29 @@
 package ai.gebo.bravesearch.handler.impl;
 
 import java.net.URI;
-import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import java.util.List;
-import java.util.function.BiFunction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.model.ToolContext;
-import org.springframework.ai.tool.ToolCallback;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
-import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.bravesearch.handler.model.BraveApiResponse;
 import ai.gebo.bravesearch.handler.model.BraveApiResponse.BraveResult;
-import ai.gebo.bravesearch.handler.model.BraveSearchConfig;
 import ai.gebo.bravesearch.handler.model.BraveSearchRequest;
 import ai.gebo.bravesearch.handler.model.BraveSearchResultItem;
 import ai.gebo.bravesearch.handler.model.BraveSearchResults;
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
-import lombok.AllArgsConstructor;
 
 /**
  * Thin REST client for the Brave Web Search API + the LLM tool factory. Auth is
@@ -46,15 +40,32 @@ import lombok.AllArgsConstructor;
  * via {@code encode().build()} so multi-word queries are handled correctly.
  */
 @Service
-@AllArgsConstructor
 public class BraveSearchApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BraveSearchApi.class);
 	public static final String BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search";
-	static final String SEARCH_WEB_WITH_BRAVE = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_NAME;
-	static final String RUNNING_A_BRAVE_SEARCH = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_DESCRIPTION;
 	private static final int DEFAULT_COUNT = 5;
 
 	private final RestTemplateWrapperService restTemplateService;
+
+	/**
+	 * The provider is called with an HTTP client of its own, whose connect and read
+	 * timeouts are the search calls' ones (see {@link SearchCallsConfig}): a provider not
+	 * answering on a sloppy network does not hold the search forever.
+	 */
+	@Autowired
+	public BraveSearchApi(SearchCallsConfig searchCalls) {
+		this(RestTemplateWrapperService.withTimeouts(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
+	}
+
+	BraveSearchApi(RestTemplateWrapperService restTemplateService) {
+		this.restTemplateService = restTemplateService;
+	}
+
+	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
+	BraveSearchApi using(SearchCallParameters parameters) {
+		return new BraveSearchApi(
+				RestTemplateWrapperService.withTimeouts(parameters.connectTimeout(), parameters.readTimeout()));
+	}
 
 	BraveApiResponse callApi(String apiKey, String query, Integer topN) throws GeboRestIntegrationException {
 		return callApi(apiKey, query, topN, null, null, null);
@@ -111,31 +122,4 @@ public class BraveSearchApi {
 		return out;
 	}
 
-	ToolCallback create(BraveSearchConfig config) {
-		BiFunction<BraveSearchRequest, ToolContext, BraveSearchResults> thisFunction = (request, toolContext) -> {
-			BraveSearchResults results = null;
-			LOGGER.info("Begin running brave search");
-			KBContext context = LLMtInteractionContextThreadLocal.Context.get();
-			LLMtInteractionContextThreadLocal.CalledFunction calledFunction = new LLMtInteractionContextThreadLocal.CalledFunction();
-			calledFunction.setFunctionName(SEARCH_WEB_WITH_BRAVE);
-			calledFunction.setFunctionDescription(RUNNING_A_BRAVE_SEARCH);
-			if (request.getQuery() != null) {
-				calledFunction.setParamsDescription(List.of(request.getQuery()));
-			}
-			if (context != null) {
-				context.getCalledFunctions().add(calledFunction);
-			}
-			ToolCallbackDeclarationUtil.addCallToContext(toolContext, calledFunction);
-			try {
-				results = search(config.getApiKey(), request);
-			} catch (Throwable th) {
-				LOGGER.error("Error running brave search", th);
-				results = new BraveSearchResults();
-			}
-			LOGGER.info("End running brave search");
-			return results;
-		};
-		return ToolCallbackDeclarationUtil.declare(thisFunction, SEARCH_WEB_WITH_BRAVE, RUNNING_A_BRAVE_SEARCH,
-				BraveSearchRequest.class, BraveSearchResults.class);
-	}
 }

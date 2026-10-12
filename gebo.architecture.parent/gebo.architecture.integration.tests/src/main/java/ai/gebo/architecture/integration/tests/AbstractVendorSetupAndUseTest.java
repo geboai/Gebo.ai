@@ -24,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import org.testcontainers.qdrant.QdrantContainer;
 
 import ai.gebo.architecture.integration.tests.model.IntegrationTestSetup;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresDocker;
 import ai.gebo.architecture.integration.tests.model.TestGeboSystemInfo;
 import ai.gebo.architecture.integration.tests.model.TestLLMSetup;
 import ai.gebo.architecture.integration.tests.model.TestSubsystemSetupInfo;
@@ -107,13 +108,17 @@ import tools.jackson.databind.ObjectMapper;
 /****************************************************************************************
  * Base for llm multivendor integration tests, taking admin account, llm vendor
  * presettings,subsystems integrations setup from a secret (in json format)
+ * <p>
+ * Every subclass needs Docker (the monolith's backing stores and Qdrant run in
+ * Testcontainers). Subclasses calling {@link #executeSystemSetupBySecret()}
+ * must also declare {@code @RequiresConfig(FULL_SETUP_ENVIRONMENT_JSON_STRING)}.
  */
-
+@RequiresDocker
 public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegrationTests {
 	protected static QdrantContainer qdrantContainer = new QdrantContainer("qdrant/qdrant:latest");
 	protected static boolean qdrantStartedUp = false;
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
-	protected static final String FULL_SETUP_ENVIRONMENT_JSON_STRING = "FullSetupSecret";
+	public static final String FULL_SETUP_ENVIRONMENT_JSON_STRING = "FullSetupSecret";
 	protected static ObjectMapper objectMapper = new ObjectMapper();
 	static {
 		// Supporto per java.time.*

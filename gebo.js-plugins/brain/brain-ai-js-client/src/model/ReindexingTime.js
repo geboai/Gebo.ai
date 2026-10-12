@@ -39,21 +39,21 @@ export default class ReindexingTime {
     if (data) {
       obj = obj || new ReindexingTime();
       if (data.hasOwnProperty('createdTime'))
-        obj.createdTime = ApiClient.convertToType(data['createdTime'], Object);
+        obj.createdTime = ApiClient.convertToType(data['createdTime'], 'Number');
       if (data.hasOwnProperty('timeComponent'))
-        obj.timeComponent = ApiClient.convertToType(data['timeComponent'], Object);
+        obj.timeComponent = ApiClient.convertToType(data['timeComponent'], ['Number']);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} createdTime
+ * @member {Number} createdTime
  */
 ReindexingTime.prototype.createdTime = undefined;
 
 /**
- * @member {Object} timeComponent
+ * @member {Array.<Number>} timeComponent
  */
 ReindexingTime.prototype.timeComponent = undefined;
 

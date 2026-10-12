@@ -40,12 +40,6 @@ public class GUploadsProjectEndpoint extends GProjectEndpoint {
 	 * This helps validate and secure the upload operation.
 	 */
 	private String uploadHandshakeCode = null;
-	
-	/**
-	 * List of identifiers for contents that have been uploaded through this endpoint.
-	 * These may reference documents, files, or other content objects in the system.
-	 */
-	private List<String> uploadedContents = null;
 
 	/**
 	 * Default constructor for creating a new uploads project endpoint.
@@ -73,24 +67,6 @@ public class GUploadsProjectEndpoint extends GProjectEndpoint {
 	 */
 	public void setUploadHandshakeCode(String uploadHandshakeCode) {
 		this.uploadHandshakeCode = uploadHandshakeCode;
-	}
-
-	/**
-	 * Retrieves the list of uploaded content identifiers.
-	 * 
-	 * @return A List of Strings representing the uploaded content identifiers
-	 */
-	public List<String> getUploadedContents() {
-		return uploadedContents;
-	}
-
-	/**
-	 * Sets the list of uploaded content identifiers.
-	 * 
-	 * @param uploadedContents The List of content identifiers to set
-	 */
-	public void setUploadedContents(List<String> uploadedContents) {
-		this.uploadedContents = uploadedContents;
 	}
 
 }

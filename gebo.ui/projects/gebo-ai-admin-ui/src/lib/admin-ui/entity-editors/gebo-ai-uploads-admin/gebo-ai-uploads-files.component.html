@@ -1,0 +1,165 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+<div class="flex flex-column gap-3">
+  @if (!endpointCode) {
+    <p-message id="SaveBeforeAddingFilesMessage" severity="info" styleClass="w-full">
+      <span id="SaveBeforeAddingFiles" gebo-ai-text>Save this data source before adding files: they go into its folder, which exists once it is saved.</span>
+    </p-message>
+  }
+  <gebo-ai-notifications [messages]="messages"></gebo-ai-notifications>
+
+  <!-- upper area: the drop zone -->
+  <div #dropArea id="UploadsDropZone">
+    <p-fileupload #fileUpload name="files[]" mode="advanced" [multiple]="true" [customUpload]="true" [auto]="true"
+      [accept]="acceptList" [maxFileSize]="104857600" [disabled]="!canAddFiles"
+      [showUploadButton]="false" [showCancelButton]="false" (uploadHandler)="onUploadHandler($event)">
+      <ng-template #header let-chooseCallback="chooseCallback">
+        <div class="flex flex-wrap align-items-center gap-2 w-full">
+          <p-button id="BrowseFilesBtn" gebo-ai-label label="Browse files" icon="pi pi-file" [outlined]="true"
+            [disabled]="!canAddFiles" (onClick)="chooseCallback()"></p-button>
+          <p-button id="BrowseFolderBtn" gebo-ai-label label="Browse a folder" icon="pi pi-folder-open" [outlined]="true"
+            [disabled]="!canAddFiles" (onClick)="browseFolder()"></p-button>
+          <span class="ml-auto flex align-items-center gap-2 text-sm">
+            <span id="UploadIntoLabel" gebo-ai-text>Upload into</span>
+            <p-tag icon="pi pi-folder" severity="info" [value]="targetFolderLabel"></p-tag>
+            @if (targetFolder) {
+              <p-button icon="pi pi-times" [text]="true" [rounded]="true" size="small" severity="secondary"
+                title="Upload into the root of the data source" (onClick)="setTarget(undefined)"></p-button>
+            }
+          </span>
+        </div>
+      </ng-template>
+      <ng-template #content let-chooseCallback="chooseCallback">
+        <div class="flex flex-column align-items-center justify-content-center gap-2 p-4 text-center">
+          <i class="pi pi-cloud-upload border-2 border-circle p-4 text-color-secondary" style="font-size: 2rem"></i>
+          @if (uploading) {
+            <span>{{uploadLabel}}</span>
+            <p-progressbar [value]="uploadProgress" styleClass="w-full" [style]="{ 'min-width': '20rem' }"></p-progressbar>
+          } @else {
+            <span id="DropHereLabel" class="font-semibold" gebo-ai-text>Drop files or folders here</span>
+            <span class="text-sm text-color-secondary">
+              <span id="OrLabel" gebo-ai-text>or</span>&nbsp;<a id="ClickToBrowseLink" class="text-primary cursor-pointer" [class.pointer-events-none]="!canAddFiles"
+                (click)="canAddFiles && chooseCallback()" gebo-ai-text>click to browse</a>
+              &nbsp;<span id="OrFolderLabel" gebo-ai-text>or</span>&nbsp;<a id="ChooseFolderLink" class="text-primary cursor-pointer" [class.pointer-events-none]="!canAddFiles"
+                (click)="browseFolder()" gebo-ai-text>choose a folder</a>
+            </span>
+          }
+        </div>
+      </ng-template>
+    </p-fileupload>
+    <input #folderInput type="file" multiple hidden webkitdirectory (change)="onFolderPicked($event)" />
+  </div>
+
+  <!-- lower area: the files the data source holds -->
+  @if (endpointCode) {
+    <p-treetable id="UploadedFilesTree" [value]="treeNodes" [loading]="loadingTree" [scrollable]="true" scrollHeight="400px" [tableStyle]="{ 'table-layout': 'fixed', width: '100%' }"
+      (onNodeExpand)="onNodeExpand($event)" (onNodeCollapse)="onNodeCollapse($event)" styleClass="p-treetable-sm">
+      <ng-template #caption>
+        <div class="flex flex-wrap align-items-center gap-2">
+          <span id="FilesOfDataSourceLabel" class="font-semibold" gebo-ai-text>Files of this data source</span>
+          @if (root) {
+            <span class="text-sm text-color-secondary">{{root.filesCount || 0}} <span id="FilesCountLabel" gebo-ai-text>files</span>,
+              {{root.publishedFilesCount || 0}} <span id="PublishedCountLabel" gebo-ai-text>published</span></span>
+          }
+          <span class="ml-auto flex gap-1">
+            <p-button id="NewRootFolderBtn" gebo-ai-label label="New folder" icon="pi pi-folder-plus" [text]="true"
+              [disabled]="!canAddFiles" (onClick)="openNewFolder(undefined)"></p-button>
+            <p-button id="RefreshFilesBtn" gebo-ai-label label="Refresh" icon="pi pi-refresh" [text]="true"
+              severity="secondary" (onClick)="reload()"></p-button>
+          </span>
+        </div>
+      </ng-template>
+      <ng-template #colgroup>
+        <colgroup>
+          <col />
+          <col style="width: 7rem" />
+          <col style="width: 11rem" />
+          <col style="width: 13rem" />
+          <col style="width: 10rem" />
+        </colgroup>
+      </ng-template>
+      <ng-template #header>
+        <tr>
+          <th id="NameHeader" gebo-ai-text>Name</th>
+          <th id="SizeHeader" gebo-ai-text>Size</th>
+          <th id="ModifiedHeader" gebo-ai-text>Modified</th>
+          <th id="StatusHeader" gebo-ai-text>Status</th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-rowNode let-node="rowData">
+        <tr [ttRow]="rowNode" [class.surface-100]="node.folder && node.relativePath === targetFolder">
+          <td>
+            <span class="inline-flex align-items-center gap-2">
+              <p-treetable-toggler [rowNode]="rowNode"></p-treetable-toggler>
+              <i class="pi" [class.pi-folder]="node.folder" [class.pi-file]="!node.folder"
+                [class.text-primary]="node.folder"></i>
+              <span [title]="node.relativePath">{{node.name}}</span>
+              @if (node.folder && node.relativePath === targetFolder) {
+                <p-tag icon="pi pi-upload" severity="info" value="Upload target"></p-tag>
+              }
+            </span>
+          </td>
+          <td class="text-sm">{{formatSize(node.size)}}</td>
+          <td class="text-sm">{{node.modificationTime | date:'short'}}</td>
+          <td>
+            @if (node.folder) {
+              @if (!node.filesCount) {
+                <span id="EmptyFolderLabel" class="text-sm text-color-secondary" gebo-ai-text>Empty</span>
+              } @else if (node.publishedFilesCount === node.filesCount) {
+                <p-tag icon="pi pi-check" severity="success" [value]="'All ' + node.filesCount + ' published'"></p-tag>
+              } @else if (node.publishedFilesCount) {
+                <p-tag severity="info" [value]="node.publishedFilesCount + ' of ' + node.filesCount + ' published'"></p-tag>
+              } @else {
+                <p-tag severity="secondary" value="Not yet published"></p-tag>
+              }
+            } @else if (node.published) {
+              <p-tag icon="pi pi-check" severity="success" value="Published" title="Already part of the knowledge base"></p-tag>
+            } @else {
+              <p-tag severity="secondary" value="Not yet published" title="Added to the knowledge base at the next publish"></p-tag>
+            }
+          </td>
+          <td class="text-right">
+            @if (node.folder) {
+              <p-button icon="pi pi-upload" [text]="true" [rounded]="true" size="small" title="Upload into this folder"
+                [disabled]="!canAddFiles" (onClick)="setTarget(node)"></p-button>
+              <p-button icon="pi pi-folder-plus" [text]="true" [rounded]="true" size="small" title="New folder inside"
+                [disabled]="!canAddFiles" (onClick)="openNewFolder(node)"></p-button>
+            } @else {
+              <p-button icon="pi pi-eye" [text]="true" [rounded]="true" size="small" title="Open the file"
+                (onClick)="viewFile.emit(node)"></p-button>
+            }
+            <p-button icon="pi pi-trash" [text]="true" [rounded]="true" size="small" severity="danger"
+              title="Delete from the data source" [disabled]="disabled || uploading" (onClick)="confirmDelete(node)"></p-button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template #emptymessage>
+        <tr>
+          <td id="NoFilesYet" colspan="5" class="text-center p-4 text-color-secondary" gebo-ai-text>No files yet: drop some in the area above.</td>
+        </tr>
+      </ng-template>
+    </p-treetable>
+  }
+</div>
+
+<p-dialog [(visible)]="newFolderVisible" [modal]="true" header="New folder" [style]="{ width: '28rem' }">
+  <div class="flex flex-column gap-2">
+    <label for="newFolderName" class="text-sm">
+      <span id="NewFolderInsideLabel" gebo-ai-text>Inside</span>&nbsp;<span class="font-semibold">{{newFolderParent ? newFolderParent : '/'}}</span>
+    </label>
+    <input pInputText id="newFolderName" [(ngModel)]="newFolderName" (keyup.enter)="createFolder()" autofocus />
+  </div>
+  <ng-template #footer>
+    <p-button label="Cancel" severity="secondary" [text]="true" (onClick)="newFolderVisible = false"></p-button>
+    <p-button label="Create" icon="pi pi-folder-plus" [disabled]="!newFolderName.trim()" (onClick)="createFolder()"></p-button>
+  </ng-template>
+</p-dialog>

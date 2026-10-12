@@ -228,7 +228,8 @@ class SecretsClusterControllerCiphertextTest {
 		IGSecretsStaticConfigurationDao staticDao = staticDao();
 		SecretsClusterController controller = controller(staticDao, accessService(staticDao));
 
-		GeboSecretContentEnvelope envelope = controller.getSecretContentById("declared-account", request);
+		GeboSecretContentEnvelope envelope = controller.infrastructureGetSecretContentById("declared-account",
+				request);
 
 		assertThat(envelope.getSecretType()).isEqualTo(GeboSecretType.USERNAME_PASSWORD);
 		// THE assertion: the password is not on the wire.
@@ -250,7 +251,7 @@ class SecretsClusterControllerCiphertextTest {
 		stored.put(secret.getCode(), secret);
 
 		GeboSecretContentEnvelope envelope = controller(staticDao, accessService(staticDao))
-				.getSecretContentById("stored-token", request);
+				.infrastructureGetSecretContentById("stored-token", request);
 
 		// Byte for byte as stored: not re-sealed, not decrypted, not touched.
 		assertThat(envelope.getCryptedContent()).isEqualTo("the-stored-ciphertext");
@@ -261,8 +262,8 @@ class SecretsClusterControllerCiphertextTest {
 	void anUnknownSecretIsStillAnError() {
 		IGSecretsStaticConfigurationDao staticDao = staticDao();
 
-		assertThatThrownBy(
-				() -> controller(staticDao, accessService(staticDao)).getSecretContentById("no-such-secret", request))
+		assertThatThrownBy(() -> controller(staticDao, accessService(staticDao))
+				.infrastructureGetSecretContentById("no-such-secret", request))
 				.isInstanceOf(GeboCryptSecretException.class).hasMessageContaining("Unkown secret");
 	}
 
@@ -279,10 +280,10 @@ class SecretsClusterControllerCiphertextTest {
 		// These endpoints write straight to the repository, so they never reach
 		// GeboSecretsAccessServiceImpl's guard: without their own check a cluster
 		// caller could shadow a declared secret with a record nobody can ever read.
-		assertThatThrownBy(() -> controller.storeSecret(write, request))
+		assertThatThrownBy(() -> controller.infrastructureStoreSecret(write, request))
 				.isInstanceOf(GeboCryptSecretException.class)
 				.hasMessage(IGeboSecretsAccessService.READ_ONLY_SECRET_MESSAGE);
-		assertThatThrownBy(() -> controller.updateSecret(write, request))
+		assertThatThrownBy(() -> controller.infrastructureUpdateSecret(write, request))
 				.isInstanceOf(GeboCryptSecretException.class)
 				.hasMessage(IGeboSecretsAccessService.READ_ONLY_SECRET_MESSAGE);
 		assertThat(stored).isEmpty();
@@ -292,7 +293,7 @@ class SecretsClusterControllerCiphertextTest {
 	void declaredIdsAreListedToTheCluster() {
 		IGSecretsStaticConfigurationDao staticDao = staticDao();
 
-		assertThat(controller(staticDao, accessService(staticDao)).getAllSecretsId(request))
+		assertThat(controller(staticDao, accessService(staticDao)).infrastructureGetAllSecretsId(request))
 				.containsExactly("declared-account");
 	}
 
@@ -300,8 +301,8 @@ class SecretsClusterControllerCiphertextTest {
 	void theMetadataOfADeclaredSecretSaysItIsReadOnly() throws Exception {
 		IGSecretsStaticConfigurationDao staticDao = staticDao();
 
-		SecretInfo info = controller(staticDao, accessService(staticDao)).getSecretInfoById("declared-account",
-				request);
+		SecretInfo info = controller(staticDao, accessService(staticDao))
+				.infrastructureGetSecretInfoById("declared-account", request);
 
 		assertThat(info.getReadOnly()).isTrue();
 		assertThat(info.getSecretType()).isEqualTo(GeboSecretType.USERNAME_PASSWORD);

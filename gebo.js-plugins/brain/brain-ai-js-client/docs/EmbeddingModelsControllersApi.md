@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getEmbeddingModelTypes"></a>
 # **getEmbeddingModelTypes**
-> Object getEmbeddingModelTypes()
+> [GEmbeddingModelType] getEmbeddingModelTypes()
 
 
 
@@ -31,7 +31,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GEmbeddingModelType]**](GEmbeddingModelType.md)
 
 ### Authorization
 
@@ -44,7 +44,7 @@ No authorization required
 
 <a name="getRuntimeConfiguredEmbeddingModels"></a>
 # **getRuntimeConfiguredEmbeddingModels**
-> Object getRuntimeConfiguredEmbeddingModels(opts)
+> [ConfigurationEntryGBaseEmbeddingModelConfig] getRuntimeConfiguredEmbeddingModels(opts)
 
 
 
@@ -54,7 +54,7 @@ import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.EmbeddingModelsControllersApi();
 let opts = { 
-  'modelTypeCode': null // Object | 
+  'modelTypeCode': "modelTypeCode_example" // String | 
 };
 apiInstance.getRuntimeConfiguredEmbeddingModels(opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -68,11 +68,11 @@ apiInstance.getRuntimeConfiguredEmbeddingModels(opts).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional] 
+ **modelTypeCode** | **String**|  | [optional] 
 
 ### Return type
 
-**Object**
+[**[ConfigurationEntryGBaseEmbeddingModelConfig]**](ConfigurationEntryGBaseEmbeddingModelConfig.md)
 
 ### Authorization
 

@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GUserMessage from './GUserMessage';
+import PathInfo from './PathInfo';
 
 /**
  * The OperationStatusListPathInfo model module.
@@ -39,35 +41,35 @@ export default class OperationStatusListPathInfo {
     if (data) {
       obj = obj || new OperationStatusListPathInfo();
       if (data.hasOwnProperty('result'))
-        obj.result = ApiClient.convertToType(data['result'], Object);
+        obj.result = ApiClient.convertToType(data['result'], [PathInfo]);
       if (data.hasOwnProperty('messages'))
-        obj.messages = ApiClient.convertToType(data['messages'], Object);
+        obj.messages = ApiClient.convertToType(data['messages'], [GUserMessage]);
       if (data.hasOwnProperty('hasErrorMessages'))
-        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], Object);
+        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], 'Boolean');
       if (data.hasOwnProperty('hasWarnMessages'))
-        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], Object);
+        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} result
+ * @member {Array.<module:model/PathInfo>} result
  */
 OperationStatusListPathInfo.prototype.result = undefined;
 
 /**
- * @member {Object} messages
+ * @member {Array.<module:model/GUserMessage>} messages
  */
 OperationStatusListPathInfo.prototype.messages = undefined;
 
 /**
- * @member {Object} hasErrorMessages
+ * @member {Boolean} hasErrorMessages
  */
 OperationStatusListPathInfo.prototype.hasErrorMessages = undefined;
 
 /**
- * @member {Object} hasWarnMessages
+ * @member {Boolean} hasWarnMessages
  */
 OperationStatusListPathInfo.prototype.hasWarnMessages = undefined;
 

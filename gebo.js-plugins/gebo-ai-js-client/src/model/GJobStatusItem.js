@@ -39,22 +39,22 @@ export default class GJobStatusItem {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new GJobStatusItem();
-      if (data.hasOwnProperty('error'))
-        obj.error = ApiClient.convertToType(data['error'], 'Boolean');
       if (data.hasOwnProperty('description'))
         obj.description = ApiClient.convertToType(data['description'], 'String');
+      if (data.hasOwnProperty('error'))
+        obj.error = ApiClient.convertToType(data['error'], 'Boolean');
       if (data.hasOwnProperty('code'))
         obj.code = ApiClient.convertToType(data['code'], 'String');
-      if (data.hasOwnProperty('jobType'))
-        obj.jobType = ApiClient.convertToType(data['jobType'], 'String');
-      if (data.hasOwnProperty('projectEndpointReference'))
-        obj.projectEndpointReference = GObjectRefGProjectEndpoint.constructFromObject(data['projectEndpointReference']);
-      if (data.hasOwnProperty('workflowId'))
-        obj.workflowId = ApiClient.convertToType(data['workflowId'], 'String');
       if (data.hasOwnProperty('workflowType'))
         obj.workflowType = ApiClient.convertToType(data['workflowType'], 'String');
+      if (data.hasOwnProperty('workflowId'))
+        obj.workflowId = ApiClient.convertToType(data['workflowId'], 'String');
+      if (data.hasOwnProperty('projectEndpointReference'))
+        obj.projectEndpointReference = GObjectRefGProjectEndpoint.constructFromObject(data['projectEndpointReference']);
       if (data.hasOwnProperty('startDateTime'))
         obj.startDateTime = ApiClient.convertToType(data['startDateTime'], 'Date');
+      if (data.hasOwnProperty('jobType'))
+        obj.jobType = ApiClient.convertToType(data['jobType'], 'String');
       if (data.hasOwnProperty('processing'))
         obj.processing = ApiClient.convertToType(data['processing'], 'Boolean');
       if (data.hasOwnProperty('finished'))
@@ -67,19 +67,39 @@ export default class GJobStatusItem {
 }
 
 /**
- * @member {Boolean} error
- */
-GJobStatusItem.prototype.error = undefined;
-
-/**
  * @member {String} description
  */
 GJobStatusItem.prototype.description = undefined;
 
 /**
+ * @member {Boolean} error
+ */
+GJobStatusItem.prototype.error = undefined;
+
+/**
  * @member {String} code
  */
 GJobStatusItem.prototype.code = undefined;
+
+/**
+ * @member {String} workflowType
+ */
+GJobStatusItem.prototype.workflowType = undefined;
+
+/**
+ * @member {String} workflowId
+ */
+GJobStatusItem.prototype.workflowId = undefined;
+
+/**
+ * @member {module:model/GObjectRefGProjectEndpoint} projectEndpointReference
+ */
+GJobStatusItem.prototype.projectEndpointReference = undefined;
+
+/**
+ * @member {Date} startDateTime
+ */
+GJobStatusItem.prototype.startDateTime = undefined;
 
 /**
  * Allowed values for the <code>jobType</code> property.
@@ -109,26 +129,6 @@ GJobStatusItem.JobTypeEnum = {
  * @member {module:model/GJobStatusItem.JobTypeEnum} jobType
  */
 GJobStatusItem.prototype.jobType = undefined;
-
-/**
- * @member {module:model/GObjectRefGProjectEndpoint} projectEndpointReference
- */
-GJobStatusItem.prototype.projectEndpointReference = undefined;
-
-/**
- * @member {String} workflowId
- */
-GJobStatusItem.prototype.workflowId = undefined;
-
-/**
- * @member {String} workflowType
- */
-GJobStatusItem.prototype.workflowType = undefined;
-
-/**
- * @member {Date} startDateTime
- */
-GJobStatusItem.prototype.startDateTime = undefined;
 
 /**
  * @member {Boolean} processing

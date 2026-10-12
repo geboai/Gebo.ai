@@ -6,8 +6,8 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**publishContents**](IntegrationInputControllerApi.md#publishContents) | **PUT** /api/application/IntegrationInputController/publishContents | 
 [**publishSync**](IntegrationInputControllerApi.md#publishSync) | **GET** /api/application/IntegrationInputController/publishSync | 
-[**spoolDocument**](IntegrationInputControllerApi.md#spoolDocument) | **POST** /api/application/IntegrationInputController/spoolDocument | 
-[**spoolDocument1**](IntegrationInputControllerApi.md#spoolDocument1) | **PUT** /api/application/IntegrationInputController/spoolDocument | 
+[**spoolDocumentEnvelope**](IntegrationInputControllerApi.md#spoolDocumentEnvelope) | **POST** /api/application/IntegrationInputController/spoolDocument | 
+[**spoolDocumentFile**](IntegrationInputControllerApi.md#spoolDocumentFile) | **PUT** /api/application/IntegrationInputController/spoolDocument | 
 
 <a name="publishContents"></a>
 # **publishContents**
@@ -97,9 +97,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="spoolDocument"></a>
-# **spoolDocument**
-> JobTicket spoolDocument(body, endpointCode, relativePath)
+<a name="spoolDocumentEnvelope"></a>
+# **spoolDocumentEnvelope**
+> JobTicket spoolDocumentEnvelope(body, endpointCode, relativePath)
 
 
 
@@ -115,10 +115,10 @@ IntegrationDocumentEnvelop body = new IntegrationDocumentEnvelop(); // Integrati
 String endpointCode = "endpointCode_example"; // String | 
 String relativePath = "relativePath_example"; // String | 
 try {
-    JobTicket result = apiInstance.spoolDocument(body, endpointCode, relativePath);
+    JobTicket result = apiInstance.spoolDocumentEnvelope(body, endpointCode, relativePath);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling IntegrationInputControllerApi#spoolDocument");
+    System.err.println("Exception when calling IntegrationInputControllerApi#spoolDocumentEnvelope");
     e.printStackTrace();
 }
 ```
@@ -144,9 +144,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="spoolDocument1"></a>
-# **spoolDocument1**
-> JobTicket spoolDocument1(file, endpointCode, relativePath)
+<a name="spoolDocumentFile"></a>
+# **spoolDocumentFile**
+> JobTicket spoolDocumentFile(file, endpointCode, relativePath)
 
 
 
@@ -162,10 +162,10 @@ File file = new File("file_example"); // File |
 String endpointCode = "endpointCode_example"; // String | 
 String relativePath = "relativePath_example"; // String | 
 try {
-    JobTicket result = apiInstance.spoolDocument1(file, endpointCode, relativePath);
+    JobTicket result = apiInstance.spoolDocumentFile(file, endpointCode, relativePath);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling IntegrationInputControllerApi#spoolDocument1");
+    System.err.println("Exception when calling IntegrationInputControllerApi#spoolDocumentFile");
     e.printStackTrace();
 }
 ```

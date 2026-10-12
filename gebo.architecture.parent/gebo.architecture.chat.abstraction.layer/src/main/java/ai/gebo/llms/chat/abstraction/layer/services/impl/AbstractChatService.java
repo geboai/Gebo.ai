@@ -15,20 +15,20 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.AssistantMessage.ToolCall;
-import org.springframework.ai.chat.messages.MessageType;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.content.Media;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
+import ai.gebo.architecture.ai.model.ContextContentRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
@@ -42,14 +42,20 @@ import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswer;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.ChatModelConfigOptions;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -63,10 +69,12 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerSe
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService;
+import ai.gebo.llms.deepsearch.service.impl.DeepSearchQuotations;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.security.services.SecurityAuditTaxonomy;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -160,6 +168,45 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	}
 
 	/**
+	 * The quotations of an answer, checked against what the model is given to answer:
+	 * the documents of the call (the prompt's documents parameter, the request's
+	 * documents when the prompt takes them) and the results of the tools it calls.
+	 */
+	protected DeepSearchQuotations answerQuotations(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatRequestContext) {
+		final DeepSearchQuotations quotations = new DeepSearchQuotations();
+		final List<Document> documents = new ArrayList<>();
+		final Object given = params != null ? params.get(IChatRequestContext.DOCUMENTS_PROMPT_PARAM) : null;
+		if (given instanceof AIDocumentsSet set) {
+			documents.addAll(set.aiDocumentsList());
+		} else if (given instanceof Collection<?> collection) {
+			for (Object item : collection) {
+				if (item instanceof Document document) {
+					documents.add(document);
+				}
+			}
+		}
+		if (chatRequestContext != null && (prompt == null || prompt.getContextDocuments() == null
+				|| prompt.getContextDocuments() == ContextContentRequired.REQUIRED)) {
+			final List<Document> requestDocuments = chatRequestContext.getDocuments();
+			if (requestDocuments != null) {
+				documents.addAll(requestDocuments);
+			}
+		}
+		quotations.addSources(documents);
+		if (chatRequestContext != null) {
+			quotations.addToolResults(chatRequestContext.getToolCallListener());
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Answer quotations checked against " + documents.size() + " document(s)"
+					+ (chatRequestContext != null && chatRequestContext.getToolCallListener() != null
+							? " and the tools' results"
+							: ""));
+		}
+		return quotations;
+	}
+
+	/**
 	 * Calls the chat client, processes the chat response, and updates the
 	 * associated GeboChatResponse.
 	 *
@@ -180,11 +227,19 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		long startMillis = System.currentTimeMillis();
 		try {
-			ChatResponse chatresponse = configurableChatModel.response(prompt, Map.of(), chatRequestContext);
-			AssistantMessage callResponseObject = chatresponse.getResult().getOutput();
-			String responseText = callResponseObject.getText();
-			response.setQueryResponse(responseText);
-			response.setCalledFunctions(context.getCalledFunctions());
+			final DeepSearchQuotations quotations = answerQuotations(prompt, Map.of(), chatRequestContext);
+			// the answer without its reasoning, every provider alike
+			final GChatAnswer answer = writtenAgainIfCut(
+					configurableChatModel.answer(prompt, Map.of(), chatRequestContext), configurableChatModel, prompt,
+					Map.of(), chatRequestContext, response);
+			// the quotations the standard way, checked against the answer's sources (best effort)
+			response.setQueryResponse(quotations.render(answer.answer()));
+			response.setThinkingOutputs(ClientChatCallUtil.thinkingSteps(answer.thinking()));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Answer with " + quotations.quotes().size() + " verified quotation(s)");
+			}
+			// the called functions are recorded into the response as the tools run (see
+			// recordToolCalls(...))
 
 			response.setDocumentsRef(showedDocuments != null ? GResponseDocumentRef.from(showedDocuments) : List.of());
 			logChatInvocationEvent(event, configurableChatModel, startMillis, SecurityAuditTaxonomy.Outcome.SUCCESS);
@@ -219,11 +274,18 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			throws LLMConfigException {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		long startMillis = System.currentTimeMillis();
+		// the user of the request, as the model's stream samples it (see streamResponse)
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		try {
-			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, params, chatRequestContext);
+			final DeepSearchQuotations quotations = answerQuotations(prompt, params, chatRequestContext);
+			Flux<GChatAnswerChunk> res = configurableChatModel.streamAnswer(prompt, params, chatRequestContext);
 			Flux<GeboChatMessageEnvelope> composed = composeFlux(res, context, request, response,
 					chatRequestContext.getToolsContext(), chatHistoryConsolidation, historySizeTarget,
-					configurableChatModel, showedDocuments);
+					configurableChatModel, showedDocuments, quotations,
+					// the copy of the model is made as the user (its tools resolved for the user): the
+					// stream's thread, where an answer turns out cut, carries no identity
+					thinking -> runAs.doRunAsWithReturnAndException(() -> withThinking(configurableChatModel,
+							thinking).streamAnswer(prompt, params, chatRequestContext)));
 			// Logged once at stream completion/error (not per chunk) to avoid flooding
 			// the audit log with one event per streamed token.
 			return composed
@@ -257,24 +319,59 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * @param docrefs                  List of document references
 	 * @return A Flux of GeboChatMessageEnvelope representing the whole stream
 	 */
-	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<ChatResponse> res, final KBContext context,
+	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<GChatAnswerChunk> res, final KBContext context,
 			final GeboChatRequest request, final GeboChatResponse response, final Map<String, Object> toolsContext,
 			boolean chatHistoryConsolidation, int historySizeTarget, IGConfigurableChatModel configurableChatModel,
 			AIDocumentsSet showedDocuments) {
+		return composeFlux(res, context, request, response, toolsContext, chatHistoryConsolidation, historySizeTarget,
+				configurableChatModel, showedDocuments, null);
+	}
+
+	/**
+	 * The same, the answer's quotations given the standard way as it streams and as it is
+	 * saved (see {@link DeepSearchQuotations}); as the model wrote them when
+	 * {@code quotations} is null.
+	 */
+	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<GChatAnswerChunk> res, final KBContext context,
+			final GeboChatRequest request, final GeboChatResponse response, final Map<String, Object> toolsContext,
+			boolean chatHistoryConsolidation, int historySizeTarget, IGConfigurableChatModel configurableChatModel,
+			AIDocumentsSet showedDocuments, final DeepSearchQuotations quotations) {
+		return composeFlux(res, context, request, response, toolsContext, chatHistoryConsolidation, historySizeTarget,
+				configurableChatModel, showedDocuments, quotations, null);
+	}
+
+	/** The same answer streamed again by the model asked for another thinking level. */
+	@FunctionalInterface
+	protected static interface AnswerRetry {
+		Flux<GChatAnswerChunk> stream(ChatModelThinkingOption thinking) throws LLMConfigException;
+	}
+
+	/**
+	 * The same, an answer cut because the model's generated tokens ran out written again
+	 * once by {@code retry} with less reasoning when its reasoning took them (see
+	 * {@link CutAnswer}); the user is warned the answer is incomplete otherwise, or when
+	 * {@code retry} is null.
+	 */
+	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<GChatAnswerChunk> res, final KBContext context,
+			final GeboChatRequest request, final GeboChatResponse response, final Map<String, Object> toolsContext,
+			boolean chatHistoryConsolidation, int historySizeTarget, IGConfigurableChatModel configurableChatModel,
+			AIDocumentsSet showedDocuments, final DeepSearchQuotations quotations, final AnswerRetry retry) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Beginning composeFlux(....)");
 		}
 		final List<GResponseDocumentRef> docrefs = showedDocuments != null ? GResponseDocumentRef.from(showedDocuments)
 				: List.of();
-		final Map<String, ToolCall> toolCalls = new HashMap<>();
 		final StringBuffer buffer = new StringBuffer();
-		final boolean skipThinkingMarkup = configurableChatModel.isApplyThinkingMarkupHandling();
+		// the quotations rendering of the answer, a new one when the answer is written again
+		final AtomicReference<DeepSearchQuotations.Streaming> quoting = new AtomicReference<>(
+				quotations != null ? quotations.streaming() : null);
+		// why the model stopped writing, as the chunk ending the answer gave it
+		final AtomicReference<String> finishReason = new AtomicReference<>();
 
 		Mono<GeboChatMessageEnvelope> startFlux = Mono.fromSupplier(() -> {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Sending a GeboChatResponse opening content");
 			}
-			response.setCalledFunctions(context.getCalledFunctions());
 			response.setDocumentsRef(docrefs);
 
 			GeboChatMessageEnvelope<GeboChatResponse> startEnvelope = new GeboChatMessageEnvelope<GeboChatResponse>();
@@ -282,76 +379,144 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			return startEnvelope;
 		});
 
-		Flux<GeboChatMessageEnvelope> bodyFlux = res.map(x -> {
-
-			GeboChatMessageEnvelope<String> envelope = new GeboChatMessageEnvelope<String>();
-			GeboChatMessageEnvelope returned = envelope;
-			final StringBuffer contentSegment = new StringBuffer("");
-			if (x != null && x.getResults() != null && !x.getResults().isEmpty()) {
-				for (Generation rs : x.getResults()) {
-					if (rs.getOutput() != null) {
-						MessageType type = rs.getOutput().getMessageType();
-
-						rs.getOutput().getToolCalls().forEach(tc -> {
-							toolCalls.put(tc.id(), tc);
-						});
-
-						String text = rs.getOutput().getText();
-						if (text != null) {
-							contentSegment.append(text);
-						}
-						List<Media> medias = rs.getOutput().getMedia();
-						if (medias != null && !medias.isEmpty()) {
-							for (Media media : medias) {
-								LLMGeneratedResource generatedResource;
-								try {
-									generatedResource = this.chatStorageAreaService.addMedia(media,
-											request.getUserChatContextCode());
-									response.getGeneratedResources().add(generatedResource);
-								} catch (Throwable e) {
-									LOGGER.error("Error receiving media", e);
-								}
-
-							}
-						}
-					}
+		// the reasoning the model writes before its answer, streamed to the user as it comes
+		final ThinkingStream thinking = new ThinkingStream();
+		// all the reasoning of the answer, saved with it
+		final StringBuilder reasoning = new StringBuilder();
+		// each chunk: the answer and the reasoning it adds, every provider alike
+		final Function<GChatAnswerChunk, Flux<GeboChatMessageEnvelope>> chunkEnvelopes = chunk -> {
+			final List<GeboChatMessageEnvelope> out = new ArrayList<>();
+			// why the model stopped writing (stop, length...), on the chunk that ends it
+			if (chunk.finishReason() != null) {
+				finishReason.set(chunk.finishReason());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Streamed answer finish reason: " + chunk.finishReason() + " after "
+							+ buffer.length() + " character(s)");
 				}
 			}
-			String thisText = contentSegment.toString();
-			buffer.append(thisText);
-			if (!skipThinkingMarkup) {
-				envelope.setContent(thisText);
-			} else if (ClientChatCallUtil.isAfterThinking(buffer.toString())) {
-				envelope.setContent(thisText);
+			for (Media media : chunk.media()) {
+				try {
+					LLMGeneratedResource generatedResource = this.chatStorageAreaService.addMedia(media,
+							request.getUserChatContextCode());
+					response.getGeneratedResources().add(generatedResource);
+				} catch (Throwable e) {
+					LOGGER.error("Error receiving media", e);
+				}
 			}
+			buffer.append(chunk.answer());
+			reasoning.append(chunk.thinking());
+			thinkingEvents(out, thinking.delta(chunk.thinking()));
+			if (!chunk.answer().isBlank()) {
+				// the answer starts: the reasoning ended
+				thinkingEvents(out, thinking.complete());
+			}
+			// a quotation still open is held until it closes
+			final DeepSearchQuotations.Streaming quotingNow = quoting.get();
+			out.add(new GeboChatMessageEnvelope<String>(
+					quotingNow != null ? quotingNow.next(chunk.answer()) : chunk.answer()));
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Sending a String content:" + contentSegment.toString());
+				LOGGER.debug("Sending a String content:" + chunk.answer());
 			}
-
-			return returned;
-		}).onErrorResume(exc -> {
+			return Flux.fromIterable(out);
+		};
+		final Function<Throwable, Flux<GeboChatMessageEnvelope>> streamError = exc -> {
 			final String msg = "Error while streaming chat respose";
 			LOGGER.error(msg, exc);
 			GeboChatMessageEnvelope<GUserMessage> exceptionEnvelope = new GeboChatMessageEnvelope<GUserMessage>();
 			GUserMessage userMessage = GUserMessage.errorMessage(msg, exc);
 			exceptionEnvelope.setContent(userMessage);
 			return Flux.just(exceptionEnvelope);
-		}).filter(x -> {
-			return x.getContentObjectType() != null && x.getContent() != null && x.getContent() != null
-					&& x.getContent().toString().trim().length() > 0;
+		};
+		final Predicate<GeboChatMessageEnvelope> sent = x -> {
+			if (x.getContentObjectType() == null || x.getContent() == null) {
+				return false;
+			}
+			// a piece of the answer made only of line ends is part of it (paragraphs, headings,
+			// tables): only an empty one is dropped
+			return x.getContent() instanceof String text ? !text.isEmpty()
+					: x.getContent().toString().trim().length() > 0;
+		};
+		Flux<GeboChatMessageEnvelope> bodyFlux = res.concatMap(chunkEnvelopes).onErrorResume(streamError).filter(sent);
+		// an answer cut because the model's generated tokens ran out: written again once with
+		// less reasoning when its reasoning took them, the user warned otherwise
+		final ChatModelThinkingOption lowerThinking = retry != null
+				&& configurableChatModel.getConfig() instanceof GBaseChatModelConfig modelConfig
+						? CutAnswer.lower(modelConfig.getThinking())
+						: null;
+		Flux<GeboChatMessageEnvelope> cutFlux = Flux.defer(() -> {
+			if (!CutAnswer.isCut(finishReason.get())) {
+				return Flux.<GeboChatMessageEnvelope>empty();
+			}
+			final long reasoningChars = thinking.writtenChars();
+			final long answerChars = ClientChatCallUtil.removeThinking(buffer.toString()).length();
+			if (lowerThinking == null || !CutAnswer.reasoningTookTheBudget(reasoningChars, answerChars)) {
+				return cutWarning(response, finishReason.get(), reasoningChars, answerChars);
+			}
+			final Flux<GChatAnswerChunk> again;
+			try {
+				again = retry.stream(lowerThinking);
+			} catch (LLMConfigException | RuntimeException e) {
+				LOGGER.error("Cannot write the cut answer again with thinking " + lowerThinking, e);
+				return cutWarning(response, finishReason.get(), reasoningChars, answerChars);
+			}
+			LOGGER.warn("Streamed answer cut (finish reason " + finishReason.get() + ") after " + answerChars
+					+ " answer and " + reasoningChars + " reasoning character(s): written again with thinking "
+					+ lowerThinking);
+			final List<GeboChatMessageEnvelope> out = new ArrayList<>();
+			thinkingEvents(out, thinking.complete());
+			final GUserMessage note = CutAnswer.writtenAgainNote();
+			response.getBackendMessages().add(note);
+			out.add(new GeboChatMessageEnvelope<GUserMessage>(note));
+			out.add(new GeboChatMessageEnvelope<String>(ANSWER_WRITTEN_AGAIN_SEPARATOR));
+			// the answer saved is the one written again, with its reasoning
+			buffer.setLength(0);
+			reasoning.setLength(0);
+			quoting.set(quotations != null ? quotations.streaming() : null);
+			finishReason.set(null);
+			final long reasoningBefore = thinking.writtenChars();
+			return Flux.fromIterable(out)
+					.concatWith(again.concatMap(chunkEnvelopes).onErrorResume(streamError).filter(sent))
+					.concatWith(Flux.defer(() -> CutAnswer.isCut(finishReason.get())
+							? cutWarning(response, finishReason.get(), thinking.writtenChars() - reasoningBefore,
+									ClientChatCallUtil.removeThinking(buffer.toString()).length())
+							: Flux.<GeboChatMessageEnvelope>empty()));
+		});
+		// a reasoning the answer never came after (the model was cut while reasoning) ends here
+		Flux<GeboChatMessageEnvelope> thinkingEndFlux = Flux.defer(() -> {
+			final List<GeboChatMessageEnvelope> out = new ArrayList<>();
+			thinkingEvents(out, thinking.complete());
+			return Flux.fromIterable(out);
+		});
+		// what the quotations rendering still holds once the answer ended
+		Mono<GeboChatMessageEnvelope> heldFlux = Mono.fromSupplier(() -> {
+			final DeepSearchQuotations.Streaming quotingNow = quoting.get();
+			final String held = quotingNow != null ? quotingNow.rest() : "";
+			if (held.isEmpty()) {
+				return null;
+			}
+			GeboChatMessageEnvelope<String> envelope = new GeboChatMessageEnvelope<String>();
+			envelope.setContent(held);
+			return envelope;
 		});
 		Mono<GeboChatMessageEnvelope> trailingFlux = Mono.fromSupplier(() -> {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Sending a GeboChatResponse trailing content with lastMessage: true");
 			}
 			String responseText = buffer.toString();
-			response.setThinkingOutputs(ClientChatCallUtil.extractThinking(responseText));
-			response.setQueryResponse(ClientChatCallUtil.removeThinking(responseText));
-			List<CalledFunction> calls = context.getCalledFunctions();
-			if (calls == null || calls.isEmpty()) {
-				calls = new ArrayList<>(toCalledFunctions(toolCalls.values()));
+			response.setThinkingOutputs(ClientChatCallUtil.thinkingSteps(reasoning.toString()));
+			if (quotations != null) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Streamed answer with " + quotations.quotes().size() + " verified quotation(s)");
+				}
+				// saved as it was streamed: the quotations the standard way
+				response.setQueryResponse(quotations.render(ClientChatCallUtil.removeThinking(responseText)));
+			} else {
+				response.setQueryResponse(ClientChatCallUtil.removeThinking(responseText));
 			}
-			response.setCalledFunctions(calls);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Streamed response carries " + response.getCalledFunctions().size()
+						+ " recorded called function(s)");
+			}
 			response.setDocumentsRef(docrefs);
 			GeboChatMessageEnvelope<GeboChatResponse> finalEnvelope = new GeboChatMessageEnvelope<GeboChatResponse>();
 			finalEnvelope.setContent(response); // Use the accumulated text
@@ -366,37 +531,118 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			}
 			return finalEnvelope;
 		});
-		Flux<GeboChatMessageEnvelope> responseFlux = startFlux.concatWith(bodyFlux).concatWith(trailingFlux)
+		Flux<GeboChatMessageEnvelope> responseFlux = startFlux.concatWith(bodyFlux).concatWith(cutFlux)
+				.concatWith(thinkingEndFlux)
+				.concatWith(heldFlux)
+				.concatWith(trailingFlux)
 				.concatWithValues(GeboChatMessageEnvelope.FINAL_MESSAGE);
-		responseFlux.doOnComplete(() -> {
+		responseFlux = responseFlux.doOnComplete(() -> {
 			try {
 				this.chatSessionLifecycleService.chatRequestCompleted(request, configurableChatModel);
 			} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException e) {
 				LOGGER.error("Error closing response flux with chatSessionLifecycle code", e);
 			}
-		});
+		}).doFinally(signal -> this.chatSessionLifecycleService.releaseRequest(request));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End composeFlux(....)");
 		}
 		return responseFlux;
 	}
 
+	/** What parts, while it streams, the cut answer from the one written again. */
+	static final String ANSWER_WRITTEN_AGAIN_SEPARATOR = CutAnswer.SEPARATOR;
+
+	/** The user warned that the streamed answer was cut. */
+	private Flux<GeboChatMessageEnvelope> cutWarning(GeboChatResponse response, String finishReason,
+			long reasoningChars, long answerChars) {
+		LOGGER.warn("Streamed answer cut (finish reason " + finishReason + ") after " + answerChars + " answer and "
+				+ reasoningChars + " reasoning character(s): the user is warned it is incomplete");
+		final GUserMessage warning = CutAnswer.incompleteWarning();
+		response.getBackendMessages().add(warning);
+		return Flux.just(new GeboChatMessageEnvelope<GUserMessage>(warning));
+	}
+
 	/**
-	 * Converts a collection of ToolCall objects to a list of CalledFunction
-	 * objects.
-	 *
-	 * @param values Collection of ToolCall objects
-	 * @return List of CalledFunction objects
+	 * A copy of the model asked for another thinking level: the same code, so its use is
+	 * recorded on the model, and the same tools (a copy given none has none).
 	 */
-	protected List<CalledFunction> toCalledFunctions(Collection<ToolCall> values) {
-		List<CalledFunction> out = new ArrayList<>();
-		for (ToolCall toolCall : values) {
-			CalledFunction cf = new CalledFunction();
-			cf.setFunctionName(toolCall.name());
-			cf.setParamsDescription(List.of(toolCall.arguments()));
-			out.add(cf);
+	protected IGConfigurableChatModel withThinking(IGConfigurableChatModel model, ChatModelThinkingOption thinking)
+			throws LLMConfigException {
+		final List<String> functions = model.getConfig() instanceof GBaseChatModelConfig modelConfig
+				? modelConfig.getEnabledFunctions()
+				: null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("withThinking(...) model " + model.getCode() + " with thinking " + thinking + " and "
+					+ (functions != null ? functions.size() : 0) + " enabled function(s)");
 		}
-		return out;
+		return model.cloneWithOptions("", new ChatModelConfigOptions(null, null, thinking, functions, null));
+	}
+
+	/**
+	 * A called answer cut because the model's generated tokens ran out: asked again once
+	 * with less reasoning when its reasoning took them (the user never saw the cut one),
+	 * the user warned it is incomplete otherwise.
+	 */
+	private GChatAnswer writtenAgainIfCut(GChatAnswer answer, IGConfigurableChatModel model,
+			GPromptTemplateConfig prompt, Map<String, Object> params, IChatRequestContext chatRequestContext,
+			GeboChatResponse response) throws LLMConfigException {
+		final String finish = answer.finishReason();
+		if (!CutAnswer.isCut(finish)) {
+			return answer;
+		}
+		final long answerChars = answer.answer().length();
+		final long reasoningChars = answer.thinking().length();
+		final ChatModelThinkingOption lower = model.getConfig() instanceof GBaseChatModelConfig modelConfig
+				? CutAnswer.lower(modelConfig.getThinking())
+				: null;
+		if (lower == null || !CutAnswer.reasoningTookTheBudget(reasoningChars, answerChars)) {
+			LOGGER.warn("Answer cut (finish reason " + finish + ") after " + answerChars + " answer and "
+					+ reasoningChars + " reasoning character(s): the user is warned it is incomplete");
+			response.getBackendMessages().add(CutAnswer.incompleteWarning());
+			return answer;
+		}
+		LOGGER.warn("Answer cut (finish reason " + finish + ") after " + answerChars + " answer and "
+				+ reasoningChars + " reasoning character(s): asked again with thinking " + lower);
+		final GChatAnswer again;
+		try {
+			again = withThinking(model, lower).answer(prompt, params, chatRequestContext);
+		} catch (LLMConfigException | RuntimeException e) {
+			LOGGER.error("Cannot ask the cut answer again with thinking " + lower, e);
+			response.getBackendMessages().add(CutAnswer.incompleteWarning());
+			return answer;
+		}
+		if (again == null || again.source() == null || again.source().getResult() == null) {
+			response.getBackendMessages().add(CutAnswer.incompleteWarning());
+			return answer;
+		}
+		if (CutAnswer.isCut(again.finishReason())) {
+			LOGGER.warn("Answer asked again with thinking " + lower + " cut again: the user is warned it is incomplete");
+			response.getBackendMessages().add(CutAnswer.incompleteWarning());
+		}
+		return again;
+	}
+
+	/** The reasoning events as envelopes, added to the ones a chunk gives. */
+	private static void thinkingEvents(List<GeboChatMessageEnvelope> out, List<GThinkingEvent> events) {
+		for (GThinkingEvent event : events) {
+			out.add(new GeboChatMessageEnvelope<GThinkingEvent>(event));
+		}
+	}
+
+	/**
+	 * Makes the tools called while answering the request recorded into the response
+	 * (its called functions, filled as the tools run). Within a chat pipeline the
+	 * executor already owns the request recorder; a direct model chat has none, so the
+	 * response being built here gets its own.
+	 */
+	protected void recordToolCalls(LLMChatRequestResources requestResources, GeboChatResponse response) {
+		if (requestResources == null || response == null || requestResources.getToolCallsListener() != null) {
+			return;
+		}
+		requestResources.setToolCallsListener(ToolCallsListener.appendingTo(response.getCalledFunctions()));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Recording the tool calls of a direct chat request into its response");
+		}
 	}
 
 	public List<GKnowledgeBase> getVisibleKnowledgeBases() {
@@ -409,6 +655,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
+		recordToolCalls(requestResources, response);
 
 		return callChatClient(chatModel, overriddenPrompt, kbcontext, requestResources.getCurrentRequest(), response,
 				requestResources.createChatRequestContext(), null);
@@ -420,6 +667,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
+		recordToolCalls(requestResources, response);
 		int tokensLength = requestResources.getTokensSize();
 		final int contextWindow = chatModel.getContextLength();
 		boolean shrink = tokensLength > contextWindow / 2;

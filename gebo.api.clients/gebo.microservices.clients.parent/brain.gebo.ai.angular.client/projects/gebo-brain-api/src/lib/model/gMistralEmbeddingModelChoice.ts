@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GModelPricingConditions } from './gModelPricingConditions';
 import { MistralBaseModelCard } from './mistralBaseModelCard';
 import { ModelMetaInfo } from './modelMetaInfo';
 
@@ -26,6 +27,7 @@ export interface GMistralEmbeddingModelChoice {
     informativeUrl?: string;
     contextLength?: number;
     nativeModelMetaInfos?: any;
+    pricingConditions?: GModelPricingConditions;
     optimalTokenizationParam?: number;
     modelCard?: MistralBaseModelCard;
 }

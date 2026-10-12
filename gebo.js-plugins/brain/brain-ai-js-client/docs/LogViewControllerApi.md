@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**deleteJobStatus**](LogViewControllerApi.md#deleteJobStatus) | **POST** /api/admin/LogViewController/deleteJobStatus | 
 [**getJobMessagesPaged**](LogViewControllerApi.md#getJobMessagesPaged) | **POST** /api/admin/LogViewController/getJobMessagesPaged | 
+[**getJobsEntries**](LogViewControllerApi.md#getJobsEntries) | **POST** /api/admin/LogViewController/getJobsEntries | 
 [**getJobsEntriesForClassName**](LogViewControllerApi.md#getJobsEntriesForClassName) | **POST** /api/admin/LogViewController/getJobsEntriesForClassName | 
 [**getJobsEntriesForJobType**](LogViewControllerApi.md#getJobsEntriesForJobType) | **POST** /api/admin/LogViewController/getJobsEntriesForJobType | 
 [**getJobsEntriesForProjectEndpoint**](LogViewControllerApi.md#getJobsEntriesForProjectEndpoint) | **POST** /api/admin/LogViewController/getJobsEntriesForProjectEndpoint | 
@@ -21,7 +22,7 @@ Method | HTTP request | Description
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.LogViewControllerApi();
-let body = null; // Object | 
+let body = ["body_example"]; // [String] | 
 
 apiInstance.deleteJobStatus(body).then(() => {
   console.log('API called successfully.');
@@ -35,7 +36,7 @@ apiInstance.deleteJobStatus(body).then(() => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  | 
+ **body** | [**[String]**](String.md)|  | 
 
 ### Return type
 
@@ -80,6 +81,46 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**PageGUserMessage**](PageGUserMessage.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getJobsEntries"></a>
+# **getJobsEntries**
+> PageGJobStatusItem getJobsEntries(body)
+
+
+
+### Example
+```javascript
+import {BrainClient} from 'gebo.brain.client.js';
+
+let apiInstance = new BrainClient.LogViewControllerApi();
+let body = new BrainClient.JobsEntriesFilter(); // JobsEntriesFilter | 
+
+apiInstance.getJobsEntries(body).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**JobsEntriesFilter**](JobsEntriesFilter.md)|  | 
+
+### Return type
+
+[**PageGJobStatusItem**](PageGJobStatusItem.md)
 
 ### Authorization
 

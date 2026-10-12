@@ -24,6 +24,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { ChangeDescriptionComponent } from "./change-description.component";
 import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
 import { DocumentRefComponent } from "./document-ref.component";
+import { GeboAISelectedChatDocumentsComponent } from "./selected-chat-documents.component";
 
 
 import { GeboAIViewTableModule } from "../view-table/view-table.module";
@@ -108,7 +109,7 @@ console.log(
       }
     }
   }), ReactiveRagChatService],
-  declarations: [ChangeDescriptionComponent, DocumentRefComponent,GeboChatUserInfoComponent, GeboAIUploadedDocumentRefComponent, GeboAIChatInputShellComponent, GeboAIGeneratedDocumentRefComponent, GeboAIReusableChatComponent,GeboAIExtensiblePipelineRouteDisplayComponent,GeboAIChatStreamEventsDisplayComponent],
+  declarations: [ChangeDescriptionComponent, DocumentRefComponent, GeboAISelectedChatDocumentsComponent, GeboChatUserInfoComponent, GeboAIUploadedDocumentRefComponent, GeboAIChatInputShellComponent, GeboAIGeneratedDocumentRefComponent, GeboAIReusableChatComponent,GeboAIExtensiblePipelineRouteDisplayComponent,GeboAIChatStreamEventsDisplayComponent],
   exports: [GeboAIReusableChatComponent]
 })
 export class GeboAIReusableChatModule { }

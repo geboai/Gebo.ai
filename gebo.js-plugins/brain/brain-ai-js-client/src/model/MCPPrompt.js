@@ -39,56 +39,56 @@ export default class MCPPrompt {
     if (data) {
       obj = obj || new MCPPrompt();
       if (data.hasOwnProperty('accessibleGroups'))
-        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], Object);
+        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], ['String']);
       if (data.hasOwnProperty('accessibleUsers'))
-        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], Object);
+        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], ['String']);
       if (data.hasOwnProperty('accessibleToAll'))
-        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], Object);
+        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], 'Boolean');
       if (data.hasOwnProperty('aclAliases'))
-        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], Object);
+        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('deletedOnMCPServer'))
-        obj.deletedOnMCPServer = ApiClient.convertToType(data['deletedOnMCPServer'], Object);
+        obj.deletedOnMCPServer = ApiClient.convertToType(data['deletedOnMCPServer'], 'Boolean');
       if (data.hasOwnProperty('addedOnMCPServer'))
-        obj.addedOnMCPServer = ApiClient.convertToType(data['addedOnMCPServer'], Object);
+        obj.addedOnMCPServer = ApiClient.convertToType(data['addedOnMCPServer'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} accessibleGroups
+ * @member {Array.<String>} accessibleGroups
  */
 MCPPrompt.prototype.accessibleGroups = undefined;
 
 /**
- * @member {Object} accessibleUsers
+ * @member {Array.<String>} accessibleUsers
  */
 MCPPrompt.prototype.accessibleUsers = undefined;
 
 /**
- * @member {Object} accessibleToAll
+ * @member {Boolean} accessibleToAll
  */
 MCPPrompt.prototype.accessibleToAll = undefined;
 
 /**
- * @member {Object} aclAliases
+ * @member {Array.<Number>} aclAliases
  */
 MCPPrompt.prototype.aclAliases = undefined;
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 MCPPrompt.prototype.name = undefined;
 
 /**
- * @member {Object} deletedOnMCPServer
+ * @member {Boolean} deletedOnMCPServer
  */
 MCPPrompt.prototype.deletedOnMCPServer = undefined;
 
 /**
- * @member {Object} addedOnMCPServer
+ * @member {Boolean} addedOnMCPServer
  */
 MCPPrompt.prototype.addedOnMCPServer = undefined;
 

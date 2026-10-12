@@ -15,9 +15,16 @@ Name | Type | Description | Notes
 **outputToken** | **Number** |  | [optional] 
 **totalToken** | **Number** |  | [optional] 
 **nrRequests** | **Number** |  | [optional] 
-**latencyMin** | **Number** |  | [optional] 
-**latencyMax** | **Number** |  | [optional] 
-**latencyAvg** | **Number** |  | [optional] 
+**responseTimeMin** | **Number** |  | [optional] 
+**responseTimeMax** | **Number** |  | [optional] 
+**responseTimeAvg** | **Number** |  | [optional] 
+**timeToFirstTokenMin** | **Number** |  | [optional] 
+**timeToFirstTokenMax** | **Number** |  | [optional] 
+**timeToFirstTokenAvg** | **Number** |  | [optional] 
+**timeToFirstTokenSamples** | **Number** |  | [optional] 
+**cost** | **Number** |  | [optional] 
+**currencyCode** | **String** |  | [optional] 
+**costSamples** | **Number** |  | [optional] 
 
 <a name="ModelTypeEnum"></a>
 ## Enum: ModelTypeEnum

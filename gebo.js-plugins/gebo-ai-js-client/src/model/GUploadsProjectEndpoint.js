@@ -76,6 +76,8 @@ export default class GUploadsProjectEndpoint {
         obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], 'String');
       if (data.hasOwnProperty('aclAliases'))
         obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
+      if (data.hasOwnProperty('personalData'))
+        obj.personalData = ApiClient.convertToType(data['personalData'], 'Boolean');
       if (data.hasOwnProperty('uploadHandshakeCode'))
         obj.uploadHandshakeCode = ApiClient.convertToType(data['uploadHandshakeCode'], 'String');
       if (data.hasOwnProperty('uploadedContents'))
@@ -210,6 +212,11 @@ GUploadsProjectEndpoint.prototype.objectSpaceType = undefined;
  * @member {Array.<Number>} aclAliases
  */
 GUploadsProjectEndpoint.prototype.aclAliases = undefined;
+
+/**
+ * @member {Boolean} personalData
+ */
+GUploadsProjectEndpoint.prototype.personalData = undefined;
 
 /**
  * @member {String} uploadHandshakeCode

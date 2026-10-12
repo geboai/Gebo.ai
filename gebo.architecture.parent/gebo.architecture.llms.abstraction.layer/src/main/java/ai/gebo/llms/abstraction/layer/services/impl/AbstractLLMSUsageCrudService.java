@@ -53,15 +53,20 @@ public abstract class AbstractLLMSUsageCrudService implements ILLMSUsageCrudServ
 	public void enqueueUsage(LLMUsageDetailDto usage) {
 		LLMUsageDetailPayload payload = new LLMUsageDetailPayload();
 		payload.setProviderId(usage.getProviderId());
+		payload.setModelTypeCode(usage.getModelTypeCode());
 		payload.setUsername(usage.getUsername());
 		payload.setModel(usage.getModel());
 		payload.setCallerStack(usage.getCallerStack());
 		payload.setModelType(usage.getModelType());
-		payload.setLatency(usage.getLatency());
+		payload.setResponseTime(usage.getResponseTime());
+		payload.setTimeToFirstToken(usage.getTimeToFirstToken());
+		payload.setCost(usage.getCost());
+		payload.setCurrencyCode(usage.getCurrencyCode());
 		payload.setInputToken(usage.getInputToken());
 		payload.setOutputToken(usage.getOutputToken());
 		payload.setTotalToken(usage.getTotalToken());
 		payload.setOutcome(usage.getOutcome());
+		payload.setApiSecretCode(usage.getApiSecretCode());
 		payload.setUsageTimestamp(System.currentTimeMillis());
 
 		GMessageEnvelope<LLMUsageDetailPayload> envelope = envelopeFactory.newMessageFrom(this, payload);

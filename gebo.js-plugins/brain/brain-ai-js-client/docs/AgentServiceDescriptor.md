@@ -3,10 +3,10 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**serviceId** | **Object** |  | [optional] 
-**description** | **Object** |  | [optional] 
-**inputType** | **Object** |  | [optional] 
-**outputType** | **Object** |  | [optional] 
-**networkAgent** | **Object** |  | [optional] 
-**routingAgent** | **Object** |  | [optional] 
-**networkAdapter** | **Object** |  | [optional] 
+**serviceId** | **String** |  | [optional] 
+**description** | **String** |  | [optional] 
+**inputType** | **String** |  | [optional] 
+**outputType** | **String** |  | [optional] 
+**networkAgent** | **Boolean** |  | [optional] 
+**routingAgent** | **Boolean** |  | [optional] 
+**networkAdapter** | **Boolean** |  | [optional] 

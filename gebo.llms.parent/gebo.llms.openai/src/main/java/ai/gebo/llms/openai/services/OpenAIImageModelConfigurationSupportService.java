@@ -28,6 +28,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.openai.api.utils.impl.GOpenAIApiUtilImpl;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -39,6 +40,7 @@ public class OpenAIImageModelConfigurationSupportService
 		type.setCode("image-generation-OpenAI");
 		type.setDescription("image generation service hosted on OpenAI");
 		type.setModelConfigurationClass(GOpenAIImageModelConfig.class.getName());
+		type.setProviderId("openai");
 	}
 	final IGeboSecretsAccessService secretService;
 	final IGOpenAIApiUtil openaiApiUtil;
@@ -106,6 +108,9 @@ public class OpenAIImageModelConfigurationSupportService
 				GOpenAIImageModelChoice choice = new GOpenAIImageModelChoice();
 				choice.setCode(model.getId());
 				choice.setDescription(model.getId());
+				// the shutdown date OpenAI publishes for the model, said in its description
+				choice.setMetaInfos(GOpenAIApiUtilImpl.liveMetaInfos(model, "openai"));
+				GOpenAIApiUtilImpl.describe(choice);
 				choices.add(choice);
 			}
 			return OperationStatus.of(choices);

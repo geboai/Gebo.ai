@@ -48,6 +48,7 @@ import ai.gebo.llms.openai_compat.services.GenericOpenAIAPITranscriptModelConfig
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIRankerModelConfigurationSupportService;
 import ai.gebo.llms.openai_compat.services.ModelsListProviderProxyService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
@@ -111,6 +112,7 @@ public class GenericOpenAIProvidersAssembler {
 	final IGDocumentContentRendererProvider documentsContentRendererProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Initializes and registers all configured OpenAI-compatible providers. This
@@ -125,7 +127,7 @@ public class GenericOpenAIProvidersAssembler {
 				GenericOpenAIAPIChatModelConfigurationSupportService provider = new GenericOpenAIAPIChatModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, functionsRepo, modelsListProxyService,
 						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern,
-						documentsContentRendererProvider, usageAdvisorFactory, observationRegistry);
+						documentsContentRendererProvider, usageAdvisorFactory, observationRegistry, modelsLibrary);
 				chatModelProvidersRepo.addImplementation(provider);
 			}
 		}
@@ -135,7 +137,7 @@ public class GenericOpenAIProvidersAssembler {
 			for (GenericOpenAIEmbeddingModelTypeConfig pc : config.getEmbeddingModelProviders()) {
 				GenericOpenAIAPIEmbeddingModelConfigurationSupportService provider = new GenericOpenAIAPIEmbeddingModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, functionsRepo, storeFactoryProvider, modelsListProxyService,
-						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern, observationRegistry);
+						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern, observationRegistry, modelsLibrary);
 				embeddingModelProvidersRepo.addImplementation(provider);
 			}
 		}
@@ -151,7 +153,7 @@ public class GenericOpenAIProvidersAssembler {
 			for (GenericOpenAITextToSpeechModelType pc : config.getTextToSpeechModelProviders()) {
 				GenericOpenAIAPITextToSpeechModelConfigurationSupportService service = new GenericOpenAIAPITextToSpeechModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, modelsListProxyService, serviceClientsProviderFactory,
-						configureHandler);
+						configureHandler, modelsLibrary);
 				textToSpeechProvidersRepo.addImplementation(service);
 			}
 		}

@@ -39,84 +39,84 @@ export default class ModelMetaInfo {
     if (data) {
       obj = obj || new ModelMetaInfo();
       if (data.hasOwnProperty('providerId'))
-        obj.providerId = ApiClient.convertToType(data['providerId'], Object);
+        obj.providerId = ApiClient.convertToType(data['providerId'], 'String');
       if (data.hasOwnProperty('modelId'))
-        obj.modelId = ApiClient.convertToType(data['modelId'], Object);
+        obj.modelId = ApiClient.convertToType(data['modelId'], 'String');
       if (data.hasOwnProperty('chatModel'))
-        obj.chatModel = ApiClient.convertToType(data['chatModel'], Object);
+        obj.chatModel = ApiClient.convertToType(data['chatModel'], 'Boolean');
       if (data.hasOwnProperty('embeddingModel'))
-        obj.embeddingModel = ApiClient.convertToType(data['embeddingModel'], Object);
+        obj.embeddingModel = ApiClient.convertToType(data['embeddingModel'], 'Boolean');
       if (data.hasOwnProperty('supportsStructuredOutput'))
-        obj.supportsStructuredOutput = ApiClient.convertToType(data['supportsStructuredOutput'], Object);
+        obj.supportsStructuredOutput = ApiClient.convertToType(data['supportsStructuredOutput'], 'Boolean');
       if (data.hasOwnProperty('supportsFunctionCalls'))
-        obj.supportsFunctionCalls = ApiClient.convertToType(data['supportsFunctionCalls'], Object);
+        obj.supportsFunctionCalls = ApiClient.convertToType(data['supportsFunctionCalls'], 'Boolean');
       if (data.hasOwnProperty('contextLength'))
-        obj.contextLength = ApiClient.convertToType(data['contextLength'], Object);
+        obj.contextLength = ApiClient.convertToType(data['contextLength'], 'Number');
       if (data.hasOwnProperty('tokenizingThreashold'))
-        obj.tokenizingThreashold = ApiClient.convertToType(data['tokenizingThreashold'], Object);
+        obj.tokenizingThreashold = ApiClient.convertToType(data['tokenizingThreashold'], 'Number');
       if (data.hasOwnProperty('maxOutputToken'))
-        obj.maxOutputToken = ApiClient.convertToType(data['maxOutputToken'], Object);
+        obj.maxOutputToken = ApiClient.convertToType(data['maxOutputToken'], 'Number');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('informativeUrl'))
-        obj.informativeUrl = ApiClient.convertToType(data['informativeUrl'], Object);
+        obj.informativeUrl = ApiClient.convertToType(data['informativeUrl'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} providerId
+ * @member {String} providerId
  */
 ModelMetaInfo.prototype.providerId = undefined;
 
 /**
- * @member {Object} modelId
+ * @member {String} modelId
  */
 ModelMetaInfo.prototype.modelId = undefined;
 
 /**
- * @member {Object} chatModel
+ * @member {Boolean} chatModel
  */
 ModelMetaInfo.prototype.chatModel = undefined;
 
 /**
- * @member {Object} embeddingModel
+ * @member {Boolean} embeddingModel
  */
 ModelMetaInfo.prototype.embeddingModel = undefined;
 
 /**
- * @member {Object} supportsStructuredOutput
+ * @member {Boolean} supportsStructuredOutput
  */
 ModelMetaInfo.prototype.supportsStructuredOutput = undefined;
 
 /**
- * @member {Object} supportsFunctionCalls
+ * @member {Boolean} supportsFunctionCalls
  */
 ModelMetaInfo.prototype.supportsFunctionCalls = undefined;
 
 /**
- * @member {Object} contextLength
+ * @member {Number} contextLength
  */
 ModelMetaInfo.prototype.contextLength = undefined;
 
 /**
- * @member {Object} tokenizingThreashold
+ * @member {Number} tokenizingThreashold
  */
 ModelMetaInfo.prototype.tokenizingThreashold = undefined;
 
 /**
- * @member {Object} maxOutputToken
+ * @member {Number} maxOutputToken
  */
 ModelMetaInfo.prototype.maxOutputToken = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 ModelMetaInfo.prototype.description = undefined;
 
 /**
- * @member {Object} informativeUrl
+ * @member {String} informativeUrl
  */
 ModelMetaInfo.prototype.informativeUrl = undefined;
 

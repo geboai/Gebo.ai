@@ -12,6 +12,7 @@
 
 export interface LLMUsageAggregationBucket { 
     providerId?: string;
+    modelTypeCode?: string;
     username?: string;
     model?: string;
     callerStack?: string;
@@ -23,9 +24,16 @@ export interface LLMUsageAggregationBucket {
     outputToken?: number;
     totalToken?: number;
     nrRequests?: number;
-    latencyMin?: number;
-    latencyMax?: number;
-    latencyAvg?: number;
+    responseTimeMin?: number;
+    responseTimeMax?: number;
+    responseTimeAvg?: number;
+    timeToFirstTokenMin?: number;
+    timeToFirstTokenMax?: number;
+    timeToFirstTokenAvg?: number;
+    timeToFirstTokenSamples?: number;
+    cost?: number;
+    currencyCode?: string;
+    costSamples?: number;
 }
 export namespace LLMUsageAggregationBucket {
     export type ModelTypeEnum = 'CHAT' | 'EMBEDDING' | 'IMAGE' | 'RANKER' | 'TTS' | 'TRANSCRIPT';

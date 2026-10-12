@@ -24,12 +24,10 @@ export default class SearchDocumentByNameParam {
    * Constructs a new <code>SearchDocumentByNameParam</code>.
    * @alias module:model/SearchDocumentByNameParam
    * @class
-   * @param name {Object} 
-   * @param knowledgeBaseCodes {Object} 
+   * @param name {String} 
    */
-  constructor(name, knowledgeBaseCodes) {
+  constructor(name) {
     this.name = name;
-    this.knowledgeBaseCodes = knowledgeBaseCodes;
   }
 
   /**
@@ -43,21 +41,21 @@ export default class SearchDocumentByNameParam {
     if (data) {
       obj = obj || new SearchDocumentByNameParam();
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('knowledgeBaseCodes'))
-        obj.knowledgeBaseCodes = ApiClient.convertToType(data['knowledgeBaseCodes'], Object);
+        obj.knowledgeBaseCodes = ApiClient.convertToType(data['knowledgeBaseCodes'], ['String']);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 SearchDocumentByNameParam.prototype.name = undefined;
 
 /**
- * @member {Object} knowledgeBaseCodes
+ * @member {Array.<String>} knowledgeBaseCodes
  */
 SearchDocumentByNameParam.prototype.knowledgeBaseCodes = undefined;
 

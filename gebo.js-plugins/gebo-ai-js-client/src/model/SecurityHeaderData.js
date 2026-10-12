@@ -74,7 +74,13 @@ SecurityHeaderData.AuthTypeEnum = {
    * value: "LOCAL_JWT"
    * @const
    */
-  LOCAL_JWT: "LOCAL_JWT"
+  LOCAL_JWT: "LOCAL_JWT",
+
+  /**
+   * value: "AUTO"
+   * @const
+   */
+  AUTO: "AUTO"
 };
 /**
  * @member {module:model/SecurityHeaderData.AuthTypeEnum} authType

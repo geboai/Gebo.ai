@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GDocumentAttributeValue from './GDocumentAttributeValue';
 import GObjectRefGProjectEndpoint from './GObjectRefGProjectEndpoint';
 import GeboComponentInfo from './GeboComponentInfo';
 
@@ -26,7 +27,7 @@ export default class GDocumentReference {
    * Constructs a new <code>GDocumentReference</code>.
    * @alias module:model/GDocumentReference
    * @class
-   * @param code {Object} 
+   * @param code {String} 
    * @param originComponent {module:model/GeboComponentInfo} 
    */
   constructor(code, originComponent) {
@@ -45,181 +46,181 @@ export default class GDocumentReference {
     if (data) {
       obj = obj || new GDocumentReference();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('creationDate'))
-        obj.creationDate = ApiClient.convertToType(data['creationDate'], Object);
+        obj.creationDate = ApiClient.convertToType(data['creationDate'], 'Date');
       if (data.hasOwnProperty('modificationDate'))
-        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], Object);
+        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], 'Date');
       if (data.hasOwnProperty('version'))
-        obj.version = ApiClient.convertToType(data['version'], Object);
+        obj.version = ApiClient.convertToType(data['version'], 'String');
       if (data.hasOwnProperty('parentVirtualFolderCode'))
-        obj.parentVirtualFolderCode = ApiClient.convertToType(data['parentVirtualFolderCode'], Object);
+        obj.parentVirtualFolderCode = ApiClient.convertToType(data['parentVirtualFolderCode'], 'String');
       if (data.hasOwnProperty('absolutePath'))
-        obj.absolutePath = ApiClient.convertToType(data['absolutePath'], Object);
+        obj.absolutePath = ApiClient.convertToType(data['absolutePath'], 'String');
       if (data.hasOwnProperty('parentProjectCode'))
-        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], Object);
+        obj.parentProjectCode = ApiClient.convertToType(data['parentProjectCode'], 'String');
       if (data.hasOwnProperty('rootKnowledgebaseCode'))
-        obj.rootKnowledgebaseCode = ApiClient.convertToType(data['rootKnowledgebaseCode'], Object);
+        obj.rootKnowledgebaseCode = ApiClient.convertToType(data['rootKnowledgebaseCode'], 'String');
       if (data.hasOwnProperty('uri'))
-        obj.uri = ApiClient.convertToType(data['uri'], Object);
+        obj.uri = ApiClient.convertToType(data['uri'], 'String');
       if (data.hasOwnProperty('relativePath'))
-        obj.relativePath = ApiClient.convertToType(data['relativePath'], Object);
+        obj.relativePath = ApiClient.convertToType(data['relativePath'], 'String');
       if (data.hasOwnProperty('name'))
-        obj.name = ApiClient.convertToType(data['name'], Object);
+        obj.name = ApiClient.convertToType(data['name'], 'String');
       if (data.hasOwnProperty('deleted'))
-        obj.deleted = ApiClient.convertToType(data['deleted'], Object);
+        obj.deleted = ApiClient.convertToType(data['deleted'], 'Boolean');
       if (data.hasOwnProperty('messagingModuleId'))
-        obj.messagingModuleId = ApiClient.convertToType(data['messagingModuleId'], Object);
+        obj.messagingModuleId = ApiClient.convertToType(data['messagingModuleId'], 'String');
       if (data.hasOwnProperty('projectEndpointReference'))
         obj.projectEndpointReference = GObjectRefGProjectEndpoint.constructFromObject(data['projectEndpointReference']);
       if (data.hasOwnProperty('nestedInArchive'))
-        obj.nestedInArchive = ApiClient.convertToType(data['nestedInArchive'], Object);
+        obj.nestedInArchive = ApiClient.convertToType(data['nestedInArchive'], 'Boolean');
       if (data.hasOwnProperty('absoluteArchivePath'))
-        obj.absoluteArchivePath = ApiClient.convertToType(data['absoluteArchivePath'], Object);
+        obj.absoluteArchivePath = ApiClient.convertToType(data['absoluteArchivePath'], 'String');
       if (data.hasOwnProperty('archiveInternalPath'))
-        obj.archiveInternalPath = ApiClient.convertToType(data['archiveInternalPath'], Object);
+        obj.archiveInternalPath = ApiClient.convertToType(data['archiveInternalPath'], 'String');
       if (data.hasOwnProperty('customMetaInfos'))
-        obj.customMetaInfos = ApiClient.convertToType(data['customMetaInfos'], Object);
+        obj.customMetaInfos = ApiClient.convertToType(data['customMetaInfos'], {'String': Object});
       if (data.hasOwnProperty('lastesJobId'))
-        obj.lastesJobId = ApiClient.convertToType(data['lastesJobId'], Object);
+        obj.lastesJobId = ApiClient.convertToType(data['lastesJobId'], 'String');
       if (data.hasOwnProperty('aclAliases'))
-        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], Object);
+        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
       if (data.hasOwnProperty('extIntegrationCode'))
-        obj.extIntegrationCode = ApiClient.convertToType(data['extIntegrationCode'], Object);
+        obj.extIntegrationCode = ApiClient.convertToType(data['extIntegrationCode'], 'String');
       if (data.hasOwnProperty('synchronizationUUID'))
-        obj.synchronizationUUID = ApiClient.convertToType(data['synchronizationUUID'], Object);
+        obj.synchronizationUUID = ApiClient.convertToType(data['synchronizationUUID'], 'String');
       if (data.hasOwnProperty('extension'))
-        obj.extension = ApiClient.convertToType(data['extension'], Object);
+        obj.extension = ApiClient.convertToType(data['extension'], 'String');
       if (data.hasOwnProperty('contentType'))
-        obj.contentType = ApiClient.convertToType(data['contentType'], Object);
+        obj.contentType = ApiClient.convertToType(data['contentType'], 'String');
       if (data.hasOwnProperty('geboFileArchetypeId'))
-        obj.geboFileArchetypeId = ApiClient.convertToType(data['geboFileArchetypeId'], Object);
+        obj.geboFileArchetypeId = ApiClient.convertToType(data['geboFileArchetypeId'], 'String');
       if (data.hasOwnProperty('fileSize'))
-        obj.fileSize = ApiClient.convertToType(data['fileSize'], Object);
+        obj.fileSize = ApiClient.convertToType(data['fileSize'], 'Number');
       if (data.hasOwnProperty('unmanagedContentType'))
-        obj.unmanagedContentType = ApiClient.convertToType(data['unmanagedContentType'], Object);
+        obj.unmanagedContentType = ApiClient.convertToType(data['unmanagedContentType'], 'Boolean');
       if (data.hasOwnProperty('referenceType'))
-        obj.referenceType = ApiClient.convertToType(data['referenceType'], Object);
+        obj.referenceType = ApiClient.convertToType(data['referenceType'], 'String');
       if (data.hasOwnProperty('skippedVectorizationContent'))
-        obj.skippedVectorizationContent = ApiClient.convertToType(data['skippedVectorizationContent'], Object);
+        obj.skippedVectorizationContent = ApiClient.convertToType(data['skippedVectorizationContent'], 'Boolean');
       if (data.hasOwnProperty('artificiallyGeneratedContent'))
-        obj.artificiallyGeneratedContent = ApiClient.convertToType(data['artificiallyGeneratedContent'], Object);
+        obj.artificiallyGeneratedContent = ApiClient.convertToType(data['artificiallyGeneratedContent'], 'String');
       if (data.hasOwnProperty('originComponent'))
         obj.originComponent = GeboComponentInfo.constructFromObject(data['originComponent']);
       if (data.hasOwnProperty('attributesValues'))
-        obj.attributesValues = ApiClient.convertToType(data['attributesValues'], Object);
+        obj.attributesValues = ApiClient.convertToType(data['attributesValues'], [GDocumentAttributeValue]);
       if (data.hasOwnProperty('langCode'))
-        obj.langCode = ApiClient.convertToType(data['langCode'], Object);
+        obj.langCode = ApiClient.convertToType(data['langCode'], 'String');
       if (data.hasOwnProperty('translationOfDocumentCode'))
-        obj.translationOfDocumentCode = ApiClient.convertToType(data['translationOfDocumentCode'], Object);
+        obj.translationOfDocumentCode = ApiClient.convertToType(data['translationOfDocumentCode'], 'String');
       if (data.hasOwnProperty('categoryCodes'))
-        obj.categoryCodes = ApiClient.convertToType(data['categoryCodes'], Object);
+        obj.categoryCodes = ApiClient.convertToType(data['categoryCodes'], ['String']);
       if (data.hasOwnProperty('publishedDate'))
-        obj.publishedDate = ApiClient.convertToType(data['publishedDate'], Object);
+        obj.publishedDate = ApiClient.convertToType(data['publishedDate'], 'Date');
       if (data.hasOwnProperty('author'))
-        obj.author = ApiClient.convertToType(data['author'], Object);
+        obj.author = ApiClient.convertToType(data['author'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GDocumentReference.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GDocumentReference.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GDocumentReference.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GDocumentReference.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GDocumentReference.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GDocumentReference.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} creationDate
+ * @member {Date} creationDate
  */
 GDocumentReference.prototype.creationDate = undefined;
 
 /**
- * @member {Object} modificationDate
+ * @member {Date} modificationDate
  */
 GDocumentReference.prototype.modificationDate = undefined;
 
 /**
- * @member {Object} version
+ * @member {String} version
  */
 GDocumentReference.prototype.version = undefined;
 
 /**
- * @member {Object} parentVirtualFolderCode
+ * @member {String} parentVirtualFolderCode
  */
 GDocumentReference.prototype.parentVirtualFolderCode = undefined;
 
 /**
- * @member {Object} absolutePath
+ * @member {String} absolutePath
  */
 GDocumentReference.prototype.absolutePath = undefined;
 
 /**
- * @member {Object} parentProjectCode
+ * @member {String} parentProjectCode
  */
 GDocumentReference.prototype.parentProjectCode = undefined;
 
 /**
- * @member {Object} rootKnowledgebaseCode
+ * @member {String} rootKnowledgebaseCode
  */
 GDocumentReference.prototype.rootKnowledgebaseCode = undefined;
 
 /**
- * @member {Object} uri
+ * @member {String} uri
  */
 GDocumentReference.prototype.uri = undefined;
 
 /**
- * @member {Object} relativePath
+ * @member {String} relativePath
  */
 GDocumentReference.prototype.relativePath = undefined;
 
 /**
- * @member {Object} name
+ * @member {String} name
  */
 GDocumentReference.prototype.name = undefined;
 
 /**
- * @member {Object} deleted
+ * @member {Boolean} deleted
  */
 GDocumentReference.prototype.deleted = undefined;
 
 /**
- * @member {Object} messagingModuleId
+ * @member {String} messagingModuleId
  */
 GDocumentReference.prototype.messagingModuleId = undefined;
 
@@ -229,82 +230,100 @@ GDocumentReference.prototype.messagingModuleId = undefined;
 GDocumentReference.prototype.projectEndpointReference = undefined;
 
 /**
- * @member {Object} nestedInArchive
+ * @member {Boolean} nestedInArchive
  */
 GDocumentReference.prototype.nestedInArchive = undefined;
 
 /**
- * @member {Object} absoluteArchivePath
+ * @member {String} absoluteArchivePath
  */
 GDocumentReference.prototype.absoluteArchivePath = undefined;
 
 /**
- * @member {Object} archiveInternalPath
+ * @member {String} archiveInternalPath
  */
 GDocumentReference.prototype.archiveInternalPath = undefined;
 
 /**
- * @member {Object} customMetaInfos
+ * @member {Object.<String, Object>} customMetaInfos
  */
 GDocumentReference.prototype.customMetaInfos = undefined;
 
 /**
- * @member {Object} lastesJobId
+ * @member {String} lastesJobId
  */
 GDocumentReference.prototype.lastesJobId = undefined;
 
 /**
- * @member {Object} aclAliases
+ * @member {Array.<Number>} aclAliases
  */
 GDocumentReference.prototype.aclAliases = undefined;
 
 /**
- * @member {Object} extIntegrationCode
+ * @member {String} extIntegrationCode
  */
 GDocumentReference.prototype.extIntegrationCode = undefined;
 
 /**
- * @member {Object} synchronizationUUID
+ * @member {String} synchronizationUUID
  */
 GDocumentReference.prototype.synchronizationUUID = undefined;
 
 /**
- * @member {Object} extension
+ * @member {String} extension
  */
 GDocumentReference.prototype.extension = undefined;
 
 /**
- * @member {Object} contentType
+ * @member {String} contentType
  */
 GDocumentReference.prototype.contentType = undefined;
 
 /**
- * @member {Object} geboFileArchetypeId
+ * @member {String} geboFileArchetypeId
  */
 GDocumentReference.prototype.geboFileArchetypeId = undefined;
 
 /**
- * @member {Object} fileSize
+ * @member {Number} fileSize
  */
 GDocumentReference.prototype.fileSize = undefined;
 
 /**
- * @member {Object} unmanagedContentType
+ * @member {Boolean} unmanagedContentType
  */
 GDocumentReference.prototype.unmanagedContentType = undefined;
 
 /**
- * @member {Object} referenceType
+ * Allowed values for the <code>referenceType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GDocumentReference.ReferenceTypeEnum = {
+  /**
+   * value: "FILE"
+   * @const
+   */
+  FILE: "FILE",
+
+  /**
+   * value: "WEB"
+   * @const
+   */
+  WEB: "WEB"
+};
+/**
+ * @member {module:model/GDocumentReference.ReferenceTypeEnum} referenceType
  */
 GDocumentReference.prototype.referenceType = undefined;
 
 /**
- * @member {Object} skippedVectorizationContent
+ * @member {Boolean} skippedVectorizationContent
  */
 GDocumentReference.prototype.skippedVectorizationContent = undefined;
 
 /**
- * @member {Object} artificiallyGeneratedContent
+ * @member {String} artificiallyGeneratedContent
  */
 GDocumentReference.prototype.artificiallyGeneratedContent = undefined;
 
@@ -314,32 +333,32 @@ GDocumentReference.prototype.artificiallyGeneratedContent = undefined;
 GDocumentReference.prototype.originComponent = undefined;
 
 /**
- * @member {Object} attributesValues
+ * @member {Array.<module:model/GDocumentAttributeValue>} attributesValues
  */
 GDocumentReference.prototype.attributesValues = undefined;
 
 /**
- * @member {Object} langCode
+ * @member {String} langCode
  */
 GDocumentReference.prototype.langCode = undefined;
 
 /**
- * @member {Object} translationOfDocumentCode
+ * @member {String} translationOfDocumentCode
  */
 GDocumentReference.prototype.translationOfDocumentCode = undefined;
 
 /**
- * @member {Object} categoryCodes
+ * @member {Array.<String>} categoryCodes
  */
 GDocumentReference.prototype.categoryCodes = undefined;
 
 /**
- * @member {Object} publishedDate
+ * @member {Date} publishedDate
  */
 GDocumentReference.prototype.publishedDate = undefined;
 
 /**
- * @member {Object} author
+ * @member {String} author
  */
 GDocumentReference.prototype.author = undefined;
 

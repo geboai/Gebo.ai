@@ -91,11 +91,14 @@ export default class GeboUserChatsControllerApi {
 
 
     /**
-     * @param {Object} chatProfileCode 
+     * @param {String} chatProfileCode 
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.contextCode 
+     * @param {String} opts.pipelineCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GUserChatInfo} and HTTP response
      */
-    createCleanChatByChatProfileCodeWithHttpInfo(chatProfileCode) {
-      
+    createCleanChatByChatProfileCodeWithHttpInfo(chatProfileCode, opts) {
+      opts = opts || {};
       let postBody = null;
       // verify the required parameter 'chatProfileCode' is set
       if (chatProfileCode === undefined || chatProfileCode === null) {
@@ -106,7 +109,7 @@ export default class GeboUserChatsControllerApi {
         
       };
       let queryParams = {
-        'chatProfileCode': chatProfileCode
+        'chatProfileCode': chatProfileCode,'contextCode': opts['contextCode'],'pipelineCode': opts['pipelineCode']
       };
       let headerParams = {
         
@@ -129,10 +132,13 @@ export default class GeboUserChatsControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} chatProfileCode 
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.contextCode 
+     * @param {String} opts.pipelineCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/GUserChatInfo}
      */
-    createCleanChatByChatProfileCode(chatProfileCode) {
-      return this.createCleanChatByChatProfileCodeWithHttpInfo(chatProfileCode)
+    createCleanChatByChatProfileCode(chatProfileCode, opts) {
+      return this.createCleanChatByChatProfileCodeWithHttpInfo(chatProfileCode, opts)
         .then(function(response_and_data) {
           return response_and_data.data;
         });
@@ -140,11 +146,60 @@ export default class GeboUserChatsControllerApi {
 
 
     /**
-     * @param {Object} modelCode 
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.pipelineCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GUserChatInfo} and HTTP response
      */
-    createCleanChatByModelCodeWithHttpInfo(modelCode) {
-      
+    createCleanChatByDefaultModelWithHttpInfo(opts) {
+      opts = opts || {};
+      let postBody = null;
+
+      let pathParams = {
+        
+      };
+      let queryParams = {
+        'pipelineCode': opts['pipelineCode']
+      };
+      let headerParams = {
+        
+      };
+      let formParams = {
+        
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = ['application/json'];
+      let returnType = GUserChatInfo;
+
+      return this.apiClient.callApi(
+        '/api/users/GeboUserChatsController/createCleanChatByDefaultModel', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.pipelineCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/GUserChatInfo}
+     */
+    createCleanChatByDefaultModel(opts) {
+      return this.createCleanChatByDefaultModelWithHttpInfo(opts)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
+     * @param {String} modelCode 
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.pipelineCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GUserChatInfo} and HTTP response
+     */
+    createCleanChatByModelCodeWithHttpInfo(modelCode, opts) {
+      opts = opts || {};
       let postBody = null;
       // verify the required parameter 'modelCode' is set
       if (modelCode === undefined || modelCode === null) {
@@ -155,7 +210,7 @@ export default class GeboUserChatsControllerApi {
         
       };
       let queryParams = {
-        'modelCode': modelCode
+        'modelCode': modelCode,'pipelineCode': opts['pipelineCode']
       };
       let headerParams = {
         
@@ -178,10 +233,12 @@ export default class GeboUserChatsControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} modelCode 
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.pipelineCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/GUserChatInfo}
      */
-    createCleanChatByModelCode(modelCode) {
-      return this.createCleanChatByModelCodeWithHttpInfo(modelCode)
+    createCleanChatByModelCode(modelCode, opts) {
+      return this.createCleanChatByModelCodeWithHttpInfo(modelCode, opts)
         .then(function(response_and_data) {
           return response_and_data.data;
         });
@@ -189,7 +246,7 @@ export default class GeboUserChatsControllerApi {
 
 
     /**
-     * @param {Object} userChatContextCode 
+     * @param {String} userChatContextCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
     deleteChatWithHttpInfo(userChatContextCode) {
@@ -238,9 +295,9 @@ export default class GeboUserChatsControllerApi {
 
 
     /**
-     * @param {Object} userContextCode 
-     * @param {Object} responseId 
-     * @param {Object} format 
+     * @param {String} userContextCode 
+     * @param {String} responseId 
+     * @param {module:model/String} format 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
     exportResponse2fileWithHttpInfo(userContextCode, responseId, format) {
@@ -299,7 +356,7 @@ export default class GeboUserChatsControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/UserChatHistory} and HTTP response
      */
     getChatHistoryWithHttpInfo(code) {
@@ -348,7 +405,7 @@ export default class GeboUserChatsControllerApi {
 
 
     /**
-     * @param {Object} id 
+     * @param {String} id 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GUserChatInfo} and HTTP response
      */
     getChatInfosByCodeWithHttpInfo(id) {
@@ -446,7 +503,7 @@ export default class GeboUserChatsControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GUserChatInfo>} and HTTP response
      */
     getMyChatsWithHttpInfo() {
       
@@ -468,7 +525,7 @@ export default class GeboUserChatsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GUserChatInfo];
 
       return this.apiClient.callApi(
         '/api/users/GeboUserChatsController/getMyChats', 'GET',
@@ -478,7 +535,7 @@ export default class GeboUserChatsControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GUserChatInfo>}
      */
     getMyChats() {
       return this.getMyChatsWithHttpInfo()
@@ -489,8 +546,57 @@ export default class GeboUserChatsControllerApi {
 
 
     /**
-     * @param {Object} page 
-     * @param {Object} pageSize 
+     * @param {String} contextCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GUserChatInfo>} and HTTP response
+     */
+    getMyChatsByContextCodeWithHttpInfo(contextCode) {
+      
+      let postBody = null;
+      // verify the required parameter 'contextCode' is set
+      if (contextCode === undefined || contextCode === null) {
+        throw new Error("Missing the required parameter 'contextCode' when calling getMyChatsByContextCode");
+      }
+
+      let pathParams = {
+        
+      };
+      let queryParams = {
+        'contextCode': contextCode
+      };
+      let headerParams = {
+        
+      };
+      let formParams = {
+        
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = ['application/json'];
+      let returnType = [GUserChatInfo];
+
+      return this.apiClient.callApi(
+        '/api/users/GeboUserChatsController/getMyChatsByContextCode', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * @param {<&vendorExtensions.x-jsdoc-type>} contextCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GUserChatInfo>}
+     */
+    getMyChatsByContextCode(contextCode) {
+      return this.getMyChatsByContextCodeWithHttpInfo(contextCode)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
+     * @param {Number} page 
+     * @param {Number} pageSize 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/PageGUserChatInfo} and HTTP response
      */
     getMyChatsPagedWithHttpInfo(page, pageSize) {
@@ -587,7 +693,7 @@ export default class GeboUserChatsControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link 'Boolean'} and HTTP response
      */
     isMinimalLLMSSetupDoneWithHttpInfo() {
       
@@ -609,7 +715,7 @@ export default class GeboUserChatsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = 'Boolean';
 
       return this.apiClient.callApi(
         '/api/users/GeboUserChatsController/isMinimalLLMSSetupDone', 'GET',
@@ -619,7 +725,7 @@ export default class GeboUserChatsControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link 'Boolean'}
      */
     isMinimalLLMSSetupDone() {
       return this.isMinimalLLMSSetupDoneWithHttpInfo()
@@ -630,7 +736,7 @@ export default class GeboUserChatsControllerApi {
 
 
     /**
-     * @param {Object} userChatContextCode 
+     * @param {String} userChatContextCode 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GUserChatInfo} and HTTP response
      */
     suggestChatDescriptionWithHttpInfo(userChatContextCode) {

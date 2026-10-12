@@ -27,8 +27,11 @@ import ai.gebo.monolithic.api.client.model.GeboChatResponse;
 import ai.gebo.monolithic.api.client.model.PageGLookupEntry;
 import ai.gebo.monolithic.api.client.model.PipelineRequestBody;
 import ai.gebo.monolithic.app.Main;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresConfig;
 
 @SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@RequiresConfig(value = AbstractVendorSetupAndUseTest.FULL_SETUP_ENVIRONMENT_JSON_STRING,
+		description = "JSON with the admin account, the LLM vendor and its API key")
 public class ChatPipelineTests extends AbstractVendorSetupAndUseTest {
 	@Autowired
 	IGRuntimeBinder runtimeBinder;
@@ -51,8 +54,10 @@ public class ChatPipelineTests extends AbstractVendorSetupAndUseTest {
 		List<GChatProfileConfiguration> profiles = ragChatControllerApi.getChatProfiles();
 
 		GeboUserChatsControllerApi userChatControllerApi = new GeboUserChatsControllerApi(apiClient);
+		// contextCode and pipelineCode left null: a brand new chat context on the
+		// profile's default pipeline.
 		GUserChatInfo chatInfo = userChatControllerApi.createCleanChatByChatProfileCode(profiles.get(0).getCode(),
-				null);
+				null, null);
 		renew(apiClient);
 		GeboChatPipelinesControllerApi chatPipelineControllerApi = new GeboChatPipelinesControllerApi(apiClient);
 		List<GeboChatRequest> requests = this.loadChatRequests("/chats-playbook/chat-playbook.json");

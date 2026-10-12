@@ -19,8 +19,10 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.openai.setup.OpenAiSetup;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.OpenAiChatOptions.Builder;
 import org.springframework.ai.tool.ToolCallback;
@@ -52,6 +54,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
@@ -69,6 +72,7 @@ public class OpenAIChatModelConfigurationSupportService
 		type.setCode("chatgpt-OpenAI");
 		type.setDescription("chatgpt service hosted on OpenAI");
 		type.setModelConfigurationClass(GOpenAIChatModelConfig.class.getName());
+		type.setProviderId("openai");
 	}
 
 	final IGeboSecretsAccessService secretService;
@@ -79,17 +83,19 @@ public class OpenAIChatModelConfigurationSupportService
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Implementation of a configurable chat model for OpenAI. This class handles
 	 * the creation and configuration of OpenAI chat models.
 	 */
-	class OpenAIConfigurableChatModel extends GAbstractConfigurableChatModel<GOpenAIChatModelConfig, OpenAiChatModel> {
+	class OpenAIConfigurableChatModel extends GAbstractConfigurableChatModel<GOpenAIChatModelConfig, ChatModel> {
 
 		public OpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 
 		}
 
@@ -105,7 +111,7 @@ public class OpenAIChatModelConfigurationSupportService
 		 * @throws LLMConfigException if there is an error in configuration
 		 */
 		@Override
-		protected OpenAiChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type,
+		protected ChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type,
 				ToolCallingManager toolsCallsManager) throws LLMConfigException {
 
 			if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0)
@@ -158,24 +164,25 @@ public class OpenAIChatModelConfigurationSupportService
 							+ " without tools: " + config.getEnabledFunctions());
 				}
 			}
+			// max_completion_tokens, not max_tokens: OpenAI deprecated max_tokens in its
+			// favour, and the reasoning models refuse it (the openai-java SDK documents it as
+			// "not compatible with o-series models"); max_completion_tokens bounds the
+			// reasoning tokens too, on every model.
 			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
-				builder.maxTokens(config.getMaxGeneratedTokens());
+				builder.maxCompletionTokens(config.getMaxGeneratedTokens());
 			}
-			if (config.getThinking() != null) {
-				switch (config.getThinking()) {
-				case LOW_THINKING: {
-					builder.reasoningEffort("low");
-				}
-					break;
-				case MEDIUM_THINKING: {
-					builder.reasoningEffort("medium");
-				}
-					break;
-				case HIGH_THINKING: {
-					builder.reasoningEffort("high");
-				}
-					break;
-				}
+			// The effort among the ones the model's parameter rules list: no thinking is
+			// sent as none where the model takes it, an effort the model refuses leaves its
+			// default (see GAbstractConfigurableChatModel.reasoningEffortFor).
+			final String effort = reasoningEffortFor(config.getThinking());
+			if (effort != null) {
+				builder.reasoningEffort(effort);
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat model {} ({}) configured with thinking {} as reasoning effort {}, temperature {},"
+						+ " max completion tokens {}", config.getCode(),
+						config.getChoosedModel() != null ? config.getChoosedModel().getCode() : null,
+						config.getThinking(), effort, config.getTemperature(), config.getMaxGeneratedTokens());
 			}
 			if (user != null) {
 				builder = builder.user(user);
@@ -185,6 +192,21 @@ public class OpenAIChatModelConfigurationSupportService
 			OpenAiChatOptions options = builder.build();
 			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
 					: functionsRepo.createToolCallingManager();
+			// The models of version 6 and later go through the Responses API, whose tool calls
+			// Chat Completions does not carry for them (OpenAiResponsesChatModel); the others
+			// stay on Spring AI's Chat Completions model
+			if (OpenAiResponsesChatModel.usesResponsesApi(options.getModel())) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model {} ({}) goes through the OpenAI Responses API", config.getCode(),
+							options.getModel());
+				}
+				return new OpenAiResponsesChatModel(OpenAiSetup.setupSyncClient(options.getBaseUrl(),
+						options.getApiKey(), null, null, null, options.getOrganizationId(), false, false,
+						options.getModel(), options.getTimeout(), options.getMaxRetries(), null, null,
+						observationRegistry, null,
+						List.of(OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(getCode())))), options,
+						toolCallingManager, observationRegistry);
+			}
 			OpenAiChatModel model = OpenAiChatModel.builder()
 					.options(options)
 					.toolCallingManager(toolCallingManager)
@@ -220,7 +242,7 @@ public class OpenAIChatModelConfigurationSupportService
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
 			return new OpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 	};
 
@@ -245,7 +267,7 @@ public class OpenAIChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GOpenAIChatModelConfig> create(GOpenAIChatModelConfig config)
 			throws LLMConfigException {
 		OpenAIConfigurableChatModel model = new OpenAIConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
 	}
@@ -261,11 +283,34 @@ public class OpenAIChatModelConfigurationSupportService
 		OpenAIApiConfig providerConfig = new OpenAIApiConfig();
 		providerConfig.setProviderId("openai");
 
-		return this.openaiApiUtil.getChatModels(GOpenAIChatModelChoice.class, providerConfig, config, (choice) -> {
-			ModelMetaInfo meta = new ModelMetaInfo();
-			meta.setInformativeUrl("https://platform.openai.com/docs/models/");
-			return meta;
-		}, type);
+		OperationStatus<List<GOpenAIChatModelChoice>> result = this.openaiApiUtil.getChatModels(
+				GOpenAIChatModelChoice.class, providerConfig, config, (choice) -> {
+					ModelMetaInfo meta = new ModelMetaInfo();
+					meta.setInformativeUrl("https://platform.openai.com/docs/models/");
+					return meta;
+				}, type);
+		if (result != null && result.getResult() != null) {
+			result.setResult(result.getResult().stream().filter(c -> isChatModel(c.getCode())).toList());
+		}
+		return result;
+	}
+
+	/**
+	 * Whether a model listed by GET /v1/models is a chat model. The endpoint lists
+	 * every model of the account with no type, so the speech, transcription, image,
+	 * moderation, realtime/audio and legacy completion models are recognised by id,
+	 * as the image, speech and transcription lists recognise theirs.
+	 */
+	static boolean isChatModel(String modelId) {
+		if (modelId == null)
+			return false;
+		String id = modelId.toLowerCase();
+		for (String marker : List.of("tts", "whisper", "transcribe", "dall-e", "image", "moderation", "realtime",
+				"audio", "embedding", "babbage", "davinci", "sora", "gpt-live", "translate")) {
+			if (id.contains(marker))
+				return false;
+		}
+		return true;
 	}
 
 	/**

@@ -35,6 +35,8 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 	private GeboChatRequest currentRequest = null;
 	private int targetTokenBudget = 0;
 	private boolean toBeShrinked = false;
+	// Incremented by every save: the background shrinker only replaces the revision it started from.
+	private long revision = 0;
 
 	@Override
 	public int getTokensSize() {
@@ -58,6 +60,27 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 				this.relevantLlmGeneratedDocuments.toAIDocumentsSet());
 		return new LLMChatRequestResources(chatWithDocuments, retrievedDocuments, uploadedDocuments,
 				llmGeneratedDocuments, chatHistory, currentRequest, pol);
+	}
+
+	// New document lists, shared entries: trimming the copy leaves this state intact.
+	public ShrinkedChatSessionState copyForTrimming() {
+		ShrinkedChatSessionState copy = new ShrinkedChatSessionState();
+		copy.setUserChatContextCode(userChatContextCode);
+		copy.setChatHistory(chatHistory);
+		copy.setCurrentRequest(currentRequest);
+		copy.setTargetTokenBudget(targetTokenBudget);
+		copy.setToBeShrinked(toBeShrinked);
+		copy.setRevision(revision);
+		copy.setRevision(revision);
+		copy.setLatestRequestsUploadedDocuments(new CSSReferredContentList<>(latestRequestsUploadedDocuments));
+		copy.setLatestRequestsChatWithDocuments(new CSSReferredContentList<>(latestRequestsChatWithDocuments));
+		copy.setLatestRequestsRetrievedDocuments(new CSSReferredContentList<>(latestRequestsRetrievedDocuments));
+		copy.setLatestRequestsLlmGeneratedDocuments(new CSSReferredContentList<>(latestRequestsLlmGeneratedDocuments));
+		copy.setRelevantChatWithDocuments(new CSSfRelevantShrinkedDocumentList(relevantChatWithDocuments));
+		copy.setRelevantUploadedDocuments(new CSSfRelevantShrinkedDocumentList(relevantUploadedDocuments));
+		copy.setRelevantRetrievedDocuments(new CSSfRelevantShrinkedDocumentList(relevantRetrievedDocuments));
+		copy.setRelevantLlmGeneratedDocuments(new CSSfRelevantShrinkedDocumentList(relevantLlmGeneratedDocuments));
+		return copy;
 	}
 
 	private AIDocumentsSet toDocsSet(CSSfRelevantShrinkedDocumentList relevantUploadedDocuments2) {

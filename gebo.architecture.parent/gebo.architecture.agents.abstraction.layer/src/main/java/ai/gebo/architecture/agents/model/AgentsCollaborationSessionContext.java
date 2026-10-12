@@ -26,7 +26,7 @@ public final class AgentsCollaborationSessionContext {
 
 	public synchronized void addContribution(AgentsExchangeMessage<?> msg, int contributionNr) {
 		AgentProducedSessionContribution contribution = new AgentProducedSessionContribution(contributionNr,
-				msg.getFromAgent(), msg.getPayload());
+				msg.getFromAgent(), msg.getPayload(), msg.getStatusNotices());
 		contributions.computeIfAbsent(contributionNr, (c) -> new ArrayList<AgentProducedSessionContribution>());
 		contributions.get(contributionNr).add(contribution);
 		if (LOGGER.isDebugEnabled()) {

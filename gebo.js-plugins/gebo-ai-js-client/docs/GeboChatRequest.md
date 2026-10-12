@@ -14,9 +14,11 @@ Name | Type | Description | Notes
 **choosedKnowledgeBases** | **[String]** |  | [optional] 
 **chatPipelineProcessId** | **String** |  | [optional] 
 **forcedRequestDocuments** | **[String]** |  | [optional] 
+**forcedDocumentsRef** | [**[GResponseDocumentRef]**](GResponseDocumentRef.md) |  | [optional] 
 **userUploadedContents** | [**[UserUploadedContent]**](UserUploadedContent.md) |  | [optional] 
 **deepSearchDataSources** | **[String]** |  | [optional] 
 **userIntent** | **String** |  | [optional] 
+**additionalContents** | [**[AdditionalContent]**](AdditionalContent.md) |  | [optional] 
 **tokensSize** | **Number** |  | [optional] 
 
 <a name="UserIntentEnum"></a>

@@ -46,33 +46,16 @@ public class LLMtInteractionContextThreadLocal {
     }
 
     /**
-     * Represents the context of the interaction, including user information, knowledge bases codes,
-     * called functions, and a custom environment map.
+     * Represents the context of the interaction, including user information, called
+     * functions, and a custom environment map. The knowledge bases a tool may reach are
+     * not here: they come in its tools context (see
+     * {@code ToolCallbackDeclarationUtil#chatKnowledgeBases(ToolContext)}).
      */
     public static class KBContext {
         private String actualUser = null;
-        private List<String> knowledgeBasesCodes = new ArrayList<String>();
         private List<CalledFunction> calledFunctions = new ArrayList<LLMtInteractionContextThreadLocal.CalledFunction>();
         private Map<String, Object> customEnvironment = new HashMap<String, Object>();
         private String usedEmbeddingSystem = null;
-
-        /**
-         * Gets the list of knowledge base codes associated with this context.
-         *
-         * @return a list of knowledge base codes.
-         */
-        public List<String> getKnowledgeBasesCodes() {
-            return knowledgeBasesCodes;
-        }
-
-        /**
-         * Sets the list of knowledge base codes for this context.
-         *
-         * @param knowledgeBasesCodes the list of knowledge base codes.
-         */
-        public void setKnowledgeBasesCodes(List<String> knowledgeBasesCodes) {
-            this.knowledgeBasesCodes = knowledgeBasesCodes;
-        }
 
         /**
          * Gets the system used for embedding in this context.

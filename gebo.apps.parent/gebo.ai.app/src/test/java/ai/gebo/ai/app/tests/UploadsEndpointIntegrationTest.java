@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -41,6 +42,7 @@ import ai.gebo.uploads.content.handler.GUploadsContentManagementSystem;
 import ai.gebo.uploads.content.handler.GUploadsProjectEndpoint;
 import ai.gebo.uploads.content.handler.IGUploadsContentManagementSystemHandler;
 import ai.gebo.uploads.content.handler.UploadedFileInfo;
+import ai.gebo.uploads.content.handler.UploadedFileNode;
 import ai.gebo.uploads.content.handler.controllers.UploadsBrowsingController;
 import ai.gebo.uploads.content.handler.service.UploadsSystemsManagementServiceImpl;
 
@@ -221,8 +223,6 @@ public class UploadsEndpointIntegrationTest extends AbstractBaseTestLLmsIntegrat
 		Path contentsFolder = contentsFolderOf(endpoint);
 		assertNull(endpoint.getUploadHandshakeCode(),
 				"The handshake code has to be consumed, a later save must not re-apply a staging area");
-		assertEquals(FIRST_BATCH.size(), endpoint.getUploadedContents().size(),
-				"The first batch has to be tracked in the uploaded contents");
 		for (String fileName : fileNamesOf(FIRST_BATCH)) {
 			assertTrue(Files.exists(contentsFolder.resolve(fileName)),
 					"The uploaded file " + fileName + " has to be in the contents folder");
@@ -230,8 +230,6 @@ public class UploadsEndpointIntegrationTest extends AbstractBaseTestLLmsIntegrat
 
 		// --- second batch: this is what the first-upload-only gate used to drop ----
 		endpoint = uploadStagedBatch(endpoint, SECOND_BATCH);
-		assertEquals(FIRST_BATCH.size() + SECOND_BATCH.size(), endpoint.getUploadedContents().size(),
-				"A data source that already holds files has to accept further batches");
 		for (String fileName : fileNamesOf(SECOND_BATCH)) {
 			assertTrue(Files.exists(contentsFolder.resolve(fileName)),
 					"The file " + fileName + " added later has to be in the contents folder");
@@ -241,7 +239,6 @@ public class UploadsEndpointIntegrationTest extends AbstractBaseTestLLmsIntegrat
 		assertEquals(FIRST_BATCH.size() + SECOND_BATCH.size(), beforeIngestion.size(),
 				"Every uploaded file has to be listed");
 		for (UploadedFileInfo info : beforeIngestion) {
-			assertTrue(info.tracked, "The file " + info.name + " was uploaded through Gebo.ai, it has to be tracked");
 			assertFalse(info.ingested, "Nothing can be ingested before the first publish");
 			assertTrue(info.size > 0, "The listing has to carry the size of " + info.name);
 		}
@@ -267,10 +264,6 @@ public class UploadsEndpointIntegrationTest extends AbstractBaseTestLLmsIntegrat
 		endpoint = deletion.getResult();
 		assertFalse(Files.exists(contentsFolder.resolve(removedFile.name)),
 				"The removed file cannot be in the contents folder any more");
-		assertEquals(allFiles - 1, endpoint.getUploadedContents().size(),
-				"The removed file has to be dropped from the tracked contents");
-		assertFalse(endpoint.getUploadedContents().contains(removedFile.name),
-				"The tracked contents cannot still name the removed file");
 		assertEquals(allFiles - 1, uploadsService.listUploadedFiles(endpoint.getCode()).size(),
 				"The listing has to reflect the removal");
 
@@ -293,6 +286,78 @@ public class UploadsEndpointIntegrationTest extends AbstractBaseTestLLmsIntegrat
 	}
 
 	/**
+	 * A whole folder uploaded into a folder of the data source keeps its folders;
+	 * the tree of the data source tells which files are published; paths leaving
+	 * the data source folder are refused; a folder is deleted with what it holds.
+	 */
+	@Test
+	public void testFolderUploadsIntoSubfoldersAndTheTreeOfTheDataSource()
+			throws InstantiationException, IllegalAccessException, GeboPersistenceException,
+			GeboContentHandlerSystemException, IOException, GeboJobServiceException, InterruptedException {
+		GUploadsProjectEndpoint endpoint = createAndPersist("uploads folders test data", GUploadsProjectEndpoint.class);
+		Path contentsFolder = contentsFolderOf(endpoint);
+
+		// --- a folder to upload into, and the ones that are refused ------------------
+		OperationStatus<UploadedFileNode> created = uploadsService.createFolder(endpoint.getCode(), "reports/2026");
+		assertFalse(created.isHasErrorMessages(), "A folder of the data source can be created");
+		assertEquals("reports/2026", created.getResult().relativePath);
+		assertTrue(Files.isDirectory(contentsFolder.resolve("reports").resolve("2026")));
+		for (String escaping : List.of("../outside", "reports/../../outside", "/tmp/outside", "")) {
+			assertTrue(uploadsService.createFolder(endpoint.getCode(), escaping).isHasErrorMessages(),
+					"The folder " + escaping + " cannot be created");
+		}
+
+		// --- a whole folder uploaded into "reports" ----------------------------------
+		List<MultipartFile> files = multipartsOf(List.of(TEST_001_PDF_FILE, TEST_001_DOCX_FILE, TEST_001_ODT_FILE));
+		endpoint = uploadsService.uploadToEndpoint(endpoint.getCode(), files, "reports",
+				List.of("manuals/v4man.pdf", "demo.docx", "../escaping.odt"));
+		assertTrue(Files.exists(contentsFolder.resolve("reports/manuals/v4man.pdf")),
+				"The file keeps the folder it was uploaded in");
+		assertTrue(Files.exists(contentsFolder.resolve("reports/demo.docx")));
+		assertFalse(Files.exists(contentsFolder.resolve("escaping.odt")), "A path leaving the target is skipped");
+		assertFalse(Files.exists(contentsFolder.getParent().resolve("escaping.odt")));
+		final GUploadsProjectEndpoint target = endpoint;
+		assertThrows(GeboContentHandlerSystemException.class,
+				() -> uploadsService.uploadToEndpoint(target.getCode(), multipartsOf(List.of(TEST_001_PDF_FILE)),
+						"../..", null),
+				"A target folder outside the data source is refused");
+
+		// --- the tree, before and after the publish ----------------------------------
+		UploadedFileNode tree = uploadsService.listUploadedFilesTree(endpoint.getCode());
+		assertEquals(2, tree.filesCount, "The tree counts the files at any depth: " + tree);
+		assertEquals(0, tree.publishedFilesCount, "Nothing is published before the first publish");
+		UploadedFileNode reports = childNamed(tree, "reports");
+		assertTrue(reports.folder);
+		assertEquals("reports/manuals", childNamed(reports, "manuals").relativePath,
+				"The folders come first, with their path relative to the data source");
+		assertEquals("2026", childNamed(reports, "2026").name, "An empty folder is listed too");
+
+		runAndWaitDoneCheckingResults(endpoint, 2, true);
+
+		tree = uploadsService.listUploadedFilesTree(endpoint.getCode());
+		assertEquals(2, tree.publishedFilesCount, "Every file is published after the publish: " + tree);
+		UploadedFileNode manual = childNamed(childNamed(childNamed(tree, "reports"), "manuals"), "v4man.pdf");
+		assertTrue(manual.published);
+		assertNotNull(manual.documentCode, "A published file carries the code of its document");
+		assertEquals(".pdf", manual.extension);
+
+		// --- a folder deleted with what it holds -------------------------------------
+		OperationStatus<GUploadsProjectEndpoint> deletion = uploadsService.deleteUploadedFiles(endpoint.getCode(),
+				List.of("reports/manuals"));
+		assertFalse(deletion.isHasErrorMessages(), "A folder of the data source can be deleted");
+		assertFalse(Files.exists(contentsFolder.resolve("reports/manuals")));
+		tree = uploadsService.listUploadedFilesTree(endpoint.getCode());
+		assertEquals(1, tree.filesCount, "The tree reflects the removal: " + tree);
+
+		cleanPersistent(endpoint);
+	}
+
+	private static UploadedFileNode childNamed(UploadedFileNode node, String name) {
+		return node.children.stream().filter(x -> name.equals(x.name)).findFirst()
+				.orElseThrow(() -> new AssertionError("No " + name + " in " + node.relativePath + ": " + node.children));
+	}
+
+	/**
 	 * Checks the browsing of a data source and the boundary it is confined to: the
 	 * editor browses the contents through the same virtual filesystem abstraction
 	 * used for the other data sources, and neither browsing nor deletion may
@@ -309,8 +374,8 @@ public class UploadsEndpointIntegrationTest extends AbstractBaseTestLLmsIntegrat
 		// of the editor.
 		endpoint = uploadsService.uploadToEndpoint(endpoint.getCode(), multipartsOf(FIRST_BATCH));
 		Path contentsFolder = contentsFolderOf(endpoint);
-		assertEquals(FIRST_BATCH.size(), endpoint.getUploadedContents().size(),
-				"Files uploaded directly have to be tracked as well");
+		assertEquals(FIRST_BATCH.size(), uploadsService.listUploadedFiles(endpoint.getCode()).size(),
+				"Files uploaded directly are in the folder of the data source");
 
 		// --- browsing --------------------------------------------------------------
 		OperationStatus<List<GVirtualFilesystemRoot>> roots = browsingController

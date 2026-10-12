@@ -63,8 +63,13 @@ import reactor.core.publisher.Flux;
  * service, with the request bound to that session's context code. This is what
  * the pipeline relies on to resolve the session-available knowledge bases and to
  * propagate the caller identity into the reactive network execution.
+ * <p>
+ * The network is pinned to {@code DEFAULT_AGENTS_NETWORK}: the RAG pipeline's
+ * configured default is the agentic loop network, covered by
+ * {@link AgenticLoopNetworkTest}.
  */
-@TestPropertySource(properties = "ai.gebo.agents.standard.enabled=true")
+@TestPropertySource(properties = { "ai.gebo.agents.standard.enabled=true",
+		"ai.gebo.agents.standard.default-chat-network-of-agents=DEFAULT_AGENTS_NETWORK" })
 public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTests {
 
 	private static final String ANSWER_MARKER = "GEBO_TEST_ANSWER_42";

@@ -24,8 +24,8 @@ export default class LLMCredentialsVerificationData {
    * Constructs a new <code>LLMCredentialsVerificationData</code>.
    * @alias module:model/LLMCredentialsVerificationData
    * @class
-   * @param vendorId {Object} 
-   * @param secretId {Object} 
+   * @param vendorId {String} 
+   * @param secretId {String} 
    */
   constructor(vendorId, secretId) {
     this.vendorId = vendorId;
@@ -43,28 +43,28 @@ export default class LLMCredentialsVerificationData {
     if (data) {
       obj = obj || new LLMCredentialsVerificationData();
       if (data.hasOwnProperty('vendorId'))
-        obj.vendorId = ApiClient.convertToType(data['vendorId'], Object);
+        obj.vendorId = ApiClient.convertToType(data['vendorId'], 'String');
       if (data.hasOwnProperty('secretId'))
-        obj.secretId = ApiClient.convertToType(data['secretId'], Object);
+        obj.secretId = ApiClient.convertToType(data['secretId'], 'String');
       if (data.hasOwnProperty('baseUrl'))
-        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], Object);
+        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} vendorId
+ * @member {String} vendorId
  */
 LLMCredentialsVerificationData.prototype.vendorId = undefined;
 
 /**
- * @member {Object} secretId
+ * @member {String} secretId
  */
 LLMCredentialsVerificationData.prototype.secretId = undefined;
 
 /**
- * @member {Object} baseUrl
+ * @member {String} baseUrl
  */
 LLMCredentialsVerificationData.prototype.baseUrl = undefined;
 

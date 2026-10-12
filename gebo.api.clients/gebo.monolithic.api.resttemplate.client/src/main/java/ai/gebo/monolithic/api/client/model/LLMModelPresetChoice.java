@@ -24,7 +24,7 @@ import java.util.List;
  * LLMModelPresetChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T05:57:34.292407+02:00[Europe/Rome]")
 
 public class LLMModelPresetChoice {
   @JsonProperty("code")
@@ -112,6 +112,46 @@ public class LLMModelPresetChoice {
 
   }  @JsonProperty("thinking")
   private ThinkingEnum thinking = null;
+
+  @JsonProperty("temperature")
+  private Double temperature = null;
+
+  /**
+   * Gets or Sets internalServicesThinking
+   */
+  public enum InternalServicesThinkingEnum {
+    NO_THINKING("NO_THINKING"),
+    LOW_THINKING("LOW_THINKING"),
+    MEDIUM_THINKING("MEDIUM_THINKING"),
+    HIGH_THINKING("HIGH_THINKING"),
+    AUTO("AUTO");
+
+    private String value;
+
+    InternalServicesThinkingEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static InternalServicesThinkingEnum fromValue(String input) {
+      for (InternalServicesThinkingEnum b : InternalServicesThinkingEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("internalServicesThinking")
+  private InternalServicesThinkingEnum internalServicesThinking = null;
 
   public LLMModelPresetChoice code(String code) {
     this.code = code;
@@ -247,6 +287,42 @@ public class LLMModelPresetChoice {
     this.thinking = thinking;
   }
 
+  public LLMModelPresetChoice temperature(Double temperature) {
+    this.temperature = temperature;
+    return this;
+  }
+
+   /**
+   * Get temperature
+   * @return temperature
+  **/
+  @Schema(description = "")
+  public Double getTemperature() {
+    return temperature;
+  }
+
+  public void setTemperature(Double temperature) {
+    this.temperature = temperature;
+  }
+
+  public LLMModelPresetChoice internalServicesThinking(InternalServicesThinkingEnum internalServicesThinking) {
+    this.internalServicesThinking = internalServicesThinking;
+    return this;
+  }
+
+   /**
+   * Get internalServicesThinking
+   * @return internalServicesThinking
+  **/
+  @Schema(description = "")
+  public InternalServicesThinkingEnum getInternalServicesThinking() {
+    return internalServicesThinking;
+  }
+
+  public void setInternalServicesThinking(InternalServicesThinkingEnum internalServicesThinking) {
+    this.internalServicesThinking = internalServicesThinking;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -263,12 +339,14 @@ public class LLMModelPresetChoice {
         Objects.equals(this.contextWindow, llMModelPresetChoice.contextWindow) &&
         Objects.equals(this.uses, llMModelPresetChoice.uses) &&
         Objects.equals(this.maxGeneratedTokens, llMModelPresetChoice.maxGeneratedTokens) &&
-        Objects.equals(this.thinking, llMModelPresetChoice.thinking);
+        Objects.equals(this.thinking, llMModelPresetChoice.thinking) &&
+        Objects.equals(this.temperature, llMModelPresetChoice.temperature) &&
+        Objects.equals(this.internalServicesThinking, llMModelPresetChoice.internalServicesThinking);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, defaultChoice, contextWindow, uses, maxGeneratedTokens, thinking);
+    return Objects.hash(code, description, defaultChoice, contextWindow, uses, maxGeneratedTokens, thinking, temperature, internalServicesThinking);
   }
 
 
@@ -284,6 +362,8 @@ public class LLMModelPresetChoice {
     sb.append("    uses: ").append(toIndentedString(uses)).append("\n");
     sb.append("    maxGeneratedTokens: ").append(toIndentedString(maxGeneratedTokens)).append("\n");
     sb.append("    thinking: ").append(toIndentedString(thinking)).append("\n");
+    sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
+    sb.append("    internalServicesThinking: ").append(toIndentedString(internalServicesThinking)).append("\n");
     sb.append("}");
     return sb.toString();
   }

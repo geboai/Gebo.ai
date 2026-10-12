@@ -17,6 +17,8 @@ import ChildVirtualFSParam from '../model/ChildVirtualFSParam';
 import GObjectRefGProjectEndpoint from '../model/GObjectRefGProjectEndpoint';
 import GProject from '../model/GProject';
 import ProjectsResearchFilter from '../model/ProjectsResearchFilter';
+import VDocumentInfo from '../model/VDocumentInfo';
+import VFolderInfo from '../model/VFolderInfo';
 
 /**
 * ProjectsController service.
@@ -89,9 +91,9 @@ export default class ProjectsControllerApi {
 
 
     /**
-     * @param {Object} knowledgeBaseCode 
-     * @param {Object} parentProjectCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} knowledgeBaseCode 
+     * @param {String} parentProjectCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GProject>} and HTTP response
      */
     findChildProjectsWithHttpInfo(knowledgeBaseCode, parentProjectCode) {
       
@@ -121,7 +123,7 @@ export default class ProjectsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GProject];
 
       return this.apiClient.callApi(
         '/api/admin/ProjectsController/findChildProjects', 'GET',
@@ -133,7 +135,7 @@ export default class ProjectsControllerApi {
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} knowledgeBaseCode 
      * @param {<&vendorExtensions.x-jsdoc-type>} parentProjectCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GProject>}
      */
     findChildProjects(knowledgeBaseCode, parentProjectCode) {
       return this.findChildProjectsWithHttpInfo(knowledgeBaseCode, parentProjectCode)
@@ -144,9 +146,9 @@ export default class ProjectsControllerApi {
 
 
     /**
-     * @param {Object} knowledgeBaseCode 
-     * @param {Object} actualSelectedProjects 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} knowledgeBaseCode 
+     * @param {Array.<String>} actualSelectedProjects 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GProject>} and HTTP response
      */
     findOtherKnowledgeBaseIncludableProjectsWithHttpInfo(knowledgeBaseCode, actualSelectedProjects) {
       
@@ -164,7 +166,7 @@ export default class ProjectsControllerApi {
         
       };
       let queryParams = {
-        'knowledgeBaseCode': knowledgeBaseCode,'actualSelectedProjects': actualSelectedProjects
+        'knowledgeBaseCode': knowledgeBaseCode,'actualSelectedProjects': this.apiClient.buildCollectionParam(actualSelectedProjects, 'multi')
       };
       let headerParams = {
         
@@ -176,7 +178,7 @@ export default class ProjectsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GProject];
 
       return this.apiClient.callApi(
         '/api/admin/ProjectsController/findOtherKnowledgeBaseIncludableProjects', 'GET',
@@ -188,7 +190,7 @@ export default class ProjectsControllerApi {
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} knowledgeBaseCode 
      * @param {<&vendorExtensions.x-jsdoc-type>} actualSelectedProjects 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GProject>}
      */
     findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode, actualSelectedProjects) {
       return this.findOtherKnowledgeBaseIncludableProjectsWithHttpInfo(knowledgeBaseCode, actualSelectedProjects)
@@ -199,7 +201,7 @@ export default class ProjectsControllerApi {
 
 
     /**
-     * @param {Object} code 
+     * @param {String} code 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/GProject} and HTTP response
      */
     findProjectByCodeWithHttpInfo(code) {
@@ -248,8 +250,8 @@ export default class ProjectsControllerApi {
 
 
     /**
-     * @param {Object} knowledgeBaseCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} knowledgeBaseCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GProject>} and HTTP response
      */
     findRootProjectsWithHttpInfo(knowledgeBaseCode) {
       
@@ -275,7 +277,7 @@ export default class ProjectsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GProject];
 
       return this.apiClient.callApi(
         '/api/admin/ProjectsController/findRootProjects', 'GET',
@@ -286,7 +288,7 @@ export default class ProjectsControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} knowledgeBaseCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GProject>}
      */
     findRootProjects(knowledgeBaseCode) {
       return this.findRootProjectsWithHttpInfo(knowledgeBaseCode)
@@ -298,7 +300,7 @@ export default class ProjectsControllerApi {
 
     /**
      * @param {module:model/ChildVirtualFSParam} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/VDocumentInfo>} and HTTP response
      */
     getChildDocumentsWithHttpInfo(body) {
       
@@ -324,7 +326,7 @@ export default class ProjectsControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [VDocumentInfo];
 
       return this.apiClient.callApi(
         '/api/admin/ProjectsController/getChildDocuments', 'POST',
@@ -335,7 +337,7 @@ export default class ProjectsControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/VDocumentInfo>}
      */
     getChildDocuments(body) {
       return this.getChildDocumentsWithHttpInfo(body)
@@ -347,7 +349,7 @@ export default class ProjectsControllerApi {
 
     /**
      * @param {module:model/ChildVirtualFSParam} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/VFolderInfo>} and HTTP response
      */
     getChildFoldersWithHttpInfo(body) {
       
@@ -373,7 +375,7 @@ export default class ProjectsControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [VFolderInfo];
 
       return this.apiClient.callApi(
         '/api/admin/ProjectsController/getChildFolders', 'POST',
@@ -384,7 +386,7 @@ export default class ProjectsControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/VFolderInfo>}
      */
     getChildFolders(body) {
       return this.getChildFoldersWithHttpInfo(body)
@@ -395,7 +397,7 @@ export default class ProjectsControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GProject>} and HTTP response
      */
     getProjectsWithHttpInfo() {
       
@@ -417,7 +419,7 @@ export default class ProjectsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GProject];
 
       return this.apiClient.callApi(
         '/api/admin/ProjectsController/getProjects', 'GET',
@@ -427,7 +429,7 @@ export default class ProjectsControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GProject>}
      */
     getProjects() {
       return this.getProjectsWithHttpInfo()
@@ -439,7 +441,7 @@ export default class ProjectsControllerApi {
 
     /**
      * @param {module:model/GObjectRefGProjectEndpoint} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/VDocumentInfo>} and HTTP response
      */
     getRootDocumentsWithHttpInfo(body) {
       
@@ -465,7 +467,7 @@ export default class ProjectsControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [VDocumentInfo];
 
       return this.apiClient.callApi(
         '/api/admin/ProjectsController/getRootDocuments', 'POST',
@@ -476,7 +478,7 @@ export default class ProjectsControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/VDocumentInfo>}
      */
     getRootDocuments(body) {
       return this.getRootDocumentsWithHttpInfo(body)
@@ -488,7 +490,7 @@ export default class ProjectsControllerApi {
 
     /**
      * @param {module:model/GObjectRefGProjectEndpoint} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/VFolderInfo>} and HTTP response
      */
     getRootFoldersWithHttpInfo(body) {
       
@@ -514,7 +516,7 @@ export default class ProjectsControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [VFolderInfo];
 
       return this.apiClient.callApi(
         '/api/admin/ProjectsController/getRootFolders', 'POST',
@@ -525,7 +527,7 @@ export default class ProjectsControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/VFolderInfo>}
      */
     getRootFolders(body) {
       return this.getRootFoldersWithHttpInfo(body)
@@ -586,7 +588,7 @@ export default class ProjectsControllerApi {
 
     /**
      * @param {module:model/ProjectsResearchFilter} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GProject>} and HTTP response
      */
     searchProjectsWithHttpInfo(body) {
       
@@ -612,7 +614,7 @@ export default class ProjectsControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GProject];
 
       return this.apiClient.callApi(
         '/api/admin/ProjectsController/searchProjects', 'POST',
@@ -623,7 +625,7 @@ export default class ProjectsControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GProject>}
      */
     searchProjects(body) {
       return this.searchProjectsWithHttpInfo(body)
@@ -635,7 +637,7 @@ export default class ProjectsControllerApi {
 
     /**
      * @param {module:model/GProject} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GProject>} and HTTP response
      */
     searchProjectsByQbeWithHttpInfo(body) {
       
@@ -661,7 +663,7 @@ export default class ProjectsControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GProject];
 
       return this.apiClient.callApi(
         '/api/admin/ProjectsController/searchProjectsByQbe', 'POST',
@@ -672,7 +674,7 @@ export default class ProjectsControllerApi {
 
     /**
      * @param {<&vendorExtensions.x-jsdoc-type>} body 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GProject>}
      */
     searchProjectsByQbe(body) {
       return this.searchProjectsByQbeWithHttpInfo(body)

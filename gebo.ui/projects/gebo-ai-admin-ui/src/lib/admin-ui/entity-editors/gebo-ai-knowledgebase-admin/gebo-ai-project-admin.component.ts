@@ -189,7 +189,7 @@ export class GeboAiProjectAdminComponent extends BaseEntityEditingComponentAutoD
     doReindex(): void {
         this.confirmService.confirm({
             header: "Reindex contents command",
-            message: "Are you shure you want to reindex these contents?",
+            message: "Are you sure you want to reindex these contents?",
             accept: () => {
                 this.loadingRelatedBackend = true;
                 this.contentsResetService.resetContentsIngestion({

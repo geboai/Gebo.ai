@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
@@ -37,6 +38,7 @@ import ai.gebo.model.base.GLookupEntry;
  * Controller for handling Chat Profile lookup operations via REST endpoints.
  * Provides functionality to fetch and search for chat profile configurations.
  */
+@PreAuthorize("hasAnyRole('USER','ADMIN','APPLICATION')")
 @RestController
 @RequestMapping(path = "api/users/GeboChatProfileLookupController")
 public class GeboChatProfileLookupController {

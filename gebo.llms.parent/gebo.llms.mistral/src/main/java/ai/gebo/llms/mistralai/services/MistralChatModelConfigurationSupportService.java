@@ -32,6 +32,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportSe
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.abstraction.layer.services.IGReasoningExtractor;
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
@@ -42,6 +43,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
@@ -63,6 +65,7 @@ public class MistralChatModelConfigurationSupportService
 		type.setCode("chatmodel-mistral");
 		type.setDescription("chat model service hosted on Mistral AI");
 		type.setModelConfigurationClass(GMistralChatModelConfig.class.getName());
+		type.setProviderId("mistralai");
 	}
 
 	/**
@@ -83,6 +86,8 @@ public class MistralChatModelConfigurationSupportService
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Inner class that implements the configuration and creation of Mistral AI chat
@@ -93,8 +98,8 @@ public class MistralChatModelConfigurationSupportService
 
 		public MistralConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 
 		}
 
@@ -151,6 +156,46 @@ public class MistralChatModelConfigurationSupportService
 			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
 				builder.maxTokens(config.getMaxGeneratedTokens());
 			}
+			// Mistral's adjustable reasoning is a switch rather than a scale: its
+			// reasoning_effort offers HIGH and NONE and nothing between them, so the three
+			// levels above zero all ask for HIGH - asking for less is not something the
+			// api can express. NONE, on the other hand, it can, which makes this one of
+			// the few providers where NO_THINKING is honoured rather than approximated.
+			// AUTO sends nothing: it means leaving the provider default alone.
+			// Only a model whose card says it reasons (capabilities.reasoning of Mistral's
+			// models api) gets a reasoning_effort: the others do not take the parameter. And
+			// where the model's parameter rules list its efforts, NONE and HIGH are sent only
+			// when listed (zai-glm-5-3 takes low, high and max, no none).
+			if (config.getThinking() != null) {
+				final Boolean reasons = config.getChoosedModel() != null
+						&& config.getChoosedModel().getMetaInfos() != null
+								? config.getChoosedModel().getMetaInfos().getSupportsReasoning()
+								: null;
+				MistralAiApi.ChatCompletionRequest.ReasoningEffort effort = null;
+				if (!Boolean.FALSE.equals(reasons)) {
+					switch (config.getThinking()) {
+					case NO_THINKING:
+						if (acceptsEffort("none"))
+							effort = MistralAiApi.ChatCompletionRequest.ReasoningEffort.NONE;
+						break;
+					case LOW_THINKING:
+					case MEDIUM_THINKING:
+					case HIGH_THINKING:
+						if (acceptsEffort("high"))
+							effort = MistralAiApi.ChatCompletionRequest.ReasoningEffort.HIGH;
+						break;
+					default:
+						break;
+					}
+				}
+				if (effort != null) {
+					builder = builder.reasoningEffort(effort);
+				}
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model {} configured with thinking {} as reasoning effort {} (model reasons: {})",
+							config.getCode(), config.getThinking(), effort, reasons);
+				}
+			}
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
 				// The condition above tests the tool names that were REQUESTED. getTools filters
@@ -201,13 +246,28 @@ public class MistralChatModelConfigurationSupportService
 			return true;
 		}
 
+		/** Mistral's reasoning, as its chunks give it ({@link #REASONING}). */
+		@Override
+		protected IGReasoningExtractor reasoningExtractor() {
+			return REASONING;
+		}
+
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
 			return new MistralConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 	};
+
+	/**
+	 * Mistral's reasoning (Magistral's thinking): Spring AI's MistralAiChatModel keeps it in
+	 * the {@value MistralAiChatModel#THINKING_CONTENT_METADATA} metadata, the piece each
+	 * streamed chunk adds (the whole of it on a blocking call's answer), the text holding
+	 * the answer only.
+	 */
+	static final IGReasoningExtractor REASONING = IGReasoningExtractor
+			.metadataPieces(MistralAiChatModel.THINKING_CONTENT_METADATA);
 
 	/**
 	 * Returns the type of this chat model service.
@@ -230,7 +290,7 @@ public class MistralChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GMistralChatModelConfig> create(GMistralChatModelConfig config)
 			throws LLMConfigException {
 		MistralConfigurableChatModel model = new MistralConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
 	}

@@ -38,57 +38,71 @@ export default class GUserChatInfo {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new GUserChatInfo();
-      if (data.hasOwnProperty('ragChat'))
-        obj.ragChat = ApiClient.convertToType(data['ragChat'], Object);
-      if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
-      if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
       if (data.hasOwnProperty('username'))
-        obj.username = ApiClient.convertToType(data['username'], Object);
-      if (data.hasOwnProperty('chatModelCode'))
-        obj.chatModelCode = ApiClient.convertToType(data['chatModelCode'], Object);
+        obj.username = ApiClient.convertToType(data['username'], 'String');
+      if (data.hasOwnProperty('description'))
+        obj.description = ApiClient.convertToType(data['description'], 'String');
+      if (data.hasOwnProperty('code'))
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('chatProfileCode'))
-        obj.chatProfileCode = ApiClient.convertToType(data['chatProfileCode'], Object);
+        obj.chatProfileCode = ApiClient.convertToType(data['chatProfileCode'], 'String');
+      if (data.hasOwnProperty('chatModelCode'))
+        obj.chatModelCode = ApiClient.convertToType(data['chatModelCode'], 'String');
+      if (data.hasOwnProperty('ragChat'))
+        obj.ragChat = ApiClient.convertToType(data['ragChat'], 'Boolean');
       if (data.hasOwnProperty('chatCreationDateTime'))
-        obj.chatCreationDateTime = ApiClient.convertToType(data['chatCreationDateTime'], Object);
+        obj.chatCreationDateTime = ApiClient.convertToType(data['chatCreationDateTime'], 'Date');
+      if (data.hasOwnProperty('contextCode'))
+        obj.contextCode = ApiClient.convertToType(data['contextCode'], 'String');
+      if (data.hasOwnProperty('pipelineCode'))
+        obj.pipelineCode = ApiClient.convertToType(data['pipelineCode'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} ragChat
- */
-GUserChatInfo.prototype.ragChat = undefined;
-
-/**
- * @member {Object} code
- */
-GUserChatInfo.prototype.code = undefined;
-
-/**
- * @member {Object} description
- */
-GUserChatInfo.prototype.description = undefined;
-
-/**
- * @member {Object} username
+ * @member {String} username
  */
 GUserChatInfo.prototype.username = undefined;
 
 /**
- * @member {Object} chatModelCode
+ * @member {String} description
  */
-GUserChatInfo.prototype.chatModelCode = undefined;
+GUserChatInfo.prototype.description = undefined;
 
 /**
- * @member {Object} chatProfileCode
+ * @member {String} code
+ */
+GUserChatInfo.prototype.code = undefined;
+
+/**
+ * @member {String} chatProfileCode
  */
 GUserChatInfo.prototype.chatProfileCode = undefined;
 
 /**
- * @member {Object} chatCreationDateTime
+ * @member {String} chatModelCode
+ */
+GUserChatInfo.prototype.chatModelCode = undefined;
+
+/**
+ * @member {Boolean} ragChat
+ */
+GUserChatInfo.prototype.ragChat = undefined;
+
+/**
+ * @member {Date} chatCreationDateTime
  */
 GUserChatInfo.prototype.chatCreationDateTime = undefined;
+
+/**
+ * @member {String} contextCode
+ */
+GUserChatInfo.prototype.contextCode = undefined;
+
+/**
+ * @member {String} pipelineCode
+ */
+GUserChatInfo.prototype.pipelineCode = undefined;
 

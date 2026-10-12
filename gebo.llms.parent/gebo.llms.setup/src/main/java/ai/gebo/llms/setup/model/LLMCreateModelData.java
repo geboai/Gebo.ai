@@ -26,5 +26,7 @@ public class LLMCreateModelData {
 	private List<ChatModelsUses> uses = null;
 	private Integer maxGeneratedTokens = null;
 	private ChatModelThinkingOption thinking = null;
+	/** The temperature the model is created with; null leaves it to its parameter rules. */
+	private Double temperature = null;
 
 }

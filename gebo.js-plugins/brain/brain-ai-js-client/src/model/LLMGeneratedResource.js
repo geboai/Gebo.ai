@@ -24,8 +24,8 @@ export default class LLMGeneratedResource {
    * Constructs a new <code>LLMGeneratedResource</code>.
    * @alias module:model/LLMGeneratedResource
    * @class
-   * @param fileName {Object} 
-   * @param userContextCode {Object} 
+   * @param fileName {String} 
+   * @param userContextCode {String} 
    */
   constructor(fileName, userContextCode) {
     this.fileName = fileName;
@@ -43,91 +43,91 @@ export default class LLMGeneratedResource {
     if (data) {
       obj = obj || new LLMGeneratedResource();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('fileName'))
-        obj.fileName = ApiClient.convertToType(data['fileName'], Object);
+        obj.fileName = ApiClient.convertToType(data['fileName'], 'String');
       if (data.hasOwnProperty('extension'))
-        obj.extension = ApiClient.convertToType(data['extension'], Object);
+        obj.extension = ApiClient.convertToType(data['extension'], 'String');
       if (data.hasOwnProperty('contentType'))
-        obj.contentType = ApiClient.convertToType(data['contentType'], Object);
+        obj.contentType = ApiClient.convertToType(data['contentType'], 'String');
       if (data.hasOwnProperty('fileSize'))
-        obj.fileSize = ApiClient.convertToType(data['fileSize'], Object);
+        obj.fileSize = ApiClient.convertToType(data['fileSize'], 'Number');
       if (data.hasOwnProperty('tokensCount'))
-        obj.tokensCount = ApiClient.convertToType(data['tokensCount'], Object);
+        obj.tokensCount = ApiClient.convertToType(data['tokensCount'], 'Number');
       if (data.hasOwnProperty('userContextCode'))
-        obj.userContextCode = ApiClient.convertToType(data['userContextCode'], Object);
+        obj.userContextCode = ApiClient.convertToType(data['userContextCode'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 LLMGeneratedResource.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 LLMGeneratedResource.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 LLMGeneratedResource.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 LLMGeneratedResource.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 LLMGeneratedResource.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 LLMGeneratedResource.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} fileName
+ * @member {String} fileName
  */
 LLMGeneratedResource.prototype.fileName = undefined;
 
 /**
- * @member {Object} extension
+ * @member {String} extension
  */
 LLMGeneratedResource.prototype.extension = undefined;
 
 /**
- * @member {Object} contentType
+ * @member {String} contentType
  */
 LLMGeneratedResource.prototype.contentType = undefined;
 
 /**
- * @member {Object} fileSize
+ * @member {Number} fileSize
  */
 LLMGeneratedResource.prototype.fileSize = undefined;
 
 /**
- * @member {Object} tokensCount
+ * @member {Number} tokensCount
  */
 LLMGeneratedResource.prototype.tokensCount = undefined;
 
 /**
- * @member {Object} userContextCode
+ * @member {String} userContextCode
  */
 LLMGeneratedResource.prototype.userContextCode = undefined;
 

@@ -17,8 +17,10 @@ import ai.gebo.application.messaging.model.DataEndpointLocality;
 import ai.gebo.application.messaging.model.DataTransformationInfo;
 import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
 import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
+import ai.gebo.application.messaging.model.GStandardDataFlowEndpoints;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.model.MetaEndpointType;
+import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
@@ -81,9 +83,10 @@ public class GraphextractionProcessorMessagesReceiverFactoryComponent extends GA
 		}
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
 		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+		flow.setDescription(GStandardWorkflowStep.GRAPHEXTRACTION.getDescription());
 
 		DataEndpoint graph = new DataEndpoint();
-		graph.setId("knowledge-graph");
+		graph.setId(GStandardDataFlowEndpoints.KNOWLEDGE_GRAPH);
 		graph.setDescription("Knowledge graph of entities and relations extracted from ingested chunks");
 		graph.setProduct("Neo4j");
 		// setEndpoint sanitizes: any userinfo in the bolt URI is stripped, and the
@@ -97,9 +100,9 @@ public class GraphextractionProcessorMessagesReceiverFactoryComponent extends GA
 		graph.setPersonalData(false);
 		graph.setRetention("Until the source is deleted or re-indexed");
 		// Erased on deletion by GraphExtractionDisposerMessageReceiverImpl, which
-		// consumes the same GDeleted*/GInternalDeletion messages the knowledge-base
-		// and project controllers broadcast, so a deleted source is purged from the
-		// graph as it is from the vector store and the chunk store.
+		// receives the same GDeleted*/GInternalDeletion messages as the vectorizator's
+		// eraser (every deletion is sent to each store eraser by GStoreDisposers), so a
+		// deleted source is purged from the graph as it is from the vector store.
 		graph.setDisposer(new GeboComponentInfo(GStandardModulesConstraints.KNOWLEDGE_GRAPH_MODULE,
 				GStandardModulesConstraints.KNOWLEDGE_GRAPH_DISPOSE_COMPONENT));
 		if (neo4jUsername != null && !neo4jUsername.isEmpty()) {
@@ -114,10 +117,7 @@ public class GraphextractionProcessorMessagesReceiverFactoryComponent extends GA
 
 		flow.getTransformations().add(DataTransformationInfo.of("graph-extraction",
 				"Chunk text is analysed and its entities and relations written to the knowledge graph", extractor,
-				GDataFlowMetaInfos.qualifiedId(
-						new GeboComponentInfo(GStandardModulesConstraints.TOKENIZER_MODULE,
-								GStandardModulesConstraints.TOKENIZER_COMPONENT),
-						"chunk-cache"),
+				GStandardDataFlowEndpoints.chunkCacheRef(),
 				flow.qualifiedId(graph.getId())));
 		return flow;
 	}

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.apps.microservices</groupId>
 		<artifactId>gebo.microservices.apps.parent</artifactId>
-		<version>1.0.3.0</version>
+		<version>1.0.4.0</version>
 	</parent>
 	<artifactId>heimdall.gebo.ai</artifactId>
 
@@ -23,6 +23,20 @@
 	  module (REST-only edge)".
 	-->
 	<dependencies>
+		<!--
+		  Entity-editor form metadata. GeboAngularFormGroupMetaInfoController
+		  (api/admin/AngularFormGroupController) reflects over the repositories on THIS
+		  service's classpath and reports, per managed entity, the properties an Angular
+		  editor's FormGroup may be missing - the UI then adds the missing controls so a
+		  persisted property is never silently dropped on save. The catalogue is
+		  per-JVM, so every service that manages entities has to publish its own;
+		  the monolith publishes them all from one classpath.
+		-->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.angular.persistence.support</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- The real IGeboSecretsAccessService (GeboSecretsAccessServiceImpl) + the
 		     existing ADMIN/UI api/admin/SecretsController. -->
 		<dependency>
@@ -83,6 +97,12 @@
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.security.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- System messages shown to the logged-in users, routed by role. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.system.messages.controllers</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- Generated API keys (model + repository + service + the two controllers).

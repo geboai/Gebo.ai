@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import PipelineChatMenuItemParameter from './PipelineChatMenuItemParameter';
 
 /**
  * The PipelineChatMenuItem model module.
@@ -24,8 +25,8 @@ export default class PipelineChatMenuItem {
    * Constructs a new <code>PipelineChatMenuItem</code>.
    * @alias module:model/PipelineChatMenuItem
    * @class
-   * @param optionId {Object} 
-   * @param description {Object} 
+   * @param optionId {String} 
+   * @param description {String} 
    */
   constructor(optionId, description) {
     this.optionId = optionId;
@@ -43,63 +44,63 @@ export default class PipelineChatMenuItem {
     if (data) {
       obj = obj || new PipelineChatMenuItem();
       if (data.hasOwnProperty('optionId'))
-        obj.optionId = ApiClient.convertToType(data['optionId'], Object);
+        obj.optionId = ApiClient.convertToType(data['optionId'], 'String');
       if (data.hasOwnProperty('icon'))
-        obj.icon = ApiClient.convertToType(data['icon'], Object);
+        obj.icon = ApiClient.convertToType(data['icon'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('defaultOption'))
-        obj.defaultOption = ApiClient.convertToType(data['defaultOption'], Object);
+        obj.defaultOption = ApiClient.convertToType(data['defaultOption'], 'Boolean');
       if (data.hasOwnProperty('routeOption'))
-        obj.routeOption = ApiClient.convertToType(data['routeOption'], Object);
+        obj.routeOption = ApiClient.convertToType(data['routeOption'], 'String');
       if (data.hasOwnProperty('pipelineId'))
-        obj.pipelineId = ApiClient.convertToType(data['pipelineId'], Object);
+        obj.pipelineId = ApiClient.convertToType(data['pipelineId'], 'String');
       if (data.hasOwnProperty('productId'))
-        obj.productId = ApiClient.convertToType(data['productId'], Object);
+        obj.productId = ApiClient.convertToType(data['productId'], 'String');
       if (data.hasOwnProperty('parameters'))
-        obj.parameters = ApiClient.convertToType(data['parameters'], Object);
+        obj.parameters = ApiClient.convertToType(data['parameters'], [PipelineChatMenuItemParameter]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} optionId
+ * @member {String} optionId
  */
 PipelineChatMenuItem.prototype.optionId = undefined;
 
 /**
- * @member {Object} icon
+ * @member {String} icon
  */
 PipelineChatMenuItem.prototype.icon = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 PipelineChatMenuItem.prototype.description = undefined;
 
 /**
- * @member {Object} defaultOption
+ * @member {Boolean} defaultOption
  */
 PipelineChatMenuItem.prototype.defaultOption = undefined;
 
 /**
- * @member {Object} routeOption
+ * @member {String} routeOption
  */
 PipelineChatMenuItem.prototype.routeOption = undefined;
 
 /**
- * @member {Object} pipelineId
+ * @member {String} pipelineId
  */
 PipelineChatMenuItem.prototype.pipelineId = undefined;
 
 /**
- * @member {Object} productId
+ * @member {String} productId
  */
 PipelineChatMenuItem.prototype.productId = undefined;
 
 /**
- * @member {Object} parameters
+ * @member {Array.<module:model/PipelineChatMenuItemParameter>} parameters
  */
 PipelineChatMenuItem.prototype.parameters = undefined;
 

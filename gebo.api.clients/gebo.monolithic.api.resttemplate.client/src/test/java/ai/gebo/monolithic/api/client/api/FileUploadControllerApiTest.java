@@ -53,10 +53,10 @@ public class FileUploadControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void upload1Test() {
+    public void uploadUploadsEndpointTest() {
         String handShakeCode = null;
         List<File> files = null;
-        api.upload1(handShakeCode, files);
+        api.uploadUploadsEndpoint(handShakeCode, files);
 
         // TODO: test validations
     }

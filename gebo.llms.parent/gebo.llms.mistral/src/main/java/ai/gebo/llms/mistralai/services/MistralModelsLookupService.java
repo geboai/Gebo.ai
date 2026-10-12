@@ -19,6 +19,7 @@ import ai.gebo.llms.mistralai.model.GMistralEmbeddingModelChoice;
 import ai.gebo.llms.mistralai.model.GMistralEmbeddingModelConfig;
 import ai.gebo.llms.mistralai.model.MistralBaseModelCard;
 import ai.gebo.llms.mistralai.model.MistralBaseModelCards;
+import ai.gebo.llms.mistralai.model.MistralModelCapabilities;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
@@ -28,6 +29,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -36,6 +38,8 @@ public class MistralModelsLookupService {
 	final IGeboSecretsAccessService secretService;
 	final RestTemplateWrapperService restTemplateWrapperService;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
+	/** Fills what a model card leaves unknown from the models library (MistralModelsLibrary). */
+	final IGModelChoiceMetaInfoEnricherService enricherService;
 	private final static String MISTRAL_MODELS_URL = "https://api.mistral.ai/v1/models";
 
 	private HttpHeaders createHeader(GBaseModelConfig config) throws LLMConfigException {
@@ -91,22 +95,17 @@ public class MistralModelsLookupService {
 		if (models.isHasErrorMessages()) {
 			result = OperationStatus.of(null, models.getMessages());
 		} else if (models.getResult() != null) {
-			result = OperationStatus.of(models.getResult().stream().map(filtered -> {
-				GMistralChatModelChoice choice = new GMistralChatModelChoice();
-				choice.setModelCard(filtered);
-				choice.setCode(filtered.getId());
-				choice.setDescription(
-						filtered.getDescription() != null ? filtered.getId() + " " + filtered.getDescription()
-								: filtered.getId());
-				if (filtered.getMax_context_length() != null) {
-					choice.setContextLength(filtered.getMax_context_length());
-				}
-				choice.setMetaInfos(new ModelMetaInfo());
-				choice.getMetaInfos().setContextLength(filtered.getMax_context_length());
-				choice.getMetaInfos().setChatModel(true);
-				choice.getMetaInfos().setProviderId("mistral.ai");
-				return choice;
-			}).toList());
+			result = OperationStatus.of(models.getResult().stream().filter(MistralModelsLookupService::offersChat)
+					.map(filtered -> {
+						GMistralChatModelChoice choice = new GMistralChatModelChoice();
+						choice.setModelCard(filtered);
+						fill(choice, filtered, true);
+						choice.setSupportsFunctionCalls(choice.getMetaInfos().getSupportsFunctionCalls());
+						// the card's values win, the library fills what it does not tell
+						enricherService.enrichChatModelMetaInfos(
+								MistralChatModelConfigurationSupportService.type.getProviderId(), choice, x -> null);
+						return choice;
+					}).toList());
 		}
 		return llmTypeFiltrerRepoPattern.filterChatModels(MistralChatModelConfigurationSupportService.type, result);
 	}
@@ -118,25 +117,75 @@ public class MistralModelsLookupService {
 		if (models.isHasErrorMessages()) {
 			result = OperationStatus.of(null, models.getMessages());
 		} else if (models.getResult() != null) {
-			result = OperationStatus.of(models.getResult().stream().map(filtered -> {
-				GMistralEmbeddingModelChoice choice = new GMistralEmbeddingModelChoice();
-				choice.setModelCard(filtered);
-				choice.setCode(filtered.getId());
-				choice.setDescription(
-						filtered.getDescription() != null ? filtered.getId() + " " + filtered.getDescription()
-								: filtered.getId());
-				if (filtered.getMax_context_length() != null) {
-					choice.setContextLength(filtered.getMax_context_length());
-				}
-				choice.setMetaInfos(new ModelMetaInfo());
-				choice.getMetaInfos().setContextLength(filtered.getMax_context_length());
-				choice.getMetaInfos().setChatModel(true);
-				choice.getMetaInfos().setProviderId("mistral.ai");
-				return choice;
-			}).toList());
+			result = OperationStatus.of(models.getResult().stream()
+					.filter(card -> !Boolean.TRUE.equals(card.getArchived())).map(filtered -> {
+						GMistralEmbeddingModelChoice choice = new GMistralEmbeddingModelChoice();
+						choice.setModelCard(filtered);
+						fill(choice, filtered, false);
+						enricherService.enrichEmbeddingModelMetaInfos(
+								MistralEmbeddingModelConfigurationSupportService.type.getProviderId(), choice, x -> null);
+						return choice;
+					}).toList());
 		}
 		return llmTypeFiltrerRepoPattern.filterEmbeddingModels(MistralEmbeddingModelConfigurationSupportService.type,
 				result);
 	}
 
+	static final String INFORMATIVE_URL = "https://docs.mistral.ai/getting-started/models/";
+
+	/**
+	 * Whether a card is a chat model: its capabilities say so when the api reports
+	 * them (OCR, moderation, transcription, speech and FIM only models do not chat);
+	 * archived fine-tuned models are left out.
+	 */
+	static boolean offersChat(MistralBaseModelCard card) {
+		if (Boolean.TRUE.equals(card.getArchived()))
+			return false;
+		return card.getCapabilities() == null || card.getCapabilities().getCompletion_chat() == null
+				|| card.getCapabilities().getCompletion_chat();
+	}
+
+	/**
+	 * Fills a choice from its model card: context length, the capabilities the api
+	 * reports, and the deprecation date with the replacement model.
+	 */
+	static void fill(ai.gebo.llms.abstraction.layer.model.GBaseModelChoice choice, MistralBaseModelCard card,
+			boolean chat) {
+		choice.setCode(card.getId());
+		String description = card.getName() != null && !card.getName().isBlank() && !card.getName().equals(card.getId())
+				? card.getId() + " " + card.getName()
+				: card.getId();
+		if (card.getDescription() != null && !card.getDescription().isBlank())
+			description = card.getId() + " " + card.getDescription();
+		ModelMetaInfo meta = new ModelMetaInfo();
+		meta.setProviderId(MistralChatModelConfigurationSupportService.type.getProviderId());
+		meta.setModelId(card.getId());
+		meta.setChatModel(chat);
+		meta.setEmbeddingModel(!chat);
+		meta.setContextLength(card.getMax_context_length());
+		meta.setInformativeUrl(INFORMATIVE_URL);
+		MistralModelCapabilities capabilities = card.getCapabilities();
+		if (capabilities != null) {
+			meta.setSupportsFunctionCalls(capabilities.getFunction_calling());
+			meta.setSupportsVision(capabilities.getVision());
+			meta.setSupportsReasoning(capabilities.getReasoning());
+		}
+		if (card.getDeprecation() != null && !card.getDeprecation().isBlank()) {
+			meta.setDeprecated(true);
+			meta.setRetirementDate(card.getDeprecation());
+			meta.setReplacementModel(card.getDeprecation_replacement_model());
+			String date = card.getDeprecation().length() >= 10 ? card.getDeprecation().substring(0, 10)
+					: card.getDeprecation();
+			description += " (deprecated " + date
+					+ (card.getDeprecation_replacement_model() != null
+							? ", replaced by " + card.getDeprecation_replacement_model()
+							: "")
+					+ ")";
+		}
+		meta.setDescription(description);
+		choice.setDescription(description);
+		choice.setContextLength(card.getMax_context_length());
+		choice.setInformativeUrl(INFORMATIVE_URL);
+		choice.setMetaInfos(meta);
+	}
 }

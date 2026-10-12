@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **String** |  | [optional] 
 **username** | **String** |  | [optional] 
+**name** | **String** |  | [optional] 
+**roles** | **[String]** |  | [optional] 
 **disabled** | **Boolean** |  | [optional] 
 **sourname** | **String** |  | [optional] 
-**roles** | **[String]** |  | [optional] 

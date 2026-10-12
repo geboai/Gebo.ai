@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -55,7 +54,11 @@ import ai.gebo.ragsystem.content.graphrag_processor.config.GeboGraphRagProcessor
  * persistence service it drives.
  * </p>
  */
-@ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
+// Registered whether or not the knowledge graph is deployed (ai.gebo.neo4j.enabled):
+// every deletion is sent to each store eraser (GStoreDisposers) - and under
+// microservices every topology component is a remote receiver of the other services,
+// deployed store or not - so this one must always be found; without the graph it has
+// nothing to erase.
 @Component
 @Scope("singleton")
 public class GraphExtractionDisposerMessageReceiverImpl extends GAbstractMessageReceiverFactory {
@@ -107,6 +110,13 @@ public class GraphExtractionDisposerMessageReceiverImpl extends GAbstractMessage
 
 		@Override
 		public void accept(GMessageEnvelope t) {
+			if (knowledgeGraphPersistenceService == null) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Knowledge graph not deployed here, nothing to erase for "
+							+ (t.getPayload() != null ? t.getPayload().getClass().getName() : null));
+				}
+				return;
+			}
 			LOGGER.info("Begin accept(..) deleting knowledge-graph data");
 			// Erasure of the graph must never break the deletion propagation for the
 			// other stores: on an unconfigured or empty graph the scope deletes simply
@@ -182,7 +192,9 @@ public class GraphExtractionDisposerMessageReceiverImpl extends GAbstractMessage
 
 	@Override
 	public IGMessageReceiver create() {
-		return new GraphExtractionDisposer(beanFactory.getBean(IKnowledgeGraphPersistenceService.class));
+		// the persistence service exists only with the knowledge graph deployed
+		return new GraphExtractionDisposer(
+				beanFactory.getBeanProvider(IKnowledgeGraphPersistenceService.class).getIfAvailable());
 	}
 
 }

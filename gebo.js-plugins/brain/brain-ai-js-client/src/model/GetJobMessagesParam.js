@@ -25,7 +25,7 @@ export default class GetJobMessagesParam {
    * Constructs a new <code>GetJobMessagesParam</code>.
    * @alias module:model/GetJobMessagesParam
    * @class
-   * @param jobId {Object} 
+   * @param jobId {String} 
    * @param dataPage {module:model/DataPage} 
    */
   constructor(jobId, dataPage) {
@@ -44,7 +44,7 @@ export default class GetJobMessagesParam {
     if (data) {
       obj = obj || new GetJobMessagesParam();
       if (data.hasOwnProperty('jobId'))
-        obj.jobId = ApiClient.convertToType(data['jobId'], Object);
+        obj.jobId = ApiClient.convertToType(data['jobId'], 'String');
       if (data.hasOwnProperty('dataPage'))
         obj.dataPage = DataPage.constructFromObject(data['dataPage']);
     }
@@ -53,7 +53,7 @@ export default class GetJobMessagesParam {
 }
 
 /**
- * @member {Object} jobId
+ * @member {String} jobId
  */
 GetJobMessagesParam.prototype.jobId = undefined;
 

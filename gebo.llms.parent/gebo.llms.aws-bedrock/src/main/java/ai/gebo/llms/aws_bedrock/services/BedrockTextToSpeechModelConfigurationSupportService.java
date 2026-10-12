@@ -59,6 +59,7 @@ public class BedrockTextToSpeechModelConfigurationSupportService implements
 		type.setCode("aws-polly-tts");
 		type.setDescription("Amazon Polly text to speech service");
 		type.setModelConfigurationClass(GBedrockTextToSpeechModelConfig.class.getName());
+		type.setProviderId("aws-bedrock");
 	}
 
 	final BedrockCredentialsResolver credentialsResolver;

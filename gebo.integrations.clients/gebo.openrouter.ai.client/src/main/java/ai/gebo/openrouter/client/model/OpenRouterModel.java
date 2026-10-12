@@ -11,6 +11,7 @@ package ai.gebo.openrouter.client.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -63,9 +64,17 @@ public class OpenRouterModel {
 
 	/** Request parameters the model supports (e.g. {@code tools}, {@code temperature}). */
 	@JsonProperty("supported_parameters")
+	@JsonAlias("supportedParameters")
 	private List<String> supportedParameters;
 
 	/** Associated Hugging Face model id, when applicable. */
 	@JsonProperty("hugging_face_id")
 	private String huggingFaceId;
+
+	/** How the model reasons, null for one that does not. */
+	private ModelReasoning reasoning;
+
+	/** The date (yyyy-MM-dd) the model leaves OpenRouter, null while none is planned. */
+	@JsonProperty("expiration_date")
+	private String expirationDate;
 }

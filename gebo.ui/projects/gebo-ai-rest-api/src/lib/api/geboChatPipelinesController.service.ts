@@ -215,22 +215,19 @@ export class GeboChatPipelinesControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPersonalPipelinesChatMenu(chatProfileCode: string, pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<PipelineChatMenu>>;
-    public getPersonalPipelinesChatMenu(chatProfileCode: string, pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PipelineChatMenu>>>;
-    public getPersonalPipelinesChatMenu(chatProfileCode: string, pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PipelineChatMenu>>>;
-    public getPersonalPipelinesChatMenu(chatProfileCode: string, pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPersonalPipelinesChatMenu(chatProfileCode?: string, pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<PipelineChatMenu>>;
+    public getPersonalPipelinesChatMenu(chatProfileCode?: string, pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PipelineChatMenu>>>;
+    public getPersonalPipelinesChatMenu(chatProfileCode?: string, pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PipelineChatMenu>>>;
+    public getPersonalPipelinesChatMenu(chatProfileCode?: string, pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (chatProfileCode === null || chatProfileCode === undefined) {
-            throw new Error('Required parameter chatProfileCode was null or undefined when calling getPersonalPipelinesChatMenu.');
-        }
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (pipelineCode !== undefined && pipelineCode !== null) {
-            queryParameters = queryParameters.set('pipelineCode', <any>pipelineCode);
-        }
         if (chatProfileCode !== undefined && chatProfileCode !== null) {
             queryParameters = queryParameters.set('chatProfileCode', <any>chatProfileCode);
+        }
+        if (pipelineCode !== undefined && pipelineCode !== null) {
+            queryParameters = queryParameters.set('pipelineCode', <any>pipelineCode);
         }
 
         let headers = this.defaultHeaders;

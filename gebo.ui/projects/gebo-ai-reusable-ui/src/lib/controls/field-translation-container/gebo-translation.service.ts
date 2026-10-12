@@ -47,6 +47,14 @@ export class GeboAITranslationService {
     public get browserLanguage(): Language | undefined {
         return this.translateService.getBrowserLang();
     }
+    /**
+     * The language the UI is currently showing, which is what locale aware rendering (Intl based
+     * day names, clock times, dates) has to follow: the browser language is not it, since the user
+     * can pick another one from the language chooser.
+     */
+    public get actualLanguageCode(): string {
+        return GeboAITranslationService.actualLanguage;
+    }
     public async tryInit() {
         if (GeboAITranslationService.initialized !== true) {
             try {

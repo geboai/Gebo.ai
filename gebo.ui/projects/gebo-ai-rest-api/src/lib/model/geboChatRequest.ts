@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { AdditionalContent } from './additionalContent';
+import { GResponseDocumentRef } from './gResponseDocumentRef';
 import { GeboRagRequestCustomConfig } from './geboRagRequestCustomConfig';
 import { UserUploadedContent } from './userUploadedContent';
 
@@ -25,20 +26,23 @@ export interface GeboChatRequest {
     choosedKnowledgeBases?: Array<string>;
     chatPipelineProcessId?: string;
     forcedRequestDocuments?: Array<string>;
+    forcedDocumentsRef?: Array<GResponseDocumentRef>;
     userUploadedContents?: Array<UserUploadedContent>;
     deepSearchDataSources?: Array<string>;
     userIntent?: GeboChatRequest.UserIntentEnum;
+    searchRequested?: boolean;
+    searchForbidden?: boolean;
+    userLanguage?: string;
     additionalContents?: Array<AdditionalContent>;
     tokensSize?: number;
 }
 export namespace GeboChatRequest {
-    export type UserIntentEnum = 'QA' | 'HOWTO' | 'DECISION' | 'SUMMARY' | 'PURE_SEARCH' | 'ANALISYS' | 'IMAGE_GENERATION' | 'UNKNOWN';
+    export type UserIntentEnum = 'QA' | 'HOWTO' | 'DECISION' | 'SUMMARY' | 'ANALISYS' | 'IMAGE_GENERATION' | 'UNKNOWN';
     export const UserIntentEnum = {
         QA: 'QA' as UserIntentEnum,
         HOWTO: 'HOWTO' as UserIntentEnum,
         DECISION: 'DECISION' as UserIntentEnum,
         SUMMARY: 'SUMMARY' as UserIntentEnum,
-        PURESEARCH: 'PURE_SEARCH' as UserIntentEnum,
         ANALISYS: 'ANALISYS' as UserIntentEnum,
         IMAGEGENERATION: 'IMAGE_GENERATION' as UserIntentEnum,
         UNKNOWN: 'UNKNOWN' as UserIntentEnum

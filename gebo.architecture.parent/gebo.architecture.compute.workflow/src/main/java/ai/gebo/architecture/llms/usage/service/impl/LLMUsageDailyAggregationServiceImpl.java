@@ -8,132 +8,262 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.springframework.scheduling.annotation.Scheduled;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.llms.usage.model.LLMDailyUsageDetail;
 import ai.gebo.architecture.llms.usage.model.LLMUsageDetail;
 import ai.gebo.architecture.llms.usage.repository.LLMDailyUsageDetailRepository;
 import ai.gebo.architecture.llms.usage.repository.LLMUsageDetailRepository;
+import ai.gebo.architecture.llms.usage.service.ILLMUsageDailyAggregationService;
 import ai.gebo.model.ModelType;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Periodically folds raw {@link LLMUsageDetail} rows written by
- * {@link LLMUsageConcentratorReceiverFactory} into {@link LLMDailyUsageDetail}
- * daily aggregates. Moved verbatim from the old
- * {@code LLMSUsageCrudServiceImpl.consolidateTick()} in
- * {@code gebo.architecture.llms.abstraction.layer}.
+ * The default {@link ILLMUsageDailyAggregationService}: folds raw
+ * {@link LLMUsageDetail} rows written by {@link LLMUsageConcentratorReceiverFactory}
+ * into {@link LLMDailyUsageDetail} daily aggregates. It holds no schedule of its
+ * own: {@link LLMUsageConsolidationTicker} invokes it. Extend it and override the
+ * protected hooks ({@link #zone()}, {@link #resolveOutcome(LLMUsageDetail)},
+ * {@link #resolveModelType(LLMUsageDetail)}) to adjust how records are bucketed.
+ * <p>
+ * Every run (tick) <b>rebuilds</b> the daily aggregates of yesterday and today from the
+ * raw rows and overwrites them, it never adds to them. The raw rows of both days
+ * are kept until the day after tomorrow, so the rebuild always sees every row of
+ * the days it writes, which makes the tick idempotent: running it again produces
+ * the same documents. Adding to the existing documents instead counted every raw
+ * row of today once per tick (about 144 times a day), and lost the rows written
+ * after the last tick before midnight.
+ * <p>
+ * Yesterday is rebuilt as well as today so that the rows written between the last
+ * tick of a day and midnight are consolidated by the first tick of the next day.
  */
 @Component
-@AllArgsConstructor
-public class LLMUsageDailyAggregationServiceImpl {
-	private final LLMUsageDetailRepository usageRepo;
-	private final LLMDailyUsageDetailRepository consolidatedRepo;
+public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggregationService {
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+	/**
+	 * The model type given to a raw record that carries none. Until every model type
+	 * was accounted only chat calls were recorded, so a record without a type is a
+	 * chat call.
+	 */
+	public static final ModelType LEGACY_MODEL_TYPE = ModelType.CHAT;
+	protected final LLMUsageDetailRepository usageRepo;
+	protected final LLMDailyUsageDetailRepository consolidatedRepo;
+	/** Null when the records need no conversion, as in the tests. */
+	protected final LLMUsageProviderIdConversion conversion;
 
-	@Scheduled(initialDelay = 5000, fixedRate = 10 * 60 * 1000)
-	public void consolidateTick() {
-		ZoneId zone = ZoneId.systemDefault();
+	public LLMUsageDailyAggregationServiceImpl(LLMUsageDetailRepository usageRepo,
+			LLMDailyUsageDetailRepository consolidatedRepo) {
+		this(usageRepo, consolidatedRepo, null);
+	}
+
+	@Autowired
+	public LLMUsageDailyAggregationServiceImpl(LLMUsageDetailRepository usageRepo,
+			LLMDailyUsageDetailRepository consolidatedRepo, LLMUsageProviderIdConversion conversion) {
+		this.usageRepo = usageRepo;
+		this.consolidatedRepo = consolidatedRepo;
+		this.conversion = conversion;
+	}
+
+	/**
+	 * The time zone the calendar days of the aggregates are cut in. Defaults to the
+	 * JVM's zone.
+	 */
+	protected ZoneId zone() {
+		return ZoneId.systemDefault();
+	}
+
+	/**
+	 * The outcome a raw record is aggregated under. Records written before the
+	 * outcome existed carry null: they are folded into SUCCESS rather than creating a
+	 * third, meaningless bucket.
+	 */
+	protected LLMCallOutcome resolveOutcome(LLMUsageDetail detail) {
+		return detail.getOutcome() != null ? detail.getOutcome() : LLMCallOutcome.SUCCESS;
+	}
+
+	/**
+	 * The model type a raw record is aggregated under: its own, or
+	 * {@link #LEGACY_MODEL_TYPE} for a record that carries none.
+	 */
+	protected ModelType resolveModelType(LLMUsageDetail detail) {
+		return detail.getModelType() != null ? detail.getModelType() : LEGACY_MODEL_TYPE;
+	}
+
+	@Override
+	public void consolidate() {
+		ZoneId zone = zone();
 		LocalDate today = LocalDate.now(zone);
-
-		// Only completed days are consolidated: everything up to the last
-		// millisecond of yesterday.
-		long lastMillisOfYesterday = today.atStartOfDay(zone).toInstant().toEpochMilli() - 1;
-		long todayFirstMillisecond = lastMillisOfYesterday + 1;
+		long yesterdayFirstMillisecond = today.minusDays(1).atStartOfDay(zone).toInstant().toEpochMilli();
 		long todayLastMillisecond = today.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli() - 1;
-		;
-		// Aggregate the raw values grouping by
-		// providerId, username, model, callerStack, modelType, outcome, year, month, day.
-		Map<ConsolidationKey, DailyAccumulator> grouped = new HashMap<>();
-		try (Stream<LLMUsageDetail> stream = usageRepo.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(
-				todayFirstMillisecond, todayLastMillisecond)) {
-			stream.forEach(detail -> {
-				LocalDate date = Instant.ofEpochMilli(detail.getTimestamp()).atZone(zone).toLocalDate();
-				// Records written before the outcome existed carry null: fold them into
-				// SUCCESS rather than creating a third, meaningless bucket.
-				LLMCallOutcome outcome = detail.getOutcome() != null ? detail.getOutcome()
-						: LLMCallOutcome.SUCCESS;
-				ConsolidationKey key = new ConsolidationKey(detail.getProviderId(), detail.getUsername(),
-						detail.getModel(), detail.getCallerStack(), detail.getModelType(), outcome,
-						date.getYear(), date.getMonthValue(), date.getDayOfMonth());
-				grouped.computeIfAbsent(key, k -> new DailyAccumulator()).add(detail);
-			});
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin consolidate() rebuilding the daily usage of " + today.minusDays(1) + " and "
+					+ today + " window=[" + yesterdayFirstMillisecond + "," + todayLastMillisecond + "]");
 		}
-		if (grouped.isEmpty()) {
+
+		if (conversion != null && !conversion.convertOnce()) {
+			LOGGER.warn("Usage not consolidated: the records written before the model type code are not converted yet");
 			return;
 		}
 
-		// Complete the sums of the target daily documents, merging into any
-		// previously consolidated record for the same key.
+		// Aggregate the raw values grouping by
+		// modelTypeCode (which gives the providerId), username, model, callerStack, modelType, outcome, apiSecretCode, year, month, day.
+		Map<ConsolidationKey, DailyAccumulator> grouped = new HashMap<>();
+		long rawRows = 0;
+		try (Stream<LLMUsageDetail> stream = usageRepo.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(
+				yesterdayFirstMillisecond, todayLastMillisecond)) {
+			rawRows = stream.mapToLong(detail -> {
+				LocalDate date = Instant.ofEpochMilli(detail.getTimestamp()).atZone(zone).toLocalDate();
+				LLMCallOutcome outcome = resolveOutcome(detail);
+				ModelType modelType = resolveModelType(detail);
+				ConsolidationKey key = new ConsolidationKey(detail.getModelTypeCode(), detail.getUsername(),
+						detail.getModel(), detail.getCallerStack(), modelType, outcome, detail.getApiSecretCode(),
+						date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+				grouped.computeIfAbsent(key, k -> new DailyAccumulator()).add(detail);
+				return 1;
+			}).sum();
+		}
+
+		// Overwrite the daily document of every key with the sums rebuilt from its raw
+		// rows. A daily document of yesterday or today whose key has no raw row left is
+		// not touched: it was written before this rebuild existed, when the raw rows of
+		// a finished day were deleted at midnight, and the rebuild has nothing to
+		// replace it with.
 		for (Map.Entry<ConsolidationKey, DailyAccumulator> entry : grouped.entrySet()) {
 			ConsolidationKey key = entry.getKey();
 			LLMDailyUsageDetail target = consolidatedRepo
-					.findByProviderIdAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndYearAndMonthAndDay(
-							key.providerId(), key.username(), key.model(), key.callerStack(), key.modelType(),
-							key.outcome(), key.year(), key.month(), key.day())
+					.findByModelTypeCodeAndUsernameAndModelAndCallerStackAndModelTypeAndOutcomeAndApiSecretCodeAndYearAndMonthAndDay(
+							key.modelTypeCode(), key.username(), key.model(), key.callerStack(), key.modelType(),
+							key.outcome(), key.apiSecretCode(), key.year(), key.month(), key.day())
 					.orElseGet(() -> newDailyUsageDetail(key));
-			entry.getValue().mergeInto(target);
+			entry.getValue().writeInto(target);
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<DAILY_USAGE key=" + key + ">");
+				LOGGER.trace("requests=" + target.getNrRequests() + " inputToken=" + target.getInputToken()
+						+ " outputToken=" + target.getOutputToken() + " totalToken=" + target.getTotalToken()
+						+ " responseTimeMin=" + target.getResponseTimeMin() + " responseTimeAvg="
+						+ target.getResponseTimeAvg() + " responseTimeMax=" + target.getResponseTimeMax()
+						+ " timeToFirstToken samples=" + target.getTimeToFirstTokenSamples() + " min="
+						+ target.getTimeToFirstTokenMin() + " avg=" + target.getTimeToFirstTokenAvg() + " max="
+						+ target.getTimeToFirstTokenMax());
+				LOGGER.trace("</DAILY_USAGE>");
+			}
 			consolidatedRepo.save(target);
 		}
 
-		// The processed raw details have been folded into the daily documents,
-		// remove every detail belonging to an already-consolidated day.
-		usageRepo.deleteByTimestampLessThanEqual(lastMillisOfYesterday);
+		// Only the raw rows of the days before yesterday are deleted: yesterday and
+		// today must stay complete for the next rebuild.
+		usageRepo.deleteByTimestampLessThanEqual(yesterdayFirstMillisecond - 1);
+		if (LOGGER.isDebugEnabled()) {
+			Map<ModelType, Long> requestsByType = new java.util.EnumMap<>(ModelType.class);
+			grouped.forEach((key, accumulator) -> requestsByType.merge(key.modelType(), accumulator.nrRequests,
+					Long::sum));
+			LOGGER.debug("End consolidate() rebuilt " + grouped.size() + " daily documents from " + rawRows
+					+ " raw rows, requests by model type=" + requestsByType + ", deleted the raw rows before "
+					+ today.minusDays(1));
+		}
 	}
 
 	private static LLMDailyUsageDetail newDailyUsageDetail(ConsolidationKey key) {
 		LLMDailyUsageDetail daily = new LLMDailyUsageDetail();
-		daily.setProviderId(key.providerId());
+		daily.setModelTypeCode(key.modelTypeCode());
 		daily.setUsername(key.username());
 		daily.setModel(key.model());
 		daily.setCallerStack(key.callerStack());
 		daily.setModelType(key.modelType());
 		daily.setOutcome(key.outcome());
+		daily.setApiSecretCode(key.apiSecretCode());
 		daily.setYear(key.year());
 		daily.setMonth(key.month());
 		daily.setDay(key.day());
 		return daily;
 	}
 
-	private record ConsolidationKey(String providerId, String username, String model, String callerStack,
-			ModelType modelType, LLMCallOutcome outcome, int year, int month, int day) {
+	private record ConsolidationKey(String modelTypeCode, String username, String model, String callerStack,
+			ModelType modelType, LLMCallOutcome outcome, String apiSecretCode, int year, int month, int day) {
 	}
 
-	private static final class DailyAccumulator {
+	static final class DailyAccumulator {
+		private static final Logger LOGGER_ACC = LoggerFactory.getLogger(LLMUsageDailyAggregationServiceImpl.class);
 		private long inputToken;
 		private long outputToken;
 		private long totalToken;
 		private long nrRequests;
-		private long latencySum;
-		private long latencyMin = Long.MAX_VALUE;
-		private long latencyMax = Long.MIN_VALUE;
+		private long responseTimeSum;
+		private long responseTimeMin = Long.MAX_VALUE;
+		private long responseTimeMax = Long.MIN_VALUE;
+		// Over the calls that measured a time to first token only: the others would
+		// otherwise drag the average toward zero.
+		private long timeToFirstTokenSamples;
+		private long timeToFirstTokenSum;
+		private long timeToFirstTokenMin = Long.MAX_VALUE;
+		private long timeToFirstTokenMax = Long.MIN_VALUE;
+		// Over the priced calls only; the currencies are tracked because costs in
+		// different currencies cannot be summed.
+		private long costSamples;
+		private double costSum;
+		private final java.util.Set<String> currencies = new java.util.LinkedHashSet<>();
+		/** The provider of the key's model type, from its raw rows; null if none has one. */
+		private String providerId;
 
 		void add(LLMUsageDetail detail) {
+			if (detail.getProviderId() != null) {
+				providerId = detail.getProviderId();
+			}
+			if (detail.getCost() != null) {
+				costSamples++;
+				costSum += detail.getCost();
+				currencies.add(detail.getCurrencyCode());
+			}
 			inputToken += detail.getInputToken();
 			outputToken += detail.getOutputToken();
 			totalToken += detail.getTotalToken();
 			nrRequests++;
-			latencySum += detail.getLatency();
-			latencyMin = Math.min(latencyMin, detail.getLatency());
-			latencyMax = Math.max(latencyMax, detail.getLatency());
+			responseTimeSum += detail.getResponseTime();
+			responseTimeMin = Math.min(responseTimeMin, detail.getResponseTime());
+			responseTimeMax = Math.max(responseTimeMax, detail.getResponseTime());
+			Long timeToFirstToken = detail.getTimeToFirstToken();
+			if (timeToFirstToken != null) {
+				timeToFirstTokenSamples++;
+				timeToFirstTokenSum += timeToFirstToken;
+				timeToFirstTokenMin = Math.min(timeToFirstTokenMin, timeToFirstToken);
+				timeToFirstTokenMax = Math.max(timeToFirstTokenMax, timeToFirstToken);
+			}
 		}
 
-		void mergeInto(LLMDailyUsageDetail target) {
-			long existingNr = target.getNrRequests();
-			long existingLatencySum = target.getLatencyAvg() * existingNr;
-			long combinedNr = existingNr + nrRequests;
-
-			target.setInputToken(target.getInputToken() + inputToken);
-			target.setOutputToken(target.getOutputToken() + outputToken);
-			target.setTotalToken(target.getTotalToken() + totalToken);
-			target.setNrRequests(combinedNr);
-			target.setLatencyAvg(combinedNr > 0 ? (existingLatencySum + latencySum) / combinedNr : 0);
-			if (existingNr > 0) {
-				target.setLatencyMin(Math.min(target.getLatencyMin(), latencyMin));
-				target.setLatencyMax(Math.max(target.getLatencyMax(), latencyMax));
+		/**
+		 * Replaces the sums of the target with the ones accumulated here, which are
+		 * complete for the target's day.
+		 */
+		void writeInto(LLMDailyUsageDetail target) {
+			if (providerId != null) {
+				target.setProviderId(providerId);
+			}
+			target.setInputToken(inputToken);
+			target.setOutputToken(outputToken);
+			target.setTotalToken(totalToken);
+			target.setNrRequests(nrRequests);
+			target.setResponseTimeAvg(nrRequests > 0 ? responseTimeSum / nrRequests : 0);
+			target.setResponseTimeMin(nrRequests > 0 ? responseTimeMin : 0);
+			target.setResponseTimeMax(nrRequests > 0 ? responseTimeMax : 0);
+			target.setTimeToFirstTokenSamples(timeToFirstTokenSamples);
+			boolean timed = timeToFirstTokenSamples > 0;
+			target.setTimeToFirstTokenAvg(timed ? timeToFirstTokenSum / timeToFirstTokenSamples : null);
+			target.setTimeToFirstTokenMin(timed ? timeToFirstTokenMin : null);
+			target.setTimeToFirstTokenMax(timed ? timeToFirstTokenMax : null);
+			target.setCostSamples(costSamples);
+			if (costSamples > 0 && currencies.size() == 1) {
+				target.setCost(costSum);
+				target.setCurrencyCode(currencies.iterator().next());
 			} else {
-				target.setLatencyMin(latencyMin);
-				target.setLatencyMax(latencyMax);
+				if (currencies.size() > 1) {
+					LOGGER_ACC.warn("Usage of provider=" + target.getProviderId() + " model=" + target.getModel()
+							+ " on " + target.getYear() + "-" + target.getMonth() + "-" + target.getDay()
+							+ " is priced in several currencies " + currencies + ", its daily cost is left unset");
+				}
+				target.setCost(null);
+				target.setCurrencyCode(null);
 			}
 		}
 	}

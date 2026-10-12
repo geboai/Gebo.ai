@@ -44,9 +44,9 @@ export default class VirtualFilesystemNavigationNode {
       if (data.hasOwnProperty('value'))
         obj.value = VFilesystemReference.constructFromObject(data['value']);
       if (data.hasOwnProperty('selected'))
-        obj.selected = ApiClient.convertToType(data['selected'], Object);
+        obj.selected = ApiClient.convertToType(data['selected'], 'Boolean');
       if (data.hasOwnProperty('opened'))
-        obj.opened = ApiClient.convertToType(data['opened'], Object);
+        obj.opened = ApiClient.convertToType(data['opened'], 'Boolean');
     }
     return obj;
   }
@@ -58,12 +58,12 @@ export default class VirtualFilesystemNavigationNode {
 VirtualFilesystemNavigationNode.prototype.value = undefined;
 
 /**
- * @member {Object} selected
+ * @member {Boolean} selected
  */
 VirtualFilesystemNavigationNode.prototype.selected = undefined;
 
 /**
- * @member {Object} opened
+ * @member {Boolean} opened
  */
 VirtualFilesystemNavigationNode.prototype.opened = undefined;
 

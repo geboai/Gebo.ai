@@ -9,6 +9,7 @@
 
 package ai.gebo.architecture.mcpserver.runtime;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.ai.chat.model.ToolContext;
@@ -17,6 +18,7 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.definition.ToolDefinition;
 import org.springframework.ai.tool.metadata.ToolMetadata;
 
+import ai.gebo.llms.agent.standard.services.UserKnowledgeBasesExecutionEnvironment;
 import io.modelcontextprotocol.common.McpTransportContext;
 import io.modelcontextprotocol.server.McpSyncServerExchange;
 
@@ -27,15 +29,21 @@ import io.modelcontextprotocol.server.McpSyncServerExchange;
  * its {@link McpTransportContext} is read, and the delegate is executed through
  * {@link GeboMcpSecurityContextSupport#runAs} so the platform tool sees the correct
  * authenticated user (and ACLs) even though the MCP SDK may run it off the request thread.
+ * Outside a chat, the tool works on all the knowledge bases the caller can see (see
+ * {@link UserKnowledgeBasesExecutionEnvironment}), read under the caller's identity and
+ * given in its tools context as a chat gives its own.
  */
 public class GeboMcpSecurityAwareToolCallback implements ToolCallback {
 
 	private final ToolCallback delegate;
 	private final GeboMcpSecurityContextSupport securitySupport;
+	private final UserKnowledgeBasesExecutionEnvironment userEnvironment;
 
-	public GeboMcpSecurityAwareToolCallback(ToolCallback delegate, GeboMcpSecurityContextSupport securitySupport) {
+	public GeboMcpSecurityAwareToolCallback(ToolCallback delegate, GeboMcpSecurityContextSupport securitySupport,
+			UserKnowledgeBasesExecutionEnvironment userEnvironment) {
 		this.delegate = delegate;
 		this.securitySupport = securitySupport;
+		this.userEnvironment = userEnvironment;
 	}
 
 	@Override
@@ -50,13 +58,21 @@ public class GeboMcpSecurityAwareToolCallback implements ToolCallback {
 
 	@Override
 	public String call(String toolInput) {
-		return delegate.call(toolInput);
+		return delegate.call(toolInput, withUserKnowledgeBases(null));
 	}
 
 	@Override
 	public String call(String toolInput, ToolContext toolContext) {
 		Optional<McpSyncServerExchange> exchange = McpToolUtils.getMcpExchange(toolContext);
 		McpTransportContext transportContext = exchange.map(McpSyncServerExchange::transportContext).orElse(null);
-		return securitySupport.runAs(transportContext, () -> delegate.call(toolInput, toolContext));
+		return securitySupport.runAs(transportContext,
+				() -> delegate.call(toolInput, withUserKnowledgeBases(toolContext)));
+	}
+
+	/** The tools context with the knowledge bases of the caller, read as the caller. */
+	ToolContext withUserKnowledgeBases(ToolContext toolContext) {
+		final List<String> knowledgeBases = userEnvironment.knowledgeBaseCodes();
+		return new ToolContext(userEnvironment.toolsContext(toolContext != null ? toolContext.getContext() : null,
+				knowledgeBases));
 	}
 }

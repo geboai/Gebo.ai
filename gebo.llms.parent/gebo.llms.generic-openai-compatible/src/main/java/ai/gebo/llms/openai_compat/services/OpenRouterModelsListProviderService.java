@@ -9,9 +9,12 @@
 
 package ai.gebo.llms.openai_compat.services;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
@@ -22,6 +25,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelChice;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.abstraction.layer.services.IGModelsListProvider;
@@ -30,6 +34,7 @@ import ai.gebo.model.OperationStatus;
 import ai.gebo.openrouter.client.OpenRouterAiClient;
 import ai.gebo.openrouter.client.OpenRouterAiClient.OutputModality;
 import ai.gebo.openrouter.client.OpenRouterClientException;
+import ai.gebo.openrouter.client.model.ModelPricing;
 import ai.gebo.openrouter.client.model.OpenRouterModel;
 import lombok.AllArgsConstructor;
 
@@ -64,6 +69,10 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class OpenRouterModelsListProviderService implements IGModelsListProvider {
+	private static final Logger LOGGER = LoggerFactory.getLogger(OpenRouterModelsListProviderService.class);
+	/** OpenRouter publishes every price in USD. */
+	static final String OPENROUTER_MODEL_PAGE = "https://openrouter.ai/";
+	private static final String OPENROUTER_CURRENCY = "USD";
 
 	private static final String OPENROUTER_AI_MODELS_LIST = "openrouter-ai-models-list";
 
@@ -87,7 +96,7 @@ public class OpenRouterModelsListProviderService implements IGModelsListProvider
 				for (OpenRouterModel m : client.listModelsByType(OutputModality.EMBEDDINGS)) {
 					GBaseEmbeddingModelChoice entry = (GBaseEmbeddingModelChoice) ModelsListCommonUtils
 							.newInstance(choiceType);
-					fill(entry, m);
+					fill(entry, m, providerId);
 					embeddingModels.add(entry);
 				}
 				enricherService.enrichEmbeddingModelMetaInfos(providerId, embeddingModels,
@@ -97,7 +106,7 @@ public class OpenRouterModelsListProviderService implements IGModelsListProvider
 				List<GBaseChatModelChoice> chatModels = new ArrayList<GBaseChatModelChoice>();
 				for (OpenRouterModel m : client.listModelsByType(OutputModality.CHAT)) {
 					GBaseChatModelChoice entry = (GBaseChatModelChoice) ModelsListCommonUtils.newInstance(choiceType);
-					fill(entry, m);
+					fill(entry, m, providerId);
 					chatModels.add(entry);
 				}
 				enricherService.enrichChatModelMetaInfos(providerId, chatModels,
@@ -107,7 +116,7 @@ public class OpenRouterModelsListProviderService implements IGModelsListProvider
 				List<GBaseRankerModelChoice> rankerModels = new ArrayList<GBaseRankerModelChoice>();
 				for (OpenRouterModel m : client.listModelsByType(OutputModality.RERANK)) {
 					GBaseRankerModelChoice entry = (GBaseRankerModelChoice) ModelsListCommonUtils.newInstance(choiceType);
-					fill(entry, m);
+					fill(entry, m, providerId);
 					rankerModels.add(entry);
 				}
 				models = new ArrayList(rankerModels);
@@ -115,7 +124,7 @@ public class OpenRouterModelsListProviderService implements IGModelsListProvider
 				List<GBaseImageModelChoice> imageModels = new ArrayList<GBaseImageModelChoice>();
 				for (OpenRouterModel m : client.listModelsByType(OutputModality.IMAGE)) {
 					GBaseImageModelChoice entry = (GBaseImageModelChoice) ModelsListCommonUtils.newInstance(choiceType);
-					fill(entry, m);
+					fill(entry, m, providerId);
 					imageModels.add(entry);
 				}
 				models = new ArrayList(imageModels);
@@ -124,7 +133,7 @@ public class OpenRouterModelsListProviderService implements IGModelsListProvider
 				for (OpenRouterModel m : client.listModelsByType(OutputModality.TRANSCRIPTION)) {
 					GBaseTranscriptModelChoice entry = (GBaseTranscriptModelChoice) ModelsListCommonUtils
 							.newInstance(choiceType);
-					fill(entry, m);
+					fill(entry, m, providerId);
 					transcriptModels.add(entry);
 				}
 				models = new ArrayList(transcriptModels);
@@ -133,7 +142,7 @@ public class OpenRouterModelsListProviderService implements IGModelsListProvider
 				for (OpenRouterModel m : client.listModelsByType(OutputModality.SPEECH)) {
 					GBaseTextToSpeachModelChice entry = (GBaseTextToSpeachModelChice) ModelsListCommonUtils
 							.newInstance(choiceType);
-					fill(entry, m);
+					fill(entry, m, providerId);
 					ttsModels.add(entry);
 				}
 				models = new ArrayList(ttsModels);
@@ -152,11 +161,97 @@ public class OpenRouterModelsListProviderService implements IGModelsListProvider
 	 * @param entry the target model choice
 	 * @param model the source OpenRouter model
 	 */
-	private void fill(GBaseModelChoice entry, OpenRouterModel model) {
+	static void fill(GBaseModelChoice entry, OpenRouterModel model, String providerId) {
 		entry.setCode(model.getId());
-		entry.setDescription(model.getName() != null && !model.getName().isBlank() ? model.getName() : model.getId());
-		entry.setContextLength(toInteger(model.getContextLength()));
+		String description = model.getName() != null && !model.getName().isBlank() ? model.getName() : model.getId();
+		if (model.getExpirationDate() != null && !model.getExpirationDate().isBlank()) {
+			description += " (leaves OpenRouter on " + model.getExpirationDate() + ")";
+		}
+		entry.setDescription(description);
+		// Audio models (transcription, speech) advertise a context length of 0
+		Integer contextLength = toInteger(model.getContextLength());
+		entry.setContextLength(contextLength != null && contextLength > 0 ? contextLength : null);
 		entry.setNativeModelMetaInfos(model);
+		// A transcription model's prompt price is per second of audio, not per token
+		if (!(entry instanceof GBaseTranscriptModelChoice)) {
+			entry.setPricingConditions(getPricingConditions(model));
+		}
+		entry.setInformativeUrl(OPENROUTER_MODEL_PAGE + model.getId());
+		entry.setMetaInfos(metaInfos(model, providerId, entry));
+	}
+
+	/**
+	 * What the models endpoint tells of a model: output limit of its top provider,
+	 * the request parameters it supports (tools, structured outputs, reasoning), image
+	 * input, and the date it leaves OpenRouter.
+	 */
+	static ModelMetaInfo metaInfos(OpenRouterModel model, String providerId, GBaseModelChoice entry) {
+		ModelMetaInfo meta = new ModelMetaInfo();
+		meta.setProviderId(providerId);
+		meta.setModelId(model.getId());
+		meta.setDescription(entry.getDescription());
+		meta.setInformativeUrl(entry.getInformativeUrl());
+		meta.setContextLength(entry.getContextLength());
+		if (model.getTopProvider() != null) {
+			meta.setMaxOutputToken(toInteger(model.getTopProvider().getMaxCompletionTokens()));
+		}
+		List<String> parameters = model.getSupportedParameters();
+		if (parameters != null) {
+			meta.setSupportsFunctionCalls(parameters.contains("tools"));
+			meta.setSupportsStructuredOutput(parameters.contains("structured_outputs"));
+			meta.setSupportsReasoning(parameters.contains("reasoning"));
+		}
+		if (model.getArchitecture() != null && model.getArchitecture().getInputModalities() != null) {
+			meta.setSupportsVision(model.getArchitecture().getInputModalities().contains("image"));
+		}
+		if (model.getExpirationDate() != null && !model.getExpirationDate().isBlank()) {
+			meta.setDeprecated(true);
+			meta.setRetirementDate(model.getExpirationDate());
+		}
+		return meta;
+	}
+
+	/**
+	 * The pay per use prices OpenRouter publishes with the model: USD per single
+	 * prompt and completion token, and per request, as decimal strings. A negative
+	 * value marks a dynamically priced model (e.g. {@code openrouter/auto}) and is
+	 * treated as unknown.
+	 * <p>
+	 * Best effort: the prices only pre-fill what the user can set in the model
+	 * configuration, so a failure here is logged and leaves the pricing unset, it
+	 * never keeps the model from being listed.
+	 */
+	private static GModelPricingConditions getPricingConditions(OpenRouterModel model) {
+		try {
+			ModelPricing prices = model.getPricing();
+			if (prices == null) {
+				return null;
+			}
+			GModelPricingConditions pricing = GModelPricingConditions.fromPerTokenPrices(
+					parsePrice(model, prices.getPrompt()), parsePrice(model, prices.getCompletion()),
+					parsePrice(model, prices.getRequest()), OPENROUTER_CURRENCY);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("OpenRouter model=" + model.getId() + " pricing=" + pricing);
+			}
+			return pricing;
+		} catch (Throwable e) {
+			LOGGER.error("Cannot read the pricing of OpenRouter model=" + model.getId()
+					+ ", it is listed without pricing", e);
+			return null;
+		}
+	}
+
+	private static Double parsePrice(OpenRouterModel model, String value) {
+		if (value == null || value.isBlank()) {
+			return null;
+		}
+		try {
+			return Double.valueOf(new BigDecimal(value.trim()).doubleValue());
+		} catch (NumberFormatException e) {
+			LOGGER.error("Unparsable price=" + value + " for OpenRouter model=" + model.getId()
+					+ ", treated as unknown");
+			return null;
+		}
 	}
 
 	private static Integer toInteger(Long value) {

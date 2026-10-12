@@ -24,12 +24,12 @@ export default class UserUploadedContent {
    * Constructs a new <code>UserUploadedContent</code>.
    * @alias module:model/UserUploadedContent
    * @class
-   * @param fileName {Object} 
-   * @param extension {Object} 
-   * @param contentType {Object} 
-   * @param fileSize {Object} 
-   * @param tokensCount {Object} 
-   * @param userContextCode {Object} 
+   * @param fileName {String} 
+   * @param extension {String} 
+   * @param contentType {String} 
+   * @param fileSize {Number} 
+   * @param tokensCount {Number} 
+   * @param userContextCode {String} 
    */
   constructor(fileName, extension, contentType, fileSize, tokensCount, userContextCode) {
     this.fileName = fileName;
@@ -51,91 +51,91 @@ export default class UserUploadedContent {
     if (data) {
       obj = obj || new UserUploadedContent();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('fileName'))
-        obj.fileName = ApiClient.convertToType(data['fileName'], Object);
+        obj.fileName = ApiClient.convertToType(data['fileName'], 'String');
       if (data.hasOwnProperty('extension'))
-        obj.extension = ApiClient.convertToType(data['extension'], Object);
+        obj.extension = ApiClient.convertToType(data['extension'], 'String');
       if (data.hasOwnProperty('contentType'))
-        obj.contentType = ApiClient.convertToType(data['contentType'], Object);
+        obj.contentType = ApiClient.convertToType(data['contentType'], 'String');
       if (data.hasOwnProperty('fileSize'))
-        obj.fileSize = ApiClient.convertToType(data['fileSize'], Object);
+        obj.fileSize = ApiClient.convertToType(data['fileSize'], 'Number');
       if (data.hasOwnProperty('tokensCount'))
-        obj.tokensCount = ApiClient.convertToType(data['tokensCount'], Object);
+        obj.tokensCount = ApiClient.convertToType(data['tokensCount'], 'Number');
       if (data.hasOwnProperty('userContextCode'))
-        obj.userContextCode = ApiClient.convertToType(data['userContextCode'], Object);
+        obj.userContextCode = ApiClient.convertToType(data['userContextCode'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 UserUploadedContent.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 UserUploadedContent.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 UserUploadedContent.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 UserUploadedContent.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 UserUploadedContent.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 UserUploadedContent.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} fileName
+ * @member {String} fileName
  */
 UserUploadedContent.prototype.fileName = undefined;
 
 /**
- * @member {Object} extension
+ * @member {String} extension
  */
 UserUploadedContent.prototype.extension = undefined;
 
 /**
- * @member {Object} contentType
+ * @member {String} contentType
  */
 UserUploadedContent.prototype.contentType = undefined;
 
 /**
- * @member {Object} fileSize
+ * @member {Number} fileSize
  */
 UserUploadedContent.prototype.fileSize = undefined;
 
 /**
- * @member {Object} tokensCount
+ * @member {Number} tokensCount
  */
 UserUploadedContent.prototype.tokensCount = undefined;
 
 /**
- * @member {Object} userContextCode
+ * @member {String} userContextCode
  */
 UserUploadedContent.prototype.userContextCode = undefined;
 

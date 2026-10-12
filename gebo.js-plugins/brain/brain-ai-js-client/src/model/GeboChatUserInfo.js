@@ -14,6 +14,8 @@
  */
 import ApiClient from '../ApiClient';
 import GBaseChatModelChoice from './GBaseChatModelChoice';
+import GBaseObject from './GBaseObject';
+import ToolCategoriesTree from './ToolCategoriesTree';
 
 /**
  * The GeboChatUserInfo model module.
@@ -40,13 +42,13 @@ export default class GeboChatUserInfo {
     if (data) {
       obj = obj || new GeboChatUserInfo();
       if (data.hasOwnProperty('ragChat'))
-        obj.ragChat = ApiClient.convertToType(data['ragChat'], Object);
+        obj.ragChat = ApiClient.convertToType(data['ragChat'], 'Boolean');
       if (data.hasOwnProperty('knowledgeBases'))
-        obj.knowledgeBases = ApiClient.convertToType(data['knowledgeBases'], Object);
+        obj.knowledgeBases = ApiClient.convertToType(data['knowledgeBases'], [GBaseObject]);
       if (data.hasOwnProperty('providerId'))
-        obj.providerId = ApiClient.convertToType(data['providerId'], Object);
+        obj.providerId = ApiClient.convertToType(data['providerId'], 'String');
       if (data.hasOwnProperty('availableFunctions'))
-        obj.availableFunctions = ApiClient.convertToType(data['availableFunctions'], Object);
+        obj.availableFunctions = ApiClient.convertToType(data['availableFunctions'], [ToolCategoriesTree]);
       if (data.hasOwnProperty('chatModelChoice'))
         obj.chatModelChoice = GBaseChatModelChoice.constructFromObject(data['chatModelChoice']);
     }
@@ -55,22 +57,22 @@ export default class GeboChatUserInfo {
 }
 
 /**
- * @member {Object} ragChat
+ * @member {Boolean} ragChat
  */
 GeboChatUserInfo.prototype.ragChat = undefined;
 
 /**
- * @member {Object} knowledgeBases
+ * @member {Array.<module:model/GBaseObject>} knowledgeBases
  */
 GeboChatUserInfo.prototype.knowledgeBases = undefined;
 
 /**
- * @member {Object} providerId
+ * @member {String} providerId
  */
 GeboChatUserInfo.prototype.providerId = undefined;
 
 /**
- * @member {Object} availableFunctions
+ * @member {Array.<module:model/ToolCategoriesTree>} availableFunctions
  */
 GeboChatUserInfo.prototype.availableFunctions = undefined;
 

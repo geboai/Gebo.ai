@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import ChatInteractions from './ChatInteractions';
 
 /**
  * The UserChatHistory model module.
@@ -39,56 +40,56 @@ export default class UserChatHistory {
     if (data) {
       obj = obj || new UserChatHistory();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('interactions'))
-        obj.interactions = ApiClient.convertToType(data['interactions'], Object);
+        obj.interactions = ApiClient.convertToType(data['interactions'], [ChatInteractions]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 UserChatHistory.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 UserChatHistory.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 UserChatHistory.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 UserChatHistory.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 UserChatHistory.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 UserChatHistory.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} interactions
+ * @member {Array.<module:model/ChatInteractions>} interactions
  */
 UserChatHistory.prototype.interactions = undefined;
 

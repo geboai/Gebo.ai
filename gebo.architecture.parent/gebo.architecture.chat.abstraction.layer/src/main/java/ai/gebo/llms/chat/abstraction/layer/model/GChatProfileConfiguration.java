@@ -111,4 +111,10 @@ public class GChatProfileConfiguration extends GBaseObject implements IGObjectWi
 
 	private Boolean useAlsoKeywordSearch = null;
 
+	/**
+	 * The code of the network of agents the chats of this profile are handed to,
+	 * among the ones choosable for the RAG pipeline; null for the system default.
+	 */
+	private String defaultChatNetworkOfAgents = null;
+
 }

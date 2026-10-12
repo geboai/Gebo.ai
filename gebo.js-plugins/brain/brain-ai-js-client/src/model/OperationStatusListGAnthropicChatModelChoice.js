@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GAnthropicChatModelChoice from './GAnthropicChatModelChoice';
+import GUserMessage from './GUserMessage';
 
 /**
  * The OperationStatusListGAnthropicChatModelChoice model module.
@@ -39,35 +41,35 @@ export default class OperationStatusListGAnthropicChatModelChoice {
     if (data) {
       obj = obj || new OperationStatusListGAnthropicChatModelChoice();
       if (data.hasOwnProperty('result'))
-        obj.result = ApiClient.convertToType(data['result'], Object);
+        obj.result = ApiClient.convertToType(data['result'], [GAnthropicChatModelChoice]);
       if (data.hasOwnProperty('messages'))
-        obj.messages = ApiClient.convertToType(data['messages'], Object);
+        obj.messages = ApiClient.convertToType(data['messages'], [GUserMessage]);
       if (data.hasOwnProperty('hasErrorMessages'))
-        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], Object);
+        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], 'Boolean');
       if (data.hasOwnProperty('hasWarnMessages'))
-        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], Object);
+        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} result
+ * @member {Array.<module:model/GAnthropicChatModelChoice>} result
  */
 OperationStatusListGAnthropicChatModelChoice.prototype.result = undefined;
 
 /**
- * @member {Object} messages
+ * @member {Array.<module:model/GUserMessage>} messages
  */
 OperationStatusListGAnthropicChatModelChoice.prototype.messages = undefined;
 
 /**
- * @member {Object} hasErrorMessages
+ * @member {Boolean} hasErrorMessages
  */
 OperationStatusListGAnthropicChatModelChoice.prototype.hasErrorMessages = undefined;
 
 /**
- * @member {Object} hasWarnMessages
+ * @member {Boolean} hasWarnMessages
  */
 OperationStatusListGAnthropicChatModelChoice.prototype.hasWarnMessages = undefined;
 

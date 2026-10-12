@@ -1,5 +1,8 @@
 package ai.gebo.llms.setup.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.security.model.AuthProvider;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +15,13 @@ public class LLMSVendorInfo {
 	private boolean requiresCustomUrl = false;
 	private String defaultCustomUrl = null;
 	private boolean requiresApiKey = false;
-	private GeboSecretType secretType = GeboSecretType.TOKEN;
+	/**
+	 * The kinds of secret the vendor's models authenticate with, the first being the one
+	 * new credentials are created as: an api key (TOKEN) unless the vendor says
+	 * otherwise, e.g. AWS_CONNECTION (GeboAwsConnectionCredentials: access key, secret
+	 * key and region) for AWS Bedrock.
+	 */
+	private List<GeboSecretType> secretTypes = new ArrayList<>(List.of(GeboSecretType.TOKEN));
 	private AuthProvider authProvider = null;
 	@NotNull
 	private String description = null;

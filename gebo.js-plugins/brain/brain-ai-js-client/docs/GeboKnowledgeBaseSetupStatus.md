@@ -3,9 +3,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**isSetup** | **Object** |  | [optional] 
-**knowledgeBases** | **Object** |  | [optional] 
-**projects** | **Object** |  | [optional] 
-**endpoints** | **Object** |  | [optional] 
-**endpointsPublished** | **Object** |  | [optional] 
-**documentReferences** | **Object** |  | [optional] 
+**isSetup** | **Boolean** |  | [optional] 
+**knowledgeBases** | **Number** |  | [optional] 
+**projects** | **Number** |  | [optional] 
+**endpoints** | **Number** |  | [optional] 
+**endpointsPublished** | **Number** |  | [optional] 
+**documentReferences** | **Number** |  | [optional] 

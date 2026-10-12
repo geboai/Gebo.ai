@@ -54,10 +54,19 @@ public class DeepSearchConfig extends GBaseObject implements IGObjectWithSecurit
 	private Boolean accessibleToAll = null;
 	private List<DeepSearchDataSourceAccess> dataSourcesAccesses = new ArrayList<>();
 	private Boolean perDataSourceConfigured=null;
+	/**
+	 * Whether the external search sources (the internal knowledge base excluded),
+	 * when configured, can be searched by everyone where the users/groups access is
+	 * not configured. Null, as in the configurations saved before it existed, means
+	 * true.
+	 */
+	private Boolean externalSourceSearchEnabledByDefault = null;
+
 	public DeepSearchConfig(DeepSearchConfig c) {
 		this(c.searchType, c.ragQueryOptions, c.firstHopSimilarityThreashold, c.secondHopSimilarityThreashold,
 				c.graphRagTopN, c.tokensLimit, c.manualThreasholdsConfiguration, c.defaultConfig, c.accessibleGroups,
-				c.accessibleUsers, c.accessibleToAll, c.dataSourcesAccesses, c.perDataSourceConfigured);
+				c.accessibleUsers, c.accessibleToAll, c.dataSourcesAccesses, c.perDataSourceConfigured,
+				c.externalSourceSearchEnabledByDefault);
 		this.setCode(c.getCode());
 		this.setDescription(c.getDescription());
 	}

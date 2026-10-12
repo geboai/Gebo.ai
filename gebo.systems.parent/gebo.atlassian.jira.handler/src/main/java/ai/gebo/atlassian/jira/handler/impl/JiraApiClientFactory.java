@@ -25,6 +25,10 @@ import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 
 /**
  * AI generated comments
@@ -67,6 +71,15 @@ class JiraApiClientFactory {
 	 * @throws RuntimeException If the secret type is not supported
 	 */
 	ApiClient getApiClient(GJiraSystem s) throws GeboCryptSecretException {
+		return getApiClient(s, (SearchCallParameters) null);
+	}
+
+	/**
+	 * A client of the Jira system for a search: its HTTP calls time out as the search
+	 * call parameters say (the clients of the content integration, given by
+	 * {@link #getApiClient(GJiraSystem)}, keep the client's own settings).
+	 */
+	ApiClient getApiClient(GJiraSystem s, SearchCallParameters searchParameters) throws GeboCryptSecretException {
 		String baseUri = s.getBaseUri();
 		String secretCode = s.getSecretCode();
 		AbstractGeboSecretContent secretContent = secretService.getSecretContentById(secretCode);
@@ -74,7 +87,8 @@ class JiraApiClientFactory {
 		case TOKEN: {
 			// Configure API client with token-based authentication
 			GeboTokenContent token = (GeboTokenContent) secretContent;
-			ApiClient apiClient = new ApiClient();
+			ApiClient apiClient = searchParameters != null ? new ApiClient(searchRestTemplate(searchParameters))
+					: new ApiClient();
 			apiClient.setBasePath(baseUri);
 			apiClient.setPassword(token.getToken());
 			apiClient.setUsername(token.getUser());
@@ -87,4 +101,15 @@ class JiraApiClientFactory {
 
 	}
 
+
+	/**
+	 * The RestTemplate of a search client: as the generated client builds its own
+	 * (buffered, so a response can be read more than once), with the search timeouts.
+	 */
+	static RestTemplate searchRestTemplate(SearchCallParameters parameters) {
+		final SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+		requestFactory.setConnectTimeout(parameters.connectTimeout());
+		requestFactory.setReadTimeout(parameters.readTimeout());
+		return new RestTemplate(new BufferingClientHttpRequestFactory(requestFactory));
+	}
 }

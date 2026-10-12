@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import MCPClientConfig from './MCPClientConfig';
 import PageableObject from './PageableObject';
 import SortObject from './SortObject';
 
@@ -41,64 +42,69 @@ export default class PageMCPClientConfig {
     if (data) {
       obj = obj || new PageMCPClientConfig();
       if (data.hasOwnProperty('totalPages'))
-        obj.totalPages = ApiClient.convertToType(data['totalPages'], Object);
+        obj.totalPages = ApiClient.convertToType(data['totalPages'], 'Number');
       if (data.hasOwnProperty('totalElements'))
-        obj.totalElements = ApiClient.convertToType(data['totalElements'], Object);
+        obj.totalElements = ApiClient.convertToType(data['totalElements'], 'Number');
+      if (data.hasOwnProperty('pageable'))
+        obj.pageable = PageableObject.constructFromObject(data['pageable']);
       if (data.hasOwnProperty('first'))
-        obj.first = ApiClient.convertToType(data['first'], Object);
+        obj.first = ApiClient.convertToType(data['first'], 'Boolean');
       if (data.hasOwnProperty('last'))
-        obj.last = ApiClient.convertToType(data['last'], Object);
+        obj.last = ApiClient.convertToType(data['last'], 'Boolean');
       if (data.hasOwnProperty('size'))
-        obj.size = ApiClient.convertToType(data['size'], Object);
+        obj.size = ApiClient.convertToType(data['size'], 'Number');
       if (data.hasOwnProperty('content'))
-        obj.content = ApiClient.convertToType(data['content'], Object);
+        obj.content = ApiClient.convertToType(data['content'], [MCPClientConfig]);
       if (data.hasOwnProperty('number'))
-        obj._number = ApiClient.convertToType(data['number'], Object);
+        obj._number = ApiClient.convertToType(data['number'], 'Number');
       if (data.hasOwnProperty('sort'))
         obj.sort = SortObject.constructFromObject(data['sort']);
       if (data.hasOwnProperty('numberOfElements'))
-        obj.numberOfElements = ApiClient.convertToType(data['numberOfElements'], Object);
-      if (data.hasOwnProperty('pageable'))
-        obj.pageable = PageableObject.constructFromObject(data['pageable']);
+        obj.numberOfElements = ApiClient.convertToType(data['numberOfElements'], 'Number');
       if (data.hasOwnProperty('empty'))
-        obj.empty = ApiClient.convertToType(data['empty'], Object);
+        obj.empty = ApiClient.convertToType(data['empty'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} totalPages
+ * @member {Number} totalPages
  */
 PageMCPClientConfig.prototype.totalPages = undefined;
 
 /**
- * @member {Object} totalElements
+ * @member {Number} totalElements
  */
 PageMCPClientConfig.prototype.totalElements = undefined;
 
 /**
- * @member {Object} first
+ * @member {module:model/PageableObject} pageable
+ */
+PageMCPClientConfig.prototype.pageable = undefined;
+
+/**
+ * @member {Boolean} first
  */
 PageMCPClientConfig.prototype.first = undefined;
 
 /**
- * @member {Object} last
+ * @member {Boolean} last
  */
 PageMCPClientConfig.prototype.last = undefined;
 
 /**
- * @member {Object} size
+ * @member {Number} size
  */
 PageMCPClientConfig.prototype.size = undefined;
 
 /**
- * @member {Object} content
+ * @member {Array.<module:model/MCPClientConfig>} content
  */
 PageMCPClientConfig.prototype.content = undefined;
 
 /**
- * @member {Object} _number
+ * @member {Number} _number
  */
 PageMCPClientConfig.prototype._number = undefined;
 
@@ -108,17 +114,12 @@ PageMCPClientConfig.prototype._number = undefined;
 PageMCPClientConfig.prototype.sort = undefined;
 
 /**
- * @member {Object} numberOfElements
+ * @member {Number} numberOfElements
  */
 PageMCPClientConfig.prototype.numberOfElements = undefined;
 
 /**
- * @member {module:model/PageableObject} pageable
- */
-PageMCPClientConfig.prototype.pageable = undefined;
-
-/**
- * @member {Object} empty
+ * @member {Boolean} empty
  */
 PageMCPClientConfig.prototype.empty = undefined;
 

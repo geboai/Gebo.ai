@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="getChatModelTypesLookup"></a>
 # **getChatModelTypesLookup**
-> Object getChatModelTypesLookup()
+> [GLookupEntry] getChatModelTypesLookup()
 
 
 
@@ -32,7 +32,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GLookupEntry]**](GLookupEntry.md)
 
 ### Authorization
 
@@ -80,7 +80,7 @@ No authorization required
 
 <a name="getRuntimeConfiguredChatModelsLookup"></a>
 # **getRuntimeConfiguredChatModelsLookup**
-> Object getRuntimeConfiguredChatModelsLookup(opts)
+> [GLookupEntryRefGBaseChatModelConfig] getRuntimeConfiguredChatModelsLookup(opts)
 
 
 
@@ -90,7 +90,7 @@ import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.ChatModelsLookupControllerApi();
 let opts = { 
-  'modelTypeCode': null // Object | 
+  'modelTypeCode': "modelTypeCode_example" // String | 
 };
 apiInstance.getRuntimeConfiguredChatModelsLookup(opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -104,11 +104,11 @@ apiInstance.getRuntimeConfiguredChatModelsLookup(opts).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional] 
+ **modelTypeCode** | **String**|  | [optional] 
 
 ### Return type
 
-**Object**
+[**[GLookupEntryRefGBaseChatModelConfig]**](GLookupEntryRefGBaseChatModelConfig.md)
 
 ### Authorization
 

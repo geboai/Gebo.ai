@@ -10,6 +10,7 @@
 package ai.gebo.llms.ollama.services;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
+import ai.gebo.llms.abstraction.layer.services.IGReasoningExtractor;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.services.ThinkTagSkippingOutputConverter;
@@ -42,6 +44,7 @@ import ai.gebo.llms.ollama.model.GOllamaChatModelChoice;
 import ai.gebo.llms.ollama.model.GOllamaChatModelConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.el.MethodNotFoundException;
 import lombok.AllArgsConstructor;
@@ -68,6 +71,7 @@ public class OllamaChatModelConfigurationSupportService
 		type.setCode("chat-ollama");
 		type.setDescription("Chat models hosted on local Ollama server");
 		type.setModelConfigurationClass(GOllamaChatModelConfig.class.getName());
+		type.setProviderId("ollama");
 	}
 
 	/**
@@ -98,6 +102,8 @@ public class OllamaChatModelConfigurationSupportService
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Inner class that implements the configurable chat model for Ollama
@@ -106,8 +112,8 @@ public class OllamaChatModelConfigurationSupportService
 
 		public OllamaConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 
 		}
 
@@ -143,17 +149,70 @@ public class OllamaChatModelConfigurationSupportService
 			if (config.getTemperature() != null) {
 				builder = builder.temperature(config.getTemperature());
 			}
+			// think is "for thinking models" (Ollama's api): a model whose /api/show
+			// capabilities lack "thinking" gets no think at all. AUTO sends none either: it
+			// means the model's default ("null: use the model default"), as it does for every
+			// other provider - it used to ask every model to think. A level the model lists
+			// in its thinking values (gpt-oss: low, medium, high) is sent as that level,
+			// otherwise thinking is just switched on.
 			if (config.getThinking() != null) {
-				switch (config.getThinking()) {
-				case NO_THINKING: {
-					builder.disableThinking();
+				final Map<String, Object> details = config.getChoosedModel() != null
+						? config.getChoosedModel().getModelDetails()
+						: null;
+				final Boolean thinks = thinkingCapability(details);
+				if (Boolean.FALSE.equals(thinks)) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Chat model {} asks for thinking {} but its model does not think: no think sent",
+								config.getCode(), config.getThinking());
+					}
+				} else {
+					switch (config.getThinking()) {
+					case NO_THINKING:
+						builder.disableThinking();
+						break;
+					case AUTO:
+						break;
+					case LOW_THINKING:
+						if (thinkingLevels(details).contains("low"))
+							builder.thinkLow();
+						else
+							builder.enableThinking();
+						break;
+					case MEDIUM_THINKING:
+						if (thinkingLevels(details).contains("medium"))
+							builder.thinkMedium();
+						else
+							builder.enableThinking();
+						break;
+					case HIGH_THINKING:
+						if (thinkingLevels(details).contains("high"))
+							builder.thinkHigh();
+						else
+							builder.enableThinking();
+						break;
+					default:
+						builder.enableThinking();
+					}
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Chat model {} configured with thinking {} (model thinks: {}, levels: {})",
+								config.getCode(), config.getThinking(), thinks, thinkingLevels(details));
+					}
 				}
-					break;
-				default: {
-					builder.enableThinking();
+			}
+			// The output limit set on the model, sent as num_predict: Ollama ignored it. Only
+			// a limit the configuration gives - no default of ours.
+			if (config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
+				builder = builder.numPredict(config.getMaxGeneratedTokens());
+			}
+			// The context window set on the model, sent as num_ctx: without it the server
+			// runs its own default (4k below 24 GiB of VRAM, Ollama's docs), whatever window
+			// Gebo budgets the prompts with. Only a window the configuration sets: the model's
+			// maximum from /api/show is not sent, it sets the memory the server allocates.
+			if (config.getContextLength() != null && config.getContextLength() > 0) {
+				builder = builder.numCtx(config.getContextLength());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model {} sends num_ctx {}", config.getCode(), config.getContextLength());
 				}
-				}
-
 			}
 			// Configure topP if specified
 			if (config.getTopP() != null && config.getTopP() > 0) {
@@ -195,10 +254,21 @@ public class OllamaChatModelConfigurationSupportService
 			return true;
 		}
 
+		/**
+		 * A model Ollama runs without its thinking api writes its reasoning in its text
+		 * between thinking tags: taken out of the answer (InlineThinkingSplitter), a model
+		 * writing none answering as it streams.
+		 */
 		@Override
 		public boolean isApplyThinkingMarkupHandling() {
 
 			return true;
+		}
+
+		/** Ollama's thinking, as its chunks give it ({@link #REASONING}). */
+		@Override
+		protected IGReasoningExtractor reasoningExtractor() {
+			return REASONING;
 		}
 
 		@Override
@@ -210,9 +280,16 @@ public class OllamaChatModelConfigurationSupportService
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
 			return new OllamaConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 	};
+
+	/**
+	 * Ollama's thinking (the think api): Spring AI's OllamaChatModel keeps it in the
+	 * "thinking" metadata of each chunk's message, the piece the chunk adds (the whole of
+	 * it on a blocking call's answer).
+	 */
+	static final IGReasoningExtractor REASONING = IGReasoningExtractor.metadataPieces("thinking");
 
 	/**
 	 * Returns the type of chat model this service supports
@@ -236,9 +313,32 @@ public class OllamaChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GOllamaChatModelConfig> create(GOllamaChatModelConfig config)
 			throws LLMConfigException {
 		OllamaConfigurableChatModel model = new OllamaConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
+	}
+
+	/**
+	 * Whether the model thinks, from the capabilities its /api/show reported; null when
+	 * they are unknown.
+	 */
+	static Boolean thinkingCapability(Map<String, Object> details) {
+		if (details != null && details.get("capabilities") instanceof List<?> capabilities) {
+			return capabilities.contains("thinking");
+		}
+		return null;
+	}
+
+	/**
+	 * The named thinking levels the model lists in its /api/show thinking values; empty
+	 * when it lists none, booleans being no levels.
+	 */
+	static List<String> thinkingLevels(Map<String, Object> details) {
+		if (details != null && details.get("thinking") instanceof Map<?, ?> thinking
+				&& thinking.get("values") instanceof List<?> values) {
+			return values.stream().filter(String.class::isInstance).map(String.class::cast).toList();
+		}
+		return List.of();
 	}
 
 	/**

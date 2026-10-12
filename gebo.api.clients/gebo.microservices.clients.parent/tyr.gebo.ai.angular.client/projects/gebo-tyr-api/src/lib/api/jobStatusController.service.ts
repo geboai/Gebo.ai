@@ -159,13 +159,13 @@ export class JobStatusControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobsEntriesForProjectEndpoint(body: JobsEntriesForProjectEndpointFilter, observe?: 'body', reportProgress?: boolean): Observable<PageGJobStatusItem>;
-    public getJobsEntriesForProjectEndpoint(body: JobsEntriesForProjectEndpointFilter, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGJobStatusItem>>;
-    public getJobsEntriesForProjectEndpoint(body: JobsEntriesForProjectEndpointFilter, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGJobStatusItem>>;
-    public getJobsEntriesForProjectEndpoint(body: JobsEntriesForProjectEndpointFilter, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getJobsEntriesForProjectEndpointJobStatus(body: JobsEntriesForProjectEndpointFilter, observe?: 'body', reportProgress?: boolean): Observable<PageGJobStatusItem>;
+    public getJobsEntriesForProjectEndpointJobStatus(body: JobsEntriesForProjectEndpointFilter, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGJobStatusItem>>;
+    public getJobsEntriesForProjectEndpointJobStatus(body: JobsEntriesForProjectEndpointFilter, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGJobStatusItem>>;
+    public getJobsEntriesForProjectEndpointJobStatus(body: JobsEntriesForProjectEndpointFilter, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getJobsEntriesForProjectEndpoint.');
+            throw new Error('Required parameter body was null or undefined when calling getJobsEntriesForProjectEndpointJobStatus.');
         }
 
         let headers = this.defaultHeaders;

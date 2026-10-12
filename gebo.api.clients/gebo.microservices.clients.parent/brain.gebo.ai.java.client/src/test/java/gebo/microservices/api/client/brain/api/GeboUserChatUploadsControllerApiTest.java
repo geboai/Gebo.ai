@@ -14,6 +14,7 @@ package gebo.microservices.api.client.brain.api;
 
 import java.io.File;
 import gebo.microservices.api.client.brain.model.OperationStatusListUserUploadedContent;
+import gebo.microservices.api.client.brain.model.UserUploadedContent;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -56,7 +57,9 @@ public class GeboUserChatUploadsControllerApiTest {
      */
     @Test
     public void deleteSessionUploadsTest() {
-        OperationStatusListUserUploadedContent response = api.deleteSessionUploads();
+        List<UserUploadedContent> body = null;
+        String userSessionCode = null;
+        OperationStatusListUserUploadedContent response = api.deleteSessionUploads(body, userSessionCode);
 
         // TODO: test validations
     }

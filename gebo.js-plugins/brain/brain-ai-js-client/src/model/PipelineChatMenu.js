@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import PipelineChatMenuItem from './PipelineChatMenuItem';
 
 /**
  * The PipelineChatMenu model module.
@@ -24,10 +25,10 @@ export default class PipelineChatMenu {
    * Constructs a new <code>PipelineChatMenu</code>.
    * @alias module:model/PipelineChatMenu
    * @class
-   * @param menuId {Object} 
-   * @param description {Object} 
-   * @param items {Object} 
-   * @param order {Object} 
+   * @param menuId {String} 
+   * @param description {String} 
+   * @param items {Array.<module:model/PipelineChatMenuItem>} 
+   * @param order {Number} 
    */
   constructor(menuId, description, items, order) {
     this.menuId = menuId;
@@ -47,49 +48,49 @@ export default class PipelineChatMenu {
     if (data) {
       obj = obj || new PipelineChatMenu();
       if (data.hasOwnProperty('menuId'))
-        obj.menuId = ApiClient.convertToType(data['menuId'], Object);
+        obj.menuId = ApiClient.convertToType(data['menuId'], 'String');
       if (data.hasOwnProperty('pipelineId'))
-        obj.pipelineId = ApiClient.convertToType(data['pipelineId'], Object);
+        obj.pipelineId = ApiClient.convertToType(data['pipelineId'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('icon'))
-        obj.icon = ApiClient.convertToType(data['icon'], Object);
+        obj.icon = ApiClient.convertToType(data['icon'], 'String');
       if (data.hasOwnProperty('items'))
-        obj.items = ApiClient.convertToType(data['items'], Object);
+        obj.items = ApiClient.convertToType(data['items'], [PipelineChatMenuItem]);
       if (data.hasOwnProperty('order'))
-        obj.order = ApiClient.convertToType(data['order'], Object);
+        obj.order = ApiClient.convertToType(data['order'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} menuId
+ * @member {String} menuId
  */
 PipelineChatMenu.prototype.menuId = undefined;
 
 /**
- * @member {Object} pipelineId
+ * @member {String} pipelineId
  */
 PipelineChatMenu.prototype.pipelineId = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 PipelineChatMenu.prototype.description = undefined;
 
 /**
- * @member {Object} icon
+ * @member {String} icon
  */
 PipelineChatMenu.prototype.icon = undefined;
 
 /**
- * @member {Object} items
+ * @member {Array.<module:model/PipelineChatMenuItem>} items
  */
 PipelineChatMenu.prototype.items = undefined;
 
 /**
- * @member {Object} order
+ * @member {Number} order
  */
 PipelineChatMenu.prototype.order = undefined;
 

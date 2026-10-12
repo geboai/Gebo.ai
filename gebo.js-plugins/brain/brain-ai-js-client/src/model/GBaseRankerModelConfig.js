@@ -40,86 +40,86 @@ export default class GBaseRankerModelConfig {
     if (data) {
       obj = obj || new GBaseRankerModelConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('modelTypeCode'))
-        obj.modelTypeCode = ApiClient.convertToType(data['modelTypeCode'], Object);
+        obj.modelTypeCode = ApiClient.convertToType(data['modelTypeCode'], 'String');
       if (data.hasOwnProperty('defaultModel'))
-        obj.defaultModel = ApiClient.convertToType(data['defaultModel'], Object);
+        obj.defaultModel = ApiClient.convertToType(data['defaultModel'], 'Boolean');
       if (data.hasOwnProperty('apiSecretCode'))
-        obj.apiSecretCode = ApiClient.convertToType(data['apiSecretCode'], Object);
+        obj.apiSecretCode = ApiClient.convertToType(data['apiSecretCode'], 'String');
       if (data.hasOwnProperty('choosedModel'))
         obj.choosedModel = GBaseRankerModelChoice.constructFromObject(data['choosedModel']);
       if (data.hasOwnProperty('baseUrl'))
-        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], Object);
+        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], 'String');
       if (data.hasOwnProperty('contextLength'))
-        obj.contextLength = ApiClient.convertToType(data['contextLength'], Object);
+        obj.contextLength = ApiClient.convertToType(data['contextLength'], 'Number');
       if (data.hasOwnProperty('maxDocumentsPerRequest'))
-        obj.maxDocumentsPerRequest = ApiClient.convertToType(data['maxDocumentsPerRequest'], Object);
+        obj.maxDocumentsPerRequest = ApiClient.convertToType(data['maxDocumentsPerRequest'], 'Number');
       if (data.hasOwnProperty('maxDocumentTokens'))
-        obj.maxDocumentTokens = ApiClient.convertToType(data['maxDocumentTokens'], Object);
+        obj.maxDocumentTokens = ApiClient.convertToType(data['maxDocumentTokens'], 'Number');
       if (data.hasOwnProperty('responseReserveTokens'))
-        obj.responseReserveTokens = ApiClient.convertToType(data['responseReserveTokens'], Object);
+        obj.responseReserveTokens = ApiClient.convertToType(data['responseReserveTokens'], 'Number');
       if (data.hasOwnProperty('fullServiceUrl'))
-        obj.fullServiceUrl = ApiClient.convertToType(data['fullServiceUrl'], Object);
+        obj.fullServiceUrl = ApiClient.convertToType(data['fullServiceUrl'], 'String');
       if (data.hasOwnProperty('relativeServiceUrl'))
-        obj.relativeServiceUrl = ApiClient.convertToType(data['relativeServiceUrl'], Object);
+        obj.relativeServiceUrl = ApiClient.convertToType(data['relativeServiceUrl'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GBaseRankerModelConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GBaseRankerModelConfig.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GBaseRankerModelConfig.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GBaseRankerModelConfig.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GBaseRankerModelConfig.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GBaseRankerModelConfig.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} modelTypeCode
+ * @member {String} modelTypeCode
  */
 GBaseRankerModelConfig.prototype.modelTypeCode = undefined;
 
 /**
- * @member {Object} defaultModel
+ * @member {Boolean} defaultModel
  */
 GBaseRankerModelConfig.prototype.defaultModel = undefined;
 
 /**
- * @member {Object} apiSecretCode
+ * @member {String} apiSecretCode
  */
 GBaseRankerModelConfig.prototype.apiSecretCode = undefined;
 
@@ -129,37 +129,37 @@ GBaseRankerModelConfig.prototype.apiSecretCode = undefined;
 GBaseRankerModelConfig.prototype.choosedModel = undefined;
 
 /**
- * @member {Object} baseUrl
+ * @member {String} baseUrl
  */
 GBaseRankerModelConfig.prototype.baseUrl = undefined;
 
 /**
- * @member {Object} contextLength
+ * @member {Number} contextLength
  */
 GBaseRankerModelConfig.prototype.contextLength = undefined;
 
 /**
- * @member {Object} maxDocumentsPerRequest
+ * @member {Number} maxDocumentsPerRequest
  */
 GBaseRankerModelConfig.prototype.maxDocumentsPerRequest = undefined;
 
 /**
- * @member {Object} maxDocumentTokens
+ * @member {Number} maxDocumentTokens
  */
 GBaseRankerModelConfig.prototype.maxDocumentTokens = undefined;
 
 /**
- * @member {Object} responseReserveTokens
+ * @member {Number} responseReserveTokens
  */
 GBaseRankerModelConfig.prototype.responseReserveTokens = undefined;
 
 /**
- * @member {Object} fullServiceUrl
+ * @member {String} fullServiceUrl
  */
 GBaseRankerModelConfig.prototype.fullServiceUrl = undefined;
 
 /**
- * @member {Object} relativeServiceUrl
+ * @member {String} relativeServiceUrl
  */
 GBaseRankerModelConfig.prototype.relativeServiceUrl = undefined;
 

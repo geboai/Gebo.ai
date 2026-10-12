@@ -131,4 +131,57 @@ export default class FileUploadControllerApi {
         });
     }
 
+
+    /**
+     * @param {String} endpointCode 
+     * @param {Object} opts Optional parameters
+     * @param {Array.<Blob>} opts.files 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
+     */
+    uploadToEndpointWithHttpInfo(endpointCode, opts) {
+      opts = opts || {};
+      let postBody = null;
+      // verify the required parameter 'endpointCode' is set
+      if (endpointCode === undefined || endpointCode === null) {
+        throw new Error("Missing the required parameter 'endpointCode' when calling uploadToEndpoint");
+      }
+
+      let pathParams = {
+        'endpointCode': endpointCode
+      };
+      let queryParams = {
+        
+      };
+      let headerParams = {
+        
+      };
+      let formParams = {
+        'files[]': this.apiClient.buildCollectionParam(opts['files'], 'multi')
+      };
+
+      let authNames = [];
+      let contentTypes = ['multipart/form-data'];
+      let accepts = [];
+      let returnType = null;
+
+      return this.apiClient.callApi(
+        '/api/admin/FileUploadController/uploadToEndpoint/{endpointCode}', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * @param {<&vendorExtensions.x-jsdoc-type>} endpointCode 
+     * @param {Object} opts Optional parameters
+     * @param {Array.<Blob>} opts.files 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}
+     */
+    uploadToEndpoint(endpointCode, opts) {
+      return this.uploadToEndpointWithHttpInfo(endpointCode, opts)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 }

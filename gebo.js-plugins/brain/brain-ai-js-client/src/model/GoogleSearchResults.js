@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GoogleSearchResultItem from './GoogleSearchResultItem';
 
 /**
  * The GoogleSearchResults model module.
@@ -39,14 +40,14 @@ export default class GoogleSearchResults {
     if (data) {
       obj = obj || new GoogleSearchResults();
       if (data.hasOwnProperty('items'))
-        obj.items = ApiClient.convertToType(data['items'], Object);
+        obj.items = ApiClient.convertToType(data['items'], [GoogleSearchResultItem]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} items
+ * @member {Array.<module:model/GoogleSearchResultItem>} items
  */
 GoogleSearchResults.prototype.items = undefined;
 

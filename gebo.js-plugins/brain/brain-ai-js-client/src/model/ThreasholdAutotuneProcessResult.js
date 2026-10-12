@@ -40,67 +40,67 @@ export default class ThreasholdAutotuneProcessResult {
     if (data) {
       obj = obj || new ThreasholdAutotuneProcessResult();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('threasholds'))
         obj.threasholds = OptimizedThreashold.constructFromObject(data['threasholds']);
       if (data.hasOwnProperty('rootKnowledgeBase'))
-        obj.rootKnowledgeBase = ApiClient.convertToType(data['rootKnowledgeBase'], Object);
+        obj.rootKnowledgeBase = ApiClient.convertToType(data['rootKnowledgeBase'], 'String');
       if (data.hasOwnProperty('vectorStoreId'))
-        obj.vectorStoreId = ApiClient.convertToType(data['vectorStoreId'], Object);
+        obj.vectorStoreId = ApiClient.convertToType(data['vectorStoreId'], 'String');
       if (data.hasOwnProperty('embeddingModelCode'))
-        obj.embeddingModelCode = ApiClient.convertToType(data['embeddingModelCode'], Object);
+        obj.embeddingModelCode = ApiClient.convertToType(data['embeddingModelCode'], 'String');
       if (data.hasOwnProperty('vectorStoreVectorizedCount'))
-        obj.vectorStoreVectorizedCount = ApiClient.convertToType(data['vectorStoreVectorizedCount'], Object);
+        obj.vectorStoreVectorizedCount = ApiClient.convertToType(data['vectorStoreVectorizedCount'], 'Number');
       if (data.hasOwnProperty('evaluationPoints'))
-        obj.evaluationPoints = ApiClient.convertToType(data['evaluationPoints'], Object);
+        obj.evaluationPoints = ApiClient.convertToType(data['evaluationPoints'], 'Number');
       if (data.hasOwnProperty('score'))
-        obj.score = ApiClient.convertToType(data['score'], Object);
+        obj.score = ApiClient.convertToType(data['score'], 'Number');
       if (data.hasOwnProperty('processedDateTime'))
-        obj.processedDateTime = ApiClient.convertToType(data['processedDateTime'], Object);
+        obj.processedDateTime = ApiClient.convertToType(data['processedDateTime'], 'Date');
       if (data.hasOwnProperty('computedElements'))
-        obj.computedElements = ApiClient.convertToType(data['computedElements'], Object);
+        obj.computedElements = ApiClient.convertToType(data['computedElements'], [{'String': Object}]);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 ThreasholdAutotuneProcessResult.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 ThreasholdAutotuneProcessResult.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 ThreasholdAutotuneProcessResult.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 ThreasholdAutotuneProcessResult.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 ThreasholdAutotuneProcessResult.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 ThreasholdAutotuneProcessResult.prototype.dateCreated = undefined;
 
@@ -110,42 +110,42 @@ ThreasholdAutotuneProcessResult.prototype.dateCreated = undefined;
 ThreasholdAutotuneProcessResult.prototype.threasholds = undefined;
 
 /**
- * @member {Object} rootKnowledgeBase
+ * @member {String} rootKnowledgeBase
  */
 ThreasholdAutotuneProcessResult.prototype.rootKnowledgeBase = undefined;
 
 /**
- * @member {Object} vectorStoreId
+ * @member {String} vectorStoreId
  */
 ThreasholdAutotuneProcessResult.prototype.vectorStoreId = undefined;
 
 /**
- * @member {Object} embeddingModelCode
+ * @member {String} embeddingModelCode
  */
 ThreasholdAutotuneProcessResult.prototype.embeddingModelCode = undefined;
 
 /**
- * @member {Object} vectorStoreVectorizedCount
+ * @member {Number} vectorStoreVectorizedCount
  */
 ThreasholdAutotuneProcessResult.prototype.vectorStoreVectorizedCount = undefined;
 
 /**
- * @member {Object} evaluationPoints
+ * @member {Number} evaluationPoints
  */
 ThreasholdAutotuneProcessResult.prototype.evaluationPoints = undefined;
 
 /**
- * @member {Object} score
+ * @member {Number} score
  */
 ThreasholdAutotuneProcessResult.prototype.score = undefined;
 
 /**
- * @member {Object} processedDateTime
+ * @member {Date} processedDateTime
  */
 ThreasholdAutotuneProcessResult.prototype.processedDateTime = undefined;
 
 /**
- * @member {Object} computedElements
+ * @member {Array.<Object.<String, Object>>} computedElements
  */
 ThreasholdAutotuneProcessResult.prototype.computedElements = undefined;
 

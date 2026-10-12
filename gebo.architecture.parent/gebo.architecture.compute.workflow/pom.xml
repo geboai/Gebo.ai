@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.3.0</version>
+		<version>1.0.4.0</version>
 	</parent>
 	<artifactId>gebo.architecture.compute.workflow</artifactId>
 	<dependencies>
@@ -60,6 +60,12 @@
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.utils</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<!-- Test only: JUnit 5 + Mockito for the daily usage consolidation test. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

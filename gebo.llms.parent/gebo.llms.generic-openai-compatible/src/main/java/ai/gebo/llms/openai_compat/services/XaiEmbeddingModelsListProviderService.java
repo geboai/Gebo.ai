@@ -157,6 +157,16 @@ public class XaiEmbeddingModelsListProviderService implements IGModelsListProvid
 						GBaseChatModelChoice entry = (GBaseChatModelChoice) ModelsListCommonUtils.newInstance(choiceType);
 						entry.setCode(m.id);
 						entry.setDescription(m.id);
+						// The token prices are listed too, but in a unit the api reference does
+						// not state: they are left to the user rather than guessed.
+						if (m.input_modalities != null) {
+							ModelMetaInfo meta = new ModelMetaInfo();
+							meta.setProviderId(providerId);
+							meta.setModelId(m.id);
+							meta.setChatModel(true);
+							meta.setSupportsVision(m.input_modalities.contains("image"));
+							entry.setMetaInfos(meta);
+						}
 						chatmodels.add(entry);
 					}
 					enricherService.enrichChatModelMetaInfos(providerId, chatmodels, (GBaseChatModelChoice x) -> {

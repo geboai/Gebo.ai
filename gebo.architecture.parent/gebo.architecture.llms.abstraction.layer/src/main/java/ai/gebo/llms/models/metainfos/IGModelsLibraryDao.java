@@ -37,4 +37,18 @@ public interface IGModelsLibraryDao {
      * @return ModelMetaInfo object containing metadata about the model.
      */
     public ModelMetaInfo findByProviderIdAndModelId(String providerId, String modelId);
+
+    /**
+     * The parameter rules covering a model of a provider: the first rule of the
+     * installation's library covering it, else the first one of the bundled library.
+     * Rules are matched by provider and model only, never by model id alone, since
+     * one model id served by two providers takes different parameters.
+     *
+     * @param providerId the provider of the model, as its type declares it
+     * @param modelId    the model id its requests name
+     * @return the rules, or null when none covers the model
+     */
+    public default ModelParameterRules findParameterRules(String providerId, String modelId) {
+        return null;
+    }
 }

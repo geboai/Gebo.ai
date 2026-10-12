@@ -786,21 +786,21 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	}
 
 	@Override
-	@Transactional
+	@Transactional("mongoTransactionManager")
 	public <T extends GBaseObject> T transactionalInsert(T element) throws GeboPersistenceException {
 
 		return this.insert(element);
 	}
 
 	@Override
-	@Transactional
+	@Transactional("mongoTransactionManager")
 	public <T extends GBaseObject> T transactionalUpdate(T element) throws GeboPersistenceException {
 
 		return this.update(element);
 	}
 
 	@Override
-	@Transactional
+	@Transactional("mongoTransactionManager")
 	public <T extends GBaseObject> void transactionalDelete(T element, boolean checkDeletable)
 			throws GeboPersistenceException {
 		this.delete(element, checkDeletable);
@@ -808,7 +808,7 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	}
 
 	@Override
-	@Transactional
+	@Transactional("mongoTransactionManager")
 	public <T extends GBaseObject> T transactionalFindById(Class<T> type, String id) throws GeboPersistenceException {
 
 		return this.findById(type, id);

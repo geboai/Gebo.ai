@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GOpenAITextToSpeechModelChoice from './GOpenAITextToSpeechModelChoice';
+import GUserMessage from './GUserMessage';
 
 /**
  * The OperationStatusListGOpenAITextToSpeechModelChoice model module.
@@ -39,35 +41,35 @@ export default class OperationStatusListGOpenAITextToSpeechModelChoice {
     if (data) {
       obj = obj || new OperationStatusListGOpenAITextToSpeechModelChoice();
       if (data.hasOwnProperty('result'))
-        obj.result = ApiClient.convertToType(data['result'], Object);
+        obj.result = ApiClient.convertToType(data['result'], [GOpenAITextToSpeechModelChoice]);
       if (data.hasOwnProperty('messages'))
-        obj.messages = ApiClient.convertToType(data['messages'], Object);
+        obj.messages = ApiClient.convertToType(data['messages'], [GUserMessage]);
       if (data.hasOwnProperty('hasErrorMessages'))
-        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], Object);
+        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], 'Boolean');
       if (data.hasOwnProperty('hasWarnMessages'))
-        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], Object);
+        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} result
+ * @member {Array.<module:model/GOpenAITextToSpeechModelChoice>} result
  */
 OperationStatusListGOpenAITextToSpeechModelChoice.prototype.result = undefined;
 
 /**
- * @member {Object} messages
+ * @member {Array.<module:model/GUserMessage>} messages
  */
 OperationStatusListGOpenAITextToSpeechModelChoice.prototype.messages = undefined;
 
 /**
- * @member {Object} hasErrorMessages
+ * @member {Boolean} hasErrorMessages
  */
 OperationStatusListGOpenAITextToSpeechModelChoice.prototype.hasErrorMessages = undefined;
 
 /**
- * @member {Object} hasWarnMessages
+ * @member {Boolean} hasWarnMessages
  */
 OperationStatusListGOpenAITextToSpeechModelChoice.prototype.hasWarnMessages = undefined;
 

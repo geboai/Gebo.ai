@@ -21,6 +21,7 @@ import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.architecture.search.controller.CustomTemplateParamsRequestBody;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.CatalogueSample;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
@@ -68,14 +69,19 @@ public abstract class AbstractNativeSearchServiceRestClient<C extends BaseSearch
 	@Override
 	public List<SearchResult> nativeSearch(N query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
+		return nativeSearch(query, system, nEntryLimit, null);
+	}
+
+	@Override
+	public List<SearchResult> nativeSearch(N query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
 		String systemId = system != null ? system.getCode() : null;
 		return call("nativeSearch",
-				() -> webClient.post()
-						.uri(uri("nativeSearch", Map.of("systemId", String.valueOf(systemId), "nEntryLimit",
-								String.valueOf(nEntryLimit))))
+				() -> withinTimeouts(webClient.post()
+						.uri(uri("nativeSearch", searchParams(systemId, nEntryLimit, parameters)))
 						.headers(this::applyCallerToken).contentType(MediaType.APPLICATION_JSON)
-						.accept(MediaType.APPLICATION_JSON).bodyValue(query).retrieve().bodyToMono(SEARCH_RESULT_LIST)
-						.block());
+						.accept(MediaType.APPLICATION_JSON).bodyValue(query).retrieve().bodyToMono(SEARCH_RESULT_LIST),
+						parameters).block());
 	}
 
 	@Override

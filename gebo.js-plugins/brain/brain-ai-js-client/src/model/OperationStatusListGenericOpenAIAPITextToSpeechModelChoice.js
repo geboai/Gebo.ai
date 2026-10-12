@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GUserMessage from './GUserMessage';
+import GenericOpenAIAPITextToSpeechModelChoice from './GenericOpenAIAPITextToSpeechModelChoice';
 
 /**
  * The OperationStatusListGenericOpenAIAPITextToSpeechModelChoice model module.
@@ -39,35 +41,35 @@ export default class OperationStatusListGenericOpenAIAPITextToSpeechModelChoice 
     if (data) {
       obj = obj || new OperationStatusListGenericOpenAIAPITextToSpeechModelChoice();
       if (data.hasOwnProperty('result'))
-        obj.result = ApiClient.convertToType(data['result'], Object);
+        obj.result = ApiClient.convertToType(data['result'], [GenericOpenAIAPITextToSpeechModelChoice]);
       if (data.hasOwnProperty('messages'))
-        obj.messages = ApiClient.convertToType(data['messages'], Object);
+        obj.messages = ApiClient.convertToType(data['messages'], [GUserMessage]);
       if (data.hasOwnProperty('hasErrorMessages'))
-        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], Object);
+        obj.hasErrorMessages = ApiClient.convertToType(data['hasErrorMessages'], 'Boolean');
       if (data.hasOwnProperty('hasWarnMessages'))
-        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], Object);
+        obj.hasWarnMessages = ApiClient.convertToType(data['hasWarnMessages'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} result
+ * @member {Array.<module:model/GenericOpenAIAPITextToSpeechModelChoice>} result
  */
 OperationStatusListGenericOpenAIAPITextToSpeechModelChoice.prototype.result = undefined;
 
 /**
- * @member {Object} messages
+ * @member {Array.<module:model/GUserMessage>} messages
  */
 OperationStatusListGenericOpenAIAPITextToSpeechModelChoice.prototype.messages = undefined;
 
 /**
- * @member {Object} hasErrorMessages
+ * @member {Boolean} hasErrorMessages
  */
 OperationStatusListGenericOpenAIAPITextToSpeechModelChoice.prototype.hasErrorMessages = undefined;
 
 /**
- * @member {Object} hasWarnMessages
+ * @member {Boolean} hasWarnMessages
  */
 OperationStatusListGenericOpenAIAPITextToSpeechModelChoice.prototype.hasWarnMessages = undefined;
 

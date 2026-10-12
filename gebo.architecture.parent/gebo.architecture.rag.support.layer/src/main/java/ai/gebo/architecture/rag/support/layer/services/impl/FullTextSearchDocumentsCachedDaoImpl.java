@@ -55,7 +55,7 @@ public class FullTextSearchDocumentsCachedDaoImpl implements IGFullTextSearchDoc
 				AIDocumentReferenceItem rItem = new AIDocumentReferenceItem(extractedMeta);
 				docsMap.put(documentCode, rItem);
 			}
-			docsMap.get(documentCode).getFragments().add(fragment);
+			docsMap.get(documentCode).addFragmentIfAbsent(fragment);
 			docsMap.get(documentCode).recalculateSize();
 		}
 		AIDocumentsSet out = AIDocumentsSet.fromMap(docsMap);

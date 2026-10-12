@@ -25,11 +25,9 @@ export default class SearchDocumentByNameParam {
    * @alias module:model/SearchDocumentByNameParam
    * @class
    * @param name {String} 
-   * @param knowledgeBaseCodes {Array.<String>} 
    */
-  constructor(name, knowledgeBaseCodes) {
+  constructor(name) {
     this.name = name;
-    this.knowledgeBaseCodes = knowledgeBaseCodes;
   }
 
   /**

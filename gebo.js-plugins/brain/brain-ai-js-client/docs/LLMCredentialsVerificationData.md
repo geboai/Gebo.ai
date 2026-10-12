@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**vendorId** | **Object** |  | 
-**secretId** | **Object** |  | 
-**baseUrl** | **Object** |  | [optional] 
+**vendorId** | **String** |  | 
+**secretId** | **String** |  | 
+**baseUrl** | **String** |  | [optional] 

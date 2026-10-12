@@ -39,91 +39,91 @@ export default class GenericOpenAIChatModelTypeConfig {
     if (data) {
       obj = obj || new GenericOpenAIChatModelTypeConfig();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('modelConfigurationClass'))
-        obj.modelConfigurationClass = ApiClient.convertToType(data['modelConfigurationClass'], Object);
+        obj.modelConfigurationClass = ApiClient.convertToType(data['modelConfigurationClass'], 'String');
       if (data.hasOwnProperty('baseUrl'))
-        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], Object);
+        obj.baseUrl = ApiClient.convertToType(data['baseUrl'], 'String');
       if (data.hasOwnProperty('modelsListProvider'))
-        obj.modelsListProvider = ApiClient.convertToType(data['modelsListProvider'], Object);
+        obj.modelsListProvider = ApiClient.convertToType(data['modelsListProvider'], 'String');
       if (data.hasOwnProperty('providerId'))
-        obj.providerId = ApiClient.convertToType(data['providerId'], Object);
+        obj.providerId = ApiClient.convertToType(data['providerId'], 'String');
       if (data.hasOwnProperty('optionalAuthentication'))
-        obj.optionalAuthentication = ApiClient.convertToType(data['optionalAuthentication'], Object);
+        obj.optionalAuthentication = ApiClient.convertToType(data['optionalAuthentication'], 'Boolean');
       if (data.hasOwnProperty('applyThinkingMarkupHandling'))
-        obj.applyThinkingMarkupHandling = ApiClient.convertToType(data['applyThinkingMarkupHandling'], Object);
+        obj.applyThinkingMarkupHandling = ApiClient.convertToType(data['applyThinkingMarkupHandling'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GenericOpenAIChatModelTypeConfig.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GenericOpenAIChatModelTypeConfig.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GenericOpenAIChatModelTypeConfig.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GenericOpenAIChatModelTypeConfig.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GenericOpenAIChatModelTypeConfig.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GenericOpenAIChatModelTypeConfig.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} modelConfigurationClass
+ * @member {String} modelConfigurationClass
  */
 GenericOpenAIChatModelTypeConfig.prototype.modelConfigurationClass = undefined;
 
 /**
- * @member {Object} baseUrl
+ * @member {String} baseUrl
  */
 GenericOpenAIChatModelTypeConfig.prototype.baseUrl = undefined;
 
 /**
- * @member {Object} modelsListProvider
+ * @member {String} modelsListProvider
  */
 GenericOpenAIChatModelTypeConfig.prototype.modelsListProvider = undefined;
 
 /**
- * @member {Object} providerId
+ * @member {String} providerId
  */
 GenericOpenAIChatModelTypeConfig.prototype.providerId = undefined;
 
 /**
- * @member {Object} optionalAuthentication
+ * @member {Boolean} optionalAuthentication
  */
 GenericOpenAIChatModelTypeConfig.prototype.optionalAuthentication = undefined;
 
 /**
- * @member {Object} applyThinkingMarkupHandling
+ * @member {Boolean} applyThinkingMarkupHandling
  */
 GenericOpenAIChatModelTypeConfig.prototype.applyThinkingMarkupHandling = undefined;
 

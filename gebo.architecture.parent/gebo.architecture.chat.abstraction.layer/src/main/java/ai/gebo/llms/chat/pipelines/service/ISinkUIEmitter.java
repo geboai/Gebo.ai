@@ -4,11 +4,18 @@ import java.util.UUID;
 
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject;
+import ai.gebo.llms.abstraction.layer.services.IGProgressNotifier;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.model.GUserMessage;
 
-public interface ISinkUIEmitter extends INotificationSink {
+public interface ISinkUIEmitter extends INotificationSink, IGProgressNotifier {
+	/** A work's progress, shown in the chat UI for a few seconds. */
+	@Override
+	default void notifyProgress(String code, String message) {
+		notifyUser(code, message, null, 3000l, NotificationType.INFO);
+	}
+
 	@Override
 	default void next(NotificationObject state) {
 		NotificationType notificationType = NotificationType.INFO;

@@ -1,0 +1,45 @@
+{{!--
+    OVERRIDE of swagger-codegen's stock typescript-angular/modelGeneric.mustache.
+    The ONLY change is the inverted additionalPropertiesType section wrapped
+    around the "extends parent" clause below; everything else is the stock
+    template and should be kept in sync with it on a codegen upgrade.
+
+    Why: for a schema that is a pure map - "type: object" plus
+    additionalProperties, with NO properties of its own - DefaultCodegenConfig
+    marks the model isMapModel and sets parent = toInstantiationType(schema),
+    which builds instantiationTypes.get("map") + "<String, " + innerType + ">".
+    The TypeScript generators never register a "map" instantiation type, so that
+    lookup returns null and the parent becomes the literal string
+    "null<String, any>". The stock template emits it verbatim and the library
+    then fails to compile:
+
+        export interface PipelineEnvironment extends null<String, any> {
+        error TS2499: An interface can only extend an identifier/qualified-name
+                      with optional type arguments.
+
+    brain's PipelineEnvironment (ai.gebo.llms.chat.client.rest.model.PipelineRequestBody)
+    is exactly that shape: a Schema annotation with additionalProperties TRUE
+    over a hidden JsonAnyGetter map, so springdoc emits
+    {"type":"object","additionalProperties":true} with no properties. The java
+    generator renders it correctly as "extends HashMap<String, Object>"; only
+    typescript-angular breaks, which is why this override lives here and not in
+    the java-resttemplate templates.
+
+    Suppressing the parent loses nothing: a map model's entries are already
+    emitted by the modelGenericAdditionalProperties partial as an index
+    signature - "[key: string]: any" - which is how TypeScript spells that
+    inheritance. The guard is deliberately narrow, keyed on
+    additionalPropertiesType rather than dropping "extends" outright, so a
+    genuine allOf/composed parent - which has no additionalPropertiesType -
+    still renders.
+--}}
+export interface {{classname}} {{^additionalPropertiesType}}{{#parent}}extends {{{parent}}} {{/parent}}{{/additionalPropertiesType}}{ {{>modelGenericAdditionalProperties}}
+{{#vars}}
+    {{#description}}
+    /**
+     * {{{description}}}
+     */
+    {{/description}}
+    {{#is this 'read-only'}}readonly {{/is}}{{name}}{{^required}}?{{/required}}: {{#is this 'enum'}}{{{datatypeWithEnum}}}{{/is}}{{#isNot this 'enum'}}{{{datatype}}}{{/isNot}};
+{{/vars}}
+}{{>modelGenericEnums}}

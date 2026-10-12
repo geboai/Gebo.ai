@@ -39,21 +39,21 @@ export default class SpecialFile {
     if (data) {
       obj = obj || new SpecialFile();
       if (data.hasOwnProperty('fileName'))
-        obj.fileName = ApiClient.convertToType(data['fileName'], Object);
+        obj.fileName = ApiClient.convertToType(data['fileName'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} fileName
+ * @member {String} fileName
  */
 SpecialFile.prototype.fileName = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 SpecialFile.prototype.description = undefined;
 

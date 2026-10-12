@@ -43,7 +43,7 @@ export default class JobsEntriesForProjectEndpointFilter {
       if (data.hasOwnProperty('endpointRef'))
         obj.endpointRef = GObjectRefGProjectEndpoint.constructFromObject(data['endpointRef']);
       if (data.hasOwnProperty('jobType'))
-        obj.jobType = ApiClient.convertToType(data['jobType'], Object);
+        obj.jobType = ApiClient.convertToType(data['jobType'], 'String');
       if (data.hasOwnProperty('page'))
         obj.page = DataPage.constructFromObject(data['page']);
     }
@@ -57,7 +57,31 @@ export default class JobsEntriesForProjectEndpointFilter {
 JobsEntriesForProjectEndpointFilter.prototype.endpointRef = undefined;
 
 /**
- * @member {Object} jobType
+ * Allowed values for the <code>jobType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+JobsEntriesForProjectEndpointFilter.JobTypeEnum = {
+  /**
+   * value: "CONTENTS_READING"
+   * @const
+   */
+  CONTENTS_READING: "CONTENTS_READING",
+
+  /**
+   * value: "VECTORIZING_CONTENTS"
+   * @const
+   */
+  VECTORIZING_CONTENTS: "VECTORIZING_CONTENTS",
+
+  /**
+   * value: "CONTENTS_READING_VECTORIZING"
+   * @const
+   */
+  CONTENTS_READING_VECTORIZING: "CONTENTS_READING_VECTORIZING"
+};
+/**
+ * @member {module:model/JobsEntriesForProjectEndpointFilter.JobTypeEnum} jobType
  */
 JobsEntriesForProjectEndpointFilter.prototype.jobType = undefined;
 

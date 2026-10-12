@@ -5,8 +5,8 @@ import { HttpClient } from '@angular/common/http';
 
 import { ContentsResetControllerService } from './api/contentsResetController.service';
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
+import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
-import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { WebdavBrowsingControllerService } from './api/webdavBrowsingController.service';
@@ -19,8 +19,8 @@ import { WebdavSystemsControllerService } from './api/webdavSystemsController.se
   providers: [
     ContentsResetControllerService,
     DocumentContentStreamerControllerService,
+    GeboAngularFormGroupMetaInfoControllerService,
     GenericalPublisherControllerService,
-    IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService,
     JobLauncherControllerService,
     WebdavBrowsingControllerService,

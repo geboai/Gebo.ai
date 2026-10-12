@@ -18,6 +18,8 @@ export interface LLMModelPresetChoice {
     uses?: Array<LLMModelPresetChoice.UsesEnum>;
     maxGeneratedTokens?: number;
     thinking?: LLMModelPresetChoice.ThinkingEnum;
+    temperature?: number;
+    internalServicesThinking?: LLMModelPresetChoice.InternalServicesThinkingEnum;
 }
 export namespace LLMModelPresetChoice {
     export type UsesEnum = 'CHAT' | 'INTERNAL_SERVICES';
@@ -32,5 +34,13 @@ export namespace LLMModelPresetChoice {
         MEDIUMTHINKING: 'MEDIUM_THINKING' as ThinkingEnum,
         HIGHTHINKING: 'HIGH_THINKING' as ThinkingEnum,
         AUTO: 'AUTO' as ThinkingEnum
+    };
+    export type InternalServicesThinkingEnum = 'NO_THINKING' | 'LOW_THINKING' | 'MEDIUM_THINKING' | 'HIGH_THINKING' | 'AUTO';
+    export const InternalServicesThinkingEnum = {
+        NOTHINKING: 'NO_THINKING' as InternalServicesThinkingEnum,
+        LOWTHINKING: 'LOW_THINKING' as InternalServicesThinkingEnum,
+        MEDIUMTHINKING: 'MEDIUM_THINKING' as InternalServicesThinkingEnum,
+        HIGHTHINKING: 'HIGH_THINKING' as InternalServicesThinkingEnum,
+        AUTO: 'AUTO' as InternalServicesThinkingEnum
     };
 }

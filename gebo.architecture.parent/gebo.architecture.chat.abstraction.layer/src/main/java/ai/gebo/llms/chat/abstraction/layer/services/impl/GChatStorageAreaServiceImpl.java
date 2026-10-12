@@ -234,6 +234,10 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		List<UserUploadContentServerSide> data = uploadContentsRepository.findAllById(id);
 		for (UserUploadContentServerSide userUploadContentServerSide : data) {
 			this.securityService.checkBeingCreator(userUploadContentServerSide);
+			if (!userSessionCode.equals(userUploadContentServerSide.getUserContextCode())) {
+				throw new SecurityException("The uploaded content " + userUploadContentServerSide.getCode()
+						+ " does not belong to the chat " + userSessionCode);
+			}
 		}
 		for (UserUploadContentServerSide userUploadContentServerSide : data) {
 			try {

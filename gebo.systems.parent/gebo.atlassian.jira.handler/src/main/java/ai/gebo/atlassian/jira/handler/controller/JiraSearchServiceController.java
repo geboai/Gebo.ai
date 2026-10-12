@@ -26,6 +26,7 @@ import ai.gebo.architecture.search.controller.AggregateRequestBody;
 import ai.gebo.architecture.search.controller.BaseNativeSearchController;
 import ai.gebo.architecture.search.controller.CustomTemplateParamsRequestBody;
 import ai.gebo.architecture.search.model.CatalogueSample;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -52,97 +53,106 @@ public class JiraSearchServiceController
 	}
 
 	@GetMapping("isEnabled")
-	public boolean restIsEnabled() throws SearchServiceException {
+	public boolean restIsEnabledJira() throws SearchServiceException {
 		return isEnabled();
 	}
 
 	@GetMapping("getId")
-	public String restGetId() {
+	public String restGetIdJira() {
 		return getId();
 	}
 
 	@GetMapping("getDescription")
-	public String restGetDescription() {
+	public String restGetDescriptionJira() {
 		return getDescription();
 	}
 
 	@GetMapping("getProductId")
-	public String restGetProductId() {
+	public String restGetProductIdJira() {
 		return getProductId();
 	}
 
 	@GetMapping("getMessagingModuleId")
-	public String restGetMessagingModuleId() {
+	public String restGetMessagingModuleIdJira() {
 		return getMessagingModuleId();
 	}
 
 	@GetMapping("getQueriesGenerationPromptUseCode")
-	public String restGetQueriesGenerationPromptUseCode() {
+	public String restGetQueriesGenerationPromptUseCodeJira() {
 		return getQueriesGenerationPromptUseCode();
 	}
 
 	@GetMapping("getNativePromptTemplateUseCode")
-	public String restGetNativePromptTemplateUseCode() {
+	public String restGetNativePromptTemplateUseCodeJira() {
 		return getNativePromptTemplateUseCode();
 	}
 
 	@GetMapping(value = "getSearchableSystems", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<SearchableSystemMetaData> restGetSearchableSystems() throws SearchServiceException {
+	public List<SearchableSystemMetaData> restGetSearchableSystemsJira() throws SearchServiceException {
 		return getSearchableSystems();
 	}
 
 	@GetMapping(value = "findSystemById", produces = MediaType.APPLICATION_JSON_VALUE)
-	public SearchableSystemMetaData restFindSystemById(@RequestParam("systemId") String systemId)
+	public SearchableSystemMetaData restFindSystemByIdJira(@RequestParam("systemId") String systemId)
 			throws SearchServiceException {
 		return findSystemById(systemId);
 	}
 
 	@PostMapping(value = "findSystemBySearchResult", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public SearchableSystemMetaData restFindSystemBySearchResult(@RequestBody SearchResult result)
+	public SearchableSystemMetaData restFindSystemBySearchResultJira(@RequestBody SearchResult result)
 			throws SearchServiceException {
 		return findSystemBySearchResult(result);
 	}
 
 	@PostMapping(value = "search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<SearchResult> restSearch(@RequestBody SearchQuery query, @RequestParam("systemId") String systemId,
-			@RequestParam("nEntryLimit") int nEntryLimit) throws IOException, SearchServiceException {
-		return search(query, systemId, nEntryLimit);
+	public List<SearchResult> restSearchJira(@RequestBody SearchQuery query, @RequestParam("systemId") String systemId,
+			@RequestParam("nEntryLimit") int nEntryLimit,
+			@RequestParam(value = SearchCallParameters.CONNECT_TIMEOUT_MILLIS_PARAM, required = false) Integer connectTimeoutMillis,
+			@RequestParam(value = SearchCallParameters.READ_TIMEOUT_MILLIS_PARAM, required = false) Integer readTimeoutMillis,
+			@RequestParam(value = SearchCallParameters.RETRIES_PARAM, required = false) Integer retries) throws IOException, SearchServiceException {
+		return search(query, systemId, nEntryLimit,
+				searchCallParameters(connectTimeoutMillis, readTimeoutMillis, retries));
 	}
 
 	@PostMapping(value = "nativeSearch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<SearchResult> restNativeSearch(@RequestBody JiraIssuesSearchFilter query,
-			@RequestParam("systemId") String systemId, @RequestParam("nEntryLimit") int nEntryLimit)
+	public List<SearchResult> restNativeSearchJira(@RequestBody JiraIssuesSearchFilter query,
+			@RequestParam("systemId") String systemId,
+			@RequestParam("nEntryLimit") int nEntryLimit,
+			@RequestParam(value = SearchCallParameters.CONNECT_TIMEOUT_MILLIS_PARAM, required = false) Integer connectTimeoutMillis,
+			@RequestParam(value = SearchCallParameters.READ_TIMEOUT_MILLIS_PARAM, required = false) Integer readTimeoutMillis,
+			@RequestParam(value = SearchCallParameters.RETRIES_PARAM, required = false) Integer retries)
 			throws IOException, SearchServiceException {
 		SearchableSystemMetaData system = findSystemById(systemId);
-		return nativeSearch(query, system, nEntryLimit);
+		return nativeSearch(query, system, nEntryLimit,
+				searchCallParameters(connectTimeoutMillis, readTimeoutMillis, retries));
 	}
 
 	@GetMapping(value = "getCataloguesListSample", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<CatalogueSample> restGetCataloguesListSample(@RequestParam("configurationCode") String configurationCode)
+	public List<CatalogueSample> restGetCataloguesListSampleJira(@RequestParam("configurationCode") String configurationCode)
 			throws SearchServiceException {
 		return getCataloguesListSample(configurationCode);
 	}
 
 	@GetMapping(value = "getCachedCatalogues", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<CatalogueSample> restGetCachedCatalogues(
+	public List<CatalogueSample> restGetCachedCataloguesJira(
 			@RequestParam(value = "systemConfigurationCode", required = false) String systemConfigurationCode)
 			throws SearchServiceException {
 		return systemConfigurationCode != null ? getCachedCatalogues(systemConfigurationCode) : getCachedCatalogues();
 	}
 
 	@PostMapping(value = "extractRelatedAnalisysReferences", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferences(@RequestParam("systemId") String systemId,
+	public SearchResultAnalisysOutcome restExtractRelatedAnalisysReferencesJira(@RequestParam("systemId") String systemId,
 			@RequestBody JiraResultsExtractionData extractedData) throws IOException, SearchServiceException {
 		return extractRelatedAnalisysReferences(systemId, extractedData);
 	}
 
 	@PostMapping(value = "aggregate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JiraResultsExtractionData restAggregate(@RequestBody AggregateRequestBody<JiraResultsExtractionData> body) {
+	public JiraResultsExtractionData restAggregateJira(@RequestBody AggregateRequestBody<JiraResultsExtractionData> body) {
 		return aggregate(body.getOldConsolidated(), body.getConsolidated());
 	}
 
 	@PostMapping(value = "createCustomTemplateParamsMap", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Map<String, Object> restCreateCustomTemplateParamsMap(@RequestBody CustomTemplateParamsRequestBody body) {
+	public Map<String, Object> restCreateCustomTemplateParamsMapJira(@RequestBody CustomTemplateParamsRequestBody body) {
 		return createCustomTemplateParamsMap(body.getSearchableSystemMetaData(), body.getCataloguesSample());
 	}
 }

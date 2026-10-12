@@ -36,7 +36,7 @@ import jakarta.validation.constraints.NotNull;
  * speech model.
  */
 @RestController
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@PreAuthorize("hasAnyRole('USER','ADMIN','APPLICATION')")
 @RequestMapping(path = "api/users/GeboTextToSpeechController")
 public class GeboTextToSpeechController {
 
@@ -50,7 +50,7 @@ public class GeboTextToSpeechController {
 	 * @return true if the text to speech functionality is enabled, false otherwise
 	 */
 	@GetMapping(value = "isEnabled", produces = MediaType.APPLICATION_JSON_VALUE)
-	public boolean isEnabled() {
+	public boolean isEnabledTextToSpeech() {
 		return textToSpeechService.isEnabled();
 	}
 

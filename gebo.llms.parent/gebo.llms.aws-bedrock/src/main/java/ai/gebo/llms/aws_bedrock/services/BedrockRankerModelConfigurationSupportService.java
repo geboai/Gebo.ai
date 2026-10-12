@@ -46,6 +46,7 @@ public class BedrockRankerModelConfigurationSupportService
 		type.setCode("ranker-aws-bedrock");
 		type.setDescription("Reranking models hosted on AWS Bedrock (Amazon Rerank / Cohere Rerank)");
 		type.setModelConfigurationClass(GBedrockRankerModelConfig.class.getName());
+		type.setProviderId("aws-bedrock");
 	}
 
 	/** Known Bedrock reranking foundation models. */

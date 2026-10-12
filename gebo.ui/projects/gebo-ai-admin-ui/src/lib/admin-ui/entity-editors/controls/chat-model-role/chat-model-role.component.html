@@ -1,0 +1,40 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+<gebo-ai-field id="modelRole" label="Model role"
+  help="One system default service model and one system default chat model are kept: choosing one of them here takes the role from the model holding it, which becomes a chat model">
+  <div class="flex flex-column gap-3">
+    <div class="flex align-items-start gap-2">
+      <p-radiobutton inputId="modelRoleService" name="modelRole" value="SERVICE" [(ngModel)]="role"
+        [ngModelOptions]="{ standalone: true }" [disabled]="disabled" (onClick)="chooseRole('SERVICE')"></p-radiobutton>
+      <div class="flex flex-column gap-1">
+        <label for="modelRoleService" id="RoleServiceLabel" gebo-ai-text>System default service model</label>
+        <small id="RoleServiceHelp" gebo-ai-text>Will be used for history consolidation, information extraction and other internal services, choose a cheap and fast one</small>
+      </div>
+    </div>
+    <div class="flex align-items-start gap-2">
+      <p-radiobutton inputId="modelRoleDefaultChat" name="modelRole" value="DEFAULT_CHAT" [(ngModel)]="role"
+        [ngModelOptions]="{ standalone: true }" [disabled]="disabled" (onClick)="chooseRole('DEFAULT_CHAT')"></p-radiobutton>
+      <div class="flex flex-column gap-1">
+        <label for="modelRoleDefaultChat" id="RoleDefaultChatLabel" gebo-ai-text>System default chat model</label>
+        <small id="RoleDefaultChatHelp" gebo-ai-text>Will be used as high capacity agentic model and quality responder</small>
+      </div>
+    </div>
+    <div class="flex align-items-start gap-2">
+      <p-radiobutton inputId="modelRoleChat" name="modelRole" value="CHAT" [(ngModel)]="role"
+        [ngModelOptions]="{ standalone: true }" [disabled]="disabled" (onClick)="chooseRole('CHAT')"></p-radiobutton>
+      <div class="flex flex-column gap-1">
+        <label for="modelRoleChat" id="RoleChatLabel" gebo-ai-text>Chat model</label>
+        <small id="RoleChatHelp" gebo-ai-text>Model to be used in explicit configurations</small>
+      </div>
+    </div>
+  </div>
+</gebo-ai-field>

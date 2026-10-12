@@ -15,10 +15,12 @@ Use only information already present in the chat history and user question.
 Avoid adding new entities, products, versions, dates, or requirements not present.
 
 Output ONLY:
- two fields in the format <field>=<value>
+ four fields in the format <field>=<value>
   
  rewrittenQuery=<the rewritten user question (no explanations, no JSON, no extra text)>
  deliverable=<selected deliverable type (intent-type value)>
+ searchRequested=<true, false or never>
+ userRequiredLanguage=<the language the latest user question names for the answer, named in English, or none>
  
 rewrittenQuery rules:
 
@@ -38,8 +40,40 @@ rewrittenQuery rules:
 
 deliverable rules:
 * Consider your generated rewrittenQuery as input and choose from the (G) deliverable type list a single the intent-type field value that mostly fits.
-* Prefer the lightest deliverable that satisfies the request; default to QA when in doubt. Only choose ANALISYS or PURE_SEARCH when the user EXPLICITLY asks for a report/analysis or for a search/research. A normal question that can be answered directly is QA, not ANALISYS.
+* Prefer the lightest deliverable that satisfies the request; default to QA when in doubt. Only choose ANALISYS when the user EXPLICITLY asks for a report or an analysis. A normal question that can be answered directly is QA, not ANALISYS.
+* The deliverable is what the user wants back, never how to get it: "search the web: when was X founded?" is QA, "find the documents about X" is SUMMARY or QA, "search and compare in depth" is ANALISYS.
 * Choose IMAGE_GENERATION when the user EXPLICITLY asks to generate/create/draw/render/paint/design a NEW image, picture, illustration, logo, icon, avatar, artwork or photo (in any language). Do NOT choose IMAGE_GENERATION when the user only wants to find/search existing images, or to describe/analyze an image they provided.
+
+searchRequested rules:
+* true when the user asks to search, find, research, look up, check or verify something, in any language and with any synonym (cerca, trova, verifica, recherche, busca, suche...), or names the sources the answer must come from (the web, the documents, the knowledge base, a system), also when the request is a question about what those sources say or contain.
+* never when the user explicitly asks to answer without searching: from memory, from this conversation, without looking anything up (in any language).
+  It wins over the rule above: a request asking not to search is never, even when it names the knowledge base, the documents or the web.
+* false otherwise.
+* Examples:
+  "Using the knowledge base, who is X?" -> true
+  "What does the knowledge base say about X? Answer only from the documents." -> true
+  "Cosa dice la knowledge base su X?" -> true
+  "Trova i documenti che parlano di X" -> true
+  "Search the web: when was X founded?" -> true
+  "Who wrote X?" -> false
+  "In one sentence: who wrote X?" -> false
+  "Without searching anything: what was my first question?" -> never
+  "Senza cercare nulla, di cosa abbiamo parlato?" -> never
+  "Senza cercare nulla: quanti documenti contiene la knowledge base?" -> never
+
+userRequiredLanguage rules (the latest user question only):
+* Report a language ONLY when the latest user question mentions it by name as the language of the
+  answer ("in inglese", "in English", "auf Deutsch", "en français"); write it named in English.
+* Otherwise none: no language named means none, whatever language the question is written in and
+  however long or detailed it is.
+* Examples:
+  "Rispondimi in inglese: chi e' X?" -> English
+  "D'ora in poi rispondimi sempre in francese. Chi e' X?" -> French
+  "Please answer in Italian: who is X?" -> Italian
+  "Chi e' X?" -> none
+  "Who is X?" -> none
+  "Write a detailed comparative analysis report on X, citing the sources." -> none
+  "Scrivi un'analisi dettagliata di X basandoti sui documenti della knowledge base." -> none
 
 You MUST NOT:
 
@@ -50,10 +84,12 @@ Add keywords lists, alternative queries, or extra metadata.
 Introduce assumptions or guesses.
 
 OUTPUT:
-Return only the two required fields exactly 2 lines:
+Return only the four required fields exactly 4 lines:
 No quotes. No markdown. No bullets.
 
 Example: 
  rewrittenQuery=<the rewritten user question (no explanations, no JSON, no extra text)>
  deliverable=<selected deliverable type (intent-type value)>
+ searchRequested=<true, false or never>
+ userRequiredLanguage=<the language the latest user question names for the answer, named in English, or none>
 

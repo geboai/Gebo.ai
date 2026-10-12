@@ -15,4 +15,5 @@ Name | Value
 MONGO | &quot;MONGO&quot;
 QDRANT | &quot;QDRANT&quot;
 REDIS | &quot;REDIS&quot;
+LOCAL | &quot;LOCAL&quot;
 TEST | &quot;TEST&quot;

@@ -1,0 +1,19 @@
+## User question
+
+{question}
+
+## Writer's instruction
+
+{INPUT}
+
+## Depth required by the user
+
+{REQUIRED_AGENT_COMPLETENESS}
+
+Extract more facts for the detailed deliverables, fewer and only the essential ones for the direct answers.
+
+## Evidence part to extract from
+
+{SHARED_CONTEXT}
+
+Now extract the relevant facts and concepts of this part, one per line, each with its source.

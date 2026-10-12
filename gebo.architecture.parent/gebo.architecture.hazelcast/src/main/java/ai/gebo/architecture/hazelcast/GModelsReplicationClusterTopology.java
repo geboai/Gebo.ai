@@ -11,6 +11,7 @@ package ai.gebo.architecture.hazelcast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -64,4 +65,28 @@ public class GModelsReplicationClusterTopology {
 	 */
 	@Builder.Default
 	private List<String> members = new ArrayList<>();
+
+	/**
+	 * Optional LIVE resolver of member addresses ({@code host:port}), called again
+	 * every time Hazelcast looks for peers rather than once at startup.
+	 * <p>
+	 * {@link #members} is a snapshot: Hazelcast reads a TCP/IP member list once,
+	 * when the member starts, so a participant that starts before its peers are
+	 * discoverable seeds an empty list, never dials anyone, and stays a cluster of
+	 * one - permanently, because multicast is disabled and the list is never
+	 * re-read. That is only safe where the full set of addresses is known up front
+	 * and fixed.
+	 * <p>
+	 * When this supplier is set it is used instead, through Hazelcast's discovery
+	 * SPI: Hazelcast calls it on every join attempt AND on its periodic
+	 * split-brain merge cycles, so members find each other whatever order they
+	 * start in, and a member that came up alone rejoins once its peers become
+	 * discoverable. It also imposes no assumption about how many instances a
+	 * participant has - the supplier returns however many the source reports, so
+	 * the cluster works with any number of replicas per participant.
+	 * <p>
+	 * It must be cheap and non-blocking: it is called from Hazelcast's own threads.
+	 */
+	@Builder.Default
+	private transient Supplier<List<String>> liveMembers = null;
 }

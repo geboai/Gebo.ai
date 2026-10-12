@@ -71,7 +71,7 @@ public class JobStatusController {
 	 * tyr's own Mongo via {@code GJobStatusReplicatorReceiverService}.
 	 */
 	@PostMapping(value = "getJobsEntriesForProjectEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Page<GJobStatusItem> getJobsEntriesForProjectEndpoint(
+	public Page<GJobStatusItem> getJobsEntriesForProjectEndpointJobStatus(
 			@RequestBody JobsEntriesForProjectEndpointFilter filter) {
 		Pageable pageable = filter.page != null ? filter.page.toPageable() : Pageable.ofSize(20);
 		return jobsRepository.findByProjectEndpointReferenceAndJobType(filter.endpointRef, filter.jobType, pageable);

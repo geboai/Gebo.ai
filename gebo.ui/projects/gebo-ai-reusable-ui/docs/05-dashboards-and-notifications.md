@@ -35,6 +35,31 @@ constructor(private notify: GeboAIRootNotificationService) {}
 this.notify.addMessage('MyModule', 'MyEntity', { severity: 'success', summary: 'Saved' });
 ```
 
+## System messages — `<gebo-ai-system-messages>`
+
+Persistent notifications published by backend modules, as opposed to the transient toasts above.
+The backend (`gebo.architecture.system.messages`) routes them by role: administrators receive the
+messages for `ADMINS` and `ALL`, the other users those for `USERS` and `ALL`.
+
+The component is part of `GeboAINotificationsModule` and is already placed in the application shell
+(`<gebo-ai-desktop>`) for logged-in users. It loads the messages right after login and then every
+`refreshSeconds` (default 300), shows them most severe first, and offers a dismiss button on the
+dismissible ones. A dismissed message comes back when its publisher changes its content.
+
+```html
+<gebo-ai-system-messages [refreshSeconds]="300"></gebo-ai-system-messages>
+```
+
+A backend module publishes through `IGSystemMessagesService`; publishing again under the same source
+and key replaces the message, so a status that changes over time stays one message:
+
+```java
+systemMessagesService.publish(new SystemMessagePublication("backup", "last-run",
+        MsgServerity.warn, "Last backup failed", detail, SystemMessageAudience.ADMINS,
+        true /* dismissible */, null /* until retracted */));
+systemMessagesService.retract("backup", "last-run");
+```
+
 ## LLM usage dashboards — `GeboAILLMSUsageDashboardModule`
 
 Two components, no inputs on either — scoping (which user's data) is determined entirely by which
@@ -48,10 +73,12 @@ component you use, not by a bound `@Input`:
 <gebo-ai-llms-usage-user-dashboard></gebo-ai-llms-usage-user-dashboard>
 ```
 
-Each renders two tabs ("This month, daily" and "Monthly history") with Chart.js token-consumption
-and latency charts, plus per-tab dropdown filters (`providerId`, `username` [admin only], `model`,
-`callerStack`, `modelType`, `year`, `month`) whose options come pre-computed from the backend
-response — there is no free-form date-range picker.
+Each renders two tabs ("This month, daily" and "Monthly history") with Chart.js charts for token
+consumption, response time (request issued to response complete, every call) and time to first
+token (the latency in the strict sense, measured for streamed chat calls only), plus per-tab
+dropdown filters in this order: `providerId`, `modelType`, `model`, `year`, `month`, `username`
+[admin only], `callerStack`. The model type filter always lists every model type; the other options
+come pre-computed from the backend response — there is no free-form date-range picker.
 
 ## Workflow stats dashboard — `GeboAIWorkflowStatsDashboardModule`
 

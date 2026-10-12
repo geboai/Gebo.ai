@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +33,7 @@ import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
@@ -48,12 +51,18 @@ import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswer;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
+import ai.gebo.llms.models.metainfos.ModelParameterRules;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
@@ -69,7 +78,28 @@ import reactor.core.scheduler.Schedulers;
  *                        ChatModel.
  */
 public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseChatModelConfig, ChatModelType extends ChatModel>
-		implements IGConfigurableChatModel<ModelConfig> {
+		implements IGConfigurableChatModel<ModelConfig>, IGProviderDealPricedModel {
+
+	/**
+	 * Prices this model by its provider deal; attached by the runtime DAO, null
+	 * leaving it priced by the provider API only.
+	 */
+	private volatile IGProviderDealService providerDealService = null;
+
+	@Override
+	public void setProviderDealService(IGProviderDealService providerDealService) {
+		this.providerDealService = providerDealService;
+	}
+
+	/**
+	 * The price the provider deal covering this model's API key gives to its
+	 * model code, else the provider API's one; read from an in-memory snapshot.
+	 */
+	@Override
+	public GModelPricingConditions getPricingConditions() {
+		return IGProviderDealPricedModel.dealOrProviderApiPricing(providerDealService, this);
+	}
+
 	public static final String END_CONTEXT = "END_CONTEXT";
 	public static final String BEGIN_CONTEXT = "BEGIN_CONTEXT";
 	public static final String NEWLINE = "\r\n";
@@ -94,19 +124,50 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 */
 	protected final ObservationRegistry observationRegistry;
 	protected static final ObjectMapper mapper = new ObjectMapper();
+	/**
+	 * The tools made for this use of the model (see
+	 * {@link ChatModelConfigOptions#getAdditionalTools()}), declared with the repository
+	 * ones when the configuration enables them.
+	 */
+	protected List<ToolCallback> additionalTools = List.of();
+	/**
+	 * The share of what a model call's messages and tools' definitions leave of the
+	 * context that its tools' results may take.
+	 */
+	public static final double TOOLS_ROOM_SHARE = 2.0d / 3.0d;
+	/** The models already warned of having no known context length, warned once. */
+	private static final java.util.Set<String> UNKNOWN_CONTEXT_LENGTH_WARNED = java.util.concurrent.ConcurrentHashMap
+			.newKeySet();
+
+	/**
+	 * The models library the parameter rules of the model are read from (see
+	 * {@link ModelParameterRules}); null leaves the requests as the configuration makes
+	 * them.
+	 */
+	protected final IGModelsLibraryDao modelsLibrary;
+	/**
+	 * The parameter rules of the model the configuration names, resolved each time it is
+	 * initialized; null when none covers it.
+	 */
+	protected ModelParameterRules parameterRules = null;
 
 	protected abstract IGConfigurableChatModel cloneMeWithInjection();
 
 	/**
 	 * Default constructor for GAbstractConfigurableChatModel.
+	 *
+	 * @param modelsLibrary the library the model's parameter rules are read from, may be
+	 *                      null
 	 */
 	public GAbstractConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 			IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-			IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
+			IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry,
+			IGModelsLibraryDao modelsLibrary) {
 		this.rendererFactory = rendererFactory;
 		this.toolCallbacksRepository = toolCallbacksRepository;
 		this.usageAdvisorFactory = usageAdvisorFactory;
 		this.observationRegistry = observationRegistry;
+		this.modelsLibrary = modelsLibrary;
 	}
 
 	/**
@@ -165,22 +226,189 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 */
 	@Override
 	public void initialize(ModelConfig config, GChatModelType type) throws LLMConfigException {
+		this.type = type;
+		this.parameterRules = parameterRulesOf(config, type);
 		// Deterministic by default: a chat model with no temperature set is initialized at
 		// temperature 0, so internal judgement calls (the ranking irrelevance filter,
-		// routing, query rewriting) do not vary run to run. An explicit temperature in the
-		// configuration is always respected.
-		if (config != null && config.getTemperature() == null) {
-			config.setTemperature(0.0d);
+		// routing, query rewriting) do not vary run to run - where the model takes a
+		// temperature at all: the reasoning models refusing the sampling parameters fail
+		// every request carrying one. An explicit temperature in the configuration is kept,
+		// and sent where the model's parameter rules allow it. A model whose provider
+		// recommends its default temperature (Gemini 3) is left at it.
+		if (config != null && config.getTemperature() == null && samplingAllowed(config)) {
+			if (parameterRules != null && parameterRules.keepsProviderDefaultSampling()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model code=" + config.getCode()
+							+ " has no temperature set and its parameter rules keep the provider default: none is sent");
+				}
+			} else {
+				config.setTemperature(0.0d);
+			}
 		}
 		this.config = config;
-		this.type = type;
-		this.model = configureModel(config, type, null);
-		Builder builder = ChatClient.builder(configureModel(config, type, null));
-		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config)).build();
+		final ModelConfig requestConfig = requestConfig(config);
+		this.model = configureModel(requestConfig, type, null);
+		Builder builder = ChatClient.builder(configureModel(requestConfig, type, null));
+		// Priced through this model's getPricingConditions(), read when each call ends; a
+		// call's answer read from its answer generation, not from a reasoning one; the
+		// reasoning of every model round apart from the answer, every provider alike.
+		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions,
+				this::getProviderId), new AnswerFirstGenerations.Advisor(this::isReasoningGeneration),
+				thinkingNormalization()).build();
+	}
+
+	/**
+	 * The parameter rules of the model the configuration names, from the models library;
+	 * null when the library is absent, the model unknown or no rule covers it.
+	 */
+	protected ModelParameterRules parameterRulesOf(ModelConfig config, GChatModelType type) {
+		if (config == null || config.getChoosedModel() == null || type == null)
+			return null;
+		final String modelId = config.getChoosedModel().getCode();
+		ModelParameterRules live = null;
+		try {
+			live = liveParameterRules(config, type);
+		} catch (RuntimeException e) {
+			LOGGER.error("Cannot read what the models api told of chat model code=" + config.getCode()
+					+ ", the models library rules apply alone", e);
+		}
+		if (modelsLibrary == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat model code=" + config.getCode() + " model=" + modelId
+						+ " no models library, live parameter rules: " + live);
+			}
+			return live;
+		}
+		try {
+			final ModelParameterRules library = modelsLibrary.findParameterRules(type.getProviderId(), modelId);
+			final ModelParameterRules rules = ModelParameterRules.merge(live, library);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat model code=" + config.getCode() + " model=" + modelId + " provider="
+						+ type.getProviderId() + " parameter rules: " + rules + " (live: " + live + ", library: "
+						+ library + ")");
+			}
+			return rules;
+		} catch (RuntimeException e) {
+			LOGGER.error("Cannot read the parameter rules of chat model code=" + config.getCode()
+					+ ", its requests are made without the library ones", e);
+			return live;
+		}
+	}
+
+	/**
+	 * The parameter rules the provider's models api told for the chosen model, kept on
+	 * the choice when the model was listed (e.g. the efforts and parameters OpenRouter
+	 * publishes per model); null when the provider tells none, the default. They win
+	 * over the models library where they say something, see
+	 * {@link ModelParameterRules#merge(ModelParameterRules, ModelParameterRules)}.
+	 */
+	protected ModelParameterRules liveParameterRules(ModelConfig config, GChatModelType type) {
+		return null;
+	}
+
+	/**
+	 * Whether a request of the model may carry the sampling parameters, temperature and
+	 * top_p: always, unless its parameter rules refuse them - outright, or while it
+	 * reasons, i.e. unless the configuration turns the reasoning off with an effort
+	 * {@code none} the model accepts.
+	 */
+	protected boolean samplingAllowed(ModelConfig config) {
+		if (parameterRules == null)
+			return true;
+		final boolean reasoningOff = config != null && config.getThinking() == ChatModelThinkingOption.NO_THINKING
+				&& parameterRules.acceptsEffort(ModelParameterRules.NO_REASONING_EFFORT);
+		return parameterRules.samplingAllowed(reasoningOff);
+	}
+
+	/**
+	 * The configuration the model's requests are made from: the given one, or a copy of
+	 * it without the sampling parameters where the model's parameter rules refuse them.
+	 * The given configuration is left as it is: it is the one saved, shown and copied.
+	 */
+	protected ModelConfig requestConfig(ModelConfig config) throws LLMConfigException {
+		if (config == null || samplingAllowed(config) || (config.getTemperature() == null && config.getTopP() == null))
+			return config;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Chat model code=" + config.getCode() + " sends neither its temperature ("
+					+ config.getTemperature() + ") nor its top_p (" + config.getTopP() + ") at thinking "
+					+ config.getThinking() + ": refused by " + parameterRules);
+		}
+		final ModelConfig withoutSampling = copyOf(config);
+		withoutSampling.setTemperature(null);
+		withoutSampling.setTopP(null);
+		return withoutSampling;
+	}
+
+	@SuppressWarnings("unchecked")
+	private ModelConfig copyOf(ModelConfig config) throws LLMConfigException {
+		try {
+			return (ModelConfig) mapper.readValue(mapper.writeValueAsString(config).getBytes(), config.getClass());
+		} catch (JacksonException e) {
+			throw new LLMConfigException("Cannot copy the configuration of chat model code=" + config.getCode(), e);
+		}
+	}
+
+	/**
+	 * The reasoning effort a request sends for a thinking option, as the OpenAI compatible
+	 * APIs spell it ({@code reasoning_effort}): {@code none} for no thinking, low, medium
+	 * and high as asked, each only when the model's parameter rules list it; null to send
+	 * none and leave the provider default. Without rules knowing the model's efforts, low,
+	 * medium and high are sent as asked and no thinking sends nothing, the value that
+	 * turns the reasoning off differing per backend.
+	 */
+	protected String reasoningEffortFor(ChatModelThinkingOption option) {
+		if (option == null)
+			return null;
+		final String effort;
+		switch (option) {
+		case NO_THINKING:
+			effort = ModelParameterRules.NO_REASONING_EFFORT;
+			break;
+		case LOW_THINKING:
+			effort = "low";
+			break;
+		case MEDIUM_THINKING:
+			effort = "medium";
+			break;
+		case HIGH_THINKING:
+			effort = "high";
+			break;
+		default:
+			// AUTO: the provider default
+			return null;
+		}
+		if (parameterRules == null || !parameterRules.knowsEfforts())
+			return option == ChatModelThinkingOption.NO_THINKING ? null : effort;
+		if (parameterRules.acceptsEffort(effort))
+			return effort;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Chat model code=" + getCode() + " thinking " + option + ": effort " + effort
+					+ " is not among the accepted " + parameterRules.getReasoningEfforts()
+					+ ", the provider default is left");
+		}
+		return null;
+	}
+
+	/**
+	 * Whether the model takes a reasoning effort value, as the provider spells it: true
+	 * unless its parameter rules list its efforts without this one.
+	 */
+	protected boolean acceptsEffort(String effort) {
+		return parameterRules == null || !parameterRules.knowsEfforts() || parameterRules.acceptsEffort(effort);
 	}
 
 	@Override
 	public List<ToolCallback> wrapTools(ReactiveIdentityUtil runAs, ToolCallsListener toolCallListener) {
+		return wrapToolsClosingResults(runAs, toolCallListener, null);
+	}
+
+	/**
+	 * The enabled tools of this model, each closing its results with
+	 * {@code toolsResultsClosing} when not null (see
+	 * {@link GPromptTemplateConfig#getToolsResultsPromptTemplate()}).
+	 */
+	protected List<ToolCallback> wrapToolsClosingResults(ReactiveIdentityUtil runAs,
+			ToolCallsListener toolCallListener, String toolsResultsClosing) {
 		List<String> toolNames = config.getEnabledFunctions();
 		if (toolNames == null)
 			toolNames = List.of();
@@ -188,7 +416,22 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 		List<ToolCallback> wrapped = new ArrayList<>();
 		for (ToolCallback toolCallback : tools) {
-			wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener));
+			wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener, toolsResultsClosing));
+		}
+		// the tools made for this use of the model are not in the repository: without this
+		// they would be executable but never declared to the model
+		int additional = 0;
+		for (ToolCallback toolCallback : additionalTools != null ? additionalTools : List.<ToolCallback>of()) {
+			final String name = toolCallback.getToolDefinition().name();
+			if (toolNames.contains(name) && wrapped.stream().noneMatch(x -> name.equals(x.getToolDefinition().name()))) {
+				wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener, toolsResultsClosing));
+				additional++;
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("wrapTools(...) model:" + getCode() + " declares " + wrapped.size() + " tool(s), " + additional
+					+ " of them made for this use of the model"
+					+ (toolsResultsClosing != null ? ", their results closed by the prompt's text" : ""));
 		}
 		return wrapped;
 	}
@@ -240,6 +483,76 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	}
 
+	/** What {@link #testCall()} asks: answerable in one word by any model. */
+	static final String TEST_CALL_PROMPT = "Reply with the single word OK.";
+
+	/**
+	 * Sends the provider one user message through this model as it is configured: its
+	 * sampling, thinking level, output limit and the definitions of the tools it enables
+	 * go with it, as with every request it makes, so the provider judges the request the
+	 * model will really send. No tool can run: in Spring AI 2.0.1 a provider's chat model
+	 * only declares the tools - the chat client runs them, and this call does not go
+	 * through it - so a tool call in the answer is an answer like any other. The call is
+	 * recorded in the usage, as any other.
+	 */
+	@Override
+	public void testCall() throws LLMConfigException {
+		final long start = System.currentTimeMillis();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin testCall() model code=" + getCode() + " model=" + safeGetModelCode() + " type="
+					+ (type != null ? type.getCode() : null) + " temperature="
+					+ (config != null ? config.getTemperature() : null) + " thinking="
+					+ (config != null ? config.getThinking() : null) + " tools="
+					+ (config != null && config.getEnabledFunctions() != null ? config.getEnabledFunctions().size()
+							: 0));
+		}
+		final ChatResponse response;
+		try {
+			response = doWithChatModel(chatModel -> chatModel.call(new Prompt(new UserMessage(TEST_CALL_PROMPT))));
+		} catch (RuntimeException e) {
+			// the stack is logged by whoever set the model, with the message this carries
+			LOGGER.warn("Chat model code=" + getCode() + " model=" + safeGetModelCode() + " refused the test call: "
+					+ innermostMessage(e));
+			throw new LLMConfigException("The chat model " + safeGetModelCode() + " (" + getCode()
+					+ ") refused a test call: " + innermostMessage(e), e);
+		}
+		if (response == null) {
+			LOGGER.warn("Chat model code=" + getCode() + " model=" + safeGetModelCode()
+					+ " answered the test call with no response");
+			throw new LLMConfigException("The chat model " + safeGetModelCode() + " (" + getCode()
+					+ ") answered a test call with no response");
+		}
+		final Generation result = response.getResult();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End testCall() model code=" + getCode() + " answered in "
+					+ (System.currentTimeMillis() - start) + "ms, finish reason="
+					+ (result != null && result.getMetadata() != null ? result.getMetadata().getFinishReason() : null)
+					+ " tool calls="
+					+ (result != null && result.getOutput() != null && result.getOutput().hasToolCalls()
+							? result.getOutput().getToolCalls().size()
+							: 0));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("testCall() model code=" + getCode() + " answer: "
+					+ (result != null && result.getOutput() != null ? result.getOutput().getText() : null));
+		}
+	}
+
+	/**
+	 * The message of the deepest cause that has one: the provider's own words, which the
+	 * wrappers around them (retries, Spring AI) tend to bury.
+	 */
+	static String innermostMessage(Throwable error) {
+		String message = null;
+		final java.util.Set<Throwable> seen = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
+		for (Throwable cause = error; cause != null && seen.add(cause); cause = cause.getCause()) {
+			if (cause.getMessage() != null && !cause.getMessage().isBlank()) {
+				message = cause.getMessage();
+			}
+		}
+		return message != null ? message : error.getClass().getSimpleName();
+	}
+
 	/**
 	 * Retrieves metadata for the chat model choice.
 	 * 
@@ -286,6 +599,15 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 */
 	@Override
 	public int getContextLength() {
+		final Integer contextLength = knownContextLength();
+		return contextLength != null ? contextLength : 8192;
+	}
+
+	/**
+	 * The context length the configuration or the model metadata give (less the
+	 * configured maximum generated tokens), null when neither gives one.
+	 */
+	protected Integer knownContextLength() {
 		Integer contextLength = null;
 		if (getConfig() != null) {
 			contextLength = getConfig().getContextLength();
@@ -315,9 +637,77 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				contextLength = realContextWindow;
 			}
 		}
-		if (contextLength == null || contextLength.intValue() == 0)
-			contextLength = 8192;
-		return contextLength;
+		return contextLength == null || contextLength.intValue() <= 0 ? null : contextLength;
+	}
+
+	/**
+	 * The context window of a configuration's model: the configured one, else the one
+	 * the chosen model carries or its provider's metadata report. Null when none is
+	 * known.
+	 */
+	public static Integer contextWindowOf(GBaseChatModelConfig<?> config) {
+		if (config == null)
+			return null;
+		Integer contextLength = config.getContextLength();
+		if ((contextLength == null || contextLength <= 0) && config.getChoosedModel() instanceof GBaseModelChoice choice) {
+			contextLength = choice.getContextLength();
+			if ((contextLength == null || contextLength <= 0) && choice.getMetaInfos() != null) {
+				contextLength = choice.getMetaInfos().getContextLength();
+			}
+		}
+		return contextLength == null || contextLength <= 0 ? null : contextLength;
+	}
+
+	/**
+	 * The default maximum of generated tokens for a context window, when the
+	 * configuration sets none: a share of the window, by steps - 4K below 30K tokens,
+	 * 8K up to 120K, 10K above. Null when the window is unknown.
+	 */
+	public static Integer defaultMaxGeneratedTokens(Integer contextWindow) {
+		if (contextWindow == null || contextWindow <= 0)
+			return null;
+		if (contextWindow < 30_000)
+			return 4096;
+		if (contextWindow <= 120_000)
+			return 8192;
+		return 10240;
+	}
+
+	/**
+	 * The maximum of generated tokens of a configuration: the configured one, else the
+	 * default its model's context window gives. Null when neither is known.
+	 */
+	public static Integer maxGeneratedTokensOf(GBaseChatModelConfig<?> config) {
+		if (config == null)
+			return null;
+		if (config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0)
+			return config.getMaxGeneratedTokens();
+		return defaultMaxGeneratedTokens(contextWindowOf(config));
+	}
+
+	/**
+	 * Whether a generation of a blocking call's response is the model's reasoning rather
+	 * than its answer. False by default: the providers whose Spring AI model returns its
+	 * reasoning as generations of their own say which ones they are, so that the answer
+	 * is read from the answer generation ({@link AnswerFirstGenerations}).
+	 */
+	protected boolean isReasoningGeneration(Generation generation) {
+		return false;
+	}
+
+	/**
+	 * How the provider's Spring AI model gives the reasoning apart from the answer. The
+	 * OpenAI reading by default (the reasoning_content of the OpenAI compatible APIs, as
+	 * Spring AI's OpenAI model keeps it): a provider keeping it otherwise gives its own.
+	 */
+	protected IGReasoningExtractor reasoningExtractor() {
+		return IGReasoningExtractor.OPENAI;
+	}
+
+	/** The advisor giving every model round's answer and reasoning the same shape. */
+	ThinkingNormalizationAdvisor thinkingNormalization() {
+		return new ThinkingNormalizationAdvisor(reasoningExtractor(), this::isApplyThinkingMarkupHandling,
+				this::isReasoningGeneration);
 	}
 
 	/**
@@ -365,15 +755,20 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 		ChatClientRequestSpec reqObject = client.prompt();
 
-		if (prompt.getToolsCalling() == null || prompt.getToolsCalling() == ContextContentRequired.REQUIRED) {
-			reqObject = reqObject.toolCallbacks(wrapTools(runAs, chatContext.getToolCallListener()));
-		} else {
-			reqObject = reqObject.toolCallbacks(List.of());
-		}
+		final boolean toolsCalling = prompt.getToolsCalling() == null
+				|| prompt.getToolsCalling() == ContextContentRequired.REQUIRED;
+		final List<ToolCallback> tools = toolsCalling
+				? wrapToolsClosingResults(runAs, chatContext.getToolCallListener(),
+						createToolsResultsClosing(prompt, params, chatContext))
+				: List.of();
+		reqObject = reqObject.toolCallbacks(tools);
 		// chat histroy in user, assistant format
 		reqObject = reqObject.messages(messages);
 		// tools call environment
 		Map<String, Object> toolContext = chatContext.getToolsContext();
+		if (!tools.isEmpty()) {
+			toolContext = withToolsRoom(toolContext, messages, tools, LOGGER.isDebugEnabled() ? tokens : -1);
+		}
 		if (toolContext != null) {
 			reqObject = reqObject.toolContext(toolContext);
 		}
@@ -381,6 +776,58 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			LOGGER.debug("End prepareCall(" + prompt.getPromptUse() + ", ...,...)");
 		}
 		return new RequestSpec(reqObject, tokens, config != null ? config.getCode() : "<<empty model>>");
+	}
+
+	/**
+	 * The tools context of a model call with tools, carrying the room its context leaves
+	 * to the tools' results (see {@link ToolsTokenBudget}): two thirds ({@link #TOOLS_ROOM_SHARE})
+	 * of what the messages and the tools' definitions leave of the context length, the
+	 * rest left to the answer, the tool calls' arguments and the model's messages
+	 * between the tool rounds. A budget an agent shares through the request context is
+	 * capped to it, never replaced, so the smaller of the two applies. Without a known
+	 * context length no room is set (the 8192 of {@link #getContextLength()} is a guess):
+	 * the tools are left to their own sizes, as before.
+	 *
+	 * @param messagesTokens the tokens of the messages when already counted, -1 when not
+	 * @return a copy of the given tools context (never the caller's map)
+	 */
+	protected Map<String, Object> withToolsRoom(Map<String, Object> toolsContext, List<Message> messages,
+			List<ToolCallback> tools, long messagesTokens) {
+		if (knownContextLength() == null) {
+			if (UNKNOWN_CONTEXT_LENGTH_WARNED.add(String.valueOf(getCode()))) {
+				LOGGER.warn("Chat model " + getCode() + " has no known context length: its tools' results are not "
+						+ "bounded by the room left in its context");
+			}
+			return toolsContext;
+		}
+		final int contextLength = getContextLength();
+		long used = messagesTokens;
+		if (used < 0) {
+			used = 0;
+			for (Message message : messages) {
+				used += ITokensCountable.stringsTokensSize(message.getText());
+			}
+		}
+		long definitions = 0;
+		for (ToolCallback tool : tools) {
+			definitions += ITokensCountable.stringsTokensSize(tool.getToolDefinition().name(),
+					tool.getToolDefinition().description(), tool.getToolDefinition().inputSchema());
+		}
+		final int room = (int) Math.max(0,
+				Math.min(Integer.MAX_VALUE, (long) ((contextLength - used - definitions) * TOOLS_ROOM_SHARE)));
+		final Map<String, Object> withRoom = toolsContext != null ? new HashMap<>(toolsContext) : new HashMap<>();
+		final ToolsTokenBudget shared = ToolsTokenBudget.from(withRoom);
+		if (shared != null) {
+			shared.capTo(room);
+		} else {
+			withRoom.put(ToolsTokenBudget.TOOLS_CONTEXT_KEY, new ToolsTokenBudget(room));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("withToolsRoom(...) model:" + getCode() + " context:" + contextLength + " messages:" + used
+					+ " tools definitions:" + definitions + " (tok) room for " + tools.size() + " tool(s) results:"
+					+ room + " (tok)" + (shared != null ? " capping the shared budget, now " + shared.left() : ""));
+		}
+		return withRoom;
 	}
 
 	protected List<Message> createCompleteHistory(IChatRequestContext chatContext) {
@@ -414,15 +861,29 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	}
 
+	protected final static String COMPRESSED_HISTORY_ONLY_MESSAGE_CHAT_TEMPLATE = "BEGIN_CONSOLIDATED_HISTORY\r\n{"
+			+ IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM + "}\r\nEND_CONSOLIDATED_HISTORY\r\n";
+
 	protected final static String COMPRESSED_HISTORY_FIRST_MESSAGE_CHAT_TEMPLATE = "BEGIN_CONSOLIDATED_HISTORY\r\n{"
 			+ IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM
-			+ "}\r\nEND_CONSOLIDATED_HISTORY\\r\\nUSER-QUESTION={" + IChatRequestContext.USER_QUESTION_PROMPT_PARAM
+			+ "}\r\nEND_CONSOLIDATED_HISTORY\r\nUSER-QUESTION={" + IChatRequestContext.USER_QUESTION_PROMPT_PARAM
 			+ "}\r\n";
 
 	protected List<Message> createCompressedHistory(IChatRequestContext chatContext) {
 		List<Message> messages = new ArrayList<>();
 		String consolidated = chatContext.getConsolidatedHistory();
-		List<IChatSessionEntry> interactions = chatContext.getInteractions();
+		List<IChatSessionEntry> interactions = chatContext.getInteractions() != null ? chatContext.getInteractions()
+				: List.of();
+		if (interactions.isEmpty()) {
+			// only the summary of the older turns is left: it is the whole history
+			PromptTemplate template = new PromptTemplate(COMPRESSED_HISTORY_ONLY_MESSAGE_CHAT_TEMPLATE);
+			template.add(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM, consolidated);
+			messages.add(new UserMessage(template.render()));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("createCompressedHistory(...) chat history is the consolidated summary only");
+			}
+			return messages;
+		}
 		for (int i = 0; i < interactions.size(); i++) {
 			if (i == 0) {
 				String user = interactions.get(0).getUser();
@@ -435,8 +896,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				messages.add(firstUserMessage);
 				messages.add(firstAssistantMessage);
 			} else {
-				String user = interactions.get(0).getUser();
-				String assistant = interactions.get(0).getAssistant();
+				String user = interactions.get(i).getUser();
+				String assistant = interactions.get(i).getAssistant();
 				UserMessage userMessage = new UserMessage(user != null ? user : "");
 				AssistantMessage assistantMessage = new AssistantMessage(assistant != null ? assistant : "");
 				messages.add(userMessage);
@@ -469,8 +930,56 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		allParams.put(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, chatContext.getActualUserRequest());
 		allParams.put(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM,
 				chatContext.getConsolidatedHistory() != null ? chatContext.getConsolidatedHistory() : "");
-		String content = promptTemplate.render(allParams);
+		String content = promptTemplate.render(withUserLanguage(allParams, chatContext));
 		return new UserMessage(content);
+	}
+
+	/**
+	 * The parameters with the answer's language ({@code {userLanguage}}): the user's
+	 * language detected for the request, or what says to deduce it; a caller's own
+	 * value is kept. Every template of every call may name it, never missing.
+	 */
+	protected static Map<String, Object> withUserLanguage(Map<String, Object> params,
+			IChatRequestContext chatContext) {
+		final Map<String, Object> withLanguage = params != null ? new HashMap<>(params) : new HashMap<>();
+		withLanguage.putIfAbsent(IChatRequestContext.USER_LANGUAGE_PROMPT_PARAM,
+				IChatRequestContext.answerLanguage(chatContext));
+		return withLanguage;
+	}
+
+	/**
+	 * The text closing every tool result of this call: the prompt's tools results
+	 * template, rendered with the parameters of the user message but the documents
+	 * (they are in the user message). The tool calling loop puts the tools' results after
+	 * the user message, so when tools run this is the last text the model reads before
+	 * answering. Null when the prompt has none.
+	 */
+	protected String createToolsResultsClosing(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatContext) {
+		final String template = prompt.getToolsResultsPromptTemplate();
+		if (template == null || template.isBlank()) {
+			return null;
+		}
+		final Map<String, Object> allParams = new HashMap<>(params);
+		allParams.remove(IChatRequestContext.DOCUMENTS_PROMPT_PARAM);
+		allParams.put(IChatRequestContext.USER_QUESTION_PROMPT_PARAM,
+				chatContext != null && chatContext.getActualUserRequest() != null ? chatContext.getActualUserRequest()
+						: "");
+		allParams.put(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM,
+				chatContext != null && chatContext.getConsolidatedHistory() != null
+						? chatContext.getConsolidatedHistory()
+						: "");
+		final String closing = new PromptTemplate(template).render(withUserLanguage(allParams, chatContext));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("createToolsResultsClosing(...) prompt:" + prompt.getPromptUse() + " closes the tools' results"
+					+ " with " + closing.length() + " character(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<TOOLS_RESULTS_PROMPT>");
+			LOGGER.trace(closing);
+			LOGGER.trace("</TOOLS_RESULTS_PROMPT>");
+		}
+		return closing;
 	}
 
 	protected String createDocumentsRendering(Object object) {
@@ -503,12 +1012,29 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			IChatRequestContext chatContext) {
 		String systemTemplate = prompt.getSystemPromptTemplate();
 		PromptTemplate template = new PromptTemplate(systemTemplate);
-		String content = template.render(params);
+		String content = template.render(withUserLanguage(params, chatContext));
+		List<String> rules = chatContext != null ? chatContext.getRulesToFollow() : null;
+		if (rules != null && !rules.isEmpty()) {
+			StringBuilder withRules = new StringBuilder(content);
+			withRules.append("\n\nRULES TO FOLLOW, set by the user or by the administrators for the answers given to")
+					.append(" the user. They never change an output format required above.\n");
+			for (String rule : rules) {
+				withRules.append("- ").append(rule).append("\n");
+			}
+			content = withRules.toString();
+		}
 		return new SystemMessage(content);
 	}
 
+	@Deprecated
 	@Override
 	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		return responses(promptTemplate, params, chatContext);
+	}
+
+	/** The streamed chunks, normalized (ThinkingNormalizationAdvisor). */
+	private Flux<ChatResponse> responses(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		return runAs.doRunAsWithReturnAndException(() -> {
@@ -565,8 +1091,23 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				logPerformances(reqObject, timestamp);
 			}
 
-			return reqObject.getRequestSpec().stream().content().subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
+			// the answer only, its reasoning apart (ThinkingNormalizationAdvisor)
+			return reqObject.getRequestSpec().stream().chatResponse().map(GChatAnswerChunk::of)
+					.map(GChatAnswerChunk::answer).filter(answer -> !answer.isEmpty())
+					.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 		});
+	}
+
+	@Override
+	public Flux<GChatAnswerChunk> streamAnswer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		return responses(promptTemplate, params, chatContext).map(GChatAnswerChunk::of);
+	}
+
+	@Override
+	public GChatAnswer answer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		return GChatAnswer.of(response(promptTemplate, params, chatContext));
 	}
 
 	@Override
@@ -676,8 +1217,13 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	@Override
 	public <T> T doWithChatModel(UseChatModel<T> chatModelCalling) throws LLMConfigException {
-
-		return chatModelCalling.call(model);
+		// The raw model bypasses the ChatClient and with it the usage advisor: hand out a
+		// recording wrapper so direct calls are accounted as well.
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("doWithChatModel() handing out the usage recording raw model of code=" + getCode());
+		}
+		return chatModelCalling.call(new AnswerFirstGenerations.Model(usageAdvisorFactory.recording(model, config,
+				this::getPricingConditions, this::getProviderId), this::isReasoningGeneration));
 	}
 
 	@Override
@@ -699,17 +1245,36 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				modelConfigClone.setTopP(configOptions.getTopP());
 			}
 			IGConfigurableChatModel handler = cloneMeWithInjection();
+			if (handler instanceof GAbstractConfigurableChatModel clone && configOptions.getAdditionalTools() != null) {
+				clone.additionalTools = List.copyOf(configOptions.getAdditionalTools());
+			}
+			if (handler instanceof IGProviderDealPricedModel priced) {
+				// The clone is priced like this model, by its provider deal; best effort.
+				try {
+					priced.setProviderDealService(this.providerDealService);
+				} catch (Throwable e) {
+					LOGGER.error("Cannot attach the provider deals to a clone of chat model code=" + getCode(), e);
+				}
+			}
 			if (configOptions.getToolCallingManager() == null) {
 				handler.initialize(modelConfigClone, type);
 			} else if (handler instanceof GAbstractConfigurableChatModel configurableChatModel) {
 				configurableChatModel.config = modelConfigClone;
 				configurableChatModel.type = this.type;
-				configurableChatModel.model = configurableChatModel.configureModel(modelConfigClone, type,
+				// the clone follows the parameter rules too: an agent's temperature never
+				// reaches a model refusing it
+				configurableChatModel.parameterRules = configurableChatModel.parameterRulesOf(modelConfigClone, type);
+				final GBaseChatModelConfig requestConfig = configurableChatModel.requestConfig(modelConfigClone);
+				configurableChatModel.model = configurableChatModel.configureModel(requestConfig, type,
 						configOptions.getToolCallingManager());
 				configurableChatModel.chatClient = ChatClient
-						.builder(configurableChatModel.configureModel(modelConfigClone, type,
+						.builder(configurableChatModel.configureModel(requestConfig, type,
 								configOptions.getToolCallingManager()))
-						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone)).build();
+						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone,
+								configurableChatModel::getPricingConditions, configurableChatModel::getProviderId),
+								new AnswerFirstGenerations.Advisor(configurableChatModel::isReasoningGeneration),
+								configurableChatModel.thinkingNormalization())
+						.build();
 			} else
 				throw new IllegalStateException(
 						"The actual configurable chat model is not an GAbstractConfigurableChatModel");

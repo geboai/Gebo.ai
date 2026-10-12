@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getImageModelTypes"></a>
 # **getImageModelTypes**
-> Object getImageModelTypes()
+> [GImageModelType] getImageModelTypes()
 
 
 
@@ -31,7 +31,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**[GImageModelType]**](GImageModelType.md)
 
 ### Authorization
 
@@ -44,7 +44,7 @@ No authorization required
 
 <a name="getRuntimeConfiguredImageModels"></a>
 # **getRuntimeConfiguredImageModels**
-> Object getRuntimeConfiguredImageModels(opts)
+> [ConfigurationEntryGBaseImageModelConfig] getRuntimeConfiguredImageModels(opts)
 
 
 
@@ -54,7 +54,7 @@ import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.ImageModelsControllerApi();
 let opts = { 
-  'modelTypeCode': null // Object | 
+  'modelTypeCode': "modelTypeCode_example" // String | 
 };
 apiInstance.getRuntimeConfiguredImageModels(opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -68,11 +68,11 @@ apiInstance.getRuntimeConfiguredImageModels(opts).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional] 
+ **modelTypeCode** | **String**|  | [optional] 
 
 ### Return type
 
-**Object**
+[**[ConfigurationEntryGBaseImageModelConfig]**](ConfigurationEntryGBaseImageModelConfig.md)
 
 ### Authorization
 

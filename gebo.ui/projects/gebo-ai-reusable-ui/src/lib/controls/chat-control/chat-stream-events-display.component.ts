@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { IGeboChatMessage } from "../../services/gebo-chat-message";
 import { GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
@@ -26,8 +26,10 @@ interface ChatNotificationContent {
         }
     ]
 })
-export class GeboAIChatStreamEventsDisplayComponent implements OnChanges{
+export class GeboAIChatStreamEventsDisplayComponent implements OnChanges, OnDestroy{
     @Input() streaming: boolean = false;
+    // The answer text has started below: the waiting skeleton gives way to it.
+    @Input() answering: boolean = false;
     protected currentChatMessage?: IGeboChatMessage;
     @Input() routingChoiceSelector?: string;
     @Input() actualPipelineRoutingOption?:PipelineRoutingOption;
@@ -59,6 +61,10 @@ export class GeboAIChatStreamEventsDisplayComponent implements OnChanges{
             this.clearEventsDisplay();
             this.notifiedPipelineRouting=this.actualPipelineRoutingOption;
         }
+    }
+    ngOnDestroy(): void {
+        // A new display is created on each answer, so the dwell timer must not outlive this one.
+        this.clearEventsDisplay();
     }
     protected get inEventsLoop(): boolean {
         return this.streaming;

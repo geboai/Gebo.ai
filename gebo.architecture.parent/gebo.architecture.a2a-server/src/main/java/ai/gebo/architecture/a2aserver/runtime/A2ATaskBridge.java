@@ -1,6 +1,5 @@
 package ai.gebo.architecture.a2aserver.runtime;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -20,6 +19,7 @@ import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactoryReposit
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
+import ai.gebo.llms.agent.standard.services.UserKnowledgeBasesExecutionEnvironment;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 
@@ -71,8 +71,18 @@ public class A2ATaskBridge {
 		IGAgentsNetworkService<String, String> service = null;
 		try {
 			service = factory.create(network, sink, String.class, String.class, runAs);
-			IChatRequestContext ctx = IChatRequestContext.of(inputText != null ? inputText : "");
-			String output = service.executeNetwork(ctx, inputText != null ? inputText : "", new HashMap<>());
+			// outside a chat the task works on all the knowledge bases the caller can see,
+			// read here, where the caller's identity is
+			final UserKnowledgeBasesExecutionEnvironment userEnvironment = runtimeBinder
+					.getImplementationOf(UserKnowledgeBasesExecutionEnvironment.class);
+			final List<String> knowledgeBases = userEnvironment.knowledgeBaseCodes();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("A2A skill '" + skillId + "' runs network " + network.getCode() + " over "
+						+ knowledgeBases.size() + " knowledge base(s) of the caller");
+			}
+			IChatRequestContext ctx = userEnvironment.requestContext(inputText, knowledgeBases);
+			String output = service.executeNetwork(ctx, inputText != null ? inputText : "",
+					userEnvironment.networkEnvironment(knowledgeBases));
 			return output != null ? output : "";
 		} catch (AgentException ae) {
 			throw ae;

@@ -15,6 +15,7 @@
 import ApiClient from "../ApiClient";
 import ComponentLLMSStatus from '../model/ComponentLLMSStatus';
 import LLMAutoconfigureCreationData from '../model/LLMAutoconfigureCreationData';
+import LLMCreateModelData from '../model/LLMCreateModelData';
 import LLMCredentialsCreationData from '../model/LLMCredentialsCreationData';
 import LLMCredentialsVerificationData from '../model/LLMCredentialsVerificationData';
 import LLMModelsLookupParameter from '../model/LLMModelsLookupParameter';
@@ -144,7 +145,7 @@ export default class GeboFastLlmsSetupControllerApi {
 
 
     /**
-     * @param {Object} body 
+     * @param {Array.<module:model/LLMCreateModelData>} body 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/OperationStatusLLMSModelsCreationResult} and HTTP response
      */
     createLLMSWithHttpInfo(body) {

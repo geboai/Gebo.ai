@@ -5,11 +5,36 @@
 	<parent>
 		<groupId>ai.gebo.apps.microservices</groupId>
 		<artifactId>gebo.microservices.apps.parent</artifactId>
-		<version>1.0.3.0</version>
+		<version>1.0.4.0</version>
 	</parent>
 	<artifactId>brain.gebo.ai</artifactId>
 
 	<dependencies>
+		<!--
+		  UI text resources / i18n. UITextResourcesController (/public/UITextResourcesController)
+		  serves the translated UI text bundles the Angular field-translation container reads,
+		  and LanguageResourcesController the language catalogue. Hosted on brain: it is the
+		  aggregate the UI already talks to, and the surface is unauthenticated static content.
+		-->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.multilanguage.support</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
+		  Entity-editor form metadata. GeboAngularFormGroupMetaInfoController
+		  (api/admin/AngularFormGroupController) reflects over the repositories on THIS
+		  service's classpath and reports, per managed entity, the properties an Angular
+		  editor's FormGroup may be missing - the UI then adds the missing controls so a
+		  persisted property is never silently dropped on save. The catalogue is
+		  per-JVM, so every service that manages entities has to publish its own;
+		  the monolith publishes them all from one classpath.
+		-->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.angular.persistence.support</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- The Spring Security filter chain + LOCAL_JWT provider (GeboAISecurityConfig,
 		     LocalJwtTokenProvider, GSecurityServiceImpl, AclGrantedAccessorServiceImpl).
 		     Deliberately WITHOUT gebo.security.directory.mongo: the
@@ -164,6 +189,20 @@
 			<artifactId>gebo.architecture.mcp-clients</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- McpClientConfigController lives here, not in the base mcp-clients
+		     module, so the config admin endpoint is served by brain but NOT by the
+		     mcpclient content-handler microservice (which shares the same Mongo and
+		     still reads the configs through the base module). -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.mcp-clients.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo</groupId>
+			<artifactId>gebo.system.ingestion.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.mcp-server</artifactId>
@@ -180,6 +219,54 @@
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.a2a-server</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<!-- OpenSearch: the SHARED full-text store, written by fulltextor and READ
+		     here. brain already carried gebo.architecture.fulltext (the abstraction)
+		     but not this implementation, and that silently disabled its lexical leg:
+		     FullTextSearchDocumentsCachedDaoImpl is @ConditionalOnBean(IGFullTextSearchService),
+		     so with no implementation the DAO was never registered, GeboRagSearchConfig
+		     took the null its @Autowired(required=false) allows, and
+		     GDocumentsSearchServiceImpl's `lexicalLegAvailable = fullTextSearch != null`
+		     was ALWAYS false - hybrid retrieval quietly degraded to semantic-only even
+		     though the shared config overlay sets ai.gebo.opensearch.enabled=true for
+		     the whole cluster.
+
+		     Same shape as the other two shared stores: brain holds a CLIENT for the
+		     store its companion service fills (neo4j <- graphicator, qdrant <-
+		     vectorizator, opensearch <- fulltextor) and reads the same index
+		     (kb_chunks) from the same host, resolved from the same shared overlay.
+
+		     Deliberately NOT gebo.ragsystem.content.fulltext.processor, which is what
+		     fulltextor depends on: that module carries FullTextIndexingBatchMessageReceiver,
+		     the INGESTION driver. brain reads the index, it must not become a second
+		     writer to it.
+
+		     Inert unless switched on: every bean in this module is
+		     @ConditionalOnProperty(ai.gebo.opensearch.enabled) and OpenSearchConfig
+		     defaults it to false, so full-text search stays cleanly disable-able and a
+		     standalone brain is unaffected. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.opensearch</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- BrainFullTopologyContextTest boots brain in its FULL configuration, which
+		     means a live Neo4j: with ai.gebo.neo4j.enabled=true (brain's shipped
+		     default) Neo4jDdlRunner executes the graph DDL as an ApplicationRunner
+		     during startup, so the context cannot load without one. The Mongo/JUnit
+		     testcontainers deps are inherited from gebo.microservices.apps.parent;
+		     this module is the only microservice besides graphicator that also needs
+		     the graph store, so it is declared here rather than in that parent. -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-neo4j</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.opensearch</groupId>
+			<artifactId>opensearch-testcontainers</artifactId>
+			<version>4.1.0</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

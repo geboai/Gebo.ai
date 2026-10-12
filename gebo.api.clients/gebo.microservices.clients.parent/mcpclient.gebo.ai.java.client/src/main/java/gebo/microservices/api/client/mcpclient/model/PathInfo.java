@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PathInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.887590537+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:51.718351904+02:00[Europe/Rome]")
 
 public class PathInfo {
   @JsonProperty("absolutePath")

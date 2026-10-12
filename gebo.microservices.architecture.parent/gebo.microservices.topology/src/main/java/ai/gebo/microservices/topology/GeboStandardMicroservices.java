@@ -99,16 +99,22 @@ public final class GeboStandardMicroservices {
 					.build(),
 
 			// fulltextor is the renamed textsearch microservice (full-text host).
+			// fulltext-dispose-component: the full-text index's erasure component, a
+			// cross-service target of every deletion (GStoreDisposers), like
+			// vectorizator's vectorization-dispose-component.
 			GeboMicroservice.named("fulltextor_gebo_ai")
-					.module("fulltext-module", "fulltext-indexing-component")
+					.module("fulltext-module", "fulltext-indexing-component", "fulltext-dispose-component")
 					.build(),
 
 			// graphicator is the renamed graphsearch microservice (knowledge-graph host).
 			// USAGE-CONCENTRATOR: graphicator's own instance of the LLM-usage emitter
 			// (GraphicatorLLMSUsageCrudService) - see the identical note under
 			// brain-module above.
+			// knowledge-graph-dispose-component: the knowledge graph's erasure component, a
+			// cross-service target of every deletion (GStoreDisposers).
 			GeboMicroservice.named("graphicator_gebo_ai")
-					.module("knowledge-graph-module", "knowledge-graph-component", "USAGE-CONCENTRATOR")
+					.module("knowledge-graph-module", "knowledge-graph-component", "knowledge-graph-dispose-component",
+							"USAGE-CONCENTRATOR")
 					.build(),
 
 			// tyr is the workflows/usage/jobs-tracking microservice, and now also hosts the

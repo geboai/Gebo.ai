@@ -24,7 +24,7 @@ export default class LLMModelPresetChoice {
    * Constructs a new <code>LLMModelPresetChoice</code>.
    * @alias module:model/LLMModelPresetChoice
    * @class
-   * @param code {Object} 
+   * @param code {String} 
    */
   constructor(code) {
     this.code = code;
@@ -41,56 +41,110 @@ export default class LLMModelPresetChoice {
     if (data) {
       obj = obj || new LLMModelPresetChoice();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('defaultChoice'))
-        obj.defaultChoice = ApiClient.convertToType(data['defaultChoice'], Object);
+        obj.defaultChoice = ApiClient.convertToType(data['defaultChoice'], 'Boolean');
       if (data.hasOwnProperty('contextWindow'))
-        obj.contextWindow = ApiClient.convertToType(data['contextWindow'], Object);
+        obj.contextWindow = ApiClient.convertToType(data['contextWindow'], 'Number');
       if (data.hasOwnProperty('uses'))
-        obj.uses = ApiClient.convertToType(data['uses'], Object);
+        obj.uses = ApiClient.convertToType(data['uses'], ['String']);
       if (data.hasOwnProperty('maxGeneratedTokens'))
-        obj.maxGeneratedTokens = ApiClient.convertToType(data['maxGeneratedTokens'], Object);
+        obj.maxGeneratedTokens = ApiClient.convertToType(data['maxGeneratedTokens'], 'Number');
       if (data.hasOwnProperty('thinking'))
-        obj.thinking = ApiClient.convertToType(data['thinking'], Object);
+        obj.thinking = ApiClient.convertToType(data['thinking'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 LLMModelPresetChoice.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 LLMModelPresetChoice.prototype.description = undefined;
 
 /**
- * @member {Object} defaultChoice
+ * @member {Boolean} defaultChoice
  */
 LLMModelPresetChoice.prototype.defaultChoice = undefined;
 
 /**
- * @member {Object} contextWindow
+ * @member {Number} contextWindow
  */
 LLMModelPresetChoice.prototype.contextWindow = undefined;
 
 /**
- * @member {Object} uses
+ * Allowed values for the <code>uses</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LLMModelPresetChoice.UsesEnum = {
+  /**
+   * value: "CHAT"
+   * @const
+   */
+  CHAT: "CHAT",
+
+  /**
+   * value: "INTERNAL_SERVICES"
+   * @const
+   */
+  INTERNAL_SERVICES: "INTERNAL_SERVICES"
+};
+/**
+ * @member {Array.<module:model/LLMModelPresetChoice.UsesEnum>} uses
  */
 LLMModelPresetChoice.prototype.uses = undefined;
 
 /**
- * @member {Object} maxGeneratedTokens
+ * @member {Number} maxGeneratedTokens
  */
 LLMModelPresetChoice.prototype.maxGeneratedTokens = undefined;
 
 /**
- * @member {Object} thinking
+ * Allowed values for the <code>thinking</code> property.
+ * @enum {String}
+ * @readonly
+ */
+LLMModelPresetChoice.ThinkingEnum = {
+  /**
+   * value: "NO_THINKING"
+   * @const
+   */
+  NO_THINKING: "NO_THINKING",
+
+  /**
+   * value: "LOW_THINKING"
+   * @const
+   */
+  LOW_THINKING: "LOW_THINKING",
+
+  /**
+   * value: "MEDIUM_THINKING"
+   * @const
+   */
+  MEDIUM_THINKING: "MEDIUM_THINKING",
+
+  /**
+   * value: "HIGH_THINKING"
+   * @const
+   */
+  HIGH_THINKING: "HIGH_THINKING",
+
+  /**
+   * value: "AUTO"
+   * @const
+   */
+  AUTO: "AUTO"
+};
+/**
+ * @member {module:model/LLMModelPresetChoice.ThinkingEnum} thinking
  */
 LLMModelPresetChoice.prototype.thinking = undefined;
 

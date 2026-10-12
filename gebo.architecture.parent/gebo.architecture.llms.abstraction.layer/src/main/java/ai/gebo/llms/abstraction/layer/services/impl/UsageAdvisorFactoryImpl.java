@@ -3,78 +3,113 @@ package ai.gebo.llms.abstraction.layer.services.impl;
 import java.util.concurrent.atomic.AtomicLong;
 import reactor.core.publisher.SignalType;
 import ai.gebo.core.messages.LLMCallOutcome;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClientRequest;
 import org.springframework.ai.chat.client.ChatClientResponse;
 import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
 import org.springframework.ai.chat.client.advisor.api.StreamAdvisorChain;
 import org.springframework.ai.chat.metadata.Usage;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.core.Ordered;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.llms.abstraction.layer.dto.LLMUsageDetailDto;
+import java.util.function.Supplier;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
+import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisor;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
-import ai.gebo.llms.abstraction.layer.services.ILLMSUsageCrudService;
-import ai.gebo.llms.abstraction.layer.services.StackSamplingUtils;
+import ai.gebo.model.ModelType;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
 @Service
 @AllArgsConstructor
 public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
-	private final ILLMSUsageCrudService usageCrudService;
+	private final LLMUsageRecorder usageRecorder;
 
 	@AllArgsConstructor
 	public static final class GeboChatModelUsageAdvisor implements IChatModelUsageAdvisor {
+		private static final Logger LOGGER = LoggerFactory.getLogger(GeboChatModelUsageAdvisor.class);
 
 		private final GBaseChatModelConfig config;
-		private final ILLMSUsageCrudService usageCrudService;
+		private final LLMUsageRecorder usageRecorder;
+		/**
+		 * The chat model's {@code IGConfigurableModel.getPricingConditions()}, read when
+		 * a call ends; null for an unpriced model.
+		 */
+		private final Supplier<GModelPricingConditions> pricing;
+		/**
+		 * The chat model's {@code IGConfigurableModel.getProviderId()}, read when a call
+		 * ends; null records the provider as unknown.
+		 */
+		private final Supplier<String> providerId;
+
+		public GeboChatModelUsageAdvisor(GBaseChatModelConfig config, LLMUsageRecorder usageRecorder,
+				Supplier<GModelPricingConditions> pricing) {
+			this(config, usageRecorder, pricing, null);
+		}
 
 		@Override
 		public ChatClientResponse adviseCall(ChatClientRequest request, CallAdvisorChain chain) {
-			// Sampled and kept per invocation: this advisor instance is installed once per
+			// Captured per invocation: this advisor instance is installed once per
 			// ChatClient and shared by every request through it, so instance state would race.
-			final String stack = StackSamplingUtils.sampleCallerPackages(3);
+			final String username = LLMUsageRecorder.safeCurrentUsername();
+			final String stack = LLMUsageRecorder.safeSampleCaller();
 			final long start = System.nanoTime();
+			final ChatClientResponse response;
 			try {
-				ChatClientResponse response = chain.nextCall(request);
-				recordUsage(stack, start, TokenCounters.of(usageOf(response)), LLMCallOutcome.SUCCESS);
-				return response;
+				response = chain.nextCall(request);
 			} catch (RuntimeException e) {
 				// A failed call still consumed time and is the interesting part of the tail.
-				recordUsage(stack, start, new TokenCounters(), LLMCallOutcome.ERROR);
+				LLMUsageRecorder.bestEffort("account a failed chat call", () -> recordUsage(username, stack, start, null,
+						new TokenCounters(), new AnswerShape(), LLMCallOutcome.ERROR));
 				throw e;
 			}
+			// Accounted best effort, outside the call: it must never fail a successful call.
+			// A blocking call returns the final response only, whose usage already covers
+			// every tool calling round trip the model made (see adviseStream).
+			// No time to first token: a blocking call gives no signal before it is complete.
+			LLMUsageRecorder.bestEffort("account a chat call", () -> recordUsage(username, stack, start, null,
+					TokenCounters.of(usageOf(response)), AnswerShape.of(response), LLMCallOutcome.SUCCESS));
+			return response;
 		}
 
 		@Override
 		public Flux<ChatClientResponse> adviseStream(ChatClientRequest request, StreamAdvisorChain chain) {
-			final String stack = StackSamplingUtils.sampleCallerPackages(3);
+			// The user is read here, on the subscribing thread: the stream completes on a
+			// Reactor thread whose security context is usually empty.
+			final String username = LLMUsageRecorder.safeCurrentUsername();
+			final String stack = LLMUsageRecorder.safeSampleCaller();
 			final long start = System.nanoTime();
 			// The provider emits a Usage object on EVERY streamed chunk, carrying zero counts
 			// until the last one, so a null check cannot tell a chunk from the completion.
-			// Recording per chunk wrote thousands of rows for one call, each holding elapsed
-			// time rather than a duration, which turned nrRequests into a chunk count and
-			// latencyAvg into roughly half the token weighted mean. Keep the last meaningful
-			// usage and write exactly one record when the stream terminates.
-			// Accumulated rather than kept as the last one seen: when the request drives a
-			// tool calling loop the chain performs several model round trips inside this one
-			// subscription, each ending with its own usage, and keeping only the last would
-			// under count the call. Summing is safe because the provider reports usage once
-			// per round trip, not cumulatively on every chunk.
+			// Recording per chunk wrote thousands of rows for one call; write exactly one
+			// record when the stream terminates instead.
+			// The call's usage is the LARGEST seen, never the sum. When the request drives a
+			// tool calling loop the model performs several round trips inside this one
+			// subscription, and Spring AI reports each round's usage as a running total
+			// (UsageCalculator.getCumulativeUsage, Ollama's and Bedrock's own accumulation).
+			// Worse, a chunk with no usage of its own carries the previous rounds' total, so
+			// every chunk of the second round repeats the first round's tokens. Summing
+			// counted those once per chunk; the maximum is the total of all the rounds.
 			final TokenCounters counters = new TokenCounters();
-			return chain.nextStream(request).doOnNext(response -> {
-				Usage usage = usageOf(response);
-				if (isMeaningful(usage)) {
-					counters.add(usage);
-				}
-			}).doFinally(signal -> recordUsage(stack, start, counters, outcomeOf(signal)));
+			final AnswerShape shape = new AnswerShape();
+			final FirstTokenTimer firstToken = new FirstTokenTimer();
+			// Per chunk accounting is best effort: a throw here would error the whole stream.
+			return chain.nextStream(request)
+					.doOnNext(response -> LLMUsageRecorder.bestEffort("account a chat chunk", () -> {
+						firstToken.onChunk(response != null ? response.chatResponse() : null);
+						Usage usage = usageOf(response);
+						if (isMeaningful(usage)) {
+							counters.max(usage);
+						}
+						shape.add(response);
+					})).doFinally(signal -> LLMUsageRecorder.bestEffort("account a chat stream",
+							() -> recordUsage(username, stack, start, firstToken.firstTokenNanos(), counters, shape,
+									outcomeOf(signal))));
 		}
 
 		@Override
@@ -121,15 +156,16 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 		}
 
 		/**
-		 * Token counts of one call, summed over however many model round trips the chain
-		 * performed inside a single advisor invocation.
+		 * Token counts of one call: the largest of each count reported over however many
+		 * chunks and model round trips the chain produced inside a single advisor
+		 * invocation.
 		 */
-		private static final class TokenCounters {
+		static final class TokenCounters {
 			private final AtomicLong input = new AtomicLong();
 			private final AtomicLong output = new AtomicLong();
 			private final AtomicLong total = new AtomicLong();
 
-			private void add(Usage usage) {
+			void max(Usage usage) {
 				if (usage == null) {
 					return;
 				}
@@ -137,48 +173,143 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 				Integer out = usage.getCompletionTokens();
 				Integer tot = usage.getTotalTokens();
 				if (in != null) {
-					input.addAndGet(in.longValue());
+					input.accumulateAndGet(in.longValue(), Math::max);
 				}
 				if (out != null) {
-					output.addAndGet(out.longValue());
+					output.accumulateAndGet(out.longValue(), Math::max);
 				}
 				if (tot != null) {
-					total.addAndGet(tot.longValue());
+					total.accumulateAndGet(tot.longValue(), Math::max);
 				}
 			}
 
-			private static TokenCounters of(Usage usage) {
+			long input() {
+				return input.get();
+			}
+
+			long output() {
+				return output.get();
+			}
+
+			long total() {
+				return total.get();
+			}
+
+			static TokenCounters of(Usage usage) {
 				TokenCounters counters = new TokenCounters();
-				counters.add(usage);
+				counters.max(usage);
 				return counters;
 			}
 		}
 
 		/**
+		 * How a call ended, for the DEBUG log: the last finish reason the provider gave and
+		 * the characters of text and of reasoning it streamed. A call cut by the output limit
+		 * (finish reason LENGTH) with no text spent it reasoning. The reasoning is read as the
+		 * ThinkingNormalizationAdvisor (ordered inside this advisor) gives it, every provider
+		 * alike: the piece each chunk adds ({@link GChatAnswerChunk#THINKING_DELTA_METADATA}),
+		 * a blocking call's whole ({@link GChatAnswerChunk#THINKING_METADATA}).
+		 */
+		static final class AnswerShape {
+			private String finishReason = null;
+			private long textChars = 0;
+			private long reasoningChars = 0;
+
+			synchronized void add(ChatClientResponse response) {
+				final org.springframework.ai.chat.model.ChatResponse chat = response != null ? response.chatResponse()
+						: null;
+				if (chat == null) {
+					return;
+				}
+				if (chat.getMetadata() != null) {
+					reasoningChars += length(chat.getMetadata().get(GChatAnswerChunk.THINKING_DELTA_METADATA))
+							+ length(chat.getMetadata().get(GChatAnswerChunk.THINKING_METADATA));
+				}
+				final org.springframework.ai.chat.model.Generation result = chat.getResult();
+				if (result == null) {
+					return;
+				}
+				if (result.getMetadata() != null && result.getMetadata().getFinishReason() != null
+						&& !result.getMetadata().getFinishReason().isBlank()) {
+					finishReason = result.getMetadata().getFinishReason();
+				}
+				if (result.getOutput() == null) {
+					return;
+				}
+				final String text = result.getOutput().getText();
+				if (text != null) {
+					textChars += text.length();
+				}
+			}
+
+			private static long length(Object reasoning) {
+				return reasoning instanceof String text ? text.length() : 0;
+			}
+
+			static AnswerShape of(ChatClientResponse response) {
+				final AnswerShape shape = new AnswerShape();
+				shape.add(response);
+				return shape;
+			}
+
+			@Override
+			public synchronized String toString() {
+				return "finishReason=" + finishReason + " text=" + textChars + " reasoning=" + reasoningChars;
+			}
+		}
+
+		/**
 		 * Writes the single usage record of one call. Always writes, even when the provider
-		 * never returned usage metadata: the latency is worth recording on its own, and a
+		 * never returned usage metadata: the response time is worth recording on its own, and a
 		 * call that produced no usage used to vanish from the audit entirely.
 		 */
-		private void recordUsage(String callerStack, long startNanos, TokenCounters counters, LLMCallOutcome outcome) {
-			String username = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
-					.filter(Authentication::isAuthenticated).map(Authentication::getName).orElse("anonymous");
-			long latencyMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNanos);
-			LLMUsageDetailDto detail = LLMUsageDetailDto.of(config);
-			detail.setInputToken(counters.input.get());
-			detail.setOutputToken(counters.output.get());
-			detail.setTotalToken(counters.total.get());
-			detail.setUsername(username);
-			detail.setCallerStack(callerStack);
-			detail.setLatency(latencyMs);
-			detail.setOutcome(outcome);
-			this.usageCrudService.enqueueUsage(detail);
+		private void recordUsage(String username, String callerStack, long startNanos, Long firstTokenNanos,
+				TokenCounters counters, AnswerShape shape, LLMCallOutcome outcome) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat call ended outcome=" + outcome + " model=" + config.getCode() + " tokens="
+						+ counters.input() + "/" + counters.output() + "/" + counters.total() + " firstToken="
+						+ (firstTokenNanos != null ? "timed" : "n/a") + " " + shape);
+			}
+			usageRecorder.record(config, LLMUsageRecorder.safeProviderId(providerId), ModelType.CHAT, pricing,
+					username, callerStack, startNanos, firstTokenNanos, counters.input(), counters.output(),
+					counters.total(), outcome);
 		}
 	}
 
 	@Override
 	public IChatModelUsageAdvisor create(GBaseChatModelConfig config) {
+		return create(config, null);
+	}
 
-		return new GeboChatModelUsageAdvisor(config, usageCrudService);
+	@Override
+	public IChatModelUsageAdvisor create(GBaseChatModelConfig config, Supplier<GModelPricingConditions> pricing) {
+		return create(config, pricing, null);
+	}
+
+	@Override
+	public IChatModelUsageAdvisor create(GBaseChatModelConfig config, Supplier<GModelPricingConditions> pricing,
+			Supplier<String> providerId) {
+		return new GeboChatModelUsageAdvisor(config, usageRecorder, pricing, providerId);
+	}
+
+	@Override
+	public ChatModel recording(ChatModel model, GBaseChatModelConfig config) {
+		return recording(model, config, null);
+	}
+
+	@Override
+	public ChatModel recording(ChatModel model, GBaseChatModelConfig config,
+			Supplier<GModelPricingConditions> pricing) {
+		return recording(model, config, pricing, null);
+	}
+
+	@Override
+	public ChatModel recording(ChatModel model, GBaseChatModelConfig config,
+			Supplier<GModelPricingConditions> pricing, Supplier<String> providerId) {
+		if (model == null || model instanceof UsageRecordingChatModel) {
+			return model;
+		}
+		return new UsageRecordingChatModel(model, config, usageRecorder, pricing, providerId);
 	}
 
 }

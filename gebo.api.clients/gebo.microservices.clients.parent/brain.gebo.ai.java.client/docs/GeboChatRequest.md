@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **choosedKnowledgeBases** | **List&lt;String&gt;** |  |  [optional]
 **chatPipelineProcessId** | **String** |  |  [optional]
 **forcedRequestDocuments** | **List&lt;String&gt;** |  |  [optional]
+**forcedDocumentsRef** | [**List&lt;GResponseDocumentRef&gt;**](GResponseDocumentRef.md) |  |  [optional]
 **userUploadedContents** | [**List&lt;UserUploadedContent&gt;**](UserUploadedContent.md) |  |  [optional]
 **deepSearchDataSources** | **List&lt;String&gt;** |  |  [optional]
 **userIntent** | [**UserIntentEnum**](#UserIntentEnum) |  |  [optional]
@@ -28,7 +29,6 @@ QA | &quot;QA&quot;
 HOWTO | &quot;HOWTO&quot;
 DECISION | &quot;DECISION&quot;
 SUMMARY | &quot;SUMMARY&quot;
-PURE_SEARCH | &quot;PURE_SEARCH&quot;
 ANALISYS | &quot;ANALISYS&quot;
 IMAGE_GENERATION | &quot;IMAGE_GENERATION&quot;
 UNKNOWN | &quot;UNKNOWN&quot;

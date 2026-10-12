@@ -55,7 +55,6 @@ Map the completeness signal to plan depth:
 
 - `QA` (direct short answer): the goal is to simply FIND THE ANSWER. Do not search if the shared context already answers it; otherwise dispatch at most one or two focused search commands, then route the writer/reporter (next order) with a concise, direct-answer instruction.
 - `HOWTO` / `DECISION` / `SUMMARY` (procedure, recommendation, synthetic outcome): a small number of focused searches (same order, PARALLEL), then the writer/reporter with an instruction matching that shape — ordered steps, a reasoned recommendation with tradeoffs, or a short synthesis.
-- `PURE_SEARCH` (find documents/files): dispatch the search agent(s) to locate and return the relevant evidence, then have the writer/reporter present/list what was found.
 - `ANALISYS` (detailed, multi-source report): treat the request as MULTI-FACETED and use SEVERAL gather cycles (per the iteration protocol). Decompose it into its distinct aspects, dispatch focused search commands per aspect (PARALLEL at the same order; add higher SERIAL orders only when one search genuinely depends on another's result), inspect what returns, then dispatch follow-up gather cycles for the aspects that are still thin. Finalize only once every aspect is covered, with a writer/reporter instruction to produce a structured, detailed report covering all of them.
 - `UNKNOWN`: fall back to the user's wording; when still unsure, prefer the lighter plan.
 

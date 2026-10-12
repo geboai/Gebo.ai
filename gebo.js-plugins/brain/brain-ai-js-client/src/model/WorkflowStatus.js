@@ -39,42 +39,42 @@ export default class WorkflowStatus {
     if (data) {
       obj = obj || new WorkflowStatus();
       if (data.hasOwnProperty('completed'))
-        obj.completed = ApiClient.convertToType(data['completed'], Object);
+        obj.completed = ApiClient.convertToType(data['completed'], 'Boolean');
       if (data.hasOwnProperty('hasErrors'))
-        obj.hasErrors = ApiClient.convertToType(data['hasErrors'], Object);
+        obj.hasErrors = ApiClient.convertToType(data['hasErrors'], 'Boolean');
       if (data.hasOwnProperty('totalDocuments'))
-        obj.totalDocuments = ApiClient.convertToType(data['totalDocuments'], Object);
+        obj.totalDocuments = ApiClient.convertToType(data['totalDocuments'], 'Number');
       if (data.hasOwnProperty('totalDocumentsWithErrors'))
-        obj.totalDocumentsWithErrors = ApiClient.convertToType(data['totalDocumentsWithErrors'], Object);
+        obj.totalDocumentsWithErrors = ApiClient.convertToType(data['totalDocumentsWithErrors'], 'Number');
       if (data.hasOwnProperty('totalDocumentsSuccessfull'))
-        obj.totalDocumentsSuccessfull = ApiClient.convertToType(data['totalDocumentsSuccessfull'], Object);
+        obj.totalDocumentsSuccessfull = ApiClient.convertToType(data['totalDocumentsSuccessfull'], 'Number');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} completed
+ * @member {Boolean} completed
  */
 WorkflowStatus.prototype.completed = undefined;
 
 /**
- * @member {Object} hasErrors
+ * @member {Boolean} hasErrors
  */
 WorkflowStatus.prototype.hasErrors = undefined;
 
 /**
- * @member {Object} totalDocuments
+ * @member {Number} totalDocuments
  */
 WorkflowStatus.prototype.totalDocuments = undefined;
 
 /**
- * @member {Object} totalDocumentsWithErrors
+ * @member {Number} totalDocumentsWithErrors
  */
 WorkflowStatus.prototype.totalDocumentsWithErrors = undefined;
 
 /**
- * @member {Object} totalDocumentsSuccessfull
+ * @member {Number} totalDocumentsSuccessfull
  */
 WorkflowStatus.prototype.totalDocumentsSuccessfull = undefined;
 

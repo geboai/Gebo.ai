@@ -22,7 +22,7 @@ import ai.gebo.ragsystem.vectorstores.model.GeboMongoVectorStoreConfig;
  * AI generated comments
  * Utility class for converting between different vector store configuration formats.
  * Provides methods to transform between YAML-based configurations and MongoDB-based configurations
- * for various vector store products like Lucene, Qdrant, Redis, and MongoDB.
+ * for various vector store products like Qdrant, Redis, and MongoDB.
  */
 class VectorStoreConfigUtil {
 

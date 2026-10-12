@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
@@ -103,6 +104,13 @@ public class ConfluenceSearchService extends
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
+		return search(query, system, nEntryLimit, null);
+	}
+
+	/** Searches with a Confluence connection whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit,
+			SearchCallParameters parameters) throws IOException, SearchServiceException {
 		query = CleanQueryUtil.cleanQuery(query);
 		if (system.getSystemConfigurationReference() instanceof GConfluenceSystem confluenceSystem) {
 
@@ -111,7 +119,7 @@ public class ConfluenceSearchService extends
 				switch (confluenceSystem.getConfluenceVersion()) {
 				case CLOUD: {
 					CloudConfluenceConnection connection = confluenceConnectionFactory
-							.getCloudConnection(confluenceSystem);
+							.getCloudConnection(confluenceSystem, parameters);
 					CloudConfluenceContentApi contentApi = new CloudConfluenceContentApi(connection);
 					CloudConfluenceSearchPageResponseSearchResult data = isCql
 							? contentApi.searchByCql(query.getQueryText(), nEntryLimit)
@@ -124,7 +132,7 @@ public class ConfluenceSearchService extends
 				}
 				case ONPREMISE7X: {
 					OnPremiseConfluenceConnection connection = confluenceConnectionFactory
-							.getOnPremiseConnection(confluenceSystem);
+							.getOnPremiseConnection(confluenceSystem, parameters);
 					OnPremiseConfluenceContentApi contentApi = new OnPremiseConfluenceContentApi(connection);
 					OnPremiseConfluenceSearchPageResponseSearchResult data = isCql
 							? contentApi.searchByCql(query.getQueryText(), nEntryLimit)
@@ -499,6 +507,13 @@ public class ConfluenceSearchService extends
 	@Override
 	public List<SearchResult> nativeSearch(ConfluenceContentSearchFilter query, SearchableSystemMetaData system,
 			int nEntryLimit) throws IOException, SearchServiceException {
+		return nativeSearch(query, system, nEntryLimit, null);
+	}
+
+	/** Searches natively with a Confluence connection whose timeouts are the call parameters', when given. */
+	@Override
+	public List<SearchResult> nativeSearch(ConfluenceContentSearchFilter query, SearchableSystemMetaData system,
+			int nEntryLimit, SearchCallParameters parameters) throws IOException, SearchServiceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin nativeSearch(...)");
 		}
@@ -514,7 +529,7 @@ public class ConfluenceSearchService extends
 				switch (confluenceSystem.getConfluenceVersion()) {
 				case CLOUD: {
 					CloudConfluenceConnection connection = confluenceConnectionFactory
-							.getCloudConnection(confluenceSystem);
+							.getCloudConnection(confluenceSystem, parameters);
 					CloudConfluenceContentApi contentApi = new CloudConfluenceContentApi(connection);
 					CloudConfluenceSearchPageResponseSearchResult data = contentApi.searchByCql(cql, nEntryLimit);
 					list = encodeCloudResults(data, connection, contentApi, confluenceSystem);
@@ -524,7 +539,7 @@ public class ConfluenceSearchService extends
 					break;
 				case ONPREMISE7X: {
 					OnPremiseConfluenceConnection connection = confluenceConnectionFactory
-							.getOnPremiseConnection(confluenceSystem);
+							.getOnPremiseConnection(confluenceSystem, parameters);
 					OnPremiseConfluenceContentApi contentApi = new OnPremiseConfluenceContentApi(connection);
 					OnPremiseConfluenceSearchPageResponseSearchResult data = contentApi.searchByCql(cql, nEntryLimit);
 					list = encodeOnPremiseResults(data, connection, contentApi, confluenceSystem);

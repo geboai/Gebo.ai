@@ -13,6 +13,7 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GDataFlowMetaInfos from './GDataFlowMetaInfos';
 
 /**
  * The ComponentMetaInfo model module.
@@ -39,42 +40,49 @@ export default class ComponentMetaInfo {
     if (data) {
       obj = obj || new ComponentMetaInfo();
       if (data.hasOwnProperty('messagingSystemId'))
-        obj.messagingSystemId = ApiClient.convertToType(data['messagingSystemId'], Object);
+        obj.messagingSystemId = ApiClient.convertToType(data['messagingSystemId'], 'String');
       if (data.hasOwnProperty('messagingModuleId'))
-        obj.messagingModuleId = ApiClient.convertToType(data['messagingModuleId'], Object);
+        obj.messagingModuleId = ApiClient.convertToType(data['messagingModuleId'], 'String');
       if (data.hasOwnProperty('receiver'))
-        obj.receiver = ApiClient.convertToType(data['receiver'], Object);
+        obj.receiver = ApiClient.convertToType(data['receiver'], 'Boolean');
       if (data.hasOwnProperty('emitter'))
-        obj.emitter = ApiClient.convertToType(data['emitter'], Object);
+        obj.emitter = ApiClient.convertToType(data['emitter'], 'Boolean');
       if (data.hasOwnProperty('localSystem'))
-        obj.localSystem = ApiClient.convertToType(data['localSystem'], Object);
+        obj.localSystem = ApiClient.convertToType(data['localSystem'], 'Boolean');
+      if (data.hasOwnProperty('dataFlowMetaInfos'))
+        obj.dataFlowMetaInfos = GDataFlowMetaInfos.constructFromObject(data['dataFlowMetaInfos']);
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} messagingSystemId
+ * @member {String} messagingSystemId
  */
 ComponentMetaInfo.prototype.messagingSystemId = undefined;
 
 /**
- * @member {Object} messagingModuleId
+ * @member {String} messagingModuleId
  */
 ComponentMetaInfo.prototype.messagingModuleId = undefined;
 
 /**
- * @member {Object} receiver
+ * @member {Boolean} receiver
  */
 ComponentMetaInfo.prototype.receiver = undefined;
 
 /**
- * @member {Object} emitter
+ * @member {Boolean} emitter
  */
 ComponentMetaInfo.prototype.emitter = undefined;
 
 /**
- * @member {Object} localSystem
+ * @member {Boolean} localSystem
  */
 ComponentMetaInfo.prototype.localSystem = undefined;
+
+/**
+ * @member {module:model/GDataFlowMetaInfos} dataFlowMetaInfos
+ */
+ComponentMetaInfo.prototype.dataFlowMetaInfos = undefined;
 

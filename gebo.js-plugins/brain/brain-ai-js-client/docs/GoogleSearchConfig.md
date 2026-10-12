@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**apiKey** | **Object** |  | [optional] 
-**customSearchEngineId** | **Object** |  | [optional] 
-**enabled** | **Object** |  | [optional] 
+**apiKey** | **String** |  | [optional] 
+**customSearchEngineId** | **String** |  | [optional] 
+**enabled** | **Boolean** |  | [optional] 

@@ -42,8 +42,14 @@ import ai.gebo.sharepoint.handler.SharepointVersion;
 import ai.gebo.sharepoint.handler.impl.SharepointBrowsingContext;
 import ai.gebo.sharepoint.handler.impl.SharepointSystemsTestService;
 import ai.gebo.systems.abstraction.layer.VirtualFilesystemBrowsingException;
+import ai.gebo.architecture.integration.tests.preconditions.IntegrationTestConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresConfig;
+import ai.gebo.architecture.integration.tests.preconditions.RequiresDocker;
 
 @SpringBootTest(classes = Main.class)
+@RequiresDocker
+@RequiresConfig(value = { "SHAREPOINT_BASE_URL", "SHAREPOINT_TENANT_ID", "SHAREPOINT_CLIENT_ID",
+		"SHAREPOINT_SECRET_KEY" }, description = "SharePoint site and Entra ID application credentials")
 public class MicrosoftSharepointIntegrationTests extends AbstractGeboMonolithicIntegrationTestsWithFakeLLMS {
 	@Autowired
 	SharepointSystemsTestService sharePointSystemTestService;
@@ -51,10 +57,10 @@ public class MicrosoftSharepointIntegrationTests extends AbstractGeboMonolithicI
 	IGSharepointContentManagementSystemHandler handler;
 	@Autowired
 	IGMicrosoftGraphVirtualFilesystemBrowsingService sharepointVirtualFileSystemBrowsingService;
-	static String SHAREPOINT_CLIENT_ID = System.getenv("SHAREPOINT_CLIENT_ID");
-	static String SHAREPOINT_TENANT_ID = System.getenv("SHAREPOINT_TENANT_ID");
-	static String SHAREPOINT_SECRET_KEY = System.getenv("SHAREPOINT_SECRET_KEY");
-	static String SHAREPOINT_BASE_URL = System.getenv("SHAREPOINT_BASE_URL");
+	static String SHAREPOINT_CLIENT_ID = IntegrationTestConfig.get("SHAREPOINT_CLIENT_ID");
+	static String SHAREPOINT_TENANT_ID = IntegrationTestConfig.get("SHAREPOINT_TENANT_ID");
+	static String SHAREPOINT_SECRET_KEY = IntegrationTestConfig.get("SHAREPOINT_SECRET_KEY");
+	static String SHAREPOINT_BASE_URL = IntegrationTestConfig.get("SHAREPOINT_BASE_URL");
 	static String MICROSOFT_GRAPH_BASE_URL = "https://graph.microsoft.com/v1.0";
 
 	@Test

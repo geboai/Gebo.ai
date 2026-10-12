@@ -67,6 +67,15 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
     @Input() maxDisplayedDocuments?: number;
 
     /**
+     * When false, the panel does not render its own list of selected documents (nor the
+     * "show all" dialog) - it acts purely as a knowledge-base document selector. The host
+     * then displays the selection elsewhere (e.g. via gebo-ai-selected-chat-documents,
+     * which unifies knowledge-base and external-search documents). Defaults to true so
+     * existing usages keep showing the list.
+     */
+    @Input() displaySelectedList: boolean = true;
+
+    /**
      * Flag to control visibility of the full list of documents window
      */
     public openedFullListDocumentsWindow: boolean = false;

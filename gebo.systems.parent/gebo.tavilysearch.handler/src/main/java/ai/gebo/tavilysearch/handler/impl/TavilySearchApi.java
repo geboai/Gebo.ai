@@ -10,35 +10,29 @@
 package ai.gebo.tavilysearch.handler.impl;
 
 import java.util.LinkedHashMap;
-import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.model.ToolContext;
-import org.springframework.ai.tool.ToolCallback;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
-import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
+import ai.gebo.architecture.search.config.SearchCallsConfig;
+import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import ai.gebo.tavilysearch.handler.model.TavilyApiResponse;
 import ai.gebo.tavilysearch.handler.model.TavilyApiResponse.TavilyApiResult;
-import ai.gebo.tavilysearch.handler.model.TavilySearchConfig;
 import ai.gebo.tavilysearch.handler.model.TavilySearchRequest;
 import ai.gebo.tavilysearch.handler.model.TavilySearchResultItem;
 import ai.gebo.tavilysearch.handler.model.TavilySearchResults;
-import lombok.AllArgsConstructor;
 
 /**
  * Thin REST client for the Tavily Search API, and the factory for the LLM
@@ -46,15 +40,32 @@ import lombok.AllArgsConstructor;
  * query (no URL-encoding pitfalls); auth is a bearer token.
  */
 @Service
-@AllArgsConstructor
 public class TavilySearchApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TavilySearchApi.class);
 	public static final String TAVILY_SEARCH_URL = "https://api.tavily.com/search";
-	static final String SEARCH_WEB_WITH_TAVILY = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_NAME;
-	static final String RUNNING_A_TAVILY_SEARCH = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_DESCRIPTION;
 	private static final int DEFAULT_MAX_RESULTS = 5;
 
 	private final RestTemplateWrapperService restTemplateService;
+
+	/**
+	 * The provider is called with an HTTP client of its own, whose connect and read
+	 * timeouts are the search calls' ones (see {@link SearchCallsConfig}): a provider not
+	 * answering on a sloppy network does not hold the search forever.
+	 */
+	@Autowired
+	public TavilySearchApi(SearchCallsConfig searchCalls) {
+		this(RestTemplateWrapperService.withTimeouts(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
+	}
+
+	TavilySearchApi(RestTemplateWrapperService restTemplateService) {
+		this.restTemplateService = restTemplateService;
+	}
+
+	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
+	TavilySearchApi using(SearchCallParameters parameters) {
+		return new TavilySearchApi(
+				RestTemplateWrapperService.withTimeouts(parameters.connectTimeout(), parameters.readTimeout()));
+	}
 
 	TavilyApiResponse callApi(String apiKey, String query, Integer topN) throws GeboRestIntegrationException {
 		return callApi(apiKey, query, topN, null, null, null);
@@ -113,31 +124,4 @@ public class TavilySearchApi {
 		return out;
 	}
 
-	ToolCallback create(TavilySearchConfig config) {
-		BiFunction<TavilySearchRequest, ToolContext, TavilySearchResults> thisFunction = (request, toolContext) -> {
-			TavilySearchResults results = null;
-			LOGGER.info("Begin running tavily search");
-			KBContext context = LLMtInteractionContextThreadLocal.Context.get();
-			LLMtInteractionContextThreadLocal.CalledFunction calledFunction = new LLMtInteractionContextThreadLocal.CalledFunction();
-			calledFunction.setFunctionName(SEARCH_WEB_WITH_TAVILY);
-			calledFunction.setFunctionDescription(RUNNING_A_TAVILY_SEARCH);
-			if (request.getQuery() != null) {
-				calledFunction.setParamsDescription(List.of(request.getQuery()));
-			}
-			if (context != null) {
-				context.getCalledFunctions().add(calledFunction);
-			}
-			ToolCallbackDeclarationUtil.addCallToContext(toolContext, calledFunction);
-			try {
-				results = search(config.getApiKey(), request);
-			} catch (Throwable th) {
-				LOGGER.error("Error running tavily search", th);
-				results = new TavilySearchResults();
-			}
-			LOGGER.info("End running tavily search");
-			return results;
-		};
-		return ToolCallbackDeclarationUtil.declare(thisFunction, SEARCH_WEB_WITH_TAVILY, RUNNING_A_TAVILY_SEARCH,
-				TavilySearchRequest.class, TavilySearchResults.class);
-	}
 }

@@ -26,7 +26,7 @@ export default class DefaultPromptForChatModelReferenceParam {
    * @alias module:model/DefaultPromptForChatModelReferenceParam
    * @class
    * @param chatModelConfigReference {module:model/GObjectRefGBaseChatModelConfig} 
-   * @param ragPrompt {Object} 
+   * @param ragPrompt {Boolean} 
    */
   constructor(chatModelConfigReference, ragPrompt) {
     this.chatModelConfigReference = chatModelConfigReference;
@@ -46,7 +46,7 @@ export default class DefaultPromptForChatModelReferenceParam {
       if (data.hasOwnProperty('chatModelConfigReference'))
         obj.chatModelConfigReference = GObjectRefGBaseChatModelConfig.constructFromObject(data['chatModelConfigReference']);
       if (data.hasOwnProperty('ragPrompt'))
-        obj.ragPrompt = ApiClient.convertToType(data['ragPrompt'], Object);
+        obj.ragPrompt = ApiClient.convertToType(data['ragPrompt'], 'Boolean');
     }
     return obj;
   }
@@ -58,7 +58,7 @@ export default class DefaultPromptForChatModelReferenceParam {
 DefaultPromptForChatModelReferenceParam.prototype.chatModelConfigReference = undefined;
 
 /**
- * @member {Object} ragPrompt
+ * @member {Boolean} ragPrompt
  */
 DefaultPromptForChatModelReferenceParam.prototype.ragPrompt = undefined;
 

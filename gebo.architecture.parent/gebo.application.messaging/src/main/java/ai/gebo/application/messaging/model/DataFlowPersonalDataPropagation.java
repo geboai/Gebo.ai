@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Propagates personal-data scope across a {@link GDataFlowReport}.
  *
@@ -36,15 +39,25 @@ import java.util.Set;
  * </p>
  *
  * <p>
- * Reachability is undirected: a store downstream of a personal-data source
- * carries personal data, and a source feeding a store already known to hold
- * personal data is in scope too. The edges are the {@link DataTransformationInfo}
- * source-to-destination pairs, whose ids are already qualified
- * ({@link GDataFlowMetaInfos#qualifiedId(String)}) so they resolve across
- * components and microservices once the reports are merged.
+ * Reachability follows the data: an endpoint holds or processes personal data
+ * only when the flow carries the content of a flagged source to it, along each
+ * {@link DataTransformationInfo} from the endpoint the data is read from
+ * ({@code dataSourceId}) to the one it is written to ({@code dataDestinationId}),
+ * ids already qualified ({@link GDataFlowMetaInfos#qualifiedId(String)}) so they
+ * resolve across components and microservices once the reports are merged. A
+ * store fed by a flagged source holds personal data, and so does a chat that
+ * retrieves from that store (retrievals are reported from the store to the
+ * reader); the other sources feeding the same store do not, since nothing flows
+ * back into them. What a step carries ({@link DataTransformationInfo.Carried})
+ * decides the rest: a step carrying only a request, as the user's question sent to
+ * an embedding model, is not followed; a step whose destination processes the
+ * content and passes it to no one else - a model, a web search provider, an MCP
+ * server, shared by many chats and agents - marks the destination and stops there,
+ * so the content of one chat never reaches another through it.
  * </p>
  */
 public final class DataFlowPersonalDataPropagation {
+	private static final Logger LOGGER = LoggerFactory.getLogger(DataFlowPersonalDataPropagation.class);
 
 	private DataFlowPersonalDataPropagation() {
 	}
@@ -64,8 +77,11 @@ public final class DataFlowPersonalDataPropagation {
 		// unique per owning component, but the same id can surface in more than one
 		// merged report entry, so keep every instance to flag them all.
 		Map<String, List<DataEndpoint>> endpointsById = new HashMap<>();
-		// Undirected flow graph: source endpoint <-> destination endpoint per edge.
+		// Directed flow graph: the endpoint the data is read from -> the one it is
+		// written to, for every step carrying content; the destinations only processing
+		// it apart, as they pass nothing on.
 		Map<String, Set<String>> adjacency = new HashMap<>();
+		Map<String, Set<String>> processing = new HashMap<>();
 
 		for (GModuleMetaInfo module : report.getModules()) {
 			if (module == null || module.getComponents() == null) {
@@ -91,10 +107,13 @@ public final class DataFlowPersonalDataPropagation {
 				if (flow.getTransformations() != null) {
 					for (DataTransformationInfo transformation : flow.getTransformations()) {
 						if (transformation == null || transformation.getDataSourceId() == null
-								|| transformation.getDataDestinationId() == null) {
+								|| transformation.getDataDestinationId() == null
+								|| transformation.getCarried() == DataTransformationInfo.Carried.REQUEST) {
 							continue;
 						}
-						link(adjacency, transformation.getDataSourceId(), transformation.getDataDestinationId());
+						(transformation.getCarried() == DataTransformationInfo.Carried.PROCESSED ? processing : adjacency)
+								.computeIfAbsent(transformation.getDataSourceId(), k -> new HashSet<>())
+								.add(transformation.getDataDestinationId());
 					}
 				}
 			}
@@ -114,19 +133,34 @@ public final class DataFlowPersonalDataPropagation {
 			}
 		}
 
-		// Undirected breadth-first walk across the transformation edges.
+		final int seeds = reached.size();
+		// Breadth-first walk along the data direction: the endpoints passing the content
+		// on are walked further, the ones only processing it are marked.
+		final Set<String> processed = new HashSet<>();
 		while (!queue.isEmpty()) {
-			Set<String> neighbours = adjacency.get(queue.poll());
-			if (neighbours == null) {
-				continue;
-			}
-			for (String next : neighbours) {
-				if (reached.add(next)) {
-					queue.add(next);
+			final String current = queue.poll();
+			Set<String> neighbours = adjacency.get(current);
+			if (neighbours != null) {
+				for (String next : neighbours) {
+					if (reached.add(next)) {
+						queue.add(next);
+					}
 				}
 			}
+			Set<String> processors = processing.get(current);
+			if (processors != null) {
+				processed.addAll(processors);
+			}
 		}
+		reached.addAll(processed);
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Personal data propagated along the data direction from " + seeds
+					+ " flagged source(s) to " + (reached.size() - seeds) + " further endpoint id(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Endpoint ids holding or processing personal data: " + reached);
+		}
 		// Write the propagated scope back onto every reachable endpoint. Ids in the
 		// reached set that name no endpoint (a store referenced only as an edge end
 		// but not itself reported) are simply skipped.
@@ -141,8 +175,4 @@ public final class DataFlowPersonalDataPropagation {
 		}
 	}
 
-	private static void link(Map<String, Set<String>> adjacency, String first, String second) {
-		adjacency.computeIfAbsent(first, k -> new HashSet<>()).add(second);
-		adjacency.computeIfAbsent(second, k -> new HashSet<>()).add(first);
-	}
 }

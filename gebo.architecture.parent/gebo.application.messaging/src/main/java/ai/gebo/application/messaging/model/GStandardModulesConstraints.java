@@ -72,6 +72,7 @@ public class GStandardModulesConstraints {
 	public static final String RESOURCES_DISPOSE_COMPONENT = "resources-dispose-component";
 	public static final String MODULE_IOC_DISPATCHER_COMPONENT = "module-ioc-dispatcher-component";
 	public static final String FULLTEXT_INDEXING_COMPONENT = "fulltext-indexing-component";
+	public static final String FULLTEXT_DISPOSE_COMPONENT = "fulltext-dispose-component";
 	public static final String MONGO_DISPOSE_DOCUMENTS_COMPONENT = "mongo-dispose-documents-component";
 	public static final String VECTORIZATION_DISPOSE_COMPONENT = "vectorization-dispose-component";
 	public static final String VECTORIZATION_COMPONENT = "vectorization-component";

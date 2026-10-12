@@ -19,7 +19,6 @@ import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.GCentralizedProjectEndpoint;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.OperationStatus;
-import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -42,8 +41,14 @@ public class GenericalPublisherController {
 				return OperationStatus.ofError("Data source unknown",
 						"The data source you want to publish cannot be reach");
 			}
-			GJobStatus job = jobQueueService.createNewAsyncJob(original, new NoContentConsumingSessionParam(),
-					GWorkflowType.STANDARD.name(), GStandardWorkflow.INGESTION.name());
+			// No session parameter, as GAbstractSystemsArchitectureController.publish: a
+			// NoContentConsumingSessionParam breaks the handlers typed on
+			// RemoteVirtualFileSystemContentConsumingSessionParam.
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Publishing data source " + original.getCode() + " with no session parameter");
+			}
+			GJobStatus job = jobQueueService.createNewAsyncJob(original, null, GWorkflowType.STANDARD.name(),
+					GStandardWorkflow.INGESTION.name());
 			return OperationStatus.of(job);
 		} catch (Throwable exc) {
 			LOGGER.error("Error publishing", exc);

@@ -7,8 +7,8 @@ import { ContentsResetControllerService } from './api/contentsResetController.se
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { FileUploadControllerService } from './api/fileUploadController.service';
 import { FileUploadsControllerService } from './api/fileUploadsController.service';
+import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
-import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { UploadsBrowsingControllerService } from './api/uploadsBrowsingController.service';
@@ -22,8 +22,8 @@ import { UploadsBrowsingControllerService } from './api/uploadsBrowsingControlle
     DocumentContentStreamerControllerService,
     FileUploadControllerService,
     FileUploadsControllerService,
+    GeboAngularFormGroupMetaInfoControllerService,
     GenericalPublisherControllerService,
-    IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService,
     JobLauncherControllerService,
     UploadsBrowsingControllerService ]

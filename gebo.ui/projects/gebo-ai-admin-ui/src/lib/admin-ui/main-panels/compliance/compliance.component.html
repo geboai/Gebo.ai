@@ -16,7 +16,7 @@
 
   @if (loadError) {
     <p-message id="ComplianceLoadError" severity="error" styleClass="w-full mb-3">
-      <span gebo-ai-text>The data-flow register could not be read from this installation.</span>
+      <span id="ComplianceLoadErrorText" gebo-ai-text>The data-flow register could not be read from this installation.</span>
     </p-message>
   }
 
@@ -25,22 +25,23 @@
     <div class="surface-card border-round p-4 border-1 surface-border">
       <div class="flex align-items-start justify-content-between gap-4 flex-wrap">
         <div class="flex flex-column gap-2" style="max-width: 46rem;">
-          <span class="text-xl font-bold" gebo-ai-text>Record of processing activities and data flows</span>
-          <span class="text-muted-color" gebo-ai-text>
+          <span id="DataFlowRegisterTitle" class="text-xl font-bold" gebo-ai-text>Record of processing activities and data flows</span>
+          <span id="DataFlowRegisterDescription" class="text-muted-color" gebo-ai-text>
             Every active element of this installation reports where it reads data from, where it
             writes it to, which engines transform it on the way, and which component is able to
             erase it. The register is built from the components actually running, not from a
             declared configuration file.
           </span>
-          <span class="text-muted-color" gebo-ai-text>
+          <span id="CredentialsLocatorText" class="text-muted-color" gebo-ai-text>
             Endpoint locators never carry credentials: a credential is identified only by the code
             of the secret that guards it.
           </span>
-          <span class="text-muted-color" gebo-ai-text>
+          <span id="PersonalDataScopeText" class="text-muted-color" gebo-ai-text>
             "May carry personal data" marks a flow as in scope for a personal-data assessment - it is
             not an automated determination. Whether ingested content is personal or purely
-            business/company data is the data controller's call; a user's own query/session is always
-            treated as personal activity.
+            business/company data is the data controller's call: personal data start only from the
+            data sources flagged as holding them and follow the flow - to the stores they feed, the
+            chats and agents reading those stores, and the models and services these write to.
           </span>
         </div>
 
@@ -54,7 +55,7 @@
             [disabled]="endpoints.length === 0"
             icon="pi pi-download" severity="secondary"
             label="Export register (CSV)"></p-button>
-          <span class="text-xs text-muted-color text-center" gebo-ai-text>
+          <span id="DataFlowRegisterNormsText" class="text-xs text-muted-color text-center" gebo-ai-text>
             Records of processing activities · Supply-chain and asset visibility
           </span>
         </div>
@@ -66,9 +67,9 @@
         <div class="flex flex-column gap-2" style="max-width: 46rem;">
           <div class="flex align-items-center gap-2">
             <i class="pi pi-shield text-green-600"></i>
-            <span class="text-xl font-bold" gebo-ai-text>Security audit logging — Wazuh / SIEM compatible</span>
+            <span id="SecurityAuditTitle" class="text-xl font-bold" gebo-ai-text>Security audit logging — Wazuh / SIEM compatible</span>
           </div>
-          <span class="text-muted-color" gebo-ai-text>
+          <span id="SecurityAuditDescription" class="text-muted-color" gebo-ai-text>
             An append-only audit trail (security-log.jsonl) records authentication, credential
             changes, model configuration and user-administration events - one JSON object per line,
             ingested natively by Wazuh's json decoder and any SIEM. Retained 365 days by default, and
@@ -79,9 +80,9 @@
         <div class="flex flex-column gap-2 align-items-stretch">
           <span class="inline-flex align-items-center justify-content-center gap-2 px-3 py-2 border-round bg-green-100 text-green-700 font-semibold"
             title="The security audit trail is active and SIEM/Wazuh-ready on this installation">
-            <i class="pi pi-check-circle"></i> <span gebo-ai-text>Up &amp; running</span>
+            <i class="pi pi-check-circle"></i> <span id="SecurityAuditRunningText" gebo-ai-text>Up &amp; running</span>
           </span>
-          <span class="text-xs text-muted-color text-center" gebo-ai-text>
+          <span id="SecurityAuditNormsText" class="text-xs text-muted-color text-center" gebo-ai-text>
             GDPR Art. 32 · NIS2 Art. 21 — Security of processing &amp; monitoring
           </span>
         </div>
@@ -91,44 +92,44 @@
     <div class="flex gap-3 flex-wrap">
       <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;">
         <div class="text-2xl font-bold">{{ summary.endpoints }}</div>
-        <div class="text-sm text-muted-color" gebo-ai-text>Data endpoints</div>
+        <div id="DataEndpointsCountLabel" class="text-sm text-muted-color" gebo-ai-text>Data endpoints</div>
       </div>
       <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;">
         <div class="text-2xl font-bold">{{ summary.transformations }}</div>
-        <div class="text-sm text-muted-color" gebo-ai-text>Transformations</div>
+        <div id="TransformationsCountLabel" class="text-sm text-muted-color" gebo-ai-text>Transformations</div>
       </div>
       <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;">
         <div class="text-2xl font-bold">{{ summary.components }}</div>
-        <div class="text-sm text-muted-color" gebo-ai-text>Reporting components</div>
+        <div id="ReportingComponentsCountLabel" class="text-sm text-muted-color" gebo-ai-text>Reporting components</div>
       </div>
       <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;"
         [class.border-red-500]="summary.externalEndpoints > 0">
         <div class="text-2xl font-bold" [class.text-red-600]="summary.externalEndpoints > 0">
           {{ summary.externalEndpoints }}
         </div>
-        <div class="text-sm text-muted-color" gebo-ai-text>External providers</div>
+        <div id="ExternalProvidersCountLabel" class="text-sm text-muted-color" gebo-ai-text>External providers</div>
       </div>
       <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;"
         [class.border-orange-500]="summary.personalDataEndpoints > 0">
         <div class="text-2xl font-bold" [class.text-orange-600]="summary.personalDataEndpoints > 0">
           {{ summary.personalDataEndpoints }}
         </div>
-        <div class="text-sm text-muted-color" gebo-ai-text>May carry personal data (assess)</div>
+        <div id="PersonalDataCountLabel" class="text-sm text-muted-color" gebo-ai-text>May carry personal data (assess)</div>
       </div>
       <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;"
         [class.border-orange-500]="summary.retainingWithoutErasure > 0">
         <div class="text-2xl font-bold" [class.text-orange-600]="summary.retainingWithoutErasure > 0">
           {{ summary.retainingWithoutErasure }}
         </div>
-        <div class="text-sm text-muted-color" gebo-ai-text>Retaining, no erasure component</div>
+        <div id="RetainingNoErasureCountLabel" class="text-sm text-muted-color" gebo-ai-text>Retaining, no erasure component</div>
       </div>
     </div>
 
     @if (report?.nodeId || report?.collectedAt) {
       <span class="text-xs text-muted-color">
-        <span gebo-ai-text>Collected from node</span>
+        <span id="CollectedFromNodeText" gebo-ai-text>Collected from node</span>
         <b> {{ report?.nodeId || "unknown" }} </b>
-        <span gebo-ai-text>at</span>
+        <span id="CollectedAtText" gebo-ai-text>at</span>
         {{ report?.collectedAt }}
       </span>
     }
@@ -143,8 +144,8 @@
 
   <ng-template pTemplate="header">
     <div class="flex flex-column">
-      <span class="text-xl font-bold" gebo-ai-text>GDPR Art. 30 · NIS2 Art. 21 — Data Flow Register</span>
-      <span class="text-sm text-muted-color" gebo-ai-text>
+      <span id="DataFlowDialogTitle" class="text-xl font-bold" gebo-ai-text>GDPR Art. 30 · NIS2 Art. 21 — Data Flow Register</span>
+      <span id="DataFlowDialogSubtitle" class="text-sm text-muted-color" gebo-ai-text>
         Sources, transformation engines, retaining stores and erasure capability, as currently configured
       </span>
     </div>
@@ -155,20 +156,26 @@
     <div class="flex align-items-center gap-3 flex-wrap px-2">
       <span class="flex align-items-center gap-2 text-sm">
         <span style="width: 1rem; height: 0.25rem; background: var(--green-500, #22c55e); display: inline-block;"></span>
-        <span gebo-ai-text>Local deployment</span>
+        <span id="LocalityLocalLegend" gebo-ai-text>Local deployment</span>
       </span>
       <span class="flex align-items-center gap-2 text-sm">
         <span style="width: 1rem; height: 0.25rem; background: var(--orange-500, #f59e0b); display: inline-block;"></span>
-        <span gebo-ai-text>Same network</span>
+        <span id="LocalitySameNetworkLegend" gebo-ai-text>Same network</span>
       </span>
       <span class="flex align-items-center gap-2 text-sm">
         <span style="width: 1rem; height: 0.25rem; background: var(--red-500, #ef4444); display: inline-block;"></span>
-        <span gebo-ai-text>External provider</span>
+        <span id="LocalityExternalLegend" gebo-ai-text>External provider</span>
       </span>
       <span class="flex align-items-center gap-2 text-sm">
         <span style="width: 1rem; height: 0.25rem; background: var(--surface-400, #9ca3af); display: inline-block;"></span>
-        <span gebo-ai-text>Locality undetermined</span>
+        <span id="LocalityUnknownLegend" gebo-ai-text>Locality undetermined</span>
       </span>
+      @if (selectedTab !== allFlowsTab) {
+        <span class="flex align-items-center gap-2 text-sm">
+          <span style="width: 1rem; height: 0; border-top: 2px dashed var(--surface-500, #6b7280); display: inline-block;"></span>
+          <span id="ReachedFromLegendText" gebo-ai-text>Reported by another component</span>
+        </span>
+      }
       <span class="flex-1"></span>
       <p-button id="RefreshDataFlowBtn" gebo-ai-label (onClick)="refreshFromDialog()"
         [outlined]="true" size="small" icon="pi pi-refresh" label="Refresh"></p-button>
@@ -177,14 +184,35 @@
     @if (endpoints.length === 0 && transformations.length === 0) {
       <div class="flex flex-column align-items-center justify-content-center gap-3 h-full text-center p-5">
         <i class="pi pi-sitemap text-muted-color" style="font-size: 3rem"></i>
-        <span class="text-xl font-semibold" gebo-ai-text>No data flows reported yet</span>
-        <span class="text-muted-color" style="max-width: 34rem;" gebo-ai-text>
+        <span id="NoDataFlowsTitle" class="text-xl font-semibold" gebo-ai-text>No data flows reported yet</span>
+        <span id="NoDataFlowsText" class="text-muted-color" style="max-width: 34rem;" gebo-ai-text>
           No component of this installation reported a data-flow configuration. This is expected
           when no data source has been configured yet, and while components are still being
           migrated to publish their configuration.
         </span>
       </div>
     } @else {
+      <!-- One tab per component reporting flows, besides every flow: only the drawing
+           is split, the register stays the same one. -->
+      <p-tabs id="DataFlowRegisterTabs" [value]="selectedTab" (valueChange)="selectTab($event)" [scrollable]="true">
+        <p-tablist>
+          <p-tab [value]="allFlowsTab">
+            <span id="AllFlowsTab" gebo-ai-text>All flows</span>
+            <span class="ml-2 text-xs text-muted-color">{{ endpoints.length + transformations.length }}</span>
+          </p-tab>
+          @for (tab of tabs; track tab.key) {
+            <!-- a name can be a whole sentence (a network of agents' description): cut
+                 short here, whole in the tooltip and above the diagram -->
+            <p-tab [value]="tab.key" [title]="tab.label + ' - ' + tab.key">
+              <span style="display: inline-block; max-width: 18rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">{{ tab.label }}</span>
+              <span class="ml-2 text-xs text-muted-color">{{ tab.endpoints + tab.transformations }}</span>
+            </p-tab>
+          }
+        </p-tablist>
+      </p-tabs>
+      @if (selectedSectionDescription(); as description) {
+        <div class="text-sm text-muted-color px-2" style="max-width: 70rem;">{{ description }}</div>
+      }
       <div style="flex: 1 1 auto; min-height: 0; width: 100%;">
         <!-- Mounted only once the dialog reports itself shown: the diagram measures
              its nodes from the DOM, so it must be created inside a container that
@@ -197,5 +225,90 @@
         }
       </div>
     }
+  </div>
+</p-dialog>
+
+<!-- Who may reach what a register endpoint stands for, as the access model in force
+     (users and groups, or ACL entries - ai.gebo.security.useAcl) applies its rules. -->
+<p-dialog id="DataFlowAccessDialog" [(visible)]="showAccessDialog" [modal]="true" [draggable]="false"
+  [style]="{ width: '44rem', maxWidth: '95vw' }">
+
+  <ng-template pTemplate="header">
+    <div class="flex flex-column">
+      <span id="AccessDialogTitle" class="text-xl font-bold" gebo-ai-text>Who can access it</span>
+      <span class="text-sm text-muted-color">{{ accessNode?.description }}</span>
+    </div>
+  </ng-template>
+
+  <div class="flex flex-column gap-3">
+    <div class="text-sm">
+      @if (contentAccessPolicy === 'ACL_BASED') {
+        <span id="AccessModelAclText" gebo-ai-text>Access model of this installation: ACL entries.</span>
+      } @else if (contentAccessPolicy === 'GROUP_BASED') {
+        <span id="AccessModelGroupsText" gebo-ai-text>Access model of this installation: users and groups.</span>
+      } @else {
+        <span id="AccessModelUnknownText" gebo-ai-text>The access model of this installation could not be read.</span>
+      }
+    </div>
+
+    @for (rule of accessRules; track $index) {
+      <div class="border-1 surface-border border-round p-3 flex flex-column gap-2">
+        <div class="flex flex-column gap-1">
+          <span class="font-bold">{{ rule.grantedBy }}</span>
+          <span class="text-sm text-muted-color">{{ rule.scope }}</span>
+        </div>
+
+        @if (rule.mode === 'NOT_APPLIED') {
+          <span id="AccessNotAppliedText" class="text-sm" gebo-ai-text>Not applied: it holds ACL entries, which the users and groups model does not read.</span>
+        } @else {
+          @if (rule.everyone) {
+            <span class="inline-flex align-items-center gap-2 font-semibold text-green-700">
+              <i class="pi pi-globe"></i><span id="AccessEveryoneText" gebo-ai-text>Every user</span>
+            </span>
+          }
+          @if (rule.acl.length > 0) {
+            <div class="flex flex-column gap-1">
+              <span id="AccessAclLabel" class="text-xs font-semibold text-muted-color" gebo-ai-text>ACL entries</span>
+              <div class="flex flex-wrap gap-1">
+                @for (entry of rule.acl; track entry) {
+                  <span class="p-1 border-round surface-200 text-sm" style="overflow-wrap: anywhere;">{{ entry }}</span>
+                }
+              </div>
+            </div>
+          }
+          @if (rule.users.length > 0) {
+            <div class="flex flex-column gap-1">
+              <span id="AccessUsersLabel" class="text-xs font-semibold text-muted-color" gebo-ai-text>Users</span>
+              <div class="flex flex-wrap gap-1">
+                @for (user of rule.users; track user) {
+                  <span class="p-1 border-round surface-200 text-sm" style="overflow-wrap: anywhere;"><i class="pi pi-user text-xs"></i> {{ user }}</span>
+                }
+              </div>
+            </div>
+          }
+          @if (rule.groups.length > 0) {
+            <div class="flex flex-column gap-1">
+              <span id="AccessGroupsLabel" class="text-xs font-semibold text-muted-color" gebo-ai-text>Groups</span>
+              <div class="flex flex-wrap gap-1">
+                @for (group of rule.groups; track group) {
+                  <span class="p-1 border-round surface-200 text-sm" style="overflow-wrap: anywhere;"><i class="pi pi-users text-xs"></i> {{ group }}</span>
+                }
+              </div>
+            </div>
+          }
+          @if (!rule.everyone && rule.acl.length === 0 && rule.users.length === 0 && rule.groups.length === 0) {
+            <span id="AccessNobodyText" class="text-sm" gebo-ai-text>Nobody is listed: only administrators.</span>
+          }
+          @if (rule.mode === 'ACL_AND_LISTS') {
+            <span id="AccessListsAlsoText" class="text-xs text-muted-color" gebo-ai-text>To read it, its users and groups are allowed too, besides its ACL entries.</span>
+          }
+        }
+        @if (rule.note) {
+          <span class="text-xs text-muted-color">{{ rule.note }}</span>
+        }
+      </div>
+    }
+
+    <span id="AccessAdministratorsText" class="text-xs text-muted-color" gebo-ai-text>Administrators can always access it.</span>
   </div>
 </p-dialog>

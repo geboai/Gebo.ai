@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**changeChatDescription**](GeboUserChatsControllerApi.md#changeChatDescription) | **POST** /api/users/GeboUserChatsController/changeChatDescription | 
 [**createCleanChatByChatProfileCode**](GeboUserChatsControllerApi.md#createCleanChatByChatProfileCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByChatProfileCode | 
+[**createCleanChatByDefaultModel**](GeboUserChatsControllerApi.md#createCleanChatByDefaultModel) | **GET** /api/users/GeboUserChatsController/createCleanChatByDefaultModel | 
 [**createCleanChatByModelCode**](GeboUserChatsControllerApi.md#createCleanChatByModelCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByModelCode | 
 [**deleteChat**](GeboUserChatsControllerApi.md#deleteChat) | **DELETE** /api/users/GeboUserChatsController/deleteChat | 
 [**exportResponse2file**](GeboUserChatsControllerApi.md#exportResponse2file) | **GET** /api/users/GeboUserChatsController/exportResponse2file | 
@@ -13,6 +14,7 @@ Method | HTTP request | Description
 [**getChatInfosByCode**](GeboUserChatsControllerApi.md#getChatInfosByCode) | **GET** /api/users/GeboUserChatsController/getChatInfosByCode | 
 [**getChatInfosByQbe**](GeboUserChatsControllerApi.md#getChatInfosByQbe) | **POST** /api/users/GeboUserChatsController/getChatInfosByQbe | 
 [**getMyChats**](GeboUserChatsControllerApi.md#getMyChats) | **GET** /api/users/GeboUserChatsController/getMyChats | 
+[**getMyChatsByContextCode**](GeboUserChatsControllerApi.md#getMyChatsByContextCode) | **GET** /api/users/GeboUserChatsController/getMyChatsByContextCode | 
 [**getMyChatsPaged**](GeboUserChatsControllerApi.md#getMyChatsPaged) | **GET** /api/users/GeboUserChatsController/getMyChatsPaged | 
 [**getUIConfig**](GeboUserChatsControllerApi.md#getUIConfig) | **GET** /api/users/GeboUserChatsController/getUIConfig | 
 [**isMinimalLLMSSetupDone**](GeboUserChatsControllerApi.md#isMinimalLLMSSetupDone) | **GET** /api/users/GeboUserChatsController/isMinimalLLMSSetupDone | 
@@ -60,7 +62,7 @@ No authorization required
 
 <a name="createCleanChatByChatProfileCode"></a>
 # **createCleanChatByChatProfileCode**
-> GUserChatInfo createCleanChatByChatProfileCode(chatProfileCode)
+> GUserChatInfo createCleanChatByChatProfileCode(chatProfileCode, opts)
 
 
 
@@ -70,8 +72,11 @@ import {GeboAiClient} from 'gebo.ai.client.js';
 
 let apiInstance = new GeboAiClient.GeboUserChatsControllerApi();
 let chatProfileCode = "chatProfileCode_example"; // String | 
-
-apiInstance.createCleanChatByChatProfileCode(chatProfileCode).then((data) => {
+let opts = { 
+  'contextCode': "contextCode_example", // String | 
+  'pipelineCode': "pipelineCode_example" // String | 
+};
+apiInstance.createCleanChatByChatProfileCode(chatProfileCode, opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
@@ -84,6 +89,49 @@ apiInstance.createCleanChatByChatProfileCode(chatProfileCode).then((data) => {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **chatProfileCode** | **String**|  | 
+ **contextCode** | **String**|  | [optional] 
+ **pipelineCode** | **String**|  | [optional] 
+
+### Return type
+
+[**GUserChatInfo**](GUserChatInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="createCleanChatByDefaultModel"></a>
+# **createCleanChatByDefaultModel**
+> GUserChatInfo createCleanChatByDefaultModel(opts)
+
+
+
+### Example
+```javascript
+import {GeboAiClient} from 'gebo.ai.client.js';
+
+let apiInstance = new GeboAiClient.GeboUserChatsControllerApi();
+let opts = { 
+  'pipelineCode': "pipelineCode_example" // String | 
+};
+apiInstance.createCleanChatByDefaultModel(opts).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **pipelineCode** | **String**|  | [optional] 
 
 ### Return type
 
@@ -100,7 +148,7 @@ No authorization required
 
 <a name="createCleanChatByModelCode"></a>
 # **createCleanChatByModelCode**
-> GUserChatInfo createCleanChatByModelCode(modelCode)
+> GUserChatInfo createCleanChatByModelCode(modelCode, opts)
 
 
 
@@ -110,8 +158,10 @@ import {GeboAiClient} from 'gebo.ai.client.js';
 
 let apiInstance = new GeboAiClient.GeboUserChatsControllerApi();
 let modelCode = "modelCode_example"; // String | 
-
-apiInstance.createCleanChatByModelCode(modelCode).then((data) => {
+let opts = { 
+  'pipelineCode': "pipelineCode_example" // String | 
+};
+apiInstance.createCleanChatByModelCode(modelCode, opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
@@ -124,6 +174,7 @@ apiInstance.createCleanChatByModelCode(modelCode).then((data) => {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **modelCode** | **String**|  | 
+ **pipelineCode** | **String**|  | [optional] 
 
 ### Return type
 
@@ -363,6 +414,46 @@ apiInstance.getMyChats().then((data) => {
 
 ### Parameters
 This endpoint does not need any parameter.
+
+### Return type
+
+[**[GUserChatInfo]**](GUserChatInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getMyChatsByContextCode"></a>
+# **getMyChatsByContextCode**
+> [GUserChatInfo] getMyChatsByContextCode(contextCode)
+
+
+
+### Example
+```javascript
+import {GeboAiClient} from 'gebo.ai.client.js';
+
+let apiInstance = new GeboAiClient.GeboUserChatsControllerApi();
+let contextCode = "contextCode_example"; // String | 
+
+apiInstance.getMyChatsByContextCode(contextCode).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **contextCode** | **String**|  | 
 
 ### Return type
 

@@ -65,6 +65,12 @@ public class ChatRuntimeDataQueryAdapterAgentService
 		return DESCRIPTION;
 	}
 
+	/** It only forwards the user query to its peers: no chat model is called. */
+	@Override
+	public boolean isCallingChatModel() {
+		return false;
+	}
+
 	@Override
 	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
 		AgentCapabilities capabilities = super.getAgentCapabilities(agentConfig);

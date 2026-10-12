@@ -27,13 +27,13 @@ export default class SearchResult {
    * Constructs a new <code>SearchResult</code>.
    * @alias module:model/SearchResult
    * @class
-   * @param id {Object} 
+   * @param id {String} 
    * @param resultReference {module:model/SearchResultReference} 
    * @param navigationReference {module:model/VFilesystemReference} 
-   * @param descriptiveText {Object} 
+   * @param descriptiveText {String} 
    * @param originComponent {module:model/GeboComponentInfo} 
-   * @param systemConfigurationCode {Object} 
-   * @param code {Object} 
+   * @param systemConfigurationCode {String} 
+   * @param code {String} 
    */
   constructor(id, resultReference, navigationReference, descriptiveText, originComponent, systemConfigurationCode, code) {
     this.id = id;
@@ -56,32 +56,32 @@ export default class SearchResult {
     if (data) {
       obj = obj || new SearchResult();
       if (data.hasOwnProperty('id'))
-        obj.id = ApiClient.convertToType(data['id'], Object);
+        obj.id = ApiClient.convertToType(data['id'], 'String');
       if (data.hasOwnProperty('resultReference'))
         obj.resultReference = SearchResultReference.constructFromObject(data['resultReference']);
       if (data.hasOwnProperty('navigationReference'))
         obj.navigationReference = VFilesystemReference.constructFromObject(data['navigationReference']);
       if (data.hasOwnProperty('descriptiveText'))
-        obj.descriptiveText = ApiClient.convertToType(data['descriptiveText'], Object);
+        obj.descriptiveText = ApiClient.convertToType(data['descriptiveText'], 'String');
       if (data.hasOwnProperty('nestingLevel'))
-        obj.nestingLevel = ApiClient.convertToType(data['nestingLevel'], Object);
+        obj.nestingLevel = ApiClient.convertToType(data['nestingLevel'], 'Number');
       if (data.hasOwnProperty('modificationDate'))
-        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], Object);
+        obj.modificationDate = ApiClient.convertToType(data['modificationDate'], 'Date');
       if (data.hasOwnProperty('childs'))
-        obj.childs = ApiClient.convertToType(data['childs'], Object);
+        obj.childs = ApiClient.convertToType(data['childs'], [SearchResult]);
       if (data.hasOwnProperty('originComponent'))
         obj.originComponent = GeboComponentInfo.constructFromObject(data['originComponent']);
       if (data.hasOwnProperty('systemConfigurationCode'))
-        obj.systemConfigurationCode = ApiClient.convertToType(data['systemConfigurationCode'], Object);
+        obj.systemConfigurationCode = ApiClient.convertToType(data['systemConfigurationCode'], 'String');
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} id
+ * @member {String} id
  */
 SearchResult.prototype.id = undefined;
 
@@ -96,22 +96,22 @@ SearchResult.prototype.resultReference = undefined;
 SearchResult.prototype.navigationReference = undefined;
 
 /**
- * @member {Object} descriptiveText
+ * @member {String} descriptiveText
  */
 SearchResult.prototype.descriptiveText = undefined;
 
 /**
- * @member {Object} nestingLevel
+ * @member {Number} nestingLevel
  */
 SearchResult.prototype.nestingLevel = undefined;
 
 /**
- * @member {Object} modificationDate
+ * @member {Date} modificationDate
  */
 SearchResult.prototype.modificationDate = undefined;
 
 /**
- * @member {Object} childs
+ * @member {Array.<module:model/SearchResult>} childs
  */
 SearchResult.prototype.childs = undefined;
 
@@ -121,12 +121,12 @@ SearchResult.prototype.childs = undefined;
 SearchResult.prototype.originComponent = undefined;
 
 /**
- * @member {Object} systemConfigurationCode
+ * @member {String} systemConfigurationCode
  */
 SearchResult.prototype.systemConfigurationCode = undefined;
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 SearchResult.prototype.code = undefined;
 

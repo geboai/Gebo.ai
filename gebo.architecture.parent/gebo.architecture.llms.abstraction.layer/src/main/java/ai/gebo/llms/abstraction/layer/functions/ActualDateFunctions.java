@@ -128,19 +128,6 @@ public class ActualDateFunctions implements IGToolCallbackSource {
      */
     private ToolCallback create() {
         BiFunction<VoidObject, ToolContext, ActualDateTime> thisFunction = (t, c) -> {
-            KBContext contextVisibility = LLMtInteractionContextThreadLocal.Context.get();
-            CalledFunction function = new CalledFunction();
-            function.setFunctionName(ACTUAL_DATE_TIME);
-            function.setFunctionDescription(GET_ACTUAL_DATE_AND_TIME_IN_ISO_FORMAT);
-            function.setParamsDescription(List.of("No parameters"));
-            if (contextVisibility != null) {
-                // Adds the function call to the current interaction context if available
-                contextVisibility.getCalledFunctions().add(function);
-            }
-            if (c != null) {
-                // Registers the function call to the provided tool context
-                ToolCallbackDeclarationUtil.addCallToContext(c, function);
-            }
             return new ActualDateTime();
         };
         return ToolCallbackDeclarationUtil.declare(thisFunction, ACTUAL_DATE_TIME,

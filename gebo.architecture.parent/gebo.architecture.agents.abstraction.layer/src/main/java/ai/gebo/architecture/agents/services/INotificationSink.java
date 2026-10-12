@@ -6,12 +6,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType;
+import ai.gebo.llms.abstraction.layer.services.IGProgressNotifier;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public interface INotificationSink {
+public interface INotificationSink extends IGProgressNotifier {
+	/** A long work's progress, as an informative notification. */
+	@Override
+	public default void notifyProgress(String code, String message) {
+		next(message, NotificationObject.NotificationType.INFO);
+	}
+
+	/** An LLM provider failure during a long work, as an error notification. */
+	@Override
+	public default void notifyLLMProblems() {
+		next("Problems with llm provider", NotificationObject.NotificationType.ERROR);
+	}
+
 	Logger NOTIFICATION_LOGGER = LoggerFactory.getLogger(INotificationSink.class);
 
 	@Data

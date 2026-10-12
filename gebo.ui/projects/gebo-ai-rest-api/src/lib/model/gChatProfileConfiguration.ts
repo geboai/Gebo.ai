@@ -35,4 +35,5 @@ export interface GChatProfileConfiguration {
     otherSearchSimilarityThreshold?: number;
     manualThreasholdsConfiguration?: boolean;
     useAlsoKeywordSearch?: boolean;
+    defaultChatNetworkOfAgents?: string;
 }

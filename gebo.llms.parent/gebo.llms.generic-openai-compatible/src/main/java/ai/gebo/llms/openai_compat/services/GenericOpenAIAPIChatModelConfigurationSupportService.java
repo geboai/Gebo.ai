@@ -55,6 +55,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 
 public class GenericOpenAIAPIChatModelConfigurationSupportService implements
@@ -95,6 +96,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Constructor that initializes all required dependencies
@@ -114,7 +116,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
 			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern,
 			IGDocumentContentRendererProvider documentContentRenderProvider,
-			IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
+			IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry,
+			IGModelsLibraryDao modelsLibrary) {
 		this.type = type;
 		this.secretService = secretService;
 		this.functionsRepo = functionsRepo;
@@ -126,6 +129,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		this.documentContentRenderProvider = documentContentRenderProvider;
 		this.usageAdvisorFactory = usageAdvisorFactory;
 		this.observationRegistry = observationRegistry;
+		this.modelsLibrary = modelsLibrary;
 
 	}
 
@@ -138,12 +142,23 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 
 		public GenericOpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 
 		}
 
 		public static final String CHATMODEL_VLLM = "chatmodel-vllm";
+
+		/**
+		 * The efforts and sampling the models list told of the chosen model, where the
+		 * provider publishes them per model (OpenRouter); null otherwise.
+		 */
+		@Override
+		protected ai.gebo.llms.models.metainfos.ModelParameterRules liveParameterRules(
+				GenericOpenAIAPIChatModelConfig config, GChatModelType type) {
+			return OpenRouterLiveParameterRules.of(config.getChoosedModel().getNativeModelMetaInfos(),
+					type.getProviderId());
+		}
 
 		/**
 		 * Configures the OpenAI-compatible chat model with the provided configuration
@@ -200,6 +215,31 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			}
 			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
 				builder.maxTokens(config.getMaxGeneratedTokens());
+			}
+			// The thinking level chosen on the model (or carried per request by an agent
+			// through cloneWithOptions) is delivered here as reasoning_effort, the parameter
+			// every OpenAI compatible gateway that exposes reasoning agrees on - regolo.ai,
+			// for one, lists it in the supported_openai_params of its chat models. Until
+			// this was applied the setting was persisted and then silently dropped, so a
+			// model configured for maximum thinking answered exactly like one that was not.
+			// AUTO deliberately sends nothing: it means "leave the provider default alone".
+			// NO_THINKING has no portable spelling across these gateways (the values that
+			// disable reasoning differ per backend and an unknown one is answered with a
+			// 400): it is sent as none only where the model's parameter rules list it, which
+			// are per provider and model, and an effort a model's rules leave out is not sent
+			// either (see GAbstractConfigurableChatModel.reasoningEffortFor).
+			if (config.getThinking() != null) {
+				final String effort = reasoningEffortFor(config.getThinking());
+				if (effort != null) {
+					builder.reasoningEffort(effort);
+				}
+				// Debug and not warn although a thinking level may not be honoured:
+				// configureModel runs again on every cloneWithOptions, so an agent passing a
+				// thinking level per request would turn a warning into one line per call.
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model {} on {} configured with thinking {} as reasoning effort {}",
+							config.getCode(), type.getCode(), config.getThinking(), effort);
+				}
 			}
 
 			// Configure tool callbacks (functions)
@@ -301,7 +341,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
 			return new GenericOpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 	};
 
@@ -326,7 +366,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	public IGConfigurableChatModel<GenericOpenAIAPIChatModelConfig> create(GenericOpenAIAPIChatModelConfig config)
 			throws LLMConfigException {
 		GenericOpenAIConfigurableChatModel model = new GenericOpenAIConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
 	}
@@ -341,10 +381,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	public OperationStatus<List<GenericOpenAIAPIChatModelChoice>> getModelChoices(
 			GenericOpenAIAPIChatModelConfig config) {
 		OperationStatus<List<GenericOpenAIAPIChatModelChoice>> result = null;
-		OpenAIApiConfig providerConfig = OpenAIApiConfig.of(config, false);
-		providerConfig.setProviderId(type.getProviderId());
-		if (providerConfig.getBasePath() == null)
-			providerConfig.setBasePath(type.getBaseUrl());
+		OpenAIApiConfig providerConfig = ProviderModelsLookup.apiConfigOf(config, type.getProviderId(),
+				type.getBaseUrl());
 		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
 			result = this.modelsListProxyService.geModels(type.getModelsListProvider(), config,
 					GenericOpenAIAPIChatModelChoice.class, type);

@@ -44,6 +44,8 @@ export default class GeboAwsConnectionCredentials {
   static constructFromObject(data, obj) {
     if (data) {
       obj = obj || new GeboAwsConnectionCredentials();
+      if (data.hasOwnProperty('readOnly'))
+        obj.readOnly = ApiClient.convertToType(data['readOnly'], 'Boolean');
       if (data.hasOwnProperty('accessKeyId'))
         obj.accessKeyId = ApiClient.convertToType(data['accessKeyId'], 'String');
       if (data.hasOwnProperty('secretAccessKey'))
@@ -54,6 +56,11 @@ export default class GeboAwsConnectionCredentials {
     return obj;
   }
 }
+
+/**
+ * @member {Boolean} readOnly
+ */
+GeboAwsConnectionCredentials.prototype.readOnly = undefined;
 
 /**
  * @member {String} accessKeyId

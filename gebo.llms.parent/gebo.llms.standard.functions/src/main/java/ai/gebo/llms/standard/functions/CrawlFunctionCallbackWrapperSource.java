@@ -23,13 +23,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.util.json.JsonParser;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.architecture.ai.model.ToolDataFlowTarget;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 
 /**
@@ -121,6 +125,13 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 			if (!url.toLowerCase().startsWith("http")) {
 				return EMPTYRESPONSE;
 			}
+			// a page read is not worth it when its model call has no room left for it
+			if (ToolsTokenBudget.noUsefulRoom(toolContext)) {
+				LOGGER.debug("readUrl not run: too little room left in its model call's context");
+				UrlCrawlResponse noRoom = new UrlCrawlResponse();
+				noRoom.setContent("No room is left in the context for more contents: answer with the contents already found.");
+				return noRoom;
+			}
 			LOGGER.info("Begin llm reading content:" + url);
 			try {
 				String content = "No content can be returned";
@@ -140,27 +151,26 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 						}
 					}
 				}
-				if (content.length() > LENGTH_CUT) {
-					LOGGER.warn("Content cut: " + content);
-					content = content.substring(0, (int) LENGTH_CUT)
-							+ " <!-- content has been cut because is too big -->";
-
+				final UrlCrawlResponse crespone = new UrlCrawlResponse();
+				final ToolsTokenBudget budget = ToolsTokenBudget.from(toolContext);
+				if (budget == null) {
+					// no room set by the model call: the page is cut to its own limit
+					if (content.length() > LENGTH_CUT) {
+						LOGGER.warn("Content of " + url + " cut from " + content.length() + " to " + LENGTH_CUT
+								+ " characters");
+						content = content.substring(0, (int) LENGTH_CUT)
+								+ " <!-- content has been cut because is too big -->";
+					}
+					crespone.setContent(content);
+				} else {
+					fitInRoom(crespone, content, budget.left());
+				}
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace("<READ_URL_CONTENT url=" + url + ">");
+					LOGGER.trace(crespone.getContent());
+					LOGGER.trace("</READ_URL_CONTENT>");
 				}
 				LOGGER.info("End llm reading content:" + url);
-				UrlCrawlResponse crespone = new UrlCrawlResponse();
-				crespone.setContent(content);
-				KBContext context = LLMtInteractionContextThreadLocal.Context.get();
-				LLMtInteractionContextThreadLocal.CalledFunction calledFunction = new LLMtInteractionContextThreadLocal.CalledFunction();
-				calledFunction.setFunctionName("readUrl");
-				calledFunction.setFunctionDescription("Read web content from its url");
-				if (request.getUrl() != null) {
-					calledFunction.setParamsDescription(List.of(request.getUrl()));
-				}
-				if (context != null) {
-
-					context.getCalledFunctions().add(calledFunction);
-				}
-				ToolCallbackDeclarationUtil.addCallToContext(toolContext, calledFunction);
 				return crespone;
 			} catch (Throwable th) {
 				LOGGER.info("Error reading content:" + url, th);
@@ -170,6 +180,36 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 
 		return ToolCallbackDeclarationUtil.declare(thisFunction, "readUrl", "Read web content from its url",
 				UrlCrawlRequest.class, UrlCrawlResponse.class);
+	}
+
+	/**
+	 * Puts the page content in the response, cut so that the response as the model
+	 * reads it (its JSON) fits the room its model call has left: the content is fitted,
+	 * then cut again by what the JSON framing and escaping add.
+	 */
+	static void fitInRoom(UrlCrawlResponse response, String content, int room) {
+		int contentRoom = room;
+		response.setContent(ToolsTokenBudget.fitText(content, contentRoom));
+		for (int attempt = 0; attempt < 3; attempt++) {
+			final int overshoot = ITokensCountable.stringsTokensSize(JsonParser.toJson(response)) - room;
+			if (overshoot <= 0) {
+				break;
+			}
+			contentRoom -= overshoot;
+			response.setContent(ToolsTokenBudget.fitText(content, Math.max(0, contentRoom)));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("fitInRoom(...) " + content.length() + " character(s) of content in a room of " + room
+					+ " (tok), " + response.getContent().length() + " kept");
+		}
+	}
+
+	/** readUrl fetches any page of the internet the model asks for. */
+	@Override
+	public List<ToolDataFlowTarget> getDataFlowTargets(String toolName) {
+		return "readUrl".equals(toolName)
+				? List.of(ToolDataFlowTarget.of(ToolDataFlowTarget.Kind.INTERNET, "readUrl: page read from its URL"))
+				: List.of();
 	}
 
 	/**

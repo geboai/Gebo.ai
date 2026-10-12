@@ -61,7 +61,7 @@ No authorization required
 import {BrainClient} from 'gebo.brain.client.js';
 
 let apiInstance = new BrainClient.OpenAiImageModelsConfigurationControllerApi();
-let code = null; // Object | 
+let code = "code_example"; // String | 
 
 apiInstance.findOpenAIImageModelConfigByCode(code).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -75,7 +75,7 @@ apiInstance.findOpenAIImageModelConfigByCode(code).then((data) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  | 
+ **code** | **String**|  | 
 
 ### Return type
 

@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class IdentityUtil {
 	private final static Logger LOGGER = LoggerFactory.getLogger(ReactiveIdentityUtil.class);
@@ -31,8 +32,28 @@ public class IdentityUtil {
 		}
 	}
 
+	private IdentityUtil(UserDetails user) {
+		this.authentication = new UsernamePasswordAuthenticationToken(user, // principal
+				null, // credentials
+				user.getAuthorities());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Sampled Authentication = " + authentication.getName() + " with its own authorities "
+					+ user.getAuthorities() + " in thread=>" + Thread.currentThread().getName());
+		}
+	}
+
 	public static IdentityUtil create(String userName, List<String> roles) {
 		return new IdentityUtil(userName, roles);
+	}
+
+	/**
+	 * The identity of a user resolved by the user details service (e.g.
+	 * {@code UserDetailsService.loadUserByUsername}): its principal and its own
+	 * authorities, as when the user logs in; for work done on a user's behalf where no
+	 * identity is (a background job of the user's).
+	 */
+	public static IdentityUtil create(UserDetails user) {
+		return new IdentityUtil(user);
 	}
 
 	public void doAs(RunAs runnable) {

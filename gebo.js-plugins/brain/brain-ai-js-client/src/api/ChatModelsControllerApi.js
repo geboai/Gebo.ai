@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from "../ApiClient";
+import ConfigurationEntryGBaseChatModelConfig from '../model/ConfigurationEntryGBaseChatModelConfig';
+import GChatModelType from '../model/GChatModelType';
 
 /**
 * ChatModelsController service.
@@ -36,7 +38,7 @@ export default class ChatModelsControllerApi {
 
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/GChatModelType>} and HTTP response
      */
     getChatModelTypesWithHttpInfo() {
       
@@ -58,7 +60,7 @@ export default class ChatModelsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [GChatModelType];
 
       return this.apiClient.callApi(
         '/api/admin/ChatModelsController/getChatModelTypes', 'GET',
@@ -68,7 +70,7 @@ export default class ChatModelsControllerApi {
     }
 
     /**
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/GChatModelType>}
      */
     getChatModelTypes() {
       return this.getChatModelTypesWithHttpInfo()
@@ -80,8 +82,8 @@ export default class ChatModelsControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Object} and HTTP response
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ConfigurationEntryGBaseChatModelConfig>} and HTTP response
      */
     getRuntimeConfiguredChatModelsWithHttpInfo(opts) {
       opts = opts || {};
@@ -103,7 +105,7 @@ export default class ChatModelsControllerApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = Object;
+      let returnType = [ConfigurationEntryGBaseChatModelConfig];
 
       return this.apiClient.callApi(
         '/api/admin/ChatModelsController/getRuntimeConfiguredChatModels', 'GET',
@@ -114,8 +116,8 @@ export default class ChatModelsControllerApi {
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Object} opts.modelTypeCode 
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Object}
+     * @param {String} opts.modelTypeCode 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ConfigurationEntryGBaseChatModelConfig>}
      */
     getRuntimeConfiguredChatModels(opts) {
       return this.getRuntimeConfiguredChatModelsWithHttpInfo(opts)

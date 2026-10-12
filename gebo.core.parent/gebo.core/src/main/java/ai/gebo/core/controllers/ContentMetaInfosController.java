@@ -35,6 +35,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ai.gebo.architecture.utils.DataPage;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.ReferenceType;
+import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceView;
 import jakarta.validation.Valid;
@@ -51,6 +53,11 @@ public class ContentMetaInfosController {
 	// Injects the repository to handle document references
 	@Autowired
 	DocumentReferenceRepository repository;
+
+	// Resolves which knowledge bases the current user may see, used to scope a
+	// name search when the caller does not pin it to a specific set.
+	@Autowired
+	IGKnowledgebaseVisibilityService visibilityService;
 
 	/**
 	 * Class to hold metadata information about content.
@@ -214,7 +221,9 @@ public class ContentMetaInfosController {
 	public static class SearchDocumentByNameParam {
 		@NotNull
 		public String name = null; // Document name to search for
-		@NotNull
+		// Optional: when null/empty the search spans every knowledge base the caller
+		// is allowed to see (resolved server-side), so a name search works from a chat
+		// that is not pinned to a specific knowledge base.
 		public List<String> knowledgeBaseCodes = null; // List of knowledge base codes
 
 	}
@@ -238,8 +247,8 @@ public class ContentMetaInfosController {
 	public Page<DocumentReferenceView> searchByDocumentNamePaged(
 			@NotNull @Valid @RequestBody SearchDocumentByNamePagedParam param) {
 		Pageable pageable = param.page.toPageable();
-		return repository.findDocumentReferenceViewByRootKnowledgebaseCodeInAndNameContains(param.knowledgeBaseCodes,
-				param.name, pageable);
+		return repository.findDocumentReferenceViewByRootKnowledgebaseCodeInAndNameContains(
+				resolveKnowledgeBaseCodes(param.knowledgeBaseCodes), param.name, pageable);
 	}
 
 	/**
@@ -252,7 +261,23 @@ public class ContentMetaInfosController {
 	public List<DocumentReferenceView> searchByDocumentName(
 			@NotNull @Valid @RequestBody SearchDocumentByNameParam param) {
 
-		return repository.findDocumentReferenceViewByRootKnowledgebaseCodeInAndNameContains(param.knowledgeBaseCodes,
-				param.name);
+		return repository.findDocumentReferenceViewByRootKnowledgebaseCodeInAndNameContains(
+				resolveKnowledgeBaseCodes(param.knowledgeBaseCodes), param.name);
+	}
+
+	/**
+	 * Returns the knowledge base codes to search within: the caller's selection when
+	 * it pinned one, otherwise every root knowledge base the current user is allowed
+	 * to see. Keeping the resolution server-side ensures the ACL is always applied and
+	 * a name search never leaks documents from knowledge bases the user cannot access.
+	 *
+	 * @param requested the codes the caller asked for, possibly null or empty.
+	 * @return a non-null, ACL-scoped list of knowledge base codes to search.
+	 */
+	private List<String> resolveKnowledgeBaseCodes(List<String> requested) {
+		if (requested != null && !requested.isEmpty()) {
+			return requested;
+		}
+		return visibilityService.allVisibleRootKnowledgebases().stream().map(GKnowledgeBase::getCode).toList();
 	}
 }

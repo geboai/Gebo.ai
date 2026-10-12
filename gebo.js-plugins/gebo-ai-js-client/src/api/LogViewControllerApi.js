@@ -14,6 +14,7 @@
  */
 import ApiClient from "../ApiClient";
 import GetJobMessagesParam from '../model/GetJobMessagesParam';
+import JobsEntriesFilter from '../model/JobsEntriesFilter';
 import JobsEntriesForClassNameFilter from '../model/JobsEntriesForClassNameFilter';
 import JobsEntriesForJobType from '../model/JobsEntriesForJobType';
 import JobsEntriesForProjectEndpointFilter from '../model/JobsEntriesForProjectEndpointFilter';
@@ -133,6 +134,55 @@ export default class LogViewControllerApi {
      */
     getJobMessagesPaged(body) {
       return this.getJobMessagesPagedWithHttpInfo(body)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
+     * @param {module:model/JobsEntriesFilter} body 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/PagedModelGJobStatusItem} and HTTP response
+     */
+    getJobsEntriesWithHttpInfo(body) {
+      
+      let postBody = body;
+      // verify the required parameter 'body' is set
+      if (body === undefined || body === null) {
+        throw new Error("Missing the required parameter 'body' when calling getJobsEntries");
+      }
+
+      let pathParams = {
+        
+      };
+      let queryParams = {
+        
+      };
+      let headerParams = {
+        
+      };
+      let formParams = {
+        
+      };
+
+      let authNames = [];
+      let contentTypes = ['application/json'];
+      let accepts = ['application/json'];
+      let returnType = PagedModelGJobStatusItem;
+
+      return this.apiClient.callApi(
+        '/api/admin/LogViewController/getJobsEntries', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType
+      );
+    }
+
+    /**
+     * @param {<&vendorExtensions.x-jsdoc-type>} body 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/PagedModelGJobStatusItem}
+     */
+    getJobsEntries(body) {
+      return this.getJobsEntriesWithHttpInfo(body)
         .then(function(response_and_data) {
           return response_and_data.data;
         });

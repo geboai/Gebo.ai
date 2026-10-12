@@ -13,6 +13,8 @@
  *
  */
 import ApiClient from '../ApiClient';
+import GAclEntry from './GAclEntry';
+import GObjectRef from './GObjectRef';
 
 /**
  * The GKnowledgeBase model module.
@@ -39,126 +41,151 @@ export default class GKnowledgeBase {
     if (data) {
       obj = obj || new GKnowledgeBase();
       if (data.hasOwnProperty('code'))
-        obj.code = ApiClient.convertToType(data['code'], Object);
+        obj.code = ApiClient.convertToType(data['code'], 'String');
       if (data.hasOwnProperty('description'))
-        obj.description = ApiClient.convertToType(data['description'], Object);
+        obj.description = ApiClient.convertToType(data['description'], 'String');
       if (data.hasOwnProperty('userModified'))
-        obj.userModified = ApiClient.convertToType(data['userModified'], Object);
+        obj.userModified = ApiClient.convertToType(data['userModified'], 'String');
       if (data.hasOwnProperty('userCreated'))
-        obj.userCreated = ApiClient.convertToType(data['userCreated'], Object);
+        obj.userCreated = ApiClient.convertToType(data['userCreated'], 'String');
       if (data.hasOwnProperty('dateModified'))
-        obj.dateModified = ApiClient.convertToType(data['dateModified'], Object);
+        obj.dateModified = ApiClient.convertToType(data['dateModified'], 'Date');
       if (data.hasOwnProperty('dateCreated'))
-        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], Object);
+        obj.dateCreated = ApiClient.convertToType(data['dateCreated'], 'Date');
       if (data.hasOwnProperty('accessibleGroups'))
-        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], Object);
+        obj.accessibleGroups = ApiClient.convertToType(data['accessibleGroups'], ['String']);
       if (data.hasOwnProperty('accessibleUsers'))
-        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], Object);
+        obj.accessibleUsers = ApiClient.convertToType(data['accessibleUsers'], ['String']);
       if (data.hasOwnProperty('accessibleToAll'))
-        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], Object);
+        obj.accessibleToAll = ApiClient.convertToType(data['accessibleToAll'], 'Boolean');
       if (data.hasOwnProperty('knowledgeBaseReferences'))
-        obj.knowledgeBaseReferences = ApiClient.convertToType(data['knowledgeBaseReferences'], Object);
+        obj.knowledgeBaseReferences = ApiClient.convertToType(data['knowledgeBaseReferences'], ['String']);
       if (data.hasOwnProperty('projectsReferences'))
-        obj.projectsReferences = ApiClient.convertToType(data['projectsReferences'], Object);
+        obj.projectsReferences = ApiClient.convertToType(data['projectsReferences'], ['String']);
       if (data.hasOwnProperty('embeddingModelReferences'))
-        obj.embeddingModelReferences = ApiClient.convertToType(data['embeddingModelReferences'], Object);
+        obj.embeddingModelReferences = ApiClient.convertToType(data['embeddingModelReferences'], [GObjectRef]);
       if (data.hasOwnProperty('username'))
-        obj.username = ApiClient.convertToType(data['username'], Object);
+        obj.username = ApiClient.convertToType(data['username'], 'String');
       if (data.hasOwnProperty('parentKnowledgebaseCode'))
-        obj.parentKnowledgebaseCode = ApiClient.convertToType(data['parentKnowledgebaseCode'], Object);
+        obj.parentKnowledgebaseCode = ApiClient.convertToType(data['parentKnowledgebaseCode'], 'String');
       if (data.hasOwnProperty('objectSpaceType'))
-        obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], Object);
+        obj.objectSpaceType = ApiClient.convertToType(data['objectSpaceType'], 'String');
       if (data.hasOwnProperty('acl'))
-        obj.acl = ApiClient.convertToType(data['acl'], Object);
+        obj.acl = ApiClient.convertToType(data['acl'], [GAclEntry]);
       if (data.hasOwnProperty('aclAliases'))
-        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], Object);
+        obj.aclAliases = ApiClient.convertToType(data['aclAliases'], ['Number']);
+      if (data.hasOwnProperty('readonly'))
+        obj.readonly = ApiClient.convertToType(data['readonly'], 'Boolean');
     }
     return obj;
   }
 }
 
 /**
- * @member {Object} code
+ * @member {String} code
  */
 GKnowledgeBase.prototype.code = undefined;
 
 /**
- * @member {Object} description
+ * @member {String} description
  */
 GKnowledgeBase.prototype.description = undefined;
 
 /**
- * @member {Object} userModified
+ * @member {String} userModified
  */
 GKnowledgeBase.prototype.userModified = undefined;
 
 /**
- * @member {Object} userCreated
+ * @member {String} userCreated
  */
 GKnowledgeBase.prototype.userCreated = undefined;
 
 /**
- * @member {Object} dateModified
+ * @member {Date} dateModified
  */
 GKnowledgeBase.prototype.dateModified = undefined;
 
 /**
- * @member {Object} dateCreated
+ * @member {Date} dateCreated
  */
 GKnowledgeBase.prototype.dateCreated = undefined;
 
 /**
- * @member {Object} accessibleGroups
+ * @member {Array.<String>} accessibleGroups
  */
 GKnowledgeBase.prototype.accessibleGroups = undefined;
 
 /**
- * @member {Object} accessibleUsers
+ * @member {Array.<String>} accessibleUsers
  */
 GKnowledgeBase.prototype.accessibleUsers = undefined;
 
 /**
- * @member {Object} accessibleToAll
+ * @member {Boolean} accessibleToAll
  */
 GKnowledgeBase.prototype.accessibleToAll = undefined;
 
 /**
- * @member {Object} knowledgeBaseReferences
+ * @member {Array.<String>} knowledgeBaseReferences
  */
 GKnowledgeBase.prototype.knowledgeBaseReferences = undefined;
 
 /**
- * @member {Object} projectsReferences
+ * @member {Array.<String>} projectsReferences
  */
 GKnowledgeBase.prototype.projectsReferences = undefined;
 
 /**
- * @member {Object} embeddingModelReferences
+ * @member {Array.<module:model/GObjectRef>} embeddingModelReferences
  */
 GKnowledgeBase.prototype.embeddingModelReferences = undefined;
 
 /**
- * @member {Object} username
+ * @member {String} username
  */
 GKnowledgeBase.prototype.username = undefined;
 
 /**
- * @member {Object} parentKnowledgebaseCode
+ * @member {String} parentKnowledgebaseCode
  */
 GKnowledgeBase.prototype.parentKnowledgebaseCode = undefined;
 
 /**
- * @member {Object} objectSpaceType
+ * Allowed values for the <code>objectSpaceType</code> property.
+ * @enum {String}
+ * @readonly
+ */
+GKnowledgeBase.ObjectSpaceTypeEnum = {
+  /**
+   * value: "COMPANY"
+   * @const
+   */
+  COMPANY: "COMPANY",
+
+  /**
+   * value: "USERSPACE"
+   * @const
+   */
+  USERSPACE: "USERSPACE"
+};
+/**
+ * @member {module:model/GKnowledgeBase.ObjectSpaceTypeEnum} objectSpaceType
  */
 GKnowledgeBase.prototype.objectSpaceType = undefined;
 
 /**
- * @member {Object} acl
+ * @member {Array.<module:model/GAclEntry>} acl
  */
 GKnowledgeBase.prototype.acl = undefined;
 
 /**
- * @member {Object} aclAliases
+ * @member {Array.<Number>} aclAliases
  */
 GKnowledgeBase.prototype.aclAliases = undefined;
+
+/**
+ * @member {Boolean} readonly
+ */
+GKnowledgeBase.prototype.readonly = undefined;
 
