@@ -6,7 +6,6 @@ import { findMatchingTranlations, UIExistingText } from '../field-translation-co
 import { MenuItem } from 'primeng/api';
 
 import { IGeboChatMessage } from '../../services/gebo-chat-message';
-import { GeboAIChatStreamEventsDisplayComponent } from './chat-stream-events-display.component';
 import { PipelineRoutingOption } from './pipeline-routing-option';
 import { Chip } from 'primeng/chip';
 import { timer } from 'rxjs';
@@ -124,7 +123,8 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   @Output() deepsearchChatResponse: EventEmitter<GeboChatResponse> = new EventEmitter();
   @Output() nextRoutingChoice: EventEmitter<PipelineRoutingOption> = new EventEmitter();
   @Output() stopReactiveChat: EventEmitter<string | undefined> = new EventEmitter();
-  @ViewChild(GeboAIChatStreamEventsDisplayComponent) streamNotificationsComponent!: GeboAIChatStreamEventsDisplayComponent;
+  // the route the running answer goes through, shown by the stream events in the answer
+  @Output() runningPipelineRoutingChange: EventEmitter<PipelineRoutingOption | undefined> = new EventEmitter();
   @ViewChild("actualRoutingChoiceChip") chip!: Chip;
   /**
    * A message the user sent while the chat was busy (loading, or still answering):
@@ -446,7 +446,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
     this.pendingSend = false;
     //set the pipeline route visualizzation that will be runned
     this.runningPipelineRouting = this.choosedPipelineRoutingChip;
-    this.streamNotificationsComponent.clearUI();
+    this.runningPipelineRoutingChange.emit(this.runningPipelineRouting);
     this.messageSubmit.emit();
     //set a timer, and in 3 seconds go back to agenti chat
     timer(3000).subscribe({
@@ -472,9 +472,9 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
       //Check if the pipeline routing choosed is different from the one displayed
       if (pipelineRouterDecisionCode !== "WAITING" && pipelineRouterDecisionCode !== this.runningPipelineRouting?.chatPipelineProcessId) {
         this.runningPipelineRouting = this.findMatchingRoutingOption(pipelineRouterDecisionCode, parameters);
+        this.runningPipelineRoutingChange.emit(this.runningPipelineRouting);
       }
     }
-    this.streamNotificationsComponent.onMessage(recvd);
   }
 
   onNewSessionCreatedOnUploadInternal(evt: any) {
