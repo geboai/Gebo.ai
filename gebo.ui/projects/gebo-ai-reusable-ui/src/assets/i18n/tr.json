@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Sıcaklık",
-        "help": "Modelin yanıt vereceği sıcaklık, 0 ile 1 arasında (emin değilseniz boş bırakın)"
+        "label": "Sıcaklık"
       },
       "contextLength": {
-        "label": "Bağlam uzunluğu (token)",
-        "help": "Bir yapay zeka modelinin işlerken dikkate alabileceği metin miktarı (ayarlanmazsa 1047576 kullanılacaktır)"
+        "label": "Bağlam uzunluğu (token)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "TopP parametresi, 0 ile 1 arasında (emin değilseniz boş bırakın)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Oluşturulan maksimum token sayısı",

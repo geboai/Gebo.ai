@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "तापमान",
-        "help": "मोडेलले प्रतिक्रिया दिने तापमान, ० देखि १ सम्म (यदि निश्चित नभए खाली छोड्नुहोस्)"
+        "label": "तापमान"
       },
       "contextLength": {
-        "label": "सन्दर्भ लम्बाइ (टोकनहरू)",
-        "help": "AI मोडेलले प्रशोधन गर्दा विचार गर्न सक्ने पाठको मात्रा (यदि सेट नभए १०४७५७६ प्रयोग हुनेछ)"
+        "label": "सन्दर्भ लम्बाइ (टोकनहरू)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "TopP प्यारामिटर, ० देखि १ सम्म (यदि निश्चित नभए खाली छोड्नुहोस्)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "अधिकतम उत्पन्न टोकनहरूको संख्या",

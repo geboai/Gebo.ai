@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Teplota",
-        "help": "Teplota odpovědi modelu, od 0 do 1 (pokud si nejste jisti, nechte prázdné)"
+        "label": "Teplota"
       },
       "contextLength": {
-        "label": "Délka kontextu (tokeny)",
-        "help": "Množství textu, které může AI model zpracovat (pokud není nastaveno, použije se 1047576)"
+        "label": "Délka kontextu (tokeny)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "Parametr TopP, od 0 do 1 (pokud si nejste jisti, nechte prázdné)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Maximální počet vygenerovaných tokenů",

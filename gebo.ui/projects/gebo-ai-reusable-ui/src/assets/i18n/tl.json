@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Temperatura",
-        "help": "Temperatura kung paano sasagot ang modelo, mula 0 hanggang 1 (kung hindi sigurado, iwanang walang laman)"
+        "label": "Temperatura"
       },
       "contextLength": {
-        "label": "Haba ng konteksto (mga token)",
-        "help": "Dami ng text na maaaring isaalang-alang ng AI model kapag pinoproseso (kung hindi nakalagay, 1047576 ang gagamitin)"
+        "label": "Haba ng konteksto (mga token)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "Ang TopP na parameter, mula 0 hanggang 1 (kung hindi sigurado, iwanang walang laman)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Pinakamataas na bilang ng nalikhang token",

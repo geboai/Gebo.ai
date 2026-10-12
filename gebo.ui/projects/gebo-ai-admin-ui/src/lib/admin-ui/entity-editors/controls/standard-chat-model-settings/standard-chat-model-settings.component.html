@@ -14,24 +14,29 @@
     @if(samplingSettings===true) {
     <div class="col-4">
       <gebo-ai-field id="temperature" label="Temperature"
-        help="Temperature the model will respond, from {{minTemperature}} to {{maxTemperature}} (if unsure leave empty)">
+        help="Temperature the model will respond (if unsure leave empty)">
         <p-inputNumber id="temperature" formControlName="temperature" [min]="minTemperature" [max]="maxTemperature"
           [maxFractionDigits]="maxTemperatureDigits" styleClass="w-full" gebo-ai-field-element />
+        <small class="text-muted-color"><span id="TemperatureRangeLabel" gebo-ai-text>Allowed range:</span> {{minTemperature}} - {{maxTemperature}}</small>
         </gebo-ai-field>
       </div>
       <div class="col-4">
         <gebo-ai-field id="topP" label="TopP"
-          help="TopP parameter, from {{minTopP}} to {{maxTopP}} (if unsure leave empty)">
+          help="TopP parameter (if unsure leave empty)">
           <p-inputNumber id="topP" formControlName="topP" [min]="minTopP" [max]="maxTopP"
             [maxFractionDigits]="maxTopPDigits" styleClass="w-full" gebo-ai-field-element />
+          <small class="text-muted-color"><span id="TopPRangeLabel" gebo-ai-text>Allowed range:</span> {{minTopP}} - {{maxTopP}}</small>
           </gebo-ai-field>
         </div>
     }
         <div class="col-4">
           <gebo-ai-field id="contextLength" label="Context length (tokens)"
-            help="Amount of text an AI model can consider when processing (if not set {{defaultContextLength}} will be used)">
+            help="Amount of text an AI model can consider when processing (if unsure leave empty)">
             <p-inputNumber id="contextLength" formControlName="contextLength" [min]="minContextLength"
               [max]="maxContextLength" [maxFractionDigits]="0" styleClass="w-full" gebo-ai-field-element />
+            @if (defaultContextLength) {
+              <small class="text-muted-color"><span id="ContextLengthDefaultLabel" gebo-ai-text>Used when not set:</span> {{defaultContextLength}}</small>
+            }
             </gebo-ai-field>
           </div>
           @if(thinking===true) {

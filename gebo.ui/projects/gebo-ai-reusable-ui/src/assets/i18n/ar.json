@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "درجة الحرارة",
-        "help": "درجة حرارة استجابة النموذج، من 0 إلى 1 (إذا لم تكن متأكدًا اتركها فارغة)"
+        "label": "درجة الحرارة"
       },
       "contextLength": {
-        "label": "طول السياق (رموز)",
-        "help": "كمية النص التي يمكن لنموذج الذكاء الاصطناعي معالجتها (إذا لم يتم التحديد سيتم استخدام 4096)"
+        "label": "طول السياق (رموز)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "معامل TopP، من 0 إلى 1 (إذا لم تكن متأكدًا اتركها فارغة)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "الحد الأقصى لعدد الرموز المولدة",

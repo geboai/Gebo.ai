@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "درجہ حرارت",
-        "help": "ماڈل کے ردعمل کا درجہ حرارت، 0 سے 1 تک (اگر یقین نہ ہو تو خالی چھوڑ دیں)"
+        "label": "درجہ حرارت"
       },
       "contextLength": {
-        "label": "سیاق و سباق کی لمبائی (ٹوکینز)",
-        "help": "متن کی مقدار جو AI ماڈل عمل کرتے وقت دیکھ سکتا ہے (اگر مقرر نہ ہو تو 1047576 استعمال ہوگی)"
+        "label": "سیاق و سباق کی لمبائی (ٹوکینز)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "TopP پیرا میٹر، 0 سے 1 تک (اگر یقین نہ ہو تو خالی چھوڑ دیں)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "زیادہ سے زیادہ تیار کردہ ٹوکنز کی تعداد",

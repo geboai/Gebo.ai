@@ -2581,16 +2581,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Température",
-        "help": "Température à laquelle le modèle répondra, de 0 à 1 (en cas de doute, laissez vide)"
+        "label": "Température"
       },
       "contextLength": {
-        "label": "Longueur du contexte (jetons)",
-        "help": "Quantité de texte qu'un modèle d'IA peut prendre en compte lors du traitement (si non défini, 1047576 sera utilisé)"
+        "label": "Longueur du contexte (jetons)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "Paramètre TopP, de 0 à 1 (en cas de doute, laissez vide)"
+        "label": "TopP"
       }
     }
   },

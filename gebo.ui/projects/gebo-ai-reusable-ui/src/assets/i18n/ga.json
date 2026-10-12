@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Teocht",
-        "help": "Teocht a rachaidh an tsamhail i bhfeidhm uirthi, ó 0 go 1 (más rud é nach bhfuil tú cinnte, fág folamh é)"
+        "label": "Teocht"
       },
       "contextLength": {
-        "label": "Fad comhthéacs (tóicindí)",
-        "help": "Méid an téacs is féidir le samhail AI a phróiseáil (mura socraítear é, úsáidfear 1047576)"
+        "label": "Fad comhthéacs (tóicindí)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "Paraiméadar TopP, ó 0 go 1 (más rud é nach bhfuil tú cinnte, fág folamh é)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Uasmhéid na dtóicíní ginte",

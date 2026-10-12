@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Temperatur",
-        "help": "Temperaturen modellen vil bruke ved svar, fra 0 til 1 (hvis du er usikker, la stå tomt)"
+        "label": "Temperatur"
       },
       "contextLength": {
-        "label": "Kontekstlengde (tokens)",
-        "help": "Mengden tekst en AI-modell kan vurdere under behandling (hvis ikke satt brukes 1047576)"
+        "label": "Kontekstlengde (tokens)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "TopP-parameter, fra 0 til 1 (hvis du er usikker, la stå tomt)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Maks antall genererte tokens",

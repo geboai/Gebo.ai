@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Temperatur",
-        "help": "Temperatur model akan merespon, dari 0 hingga 1 (jika ragu biarkan kosong)"
+        "label": "Temperatur"
       },
       "contextLength": {
-        "label": "Panjang konteks (token)",
-        "help": "Jumlah teks yang dapat dipertimbangkan model AI saat memproses (jika tidak diatur, 1047576 akan digunakan)"
+        "label": "Panjang konteks (token)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "Parameter TopP, dari 0 hingga 1 (jika ragu biarkan kosong)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Jumlah maksimum token yang dihasilkan",

@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Nhiệt độ",
-        "help": "Mức nhiệt độ mà mô hình sẽ phản hồi, từ 0 đến 1 (nếu không chắc, hãy để trống)"
+        "label": "Nhiệt độ"
       },
       "contextLength": {
-        "label": "Độ dài ngữ cảnh (tokens)",
-        "help": "Số lượng văn bản mà mô hình AI có thể xem xét khi xử lý (nếu không đặt sẽ dùng 1047576)"
+        "label": "Độ dài ngữ cảnh (tokens)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "Tham số TopP, từ 0 đến 1 (nếu không chắc, hãy để trống)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Số lượng token tạo tối đa",

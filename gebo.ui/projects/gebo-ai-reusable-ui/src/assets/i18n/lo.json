@@ -2581,16 +2581,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "ອຸນ​​ຫະ​​ພູມ",
-        "help": "ອຸນ​​ຫະ​​ພູມທີ່ແບບຈະຕອບກັບ, ຈາກ 0 ຫາ 1 (ຖ້າບໍ່ແນ່ໃຈ ໃຫ້ປ່ອຍວ່າງໄວ້)"
+        "label": "ອຸນ​​ຫະ​​ພູມ"
       },
       "contextLength": {
-        "label": "ຄວາມຍາວບໍ່ຕິດກັນ (tokens)",
-        "help": "ຈຳນວນຂໍ້ຄວາມທີ່ແບບ AI ສາມາດຄິດເວລາປະມວນຜົນ (ຖ້າບໍ່ຕັ້ງຄ່າຈະໃຊ້ 1047576)"
+        "label": "ຄວາມຍາວບໍ່ຕິດກັນ (tokens)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "ຄ່າພາລາມິເຕີ TopP, ຈາກ 0 ຫາ 1 (ຖ້າບໍ່ແນ່ໃຈ ໃຫ້ປ່ອຍວ່າງໄວ້)"
+        "label": "TopP"
       }
     }
   },

@@ -1627,16 +1627,13 @@
     "GeboAIStandardChatModelModule": {
         "GeboAIStandardChatModelSettings": {
             "temperature": {
-                "label": "温度",
-                "help": "モデルの応答温度（0から1、わからない場合は空欄）"
+                "label": "温度"
             },
             "contextLength": {
-                "label": "コンテキスト長（トークン数）",
-                "help": "AIモデルが処理時に考慮できるテキスト量（設定しない場合は4096が使用されます）"
+                "label": "コンテキスト長（トークン数）"
             },
             "topP": {
-                "label": "TopP",
-                "help": "TopPパラメーター（0から1、わからない場合は空欄）"
+                "label": "TopP"
             }
         }
     },

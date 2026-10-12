@@ -41,10 +41,10 @@
   @if (editingAlreadyPersistedEntity) {
     <div class="grid">
       <div class="col-12">
-        <p-message id="EmbeddingModelChangeWarning" severity="error" styleClass="w-full" gebo-ai-text>
-          Changing the embedding model of an existing configuration invalidates the vectors already
+        <p-message severity="error" styleClass="w-full">
+          <span id="EmbeddingModelChangeWarning" gebo-ai-text>Changing the embedding model of an existing configuration invalidates the vectors already
           stored: the knowledge bases must be ingested again, otherwise retrieval keeps searching
-          vectors that this model did not produce.
+          vectors that this model did not produce.</span>
         </p-message>
       </div>
     </div>

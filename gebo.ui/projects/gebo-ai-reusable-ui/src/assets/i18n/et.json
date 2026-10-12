@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Temperatuur",
-        "help": "Temperatuur, millega mudel vastab, vahemikus 0 kuni 1 (kui pole kindel, jäta tühjaks)"
+        "label": "Temperatuur"
       },
       "contextLength": {
-        "label": "Konteksti pikkus (tokenid)",
-        "help": "Teksti hulk, mida AI mudel saab töötlemisel arvesse võtta (kui pole määratud, kasutatakse väärtust 1047576)"
+        "label": "Konteksti pikkus (tokenid)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "TopP parameeter, vahemikus 0 kuni 1 (kui pole kindel, jäta tühjaks)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Maksimaalne genereeritud tokenite arv",

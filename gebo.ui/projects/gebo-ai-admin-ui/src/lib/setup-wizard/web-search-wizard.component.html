@@ -47,13 +47,13 @@
                 
                 <li *ngFor="let p of providers"><p-radioButton [inputId]="p.id" name="provider" [value]="p.id" [(ngModel)]="selectedProvider"
                         [ngModelOptions]="{ standalone: true }" (onClick)="onProviderChange()"></p-radioButton>
-                    <label [for]="p.id" gebo-ai-text style="margin-left: 0.5rem">{{ p.label }}</label></li>
+                    <label [for]="p.id" style="margin-left: 0.5rem">{{ p.label }}</label></li>
             </ul>
             
         </div>
 
         <div class="col-12">
-            <small gebo-ai-text>{{ selectedMeta.hint }}</small>
+            <small>{{ selectedMeta.hint }}</small>
         </div>
 
         <div class="col-12 md:col-6" *ngIf="selectedMeta.needsBaseUrl">

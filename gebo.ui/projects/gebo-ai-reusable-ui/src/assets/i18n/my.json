@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "အပူချိန်",
-        "help": "မော်ဒယ်မှတုံ့ပြန်မှုအပူချိန်၊ 0 မှ 1 အထိ (မသိရင် ထားလိုက်ပါ)"
+        "label": "အပူချိန်"
       },
       "contextLength": {
-        "label": "အကြောင်းအရာ အရှည် (tokens)",
-        "help": "AI မော်ဒယ်တစ်ခု တုံ့ပြန်ရာတွင် စဉ်းစားနိုင်သော စာသားပမာဏ (မသတ်မှတ်လျှင် 1047576 ကို အသုံးပြုပါမည်)"
+        "label": "အကြောင်းအရာ အရှည် (tokens)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "TopP ပါရာမီတာ 0 မှ 1 အထိ (မသိရင် ထားလိုက်ပါ)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "ထုတ်လုပ်ထားသော token အများဆုံးအရေအတွက်",

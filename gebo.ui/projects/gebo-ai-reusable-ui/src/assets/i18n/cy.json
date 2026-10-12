@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Tymheredd",
-        "help": "Tymheredd y bydd y model yn ymateb, o 0 i 1 (os nad ydych yn siŵr, gadewch yn wag)"
+        "label": "Tymheredd"
       },
       "contextLength": {
-        "label": "Hyd cyd-destun (tokenau)",
-        "help": "Nifer y testun y gall model AI ei ystyried wrth brosesu (os nad yw wedi'i osod, bydd 1047576 yn cael ei ddefnyddio)"
+        "label": "Hyd cyd-destun (tokenau)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "Paramedr TopP, o 0 i 1 (os nad ydych yn siŵr, gadewch yn wag)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Uchafswm nifer y tocynnau a gynhyrchir",

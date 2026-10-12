@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "សីតុណ្ហភាព",
-        "help": "សីតុណ្ហភាពដែលម៉ូដែលនឹងឆ្លើយតប ចន្លោះពី 0 ទៅ 1 (បើមិនប្រាកដចាំមិនបញ្ចូលទេ)"
+        "label": "សីតុណ្ហភាព"
       },
       "contextLength": {
-        "label": "ប្រវែងបរិបទ (token)",
-        "help": "បរិមាណអត្ថបទដែលម៉ូដែល AI អាចពិចារណាពេលដំណើរការ (បើមិនកំណត់នឹងប្រើ 1047576)"
+        "label": "ប្រវែងបរិបទ (token)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "ប៉ារ៉ាម៉ែត្រ TopP ចន្លោះពី 0 ទៅ 1 (បើមិនប្រាកដចាំមិនបញ្ចូលទេ)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "ចំនួនអតិបរមានៃ token ដែលបង្កើតឡើង",

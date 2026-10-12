@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Hitastig",
-        "help": "Hitastig sem líkanið mun svara á, frá 0 upp í 1 (ef þú ert óviss skaltu skilja þetta eftir autt)"
+        "label": "Hitastig"
       },
       "contextLength": {
-        "label": "Samhengislengd (tokenar)",
-        "help": "Magn texta sem gervigreindarlíkan getur tekið tillit til við úrvinnslu (ef ekki er sett inn verður 1047576 notað)"
+        "label": "Samhengislengd (tokenar)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "TopP breyta, frá 0 upp í 1 (ef þú ert óviss skaltu skilja þetta eftir autt)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Hámarksfjöldi búinna tákna",

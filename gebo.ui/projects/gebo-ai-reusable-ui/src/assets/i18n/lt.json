@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Temperatūra",
-        "help": "Temperatūra, kuria modelis atsakys, nuo 0 iki 1 (jei nesate tikri, palikite tuščią)"
+        "label": "Temperatūra"
       },
       "contextLength": {
-        "label": "Konteksto ilgis (ženklai)",
-        "help": "Teksto kiekis, kurį AI modelis gali apdoroti (jei nenustatyta, bus naudojama 1047576)"
+        "label": "Konteksto ilgis (ženklai)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "TopP parametras, nuo 0 iki 1 (jei nesate tikri, palikite tuščią)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Didžiausias sugeneruotų žetonų skaičius",

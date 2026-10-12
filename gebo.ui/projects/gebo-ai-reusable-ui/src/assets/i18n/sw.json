@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Joto",
-        "help": "Joto ambalo mfano utajibu, kutoka 0 hadi 1 (kama huna uhakika acha wazi)"
+        "label": "Joto"
       },
       "contextLength": {
-        "label": "Urefu wa muktadha (tokeni)",
-        "help": "Kiasi cha maandishi ambacho mfano wa AI unaweza kuzingatia wakati wa kuchakata (kama haijawekwa, 1047576 itatumika)"
+        "label": "Urefu wa muktadha (tokeni)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "Kigezo cha TopP, kutoka 0 hadi 1 (kama huna uhakika acha wazi)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Idadi ya juu ya tokeni zinazozalishwa",

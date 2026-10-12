@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "ሙቀት",
-        "help": "ሞዴሉ የሚሰጠውን ምላሽ ሙቀት፣ ከ0 እስከ 1 ድረስ (አይታወቅም ከሆነ ባዶ ይተዉት)"
+        "label": "ሙቀት"
       },
       "contextLength": {
-        "label": "የአይነት ርዝመት (ቶከኖች)",
-        "help": "AI ሞዴሉ ሲሰራ የሚያቅም የጽሑፍ መጠን (ካልተመረጠ 1047576 ይጠቀማል)"
+        "label": "የአይነት ርዝመት (ቶከኖች)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "የTopP መለኪያ፣ ከ0 እስከ 1 ድረስ (አይታወቅም ከሆነ ባዶ ይተዉት)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "ከፍተኛው የሚፈጠሩ ቶክኖች ብዛት",

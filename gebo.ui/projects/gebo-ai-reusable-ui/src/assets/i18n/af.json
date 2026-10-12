@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Temperatuur",
-        "help": "Temperatuur waarop die model sal reageer, van 0 tot 1 (laat leeg as jy onseker is)"
+        "label": "Temperatuur"
       },
       "contextLength": {
-        "label": "Kontekslengte (tokens)",
-        "help": "Hoeveelheid teks wat 'n KI-model kan oorweeg tydens verwerking (as nie gestel nie, sal 1047576 gebruik word)"
+        "label": "Kontekslengte (tokens)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "TopP-parameter, van 0 tot 1 (laat leeg as jy onseker is)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Maksimum aantal gegenereerde tokens",

@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Temperatur",
-        "help": "Modelin cavab verəcəyi temperatur, 0-dan 1-ə qədər (əmin deyilsinizsə boş buraxın)"
+        "label": "Temperatur"
       },
       "contextLength": {
-        "label": "Kontekst uzunluğu (tokenlər)",
-        "help": "AI modelinin işləyərkən nəzərə ala biləcəyi mətn miqdarı (əgər təyin olunmasa, 1047576 istifadə olunacaq)"
+        "label": "Kontekst uzunluğu (tokenlər)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "TopP parametri, 0-dan 1-ə qədər (əmin deyilsinizsə boş buraxın)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Maksimum yaradılan token sayı",

@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "อุณหภูมิ",
-        "help": "ค่าความแปรปรวนที่โมเดลจะใช้ตอบ ตั้งแต่ 0 ถึง 1 (หากไม่แน่ใจเว้นว่างไว้)"
+        "label": "อุณหภูมิ"
       },
       "contextLength": {
-        "label": "ความยาวบริบท (โทเคน)",
-        "help": "ปริมาณข้อความที่โมเดล AI สามารถนำมาพิจารณา (หากไม่ได้กำหนดไว้จะใช้ 1047576)"
+        "label": "ความยาวบริบท (โทเคน)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "พารามิเตอร์ TopP ตั้งแต่ 0 ถึง 1 (หากไม่แน่ใจเว้นว่างไว้)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "จำนวนโทเคนที่สร้างสูงสุด",

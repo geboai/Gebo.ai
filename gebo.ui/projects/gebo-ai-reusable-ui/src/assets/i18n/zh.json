@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "温度",
-        "help": "模型回复的温度，范围 0 到 1（如不确定可留空）"
+        "label": "温度"
       },
       "contextLength": {
-        "label": "上下文长度（标记）",
-        "help": "AI 模型在处理时可考虑的文本长度（如未设置，将使用 1047576）"
+        "label": "上下文长度（标记）"
       },
       "topP": {
-        "label": "TopP",
-        "help": "TopP 参数，范围 0 到 1（如不确定可留空）"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "最大生成令牌数",

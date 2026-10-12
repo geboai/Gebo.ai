@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "دمای مدل",
-        "help": "میزان دمای پاسخ‌دهی مدل، از ۰ تا ۱ (در صورت عدم اطمینان خالی بگذارید)"
+        "label": "دمای مدل"
       },
       "contextLength": {
-        "label": "طول متن (تعداد توکن)",
-        "help": "مقدار متنی که مدل هوش مصنوعی در پردازش در نظر می‌گیرد (اگر تعیین نشود مقدار ۱۰۴۷۵۷۶ استفاده می‌شود)"
+        "label": "طول متن (تعداد توکن)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "پارامتر TopP، از ۰ تا ۱ (در صورت عدم اطمینان خالی بگذارید)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "حداکثر تعداد توکن‌های تولید شده",

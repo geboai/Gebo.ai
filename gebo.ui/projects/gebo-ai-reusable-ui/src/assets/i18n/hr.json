@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Temperatura",
-        "help": "Temperatura na koju će model odgovarati, od 0 do 1 (ako niste sigurni, ostavite prazno)"
+        "label": "Temperatura"
       },
       "contextLength": {
-        "label": "Duljina konteksta (tokeni)",
-        "help": "Količina teksta koju AI model može uzeti u obzir prilikom obrade (ako nije postavljeno, koristi se 1047576)"
+        "label": "Duljina konteksta (tokeni)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "TopP parametar, od 0 do 1 (ako niste sigurni, ostavite prazno)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Maksimalan broj generiranih tokena",

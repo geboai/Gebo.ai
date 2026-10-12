@@ -3415,16 +3415,13 @@
   "GeboAIStandardChatModelModule": {
     "GeboAIStandardChatModelSettings": {
       "temperature": {
-        "label": "Hőmérséklet",
-        "help": "A modell válaszadási hőmérséklete 0 és 1 között (ha nem biztos, hagyja üresen)"
+        "label": "Hőmérséklet"
       },
       "contextLength": {
-        "label": "Kontextus hossza (tokenek)",
-        "help": "Az a szövegmennyiség, amelyet az AI modell feldolgozáskor figyelembe tud venni (ha nincs megadva, az alapértelmezett 1047576 lesz használva)"
+        "label": "Kontextus hossza (tokenek)"
       },
       "topP": {
-        "label": "TopP",
-        "help": "TopP paraméter, 0 és 1 között (ha nem biztos, hagyja üresen)"
+        "label": "TopP"
       },
       "maxGeneratedTokens": {
         "label": "Maximális generált tokenek száma",
