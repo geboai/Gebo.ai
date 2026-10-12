@@ -53,11 +53,11 @@ class OpenAIModelsLibrarySegmentTest {
 
 		// the current models' limits, which /v1/models does not give
 		assertEquals(1050000, library.findByProviderIdAndModelId("openai", "gpt-6.1-sol").getContextLength());
-		assertEquals(Boolean.FALSE, library.findByProviderIdAndModelId("openai", "gpt-6.1-sol").getSupportsFunctionCalls(),
-				"tools only through the Responses api");
+		assertEquals(Boolean.TRUE, library.findByProviderIdAndModelId("openai", "gpt-6.1-sol").getSupportsFunctionCalls(),
+				"tools through the Responses api Gebo calls it with");
 		assertEquals(32768, library.findByProviderIdAndModelId("openai", "gpt-4.1-mini").getMaxOutputToken());
-		assertNull(library.findByProviderIdAndModelId("openai", "gpt-6-luna").getSupportsFunctionCalls(),
-				"tools on Chat Completions only at effort none: unset");
+		assertEquals(Boolean.TRUE, library.findByProviderIdAndModelId("openai", "gpt-6-luna").getSupportsFunctionCalls(),
+				"tools at every effort through the Responses api");
 	}
 
 	@Test

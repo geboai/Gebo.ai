@@ -90,9 +90,10 @@ ai.gebo.models.providers.openai:
     # The current models, from their pages on developers.openai.com/api/docs/models
     # (fetched 2026-10-11): OpenAI's /v1/models gives id, created, owned_by and
     # shutdown_date only, so this is where their limits come from. supportsFunctionCalls
-    # is about Chat Completions, the api Gebo calls: gpt-6.1-sol calls tools only through
-    # the Responses api; gpt-6-sol and gpt-6-luna only at reasoning effort none, so they
-    # are left unset, as is gpt-6-astra, whose page does not say for Chat Completions.
+    # is about the api Gebo calls each model through: the models of version 6 and later go
+    # through the Responses api (OpenAiResponsesChatModel), where their pages list function
+    # calling - on Chat Completions gpt-6.1-sol and gpt-6-astra call no tools (reasoning
+    # guide) and gpt-6-sol / gpt-6-luna only at reasoning effort none (their pages).
     - providerId: openai
       modelId: gpt-4.1-mini
       chatModel: true
@@ -109,7 +110,7 @@ ai.gebo.models.providers.openai:
       embeddingModel: false
       contextLength: 1050000
       maxOutputToken: 128000
-      supportsFunctionCalls: false
+      supportsFunctionCalls: true
       supportsReasoning: true
       description: GPT-6.1 Sol
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6.1-sol
@@ -119,6 +120,7 @@ ai.gebo.models.providers.openai:
       embeddingModel: false
       contextLength: 1050000
       maxOutputToken: 128000
+      supportsFunctionCalls: true
       supportsReasoning: true
       description: GPT-6 Astra
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6-astra
@@ -128,6 +130,7 @@ ai.gebo.models.providers.openai:
       embeddingModel: false
       contextLength: 1050000
       maxOutputToken: 128000
+      supportsFunctionCalls: true
       supportsReasoning: true
       description: GPT-6 Sol
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6-sol
@@ -137,6 +140,7 @@ ai.gebo.models.providers.openai:
       embeddingModel: false
       contextLength: 1050000
       maxOutputToken: 128000
+      supportsFunctionCalls: true
       supportsReasoning: true
       description: GPT-6 Luna
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6-luna

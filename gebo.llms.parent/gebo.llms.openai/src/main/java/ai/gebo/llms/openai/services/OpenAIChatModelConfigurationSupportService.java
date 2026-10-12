@@ -19,8 +19,10 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.openai.setup.OpenAiSetup;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.OpenAiChatOptions.Builder;
 import org.springframework.ai.tool.ToolCallback;
@@ -88,7 +90,7 @@ public class OpenAIChatModelConfigurationSupportService
 	 * Implementation of a configurable chat model for OpenAI. This class handles
 	 * the creation and configuration of OpenAI chat models.
 	 */
-	class OpenAIConfigurableChatModel extends GAbstractConfigurableChatModel<GOpenAIChatModelConfig, OpenAiChatModel> {
+	class OpenAIConfigurableChatModel extends GAbstractConfigurableChatModel<GOpenAIChatModelConfig, ChatModel> {
 
 		public OpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
@@ -109,7 +111,7 @@ public class OpenAIChatModelConfigurationSupportService
 		 * @throws LLMConfigException if there is an error in configuration
 		 */
 		@Override
-		protected OpenAiChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type,
+		protected ChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type,
 				ToolCallingManager toolsCallsManager) throws LLMConfigException {
 
 			if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0)
@@ -190,6 +192,21 @@ public class OpenAIChatModelConfigurationSupportService
 			OpenAiChatOptions options = builder.build();
 			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
 					: functionsRepo.createToolCallingManager();
+			// The models of version 6 and later go through the Responses API, whose tool calls
+			// Chat Completions does not carry for them (OpenAiResponsesChatModel); the others
+			// stay on Spring AI's Chat Completions model
+			if (OpenAiResponsesChatModel.usesResponsesApi(options.getModel())) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model {} ({}) goes through the OpenAI Responses API", config.getCode(),
+							options.getModel());
+				}
+				return new OpenAiResponsesChatModel(OpenAiSetup.setupSyncClient(options.getBaseUrl(),
+						options.getApiKey(), null, null, null, options.getOrganizationId(), false, false,
+						options.getModel(), options.getTimeout(), options.getMaxRetries(), null, null,
+						observationRegistry, null,
+						List.of(OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(getCode())))), options,
+						toolCallingManager, observationRegistry);
+			}
 			OpenAiChatModel model = OpenAiChatModel.builder()
 					.options(options)
 					.toolCallingManager(toolCallingManager)
