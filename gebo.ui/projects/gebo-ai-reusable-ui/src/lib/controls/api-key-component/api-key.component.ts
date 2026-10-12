@@ -261,9 +261,12 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
     private switchControlsRequired(ctrls: string[], required: boolean) {
         ctrls.forEach(ctrName => {
             this.secretFormGroup.controls[ctrName].clearValidators();
-            this.secretFormGroup.controls[ctrName].disable();
+            // Silently: disable() and enable() re-emit the control's value, and the selected secret
+            // re-emitted here was taken as a new choice and validated against the provider the
+            // host had just switched to - sending the previous provider's key to the new one.
+            this.secretFormGroup.controls[ctrName].disable({ emitEvent: false });
             if (required === true) {
-                this.secretFormGroup.controls[ctrName].enable();
+                this.secretFormGroup.controls[ctrName].enable({ emitEvent: false });
                 this.secretFormGroup.controls[ctrName].addValidators(Validators.required);
             }
         });
@@ -293,8 +296,10 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
                                     selectedSecret: secret?.code,
                                     useExistingOrNew: "EXISTING"
                                 };
-                                this.secretFormGroup.patchValue(newValue);
+                                // Known before the patch: the selection it sets is the secret just
+                                // validated, not a new choice to validate a second time.
                                 this.secretId = secret?.code;
+                                this.secretFormGroup.patchValue(newValue);
                                 if (this.onChange)
                                     this.onChange(this.secretId);
                                 this.messages=[credentialCreatedOk as GUserMessage];
@@ -397,12 +402,14 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
     }
     writeValue(obj: any): void {
         this.secretId = obj;
+        // The selection first, silently: the existing/new switch below reports the selected
+        // secret, which must already be the written one, not the previous provider's.
+        this.secretFormGroup.controls["selectedSecret"].setValue(obj, { emitEvent: false });
         let secretsOrNew: "EXISTING" | "NEW" = "NEW";
         if (obj || !this.newKind) {
             secretsOrNew = "EXISTING";
         }
         this.secretFormGroup.controls["useExistingOrNew"].setValue(secretsOrNew);
-        this.secretFormGroup.controls["selectedSecret"].setValue(obj);
     }
     private onChange?: (fn: any) => void;
     registerOnChange(fn: any): void {
