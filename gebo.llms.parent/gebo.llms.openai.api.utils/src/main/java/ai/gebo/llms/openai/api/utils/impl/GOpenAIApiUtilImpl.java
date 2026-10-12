@@ -330,8 +330,34 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 	public <ModelChoice extends GBaseRankerModelChoice, RankerConfigType extends GBaseRankerModelConfig<ModelChoice>, RankerTypeClass extends GRankerModelType> OperationStatus<List<ModelChoice>> getRankerModels(
 			Class<ModelChoice> class1, OpenAIApiConfig providerConfig, RankerConfigType config,
 			Function<ModelChoice, ModelMetaInfo> defaultMetainfoFactory, RankerTypeClass type) {
-		// TODO Auto-generated method stub
-		return null;
+		// The models the server lists, as for chat and embedding models: an OpenAI
+		// compatible reranking server (vLLM, a generic one) serves its reranker models
+		// there. The caller keeps those named as rerankers. A null answer used to end
+		// the lookup of every such provider with a NullPointerException.
+		final List<Throwable> throwed = new ArrayList<>();
+		OperationStatus<List<ModelChoice>> returnValue = doWithRemoteSystem(apiKey -> {
+			OpenAIApiConfig apiconfig = new OpenAIApiConfig(providerConfig);
+			apiconfig.setApiKey(apiKey);
+			if (config.getBaseUrl() != null) {
+				apiconfig.setBasePath(config.getBaseUrl());
+			}
+			try {
+				List<ModelChoice> list = new ArrayList<ModelChoice>();
+				for (OpenAIModel openAIModel : getModels(apiconfig)) {
+					if (Boolean.FALSE.equals(openAIModel.getActive()))
+						continue;
+					ModelChoice entry = class1.newInstance();
+					entry.setCode(openAIModel.getId());
+					entry.setDescription(openAIModel.getId());
+					list.add(entry);
+				}
+				return list;
+			} catch (Throwable e) {
+				throwed.add(e);
+				return List.of();
+			}
+		}, config.getApiSecretCode(), providerConfig.isApiKeyMandatory());
+		return throwed.isEmpty() ? returnValue : OperationStatus.of(throwed.get(0));
 	}
 
 

@@ -217,14 +217,10 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 	public OperationStatus<List<GenericOpenAIAPIEmbeddingModelChoice>> getModelChoices(
 			GenericOpenAIAPIEmbeddingModelConfig config) {
 		OperationStatus<List<GenericOpenAIAPIEmbeddingModelChoice>> result = null;
-		OpenAIApiConfig providerConfig = OpenAIApiConfig.of(config, false);
-		providerConfig.setProviderId(type.getProviderId());
 		// The configured base url wins, the provider's own is the default (as for chat
-		// and ranker models): the test was inverted, replacing a configured url with the
-		// provider's and leaving an unconfigured one empty.
-		if (providerConfig.getBasePath() == null || providerConfig.getBasePath().trim().length() == 0) {
-			providerConfig.setBasePath(type.getBaseUrl());
-		}
+		// and ranker models).
+		OpenAIApiConfig providerConfig = ProviderModelsLookup.apiConfigOf(config, type.getProviderId(),
+				type.getBaseUrl());
 		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
 			result = this.modelsListProxyService.geModels(type.getModelsListProvider(), config,
 					GenericOpenAIAPIEmbeddingModelChoice.class, type);
