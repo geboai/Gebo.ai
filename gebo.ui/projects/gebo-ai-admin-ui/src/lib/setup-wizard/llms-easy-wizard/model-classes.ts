@@ -124,6 +124,12 @@ export interface ModelChoiceOption {
     code?: string;
     description?: string;
     fromPreset?: boolean;
+    /** The provider deprecated the model: still callable, headed for retirement. */
+    deprecated?: boolean;
+    /** The date the provider retires the model, as it publishes it. */
+    retirementDate?: string;
+    /** The model the provider suggests in its place. */
+    replacementModel?: string;
 }
 
 /**

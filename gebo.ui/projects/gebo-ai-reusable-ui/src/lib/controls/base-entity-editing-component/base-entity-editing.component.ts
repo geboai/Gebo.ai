@@ -687,7 +687,18 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
    */
   private checkCanBeDeleted(value: RecordType): void {
     this.canBeDeletedCheckBackend = true;
-    this.canBeDeleted(value).subscribe({
+    let check: Observable<{ canBeDeleted: boolean; message: string; }>;
+    try {
+      check = this.canBeDeleted(value);
+    } catch (e) {
+      // An editor that cannot tell must not leave the block-UI up nor break the save
+      // that asked: it is simply not deletable
+      console.error(e);
+      this.canBeDeletedCheckBackend = false;
+      this.canDelete = false;
+      return;
+    }
+    check.subscribe({
       next: (returned) => {
         this.canBeDeletedCheckBackend = false;
         this.canDelete = returned.canBeDeleted;

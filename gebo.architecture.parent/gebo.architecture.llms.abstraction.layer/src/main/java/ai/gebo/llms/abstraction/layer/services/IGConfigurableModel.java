@@ -77,6 +77,21 @@ public interface IGConfigurableModel<ModelConfig extends GBaseModelConfig, Model
 	 */
 	public void delete() throws LLMConfigException;
 
+	/**
+	 * Sends the provider one short request made the way this model makes its own, so a
+	 * setting the provider refuses (a sampling parameter, a thinking level, a retired
+	 * model, a wrong key or url) is reported when the model is set rather than at its
+	 * first real use. Called once on the instance where a user sets or changes the
+	 * model, never at startup, on a cluster replica or for a per-request clone: see
+	 * {@code GAbstractClusteredModelRuntimeConfigurationDao}.
+	 * <p>
+	 * By default nothing is sent: a model kind takes part by overriding it.
+	 *
+	 * @throws LLMConfigException when the provider refuses the request
+	 */
+	public default void testCall() throws LLMConfigException {
+	}
+
 	/* Safetely gets the llm model code from this runtime object */
 	public default String safeGetModelCode() {
 		String modelCode = null;

@@ -60,6 +60,9 @@ import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
+import ai.gebo.llms.models.metainfos.ModelParameterRules;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
@@ -136,18 +139,35 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	private static final java.util.Set<String> UNKNOWN_CONTEXT_LENGTH_WARNED = java.util.concurrent.ConcurrentHashMap
 			.newKeySet();
 
+	/**
+	 * The models library the parameter rules of the model are read from (see
+	 * {@link ModelParameterRules}); null leaves the requests as the configuration makes
+	 * them.
+	 */
+	protected final IGModelsLibraryDao modelsLibrary;
+	/**
+	 * The parameter rules of the model the configuration names, resolved each time it is
+	 * initialized; null when none covers it.
+	 */
+	protected ModelParameterRules parameterRules = null;
+
 	protected abstract IGConfigurableChatModel cloneMeWithInjection();
 
 	/**
 	 * Default constructor for GAbstractConfigurableChatModel.
+	 *
+	 * @param modelsLibrary the library the model's parameter rules are read from, may be
+	 *                      null
 	 */
 	public GAbstractConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 			IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-			IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
+			IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry,
+			IGModelsLibraryDao modelsLibrary) {
 		this.rendererFactory = rendererFactory;
 		this.toolCallbacksRepository = toolCallbacksRepository;
 		this.usageAdvisorFactory = usageAdvisorFactory;
 		this.observationRegistry = observationRegistry;
+		this.modelsLibrary = modelsLibrary;
 	}
 
 	/**
@@ -206,23 +226,175 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 */
 	@Override
 	public void initialize(ModelConfig config, GChatModelType type) throws LLMConfigException {
+		this.type = type;
+		this.parameterRules = parameterRulesOf(config, type);
 		// Deterministic by default: a chat model with no temperature set is initialized at
 		// temperature 0, so internal judgement calls (the ranking irrelevance filter,
-		// routing, query rewriting) do not vary run to run. An explicit temperature in the
-		// configuration is always respected.
-		if (config != null && config.getTemperature() == null) {
-			config.setTemperature(0.0d);
+		// routing, query rewriting) do not vary run to run - where the model takes a
+		// temperature at all: the reasoning models refusing the sampling parameters fail
+		// every request carrying one. An explicit temperature in the configuration is kept,
+		// and sent where the model's parameter rules allow it. A model whose provider
+		// recommends its default temperature (Gemini 3) is left at it.
+		if (config != null && config.getTemperature() == null && samplingAllowed(config)) {
+			if (parameterRules != null && parameterRules.keepsProviderDefaultSampling()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model code=" + config.getCode()
+							+ " has no temperature set and its parameter rules keep the provider default: none is sent");
+				}
+			} else {
+				config.setTemperature(0.0d);
+			}
 		}
 		this.config = config;
-		this.type = type;
-		this.model = configureModel(config, type, null);
-		Builder builder = ChatClient.builder(configureModel(config, type, null));
+		final ModelConfig requestConfig = requestConfig(config);
+		this.model = configureModel(requestConfig, type, null);
+		Builder builder = ChatClient.builder(configureModel(requestConfig, type, null));
 		// Priced through this model's getPricingConditions(), read when each call ends; a
 		// call's answer read from its answer generation, not from a reasoning one; the
 		// reasoning of every model round apart from the answer, every provider alike.
 		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions,
 				this::getProviderId), new AnswerFirstGenerations.Advisor(this::isReasoningGeneration),
 				thinkingNormalization()).build();
+	}
+
+	/**
+	 * The parameter rules of the model the configuration names, from the models library;
+	 * null when the library is absent, the model unknown or no rule covers it.
+	 */
+	protected ModelParameterRules parameterRulesOf(ModelConfig config, GChatModelType type) {
+		if (config == null || config.getChoosedModel() == null || type == null)
+			return null;
+		final String modelId = config.getChoosedModel().getCode();
+		ModelParameterRules live = null;
+		try {
+			live = liveParameterRules(config, type);
+		} catch (RuntimeException e) {
+			LOGGER.error("Cannot read what the models api told of chat model code=" + config.getCode()
+					+ ", the models library rules apply alone", e);
+		}
+		if (modelsLibrary == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat model code=" + config.getCode() + " model=" + modelId
+						+ " no models library, live parameter rules: " + live);
+			}
+			return live;
+		}
+		try {
+			final ModelParameterRules library = modelsLibrary.findParameterRules(type.getProviderId(), modelId);
+			final ModelParameterRules rules = ModelParameterRules.merge(live, library);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat model code=" + config.getCode() + " model=" + modelId + " provider="
+						+ type.getProviderId() + " parameter rules: " + rules + " (live: " + live + ", library: "
+						+ library + ")");
+			}
+			return rules;
+		} catch (RuntimeException e) {
+			LOGGER.error("Cannot read the parameter rules of chat model code=" + config.getCode()
+					+ ", its requests are made without the library ones", e);
+			return live;
+		}
+	}
+
+	/**
+	 * The parameter rules the provider's models api told for the chosen model, kept on
+	 * the choice when the model was listed (e.g. the efforts and parameters OpenRouter
+	 * publishes per model); null when the provider tells none, the default. They win
+	 * over the models library where they say something, see
+	 * {@link ModelParameterRules#merge(ModelParameterRules, ModelParameterRules)}.
+	 */
+	protected ModelParameterRules liveParameterRules(ModelConfig config, GChatModelType type) {
+		return null;
+	}
+
+	/**
+	 * Whether a request of the model may carry the sampling parameters, temperature and
+	 * top_p: always, unless its parameter rules refuse them - outright, or while it
+	 * reasons, i.e. unless the configuration turns the reasoning off with an effort
+	 * {@code none} the model accepts.
+	 */
+	protected boolean samplingAllowed(ModelConfig config) {
+		if (parameterRules == null)
+			return true;
+		final boolean reasoningOff = config != null && config.getThinking() == ChatModelThinkingOption.NO_THINKING
+				&& parameterRules.acceptsEffort(ModelParameterRules.NO_REASONING_EFFORT);
+		return parameterRules.samplingAllowed(reasoningOff);
+	}
+
+	/**
+	 * The configuration the model's requests are made from: the given one, or a copy of
+	 * it without the sampling parameters where the model's parameter rules refuse them.
+	 * The given configuration is left as it is: it is the one saved, shown and copied.
+	 */
+	protected ModelConfig requestConfig(ModelConfig config) throws LLMConfigException {
+		if (config == null || samplingAllowed(config) || (config.getTemperature() == null && config.getTopP() == null))
+			return config;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Chat model code=" + config.getCode() + " sends neither its temperature ("
+					+ config.getTemperature() + ") nor its top_p (" + config.getTopP() + ") at thinking "
+					+ config.getThinking() + ": refused by " + parameterRules);
+		}
+		final ModelConfig withoutSampling = copyOf(config);
+		withoutSampling.setTemperature(null);
+		withoutSampling.setTopP(null);
+		return withoutSampling;
+	}
+
+	@SuppressWarnings("unchecked")
+	private ModelConfig copyOf(ModelConfig config) throws LLMConfigException {
+		try {
+			return (ModelConfig) mapper.readValue(mapper.writeValueAsString(config).getBytes(), config.getClass());
+		} catch (JacksonException e) {
+			throw new LLMConfigException("Cannot copy the configuration of chat model code=" + config.getCode(), e);
+		}
+	}
+
+	/**
+	 * The reasoning effort a request sends for a thinking option, as the OpenAI compatible
+	 * APIs spell it ({@code reasoning_effort}): {@code none} for no thinking, low, medium
+	 * and high as asked, each only when the model's parameter rules list it; null to send
+	 * none and leave the provider default. Without rules knowing the model's efforts, low,
+	 * medium and high are sent as asked and no thinking sends nothing, the value that
+	 * turns the reasoning off differing per backend.
+	 */
+	protected String reasoningEffortFor(ChatModelThinkingOption option) {
+		if (option == null)
+			return null;
+		final String effort;
+		switch (option) {
+		case NO_THINKING:
+			effort = ModelParameterRules.NO_REASONING_EFFORT;
+			break;
+		case LOW_THINKING:
+			effort = "low";
+			break;
+		case MEDIUM_THINKING:
+			effort = "medium";
+			break;
+		case HIGH_THINKING:
+			effort = "high";
+			break;
+		default:
+			// AUTO: the provider default
+			return null;
+		}
+		if (parameterRules == null || !parameterRules.knowsEfforts())
+			return option == ChatModelThinkingOption.NO_THINKING ? null : effort;
+		if (parameterRules.acceptsEffort(effort))
+			return effort;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Chat model code=" + getCode() + " thinking " + option + ": effort " + effort
+					+ " is not among the accepted " + parameterRules.getReasoningEfforts()
+					+ ", the provider default is left");
+		}
+		return null;
+	}
+
+	/**
+	 * Whether the model takes a reasoning effort value, as the provider spells it: true
+	 * unless its parameter rules list its efforts without this one.
+	 */
+	protected boolean acceptsEffort(String effort) {
+		return parameterRules == null || !parameterRules.knowsEfforts() || parameterRules.acceptsEffort(effort);
 	}
 
 	@Override
@@ -309,6 +481,76 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public void reconfigure(ModelConfig config) throws LLMConfigException {
 		this.initialize(config, type);
 
+	}
+
+	/** What {@link #testCall()} asks: answerable in one word by any model. */
+	static final String TEST_CALL_PROMPT = "Reply with the single word OK.";
+
+	/**
+	 * Sends the provider one user message through this model as it is configured: its
+	 * sampling, thinking level, output limit and the definitions of the tools it enables
+	 * go with it, as with every request it makes, so the provider judges the request the
+	 * model will really send. No tool can run: in Spring AI 2.0.1 a provider's chat model
+	 * only declares the tools - the chat client runs them, and this call does not go
+	 * through it - so a tool call in the answer is an answer like any other. The call is
+	 * recorded in the usage, as any other.
+	 */
+	@Override
+	public void testCall() throws LLMConfigException {
+		final long start = System.currentTimeMillis();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin testCall() model code=" + getCode() + " model=" + safeGetModelCode() + " type="
+					+ (type != null ? type.getCode() : null) + " temperature="
+					+ (config != null ? config.getTemperature() : null) + " thinking="
+					+ (config != null ? config.getThinking() : null) + " tools="
+					+ (config != null && config.getEnabledFunctions() != null ? config.getEnabledFunctions().size()
+							: 0));
+		}
+		final ChatResponse response;
+		try {
+			response = doWithChatModel(chatModel -> chatModel.call(new Prompt(new UserMessage(TEST_CALL_PROMPT))));
+		} catch (RuntimeException e) {
+			// the stack is logged by whoever set the model, with the message this carries
+			LOGGER.warn("Chat model code=" + getCode() + " model=" + safeGetModelCode() + " refused the test call: "
+					+ innermostMessage(e));
+			throw new LLMConfigException("The chat model " + safeGetModelCode() + " (" + getCode()
+					+ ") refused a test call: " + innermostMessage(e), e);
+		}
+		if (response == null) {
+			LOGGER.warn("Chat model code=" + getCode() + " model=" + safeGetModelCode()
+					+ " answered the test call with no response");
+			throw new LLMConfigException("The chat model " + safeGetModelCode() + " (" + getCode()
+					+ ") answered a test call with no response");
+		}
+		final Generation result = response.getResult();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End testCall() model code=" + getCode() + " answered in "
+					+ (System.currentTimeMillis() - start) + "ms, finish reason="
+					+ (result != null && result.getMetadata() != null ? result.getMetadata().getFinishReason() : null)
+					+ " tool calls="
+					+ (result != null && result.getOutput() != null && result.getOutput().hasToolCalls()
+							? result.getOutput().getToolCalls().size()
+							: 0));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("testCall() model code=" + getCode() + " answer: "
+					+ (result != null && result.getOutput() != null ? result.getOutput().getText() : null));
+		}
+	}
+
+	/**
+	 * The message of the deepest cause that has one: the provider's own words, which the
+	 * wrappers around them (retries, Spring AI) tend to bury.
+	 */
+	static String innermostMessage(Throwable error) {
+		String message = null;
+		final java.util.Set<Throwable> seen = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
+		for (Throwable cause = error; cause != null && seen.add(cause); cause = cause.getCause()) {
+			if (cause.getMessage() != null && !cause.getMessage().isBlank()) {
+				message = cause.getMessage();
+			}
+		}
+		return message != null ? message : error.getClass().getSimpleName();
 	}
 
 	/**
@@ -1019,10 +1261,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			} else if (handler instanceof GAbstractConfigurableChatModel configurableChatModel) {
 				configurableChatModel.config = modelConfigClone;
 				configurableChatModel.type = this.type;
-				configurableChatModel.model = configurableChatModel.configureModel(modelConfigClone, type,
+				// the clone follows the parameter rules too: an agent's temperature never
+				// reaches a model refusing it
+				configurableChatModel.parameterRules = configurableChatModel.parameterRulesOf(modelConfigClone, type);
+				final GBaseChatModelConfig requestConfig = configurableChatModel.requestConfig(modelConfigClone);
+				configurableChatModel.model = configurableChatModel.configureModel(requestConfig, type,
 						configOptions.getToolCallingManager());
 				configurableChatModel.chatClient = ChatClient
-						.builder(configurableChatModel.configureModel(modelConfigClone, type,
+						.builder(configurableChatModel.configureModel(requestConfig, type,
 								configOptions.getToolCallingManager()))
 						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone,
 								configurableChatModel::getPricingConditions, configurableChatModel::getProviderId),

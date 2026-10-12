@@ -238,8 +238,11 @@ public class SystemInitializationLLMService {
 													if (choice.getMaxGeneratedTokens() != null) {
 														chatData.setMaxGeneratedTokens(choice.getMaxGeneratedTokens());
 													}
-													if (choice.getThinking() != null) {
-														chatData.setThinking(choice.getThinking());
+													if (choice.thinkingFor(chatData.getUses()) != null) {
+														chatData.setThinking(choice.thinkingFor(chatData.getUses()));
+													}
+													if (choice.getTemperature() != null) {
+														chatData.setTemperature(choice.getTemperature());
 													}
 												});
 										newLLmsConfigs.add(chatData);

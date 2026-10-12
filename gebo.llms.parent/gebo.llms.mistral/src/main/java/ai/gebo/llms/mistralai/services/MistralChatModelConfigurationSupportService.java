@@ -43,6 +43,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
@@ -85,6 +86,8 @@ public class MistralChatModelConfigurationSupportService
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Inner class that implements the configuration and creation of Mistral AI chat
@@ -95,8 +98,8 @@ public class MistralChatModelConfigurationSupportService
 
 		public MistralConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 
 		}
 
@@ -159,23 +162,38 @@ public class MistralChatModelConfigurationSupportService
 			// api can express. NONE, on the other hand, it can, which makes this one of
 			// the few providers where NO_THINKING is honoured rather than approximated.
 			// AUTO sends nothing: it means leaving the provider default alone.
+			// Only a model whose card says it reasons (capabilities.reasoning of Mistral's
+			// models api) gets a reasoning_effort: the others do not take the parameter. And
+			// where the model's parameter rules list its efforts, NONE and HIGH are sent only
+			// when listed (zai-glm-5-3 takes low, high and max, no none).
 			if (config.getThinking() != null) {
-				switch (config.getThinking()) {
-				case NO_THINKING: {
-					builder = builder.reasoningEffort(MistralAiApi.ChatCompletionRequest.ReasoningEffort.NONE);
+				final Boolean reasons = config.getChoosedModel() != null
+						&& config.getChoosedModel().getMetaInfos() != null
+								? config.getChoosedModel().getMetaInfos().getSupportsReasoning()
+								: null;
+				MistralAiApi.ChatCompletionRequest.ReasoningEffort effort = null;
+				if (!Boolean.FALSE.equals(reasons)) {
+					switch (config.getThinking()) {
+					case NO_THINKING:
+						if (acceptsEffort("none"))
+							effort = MistralAiApi.ChatCompletionRequest.ReasoningEffort.NONE;
+						break;
+					case LOW_THINKING:
+					case MEDIUM_THINKING:
+					case HIGH_THINKING:
+						if (acceptsEffort("high"))
+							effort = MistralAiApi.ChatCompletionRequest.ReasoningEffort.HIGH;
+						break;
+					default:
+						break;
+					}
 				}
-					break;
-				case LOW_THINKING:
-				case MEDIUM_THINKING:
-				case HIGH_THINKING: {
-					builder = builder.reasoningEffort(MistralAiApi.ChatCompletionRequest.ReasoningEffort.HIGH);
-				}
-					break;
-				default:
-					break;
+				if (effort != null) {
+					builder = builder.reasoningEffort(effort);
 				}
 				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Chat model {} configured with thinking {}", config.getCode(), config.getThinking());
+					LOGGER.debug("Chat model {} configured with thinking {} as reasoning effort {} (model reasons: {})",
+							config.getCode(), config.getThinking(), effort, reasons);
 				}
 			}
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
@@ -238,7 +256,7 @@ public class MistralChatModelConfigurationSupportService
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
 			return new MistralConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 	};
 
@@ -272,7 +290,7 @@ public class MistralChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GMistralChatModelConfig> create(GMistralChatModelConfig config)
 			throws LLMConfigException {
 		MistralConfigurableChatModel model = new MistralConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
 	}

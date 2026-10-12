@@ -32,6 +32,7 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
+import ai.gebo.llms.models.metainfos.ModelParameterRules;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
@@ -46,6 +47,7 @@ import ai.gebo.llms.anthropic.model.AnthropicThinkingSupport;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelChoice;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelConfig;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.el.MethodNotFoundException;
 import lombok.AllArgsConstructor;
@@ -101,6 +103,8 @@ public class AnthropicChatModelConfigurationSupportService
 
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Inner class that implements the configurable chat model for Anthropic
@@ -110,8 +114,8 @@ public class AnthropicChatModelConfigurationSupportService
 
 		public AnthropicConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		}
 
 		/**
@@ -173,7 +177,19 @@ public class AnthropicChatModelConfigurationSupportService
 				if (support == null && modelCode != null) {
 					support = modelsService.getThinkingSupport(apiKey, config.getBaseUrl(), modelCode);
 				}
-				ThinkingRequest thinking = thinkingRequest(config.getThinking(), support, modelCode);
+				ChatModelThinkingOption option = config.getThinking();
+				// Without the Models API's word, no thinking is sent as disabled only to a model
+				// the parameter rules do not list without "none": the current models refuse
+				// disabled with a 400, and left at their default they think adaptively.
+				if (support == null && option == ChatModelThinkingOption.NO_THINKING
+						&& !acceptsEffort(ModelParameterRules.NO_REASONING_EFFORT)) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Chat model {} ({}) asks for no thinking, which its parameter rules say it refuses:"
+								+ " it is left at the provider default", config.getCode(), modelCode);
+					}
+					option = null;
+				}
+				ThinkingRequest thinking = thinkingRequest(option, support, modelCode);
 				if (thinking == null && config.getThinking() != null) {
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Chat model {} asks for thinking {} but {} cannot express it: the model is left"
@@ -248,7 +264,7 @@ public class AnthropicChatModelConfigurationSupportService
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 			AnthropicConfigurableChatModel anthropicChatModel = new AnthropicConfigurableChatModel(rendererFactory,
-					toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+					toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 			return anthropicChatModel;
 		}
 	}
@@ -283,7 +299,7 @@ public class AnthropicChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GAnthropicChatModelConfig> create(GAnthropicChatModelConfig config)
 			throws LLMConfigException {
 		AnthropicConfigurableChatModel model = new AnthropicConfigurableChatModel(this.documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
 	}

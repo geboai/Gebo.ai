@@ -1,0 +1,15 @@
+ai.gebo.models.providers.alpha:
+  modelsInfo:
+    - providerId: alpha
+      modelId: alpha-1
+      chatModel: true
+      contextLength: 1000
+  parameterRules:
+    - providerId: alpha
+      models: ["alpha-*"]
+      sampling: REJECTED
+      reasoningEfforts: [none, low]
+    - providerId: alpha
+      models: ["alpha-embed"]
+      queryInputType: query
+      documentInputType: passage

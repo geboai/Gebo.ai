@@ -37,6 +37,7 @@ import ai.gebo.llms.openai.model.GOpenAITextToSpeechModelConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
 import ai.gebo.openai.integration.client.model.OpenAIModel;
+import ai.gebo.llms.openai.api.utils.impl.GOpenAIApiUtilImpl;
 
 /**
  * Service to configure and create OpenAI text-to-speech models. AI generated
@@ -161,6 +162,9 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 				GOpenAITextToSpeechModelChoice choice = new GOpenAITextToSpeechModelChoice();
 				choice.setCode(model.getId());
 				choice.setDescription(model.getId());
+				// the shutdown date OpenAI publishes for the model, said in its description
+				choice.setMetaInfos(GOpenAIApiUtilImpl.liveMetaInfos(model, "openai"));
+				GOpenAIApiUtilImpl.describe(choice);
 				choices.add(choice);
 			}
 			return OperationStatus.of(choices);

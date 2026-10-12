@@ -1,0 +1,13 @@
+# The regolo.ai piece of the models library: what Gebo knows of this provider's models
+# (modelsInfo) and what they accept in a request (parameterRules), bound by
+# RegoloModelsLibrary under ai.gebo.models.providers.regolo.
+# No entry yet: model_info gives each model's context, prices and capability flags; its supported_openai_params is the same 33 parameters for every model (checked 2026-10-11), so no rule comes from it.
+# An entry goes under the key below, for example:
+#
+# ai.gebo.models.providers.regolo:
+#   parameterRules:
+#     - providerId: regolo.ai
+#       models: ["some-model-*"]
+#       sampling: REJECTED
+#       reasoningEfforts: [none, low, high]
+#       source: the provider page the rule was read on, and when

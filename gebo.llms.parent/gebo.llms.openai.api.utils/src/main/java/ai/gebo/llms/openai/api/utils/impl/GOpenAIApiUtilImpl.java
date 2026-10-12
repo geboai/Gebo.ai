@@ -307,7 +307,14 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 						entry.setContextLength(openAIModel.getMetaInfos().getContextLength());
 						entry.setOptimalTokenizationParam(openAIModel.getMetaInfos().getTokenizingThreashold());
 					} else {
-
+						// as for chat models: the shutdown date, the window a compatible
+						// server reports
+						ModelMetaInfo live = liveMetaInfos(openAIModel, config.getProviderId());
+						if (live != null) {
+							live.setEmbeddingModel(true);
+							entry.setMetaInfos(live);
+							entry.setContextLength(live.getContextLength());
+						}
 					}
 					if (entry.getDescription() == null) {
 						entry.setDescription(openAIModel.getId());
@@ -363,17 +370,20 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 
 	/**
 	 * What the model object tells beyond its id: the shutdown date OpenAI publishes,
-	 * the context window and output limit some compatible providers add (Groq). Null
-	 * when it tells none of them, the models library then describes the model alone.
+	 * the context window and output limit some compatible providers add (Groq's
+	 * context_window, vLLM's max_model_len). Null when it tells none of them, the models
+	 * library then describes the model alone.
 	 */
-	static ModelMetaInfo liveMetaInfos(OpenAIModel model, String providerId) {
+	public static ModelMetaInfo liveMetaInfos(OpenAIModel model, String providerId) {
 		boolean shutdown = model.getShutdown_date() != null && !model.getShutdown_date().isBlank();
-		if (!shutdown && model.getContext_window() == null && model.getMax_completion_tokens() == null)
+		final Integer contextLength = model.getContext_window() != null ? model.getContext_window()
+				: model.getMax_model_len();
+		if (!shutdown && contextLength == null && model.getMax_completion_tokens() == null)
 			return null;
 		ModelMetaInfo meta = new ModelMetaInfo();
 		meta.setProviderId(providerId);
 		meta.setModelId(model.getId());
-		meta.setContextLength(model.getContext_window());
+		meta.setContextLength(contextLength);
 		meta.setMaxOutputToken(model.getMax_completion_tokens());
 		if (shutdown) {
 			meta.setDeprecated(true);
@@ -386,7 +396,7 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 	 * A choice still described by its bare id takes the description the models
 	 * library has for it; a model with an announced shutdown says when.
 	 */
-	static void describe(GBaseModelChoice entry) {
+	public static void describe(GBaseModelChoice entry) {
 		ModelMetaInfo meta = entry.getMetaInfos();
 		if (meta == null)
 			return;

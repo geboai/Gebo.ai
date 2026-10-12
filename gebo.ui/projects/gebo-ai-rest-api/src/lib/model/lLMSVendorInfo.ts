@@ -15,7 +15,7 @@ export interface LLMSVendorInfo {
     requiresCustomUrl?: boolean;
     defaultCustomUrl?: string;
     requiresApiKey?: boolean;
-    secretType?: LLMSVendorInfo.SecretTypeEnum;
+    secretTypes?: Array<LLMSVendorInfo.SecretTypesEnum>;
     authProvider?: LLMSVendorInfo.AuthProviderEnum;
     description: string;
     name: string;
@@ -26,17 +26,17 @@ export interface LLMSVendorInfo {
     supportsAutoconfig?: boolean;
 }
 export namespace LLMSVendorInfo {
-    export type SecretTypeEnum = 'USERNAME_PASSWORD' | 'TOKEN' | 'SSH_KEY' | 'CUSTOM_SECRET' | 'OAUTH2_STANDARD' | 'OAUTH2_GOOGLE' | 'GOOGLE_CLOUD_JSON_CREDENTIALS' | 'OAUTH2_AUTHORIZED_CLIENT' | 'AWS_CONNECTION';
-    export const SecretTypeEnum = {
-        USERNAMEPASSWORD: 'USERNAME_PASSWORD' as SecretTypeEnum,
-        TOKEN: 'TOKEN' as SecretTypeEnum,
-        SSHKEY: 'SSH_KEY' as SecretTypeEnum,
-        CUSTOMSECRET: 'CUSTOM_SECRET' as SecretTypeEnum,
-        OAUTH2STANDARD: 'OAUTH2_STANDARD' as SecretTypeEnum,
-        OAUTH2GOOGLE: 'OAUTH2_GOOGLE' as SecretTypeEnum,
-        GOOGLECLOUDJSONCREDENTIALS: 'GOOGLE_CLOUD_JSON_CREDENTIALS' as SecretTypeEnum,
-        OAUTH2AUTHORIZEDCLIENT: 'OAUTH2_AUTHORIZED_CLIENT' as SecretTypeEnum,
-        AWSCONNECTION: 'AWS_CONNECTION' as SecretTypeEnum
+    export type SecretTypesEnum = 'USERNAME_PASSWORD' | 'TOKEN' | 'SSH_KEY' | 'CUSTOM_SECRET' | 'OAUTH2_STANDARD' | 'OAUTH2_GOOGLE' | 'GOOGLE_CLOUD_JSON_CREDENTIALS' | 'OAUTH2_AUTHORIZED_CLIENT' | 'AWS_CONNECTION';
+    export const SecretTypesEnum = {
+        USERNAMEPASSWORD: 'USERNAME_PASSWORD' as SecretTypesEnum,
+        TOKEN: 'TOKEN' as SecretTypesEnum,
+        SSHKEY: 'SSH_KEY' as SecretTypesEnum,
+        CUSTOMSECRET: 'CUSTOM_SECRET' as SecretTypesEnum,
+        OAUTH2STANDARD: 'OAUTH2_STANDARD' as SecretTypesEnum,
+        OAUTH2GOOGLE: 'OAUTH2_GOOGLE' as SecretTypesEnum,
+        GOOGLECLOUDJSONCREDENTIALS: 'GOOGLE_CLOUD_JSON_CREDENTIALS' as SecretTypesEnum,
+        OAUTH2AUTHORIZEDCLIENT: 'OAUTH2_AUTHORIZED_CLIENT' as SecretTypesEnum,
+        AWSCONNECTION: 'AWS_CONNECTION' as SecretTypesEnum
     };
     export type AuthProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'aws_identity_center' | 'keycloak' | 'oauth2_generic' | 'ldap';
     export const AuthProviderEnum = {

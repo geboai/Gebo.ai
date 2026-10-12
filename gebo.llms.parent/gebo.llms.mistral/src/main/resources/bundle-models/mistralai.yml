@@ -1,0 +1,19 @@
+# The mistralai segment of the models library: what Gebo knows of this provider's models
+# (modelsInfo) and what they accept in a request (parameterRules). The abstraction layer
+# collects every provider library bean; this one binds ai.gebo.models.providers.mistralai.
+# A rule applies to its providerId only.
+# Rules: the first one covering a model applies, so specific models come before family
+# patterns ("*" stands for any characters); unset fields are unknown.
+ai.gebo.models.providers.mistralai:
+  parameterRules:
+    # Mistral - docs.mistral.ai/capabilities/reasoning: the models with adjustable reasoning
+    # take high or none, zai-glm-5-3 takes low, high and max (no none). The other Mistral
+    # models get no reasoning_effort unless their model card says they reason.
+    - providerId: mistralai
+      models: ["mistral-small-latest", "mistral-medium-3-5*", "mistral-large-4-0*"]
+      reasoningEfforts: [high, none]
+      source: docs.mistral.ai/capabilities/reasoning, 2026-10-11
+    - providerId: mistralai
+      models: ["zai-glm-5-3*"]
+      reasoningEfforts: [low, high, max]
+      source: docs.mistral.ai/capabilities/reasoning, 2026-10-11

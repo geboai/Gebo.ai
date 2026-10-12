@@ -24,7 +24,7 @@ import java.util.List;
  * LLMCreateModelData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T05:57:34.292407+02:00[Europe/Rome]")
 
 public class LLMCreateModelData {
   /**
@@ -162,6 +162,9 @@ public class LLMCreateModelData {
 
   }  @JsonProperty("thinking")
   private ThinkingEnum thinking = null;
+
+  @JsonProperty("temperature")
+  private Double temperature = null;
 
   public LLMCreateModelData type(TypeEnum type) {
     this.type = type;
@@ -387,6 +390,24 @@ public class LLMCreateModelData {
     this.thinking = thinking;
   }
 
+  public LLMCreateModelData temperature(Double temperature) {
+    this.temperature = temperature;
+    return this;
+  }
+
+   /**
+   * Get temperature
+   * @return temperature
+  **/
+  @Schema(description = "")
+  public Double getTemperature() {
+    return temperature;
+  }
+
+  public void setTemperature(Double temperature) {
+    this.temperature = temperature;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -408,12 +429,13 @@ public class LLMCreateModelData {
         Objects.equals(this.contextWindow, llMCreateModelData.contextWindow) &&
         Objects.equals(this.uses, llMCreateModelData.uses) &&
         Objects.equals(this.maxGeneratedTokens, llMCreateModelData.maxGeneratedTokens) &&
-        Objects.equals(this.thinking, llMCreateModelData.thinking);
+        Objects.equals(this.thinking, llMCreateModelData.thinking) &&
+        Objects.equals(this.temperature, llMCreateModelData.temperature);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, doModelsLookup, serviceHandler, setAsDefaultModel, enableAllFunctions, secretId, modelCode, baseUrl, contextWindow, uses, maxGeneratedTokens, thinking);
+    return Objects.hash(type, doModelsLookup, serviceHandler, setAsDefaultModel, enableAllFunctions, secretId, modelCode, baseUrl, contextWindow, uses, maxGeneratedTokens, thinking, temperature);
   }
 
 
@@ -434,6 +456,7 @@ public class LLMCreateModelData {
     sb.append("    uses: ").append(toIndentedString(uses)).append("\n");
     sb.append("    maxGeneratedTokens: ").append(toIndentedString(maxGeneratedTokens)).append("\n");
     sb.append("    thinking: ").append(toIndentedString(thinking)).append("\n");
+    sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
     sb.append("}");
     return sb.toString();
   }

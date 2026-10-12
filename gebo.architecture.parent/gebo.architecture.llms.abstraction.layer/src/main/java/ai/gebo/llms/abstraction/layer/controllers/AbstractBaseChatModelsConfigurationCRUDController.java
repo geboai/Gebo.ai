@@ -103,12 +103,13 @@ public abstract class AbstractBaseChatModelsConfigurationCRUDController<ChatMode
 		LOGGER.info("Begin chat model configuration insert");
 		try {
 			out = persistentObjectManager.insert(config);
-			handleDefaultModel(out);
 		} catch (Throwable e) {
 			LOGGER.error("Exception while inserting configuration ", e);
 			return OperationStatus.<ChatModelConfigType>of(e);
 		}
 		try {
+			// brings the model up and makes its test call: a model the provider refuses is
+			// removed again
 			this.modelRuntimeConfigurationDao.addRuntimeByConfigClustered(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception while configuring new chat model ", e);
@@ -117,6 +118,14 @@ public abstract class AbstractBaseChatModelsConfigurationCRUDController<ChatMode
 			} catch (Throwable th) {
 				LOGGER.error("Cannot delete new chat model from mongo ", th);
 			}
+			return OperationStatus.<ChatModelConfigType>of(e);
+		}
+		try {
+			// Only a model that came up takes a system role from the others: taken before,
+			// a refused model left the system without the default it replaced.
+			handleDefaultModel(out);
+		} catch (Throwable e) {
+			LOGGER.error("Exception while giving the new chat model its system role ", e);
 			return OperationStatus.<ChatModelConfigType>of(e);
 		}
 		LOGGER.info("End chat model configuration insert successfully");

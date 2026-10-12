@@ -13,6 +13,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.openai.OpenAiAudioSpeechModel;
 import org.springframework.ai.openai.OpenAiAudioSpeechOptions;
@@ -22,6 +24,8 @@ import ai.gebo.llms.abstraction.layer.model.GTextToSpeechModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
+import ai.gebo.llms.models.metainfos.ModelParameterRules;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportService;
@@ -74,23 +78,39 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 
 	final ModelRuntimeConfigureHandler configureHandler;
 
+	/** The library the parameter rules of the speech models are read from, may be null. */
+	final IGModelsLibraryDao modelsLibrary;
+
 	/**
 	 * Implementation of OpenAI's text-to-speech model that extends the abstract
 	 * configurable model.
 	 */
 	class GenericOpenAIConfigurableTextToSpeechModel extends
 			GAbstractConfigurableTextToSpeechModel<GenericOpenAIAPITextToSpeechModelConfig, OpenAiAudioSpeechModel> {
+		private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+		/**
+		 * Whether the model answers in raw pcm samples only, which are wrapped in a WAV
+		 * header to be playable.
+		 */
+		private volatile boolean pcmOnly = false;
 
 		/**
 		 * Converts text to speech and returns the audio as an InputStream.
 		 * 
 		 * @param text The text to convert to speech
-		 * @return InputStream containing the audio data
+		 * @return InputStream containing the audio data: mp3, or WAV for a model answering
+		 *         in pcm only
 		 */
 		@Override
 		public InputStream call(String text) {
 			byte buffer[] = model.call(text);
-
+			if (pcmOnly) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Speech of model {}: {} bytes of pcm wrapped as WAV", getCode(),
+							buffer != null ? buffer.length : 0);
+				}
+				buffer = PcmWav.wrap(buffer);
+			}
 			return new ByteArrayInputStream(buffer);
 		}
 
@@ -123,10 +143,21 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 			String baseUrl = GenericOpenAIAPITextToSpeechModelConfigurationSupportService.this.type.getBaseUrl();
 			String modelName = config.getChoosedModel() != null && config.getChoosedModel().getCode() != null
 					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "tts-1";
+			// mp3, unless the model's parameter rules say it answers in one other format:
+			// Gemini TTS answers pcm only, and refuses mp3 with a 400.
+			final ModelParameterRules rules = modelsLibrary != null
+					? modelsLibrary.findParameterRules(type.getProviderId(), modelName)
+					: null;
+			pcmOnly = rules != null && OpenAiAudioSpeechOptions.AudioResponseFormat.PCM.getValue()
+					.equalsIgnoreCase(rules.getSpeechFormat());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Speech model {} ({}) asks for {}", config.getCode(), modelName, pcmOnly ? "pcm" : "mp3");
+			}
 			OpenAiAudioSpeechOptions.Builder optionsBuilder = OpenAiAudioSpeechOptions.builder()
 					.model(modelName)
 					.voice(OpenAiAudioSpeechOptions.Voice.ALLOY)
-					.responseFormat(OpenAiAudioSpeechOptions.AudioResponseFormat.MP3)
+					.responseFormat(pcmOnly ? OpenAiAudioSpeechOptions.AudioResponseFormat.PCM
+							: OpenAiAudioSpeechOptions.AudioResponseFormat.MP3)
 					.speed(1.0);
 			if (apiKey != null) {
 				optionsBuilder.apiKey(apiKey);

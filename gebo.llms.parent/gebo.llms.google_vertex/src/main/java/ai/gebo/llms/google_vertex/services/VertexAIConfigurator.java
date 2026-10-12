@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.aiplatform.v1.PredictionServiceSettings;
 import com.google.genai.Client;
 import com.google.genai.types.HttpOptions;
@@ -48,6 +49,7 @@ import ai.gebo.secrets.services.IGeboSecretsAccessService;
  */
 @Service
 class VertexAIConfigurator {
+	private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(VertexAIConfigurator.class);
 	/**
 	 * Service for accessing secret credentials stored in the Gebo system.
 	 */
@@ -142,6 +144,24 @@ class VertexAIConfigurator {
 					clientBuilder.location(googleOauth2.getLocation());
 				}
 			}
+			// A service account key carries its project but no location: without them, and
+			// without GOOGLE_CLOUD_PROJECT / GOOGLE_CLOUD_LOCATION, the GenAI client refuses to
+			// build ("Authentication is not set up. Please provide either a project and
+			// location ..."). The environment wins when set.
+			if (googleJson != null) {
+				String project = serviceAccountProject(credentials);
+				if (project != null && isBlank(System.getenv(ENV_PROJECT))) {
+					clientBuilder.project(project);
+				}
+				if (isBlank(System.getenv(ENV_LOCATION))) {
+					clientBuilder.location(DEFAULT_LOCATION);
+				}
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Vertex AI client from a service account key: project {} location {}",
+							isBlank(System.getenv(ENV_PROJECT)) ? project : "from " + ENV_PROJECT,
+							isBlank(System.getenv(ENV_LOCATION)) ? DEFAULT_LOCATION : "from " + ENV_LOCATION);
+				}
+			}
 
 			// Timeouts, retry budget and the optional custom endpoint all travel together
 			clientBuilder.httpOptions(httpOptions(baseUrl));
@@ -202,6 +222,17 @@ class VertexAIConfigurator {
 					builder = builder.location(googleOauth2.getLocation());
 				}
 			}
+			// A service account key's project, unless GOOGLE_CLOUD_PROJECT names one; the
+			// location stays the connection's default
+			if (googleJson != null) {
+				String project = serviceAccountProject(credentials);
+				if (project != null && isBlank(System.getenv(ENV_PROJECT))) {
+					builder = builder.projectId(project);
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Vertex AI embedding connection from a service account key: project {}", project);
+					}
+				}
+			}
 			com.google.cloud.aiplatform.v1.PredictionServiceSettings.Builder predictionBuilder = PredictionServiceSettings
 					.newBuilder().setCredentialsProvider(FixedCredentialsProvider.create(credentials));
 			
@@ -217,5 +248,27 @@ class VertexAIConfigurator {
 		} catch (IOException e) {
 			throw new LLMConfigException("IO Exception while trying to configure Google Vertex Embedding", e);
 		}
+	}
+
+	static final String ENV_PROJECT = "GOOGLE_CLOUD_PROJECT", ENV_LOCATION = "GOOGLE_CLOUD_LOCATION";
+	/**
+	 * The location a service account key's client gets when GOOGLE_CLOUD_LOCATION is not
+	 * set: the global endpoint, which serves the current Gemini models
+	 * (docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/locations, 2026-10-11:
+	 * gemini-3.8-flash, gemini-3.5-flash, gemini-2.5-*). A deployment with data residency
+	 * requirements sets GOOGLE_CLOUD_LOCATION, or uses an OAuth2 secret naming its location.
+	 */
+	static final String DEFAULT_LOCATION = "global";
+
+	/** The project a service account key belongs to, null for other credentials. */
+	static String serviceAccountProject(GoogleCredentials credentials) {
+		if (credentials instanceof ServiceAccountCredentials serviceAccount) {
+			return isBlank(serviceAccount.getProjectId()) ? null : serviceAccount.getProjectId();
+		}
+		return null;
+	}
+
+	private static boolean isBlank(String value) {
+		return value == null || value.isBlank();
 	}
 }

@@ -1,0 +1,20 @@
+# The groq segment of the models library: what Gebo knows of this provider's models
+# (modelsInfo) and what they accept in a request (parameterRules). The abstraction layer
+# collects every provider library bean; this one binds ai.gebo.models.providers.groq.
+# A rule applies to its providerId only.
+# Rules: the first one covering a model applies, so specific models come before family
+# patterns ("*" stands for any characters); unset fields are unknown.
+ai.gebo.models.providers.groq:
+  parameterRules:
+    # Groq - console.groq.com/docs/reasoning, 2026-10-11: temperature 0.0 to 2.0 on its
+    # reasoning models.
+    - providerId: groq
+      models: ["openai/gpt-oss-*"]
+      sampling: ACCEPTED
+      reasoningEfforts: [low, medium, high]
+      source: console.groq.com/docs/reasoning, 2026-10-11
+    - providerId: groq
+      models: ["qwen/qwen3.8-27b"]
+      sampling: ACCEPTED
+      reasoningEfforts: [none, default, low, medium, high]
+      source: console.groq.com/docs/reasoning, 2026-10-11

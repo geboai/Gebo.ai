@@ -1,10 +1,11 @@
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
-import { GUserMessage, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { AbstractControl, ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
+import { GeboAwsConnectionCredentials, GeboGoogleJsonSecretContent, GUserMessage, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { Observable, of } from "rxjs";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
 import { ToastMessageOptions } from "primeng/api";
+import { GeboActionType, GeboUIActionRequest } from "../../architecture/actions.model";
 const credentialCreatedOk:ToastMessageOptions={id:"APIKEY_CREATED_OK",severity:"success",detail:"Credentials successfully created",summary:"Credentials created"};
 interface ApiKeyInternalFG {
     requireApiKeyAniway?: boolean,
@@ -12,8 +13,25 @@ interface ApiKeyInternalFG {
     useExistingOrNew?: "EXISTING" | "NEW",
     selectedSecret?: string,
     newApiSecret?: string,
-    newUserName?: string
+    newUserName?: string,
+    awsAccessKeyId?: string,
+    awsSecretAccessKey?: string,
+    awsRegion?: string,
+    googleJsonContent?: string,
+    googleDelegatedUser?: string
 }
+/** The kinds of secret whose new credentials are typed in place, in this order of preference. */
+const IN_PLACE_KINDS: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.TOKEN, SecretInfo.SecretTypeEnum.AWSCONNECTION, SecretInfo.SecretTypeEnum.GOOGLECLOUDJSONCREDENTIALS];
+/** The content of a Google service account key must be json. */
+const validJson: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) return null;
+    try {
+        JSON.parse(control.value);
+        return null;
+    } catch (e) {
+        return { "googleJsonContent": "Not valid json" };
+    }
+};
 @Component({
     selector: "gebo-ai-api-key-component",
     templateUrl: "api-key.component.html",
@@ -29,6 +47,42 @@ interface ApiKeyInternalFG {
 export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAccessor {
     @Input({ required: true }) contextCode?: string;
     @Input({ required: true }) apiKeyDescription?: string;
+    /**
+     * The kinds of secret the provider takes; an api key (TOKEN) when not given. The
+     * existing secrets of those kinds are offered; new ones are typed in place, as the
+     * first kind that can be (an api key, an AWS connection - GeboAwsConnectionCredentials -
+     * or a Google service account key), with the fields and checks of the secrets editor.
+     */
+    @Input() secretTypes?: SecretInfo.SecretTypeEnum[];
+    /** The kind new credentials are typed in place as; undefined when none can be (e.g. OAuth2). */
+    protected get newKind(): SecretInfo.SecretTypeEnum | undefined {
+        const kinds = this.secretTypes?.length ? this.secretTypes : [SecretInfo.SecretTypeEnum.TOKEN];
+        return kinds.find(kind => IN_PLACE_KINDS.includes(kind));
+    }
+    protected readonly kinds = SecretInfo.SecretTypeEnum;
+    protected awsRegions: { label: string, value: string }[] = Object.values(GeboAwsConnectionCredentials.RegionEnum)
+        .map(region => ({ label: region as string, value: region as string }));
+    /**
+     * Opens the secrets editor on a new secret of the provider's kinds, only for a
+     * provider whose credentials cannot be typed in place (an OAuth2 grant needs its sign in).
+     */
+    protected newSecretAction?: GeboUIActionRequest;
+    private buildNewSecretAction(): void {
+        if (this.newKind || !this.secretTypes?.length || !this.contextCode) {
+            this.newSecretAction = undefined;
+            return;
+        }
+        const types = this.secretTypes as SecretInfo.SecretTypeEnum[];
+        this.newSecretAction = {
+            actionType: GeboActionType.NEW,
+            contextType: "GeboAIApiKeyComponent",
+            context: {},
+            targetType: "Secret",
+            // the secrets editor's SecretWrapper: the kind and context of the new secret
+            target: { secretType: types[0], contextCode: this.contextCode, description: this.apiKeyDescription } as GeboUIActionRequest["target"],
+            targetFormInputs: { allowedTypes: types }
+        };
+    }
     @Input() backendValidationOnChange: boolean = true;
     @Input() backendValidation: (credentials: SecretInfo) => Observable<IOperationStatus<any>> = (credentials: SecretInfo) => {
         const data: IOperationStatus<any> = {
@@ -44,8 +98,14 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
         selectedSecret: new FormControl(),
         newSecretDescription: new FormControl(),
         newApiSecret: new FormControl(),
-        newUserName: new FormControl()
+        newUserName: new FormControl(),
+        awsAccessKeyId: new FormControl(),
+        awsSecretAccessKey: new FormControl(),
+        awsRegion: new FormControl(),
+        googleJsonContent: new FormControl(),
+        googleDelegatedUser: new FormControl()
     });
+    private static readonly NEW_CONTROLS = ["newApiSecret", "newUserName", "newSecretDescription", "awsAccessKeyId", "awsSecretAccessKey", "awsRegion", "googleJsonContent", "googleDelegatedUser"];
     protected messages?: GUserMessage[] = [];
     protected view: "COMPACT" | "FULL" = "COMPACT";
     protected existingOrNewShow: boolean = true;
@@ -67,15 +127,11 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
                 if (value === true) {
                     this.secretFormGroup.controls["useExistingOrNew"].enable();
                     this.secretFormGroup.controls["selectedSecret"].enable();
-                    this.secretFormGroup.controls["newApiSecret"].enable();
-                    this.secretFormGroup.controls["newUserName"].enable();
-                    this.secretFormGroup.controls["newSecretDescription"].enable();
+                    this.newCredentialsControls().forEach(ctrl => this.secretFormGroup.controls[ctrl].enable());
                 } else {
                     this.secretFormGroup.controls["useExistingOrNew"].disable();
                     this.secretFormGroup.controls["selectedSecret"].disable();
-                    this.secretFormGroup.controls["newApiSecret"].disable();
-                    this.secretFormGroup.controls["newUserName"].disable();
-                    this.secretFormGroup.controls["newSecretDescription"].disable();
+                    GeboAIApiKeyComponent.NEW_CONTROLS.forEach(ctrl => this.secretFormGroup.controls[ctrl].disable());
                 }
                 this.secretFormGroup.updateValueAndValidity();
             }
@@ -84,7 +140,7 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
         this.secretFormGroup.controls["useExistingOrNew"].valueChanges.subscribe({
             next: (value) => {
                 if (this.enabled!==true) return;
-                const allCtrls = ["selectedSecret", "newApiSecret", "newUserName", "newSecretDescription"];
+                const allCtrls = ["selectedSecret", ...GeboAIApiKeyComponent.NEW_CONTROLS];
                 this.switchControlsRequired(allCtrls, false);
                 this.useExistingOrNew = value;
                 if (value === "EXISTING") {
@@ -92,7 +148,14 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
                     if (this.onChange) this.onChange(this.secretFormGroup.controls["selectedSecret"].value);
                 }
                 if (value === "NEW") {
-                    this.switchControlsRequired(["newApiSecret", "newUserName", "newSecretDescription"], true);
+                    this.switchControlsRequired(this.newCredentialsControls(), true);
+                    if (this.newKind === SecretInfo.SecretTypeEnum.GOOGLECLOUDJSONCREDENTIALS) {
+                        this.secretFormGroup.controls["googleJsonContent"].addValidators(validJson);
+                    }
+                    if (this.newKind === SecretInfo.SecretTypeEnum.AWSCONNECTION) {
+                        this.secretFormGroup.controls["awsAccessKeyId"].addValidators(Validators.maxLength(128));
+                        this.secretFormGroup.controls["awsSecretAccessKey"].addValidators(Validators.maxLength(128));
+                    }
                     if (this.onChange) this.onChange(undefined);
                 }
             }
@@ -136,9 +199,64 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
         });
         this.secretFormGroup.valueChanges.subscribe({
             next: (value: ApiKeyInternalFG) => {
-                this.saveDisabled = !(value?.useExistingOrNew === "NEW" && value?.newUserName && value?.newApiSecret);
+                this.saveDisabled = !(value?.useExistingOrNew === "NEW" && this.secretFormGroup.valid && this.newCredentialsComplete(value));
             }
         });
+    }
+    /**
+     * The controls new credentials of the kind typed in place need - the secrets editor's
+     * fields of that kind, all required as the backend validates them (an AWS connection's
+     * key id, secret key and region; a service account key's json and delegated user).
+     */
+    private newCredentialsControls(): string[] {
+        switch (this.newKind) {
+            case SecretInfo.SecretTypeEnum.AWSCONNECTION: return ["awsAccessKeyId", "awsSecretAccessKey", "awsRegion", "newSecretDescription"];
+            case SecretInfo.SecretTypeEnum.GOOGLECLOUDJSONCREDENTIALS: return ["googleJsonContent", "googleDelegatedUser", "newSecretDescription"];
+            case SecretInfo.SecretTypeEnum.TOKEN: return ["newApiSecret", "newUserName", "newSecretDescription"];
+            default: return [];
+        }
+    }
+    private newCredentialsComplete(value: ApiKeyInternalFG): boolean {
+        switch (this.newKind) {
+            case SecretInfo.SecretTypeEnum.AWSCONNECTION: return !!(value?.awsAccessKeyId && value?.awsSecretAccessKey && value?.awsRegion);
+            case SecretInfo.SecretTypeEnum.GOOGLECLOUDJSONCREDENTIALS: return !!(value?.googleJsonContent && value?.googleDelegatedUser);
+            case SecretInfo.SecretTypeEnum.TOKEN: return !!(value?.newUserName && value?.newApiSecret);
+            default: return false;
+        }
+    }
+    /** Stores the new credentials as the kind typed in place. */
+    private storeNewCredentials(value: ApiKeyInternalFG): Observable<SecretInfo> | undefined {
+        if (!this.contextCode || !this.apiKeyDescription || !this.newCredentialsComplete(value)) return undefined;
+        const description = value.newSecretDescription || this.apiKeyDescription;
+        switch (this.newKind) {
+            case SecretInfo.SecretTypeEnum.AWSCONNECTION:
+                return this.secretController.createAWSConnectionSecret({
+                    contextCode: this.contextCode,
+                    description: description,
+                    secretContent: {
+                        accessKeyId: value.awsAccessKeyId as string,
+                        secretAccessKey: value.awsSecretAccessKey as string,
+                        region: value.awsRegion as GeboAwsConnectionCredentials.RegionEnum
+                    }
+                });
+            case SecretInfo.SecretTypeEnum.GOOGLECLOUDJSONCREDENTIALS:
+                return this.secretController.createGoogleJsonCredentialsSecret({
+                    contextCode: this.contextCode,
+                    description: description,
+                    secretContent: { jsonContent: value.googleJsonContent, delegatedUser: value.googleDelegatedUser } as GeboGoogleJsonSecretContent
+                });
+            case SecretInfo.SecretTypeEnum.TOKEN:
+                return this.secretController.createTokenSecret({
+                    contextCode: this.contextCode,
+                    description: this.apiKeyDescription,
+                    secretContent: {
+                        token: value.newApiSecret as string,
+                        user: value.newUserName as string
+                    }
+                });
+            default:
+                return undefined;
+        }
     }
     private switchControlsRequired(ctrls: string[], required: boolean) {
         ctrls.forEach(ctrName => {
@@ -152,16 +270,10 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
     }
     protected createCredentials(): void {
         const value: ApiKeyInternalFG = this.secretFormGroup.value;
-        if (value?.newApiSecret && value?.newUserName && this.contextCode && this.apiKeyDescription) {
+        const storing = this.storeNewCredentials(value);
+        if (storing) {
             this.loadingBackend = true;
-            this.secretController.createTokenSecret({
-                contextCode: this.contextCode,
-                description: this.apiKeyDescription,
-                secretContent: {
-                    token: value.newApiSecret,
-                    user: value.newUserName
-                }
-            }).subscribe({
+            storing.subscribe({
                 next: (secret: SecretInfo) => {
                     this.validating = true;
                     this.backendValidation(secret).subscribe({
@@ -173,6 +285,11 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
                                     requireApiKeyAniway: true,
                                     newApiSecret: undefined,
                                     newUserName: undefined,
+                                    awsAccessKeyId: undefined,
+                                    awsSecretAccessKey: undefined,
+                                    awsRegion: undefined,
+                                    googleJsonContent: undefined,
+                                    googleDelegatedUser: undefined,
                                     selectedSecret: secret?.code,
                                     useExistingOrNew: "EXISTING"
                                 };
@@ -221,14 +338,15 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
 
     }
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes["contextCode"]) {
+        if (changes["contextCode"] || changes["secretTypes"]) {
+            this.buildNewSecretAction();
             const resetValue: ApiKeyInternalFG = {
                 requireApiKeyAniway: this.enabled,
                 newApiSecret: undefined,
                 newUserName: undefined,
                 selectedSecret: undefined,
                 newSecretDescription: undefined,
-                useExistingOrNew: "NEW"
+                useExistingOrNew: !this.newKind ? "EXISTING" : "NEW"
             };
             this.secretFormGroup.patchValue(resetValue);
             if (this.onChange) {
@@ -238,20 +356,22 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
                 console.log("Current api key context:" + this.contextCode);
                 this.loadingBackend = true;
                 this.secrets = [];
-                this.secretFormGroup.controls["useExistingOrNew"].setValue("NEW");
+                this.secretFormGroup.controls["useExistingOrNew"].setValue(!this.newKind ? "EXISTING" : "NEW");
                 this.secretController.getSecretsByContextCode(this.contextCode).subscribe({
                     next: (secrets) => {
                         this.loadingBackend = false;
-                        this.secrets = secrets;
+                        // the secrets of the kinds the provider takes
+                        const kinds = this.secretTypes?.length ? this.secretTypes : [SecretInfo.SecretTypeEnum.TOKEN];
+                        this.secrets = (secrets ?? []).filter(x => !x.secretType || kinds.includes(x.secretType));
 
                         let secretsOrNew: "EXISTING" | "NEW" = "NEW";
                         this.existingOrNewShow = true;
-                        if (this.secrets?.length > 0) {
+                        if (this.secrets?.length > 0 || !this.newKind) {
                             secretsOrNew = "EXISTING";
                         } else {
                             this.existingOrNewShow = false;
                         }
-                        this.secretId = secrets && secrets.length ? secrets[0].code : undefined;
+                        this.secretId = this.secrets.length ? this.secrets[0].code : undefined;
                         const newValue: ApiKeyInternalFG = {
                             requireApiKeyAniway: this.enabled,
                             newApiSecret: undefined,
@@ -278,7 +398,7 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
     writeValue(obj: any): void {
         this.secretId = obj;
         let secretsOrNew: "EXISTING" | "NEW" = "NEW";
-        if (obj) {
+        if (obj || !this.newKind) {
             secretsOrNew = "EXISTING";
         }
         this.secretFormGroup.controls["useExistingOrNew"].setValue(secretsOrNew);

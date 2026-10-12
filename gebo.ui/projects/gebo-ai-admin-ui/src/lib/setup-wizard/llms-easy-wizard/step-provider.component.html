@@ -51,7 +51,7 @@
     }
 
     <div class="col-12">
-      <gebo-ai-api-key-component formControlName="secretId" [contextCode]="secretContext"
+      <gebo-ai-api-key-component formControlName="secretId" [contextCode]="secretContext" [secretTypes]="vendor.parentModel.secretTypes"
         [apiKeyDescription]="secretDescription" [backendValidation]="validateCredentials"
         [backendValidationOnChange]="true"></gebo-ai-api-key-component>
     </div>

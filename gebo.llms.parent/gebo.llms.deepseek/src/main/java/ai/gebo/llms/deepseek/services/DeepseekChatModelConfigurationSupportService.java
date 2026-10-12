@@ -26,6 +26,7 @@ import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
@@ -43,6 +44,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.el.MethodNotFoundException;
 import lombok.AllArgsConstructor;
@@ -98,6 +100,8 @@ public class DeepseekChatModelConfigurationSupportService
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	final ObservationRegistry observationRegistry;
+	/** The library the parameter rules of the chat models are read from. */
+	final IGModelsLibraryDao modelsLibrary;
 
 	/**
 	 * Implementation of configurable chat model for DeepSeek Note: The class is
@@ -109,8 +113,8 @@ public class DeepseekChatModelConfigurationSupportService
 
 		public DeepseekConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry, IGModelsLibraryDao modelsLibrary) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry, modelsLibrary);
 
 		    }
 
@@ -146,6 +150,14 @@ public class DeepseekChatModelConfigurationSupportService
 			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
 					.getWebClientBuilder();
 			org.springframework.core.retry.RetryTemplate retryTemplate = clientsProvider.getCoreRetryTemplate();
+			// Low thinking goes out as effort low, which the client cannot name: rewritten on
+			// copies of the shared builders (see DeepseekLowEffort)
+			final boolean lowEffort = config.getThinking() == ChatModelThinkingOption.LOW_THINKING
+					&& acceptsLowEffort(config.getChoosedModel() != null ? config.getChoosedModel().getModelDetails() : null);
+			if (lowEffort) {
+				restClient = restClient.clone().requestInterceptor(DeepseekLowEffort.interceptor());
+				webClient = webClient.clone().filter(DeepseekLowEffort.filter());
+			}
 			org.springframework.ai.deepseek.api.DeepSeekApi.Builder apiBuilder = DeepSeekApi.builder();
 			if (config.getBaseUrl() != null) {
 				apiBuilder.baseUrl(config.getBaseUrl());
@@ -172,9 +184,11 @@ public class DeepseekChatModelConfigurationSupportService
 			// Deepseek carries the two halves of the setting separately: thinking switches
 			// the mode on or off, reasoning_effort says how deep it goes once it is on.
 			// The models api lists the levels each model accepts (low, high, max today),
-			// but the client only knows HIGH and MAX, so LOW and MEDIUM can only turn
-			// thinking on and leave the depth at the provider default. HIGH_THINKING, our
-			// "maximum thinking", reaches for the highest level the model lists.
+			// but the client only knows HIGH and MAX: LOW goes as HIGH rewritten to low on
+			// the wire (DeepseekLowEffort) where the model takes low; MEDIUM, which
+			// DeepSeek runs as high, only turns thinking on and leaves the depth at the
+			// provider default (high). HIGH_THINKING, our "maximum thinking", reaches for
+			// the highest level the model lists.
 			// AUTO sends neither, which is what it means: leave the provider default alone.
 			if (config.getThinking() != null) {
 				switch (config.getThinking()) {
@@ -182,7 +196,13 @@ public class DeepseekChatModelConfigurationSupportService
 					builder = builder.thinking(DeepSeekApi.ChatCompletionRequest.Thinking.DISABLED);
 				}
 					break;
-				case LOW_THINKING:
+				case LOW_THINKING: {
+					builder = builder.thinking(DeepSeekApi.ChatCompletionRequest.Thinking.ENABLED);
+					if (lowEffort) {
+						builder = builder.reasoningEffort(DeepSeekApi.ChatCompletionRequest.ReasoningEffort.HIGH);
+					}
+				}
+					break;
 				case MEDIUM_THINKING: {
 					builder = builder.thinking(DeepSeekApi.ChatCompletionRequest.Thinking.ENABLED);
 				}
@@ -199,7 +219,8 @@ public class DeepseekChatModelConfigurationSupportService
 					break;
 				}
 				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Chat model {} configured with thinking {}", config.getCode(), config.getThinking());
+					LOGGER.debug("Chat model {} configured with thinking {}{}", config.getCode(), config.getThinking(),
+							lowEffort ? " sent as reasoning_effort low" : "");
 				}
 			}
 			List<ToolCallback> functions = new ArrayList<ToolCallback>();
@@ -240,7 +261,7 @@ public class DeepseekChatModelConfigurationSupportService
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
 			return new DeepseekConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
-					observationRegistry);
+					observationRegistry, modelsLibrary);
 		}
 	};
 
@@ -275,7 +296,7 @@ public class DeepseekChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GDeepseekChatModelConfig> create(GDeepseekChatModelConfig config)
 			throws LLMConfigException {
 		DeepseekConfigurableChatModel model = new DeepseekConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory, observationRegistry);
+				functionsRepo, usageAdvisorFactory, observationRegistry, modelsLibrary);
 		model.initialize(config, type);
 		return model;
 	}
@@ -324,6 +345,17 @@ public class DeepseekChatModelConfigurationSupportService
 	 * configuration saved before they were read), as before they were; null when the
 	 * model lists levels but none the client knows.
 	 */
+	/**
+	 * Whether the effort low may be sent: the model lists it, or its levels are unknown
+	 * (DeepSeek documents low for its thinking models).
+	 */
+	static boolean acceptsLowEffort(java.util.Map<String, Object> details) {
+		Object levels = details != null ? details.get(DeepseekModelsLookupService.EFFORT_LEVELS) : null;
+		if (!(levels instanceof java.util.Collection<?> list) || list.isEmpty())
+			return true;
+		return list.contains(DeepseekLowEffort.LOW);
+	}
+
 	static DeepSeekApi.ChatCompletionRequest.ReasoningEffort maximumEffort(java.util.Map<String, Object> details) {
 		Object levels = details != null ? details.get(DeepseekModelsLookupService.EFFORT_LEVELS) : null;
 		if (!(levels instanceof java.util.Collection<?> list) || list.isEmpty())

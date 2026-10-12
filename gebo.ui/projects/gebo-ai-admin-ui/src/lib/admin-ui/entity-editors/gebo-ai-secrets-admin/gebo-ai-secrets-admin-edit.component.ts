@@ -388,9 +388,11 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
     }
 
     /**
-     * Checks if a secret can be deleted. Not implemented in this component.
+     * Secrets are not deleted from this editor. Answered rather than thrown: the base
+     * editor asks right after a successful insert, and a throw there left its block-UI up
+     * and the window open, the new secret never handed back to the caller.
      */
     override canBeDeleted(value: SecretWrapper): Observable<{ canBeDeleted: boolean; message: string; }> {
-        throw new Error("Method not implemented.");
+        return of({ canBeDeleted: false, message: "Secrets are not deleted from this editor" });
     }
 }

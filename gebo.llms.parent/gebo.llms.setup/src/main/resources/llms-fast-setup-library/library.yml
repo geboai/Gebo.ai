@@ -148,19 +148,17 @@ ai.gebo.llms.vendors.setup.config:
           doModelsLookup: true
           choices:
             # gpt-4o-transcribe, gpt-4o-mini-transcribe and whisper-1 shut down on 2027-02-26.
-            # The OpenAI transcript handler asks for a text response: whisper-1 gives it,
-            # gpt-4o-transcribe and gpt-4o-mini-transcribe answer json only, and OpenAI does
-            # not document the formats of gpt-transcribe. whisper-1 is the default until the
-            # handler asks for json, the format the transcription api answers by default.
-            - code: whisper-1
-              description: Whisper 1
-              defaultChoice: true
+            # The OpenAI transcript handler asks for json, which every one of these answers
+            # (gpt-4o-transcribe and gpt-4o-mini-transcribe answer json only).
             - code: gpt-transcribe
               description: GPT Transcribe (speech to text)
+              defaultChoice: true
             - code: gpt-4o-transcribe
               description: GPT-4o Transcribe (speech to text)
             - code: gpt-4o-mini-transcribe
               description: GPT-4o mini Transcribe
+            - code: whisper-1
+              description: Whisper 1
     - vendorInfo:
         vendorId: anthropic
         name: Anthropic
@@ -199,92 +197,116 @@ ai.gebo.llms.vendors.setup.config:
               description: Claude Fable 5.1
               uses: CHAT
 
-# AWS Bedrock vendor temporarily disabled: the model lookup now lists the inference
-# profile ids the profile-only models are invoked by (us./eu./apac./global.), but the
-# codes below (Claude 4.5 generation) are outdated and need checking against a live
-# Bedrock account before re-enabling (current Claude ids: anthropic.claude-*-5-5).
-#    - vendorInfo:
-#        vendorId: aws-bedrock
-#        name: AWS Bedrock
-#        description: Amazon Bedrock (Claude, Amazon Nova, Meta Llama, Mistral, Cohere ...) plus Amazon Polly / Transcribe
-#        acquireKeyUrl: https://console.aws.amazon.com/iam/home#/security_credentials
-#        requiresApiKey: true
-#        secretType: AWS_CONNECTION
-#        requiresCustomUrl: false
-#        webSite: https://aws.amazon.com/bedrock/
-#        apiKeySecretContext: aws-bedrock
-#        minContextWindow: 200000
-#        supportsAutoconfig: true
-#      presets:
-#        - type: CHAT
-#          serviceHandler: chat-aws-bedrock
-#          doModelsLookup: true
-#          choices:
-#            - code: us.anthropic.claude-sonnet-4-5-20250929-v1:0
-#              description: Anthropic Claude Sonnet 4.5
-#              uses: CHAT
-#              defaultChoice: true
-#            - code: us.amazon.nova-pro-v1:0
-#              description: Amazon Nova Pro
-#              uses: CHAT
-#            - code: us.meta.llama3-3-70b-instruct-v1:0
-#              description: Meta Llama 3.3 70b Instruct
-#              uses: CHAT
-#            - code: us.anthropic.claude-haiku-4-5-20251001-v1:0
-#              description: Anthropic Claude Haiku 4.5
-#              uses: INTERNAL_SERVICES
-#            - code: us.amazon.nova-lite-v1:0
-#              description: Amazon Nova Lite
-#              uses: INTERNAL_SERVICES
-#        - type: EMBEDDING
-#          serviceHandler: embedding-aws-bedrock
-#          doModelsLookup: true
-#          choices:
-#            - code: amazon.titan-embed-text-v2:0
-#              description: Amazon Titan Text Embeddings V2
-#              defaultChoice: true
-#            - code: cohere.embed-multilingual-v3
-#              description: Cohere Embed Multilingual v3
-#            - code: cohere.embed-english-v3
-#              description: Cohere Embed English v3
-#        - type: RANKING
-#          serviceHandler: ranker-aws-bedrock
-#          doModelsLookup: true
-#          choices:
-#            - code: amazon.rerank-v1:0
-#              description: Amazon Rerank v1
-#              defaultChoice: true
-#            - code: cohere.rerank-v3-5:0
-#              description: Cohere Rerank v3.5
-#        - type: IMAGESGEN
-#          serviceHandler: image-generation-aws-bedrock
-#          doModelsLookup: true
-#          choices:
-#            - code: amazon.nova-canvas-v1:0
-#              description: Amazon Nova Canvas (text to image generation)
-#              defaultChoice: true
-#            - code: amazon.titan-image-generator-v2:0
-#              description: Amazon Titan Image Generator v2
-#            - code: stability.stable-image-ultra-v1:1
-#              description: Stability AI Stable Image Ultra
-#        - type: TTS
-#          serviceHandler: aws-polly-tts
-#          doModelsLookup: false
-#          choices:
-#            - code: Joanna
-#              description: Amazon Polly - Joanna (en-US, neural)
-#              defaultChoice: true
-#            - code: Matthew
-#              description: Amazon Polly - Matthew (en-US, neural)
-#            - code: Danielle
-#              description: Amazon Polly - Danielle (en-US, generative)
-#        - type: TRANSCRIPT
-#          serviceHandler: aws-transcribe
-#          doModelsLookup: false
-#          choices:
-#            - code: amazon-transcribe-streaming
-#              description: Amazon Transcribe streaming (speech to text)
-#              defaultChoice: true
+# AWS Bedrock: credentials and region travel in one AWS_CONNECTION secret, picked or
+# created in the setup. Codes from the Bedrock model cards
+# (docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html, 2026-10-11). The Claude
+# 5.5 models are invoked through inference profiles only (no in-region invocation): the
+# global profile works from any region; the geo ones (eu./us./au./jp.) keep the requests
+# in a geography and are offered by the models lookup. Nova Canvas left the library: its
+# card gives end of life 2026-09-30.
+    - vendorInfo:
+        vendorId: aws-bedrock
+        name: AWS Bedrock
+        description: Amazon Bedrock (Claude, Amazon Nova, Meta Llama, Mistral, Cohere ...) plus Amazon Polly / Transcribe
+        acquireKeyUrl: https://console.aws.amazon.com/iam/home#/security_credentials
+        requiresApiKey: true
+        secretTypes: [AWS_CONNECTION]
+        requiresCustomUrl: false
+        webSite: https://aws.amazon.com/bedrock/
+        apiKeySecretContext: aws-bedrock
+        minContextWindow: 200000
+      presets:
+        - type: CHAT
+          serviceHandler: chat-aws-bedrock
+          doModelsLookup: true
+          choices:
+            - code: global.anthropic.claude-sonnet-5-5
+              description: Anthropic Claude Sonnet 5.5 (global inference profile)
+              uses: CHAT
+              defaultChoice: true
+            - code: global.anthropic.claude-opus-5-5
+              description: Anthropic Claude Opus 5.5 (global inference profile)
+              uses: CHAT
+            - code: global.anthropic.claude-haiku-5-5
+              description: Anthropic Claude Haiku 5.5 (global inference profile)
+              uses: INTERNAL_SERVICES
+        - type: EMBEDDING
+          serviceHandler: embedding-aws-bedrock
+          doModelsLookup: true
+          choices:
+            # 8K tokens, in-region (its card)
+            - code: amazon.titan-embed-text-v2:0
+              description: Amazon Titan Text Embeddings V2
+              defaultChoice: true
+            # 512 tokens, 100+ languages, in-region (its card)
+            - code: cohere.embed-multilingual-v3
+              description: Cohere Embed Multilingual v3
+        - type: RANKING
+          serviceHandler: ranker-aws-bedrock
+          doModelsLookup: true
+          choices:
+            - code: cohere.rerank-v3-5:0
+              description: Cohere Rerank 3.5
+              defaultChoice: true
+        - type: TTS
+          serviceHandler: aws-polly-tts
+          doModelsLookup: false
+          choices:
+            - code: Joanna
+              description: Amazon Polly - Joanna (en-US, neural)
+              defaultChoice: true
+            - code: Matthew
+              description: Amazon Polly - Matthew (en-US, neural)
+        - type: TRANSCRIPT
+          serviceHandler: aws-transcribe
+          doModelsLookup: false
+          choices:
+            - code: amazon-transcribe-streaming
+              description: Amazon Transcribe streaming (speech to text)
+              defaultChoice: true
+# Google Vertex AI: a service account key (GOOGLE_CLOUD_JSON_CREDENTIALS secret, its project
+# the key's, the location GOOGLE_CLOUD_LOCATION or the global endpoint) or a Google OAuth2
+# grant, picked or created in the setup. Codes and lifecycle from the Vertex model versions page
+# (docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions, 2026-10-11):
+# gemini-3.8-flash has no retirement announced, gemini-3.5-flash and gemini-3.1-flash-lite
+# retire May 2027 or later; the 2.5 family retires 2026-10-20 and is not preset.
+    - vendorInfo:
+        vendorId: google-vertex
+        name: Google Vertex AI
+        description: Google Vertex AI (Gemini models, text embeddings)
+        acquireKeyUrl: https://console.cloud.google.com/iam-admin/serviceaccounts
+        requiresApiKey: true
+        # a service account key, or a Google OAuth2 grant naming project and location
+        # (VertexAIConfigurator takes both)
+        secretTypes: [GOOGLE_CLOUD_JSON_CREDENTIALS, OAUTH2_GOOGLE]
+        requiresCustomUrl: false
+        webSite: https://cloud.google.com/vertex-ai
+        apiKeySecretContext: google-vertex
+        minContextWindow: 1000000
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-google-vertex
+          doModelsLookup: true
+          choices:
+            - code: gemini-3.8-flash
+              description: Gemini 3.8 Flash
+              uses: CHAT
+              defaultChoice: true
+            - code: gemini-3.5-flash
+              description: Gemini 3.5 Flash
+              uses: CHAT
+            - code: gemini-3.1-flash-lite
+              description: Gemini 3.1 Flash-Lite
+              uses: INTERNAL_SERVICES
+        - type: EMBEDDING
+          serviceHandler: embedding-google-vertex
+          doModelsLookup: true
+          choices:
+            - code: text-multilingual-embedding-002
+              description: Text multilingual embedding 002
+              defaultChoice: true
+            - code: text-embedding-005
+              description: Text embedding 005 (English and code)
 
     - vendorInfo:
         vendorId: deepseek
@@ -303,10 +325,14 @@ ai.gebo.llms.vendors.setup.config:
           choices:
             # deepseek-chat and deepseek-reasoner were discontinued on 2026-07-24: thinking
             # is now a setting of the model (the thinking option), not a model of its own.
+            # Thinking for chat (its default), not for the internal services: their calls
+            # (ranking filter, routing, query rewriting) are short judgements, and DeepSeek
+            # takes thinking disabled on this model.
             - code: deepseek-flash
               description: DeepSeek V4.1 Flash
               uses: CHAT , INTERNAL_SERVICES
               defaultChoice: true
+              internalServicesThinking: NO_THINKING
             - code: deepseek-v4-pro
               description: DeepSeek V4 Pro
               uses: CHAT
@@ -330,14 +356,18 @@ ai.gebo.llms.vendors.setup.config:
             # The grok 4 fast, 4.1 fast and 3 models were retired on 2026-05-15 (xAI
             # redirects their names to grok-4.3, but they are no longer listed, so the setup
             # could not validate them).
-            - code: grok-4.3
-              description: Grok 4.3
-              contextWindow: 1000000
-              uses: CHAT
-              defaultChoice: true
+            # The default is xAI's own pick: "For everything else, including code, use Grok
+            # 4.7. It is the most capable model we've built." (docs.x.ai/developers/models,
+            # 2026-10-11). Its reasoning cannot be turned off; grok-4.3 (1M context, effort
+            # none to xhigh) stays an option.
             - code: grok-4.7
               description: Grok 4.7
               contextWindow: 500000
+              uses: CHAT
+              defaultChoice: true
+            - code: grok-4.3
+              description: Grok 4.3
+              contextWindow: 1000000
               uses: CHAT
             - code: grok-4.20-0309-reasoning
               description: Grok 4.20 reasoning
@@ -378,12 +408,17 @@ ai.gebo.llms.vendors.setup.config:
             - code: openai/gpt-oss-20b
               description: OpenAI Gpt OSS 20b
               uses: INTERNAL_SERVICES
-        # No EMBEDDING preset for now: nvidia/nemotron-3-embed-1b and
-        # nvidia/llama-3.2-nv-embedqa-1b-v1 require an input_type (query or passage) on
-        # every request, which the embedding-nvidia handler does not send yet, so a model
-        # created from them fails. Leaving the codes without a default is not enough: the
-        # easy wizard preselects the first choice of a type that has no default.
-        # Restore them, nemotron-3-embed-1b as the default, once input_type is sent.
+        - type: EMBEDDING
+          serviceHandler: embedding-nvidia
+          doModelsLookup: true
+          choices:
+            # Both take an input_type with every request (query or passage), which the
+            # embedding handler sends from the models library's parameter rules.
+            - code: nvidia/nemotron-3-embed-1b
+              description: NVIDIA Nemotron 3 Embed 1B
+              defaultChoice: true
+            - code: nvidia/llama-3.2-nv-embedqa-1b-v1
+              description: NVIDIA Llama 3.2 NV EmbedQA 1B
     - vendorInfo:
         vendorId: mistral.ai
         name: Mistral.ai
@@ -499,11 +534,13 @@ ai.gebo.llms.vendors.setup.config:
           choices:
             # The default is the cheapest model here that stays reliable once tools are
             # in play, which is what a chat pipeline spends most of its calls on: glm
-            # 5.3 flash costs 0.09/0.30 per million in and out, carries a 1.3M context
-            # and scores above the other flash-class models on the agentic benchmarks.
+            # 5.3 flash is among the cheapest (its price comes from openrouter.ai's models
+            # api) and scores above the other flash-class models on the agentic benchmarks.
+            # Context 1048576 per openrouter.ai/api/v1/models, checked 2026-10-11; its
+            # reasoning is mandatory there, efforts max, high and low.
             - code: z-ai/glm-5.3-flash
               description: Z.ai GLM 5.3 Flash
-              contextWindow: 1310720
+              contextWindow: 1048576
               uses: CHAT
               defaultChoice: true
             # Kept as an option but no longer the default: gpt-oss-120b is unreliable at
@@ -583,9 +620,9 @@ ai.gebo.llms.vendors.setup.config:
             # while the generic text to speech handler asks every provider for mp3:
             # tested against a live key it answers
             #   400 Gemini TTS only supports response_format="pcm". Got "mp3".
-            # and the call fails. It stays listed for the day the handler negotiates the
-            # format per model, and the default is the widest-reaching voice that does
-            # answer in mp3, verified end to end on this installation.
+            # and the call fails. The handler now asks it for pcm (the models library's
+            # parameter rules) and wraps the samples in a WAV header; the default stays the
+            # widest-reaching voice verified end to end in mp3 on this installation.
             - code: minimax/speech-2.8-hd
               description: MiniMax Speech 2.8 HD (multilanguage)
               defaultChoice: true
@@ -594,11 +631,95 @@ ai.gebo.llms.vendors.setup.config:
             - code: microsoft/mai-voice-2
               description: Microsoft MAI Voice 2 (15 languages)
             - code: google/gemini-3.1-flash-tts-preview
-              description: Google Gemini 3.1 Flash TTS (70+ languages, needs pcm support)
+              description: Google Gemini 3.1 Flash TTS (70+ languages)
             - code: deepgram/aura-2
               description: Deepgram Aura 2
             - code: hexgrad/kokoro-82m
               description: Kokoro 82M (8 languages)
+
+    # llmax.ai - llmax.ai/models (2026-10-11): llmax-all-round (Essential plan, 262144
+    # context), llmax-smart (Smart plan) and llmax-best (Pro plan, 1M), each "tool calling,
+    # vision, reasoning" supported; a key reaches the models of its plan only, so the
+    # preset is the Essential one and the lookup offers what the key reaches. No
+    # embeddings.
+    - vendorInfo:
+        vendorId: llmax
+        name: llmax.ai
+        description: llmax.ai AI provider (EU, subscription)
+        acquireKeyUrl: https://llmax.ai/docs/quickstart
+        requiresApiKey: true
+        requiresCustomUrl: false
+        webSite: https://llmax.ai
+        apiKeySecretContext: llmax
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-llmax
+          doModelsLookup: true
+          choices:
+            - code: llmax-all-round
+              description: llmax all round (Essential plan)
+              contextWindow: 262144
+              uses: CHAT , INTERNAL_SERVICES
+              defaultChoice: true
+            - code: llmax-smart
+              description: llmax smart (Smart plan)
+              uses: CHAT
+            - code: llmax-best
+              description: llmax best (Pro plan)
+              contextWindow: 1000000
+              uses: CHAT
+
+    # Profundo AI - profundoai.com/models (2026-10-11): "Every plan includes all models";
+    # tool use is stated for glm-5.3 and glm-5.2 (128K), glm-5.3-flash is the fast tier.
+    # profundoai.com/docs: tools, parallel tool calls, response_format and reasoning_effort
+    # are accepted "where the model allows"; no embeddings.
+    - vendorInfo:
+        vendorId: profundoai
+        name: Profundo AI
+        description: Profundo AI provider (subscription)
+        acquireKeyUrl: https://profundoai.com/docs
+        requiresApiKey: true
+        requiresCustomUrl: false
+        webSite: https://profundoai.com
+        apiKeySecretContext: profundoai
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-profundoai
+          doModelsLookup: true
+          choices:
+            - code: glm-5.3
+              description: Z.ai GLM 5.3
+              contextWindow: 128000
+              uses: CHAT
+              defaultChoice: true
+            - code: glm-5.2
+              description: Z.ai GLM 5.2
+              contextWindow: 128000
+              uses: CHAT
+            - code: glm-5.3-flash
+              description: Z.ai GLM 5.3 Flash
+              contextWindow: 128000
+              uses: INTERNAL_SERVICES
+
+    # ONNX transformers - the embedding model that runs inside Gebo itself (Spring AI's
+    # default ONNX model, docs.spring.io/spring-ai/reference/api/embeddings/onnx.html):
+    # no key, no server, so a setup without any provider for embeddings still has one.
+    - vendorInfo:
+        vendorId: onnx-transformers
+        name: ONNX local embeddings
+        description: Local embedding model running inside Gebo (no provider needed)
+        requiresApiKey: false
+        requiresCustomUrl: false
+        webSite: https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
+        apiKeySecretContext: onnx-transformers
+      presets:
+        - type: EMBEDDING
+          serviceHandler: embedding-onnx-transformers
+          doModelsLookup: true
+          choices:
+            - code: sentence-transformers/all-MiniLM-L6-v2
+              description: all-MiniLM-L6-v2 (local, 384 dimensions)
+              defaultChoice: true
 
     - vendorInfo:
         vendorId: ollama

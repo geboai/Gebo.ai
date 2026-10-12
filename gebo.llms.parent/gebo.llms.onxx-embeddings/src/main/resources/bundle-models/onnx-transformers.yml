@@ -1,0 +1,15 @@
+# The onnx-transformers piece of the models library: what Gebo knows of this provider's models
+# (modelsInfo) and what they accept in a request (parameterRules), bound by
+# OnnxTransformersModelsLibrary under ai.gebo.models.providers.onnx-transformers.
+# The model runs in process, there is no models api to tell its limits: they come from
+# its model card, huggingface.co/sentence-transformers/all-MiniLM-L6-v2 (2026-10-11):
+# 384 dimensions, "input text longer than 256 word pieces is truncated".
+ai.gebo.models.providers.onnx-transformers:
+  modelsInfo:
+    - providerId: onnx-transformers
+      modelId: sentence-transformers/all-MiniLM-L6-v2
+      chatModel: false
+      embeddingModel: true
+      contextLength: 256
+      tokenizingThreashold: 256
+      informativeUrl: https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
