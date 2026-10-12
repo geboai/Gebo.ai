@@ -5724,6 +5724,26 @@
       "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6": {
         "summary": "Error comunicating with  Ollama server ",
         "detail": "Netork error comunicating to the remote system accessing content\n models list Error working with url:nullapi/tags"
+      },
+      "NewAwsAccessKeyId": {
+        "label": "AWS access key id",
+        "help": "Enter the AWS access key id used to identify the account (e.g. AKIA...)."
+      },
+      "NewAwsSecretAccessKey": {
+        "label": "AWS secret access key",
+        "help": "Enter the AWS secret access key that authenticates the account."
+      },
+      "NewAwsRegion": {
+        "label": "AWS region",
+        "help": "Select the AWS region hosting the resources this connection is used for."
+      },
+      "NewGoogleDelegatedUser": {
+        "label": "Google user to impersonate",
+        "help": "The user that will be impersonated by the provided credentials"
+      },
+      "NewGoogleJsonContent": {
+        "label": "Google credentials file content",
+        "help": "Copy here the file content of Google api credentials file downloaded from the google cloud api console (https://console.cloud.google.com/)"
       }
     }
   },
