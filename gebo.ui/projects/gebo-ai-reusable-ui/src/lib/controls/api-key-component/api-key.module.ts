@@ -10,13 +10,11 @@ import { SelectButtonModule } from "primeng/selectbutton";
 import { ButtonModule } from "primeng/button";
 import { BlockUIModule } from "primeng/blockui";
 import { InputTextModule } from "primeng/inputtext";
-import { SelectModule } from "primeng/select";
-import { TextareaModule } from "primeng/textarea";
 import { GeboAINotificationsModule } from "../../notifications/notifications.module";
 import { GeboBlockableContainerDirective } from "../../directives/blockable-container/blockable-container.directive";
 
 @NgModule({
-    imports:[CommonModule,ReactiveFormsModule,PanelModule,FieldsetModule,EditableListboxModule,GeboAIFieldTranslationContainerModule,SelectButtonModule,ButtonModule,BlockUIModule,InputTextModule,SelectModule,TextareaModule,GeboAINotificationsModule,GeboBlockableContainerDirective],
+    imports:[CommonModule,ReactiveFormsModule,PanelModule,FieldsetModule,EditableListboxModule,GeboAIFieldTranslationContainerModule,SelectButtonModule,ButtonModule,BlockUIModule,InputTextModule,GeboAINotificationsModule,GeboBlockableContainerDirective],
     declarations:[GeboAIApiKeyComponent],
     exports:[GeboAIApiKeyComponent]
 })

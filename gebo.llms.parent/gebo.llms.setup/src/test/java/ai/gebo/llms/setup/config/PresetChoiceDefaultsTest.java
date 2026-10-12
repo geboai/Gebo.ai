@@ -79,14 +79,14 @@ class PresetChoiceDefaultsTest {
 
 		LLMSVendor bedrock = library.getVendors().stream()
 				.filter(v -> "aws-bedrock".equals(v.getVendorInfo().getVendorId())).findFirst().orElseThrow();
-		assertEquals(ai.gebo.secrets.model.GeboSecretType.AWS_CONNECTION, bedrock.getVendorInfo().getSecretType());
+		assertEquals(List.of(ai.gebo.secrets.model.GeboSecretType.AWS_CONNECTION), bedrock.getVendorInfo().getSecretTypes());
 		assertEquals("aws-bedrock", bedrock.getVendorInfo().getApiKeySecretContext(), "the model editors' context");
 		LLMSVendor vertex = library.getVendors().stream()
 				.filter(v -> "google-vertex".equals(v.getVendorInfo().getVendorId())).findFirst().orElseThrow();
-		assertEquals(ai.gebo.secrets.model.GeboSecretType.GOOGLE_CLOUD_JSON_CREDENTIALS,
-				vertex.getVendorInfo().getSecretType());
+		assertEquals(List.of(ai.gebo.secrets.model.GeboSecretType.GOOGLE_CLOUD_JSON_CREDENTIALS, ai.gebo.secrets.model.GeboSecretType.OAUTH2_GOOGLE),
+				vertex.getVendorInfo().getSecretTypes());
 		assertTrue(library.getVendors().stream().filter(v -> "openai".equals(v.getVendorInfo().getVendorId()))
-				.allMatch(v -> v.getVendorInfo().getSecretType() == ai.gebo.secrets.model.GeboSecretType.TOKEN),
+				.allMatch(v -> v.getVendorInfo().getSecretTypes().equals(List.of(ai.gebo.secrets.model.GeboSecretType.TOKEN))),
 				"an api key vendor keeps TOKEN");
 	}
 }

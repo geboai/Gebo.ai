@@ -210,7 +210,7 @@ ai.gebo.llms.vendors.setup.config:
         description: Amazon Bedrock (Claude, Amazon Nova, Meta Llama, Mistral, Cohere ...) plus Amazon Polly / Transcribe
         acquireKeyUrl: https://console.aws.amazon.com/iam/home#/security_credentials
         requiresApiKey: true
-        secretType: AWS_CONNECTION
+        secretTypes: [AWS_CONNECTION]
         requiresCustomUrl: false
         webSite: https://aws.amazon.com/bedrock/
         apiKeySecretContext: aws-bedrock
@@ -264,9 +264,9 @@ ai.gebo.llms.vendors.setup.config:
             - code: amazon-transcribe-streaming
               description: Amazon Transcribe streaming (speech to text)
               defaultChoice: true
-# Google Vertex AI: a service account key (GOOGLE_CLOUD_JSON_CREDENTIALS secret), picked
-# or created in the setup; its project is the key's, the location GOOGLE_CLOUD_LOCATION or
-# the global endpoint. Codes and lifecycle from the Vertex model versions page
+# Google Vertex AI: a service account key (GOOGLE_CLOUD_JSON_CREDENTIALS secret, its project
+# the key's, the location GOOGLE_CLOUD_LOCATION or the global endpoint) or a Google OAuth2
+# grant, picked or created in the setup. Codes and lifecycle from the Vertex model versions page
 # (docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions, 2026-10-11):
 # gemini-3.8-flash has no retirement announced, gemini-3.5-flash and gemini-3.1-flash-lite
 # retire May 2027 or later; the 2.5 family retires 2026-10-20 and is not preset.
@@ -276,7 +276,9 @@ ai.gebo.llms.vendors.setup.config:
         description: Google Vertex AI (Gemini models, text embeddings)
         acquireKeyUrl: https://console.cloud.google.com/iam-admin/serviceaccounts
         requiresApiKey: true
-        secretType: GOOGLE_CLOUD_JSON_CREDENTIALS
+        # a service account key, or a Google OAuth2 grant naming project and location
+        # (VertexAIConfigurator takes both)
+        secretTypes: [GOOGLE_CLOUD_JSON_CREDENTIALS, OAUTH2_GOOGLE]
         requiresCustomUrl: false
         webSite: https://cloud.google.com/vertex-ai
         apiKeySecretContext: google-vertex

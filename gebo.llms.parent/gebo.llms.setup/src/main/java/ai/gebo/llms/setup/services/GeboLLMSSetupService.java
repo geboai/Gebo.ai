@@ -71,6 +71,7 @@ import ai.gebo.llms.setup.model.LLMSSetupConfigurationData.LLMSSetupConfiguratio
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.model.base.GObjectRef;
+import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
@@ -683,6 +684,16 @@ public class GeboLLMSSetupService {
 			if (secretId != null && secretId.trim().length() > 0) {
 
 			} else {
+				// Only an api key vendor gets its credentials made here from the key typed in;
+				// one taking another kind of secret (AWS, Google) needs it picked or created
+				List<GeboSecretType> secretTypes = vendorData.getVendorInfo().getSecretTypes();
+				if (secretTypes != null && !secretTypes.isEmpty() && !secretTypes.contains(GeboSecretType.TOKEN)) {
+					LOGGER.warn("Autoconfigure of vendor " + autoconfiguredata.getVendorId()
+							+ " without a secret: it takes " + secretTypes + ", not an api key");
+					return OperationStatus.ofError("Credentials required",
+							vendorData.getVendorInfo().getName() + " needs credentials of kind " + secretTypes
+									+ ": choose or create them");
+				}
 				GeboTokenContent geboToken = new GeboTokenContent();
 				geboToken.setToken(autoconfiguredata.getNewApiSecret());
 				geboToken.setUser(autoconfiguredata.getNewUserName());

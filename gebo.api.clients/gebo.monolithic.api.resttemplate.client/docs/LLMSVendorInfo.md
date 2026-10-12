@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **requiresCustomUrl** | **Boolean** |  |  [optional]
 **defaultCustomUrl** | **String** |  |  [optional]
 **requiresApiKey** | **Boolean** |  |  [optional]
-**secretType** | [**SecretTypeEnum**](#SecretTypeEnum) |  |  [optional]
+**secretTypes** | [**List&lt;SecretTypesEnum&gt;**](#List&lt;SecretTypesEnum&gt;) |  |  [optional]
 **authProvider** | [**AuthProviderEnum**](#AuthProviderEnum) |  |  [optional]
 **description** | **String** |  | 
 **name** | **String** |  | 
@@ -17,8 +17,8 @@ Name | Type | Description | Notes
 **minContextWindow** | **Integer** |  |  [optional]
 **supportsAutoconfig** | **Boolean** |  |  [optional]
 
-<a name="SecretTypeEnum"></a>
-## Enum: SecretTypeEnum
+<a name="List<SecretTypesEnum>"></a>
+## Enum: List&lt;SecretTypesEnum&gt;
 Name | Value
 ---- | -----
 USERNAME_PASSWORD | &quot;USERNAME_PASSWORD&quot;
