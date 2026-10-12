@@ -192,14 +192,20 @@ public class OpenAiResponsesChatModel implements ChatModel {
 					DEFAULT_OBSERVATION_CONVENTION, () -> observationContext, observationRegistry);
 			observation.start();
 			final StringBuilder reasoning = new StringBuilder();
+			final Map<String, Integer> eventTypes = new java.util.TreeMap<>();
 			final StreamResponse<ResponseStreamEvent> events = withSummariesFallback(
 					summaries -> client.responses().createStreaming(params(request, requestOptions, summaries),
 							requestOptionsOf(requestOptions)));
 			return Flux.fromStream(events.stream()).<ChatResponse>handle((event, sink) -> {
+				if (LOGGER.isDebugEnabled()) {
+					eventTypes.merge(typeOf(event), 1, Integer::sum);
+				}
 				if (event.outputTextDelta().isPresent()) {
 					sink.next(chunk(event.outputTextDelta().get().delta(), Map.of()));
-				} else if (event.reasoningSummaryTextDelta().isPresent()) {
-					reasoning.append(event.reasoningSummaryTextDelta().get().delta());
+				} else if (event.reasoningSummaryTextDelta().isPresent() || event.reasoningTextDelta().isPresent()) {
+					reasoning.append(event.reasoningSummaryTextDelta().isPresent()
+							? event.reasoningSummaryTextDelta().get().delta()
+							: event.reasoningTextDelta().get().delta());
 					// all of it so far, as Gebo's OpenAI reading takes it
 					sink.next(chunk("", Map.of(REASONING_CONTENT_METADATA, reasoning.toString())));
 				} else if (event.completed().isPresent()) {
@@ -219,6 +225,9 @@ public class OpenAiResponsesChatModel implements ChatModel {
 							+ ": " + event.error().get().message()));
 				}
 			}).doOnError(observation::error).doFinally(signal -> {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Responses stream {} events by type: {}", signal, eventTypes);
+				}
 				events.close();
 				observation.stop();
 			});
@@ -411,6 +420,16 @@ public class OpenAiResponsesChatModel implements ChatModel {
 			return items;
 		for (Object json : list) {
 			try {
+				// any item the model gave, as it gave it (the input takes the output items' shapes)
+				items.add(ObjectMappers.jsonMapper().readValue(String.valueOf(json), ResponseInputItem.class));
+				continue;
+			} catch (Exception e) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("An output item is not an input item as it is, it is read by its kind: {}",
+							e.getMessage());
+				}
+			}
+			try {
 				final ResponseOutputItem item = ObjectMappers.jsonMapper().readValue(String.valueOf(json),
 						ResponseOutputItem.class);
 				if (item.reasoning().isPresent()) {
@@ -484,23 +503,24 @@ public class OpenAiResponsesChatModel implements ChatModel {
 		final StringBuilder reasoning = new StringBuilder();
 		final List<AssistantMessage.ToolCall> toolCalls = new ArrayList<>();
 		final List<String> outputItems = new ArrayList<>();
+		final List<String> itemTypes = new ArrayList<>();
 		for (ResponseOutputItem item : response.output()) {
+			final String json = json(item);
+			// every item goes back in the next round, whatever its kind
+			outputItems.add(json);
+			itemTypes.add(typeOf(json));
 			if (item.message().isPresent()) {
 				item.message().get().content().forEach(content -> content.outputText()
 						.ifPresent(outputText -> text.append(outputText.text())));
-				outputItems.add(json(item));
 			} else if (item.functionCall().isPresent()) {
 				final ResponseFunctionToolCall call = item.functionCall().get();
 				toolCalls.add(new AssistantMessage.ToolCall(call.callId(), "function", call.name(), call.arguments()));
-				outputItems.add(json(item));
 			} else if (item.reasoning().isPresent()) {
 				final ResponseReasoningItem reasoningItem = item.reasoning().get();
-				reasoningItem.summary().forEach(summary -> {
-					if (reasoning.length() > 0)
-						reasoning.append("\n\n");
-					reasoning.append(summary.text());
-				});
-				outputItems.add(json(item));
+				reasoningItem.summary().forEach(summary -> append(reasoning, summary.text()));
+				if (reasoningItem.summary().isEmpty()) {
+					reasoningItem.content().ifPresent(contents -> contents.forEach(content -> append(reasoning, content.text())));
+				}
 			}
 		}
 		final Map<String, Object> metadata = new LinkedHashMap<>();
@@ -516,8 +536,9 @@ public class OpenAiResponsesChatModel implements ChatModel {
 				ChatGenerationMetadata.builder().finishReason(finishReason(response, toolCalls)).build());
 		final Usage usage = response.usage().map(OpenAiResponsesChatModel::usageOf).orElse(new EmptyUsage());
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Responses answer id={} status={} tool calls={} output items={} usage={}", response.id(),
-					response.status().map(s -> s.asString()).orElse("?"), toolCalls.size(), outputItems.size(), usage);
+			LOGGER.debug("Responses answer id={} status={} tool calls={} output items={} usage={} reasoning tokens={}",
+					response.id(), response.status().map(s -> s.asString()).orElse("?"), toolCalls.size(), itemTypes,
+					usage, response.usage().map(u -> u.outputTokensDetails().reasoningTokens()).orElse(null));
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("Responses answer text: {} reasoning: {}", text, allReasoning);
@@ -544,6 +565,26 @@ public class OpenAiResponsesChatModel implements ChatModel {
 	static Usage usageOf(ResponseUsage usage) {
 		return new DefaultUsage(Math.toIntExact(usage.inputTokens()), Math.toIntExact(usage.outputTokens()),
 				Math.toIntExact(usage.totalTokens()), usage, usage.inputTokensDetails().cachedTokens(), null);
+	}
+
+	private static void append(StringBuilder reasoning, String text) {
+		if (text == null || text.isEmpty())
+			return;
+		if (reasoning.length() > 0)
+			reasoning.append("\n\n");
+		reasoning.append(text);
+	}
+
+	/** The type field of an item or event of the api, as its json says it. */
+	private static String typeOf(Object value) {
+		try {
+			final com.fasterxml.jackson.databind.JsonNode node = value instanceof String json
+					? ObjectMappers.jsonMapper().readTree(json)
+					: ObjectMappers.jsonMapper().valueToTree(value);
+			return node.path("type").asText("?");
+		} catch (Exception e) {
+			return "?";
+		}
 	}
 
 	private String json(ResponseOutputItem item) {
