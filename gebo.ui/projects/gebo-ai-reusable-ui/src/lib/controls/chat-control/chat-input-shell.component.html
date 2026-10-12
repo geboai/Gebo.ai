@@ -1,9 +1,4 @@
 <div class="chat-input-shell">
-  <gebo-ai-chat-stream-events-display [routingChoiceSelector]="routingChoiceSelector" [streaming]="streaming"
-    [actualPipelineRoutingOption]="runningPipelineRouting">
-
-  </gebo-ai-chat-stream-events-display>
-
   <form [formGroup]="formGroup" (submit)="onSubmit()">
 
     @if (ragsystem && !disableFilesBrowsers) {
