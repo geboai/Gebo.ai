@@ -33,7 +33,6 @@ export interface GUploadsProjectEndpoint {
     aclAliases?: Array<number>;
     personalData?: boolean;
     uploadHandshakeCode?: string;
-    uploadedContents?: Array<string>;
 }
 export namespace GUploadsProjectEndpoint {
     export type SynchroStrategyEnum = 'SIZE_AND_TIMESTAMP_AND_HASH_CHECK' | 'HASH_CHECK';

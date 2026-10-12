@@ -24,7 +24,7 @@ import java.util.List;
  * GContentSelectionFilterCriteria
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:42.864176213+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:18:48.473968687+02:00[Europe/Rome]")
 
 public class GContentSelectionFilterCriteria {
   @JsonProperty("mimeContentTypes")

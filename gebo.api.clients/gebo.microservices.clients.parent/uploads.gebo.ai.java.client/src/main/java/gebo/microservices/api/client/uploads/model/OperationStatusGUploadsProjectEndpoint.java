@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusGUploadsProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:58.344561180+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:19:29.686242990+02:00[Europe/Rome]")
 
 public class OperationStatusGUploadsProjectEndpoint {
   @JsonProperty("result")

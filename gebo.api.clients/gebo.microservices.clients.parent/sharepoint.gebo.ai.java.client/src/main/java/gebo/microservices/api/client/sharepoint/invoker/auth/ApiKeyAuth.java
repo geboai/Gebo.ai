@@ -3,7 +3,7 @@ package gebo.microservices.api.client.sharepoint.invoker.auth;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:53.845611079+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:19:18.534520729+02:00[Europe/Rome]")
 public class ApiKeyAuth implements Authentication {
     private final String location;
     private final String paramName;

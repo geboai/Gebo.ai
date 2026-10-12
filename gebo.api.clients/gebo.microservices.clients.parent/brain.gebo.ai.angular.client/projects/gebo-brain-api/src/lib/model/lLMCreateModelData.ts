@@ -23,6 +23,7 @@ export interface LLMCreateModelData {
     uses?: Array<LLMCreateModelData.UsesEnum>;
     maxGeneratedTokens?: number;
     thinking?: LLMCreateModelData.ThinkingEnum;
+    temperature?: number;
 }
 export namespace LLMCreateModelData {
     export type TypeEnum = 'CHAT' | 'EMBEDDING' | 'RANKING' | 'IMAGESGEN' | 'TTS' | 'TRANSCRIPT';

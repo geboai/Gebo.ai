@@ -15,4 +15,6 @@ export interface GDataFlowReport {
     nodeId?: string;
     collectedAt?: Date;
     modules?: Array<GModuleMetaInfo>;
+    contentAccessPolicy?: string;
+    groupDescriptions?: { [key: string]: string; };
 }

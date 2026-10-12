@@ -21,12 +21,14 @@ import gebo.microservices.api.client.brain.model.GModuleMetaInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 /**
  * GDataFlowReport
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:20.194305186+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
 
 public class GDataFlowReport {
   @JsonProperty("nodeId")
@@ -37,6 +39,12 @@ public class GDataFlowReport {
 
   @JsonProperty("modules")
   private List<GModuleMetaInfo> modules = null;
+
+  @JsonProperty("contentAccessPolicy")
+  private String contentAccessPolicy = null;
+
+  @JsonProperty("groupDescriptions")
+  private Map<String, String> groupDescriptions = null;
 
   public GDataFlowReport nodeId(String nodeId) {
     this.nodeId = nodeId;
@@ -100,6 +108,50 @@ public class GDataFlowReport {
     this.modules = modules;
   }
 
+  public GDataFlowReport contentAccessPolicy(String contentAccessPolicy) {
+    this.contentAccessPolicy = contentAccessPolicy;
+    return this;
+  }
+
+   /**
+   * Get contentAccessPolicy
+   * @return contentAccessPolicy
+  **/
+  @Schema(description = "")
+  public String getContentAccessPolicy() {
+    return contentAccessPolicy;
+  }
+
+  public void setContentAccessPolicy(String contentAccessPolicy) {
+    this.contentAccessPolicy = contentAccessPolicy;
+  }
+
+  public GDataFlowReport groupDescriptions(Map<String, String> groupDescriptions) {
+    this.groupDescriptions = groupDescriptions;
+    return this;
+  }
+
+  public GDataFlowReport putGroupDescriptionsItem(String key, String groupDescriptionsItem) {
+    if (this.groupDescriptions == null) {
+      this.groupDescriptions = new HashMap<>();
+    }
+    this.groupDescriptions.put(key, groupDescriptionsItem);
+    return this;
+  }
+
+   /**
+   * Get groupDescriptions
+   * @return groupDescriptions
+  **/
+  @Schema(description = "")
+  public Map<String, String> getGroupDescriptions() {
+    return groupDescriptions;
+  }
+
+  public void setGroupDescriptions(Map<String, String> groupDescriptions) {
+    this.groupDescriptions = groupDescriptions;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -112,12 +164,14 @@ public class GDataFlowReport {
     GDataFlowReport gdataFlowReport = (GDataFlowReport) o;
     return Objects.equals(this.nodeId, gdataFlowReport.nodeId) &&
         Objects.equals(this.collectedAt, gdataFlowReport.collectedAt) &&
-        Objects.equals(this.modules, gdataFlowReport.modules);
+        Objects.equals(this.modules, gdataFlowReport.modules) &&
+        Objects.equals(this.contentAccessPolicy, gdataFlowReport.contentAccessPolicy) &&
+        Objects.equals(this.groupDescriptions, gdataFlowReport.groupDescriptions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nodeId, collectedAt, modules);
+    return Objects.hash(nodeId, collectedAt, modules, contentAccessPolicy, groupDescriptions);
   }
 
 
@@ -129,6 +183,8 @@ public class GDataFlowReport {
     sb.append("    nodeId: ").append(toIndentedString(nodeId)).append("\n");
     sb.append("    collectedAt: ").append(toIndentedString(collectedAt)).append("\n");
     sb.append("    modules: ").append(toIndentedString(modules)).append("\n");
+    sb.append("    contentAccessPolicy: ").append(toIndentedString(contentAccessPolicy)).append("\n");
+    sb.append("    groupDescriptions: ").append(toIndentedString(groupDescriptions)).append("\n");
     sb.append("}");
     return sb.toString();
   }

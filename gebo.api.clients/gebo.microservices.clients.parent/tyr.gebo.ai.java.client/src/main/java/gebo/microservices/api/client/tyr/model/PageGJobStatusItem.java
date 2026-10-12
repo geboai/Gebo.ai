@@ -27,7 +27,7 @@ import java.util.List;
  * PageGJobStatusItem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:56.166837135+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:19:24.171841609+02:00[Europe/Rome]")
 
 public class PageGJobStatusItem {
   @JsonProperty("totalPages")

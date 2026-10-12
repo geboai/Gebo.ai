@@ -27,7 +27,7 @@ import java.util.List;
  * PageUsersGroup
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:44.621764227+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:18:52.907609785+02:00[Europe/Rome]")
 
 public class PageUsersGroup {
   @JsonProperty("totalPages")
@@ -38,12 +38,6 @@ public class PageUsersGroup {
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
-
-  @JsonProperty("first")
-  private Boolean first = null;
-
-  @JsonProperty("last")
-  private Boolean last = null;
 
   @JsonProperty("size")
   private Integer size = null;
@@ -56,6 +50,12 @@ public class PageUsersGroup {
 
   @JsonProperty("sort")
   private SortObject sort = null;
+
+  @JsonProperty("first")
+  private Boolean first = null;
+
+  @JsonProperty("last")
+  private Boolean last = null;
 
   @JsonProperty("numberOfElements")
   private Integer numberOfElements = null;
@@ -115,42 +115,6 @@ public class PageUsersGroup {
 
   public void setPageable(PageableObject pageable) {
     this.pageable = pageable;
-  }
-
-  public PageUsersGroup first(Boolean first) {
-    this.first = first;
-    return this;
-  }
-
-   /**
-   * Get first
-   * @return first
-  **/
-  @Schema(description = "")
-  public Boolean isFirst() {
-    return first;
-  }
-
-  public void setFirst(Boolean first) {
-    this.first = first;
-  }
-
-  public PageUsersGroup last(Boolean last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Boolean isLast() {
-    return last;
-  }
-
-  public void setLast(Boolean last) {
-    this.last = last;
   }
 
   public PageUsersGroup size(Integer size) {
@@ -233,6 +197,42 @@ public class PageUsersGroup {
     this.sort = sort;
   }
 
+  public PageUsersGroup first(Boolean first) {
+    this.first = first;
+    return this;
+  }
+
+   /**
+   * Get first
+   * @return first
+  **/
+  @Schema(description = "")
+  public Boolean isFirst() {
+    return first;
+  }
+
+  public void setFirst(Boolean first) {
+    this.first = first;
+  }
+
+  public PageUsersGroup last(Boolean last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Boolean isLast() {
+    return last;
+  }
+
+  public void setLast(Boolean last) {
+    this.last = last;
+  }
+
   public PageUsersGroup numberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
     return this;
@@ -282,19 +282,19 @@ public class PageUsersGroup {
     return Objects.equals(this.totalPages, pageUsersGroup.totalPages) &&
         Objects.equals(this.totalElements, pageUsersGroup.totalElements) &&
         Objects.equals(this.pageable, pageUsersGroup.pageable) &&
-        Objects.equals(this.first, pageUsersGroup.first) &&
-        Objects.equals(this.last, pageUsersGroup.last) &&
         Objects.equals(this.size, pageUsersGroup.size) &&
         Objects.equals(this.content, pageUsersGroup.content) &&
         Objects.equals(this.number, pageUsersGroup.number) &&
         Objects.equals(this.sort, pageUsersGroup.sort) &&
+        Objects.equals(this.first, pageUsersGroup.first) &&
+        Objects.equals(this.last, pageUsersGroup.last) &&
         Objects.equals(this.numberOfElements, pageUsersGroup.numberOfElements) &&
         Objects.equals(this.empty, pageUsersGroup.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
+    return Objects.hash(totalPages, totalElements, pageable, size, content, number, sort, first, last, numberOfElements, empty);
   }
 
 
@@ -306,12 +306,12 @@ public class PageUsersGroup {
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
-    sb.append("    first: ").append(toIndentedString(first)).append("\n");
-    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    first: ").append(toIndentedString(first)).append("\n");
+    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");

@@ -17,7 +17,9 @@ import gebo.microservices.api.client.uploads.model.GUploadsContentManagementSyst
 import gebo.microservices.api.client.uploads.model.GUploadsProjectEndpoint;
 import gebo.microservices.api.client.uploads.model.OperationStatusGJobStatus;
 import gebo.microservices.api.client.uploads.model.OperationStatusGUploadsProjectEndpoint;
+import gebo.microservices.api.client.uploads.model.OperationStatusUploadedFileNode;
 import gebo.microservices.api.client.uploads.model.UploadedFileInfo;
+import gebo.microservices.api.client.uploads.model.UploadedFileNode;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -34,6 +36,22 @@ public class FileUploadsControllerApiTest {
 
     private final FileUploadsControllerApi api = new FileUploadsControllerApi();
 
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void createUploadsFolderTest() {
+        String endpointCode = null;
+        String folderPath = null;
+        OperationStatusUploadedFileNode response = api.createUploadsFolder(endpointCode, folderPath);
+
+        // TODO: test validations
+    }
     /**
      * 
      *
@@ -165,6 +183,21 @@ public class FileUploadsControllerApiTest {
     public void listUploadedFilesTest() {
         String endpointCode = null;
         List<UploadedFileInfo> response = api.listUploadedFiles(endpointCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listUploadedFilesTreeTest() {
+        String endpointCode = null;
+        UploadedFileNode response = api.listUploadedFilesTree(endpointCode);
 
         // TODO: test validations
     }

@@ -2,6 +2,7 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.AgentMountedTools;
 import gebo.microservices.api.client.brain.model.AgentServiceDescriptor;
 import gebo.microservices.api.client.brain.model.GAgentConfig;
 import gebo.microservices.api.client.brain.model.GAgentsNetwork;
@@ -26,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:20.194305186+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
 
 public class GeboAgentsNetworkAdminControllerApi {
     private ApiClient apiClient;
@@ -212,6 +213,52 @@ public class GeboAgentsNetworkAdminControllerApi {
 
         ParameterizedTypeReference<List<AgentServiceDescriptor>> returnType = new ParameterizedTypeReference<List<AgentServiceDescriptor>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return List&lt;AgentMountedTools&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<AgentMountedTools> getAgentsMountedTools(List<String> body) throws RestClientException {
+        return getAgentsMountedToolsWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;List&lt;AgentMountedTools&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<AgentMountedTools>> getAgentsMountedToolsWithHttpInfo(List<String> body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getAgentsMountedTools");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentsNetworkAdminController/getAgentsMountedTools").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<AgentMountedTools>> returnType = new ParameterizedTypeReference<List<AgentMountedTools>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 

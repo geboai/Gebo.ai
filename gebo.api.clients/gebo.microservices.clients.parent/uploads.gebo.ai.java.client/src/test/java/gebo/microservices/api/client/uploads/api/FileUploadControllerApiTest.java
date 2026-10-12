@@ -56,7 +56,9 @@ public class FileUploadControllerApiTest {
     public void uploadToEndpointTest() {
         String endpointCode = null;
         List<File> files = null;
-        api.uploadToEndpoint(endpointCode, files);
+        String folder = null;
+        List<String> relativePaths = null;
+        api.uploadToEndpoint(endpointCode, files, folder, relativePaths);
 
         // TODO: test validations
     }

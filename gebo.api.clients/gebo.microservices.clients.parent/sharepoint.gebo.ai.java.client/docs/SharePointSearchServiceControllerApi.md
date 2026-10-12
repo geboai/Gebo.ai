@@ -639,7 +639,7 @@ No authorization required
 
 <a name="restNativeSearchSharePoint"></a>
 # **restNativeSearchSharePoint**
-> List&lt;SearchResult&gt; restNativeSearchSharePoint(body, systemId, nEntryLimit)
+> List&lt;SearchResult&gt; restNativeSearchSharePoint(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries)
 
 
 
@@ -654,8 +654,11 @@ SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceCo
 SharePointSearchFilter body = new SharePointSearchFilter(); // SharePointSearchFilter | 
 String systemId = "systemId_example"; // String | 
 Integer nEntryLimit = 56; // Integer | 
+Integer connectTimeoutMillis = 56; // Integer | 
+Integer readTimeoutMillis = 56; // Integer | 
+Integer retries = 56; // Integer | 
 try {
-    List<SearchResult> result = apiInstance.restNativeSearchSharePoint(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restNativeSearchSharePoint(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SharePointSearchServiceControllerApi#restNativeSearchSharePoint");
@@ -670,6 +673,9 @@ Name | Type | Description  | Notes
  **body** | [**SharePointSearchFilter**](SharePointSearchFilter.md)|  |
  **systemId** | **String**|  |
  **nEntryLimit** | **Integer**|  |
+ **connectTimeoutMillis** | **Integer**|  | [optional]
+ **readTimeoutMillis** | **Integer**|  | [optional]
+ **retries** | **Integer**|  | [optional]
 
 ### Return type
 
@@ -686,7 +692,7 @@ No authorization required
 
 <a name="restSearchSharePoint"></a>
 # **restSearchSharePoint**
-> List&lt;SearchResult&gt; restSearchSharePoint(body, systemId, nEntryLimit)
+> List&lt;SearchResult&gt; restSearchSharePoint(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries)
 
 
 
@@ -701,8 +707,11 @@ SharePointSearchServiceControllerApi apiInstance = new SharePointSearchServiceCo
 SearchQuery body = new SearchQuery(); // SearchQuery | 
 String systemId = "systemId_example"; // String | 
 Integer nEntryLimit = 56; // Integer | 
+Integer connectTimeoutMillis = 56; // Integer | 
+Integer readTimeoutMillis = 56; // Integer | 
+Integer retries = 56; // Integer | 
 try {
-    List<SearchResult> result = apiInstance.restSearchSharePoint(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restSearchSharePoint(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SharePointSearchServiceControllerApi#restSearchSharePoint");
@@ -717,6 +726,9 @@ Name | Type | Description  | Notes
  **body** | [**SearchQuery**](SearchQuery.md)|  |
  **systemId** | **String**|  |
  **nEntryLimit** | **Integer**|  |
+ **connectTimeoutMillis** | **Integer**|  | [optional]
+ **readTimeoutMillis** | **Integer**|  | [optional]
+ **retries** | **Integer**|  | [optional]
 
 ### Return type
 

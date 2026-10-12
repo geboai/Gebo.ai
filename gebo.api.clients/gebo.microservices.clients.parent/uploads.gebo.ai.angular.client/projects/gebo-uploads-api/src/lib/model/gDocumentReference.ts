@@ -24,6 +24,7 @@ export interface GDocumentReference {
     modificationDate?: Date;
     version?: string;
     parentVirtualFolderCode?: string;
+    uniqueId?: number;
     absolutePath?: string;
     parentProjectCode?: string;
     rootKnowledgebaseCode?: string;

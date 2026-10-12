@@ -268,7 +268,10 @@ public class ConfluenceSearchServiceControllerApiTest {
         ConfluenceContentSearchFilter body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restNativeSearchConfluence(body, systemId, nEntryLimit);
+        Integer connectTimeoutMillis = null;
+        Integer readTimeoutMillis = null;
+        Integer retries = null;
+        List<SearchResult> response = api.restNativeSearchConfluence(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries);
 
         // TODO: test validations
     }
@@ -285,7 +288,10 @@ public class ConfluenceSearchServiceControllerApiTest {
         SearchQuery body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restSearchConfluence(body, systemId, nEntryLimit);
+        Integer connectTimeoutMillis = null;
+        Integer readTimeoutMillis = null;
+        Integer retries = null;
+        List<SearchResult> response = api.restSearchConfluence(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries);
 
         // TODO: test validations
     }

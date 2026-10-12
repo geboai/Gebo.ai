@@ -639,7 +639,7 @@ No authorization required
 
 <a name="restNativeSearchConfluence"></a>
 # **restNativeSearchConfluence**
-> List&lt;SearchResult&gt; restNativeSearchConfluence(body, systemId, nEntryLimit)
+> List&lt;SearchResult&gt; restNativeSearchConfluence(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries)
 
 
 
@@ -654,8 +654,11 @@ ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceCo
 ConfluenceContentSearchFilter body = new ConfluenceContentSearchFilter(); // ConfluenceContentSearchFilter | 
 String systemId = "systemId_example"; // String | 
 Integer nEntryLimit = 56; // Integer | 
+Integer connectTimeoutMillis = 56; // Integer | 
+Integer readTimeoutMillis = 56; // Integer | 
+Integer retries = 56; // Integer | 
 try {
-    List<SearchResult> result = apiInstance.restNativeSearchConfluence(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restNativeSearchConfluence(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restNativeSearchConfluence");
@@ -670,6 +673,9 @@ Name | Type | Description  | Notes
  **body** | [**ConfluenceContentSearchFilter**](ConfluenceContentSearchFilter.md)|  |
  **systemId** | **String**|  |
  **nEntryLimit** | **Integer**|  |
+ **connectTimeoutMillis** | **Integer**|  | [optional]
+ **readTimeoutMillis** | **Integer**|  | [optional]
+ **retries** | **Integer**|  | [optional]
 
 ### Return type
 
@@ -686,7 +692,7 @@ No authorization required
 
 <a name="restSearchConfluence"></a>
 # **restSearchConfluence**
-> List&lt;SearchResult&gt; restSearchConfluence(body, systemId, nEntryLimit)
+> List&lt;SearchResult&gt; restSearchConfluence(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries)
 
 
 
@@ -701,8 +707,11 @@ ConfluenceSearchServiceControllerApi apiInstance = new ConfluenceSearchServiceCo
 SearchQuery body = new SearchQuery(); // SearchQuery | 
 String systemId = "systemId_example"; // String | 
 Integer nEntryLimit = 56; // Integer | 
+Integer connectTimeoutMillis = 56; // Integer | 
+Integer readTimeoutMillis = 56; // Integer | 
+Integer retries = 56; // Integer | 
 try {
-    List<SearchResult> result = apiInstance.restSearchConfluence(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restSearchConfluence(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ConfluenceSearchServiceControllerApi#restSearchConfluence");
@@ -717,6 +726,9 @@ Name | Type | Description  | Notes
  **body** | [**SearchQuery**](SearchQuery.md)|  |
  **systemId** | **String**|  |
  **nEntryLimit** | **Integer**|  |
+ **connectTimeoutMillis** | **Integer**|  | [optional]
+ **readTimeoutMillis** | **Integer**|  | [optional]
+ **retries** | **Integer**|  | [optional]
 
 ### Return type
 
