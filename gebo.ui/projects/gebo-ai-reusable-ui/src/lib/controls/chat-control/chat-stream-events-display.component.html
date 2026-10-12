@@ -8,9 +8,9 @@
             document:</span>&nbsp;<span>{{inputProcessingEvent?.document?.name}}</span>
         }
         @else if (currentNotification) {
+        <!-- not translated: gebo-ai-text replaces the text once, freezing it on the first notification -->
         <span id="NOTIFICATION">
-            <span [id]="currentNotification.code" [className]="currentNotification.notificationType"
-                gebo-ai-text>{{currentNotification.message}}</span>
+            <span [id]="currentNotification.code" [className]="currentNotification.notificationType">{{currentNotification.message}}</span>
         </span>
         }
         @else if(notifiedPipelineRouting) {
