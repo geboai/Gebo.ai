@@ -40,8 +40,8 @@
         <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <p-tabs [value]="0" id="TabView">
             <p-tablist>
-              <p-tab [value]="0" gebo-ai-text>General infos</p-tab>
-              <p-tab [value]="1" gebo-ai-text>Knowledge base access settings</p-tab>
+              <p-tab id="GeneralInfosTab" [value]="0" gebo-ai-text>General infos</p-tab>
+              <p-tab id="AccessSettingsTab" [value]="1" gebo-ai-text>Knowledge base access settings</p-tab>
             </p-tablist>
             <p-tabpanels>
           <p-tabpanel [value]="0">

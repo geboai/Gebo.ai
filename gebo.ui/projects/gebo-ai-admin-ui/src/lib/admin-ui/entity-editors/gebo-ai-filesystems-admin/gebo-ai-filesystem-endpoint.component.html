@@ -46,9 +46,9 @@
 
           <p-tabs [value]="0" id="TabView" class="standardTabDialogueHeight">
             <p-tablist>
-              <p-tab [value]="0" gebo-ai-text>Settings</p-tab>
-              <p-tab [value]="1" gebo-ai-text>Source code treatment</p-tab>
-              <p-tab [value]="2" gebo-ai-text [disabled]="!objectReference">Logs</p-tab>
+              <p-tab id="SettingsTab" [value]="0" gebo-ai-text>Settings</p-tab>
+              <p-tab id="SourceCodeTreatmentTab" [value]="1" gebo-ai-text>Source code treatment</p-tab>
+              <p-tab id="LogsTab" [value]="2" gebo-ai-text [disabled]="!objectReference">Logs</p-tab>
             </p-tablist>
             <p-tabpanels>
             <p-tabpanel [value]="0">

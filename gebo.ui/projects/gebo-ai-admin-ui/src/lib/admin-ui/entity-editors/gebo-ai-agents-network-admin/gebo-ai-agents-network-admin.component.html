@@ -28,10 +28,10 @@
         <div class="col-12 standardTabDialogueHeight">
           <p-tabs [value]="0" (valueChange)="onTabChange($event)" id="TabView">
             <p-tablist>
-              <p-tab [value]="0" gebo-ai-text>General infos</p-tab>
-              <p-tab [value]="1" gebo-ai-text>Agents Network Graph</p-tab>
-              <p-tab [value]="2" gebo-ai-text>Agents list</p-tab>
-              <p-tab [value]="3" gebo-ai-text>Security access settings</p-tab>
+              <p-tab id="GeneralInfosTab" [value]="0" gebo-ai-text>General infos</p-tab>
+              <p-tab id="NetworkGraphTab" [value]="1" gebo-ai-text>Agents Network Graph</p-tab>
+              <p-tab id="AgentsListTab" [value]="2" gebo-ai-text>Agents list</p-tab>
+              <p-tab id="SecurityAccessSettingsTab" [value]="3" gebo-ai-text>Security access settings</p-tab>
             </p-tablist>
             <p-tabpanels>
             <p-tabpanel [value]="0">

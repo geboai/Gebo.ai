@@ -45,6 +45,9 @@
       "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838": {
         "summary": "Admin user created !",
         "detail": "Admin user PAOLO.ZAVALLONI@GMAIL.COM created successfully"
+      },
+      "PasswordTooShort": {
+        "label": "must be at least 8 characters long"
       }
     }
   },
@@ -70,6 +73,9 @@
       },
       "ForgotPasswordLink": {
         "label": "Forgot password?"
+      },
+      "OauthProviders": {
+        "label": "Login using provider"
       }
     },
     "message": {
@@ -113,6 +119,9 @@
       },
       "IdHeader": {
         "label": "Id"
+      },
+      "ModifyBtn": {
+        "label": "Modify"
       }
     },
     "SetupWizardPanelComponent": {
@@ -345,6 +354,9 @@
       },
       "SystemTypeHeader": {
         "label": "System type"
+      },
+      "EditSystemBtn": {
+        "label": "Edit system"
       }
     },
     "SharepointWizardComponent": {
@@ -362,6 +374,9 @@
       },
       "SharepointSystemBtn": {
         "label": "Sharepoint system"
+      },
+      "EditBtn": {
+        "label": "Edit system"
       }
     },
     "LLMSetupWizardComponent": {
@@ -468,6 +483,9 @@
       },
       "Button3": {
         "help": "open data source"
+      },
+      "PublishBtn": {
+        "label": "Publish"
       }
     },
     "WorkFolderWizardComponent": {
@@ -594,6 +612,9 @@
       },
       "DescriptionHeader": {
         "label": "Description"
+      },
+      "EditSystemBtn": {
+        "label": "Edit system"
       }
     },
     "GeboAIGoogleSearchWizardComponent": {
@@ -656,6 +677,25 @@
       },
       "IntroExplanation": {
         "label": "Gebo.ai uses several classes of language models. Two are required for the system to work, the others are suggested and enable extra capabilities. The wizard will help you configure them from a single provider; you can always add or change models later from the LLMs admin screens."
+      },
+      "ProviderExplanation": {
+        "label": "Select the provider you want to choose models from"
+      },
+      "ModelsExplanation": {
+        "label": "Choose new models and/or modify existing"
+      },
+      "SummaryExplanation": {
+        "label": "Actual configured models overview"
+      },
+      "ResolutionField": {
+        "label": "Model no longer offered",
+        "help": "The chosen model is not offered by the provider anymore, please select a replacement"
+      },
+      "ResolveBtn": {
+        "label": "Apply replacements"
+      },
+      "ResolutionsSection": {
+        "label": "Choose a replacement model"
       }
     },
     "AwsS3WizardComponent": {
@@ -673,6 +713,9 @@
       },
       "SystemTypeHeader": {
         "label": "System type"
+      },
+      "EditBtn": {
+        "label": "Edit system"
       }
     },
     "WebdavWizardComponent": {
@@ -690,6 +733,9 @@
       },
       "AuthTypeHeader": {
         "label": "Auth type"
+      },
+      "EditBtn": {
+        "label": "Edit system"
       }
     },
     "McpServerWizardComponent": {
@@ -704,6 +750,9 @@
       },
       "DescriptionHeader": {
         "label": "Description"
+      },
+      "EditMcpBtn": {
+        "label": "Edit MCP Server"
       }
     },
     "GeboAIMCPServerWizardComponent": {
@@ -724,6 +773,9 @@
       },
       "EnabledHeader": {
         "label": "Enabled"
+      },
+      "EditMcpBtn": {
+        "label": "Edit MCP Server"
       }
     },
     "A2AExportWizardComponent": {
@@ -732,6 +784,24 @@
       },
       "A2AExportAddBtn": {
         "label": "Add A2A Server"
+      },
+      "RelativeUrlHeader": {
+        "label": "Relative URL"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "ExportsHeader": {
+        "label": "Exports"
+      },
+      "EnabledHeader": {
+        "label": "Enabled"
+      },
+      "EditBtn": {
+        "label": "Edit"
+      },
+      "NoServersText": {
+        "label": "No A2A servers published yet."
       }
     },
     "GeneratedAdminApiKeyWizardComponent": {
@@ -770,6 +840,20 @@
       "descriptionField": {
         "label": "Description",
         "help": "Provide a brief description of what this API key will be used for."
+      },
+      "DeleteApiKeyBtn": {
+        "label": "Delete",
+        "help": "Delete generated API key"
+      },
+      "generatedKeyField": {
+        "label": "API Key Value",
+        "help": "This key has been successfully generated. Copy it now."
+      },
+      "CopyKeyWarningLabel": {
+        "label": "Warning:"
+      },
+      "CopyKeyWarningText": {
+        "label": "Copy this API key now! For security reasons, it will never be displayed again after you close this dialog."
       }
     },
     "A2AImportWizardComponent": {
@@ -778,6 +862,56 @@
       },
       "MainPanel": {
         "label": "Import external A2A agents"
+      },
+      "PrefixHeader": {
+        "label": "Prefix"
+      },
+      "AgentCardUrlHeader": {
+        "label": "Agent Card URL"
+      },
+      "EnabledHeader": {
+        "label": "Enabled"
+      },
+      "EditBtn": {
+        "label": "Edit"
+      },
+      "NoAgentsText": {
+        "label": "No remote A2A agents registered yet."
+      }
+    },
+    "GeboAIWebSearchWizardComponent": {
+      "ConfigureWebSearchBtn": {
+        "label": "Set provider",
+        "help": "Search web search provider"
+      },
+      "DeactivateWebSearchBtn": {
+        "label": "Deactivate web search"
+      },
+      "CURRENTLY_ACTIVE": {
+        "label": "Currently active:"
+      },
+      "ActivateBtn": {
+        "label": "Activate this provider"
+      },
+      "CancelBtn": {
+        "label": "Cancel"
+      },
+      "PROVIDER_TEXT": {
+        "label": "Choose provider:"
+      },
+      "baseUrl": {
+        "label": "SearXNG instance URL",
+        "help": "Base URL of your SearXNG instance, e.g. https://searx.example.org"
+      },
+      "customSearchEngineId": {
+        "label": "Programmable Search Engine id",
+        "help": "The Google Programmable Search Engine (cx) id."
+      },
+      "apiKey": {
+        "help": "The provider API key / subscription token."
+      },
+      "MainPanel": {
+        "label": "Web search provider"
       }
     }
   },
@@ -837,6 +971,12 @@
       },
       "DeleteBtn": {
         "label": "Delete"
+      },
+      "RedirectUrls": {
+        "label": "Redirect urls to enable on oauth2 provider"
+      },
+      "RefererUrls": {
+        "label": "Referer urls to enable on oauth2 provider"
       }
     }
   },
@@ -849,6 +989,19 @@
       "secret": {
         "label": "Secret key",
         "help": "Client secret for the oauth2 protocol (to be retrieved in the oauth2 authenticated 3rd party software admin area)"
+      },
+      "providerName": {
+        "label": "Oauth2 provider",
+        "help": "Parent project reference.",
+        "placeholder": "Select a provider"
+      },
+      "scopes": {
+        "label": "Oauth2 scopes",
+        "help": "Scopes for the oauth2 registered client",
+        "placeholder": "Select Oauth2 scopes"
+      },
+      "CustomOauth2Attributes": {
+        "label": "Oauth2 provider custom attributes"
       }
     }
   },
@@ -1257,6 +1410,10 @@
       },
       "MainPanel": {
         "label": "Create SharePoint/OneDrive system configuration"
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Base url for your organization sharepoint cloud system or for an \"on premise\" installation"
       }
     },
     "GSharepointProjectEndpoint": {
@@ -1350,6 +1507,10 @@
       "sharepointVersion": {
         "label": "Sharepoint version",
         "help": "sharepoint version"
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Url of the base sharepoint system address"
       }
     }
   },
@@ -1505,6 +1666,15 @@
       "addNewAnchor": {
         "label": "+ Add item/project",
         "help": "add new..."
+      },
+      "PreviewTitle": {
+        "label": "Displaying external content"
+      },
+      "NoUrlSetYet": {
+        "label": "No url set yet"
+      },
+      "PreviewGeboTitle": {
+        "label": "Displaying content"
       }
     }
   },
@@ -1530,7 +1700,7 @@
         "label": "Dashboard"
       },
       "LLMSTab": {
-        "label": "LLMs for chat & embedding"
+        "label": "LLMs configurations"
       },
       "RagChatConfigTab": {
         "label": "Rag chat profiles/Model prompts"
@@ -1546,6 +1716,21 @@
       },
       "LogsTab": {
         "label": "Logs"
+      },
+      "BuildPackageSystems": {
+        "label": "Build/packaging systems"
+      },
+      "RagChatProfilesTab": {
+        "label": "Rag chat profiles"
+      },
+      "PromptsTab": {
+        "label": "Prompts"
+      },
+      "AgentsNetworksTab": {
+        "label": "Agents/Networks of agents"
+      },
+      "ComplianceTab": {
+        "label": "Compliance"
       }
     }
   },
@@ -1873,6 +2058,9 @@
       "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2": {
         "summary": "AI remote provider OK",
         "detail": "Provider is up and running and successfully configured"
+      },
+      "EmbeddingModelChangeWarning": {
+        "label": "Changing the embedding model of an existing configuration invalidates the vectors already stored: the knowledge bases must be ingested again, otherwise retrieval keeps searching vectors that this model did not produce."
       }
     },
     "GOllamaChatModelConfig": {
@@ -2253,6 +2441,9 @@
       "baseUrl": {
         "label": "Base ollama server address",
         "help": "Base address (like http://servername:234/) the ollama local or lan server responds."
+      },
+      "EmbeddingModelChangeWarning": {
+        "label": "Changing the embedding model of an existing configuration invalidates the vectors already stored: the knowledge bases must be ingested again, otherwise retrieval keeps searching vectors that this model did not produce."
       }
     },
     "GMistralEmbeddingModelConfig": {
@@ -2287,6 +2478,9 @@
       "apiSecretCode": {
         "label": "MistralAI token",
         "help": "Choose the MistralAI token to be used for this model"
+      },
+      "EmbeddingModelChangeWarning": {
+        "label": "Changing the embedding model of an existing configuration invalidates the vectors already stored: the knowledge bases must be ingested again, otherwise retrieval keeps searching vectors that this model did not produce."
       }
     },
     "GGoogleVertexEmbeddingModelConfig": {
@@ -2321,6 +2515,9 @@
       "apiSecretCode": {
         "label": "Google Vertex AI token",
         "help": "Choose the Google Vertex AI token to be used for this model"
+      },
+      "EmbeddingModelChangeWarning": {
+        "label": "Changing the embedding model of an existing configuration invalidates the vectors already stored: the knowledge bases must be ingested again, otherwise retrieval keeps searching vectors that this model did not produce."
       }
     },
     "GenericOpenAIAPIEmbeddingModelConfig": {
@@ -2363,6 +2560,9 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f": {
         "summary": "OK!",
         "detail": "Operation done successfully"
+      },
+      "EmbeddingModelChangeWarning": {
+        "label": "Changing the embedding model of an existing configuration invalidates the vectors already stored: the knowledge bases must be ingested again, otherwise retrieval keeps searching vectors that this model did not produce."
       }
     },
     "GenericOpenAIRankerModelConfig": {
@@ -2733,6 +2933,15 @@
       "defaultModel": {
         "label": "set this as default chat model",
         "help": "If true this will be used as default chat model where chat model is not indicated"
+      },
+      "GeneralInfosTab": {
+        "label": "General infos"
+      },
+      "AdvancedSettingsTab": {
+        "label": "Advanced settings"
+      },
+      "ModelAccessSettingsTab": {
+        "label": "Model access settings"
       }
     },
     "GBedrockEmbeddingModelConfig": {
@@ -2767,6 +2976,9 @@
       "defaultModel": {
         "label": "set this as default embedding model",
         "help": "If true this will be used as default embedding model where embedding model is not indicated"
+      },
+      "EmbeddingModelChangeWarning": {
+        "label": "Changing the embedding model of an existing configuration invalidates the vectors already stored: the knowledge bases must be ingested again, otherwise retrieval keeps searching vectors that this model did not produce."
       }
     },
     "GBedrockImageModelConfig": {
@@ -3175,7 +3387,7 @@
         "help": "Good answer"
       },
       "badAnswerBtn": {
-        "help": "Bad answer: tell what was wrong"
+        "help": "Bad answer"
       },
       "branchChatBtn": {
         "help": "Continue in a new chat from this answer"
@@ -3198,10 +3410,19 @@
         "detail": "The conversation continues in a new chat, starting from the chosen answer"
       },
       "CalledFunctionsListBtn": {
-        "help": "Show or hide the functions the AI called"
+        "help": "Show the functions called"
       },
       "ThinkingLabel": {
         "label": "Reasoning:"
+      },
+      "PreviewTitle": {
+        "label": "Displaying external content"
+      },
+      "NoUrlSetYet": {
+        "label": "No url set yet"
+      },
+      "PreviewGeboTitle": {
+        "label": "Displaying content"
       }
     },
     "ChangeDescriptionComponent": {
@@ -3246,6 +3467,15 @@
     "DocumentRefComponent": {
       "AddDocsBtn": {
         "help": "Add document to 'chat with' list "
+      },
+      "PreviewTitle": {
+        "label": "Displaying external content"
+      },
+      "NoUrlSetYet": {
+        "label": "No url set yet"
+      },
+      "PreviewGeboTitle": {
+        "label": "Displaying content"
       }
     },
     "GeboAIExtensiblePipelineRouteDisplayComponent": {
@@ -3353,6 +3583,36 @@
     "GeboAIChatInputShellComponent": {
       "PendingSendHint": {
         "label": "The message will be sent as soon as the chat is ready…"
+      },
+      "DataSourceChoicesArea": {
+        "label": "Selected systems"
+      },
+      "KnowledgeBaseChoicesArea": {
+        "label": "Selected knowledge bases"
+      },
+      "SelectSourcesBtn": {
+        "label": "Select sources"
+      },
+      "SkipDeepSearch": {
+        "label": "Skip deep search"
+      },
+      "ChooseAtLeastMessage": {
+        "label": "Choose at least one of the following options"
+      }
+    },
+    "SelectedChatDocumentsComponent": {
+      "SelectedChatDocsLabel": {
+        "label": "Documents to chat with"
+      },
+      "SelectedChatDocRemoveBtn": {
+        "help": "Remove this document"
+      },
+      "SelectedChatDocsClearAllBtn": {
+        "label": "Clear list",
+        "help": "Clear all selected documents"
+      },
+      "SELECTED_CHAT_DOCS_WINDOW": {
+        "label": "Documents to chat with"
       }
     }
   },
@@ -3464,6 +3724,12 @@
       },
       "MoreDetailsBtn": {
         "label": "More details"
+      },
+      "LLMSUsageTab": {
+        "label": "LLM(s) Usage stats"
+      },
+      "WorkflowsTab": {
+        "label": "Workflows traffic stats"
       }
     }
   },
@@ -3503,15 +3769,15 @@
     "GeboAIStandardChatModelSettings": {
       "temperature": {
         "label": "Temperature",
-        "help": "Temperature the model will respond, from 0 to 1 (if unsure leave empty)"
+        "help": "Temperature the model will respond (if unsure leave empty)"
       },
       "contextLength": {
         "label": "Context length (tokens)",
-        "help": "Amount of text an AI model can consider when processing (if not set 128000 will be used)"
+        "help": "Amount of text an AI model can consider when processing (if unsure leave empty)"
       },
       "topP": {
         "label": "TopP",
-        "help": "TopP parameter, from 0 to 1 (if unsure leave empty)"
+        "help": "TopP parameter (if unsure leave empty)"
       },
       "maxGeneratedTokens": {
         "label": "Max number of generated tokens",
@@ -3520,6 +3786,15 @@
       "thinking": {
         "label": "Thinking efforts",
         "help": "Configure thinking efforts the model will do (not all model supports this)"
+      },
+      "TemperatureRangeLabel": {
+        "label": "Allowed range:"
+      },
+      "TopPRangeLabel": {
+        "label": "Allowed range:"
+      },
+      "ContextLengthDefaultLabel": {
+        "label": "Used when not set:"
       }
     }
   },
@@ -3605,6 +3880,27 @@
       "OK": {
         "summary": "Saved with success",
         "detail": "Update operation done successfully"
+      },
+      "projectId": {
+        "label": "projectId",
+        "help": "Enter the project id."
+      },
+      "location": {
+        "label": "Location",
+        "help": "Enter the location."
+      },
+      "accessKeyId": {
+        "label": "AWS access key id",
+        "help": "Enter the AWS access key id used to identify the account (e.g. AKIA...)."
+      },
+      "secretAccessKey": {
+        "label": "AWS secret access key",
+        "help": "Enter the AWS secret access key that authenticates the account."
+      },
+      "region": {
+        "placeholder": "Select an AWS region",
+        "label": "AWS region",
+        "help": "Select the AWS region hosting the resources this connection is used for."
       }
     },
     "GeboAiSecretsAdminListComponent": {
@@ -3689,6 +3985,15 @@
       },
       "UploadedFilesTab": {
         "label": "Uploaded files"
+      },
+      "PreviewTitle": {
+        "label": "Displaying external content"
+      },
+      "NoUrlSetYet": {
+        "label": "No url set yet"
+      },
+      "PreviewGeboTitle": {
+        "label": "Displaying content"
       }
     },
     "GeboAIUploadsFilesComponent": {
@@ -3780,6 +4085,9 @@
       "RefreshBtn": {
         "label": "Refresh",
         "help": "Reload the contents from the remote system"
+      },
+      "DeletedElementsArea": {
+        "label": "To be deleted"
       }
     }
   },
@@ -3988,6 +4296,9 @@
       "personalData": {
         "label": "Contains personal data",
         "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
+      },
+      "LogTableComponent": {
+        "help": "This shared filesystem area ingestion log"
       }
     },
     "GeboAISharedFilesystemsComponent": {
@@ -4136,6 +4447,16 @@
       "publicAccess": {
         "label": "Public access",
         "help": "If true the system gives public access to everyone"
+      },
+      "GeneralTab": {
+        "label": "General settings"
+      },
+      "SecurityTab": {
+        "label": "Security settings"
+      },
+      "defaultIdentityCode": {
+        "label": "Default identity used",
+        "help": "Select the default identity to do clone/checkout on the system"
       }
     }
   },
@@ -4352,6 +4673,9 @@
       "description": {
         "label": "Description",
         "help": "Enter the description of google search api configuration."
+      },
+      "ForMoreInformationsText": {
+        "label": "For more information on Google custom search API or getting your api key (for free) visit:"
       }
     }
   },
@@ -4386,7 +4710,7 @@
         "help": "Close side bar"
       },
       "NewChatMiniBtn": {
-        "help": "Create a new chat with large language models",
+        "help": "Chat freely with external web/systems search and your files, without company knowledge base retrieval",
         "label": "Chat"
       },
       "NewRagChatMiniBtn": {
@@ -4415,6 +4739,18 @@
       },
       "FULL_DOCS_LIST_WINDOW": {
         "label": "Selected Documents"
+      },
+      "ChatWithDocsClearAllBtn": {
+        "label": "Clear list"
+      },
+      "PreviewTitle": {
+        "label": "Displaying external content"
+      },
+      "NoUrlSetYet": {
+        "label": "No url set yet"
+      },
+      "PreviewGeboTitle": {
+        "label": "Displaying content"
       }
     },
     "GeboAISearchDocumentsComponent": {
@@ -4454,6 +4790,20 @@
       },
       "chooseFilesDialog": {
         "label": "Choose files to chat with"
+      },
+      "PreviewTitle": {
+        "label": "Displaying external content"
+      },
+      "NoUrlSetYet": {
+        "label": "No url set yet"
+      },
+      "PreviewGeboTitle": {
+        "label": "Displaying content"
+      }
+    },
+    "GeboAIDocumentsListPanelComponent": {
+      "confirmBtn": {
+        "label": "Confirm"
       }
     }
   },
@@ -4464,6 +4814,15 @@
       },
       "ChooseUserFilesDialog": {
         "label": "Choose users files"
+      },
+      "PreviewTitle": {
+        "label": "Displaying external content"
+      },
+      "NoUrlSetYet": {
+        "label": "No url set yet"
+      },
+      "PreviewGeboTitle": {
+        "label": "Displaying content"
       }
     },
     "GeboAIUserspaceBrowseComponent": {
@@ -4478,6 +4837,34 @@
       },
       "UserspaceBrowser": {
         "label": "Knowledge bases & user files"
+      }
+    },
+    "GeboAIUserspaceKnowledgebaseComponent": {
+      "accessibleGroups": {
+        "help": "Set which of the groups you are participating can access these documents.",
+        "label": "Accessible from groups"
+      },
+      "description": {
+        "label": "User space description",
+        "help": "Enter the description of your user space."
+      }
+    },
+    "GeboAIUserspaceFilesUploadComponent": {
+      "upload": {
+        "label": "Upload contents",
+        "help": "Upload contents control"
+      },
+      "FilesUploadPanel": {
+        "label": "Files upload"
+      }
+    },
+    "GeboAIUserspaceFolderComponent": {
+      "description": {
+        "label": "User folder description",
+        "help": "Enter the description of your folder."
+      },
+      "UserSpaceFolderEditingPanel": {
+        "label": "User space folder editing"
       }
     }
   },
@@ -4897,6 +5284,87 @@
       },
       "AdvancedModelsTab": {
         "label": "Advanced models selection"
+      },
+      "serviceChatPresetChoice": {
+        "help": "The chat model used for internal services (extracting information, summarizing and executing internal workflows). It is created as a non-default model.",
+        "label": "Internal services chat model"
+      },
+      "rankerPresetChoice": {
+        "label": "Default ranker model",
+        "help": "Select one of the predefined reranking models. It is created as the default ranker model."
+      },
+      "imagesPresetChoice": {
+        "label": "Default image generation model",
+        "help": "Select one of the predefined image generation models. It is created as the default image generation model."
+      },
+      "transcriptPresetChoice": {
+        "label": "Default transcript model",
+        "help": "Select one of the predefined speech to text (transcript) models. It is created as the default transcript model."
+      },
+      "ttsPresetChoice": {
+        "label": "Default text to speech model",
+        "help": "Select one of the predefined text to speech models. It is created as the default text to speech model."
+      },
+      "enableAllFunctionsAdv": {
+        "label": "enable all function calls",
+        "help": "Enable all available tools and function calls."
+      },
+      "ChatCurDef": {
+        "label": "Current default"
+      },
+      "serviceChatAdvancedChoice": {
+        "label": "Internal services chat model",
+        "help": "The chat model used for internal services. It is created as a non-default model."
+      },
+      "SvcChatCur": {
+        "label": "Current"
+      },
+      "EmbCurDef": {
+        "label": "Current default"
+      },
+      "rankerAdvancedChoice": {
+        "label": "Ranker model",
+        "help": "Select one of the supplier published reranking models."
+      },
+      "rankerAdvancedSetAsDefault": {
+        "label": "set as default",
+        "help": "Set this model as the default ranker model (overrides the current one if any)."
+      },
+      "RankCurDef": {
+        "label": "Current default"
+      },
+      "imagesAdvancedChoice": {
+        "label": "Image generation model",
+        "help": "Select one of the supplier published image generation models."
+      },
+      "imagesAdvancedSetAsDefault": {
+        "label": "set as default",
+        "help": "Set this model as the default image generation model (overrides the current one if any)."
+      },
+      "ImgCurDef": {
+        "label": "Current default"
+      },
+      "transcriptAdvancedChoice": {
+        "label": "Transcript model",
+        "help": "Select one of the supplier published speech to text (transcript) models."
+      },
+      "transcriptAdvancedSetAsDefault": {
+        "label": "set as default",
+        "help": "Set this model as the default transcript model (overrides the current one if any)."
+      },
+      "TrsCurDef": {
+        "label": "Current default"
+      },
+      "ttsAdvancedChoice": {
+        "label": "Text to speech model",
+        "help": "Select one of the supplier published text to speech models."
+      },
+      "ttsAdvancedSetAsDefault": {
+        "label": "set as default",
+        "help": "Set this model as the default text to speech model (overrides the current one if any)."
+      },
+      "TtsCurDef": {
+        "label": "Current default"
       }
     },
     "GeboAIEasyVendorConfigurationComponent": {
@@ -4952,6 +5420,9 @@
       "ImagesModel": {
         "label": "Default image generation model",
         "help": "This model will be responsible of doing image generation"
+      },
+      "PresetNotOfferedText": {
+        "label": "Preconfigured model is not in this provider anymore, please select one"
       }
     },
     "LLMSetupWizardComponent": {
@@ -5420,6 +5891,9 @@
       },
       "AddConfigurationBtn": {
         "label": "Add configuration"
+      },
+      "EditConfigurationBtn": {
+        "label": "Edit configuration"
       }
     }
   },
@@ -5536,6 +6010,18 @@
       "driveAccessSecret": {
         "label": "Identity used",
         "help": "Select or create the identity to access the google drive system"
+      }
+    },
+    "GeboAIGoogleWorkspaceAccessComponent": {
+      "MainPanel": {
+        "label": "Access to google workspaces information"
+      },
+      "user": {
+        "label": "Username for google workspaces integration",
+        "help": "Enter the username to be used to access grant to read data from google workspaces (google drive and google documents)"
+      },
+      "ConfirmBtn": {
+        "label": "Confirm username"
       }
     }
   },
@@ -5835,6 +6321,9 @@
       "topP": {
         "label": "TopP",
         "help": "TopP parameter, from 0 to 1 (if unsure leave empty)"
+      },
+      "warnSystemAgent": {
+        "label": "This is a default system agent, you cannot change its configuration"
       }
     }
   },
@@ -6004,6 +6493,81 @@
       },
       "AccessAdministratorsText": {
         "label": "Administrators can always access it."
+      },
+      "ComplianceLoadErrorText": {
+        "label": "The data-flow register could not be read from this installation."
+      },
+      "DataFlowRegisterTitle": {
+        "label": "Record of processing activities and data flows"
+      },
+      "DataFlowRegisterDescription": {
+        "label": "Every active element of this installation reports where it reads data from, where it writes it to, which engines transform it on the way, and which component is able to erase it. The register is built from the components actually running, not from a declared configuration file."
+      },
+      "CredentialsLocatorText": {
+        "label": "Endpoint locators never carry credentials: a credential is identified only by the code of the secret that guards it."
+      },
+      "DataFlowRegisterNormsText": {
+        "label": "Records of processing activities · Supply-chain and asset visibility"
+      },
+      "SecurityAuditTitle": {
+        "label": "Security audit logging — Wazuh / SIEM compatible"
+      },
+      "SecurityAuditDescription": {
+        "label": "An append-only audit trail (security-log.jsonl) records authentication, credential changes, model configuration and user-administration events - one JSON object per line, ingested natively by Wazuh's json decoder and any SIEM. Retained 365 days by default, and its Wazuh compatibility is verified on every build."
+      },
+      "SecurityAuditRunningText": {
+        "label": "Up & running"
+      },
+      "SecurityAuditNormsText": {
+        "label": "GDPR Art. 32 · NIS2 Art. 21 — Security of processing & monitoring"
+      },
+      "DataEndpointsCountLabel": {
+        "label": "Data endpoints"
+      },
+      "TransformationsCountLabel": {
+        "label": "Transformations"
+      },
+      "ReportingComponentsCountLabel": {
+        "label": "Reporting components"
+      },
+      "ExternalProvidersCountLabel": {
+        "label": "External providers"
+      },
+      "PersonalDataCountLabel": {
+        "label": "May carry personal data (assess)"
+      },
+      "RetainingNoErasureCountLabel": {
+        "label": "Retaining, no erasure component"
+      },
+      "CollectedFromNodeText": {
+        "label": "Collected from node"
+      },
+      "CollectedAtText": {
+        "label": "at"
+      },
+      "DataFlowDialogTitle": {
+        "label": "GDPR Art. 30 · NIS2 Art. 21 — Data Flow Register"
+      },
+      "DataFlowDialogSubtitle": {
+        "label": "Sources, transformation engines, retaining stores and erasure capability, as currently configured"
+      },
+      "LocalityLocalLegend": {
+        "label": "Local deployment"
+      },
+      "LocalitySameNetworkLegend": {
+        "label": "Same network"
+      },
+      "LocalityExternalLegend": {
+        "label": "External provider"
+      },
+      "LocalityUnknownLegend": {
+        "label": "Locality undetermined"
+      },
+      "NoDataFlowsTitle": {
+        "label": "No data flows reported yet"
+      },
+      "NoDataFlowsText": {
+        "label": "No component of this installation reported a data-flow configuration. This is expected when no data source has been configured yet, and while components are still being migrated to publish their configuration."
       }
     }
   },
@@ -6036,6 +6600,9 @@
       "description": {
         "label": "Description",
         "help": "Enter the description of the AWS S3 system."
+      },
+      "GeneralSettingsTab": {
+        "label": "General settings"
       }
     },
     "GAwsS3ProjectEndpoint": {
@@ -6090,6 +6657,12 @@
       "personalData": {
         "label": "Contains personal data",
         "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
+      },
+      "SettingsTab": {
+        "label": "Settings"
+      },
+      "LogsTab": {
+        "label": "Logs"
       }
     },
     "GeboAIAwsS3SystemFastComponent": {
@@ -6157,6 +6730,13 @@
       "webdavAuthType": {
         "label": "Authentication method",
         "help": "Authentication method for the WebDAV server"
+      },
+      "GeneralSettingsTab": {
+        "label": "General settings"
+      },
+      "secretCode": {
+        "label": "Identity used",
+        "help": "Select or create the identity to access the WebDAV system"
       }
     },
     "GWebdavProjectEndpoint": {
@@ -6207,6 +6787,12 @@
       "personalData": {
         "label": "Contains personal data",
         "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
+      },
+      "SettingsTab": {
+        "label": "Settings"
+      },
+      "LogsTab": {
+        "label": "Logs"
       }
     },
     "GeboAIWebdavSystemFastComponent": {
@@ -6241,6 +6827,14 @@
       "password": {
         "label": "Password",
         "help": "Password to access the WebDAV system"
+      },
+      "tokenUsername": {
+        "label": "User",
+        "help": "User associated with the bearer token"
+      },
+      "token": {
+        "label": "Bearer token",
+        "help": "Bearer token to access the WebDAV system"
       }
     }
   },
@@ -6322,6 +6916,41 @@
       "sseEndpoint": {
         "label": "SSE Endpoint path",
         "help": "Optional Server Sent Events endpoint path."
+      },
+      "GeneralSettingsTab": {
+        "label": "General settings"
+      },
+      "SecurityAccessSettingsTab": {
+        "label": "Security access settings"
+      },
+      "ToolsTab": {
+        "label": "Exported Tools"
+      },
+      "ResourcesTab": {
+        "label": "Exported Resources"
+      },
+      "PromptsTab": {
+        "label": "Exported Prompts"
+      },
+      "stdioCommand": {
+        "label": "Stdio Command/Process",
+        "help": "Path to executable process to start (e.g. node, python, npx)."
+      },
+      "stdioArgsRaw": {
+        "label": "Process Arguments",
+        "help": "Arguments to pass to the process, one per line."
+      },
+      "stdioEnvironmentRaw": {
+        "label": "Process Environment variables",
+        "help": "Environment variables as KEY=VALUE, one per line."
+      },
+      "secretCode": {
+        "label": "Identity credential (secret)",
+        "help": "Select or create the secret credentials."
+      },
+      "oauth2AuthenticatorCode": {
+        "label": "OAuth2 Authenticator code",
+        "help": "Unique code of the OAuth2 registration/authenticator."
       }
     }
   },
@@ -6366,6 +6995,19 @@
       "personalData": {
         "label": "Contains personal data",
         "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
+      },
+      "SettingsTab": {
+        "label": "Settings"
+      },
+      "LogsTab": {
+        "label": "Logs"
+      },
+      "tree": {
+        "label": "Selected MCP resources",
+        "help": "Resources exposed by the MCP server. Pick the whole server to ingest every resource, or select individual resources."
+      },
+      "LogTableComponent": {
+        "help": "This MCP server data source ingestion log"
       }
     }
   },
@@ -6406,6 +7048,18 @@
       "resourcesTree": {
         "label": "Exported Resources Tree",
         "help": "Select Knowledge Bases, Projects, and Project Endpoints to export as resources."
+      },
+      "GeneralSettingsTab": {
+        "label": "General settings"
+      },
+      "SecurityAccessSettingsTab": {
+        "label": "Security access settings"
+      },
+      "ToolsTab": {
+        "label": "Exported Tools"
+      },
+      "ResourcesTab": {
+        "label": "Exported Resources"
       }
     }
   },
@@ -6457,6 +7111,42 @@
       },
       "MainPanel": {
         "label": "Editing A2A Remote Agent"
+      },
+      "GeneralSettingsTab": {
+        "label": "General settings"
+      },
+      "SecurityAccessSettingsTab": {
+        "label": "Security access settings"
+      },
+      "DiscoveredSkillsTab": {
+        "label": "Discovered Skills"
+      },
+      "oauth2AuthenticatorCode": {
+        "label": "OAuth2 Authenticator Code",
+        "help": "Code of the OAuth2 runtime configuration used for the client-credentials grant."
+      },
+      "secretCode": {
+        "label": "Credential Secret",
+        "help": "The stored secret (API key / bearer token) presented to the remote agent."
+      },
+      "secretCodeRelay": {
+        "label": "Credential Secret (optional)",
+        "help": "A stored OAuth2 authorized-client token to relay. Leave empty to relay the calling user's own identity (token exchange)."
+      },
+      "RelayIdentityInfoText": {
+        "label": "With no secret set, the calling user's own authentication is relayed: the inbound OAuth2 token when this platform runs as an OAuth2 resource server, otherwise a short-lived JWT minted for the user."
+      },
+      "TokenExchangeInfoText": {
+        "label": "Token exchange: the calling user's own authentication is relayed to the remote agent — the inbound OAuth2 token when this platform runs as an OAuth2 resource server, otherwise a short-lived JWT minted for the user. No stored secret is used."
+      },
+      "SkillIdHeader": {
+        "label": "Id"
+      },
+      "SkillNameHeader": {
+        "label": "Name"
+      },
+      "SkillDescriptionHeader": {
+        "label": "Description"
       }
     }
   },
@@ -6501,6 +7191,30 @@
       "newSkillName": {
         "label": "Skill name",
         "help": "Skill id/name advertised on the Agent Card (defaults to the code)."
+      },
+      "GeneralSettingsTab": {
+        "label": "General settings"
+      },
+      "ExportedAgentsTab": {
+        "label": "Exported agents & networks"
+      },
+      "SecurityAccessSettingsTab": {
+        "label": "Security access settings"
+      },
+      "CallerAuthenticationInfoText": {
+        "label": "Callers authenticate through this platform's active security (self-issued JWT / API key, or OAuth2 resource server) — there is no per-server credential here. The exported network runs impersonating the resolved caller and honours that user's access rights; the served Agent Card advertises the active scheme."
+      },
+      "KindHeader": {
+        "label": "Kind"
+      },
+      "ExportCodeHeader": {
+        "label": "Network / Agent code"
+      },
+      "SkillNameHeader": {
+        "label": "Skill name"
+      },
+      "NoExportsText": {
+        "label": "No agents or networks exported yet."
       }
     }
   },
@@ -6550,6 +7264,18 @@
       },
       "PureChatPipelineOption": {
         "label": "Free chat"
+      },
+      "GeneralInfosTab": {
+        "label": "General infos"
+      },
+      "NetworkGraphTab": {
+        "label": "Agents Network Graph"
+      },
+      "AgentsListTab": {
+        "label": "Agents list"
+      },
+      "SecurityAccessSettingsTab": {
+        "label": "Security access settings"
       }
     }
   },
@@ -6643,6 +7369,28 @@
       },
       "SecurityNoticeHeader": {
         "label": "Important Security Notice"
+      },
+      "McpServersTab": {
+        "label": "Model Context Protocol (MCP) Servers"
+      },
+      "PersonalApiKeysTab": {
+        "label": "Personal API Keys"
+      },
+      "AccessRestrictedHeader": {
+        "label": "Access Restricted"
+      },
+      "AccessRestrictedText": {
+        "label": "You do not have the required permissions to access this page."
+      },
+      "AccessDeniedPanel": {
+        "label": "Access Denied"
+      },
+      "McpEndpointUnavailable": {
+        "label": "Endpoint unavailable"
+      },
+      "customExpiration": {
+        "label": "Custom Expiration Date",
+        "help": "Select a custom date and time for expiration"
       }
     }
   },
@@ -6736,6 +7484,36 @@
       },
       "toolsResultsPromptTemplateHint": {
         "label": "Optional: text added at the end of every tool result. When tools run, their results come after the user prompt, so this is the last text the model reads before answering."
+      }
+    },
+    "GeboAIPromptWizardComponent": {
+      "modelCode": {
+        "help": "Choose the chat model you want to ask the prompt template generation",
+        "label": "Chat model to use"
+      },
+      "query": {
+        "help": "Specify in 2nd person which is the objective that the AI will support the user",
+        "label": "Prompt template request"
+      },
+      "PromptWizardBtn": {
+        "label": "Prompt wizard",
+        "help": "Use this to use an LLM to generate the prompt for your objectives"
+      },
+      "promptWizardGenerateBtn": {
+        "label": "Generate prompt"
+      },
+      "promptWizardAcceptBtn": {
+        "label": "Accept prompt"
+      },
+      "promptWizardCancelBtn": {
+        "label": "Cancel"
+      },
+      "response": {
+        "label": "Suggested prompt template",
+        "help": "Generated template text for your objective (you can change or correct/modify it)"
+      },
+      "promptWizardUI": {
+        "label": "Prompt template generation wizard"
       }
     }
   },
@@ -7358,6 +8136,23 @@
       },
       "RoleChatHelp": {
         "label": "Model to be used in explicit configurations"
+      }
+    }
+  },
+  "BuildPackagingSystemsPanelModule": {
+    "BuildPackagingSystemsComponent": {
+      "CodeHeader": {
+        "label": "Code"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      }
+    }
+  },
+  "GeboAIChooseLLMFunctionsModule": {
+    "GeboAIChooseLLMFunctionscomponent": {
+      "TreeSelect": {
+        "placeholder": "Select functions"
       }
     }
   }
