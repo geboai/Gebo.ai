@@ -38,6 +38,7 @@ an enterprise version with more feature and support is also available.
  - Most providers support **guided fast-setup** with ready-to-use model presets and automatic models lookup
  - Connect to **Model Context Protocol (MCP)** servers to give your chatbots extra tools & data sources, or expose Gebo.ai itself as an **MCP server**
  - **Agent-to-agent interoperability** — through the open **Agent2Agent (A2A) protocol**, Gebo.ai plugs into the wider agentic ecosystem in **both directions**: **connect external A2A agents** — whatever framework or vendor built them — and put them to work as tools and participants inside your own agent networks, or **publish your Gebo.ai agents, a single agent or an entire network of agents, as standards-compliant A2A agents** with their own Agent Card, ready to be consumed by any A2A-capable platform. It is **secure by default**: every import/export is admin-enabled, off and invisible until you switch it on, inbound calls are validated by the platform security chain (self-issued JWT / API key or corporate OAuth2) and run under the caller's own identity, and outbound credentials are handled by the platform secrets vault with OAuth2 token relay. The **"no AI vendor lock-in"** promise now reaches the agents themselves.
+ - Choose the **network of AI agents** that answers each chat type and each chatbot profile.
  - Configure gebo.ai rag system to access several company documents repository and information sharing tools such as:
     - **Microsoft Onedrive/Sharepoint**
     - **Atlassian Confluence**
@@ -60,6 +61,8 @@ an enterprise version with more feature and support is also available.
  - Schedule document updates for AI reindexing (embedding) on updates.
  - Monitor embedding batch job.
  - Monitor **LLM usage** with built-in dashboards (admin: every user; user: own usage only) — drill down by provider, model, model type (chat/embedding/image/reranking/TTS/transcription), user and month to track calls/tokens over time.
+ - Keep **LLM costs** under control: record your **provider deals** and **model prices** (imported automatically for OpenRouter.ai and Regolo.ai) and read the **cost evaluation** on the usage dashboard, together with each model's **response time** and **time to first token**.
+ - Set **daily or monthly token limits** on each provider deal: administrators are warned as soon as they are reached.
  - **NIS2-oriented security audit logging**: login/logout, LLM configuration changes, LLM invocations, secrets/API-key/3rd-party-integration changes and user administration are all traced to a dedicated, append-only, **Wazuh-compatible JSON** audit trail — see [Security & compliance](#security--compliance) below.
  - **Compliance / data-flow register** (GDPR Art. 30 · NIS2 Art. 21): a live **record of processing activities** built from the components actually running — data sources, transformation engines, retaining stores and external providers, with per-source personal-data scope, retention & erasure per store, an interactive data-flow graph and CSV export, plus the Wazuh/SIEM security-audit-logging status — see [Security & compliance](#security--compliance) below.
  - Configure company users and groups.      
@@ -75,6 +78,7 @@ an enterprise version with more feature and support is also available.
 ### Users features        
  - Chat using chatbots without retrieve augmented generation according to admin config.
  - Chat using chatbots with retrieve augmented generation  according to admin config.
+ - Work with the **AI agent** in "Agentic chat": it takes the question step by step with its own tools — it searches the company knowledge bases, the web and the connected enterprise tools, ranks the results with your reranking model, runs deep searches, browses the knowledge bases, reads whole documents and finds them by what their name, title or author mean.
  - Chat with uploaded documents/user documents uploaded in chat session (rag or normal chat sessions).
  - Browse company knowledge bases to select  documents to chat/work with  according to admin config.  
  - Generate **images** directly in chat using configured image generation models.
