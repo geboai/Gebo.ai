@@ -34,6 +34,7 @@ import { IGeboChatMessage } from "../../services/gebo-chat-message";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
 import { ExtendedConfirmation, GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 import { GeboAIChatInputShellComponent } from "./chat-input-shell.component";
+import { GeboAIChatStreamEventsDisplayComponent } from "./chat-stream-events-display.component";
 import { PipelineRoutingOption } from "./pipeline-routing-option";
 const loading_vocal_answer: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER", severity: "info", summary: "Loading vocal answer" };
 const loading_vocal_answer_received: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER_RECEIVED", severity: "info", summary: "Vocal answer received" };
@@ -307,6 +308,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     @Output() branchedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
     @ViewChild(GeboAIChatInputShellComponent) chatInputShell!: GeboAIChatInputShellComponent;
+    // shown in the last answer, between its reasoning and its text, while it streams
+    @ViewChild(GeboAIChatStreamEventsDisplayComponent) streamEventsDisplay?: GeboAIChatStreamEventsDisplayComponent;
     /**
      * Configuration options for Mermaid diagrams
      */
@@ -330,6 +333,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         additionalContents: new FormControl([])
     });
     protected currentPipelineRoutingOption?: PipelineRoutingOption;
+    protected runningPipelineRouting?: PipelineRoutingOption;
     /**
      * Form group for chat information
      */
@@ -1404,6 +1408,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 }
 
                 this.chatInputShell.onStreamMessage(recvd);
+                this.streamEventsDisplay?.onMessage(recvd);
                 if (recvd && recvd.contentObjectType) {
                     switch (recvd.contentObjectType) {
                         case "GUserMessage": {
