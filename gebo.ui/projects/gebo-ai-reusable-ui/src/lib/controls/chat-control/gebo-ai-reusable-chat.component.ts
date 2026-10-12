@@ -20,7 +20,7 @@
  */
 
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Component, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AdditionalContent, AnswerFeedbackRequest, BASE_PATH, CalledFunction, GBaseChatModelChoice, GChatAnswerFeedback, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
@@ -92,6 +92,15 @@ const scrollHostCacheMillis: number = 250;
  */
 const streamedTextBatchMillis: number = 100;
 /**
+ * How long the chat keeps following an answer after it ended, so its final rendering
+ * (markdown, diagrams, the found documents) is brought into view as well
+ */
+const followAnswerGraceMillis: number = 1500;
+/**
+ * Pixels from the bottom of the chat still counted as being at its end
+ */
+const followAnswerSlackPx: number = 24;
+/**
  * Component that provides a reusable chat interface for Gebo.ai models.
  * Supports both standard chat and RAG-enabled conversations, with features like
  * streaming responses, speech recognition, and voice output. Manages chat history
@@ -110,7 +119,7 @@ const streamedTextBatchMillis: number = 100;
     ],
     standalone: false
 })
-export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFieldHost {
+export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy, GeboAIFieldHost {
 
 
 
@@ -365,6 +374,19 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     private scrollHost?: HTMLElement;
     private scrollHostResolvedAt: number = 0;
     /**
+     * From the question sent until shortly after its answer ended, the chat keeps its end
+     * in view while the reasoning, the stream events and the answer grow. Scrolling up
+     * away from the end pauses it, scrolling back down to the end resumes it.
+     */
+    private followAnswer: boolean = false;
+    private scrolledAwayFromAnswer: boolean = false;
+    private lastChatScrollTop: number = 0;
+    private followAnswerEndTimer?: ReturnType<typeof setTimeout>;
+    private chatBodyResizeObserver?: ResizeObserver;
+    private readonly chatScrollListener = (event: Event) => this.onChatScroll(event);
+    @ViewChild("chatBody") chatBody?: ElementRef<HTMLElement>;
+    private readonly ngZone: NgZone = inject(NgZone);
+    /**
      * Metadata about the current chat model
      */
     public modelMetaInfos?: GBaseChatModelChoice;
@@ -437,6 +459,81 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         });
     }
 
+    ngAfterViewInit(): void {
+        this.ngZone.runOutsideAngular(() => {
+            // scroll events do not bubble: the capture phase sees the chat's container too
+            window.document.addEventListener("scroll", this.chatScrollListener, { capture: true, passive: true });
+            if (this.chatBody && typeof ResizeObserver !== "undefined") {
+                // the body grows once rendered, so its end is measured after the new content is laid out
+                this.chatBodyResizeObserver = new ResizeObserver(() => {
+                    if (this.followAnswer && !this.scrolledAwayFromAnswer) {
+                        this.ngZone.run(() => this.scrollToBottom());
+                    }
+                    // a shrinking body pulls the view up by itself, its scroll event arriving
+                    // after more content may have been added: that is not the user leaving the end
+                    this.lastChatScrollTop = this.scrollPosition().position;
+                });
+                this.chatBodyResizeObserver.observe(this.chatBody.nativeElement);
+            }
+        });
+    }
+
+    ngOnDestroy(): void {
+        window.document.removeEventListener("scroll", this.chatScrollListener, { capture: true });
+        this.chatBodyResizeObserver?.disconnect();
+        if (this.followAnswerEndTimer !== undefined) {
+            clearTimeout(this.followAnswerEndTimer);
+        }
+    }
+
+    private startFollowingAnswer(): void {
+        if (this.followAnswerEndTimer !== undefined) {
+            clearTimeout(this.followAnswerEndTimer);
+            this.followAnswerEndTimer = undefined;
+        }
+        this.followAnswer = true;
+        this.scrolledAwayFromAnswer = false;
+        this.lastChatScrollTop = this.scrollPosition().position;
+    }
+
+    private stopFollowingAnswer(): void {
+        if (this.followAnswerEndTimer !== undefined) {
+            clearTimeout(this.followAnswerEndTimer);
+        }
+        this.followAnswerEndTimer = setTimeout(() => {
+            this.followAnswerEndTimer = undefined;
+            this.followAnswer = false;
+        }, followAnswerGraceMillis);
+    }
+
+    /**
+     * Pauses following when the user scrolls up away from the end (keys, scrollbar), resumes
+     * it back at the end. Following only scrolls down, and the view pulled up by a shrinking
+     * answer is taken as the new starting point (see ngAfterViewInit), so neither reads as
+     * the user leaving.
+     */
+    private onChatScroll(event: Event): void {
+        if (!this.followAnswer) {
+            return;
+        }
+        const scrollHost: HTMLElement | undefined = this.resolveScrollHost();
+        const target: EventTarget | null = event.target;
+        const fromChatScroller: boolean = scrollHost
+            ? target === scrollHost
+            : (target === window.document || target === window.document.documentElement || target === window.document.body);
+        if (!fromChatScroller) {
+            return;
+        }
+        const { position, maxPosition } = this.scrollPosition();
+        const atEnd: boolean = (maxPosition - position) <= followAnswerSlackPx;
+        if (atEnd) {
+            this.scrolledAwayFromAnswer = false;
+        } else if (position < this.lastChatScrollTop) {
+            this.scrolledAwayFromAnswer = true;
+        }
+        this.lastChatScrollTop = position;
+    }
+
     @HostListener('window:scroll')
     onWindowScroll() {
         this.updateScrollButtons();
@@ -469,6 +566,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             window.scrollBy(0, delta);
         }
         event.preventDefault();
+        if (delta < 0 && this.followAnswer) {
+            // going back up to read: an answer still growing must not pull the view down again
+            this.scrolledAwayFromAnswer = true;
+        }
         this.updateScrollButtons();
     }
 
@@ -496,13 +597,21 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Refreshes the visibility of the up/down buttons against the current scroll position
      */
     private updateScrollButtons(): void {
+        const { position, maxPosition } = this.scrollPosition();
+        this.showTopButton = position > scrollStart;
+        this.showBottomButton = (maxPosition - position) > scrollStart;
+    }
+
+    /**
+     * Where the chat is scrolled to, and how far it can be scrolled
+     */
+    private scrollPosition(): { position: number, maxPosition: number } {
         const scrollHost: HTMLElement | undefined = this.resolveScrollHost();
         const position: number = scrollHost ? scrollHost.scrollTop : window.scrollY;
         const maxPosition: number = scrollHost
             ? (scrollHost.scrollHeight - scrollHost.clientHeight)
             : (window.document.body.scrollHeight - window.innerHeight);
-        this.showTopButton = position > scrollStart;
-        this.showBottomButton = (maxPosition - position) > scrollStart;
+        return { position, maxPosition };
     }
 
     /**
@@ -1241,13 +1350,14 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             userChatContextCode: response.userChatContextCode
                         };
                         this.formGroup.patchValue(dataUpdate);
-                        this.scrollToBottom();
+                        this.stopFollowingAnswer();
                         this.loadingChatResponse = false;
                         if (doSpeach === true) {
                             this.speechPlay(response.queryResponse);
                         }
                     },
                     error: (error) => {
+                        this.stopFollowingAnswer();
                         this.loadingChatResponse = false;
                     },
                     complete: () => {
@@ -1341,7 +1451,6 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 }
             }
         }
-        setTimeout(() => this.scrollToBottom(), 10);
     }
 
     private callReactiveChat(r: GeboChatRequest, doSpeach: boolean): void {
@@ -1370,7 +1479,6 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 interaction.response.queryResponse = (interaction.response.queryResponse || "") + pendingText;
             }
             pendingText = "";
-            this.scrollToBottom();
         };
         const appendText = (text: string) => {
             pendingText += text;
@@ -1461,7 +1569,6 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                                 interaction.streamingThinking = undefined;
                             } else if (recvd.content?.text) {
                                 interaction.streamingThinking = (interaction.streamingThinking ?? "") + recvd.content.text;
-                                this.scrollToBottom();
                             }
                         } break;
                     }
@@ -1471,6 +1578,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     flushText();
                     interaction.loading = false;
                     this.chatStreaming = false;
+                    this.stopFollowingAnswer();
                 }
             } catch (e) {
                 console.error("Exception :", e);
@@ -1479,6 +1587,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         const errorCallBack = (error: any) => {
             flushText();
             this.chatStreaming = false;
+            this.stopFollowingAnswer();
             this.chatStreamingErrorOccurred = true;
             console.error("Exception in receiving data", error);
 
@@ -1491,6 +1600,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         const onCompleteCallback = () => {
             flushText();
             this.chatStreaming = false;
+            this.stopFollowingAnswer();
             this.loadingChatResponse = false;
             if (interaction) {
                 interaction.loading = false;
@@ -1566,6 +1676,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     }
 
     private dispatchMessage(qry: GeboChatRequest, doSpeach: boolean): void {
+        this.startFollowingAnswer();
         if (this.useRestOnly === true) {
             this.callRestChat(qry, doSpeach);
         } else {
