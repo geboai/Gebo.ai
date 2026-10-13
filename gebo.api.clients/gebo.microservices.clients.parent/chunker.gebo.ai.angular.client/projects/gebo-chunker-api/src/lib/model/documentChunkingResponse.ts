@@ -23,4 +23,5 @@ export interface DocumentChunkingResponse {
     empty?: boolean;
     error?: boolean;
     errorMessage?: GUserMessage;
+    contentHash?: string;
 }

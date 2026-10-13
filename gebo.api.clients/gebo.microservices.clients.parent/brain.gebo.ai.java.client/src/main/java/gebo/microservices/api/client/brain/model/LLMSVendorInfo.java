@@ -18,11 +18,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * LLMSVendorInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:20.194305186+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
 
 public class LLMSVendorInfo {
   @JsonProperty("vendorId")
@@ -38,9 +40,9 @@ public class LLMSVendorInfo {
   private Boolean requiresApiKey = null;
 
   /**
-   * Gets or Sets secretType
+   * Gets or Sets secretTypes
    */
-  public enum SecretTypeEnum {
+  public enum SecretTypesEnum {
     USERNAME_PASSWORD("USERNAME_PASSWORD"),
     TOKEN("TOKEN"),
     SSH_KEY("SSH_KEY"),
@@ -53,7 +55,7 @@ public class LLMSVendorInfo {
 
     private String value;
 
-    SecretTypeEnum(String value) {
+    SecretTypesEnum(String value) {
       this.value = value;
     }
     @JsonValue
@@ -66,8 +68,8 @@ public class LLMSVendorInfo {
       return String.valueOf(value);
     }
     @JsonCreator
-    public static SecretTypeEnum fromValue(String input) {
-      for (SecretTypeEnum b : SecretTypeEnum.values()) {
+    public static SecretTypesEnum fromValue(String input) {
+      for (SecretTypesEnum b : SecretTypesEnum.values()) {
         if (b.value.equals(input)) {
           return b;
         }
@@ -75,8 +77,8 @@ public class LLMSVendorInfo {
       return null;
     }
 
-  }  @JsonProperty("secretType")
-  private SecretTypeEnum secretType = null;
+  }  @JsonProperty("secretTypes")
+  private List<SecretTypesEnum> secretTypes = null;
 
   /**
    * Gets or Sets authProvider
@@ -212,22 +214,30 @@ public class LLMSVendorInfo {
     this.requiresApiKey = requiresApiKey;
   }
 
-  public LLMSVendorInfo secretType(SecretTypeEnum secretType) {
-    this.secretType = secretType;
+  public LLMSVendorInfo secretTypes(List<SecretTypesEnum> secretTypes) {
+    this.secretTypes = secretTypes;
+    return this;
+  }
+
+  public LLMSVendorInfo addSecretTypesItem(SecretTypesEnum secretTypesItem) {
+    if (this.secretTypes == null) {
+      this.secretTypes = new ArrayList<>();
+    }
+    this.secretTypes.add(secretTypesItem);
     return this;
   }
 
    /**
-   * Get secretType
-   * @return secretType
+   * Get secretTypes
+   * @return secretTypes
   **/
   @Schema(description = "")
-  public SecretTypeEnum getSecretType() {
-    return secretType;
+  public List<SecretTypesEnum> getSecretTypes() {
+    return secretTypes;
   }
 
-  public void setSecretType(SecretTypeEnum secretType) {
-    this.secretType = secretType;
+  public void setSecretTypes(List<SecretTypesEnum> secretTypes) {
+    this.secretTypes = secretTypes;
   }
 
   public LLMSVendorInfo authProvider(AuthProviderEnum authProvider) {
@@ -388,7 +398,7 @@ public class LLMSVendorInfo {
         Objects.equals(this.requiresCustomUrl, llMSVendorInfo.requiresCustomUrl) &&
         Objects.equals(this.defaultCustomUrl, llMSVendorInfo.defaultCustomUrl) &&
         Objects.equals(this.requiresApiKey, llMSVendorInfo.requiresApiKey) &&
-        Objects.equals(this.secretType, llMSVendorInfo.secretType) &&
+        Objects.equals(this.secretTypes, llMSVendorInfo.secretTypes) &&
         Objects.equals(this.authProvider, llMSVendorInfo.authProvider) &&
         Objects.equals(this.description, llMSVendorInfo.description) &&
         Objects.equals(this.name, llMSVendorInfo.name) &&
@@ -401,7 +411,7 @@ public class LLMSVendorInfo {
 
   @Override
   public int hashCode() {
-    return Objects.hash(vendorId, requiresCustomUrl, defaultCustomUrl, requiresApiKey, secretType, authProvider, description, name, webSite, acquireKeyUrl, apiKeySecretContext, minContextWindow, supportsAutoconfig);
+    return Objects.hash(vendorId, requiresCustomUrl, defaultCustomUrl, requiresApiKey, secretTypes, authProvider, description, name, webSite, acquireKeyUrl, apiKeySecretContext, minContextWindow, supportsAutoconfig);
   }
 
 
@@ -414,7 +424,7 @@ public class LLMSVendorInfo {
     sb.append("    requiresCustomUrl: ").append(toIndentedString(requiresCustomUrl)).append("\n");
     sb.append("    defaultCustomUrl: ").append(toIndentedString(defaultCustomUrl)).append("\n");
     sb.append("    requiresApiKey: ").append(toIndentedString(requiresApiKey)).append("\n");
-    sb.append("    secretType: ").append(toIndentedString(secretType)).append("\n");
+    sb.append("    secretTypes: ").append(toIndentedString(secretTypes)).append("\n");
     sb.append("    authProvider: ").append(toIndentedString(authProvider)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");

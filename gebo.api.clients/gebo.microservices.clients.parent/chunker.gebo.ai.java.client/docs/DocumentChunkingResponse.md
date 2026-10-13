@@ -13,3 +13,4 @@ Name | Type | Description | Notes
 **empty** | **Boolean** |  |  [optional]
 **error** | **Boolean** |  |  [optional]
 **errorMessage** | [**GUserMessage**](GUserMessage.md) |  |  [optional]
+**contentHash** | **String** |  |  [optional]

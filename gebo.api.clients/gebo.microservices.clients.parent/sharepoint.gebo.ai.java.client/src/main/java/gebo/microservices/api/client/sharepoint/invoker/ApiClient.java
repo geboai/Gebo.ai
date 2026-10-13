@@ -50,7 +50,7 @@ import gebo.microservices.api.client.sharepoint.invoker.auth.HttpBasicAuth;
 import gebo.microservices.api.client.sharepoint.invoker.auth.ApiKeyAuth;
 import gebo.microservices.api.client.sharepoint.invoker.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:53.845611079+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:19:18.534520729+02:00[Europe/Rome]")
 
 public class ApiClient {
     public enum CollectionFormat {

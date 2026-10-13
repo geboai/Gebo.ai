@@ -4,6 +4,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **providerId** | **String** |  |  [optional]
+**modelTypeCode** | **String** |  |  [optional]
 **username** | **String** |  |  [optional]
 **model** | **String** |  |  [optional]
 **callerStack** | **String** |  |  [optional]

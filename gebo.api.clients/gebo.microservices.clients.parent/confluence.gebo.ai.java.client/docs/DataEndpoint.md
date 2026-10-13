@@ -15,6 +15,8 @@ Name | Type | Description | Notes
 **personalData** | **Boolean** |  |  [optional]
 **retention** | **String** |  |  [optional]
 **disposer** | [**GeboComponentInfo**](GeboComponentInfo.md) |  |  [optional]
+**access** | [**List&lt;DataEndpointAccess&gt;**](DataEndpointAccess.md) |  |  [optional]
+**section** | **String** |  |  [optional]
 
 <a name="List<TypesEnum>"></a>
 ## Enum: List&lt;TypesEnum&gt;

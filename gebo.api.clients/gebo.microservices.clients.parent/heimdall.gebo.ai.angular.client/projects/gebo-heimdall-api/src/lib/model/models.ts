@@ -1,3 +1,4 @@
+export * from './aclEntry';
 export * from './authProviderDto';
 export * from './authResponse';
 export * from './changePasswordParam';
@@ -9,6 +10,8 @@ export * from './componentEnabledStatus';
 export * from './componentMetaInfo';
 export * from './createUserIfNotExistsRequest';
 export * from './dataEndpoint';
+export * from './dataEndpointAccess';
+export * from './dataFlowSection';
 export * from './dataPage';
 export * from './dataTransformationInfo';
 export * from './dataTransformationMetaInfo';

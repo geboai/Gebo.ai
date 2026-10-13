@@ -1,3 +1,4 @@
+export * from './aclEntry';
 export * from './aggregateRequestBodyConfluenceResultsExtractionData';
 export * from './browseParam';
 export * from './buildSystemRef';
@@ -10,6 +11,8 @@ export * from './confluencePeopleFilter';
 export * from './confluenceResultsExtractionData';
 export * from './customTemplateParamsRequestBody';
 export * from './dataEndpoint';
+export * from './dataEndpointAccess';
+export * from './dataFlowSection';
 export * from './dataTransformationInfo';
 export * from './dataTransformationMetaInfo';
 export * from './deletableStatus';

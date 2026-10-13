@@ -14,8 +14,8 @@ import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
 export interface PageGeboMCPServerConfig { 
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     pageable?: PageableObject;
     first?: boolean;
     last?: boolean;

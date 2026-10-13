@@ -17,6 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { AgentMountedTools } from '../model/agentMountedTools';
 import { AgentServiceDescriptor } from '../model/agentServiceDescriptor';
 import { GAgentConfig } from '../model/gAgentConfig';
 import { GAgentsNetwork } from '../model/gAgentsNetwork';
@@ -217,6 +218,53 @@ export class GeboAgentsNetworkAdminControllerService {
 
         return this.httpClient.request<Array<AgentServiceDescriptor>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentServices`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAgentsMountedTools(body: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<AgentMountedTools>>;
+    public getAgentsMountedTools(body: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AgentMountedTools>>>;
+    public getAgentsMountedTools(body: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AgentMountedTools>>>;
+    public getAgentsMountedTools(body: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getAgentsMountedTools.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<Array<AgentMountedTools>>('post',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentsMountedTools`,
+            {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
