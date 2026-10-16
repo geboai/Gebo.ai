@@ -21,6 +21,9 @@ import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkCrudService;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
+import ai.gebo.architecture.agents.services.IGReactiveAgentService;
+import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactory;
+import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern;
 import ai.gebo.architecture.agents.services.IGRoutingNetworkAgentService;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.model.GUserMessage;
@@ -330,7 +333,16 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 								+ "' which is not registered"));
 				continue;
 			}
-			if (!(service instanceof IGNetworkAgentService<?, ?> networkService)) {
+			final IGNetworkAgentService<?, ?> networkService;
+			if (service instanceof IGNetworkAgentService<?, ?> directNetworkService) {
+				networkService = directNetworkService;
+			} else if (service instanceof IGReactiveAgentService<?, ?> reactiveService) {
+				networkService = reactiveNetworkAdapter(name, participant, reactiveService, messages);
+				if (networkService == null) {
+					// The reason has been reported.
+					continue;
+				}
+			} else {
 				messages.add(GUserMessage.errorMessage("Service is not a network agent",
 						"Agent service '" + service.getId() + "' used by participant '" + name
 								+ "' is not a network agent service and cannot take part in a network"));
@@ -352,8 +364,65 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 	}
 
 	/**
-	 * Enforces the core invariant: for every communication edge {@code A -> B} the
-	 * output type of {@code A} must be assignable to the input type of {@code B}.
+	 * The network agent a reactive agent service (one answering the user directly,
+	 * like the report writer) takes part in the network as, built like the reactive
+	 * output networks build it at runtime: only on an output node, through the
+	 * adapter its {@link IGReactiveToNetworkAgentAdapterFactory} creates.
+	 *
+	 * @return the adapter, or null with the reason added to {@code messages}
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private IGNetworkAgentService<?, ?> reactiveNetworkAdapter(String name, AgentNetworkParticipant participant,
+			IGReactiveAgentService reactiveService, List<GUserMessage> messages) {
+		if (!participant.isOutputNode()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Participant:" + name + " runs the reactive agent service:" + reactiveService.getId()
+						+ " without being an output node");
+			}
+			messages.add(GUserMessage.errorMessage("Reactive agent not on an output node",
+					"Agent service '" + reactiveService.getId() + "' used by participant '" + name
+							+ "' answers the user directly: it can take part in a network only as an output node"));
+			return null;
+		}
+		final IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern factories = runtimeBinder
+				.getImplementationOf(IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern.class);
+		final IGReactiveToNetworkAgentAdapterFactory factory = factories != null
+				? factories.getFactory(reactiveService)
+				: null;
+		if (factory == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No network adapter factory for the reactive agent service:" + reactiveService.getId()
+						+ " of participant:" + name);
+			}
+			messages.add(GUserMessage.errorMessage("Reactive agent cannot take part in a network",
+					"Agent service '" + reactiveService.getId() + "' used by participant '" + name
+							+ "' answers the user directly and no adapter makes it a network agent"));
+			return null;
+		}
+		try {
+			IGNetworkAgentService<?, ?> adapter = factory.create(reactiveService).getAdapter();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Participant:" + name + " runs the reactive agent service:" + reactiveService.getId()
+						+ " through the network adapter factory:" + factory.getClass().getName());
+			}
+			return adapter;
+		} catch (Throwable e) {
+			LOGGER.error("Cannot adapt the reactive agent service:" + reactiveService.getId() + " of participant:"
+					+ name, e);
+			messages.add(GUserMessage.errorMessage("Reactive agent cannot take part in a network",
+					"Agent service '" + reactiveService.getId() + "' used by participant '" + name
+							+ "' cannot be adapted to a network agent: " + e.getMessage()));
+			return null;
+		}
+	}
+
+	/**
+	 * Enforces the core invariant: for every communication edge {@code A -> B} along
+	 * which {@code A} delivers its output as the input of {@code B}
+	 * ({@link IGNetworkAgentService#isOutputDeliveredAsInput()}), the output type of
+	 * {@code A} must be assignable to the input type of {@code B}. An agent that only
+	 * shares its output in the session context (a performer, a searcher, a writer)
+	 * has no type to match: its targets read the shared contributions.
 	 * <p>
 	 * Routing/coordinator agents ({@link IGRoutingNetworkAgentService}) do not pipe
 	 * their own output into a peer; they emit commands typed to each target's own
@@ -386,6 +455,15 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 				IGNetworkAgentService<?, ?> targetService = servicesByName.get(targetName);
 				if (sourceService == null || targetService == null) {
 					// The missing service has already been reported above.
+					continue;
+				}
+				if (!sourceService.isOutputDeliveredAsInput()) {
+					// The source only shares its output in the session context the target reads:
+					// its output never becomes the target's input.
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("Edge " + sourceName + " -> " + targetName
+								+ " shares the output in the session context: no input type to match");
+					}
 					continue;
 				}
 				Class<?> sourceOutput = sourceService.getOutputType();

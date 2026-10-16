@@ -52,6 +52,12 @@ import org.a2aproject.sdk.spec.TextPart;
  */
 public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<String, String> {
 
+	/** The remote agent's answer is a RESPONSE, shared in the session context. */
+	@Override
+	public boolean isOutputDeliveredAsInput() {
+		return false;
+	}
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(RemoteA2ANetworkAgentService.class);
 
 	private final A2ARemoteAgentConfig remoteConfig;

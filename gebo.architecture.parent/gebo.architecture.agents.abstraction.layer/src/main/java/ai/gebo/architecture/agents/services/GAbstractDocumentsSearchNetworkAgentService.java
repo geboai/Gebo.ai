@@ -34,6 +34,12 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		extends GAbstractGenericalNetworkAgentService<SearchAgentCommand, List<Document>>
 		implements IGDocumentsSearchNetworkAgentService {
 
+	/** The searcher returns the documents found with a RESPONSE, shared in the session context. */
+	@Override
+	public boolean isOutputDeliveredAsInput() {
+		return false;
+	}
+
 	public GAbstractDocumentsSearchNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,

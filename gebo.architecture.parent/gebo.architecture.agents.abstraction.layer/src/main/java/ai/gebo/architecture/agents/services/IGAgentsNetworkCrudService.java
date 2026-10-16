@@ -16,9 +16,11 @@ import ai.gebo.model.OperationStatus;
  * {@code null} result together with the diagnostic messages.
  * <p>
  * The structural validation always enforces that the agents of a network can
- * actually communicate: for every communication edge {@code A -> B} the output
- * type of {@code A} must be assignable to the input type of {@code B} (see
- * {@link #validate(GAgentsNetwork)}).
+ * actually communicate: for every communication edge {@code A -> B} along which
+ * {@code A} delivers its output as the input of {@code B}, the output type of
+ * {@code A} must be assignable to the input type of {@code B} (see
+ * {@link #validate(GAgentsNetwork)} and
+ * {@link IGNetworkAgentService#isOutputDeliveredAsInput()}).
  */
 public interface IGAgentsNetworkCrudService {
 

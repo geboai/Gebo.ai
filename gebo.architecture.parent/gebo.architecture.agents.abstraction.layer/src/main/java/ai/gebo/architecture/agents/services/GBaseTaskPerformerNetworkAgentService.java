@@ -32,6 +32,12 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 		extends GAbstractGenericalNetworkAgentService<InputType, OutputType>
 		implements IGNetworkAgentService<InputType, OutputType> {
 
+	/** The performer answers with a RESPONSE, shared in the session context. */
+	@Override
+	public boolean isOutputDeliveredAsInput() {
+		return false;
+	}
+
 	protected final Class<InputType> inputType;
 	protected final Class<OutputType> outputType;
 	protected final String id;

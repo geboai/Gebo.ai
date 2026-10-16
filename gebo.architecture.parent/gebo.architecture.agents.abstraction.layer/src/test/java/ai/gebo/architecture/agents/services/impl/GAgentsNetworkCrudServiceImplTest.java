@@ -25,6 +25,10 @@ import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
+import ai.gebo.architecture.agents.services.IGReactiveAgentService;
+import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactory;
+import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactory.AdapterWithFlux;
+import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
@@ -46,13 +50,39 @@ class GAgentsNetworkCrudServiceImplTest {
 		when(textAgent.getId()).thenReturn("textAgent");
 		when(textAgent.getInputType()).thenReturn(String.class);
 		when(textAgent.getOutputType()).thenReturn(String.class);
+		when(textAgent.isOutputDeliveredAsInput()).thenReturn(true);
+		// an agent sharing a list in the session context, and one delivering a number as input
+		IGNetworkAgentService sharingAgent = mock(IGNetworkAgentService.class);
+		when(sharingAgent.getId()).thenReturn("sharingAgent");
+		when(sharingAgent.getInputType()).thenReturn(String.class);
+		when(sharingAgent.getOutputType()).thenReturn(List.class);
+		when(sharingAgent.isOutputDeliveredAsInput()).thenReturn(false);
+		IGNetworkAgentService deliveringAgent = mock(IGNetworkAgentService.class);
+		when(deliveringAgent.getId()).thenReturn("deliveringAgent");
+		when(deliveringAgent.getInputType()).thenReturn(String.class);
+		when(deliveringAgent.getOutputType()).thenReturn(Integer.class);
+		when(deliveringAgent.isOutputDeliveredAsInput()).thenReturn(true);
+		// a reactive agent (answering the user directly) takes part through its network adapter
+		IGReactiveAgentService reactiveAgent = mock(IGReactiveAgentService.class);
+		when(reactiveAgent.getId()).thenReturn("reactiveAgent");
+		IGReactiveToNetworkAgentAdapterFactory adapterFactory = mock(IGReactiveToNetworkAgentAdapterFactory.class);
+		when(adapterFactory.create(any())).thenReturn(new AdapterWithFlux(textAgent, null, null));
+		IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern adapterFactories = mock(
+				IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern.class);
+		when(adapterFactories.getFactory(any())).thenReturn(adapterFactory);
 		IGAgentServiceRuntimeDao serviceDao = mock(IGAgentServiceRuntimeDao.class);
 		when(serviceDao.findByCode("textAgent")).thenReturn(textAgent);
+		when(serviceDao.findByCode("reactiveAgent")).thenReturn(reactiveAgent);
+		when(serviceDao.findByCode("sharingAgent")).thenReturn(sharingAgent);
+		when(serviceDao.findByCode("deliveringAgent")).thenReturn(deliveringAgent);
 		IAgentConfigDao agentDao = mock(IAgentConfigDao.class);
+		// the agent config code tells the agent service: reactive..., sharing..., delivering...
 		when(agentDao.findByCode(any())).thenAnswer(x -> {
 			GAgentConfig agent = new GAgentConfig();
 			agent.setCode(x.getArgument(0));
-			agent.setAgentServiceId("textAgent");
+			String kind = agent.getCode().replaceAll("[A-Z].*", "");
+			agent.setAgentServiceId(List.of("reactive", "sharing", "delivering").contains(kind) ? kind + "Agent"
+					: "textAgent");
 			return agent;
 		});
 		networkDao = mock(IAgentsNetworkDao.class);
@@ -71,17 +101,23 @@ class GAgentsNetworkCrudServiceImplTest {
 		when(runtimeBinder.getImplementationOf(IAgentsNetworkDao.class)).thenReturn(networkDao);
 		when(runtimeBinder.getImplementationOf(IAgentConfigDao.class)).thenReturn(agentDao);
 		when(runtimeBinder.getImplementationOf(IGAgentServiceRuntimeDao.class)).thenReturn(serviceDao);
+		when(runtimeBinder.getImplementationOf(IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern.class))
+				.thenReturn(adapterFactories);
 		service = new GAgentsNetworkCrudServiceImpl(runtimeBinder);
 	}
 
 	/** A valid two agents network: an input node messaging an output node. */
 	private static GAgentsNetwork network(String code, String description) {
+		return network(code, description, "reader", "writer");
+	}
+
+	private static GAgentsNetwork network(String code, String description, String inputAgent, String outputAgent) {
 		AgentNetworkParticipant input = new AgentNetworkParticipant();
-		input.setAgentConfigCode("reader");
+		input.setAgentConfigCode(inputAgent);
 		input.setInputNode(true);
-		input.setCommunicationList(List.of("writer"));
+		input.setCommunicationList(List.of(outputAgent));
 		AgentNetworkParticipant output = new AgentNetworkParticipant();
-		output.setAgentConfigCode("writer");
+		output.setAgentConfigCode(outputAgent);
 		output.setOutputNode(true);
 		GAgentsNetwork network = new GAgentsNetwork();
 		network.setCode(code);
@@ -141,6 +177,37 @@ class GAgentsNetworkCrudServiceImplTest {
 		assertNull(status.getResult());
 		assertTrue(hasError(status, "Missing network description"));
 		verify(networkDao, never()).insert(any());
+	}
+
+	@Test
+	void aReactiveAgentTakesPartAsAnOutputNodeThroughItsAdapter() {
+		OperationStatus<GAgentsNetwork> status = service.validate(network("net", "Net", "reader", "reactiveWriter"));
+
+		assertFalse(status.isHasErrorMessages(), String.valueOf(status.getMessages()));
+		assertNotNull(status.getResult());
+	}
+
+	@Test
+	void aReactiveAgentCannotBeAnInnerNode() {
+		OperationStatus<GAgentsNetwork> status = service.validate(network("net", "Net", "reactiveReader", "writer"));
+
+		assertNull(status.getResult());
+		assertTrue(hasError(status, "Reactive agent not on an output node"));
+	}
+
+	@Test
+	void anOutputSharedInTheSessionContextNeedsNoMatchingInput() {
+		OperationStatus<GAgentsNetwork> status = service.validate(network("net", "Net", "sharingReader", "writer"));
+
+		assertFalse(status.isHasErrorMessages(), String.valueOf(status.getMessages()));
+	}
+
+	@Test
+	void anOutputDeliveredAsInputMustMatchTheInputType() {
+		OperationStatus<GAgentsNetwork> status = service.validate(network("net", "Net", "deliveringReader", "writer"));
+
+		assertNull(status.getResult());
+		assertTrue(hasError(status, "Incompatible communication types"));
 	}
 
 	@Test

@@ -25,6 +25,12 @@ import lombok.Getter;
 public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputType>
 		extends GAbstractGenericalNetworkAgentService<InputType, OutputType>
 		implements IGAgentsNetworkToNetworkAgentAdapterService<InputType, OutputType> {
+
+	/** The adapted network answers with a RESPONSE, shared in the session context. */
+	@Override
+	public boolean isOutputDeliveredAsInput() {
+		return false;
+	}
 	private static final String EMPTY_ADAPTED_AGENT_NETWORK_CODE_MSG = "A network adapter configuration cannot have an empty adaptedAgentNetworkCode";
 	private static final String EMPTY_NETWORK_SERVICE_CODE_MSG = "A network adapter configuration cannot have an empty agentNetworkServiceCode";
 	private static final String OR_OUTPUT_TYPE = " or output type: ";

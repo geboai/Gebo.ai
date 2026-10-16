@@ -26,6 +26,12 @@ import reactor.core.publisher.Sinks;
 public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, ResponseType>
 		implements IGNetworkAgentService<RequestType, ResponseType> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractReactiveAgentServiceNetworkAdapter.class);
+
+	/** The adapted agent answers with a RESPONSE, shared in the session context. */
+	@Override
+	public boolean isOutputDeliveredAsInput() {
+		return false;
+	}
 	private final IGReactiveAgentService<RequestType, ResponseType> service;
 	private final Class<RequestType> inputType;
 	private final Class<ResponseType> outputType;
