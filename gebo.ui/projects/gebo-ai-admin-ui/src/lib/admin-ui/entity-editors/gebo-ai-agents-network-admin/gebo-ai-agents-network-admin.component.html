@@ -5,16 +5,20 @@
   @if (!isWizardMode) {
     <div class="geboButtonsBar" style="vertical-align: bottom">
       <div class="grid">
-        <div class="col-4">
+        <div class="col-3">
           <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
             icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || readonly===true"
           styleClass="w-full"></p-button>
         </div>
-        <div class="col-4">
+        <div class="col-3">
+          <p-button id="CopyBtn" gebo-ai-label [outlined]="true" label="Copy" severity="info"
+            icon="pi pi-copy" [disabled]="!entity?.code" (onClick)="copyNetwork()" styleClass="w-full" />
+        </div>
+        <div class="col-3">
           <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
             (onClick)="cancelAction.emit(true)" styleClass="w-full" />
           </div>
-          <div class="col-4">
+          <div class="col-3">
             <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
               icon="pi pi-trash" [disabled]="readonly===true" (onClick)="doDelete()" styleClass="w-full" />
             </div>

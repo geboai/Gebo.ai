@@ -1,0 +1,39 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+<p-blockUI id="BlockUILock" [target]="networksUI" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #networksUI header="Agents and Agents Networks">
+  <div id="AgentsNetworksHint" gebo-ai-text class="text-sm text-600 mb-3">
+    An agent works within the network of agents it takes part in: open a network to configure it and its agents.
+    The system networks are read-only: copy one from its editor to have a network of agents of your own.
+  </div>
+  <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+  @if (agentsNetworks.length) {
+    <p-table id="Table" gebo-ai-label [value]="agentsNetworks">
+      <ng-template #header pTemplate="header">
+        <tr>
+          <th id="CodeHeader" gebo-ai-text>Code</th>
+          <th id="DescriptionHeader" gebo-ai-text>Description</th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-network pTemplate="body">
+        <tr>
+          <td>{{ network.code }}</td>
+          <td>{{ network.description }}</td>
+          <td><p-button id="ConfigureBtn" gebo-ai-label label="configure" icon="pi pi-wrench" [outlined]="true"
+              (onClick)="openNetwork(network)"></p-button></td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+</p-panel>

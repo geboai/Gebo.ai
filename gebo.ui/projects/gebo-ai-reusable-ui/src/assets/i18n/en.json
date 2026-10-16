@@ -256,13 +256,6 @@
         "summary": "Gebo.ai setup is missing some mandatory step",
         "detail": "Please review the red steps of the setup process"
       },
-      "agentSetupSection": {
-        "label": "Configure Agent Services",
-        "description": "Configure Agent Services and their available tools"
-      },
-      "AgentAddBtn": {
-        "label": "Add agent"
-      },
       "MainPanel": {
         "label": "Setup Agents"
       },
@@ -271,9 +264,6 @@
       },
       "DescriptionHeader": {
         "label": "Description"
-      },
-      "EditAgentBtn": {
-        "label": "Edit agent"
       },
       "ExitMandatorySetupPopupBtn": {
         "label": "Exit setup checklist"
@@ -317,6 +307,10 @@
       "agenticChatNetworksSetupSection": {
         "label": "Agentic chat networks",
         "description": "Choose the network of agents the chats with knowledge bases and the free chats are handed to."
+      },
+      "agentsNetworksSetupSection": {
+        "label": "Agents/Networks of agents",
+        "description": "Configure the networks of agents and their agents; copy a system network to have one of your own"
       }
     },
     "ConfluenceWizardComponent": {
@@ -6324,6 +6318,16 @@
       },
       "warnSystemAgent": {
         "label": "This is a default system agent, you cannot change its configuration"
+      },
+      "CopyBtn": {
+        "label": "Copy"
+      },
+      "CopyConfirmation": {
+        "message": "The changes not saved are not copied and will be lost: copy the saved agent?",
+        "header": "Copy the agent"
+      },
+      "COPY-ERROR": {
+        "summary": "Copy failed"
       }
     }
   },
@@ -7276,6 +7280,19 @@
       },
       "SecurityAccessSettingsTab": {
         "label": "Security access settings"
+      },
+      "CopyBtn": {
+        "label": "Copy"
+      },
+      "CopyConfirmation": {
+        "message": "The changes not saved are not copied and will be lost: copy the saved network of agents?",
+        "header": "Copy the network of agents"
+      },
+      "CANNOT-DELETE": {
+        "detail": "This is a system network of agents: it cannot be changed nor deleted, copy it to have one of your own"
+      },
+      "COPY-ERROR": {
+        "summary": "Copy failed"
       }
     }
   },
@@ -8153,6 +8170,25 @@
     "GeboAIChooseLLMFunctionscomponent": {
       "TreeSelect": {
         "placeholder": "Select functions"
+      }
+    }
+  },
+  "AgentsNetworksSetupWizardModule": {
+    "AgentsNetworksSetupWizardComponent": {
+      "MainPanel": {
+        "label": "Agents and Agents Networks"
+      },
+      "AgentsNetworksHint": {
+        "label": "An agent works within the network of agents it takes part in: open a network to configure it and its agents. The system networks are read-only: copy one from its editor to have a network of agents of your own."
+      },
+      "CodeHeader": {
+        "label": "Code"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "ConfigureBtn": {
+        "label": "configure"
       }
     }
   }

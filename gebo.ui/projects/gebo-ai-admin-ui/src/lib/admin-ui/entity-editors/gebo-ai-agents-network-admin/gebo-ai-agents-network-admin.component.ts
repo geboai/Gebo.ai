@@ -1,9 +1,9 @@
 import { afterNextRender, Component, DestroyRef, ElementRef, forwardRef, Injector, OnInit, runInInjectionContext, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AgenticChatDefaultNetworksAdminControllerService, GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GBaseObject, GAgentConfig, AgentMountedTools } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboActionPerformedType, GeboAITranslationService, ExtendedConfirmation } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
-import { map, Observable, of } from "rxjs";
+import { map, Observable, of, take } from "rxjs";
 import { initializeModel, NgDiagramNodeTemplateMap, NgDiagramConfig, provideNgDiagram, NgDiagramViewportService } from "ng-diagram";
 import { AgentNodeComponent } from "./agent-node.component";
 
@@ -480,9 +480,64 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
             targetType: "GAgentConfig",
             target: { code: code },
             onActionPerformed: (event) => {
-                this.loadAvailableAgents(code);
+                // an agent copied from the participant's context becomes the participant's agent
+                const copiedCode = event?.actionType === GeboActionPerformedType.INSERTED ? event.target?.code : undefined;
+                this.loadAvailableAgents(copiedCode ?? code);
                 // the edited configuration may mount other tools now
-                this.loadMountedTools(code);
+                this.loadMountedTools(copiedCode ?? code);
+            }
+        });
+    }
+
+    /**
+     * Copies the network together with its agents and goes on editing the copy in
+     * place of the original: this is also how a read-only system network becomes a
+     * network of agents that can be changed.
+     */
+    protected copyNetwork(): void {
+        const code = this.entity?.code;
+        if (!code) return;
+        if (!this.formGroup.dirty) {
+            this.doCopyNetwork(code);
+            return;
+        }
+        const confirmation: ExtendedConfirmation = {
+            id: "CopyConfirmation",
+            message: "The changes not saved are not copied and will be lost: copy the saved network of agents?",
+            header: "Copy the network of agents",
+            icon: "pi pi-exclamation-triangle",
+            accept: () => this.doCopyNetwork(code)
+        };
+        this.myInjector.get(GeboAITranslationService).translateConfirmation("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork", confirmation)
+            .pipe(take(1)).subscribe(translated => this.myConfirmationService.confirm(translated ?? confirmation));
+    }
+
+    private doCopyNetwork(code: string): void {
+        this.loadingRelatedBackend = true;
+        this.service.copyAgentsNetwork(code).subscribe({
+            next: (status) => {
+                this.assignBackendMessages(status?.messages);
+                const copy = status?.result;
+                if (copy?.code) {
+                    // the copy takes the place of the original in this editor, and whoever
+                    // opened the editor (the networks lists) learns a network was created
+                    this.entity = copy;
+                    this.formGroup.markAsPristine();
+                    this.doReloadByCode();
+                    this.loadAvailableAgents();
+                    this.createdNew.emit(copy);
+                } else {
+                    this.loadingRelatedBackend = false;
+                }
+            },
+            error: (error) => {
+                this.loadingRelatedBackend = false;
+                this.userMessages = [{
+                    id: "COPY-ERROR",
+                    severity: "error",
+                    summary: "Copy failed",
+                    detail: "Server error copying the network of agents: " + (error?.message ?? error)
+                }];
             }
         });
     }
@@ -727,6 +782,10 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
     }
 
     override canBeDeleted(value: GAgentsNetwork): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ "canBeDeleted": false, "message": "" });
+        // only the system networks, which are read-only, cannot be deleted
+        return of({
+            "canBeDeleted": value?.readOnly !== true,
+            "message": "This is a system network of agents: it cannot be changed nor deleted, copy it to have one of your own"
+        });
     }
 }

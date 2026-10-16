@@ -1,9 +1,9 @@
 import { Component, forwardRef, inject, Injector } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, GAgentConfig, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GPromptTemplateConfig } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, ExtendedConfirmation, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
-import { forkJoin, map, Observable, of } from "rxjs";
+import { forkJoin, map, Observable, of, take } from "rxjs";
 const systemAgentService:ToastMessageOptions={id:"systemAgentService",summary:"Default system agent",detail:"This is a default system generated agent, you cannot change its configuration",severity:"warn",life:5000};
 @Component({
     selector: "gebo-ai-agent-admin-component",
@@ -53,12 +53,12 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     protected thinkingOptions: { code: GBaseChatModelConfig.ThinkingEnum, description: string }[] = [{ code: "NO_THINKING", description: "Disabled" }, { code: "AUTO", description: "Automatic" }, { code: "LOW_THINKING", description: "Low" }, { code: "MEDIUM_THINKING", description: "Medium" }, { code: "HIGH_THINKING", description: "High" }];
     public constructor(injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,
-        confirmationService: ConfirmationService,
+        protected myConfirmationService: ConfirmationService,
         geboUIActionRoutingService: GeboUIActionRoutingService,
         outputForwardingService: GeboUIOutputForwardingService,
         private agentsAdminService: GeboAgentAdminControllerService,
         private geboChatModelsService: ChatModelsControllerService) {
-        super(injector, geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService);
+        super(injector, geboFormGroupsService, myConfirmationService, geboUIActionRoutingService, outputForwardingService);
         this.formGroup.controls["subscribeAllTools"].valueChanges.subscribe({
             next: (received) => {
                 if (received === true)
@@ -145,6 +145,58 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
 
         });
     }
+    /**
+     * Copies the agent and goes on editing the copy in place of the original: this is
+     * also how a read-only system agent becomes an agent that can be changed. Opened
+     * from a network participant, the participant takes the copy.
+     */
+    protected copyAgent(): void {
+        const code = this.entity?.code;
+        if (!code) return;
+        if (!this.formGroup.dirty) {
+            this.doCopyAgent(code);
+            return;
+        }
+        const confirmation: ExtendedConfirmation = {
+            id: "CopyConfirmation",
+            message: "The changes not saved are not copied and will be lost: copy the saved agent?",
+            header: "Copy the agent",
+            icon: "pi pi-exclamation-triangle",
+            accept: () => this.doCopyAgent(code)
+        };
+        this.injector.get(GeboAITranslationService).translateConfirmation("GeboAIAgentsAdminModule", "GAgentConfig", confirmation)
+            .pipe(take(1)).subscribe(translated => this.myConfirmationService.confirm(translated ?? confirmation));
+    }
+
+    private doCopyAgent(code: string): void {
+        this.loadingRelatedBackend = true;
+        this.agentsAdminService.copyAgent(code).subscribe({
+            next: (status) => {
+                this.assignBackendMessages(status?.messages);
+                const copy = status?.result;
+                if (copy?.code) {
+                    // the copy takes the place of the original in this editor, and whoever
+                    // opened the editor (a network participant) learns an agent was created
+                    this.entity = copy;
+                    this.formGroup.markAsPristine();
+                    this.doReloadByCode();
+                    this.createdNew.emit(copy);
+                } else {
+                    this.loadingRelatedBackend = false;
+                }
+            },
+            error: (error) => {
+                this.loadingRelatedBackend = false;
+                this.userMessages = [{
+                    id: "COPY-ERROR",
+                    severity: "error",
+                    summary: "Copy failed",
+                    detail: "Server error copying the agent: " + (error?.message ?? error)
+                }];
+            }
+        });
+    }
+
     override findByCode(code: string): Observable<GAgentConfig | null> {
         return this.agentsAdminService.getAgentByCode(code);
     }
