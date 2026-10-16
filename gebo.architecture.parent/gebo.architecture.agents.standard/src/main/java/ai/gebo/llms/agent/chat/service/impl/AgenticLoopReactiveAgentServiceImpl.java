@@ -2152,12 +2152,23 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			piece.append("BEGIN_AGENT-LOOP-").append(iteration.number()).append(NEWLINE);
 			List<CalledFunction> functions = renderFunctions(iteration.calls());
 			for (int i = 0; functions != null && i < functions.size(); i++) {
+				// the call's input is its paramsDescription (see ToolCallsListener.toCalledFunction):
+				// params is empty, and printed it as "[]", hiding what was searched
 				piece.append("TOOL-CALLED-").append(i + 1).append(": ").append(functions.get(i).getFunctionName())
-						.append(" params:").append(functions.get(i).getParams()).append(NEWLINE);
+						.append(" params:").append(functions.get(i).getParamsDescription()).append(NEWLINE);
 			}
 			if (!iteration.discarded() && index == lastShown) {
 				// the answer the user sees now: the next iteration writes it again, improved
 				piece.append(LAST_ANSWER).append(iteration.text()).append(NEWLINE);
+				if (iteration.calls() == null || iteration.calls().isEmpty()) {
+					// it searched nothing and asked to go on: without new evidence the next iteration
+					// would write the same answer again; it is told to change angle, or to finish
+					piece.append(NO_SEARCH_NOTE).append(NEWLINE);
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Agentic loop agent id:" + getId() + " iteration " + iteration.number()
+								+ " searched nothing and asked to go on: the next one is told to change angle, or to finish");
+					}
+				}
 			} else if (!iteration.discarded()) {
 				// shown, then written again by a later iteration: recalled by its tool calls
 				piece.append(SUPERSEDED_ANSWER).append(NEWLINE);
@@ -2202,6 +2213,12 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			+ "iteration replaces it: write the whole answer again, improved by what you found since): ";
 	/** An answer shown to the user and then written again by a later iteration. */
 	static final String SUPERSEDED_ANSWER = "ANSWER: superseded by your later answer.";
+	/**
+	 * Follows, in the story, the last answer when its iteration called no tool and asked
+	 * to go on: without new evidence the next iteration would write the same answer again.
+	 */
+	static final String NO_SEARCH_NOTE = "THIS ITERATION SEARCHED NOTHING AND ASKED TO GO ON: in this iteration "
+			+ "search an angle the searches above (TOOL-CALLED) did not cover, or finish with the answer as it stands.";
 	static final String WHY_DISCARDED = "WHY IT WAS DISCARDED: ";
 	static final String SUPERSEDED_DRAFT = "DISCARDED DRAFT: superseded by a later one.";
 	/** A discarded draft that rests on no tool result: not shown, only why. */

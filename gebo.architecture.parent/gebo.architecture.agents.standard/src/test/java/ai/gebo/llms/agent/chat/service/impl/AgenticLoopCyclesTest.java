@@ -159,6 +159,25 @@ class AgenticLoopCyclesTest {
 	}
 
 	@Test
+	void anIterationThatSearchedNothingAndWentOnTellsTheNextOneToChangeAngleOrFinish() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
+		ToolCallsListener listener = new ToolCallsListener();
+		listener.addCall("searchKnowledgeBase", "search", "{\"query\":\"archons\"}", "found");
+		List<LoopIteration> searched = List.of(new LoopIteration(1, "Searched answer.", listener.getCalls()));
+		List<LoopIteration> notSearched = List.of(new LoopIteration(1, "Searched answer.", listener.getCalls()),
+				new LoopIteration(2, "The same answer again.", List.of()));
+
+		assertFalse(agent.loopStory(searched, 40_000, null).contains(AgenticLoopReactiveAgentServiceImpl.NO_SEARCH_NOTE),
+				"an iteration that searched is not told to change angle");
+		String story = agent.loopStory(notSearched, 40_000, null);
+		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.LAST_ANSWER + "The same answer again."), story);
+		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.NO_SEARCH_NOTE), story);
+		assertTrue(story.indexOf("searchKnowledgeBase") < story.indexOf(AgenticLoopReactiveAgentServiceImpl.NO_SEARCH_NOTE),
+				"the searches already made come before the note, as the angles to avoid: " + story);
+		assertTrue(story.contains("archons"), "a search is told with its input, the angle it covered: " + story);
+	}
+
+	@Test
 	void theStoryGivesTheLastShownAnswerWholeAndADraftDiscardedAfterIt() {
 		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
 		List<LoopIteration> history = List.of(new LoopIteration(1, "Shown first.", List.of()),

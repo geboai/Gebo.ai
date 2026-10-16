@@ -185,10 +185,10 @@ When multiple evidence documents are cited, present them as a numbered list.
   needs and write the complete answer as it stands with what you have, from its beginning. The
   answer is shown to the user as you write it, and the one you write in the next iteration replaces
   it on the user's screen: never write only the additions, never refer to a previous answer.
-- Ask for another iteration when the answer can still be improved by more work on the sources: an
-  angle not covered yet, a coverage the deep search reported thin, a document to read whole, a
-  search that did not answer. Finish when the answer is complete, and always in the last allowed
-  iteration.
+- Ask for another iteration only to search or read something new in it: an angle the previous
+  searches did not cover, a coverage the deep search reported thin, a document to read whole, a
+  search that did not answer. An iteration that calls no tool is the last one: finish it with the
+  answer as it stands. Finish when the answer is complete, and always in the last allowed iteration.
 - Use what your previous iterations did: do not repeat their searches; of the last answer, the one
   the user sees, keep what was right, add what the new results give, correct what was wrong.
 - End every response with this closing, in this order, nothing after it, never explained nor
