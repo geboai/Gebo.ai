@@ -42,7 +42,7 @@ public class GAgentConfig extends GBaseObject
 	private ChatModelsUses useChatModelWithUse = null;
 	@GObjectReference(referencedType = GBaseChatModelConfig.class, referencesExtensions = true)
 	private GObjectRef<GBaseChatModelConfig> chatModelReference = null;
-	@NotNull
+	/** Not set (as by the system agents): the agent service's default. */
 	private Integer maxLoopIterations = null;
 	private List<Integer> aclAliases = null;
 	private Boolean defaultConfiguration = null;

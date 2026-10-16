@@ -134,8 +134,12 @@ public class GeboAgentAdminController {
 		return status;
 	}
 
+	/**
+	 * Deletes the agent configuration: not validated, an agent being deleted by its
+	 * code also when its configuration is no longer valid.
+	 */
 	@DeleteMapping(value = "deleteAgent", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void deleteAgent(@Valid @NotNull @RequestBody GAgentConfig config) throws GeboPersistenceException {
+	public void deleteAgent(@NotNull @RequestBody GAgentConfig config) throws GeboPersistenceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST deleteAgent code:" + (config != null ? config.getCode() : null));
 		}
