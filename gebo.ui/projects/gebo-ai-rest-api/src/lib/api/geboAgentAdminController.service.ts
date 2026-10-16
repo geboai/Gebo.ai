@@ -20,6 +20,7 @@ import { Observable }                                        from 'rxjs';
 import { GAgentConfig } from '../model/gAgentConfig';
 import { GBaseObject } from '../model/gBaseObject';
 import { GPromptTemplateConfig } from '../model/gPromptTemplateConfig';
+import { OperationStatusGAgentConfig } from '../model/operationStatusGAgentConfig';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -56,6 +57,53 @@ export class GeboAgentAdminControllerService {
         return false;
     }
 
+
+    /**
+     * 
+     * 
+     * @param code 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public copyAgent(code: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGAgentConfig>;
+    public copyAgent(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGAgentConfig>>;
+    public copyAgent(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGAgentConfig>>;
+    public copyAgent(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (code === null || code === undefined) {
+            throw new Error('Required parameter code was null or undefined when calling copyAgent.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (code !== undefined && code !== null) {
+            queryParameters = queryParameters.set('code', <any>code);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<OperationStatusGAgentConfig>('post',`${this.basePath}/api/admin/GeboAgentAdminController/copyAgent`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * 

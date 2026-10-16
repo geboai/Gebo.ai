@@ -63,6 +63,53 @@ export class GeboAgentsNetworkAdminControllerService {
     /**
      * 
      * 
+     * @param code 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public copyAgentsNetwork(code: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGAgentsNetwork>;
+    public copyAgentsNetwork(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGAgentsNetwork>>;
+    public copyAgentsNetwork(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGAgentsNetwork>>;
+    public copyAgentsNetwork(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (code === null || code === undefined) {
+            throw new Error('Required parameter code was null or undefined when calling copyAgentsNetwork.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (code !== undefined && code !== null) {
+            queryParameters = queryParameters.set('code', <any>code);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<OperationStatusGAgentsNetwork>('post',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/copyAgentsNetwork`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

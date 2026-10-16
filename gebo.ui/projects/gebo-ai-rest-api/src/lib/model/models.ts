@@ -363,6 +363,7 @@ export * from './operationStatusAgenticChatDefaultNetworkInfo';
 export * from './operationStatusAuthResponse';
 export * from './operationStatusBoolean';
 export * from './operationStatusComponentVectorStoreStatus';
+export * from './operationStatusGAgentConfig';
 export * from './operationStatusGAgentsNetwork';
 export * from './operationStatusGAnthropicChatModelConfig';
 export * from './operationStatusGAwsS3System';
