@@ -17,8 +17,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,6 +73,7 @@ import ai.gebo.llms.agent.standardtools.ToolsProgress;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.agent.standardtools.WebSearchToolSource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GAnswerCycleEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -90,11 +91,14 @@ import reactor.core.scheduler.Schedulers;
 
 /**
  * A single agent with tools, working in the classic agentic loop over the network
- * of agents: at each iteration the model uses its tools as it sees fit, then either
- * answers and ends the loop, or asks for another iteration by ending its text with
- * a control marker. Every iteration is streamed to the user without the markers,
- * and the next one receives the history of the previous ones (their text and the
- * tools they called). The loop ends when the model says so, or after
+ * of agents: at each iteration (a cycle) the model uses its tools as it sees fit and
+ * writes the complete answer as it stands, then either ends the loop or asks for
+ * another iteration by ending its text with a control marker. Every cycle's answer
+ * is streamed to the user without the markers and then given whole, with the
+ * documents it rests on, those of the previous cycles kept; the next cycle writes
+ * the answer again in its place (see {@link CycleRenderer}), receiving the history
+ * of the previous ones: the tools they called and the last answer the user sees,
+ * to improve. The loop ends when the model says so, or after
  * {@link #maxIterations(AgentNetworkParticipant)} iterations.
  * <p>
  * It runs as the output node of its own network, reusing the report writer's
@@ -104,7 +108,7 @@ import reactor.core.scheduler.Schedulers;
 public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAgentServiceImpl {
 	public static final String AGENTIC_LOOP_NETWORK_AGENT_SERVICE = "AgenticLoopNetworkAgentService";
 	private static final String DESCRIPTION = "Single agent that operates every available tool in a loop and decides by itself when the answer is complete";
-	/** Iterations of the loop when the network does not set them. */
+	/** The iterations (cycles) the loop may run at most. */
 	static final int DEFAULT_MAX_ITERATIONS = 5;
 	static final String MAX_ITERATIONS_PARAM = "MAX_ITERATIONS";
 	/**
@@ -592,69 +596,218 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			}
 			return keep;
 		});
-		// the answer written again after a cut one is the answer: the cut one, shown as it
-		// streamed, is parted from it by a rule (see iteration(...))
-		final AtomicInteger restartAt = new AtomicInteger(-1);
-		final AtomicInteger streamed = new AtomicInteger();
-		text = text.map(chunk -> {
-			final int mark = chunk.indexOf(ANSWER_RESTART_MARK);
-			if (mark < 0) {
-				streamed.addAndGet(chunk.length());
-				return chunk;
-			}
-			final String parted = chunk.substring(0, mark) + ANSWER_RESTART_RULE
-					+ chunk.substring(mark + ANSWER_RESTART_MARK.length());
-			restartAt.set(streamed.get() + mark + ANSWER_RESTART_RULE.length());
-			streamed.addAndGet(parted.length());
-			return parted;
-		});
-		final GeboChatResponse response = new GeboChatResponse();
-		return renderOutputStream(text, response, session, contextAgentPersona, notificationSink, callBacksListener)
-				.doOnNext(operation -> {
-					if (operation != null && operation.getData() != null
-							&& operation.getData().getContent() == response) {
-						keepTheAnswerWrittenAgain(response, restartAt.get());
-						final int before = response.getDocumentsRef() != null ? response.getDocumentsRef().size() : 0;
-						// the documents the answer rests on, not every one the tools returned
-						response.setDocumentsRef(ToolsFoundDocuments.mergeInto(response.getDocumentsRef(),
-								answerDocuments(toolDocuments, response.getQueryResponse())));
-						// the documents of the chat's earlier answers it names are given with it
-						final List<GResponseDocumentRef> earlier = citedEarlierDocuments(response.getQueryResponse(),
-								chatRequestContext);
-						if (!earlier.isEmpty()) {
-							response.setDocumentsRef(ToolsFoundDocuments.mergeInto(response.getDocumentsRef(), earlier));
-							if (LOGGER.isDebugEnabled()) {
-								LOGGER.debug("Agentic loop agent id:" + getId() + " answer names " + earlier.size()
-										+ " document(s) of the chat's earlier answers: given with it");
-							}
-						}
-						// the documents the tools only listed (in this request or for an earlier
-						// answer) it names: kept with the chat's history, the next requests may name them
-						final List<String> listed = new ArrayList<>(
-								toolDocuments != null ? toolDocuments.getListedNames() : List.of());
-						listed.addAll(earlierAnswersListedNames(chatRequestContext));
-						final List<String> namedListed = namedDocuments(response.getQueryResponse(), listed);
-						response.setListedDocumentNames(namedListed.isEmpty() ? null : namedListed);
-						if (LOGGER.isDebugEnabled()) {
-							LOGGER.debug("Agentic loop agent id:" + getId() + " answer names " + namedListed.size()
-									+ " of " + listed.size() + " document(s) only listed: kept with the history");
-						}
-						if (LOGGER.isDebugEnabled()) {
-							LOGGER.debug("Agentic loop agent id:" + getId() + " answer documents: " + before
-									+ " from the session, " + response.getDocumentsRef().size()
-									+ " with the search tools' ones");
-						}
-						if (!searchForbidden) {
-							// the user asked not to search: naming a document is no claim to have read it
-							warnAboutUnreadCitations(response, chatRequestContext, toolDocuments);
-						}
-						warnAboutRemovedAddresses(response, removedAddresses);
-						warnAboutAnswerWithoutSearch(response, toolDocuments);
-						warnAboutThinCoverage(response, coverage);
-						warnAboutEmptyAnswer(response);
-						warnAboutCutAnswer(response, history);
+		// each cycle's answer: streamed as the model writes it, then whole with the documents
+		// it rests on when the model asks for another cycle, the next cycle writing it again
+		// in its place; the last cycle's answer, with the warnings for the user, is the
+		// agent's response (see CycleRenderer)
+		final CycleRenderer cycles = new CycleRenderer(maxIterations, contextAgentPersona, notificationSink,
+				callBacksListener, answer -> answerDocumentsOf(answer, chatRequestContext, toolDocuments, session),
+				answer -> {
+					if (!searchForbidden) {
+						// the user asked not to search: naming a document is no claim to have read it
+						warnAboutUnreadCitations(answer, chatRequestContext, toolDocuments);
 					}
+					warnAboutRemovedAddresses(answer, removedAddresses);
+					warnAboutAnswerWithoutSearch(answer, toolDocuments);
+					warnAboutThinCoverage(answer, coverage);
+					warnAboutEmptyAnswer(answer);
+					warnAboutCutAnswer(answer, history);
 				});
+		return cycles.render(text);
+	}
+
+	/**
+	 * Gives an answer of the loop (a cycle's one, or the last one) the documents it rests
+	 * on: the ones of the session, the ones among the tools' documents its text says it
+	 * rests on (its {@code ANSWER-DOCUMENTS} line, else the ones it cites), the documents
+	 * of the chat's earlier answers it names, and the names of the documents the tools
+	 * only listed that it names, kept with the chat's history.
+	 */
+	void answerDocumentsOf(GeboChatResponse answer, IChatRequestContext chatRequestContext,
+			ToolsFoundDocuments toolDocuments, AgentsCollaborationSessionContext session) {
+		answer.setDocumentsRef(documentsList(session));
+		final int before = answer.getDocumentsRef() != null ? answer.getDocumentsRef().size() : 0;
+		// the documents the answer rests on, not every one the tools returned
+		answer.setDocumentsRef(ToolsFoundDocuments.mergeInto(answer.getDocumentsRef(),
+				answerDocuments(toolDocuments, answer.getQueryResponse())));
+		// the documents of the chat's earlier answers it names are given with it
+		final List<GResponseDocumentRef> earlier = citedEarlierDocuments(answer.getQueryResponse(), chatRequestContext);
+		if (!earlier.isEmpty()) {
+			answer.setDocumentsRef(ToolsFoundDocuments.mergeInto(answer.getDocumentsRef(), earlier));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agentic loop agent id:" + getId() + " answer names " + earlier.size()
+						+ " document(s) of the chat's earlier answers: given with it");
+			}
+		}
+		// the documents the tools only listed (in this request or for an earlier
+		// answer) it names: kept with the chat's history, the next requests may name them
+		final List<String> listed = new ArrayList<>(toolDocuments != null ? toolDocuments.getListedNames() : List.of());
+		listed.addAll(earlierAnswersListedNames(chatRequestContext));
+		final List<String> namedListed = namedDocuments(answer.getQueryResponse(), listed);
+		answer.setListedDocumentNames(namedListed.isEmpty() ? null : namedListed);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agentic loop agent id:" + getId() + " answer names " + namedListed.size() + " of "
+					+ listed.size() + " document(s) only listed: kept with the history");
+			LOGGER.debug("Agentic loop agent id:" + getId() + " answer documents: " + before + " from the session, "
+					+ answer.getDocumentsRef().size() + " with the search tools' ones");
+		}
+	}
+
+	/**
+	 * Where a cycle of the loop ends in its streamed text, when the model asks for another
+	 * one: a character no text has (see {@link CycleRenderer}).
+	 */
+	static final String CYCLE_END_MARK = "\uE001";
+
+	/**
+	 * Turns the loop's streamed text into the chat's messages, cycle by cycle. The text of
+	 * a cycle streams as the model writes it; when the model asks for another cycle
+	 * ({@link #CYCLE_END_MARK}) the cycle's answer is given whole, as a
+	 * {@link GeboChatResponse} with the documents it rests on, those of the previous
+	 * cycles kept (each cycle adds its own, no document twice), then a
+	 * {@link GAnswerCycleEvent} tells the chat the next cycle writes the answer again in
+	 * its place. The answer written again after a cut one ({@link #ANSWER_RESTART_MARK},
+	 * shown parted by a rule) is the cycle's answer. The last cycle's answer, completed
+	 * with the warnings for the user, ends the stream as the agent's response.
+	 */
+	final class CycleRenderer {
+		private final int maxCycles;
+		private final AgentNetworkParticipant persona;
+		private final INotificationSink notificationSink;
+		private final ToolCallsListener callBacksListener;
+		/** Gives an answer the documents it rests on (see {@link #answerDocumentsOf}). */
+		private final Consumer<GeboChatResponse> answerDocuments;
+		/** Completes the last answer with the warnings for the user. */
+		private final Consumer<GeboChatResponse> lastAnswer;
+		private final StringBuilder cycleText = new StringBuilder();
+		/** The documents the answers of the cycles so far rest on, no one twice. */
+		private List<GResponseDocumentRef> documentsSoFar = null;
+		private int cycle = 1;
+		/** Where, in the cycle's text, the answer written again after a cut one starts; -1 for none. */
+		private int restartAt = -1;
+
+		CycleRenderer(int maxCycles, AgentNetworkParticipant persona, INotificationSink notificationSink,
+				ToolCallsListener callBacksListener, Consumer<GeboChatResponse> answerDocuments,
+				Consumer<GeboChatResponse> lastAnswer) {
+			this.maxCycles = maxCycles;
+			this.persona = persona;
+			this.notificationSink = notificationSink;
+			this.callBacksListener = callBacksListener;
+			this.answerDocuments = answerDocuments;
+			this.lastAnswer = lastAnswer;
+		}
+
+		/** The chat's messages of the loop's streamed text. */
+		Flux<IGPartialOperation<GeboChatMessageEnvelope>> render(Flux<String> text) {
+			return text.concatMap(chunk -> Flux.fromIterable(accept(chunk)))
+					.concatWith(Flux.defer(() -> Flux.fromIterable(complete())));
+		}
+
+		/** The messages of a streamed chunk: its text, and the cycles ending in it. */
+		List<IGPartialOperation<GeboChatMessageEnvelope>> accept(String chunk) {
+			final List<IGPartialOperation<GeboChatMessageEnvelope>> out = new ArrayList<>();
+			if (chunk == null) {
+				return out;
+			}
+			int from = 0;
+			int mark;
+			while ((mark = chunk.indexOf(CYCLE_END_MARK, from)) >= 0) {
+				streamed(chunk.substring(from, mark), out);
+				cycleEnded(out);
+				from = mark + CYCLE_END_MARK.length();
+			}
+			streamed(chunk.substring(from), out);
+			return out;
+		}
+
+		/** The messages ending the stream: the last cycle's answer, the agent's response. */
+		List<IGPartialOperation<GeboChatMessageEnvelope>> complete() {
+			final GeboChatResponse answer = answer();
+			lastAnswer.accept(answer);
+			notificationSink.next("Agent: " + persona.getNetworkAgentName() + " has finished",
+					ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agentic loop agent id:" + getId() + " cycle " + cycle + " of at most " + maxCycles
+						+ " is the last: answer of " + String.valueOf(answer.getQueryResponse()).length()
+						+ " character(s), documents:"
+						+ (answer.getDocumentsRef() != null ? answer.getDocumentsRef().size() : 0)
+						+ ", own tool calls:" + callBacksListener.getCalls().size());
+			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<AGENTIC_LOOP_FINAL_ANSWER cycle=" + cycle + ">");
+				LOGGER.trace(String.valueOf(answer.getQueryResponse()));
+				LOGGER.trace("</AGENTIC_LOOP_FINAL_ANSWER>");
+			}
+			return List.of(IGPartialOperation.of(new GeboChatMessageEnvelope(answer), false));
+		}
+
+		private void streamed(String piece, List<IGPartialOperation<GeboChatMessageEnvelope>> out) {
+			if (piece.isEmpty()) {
+				return;
+			}
+			final int mark = piece.indexOf(ANSWER_RESTART_MARK);
+			if (mark >= 0) {
+				// the cut answer, shown as it streamed, is parted from the one written again by a rule
+				restartAt = cycleText.length() + mark + ANSWER_RESTART_RULE.length();
+				piece = piece.substring(0, mark) + ANSWER_RESTART_RULE
+						+ piece.substring(mark + ANSWER_RESTART_MARK.length());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agentic loop agent id:" + getId() + " cycle " + cycle
+							+ " answer written again from character " + restartAt);
+				}
+			}
+			cycleText.append(piece);
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<AGENTIC_LOOP_CHUNK cycle=" + cycle + " cumulated=" + cycleText.length() + ">");
+				LOGGER.trace(piece);
+				LOGGER.trace("</AGENTIC_LOOP_CHUNK>");
+			}
+			out.add(IGPartialOperation.of(new GeboChatMessageEnvelope(piece), false));
+		}
+
+		private void cycleEnded(List<IGPartialOperation<GeboChatMessageEnvelope>> out) {
+			final GeboChatResponse answer = answer();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agentic loop agent id:" + getId() + " cycle " + cycle + " of at most " + maxCycles
+						+ " ended: answer of " + String.valueOf(answer.getQueryResponse()).length()
+						+ " character(s), documents so far:"
+						+ (answer.getDocumentsRef() != null ? answer.getDocumentsRef().size() : 0) + "; cycle "
+						+ (cycle + 1) + " writes it again");
+			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<AGENTIC_LOOP_CYCLE_ANSWER cycle=" + cycle + ">");
+				LOGGER.trace(String.valueOf(answer.getQueryResponse()));
+				LOGGER.trace("</AGENTIC_LOOP_CYCLE_ANSWER>");
+			}
+			out.add(IGPartialOperation.of(new GeboChatMessageEnvelope(answer), false));
+			cycle++;
+			cycleText.setLength(0);
+			restartAt = -1;
+			out.add(IGPartialOperation.of(new GeboChatMessageEnvelope(new GAnswerCycleEvent(cycle, maxCycles)),
+					false));
+		}
+
+		/**
+		 * The answer of the cycle as it stands: its text (the one written again after a cut
+		 * one), the documents it rests on with the previous cycles' ones, the agent's own
+		 * tool calls so far.
+		 */
+		private GeboChatResponse answer() {
+			final GeboChatResponse answer = new GeboChatResponse();
+			answer.setQueryResponse(cycleText.toString());
+			keepTheAnswerWrittenAgain(answer, restartAt);
+			answerDocuments.accept(answer);
+			// each cycle adds the documents it rests on to the previous cycles' ones, no one twice
+			final List<GResponseDocumentRef> own = answer.getDocumentsRef() != null ? answer.getDocumentsRef()
+					: List.of();
+			documentsSoFar = documentsSoFar == null ? new ArrayList<>(own)
+					: ToolsFoundDocuments.mergeInto(documentsSoFar, own);
+			answer.setDocumentsRef(new ArrayList<>(documentsSoFar));
+			// this response carries the agent's own calls; the calls of the whole request are
+			// recorded on the pipeline response by the request's recorder
+			answer.setCalledFunctions(renderFunctions(callBacksListener.getCalls()));
+			return answer;
+		}
 	}
 
 	/**
@@ -1703,7 +1856,9 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				final SourceGate nextGate = notSearched
 						? new SourceGate(gate.tools(), true, gate.readDocumentNames(), gate.coverage(), false)
 						: SourceGate.continuing(gate.coverage());
-				return releasedText.concatWith(Flux.just(NEWLINE + NEWLINE)).concatWith(asUser(runAs, iteration(
+				// the cycle ends: its answer is given whole and the next cycle writes it again in
+				// its place (see CycleRenderer)
+				return releasedText.concatWith(Flux.just(CYCLE_END_MARK)).concatWith(asUser(runAs, iteration(
 						number + 1, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
 						contextAgentPersona, notificationSink, callBacksListener, deliverableParams, nextGate, runAs)));
 			});
@@ -1967,22 +2122,27 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	/**
 	 * The history of the previous iterations for the next one, which goes on from the
 	 * last outcome as the report writer goes on from its last draft: the tools each
-	 * iteration called and what it wrote. A text shown to the user is part of the
-	 * answer, kept so it is not repeated; a discarded draft is kept whole when it is the
-	 * last outcome, with why it was discarded, so the next iteration completes it
-	 * instead of starting over, and only by its tool calls once a later draft
-	 * supersedes it. Then the documents the tools returned so far, with their ids. All
-	 * within half of the budget, shared equally; the other half is left to the chat
-	 * history and the tool results of the iteration.
+	 * iteration called and what it wrote. The last answer shown to the user is the one
+	 * the user sees now, given whole: the next iteration writes it again, improved, in
+	 * its place; the answers shown before it are superseded by it and only recalled by
+	 * their tool calls. A discarded draft is kept whole when it is the last outcome,
+	 * with why it was discarded, so the next iteration completes it instead of starting
+	 * over, and only by its tool calls once a later draft supersedes it. Then the
+	 * documents the tools returned so far, with their ids. All within half of the
+	 * budget, shared equally; the other half is left to the chat history and the tool
+	 * results of the iteration.
 	 */
 	protected String loopStory(List<LoopIteration> history, int budget, ToolsFoundDocuments collector) {
 		if (history.isEmpty()) {
 			return "No previous iteration: this is the first one.";
 		}
 		int lastDraft = -1;
+		int lastShown = -1;
 		for (int i = 0; i < history.size(); i++) {
 			if (history.get(i).discarded()) {
 				lastDraft = i;
+			} else {
+				lastShown = i;
 			}
 		}
 		List<String> pieces = new ArrayList<>();
@@ -1995,8 +2155,12 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				piece.append("TOOL-CALLED-").append(i + 1).append(": ").append(functions.get(i).getFunctionName())
 						.append(" params:").append(functions.get(i).getParams()).append(NEWLINE);
 			}
-			if (!iteration.discarded()) {
-				piece.append("RESPONSE: ").append(iteration.text()).append(NEWLINE);
+			if (!iteration.discarded() && index == lastShown) {
+				// the answer the user sees now: the next iteration writes it again, improved
+				piece.append(LAST_ANSWER).append(iteration.text()).append(NEWLINE);
+			} else if (!iteration.discarded()) {
+				// shown, then written again by a later iteration: recalled by its tool calls
+				piece.append(SUPERSEDED_ANSWER).append(NEWLINE);
 			} else if (index == lastDraft && DISCARDED_EMPTY.equals(iteration.discardedFor())) {
 				// it wrote nothing: the next iteration writes the answer
 				piece.append(EMPTY_ANSWER_STORY).append(NEWLINE);
@@ -2030,6 +2194,14 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 
 	/** Introduces a discarded draft in the story: the user never saw it. */
 	static final String DISCARDED_DRAFT = "DISCARDED DRAFT (the user never saw it, build on it): ";
+	/**
+	 * Introduces, in the story, the last answer shown to the user: the one the user sees
+	 * now, that the next iteration writes again in its place.
+	 */
+	static final String LAST_ANSWER = "YOUR LAST ANSWER (the user sees it now; the answer you write in this "
+			+ "iteration replaces it: write the whole answer again, improved by what you found since): ";
+	/** An answer shown to the user and then written again by a later iteration. */
+	static final String SUPERSEDED_ANSWER = "ANSWER: superseded by your later answer.";
 	static final String WHY_DISCARDED = "WHY IT WAS DISCARDED: ";
 	static final String SUPERSEDED_DRAFT = "DISCARDED DRAFT: superseded by a later one.";
 	/** A discarded draft that rests on no tool result: not shown, only why. */
@@ -2066,7 +2238,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		return list.toString();
 	}
 
-	/** The iterations the loop may run. */
+	/** The iterations (cycles) the loop may run at most: {@value #DEFAULT_MAX_ITERATIONS}. */
 	protected int maxIterations(AgentNetworkParticipant contextAgentPersona) {
 		return DEFAULT_MAX_ITERATIONS;
 	}

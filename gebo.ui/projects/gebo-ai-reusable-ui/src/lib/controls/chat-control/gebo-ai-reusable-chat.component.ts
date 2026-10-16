@@ -1563,6 +1563,16 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
                             flushText();
                             this.handleGeboChatResponse(interaction, recvd.content, r, suggestChatDescription, doSpeach, recvd.lastMessage);
                         } break;
+                        case "GAnswerCycleEvent": {
+                            // an agent working in cycles starts a new one: the answer of the previous
+                            // cycle (given whole just before, as a GeboChatResponse) is written again,
+                            // improved, in its place; the shown text makes room for the new one
+                            flushText();
+                            if (interaction.response) {
+                                interaction.response.queryResponse = "";
+                            }
+                            console.log("answer cycle " + recvd.content?.cycle + " of at most " + recvd.content?.maxCycles + " starts");
+                        } break;
                         case "GThinkingEvent": {
                             if (recvd.content?.completed) {
                                 // the reasoning ended: the answer takes its place
