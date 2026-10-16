@@ -2210,7 +2210,9 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * now, that the next iteration writes again in its place.
 	 */
 	static final String LAST_ANSWER = "YOUR LAST ANSWER (the user sees it now; the answer you write in this "
-			+ "iteration replaces it: write the whole answer again, improved by what you found since): ";
+			+ "iteration replaces it: write the whole answer again, improved by what you found since, keeping "
+			+ "everything of it that is right; the new answer is never shorter than this one, unless the user asked "
+			+ "for brevity): ";
 	/** An answer shown to the user and then written again by a later iteration. */
 	static final String SUPERSEDED_ANSWER = "ANSWER: superseded by your later answer.";
 	/**
