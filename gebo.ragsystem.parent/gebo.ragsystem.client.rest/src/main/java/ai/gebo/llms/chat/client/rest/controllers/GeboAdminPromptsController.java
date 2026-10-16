@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +47,8 @@ import lombok.Data;
 @RequestMapping(path = "api/admin/GeboAdminPromptsController")
 @AllArgsConstructor
 public class GeboAdminPromptsController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeboAdminPromptsController.class);
+
 	/**
 	 * Persistence manager for database operations.
 	 */
@@ -229,8 +233,29 @@ public class GeboAdminPromptsController {
 		return new ArrayList<String>(cats.keySet());
 	}
 
+	/**
+	 * Retrieves the prompt templates declared as agent prompts of the given agent
+	 * service.
+	 *
+	 * @param agentId The agent service id (the {@code agentServiceId} of an agent
+	 *                configuration)
+	 * @return The agent prompt templates whose {@code agentId} matches
+	 */
 	@GetMapping(value = "findPromptConfigByAgentId", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GPromptTemplateConfig> findPromptConfigByAgentId(@RequestParam("agentId") String agentId) {
-		return this.findPromptConfigByAgentId(agentId);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin findPromptConfigByAgentId(...) agentId:" + agentId);
+		}
+		List<GPromptTemplateConfig> prompts = promptConfigDao.findByAgentId(agentId);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End findPromptConfigByAgentId(...) agentId:" + agentId + " returned "
+					+ (prompts != null ? prompts.size() : 0) + " prompt template(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_PROMPT_TEMPLATES agentId=" + agentId + ">");
+			LOGGER.trace(String.valueOf(prompts));
+			LOGGER.trace("</AGENT_PROMPT_TEMPLATES>");
+		}
+		return prompts;
 	}
 }
