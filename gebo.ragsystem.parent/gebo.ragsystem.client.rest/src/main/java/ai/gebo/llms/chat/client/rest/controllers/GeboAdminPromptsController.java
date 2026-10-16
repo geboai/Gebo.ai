@@ -98,7 +98,8 @@ public class GeboAdminPromptsController {
 			GPromptTemplateLightView view = GPromptTemplateLightView.of(config);
 			// Most static library templates carry no description of their own; fall back
 			// to the GPromptUseInfo catalog entry so the list stays informative.
-			if ((view.getDescription() == null || view.getDescription().trim().isEmpty()) && view.getPromptUse() != null) {
+			if ((view.getDescription() == null || view.getDescription().trim().isEmpty())
+					&& view.getPromptUse() != null) {
 				GPromptUseInfo useInfo = promptUseInfoDao.findByCode(view.getPromptUse());
 				if (useInfo != null && useInfo.getDescription() != null) {
 					view.setDescription(useInfo.getDescription());
@@ -117,7 +118,8 @@ public class GeboAdminPromptsController {
 	 *                                  operation
 	 */
 	@GetMapping(value = "findPromptConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptTemplateConfig findPromptConfigByCode(@RequestParam("code") String code) throws GeboPersistenceException {
+	public GPromptTemplateConfig findPromptConfigByCode(@RequestParam("code") String code)
+			throws GeboPersistenceException {
 		return promptConfigDao.findByCode(code);
 	}
 
@@ -144,7 +146,8 @@ public class GeboAdminPromptsController {
 	 *                                  operation
 	 */
 	@PostMapping(value = "insertPromptConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptTemplateConfig insertPromptConfig(@RequestBody GPromptTemplateConfig Config) throws GeboPersistenceException {
+	public GPromptTemplateConfig insertPromptConfig(@RequestBody GPromptTemplateConfig Config)
+			throws GeboPersistenceException {
 		return promptConfigDao.insert(Config);
 	}
 
@@ -157,7 +160,8 @@ public class GeboAdminPromptsController {
 	 *                                  operation
 	 */
 	@PostMapping(value = "updatePromptConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptTemplateConfig updatePromptConfig(@RequestBody GPromptTemplateConfig Config) throws GeboPersistenceException {
+	public GPromptTemplateConfig updatePromptConfig(@RequestBody GPromptTemplateConfig Config)
+			throws GeboPersistenceException {
 		return promptConfigDao.update(Config);
 	}
 
@@ -200,7 +204,8 @@ public class GeboAdminPromptsController {
 	 *                                  operation
 	 */
 	@PostMapping(value = "getPromptConfigByFilter", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptTemplateConfig getPromptConfigByFilter(@RequestBody PromptFilter param) throws GeboPersistenceException {
+	public GPromptTemplateConfig getPromptConfigByFilter(@RequestBody PromptFilter param)
+			throws GeboPersistenceException {
 		return promptConfigDao.exactFindByPromptUse(param.modelUse, param.langCode, param.modelProvider,
 				param.modelCode);
 	}
@@ -222,5 +227,10 @@ public class GeboAdminPromptsController {
 			}
 		});
 		return new ArrayList<String>(cats.keySet());
+	}
+
+	@GetMapping(value = "findPromptConfigByAgentId", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GPromptTemplateConfig> findPromptConfigByAgentId(@RequestParam("agentId") String agentId) {
+		return this.findPromptConfigByAgentId(agentId);
 	}
 }

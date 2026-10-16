@@ -217,4 +217,11 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 		this.directRepo.delete(config);
 	}
 
+	@Override
+	public List<GPromptTemplateConfig> findByAgentId(String agentId) {
+
+		return findListByPredicate(x -> x.getAgentPrompt() != null && x.getAgentPrompt() == true
+				&& x.getAgentId() != null && x.getAgentId().equals(agentId));
+	}
+
 }
