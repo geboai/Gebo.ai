@@ -213,8 +213,12 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			if (config.getTopP() != null && config.getTopP() > 0) {
 				builder = builder.topP(config.getTopP());
 			}
-			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
-				builder.maxTokens(config.getMaxGeneratedTokens());
+			// The generation cap: the configured one, else the default sized on the model's context
+			// window (see GAbstractConfigurableChatModel.maxGeneratedTokensOf), the same the budgets
+			// reserve; a model left without one generates up to its own maximum.
+			final Integer maxGeneratedTokens = GAbstractConfigurableChatModel.maxGeneratedTokensOf(config);
+			if (maxGeneratedTokens != null) {
+				builder.maxTokens(maxGeneratedTokens);
 			}
 			// The thinking level chosen on the model (or carried per request by an agent
 			// through cloneWithOptions) is delivered here as reasoning_effort, the parameter

@@ -56,6 +56,10 @@ interface GeboChatInteraction {
     // The reasoning the model writes before its answer, as it streams: accumulated and shown in
     // the answer's place until the answer starts, never part of the answer.
     streamingThinking?: string;
+    // How many GeboChatResponse messages the stream of this answer delivered so far: an agent
+    // working in cycles sends one per cycle, then the final one and the closing one of the
+    // pipeline. Undefined for an answer loaded from the history.
+    receivedResponses?: number;
 };
 
 /**
@@ -1383,6 +1387,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
         lastMessage?: boolean
     ): void {
         const oldQueryResponse = interaction.response?.queryResponse;
+        interaction.receivedResponses = (interaction.receivedResponses ?? 0) + 1;
         interaction.response = response;
         if (interaction.response && oldQueryResponse && !interaction.response.queryResponse) {
             interaction.response.queryResponse = oldQueryResponse;

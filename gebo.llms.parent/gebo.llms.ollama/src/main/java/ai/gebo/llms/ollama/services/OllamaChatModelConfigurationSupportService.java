@@ -199,10 +199,13 @@ public class OllamaChatModelConfigurationSupportService
 					}
 				}
 			}
-			// The output limit set on the model, sent as num_predict: Ollama ignored it. Only
-			// a limit the configuration gives - no default of ours.
-			if (config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
-				builder = builder.numPredict(config.getMaxGeneratedTokens());
+			// The output limit of the model, sent as num_predict: Ollama ignored it.
+			// The generation cap: the configured one, else the default sized on the model's context
+			// window (see GAbstractConfigurableChatModel.maxGeneratedTokensOf), the same the budgets
+			// reserve; a model left without one generates up to its own maximum.
+			final Integer maxGeneratedTokens = GAbstractConfigurableChatModel.maxGeneratedTokensOf(config);
+			if (maxGeneratedTokens != null) {
+				builder = builder.numPredict(maxGeneratedTokens);
 			}
 			// The context window set on the model, sent as num_ctx: without it the server
 			// runs its own default (4k below 24 GiB of VRAM, Ollama's docs), whatever window

@@ -38,4 +38,20 @@ class DefaultMaxGeneratedTokensTest {
 
 		assertNull(GAbstractConfigurableChatModel.maxGeneratedTokensOf(new GBaseChatModelConfig<>()));
 	}
+
+	@Test
+	void theBudgetsReserveWhatTheRequestsReserveForTheGeneration() {
+		GBaseChatModelConfig<GBaseChatModelChoice> config = new GBaseChatModelConfig<>();
+		config.setContextLength(1000000);
+		// no configured cap: the default of the window is reserved, as the requests send it
+		assertEquals(1000000 - 10240, GAbstractConfigurableChatModel.usableContextWindow(1000000, config));
+		config.setMaxGeneratedTokens(32000);
+		assertEquals(1000000 - 32000, GAbstractConfigurableChatModel.usableContextWindow(1000000, config));
+		// a cap not smaller than the window leaves the window as it is
+		config.setMaxGeneratedTokens(2000000);
+		assertEquals(1000000, GAbstractConfigurableChatModel.usableContextWindow(1000000, config));
+		// no window known: nothing to size
+		assertNull(GAbstractConfigurableChatModel.usableContextWindow(null, config));
+		assertNull(GAbstractConfigurableChatModel.usableContextWindow(0, new GBaseChatModelConfig<>()));
+	}
 }

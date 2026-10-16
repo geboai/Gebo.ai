@@ -104,6 +104,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public static final String BEGIN_CONTEXT = "BEGIN_CONTEXT";
 	public static final String NEWLINE = "\r\n";
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+	/** The logger of the static helpers, which have no runtime subclass to log as. */
+	private static final Logger STATIC_LOGGER = LoggerFactory.getLogger(GAbstractConfigurableChatModel.class);
 	// Configuration for the chat model
 	protected ModelConfig config = null;
 	// Type of the chat model
@@ -604,8 +606,10 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	}
 
 	/**
-	 * The context length the configuration or the model metadata give (less the
-	 * configured maximum generated tokens), null when neither gives one.
+	 * The context length the configuration or the model metadata give, less the
+	 * maximum generated tokens (configured, else the default of
+	 * {@link #maxGeneratedTokensOf}: what the requests reserve for the generation),
+	 * null when neither gives one.
 	 */
 	protected Integer knownContextLength() {
 		Integer contextLength = null;
@@ -628,12 +632,24 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		} else {
 			LOGGER.error("No config value for configurable model!!");
 		}
-		Integer generated = config.getMaxGeneratedTokens();
+		return usableContextWindow(contextLength, config);
+	}
+
+	/**
+	 * The part of a context window the prompts may take: the window less the maximum
+	 * generated tokens of the configuration (configured, else the default of
+	 * {@link #maxGeneratedTokensOf}), the window itself when the cap is unknown or not
+	 * smaller than it. Null when the window is unknown or not positive.
+	 */
+	public static Integer usableContextWindow(Integer contextLength, GBaseChatModelConfig<?> config) {
+		final Integer generated = maxGeneratedTokensOf(config);
 		if (contextLength != null && generated != null) {
-			int contextWindow = contextLength.intValue();
-			int generatedTokens = generated.intValue();
-			int realContextWindow = contextWindow - generatedTokens;
+			final int realContextWindow = contextLength.intValue() - generated.intValue();
 			if (realContextWindow > 0) {
+				if (STATIC_LOGGER.isTraceEnabled()) {
+					STATIC_LOGGER.trace("usableContextWindow(...) window:" + contextLength + " less generated tokens:"
+							+ generated + " = " + realContextWindow);
+				}
 				contextLength = realContextWindow;
 			}
 		}

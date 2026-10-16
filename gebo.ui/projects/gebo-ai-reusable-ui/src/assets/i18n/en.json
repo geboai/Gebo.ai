@@ -3417,6 +3417,9 @@
       },
       "PreviewGeboTitle": {
         "label": "Displaying content"
+      },
+      "ReceivedResponsesBadge": {
+        "help": "Chat responses received while streaming this answer"
       }
     },
     "ChangeDescriptionComponent": {
@@ -3775,7 +3778,7 @@
       },
       "maxGeneratedTokens": {
         "label": "Max number of generated tokens",
-        "help": "Maximum number of tokens the model may generate for one answer, its reasoning included (if empty, a default sized on the model's context window applies: 4K below 30K tokens, 8K up to 120K, 10K above, where the provider requires one)"
+        "help": "Maximum number of tokens the model may generate for one answer, its reasoning included (if empty, a default sized on the model's context window applies: 4K below 30K tokens, 8K up to 120K, 10K above)"
       },
       "thinking": {
         "label": "Thinking efforts",

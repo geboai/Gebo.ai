@@ -169,8 +169,12 @@ public class DeepseekChatModelConfigurationSupportService
 			DeepSeekApi deepseekApi = apiBuilder.build();
 
 			org.springframework.ai.deepseek.DeepSeekChatOptions.Builder builder = DeepSeekChatOptions.builder();
-			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
-				builder.maxTokens(config.getMaxGeneratedTokens());				
+			// The generation cap: the configured one, else the default sized on the model's context
+			// window (see GAbstractConfigurableChatModel.maxGeneratedTokensOf), the same the budgets
+			// reserve; a model left without one generates up to its own maximum.
+			final Integer maxGeneratedTokens = GAbstractConfigurableChatModel.maxGeneratedTokensOf(config);
+			if (maxGeneratedTokens != null) {
+				builder.maxTokens(maxGeneratedTokens);
 			}
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());

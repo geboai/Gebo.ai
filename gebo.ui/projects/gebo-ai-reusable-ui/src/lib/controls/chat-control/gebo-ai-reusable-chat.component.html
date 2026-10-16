@@ -87,6 +87,10 @@
         <div class="gebo-ai-reusable-chat__interaction-item">
           <div class="gebo-ai-reusable-chat__interaction-item-title">
             {{interaction?.response?.usedChatModelCode || interaction?.streamingModelName || modelName }}
+            @if (interaction?.receivedResponses) {
+              <span id="ReceivedResponsesBadge" class="gebo-ai-reusable-chat__interaction-responses-count"
+                gebo-ai-label title="Chat responses received while streaming this answer">{{interaction.receivedResponses}}</span>
+            }
           </div>
 
           @if (interaction?.streamingThinking) {
