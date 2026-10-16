@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -36,11 +37,13 @@ import ai.gebo.model.base.GBaseObject;
  * Default {@link IGAgentsCopyService} implementation.
  * <p>
  * The copies are stored through the {@link IAgentConfigDao} and
- * {@link IAgentsNetworkDao}, whose insert generates the code from the description
- * and makes it unique among the stored entities only; the DAOs resolve a code to a
- * configuration bean before the stored entities, so a copy whose generated code a
- * bean already declares would be hidden by the bean: it is removed and the next copy
- * number is tried. Like {@link GAgentsNetworkCrudServiceImpl}, the collaborators are
+ * {@link IAgentsNetworkDao}; a copy carries its original's code
+ * ({@code copiedFromCode}), from which its own code is made on insert
+ * ({@link GAgentConfigCopyCodeGenerator}, {@link GAgentsNetworkCopyCodeGenerator}:
+ * {@code <original>-<n>}, the first free slot from 1 on), unique among the stored entities and
+ * the ones declared by configuration beans. Should a stored copy's code still resolve
+ * to a configuration bean, which the DAOs resolve first, the copy is removed and the
+ * next copy number is tried. Like {@link GAgentsNetworkCrudServiceImpl}, the collaborators are
  * resolved lazily through the {@link IGRuntimeBinder} on every call, since the
  * runtime agent services and configuration sources are wired late in the startup
  * sequence.
@@ -51,6 +54,9 @@ public class GAgentsCopyServiceImpl implements IGAgentsCopyService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GAgentsCopyServiceImpl.class);
 	/** The copy numbers tried for a unique description before giving up. */
 	static final int MAX_COPY_NUMBER = 100;
+	/** The copy marks ending the description of a copy: {@code " (copy)"}, {@code " (copy 2)"}... */
+	private static final Pattern COPY_MARKS_PATTERN = Pattern.compile("(?:\\s*\\(copy(?:\\s+\\d+)?\\))+$",
+			Pattern.CASE_INSENSITIVE);
 
 	private final IGRuntimeBinder runtimeBinder;
 
@@ -211,6 +217,8 @@ public class GAgentsCopyServiceImpl implements IGAgentsCopyService {
 		copy.setReadOnly(false);
 		copy.setDefaultConfiguration(null);
 		clearAudit(copy);
+		// its code is made from the original's (GAgentConfigCopyCodeGenerator)
+		copy.setCopiedFromCode(source.getCode());
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("<AGENT_COPY_SOURCE code=" + source.getCode() + ">");
 			LOGGER.trace(String.valueOf(source));
@@ -232,9 +240,9 @@ public class GAgentsCopyServiceImpl implements IGAgentsCopyService {
 
 	/**
 	 * Stores the copy under the first copy description of the source not in
-	 * {@code takenDescriptions}, the code being generated from it on insert. A stored
-	 * copy whose code resolves to a configuration bean ({@code declaredByBean}) would
-	 * be hidden by it: it is removed and the next copy number is tried.
+	 * {@code takenDescriptions}, its code being made from the original's on insert. A
+	 * stored copy whose code resolves to a configuration bean ({@code declaredByBean})
+	 * would be hidden by it: it is removed and the next copy number is tried.
 	 */
 	private <T extends GBaseObject> T insertUniqueCopy(String kind, GBaseObject source, T copy,
 			Set<String> takenDescriptions, PersistenceCall<T> insert, Function<String, T> find,
@@ -287,6 +295,8 @@ public class GAgentsCopyServiceImpl implements IGAgentsCopyService {
 		// A copy is editable also when the original is a read-only configuration bean.
 		copy.setReadOnly(false);
 		clearAudit(copy);
+		// its code is made from the original's (GAgentsNetworkCopyCodeGenerator)
+		copy.setCopiedFromCode(source.getCode());
 		final Map<String, String> networkAgentNames = new HashMap<>();
 		for (AgentNetworkParticipant participant : copy.getAgents()) {
 			final String sourceName = participant.getNetworkAgentName();
@@ -351,9 +361,26 @@ public class GAgentsCopyServiceImpl implements IGAgentsCopyService {
 		return base + (number == 1 ? " (copy)" : " (copy " + number + ")");
 	}
 
-	/** The description the copies of the source are named after: its code when it has none. */
-	private static String baseDescription(GBaseObject source) {
-		return isBlank(source.getDescription()) ? source.getCode() : source.getDescription().trim();
+	/**
+	 * The description the copies of the source are named after: its code when it has
+	 * none. The copy marks ending the description of a copy are removed, so the copy
+	 * of a copy takes the next copy number of its root original ({@code "X (copy 2)"},
+	 * never {@code "X (copy) (copy)"}).
+	 */
+	static String baseDescription(GBaseObject source) {
+		if (isBlank(source.getDescription())) {
+			return source.getCode();
+		}
+		final String description = source.getDescription().trim();
+		final String root = COPY_MARKS_PATTERN.matcher(description).replaceFirst("");
+		if (root.isBlank()) {
+			// nothing but copy marks: kept as it is
+			return description;
+		}
+		if (LOGGER.isDebugEnabled() && root.length() != description.length()) {
+			LOGGER.debug("Copies of:" + source.getCode() + " named after its root description:" + root);
+		}
+		return root;
 	}
 
 	private static Set<String> descriptionsOf(List<? extends GBaseObject> entities) {

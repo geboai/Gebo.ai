@@ -13,8 +13,12 @@ import ai.gebo.model.OperationStatus;
  * {@code defaultConfiguration} flag of an agent: the original stays the default
  * configuration of its agent service. The copy's description is the original one
  * marked as a copy ({@code "(copy)"}, {@code "(copy 2)"}, ...), unique among the
- * existing entities of its kind, and so is the code generated from it on insert: a
- * code that a configuration bean already declares is never given to a copy.
+ * existing entities of its kind, the copy of a copy taking the next number of the
+ * same original; its code is made from the original's code
+ * ({@code controllerAgent-1}, {@code controllerAgent-2}..., the copy of a copy taking
+ * the next free slot of the same original), never one already
+ * taken, by a stored entity or by a configuration bean: in a network the agents are
+ * addressed by their codes.
  * <p>
  * Every operation returns an {@link OperationStatus} carrying the stored copy, or a
  * {@code null} result when nothing was copied, with the messages describing the

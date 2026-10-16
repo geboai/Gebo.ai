@@ -2,6 +2,10 @@ package ai.gebo.architecture.agents.model;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ai.gebo.acl.IAclGrantedResource;
 import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.IJsonClonable;
@@ -12,7 +16,7 @@ import lombok.Data;
 
 @Data
 public class GAgentsNetwork extends GBaseObject
-		implements IJsonClonable<GAgentsNetwork>, IGObjectWithSecurity, IAclGrantedResource {
+		implements IJsonClonable<GAgentsNetwork>, IGObjectWithSecurity, IAclGrantedResource, IGCopiedEntity {
 	/*
 	 * public String owner(); public Boolean getAccessibleToAll(); public
 	 * List<String> getAccessibleUsers(); public List<String> getAccessibleGroups();
@@ -85,5 +89,13 @@ public class GAgentsNetwork extends GBaseObject
 	 * agents; not choosable when empty.
 	 */
 	private List<PipelineType> choosableForPipelineTypes = null;
+
+	/**
+	 * The code of the network this one is a copy of, only while the copy is being
+	 * inserted: its code is made from it. Neither stored nor exchanged.
+	 */
+	@Transient
+	@JsonIgnore
+	private String copiedFromCode = null;
 
 }

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -60,8 +61,13 @@ class GAgentsCopyServiceImplTest {
 		return sb.toString();
 	}
 
-	private static <T extends GBaseObject> T insert(Map<String, T> stored, T value) {
-		String code = slug(value.getDescription());
+	/**
+	 * Stores like the persistence layer: the code generated from the description goes
+	 * through the code generator of the entity's type, then is made unique.
+	 */
+	private static <T extends GBaseObject> T insert(Map<String, T> stored, T value,
+			BiFunction<T, String, String> codeGenerator) {
+		String code = codeGenerator.apply(value, slug(value.getDescription()));
 		while (stored.containsKey(code)) {
 			code = code + "-x";
 		}
@@ -101,15 +107,20 @@ class GAgentsCopyServiceImplTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
+		IGRuntimeBinder runtimeBinder = mock(IGRuntimeBinder.class);
+		GAgentConfigCopyCodeGenerator agentCodes = new GAgentConfigCopyCodeGenerator(runtimeBinder);
+		GAgentsNetworkCopyCodeGenerator networkCodes = new GAgentsNetworkCopyCodeGenerator(runtimeBinder);
 		IAgentConfigDao agentDao = mock(IAgentConfigDao.class);
 		when(agentDao.getConfigurations()).thenAnswer(x -> all(beanAgents, storedAgents));
 		when(agentDao.findByCode(any())).thenAnswer(x -> find(beanAgents, storedAgents, x.getArgument(0)));
-		when(agentDao.insert(any())).thenAnswer(x -> insert(storedAgents, (GAgentConfig) x.getArgument(0)));
+		when(agentDao.insert(any()))
+				.thenAnswer(x -> insert(storedAgents, (GAgentConfig) x.getArgument(0), agentCodes::generateCode));
 		doAnswer(x -> storedAgents.remove(((GAgentConfig) x.getArgument(0)).getCode())).when(agentDao).delete(any());
 		IAgentsNetworkDao networkDao = mock(IAgentsNetworkDao.class);
 		when(networkDao.getConfigurations()).thenAnswer(x -> all(beanNetworks, storedNetworks));
 		when(networkDao.findByCode(any())).thenAnswer(x -> find(beanNetworks, storedNetworks, x.getArgument(0)));
-		when(networkDao.insert(any())).thenAnswer(x -> insert(storedNetworks, (GAgentsNetwork) x.getArgument(0)));
+		when(networkDao.insert(any()))
+				.thenAnswer(x -> insert(storedNetworks, (GAgentsNetwork) x.getArgument(0), networkCodes::generateCode));
 		doAnswer(x -> storedNetworks.remove(((GAgentsNetwork) x.getArgument(0)).getCode())).when(networkDao)
 				.delete(any());
 		IGAgentsNetworkCrudService crudService = mock(IGAgentsNetworkCrudService.class);
@@ -118,7 +129,6 @@ class GAgentsCopyServiceImplTest {
 			return valid.test(network) ? PartialOperationStatus.of(network)
 					: PartialOperationStatus.ofError("Invalid network", "The network is not valid");
 		});
-		IGRuntimeBinder runtimeBinder = mock(IGRuntimeBinder.class);
 		when(runtimeBinder.getImplementationOf(IAgentConfigDao.class)).thenReturn(agentDao);
 		when(runtimeBinder.getImplementationOf(IAgentsNetworkDao.class)).thenReturn(networkDao);
 		when(runtimeBinder.getImplementationOf(IGAgentsNetworkCrudService.class)).thenReturn(crudService);
@@ -136,7 +146,7 @@ class GAgentsCopyServiceImplTest {
 		GAgentConfig copy = status.getResult();
 		assertNotNull(copy);
 		assertFalse(status.isHasErrorMessages());
-		assertEquals("network-controller-copy", copy.getCode());
+		assertEquals("controllerAgent-1", copy.getCode(), "named after the original, not its description");
 		assertEquals("Network controller (copy)", copy.getDescription());
 		assertEquals(Boolean.FALSE, copy.getReadOnly());
 		assertNull(copy.getDefaultConfiguration());
@@ -155,21 +165,54 @@ class GAgentsCopyServiceImplTest {
 
 		assertEquals("Writer (copy)", first.getDescription());
 		assertEquals("Writer (copy 2)", second.getDescription());
+		assertEquals("writer-1", first.getCode());
+		assertEquals("writer-2", second.getCode());
 		assertNotEquals(first.getCode(), second.getCode());
 		assertEquals(2, storedAgents.size());
 	}
 
 	@Test
+	void theCopyOfACopyTakesTheNextNumberOfItsRootOriginal() {
+		beanAgent("writer", "Writer", "ReportWriterNetworkAgentService");
+		GAgentConfig first = service.copyAgent("writer").getResult();
+
+		GAgentConfig copyOfCopy = service.copyAgent(first.getCode()).getResult();
+
+		assertEquals("Writer (copy 2)", copyOfCopy.getDescription(), "never Writer (copy) (copy)");
+		assertEquals("writer-2", copyOfCopy.getCode());
+	}
+
+	@Test
+	void theCopiesAreNamedAfterTheRootDescription() {
+		assertEquals("Writer", GAgentsCopyServiceImpl.baseDescription(described("Writer (copy)")));
+		assertEquals("Writer", GAgentsCopyServiceImpl.baseDescription(described(" Writer (Copy 3) ")));
+		assertEquals("Writer", GAgentsCopyServiceImpl.baseDescription(described("Writer (copy) (copy 2)")),
+				"the marks stacked by older copies are removed too");
+		assertEquals("Writer (copyist)", GAgentsCopyServiceImpl.baseDescription(described("Writer (copyist)")));
+		assertEquals("Writer (copy) notes", GAgentsCopyServiceImpl.baseDescription(described("Writer (copy) notes")));
+		assertEquals("(copy)", GAgentsCopyServiceImpl.baseDescription(described("(copy)")),
+				"nothing but a copy mark is kept as it is");
+		assertEquals("writer", GAgentsCopyServiceImpl.baseDescription(described(" ")), "no description: the code");
+	}
+
+	private static GAgentConfig described(String description) {
+		GAgentConfig agent = new GAgentConfig();
+		agent.setCode("writer");
+		agent.setDescription(description);
+		return agent;
+	}
+
+	@Test
 	void aCodeDeclaredByABeanIsNeverGivenToACopy() {
 		beanAgent("writer", "Writer", "ReportWriterNetworkAgentService");
-		// a bean already declares the code the first copy description would generate
-		beanAgent("writer-copy", "Another agent", "toolCallingAgentService");
+		// a bean already declares the code the first copy would be named with
+		beanAgent("writer-1", "Another agent", "toolCallingAgentService");
 
 		GAgentConfig copy = service.copyAgent("writer").getResult();
 
-		assertEquals("writer-copy-2", copy.getCode());
-		assertEquals("Writer (copy 2)", copy.getDescription());
-		assertEquals(List.of("writer-copy-2"), List.copyOf(storedAgents.keySet()), "the hidden copy is removed");
+		assertEquals("writer-2", copy.getCode());
+		assertEquals("Writer (copy)", copy.getDescription());
+		assertEquals(List.of("writer-2"), List.copyOf(storedAgents.keySet()));
 	}
 
 	@Test
@@ -208,27 +251,41 @@ class GAgentsCopyServiceImplTest {
 		GAgentsNetwork copy = status.getResult();
 		assertNotNull(copy);
 		assertFalse(status.isHasErrorMessages());
-		assertEquals("full-network-copy", copy.getCode());
+		assertEquals("DEFAULT_AGENTS_NETWORK-1", copy.getCode());
 		assertEquals("Full network (copy)", copy.getDescription());
 		assertEquals(Boolean.FALSE, copy.getReadOnly());
 		assertEquals(4, storedAgents.size(), "one copy per agent configuration, the shared one copied once");
 		for (GAgentConfig agentCopy : storedAgents.values()) {
 			assertEquals(Boolean.FALSE, agentCopy.getReadOnly());
 		}
+		// the agents are addressed by names made from the originals' codes
 		List<String> participants = copy.getAgents().stream().map(AgentNetworkParticipant::getNetworkAgentName)
 				.toList();
-		assertEquals(List.of("input-adapter-copy", "controller-copy", "searcher-copy-web", "searcher-copy-kb",
-				"writer-copy"), participants);
-		assertEquals(List.of("controller-copy"), copy.getAgents().get(0).getCommunicationList());
-		assertEquals(List.of("searcher-copy-web", "searcher-copy-kb", "writer-copy"),
+		assertEquals(List.of("chatRuntimeDataQueryAdapter-1", "controllerAgent-1", "searcher-1-web", "searcher-1-kb",
+				"ReportWriterNetworkAgentService-1"), participants);
+		assertEquals(List.of("controllerAgent-1"), copy.getAgents().get(0).getCommunicationList());
+		assertEquals(List.of("searcher-1-web", "searcher-1-kb", "ReportWriterNetworkAgentService-1"),
 				copy.getAgents().get(1).getCommunicationList());
-		assertEquals(List.of("writer-copy"), copy.getAgents().get(2).getCommunicationList());
-		assertEquals(List.of("controller-copy"), copy.getAgents().get(4).getCommunicationList());
+		assertEquals(List.of("ReportWriterNetworkAgentService-1"), copy.getAgents().get(2).getCommunicationList());
+		assertEquals(List.of("controllerAgent-1"), copy.getAgents().get(4).getCommunicationList());
 		// the original network and its agents are untouched
 		assertEquals(Boolean.TRUE, original.getReadOnly());
 		assertEquals("controllerAgent", original.getAgents().get(1).getAgentConfigCode());
 		assertEquals(List.of("searcher-web", "searcher-kb", "ReportWriterNetworkAgentService"),
 				original.getAgents().get(1).getCommunicationList());
+	}
+
+	@Test
+	void theCopyOfANetworkCopyTakesTheNextNumberOfItsRootOriginal() {
+		beanNetwork();
+		GAgentsNetwork first = service.copyAgentsNetwork("DEFAULT_AGENTS_NETWORK").getResult();
+
+		GAgentsNetwork copyOfCopy = service.copyAgentsNetwork(first.getCode()).getResult();
+
+		assertEquals("DEFAULT_AGENTS_NETWORK-2", copyOfCopy.getCode());
+		assertEquals("Full network (copy 2)", copyOfCopy.getDescription());
+		assertEquals("controllerAgent-2", copyOfCopy.getAgents().get(1).getAgentConfigCode());
+		assertEquals("Controller (copy 2)", storedAgents.get("controllerAgent-2").getDescription());
 	}
 
 	@Test
