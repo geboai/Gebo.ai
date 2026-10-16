@@ -1272,12 +1272,20 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			if (participant == null || participant.getAgentConfigCode() == null) {
 				continue;
 			}
-			RuntimeAgentInfos agent = resolvePeer(participant.getAgentConfigCode(), agentsDao);
+			// The runtime agents, like the communication lists, are keyed by network agent
+			// name (the configuration code plus the contextual name): the name the agents
+			// are addressed with.
+			final String networkAgentName = participant.getNetworkAgentName();
+			RuntimeAgentInfos agent = resolvePeer(networkAgentName, agentsDao);
 			if (agent == null || agent.getService() == null) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("createNetworkAgentsCapabilitiesDescription(...) participant:" + networkAgentName
+							+ " has no runtime agent, left out of the roster");
+				}
 				continue;
 			}
 			buffer.append(AGENT_LIST_ITEM_PREFIX);
-			buffer.append(participant.getAgentConfigCode());
+			buffer.append(networkAgentName);
 			String description = resolvePeerDescription(agent);
 			if (description != null && !description.isBlank()) {
 				buffer.append(AGENT_DESCRIPTION_SEPARATOR);

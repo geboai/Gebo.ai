@@ -54,8 +54,8 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 
 	/** The remote agent's answer is a RESPONSE, shared in the session context. */
 	@Override
-	public boolean isOutputDeliveredAsInput() {
-		return false;
+	public MessageSemantic getProducedMessageSemantic() {
+		return MessageSemantic.RESPONSE;
 	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RemoteA2ANetworkAgentService.class);
@@ -135,8 +135,9 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 			EventKind result = connector.sendMessage(remoteConfig, inputText, session.getId());
 			String outputText = extractText(result);
 			GAgentRole role = resolveRole(config);
-			AgentsExchangeMessage<String> out = new AgentsExchangeMessage<>(session.getId(), MessageSemantic.RESPONSE,
-					contextAgentPersona.getNetworkAgentName(), role, msg.getFromAgent(), outputText, 1);
+			AgentsExchangeMessage<String> out = new AgentsExchangeMessage<>(session.getId(),
+					getProducedMessageSemantic(), contextAgentPersona.getNetworkAgentName(), role, msg.getFromAgent(),
+					outputText, 1);
 			if (contextAgentPersona.isAllowedToNotifyUser() && notificationSink != null) {
 				notificationSink.next("Remote A2A agent '" + remoteConfig.getExportingPrefix() + "' responded",
 						NotificationType.INFO);

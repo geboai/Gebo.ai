@@ -36,8 +36,8 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 
 	/** The searcher returns the documents found with a RESPONSE, shared in the session context. */
 	@Override
-	public boolean isOutputDeliveredAsInput() {
-		return false;
+	public MessageSemantic getProducedMessageSemantic() {
+		return MessageSemantic.RESPONSE;
 	}
 
 	public GAbstractDocumentsSearchNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
@@ -127,8 +127,9 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 				index++;
 			}
 		}
-		AgentsExchangeMessage<List<Document>> outMsg = AgentsExchangeMessage.of(session, msg.getFromAgent(), documents,
-				MessageSemantic.RESPONSE);
+		AgentsExchangeMessage<List<Document>> outMsg = AgentsExchangeMessage.of(session,
+				contextAgentPersona.getNetworkAgentName(), msg.getFromAgent(), documents, getProducedMessageSemantic());
+		outMsg.setFromAgentRole(agentRole);
 		if (!statusNotices.isEmpty()) {
 			outMsg.setStatusNotices(statusNotices);
 			if (LOGGER.isDebugEnabled()) {

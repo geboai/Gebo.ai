@@ -71,8 +71,8 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 
 	/** The tool results are a RESPONSE, shared in the session context. */
 	@Override
-	public boolean isOutputDeliveredAsInput() {
-		return false;
+	public MessageSemantic getProducedMessageSemantic() {
+		return MessageSemantic.RESPONSE;
 	}
 
 	protected final Class<InputType> inputType;
@@ -170,11 +170,8 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 		}
 
 		AgentsExchangeMessage<OutputType> out = new AgentsExchangeMessage<OutputType>(session.getId(),
-				MessageSemantic.RESPONSE,
-				contextAgentPersona.getAgentConfigCode() + (contextAgentPersona.getAgentContextualName() != null
-						? "-" + contextAgentPersona.getAgentContextualName()
-						: ""),
-				agentRole, msg.getFromAgent(), output, 1);
+				getProducedMessageSemantic(), contextAgentPersona.getNetworkAgentName(), agentRole,
+				msg.getFromAgent(), output, 1);
 		return List.of(out);
 	}
 

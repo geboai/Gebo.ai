@@ -28,8 +28,8 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 
 	/** The adapted network answers with a RESPONSE, shared in the session context. */
 	@Override
-	public boolean isOutputDeliveredAsInput() {
-		return false;
+	public MessageSemantic getProducedMessageSemantic() {
+		return MessageSemantic.RESPONSE;
 	}
 	private static final String EMPTY_ADAPTED_AGENT_NETWORK_CODE_MSG = "A network adapter configuration cannot have an empty adaptedAgentNetworkCode";
 	private static final String EMPTY_NETWORK_SERVICE_CODE_MSG = "A network adapter configuration cannot have an empty agentNetworkServiceCode";
@@ -110,8 +110,8 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 				List<AgentsExchangeMessage<OutputType>> outputMessages = new ArrayList<AgentsExchangeMessage<OutputType>>();
 				List<String> targetAgents = contextAgentPersona.getCommunicationList();
 				for (String target : targetAgents) {
-					AgentsExchangeMessage<OutputType> newMsg = AgentsExchangeMessage.of(session, target, output,
-							MessageSemantic.RESPONSE);
+					AgentsExchangeMessage<OutputType> newMsg = AgentsExchangeMessage.of(session,
+							contextAgentPersona.getNetworkAgentName(), target, output, getProducedMessageSemantic());
 					outputMessages.add(newMsg);
 				}
 				if (LOGGER.isDebugEnabled()) {

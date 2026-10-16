@@ -47,6 +47,20 @@ public class AgentsExchangeMessage<PayloadType> {
 			GAgentRole fromAgentRole, String toAgent, PayloadType payload, int executionOrder) {
 		this(collaborationContextId, messageSemantic, fromAgent, fromAgentRole, toAgent, payload, executionOrder, null);
 	}
+	/**
+	 * A message from the given agent, its network agent name: the name its
+	 * contribution is shared in the session context with.
+	 */
+	public static <PayloadType> AgentsExchangeMessage<PayloadType> of(AgentsCollaborationSessionContext context,
+			String fromAgent, String targetAgent, PayloadType data, MessageSemantic messageSemantic) {
+		AgentsExchangeMessage<PayloadType> m = of(context, targetAgent, data, messageSemantic);
+		m.setFromAgent(fromAgent);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agents exchange message id:" + m.getId() + " is from:" + fromAgent);
+		}
+		return m;
+	}
+
 	public static <PayloadType> AgentsExchangeMessage<PayloadType> of(AgentsCollaborationSessionContext context,
 			String targetAgent, PayloadType data, MessageSemantic messageSemantic) {
 		AgentsExchangeMessage<PayloadType> m = new AgentsExchangeMessage<PayloadType>();

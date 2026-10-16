@@ -180,6 +180,15 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		return outputType;
 	}
 
+	/**
+	 * A router works by delivering: each agent it can talk to gets a command typed on
+	 * that agent's input, and the router itself gets its next cycle.
+	 */
+	@Override
+	public final MessageSemantic getProducedMessageSemantic() {
+		return MessageSemantic.EXECUTE_AND_SHARE_RESULT;
+	}
+
 	@Override
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
 			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
@@ -345,8 +354,8 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 				if (!targetAgents.contains(d.getAgentId()))
 					targetAgents.add(d.getAgentId());
 				AgentsExchangeMessage<?> _msg = new AgentsExchangeMessage(session.getId(),
-						MessageSemantic.EXECUTE_AND_SHARE_RESULT, contextAgentPersona.getAgentContextualName(),
-						agentRole, d.getAgentId(), d.getCommandData(), d.getDeliveryOrder());
+						getProducedMessageSemantic(), contextAgentPersona.getNetworkAgentName(), agentRole,
+						d.getAgentId(), d.getCommandData(), d.getDeliveryOrder());
 				out.add(_msg);
 			}
 		}
@@ -473,8 +482,8 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 						+ " self:" + selfName + " at deliveryOrder:" + nextOrder + " to plan cycle " + (currentCycle + 1)
 						+ " of " + maxCycles);
 			}
-			out.add(new AgentsExchangeMessage(session.getId(), MessageSemantic.EXECUTE_AND_SHARE_RESULT, selfName,
-					agentRole, selfName, msg.getPayload(), nextOrder));
+			out.add(new AgentsExchangeMessage(session.getId(), getProducedMessageSemantic(), selfName, agentRole,
+					selfName, msg.getPayload(), nextOrder));
 			// INFO, not DEBUG: a gather cycle is the longest silence in the whole exchange -
 			// the searchers run, the controller re-plans, and only then does the writer begin
 			// emitting text. Measured on a multi source analytic question, that is around
