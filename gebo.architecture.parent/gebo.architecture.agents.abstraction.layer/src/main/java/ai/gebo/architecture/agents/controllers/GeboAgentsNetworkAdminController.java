@@ -22,6 +22,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
+import ai.gebo.architecture.agents.services.IGAgentsCopyService;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkCrudService;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkToNetworkAgentAdapterService;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
@@ -60,6 +61,7 @@ public class GeboAgentsNetworkAdminController {
 
 	private final IGAgentsNetworkCrudService networkCrudService;
 	private final IGRuntimeBinder runtimeBinder;
+	private final IGAgentsCopyService agentsCopyService;
 
 	private <T> T get(Class<T> t) {
 		T implementation = runtimeBinder.getImplementationOf(t);
@@ -174,6 +176,26 @@ public class GeboAgentsNetworkAdminController {
 			LOGGER.debug("REST deleteAgentsNetwork code:" + (network != null ? network.getCode() : null) + " produced a result:"
 					+ (status != null && status.getResult() != null) + " message(s):"
 					+ (status != null && status.getMessages() != null ? status.getMessages().size() : 0));
+		}
+		return status;
+	}
+
+	/**
+	 * Copies the network of agents with the given code, together with its agents,
+	 * into a new, editable network whose participants are copies of the original
+	 * agents, also when the original is a read-only network declared by a
+	 * configuration bean (see {@link IGAgentsCopyService#copyAgentsNetwork(String)}).
+	 */
+	@PostMapping(value = "copyAgentsNetwork", produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GAgentsNetwork> copyAgentsNetwork(@RequestParam("code") String code) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST copyAgentsNetwork code:" + code);
+		}
+		OperationStatus<GAgentsNetwork> status = agentsCopyService.copyAgentsNetwork(code);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST copyAgentsNetwork code:" + code + " produced a copy:"
+					+ (status != null && status.getResult() != null ? status.getResult().getCode() : null)
+					+ " message(s):" + (status != null && status.getMessages() != null ? status.getMessages().size() : 0));
 		}
 		return status;
 	}

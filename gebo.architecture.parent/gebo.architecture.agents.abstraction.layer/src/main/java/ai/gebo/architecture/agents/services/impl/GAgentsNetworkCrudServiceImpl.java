@@ -71,7 +71,7 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 			LOGGER.debug("Begin validate(...) agents network code:" + (network != null ? network.getCode() : null));
 		}
 		List<GUserMessage> messages = new ArrayList<>();
-		validateStructure(network, messages);
+		validateStructure(network, messages, true);
 		traceMessages("validate", messages);
 		if (hasErrors(messages)) {
 			if (LOGGER.isDebugEnabled()) {
@@ -95,11 +95,31 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 			LOGGER.debug("Begin insert(...) agents network code:" + (network != null ? network.getCode() : null));
 		}
 		List<GUserMessage> messages = new ArrayList<>();
-		validateStructure(network, messages);
+		// The code of a new network is generated from its description by the persistence
+		// layer, which refuses a network that already has one: it is not required here,
+		// and one given in advance cannot be kept.
+		validateStructure(network, messages, false);
 		final IAgentsNetworkDao dao = runtimeBinder.getImplementationOf(IAgentsNetworkDao.class);
-		if (network != null && !isBlank(network.getCode()) && dao.findByCode(network.getCode()) != null) {
-			messages.add(GUserMessage.errorMessage("Network already exists",
-					"A network with code '" + network.getCode() + "' already exists; use update instead"));
+		if (network != null) {
+			if (isBlank(network.getDescription())) {
+				messages.add(GUserMessage.errorMessage("Missing network description",
+						"The network must have a description: its code is generated from it"));
+			}
+			if (isBlank(network.getCode())) {
+				// An empty code is no code: the persistence layer generates one only for null.
+				network.setCode(null);
+			} else if (dao.findByCode(network.getCode()) != null) {
+				messages.add(GUserMessage.errorMessage("Network already exists",
+						"A network with code '" + network.getCode() + "' already exists; use update instead"));
+			} else {
+				messages.add(GUserMessage.errorMessage("Network code is generated",
+						"The code of a new network is generated from its description: leave the code '"
+								+ network.getCode() + "' empty"));
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("insert(...) network description:" + network.getDescription()
+						+ " code given in advance:" + network.getCode());
+			}
 		}
 		traceMessages("insert", messages);
 		if (hasErrors(messages)) {
@@ -128,7 +148,7 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 			LOGGER.debug("Begin update(...) agents network code:" + (network != null ? network.getCode() : null));
 		}
 		List<GUserMessage> messages = new ArrayList<>();
-		validateStructure(network, messages);
+		validateStructure(network, messages, true);
 		final IAgentsNetworkDao dao = runtimeBinder.getImplementationOf(IAgentsNetworkDao.class);
 		if (network != null && !isBlank(network.getCode())) {
 			GAgentsNetwork existing = dao.findByCode(network.getCode());
@@ -216,12 +236,13 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 	/**
 	 * Runs the structural validation, accumulating {@link GUserMessage}s into the
 	 * given list. The presence of any {@code error} message means the network must
-	 * not be persisted.
+	 * not be persisted. {@code codeRequired} is false for a network to insert, whose
+	 * code is generated on insert.
 	 */
-	private void validateStructure(GAgentsNetwork network, List<GUserMessage> messages) {
+	private void validateStructure(GAgentsNetwork network, List<GUserMessage> messages, boolean codeRequired) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin validateStructure(...) network code:" + (network != null ? network.getCode() : null)
-					+ " participants:"
+					+ " codeRequired:" + codeRequired + " participants:"
 					+ (network != null && network.getAgents() != null ? network.getAgents().size() : 0));
 		}
 		if (LOGGER.isTraceEnabled()) {
@@ -233,7 +254,7 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 			messages.add(GUserMessage.errorMessage("Network is null", "No agents network was provided"));
 			return;
 		}
-		if (isBlank(network.getCode())) {
+		if (codeRequired && isBlank(network.getCode())) {
 			messages.add(GUserMessage.errorMessage("Missing network code", "The network must have a non-empty code"));
 		}
 		if (isBlank(network.getScenarioDescription())) {
