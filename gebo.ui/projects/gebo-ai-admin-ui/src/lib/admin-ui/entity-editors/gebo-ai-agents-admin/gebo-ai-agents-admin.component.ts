@@ -1,6 +1,6 @@
 import { Component, forwardRef, inject, Injector } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, GAgentConfig, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GPromptTemplateConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { AgentServiceDescriptor, ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, GAgentConfig, GAgentRole, GAgentsNetwork, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, GPromptTemplateConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, ExtendedConfirmation, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable, of, take } from "rxjs";
@@ -25,6 +25,10 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         dateModified: new FormControl(),
         dateCreated: new FormControl(),
         agentServiceId: new FormControl(),
+        agentRoleCode: new FormControl(null, Validators.required),
+        agentType: new FormControl(),
+        adaptedAgentNetworkCode: new FormControl(),
+        agentNetworkServiceCode: new FormControl(),
         mainLoopPromptUseCode: new FormControl(),
         customLoopPrompt: new FormControl(),
         completeEvaluationPromptUseCode: new FormControl(),
@@ -47,6 +51,12 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     });
     protected chatModelsData: ConfigurationEntryGBaseChatModelConfig[] = [];
     protected agentTypes: GBaseObject[] = [];
+    /** The roles an agent can take; the role is mandatory. */
+    protected roles: GAgentRole[] = [];
+    /** The services with their types and kinds, by service id. */
+    protected serviceDescriptors: AgentServiceDescriptor[] = [];
+    /** The networks an adapter service can run as one agent. */
+    protected networks: GBaseObject[] = [];
     protected promptLoadingObservable: Observable<GPromptTemplateConfig[]> = of([]);
     protected defaultChatModel?: ConfigurationEntryGBaseChatModelConfig;
     protected isChooseChatModel: boolean = false;
@@ -57,7 +67,8 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         geboUIActionRoutingService: GeboUIActionRoutingService,
         outputForwardingService: GeboUIOutputForwardingService,
         private agentsAdminService: GeboAgentAdminControllerService,
-        private geboChatModelsService: ChatModelsControllerService) {
+        private geboChatModelsService: ChatModelsControllerService,
+        private networksService: GeboAgentsNetworkAdminControllerService) {
         super(injector, geboFormGroupsService, myConfirmationService, geboUIActionRoutingService, outputForwardingService);
         this.formGroup.controls["subscribeAllTools"].valueChanges.subscribe({
             next: (received) => {
@@ -69,8 +80,40 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         });
         this.formGroup.controls["agentServiceId"].valueChanges.subscribe(agentServiceId => {
             if (agentServiceId) {
-                this.promptLoadingObservable = this.agentsAdminService.getPromptTemplatesByAgentId(agentServiceId).pipe(map(x => { return x?.map(y => { y.code = y.promptUse; return y; }) }));
+                // a prompt template is chosen by its use; the ones without a description are listed by it
+                this.promptLoadingObservable = this.agentsAdminService.getPromptTemplatesByAgentId(agentServiceId).pipe(map(x => { return x?.map(y => { y.code = y.promptUse; y.description = y.description || y.promptUse; return y; }) }));
             }
+            // a network adapter service runs a whole network as one agent: the
+            // configuration says which network, and the agent type says so
+            const adapter = this.isNetworkAdapterService(agentServiceId);
+            const agentType = adapter ? "AGENTS_NETWORK" : "AGENT";
+            if (this.formGroup.controls["agentType"].value !== agentType) {
+                console.debug("[agents-admin] service " + agentServiceId + " makes the agent type " + agentType);
+                this.formGroup.controls["agentType"].setValue(agentType);
+            }
+            if (!adapter && (this.formGroup.controls["adaptedAgentNetworkCode"].value || this.formGroup.controls["agentNetworkServiceCode"].value)) {
+                this.formGroup.controls["adaptedAgentNetworkCode"].setValue(null);
+                this.formGroup.controls["agentNetworkServiceCode"].setValue(null);
+            }
+        });
+        // the adapted network tells the network service (its factory) that runs it
+        this.formGroup.controls["adaptedAgentNetworkCode"].valueChanges.subscribe(code => {
+            if (!code) {
+                if (this.formGroup.controls["agentNetworkServiceCode"].value) {
+                    this.formGroup.controls["agentNetworkServiceCode"].setValue(null);
+                }
+                return;
+            }
+            this.networksService.getAgentsNetworkByCode(code).subscribe({
+                next: (network: GAgentsNetwork | null) => {
+                    const factoryId = network?.agentsNetworkServiceFactoryId || null;
+                    console.debug("[agents-admin] adapted network " + code + " runs on " + factoryId);
+                    if (this.formGroup.controls["agentNetworkServiceCode"].value !== factoryId) {
+                        this.formGroup.controls["agentNetworkServiceCode"].setValue(factoryId);
+                    }
+                },
+                error: (error) => console.error("Cannot read the adapted network " + code, error)
+            });
         });
         // Enable/disable chat model selection based on useDefaultChatModel value
         this.formGroup.controls["useDefaultChatModel"].valueChanges.subscribe(
@@ -130,7 +173,8 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     override ngOnInit(): void {
         super.ngOnInit();
         this.loadingRelatedBackend = true;
-        const observables: [Observable<ConfigurationEntryGBaseChatModelConfig[]>, Observable<GBaseObject[]>] = [this.geboChatModelsService.getRuntimeConfiguredChatModels(), this.agentsAdminService.getAgentsChoices()];
+        const observables: [Observable<ConfigurationEntryGBaseChatModelConfig[]>, Observable<GBaseObject[]>, Observable<GAgentRole[]>, Observable<AgentServiceDescriptor[]>, Observable<GBaseObject[]>] =
+            [this.geboChatModelsService.getRuntimeConfiguredChatModels(), this.agentsAdminService.getAgentsChoices(), this.agentsAdminService.getAgentRoles(), this.networksService.getAgentServices(), this.networksService.getAgentsNetwork()];
         forkJoin(observables).subscribe({
             next: (values) => {
                 this.chatModelsData = values[0];
@@ -138,6 +182,11 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
                     this.defaultChatModel = values[0].find(x => x.configuration?.defaultModel === true);
                 }
                 this.agentTypes = values[1];
+                this.roles = values[2] || [];
+                this.serviceDescriptors = values[3] || [];
+                this.networks = values[4] || [];
+                console.debug("[agents-admin] " + this.agentTypes.length + " service(s), " + this.roles.length + " role(s), "
+                    + this.serviceDescriptors.length + " descriptor(s), " + this.networks.length + " network(s)");
             },
             complete: () => {
                 this.loadingRelatedBackend = false;
@@ -195,6 +244,25 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
                 }];
             }
         });
+    }
+
+    /** The descriptor of the service chosen in the form, with its types and kind. */
+    protected selectedServiceDescriptor(): AgentServiceDescriptor | undefined {
+        const serviceId = this.formGroup.controls["agentServiceId"].value;
+        return serviceId ? this.serviceDescriptors.find(s => s.serviceId === serviceId) : undefined;
+    }
+
+    protected isNetworkAdapterService(serviceId: string | null | undefined): boolean {
+        return !!serviceId && this.serviceDescriptors.some(s => s.serviceId === serviceId && s.networkAdapter === true);
+    }
+
+    /** The simple name of a type, what the hints show. */
+    protected shortType(type: string | undefined): string {
+        if (!type) {
+            return "?";
+        }
+        const simple = type.substring(type.lastIndexOf(".") + 1);
+        return simple === "List" ? "List<Document>" : simple;
     }
 
     override findByCode(code: string): Observable<GAgentConfig | null> {

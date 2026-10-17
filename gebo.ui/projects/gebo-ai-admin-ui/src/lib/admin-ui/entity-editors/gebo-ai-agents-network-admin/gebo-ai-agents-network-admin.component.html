@@ -7,7 +7,7 @@
       <div class="grid">
         <div class="col-3">
           <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
-            icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || readonly===true"
+            icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || readonly===true || validationErrors"
           styleClass="w-full"></p-button>
         </div>
         <div class="col-3">
@@ -27,10 +27,13 @@
       }
 
       <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+      @if (readonly) {
+        <div class="px-2 pb-2"><b id="ReadOnlyNetworkWarning" gebo-ai-text>This is a system network of agents: it cannot be changed, copy it to have one of your own.</b></div>
+      }
 
       <div class="grid geboDialogContent standardTabDialogueHeight">
         <div class="col-12 standardTabDialogueHeight">
-          <p-tabs [value]="0" (valueChange)="onTabChange($event)" id="TabView">
+          <p-tabs [value]="activeTab" (valueChange)="onTabChange($event)" id="TabView">
             <p-tablist>
               <p-tab id="GeneralInfosTab" [value]="0" gebo-ai-text>General infos</p-tab>
               <p-tab id="NetworkGraphTab" [value]="1" gebo-ai-text>Agents Network Graph</p-tab>
@@ -52,6 +55,19 @@
                       help="Automatically generated unique code of the Network.">
                       <input pInputText id="code" formControlName="code" readonly="true"
                         gebo-ai-field-element />
+                      </gebo-ai-field>
+                    </div>
+                    <div class="col-12">
+                      <gebo-ai-field id="agentsNetworkServiceFactoryId" label="Runs on"
+                        help="The network service factory that runs the network: it fixes the input its input nodes must accept and the output its output nodes must produce." [required]="true">
+                        <p-select id="FactorySelect" gebo-ai-label formControlName="agentsNetworkServiceFactoryId" [options]="factories"
+                          optionLabel="description" optionValue="factoryId" dataKey="factoryId" placeholder="Choose the factory the network runs on"
+                          styleClass="w-full" appendTo="body" gebo-ai-field-element>
+                          <ng-template #item let-factory>
+                            <span>{{factory.description}}</span>
+                            <span class="ml-2 text-xs text-muted-color font-monospace">{{shortType(factory.inputType)}} → {{shortType(factory.outputType)}}</span>
+                          </ng-template>
+                        </p-select>
                       </gebo-ai-field>
                     </div>
                     <div class="col-12">
@@ -91,67 +107,299 @@
                 </p-tabpanel>
 
                 <p-tabpanel [value]="1">
-                  <div class="flex justify-content-between align-items-center mb-4 p-2">
-                    <div>
-                      <h3 class="m-0 font-semibold text-xl">Agent Nodes & Communications</h3>
-                      <p class="text-sm text-muted-color m-0">Visualize and structure agent interactions within this network.</p>
+                  <!-- The composer: palette | graph | inspector and checks -->
+                  <div class="flex flex-wrap justify-content-between align-items-center gap-2 mb-2 px-2">
+                    <div class="flex flex-wrap align-items-center gap-2">
+                      <span id="ContractLabel" gebo-ai-text class="font-semibold">Contract</span>
+                      @if (factory(); as contract) {
+                        <span class="px-2 py-1 border-round bg-blue-50 text-blue-700 text-xs font-monospace" [pTooltip]="contract.inputType" tooltipPosition="bottom" appendTo="body">in {{shortType(contract.inputType)}}</span>
+                        <i class="pi pi-arrow-right text-xs text-muted-color"></i>
+                        <span class="px-2 py-1 border-round bg-purple-50 text-purple-700 text-xs font-monospace" [pTooltip]="contract.outputType" tooltipPosition="bottom" appendTo="body">out {{shortType(contract.outputType)}}</span>
+                        @if (contract.reactiveOutput) {
+                          <span id="StreamsOneWriterBadge" gebo-ai-text class="px-2 py-1 border-round surface-200 text-xs" title="The factory streams the answer of exactly one participant answering the user directly">streams one writer</span>
+                        }
+                        <span class="text-xs text-muted-color">{{contract.description}}</span>
+                      } @else {
+                        <span id="NoContractWarning" gebo-ai-text class="text-xs text-red-600">Choose on the general tab the factory the network runs on</span>
+                      }
                     </div>
                     <div class="flex gap-2">
-                      <button pButton label="Add Participant" icon="pi pi-plus" class="p-button-outlined" [disabled]="readonly" (click)="openAddParticipant()"></button>
-                      <button pButton label="Clear All" icon="pi pi-trash" class="p-button-outlined p-button-danger" [disabled]="agentsList.length === 0 || readonly" (click)="clearNetwork()"></button>
+                      <button pButton id="ValidateBtn" gebo-ai-label label="Validate now" icon="pi pi-check-circle" class="p-button-outlined p-button-sm" (click)="runValidation()"></button>
+                      <button pButton id="ClearAllBtn" gebo-ai-label label="Clear all" icon="pi pi-trash" class="p-button-outlined p-button-danger p-button-sm" [disabled]="agentsList.length === 0 || readonly" (click)="clearNetwork()"></button>
                     </div>
                   </div>
 
-                  <!-- Empty state -->
-                  @if (agentsList.length === 0) {
-                    <div class="flex flex-column align-items-center justify-content-center p-6 border-round border-1 surface-border bg-card shadow-1 m-4" style="min-height: 250px;">
-                      <i class="pi pi-share-alt text-4xl text-primary mb-3"></i>
-                      <span class="font-semibold text-xl mb-2">No agents in the network yet</span>
-                      <span class="text-sm text-muted-color mb-4">Start by adding the first agent node which can act as your starting input node.</span>
-                      <button pButton label="Add First Agent" icon="pi pi-plus" [disabled]="readonly" (click)="openAddParticipant()"></button>
+                  <div class="grid">
+                    <!-- Palette -->
+                    <div class="col-12 md:col-3 lg:col-2">
+                      <div class="border-round border-1 surface-border bg-card p-2 flex flex-column gap-2" style="max-height: clamp(380px, calc(100vh - 400px), 640px); overflow: auto;">
+                        <span id="PaletteTitle" gebo-ai-text class="font-semibold text-sm">Agent services</span>
+                        @for (group of paletteGroups; track group.id) {
+                          <div class="flex flex-column gap-1">
+                            <span class="text-xs uppercase text-muted-color font-semibold">{{group.label}}</span>
+                            @for (service of group.services; track service.serviceId) {
+                              <div class="border-round border-1 surface-border p-2 flex flex-column gap-1"
+                                [class.opacity-50]="serviceBlockReason(service) !== null"
+                                [pTooltip]="serviceBlockReason(service) || service.description" tooltipPosition="right" appendTo="body">
+                                <div class="flex justify-content-between align-items-center gap-1">
+                                  <span class="text-sm font-medium" style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{service.serviceId}}</span>
+                                  <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-sm p-0 w-2rem h-2rem flex-shrink-0"
+                                    [disabled]="readonly || serviceBlockReason(service) !== null" (click)="addService(service)"
+                                    [title]="'Add ' + service.serviceId"></button>
+                                </div>
+                                <div class="flex flex-wrap align-items-center gap-1 text-xs font-monospace">
+                                  <span class="px-1 border-round bg-blue-50 text-blue-700">{{shortType(service.inputType)}}</span>
+                                  <i class="pi pi-arrow-right text-muted-color" style="font-size: 0.6rem"></i>
+                                  @if (isRouter(service)) {
+                                    <span class="px-1 border-round bg-orange-50 text-orange-700">commands</span>
+                                  } @else {
+                                    <span class="px-1 border-round bg-purple-50 text-purple-700">{{shortType(service.outputType)}}</span>
+                                  }
+                                  @if (isResponder(service)) {
+                                    <span class="px-1 border-round bg-teal-50 text-teal-700">replies</span>
+                                  }
+                                </div>
+                                <span class="text-xs text-muted-color">{{serviceBlockReason(service) || (configsCount(service) + ' configuration' + (configsCount(service) === 1 ? '' : 's'))}}</span>
+                              </div>
+                            }
+                          </div>
+                        }
+                        @if (paletteGroups.length === 0) {
+                          <span id="PaletteEmpty" gebo-ai-text class="text-xs text-muted-color">No agent service is registered.</span>
+                        }
+                      </div>
                     </div>
-                  }
 
-                  <!-- NgDiagram visualizer -->
-                  @if (agentsList.length > 0) {
-                    <div class="w-full overflow-auto p-4 border-round border-1 surface-border bg-card shadow-1"
-                      [class.readonly-diagram]="readonly"
-                      style="min-height: 500px; height: 600px; position: relative;">
-                      <ng-diagram #diagramHost [model]="diagramModel" [config]="diagramConfig" [nodeTemplateMap]="nodeTemplateMap" style="width: 100%; height: 100%; display: block;">
-                        <ng-diagram-background></ng-diagram-background>
-                      </ng-diagram>
+                    <!-- Graph -->
+                    <div class="col-12 md:col-6 lg:col-7">
+                      @if (agentsList.length === 0) {
+                        <div class="flex flex-column align-items-center justify-content-center p-6 border-round border-1 surface-border bg-card shadow-1" style="min-height: 250px;">
+                          <i class="pi pi-share-alt text-4xl text-primary mb-3"></i>
+                          <span id="EmptyNetworkTitle" gebo-ai-text class="font-semibold text-xl mb-2">No agents in the network yet</span>
+                          <span id="EmptyNetworkHint" gebo-ai-text class="text-sm text-muted-color mb-4">Add an input adapter from the palette: it is the node that receives the network input.</span>
+                        </div>
+                      } @else {
+                        <div class="w-full overflow-auto border-round border-1 surface-border bg-card shadow-1"
+                          [class.readonly-diagram]="readonly"
+                          style="min-height: 380px; height: clamp(380px, calc(100vh - 400px), 600px); position: relative;">
+                          <ng-diagram #diagramHost [model]="diagramModel" [config]="diagramConfig" [nodeTemplateMap]="nodeTemplateMap"
+                            (edgeDrawEnded)="onEdgeDrawEnded($event)" (selectionChanged)="onSelectionChanged($event)" (nodeDragEnded)="onNodeDragEnded($event)"
+                            style="width: 100%; height: 100%; display: block;">
+                            <ng-diagram-background></ng-diagram-background>
+                          </ng-diagram>
+                        </div>
+                        <div class="flex flex-wrap gap-3 text-xs text-muted-color mt-2 px-1">
+                          <span id="LegendInputPort" gebo-ai-text>Left port: the input the agent accepts</span>
+                          <span id="LegendOutputPort" gebo-ai-text>Right port: what it produces, a router sends commands, a responder replies to whoever asked</span>
+                          <span id="LegendDraw" gebo-ai-text>Drag from a right port to a node to let them talk; click an edge to remove it from the inspector</span>
+                        </div>
+                      }
                     </div>
-                  }
+
+                    <!-- Inspector and checks -->
+                    <div class="col-12 md:col-3 lg:col-3 flex flex-column gap-2">
+                      <div class="border-round border-1 surface-border bg-card" [formGroup]="participantFormGroup">
+                        <div class="flex gap-1 px-2 pt-2 border-bottom-1 surface-border">
+                          <button type="button" id="InspectorParticipantTab" gebo-ai-text class="p-button p-button-text p-button-sm" [class.font-bold]="inspectorTab === 'participant'" (click)="inspectorTab = 'participant'">Participant</button>
+                          <button type="button" id="InspectorConfigurationTab" gebo-ai-text class="p-button p-button-text p-button-sm" [class.font-bold]="inspectorTab === 'configuration'" (click)="inspectorTab = 'configuration'">Agent configuration</button>
+                        </div>
+                        <div class="p-2 flex flex-column gap-2 text-sm" style="max-height: clamp(260px, calc(100vh - 520px), 560px); overflow-y: auto; overflow-x: hidden; min-width: 0; overflow-wrap: anywhere;">
+                          @if (selectedEdge) {
+                            <div class="flex align-items-center justify-content-between gap-2 border-round surface-100 p-2">
+                              <span class="text-xs"><span id="EdgeLabel" gebo-ai-text>Link</span> <b>{{selectedEdge.source}}</b> → <b>{{selectedEdge.target}}</b></span>
+                              <button pButton id="RemoveEdgeBtn" gebo-ai-label label="Remove" icon="pi pi-times" class="p-button-text p-button-danger p-button-sm" [disabled]="readonly" (click)="removeSelectedEdge()"></button>
+                            </div>
+                          }
+                          @if (!selected) {
+                            <span id="InspectorEmpty" gebo-ai-text class="text-muted-color text-xs">Select a node of the graph, or add a service from the palette.</span>
+                          } @else if (inspectorTab === 'participant') {
+                            @let service = serviceOf(selected);
+                            <div class="flex flex-column gap-1">
+                              <label id="ParticipantConfigLabel" gebo-ai-text class="text-xs font-semibold text-muted-color">Agent configuration</label>
+                              <div class="flex gap-1">
+                                <p-select id="ParticipantConfigSelect" gebo-ai-label formControlName="agentConfigCode" [options]="configsOfSelected()" optionLabel="description" optionValue="code" dataKey="code"
+                                  placeholder="Choose the configuration" class="flex-grow-1" styleClass="w-full" appendTo="body"></p-select>
+                                <button pButton icon="pi pi-pencil" class="p-button-outlined p-button-sm w-2rem" [disabled]="!selected.agentConfigCode" (click)="editSelectedConfig()" [title]="'Edit the configuration'" id="EditConfigBtn"></button>
+                                <button pButton icon="pi pi-plus" class="p-button-outlined p-button-sm w-2rem" [disabled]="readonly" (click)="newConfigForSelected()" [title]="'New configuration of this service'" id="NewConfigBtn"></button>
+                              </div>
+                              @if (service) {
+                                <span class="text-xs text-muted-color">{{service.serviceId}}: <span class="font-monospace">{{shortType(service.inputType)}} → {{isRouter(service) ? 'commands' : shortType(service.outputType)}}</span></span>
+                              } @else {
+                                <span id="UnknownServiceWarning" gebo-ai-text class="text-xs text-red-600">The configuration runs a service that is not registered.</span>
+                              }
+                            </div>
+                            <div class="flex flex-column gap-1">
+                              <label id="ContextualNameLabel" gebo-ai-text class="text-xs font-semibold text-muted-color">Contextual name</label>
+                              <input pInputText id="ContextualNameInput" gebo-ai-label formControlName="agentContextualName" class="w-full p-inputtext-sm" placeholder="Optional, makes the name unique" />
+                              <span class="text-xs" [class.text-red-600]="isDuplicateName(selected)" [class.text-muted-color]="!isDuplicateName(selected)">
+                                <span id="NetworkNameLabel" gebo-ai-text>Network name</span> <span class="font-monospace">{{participantName(selected)}}</span>
+                                @if (isDuplicateName(selected)) { <span id="DuplicateNameWarning" gebo-ai-text>is used twice: give one a contextual name</span> }
+                              </span>
+                            </div>
+                            <div class="border-top-1 surface-border pt-2 flex flex-column gap-1">
+                              <span id="RoleInNetworkLabel" gebo-ai-text class="text-xs uppercase font-semibold text-muted-color">Role in the network</span>
+                              <div class="flex align-items-center gap-2" [class.opacity-50]="!canBeInputNode(service)">
+                                <p-checkbox formControlName="inputNode" [binary]="true" inputId="InputNodeCheck"></p-checkbox>
+                                <label for="InputNodeCheck" id="InputNodeLabel" gebo-ai-text class="text-sm">Network input node</label>
+                              </div>
+                              <span class="text-xs text-muted-color">
+                                @if (canBeInputNode(service)) { <span id="InputNodeOkHint" gebo-ai-text>accepts the input of the contract</span> }
+                                @else if (service && factory()) { <span id="InputNodeNoHint" gebo-ai-text>cannot: its input is not the input of the contract</span>&nbsp;<span class="font-monospace">{{shortType(service.inputType)}} ≠ {{shortType(factory()?.inputType)}}</span> }
+                              </span>
+                              <div class="flex align-items-center gap-2">
+                                <p-checkbox formControlName="outputNode" [binary]="true" inputId="OutputNodeCheck"></p-checkbox>
+                                <label for="OutputNodeCheck" id="OutputNodeLabel" gebo-ai-text class="text-sm">Network output node</label>
+                              </div>
+                              <span class="text-xs text-muted-color">
+                                @if (service?.reactive) { <span id="WriterOutputHint" gebo-ai-text>a writer is always an output node</span> }
+                                @else if (producesNetworkOutput(service)) { <span id="OutputNodeOkHint" gebo-ai-text>produces the output of the contract</span> }
+                                @else if (service && factory()) { <span id="OutputNodeNoHint" gebo-ai-text>does not produce the output of the contract: another output node must</span> }
+                              </span>
+                            </div>
+                            <div class="border-top-1 surface-border pt-2 flex flex-column gap-1">
+                              <span id="TalksToLabel" gebo-ai-text class="text-xs uppercase font-semibold text-muted-color">Talks to</span>
+                              <div class="flex flex-wrap gap-1">
+                                @for (target of (selected.communicationList || []); track target) {
+                                  <p-chip [label]="target" [removable]="!readonly" (onRemove)="removeTarget(target)" styleClass="text-xs"></p-chip>
+                                }
+                                @if (!(selected.communicationList || []).length) { <span id="TalksToNobody" gebo-ai-text class="text-xs text-muted-color">nobody</span> }
+                              </div>
+                              <p-select id="AddTargetSelect" gebo-ai-label [formControl]="addTargetControl" [options]="targetCandidates()" optionLabel="name" optionValue="name" optionDisabled="disabled"
+                                dataKey="name" placeholder="Add an agent to talk to" styleClass="w-full" appendTo="body">
+                                <ng-template #item let-candidate>
+                                  <span [class.text-muted-color]="!candidate.verdict.ok">{{candidate.name}}</span>
+                                  <span class="ml-2 text-xs text-muted-color">{{candidate.verdict.reason}}</span>
+                                </ng-template>
+                              </p-select>
+                              <span class="text-xs text-muted-color">
+                                @if (isRouter(service)) { <span id="RouterTalksHint" gebo-ai-text>A router sends each target a command typed on that target's input; it needs at least one.</span> }
+                                @else if (isForwarder(service)) { <span id="ForwarderTalksHint" gebo-ai-text>A forwarder delivers its output as the input of each target; it needs at least one and the types must match.</span> }
+                                @else if (isResponder(service)) { <span id="ResponderTalksHint" gebo-ai-text>Its reply goes to whoever asked and is shared in the session; this list tells the model whom it may address.</span> }
+                              </span>
+                            </div>
+                            <div class="border-top-1 surface-border pt-2 flex flex-column gap-1">
+                              <span id="CapabilitiesLabel" gebo-ai-text class="text-xs uppercase font-semibold text-muted-color">Capabilities</span>
+                              <div class="flex align-items-center gap-2">
+                                <p-checkbox formControlName="allowedToNotifyUser" [binary]="true" inputId="NotifyUserCheck"></p-checkbox>
+                                <label for="NotifyUserCheck" id="NotifyUserLabel" gebo-ai-text class="text-sm">May notify the user</label>
+                              </div>
+                              <div class="flex align-items-center gap-2">
+                                <p-checkbox formControlName="canCallTools" [binary]="true" inputId="CanCallToolsCheck"></p-checkbox>
+                                <label for="CanCallToolsCheck" id="CanCallToolsLabel" gebo-ai-text class="text-sm">May call its tools</label>
+                              </div>
+                              <div class="flex align-items-center gap-2">
+                                <p-checkbox formControlName="canCallOtherAgents" [binary]="true" inputId="CanCallOtherAgentsCheck"></p-checkbox>
+                                <label for="CanCallOtherAgentsCheck" id="CanCallOtherAgentsLabel" gebo-ai-text class="text-sm">May delegate to other agents</label>
+                              </div>
+                            </div>
+                            @if (isRouter(service)) {
+                              <div class="border-top-1 surface-border pt-2 flex flex-column gap-1">
+                                <span id="RoutingBudgetLabel" gebo-ai-text class="text-xs uppercase font-semibold text-muted-color">Routing budget</span>
+                                <label id="MaxInvocationsLabel" gebo-ai-text class="text-xs font-semibold text-muted-color" for="MaxInvocationsInput">Coordination cycles</label>
+                                <p-inputNumber id="MaxInvocationsInput" gebo-ai-label formControlName="maxInvocations" [min]="1" placeholder="One pass" styleClass="w-full" inputStyleClass="p-inputtext-sm w-full"></p-inputNumber>
+                                <label id="MaxConsecutiveLabel" gebo-ai-text class="text-xs font-semibold text-muted-color" for="MaxConsecutiveInput">Cycles when the first is empty</label>
+                                <p-inputNumber id="MaxConsecutiveInput" gebo-ai-label formControlName="maxConsecutiveInvocations" [min]="1" placeholder="One pass" styleClass="w-full" inputStyleClass="p-inputtext-sm w-full"></p-inputNumber>
+                                <span id="RoutingBudgetHint" gebo-ai-text class="text-xs text-muted-color">Cycles the router may run before it must deliver; empty means one pass. Only routers read these values.</span>
+                              </div>
+                            }
+                            <div class="border-top-1 surface-border pt-2 flex flex-column gap-1">
+                              <label id="PolicyLabel" gebo-ai-text class="text-xs font-semibold text-muted-color">Communication policy</label>
+                              <p-select id="PolicySelect" gebo-ai-label formControlName="communicationPolicy" [options]="policyOptions" optionLabel="label" optionValue="value" dataKey="value" styleClass="w-full" appendTo="body"></p-select>
+                              <span id="PolicyHint" gebo-ai-text class="text-xs text-muted-color">Stored with the participant; the runtime does not enforce it yet.</span>
+                            </div>
+                            <div class="border-top-1 surface-border pt-2">
+                              <button pButton id="RemoveParticipantBtn" gebo-ai-label label="Remove from the network" icon="pi pi-trash" class="p-button-outlined p-button-danger p-button-sm" [disabled]="readonly" (click)="deleteParticipant(selected)"></button>
+                            </div>
+                          } @else {
+                            @let config = configOf(selected);
+                            @let configService = serviceOfConfig(config);
+                            @if (config) {
+                              <div class="flex flex-column gap-1">
+                                <span class="font-semibold">{{config.description}}</span>
+                                <span class="text-xs text-muted-color font-monospace">{{config.code}}</span>
+                                @if (config.readOnly) { <span id="SystemAgentHint" gebo-ai-text class="text-xs text-orange-700">System agent: read only, copy it from its editor to change it.</span> }
+                              </div>
+                              <div class="flex flex-column gap-1 text-xs">
+                                <span><span id="CfgServiceLabel" gebo-ai-text class="font-semibold text-muted-color">Service</span> {{config.agentServiceId}}
+                                  @if (configService) { <span class="font-monospace">{{shortType(configService.inputType)}} → {{isRouter(configService) ? 'commands' : shortType(configService.outputType)}}</span> }
+                                </span>
+                                <span><span id="CfgRoleLabel" gebo-ai-text class="font-semibold text-muted-color">Role</span> {{config.agentRoleCode || '—'}}
+                                  @if (!config.agentRoleCode) { <span id="CfgNoRoleWarning" gebo-ai-text class="text-red-600">required: the backend refuses a configuration without a role</span> }
+                                </span>
+                                <span><span id="CfgPromptLabel" gebo-ai-text class="font-semibold text-muted-color">Main loop prompt</span> {{config.mainLoopPromptUseCode || '—'}}</span>
+                                <span><span id="CfgModelLabel" gebo-ai-text class="font-semibold text-muted-color">Chat model</span>
+                                  @if (config.useDefaultChatModel !== false) { <span id="CfgDefaultModel" gebo-ai-text>system default</span> } @else { {{config.chatModelReference?.description || config.chatModelReference?.code || '—'}} }
+                                </span>
+                                <span><span id="CfgToolsLabel" gebo-ai-text class="font-semibold text-muted-color">Tools</span>
+                                  @if (config.subscribeAllTools) { <span id="CfgAllTools" gebo-ai-text>every registered tool</span> } @else { {{(config.enabledFunctions || []).length}} }
+                                </span>
+                                @if (configService?.networkAdapter) {
+                                  <span><span id="CfgAdaptedNetworkLabel" gebo-ai-text class="font-semibold text-muted-color">Delegates to network</span> {{config.adaptedAgentNetworkCode || '—'}}</span>
+                                }
+                              </div>
+                              <div class="flex gap-1 pt-2">
+                                <button pButton id="OpenConfigEditorBtn" gebo-ai-label label="Open the editor" icon="pi pi-pencil" class="p-button-outlined p-button-sm" (click)="editSelectedConfig()"></button>
+                                <button pButton id="NewConfigFromInspectorBtn" gebo-ai-label label="New" icon="pi pi-plus" class="p-button-outlined p-button-sm" [disabled]="readonly" (click)="newConfigForSelected()"></button>
+                              </div>
+                            } @else {
+                              <span id="CfgMissingWarning" gebo-ai-text class="text-xs text-red-600">The configuration does not exist.</span>
+                            }
+                          }
+                        </div>
+                      </div>
+
+                      <!-- Checks -->
+                      <div class="border-round border-1 surface-border bg-card">
+                        <div class="flex justify-content-between align-items-center px-2 pt-2">
+                          <span id="ChecksTitle" gebo-ai-text class="font-semibold text-sm">Checks</span>
+                          @if (checks.length === 0) {
+                            <span id="ChecksValid" gebo-ai-text class="text-xs text-green-700">valid, can save</span>
+                          } @else if (validationErrors) {
+                            <span class="text-xs text-red-600">{{checksCount('error')}} <span id="ChecksErrors" gebo-ai-text>error(s)</span></span>
+                          } @else {
+                            <span class="text-xs text-orange-700">{{checksCount('warn')}} <span id="ChecksWarnings" gebo-ai-text>warning(s), can save</span></span>
+                          }
+                        </div>
+                        <div class="p-2 flex flex-column gap-1" style="max-height: clamp(120px, calc(100vh - 820px), 220px); overflow: auto;">
+                          @for (check of checks; track $index) {
+                            <div class="border-round border-1 surface-border p-1 cursor-pointer text-xs flex gap-2 align-items-start" (click)="selectFromCheck(check)">
+                              <span class="px-1 border-round font-semibold flex-shrink-0" [class.bg-red-100]="check.severity === 'error'" [class.text-red-700]="check.severity === 'error'"
+                                [class.bg-orange-100]="check.severity !== 'error'" [class.text-orange-700]="check.severity !== 'error'">{{check.severity}}</span>
+                              <span><span class="font-semibold">{{check.summary}}</span><br><span class="text-muted-color">{{check.detail}}</span></span>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </p-tabpanel>
 
                 <p-tabpanel [value]="2">
                   <div class="flex justify-content-between align-items-center mb-4 p-2">
                     <div>
-                      <h3 class="m-0 font-semibold text-xl">Agents in the Network</h3>
-                      <p class="text-sm text-muted-color m-0">Click a row to open the agent editor{{ readonly ? ' (read only)' : '' }}.</p>
-                    </div>
-                    <div class="flex gap-2">
-                      <button pButton label="Add Agent" icon="pi pi-plus" class="p-button-outlined" [disabled]="readonly" (click)="openAddParticipant()"></button>
+                      <h3 id="AgentsListTitle" gebo-ai-text class="m-0 font-semibold text-xl">Agents in the Network</h3>
+                      <p id="AgentsListHint" gebo-ai-text class="text-sm text-muted-color m-0">Click a row to open the participant in the graph.</p>
                     </div>
                   </div>
 
                   <p-table [value]="agentsList" [rowHover]="true" styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="420px">
                     <ng-template pTemplate="header">
                       <tr>
-                        <th>Network Agent Name</th>
-                        <th>Agent Configuration</th>
-                        <th>Contextual Name</th>
-                        <th>Role</th>
-                        <th>Communication Policy</th>
-                        <th>Communicates With</th>
+                        <th id="NameHeader" gebo-ai-text>Network Agent Name</th>
+                        <th id="ConfigurationHeader" gebo-ai-text>Agent Configuration</th>
+                        <th id="ServiceHeader" gebo-ai-text>Service</th>
+                        <th id="TypesHeader" gebo-ai-text>Input → output</th>
+                        <th id="RoleHeader" gebo-ai-text>Role</th>
+                        <th id="CommunicatesWithHeader" gebo-ai-text>Talks to</th>
                         <th style="width: 7rem"></th>
                       </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-agent>
-                      <tr class="cursor-pointer" (click)="openEditParticipant(agent)">
-                        <td class="font-semibold text-primary">{{ agent.networkAgentName }}</td>
+                      <tr class="cursor-pointer" [class.surface-100]="isSelected(agent)" (click)="select(agent); activeTab = 1">
+                        <td class="font-semibold text-primary">{{ participantName(agent) }}</td>
                         <td>{{ getAgentDescription(agent.agentConfigCode) }}</td>
-                        <td>{{ agent.agentContextualName || '-' }}</td>
+                        <td>{{ serviceOf(agent)?.serviceId || '-' }}</td>
+                        <td class="font-monospace text-xs">{{ shortType(serviceOf(agent)?.inputType) }} → {{ isRouter(serviceOf(agent)) ? 'commands' : shortType(serviceOf(agent)?.outputType) }}</td>
                         <td>
                           <div class="flex gap-1">
                             @if (agent.inputNode) {
@@ -165,13 +413,12 @@
                             }
                           </div>
                         </td>
-                        <td>{{ agent.communicationPolicy }}</td>
                         <td>{{ (agent.communicationList && agent.communicationList.length) ? agent.communicationList.join(', ') : '-' }}</td>
                         <td class="text-right" (click)="$event.stopPropagation()">
                           <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-secondary p-button-sm p-0 w-2rem h-2rem"
-                            [title]="readonly ? 'View Participant' : 'Edit Participant'" (click)="openEditParticipant(agent)"></button>
+                            [title]="readonly ? 'View' : 'Edit'" (click)="select(agent); activeTab = 1"></button>
                           <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger p-button-sm p-0 w-2rem h-2rem"
-                            [disabled]="readonly" title="Remove Participant" (click)="deleteParticipant(agent)"></button>
+                            [disabled]="readonly" title="Remove" (click)="deleteParticipant(agent)"></button>
                         </td>
                       </tr>
                     </ng-template>
@@ -180,8 +427,7 @@
                         <td colspan="7">
                           <div class="flex flex-column align-items-center justify-content-center p-5 text-center">
                             <i class="pi pi-users text-3xl text-primary mb-2"></i>
-                            <span class="font-semibold mb-1">No agents in the network yet</span>
-                            <span class="text-sm text-muted-color">Use "Add Agent" to add the first participant.</span>
+                            <span id="AgentsListEmpty" gebo-ai-text class="font-semibold mb-1">No agents in the network yet</span>
                           </div>
                         </td>
                       </tr>
@@ -199,85 +445,3 @@
             </div>
           </div>
         </p-panel>
-
-        <!-- Participant Modal Dialog - organized like the entity editors: 90% viewport, buttons on top -->
-        <p-dialog [(visible)]="showParticipantDialog" [modal]="true" styleClass="gebo-entity-dialog"
-          [style]="{width: '90vw', height: '90vh'}" [maximizable]="true" [dismissableMask]="true">
-          <p-panel [header]="dialogHeader" [formGroup]="participantFormGroup">
-            <div class="geboButtonsBar" style="vertical-align: bottom">
-              <div class="grid">
-                <div class="col-6">
-                  <p-button [outlined]="true" label="Save" (onClick)="saveParticipant()" icon="pi pi-save"
-                    severity="success" [disabled]="participantFormGroup.invalid || readonly===true" styleClass="w-full"></p-button>
-                </div>
-                <div class="col-6">
-                  <p-button [outlined]="true" label="Cancel" severity="contrast"
-                    (onClick)="showParticipantDialog = false" styleClass="w-full"></p-button>
-                </div>
-              </div>
-            </div>
-
-            <div class="grid geboDialogContent p-3">
-              <div class="col-12 md:col-6">
-                <label for="networkAgentName" class="font-semibold mb-1 block text-sm">Network Agent Name *</label>
-                <input pInputText id="networkAgentName" formControlName="networkAgentName" class="w-full" placeholder="Unique name in network (e.g. worker)" />
-              </div>
-
-              <div class="col-12 md:col-6">
-                <label for="agentConfigCode" class="font-semibold mb-1 block text-sm">Agent Configuration *</label>
-                <div class="flex gap-2">
-                  <p-select id="agentConfigCode" formControlName="agentConfigCode" [options]="availableAgents" optionValue="code" optionLabel="description" placeholder="Select Agent Configuration" class="flex-grow-1"></p-select>
-                  <button pButton icon="pi pi-pencil" class="p-button-outlined w-3rem h-3rem" [disabled]="!participantFormGroup.get('agentConfigCode')?.value || readonly" (click)="editAgentConfig(participantFormGroup.get('agentConfigCode')?.value)" title="Edit Agent Configuration"></button>
-                  <button pButton icon="pi pi-plus" class="p-button-outlined w-3rem h-3rem" [disabled]="readonly" (click)="addAgentConfig()" title="Add Agent Configuration"></button>
-                </div>
-              </div>
-
-              <div class="col-12 md:col-6">
-                <label for="agentContextualName" class="font-semibold mb-1 block text-sm">Contextual Name</label>
-                <input pInputText id="agentContextualName" formControlName="agentContextualName" class="w-full" placeholder="Optional contextual description" />
-              </div>
-
-              <div class="col-12 md:col-6">
-                <label for="communicationPolicy" class="font-semibold mb-1 block text-sm">Communication Policy *</label>
-                <p-select id="communicationPolicy" formControlName="communicationPolicy" [options]="policyOptions" optionValue="value" optionLabel="label" class="w-full"></p-select>
-              </div>
-
-              <div class="col-12">
-                <label for="communicationList" class="font-semibold mb-1 block text-sm">Communicates With</label>
-                <p-multiSelect id="communicationList" formControlName="communicationList" [options]="getPotentialTargets(participantFormGroup.get('networkAgentName')?.value || undefined)" placeholder="Select target agents" class="w-full"></p-multiSelect>
-              </div>
-
-              <div class="col-12 md:col-6">
-                <label for="maxInvocations" class="font-semibold mb-1 block text-sm">Max Invocations</label>
-                <p-inputNumber id="maxInvocations" formControlName="maxInvocations" [min]="1" placeholder="Unlimited" styleClass="w-full"></p-inputNumber>
-              </div>
-
-              <div class="col-12 md:col-6">
-                <label for="maxConsecutiveInvocations" class="font-semibold mb-1 block text-sm">Max Consecutive Invocations</label>
-                <p-inputNumber id="maxConsecutiveInvocations" formControlName="maxConsecutiveInvocations" [min]="1" placeholder="Unlimited" styleClass="w-full"></p-inputNumber>
-              </div>
-
-              <div class="col-12 border-top-1 surface-border pt-3">
-                <span class="font-semibold text-sm block mb-2">Node role &amp; capabilities</span>
-                <div class="grid">
-                  <div class="col-6 md:col-3 flex align-items-center gap-2">
-                    <p-checkbox formControlName="inputNode" [binary]="true" inputId="inputNode"></p-checkbox>
-                    <label for="inputNode" class="text-sm">Starting Input Node</label>
-                  </div>
-                  <div class="col-6 md:col-3 flex align-items-center gap-2">
-                    <p-checkbox formControlName="outputNode" [binary]="true" inputId="outputNode"></p-checkbox>
-                    <label for="outputNode" class="text-sm">Final Output Node</label>
-                  </div>
-                  <div class="col-6 md:col-3 flex align-items-center gap-2">
-                    <p-checkbox formControlName="canCallTools" [binary]="true" inputId="canCallTools"></p-checkbox>
-                    <label for="canCallTools" class="text-sm">Can Call Tools</label>
-                  </div>
-                  <div class="col-6 md:col-3 flex align-items-center gap-2">
-                    <p-checkbox formControlName="canCallOtherAgents" [binary]="true" inputId="canCallOtherAgents"></p-checkbox>
-                    <label for="canCallOtherAgents" class="text-sm">Can Call Other Agents</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </p-panel>
-        </p-dialog>

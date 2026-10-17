@@ -6331,6 +6331,36 @@
       },
       "COPY-ERROR": {
         "summary": "Copy failed"
+      },
+      "ServiceTypesHint": {
+        "label": "In a network it accepts"
+      },
+      "ServiceRouterHint": {
+        "label": "and sends commands typed on each agent it talks to"
+      },
+      "ServiceProducesHint": {
+        "label": "and produces"
+      },
+      "ServiceWriterHint": {
+        "label": "; it answers the user directly, so it is the single output node of a network"
+      },
+      "agentRoleCode": {
+        "label": "Agent role",
+        "help": "The role the agent plays, from the role library the prompts are built with. Mandatory."
+      },
+      "AgentRoleSelect": {
+        "placeholder": "Choose the role"
+      },
+      "adaptedAgentNetworkCode": {
+        "label": "Delegates to network",
+        "help": "The network of agents this agent runs as one agent: its contract must match the input and output of the adapter service."
+      },
+      "AdaptedNetworkSelect": {
+        "placeholder": "Choose the network"
+      },
+      "agentNetworkServiceCode": {
+        "label": "Network runs on",
+        "help": "The network service factory of the adapted network, taken from the network."
       }
     }
   },
@@ -7296,6 +7326,282 @@
       },
       "COPY-ERROR": {
         "summary": "Copy failed"
+      },
+      "ReadOnlyNetworkWarning": {
+        "label": "This is a system network of agents: it cannot be changed, copy it to have one of your own."
+      },
+      "ContractLabel": {
+        "label": "Contract"
+      },
+      "StreamsOneWriterBadge": {
+        "label": "streams one writer",
+        "help": "The factory streams the answer of exactly one participant answering the user directly"
+      },
+      "NoContractWarning": {
+        "label": "Choose on the general tab the factory the network runs on"
+      },
+      "PaletteTitle": {
+        "label": "Agent services"
+      },
+      "PaletteEmpty": {
+        "label": "No agent service is registered."
+      },
+      "EmptyNetworkTitle": {
+        "label": "No agents in the network yet"
+      },
+      "EmptyNetworkHint": {
+        "label": "Add an input adapter from the palette: it is the node that receives the network input."
+      },
+      "LegendInputPort": {
+        "label": "Left port: the input the agent accepts"
+      },
+      "LegendOutputPort": {
+        "label": "Right port: what it produces, a router sends commands, a responder replies to whoever asked"
+      },
+      "LegendDraw": {
+        "label": "Drag from a right port to a node to let them talk; click an edge to remove it from the inspector"
+      },
+      "InspectorParticipantTab": {
+        "label": "Participant"
+      },
+      "InspectorConfigurationTab": {
+        "label": "Agent configuration"
+      },
+      "EdgeLabel": {
+        "label": "Link"
+      },
+      "InspectorEmpty": {
+        "label": "Select a node of the graph, or add a service from the palette."
+      },
+      "ParticipantConfigLabel": {
+        "label": "Agent configuration"
+      },
+      "UnknownServiceWarning": {
+        "label": "The configuration runs a service that is not registered."
+      },
+      "ContextualNameLabel": {
+        "label": "Contextual name"
+      },
+      "NetworkNameLabel": {
+        "label": "Network name"
+      },
+      "DuplicateNameWarning": {
+        "label": "is used twice: give one a contextual name"
+      },
+      "RoleInNetworkLabel": {
+        "label": "Role in the network"
+      },
+      "InputNodeLabel": {
+        "label": "Network input node"
+      },
+      "InputNodeOkHint": {
+        "label": "accepts the input of the contract"
+      },
+      "InputNodeNoHint": {
+        "label": "cannot: its input is not the input of the contract"
+      },
+      "OutputNodeLabel": {
+        "label": "Network output node"
+      },
+      "WriterOutputHint": {
+        "label": "a writer is always an output node"
+      },
+      "OutputNodeOkHint": {
+        "label": "produces the output of the contract"
+      },
+      "OutputNodeNoHint": {
+        "label": "does not produce the output of the contract: another output node must"
+      },
+      "TalksToLabel": {
+        "label": "Talks to"
+      },
+      "TalksToNobody": {
+        "label": "nobody"
+      },
+      "RouterTalksHint": {
+        "label": "A router sends each target a command typed on that target's input; it needs at least one."
+      },
+      "ForwarderTalksHint": {
+        "label": "A forwarder delivers its output as the input of each target; it needs at least one and the types must match."
+      },
+      "ResponderTalksHint": {
+        "label": "Its reply goes to whoever asked and is shared in the session; this list tells the model whom it may address."
+      },
+      "CapabilitiesLabel": {
+        "label": "Capabilities"
+      },
+      "NotifyUserLabel": {
+        "label": "May notify the user"
+      },
+      "CanCallToolsLabel": {
+        "label": "May call its tools"
+      },
+      "CanCallOtherAgentsLabel": {
+        "label": "May delegate to other agents"
+      },
+      "RoutingBudgetLabel": {
+        "label": "Routing budget"
+      },
+      "MaxInvocationsLabel": {
+        "label": "Coordination cycles"
+      },
+      "MaxConsecutiveLabel": {
+        "label": "Cycles when the first is empty"
+      },
+      "RoutingBudgetHint": {
+        "label": "Cycles the router may run before it must deliver; empty means one pass. Only routers read these values."
+      },
+      "PolicyLabel": {
+        "label": "Communication policy"
+      },
+      "PolicyHint": {
+        "label": "Stored with the participant; the runtime does not enforce it yet."
+      },
+      "SystemAgentHint": {
+        "label": "System agent: read only, copy it from its editor to change it."
+      },
+      "CfgServiceLabel": {
+        "label": "Service"
+      },
+      "CfgRoleLabel": {
+        "label": "Role"
+      },
+      "CfgNoRoleWarning": {
+        "label": "required: the backend refuses a configuration without a role"
+      },
+      "CfgPromptLabel": {
+        "label": "Main loop prompt"
+      },
+      "CfgModelLabel": {
+        "label": "Chat model"
+      },
+      "CfgDefaultModel": {
+        "label": "system default"
+      },
+      "CfgToolsLabel": {
+        "label": "Tools"
+      },
+      "CfgAllTools": {
+        "label": "every registered tool"
+      },
+      "CfgAdaptedNetworkLabel": {
+        "label": "Delegates to network"
+      },
+      "CfgMissingWarning": {
+        "label": "The configuration does not exist."
+      },
+      "ChecksTitle": {
+        "label": "Checks"
+      },
+      "ChecksValid": {
+        "label": "valid, can save"
+      },
+      "ChecksErrors": {
+        "label": "error(s)"
+      },
+      "ChecksWarnings": {
+        "label": "warning(s), can save"
+      },
+      "AgentsListTitle": {
+        "label": "Agents in the Network"
+      },
+      "AgentsListHint": {
+        "label": "Click a row to open the participant in the graph."
+      },
+      "NameHeader": {
+        "label": "Network Agent Name"
+      },
+      "ConfigurationHeader": {
+        "label": "Agent Configuration"
+      },
+      "ServiceHeader": {
+        "label": "Service"
+      },
+      "TypesHeader": {
+        "label": "Input → output"
+      },
+      "RoleHeader": {
+        "label": "Role"
+      },
+      "CommunicatesWithHeader": {
+        "label": "Talks to"
+      },
+      "AgentsListEmpty": {
+        "label": "No agents in the network yet"
+      },
+      "PolicyAllowAll": {
+        "label": "Allow all"
+      },
+      "PolicyDenyAll": {
+        "label": "Deny all"
+      },
+      "PolicyAllowList": {
+        "label": "Allow list"
+      },
+      "PolicyDenyList": {
+        "label": "Deny list"
+      },
+      "PaletteForwarders": {
+        "label": "Input adapters"
+      },
+      "PaletteRouters": {
+        "label": "Routers"
+      },
+      "PaletteResponders": {
+        "label": "Workers"
+      },
+      "PaletteWriters": {
+        "label": "Writers, answer the user"
+      },
+      "PaletteNetworkAdapters": {
+        "label": "Networks as agents"
+      },
+      "ValidateBtn": {
+        "label": "Validate now"
+      },
+      "ClearAllBtn": {
+        "label": "Clear all"
+      },
+      "RemoveEdgeBtn": {
+        "label": "Remove"
+      },
+      "RemoveParticipantBtn": {
+        "label": "Remove from the network"
+      },
+      "OpenConfigEditorBtn": {
+        "label": "Open the editor"
+      },
+      "NewConfigFromInspectorBtn": {
+        "label": "New"
+      },
+      "agentsNetworkServiceFactoryId": {
+        "label": "Runs on",
+        "help": "The network service factory that runs the network: it fixes the input its input nodes must accept and the output its output nodes must produce."
+      },
+      "FactorySelect": {
+        "placeholder": "Choose the factory the network runs on"
+      },
+      "ParticipantConfigSelect": {
+        "placeholder": "Choose the configuration"
+      },
+      "ContextualNameInput": {
+        "placeholder": "Optional, makes the name unique"
+      },
+      "AddTargetSelect": {
+        "placeholder": "Add an agent to talk to"
+      },
+      "MaxInvocationsInput": {
+        "placeholder": "One pass"
+      },
+      "MaxConsecutiveInput": {
+        "placeholder": "One pass"
+      },
+      "RemoveParticipantConfirmation": {
+        "header": "Remove the participant"
+      },
+      "ClearNetworkConfirmation": {
+        "message": "Remove every agent from the network?",
+        "header": "Clear the network"
       }
     }
   },

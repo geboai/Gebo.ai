@@ -63,7 +63,42 @@
                           gebo-ai-field-element>
                         </geboai-editable-listbox-component>
                       </gebo-ai-field>
+                      @if (selectedServiceDescriptor(); as service) {
+                        <small class="text-muted-color">
+                          <span id="ServiceTypesHint" gebo-ai-text>In a network it accepts</span>&nbsp;<span class="font-monospace">{{shortType(service.inputType)}}</span>
+                          @if (service.kind === 'ROUTER') { &nbsp;<span id="ServiceRouterHint" gebo-ai-text>and sends commands typed on each agent it talks to</span> }
+                          @else { &nbsp;<span id="ServiceProducesHint" gebo-ai-text>and produces</span>&nbsp;<span class="font-monospace">{{shortType(service.outputType)}}</span> }
+                          @if (service.reactive) { <span id="ServiceWriterHint" gebo-ai-text>; it answers the user directly, so it is the single output node of a network</span> }
+                        </small>
+                      }
                     </div>
+                    <div class="col-6">
+                      <gebo-ai-field id="agentRoleCode" label="Agent role"
+                        help="The role the agent plays, from the role library the prompts are built with. Mandatory." [required]="true">
+                        <p-select id="AgentRoleSelect" gebo-ai-label formControlName="agentRoleCode" [options]="roles" optionLabel="description" optionValue="code" dataKey="code"
+                          [required]="true" placeholder="Choose the role" styleClass="w-full" appendTo="body" [filter]="true" filterBy="code,description" gebo-ai-field-element>
+                          <ng-template #item let-role>
+                            <span>{{role.description}}</span>
+                            <span class="ml-2 text-xs text-muted-color font-monospace">{{role.code}}</span>
+                          </ng-template>
+                        </p-select>
+                      </gebo-ai-field>
+                    </div>
+                    @if (isNetworkAdapterService(formGroup.controls['agentServiceId'].value)) {
+                      <div class="col-6">
+                        <gebo-ai-field id="adaptedAgentNetworkCode" label="Delegates to network"
+                          help="The network of agents this agent runs as one agent: its contract must match the input and output of the adapter service." [required]="true">
+                          <p-select id="AdaptedNetworkSelect" gebo-ai-label formControlName="adaptedAgentNetworkCode" [options]="networks" optionLabel="description" optionValue="code" dataKey="code"
+                            [required]="true" placeholder="Choose the network" styleClass="w-full" appendTo="body" gebo-ai-field-element></p-select>
+                        </gebo-ai-field>
+                      </div>
+                      <div class="col-6">
+                        <gebo-ai-field id="agentNetworkServiceCode" label="Network runs on"
+                          help="The network service factory of the adapted network, taken from the network.">
+                          <input pInputText id="agentNetworkServiceCode" formControlName="agentNetworkServiceCode" readonly="true" gebo-ai-field-element />
+                        </gebo-ai-field>
+                      </div>
+                    }
                     <div class="col-6">
                       <gebo-ai-field id="mainLoopPromptUseCode" label="Choose main loop prompt template"
                         help="Choose the Agent main loop prompt.">
