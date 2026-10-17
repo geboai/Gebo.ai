@@ -204,7 +204,7 @@ export class GeboAIGenericOpenAIAPIChatModelAdminComponent extends BaseEntityEdi
      */
     protected override onLoadedPersistentData(actualValue: GenericOpenAIAPIChatModelConfig): void {
         this.refreshProviderModel(actualValue);
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     /**

@@ -122,7 +122,7 @@ export class GeboAIGenericOpenAIAPIImageModelAdminComponent extends BaseEntityEd
 
     protected override onLoadedPersistentData(actualValue: GenericOpenAIAPIImageModelConfig): void {
         this.refreshProviderModel(actualValue);
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     protected override onNewData(actualValue: GenericOpenAIAPIImageModelConfig): void {

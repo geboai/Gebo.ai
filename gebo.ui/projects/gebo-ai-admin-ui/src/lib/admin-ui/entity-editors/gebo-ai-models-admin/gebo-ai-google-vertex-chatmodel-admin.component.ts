@@ -141,7 +141,7 @@ export class GeboAIGoogleVertexChatModelAdminComponent extends BaseEntityEditing
      */
     protected override onLoadedPersistentData(actualValue: GGoogleVertexChatModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("chatmodel-google-vertex");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
     
     /**

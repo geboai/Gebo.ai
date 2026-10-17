@@ -146,7 +146,7 @@ export class GeboAIOllamaChatModelAdminComponent extends BaseEntityEditingCompon
      */
     protected override onLoadedPersistentData(actualValue: GOllamaChatModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("chat-ollama");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
     
     /**

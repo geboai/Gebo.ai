@@ -128,7 +128,7 @@ export class GeboAIOpenAIEmbedModelAdminComponent extends BaseEntityEditingCompo
      */
     protected override onLoadedPersistentData(actualValue: GOpenAIEmbeddingModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("embedding-OpenAI");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     /**

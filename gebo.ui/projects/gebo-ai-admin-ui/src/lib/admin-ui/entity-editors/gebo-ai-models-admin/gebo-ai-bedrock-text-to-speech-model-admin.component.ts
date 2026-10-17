@@ -86,7 +86,7 @@ export class GeboAIBedrockTextToSpeechModelAdminComponent extends BaseEntityEdit
 
     protected override onLoadedPersistentData(actualValue: GBedrockTextToSpeechModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("aws-polly-tts");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     protected override onNewData(actualValue: GBedrockTextToSpeechModelConfig): void {

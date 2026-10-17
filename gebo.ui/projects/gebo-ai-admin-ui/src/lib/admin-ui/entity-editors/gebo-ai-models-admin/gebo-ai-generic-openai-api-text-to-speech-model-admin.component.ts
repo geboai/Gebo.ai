@@ -185,7 +185,7 @@ export class GeboAIGenericOpenAIAPITextToSpeechModelAdminComponent extends BaseE
      */
     protected override onLoadedPersistentData(actualValue: GenericOpenAIAPITextToSpeechModelConfig): void {
         this.refreshProviderModel(actualValue);
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     /**

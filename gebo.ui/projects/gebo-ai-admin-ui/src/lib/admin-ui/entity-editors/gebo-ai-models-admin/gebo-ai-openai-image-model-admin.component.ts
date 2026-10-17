@@ -86,7 +86,7 @@ export class GeboAIOpenAIImageModelAdminComponent extends BaseEntityEditingCompo
 
     protected override onLoadedPersistentData(actualValue: GOpenAIImageModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("openai-image");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     protected override onNewData(actualValue: GOpenAIImageModelConfig): void {

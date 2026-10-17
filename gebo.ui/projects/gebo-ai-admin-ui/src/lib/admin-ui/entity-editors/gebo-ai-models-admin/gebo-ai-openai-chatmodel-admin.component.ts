@@ -161,7 +161,7 @@ export class GeboAIOpenAIChatModelAdminComponent extends BaseEntityEditingCompon
      */
     protected override onLoadedPersistentData(actualValue: GOpenAIChatModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("chatgpt-OpenAI");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     /**

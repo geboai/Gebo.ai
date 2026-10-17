@@ -132,7 +132,7 @@ export class GeboAIGoogleVertexEmbedModelAdminComponent extends BaseEntityEditin
      */
     protected override onLoadedPersistentData(actualValue: GGoogleVertexEmbeddingModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("embedding-google-vertex");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
     
     /**

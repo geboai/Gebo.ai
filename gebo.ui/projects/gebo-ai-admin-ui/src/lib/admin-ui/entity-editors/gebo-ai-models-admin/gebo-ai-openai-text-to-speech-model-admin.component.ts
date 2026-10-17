@@ -128,7 +128,7 @@ export class GeboAIOpenAITextToSpeechModelAdminComponent extends BaseEntityEditi
      */
     protected override onLoadedPersistentData(actualValue: GOpenAITextToSpeechModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("openai-tts");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     /**

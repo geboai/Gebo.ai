@@ -83,7 +83,7 @@ export class GeboAIBedrockImageModelAdminComponent extends BaseEntityEditingComp
 
     protected override onLoadedPersistentData(actualValue: GBedrockImageModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("image-generation-aws-bedrock");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     protected override onNewData(actualValue: GBedrockImageModelConfig): void {

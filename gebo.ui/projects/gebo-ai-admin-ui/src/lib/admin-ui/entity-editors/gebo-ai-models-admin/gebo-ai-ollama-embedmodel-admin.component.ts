@@ -136,7 +136,7 @@ export class GeboAIOllamaEmbedModelAdminComponent extends BaseEntityEditingCompo
      */
     protected override onLoadedPersistentData(actualValue: GOllamaEmbeddingModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("embedding-ollama");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
     
     /**

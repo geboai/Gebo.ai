@@ -163,7 +163,7 @@ export class GeboAIDeepseekChatModelAdminComponent extends BaseEntityEditingComp
      */
     protected override onLoadedPersistentData(actualValue: GDeepseekChatModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("chat-deepseek");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     /**

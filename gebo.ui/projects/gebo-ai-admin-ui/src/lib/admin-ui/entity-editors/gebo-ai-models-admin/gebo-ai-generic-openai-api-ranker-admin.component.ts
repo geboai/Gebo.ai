@@ -152,7 +152,7 @@ export class GeboAIGenericOpenaAIAPiRankerAdminComponent extends BaseEntityEditi
      */
     protected override onLoadedPersistentData(actualValue: GenericOpenAIAPIRankerModelConfig): void {
         this.refreshProviderModel(actualValue);
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     /**

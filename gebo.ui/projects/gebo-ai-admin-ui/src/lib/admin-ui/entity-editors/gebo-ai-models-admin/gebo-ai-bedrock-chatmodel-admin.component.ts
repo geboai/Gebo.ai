@@ -110,7 +110,7 @@ export class GeboAIBedrockChatModelAdminComponent extends BaseEntityEditingCompo
 
     protected override onLoadedPersistentData(actualValue: GBedrockChatModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("chat-aws-bedrock");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     protected override onNewData(actualValue: GBedrockChatModelConfig): void {

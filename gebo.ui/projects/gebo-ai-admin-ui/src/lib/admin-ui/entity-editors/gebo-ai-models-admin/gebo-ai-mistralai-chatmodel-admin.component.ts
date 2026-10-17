@@ -152,7 +152,7 @@ export class GeboAIMistralAIChatModelAdminComponent extends BaseEntityEditingCom
      */
     protected override onLoadedPersistentData(actualValue: GMistralChatModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("chatmodel-mistral");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     /**

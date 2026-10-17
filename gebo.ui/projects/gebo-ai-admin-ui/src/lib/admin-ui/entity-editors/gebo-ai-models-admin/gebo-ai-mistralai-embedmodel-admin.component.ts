@@ -132,7 +132,7 @@ export class GeboAIMistralAIEmbedModelAdminComponent extends BaseEntityEditingCo
      */
     protected override onLoadedPersistentData(actualValue: GMistralEmbeddingModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("embedding-mistral");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     /**

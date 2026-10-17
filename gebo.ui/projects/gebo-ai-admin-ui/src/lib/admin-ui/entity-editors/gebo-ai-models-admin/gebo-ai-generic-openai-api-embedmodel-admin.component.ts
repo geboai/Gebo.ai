@@ -205,7 +205,7 @@ export class GeboAIGenericOpenAIAPIEmbedModelAdminComponent extends BaseEntityEd
     protected override onLoadedPersistentData(actualValue: GenericOpenAIAPIEmbeddingModelConfig): void {
         this.loadSecretsInfos(actualValue);
         this.refreshProviderModel(actualValue);
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
     
     /**

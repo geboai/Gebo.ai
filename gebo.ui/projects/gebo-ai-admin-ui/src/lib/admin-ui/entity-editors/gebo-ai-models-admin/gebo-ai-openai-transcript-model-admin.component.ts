@@ -128,7 +128,7 @@ export class GeboAIOpenAITranscriptModelAdminComponent extends BaseEntityEditing
      */
     protected override onLoadedPersistentData(actualValue: GOpenAITranscriptModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("openai-transcript");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     /**
