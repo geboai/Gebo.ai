@@ -84,7 +84,7 @@
                 <div class="col-6">
                   <gebo-ai-field id="choosedModel" label="Chat model  chat model choice"
                     help="Choose the Chat model  chat model to work with." [required]="true">
-                    <p-select styleClass="w-full" formControlName="choosedModel" id="choosedModel"
+                    <p-select styleClass="w-full" formControlName="choosedModel" dataKey="code" id="choosedModel"
                       placeholder="Select a model" [required]="true" [options]="modelChoicesData"
                     optionLabel="description" gebo-ai-field-element></p-select>
                   </gebo-ai-field>

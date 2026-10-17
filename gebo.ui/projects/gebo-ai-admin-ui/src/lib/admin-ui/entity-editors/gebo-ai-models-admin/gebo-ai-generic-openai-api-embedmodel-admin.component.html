@@ -93,7 +93,7 @@
               <div class="col-6">
                 <gebo-ai-field id="choosedModel" label="Embedding model  embedding model choice"
                   help="Choose the Embedding model  embedding model to work with." [required]="true">
-                  <p-select styleClass="w-full" formControlName="choosedModel" id="choosedModel"
+                  <p-select styleClass="w-full" formControlName="choosedModel" dataKey="code" id="choosedModel"
                     placeholder="Select a model" [required]="true" [options]="modelChoicesData"
                     optionLabel="description" gebo-ai-field-element />
                   </gebo-ai-field>

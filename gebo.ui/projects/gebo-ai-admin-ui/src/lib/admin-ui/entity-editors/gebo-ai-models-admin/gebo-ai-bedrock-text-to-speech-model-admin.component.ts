@@ -15,6 +15,7 @@ import { ConfirmationService } from "primeng/api";
 import { map, Observable } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 /**
  * Component for administering AWS (Amazon Polly) text-to-speech model configurations.
  */
@@ -75,7 +76,7 @@ export class GeboAIBedrockTextToSpeechModelAdminComponent extends BaseEntityEdit
         this.bedrockTextToSpeechModelConfigService.getBedrockTextToSpeechModels(newValue).subscribe({
             next: (r) => {
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : [];
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete: () => {
                 this.loadingRelatedBackend = false;

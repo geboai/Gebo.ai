@@ -28,6 +28,7 @@ import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 import { isValidUrl } from "../utils/url-ok";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 /**
  * Component responsible for managing Google Vertex AI chat model configurations.
  * Provides UI for creating, editing, and deleting chat model configurations 
@@ -124,7 +125,7 @@ export class GeboAIGoogleVertexChatModelAdminComponent extends BaseEntityEditing
             next: (r) => {
                 //this.backendMessages = r.messages as Message[];
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : []
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete:()=>{
                 this.loadingRelatedBackend=false;

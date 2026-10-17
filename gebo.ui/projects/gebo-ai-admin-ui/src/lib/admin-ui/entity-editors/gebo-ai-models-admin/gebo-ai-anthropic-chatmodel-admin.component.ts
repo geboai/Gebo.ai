@@ -27,6 +27,7 @@ import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 /**
  * Component responsible for managing Anthropic chat model configurations.
  * Extends BaseEntityEditingComponent to provide CRUD functionality for GAnthropicChatModelConfig entities.
@@ -148,7 +149,7 @@ export class GeboAIAnthropicChatModelAdminComponent extends BaseEntityEditingCom
         this.anthropicChatModelConfigService.getAnthropicChatModels(newValue).subscribe({
             next: (r) => {
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : []
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete: () => {
                 this.loadingRelatedBackend = false;

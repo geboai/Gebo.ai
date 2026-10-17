@@ -15,6 +15,7 @@ import { ConfirmationService } from "primeng/api";
 import { map, Observable } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 /**
  * Component for administering AWS Bedrock embedding model configurations
  * (Amazon Titan / Cohere).
@@ -71,7 +72,7 @@ export class GeboAIBedrockEmbedModelAdminComponent extends BaseEntityEditingComp
         this.bedrockEmbedModelConfigService.getBedrockEmbeddingModels(newValue).subscribe({
             next: (r) => {
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : [];
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete: () => {
                 this.loadingRelatedBackend = false;

@@ -25,6 +25,7 @@ import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 import { isValidUrl } from "../utils/url-ok";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 /**
  * Component for administering Generic OpenAI API Transcript model configurations.
  * This component extends BaseEntityEditingComponent and provides a user interface 
@@ -170,7 +171,7 @@ export class GeboAIGenericOpenAIAPITranscriptModelAdminComponent extends BaseEnt
         this.openaiTranscriptModelConfigService.getGenericOpenAIAPITranscriptModels(newValue).subscribe({
             next: (r) => {
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : []
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete: () => {
                 this.loadingRelatedBackend = false;

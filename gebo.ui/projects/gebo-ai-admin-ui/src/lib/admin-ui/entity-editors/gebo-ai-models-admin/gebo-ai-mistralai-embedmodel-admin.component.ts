@@ -26,6 +26,7 @@ import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 import { isValidUrl } from "../utils/url-ok";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 /**
  * Component responsible for administering MistralAI embedding models.
  * Extends BaseEntityEditingComponent to manage CRUD operations for GMistralEmbeddingModelConfig entities.
@@ -117,7 +118,7 @@ export class GeboAIMistralAIEmbedModelAdminComponent extends BaseEntityEditingCo
         this.MIstralEmbedModelConfigService.getMistralAIEmbeddingModels(newValue).subscribe({
             next: (r) => {
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : []
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete:()=>{
                 this.loadingRelatedBackend=false;
