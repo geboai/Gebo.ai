@@ -84,7 +84,31 @@ public class DeepSearchToolSource implements IGToolCallbackSource {
 
 	@Override
 	public List<ToolReference> getFullToolReferences() {
-		return tools().stream().map(tool -> tool.toToolReference()).toList();
+		final List<ToolReference> references = new ArrayList<>();
+		for (AbstractDeepSearchTool<?> tool : tools()) {
+			final ToolReference reference = tool.toToolReference();
+			reference.setUserUIfunctionDescription(adminDescription(tool));
+			references.add(reference);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("getFullToolReferences() tool source:" + getId() + " exposes " + references.size()
+					+ " deep search tool reference(s) with their admin description");
+		}
+		return references;
+	}
+
+	/**
+	 * What the tool does, told for the admin choosing the tools: the source deep
+	 * searched, then what a deep search does with what it finds.
+	 */
+	static String adminDescription(AbstractDeepSearchTool<?> tool) {
+		final String source;
+		if (tool instanceof SearchServiceDeepSearchTool<?> serviceTool) {
+			source = DEEP_SEARCH_WEB_TOOL.equals(tool.getToolName()) ? "the public web" : describe(serviceTool.getService());
+		} else {
+			source = "the user accessible knowledge base(s)";
+		}
+		return "Deep search of " + source + ": many searches, the contents found analysed and summarised";
 	}
 
 	@Override
