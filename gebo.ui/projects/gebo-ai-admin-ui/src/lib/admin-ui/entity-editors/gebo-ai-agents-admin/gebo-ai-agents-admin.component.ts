@@ -9,6 +9,16 @@ const systemAgentService:ToastMessageOptions={id:"systemAgentService",summary:"D
     selector: "gebo-ai-agent-admin-component",
     templateUrl: "gebo-ai-agents-admin.component.html",
     standalone: false,
+    // the chosen tools are listed by their description, which is long: the chooser
+    // wraps them instead of growing wider than its column and pushing the fields
+    // beside it out of the panel
+    styles: [`
+        :host ::ng-deep gebo-ai-choose-llm-functions-component { display: block; min-width: 0; max-width: 100%; }
+        :host ::ng-deep gebo-ai-choose-llm-functions-component .p-treeselect { width: 100%; max-width: 100%; }
+        :host ::ng-deep gebo-ai-choose-llm-functions-component .p-treeselect-label { display: flex; flex-wrap: wrap; gap: 4px; white-space: normal; }
+        :host ::ng-deep gebo-ai-choose-llm-functions-component .p-treeselect-chip-item,
+        :host ::ng-deep gebo-ai-choose-llm-functions-component .p-treeselect-chip-item .p-chip { max-width: 100%; white-space: normal; }
+    `],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIAgentsAdminModule", multi: false },
     {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIAgentsAdminComponent),
